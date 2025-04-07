@@ -18,10 +18,11 @@
 #ifndef RG_TEMPORULER_H
 #define RG_TEMPORULER_H
 
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/general/ActionFileClient.h"
 
+#include "base/Composition.h" // for tempoT!?
 #include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QFont>
 #include <QFontMetrics>

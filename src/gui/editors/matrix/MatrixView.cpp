@@ -1459,7 +1459,7 @@ void MatrixView::slotAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
-    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument);
+    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument, false);
 
     connect(&tempoDlg,
              SIGNAL(changeTempo(timeT,

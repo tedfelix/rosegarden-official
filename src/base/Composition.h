@@ -52,6 +52,9 @@ namespace Rosegarden
 // for compatibility with the Event integer type -- but note that we
 // use 0 (rather than -1) to indicate "tempo not set", by convention
 // (though see usage of target tempo in e.g. addTempoAtTime).
+// ??? I suspect keeping this in Composition.h introduces numerous unnecessary
+//     dependencies on Composition.h.  Consider breaking this out into a
+//     TempoT.h like TimeT.h.
 typedef int tempoT;
 
 class Quantizer;

@@ -121,7 +121,6 @@
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/InsertTupletDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"

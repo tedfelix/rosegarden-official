@@ -19,21 +19,22 @@
 #ifndef RG_TEMPODIALOG_H
 #define RG_TEMPODIALOG_H
 
+#include "base/Composition.h" // for tempoT
+
 #include <QDialog>
 #include <QTime>
-#include "base/Composition.h" // for tempoT (TODO: should move to a small header like basetypes.h)
-#include "base/Event.h" // for timeT (TODO: same)
 
-class QWidget;
-class QString;
-class QRadioButton;
-class QLabel;
 class QCheckBox;
 class QDoubleSpinBox;
+class QLabel;
 class QPushButton;
+class QRadioButton;
+class QWidget;
+
 
 namespace Rosegarden
 {
+
 
 class TimeWidget;
 class RosegardenDocument;
@@ -42,7 +43,9 @@ class RosegardenDocument;
 class TempoDialog : public QDialog
 {
     Q_OBJECT
+
 public:
+
     enum TempoDialogAction {
         AddTempo,
         ReplaceTempo,
@@ -52,14 +55,14 @@ public:
     };
 
     TempoDialog(QWidget *parent, RosegardenDocument *doc,
-                bool timeEditable = false);
+                bool timeEditable);
     ~TempoDialog() override;
 
-    // Set the position at which we're checking the tempo
-    //
+    /// Set the position at which we're checking the tempo.
     void setTempoPosition(timeT time);
 
 public slots:
+
     void accept() override;
     void slotActionChanged();
     void slotTempoChanged(double);
@@ -71,47 +74,61 @@ public slots:
     void slotHelpRequested();
 
 signals:
-    // Return results in this signal
-    //
+
+    /// Results are returned via this signal.
     void changeTempo(timeT,  // tempo change time
                      tempoT,  // tempo value
                      tempoT,  // target tempo value
                      TempoDialog::TempoDialogAction); // tempo action
 
-protected:
-    void populateTempo();
+private:
+
+    RosegardenDocument *m_doc;
+
+    timeT m_tempoTime{0};
+
+    // Widgets
+
+    // Tempo Group
+
+    QDoubleSpinBox *m_tempoValueSpinBox;
+    QPushButton *m_tempoTap;
+    QTime m_tapMinusTwo;
+    QTime m_tapMinusOne;
+    QLabel *m_tempoBeatLabel;
+    QLabel *m_tempoBeat;
+    QLabel *m_tempoBeatsPerMinute;
     void updateBeatLabels(double newTempo);
 
-    //--------------- Data members ---------------------------------
+    QRadioButton *m_tempoConstant;
+    QRadioButton *m_tempoRampToNext;
+    QRadioButton *m_tempoRampToTarget;
+    QDoubleSpinBox *m_tempoTargetSpinBox;
 
-    RosegardenDocument     *m_doc;
-    timeT                 m_tempoTime{0};
-    QDoubleSpinBox       *m_tempoValueSpinBox;
-    QPushButton          *m_tempoTap;
-    QTime                 m_tapMinusTwo;
-    QTime                 m_tapMinusOne;
+    // Time of Tempo Change Group
 
-    QRadioButton         *m_tempoConstant;
-    QRadioButton         *m_tempoRampToNext;
-    QRadioButton         *m_tempoRampToTarget;
-    QDoubleSpinBox       *m_tempoTargetSpinBox; 
+    TimeWidget *m_timeEditor{nullptr};
 
-    QLabel               *m_tempoBeatLabel;
-    QLabel               *m_tempoBeat;
-    QLabel               *m_tempoBeatsPerMinute;
+    // Scope Group
 
-    TimeWidget           *m_timeEditor{nullptr};
-
-    QLabel               *m_tempoTimeLabel;
-    QLabel               *m_tempoBarLabel;
-    QLabel               *m_tempoStatusLabel;
+    QLabel *m_tempoTimeLabel;  // x.y s
+    QLabel *m_tempoBarLabel;  // "at the start of ..." or "in the middle of ..."
+    QLabel *m_tempoStatusLabel;  // "there are no..." status message
     
-    QRadioButton         *m_tempoChangeHere;
-    QRadioButton         *m_tempoChangeBefore;
-    QLabel               *m_tempoChangeBeforeAt;
-    QRadioButton         *m_tempoChangeStartOfBar;
-    QRadioButton         *m_tempoChangeGlobal;
-    QCheckBox            *m_defaultBox;
+    // Apply this tempo from here onwards
+    QRadioButton *m_tempoChangeHere;
+    // Replace the last tempo change
+    QRadioButton *m_tempoChangeBefore;
+    QLabel *m_tempoChangeBeforeAt;
+    // Apply this tempo from the start of this bar
+    QRadioButton *m_tempoChangeStartOfBar;
+    // Apply this tempo to the whole composition
+    QRadioButton *m_tempoChangeGlobal;
+    // Also make this the default tempo
+    QCheckBox *m_defaultBox;
+
+    void populateTempo();
+
 };
 
 
