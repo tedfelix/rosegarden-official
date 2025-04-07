@@ -61,6 +61,11 @@ public:
     /// Set the position at which we're checking the tempo.
     void setTempoPosition(timeT time);
 
+    // For those who would prefer to avoid the changeTempo() signal overhead.
+    timeT getTime() const  { return m_tempoTime; }
+    tempoT getTempo() const  { return m_tempo; }
+    tempoT getTargetTempo() const  { return m_targetTempo; }
+
 public slots:
 
     void accept() override;
@@ -76,6 +81,9 @@ public slots:
 signals:
 
     /// Results are returned via this signal.
+    /**
+     * Or use the getters above.
+     */
     void changeTempo(timeT,  // tempo change time
                      tempoT,  // tempo value
                      tempoT,  // target tempo value
@@ -128,6 +136,11 @@ private:
     QCheckBox *m_defaultBox;
 
     void populateTempo();
+
+
+    // User input is stored here on accept().
+    tempoT m_tempo{0};
+    tempoT m_targetTempo{-1};
 
 };
 

@@ -23,6 +23,7 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/RealTime.h"
+#include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/RemoveTempoChangeCommand.h"
@@ -862,9 +863,36 @@ TempoAndTimeSignatureEditor::popupEditor(timeT time, const Type type)
     {
 
     case Type::Tempo:
-        // Launch the TempoDialog.
-        EditTempoController::self()->editTempo(
-                this, time, true /* timeEditable */);
+        {
+            RosegardenDocument *doc = RosegardenDocument::currentDocument;
+
+            TempoDialog tempoDialog(this, doc, true);
+            tempoDialog.setTempoPosition(time);
+
+            if (tempoDialog.exec() != QDialog::Accepted)
+                return;
+
+            Composition &comp = doc->getComposition();
+
+            const int index = comp.getTempoChangeNumberAt(time);
+            if (index < 0)
+                return;
+
+            MacroCommand *macro = new MacroCommand(tr("Edit Tempo Change"));
+
+            // Remove the old.
+            macro->addCommand(new RemoveTempoChangeCommand(&comp, index));
+
+            // Add the new.
+            macro->addCommand(new AddTempoChangeCommand(
+                    &comp,
+                    tempoDialog.getTime(),
+                    tempoDialog.getTempo(),
+                    tempoDialog.getTargetTempo()));
+
+            CommandHistory::getInstance()->addCommand(macro);
+        }
+
         break;
 
     case Type::TimeSignature:
