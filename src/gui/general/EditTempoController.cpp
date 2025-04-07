@@ -31,16 +31,6 @@
 namespace Rosegarden
 {
 
-
-static EditTempoController *s_instance = nullptr;
-
-
-EditTempoController::EditTempoController(QObject *parent) :
-    QObject(parent)
-{
-    s_instance = this;
-}
-
 void EditTempoController::setDocument(RosegardenDocument *doc)
 {
     m_doc = doc;
@@ -49,11 +39,11 @@ void EditTempoController::setDocument(RosegardenDocument *doc)
 
 EditTempoController *EditTempoController::self()
 {
-    // Normally the instance is created by the MainWindow
-    // This is just the fallback for unittests
-    if (!s_instance)
-        s_instance = new EditTempoController(nullptr);
-    return s_instance;
+    // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    // See ISO/IEC 14882:2011 6.7(4).
+    static EditTempoController instance;
+
+    return &instance;
 }
 
 void EditTempoController::editTempo(QWidget *parent, timeT atTime, bool timeEditable)

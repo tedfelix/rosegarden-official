@@ -337,7 +337,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_pluginGUIManager(nullptr),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
-    m_editTempoController(new EditTempoController(this)),
     m_startupTester(nullptr),
     m_firstRun(false),
     m_haveAudioImporter(false),
@@ -367,13 +366,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_myself = this;
 
     if (startupStatusMessageReceiver) {
-        QObject::connect(this, SIGNAL(startupStatusMessage(QString)),
-                         startupStatusMessageReceiver,
-                         SLOT(slotShowStatusMessage(QString)));
+        connect(this, SIGNAL(startupStatusMessage(QString)),
+                startupStatusMessageReceiver, SLOT(slotShowStatusMessage(QString)));
     }
 
-    connect(m_editTempoController, SIGNAL(editTempos(timeT)),
-            this, SLOT(slotEditTempos(timeT)));
+    connect(EditTempoController::self(), &EditTempoController::editTempos,
+            this, static_cast<void(RosegardenMainWindow::*)(timeT)>(
+                    &RosegardenMainWindow::slotEditTempos));
 
     // Need to do this prior to launching the sequencer to
     // avoid ActionFileClient warnings in the debug log due
@@ -1314,7 +1313,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
         m_triggerSegmentManager->setDocument(RosegardenDocument::currentDocument);
 
     m_trackParameterBox->setDocument(RosegardenDocument::currentDocument);
-    m_editTempoController->setDocument(RosegardenDocument::currentDocument);
+    EditTempoController::self()->setDocument(RosegardenDocument::currentDocument);
 
     if (m_pluginGUIManager) {
         m_pluginGUIManager->stopAllGUIs();
@@ -6243,7 +6242,7 @@ void
 RosegardenMainWindow::slotEditTempo(QWidget *parent, timeT atTime)
 {
     RG_DEBUG << "slotEditTempo";
-    m_editTempoController->editTempo(parent, atTime, false);
+    EditTempoController::self()->editTempo(parent, atTime, false);
 }
 
 void
@@ -6268,7 +6267,7 @@ void
 RosegardenMainWindow::slotEditTimeSignature(QWidget *parent,
         timeT atTime)
 {
-    m_editTempoController->editTimeSignature(parent, atTime);
+    EditTempoController::self()->editTimeSignature(parent, atTime);
 }
 
 void

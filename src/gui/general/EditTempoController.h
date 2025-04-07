@@ -48,22 +48,8 @@ class EditTempoController : public QObject
 
 public:
 
-    /// Called by RosegardenMainWindow.
-    explicit EditTempoController(QObject *parent);
-
-    /// Make sure the current document is used.
-    /**
-     * ??? Should be able to safely switch to
-     *     RosegardenDocument::currentDocument and get rid of this.
-     */
-    void setDocument(RosegardenDocument *doc);
-
     /// Singleton instance.
     /**
-     * ??? Make this a proper Singleton so that we don't have to jump
-     *     through so many hoops.  Create on first call to self().  Maintain
-     *     the instance internally.  Private ctor.  Etc...
-     *
      * Returns the unique instance of EditTempoController, created by
      * RosegardenMainWindow.  This is only an acceptable hack because
      * RosegardenMainWindow itself is a Singleton.  The alternative is to pass
@@ -77,6 +63,13 @@ public:
      * to pass down to all these.
      */
     static EditTempoController *self();
+
+    /// Make sure the current document is used.
+    /**
+     * ??? Should be able to safely switch to
+     *     RosegardenDocument::currentDocument and get rid of this.
+     */
+    void setDocument(RosegardenDocument *doc);
 
     void emitEditTempos(timeT time)  { emit editTempos(time); }
 
@@ -102,6 +95,9 @@ public slots:
                      TempoDialog::TempoDialogAction action);
 
 private:
+
+    /// Singleton.
+    EditTempoController()  { }
 
     RosegardenDocument *m_doc{nullptr};
     Composition *m_composition{nullptr};

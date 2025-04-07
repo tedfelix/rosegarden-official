@@ -1641,8 +1641,6 @@ private:
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
 
-    EditTempoController *m_editTempoController;
-
     StartupTester *m_startupTester;
 
     bool m_firstRun;
