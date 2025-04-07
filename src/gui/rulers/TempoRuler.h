@@ -123,8 +123,8 @@ private:
     bool m_dragFine;
     int  m_clickX;
 
-    timeT  m_dragStartTime;
-    timeT  m_dragPreviousTime;
+    timeT  m_dragStartTime{0};
+    timeT  m_dragPreviousTime{0};
     tempoT m_dragStartTempo;
     tempoT m_dragStartTarget;
     tempoT m_dragOriginalTempo;
