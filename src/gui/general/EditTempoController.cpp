@@ -116,12 +116,10 @@ void EditTempoController::changeTempo(timeT time,
                                       tempoT target,
                                       TempoDialog::TempoDialogAction action)
 {
-    // We define a macro command here and build up the command
-    // label as we add commands on.
-    //
     if (action == TempoDialog::AddTempo) {
         CommandHistory::getInstance()->addCommand(new AddTempoChangeCommand(
                 m_composition, time, value, target));
+
     } else if (action == TempoDialog::ReplaceTempo) {
         const int index = m_composition->getTempoChangeNumberAt(time);
 
@@ -151,6 +149,7 @@ void EditTempoController::changeTempo(timeT time,
                 m_composition->getBarStartForTime(time),
                 value,
                 target));
+
     } else if (action == TempoDialog::GlobalTempo  ||
                action == TempoDialog::GlobalTempoWithDefault) {
         MacroCommand *macro = new MacroCommand(tr("Set Global Tempo"));
@@ -161,7 +160,7 @@ void EditTempoController::changeTempo(timeT time,
         for (int i = 0; i < m_composition->getTempoChangeCount(); ++i)
             macro->addCommand(new RemoveTempoChangeCommand(
                     m_composition,
-                    (m_composition->getTempoChangeCount() - 1 - i)));
+                    m_composition->getTempoChangeCount() - 1 - i));
 
         // add tempo change at time zero
         //
@@ -178,7 +177,7 @@ void EditTempoController::changeTempo(timeT time,
         CommandHistory::getInstance()->addCommand(macro);
 
     } else {
-        RG_DEBUG << "EditTempoController::changeTempo() unrecognised tempo command";
+        RG_DEBUG << "changeTempo() unrecognised tempo command";
     }
 }
 
