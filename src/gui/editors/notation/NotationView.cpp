@@ -3848,7 +3848,7 @@ void
 NotationView::slotAddTempo()
 {
     const timeT insertionTime = getInsertionTime();
-    EditTempoController::self()->editTempo(this, insertionTime);
+    EditTempoController::self()->editTempo(this, insertionTime, false);
 }
 
 void

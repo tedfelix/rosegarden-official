@@ -6243,7 +6243,7 @@ void
 RosegardenMainWindow::slotEditTempo(QWidget *parent, timeT atTime)
 {
     RG_DEBUG << "slotEditTempo";
-    m_editTempoController->editTempo(parent, atTime);
+    m_editTempoController->editTempo(parent, atTime, false);
 }
 
 void

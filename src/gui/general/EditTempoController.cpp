@@ -16,6 +16,7 @@
 #define RG_MODULE_STRING "[EditTempoController]"
 
 #include "EditTempoController.h"
+
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
@@ -23,18 +24,19 @@
 #include "commands/segment/RemoveTempoChangeCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/TempoDialog.h"
+#include "gui/dialogs/TimeSignatureDialog.h"
+
 
 namespace Rosegarden
 {
 
+
 static EditTempoController *s_instance = nullptr;
 
-EditTempoController::EditTempoController(QObject *parent)
-    : QObject(parent),
-      m_doc(nullptr),
-      m_composition(nullptr)
+
+EditTempoController::EditTempoController(QObject *parent) :
+    QObject(parent)
 {
     s_instance = this;
 }
@@ -45,13 +47,12 @@ void EditTempoController::setDocument(RosegardenDocument *doc)
     m_composition = &m_doc->getComposition();
 }
 
-
 EditTempoController *EditTempoController::self()
 {
     // Normally the instance is created by the MainWindow
     // This is just the fallback for unittests
     if (!s_instance)
-        s_instance = new EditTempoController;
+        s_instance = new EditTempoController(nullptr);
     return s_instance;
 }
 
