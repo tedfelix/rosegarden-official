@@ -222,7 +222,7 @@ AlsaDriver::checkAlsaError(int rc, const char *
 {
 #ifdef DEBUG_ALSA
     if (rc < 0) {
-        RG_WARNING << "AlsaDriver::"
+        RG_WARNING //<< "AlsaDriver::"
                    << message
                    << ": " << rc
                    << " (" << snd_strerror(rc) << ")";
@@ -3725,6 +3725,36 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event) const
 }
 
 void
+AlsaDriver::sendEvent(
+        const bool isSoftSynth,
+        const InstrumentId instrumentID,
+        snd_seq_event_t &alsaEvent,
+        const bool now)
+{
+    if (isSoftSynth) {
+        processSoftSynthEventOut(instrumentID, &alsaEvent, now);
+        return;
+    }
+
+    // ALSA Port
+
+    const int rc = snd_seq_event_output(m_midiHandle, &alsaEvent);
+    checkAlsaError(rc, "sendEvent(): output queued");
+
+    if (now) {
+        if (m_queueRunning  &&  !m_playing) {
+            // Restart queue
+            checkAlsaError(
+                    snd_seq_continue_queue(m_midiHandle, m_queue, nullptr),
+                    "sendEvent(): continue queue");
+        }
+        checkAlsaError(
+                snd_seq_drain_output(m_midiHandle),
+                "sendEvent(): draining");
+    }
+}
+
+void
 AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                            const RealTime &sliceStart,
                            const RealTime &sliceEnd)
@@ -3798,8 +3828,9 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         const bool isExternalController =
                 (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
 
-        bool isSoftSynth = (!isExternalController &&
-                            (rgEvent->getInstrumentId() >= SoftSynthInstrumentBase));
+        const bool isSoftSynth =
+                (!isExternalController  &&
+                 rgEvent->getInstrumentId() >= SoftSynthInstrumentBase);
 
         RealTime outputTime = rgEvent->getEventTime() - m_playStartPosition +
             m_alsaPlayStartTime;
@@ -4071,36 +4102,68 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             break;
 
         case MappedEvent::MidiRPN:
-#if 1
+#if 0
+            // This does not work.  It sends an *ALSA* RPN, not a set of CCs.
+            // So ALSA synths need to handle *ALSA* RPNs.  Fluidsynth does
+            // not so I decided to translate this to CCs which should be
+            // compatible with everything.
+
             // Based on snd_seq_ev_set_controller().
             // There is no snd_seq_ev_set_regparam().
-            // ??? This isn't working.  I can see the events using aseqdump.
-            //     But when I send them to fluidsynth, they do nothing.
-            //     Sending the individual CCs works fine.  I suspect that we
-            //     need to abandon this approach.
             alsaEvent.type = SND_SEQ_EVENT_REGPARAM;
             snd_seq_ev_set_fixed(&alsaEvent);
             alsaEvent.data.control.channel = channel;
             alsaEvent.data.control.param = rgEvent->getNumber();
             alsaEvent.data.control.value = rgEvent->getValue();
-#else
-            // Create the set of CCs required for the RPN.
-
-            // ??? We seem to be coming in here and preparing a single
-            //     ALSA event.  Perhaps we should convert a
-            //     SND_SEQ_EVENT_REGPARAM event to a raw bytes event.
-            // ??? Might be better to pull the snd_seq_event_output() related
-            //     code below into a routine and then call that multiple
-            //     times in here as needed.
-
-            // BnH 65H <RPN MSB>
-            // BnH 64H <RPN LSB>
-            // BnH 06H <Value MSB>  (Data Entry MSB)
-            // BnH 26H <Value LSB>  (Data Entry LSB)
-#endif
             break;
+#else
+            {
+                // Send the set of CCs required for the RPN.
+
+                const InstrumentId instrumentID = rgEvent->getInstrumentId();
+                const int number = rgEvent->getNumber();
+                const int value = rgEvent->getValue();
+
+                // BnH 65H <RPN MSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x65,
+                                          number >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 64H <RPN LSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x64,
+                                          number & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 06H <Value MSB>  (Data Entry MSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x06,
+                                          value >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 26H <Value LSB>  (Data Entry LSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x26,
+                                          value & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // Handled it.  Move on to the next.
+                continue;
+            }
+#endif
 
         case MappedEvent::MidiNRPN:
+#if 0
+            // This does not work.  It sends an *ALSA* NRPN, not a set of CCs.
+            // So ALSA synths need to handle *ALSA* NRPNs.  Fluidsynth does
+            // not so I decided to translate this to CCs which should be
+            // compatible with everything.
+
             // Based on snd_seq_ev_set_controller().
             // There is no snd_seq_ev_set_nonregparam().
             // ??? This isn't working.  I can see the events using aseqdump.
@@ -4113,6 +4176,46 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             alsaEvent.data.control.param = rgEvent->getNumber();
             alsaEvent.data.control.value = rgEvent->getValue();
             break;
+#else
+            {
+                // Send the set of CCs required for the NRPN.
+
+                const InstrumentId instrumentID = rgEvent->getInstrumentId();
+                const int number = rgEvent->getNumber();
+                const int value = rgEvent->getValue();
+
+                // BnH 63H <NRPN MSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x63,
+                                          number >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 62H <NRPN LSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x62,
+                                          number & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 06H <Value MSB>  (Data Entry MSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x06,
+                                          value >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 26H <Value LSB>  (Data Entry LSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x26,
+                                          value & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // Handled it.  Move on to the next.
+                continue;
+            }
+#endif
 
         // These types do nothing here, so go on to the
         // next iteration.
@@ -4159,34 +4262,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             RG_DEBUG << "  ALSA event type: " << alsaEvent.type << " (" << eventType << ")";
         }
 
-        if (isSoftSynth) {
-            if (debug)
-                RG_DEBUG << "  Calling processSoftSynthEventOut()...";
-
-            processSoftSynthEventOut(rgEvent->getInstrumentId(), &alsaEvent, now);
-
-        } else {
-            if (debug)
-                RG_DEBUG << "  Calling snd_seq_event_output()...";
-
-            int rc = snd_seq_event_output(m_midiHandle, &alsaEvent);
-            checkAlsaError(rc, "processMidiOut(): output queued");
-
-            if (debug)
-                RG_DEBUG << "  snd_seq_event_output() rc:" << rc;
-
-            if (now) {
-                if (m_queueRunning && !m_playing) {
-                    // restart queue
-#ifdef DEBUG_PROCESS_MIDI_OUT
-                    RG_DEBUG << "processMidiOut(): restarting queue after now-event";
-#endif
-
-                    checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, nullptr), "processMidiOut(): continue queue");
-                }
-                checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
-            }
-        }
+        sendEvent(isSoftSynth, rgEvent->getInstrumentId(), alsaEvent, now);
 
         // Add note to note off stack
         //
