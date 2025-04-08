@@ -365,15 +365,14 @@ MidiInserter::insertCopy(const MappedEvent &event)
             }
 
         case MappedEvent::MidiPitchBend:
-            {
-                trackData.insertMidiEvent(new MidiEvent(
-                        midiEventAbsoluteTime,
-                        MIDI_PITCH_BEND | midiChannel,
-                        event.getData2(),
-                        event.getData1()));
 
-                break;
-            }
+            trackData.insertMidiEvent(new MidiEvent(
+                    midiEventAbsoluteTime,
+                    MIDI_PITCH_BEND | midiChannel,
+                    event.getData2(),
+                    event.getData1()));
+
+            break;
 
         case MappedEvent::MidiSystemMessage:
             {
@@ -394,72 +393,131 @@ MidiInserter::insertCopy(const MappedEvent &event)
             }
 
         case MappedEvent::MidiChannelPressure:
-            {
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_CHNL_AFTERTOUCH | midiChannel,
-                                   event.getData1()));
 
-                break;
-            }
+            trackData.insertMidiEvent(new MidiEvent(
+                    midiEventAbsoluteTime,
+                    MIDI_CHNL_AFTERTOUCH | midiChannel,
+                    event.getData1()));
+
+            break;
+
         case MappedEvent::MidiKeyPressure:
-            {
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_POLY_AFTERTOUCH | midiChannel,
-                                   event.getData1(), event.getData2()));
 
-                break;
-            }
+            trackData.insertMidiEvent(new MidiEvent(
+                    midiEventAbsoluteTime,
+                    MIDI_POLY_AFTERTOUCH | midiChannel,
+                    event.getData1(),
+                    event.getData2()));
+
+            break;
 
         case MappedEvent::MidiRPN:
             {
-                // ??? How do we implement this?  As a series of
-                //     trackData.insertMidiEvent() calls for each piece?
+                // Create the set of CCs required for the RPN.
+
+                const int rpn = event.getNumber();
+
+                // BnH 65H <RPN MSB>
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x65,
+                        (rpn >> 7) & 0x7F));
+
+                // BnH 64H <RPN LSB>
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x64,
+                        rpn & 0x7F));
+
+                const int value = event.getValue();
+
+                // BnH 06H <Value MSB>  (Data Entry MSB)
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x06,
+                        (value >> 7) & 0x7F));
+
+                // BnH 26H <Value LSB>  (Data Entry LSB)
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x26,
+                        value & 0x7F));
 
                 break;
             }
 
         case MappedEvent::MidiNRPN:
             {
-                // ??? How do we implement this?  As a series of
-                //     trackData.insertMidiEvent() calls for each piece?
+                // Create the set of CCs required for the NRPN.
+
+                const int nrpn = event.getNumber();
+
+                // BnH 65H <RPN MSB>
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x63,
+                        (nrpn >> 7) & 0x7F));
+
+                // BnH 64H <RPN LSB>
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x62,
+                        nrpn & 0x7F));
+
+                const int value = event.getValue();
+
+                // BnH 06H <Value MSB>  (Data Entry MSB)
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x06,
+                        (value >> 7) & 0x7F));
+
+                // BnH 26H <Value LSB>  (Data Entry LSB)
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_CTRL_CHANGE | midiChannel,
+                        0x26,
+                        value & 0x7F));
 
                 break;
             }
 
         case MappedEvent::Marker:
             {
-                std::string metaMessage =
-                    DataBlockRepository::getInstance()->
-                    getDataBlockForEvent(&event);
+                const std::string metaMessage =
+                        DataBlockRepository::getInstance()->
+                                getDataBlockForEvent(&event);
 
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_FILE_META_EVENT,
-                                   MIDI_TEXT_MARKER,
-                                   metaMessage));
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_FILE_META_EVENT,
+                        MIDI_TEXT_MARKER,
+                        metaMessage));
 
                 break;
             }
 
         case MappedEvent::Text:
             {
-                MidiByte midiTextType = event.getData1();
+                const MidiByte midiTextType = event.getData1();
 
-                std::string metaMessage =
-                    DataBlockRepository::getInstance()->
-                    getDataBlockForEvent(&event);
+                const std::string metaMessage =
+                        DataBlockRepository::getInstance()->
+                                getDataBlockForEvent(&event);
 
-                trackData.
-                    insertMidiEvent
-                    (new MidiEvent(midiEventAbsoluteTime,
-                                   MIDI_FILE_META_EVENT,
-                                   midiTextType,
-                                   metaMessage));
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_FILE_META_EVENT,
+                        midiTextType,
+                        metaMessage));
+
                 break;
             }
 
@@ -469,11 +527,12 @@ MidiInserter::insertCopy(const MappedEvent &event)
                 metaMessage += MidiByte(event.getData1());
                 metaMessage += MidiByte(event.getData2());
 
-                trackData.insertMidiEvent(
-                    new MidiEvent(midiEventAbsoluteTime,
-                                  MIDI_FILE_META_EVENT,
-                                  MIDI_KEY_SIGNATURE,
-                                  metaMessage));
+                trackData.insertMidiEvent(new MidiEvent(
+                        midiEventAbsoluteTime,
+                        MIDI_FILE_META_EVENT,
+                        MIDI_KEY_SIGNATURE,
+                        metaMessage));
+
                 break;
             }
 
