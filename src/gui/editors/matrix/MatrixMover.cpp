@@ -107,7 +107,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         getSnapGrid()->snapTime(m_currentElement->getViewAbsoluteTime());
     m_clickSnappedLeftDeltaTime = e->snappedLeftTime - snappedAbsoluteLeftTime;
 
-    m_dragConstrained = true;
+    m_dragConstrained = Preferences::getMatrixConstrainNotes();
     double horizontalZoomFactor;
     double verticalZoomFactor;
     m_widget->getZoomFactors(horizontalZoomFactor, verticalZoomFactor);
@@ -120,8 +120,13 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         (e->sceneX - m_constraintSize / horizontalZoomFactor, 0,
          2* m_constraintSize / horizontalZoomFactor, m_scene->height());
 
-    m_constraintH->show();
-    m_constraintV->show();
+    if (m_dragConstrained) {
+        m_constraintH->show();
+        m_constraintV->show();
+    } else {
+        m_constraintH->hide();
+        m_constraintV->hide();
+    }
 
     m_quickCopy = (e->modifiers & Qt::ControlModifier);
 

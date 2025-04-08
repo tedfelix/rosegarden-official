@@ -276,5 +276,18 @@ int Preferences::getSMFExportPPQN()
     return smfExportPPQN.get();
 }
 
+static PreferenceBool matrixConstrainNotes(
+        MatrixViewConfigGroup, "constrainNotes", false);
+
+void Preferences::setMatrixConstrainNotes(bool value)
+{
+    matrixConstrainNotes.set(value);
+}
+
+bool Preferences::getMatrixConstrainNotes()
+{
+    return matrixConstrainNotes.get();
+}
+
 
 }
