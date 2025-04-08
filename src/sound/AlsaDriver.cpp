@@ -4071,18 +4071,42 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             break;
 
         case MappedEvent::MidiRPN:
+#if 1
             // Based on snd_seq_ev_set_controller().
             // There is no snd_seq_ev_set_regparam().
+            // ??? This isn't working.  I can see the events using aseqdump.
+            //     But when I send them to fluidsynth, they do nothing.
+            //     Sending the individual CCs works fine.  I suspect that we
+            //     need to abandon this approach.
             alsaEvent.type = SND_SEQ_EVENT_REGPARAM;
             snd_seq_ev_set_fixed(&alsaEvent);
             alsaEvent.data.control.channel = channel;
             alsaEvent.data.control.param = rgEvent->getNumber();
             alsaEvent.data.control.value = rgEvent->getValue();
+#else
+            // Create the set of CCs required for the RPN.
+
+            // ??? We seem to be coming in here and preparing a single
+            //     ALSA event.  Perhaps we should convert a
+            //     SND_SEQ_EVENT_REGPARAM event to a raw bytes event.
+            // ??? Might be better to pull the snd_seq_event_output() related
+            //     code below into a routine and then call that multiple
+            //     times in here as needed.
+
+            // BnH 65H <RPN MSB>
+            // BnH 64H <RPN LSB>
+            // BnH 06H <Value MSB>  (Data Entry MSB)
+            // BnH 26H <Value LSB>  (Data Entry LSB)
+#endif
             break;
 
         case MappedEvent::MidiNRPN:
             // Based on snd_seq_ev_set_controller().
             // There is no snd_seq_ev_set_nonregparam().
+            // ??? This isn't working.  I can see the events using aseqdump.
+            //     But when I send them to fluidsynth, they do nothing.
+            //     Sending the individual CCs works fine.  I suspect that we
+            //     need to abandon this approach.
             alsaEvent.type = SND_SEQ_EVENT_NONREGPARAM;
             snd_seq_ev_set_fixed(&alsaEvent);
             alsaEvent.data.control.channel = channel;
