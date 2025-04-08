@@ -101,6 +101,7 @@ private slots:
 
     /// Filter check boxes.
     void slotFilterClicked(bool);
+    void slotAllOnOffClicked(bool);
 
     /// Handle double-click on an event in the event list.
     void slotCellDoubleClicked(int row, int column);
@@ -163,6 +164,8 @@ private:
     bool m_showSegmentID{true};
     QCheckBox *m_otherCheckBox;
     bool m_showOther{true};
+
+    bool m_allState{true};
 
     // The Event table.
     QTableWidget *m_tableWidget;

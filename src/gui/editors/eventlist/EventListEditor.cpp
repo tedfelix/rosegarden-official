@@ -269,6 +269,11 @@ EventListEditor::EventListEditor(RosegardenDocument *doc,
             this, &EventListEditor::slotFilterClicked);
     filterGroupLayout->addWidget(m_otherCheckBox);
 
+    QPushButton *allOnOff = new QPushButton(tr("All On/Off"), m_filterGroup);
+    connect(allOnOff, &QCheckBox::clicked,
+            this, &EventListEditor::slotAllOnOffClicked);
+    filterGroupLayout->addWidget(allOnOff);
+
     mainLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
     mainLayout->setRowMinimumHeight(0, m_filterGroup->height());
 
@@ -1386,6 +1391,21 @@ EventListEditor::slotFilterClicked(bool)
     m_showSegmentID = m_segmentIDCheckBox->isChecked();
     m_showOther = m_otherCheckBox->isChecked();
 
+    updateTableWidget();
+}
+
+void
+EventListEditor::slotAllOnOffClicked(bool)
+{
+    m_allState = !m_allState;
+
+    m_showNote = m_showRest = m_showProgramChange = m_showController =
+            m_showPitchBend = m_showChannelPressure = m_showKeyPressure =
+            m_showRPNNRPN = m_showSystemExclusive = m_showIndication =
+            m_showText = m_showGeneratedRegion = m_showSegmentID =
+            m_showOther = m_allState;
+
+    updateFilterCheckBoxes();
     updateTableWidget();
 }
 
