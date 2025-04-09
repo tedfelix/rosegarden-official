@@ -238,6 +238,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     }
     settings.endGroup();
 
+    bool constrain = Preferences::getMatrixConstrainNotes();
+    findAction("constrained_move")->setChecked(constrain);
+
     if (segments.size() > 1) {
         enterActionState("have_multiple_segments");
     } else {
@@ -384,6 +387,9 @@ MatrixView::setupActions()
     createAction("resize", SLOT(slotSetResizeTool()));
     createAction("velocity", SLOT(slotSetVelocityTool()));
     createAction("chord_mode", SLOT(slotToggleChordMode()));
+    QAction *action = createAction(
+            "constrained_move", &MatrixView::slotConstrainedMove);
+    action->setStatusTip(tr("Preserves precise horizontal and vertical position when moving a note."));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
     createAction("quantize", SLOT(slotQuantize()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantize()));
@@ -621,7 +627,8 @@ MatrixView::initActionsToolbar()
     // The SnapGrid combo and Snap To... menu items
     //
     QLabel *sLabel = new QLabel(tr(" Grid: "), actionsToolbar);
-    sLabel->setIndent(10);
+    // Put some space between this and the previous widget.
+    sLabel->setContentsMargins(10,0,0,0);
     actionsToolbar->addWidget(sLabel);
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
@@ -664,16 +671,21 @@ MatrixView::initActionsToolbar()
     // focus away from our more important widgets
 
     QLabel *vlabel = new QLabel(tr(" Velocity: "), actionsToolbar);
-    vlabel->setIndent(10);
+    // Put some space between this and the previous widget.
+    vlabel->setContentsMargins(10,0,0,0);
+    QString toolTip = tr("<qt>Velocity for new notes.</qt>");
+    vlabel->setToolTip(toolTip);
     actionsToolbar->addWidget(vlabel);
 
     m_velocityCombo = new QComboBox(actionsToolbar);
+    m_velocityCombo->setToolTip(toolTip);
     actionsToolbar->addWidget(m_velocityCombo);
 
     for (int i = 0; i <= 127; ++i) {
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
-    m_velocityCombo->setCurrentIndex(100); //!!! associate with segment
+    // ??? Would be nice to persist this on a segment-by-segment basis.
+    m_velocityCombo->setCurrentIndex(100);
     connect(m_velocityCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             m_matrixWidget, &MatrixWidget::slotSetCurrentVelocity);
@@ -681,10 +693,14 @@ MatrixView::initActionsToolbar()
     // Quantize combo
     //
     QLabel *qLabel = new QLabel(tr(" Quantize: "), actionsToolbar);
-    qLabel->setIndent(10);
+    // Put some space between this and the previous widget.
+    qLabel->setContentsMargins(10,0,0,0);
+    toolTip = tr("<qt><p>Quantize the display.</p><p>Notes with start times that are not aligned to the quantize setting are displayed as being aligned.</p></qt>");
+    qLabel->setToolTip(toolTip);
     actionsToolbar->addWidget(qLabel);
 
     m_quantizeCombo = new QComboBox(actionsToolbar);
+    m_quantizeCombo->setToolTip(toolTip);
     actionsToolbar->addWidget(m_quantizeCombo);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
@@ -1449,7 +1465,7 @@ void MatrixView::slotAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
-    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument);
+    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument, false);
 
     connect(&tempoDlg,
              SIGNAL(changeTempo(timeT,
@@ -2201,6 +2217,15 @@ void
 MatrixView::slotToggleRulersToolBar()
 {
     toggleNamedToolBar("Rulers Toolbar");
+}
+
+void
+MatrixView::slotConstrainedMove()
+{
+    // toggle constrain
+    bool constrain = Preferences::getMatrixConstrainNotes();
+    Preferences::setMatrixConstrainNotes(! constrain);
+    findAction("constrained_move")->setChecked(! constrain);
 }
 
 void

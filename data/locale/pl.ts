@@ -3636,7 +3636,7 @@
     <message>
         <location line="+1"/>
         <source>Cuíca</source>
-        <translation>Cuíca</translation>
+        <translation>Cuica</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3656,7 +3656,7 @@
     <message>
         <location line="+1"/>
         <source>Suspended cymbal</source>
-        <translation>Talerz podwieszany</translation>
+        <translation>Talerz wiszący</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3681,7 +3681,7 @@
     <message>
         <location line="+1"/>
         <source>Chinese cymbal</source>
-        <translation>Chiński talerz</translation>
+        <translation>Talerz china</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3772,7 +3772,7 @@
     <message>
         <location line="+1"/>
         <source>Guiro</source>
-        <translation>Güiro</translation>
+        <translation>Guiro</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4130,7 +4130,7 @@
     <message>
         <location line="+1"/>
         <source>Pistol shot</source>
-        <translation>Strzał z pistoletu</translation>
+        <translation>Wystrzał z pistoletu</translation>
     </message>
     <message>
         <location filename="../AutoloadStrings.cpp" line="-23"/>
@@ -4155,17 +4155,17 @@
     <message>
         <location line="+1"/>
         <source>Honky-tonk Piano</source>
-        <translation>Fortepian honky-tonk</translation>
+        <translation>Pianino Honky-tonk</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Piano 1</source>
-        <translation>Fortepian elektryczny 1</translation>
+        <translation>Pianino elektryczne 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Piano 2</source>
-        <translation>Fortepian elektryczny 2</translation>
+        <translation>Pianino elektryczne 2</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4200,17 +4200,17 @@
     <message>
         <location line="+1"/>
         <source>Dulcimer</source>
-        <translation>Dulcimer</translation>
+        <translation>Cymbały</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Drawbar Organ</source>
-        <translation>Organy Drawbar</translation>
+        <translation>Organy Hammonda</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Percussive Organ</source>
-        <translation>Organy Percussive</translation>
+        <translation>Organy perkusyjne</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4235,22 +4235,22 @@
     <message>
         <location line="+2"/>
         <source>Tango Accordion</source>
-        <translation>Akordeon (tango)</translation>
+        <translation>Bandoneon</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Guitar (nylon)</source>
-        <translation>Gitara akustyczna (nylonowe)</translation>
+        <translation>Gitara akustyczna (struny nylonowe)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Guitar (steel)</source>
-        <translation>Gitara akustyczna (stalowe)</translation>
+        <translation>Gitara akustyczna (struny stalowe)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Electric Guitar (jazz)</source>
-        <translation>Gitara elektryczna (jazzowa)</translation>
+        <translation>Gitara jazzowa</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4265,57 +4265,57 @@
     <message>
         <location line="+1"/>
         <source>Overdriven Guitar</source>
-        <translation>Przesterowanie gitarowe</translation>
+        <translation>Przesterowanie na gitarze elektrycznej</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Distortion Guitar</source>
-        <translation>Zniekształcenie gitarowe</translation>
+        <translation>Zniekształcenie na gitarze elektrycznej</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar harmonics</source>
-        <translation>Flażolety gitarowe</translation>
+        <translation>Flażolety na gitarze</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Acoustic Bass</source>
-        <translation>Bas akustyczny</translation>
+        <translation>Gitara basowa akustyczna</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fingered Bass</source>
-        <translation>Bas palcowany</translation>
+        <translation>Palcowanie na gitarze basowej</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Picked Bass</source>
-        <translation>Bas doborowy</translation>
+        <translation>Kostkowanie na gitarze basowej</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Fretless Bass</source>
-        <translation>Bas bezprogowy</translation>
+        <translation>Gitara basowa bezprogowa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slap Bass 1</source>
-        <translation>Bas klepany 1</translation>
+        <translation>Slapping na gitarze basowej 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Slap Bass 2</source>
-        <translation>Bas klepany 2</translation>
+        <translation>Slapping na gitarze basowej 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Bass 1</source>
-        <translation>Bas syntetyczny 1</translation>
+        <translation>Bas syntezowany 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Bass 2</source>
-        <translation>Bas syntetyczny 2</translation>
+        <translation>Bas syntezowany 2</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4350,27 +4350,27 @@
     <message>
         <location line="+1"/>
         <source>SynthStrings 1</source>
-        <translation>Syntetyczne smyczki 1</translation>
+        <translation>Smyczki syntezowane 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SynthStrings 2</source>
-        <translation>Syntetyczne smyczki 2</translation>
+        <translation>Smyczki syntezowane 2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Choir Aahs</source>
-        <translation>Chór Aahs</translation>
+        <translation>Chór Aaa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Voice Oohs</source>
-        <translation>Głos Oohs</translation>
+        <translation>Głos Ooo</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Voice</source>
-        <translation>Głos syntetyczny</translation>
+        <translation>Głos syntezowany</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4410,12 +4410,12 @@
     <message>
         <location line="+1"/>
         <source>SynthBrass 1</source>
-        <translation>Syntetyczne dęte blaszane 1</translation>
+        <translation>Dęte blaszane syntezowane 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>SynthBrass 2</source>
-        <translation>Syntetyczne dęte blaszane 2</translation>
+        <translation>Dęte blaszane syntezowane 2</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4620,7 +4620,7 @@
     <message>
         <location line="+1"/>
         <source>Fiddle</source>
-        <translation>Skrzypce fiddle</translation>
+        <translation>Skrzypki</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4630,7 +4630,7 @@
     <message>
         <location line="+1"/>
         <source>Tinkle Bell</source>
-        <translation>Dzwonek tinkle</translation>
+        <translation>Dzwoneczek</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4650,42 +4650,42 @@
     <message>
         <location line="+1"/>
         <source>Taiko Drum</source>
-        <translation>Bęben Taiko</translation>
+        <translation>Taiko</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Melodic Tom</source>
-        <translation>Melodic Tom</translation>
+        <translation>Tom-tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Synth Drum</source>
-        <translation>Perkusja syntetyczna</translation>
+        <translation>Perkusja syntezowana</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Reverse Cymbal</source>
-        <translation>Reverse Cymbal</translation>
+        <translation>Talerz wiszący</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Guitar Fret Noise</source>
-        <translation>Dźwięk progu w gitarze</translation>
+        <translation>Dźwięk progu gitarowego</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Breath Noise</source>
-        <translation>Dźwięk oddechu</translation>
+        <translation>Oddech</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Seashore</source>
-        <translation>Brzeg morza</translation>
+        <translation>Szum morza</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bird Tweet</source>
-        <translation>Śpiew ptaka</translation>
+        <translation>Ptasi śpiew</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4695,12 +4695,12 @@
     <message>
         <location line="+1"/>
         <source>Helicopter</source>
-        <translation>Helikopter</translation>
+        <translation>Śmigłowiec</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Applause</source>
-        <translation>Oklaski</translation>
+        <translation>Aplauz</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4715,12 +4715,12 @@
     <message>
         <location line="+1"/>
         <source>Acoustic Bass Drum</source>
-        <translation>Bęben akustyczny</translation>
+        <translation>Bęben basowy akustyczny</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Bass Drum 1</source>
-        <translation>Bęben 1</translation>
+        <translation>Bęben basowy elektryczny</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4735,7 +4735,7 @@
     <message>
         <location line="+1"/>
         <source>Hand Clap</source>
-        <translation>Klaśnięcie rękoma</translation>
+        <translation>Klaskanie</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4750,7 +4750,7 @@
     <message>
         <location line="+1"/>
         <source>Closed Hi-Hat</source>
-        <translation>Zamknięty talerz hi-hat</translation>
+        <translation>Hi-hat zamknięty</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4760,27 +4760,27 @@
     <message>
         <location line="+1"/>
         <source>Pedal Hi-Hat</source>
-        <translation>Talerz hi-hat z pedałem</translation>
+        <translation>Hi-hat grany nogą</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Tom</source>
-        <translation>Low tom</translation>
+        <translation>Niski tom-tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi-Hat</source>
-        <translation>Otwarty talerz hi-hat</translation>
+        <translation>Hi-hat otwarty</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low-Mid Tom</source>
-        <translation>Low-mid tom</translation>
+        <translation>Niski-średni tom-tom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Hi-Mid Tom</source>
-        <translation>Hi-mid tom</translation>
+        <translation>Wysoki-średni tom-tom</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4790,7 +4790,7 @@
     <message>
         <location line="+1"/>
         <source>High Tom</source>
-        <translation>High tom</translation>
+        <translation>Wysoki tom-tom</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4800,12 +4800,12 @@
     <message>
         <location line="+1"/>
         <source>Chinese Cymbal</source>
-        <translation>Chiński talerz</translation>
+        <translation>Talerz china</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Ride Bell</source>
-        <translation>Dzwonek ride</translation>
+        <translation>Talerz ride</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4845,27 +4845,27 @@
     <message>
         <location line="+1"/>
         <source>Mute Hi Conga</source>
-        <translation>Zamknięty wysoki kong</translation>
+        <translation>Wysokie kongi - tłumik</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Hi Conga</source>
-        <translation>Otwarty wysoki kong</translation>
+        <translation>Wysokie kongi - otwarte</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Conga</source>
-        <translation>Niski kong</translation>
+        <translation>Niskie kongi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>High Timbale</source>
-        <translation>Wysoki Timbale</translation>
+        <translation>Wysokie timbale</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Low Timbale</source>
-        <translation>Niski Timbale</translation>
+        <translation>Niskie timbale</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4880,22 +4880,22 @@
     <message>
         <location line="+3"/>
         <source>Short Whistle</source>
-        <translation>Krótki gwizd</translation>
+        <translation>Gwizdek - krótki</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Long Whistle</source>
-        <translation>Długi gwizd</translation>
+        <translation>Gwizdek - długi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Short Guiro</source>
-        <translation>Krótkie güiro</translation>
+        <translation>Guiro - krótkie</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Long Guiro</source>
-        <translation>Długie güiro</translation>
+        <translation>Guiro - długie</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -4910,22 +4910,22 @@
     <message>
         <location line="+1"/>
         <source>Mute Cuica</source>
-        <translation>Zamknięta Cuíca</translation>
+        <translation>Cuica - tłumik</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Cuica</source>
-        <translation>Otwarta Cuíca</translation>
+        <translation>Cuica - otwarta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Mute Triangle</source>
-        <translation>Zamknięty trójkąt</translation>
+        <translation>Trójkąt - tłumik</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Open Triangle</source>
-        <translation>Otwarty trójkąt</translation>
+        <translation>Trójkąt - otwarty</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+299"/>
@@ -9925,7 +9925,7 @@
     </message>
     <message>
         <source>Coupled Harpsichord</source>
-        <translation type="obsolete">Połączony klawesyn</translation>
+        <translation type="obsolete">Klawiorgany</translation>
     </message>
     <message>
         <source>Church Bell</source>
@@ -9969,11 +9969,11 @@
     </message>
     <message>
         <source>Synth Bass 3</source>
-        <translation type="obsolete">Bas syntetyczny 3</translation>
+        <translation type="obsolete">Bas syntezowany 3</translation>
     </message>
     <message>
         <source>Synth Bass 4</source>
-        <translation type="obsolete">Bas syntetyczny 4</translation>
+        <translation type="obsolete">Bas syntezowany 4</translation>
     </message>
     <message>
         <source>Slow Violin</source>
@@ -9981,23 +9981,23 @@
     </message>
     <message>
         <source>Orchestral Pad</source>
-        <translation type="obsolete">Orchestral Pad</translation>
+        <translation type="obsolete">Orchestral pad</translation>
     </message>
     <message>
         <source>Synth Strings 3</source>
-        <translation type="obsolete">Syntetyczne smyczki 3</translation>
+        <translation type="obsolete">Smyczki syntezowane 3</translation>
     </message>
     <message>
         <source>Brass 2</source>
-        <translation type="obsolete">Dęte blaszane 2</translation>
+        <translation type="obsolete">Sekcja dętych blaszanych 2</translation>
     </message>
     <message>
         <source>Synth Brass 3</source>
-        <translation type="obsolete">Syntetyczne dęte blaszane 3</translation>
+        <translation type="obsolete">Dęte blaszane syntezowane 3</translation>
     </message>
     <message>
         <source>Synth Brass 4</source>
-        <translation type="obsolete">Syntetyczne dęte blaszane 4</translation>
+        <translation type="obsolete">Dęte blaszane syntezowane 4</translation>
     </message>
     <message>
         <source>Sine Wave</source>
@@ -10005,7 +10005,7 @@
     </message>
     <message>
         <source>Taisho Koto</source>
-        <translation type="obsolete">Taisho Koto</translation>
+        <translation type="obsolete">Taisho koto</translation>
     </message>
     <message>
         <source>Concert Bass Drum</source>
@@ -10013,7 +10013,7 @@
     </message>
     <message>
         <source>Melo Tom 2</source>
-        <translation type="obsolete">Melo Tom 2</translation>
+        <translation type="obsolete">Tom-tom 2</translation>
     </message>
     <message>
         <source>808 Tom</source>
@@ -10915,11 +10915,11 @@ zamiast tego?</translation>
     <message>
         <location line="+7"/>
         <source>&lt;p&gt;Copyright 2000-2024 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Prawa autorskie 2000-2024 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz &quot;Gootector&quot; Pruchniakowski.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Prawa autorskie 2000-2024 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz Pruchniakowski.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2023 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Prawa autorskie 2000-2023 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz &quot;Gootector&quot; Pruchniakowski.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Prawa autorskie 2000-2023 zespół programistów Rosegarden&lt;/p&gt;&lt;p&gt;Wersja: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Wydanie: %3&lt;br&gt;Wersja Qt: %2&lt;/p&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby zobaczyć listę autorów, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Aby uzyskać więcej informacji o Rosegarden, odwiedź&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;Licencja: GNU General Public License wersja 2 lub nowsza.&lt;/p&gt;&lt;p&gt;Polskie tłumaczenie Rosegarden: Grzegorz Pruchniakowski.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Rosegarden - &quot;%1&quot;&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
@@ -20000,7 +20000,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <location line="+17"/>
         <source>There is no sustain controller defined for this device.
 Please ensure the device is configured correctly in the Manage MIDI Devices dialog in the main window.</source>
-        <translation>Brak zdefiniowanego komunikatu pedału dla tego urządzenia.
+        <translation>Brak zdefiniowanego kontrolera pedału dla tego urządzenia.
 Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania urządzeniami MIDI w głównym oknie.</translation>
     </message>
     <message>

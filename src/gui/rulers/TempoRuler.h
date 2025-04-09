@@ -18,10 +18,11 @@
 #ifndef RG_TEMPORULER_H
 #define RG_TEMPORULER_H
 
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/general/ActionFileClient.h"
 
+#include "base/Composition.h" // for tempoT!?
 #include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QFont>
 #include <QFontMetrics>
@@ -123,8 +124,8 @@ private:
     bool m_dragFine;
     int  m_clickX;
 
-    timeT  m_dragStartTime;
-    timeT  m_dragPreviousTime;
+    timeT  m_dragStartTime{0};
+    timeT  m_dragPreviousTime{0};
     tempoT m_dragStartTempo;
     tempoT m_dragStartTarget;
     tempoT m_dragOriginalTempo;

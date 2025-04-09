@@ -19,7 +19,6 @@
 #define RG_ROSEGARDENMAINWINDOW_H
 
 #include "base/MidiProgram.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
 #include "gui/general/RecentFiles.h"
 #include "base/Event.h"
@@ -39,6 +38,7 @@
 #include <QToolBar>
 #include <QPointer>
 #include <QSharedPointer>
+#include <QTime>
 
 #include <map>
 #include <set>
@@ -1640,8 +1640,6 @@ private:
 
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
-
-    EditTempoController *m_editTempoController;
 
     StartupTester *m_startupTester;
 

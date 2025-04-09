@@ -27,6 +27,7 @@
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
 #include "base/Track.h"
+#include "gui/editors/segment/compositionview/CompositionModelImpl.h"
 
 #include <QString>
 
@@ -34,10 +35,11 @@ namespace Rosegarden
 {
 
 CopySegmentCommand::CopySegmentCommand(Composition *composition,
-                                       Segment* segment,
+                                       Segment *segment,
                                        timeT startTime,
                                        TrackId track,
-                                       bool copyAsLink) :
+                                       bool copyAsLink,
+                                       CompositionModelImpl *compositionModel) :
     NamedCommand(getGlobalName()),
     m_composition(composition),
     m_segment(segment),
@@ -47,7 +49,8 @@ CopySegmentCommand::CopySegmentCommand(Composition *composition,
     m_detached(false),
     m_oldEndTime(m_composition->getEndMarker()),
     m_addedSegment(nullptr),
-    m_originalSegmentIsLinked(segment->isTrulyLinked())
+    m_originalSegmentIsLinked(segment->isTrulyLinked()),
+    m_compositionModel(compositionModel)
 {
     RG_DEBUG << "ctor" << startTime << track;
 }
@@ -98,6 +101,11 @@ CopySegmentCommand::execute()
     segment->setStartTime(m_startTime);
     segment->setTrack(m_track);
     m_composition->addSegment(segment);
+
+    // Select the new Segment so the user can tweak it when it appears.
+    if (m_compositionModel)
+        m_compositionModel->setSelected(segment);
+
     m_addedSegment = segment;
 
     if (m_composition->autoExpandEnabled()) {

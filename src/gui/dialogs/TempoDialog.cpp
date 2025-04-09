@@ -439,23 +439,26 @@ TempoDialog::slotActionChanged()
 void
 TempoDialog::accept()
 {
-    tempoT tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
-    RG_DEBUG << "Tempo is " << tempo;
+    m_tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
+    RG_DEBUG << "Tempo is " << m_tempo;
 
-    tempoT target = -1;
+    m_targetTempo = -1;
     if (m_tempoRampToNext->isChecked()) {
-        target = 0;
+        m_targetTempo = 0;
     } else if (m_tempoRampToTarget->isChecked()) {
-        target = Composition::getTempoForQpm(m_tempoTargetSpinBox->value());
+        m_targetTempo =
+                Composition::getTempoForQpm(m_tempoTargetSpinBox->value());
     }
 
-    RG_DEBUG << "Target is " << target;
+    RG_DEBUG << "Target is " << m_targetTempo;
 
     if (m_timeEditor) {
 
-        emit changeTempo(m_timeEditor->getTime(),
-                         tempo,
-                         target,
+        m_tempoTime = m_timeEditor->getTime();
+
+        emit changeTempo(m_tempoTime,
+                         m_tempo,
+                         m_targetTempo,
                          AddTempo);
 
     } else {
@@ -474,8 +477,8 @@ TempoDialog::accept()
         }
 
         emit changeTempo(m_tempoTime,
-                         tempo,
-                         target,
+                         m_tempo,
+                         m_targetTempo,
                          action);
     }
 

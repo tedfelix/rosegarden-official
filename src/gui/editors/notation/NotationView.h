@@ -22,7 +22,6 @@
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/ProgressBar.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "base/NotationTypes.h"
 #include "base/Composition.h"
 

@@ -113,6 +113,11 @@ namespace Preferences
 
     void setSMFExportPPQN(int value);
     int getSMFExportPPQN();
+
+    // matrix editor note constraint
+    void setMatrixConstrainNotes(bool value);
+    bool getMatrixConstrainNotes();
+
 }
 
 

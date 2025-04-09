@@ -891,7 +891,7 @@ void
 TempoRuler::slotEditTempo()
 {
     const timeT atTime = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
-    m_editTempoController->editTempo(this, atTime);
+    m_editTempoController->editTempo(this, atTime, false);
 }
 
 void

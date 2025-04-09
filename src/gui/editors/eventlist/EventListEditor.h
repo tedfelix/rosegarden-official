@@ -101,6 +101,7 @@ private slots:
 
     /// Filter check boxes.
     void slotFilterClicked(bool);
+    void slotAllOnOffClicked(bool);
 
     /// Handle double-click on an event in the event list.
     void slotCellDoubleClicked(int row, int column);
@@ -145,12 +146,14 @@ private:
     bool m_showController{true};
     QCheckBox *m_pitchBendCheckBox;
     bool m_showPitchBend{true};
-    QCheckBox *m_sysExCheckBox;
-    bool m_showSystemExclusive{true};
-    QCheckBox *m_keyPressureCheckBox;
-    bool m_showKeyPressure{true};
     QCheckBox *m_channelPressureCheckBox;
     bool m_showChannelPressure{true};
+    QCheckBox *m_keyPressureCheckBox;
+    bool m_showKeyPressure{true};
+    QCheckBox *m_rpnNRPNCheckBox;
+    bool m_showRPNNRPN{true};
+    QCheckBox *m_sysExCheckBox;
+    bool m_showSystemExclusive{true};
     QCheckBox *m_indicationCheckBox;
     bool m_showIndication{true};
     QCheckBox *m_textCheckBox;
@@ -161,6 +164,8 @@ private:
     bool m_showSegmentID{true};
     QCheckBox *m_otherCheckBox;
     bool m_showOther{true};
+
+    bool m_allState{true};
 
     // The Event table.
     QTableWidget *m_tableWidget;

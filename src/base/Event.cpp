@@ -20,6 +20,9 @@
 #include "BaseProperties.h"
 
 #include "misc/Debug.h"
+#include "base/figuration/GeneratedRegion.h"
+#include "base/figuration/SegmentID.h"
+#include "gui/editors/guitar/Chord.h"
 
 #include <sstream>
 #include <cstdio>
@@ -421,7 +424,28 @@ Event::isCopyOf(const Event &e) const
 
 int Event::getSubOrdering(std::string eventType)
 {
-    if (eventType == Indication::EventType) {
+    // Missing:
+    // - TimeSignature (private, -150)
+
+    if (eventType == Note::EventType) {
+        return 0;  // Should be Note::EventSubOrdering but there is none.
+    } else if (eventType == Note::EventRestType) {
+        return Note::EventRestSubOrdering;
+    } else if (eventType == ProgramChange::EventType) {
+        return ProgramChange::EventSubOrdering;
+    } else if (eventType == Controller::EventType) {
+        return Controller::EventSubOrdering;
+    } else if (eventType == PitchBend::EventType) {
+        return PitchBend::EventSubOrdering;
+    } else if (eventType == ChannelPressure::EventType) {
+        return ChannelPressure::EventSubOrdering;
+    } else if (eventType == KeyPressure::EventType) {
+        return KeyPressure::EventSubOrdering;
+    } else if (eventType == RPN::EventType) {
+        return RPN::EventSubOrdering;
+    } else if (eventType == NRPN::EventType) {
+        return NRPN::EventSubOrdering;
+    } else if (eventType == Indication::EventType) {
         return Indication::EventSubOrdering;
     } else if (eventType == Clef::EventType) {
         return Clef::EventSubOrdering;
@@ -429,20 +453,16 @@ int Event::getSubOrdering(std::string eventType)
         return Key::EventSubOrdering;
     } else if (eventType == Text::EventType) {
         return Text::EventSubOrdering;
-    } else if (eventType == Note::EventRestType) {
-        return Note::EventRestSubOrdering;
-    } else if (eventType == PitchBend::EventType) {
-        return PitchBend::EventSubOrdering;
-    } else if (eventType == Controller::EventType) {
-        return Controller::EventSubOrdering;
-    } else if (eventType == KeyPressure::EventType) {
-        return KeyPressure::EventSubOrdering;
-    } else if (eventType == ChannelPressure::EventType) {
-        return ChannelPressure::EventSubOrdering;
-    } else if (eventType == ProgramChange::EventType) {
-        return ProgramChange::EventSubOrdering;
     } else if (eventType == SystemExclusive::EventType) {
         return SystemExclusive::EventSubOrdering;
+    } else if (eventType == GeneratedRegion::EventType) {
+        return GeneratedRegion::EventSubOrdering;
+    } else if (eventType == SegmentID::EventType) {
+        return SegmentID::EventSubOrdering;
+    } else if (eventType == Symbol::EventType) {
+        return Symbol::EventSubOrdering;
+    } else if (eventType == Guitar::Chord::EventType) {
+        return Guitar::Chord::EventSubOrdering;
     }
 
     return 0;

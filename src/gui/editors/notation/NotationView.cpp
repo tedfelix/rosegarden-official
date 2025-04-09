@@ -121,7 +121,6 @@
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/InsertTupletDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
@@ -3848,7 +3847,7 @@ void
 NotationView::slotAddTempo()
 {
     const timeT insertionTime = getInsertionTime();
-    EditTempoController::self()->editTempo(this, insertionTime);
+    EditTempoController::self()->editTempo(this, insertionTime, false);
 }
 
 void

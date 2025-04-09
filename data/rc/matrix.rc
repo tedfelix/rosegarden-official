@@ -295,6 +295,8 @@
 
     <Action name="chord_mode" text="C&amp;hord Insert Mode" icon="group-chord" shortcut="H" checked="false" />
   <Separator/>
+    <Action name="constrained_move" text="&amp;Constrained move" checked="false" />
+  <Separator/>
     <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
   </Menu>
 
