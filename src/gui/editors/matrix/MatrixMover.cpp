@@ -107,7 +107,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         getSnapGrid()->snapTime(m_currentElement->getViewAbsoluteTime());
     m_clickSnappedLeftDeltaTime = e->snappedLeftTime - snappedAbsoluteLeftTime;
 
-    m_dragConstrained = true;
+    m_dragConstrained = Preferences::getMatrixConstrainNotes();
     double horizontalZoomFactor;
     double verticalZoomFactor;
     m_widget->getZoomFactors(horizontalZoomFactor, verticalZoomFactor);
@@ -120,8 +120,13 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
         (e->sceneX - m_constraintSize / horizontalZoomFactor, 0,
          2* m_constraintSize / horizontalZoomFactor, m_scene->height());
 
-    m_constraintH->show();
-    m_constraintV->show();
+    if (m_dragConstrained) {
+        m_constraintH->show();
+        m_constraintV->show();
+    } else {
+        m_constraintH->hide();
+        m_constraintV->hide();
+    }
 
     m_quickCopy = (e->modifiers & Qt::ControlModifier);
 
@@ -222,9 +227,17 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
     timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
     int newPitch = e->pitch;
 
+    EventSelection* selection = m_scene->getSelection();
+
     if (m_dragConstrained) {
-        if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
-        else newPitch = m_event->get<Int>(BaseProperties::PITCH);
+        if (vertical) {
+            newTime = m_currentElement->getViewAbsoluteTime();
+        } else {
+            newPitch = m_event->get<Int>(BaseProperties::PITCH);
+            // allow for transpose
+            long pitchOffset = selection->getSegment().getTranspose();
+            newPitch += pitchOffset;
+        }
     }
 
     emit hoveredOverNoteChanged(newPitch, true, newTime);
@@ -238,8 +251,6 @@ MatrixMover::handleMouseMove(const MatrixMouseEvent *e)
     if (m_event->has(PITCH)) {
         diffPitch = newPitch - m_event->get<Int>(PITCH);
     }
-
-    EventSelection* selection = m_scene->getSelection();
 
     // factor in transpose to adjust the height calculation
     long pitchOffset = selection->getSegment().getTranspose();
@@ -299,11 +310,19 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
     int newPitch = e->pitch;
 
+    EventSelection* selection = m_scene->getSelection();
+
     if (m_dragConstrained) {
         m_constraintH->hide();
         m_constraintV->hide();
-        if (vertical) newTime = m_currentElement->getViewAbsoluteTime();
-        else newPitch = m_event->get<Int>(BaseProperties::PITCH);
+        if (vertical) {
+            newTime = m_currentElement->getViewAbsoluteTime();
+        } else {
+            newPitch = m_event->get<Int>(BaseProperties::PITCH);
+            // allow for transpose
+            long pitchOffset = selection->getSegment().getTranspose();
+            newPitch += pitchOffset;
+        }
     }
     m_dragConstrained = false;
 
@@ -319,8 +338,6 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     if (m_event->has(PITCH)) {
         diffPitch = newPitch - m_event->get<Int>(PITCH);
     }
-
-    EventSelection* selection = m_scene->getSelection();
 
     // factor in transpose to adjust the height calculation
     long pitchOffset = selection->getSegment().getTranspose();

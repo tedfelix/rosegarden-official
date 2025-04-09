@@ -238,6 +238,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     }
     settings.endGroup();
 
+    bool constrain = Preferences::getMatrixConstrainNotes();
+    findAction("constrain_notes")->setChecked(constrain);
+
     if (segments.size() > 1) {
         enterActionState("have_multiple_segments");
     } else {
@@ -384,6 +387,7 @@ MatrixView::setupActions()
     createAction("resize", SLOT(slotSetResizeTool()));
     createAction("velocity", SLOT(slotSetVelocityTool()));
     createAction("chord_mode", SLOT(slotToggleChordMode()));
+    createAction("constrain_notes", SLOT(slotConstrainNotes()));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
     createAction("quantize", SLOT(slotQuantize()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantize()));
@@ -2211,6 +2215,15 @@ void
 MatrixView::slotToggleRulersToolBar()
 {
     toggleNamedToolBar("Rulers Toolbar");
+}
+
+void
+MatrixView::slotConstrainNotes()
+{
+    // toggle constrain
+    bool constrain = Preferences::getMatrixConstrainNotes();
+    Preferences::setMatrixConstrainNotes(! constrain);
+    findAction("constrain_notes")->setChecked(! constrain);
 }
 
 void

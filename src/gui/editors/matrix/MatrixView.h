@@ -248,6 +248,7 @@ protected slots:
     void slotPitchBendSequence();
     void slotControllerSequence();
 
+    void slotConstrainNotes();
     void slotToggleStepByStep();
     void slotStepByStepTargetRequested(QObject *);
 
