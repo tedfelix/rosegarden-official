@@ -823,6 +823,11 @@ private:
     TransportSyncStatus m_mmcStatus;
     TransportSyncStatus m_mtcStatus;
 
+    void sendEvent(
+            bool isSoftSynth,
+            InstrumentId instrumentID,
+            snd_seq_event_t &alsaEvent,
+            bool now);
 };
 
 

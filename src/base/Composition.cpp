@@ -1795,7 +1795,7 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
 // @returns A tempo that effects this relationship.
 // @author Tom Breton (Tehom)
 tempoT
-Composition::timeRatioToTempo(RealTime &realTime,
+Composition::timeRatioToTempo(const RealTime &realTime,
                                   timeT beatTime, tempoT)
 {
     static const timeT cdur = Note(Note::Crotchet).getDuration();

@@ -703,7 +703,7 @@ public:
     }
 
     static tempoT
-        timeRatioToTempo(RealTime &realTime,
+        timeRatioToTempo(const RealTime &realTime,
                          timeT beatTime, tempoT rampTo);
 
     //////
