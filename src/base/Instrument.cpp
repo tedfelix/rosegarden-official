@@ -554,17 +554,12 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
 bool
 Instrument::hasController(MidiByte controlNumber) const
 {
-    //for (const StaticControllers::value_type &pair : m_staticControllers) {
-    //    if (pair.first == controlNumber)
-    //        return true;
-    //}
+    for (const StaticControllers::value_type &pair : m_staticControllers) {
+        if (pair.first == controlNumber)
+            return true;
+    }
 
-    //return false;
-
-    return std::any_of(m_staticControllers.begin(),
-                       m_staticControllers.end(),
-                       [controlNumber](const ControllerValuePair& pair)
-                       {return (pair.first == controlNumber);});
+    return false;
 }
 
 MidiByte

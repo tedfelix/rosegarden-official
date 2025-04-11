@@ -153,18 +153,24 @@ EventSelection::eraseThisEvent(Event *event)
     std::pair<EventContainer::iterator, EventContainer::iterator> interval =
             m_segmentEvents.equal_range(event);
 
-    EventContainer::iterator eventIter =
-        std::find_if(interval.first,
-                     interval.second,
-                     [event](const Event* e) { return (e == event); } );
+   for (EventContainer::iterator eventIter = interval.first;
+         eventIter != interval.second;
+         ++eventIter) {
 
-    if (eventIter != interval.second) { // found
-        m_segmentEvents.erase(eventIter);
-        // Notify observers
-        for (ObserverSet::const_iterator observerIter = m_observers.begin();
-             observerIter != m_observers.end();
-             ++observerIter) {
-            (*observerIter)->eventDeselected(this, event);
+        // If this is the actual one we want to remove...
+        if (*eventIter == event) {
+
+            eventIter = m_segmentEvents.erase(eventIter);
+
+            // Notify observers
+            for (ObserverSet::const_iterator observerIter = m_observers.begin();
+                 observerIter != m_observers.end();
+                 ++observerIter) {
+                (*observerIter)->eventDeselected(this, event);
+            }
+
+            // Work is done.
+            break;
         }
     }
 }
@@ -332,18 +338,23 @@ EventSelection::contains(Event *e) const
     std::pair<EventContainer::const_iterator, EventContainer::const_iterator>
         interval = m_segmentEvents.equal_range(e);
 
-    return std::any_of(interval.first,
-                       interval.second,
-                       [e](const Event* et) {return (e == et);});
+    for (EventContainer::const_iterator it = interval.first;
+         it != interval.second; ++it)
+        {
+            if (*it == e) return true;
+        }
 
+    return false;
 }
 
 bool
 EventSelection::contains(const std::string &type) const
 {
-    return std::any_of(m_segmentEvents.begin(),
-                       m_segmentEvents.end(),
-                       [type](const Event *et) {return (et->isa(type)); } );
+    for (EventContainer::const_iterator i = m_segmentEvents.begin();
+         i != m_segmentEvents.end(); ++i) {
+        if ((*i)->isa(type)) return true;
+    }
+    return false;
 }
 
 timeT
