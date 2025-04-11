@@ -296,6 +296,7 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 
         for (iteratorcontainer::iterator ci = c.begin();
              ci != c.end(); ++ci) {
+            // cppcheck-suppress useStlAlgorithm
             d += (**ci)->getDuration();
         }
     }

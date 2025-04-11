@@ -422,7 +422,7 @@ Event::isCopyOf(const Event &e) const
     return false;
 }
 
-int Event::getSubOrdering(std::string eventType)
+int Event::getSubOrdering(const std::string& eventType)
 {
     // Missing:
     // - TimeSignature (private, -150)

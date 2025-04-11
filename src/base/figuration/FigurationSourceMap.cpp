@@ -377,8 +377,8 @@ class ProximityNote : public RelativeEvent
                 // at once and do modular lookup.
                 for (size_t i = 0; i < tones.size(); ++i) {
                     const int highIndex = (i + 1) % tones.size();
-                    TonePressure &tonePressureA = tones.at(i);
-                    TonePressure &tonePressureB = tones.at(highIndex);
+                    const TonePressure &tonePressureA = tones.at(i);
+                    const TonePressure &tonePressureB = tones.at(highIndex);
 
                     // Decide what we could do to resolve
                     /// over/underpressure.

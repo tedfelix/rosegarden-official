@@ -554,6 +554,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
 bool
 Instrument::hasController(MidiByte controlNumber) const
 {
+    // cppcheck-suppress useStlAlgorithm
     for (const StaticControllers::value_type &pair : m_staticControllers) {
         if (pair.first == controlNumber)
             return true;

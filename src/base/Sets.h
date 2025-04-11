@@ -287,7 +287,7 @@ extern bool
 get__String(Event *e, const PropertyName &name, std::string &ref);
 
 extern bool
-isPersistent__Bool(Event *e, const PropertyName &name);
+isPersistent__Bool(const Event *e, const PropertyName &name);
 
 extern void
 setMaybe__Int(Event *e, const PropertyName &name, long value);

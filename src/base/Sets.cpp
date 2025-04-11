@@ -81,7 +81,7 @@ get__String(Event *e, const PropertyName &name, std::string &ref)
 }
 
 extern bool
-isPersistent__Bool(Event *e, const PropertyName &name)
+isPersistent__Bool(const Event *e, const PropertyName &name)
 {
     return e->isPersistent(name);
 }
@@ -99,4 +99,3 @@ setMaybe__String(Event *e, const PropertyName &name, const std::string &value)
 }
 
 }
-

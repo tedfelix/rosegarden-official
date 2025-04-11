@@ -43,7 +43,7 @@ public:
     static const short EventSubOrdering;
 
     Chord();
-    Chord(const QString& root, const QString& ext = QString());
+    explicit Chord(const QString& root, const QString& ext = QString());
     explicit Chord(const Event&);
 
     Event* getAsEvent(timeT absoluteTime) const;
