@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -57,8 +57,8 @@ public:
     //
     struct ControlPositionCmp
     {
-        bool operator()(ControlParameter *c1,
-                        ControlParameter *c2) const
+        bool operator()(const ControlParameter *c1,
+                        const ControlParameter *c2) const
         {
             return (c1->getIPBPosition() < c2->getIPBPosition());
         }

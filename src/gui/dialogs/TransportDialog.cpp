@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -899,7 +899,15 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
         ui->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
-        // Pacify compiler warnings about missed cases.
+    case MappedEvent::MidiRPN:
+        ui->InDisplay->setText(tr("RPN"));
+        break;
+
+    case MappedEvent::MidiNRPN:
+        ui->InDisplay->setText(tr("NRPN"));
+        break;
+
+    // Pacify compiler warnings about missed cases.
     case MappedEvent::InvalidMappedEvent:
     case MappedEvent::Audio:
     case MappedEvent::AudioCancel:
@@ -988,7 +996,15 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
         ui->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
-        // Pacify compiler warnings about missed cases.
+    case MappedEvent::MidiRPN:
+        ui->OutDisplay->setText(tr("RPN"));
+        break;
+
+    case MappedEvent::MidiNRPN:
+        ui->OutDisplay->setText(tr("NRPN"));
+        break;
+
+    // Pacify compiler warnings about missed cases.
     case MappedEvent::InvalidMappedEvent:
     case MappedEvent::Audio:
     case MappedEvent::AudioCancel:
@@ -1034,7 +1050,7 @@ TransportDialog::slotClearMidiOutLabel()
 }
 
 void
-TransportDialog::closeEvent(QCloseEvent * /*e*/)
+TransportDialog::closeEvent(QCloseEvent * /*closeEvent*/)
 {
     emit closed();
 
@@ -1347,6 +1363,31 @@ void TransportDialog::updateMetronomeTimer()
 
     // If we are flashing, we need to let slotMetronomeTimer() clear the flash
     // for us and stop the timer.
+}
+
+void TransportDialog::keyPressEvent(QKeyEvent *keyEvent)
+{
+    if (!keyEvent)
+        return;
+
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    if (!rmw) {
+        QDialog::keyPressEvent(keyEvent);
+        return;
+    }
+
+    const int key = keyEvent->key();
+
+    if (key == Qt::Key_PageUp)
+        rmw->slotRewind();
+    else if (key == Qt::Key_PageDown)
+        rmw->slotFastforward();
+    else if (key == Qt::Key_Home)
+        rmw->slotRewindToBeginning();
+    else if (key == Qt::Key_End)
+        rmw->slotFastForwardToEnd();
+
+    QDialog::keyPressEvent(keyEvent);
 }
 
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -23,6 +23,9 @@
 #include <QString>
 #include <QList>
 #include "base/Event.h"
+#include "base/Segment.h"
+#include "MatrixScene.h"
+
 
 
 namespace Rosegarden
@@ -48,6 +51,9 @@ public:
     void handleMouseRelease(const MatrixMouseEvent *) override;
     void handleMouseDoubleClick(const MatrixMouseEvent *) override;
     virtual void handleMouseTripleClick(const MatrixMouseEvent *);
+
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
 
     /**
      * Create the selection rect
@@ -102,7 +108,9 @@ protected:
      * Return false if unchanged from last time.
      * The returned result is owned by the caller.
      */
-    bool getSelection(EventSelection *&selection);
+    bool getSelection
+        (EventSelection *&selection,
+         MatrixScene::EventWithSegmentMap* previewEvents = nullptr);
 
     //--------------- Data members ---------------------------------
 

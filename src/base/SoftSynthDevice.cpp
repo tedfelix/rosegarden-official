@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -72,7 +72,7 @@ SoftSynthDevice::createInstruments()
 {
     for (uint i = 0; i < SoftSynthInstrumentCount; ++i) {
 	Instrument *instrument = new Instrument
-	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", i, this);
+	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", this);
 	addInstrument(instrument);
     }
     renameInstruments();
@@ -86,7 +86,7 @@ SoftSynthDevice::renameInstruments()
             (QString("%1 #%2").arg(getName().c_str()).arg(i+1).toUtf8().data());
     }
 }
-    
+
 
 void
 SoftSynthDevice::checkControlList()
@@ -105,7 +105,7 @@ SoftSynthDevice::checkControlList()
     };
 
     if (m_controlList.empty()) {
-	
+
 	for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
 
 	    Rosegarden::ControlParameter con(controls[i][0],
@@ -134,9 +134,9 @@ SoftSynthDevice::getControlParameterConst(const std::string &type,
         {
             // Return matched on type for most events
             //
-            if (type != Rosegarden::Controller::EventType) 
+            if (type != Rosegarden::Controller::EventType)
                 return &*it;
-            
+
             // Also match controller value for Controller events
             //
             if (it->getControllerNumber() == controllerValue)
@@ -177,7 +177,7 @@ SoftSynthDevice::toXmlString() const
                    << "depth=\"" << (int)m_metronome->getDepth() << "\" "
                    << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
                    << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() << "\" "
-                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity() 
+                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity()
                    << "\"/>"
                    << std::endl << std::endl;
     }

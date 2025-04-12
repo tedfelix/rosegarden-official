@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -21,6 +21,7 @@
 #include "RingBuffer.h"
 #include "AudioFile.h"
 #include "AudioCache.h"
+#include "PlayableData.h"
 
 #include <QMutex>
 
@@ -42,11 +43,9 @@ class RingBufferPool;
  *
  * AudioInstrumentMixer gets audio data from PlayableAudioFile objects.
  */
-class PlayableAudioFile
+ class PlayableAudioFile : public PlayableData
 {
 public:
-    typedef float sample_t;
-
     PlayableAudioFile(InstrumentId instrumentId,
                       AudioFile *audioFile,
                       const RealTime &startTime,
@@ -61,25 +60,25 @@ public:
     static void setRingBufferPoolSizes(size_t n, size_t nframes);
 
     //void setStartTime(const RealTime &time) { m_startTime = time; }
-    RealTime getStartTime() const { return m_startTime; }
+    RealTime getStartTime() const override { return m_startTime; }
 
     //void setDuration(const RealTime &time) { m_duration = time; }
-    RealTime getDuration() const { return m_duration; }
-    RealTime getEndTime() const { return m_startTime + m_duration; }
+    RealTime getDuration() const override { return m_duration; }
+    RealTime getEndTime() const override { return m_startTime + m_duration; }
 
     //void setStartIndex(const RealTime &time) { m_startIndex = time; }
     //RealTime getStartIndex() const { return m_startIndex; }
 
-    bool isSmallFile() const { return m_isSmallFile; }
+    bool isSmallFile() const override { return m_isSmallFile; }
 
     // Get audio file for interrogation
     //
-    AudioFile* getAudioFile() const { return m_audioFile; }
+    AudioFile* getAudioFile() const override { return m_audioFile; }
 
     // Get instrument ID - we need to be able to map back
     // at the GUI.
     //
-    InstrumentId getInstrument() const { return m_instrumentId; }
+    InstrumentId getInstrument() const override { return m_instrumentId; }
 
     /**
      * Return the number of frames currently buffered.  The next call
@@ -88,7 +87,7 @@ public:
      *
      * Used by AudioInstrumentMixer.
      */
-    size_t getSampleFramesAvailable();
+    size_t getSampleFramesAvailable() override;
 
     /**
      * Read samples from the given channel on the file and add them
@@ -104,10 +103,11 @@ public:
      *
      * Used by AudioInstrumentMixer.
      */
-    size_t addSamples(std::vector<sample_t *> &target,
-                      size_t channels, size_t nframes, size_t offset = 0);
+    size_t addSamples
+        (std::vector<sample_t *> &destination,
+         size_t channels, size_t nframes, size_t offset = 0) override;
 
-    unsigned int getTargetChannels() const;
+    unsigned int getTargetChannels() const override;
 
     //unsigned int getTargetSampleRate();
     //unsigned int getBitsPerSample();
@@ -125,9 +125,9 @@ public:
     // performance reasons).  They should be called for all files
     // sequentially within a single thread.
     //
-    bool fillBuffers(const RealTime &currentTime);
+    bool fillBuffers(const RealTime &currentTime) override;
 
-    void clearBuffers();
+    void clearBuffers() override;
 
     // Update the buffer during playback.
     //
@@ -135,24 +135,26 @@ public:
     // reasons).  They should be called for all files sequentially
     // within a single thread.
     //
-    bool updateBuffers();
+    bool updateBuffers() override;
 
     // Has fillBuffers been called and completed yet?
     //
-    bool isBuffered() const { return m_currentScanPoint > m_startIndex; }
+    bool isBuffered() const override
+    { return m_currentScanPoint > m_startIndex; }
 
     // Has all the data in this file now been read into the buffers?
     //
-    bool isFullyBuffered() const { return m_isSmallFile || m_fileEnded; }
+    bool isFullyBuffered() const override
+    { return m_isSmallFile || m_fileEnded; }
 
     // Stop playing this file.
     //
-    void cancel() { m_fileEnded = true; }
+    void cancel() override { m_fileEnded = true; }
 
     // Segment id that allows us to crosscheck against playing audio
     // segments.
     //
-    int getRuntimeSegmentId() const { return m_runtimeSegmentId; }
+    int getRuntimeSegmentId() const override { return m_runtimeSegmentId; }
     void setRuntimeSegmentId(int id) { m_runtimeSegmentId = id; }
 
     // Auto fading of a playable audio file

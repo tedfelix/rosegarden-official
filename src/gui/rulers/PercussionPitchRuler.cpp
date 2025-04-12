@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -23,7 +23,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/MidiProgram.h"
-#include "gui/editors/matrix/MatrixView.h"
 #include "gui/general/MidiPitchLabel.h"
 #include "PitchRuler.h"
 #include <QColor>

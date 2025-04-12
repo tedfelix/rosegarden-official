@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -84,7 +84,7 @@ protected:
     QCheckBox    *m_ignore8ve;       /**< Ignore 8ve in pitch comparison? */
     QSpinBox     *m_graphWidth;      /**< Width of graph in milliseconds */
     QSpinBox     *m_graphHeight;     /**< Height of graph in cents */
-    std::vector<Accidentals::Tuning *> *m_tunings; /**< Available tunings */
+    std::vector<std::shared_ptr<Accidentals::Tuning>> *m_tunings; /**< Available tunings */
 
     QErrorMessage m_noTuningsAlert;  /**< Alert missing tunings file */
 

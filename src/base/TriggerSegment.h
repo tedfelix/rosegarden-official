@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -29,6 +29,11 @@ class ControllerContextParams;
 class Event;
 class Segment;
 
+/// A Trigger Segment
+/**
+ * I assume "Rec" means "Record".  As in this is a bigger data structure
+ * around a Segment?  We can probably just drop the "Rec".
+ */
 class TriggerSegmentRec
 {
 public:

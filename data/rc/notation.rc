@@ -84,6 +84,13 @@
       <Action name="multi_page_mode" text="&amp;Multiple Page Layout" icon="multi-page-mode" checked="false" group="score_layout" />
     </Menu>
   <Separator/>
+    <Menu name="highlighting">
+      <text>Highlight Active Segment</text>
+      <Action name="highlight_none" text="&amp;None" checked="false" group="highlight_group" />
+      <Action name="highlight_within_track" text="Within &amp;Track" checked="false" group="highlight_group" />
+      <Action name="highlight" text="Across &amp;All Tracks" checked="false" group="highlight_group" />
+    </Menu>
+  <Separator/>
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->
@@ -442,10 +449,10 @@
       <Action name="stop" text="&amp;Stop" icon="transport-stop" />
       <Action name="cursor_back" text="Step &amp;Back" icon="step-back" shortcut="Left" />
       <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" shortcut="Right" />
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" />
-      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
-      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Ctrl+Left" />
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Ctrl+Right" />
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" shortcut="Home" />
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" shortcut="End" />
       <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" />
       <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" shortcut="Ctrl+L" />
       <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" checked="false" />

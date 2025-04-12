@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,6 +20,7 @@
 
 #include "NotationTool.h"
 #include "NotationMouseEvent.h"
+#include "NotationScene.h"
 #include "base/Event.h"
 
 #include <QString>
@@ -33,6 +34,7 @@ class QGraphicsRectItem;
 namespace Rosegarden
 {
 
+
 class ViewElement;
 class NotationWidget;
 class NotationElement;
@@ -40,6 +42,8 @@ class EventSelection;
 class Event;
 class NotationStaff;
 
+
+/// The Notation Arrow Tool
 /**
  * Rectangular note selection
  */
@@ -96,7 +100,7 @@ public:
     static QString ToolName();
 
 signals:
-    void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void editElement(NotationStaff *, NotationElement *);
 
 public slots:
     /**
@@ -139,7 +143,8 @@ protected:
 
     void drag(int x, int y, bool final);
 
-    EventSelection *getEventsInSelectionRect();
+    EventSelection *getEventsInSelectionRect
+        (NotationScene::EventWithSegmentMap* previewEvents);
 
     //--------------- Data members ---------------------------------
 

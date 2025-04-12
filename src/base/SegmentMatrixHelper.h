@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ class SegmentMatrixHelper : protected SegmentNotationHelper
 public:
     explicit SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
 
-    iterator insertNote(Event *);
+    Segment::iterator insertNote(Event *);
 
     /**
      * Returns true if event is colliding another note in percussion

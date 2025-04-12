@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -12,21 +12,23 @@
     COPYING included with this distribution for more information.
 */
 
+#ifndef RG_AUDIOPLUGININSTANCE_H
+#define RG_AUDIOPLUGININSTANCE_H
+
 #include <vector>
 #include <string>
 #include <map>
 
 #include "XmlExportable.h"
+#include "base/Instrument.h"
 
-// An Instrument on needs to implement these to render an instance
-// of the plugin at the sequencer.
-//
-
-#ifndef RG_AUDIOPLUGININSTANCE_H
-#define RG_AUDIOPLUGININSTANCE_H
+#include <QVariant>
 
 namespace Rosegarden
 {
+
+
+// *******************************************************************
 
 typedef float PortData;
 
@@ -38,7 +40,8 @@ public:
         Input    = 0x01,
         Output   = 0x02,
         Control  = 0x04,
-        Audio    = 0x08
+        Audio    = 0x08,
+        Event    = 0x10
     } PortType;
 
     typedef enum
@@ -48,6 +51,25 @@ public:
         Integer     = 0x02,
         Logarithmic = 0x04
     } PortDisplayHint;
+
+    struct Connection
+    {
+        // Name for the UI.
+        // ??? rename: portName?
+        QString pluginPort;
+        InstrumentId instrumentId{NoInstrument};
+        int portIndex{0};
+        int channel{0}; // 0 - left, 1 - right. -1 - both
+        bool isOutput{false};
+        bool isAudio{false};
+    };
+
+    struct ConnectionList
+    {
+        InstrumentId baseInstrument{NoInstrument};
+        int numChannels{0};
+        std::vector<Connection> connections;
+    };
 
     PluginPort(int number,
                const std::string& name,
@@ -76,6 +98,8 @@ protected:
     PortData        m_default;
 };
 
+// *******************************************************************
+
 class PluginPortInstance
 {
 public:
@@ -88,22 +112,34 @@ public:
     bool changedSinceProgramChange;
 
     void setValue(PortData v) { value = v; changedSinceProgramChange = true; }
+
 };
 
 typedef std::vector<PluginPortInstance*>::iterator PortInstanceIterator;
+
+// *******************************************************************
+
+enum class PluginArch
+{
+    DSSI, LADSPA, LV2
+};
 
 class AudioPluginInstance : public XmlExportable
 {
 public:
     explicit AudioPluginInstance(unsigned int position);
+    ~AudioPluginInstance();
 
-    AudioPluginInstance(const std::string& identifier,
-                        unsigned int position);
+    //AudioPluginInstance(const std::string& identifier,
+    //                    unsigned int position);
 
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     void setIdentifier(const std::string& identifier) { m_identifier = identifier; }
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string getIdentifier() const { return m_identifier; }
+
+    void setArch(PluginArch arch)  { m_arch = arch; }
+    PluginArch getArch() const  { return m_arch; }
 
     void setPosition(unsigned int position) { m_position = position; }
     unsigned int getPosition() const { return m_position; }
@@ -147,11 +183,39 @@ public:
 
     std::string getDisplayName() const;
 
+    void setLabel(const std::string& label);
+
+    // plugin parameters
+    enum class ParameterType
+    {UNKNOWN, INT, LONG, FLOAT, DOUBLE, BOOL, STRING, PATH};
+
+    struct PluginParameter
+    {
+        ParameterType type;
+        QVariant value;
+        bool readable;
+        bool writable;
+        QString label;
+    };
+
+    // map key -> parameter
+    typedef std::map<QString, PluginParameter> PluginParameters;
+
+    // plugin presets
+    struct PluginPreset
+    {
+        QString uri;
+        QString label;
+    };
+    typedef std::vector<PluginPreset> PluginPresetList;
+
 protected:
 
     int                                m_mappedId;
     /// E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::string                        m_identifier;
+    PluginArch m_arch;
+
     std::vector<PluginPortInstance*>   m_ports;
     unsigned int                       m_position;
 
@@ -164,6 +228,8 @@ protected:
     std::string                        m_program;
 
     ConfigMap                          m_config;
+ private:
+    std::string m_label;
 };
 
 }

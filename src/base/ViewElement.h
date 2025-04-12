@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -31,8 +31,7 @@ namespace Rosegarden
  * The abstract base for classes which represent an Event as an
  * on-screen graphic item (a note, a rectangle on a piano roll).
  *
- * "EventView" is probably a better name, but we already have an EventView.
- * Perhaps "EditorEventView"?
+ * "EventView" is probably a better name.
  */
 class ViewElement
 {

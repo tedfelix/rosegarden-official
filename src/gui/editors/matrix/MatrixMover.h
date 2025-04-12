@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,28 +19,37 @@
 #define RG_MATRIXMOVER_H
 
 #include "MatrixTool.h"
+#include "base/TimeT.h"
+
 #include <QString>
-#include "base/Event.h"
+
+class QGraphicsRectItem;
+class QKeyEvent;
 
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class MatrixViewSegment;
 class MatrixElement;
 class Event;
+
 
 class MatrixMover : public MatrixTool
 {
     Q_OBJECT
 
-    friend class MatrixToolBox;
-
 public:
+
+    MatrixMover(MatrixWidget *);
+
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     FollowMode handleMouseMove(const MatrixMouseEvent *) override;
     void handleMouseRelease(const MatrixMouseEvent *) override;
+
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
 
     /**
      * Respond to an event being deleted -- it may be the one the tool
@@ -54,27 +63,39 @@ public:
     static QString ToolName();
 
 signals:
+
     void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 
-protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
-
-protected:
-    MatrixMover(MatrixWidget *);
+private:
 
     void setBasicContextHelp(bool ctrlPressed = false);
 
-    MatrixElement *m_currentElement;
+    MatrixElement *m_currentElement{nullptr};
+
     /// The Event associated with m_currentElement.
-    Event *m_event;
-    MatrixViewSegment *m_currentViewSegment;
-    timeT m_clickSnappedLeftDeltaTime;
+    Event *m_event{nullptr};
+    MatrixViewSegment *m_currentViewSegment{nullptr};
+
+    timeT m_clickSnappedLeftDeltaTime{0};
 
     std::vector<MatrixElement *> m_duplicateElements;
-    bool m_quickCopy;
+    bool m_quickCopy{false};
 
-    int m_lastPlayedPitch;
+    int m_lastPlayedPitch{-1};
+
+    void createDuplicates();
+    void removeDuplicates();
+
+    QPoint m_mousePressPos;
+    bool m_dragConstrained{false};
+
+    static constexpr int m_constraintSize{30};
+
+    QGraphicsRectItem *m_constraintH{nullptr};
+    QGraphicsRectItem *m_constraintV{nullptr};
+
 };
+
 
 }
 

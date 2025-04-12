@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,12 +27,13 @@
 class QGraphicsItem;
 class ItemList;
 
+#define NONHIGHLIGHTOPACITY 0.3
 
 namespace Rosegarden
 {
 
 class Event;
-
+class Segment;
 
 /**
  * The Notation H and V layout is performed on a
@@ -53,7 +54,7 @@ public:
      * parameter.  NotationElement does not take ownership of the
      * event itself.
      */
-    explicit NotationElement(Event *event);
+    explicit NotationElement(Event *event, Segment *segment);
 
     /**
      * Only destroy the graphical representation of the Event, not the
@@ -177,6 +178,10 @@ public:
 
     static NotationElement *getNotationElement(QGraphicsItem *);
 
+    void setHighlight(bool highlight);
+
+    Segment* getSegment() { return m_segment; }
+
 protected:
     double m_airX;
     double m_airWidth;
@@ -190,6 +195,15 @@ protected:
 
     typedef std::vector<QGraphicsItem *> ItemList;
     ItemList *m_extraItems;
+
+ private:
+
+    // Remove copy ctor and op=.
+    NotationElement(const NotationElement &) = delete;
+    NotationElement &operator=(const NotationElement &) = delete;
+
+    bool m_highlight;
+    Segment *m_segment;
 };
 
 typedef ViewElementList NotationElementList;

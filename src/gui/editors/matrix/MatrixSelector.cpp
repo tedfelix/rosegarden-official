@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,8 +31,7 @@
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
-#include "gui/dialogs/EventEditDialog.h"
-#include "gui/dialogs/SimpleEventEditDialog.h"
+#include "gui/editors/event/EditEvent.h"
 #include "gui/general/GUIPalette.h"
 #include "MatrixElement.h"
 #include "MatrixMover.h"
@@ -255,42 +254,32 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
             return;
         }
 
-        if (e->modifiers & Qt::ShiftModifier) { // advanced edit
+        EditEvent dialog(m_widget, *element->event());
 
-            EventEditDialog dialog(m_widget, *element->event(), true);
+        // Launch dialog.  Bail if canceled.
+        if (dialog.exec() != QDialog::Accepted)
+            return;
 
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
+        Event newEvent = dialog.getEvent();
+        // No changes?  Bail.
+        if (newEvent == *element->event())
+            return;
 
-                EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(), element->event(),
-                     dialog.getEvent());
+        CommandHistory::getInstance()->addCommand(new EventEditCommand(
+                vs->getSegment(),
+                element->event(),  // eventToModify
+                newEvent));  // newEvent
 
-                CommandHistory::getInstance()->addCommand(command);
-            }
+    }
 
-        } else {
+#if 0
+    // Feature Request #124: multiclick select methods shouldwork in matrix
+    // editor (was #988167)
 
-            SimpleEventEditDialog dialog
-                (m_widget, RosegardenDocument::currentDocument, *element->event(), false);
+    // Postponing this, as it falls foul of world-matrix transformation
+    // etiquette and other such niceties
 
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
-
-                EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(), element->event(), dialog.getEvent());
-
-                CommandHistory::getInstance()->addCommand(command);
-            }
-        }
-
-    } /*
-
-          #988167: Matrix:Multiclick select methods don't work in matrix editor
-          Postponing this, as it falls foul of world-matrix transformation
-          etiquette and other such niceties
-
-          else {
+    else {
 
         QRect rect = staff->getBarExtents(ev->x(), ev->y());
 
@@ -304,7 +293,8 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
         m_justSelectedBar = true;
         QTimer::singleShot(QApplication::doubleClickInterval(), this,
                            SLOT(slotClickTimeout()));
-        } */
+    }
+#endif
 }
 
 void
@@ -430,6 +420,16 @@ MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
     setContextHelpFor(e);
 }
 
+void MatrixSelector::keyPressEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyPressEvent(e);
+}
+
+void MatrixSelector::keyReleaseEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyReleaseEvent(e);
+}
+
 void
 MatrixSelector::ready()
 {
@@ -506,8 +506,10 @@ MatrixSelector::setViewCurrentSelection(bool always)
 {
     if (always) m_previousCollisions.clear();
 
+    MatrixScene::EventWithSegmentMap previewEvents;
+
     EventSelection* selection = nullptr;
-    bool changed = getSelection(selection);
+    bool changed = getSelection(selection, &previewEvents);
     if (!changed) {
         delete selection;
         return;
@@ -523,12 +525,16 @@ MatrixSelector::setViewCurrentSelection(bool always)
 
         m_scene->setSelection(selection, true);
     }
+    m_scene->setExtraPreviewEvents(previewEvents);
 }
 
 bool
-MatrixSelector::getSelection(EventSelection *&selection)
+MatrixSelector::getSelection(EventSelection *&selection,
+                             MatrixScene::EventWithSegmentMap* previewEvents)
 {
     if (!m_selectionRect || !m_selectionRect->isVisible()) return 0;
+
+    if (previewEvents) previewEvents->clear();
 
     Segment& originalSegment = m_currentViewSegment->getSegment();
     selection = new EventSelection(originalSegment);
@@ -562,12 +568,24 @@ MatrixSelector::getSelection(EventSelection *&selection)
         for (int i = 0; i < l.size(); ++i) {
             QGraphicsItem *item = l[i];
             MatrixElement *element = MatrixElement::getMatrixElement(item);
-            if (element && element->getSegment() ==
-                           element->getScene()->getCurrentSegment()) {
-                //!!! NB. In principle, this element might not come
-                //!!! from the right segment (in practice we only have
-                //!!! one segment, but that may change)
-                selection->addEvent(element->event());
+            if (element) {
+                // The selection should only contain elements from the
+                // current segment however for preview play we should
+                // have all the elements
+                if (element->getSegment() ==
+                    element->getScene()->getCurrentSegment()) {
+                    selection->addEvent(element->event());
+                } else {
+                    // previewEvents contains events from other
+                    // segments which should also be preview played
+                    if (previewEvents) {
+                        if (previewEvents->find(element->event()) ==
+                            previewEvents->end()) {
+                            (*previewEvents)[element->event()] =
+                                element->getSegment();
+                        }
+                    }
+                }
             }
         }
     }

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -170,7 +170,7 @@ getControlParameter2(const Segment &segment, int ccNumber)
 
     // Get the ControlParameter for the ccNumber.
 
-    Controllable *controllable = device->getControllable();
+    const Controllable *controllable = device->getControllable();
     if (!controllable)
         return nullptr;
 
@@ -282,7 +282,7 @@ namespace
         if (!instrument)
             return false;
 
-        Controllable *controllable = instrument->getDevice()->getControllable();
+        const Controllable *controllable = instrument->getDevice()->getControllable();
 
         if (!controllable)
             return false;
@@ -406,8 +406,10 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
 
     // Add to tabs.
     // (Controller names, if translatable, come from AutoLoadStrings.cpp and are
-    // in the QObject context/namespace/whatever.)
-    const int index = m_tabBar->addTab(QObject::tr(name.toStdString().c_str()));
+    // in the MIDI_CONTROLLER translation context.)
+    const int index = m_tabBar->addTab(
+                        QCoreApplication::translate("MIDI_CONTROLLER",
+                                                    name.toStdString().c_str()));
     m_tabBar->setCurrentIndex(index);
 
     // Add to ruler list.

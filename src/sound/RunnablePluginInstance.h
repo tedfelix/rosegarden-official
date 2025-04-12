@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -26,6 +26,9 @@ namespace Rosegarden
 {
 
 class PluginFactory;
+class PlayableData;
+
+typedef float sample_t;
 
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
@@ -42,8 +45,6 @@ class PluginFactory;
 class RunnablePluginInstance
 {
 public:
-    typedef float sample_t;
-
     virtual ~RunnablePluginInstance();
 
     virtual bool isOK() const = 0;
@@ -74,7 +75,16 @@ public:
     virtual void setPortValue(unsigned int port, float value) = 0;
     virtual float getPortValue(unsigned int port) = 0;
 
-    virtual QString configure(QString /* key */, QString /* value */) { return QString(); }
+    virtual QString configure(const QString& /* key */,
+                              const QString& /* value */) { return QString(); }
+
+    // default implementation does nothing
+    virtual void savePluginState() { }
+
+    virtual void getPluginPlayableAudio
+        (std::vector<PlayableData*>& /* playable */) { }
+
+    virtual void removeAudioSource(int /* portIndex */) { }
 
     virtual void sendEvent(const RealTime & /* eventTime */,
                            const void * /* event */) { }
@@ -88,6 +98,9 @@ public:
     virtual void silence() = 0;
     virtual void discardEvents() { }
     virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
+
+    // default implementation does nothing
+    virtual void audioProcessingDone() { }
 
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 

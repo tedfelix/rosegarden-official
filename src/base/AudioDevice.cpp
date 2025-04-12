@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ AudioDevice::createInstruments()
 {
     for (uint i = 0; i < AudioInstrumentCount; ++i) {
 	Instrument *instrument = new Instrument
-	    (AudioInstrumentBase + i, Instrument::Audio, "", i, this);
+	    (AudioInstrumentBase + i, Instrument::Audio, "", this);
         addInstrument(instrument);
     }
     renameInstruments();

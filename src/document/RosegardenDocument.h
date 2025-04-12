@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -94,12 +94,16 @@ public:
      * that is no longer the case since Thorn.  We need to be able to avoid
      * clearing the command history here, or certain commands wipe out the
      * entire undo history needlessly.
+     *
+     * If the path is not empty the file will be loaded but the document will
+     * still be considered "new"
      */
     RosegardenDocument(QObject *parent,
                        QSharedPointer<AudioPluginManager> audioPluginManager,
                        bool skipAutoload = false,
                        bool clearCommandHistory = true,
-                       bool enableSound = true);
+                       bool enableSound = true,
+                       const QString& path = "");
 
     /// The current document.
     /**
@@ -110,8 +114,8 @@ public:
      * RosegardenDocument, e.g. Composition, beware that the document may
      * have changed when your destructor is called.  In these cases, keep a
      * local copy of the document pointer so that you can detach from the
-     * correct document.  See, e.g. TempoView which uses EditViewBase::m_doc
-     * in this way.
+     * correct document.  See, e.g. TempoAndTimeSignatureEditor which uses
+     * EditViewBase::m_doc in this way.
      *
      * If we are crashing because this is null, be sure that when a document
      * is created, this pointer is set.  The rest of the system depends on
@@ -279,15 +283,8 @@ public:
     void jumpToQuickMarker();
     timeT getQuickMarkerTime() { return m_quickMarkerTime; }
 
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    Composition&       getComposition()       { return m_composition; }
-
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    const Composition& getComposition() const { return m_composition; }
+    Composition &getComposition()  { return m_composition; }
+    const Composition &getComposition() const  { return m_composition; }
 
     /*
      * return the Studio
@@ -366,6 +363,12 @@ public:
      * when inserting any subsequent recorded data
      */
     void setRecordStartTime(timeT t) { m_recordStartTime = t; }
+
+    /**
+     * Cause the document to use the given time as the pointer
+     * position before recording
+     */
+    void setPointerPositionBeforeRecord(timeT t) { m_pointerBeforeRecord = t; }
 
     /*
      * Get a MappedDevice from the sequencer and add the
@@ -577,7 +580,7 @@ private:
     /**
      * initializes the document generally
      */
-    void newDocument();
+    void newDocument(const QString& path = "");
 
     /**
      * Autoload
@@ -791,7 +794,7 @@ private:
     RealTime m_audioRecordLatency;
 
     timeT m_recordStartTime;
-
+    timeT m_pointerBeforeRecord;
     timeT m_quickMarkerTime;
 
     std::vector<QString> m_orphanedRecordedAudioFiles;

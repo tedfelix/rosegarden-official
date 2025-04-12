@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -370,14 +370,12 @@ public:
     virtual QRect getBarExtents(double x, int y) const;
 
     /**
-     * Set whether this is the current staff or not.  A staff that is
-     * current will differ visually from non-current staffs.
+     * Set whether this staff is highlighted or not.  A staff that is
+     * highlighted will differ visually from non-highlighted staffs.
      *
-     * The owner of the staffs should normally ensure that one staff
-     * is current (the default is non-current, even if there only is
-     * one staff) and that only one staff is current at once.
+     * The owner of the staffs is responsible for the highlighting.
      */
-    virtual void setCurrent(bool current);
+    virtual void setHighlight(bool highlight);
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -645,7 +643,7 @@ protected:
     double   m_startLayoutX;
     double   m_endLayoutX;
 
-    bool     m_current;
+    bool     m_highlight;
 
     typedef std::vector<QGraphicsItem *> ItemList;
     typedef std::vector<ItemList> ItemMatrix;

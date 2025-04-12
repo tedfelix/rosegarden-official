@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -24,15 +24,16 @@
 #include "base/Segment.h"
 //#include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
-#include "base/Track.h"
 #include "base/Instrument.h"
-#include "base/Studio.h"
 #include "base/MidiTypes.h"
 #include "base/Profiler.h"
+#include "base/Studio.h"
+#include "base/Track.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "sound/MappedBufMetaIterator.h"
 #include "sound/MidiInserter.h"
@@ -617,7 +618,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
     RG_DEBUG << "convertToRosegarden(): MIDI COMP SIZE = " << m_midiComposition.size();
 
     if (m_timingFormat == MIDI_TIMING_SMPTE) {
-        
+
         // If we have SMPTE timecode (i.e. seconds and frames, roughly
         // equivalent to RealTime timestamps) then we need to add any
         // tempo change events _first_ before we can do any conversion
@@ -639,7 +640,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
             // For each event
             for (MidiTrack::const_iterator midiEvent = m_midiComposition[i].begin();
                  midiEvent != m_midiComposition[i].end();
-                 ++midiEvent) {        
+                 ++midiEvent) {
                 if ((*midiEvent)->isMeta()) {
                     // If we have a set tempo meta-event
                     if ((*midiEvent)->getMetaEventCode() == MIDI_SET_TEMPO) {
@@ -729,7 +730,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
         // a duration.
         consolidateNoteEvents(trackId);
 
-        InstrumentId instrumentId = MidiInstrumentBase;
+        InstrumentId instrumentId = studio.getFirstMIDIInstrument();
 
         // If this track has a channel, use that channel's instrument.
         if (m_trackChannelMap.find(trackId) != m_trackChannelMap.end()) {
@@ -786,7 +787,7 @@ MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
                 // header (stored as m_subframes, m_fps).  We need to
                 // go through a realtime -> musical time conversion
                 // for these, having added our tempo changes earlier
-                
+
                 rosegardenTime = composition.getElapsedTimeForRealTime(
                     RealTime::frame2RealTime(midiAbsoluteTime,
                                              m_fps * m_subframes));
@@ -1203,7 +1204,7 @@ void MidiFile::configureInstrument(
         return;
 
     instrument->setPercussion(
-            instrument->getNaturalChannel() ==
+            instrument->getNaturalMidiChannel() ==
                     MIDI_PERCUSSION_CHANNEL);
 
     track->setInstrument(instrument->getId());
@@ -1350,7 +1351,7 @@ MidiFile::convertToMidi(RosegardenDocument *doc, const QString &filename)
 
     delete metaIterator;
 
-    MidiInserter inserter(composition, 480, end);
+    MidiInserter inserter(composition, Preferences::getSMFExportPPQN(), end);
     // Copy the events from sorter to inserter.
     sorter.insertSorted(inserter);
     // Finally, copy the events from inserter to m_midiComposition.
@@ -1466,7 +1467,7 @@ MidiFile::writeTrack(std::ofstream *midiFile, TrackId trackNumber)
         // otherwise any midi event with data1 == 121 would get caught
         if (
                 midiEvent.getEventCode() == MIDI_CTRL_CHANGE &&
-                midiEvent.getData1() == MIDI_CONTROLLER_RESET 
+                midiEvent.getData1() == MIDI_CONTROLLER_RESET
             ) {
             RG_WARNING << "writeTrack(): Found controller 121.  Skipping.  This is a HACK to address BUG #1404.";
 
@@ -1691,4 +1692,3 @@ MidiFile::clearMidiComposition()
 
 
 }
-

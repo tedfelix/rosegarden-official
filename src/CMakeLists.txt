@@ -43,10 +43,24 @@ if(LIRCCLIENT_FOUND)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LIRCCLIENT_LIBRARY})
 endif()
 
+if(LILV_FOUND)
+    include_directories(${LILV_INCLUDE_DIRS})
+    add_definitions(-DHAVE_LILV)
+    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LILV_LIBRARIES})
+endif()
+
 if(ALSA_FOUND)
     include_directories(${ALSA_INCLUDE_DIR})
     add_definitions(-DHAVE_ALSA)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${ALSA_LIBRARIES})
+endif()
+
+find_package(GTK2)
+if(GTK2_FOUND)
+    include_directories(${GTK2_INCLUDE_DIRS})
+    link_directories(${GTK2_LIBRARY_DIRS})
+    add_definitions(-DHAVE_GTK2)
+    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${GTK2_LIBRARIES})
 endif()
 
 set(rg_CPPS
@@ -98,6 +112,9 @@ set(rg_CPPS
   gui/dialogs/MakeOrnamentDialog.cpp
   gui/dialogs/ClefDialog.cpp
   gui/dialogs/AudioPluginDialog.cpp
+  gui/dialogs/AudioPluginParameterDialog.cpp
+  gui/dialogs/AudioPluginPresetDialog.cpp
+  gui/dialogs/AudioPluginConnectionDialog.cpp
   gui/dialogs/ExportDeviceDialog.cpp
   gui/dialogs/DialogSuppressor.cpp
   gui/dialogs/CountdownDialog.cpp
@@ -107,7 +124,6 @@ set(rg_CPPS
   gui/dialogs/BeatsBarsDialog.cpp
   gui/dialogs/PitchBendSequenceDialog.cpp
   gui/dialogs/TimeSignatureDialog.cpp
-  gui/dialogs/SimpleEventEditDialog.cpp
   gui/dialogs/TempoDialog.cpp
   gui/dialogs/AudioPlayingDialog.cpp
   gui/dialogs/TextEventDialog.cpp
@@ -127,7 +143,6 @@ set(rg_CPPS
   gui/dialogs/InsertTupletDialog.cpp
   gui/dialogs/TransportDialog.cpp
   gui/dialogs/ShowSequencerStatusDialog.cpp
-  gui/dialogs/EventEditDialog.cpp
   gui/dialogs/QuantizeDialog.cpp
   gui/dialogs/CheckForParallelsDialog.cpp
   gui/dialogs/FloatEdit.cpp
@@ -147,6 +162,8 @@ set(rg_CPPS
   gui/dialogs/ShortcutDelegate.cpp
   gui/dialogs/ShortcutWarnDialog.cpp
   gui/dialogs/OutOfProcessorPower.cpp
+  gui/dialogs/LibrarianDialog.cpp
+  gui/dialogs/SelectBankDialog.cpp
   gui/widgets/IconStackedWidget.cpp
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp
@@ -195,6 +212,19 @@ set(rg_CPPS
   gui/widgets/WarningWidget.cpp
   gui/widgets/TextFloat.cpp
   gui/widgets/ColorCombo.cpp
+  gui/editors/event/EditEvent.cpp
+  gui/editors/event/EventWidget.cpp
+  gui/editors/event/NoteWidget.cpp
+  gui/editors/event/RestWidget.cpp
+  gui/editors/event/ControllerWidget.cpp
+  gui/editors/event/ProgramChangeWidget.cpp
+  gui/editors/event/PitchBendWidget.cpp
+  gui/editors/event/ChannelPressureWidget.cpp
+  gui/editors/event/KeyPressureWidget.cpp
+  gui/editors/event/SysExWidget.cpp
+  gui/editors/event/RPNWidget.cpp
+  gui/editors/event/NRPNWidget.cpp
+  gui/editors/event/EventTypeDialog.cpp
   gui/editors/pitchtracker/PitchHistory.cpp
   gui/editors/pitchtracker/PitchTrackerView.cpp
   gui/editors/pitchtracker/PitchGraphWidget.cpp
@@ -256,8 +286,7 @@ set(rg_CPPS
   gui/editors/notation/NotePixmapFactory.cpp
   gui/editors/notation/SystemFont.cpp
   gui/editors/notation/NotePixmapParameters.cpp
-  gui/editors/tempo/TempoListItem.cpp
-  gui/editors/tempo/TempoView.cpp
+  gui/editors/tempo/TempoAndTimeSignatureEditor.cpp
   gui/editors/matrix/MatrixView.cpp
   gui/editors/matrix/MatrixElement.cpp
   gui/editors/matrix/PianoKeyboard.cpp
@@ -274,8 +303,7 @@ set(rg_CPPS
   gui/editors/matrix/MatrixSelector.cpp
   gui/editors/matrix/MatrixToolBox.cpp
   gui/editors/eventlist/TrivialVelocityDialog.cpp
-  gui/editors/eventlist/EventView.cpp
-  gui/editors/eventlist/EventViewItem.cpp
+  gui/editors/eventlist/EventListEditor.cpp
   gui/editors/segment/TriggerManagerItem.cpp
   gui/editors/segment/PlayListView.cpp
   gui/editors/segment/TrackButtons.cpp
@@ -341,7 +369,6 @@ set(rg_CPPS
   gui/general/ActionFileClient.cpp
   gui/general/ActionData.cpp
   gui/general/BaseTool.cpp
-  gui/general/ListEditView.cpp
   gui/general/TempDirectory.cpp
   gui/general/DecoyAction.cpp
   gui/general/PresetGroup.cpp
@@ -399,6 +426,7 @@ set(rg_CPPS
   gui/studio/StudioControl.cpp
   gui/studio/ControlEditorDialog.cpp
   gui/studio/MidiKeyMapTreeWidgetItem.cpp
+  gui/studio/AudioPluginGUIManager.cpp
   gui/studio/AudioPluginOSCGUIManager.cpp
   gui/studio/AudioPlugin.cpp
   gui/studio/DeviceManagerDialog.cpp
@@ -525,6 +553,7 @@ set(rg_CPPS
   sound/MappedDevice.cpp
   sound/SF2PatchExtractor.cpp
   sound/AudioProcess.cpp
+  sound/AudioInstrumentMixer.cpp
   sound/LADSPAPluginInstance.cpp
   sound/DSSIPluginInstance.cpp
   sound/MidiEvent.cpp
@@ -542,6 +571,7 @@ set(rg_CPPS
   sound/PluginFactory.cpp
   sound/BWFAudioFile.cpp
   sound/PeakFile.cpp
+  sound/PluginAudioSource.cpp
   sound/RIFFAudioFile.cpp
   sound/AudioFileTimeStretcher.cpp
   sound/SequencerDataBlock.cpp
@@ -559,6 +589,7 @@ set(rg_CPPS
   sound/Resampler.cpp
   sound/ExternalController.cpp
   sound/KorgNanoKontrol2.cpp
+  sound/WAVExporter.cpp
   commands/notation/ResetDisplacementsCommand.cpp
   commands/notation/RemoveNotationQuantizeCommand.cpp
   commands/notation/AddMarkCommand.cpp
@@ -672,7 +703,6 @@ set(rg_CPPS
   commands/segment/MergeFileCommand.cpp
   commands/segment/SegmentColourMapCommand.cpp
   commands/segment/SegmentRecordCommand.cpp
-  commands/segment/SegmentQuickCopyCommand.cpp
   commands/segment/FitToBeatsCommand.cpp
   commands/segment/AudioSegmentInsertCommand.cpp
   commands/segment/AudioSegmentRescaleCommand.cpp
@@ -697,7 +727,6 @@ set(rg_CPPS
   commands/segment/AddTimeSignatureAndNormalizeCommand.cpp
   commands/segment/EraseSegmentsStartingInRangeCommand.cpp
   commands/segment/SegmentRepeatToCopyCommand.cpp
-  commands/segment/SegmentQuickLinkCommand.cpp
   commands/segment/SegmentColourCommand.cpp
   commands/segment/InsertRangeCommand.cpp
   commands/segment/AudioSegmentAutoSplitCommand.cpp
@@ -713,6 +742,7 @@ set(rg_CPPS
   commands/segment/CutRangeCommand.cpp
   commands/segment/SegmentEraseCommand.cpp
   commands/segment/SegmentExcludeFromPrintingCommand.cpp
+  commands/segment/CopySegmentCommand.cpp
   commands/studio/CreateOrDeleteDeviceCommand.cpp
   commands/studio/RemoveControlParameterCommand.cpp
   commands/studio/ModifyControlParameterCommand.cpp
@@ -730,6 +760,25 @@ if (JACK_FOUND)
   set(rg_CPPS ${rg_CPPS}
     sound/JackCaptureClient.cpp
   )
+endif()
+
+if (LILV_FOUND)
+  set(rg_CPPS ${rg_CPPS}
+    sound/LV2PluginDatabase.cpp
+    sound/LV2PluginFactory.cpp
+    sound/LV2PluginInstance.cpp
+    sound/LV2Utils.cpp
+    sound/LV2URIDMapper.cpp
+    sound/LV2Worker.cpp
+    sound/LV2World.cpp
+    sound/LV2PluginParameter.cpp
+    gui/studio/AudioPluginLV2GUIManager.cpp
+    gui/studio/AudioPluginLV2GUI.cpp
+    gui/studio/AudioPluginLV2GUIWindow.cpp
+    gui/studio/LV2Gtk.cpp
+  )
+  set_source_files_properties(gui/studio/LV2Gtk.cpp
+    PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()
 
 set(rg_UIS

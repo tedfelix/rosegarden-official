@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -47,7 +47,8 @@ public:
                         DeviceId device,
                         const std::string &name,
                         const std::string &librarianName,
-                        const std::string &librarianEmail);
+                        const std::string &librarianEmail,
+                        const QString& commandName = "");
 
     void setVariation  (MidiDevice::VariationType variationType);
     void setBankList   (const BankList    &bankList);

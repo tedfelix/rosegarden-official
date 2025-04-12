@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,9 +18,7 @@
 #ifndef RG_ROSEGARDENMAINWINDOW_H
 #define RG_ROSEGARDENMAINWINDOW_H
 
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "base/MidiProgram.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
 #include "gui/general/RecentFiles.h"
 #include "base/Event.h"
@@ -40,6 +38,7 @@
 #include <QToolBar>
 #include <QPointer>
 #include <QSharedPointer>
+#include <QTime>
 
 #include <map>
 #include <set>
@@ -60,10 +59,12 @@ class QAction;
 namespace Rosegarden
 {
 
+
+class RosegardenMainViewWidget;
 class TriggerSegmentManager;
 class TransportDialog;
 class TrackParameterBox;
-class TempoView;
+class TempoAndTimeSignatureEditor;
 class SynthPluginManagerDialog;
 class StartupTester;
 class SequenceManager;
@@ -84,7 +85,7 @@ class ControlEditorDialog;
 class Composition;
 class Clipboard;
 class BankEditorDialog;
-class AudioPluginOSCGUIManager;
+class AudioPluginGUIManager;
 class AudioPluginManager;
 class AudioPluginDialog;
 class AudioMixerWindow2;
@@ -95,6 +96,7 @@ class TranzportClient;
 class WarningWidget;
 class DocumentConfigureDialog;
 class ConfigureDialog;
+
 
 /// The main Rosegarden application window.
 /**
@@ -177,18 +179,18 @@ public:
     /// merge a file, explicitly specifying its type, allow multiple files
     void mergeFile(QStringList filePathList, ImportType type);
 
-    void openURL(const QUrl &url, bool replace);
+    bool openURL(const QUrl &url, bool replace);
 
-    void exportMIDIFile(QString file);
+    bool exportMIDIFile(QString file);
 
     /// export a Csound scorefile
-    void exportCsoundFile(QString file);
+    bool exportCsoundFile(QString file);
 
-    void exportMupFile(QString file);
+    bool exportMupFile(QString file);
 
-    bool exportLilyPondFile(QString file, bool forPreview = false);
+    bool exportLilyPondFile(const QString &file, bool forPreview = false);
 
-    void exportMusicXmlFile(QString file);
+    bool exportMusicXmlFile(QString file);
 
     SequenceManager *getSequenceManager() { return m_seqManager; }
 
@@ -239,7 +241,7 @@ public:
     void awaitDialogClearance() const;
 
     /// Return the plugin native GUI manager, if we have one
-    AudioPluginOSCGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
+    AudioPluginGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
 
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
@@ -294,8 +296,11 @@ protected:
      *   - false: This is a temporary document and is not allowed to make
      *            changes to ALSA and any audio or MIDI connections.
      *   - See RosegardenDocument::m_soundEnabled.
+     *
+     * If the path is not empty that file will be loaded but the document
+     * will still be considered "new" - no filename will be set
      */
-    RosegardenDocument *newDocument(bool permanent);
+    RosegardenDocument *newDocument(bool permanent, const QString& path = "");
 
     /**** File handling code that we don't want the outside world to use ****/
     /**/
@@ -429,7 +434,7 @@ protected:
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString getValidWriteFileName(QString descriptiveExtension, QString label);
+    QString launchSaveAsDialog(QString filter, QString label);
 
     /**
      * Find any non-ASCII strings in a composition that has been
@@ -493,9 +498,6 @@ signals:
     /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
     void segmentsSelected(const SegmentSelection &);
 
-    /// emitted when the composition state (selected track, solo, etc...) changes
-    void compositionStateUpdate();
-
     /// emitted when a plugin dialog selects a plugin
     void pluginSelected(InstrumentId, int, int);
 
@@ -558,8 +560,8 @@ public slots:
      * be saved read-only, to make it harder to overwrite by accident in the
      * future
      */
-    bool slotFileSaveAs(bool asTemplate = false);
-    void slotFileSaveAsTemplate() { slotFileSaveAs(true); }
+    void slotFileSaveAs() { fileSaveAs(false); }
+    void slotFileSaveAsTemplate() { fileSaveAs(true); }
 
     /**
      * asks for saving if the file is modified, then closes the actual
@@ -657,6 +659,11 @@ public slots:
      * Let the user enter a MusicXml file to export to
      */
     void slotExportMusicXml();
+
+    /**
+     * Export (render) file to audio (only audio and synth plugins)
+     */
+    void slotExportWAV();
 
     /**
      * closes all open windows by calling close() on each memberList
@@ -1361,6 +1368,7 @@ public slots:
     void slotTransposeSegments();
     void slotTransposeSemitones();
     void slotSwitchPreset();
+    void slotInterpret();
 
     /// Panic button pressed
     void slotPanic();
@@ -1404,7 +1412,7 @@ public slots:
     void slotMarkerEditorClosed();
 
     /**
-     * when TempoView is being closed
+     * when TempoAndTimeSignatureEditor is being closed
      */
     void slotTempoViewClosed();
 
@@ -1543,6 +1551,14 @@ private:
      */
     void displayBarTime(timeT t);
 
+    /**
+     * Initialise singletons in the correct order
+     */
+    void initStaticObjects();
+
+    bool fileSaveAs(bool asTemplate);
+
+
     //--------------- Data members ---------------------------------
 
     bool m_actionsSetup;
@@ -1562,10 +1578,6 @@ private:
 
     SequencerThread *m_sequencerThread;
     bool m_sequencerCheckedIn;
-
-#ifdef HAVE_LIBJACK
-    QProcess *m_jackProcess;
-#endif // HAVE_LIBJACK
 
     /// CPU meter in the main window status bar.
     /**
@@ -1613,14 +1625,14 @@ private:
     MidiMixerWindow       *m_midiMixer;
     BankEditorDialog      *m_bankEditor;
     MarkerEditor          *m_markerEditor;
-    TempoView             *m_tempoView;
+    TempoAndTimeSignatureEditor *m_tempoAndTimeSignatureEditor;
     TriggerSegmentManager *m_triggerSegmentManager;
     ConfigureDialog       *m_configDlg;
     DocumentConfigureDialog *m_docConfigDlg;
     std::set<ControlEditorDialog *> m_controlEditors;
     /// List of plugin dialogs to make sure we don't launch more than one.
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
-    AudioPluginOSCGUIManager *m_pluginGUIManager;
+    AudioPluginGUIManager *m_pluginGUIManager;
 
     static RosegardenMainWindow *m_myself;
 
@@ -1628,8 +1640,6 @@ private:
 
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
-
-    EditTempoController *m_editTempoController;
 
     StartupTester *m_startupTester;
 
@@ -1669,6 +1679,9 @@ private:
 
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;
+
+    unsigned m_autoSaveInterval;
+    QTime m_lastAutoSaveTime;
 
     void doStop(bool autoStop);
 

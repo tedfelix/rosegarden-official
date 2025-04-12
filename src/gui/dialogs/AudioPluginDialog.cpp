@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginDialog]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "AudioPluginDialog.h"
 
@@ -27,11 +28,16 @@
 #include "gui/studio/AudioPluginClipboard.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "gui/studio/AudioPluginOSCGUIManager.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/PluginControl.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+#include "gui/dialogs/AudioPluginParameterDialog.h"
+#include "gui/dialogs/AudioPluginPresetDialog.h"
+#include "gui/dialogs/AudioPluginConnectionDialog.h"
+#include "misc/Preferences.h"
 
 #include <QLayout>
 #include <QCloseEvent>
@@ -54,6 +60,7 @@
 #include <QUrl>
 #include <QDesktopServices>
 #include <QSharedPointer>
+#include <QLineEdit>
 
 #include <set>
 
@@ -62,7 +69,7 @@ namespace Rosegarden
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      QSharedPointer<AudioPluginManager> aPM,
-                                     AudioPluginOSCGUIManager *aGM,
+                                     AudioPluginGUIManager *aGM,
                                      PluginContainer *pluginContainer,
                                      int index):
     QDialog(parent),
@@ -73,7 +80,8 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     m_programLabel(nullptr),
     m_index(index),
     m_generating(true),
-    m_guiShown(false)
+    m_guiShown(false),
+    m_selectdPluginNumber(0)
 {
     setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
@@ -101,13 +109,38 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     makePluginParamsBox(vbox);
     vboxLayout->addWidget(m_pluginParamsBox);
 
+    // search string
+    m_pluginSearchBox = new QWidget(pluginSelectionBox);
+    QHBoxLayout *pluginSearchBoxLayout = new QHBoxLayout(m_pluginSearchBox);
+    pluginSearchBoxLayout->setContentsMargins(0, 0, 0, 0);
+    pluginSelectionBoxLayout->addWidget(m_pluginSearchBox);
+
+    pluginSearchBoxLayout->addWidget(new QLabel(tr("Search:"), m_pluginSearchBox));
+
+    m_pluginSearchText = new QLineEdit(m_pluginSearchBox);
+    connect(m_pluginSearchText, &QLineEdit::textChanged,
+            this, &AudioPluginDialog::slotSearchTextChanged);
+    m_pluginSearchText->setClearButtonEnabled(true);
+    pluginSearchBoxLayout->addWidget(m_pluginSearchText);
+
     // the Category label/combo
     m_pluginCategoryBox = new QWidget(pluginSelectionBox);
     QHBoxLayout *pluginCategoryBoxLayout = new QHBoxLayout(m_pluginCategoryBox);
     pluginCategoryBoxLayout->setContentsMargins(0, 0, 0, 0);
     pluginSelectionBoxLayout->addWidget(m_pluginCategoryBox);
 
+    pluginCategoryBoxLayout->addWidget(new QLabel(tr("Architecture:"),
+                                                  m_pluginCategoryBox));
+    m_pluginArchList = new QComboBox(m_pluginCategoryBox);
+    pluginCategoryBoxLayout->addWidget(m_pluginArchList);
+
     pluginCategoryBoxLayout->addWidget(new QLabel(tr("Category:"), m_pluginCategoryBox));
+    // fixed order
+    m_pluginArchList->addItem(tr("all"));
+    m_pluginArchList->addItem(tr("ladspa"));
+    m_pluginArchList->addItem(tr("dssi"));
+    if (Preferences::getLV2())
+        m_pluginArchList->addItem(tr("lv2"));
 
     m_pluginCategoryList = new QComboBox(m_pluginCategoryBox);
     pluginCategoryBoxLayout->addWidget(m_pluginCategoryList);
@@ -161,6 +194,10 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &AudioPluginDialog::slotPluginSelected);
 
+    connect(m_pluginArchList,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &AudioPluginDialog::slotArchSelected);
+
     connect(m_pluginCategoryList,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &AudioPluginDialog::slotCategorySelected);
@@ -197,10 +234,26 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
                  QDialogButtonBox::Close | QDialogButtonBox::Help);
 
+    m_paramsButton = new QPushButton(tr("Parameters"));
+    buttonBox->addButton(m_paramsButton, QDialogButtonBox::ActionRole);
+    connect(m_paramsButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotParameters);
+    m_paramsButton->setEnabled(false);
+    m_presetButton = new QPushButton(tr("Presets"));
+    buttonBox->addButton(m_presetButton, QDialogButtonBox::ActionRole);
+    connect(m_presetButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotPresets);
+    m_presetButton->setEnabled(false);
+    m_editConnectionsButton = new QPushButton(tr("Edit connections"));
+    buttonBox->addButton(m_editConnectionsButton, QDialogButtonBox::ActionRole);
+    connect(m_editConnectionsButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotEditConnections);
+    m_editConnectionsButton->setEnabled(false);
     m_editorButton = new QPushButton(tr("Editor"));
     //RG_DEBUG << "ctor - created Editor button";
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
-    connect(m_editorButton, &QAbstractButton::clicked, this, &AudioPluginDialog::slotEditor);
+    connect(m_editorButton, &QAbstractButton::clicked,
+            this, &AudioPluginDialog::slotEditor);
     m_editorButton->setEnabled(false);
 
     metagrid->addWidget(buttonBox, 1, 0);
@@ -226,6 +279,49 @@ AudioPluginDialog::~AudioPluginDialog()
     emit destroyed(m_containerId, m_index);
 }
 
+void AudioPluginDialog::slotParameters()
+{
+    RG_DEBUG << "slotParameters";
+    AudioPluginParameterDialog dlg(this, m_containerId, m_index);
+    dlg.exec();
+}
+
+void AudioPluginDialog::slotPresets()
+{
+    RG_DEBUG << "slotPresets";
+    AudioPluginPresetDialog dlg(this, m_containerId, m_index);
+    dlg.exec();
+}
+
+void AudioPluginDialog::slotEditConnections()
+{
+    PluginPort::ConnectionList clist;
+    m_pluginGUIManager->getConnections(m_containerId, m_index, clist);
+
+#ifndef NDEBUG
+    RG_DEBUG << "slotEditConnections";
+    for (const auto &c : clist.connections) {
+        RG_DEBUG << c.isOutput << c.isAudio << c.pluginPort <<
+            c.instrumentId << c.channel;
+    }
+#endif
+
+    AudioPluginConnectionDialog dlg(this, clist);
+    if (dlg.exec() == QDialog::Accepted) {
+        PluginPort::ConnectionList newList;
+        dlg.getConnections(newList);
+
+#ifndef NDEBUG
+        RG_DEBUG << "slotEditConnections new list";
+        for (const auto &c : newList.connections) {
+            RG_DEBUG << c.isOutput << c.isAudio <<
+                c.pluginPort << c.instrumentId << c.channel;
+        }
+#endif
+
+        m_pluginGUIManager->setConnections(m_containerId, m_index, newList);
+    }
+}
 
 void
 AudioPluginDialog::slotEditor()
@@ -309,6 +405,13 @@ AudioPluginDialog::populatePluginList()
     m_pluginList->addItem(tr("(none)"));
     m_pluginsInList.push_back(0);
 
+    QString archFilter;
+    // We cannot use currentText here because it returns the translated strings
+    int aindex = m_pluginArchList->currentIndex();
+    if (aindex == 1) archFilter = "ladspa";
+    if (aindex == 2) archFilter = "dssi";
+    if (aindex == 3) archFilter = "lv2";
+
     QString category;
     bool needCategory = false;
 
@@ -350,6 +453,13 @@ AudioPluginDialog::populatePluginList()
                     continue;
             }
 
+            // check architecture
+            QString aid = plugin->getIdentifier();
+            QString atype, asoname, alabel, aarch;
+            PluginIdentifier::parseIdentifier
+                (aid, atype, asoname, alabel, aarch);
+            if (archFilter != "" && archFilter != aarch) continue;
+
             QString name = plugin->getName();
             bool store = true;
 
@@ -358,9 +468,10 @@ AudioPluginDialog::populatePluginList()
                 // LADSPA plugin, replace it (this one might be
                 // something better); otherwise leave it alone.
                 QString id = pluginsSorted[name].second->getIdentifier();
-                QString type, soname, label;
-                PluginIdentifier::parseIdentifier(id, type, soname, label);
-                if (type != "ladspa") {
+                QString type, soname, label, arch;
+                PluginIdentifier::parseIdentifier
+                    (id, type, soname, label, arch);
+                if (arch != "ladspa") {
                     store = false;
                 }
             }
@@ -392,12 +503,22 @@ AudioPluginDialog::populatePluginList()
         if (name.endsWith(" VST"))
             name = name.left(name.length() - 4);
 
-        m_pluginList->addItem(name);
-        m_pluginsInList.push_back(i->second.first);
+        QString id = i->second.second->getIdentifier();
+        QString type, soname, label, arch;
+        PluginIdentifier::parseIdentifier(id, type, soname, label, arch);
 
-        // If this is the plugin that is selected, select it in the combobox.
-        if (currentId == i->second.second->getIdentifier()) {
-            m_pluginList->setCurrentIndex(m_pluginList->count() - 1);
+        QString tname = type + ":" + name;
+
+        QString searchText = m_pluginSearchText->text();
+        if (searchText == "" ||
+            tname.contains(searchText, Qt::CaseInsensitive)) {
+            m_pluginList->addItem(tname);
+            m_pluginsInList.push_back(i->second.first);
+            // If this is the plugin that is selected, select it in
+            // the combobox.
+            if (currentId == i->second.second->getIdentifier()) {
+                m_pluginList->setCurrentIndex(m_pluginList->count() - 1);
+            }
         }
     }
 
@@ -423,6 +544,19 @@ AudioPluginDialog::makePluginParamsBox(QWidget *parent)
 }
 
 void
+AudioPluginDialog::slotSearchTextChanged(const QString&)
+{
+    populatePluginList();
+}
+
+void
+AudioPluginDialog::slotArchSelected(int)
+{
+    //RG_DEBUG << "slotArchSelected()";
+    populatePluginList();
+}
+
+void
 AudioPluginDialog::slotCategorySelected(int)
 {
     //RG_DEBUG << "slotCategorySelected()";
@@ -432,14 +566,24 @@ AudioPluginDialog::slotCategorySelected(int)
 void
 AudioPluginDialog::slotPluginSelected(int index)
 {
+    int number = m_pluginsInList[index];
+    if (number == m_selectdPluginNumber) {
+        // no change - return here to avoid unnecessary stop and start of ui
+        RG_DEBUG << "slotPluginSelected no change";
+        return;
+    }
+    RG_DEBUG << "slotPluginSelected" << m_selectdPluginNumber << "->" <<
+        number;
+    m_selectdPluginNumber = number;
+
     bool guiWasShown = m_guiShown;
 
-    if (m_guiShown) {
-        emit stopPluginGUI(m_containerId, m_index);
-        m_guiShown = false;
-    }
+    // always stop the gui
+    emit stopPluginGUI(m_containerId, m_index);
+    // allow time for the gui to stop properly
+    qApp->processEvents(QEventLoop::AllEvents, 1);
 
-    int number = m_pluginsInList[index];
+    m_guiShown = false;
 
     //RG_DEBUG << "slotPluginSelected(): setting up plugin from position " << number << " at menu item " << index;
 
@@ -455,7 +599,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_pluginList->setToolTip( tr("Select a plugin from this list") );
     }
 
-    QSharedPointer<AudioPlugin> plugin = m_pluginManager->getPlugin(number - 1);
+    QSharedPointer<AudioPlugin> audioPlugin = m_pluginManager->getPlugin(number - 1);
 
     // Destroy old param widgets
     //
@@ -468,12 +612,13 @@ AudioPluginDialog::slotPluginSelected(int index)
 
     // count up how many controller inputs the plugin has
     int portCount = 0;
-    if (plugin) {
-        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
-             it != plugin->end();
+    if (audioPlugin) {
+        for (AudioPlugin::PluginPortVector::iterator it = audioPlugin->begin();
+             it != audioPlugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
-                ((*it)->getType() & PluginPort::Input))
+                ((*it)->getType() & PluginPort::Input) &&
+                ! ((*it)->getType() & PluginPort::Event))
                 ++portCount;
         }
     }
@@ -494,55 +639,57 @@ AudioPluginDialog::slotPluginSelected(int index)
             new QLabel(tr("<qt><p>This plugin has too many controls to edit here.</p><p>Use the external editor, if available.</p></qt>"),
                             m_pluginParamsBox), insRow, 0, 1, 2, Qt::AlignCenter);
             hidden = true;
-    } else if (portCount == 0 && plugin) {
+    } else if (portCount == 0 && audioPlugin) {
         m_pluginParamsBoxLayout->addWidget(
             new QLabel(tr("This plugin does not have any controls that can be edited here."),
                            m_pluginParamsBox), insRow, 0, 1, 2, Qt::AlignCenter);
     }
 
-    AudioPluginInstance *inst = m_pluginContainer->getPlugin(m_index);
-    if (!inst)
+    AudioPluginInstance *audioPluginInstance = m_pluginContainer->getPlugin(m_index);
+    if (!audioPluginInstance)
         return ;
 
-    if (plugin) {
-        setWindowTitle(caption + plugin->getName());
-        m_pluginId->setText(tr("Id: %1").arg(plugin->getUniqueId()));
+    if (audioPlugin) {
+        setWindowTitle(caption + audioPlugin->getName());
+        m_pluginId->setText(tr("Id: %1").arg(audioPlugin->getUniqueId()));
 
-        QString pluginInfo = plugin->getAuthor() + QString("\n") +
-            plugin->getCopyright();
+        QString pluginInfo = audioPlugin->getAuthor() + QString("\n") +
+            audioPlugin->getCopyright();
 
         m_pluginList->setToolTip(pluginInfo);
 
-        std::string identifier = qstrtostr(plugin->getIdentifier());
+        std::string identifier = qstrtostr(audioPlugin->getIdentifier());
 
         // Only clear ports &c if this method is accessed by user
         // action (after the constructor)
         //
         if (m_generating == false) {
-///////
-//          inst->clearPorts();
-///////
-            if (inst->getIdentifier() != identifier) {
-                inst->clearConfiguration();
+            // If the plugin has changed, clear everything for the new one.
+            if (audioPluginInstance->getIdentifier() != identifier) {
+                audioPluginInstance->clearPorts();
+                audioPluginInstance->clearConfiguration();
             }
+            audioPluginInstance->setLabel(qstrtostr(audioPlugin->getLabel()));
         }
 
-        inst->setIdentifier(identifier);
+        audioPluginInstance->setIdentifier(identifier);
+        audioPluginInstance->setArch(audioPlugin->getArch());
 
         int count = 0;
         int ins = 0, outs = 0;
 
-        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
-             it != plugin->end();
+        for (AudioPlugin::PluginPortVector::iterator it = audioPlugin->begin();
+             it != audioPlugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
-                ((*it)->getType() & PluginPort::Input)) {
+                ((*it)->getType() & PluginPort::Input) &&
+                ! ((*it)->getType() & PluginPort::Event)) {
                 // Check for port existence and create with default value
                 // if it doesn't exist.  Modification occurs through the
                 // slotPluginPortChanged signal.
                 //
-                if (inst->getPort(count) == nullptr) {
-                    inst->addPort(count, (float)(*it)->getDefaultValue());
+                if (audioPluginInstance->getPort(count) == nullptr) {
+                    audioPluginInstance->addPort(count, (float)(*it)->getDefaultValue());
 //                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
                 }
 
@@ -563,7 +710,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         else
             m_insOuts->setText(tr("%1 in, %2 out").arg(ins).arg(outs));
 
-        QString shortName(plugin->getName());
+        QString shortName(audioPlugin->getName());
         int parenIdx = shortName.indexOf(" (");
         if (parenIdx > 0) {
             shortName = shortName.left(parenIdx);
@@ -577,10 +724,10 @@ AudioPluginDialog::slotPluginSelected(int index)
     // tell the sequencer
     emit pluginSelected(m_containerId, m_index, number - 1);
 
-    if (plugin) {
+    if (audioPlugin) {
 
         int current = -1;
-        QStringList programs = getProgramsForInstance(inst, current);
+        QStringList programs = getProgramsForInstance(audioPluginInstance, current);
 
         if (programs.count() > 0) {
 
@@ -642,11 +789,12 @@ AudioPluginDialog::slotPluginSelected(int index)
 
         // Create the plugin controls, but only if they're going to be visible.
         // (Else what's the point of creating them at all?)
-        for (AudioPlugin::PluginPortVector::iterator it = plugin->begin();
-             it != plugin->end();
+        for (AudioPlugin::PluginPortVector::iterator it = audioPlugin->begin();
+             it != audioPlugin->end();
              ++it) {
             if (((*it)->getType() & PluginPort::Control) &&
                 ((*it)->getType() & PluginPort::Input) &&
+                ! ((*it)->getType() & PluginPort::Event) &&
                 !hidden) {
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,
@@ -654,7 +802,7 @@ AudioPluginDialog::slotPluginSelected(int index)
                                       *it,
                                       m_pluginManager,
                                       count,
-                                      inst->getPort(count)->value,
+                                      audioPluginInstance->getPort(count)->value,
                                       showBounds);
                 m_pluginParamsBoxLayout->addWidget(control, row, col);
 //                m_pluginParamsBoxLayout->setColumnStretch(col, 20);
@@ -682,31 +830,44 @@ AudioPluginDialog::slotPluginSelected(int index)
         m_pluginParamsBox->show();
     }
 
-    if (guiWasShown) {
+    if (guiWasShown && audioPlugin) {
         emit showPluginGUI(m_containerId, m_index);
         m_guiShown = true;
     }
 
-    // unused
-    //bool gui = false;
-    m_pluginGUIManager->hasGUI(m_containerId, m_index);
-//    std::cout << "gui is: " << gui
-//              << " container ID: " << m_containerId
-//              << " index: " << m_index
-//              << std::endl;
-//    m_editorButton->setEnabled(gui);
+    if (audioPlugin) {
+        bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
 
-    //!!!  I can't get to the bottom of this in a reasonable amount of time.
-    // m_containerId is always 10013, and m_index is either 0 (LADSPA plugin) or
-    // 999 (DSSI plugin) with no variation, and hasGUI() always tests false.
-    // This means the editor button is never enabled, and this is unacceptable
-    // for plugins that have no controls that can be edited from within
-    // Rosegarden.  I'm hacking the button always enabled, even if no GUI is
-    // available.  This seems to fail silently until the user randomly switches
-    // to a plugin that does have a GUI, in which case its GUI pops up, even
-    // though they're five plugins away from the one where the pushed the button
-    // originally.  Compared with never making it available, this is tolerable.
-    m_editorButton->setEnabled(true);
+        // original comment is below. The hasGui function seems to work for me
+
+        //!!!  I can't get to the bottom of this in a reasonable
+        // amount of time.  m_containerId is always 10013, and m_index
+        // is either 0 (LADSPA plugin) or 999 (DSSI plugin) with no
+        // variation, and hasGUI() always tests false.  This means the
+        // editor button is never enabled, and this is unacceptable
+        // for plugins that have no controls that can be edited from
+        // within Rosegarden.  I'm hacking the button always enabled,
+        // even if no GUI is available.  This seems to fail silently
+        // until the user randomly switches to a plugin that does have
+        // a GUI, in which case its GUI pops up, even though they're
+        // five plugins away from the one where the pushed the button
+        // originally.  Compared with never making it available, this
+        // is tolerable.
+        m_editorButton->setEnabled(hasGui);
+        bool canEditConnections =
+            m_pluginGUIManager->canEditConnections(m_containerId, m_index);
+        m_editConnectionsButton->setEnabled(canEditConnections);
+        bool hasParameters =
+            m_pluginGUIManager->hasParameters(m_containerId, m_index);
+        m_paramsButton->setEnabled(hasParameters);
+        bool canUsePresets =
+            m_pluginGUIManager->canUsePresets(m_containerId, m_index);
+        m_presetButton->setEnabled(canUsePresets);
+    } else {
+        m_editorButton->setEnabled(false);
+        m_presetButton->setEnabled(false);
+        m_editConnectionsButton->setEnabled(false);
+    }
 
     adjustSize();
     update(0, 0, width(), height());
@@ -902,6 +1063,9 @@ AudioPluginDialog::slotBypassChanged(bool bp)
 void
 AudioPluginDialog::slotCopy()
 {
+    // tell plugins to save state
+    RosegardenSequencer::getInstance()->savePluginState();
+
     int item = m_pluginList->currentIndex();
     int number = m_pluginsInList[item] - 1;
 

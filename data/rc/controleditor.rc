@@ -14,12 +14,18 @@
     <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
+
+    <Separator/>
+
+    <Action name="remove_all_from_ip" text="Remove All From Instrument Panel" />
   </Menu>
 
   <Menu name="help" append="about_merge">
     <text>&amp;Help</text>
     <Action name="control_help" text="&amp;Help" icon="wiki" shortcut="F1" />
-  <Separator/>
+
+    <Separator/>
+
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
   </Menu>
 </MenuBar>

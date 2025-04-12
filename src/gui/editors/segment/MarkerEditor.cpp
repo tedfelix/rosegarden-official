@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -34,7 +34,6 @@
 #include "document/Command.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "gui/widgets/TmpStatusMsg.h"
 
 #include <QApplication>
 #include <QMainWindow>
@@ -256,10 +255,11 @@ MarkerEditor::slotUpdate()
 
     m_listView->clear();
 
-    Composition::markercontainer markers =
-        m_doc->getComposition().getMarkers();
+    Composition &comp = m_doc->getComposition();
 
-    Composition::markerconstiterator it;
+    Composition::MarkerVector markers = comp.getMarkers();
+
+    Composition::MarkerVector::const_iterator it;
 
     QSettings settings;
     settings.beginGroup(MarkerEditorConfigGroup);
@@ -267,7 +267,8 @@ MarkerEditor::slotUpdate()
     int timeMode = settings.value("timemode", 0).toInt() ;
 
     for (it = markers.begin(); it != markers.end(); ++it) {
-        QString timeString = makeTimeString((*it)->getTime(), timeMode);
+        const QString timeString = comp.makeTimeString(
+                (*it)->getTime(), static_cast<Composition::TimeMode>(timeMode));
 
         MarkerEditorViewItem *item =
             new MarkerEditorViewItem(
@@ -518,42 +519,6 @@ MarkerEditor::slotItemClicked(QTreeWidgetItem *item, int column )
         << "jump to marker at " << ei->getRawTime();
 
         emit jumpToMarker(timeT(ei->getRawTime()));
-    }
-}
-
-QString
-MarkerEditor::makeTimeString(timeT time, int timeMode)
-{
-    switch (timeMode) {
-
-    case 0:  // musical time
-        {
-            int bar, beat, fraction, remainder;
-            m_doc->getComposition().getMusicalTimeForAbsoluteTime
-            (time, bar, beat, fraction, remainder);
-            ++bar;
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case 1:  // real time
-        {
-            RealTime rt =
-                m_doc->getComposition().getElapsedRealTime(time);
-            //        return QString("%1   ").arg(rt.toString().c_str());
-            return QString("%1   ").arg(rt.toText().c_str());
-        }
-
-    default:
-        return QString("%1   ").arg(time);
     }
 }
 

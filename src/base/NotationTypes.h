@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@
  * NotationTypes.h
  *
  * This file contains definitions of several classes to assist in
- * creating and manipulating certain event types.  The classes are:
+ * creating and manipulating certain Event types.  The classes are:
  *
  *   Accidental
  *   Clef
@@ -56,6 +56,9 @@
  *
  * This file also defines the event types and standard property names
  * for the basic events.
+ *
+ * See MidiTypes.h for MIDI-specific Event types like Controllers and
+ * Program Changes.
  */
 
 namespace Rosegarden
@@ -301,7 +304,7 @@ public:
      * exception if the given string does not match one of the above
      * clef name constants.
      */
-    Clef(const std::string &s, int octaveOffset = 0);
+    explicit Clef(const std::string &s, int octaveOffset = 0);
 
     Clef(const Clef &c) : m_clef(c.m_clef), m_octaveOffset(c.m_octaveOffset) {
     }
@@ -729,8 +732,8 @@ public:
 
     explicit Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
-    Text(const std::string &text,
-         const std::string &textType = UnspecifiedType);
+    explicit Text(const std::string &text,
+                  const std::string &textType = UnspecifiedType);
     Text(const Text &);
     Text &operator=(const Text &);
     ~Text();
@@ -791,8 +794,9 @@ public:
     /**
      * Construct a Pitch object based on the given performance (MIDI) pitch.
      */
-    Pitch(int performancePitch,
-          const Accidental &explicitAccidental = Accidentals::NoAccidental);
+    explicit Pitch
+    (int performancePitch,
+     const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
      * Construct a Pitch based on octave and pitch in octave.  The
@@ -1082,7 +1086,7 @@ public:
      * durational; they don't represent pitch, and may be as
      * relevant to rests as actual notes.
      */
-    Note(Type type, int dots = 0) :
+    explicit Note(Type type, int dots = 0) :
         m_type(type < Shortest ? Shortest :
                type >  Longest ?  Longest :
                type),

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ namespace Rosegarden
 
 AudioCache PlayableAudioFile::m_smallFileCache;
 
-std::vector<PlayableAudioFile::sample_t *> PlayableAudioFile::m_workBuffers;
+std::vector<sample_t *> PlayableAudioFile::m_workBuffers;
 size_t PlayableAudioFile::m_workBufferSize = 0;
 QMutex PlayableAudioFile::m_workBuffersMutex;
 

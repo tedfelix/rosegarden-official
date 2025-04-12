@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -97,16 +97,21 @@ QSize SqueezedLabel::sizeHint() const
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QScreen* screen = this->screen();
-    int dw = screen->availableGeometry().width();
+    const int displayWidth = screen->availableGeometry().width();
 #else
-    int dw = QApplication::desktop()->availableGeometry(QPoint(0, 0)).width();
+    const int displayWidth = QApplication::desktop()->availableGeometry(QPoint(0, 0)).width();
 #endif
-    int maxWidth = dw * 3 / 4;
+    // 3/4 of the display width.
+    const int maxWidth = displayWidth * 3 / 4;
+
     QFontMetrics fm(fontMetrics());
-    int textWidth = fm.boundingRect(d->fullText).width();
-    if (textWidth > maxWidth) {
+
+    // ??? This has problems with "Pan".  It returns 18, but Pan needs more.
+    //     Adding 1 here fixes "Pan".
+    int textWidth = fm.boundingRect(d->fullText).width() + 1;
+    if (textWidth > maxWidth)
         textWidth = maxWidth;
-    }
+
     return QSize(textWidth, QLabel::sizeHint().height());
 }
 

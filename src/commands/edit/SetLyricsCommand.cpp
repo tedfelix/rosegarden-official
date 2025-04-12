@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -103,7 +103,7 @@ SetLyricsCommand::execute()
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
         QString syllables = *bsi;
-        syllables.replace(QRegularExpression("\\[\\d+\\] "), " ");
+        syllables.replace(QRegularExpression("\\[\\-?\\d+\\] "), " ");
         syllables.replace(QRegularExpression("\n"), " ");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList syllableList = syllables.split(" ", Qt::SkipEmptyParts); // no empties

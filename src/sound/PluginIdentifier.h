@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -27,11 +27,14 @@ namespace Rosegarden {
 class PluginIdentifier {
 
 public:
- 
+
     static QString createIdentifier(QString type, QString soName, QString label);
 
     static void parseIdentifier(QString identifier,
-                                QString &type, QString &soName, QString &label);
+                                QString &type,
+                                QString &soName,
+                                QString &label,
+                                QString &architecture);
 
     static bool areIdentifiersSimilar(QString id1, QString id2);
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -63,9 +63,8 @@ namespace Rosegarden
   CONSTRUCTOR, DESTRUCTOR, AND INIT
  *************************************/
 PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
-                                   const std::vector<Segment *>& segments,
-                                   QWidget *parent) :
-        NotationView(doc, segments, parent),
+                                   const std::vector<Segment *>& segments) :
+        NotationView(doc, segments),
         m_doc(doc),
         m_jackCaptureClient(nullptr),
         m_jackConnected(false),
@@ -105,17 +104,18 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     // The one we want is obtained be dereferencing the return value of
     // getTunings to obtain the std::vector, then indexing by the quantity
     // retreived above. So the following looks nasty, but that's C++ for you.
-    const std::vector<Accidentals::Tuning*> *availableTunings =
+    const std::vector<std::shared_ptr<Accidentals::Tuning>> *availableTunings =
         Accidentals::Tuning::getTunings();
 
     if (availableTunings) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         m_availableTunings =
-            QVector<Accidentals::Tuning*>(availableTunings->begin(),
-                                          availableTunings->end());
+            QVector<std::shared_ptr<Accidentals::Tuning>>(
+                    availableTunings->begin(),
+                    availableTunings->end());
 #else
         m_availableTunings =
-            QVector<Accidentals::Tuning*>::fromStdVector(*availableTunings);
+            QVector<std::shared_ptr<Accidentals::Tuning>>::fromStdVector(*availableTunings);
 #endif
 
         if (tuning < 0 ||
@@ -186,7 +186,7 @@ void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
     m_tuningsActionGroup = new QActionGroup(this);
 
     {
-        QVectorIterator<Accidentals::Tuning*> it(m_availableTunings);
+        QVectorIterator<std::shared_ptr<Accidentals::Tuning>> it(m_availableTunings);
         while (it.hasNext()) {
             QAction *tuning =
               new QAction(QString::fromStdString(it.next()->getName()),

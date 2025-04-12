@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,8 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[OSCMessage]"
+#define RG_NO_DEBUG_PRINT
 
 #include "OSCMessage.h"
+
+#include "misc/Debug.h"
 
 #include <cstdlib>
 #include <cstring>
@@ -43,7 +47,11 @@ OSCMessage::addArg(char type, lo_arg *arg)
 {
     lo_arg *newarg = nullptr;
 
-    if (type == 's') {
+    //RG_DEBUG << "addArg()";
+    //RG_DEBUG << "  sizeof(lo_arg):" << sizeof(lo_arg);
+    //RG_DEBUG << "  type:" << type;
+
+    if (type == LO_STRING  ||  type == LO_SYMBOL) {
 
         size_t sz = strlen((char *)arg) + 1;
         if (sz < sizeof(lo_arg))
@@ -51,14 +59,23 @@ OSCMessage::addArg(char type, lo_arg *arg)
         newarg = (lo_arg *)malloc(sz);
         strcpy((char *)newarg, (char *)arg);
 
-    } else {
+    } else if (type == LO_INT32  ||  type == LO_FLOAT  ||
+               type == LO_MIDI) {  // 4-bytes
+
+        // ??? Too big.  Only need 4.  Need to reduce and test.
+        newarg = static_cast<lo_arg *>(malloc(sizeof(lo_arg)));
+        memcpy(newarg, arg, 4);
+
+    } else {  // Assume it's safe to copy 8 bytes, which it may not be.
+
+        // ??? LO_BLOB seems like a problem along with several others.
+        //     E.g. with LO_TRUE do we just go with nullptr and allocate nothing?
 
         newarg = (lo_arg *)malloc(sizeof(lo_arg));
-        memcpy((char *)newarg, (char *)arg, sizeof(lo_arg));
+        memcpy(newarg, arg, sizeof(lo_arg));
     }
 
     m_args.push_back(OSCArg(type, newarg));
-    //cppcheck-suppress memleak
 }
 
 size_t

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,66 +19,31 @@
 #ifndef RG_MUSICXMLIMPORTHELPER_H
 #define RG_MUSICXMLIMPORTHELPER_H
 
-#include "base/BaseProperties.h"
-#include "base/Composition.h"
 #include "base/Instrument.h"
-#include "base/NotationTypes.h"
-#include "base/StaffExportTypes.h"
-#include "base/Segment.h"
-#include "base/MidiProgram.h"
-#include "base/Studio.h"
-#include "base/Event.h"
-#include "base/Track.h"
-#include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationProperties.h"
+#include "base/TimeT.h"
+
+#include <QString>
 
 #include <string>
 #include <vector>
-#include <queue>
-
-#include <QString>
+#include <map>
 
 
 namespace Rosegarden
 {
 
-// class Segment;
-// class Composition;
 
-//     typedef std::map<QString, timeT> IndicationMap;
-//     typedef std::map<QString, int> UnpitchedMap;
+class RosegardenDocument;
+class Track;
+class Segment;
+class Event;
+class Key;
+class TimeSignature;
+class Clef;
+
 
 class MusicXMLImportHelper {
 public:
-
-    class IndicationStart {
-    public:
-        IndicationStart(const QString &staff="", const QString &voice="",
-                        const std::string &name="", timeT time=0, int number=1,
-                        const std::string &endName="") :
-                m_staff(staff),
-                m_voice(voice),
-                m_name(name),
-                m_endName((endName == "") ? name : endName),
-                m_time(time),
-                m_number(number)
-        {
-        };
-        QString     m_staff;
-        QString     m_voice;
-        std::string m_name;
-        std::string m_endName;
-        timeT       m_time;
-        int         m_number;
-    };
-
-//     struct IndicationCMP {
-//         bool operator()(const IndicationStart &a, const IndicationStart &b) {
-//             return true;
-//         };
-//     };
-
-    typedef std::vector<IndicationStart> IndicationVector;
 
     typedef std::map<QString, Track*> TrackMap;
     typedef std::map<QString, Segment *> SegmentMap;
@@ -86,8 +51,9 @@ public:
     typedef std::map<QString, int> PercussionMap;
     typedef std::map<QString, QString> VoiceMap;
 
-    explicit MusicXMLImportHelper(Composition *composition);
+    explicit MusicXMLImportHelper(RosegardenDocument *doc);
     ~MusicXMLImportHelper();
+
     bool setStaff(const QString &staff="1");
     bool setVoice(const QString &voice="");
     bool setLabel(const QString &label);
@@ -108,21 +74,52 @@ public:
     void setInstrument(InstrumentId instrument);
     void setBracketType(int bracket);
 
-protected:
-    Composition         *m_composition;
+private:
+
+    class IndicationStart {
+    public:
+        IndicationStart(const QString &staff="", const QString &voice="",
+                        const std::string &name="", timeT time=0, int number=1,
+                        const std::string &endName="") :
+                m_staff(staff),
+                m_voice(voice),
+                m_name(name),
+                m_endName((endName == "") ? name : endName),
+                m_time(time),
+                m_number(number)
+        {
+        };
+        QString     m_staff;
+        QString     m_voice;
+        std::string m_name;
+        std::string m_endName;
+        timeT       m_time{};
+        int         m_number{1};
+    };
+    //struct IndicationCMP {
+    //    bool operator()(const IndicationStart &a, const IndicationStart &b) {
+    //        return true;
+    //    };
+    //};
+
+    RosegardenDocument *m_document;
+
     VoiceMap            m_mainVoice;
     QString             m_staff;
     QString             m_voice;
     TrackMap            m_tracks;
     SegmentMap          m_segments;
 
-    timeT               m_curTime;
-    int                 m_divisions;
+    timeT               m_curTime{0};
+    int                 m_divisions{960};
+    typedef std::vector<IndicationStart> IndicationVector;
     IndicationVector    m_indications;
     PercussionMap       m_unpitched;
-
+    QString             m_label;
 };
 
+
 }
+
 
 #endif

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CreateOrDeleteDeviceCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CreateOrDeleteDeviceCommand.h"
 
@@ -40,6 +41,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     m_baseInstrumentId(0),
     m_deviceCreated(true)  // We are doing delete.
 {
+    RG_DEBUG << "ctor" << m_deviceName << m_type << m_direction;
     Device *device = m_studio->getDevice(m_deviceId);
 
     if (!device) {
@@ -65,6 +67,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
 void
 CreateOrDeleteDeviceCommand::execute()
 {
+    RG_DEBUG << "execute" << m_deviceName << m_type << m_direction;
     // Create
     if (!m_deviceCreated) {
 
@@ -103,6 +106,26 @@ CreateOrDeleteDeviceCommand::execute()
             if (midiDevice) {
                 midiDevice->setDirection(m_direction);
                 midiDevice->setUserConnection(m_connection);
+                if (m_withData) {
+                    midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
+                    midiDevice->setVariationType(m_variationType);
+                    midiDevice->clearBankList();
+                    for(const MidiBank& bank : m_bankList) {
+                        midiDevice->addBank(bank);
+                    }
+                    midiDevice->clearProgramList();
+                    for(const MidiProgram& program : m_programList) {
+                        midiDevice->addProgram(program);
+                    }
+                    midiDevice->clearControlList();
+                    for(const ControlParameter& control : m_controlList) {
+                        midiDevice->addControlParameter(control, false);
+                    }
+                    midiDevice->clearKeyMappingList();
+                    for(const MidiKeyMapping& keyMapping : m_keyMappingList) {
+                        midiDevice->addKeyMapping(keyMapping);
+                    }
+                }
             }
         }
 

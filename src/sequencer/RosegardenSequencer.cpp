@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenSequencer]"
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenSequencer.h"
 
@@ -68,7 +69,7 @@ RosegardenSequencer::RosegardenSequencer() :
     m_loopEnd(0, 0),
     m_studio(new MappedStudio()),
     m_transportToken(1),
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     m_isEndOfCompReached(false)
 #else
     m_isEndOfCompReached(false),
@@ -129,6 +130,7 @@ RosegardenSequencer::getInstance()
 {
     // Guaranteed in C++11 to be lazy initialized and thread-safe.
     // See ISO/IEC 14882:2011 6.7(4).
+    RG_DEBUG << "create instance";
     static RosegardenSequencer instance;
 
     // ??? To avoid the static destruction order fiasco, we might want to
@@ -516,7 +518,7 @@ RosegardenSequencer::setMappedInstrument(int type, unsigned int id)
 }
 
 void
-RosegardenSequencer::processMappedEvent(MappedEvent mE)
+RosegardenSequencer::processMappedEvent(const MappedEvent &mE)
 {
     QMutexLocker locker(&m_asyncQueueMutex);
     m_asyncOutQueue.push_back(new MappedEvent(mE));
@@ -848,8 +850,8 @@ RosegardenSequencer::getPluginProgram(int id, const QString &name)
 
 void
 RosegardenSequencer::setMappedPort(int pluginId,
-                                      unsigned long portId,
-                                      float value)
+                                   unsigned long portId,
+                                   float value)
 {
     LOCKED;
 
@@ -889,6 +891,11 @@ RosegardenSequencer::getMappedPort(int pluginId,
     }
 
     return 0;
+}
+
+void RosegardenSequencer::savePluginState()
+{
+    m_driver->savePluginState();
 }
 
 // Creates an object of a type
@@ -966,7 +973,7 @@ RosegardenSequencer::disconnectMappedObject(int id)
 unsigned int
 RosegardenSequencer::getSampleRate() const
 {
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QMutexLocker locker(const_cast<QRecursiveMutex *>(&m_mutex));
 #else
     QMutexLocker locker(const_cast<QMutex *>(&m_mutex));
@@ -1031,7 +1038,7 @@ void RosegardenSequencer::dumpFirstSegment()
         if (!evt)
             continue;
 
-        SEQUENCER_DEBUG << i << " : inst = " << evt->getInstrument()
+        SEQUENCER_DEBUG << i << " : inst = " << evt->getInstrumentId()
                         << " - type = " << evt->getType()
                         << " - data1 = " << (unsigned int)evt->getData1()
                         << " - data2 = " << (unsigned int)evt->getData2()
@@ -1203,7 +1210,7 @@ RosegardenSequencer::applyLatencyCompensation(MappedEventList &mappedEventList)
             i != mappedEventList.end(); ++i) {
 
         RealTime instrumentLatency =
-            m_driver->getInstrumentPlayLatency((*i)->getInstrument());
+            m_driver->getInstrumentPlayLatency((*i)->getInstrumentId());
 
         //	SEQUENCER_DEBUG << "RosegardenSequencer::applyLatencyCompensation: maxLatency " << maxLatency << ", instrumentLatency " << instrumentLatency << ", moving " << (*i)->getEventTime() << " to " << (*i)->getEventTime() + maxLatency - instrumentLatency;
 
@@ -1404,7 +1411,7 @@ RosegardenSequencer::routeEvents(
                         event->getRecordedDevice(),
                         event->getRecordedChannel());
 
-        event->setInstrument(info.id);
+        event->setInstrumentId(info.id);
         event->setRecordedChannel(info.channel);
     }
 
@@ -1514,6 +1521,12 @@ RosegardenSequencer::initialiseStudio()
     // clear down the studio before we start adding anything
     //
     m_studio->clear();
+}
+
+void
+RosegardenSequencer::installExporter(WAVExporter* wavExporter)
+{
+    m_driver->installExporter(wavExporter);
 }
 
 void

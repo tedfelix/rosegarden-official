@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -36,6 +36,7 @@
 #include "base/Instrument.h"
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
+#include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
 #include "base/Profiler.h"
 #include "base/QEvents.h"
@@ -54,6 +55,7 @@
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "commands/edit/RemoveMarkerCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
+#include "commands/notation/InterpretCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
 #include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
 #include "commands/segment/AudioSegmentAutoSplitCommand.h"
@@ -115,6 +117,7 @@
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
+#include "gui/dialogs/InterpretDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/LilyPondOptionsDialog.h"
 #include "gui/dialogs/MusicXMLOptionsDialog.h"
@@ -144,7 +147,7 @@
 #include "gui/editors/segment/compositionview/SegmentToolBox.h"
 #include "gui/editors/segment/TrackLabel.h"
 #include "gui/editors/segment/TriggerSegmentManager.h"
-#include "gui/editors/tempo/TempoView.h"
+#include "gui/editors/tempo/TempoAndTimeSignatureEditor.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/FileSource.h"
@@ -161,7 +164,7 @@
 #include "gui/studio/AudioMixerWindow2.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "gui/studio/AudioPluginOSCGUIManager.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "gui/studio/BankEditorDialog.h"
 #include "gui/studio/DeviceManagerDialog.h"
 #include "gui/studio/MidiMixerWindow.h"
@@ -179,6 +182,12 @@
 #include "sequencer/SequencerThread.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
+#ifdef HAVE_LILV
+#include "sound/LV2World.h"
+#include "sound/LV2Utils.h"
+#include "sound/LV2Worker.h"
+#include "gui/studio/LV2Gtk.h"
+#endif
 #include "sound/MappedCommon.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
@@ -188,7 +197,6 @@
 #include "sound/SequencerDataBlock.h"
 #include "sound/SoundDriver.h"
 #include "StartupTester.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/studio/DeviceManagerDialog.h"
 #include "gui/widgets/InputDialog.h"
 #include "TranzportClient.h"
@@ -240,6 +248,8 @@
 #include <QPageSetupDialog>
 #include <QSharedPointer>
 #include <QInputDialog>
+#include <QThread>
+#include <QStandardPaths>
 
 // Ladish lv1 support
 #include <cerrno>   // for errno
@@ -254,6 +264,44 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+    // Like QFileInfo::canonicalPath(), but returns the largest directory
+    // path that actually exists.  E.g. if handed /a/b/c/d/e.txt and d does not
+    // exist, this returns /a/b/c.
+    QString existingDir(const QString &path)
+    {
+        RG_DEBUG << "existingDir" << path;
+
+        QFileInfo dirInfo(path);
+        // For each directory level...
+        while (true) {
+            RG_DEBUG << "existingDir" << dirInfo;
+            if (dirInfo.isDir())
+                return dirInfo.canonicalFilePath();
+            // Remove a level.
+            dirInfo.setFile(dirInfo.dir().path());
+        }
+    }
+
+    void setFileSaveAsDirectory(const QString &directory)
+    {
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("save_file", directory);
+    }
+
+    QString getFileSaveAsDirectory()
+    {
+        QSettings settings;
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        // Get the last Save As location, or DocumentsLocation if there is none.
+        return settings.value(
+                "save_file",
+                QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation)).toString();
+    }
+}
+
 RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
                                            QObject *startupStatusMessageReceiver) :
     QMainWindow(nullptr),
@@ -265,9 +313,6 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_recentFiles(),
     m_sequencerThread(nullptr),
     m_sequencerCheckedIn(false),
-#ifdef HAVE_LIBJACK
-    m_jackProcess(nullptr),
-#endif
     m_cpuBar(nullptr),
     m_zoomSlider(nullptr),
     m_zoomLabel(nullptr),
@@ -285,14 +330,13 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_midiMixer(nullptr),
     m_bankEditor(nullptr),
     m_markerEditor(nullptr),
-    m_tempoView(nullptr),
+    m_tempoAndTimeSignatureEditor(nullptr),
     m_triggerSegmentManager(nullptr),
     m_configDlg(nullptr),
     m_docConfigDlg(nullptr),
-    m_pluginGUIManager(new AudioPluginOSCGUIManager(this)),
+    m_pluginGUIManager(nullptr),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
-    m_editTempoController(new EditTempoController(this)),
     m_startupTester(nullptr),
     m_firstRun(false),
     m_haveAudioImporter(false),
@@ -304,21 +348,31 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     m_tranzport(nullptr),
 //  m_deviceManager(),  QPointer inits itself to 0.
     m_warningWidget(nullptr),
-    m_cpuMeterTimer(new QTimer(this))
+    m_cpuMeterTimer(new QTimer(this)),
+    m_autoSaveInterval(0)
 {
+#ifdef THREAD_DEBUG
+    RG_WARNING << "UI Thread gettid(): " << gettid();
+#endif
+
+    initStaticObjects();
+
+    // the AudioPluginGUIManager must be created after initStaticObjects
+    m_pluginGUIManager = new AudioPluginGUIManager(this);
+
     setAttribute(Qt::WA_DeleteOnClose);
 
     setObjectName("App");
     m_myself = this;
 
     if (startupStatusMessageReceiver) {
-        QObject::connect(this, SIGNAL(startupStatusMessage(QString)),
-                         startupStatusMessageReceiver,
-                         SLOT(slotShowStatusMessage(QString)));
+        connect(this, SIGNAL(startupStatusMessage(QString)),
+                startupStatusMessageReceiver, SLOT(slotShowStatusMessage(QString)));
     }
 
-    connect(m_editTempoController, SIGNAL(editTempos(timeT)),
-            this, SLOT(slotEditTempos(timeT)));
+    connect(EditTempoController::self(), &EditTempoController::editTempos,
+            this, static_cast<void(RosegardenMainWindow::*)(timeT)>(
+                    &RosegardenMainWindow::slotEditTempos));
 
     // Need to do this prior to launching the sequencer to
     // avoid ActionFileClient warnings in the debug log due
@@ -337,13 +391,53 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
         launchSequencer();
     }
 
+    // check for autosaved untitled document
+
+    // note this must be done before the plugin manager is started as
+    // the messagebox will hold up the initialization process and
+    // plugins which require the sample rate for initialization will
+    // not work correctly.
+    bool loadAutoSaveFile = false;
+    QString autoSaved = AutoSaveFinder().checkAutoSaveFile("");
+    if (autoSaved != "") {
+
+        // At this point the splash screen is definitely up, hide it
+        // before showing the messagebox.
+        StartupLogo::hideIfStillThere();
+
+        // Ask the user if they want to use the auto-save file
+        QMessageBox::StandardButton reply = QMessageBox::question(
+                this,  // parent
+                tr("Rosegarden"),  // title
+                tr("An auto-save file for an unsaved document has been found.\n"
+                   "Do you want to open it?"),  // text
+                QMessageBox::Yes | QMessageBox::No,  // buttons
+                QMessageBox::Yes);  // defaultButton
+
+        if (reply == QMessageBox::Yes) {
+            loadAutoSaveFile = true;
+        } else {
+            // user doesn't want the auto-save, so delete it
+            // so it won't bother us again if we relaunch
+            QString autoSaveFileName =
+                AutoSaveFinder().getAutoSavePath("");
+            RG_DEBUG << "ctor deleting autosave file" << autoSaveFileName;
+            QFile::remove(autoSaveFileName);
+        }
+
+    }
+
     // Plugin manager
     //
     emit startupStatusMessage(tr("Initializing plugin manager..."));
     m_pluginManager.reset(new AudioPluginManager(enableSound));
 
-    RosegardenDocument *doc = newDocument(
-            true);  // permanent
+    QString autoSaveFileName;
+    if (loadAutoSaveFile) {
+        autoSaveFileName = AutoSaveFinder().getAutoSavePath("");
+        RG_DEBUG << "ctor loading autosave file" << autoSaveFileName;
+    }
+    RosegardenDocument *doc = newDocument(true, autoSaveFileName);  // permanent
 
     m_seqManager = new SequenceManager();
 
@@ -435,7 +529,7 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
 
     // Send the transport control statuses for MMC and JACK
     //
-    m_seqManager->sendTransportControlStatuses();
+    m_seqManager->sendPreferences();
 
     // Now autoload
     //
@@ -527,6 +621,9 @@ RosegardenMainWindow::~RosegardenMainWindow()
 {
     RG_DEBUG << "dtor...";
 
+    delete m_tempoAndTimeSignatureEditor;
+    m_tempoAndTimeSignatureEditor = nullptr;
+
     if (getView() &&
         getView()->getTrackEditor() &&
         getView()->getTrackEditor()->getCompositionView()) {
@@ -564,6 +661,22 @@ RosegardenMainWindow::~RosegardenMainWindow()
     RosegardenDocument::currentDocument = nullptr;
 
     Profiles::getInstance()->dump();
+}
+
+void RosegardenMainWindow::initStaticObjects()
+{
+    // This will declare the static variables for the singletons in
+    // the correct order. They are destroyed in the reverse order.
+    RG_DEBUG << "initStaticObjects";
+#ifdef HAVE_LILV
+    LV2World::get();
+    LV2Utils::getInstance();
+    LV2Worker::getInstance();
+#ifdef HAVE_GTK2
+    LV2Gtk::getInstance();
+#endif
+#endif
+    RosegardenSequencer::getInstance();
 }
 
 int RosegardenMainWindow::sigpipe[2];
@@ -635,6 +748,9 @@ void
 RosegardenMainWindow::closeEvent(QCloseEvent *event)
 {
     if (queryClose()) {
+        // do some cleaning up
+        emit documentAboutToChange();
+
         // Save window geometry and toolbar state
         //RG_DEBUG << "closeEvent(): Saving main window geometry...";
         QSettings settings;
@@ -677,178 +793,180 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
 void
 RosegardenMainWindow::setupActions()
 {
-    createAction("file_new", SLOT(slotFileNew()));
-    createAction("file_open", SLOT(slotFileOpen()));
-    createAction("file_open_example", SLOT(slotFileOpenExample()));
-    createAction("file_open_template", SLOT(slotFileOpenTemplate()));
-    createAction("file_open_most_recent", SLOT(slotFileOpenRecent()));
-    createAction("file_save", SLOT(slotFileSave()));
-    createAction("file_save_as", SLOT(slotFileSaveAs()));
-    createAction("file_save_as_template", SLOT(slotFileSaveAsTemplate()));
-    createAction("file_revert", SLOT(slotRevertToSaved()));
-    createAction("file_close", SLOT(slotFileClose()));
-    createAction("file_quit", SLOT(slotQuit()));
+    createAction("file_new", &RosegardenMainWindow::slotFileNew);
+    createAction("file_open", &RosegardenMainWindow::slotFileOpen);
+    createAction("file_open_example", &RosegardenMainWindow::slotFileOpenExample);
+    createAction("file_open_template", &RosegardenMainWindow::slotFileOpenTemplate);
+    createAction("file_open_most_recent", &RosegardenMainWindow::slotFileOpenRecent);
+    createAction("file_save", &RosegardenMainWindow::slotFileSave);
+    createAction("file_save_as", &RosegardenMainWindow::slotFileSaveAs);
+    createAction("file_save_as_template", &RosegardenMainWindow::slotFileSaveAsTemplate);
+    createAction("file_revert", &RosegardenMainWindow::slotRevertToSaved);
+    createAction("file_close", &RosegardenMainWindow::slotFileClose);
+    createAction("file_quit", &RosegardenMainWindow::slotQuit);
 
-    createAction("edit_cut", SLOT(slotEditCut()));
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("edit_cut", &RosegardenMainWindow::slotEditCut);
+    createAction("edit_copy", &RosegardenMainWindow::slotEditCopy);
+    createAction("edit_paste", &RosegardenMainWindow::slotEditPaste);
     //uncomment this when time comes to implement paste as links
-    //createAction("edit_paste_as_links", SLOT(slotEditPasteAsLinks()));
+    //createAction("edit_paste_as_links", &RosegardenMainWindow::slotEditPasteAsLinks);
 
-    createAction("shortcuts_configure", SLOT(slotConfigureShortcuts()));
-    createAction("options_configure", SLOT(slotConfigure()));
+    createAction("shortcuts_configure", &RosegardenMainWindow::slotConfigureShortcuts);
+    createAction("options_configure", &RosegardenMainWindow::slotConfigure);
 
-    createAction("file_import_project", SLOT(slotImportProject()));
-    createAction("file_import_midi", SLOT(slotImportMIDI()));
-    createAction("file_import_rg21", SLOT(slotImportRG21()));
-//    createAction("file_import_hydrogen", SLOT(slotImportHydrogen()));
-    createAction("file_import_musicxml", SLOT(slotImportMusicXML()));
-    createAction("file_merge", SLOT(slotMerge()));
-    createAction("file_merge_midi", SLOT(slotMergeMIDI()));
-    createAction("file_merge_rg21", SLOT(slotMergeRG21()));
-//    createAction("file_merge_hydrogen", SLOT(slotMergeHydrogen()));
-    createAction("file_merge_musicxml", SLOT(slotMergeMusicXML()));
-    createAction("file_export_project", SLOT(slotExportProject()));
-    createAction("file_export_midi", SLOT(slotExportMIDI()));
-    createAction("file_export_lilypond", SLOT(slotExportLilyPond()));
-    createAction("file_export_musicxml", SLOT(slotExportMusicXml()));
-    createAction("file_export_csound", SLOT(slotExportCsound()));
-    createAction("file_export_mup", SLOT(slotExportMup()));
-    createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
-    createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
-    createAction("file_show_playlist", SLOT(slotPlayList()));
+    createAction("file_import_project", &RosegardenMainWindow::slotImportProject);
+    createAction("file_import_midi", &RosegardenMainWindow::slotImportMIDI);
+    createAction("file_import_rg21", &RosegardenMainWindow::slotImportRG21);
+//    createAction("file_import_hydrogen", &RosegardenMainWindow::slotImportHydrogen);
+    createAction("file_import_musicxml", &RosegardenMainWindow::slotImportMusicXML);
+    createAction("file_merge", &RosegardenMainWindow::slotMerge);
+    createAction("file_merge_midi", &RosegardenMainWindow::slotMergeMIDI);
+    createAction("file_merge_rg21", &RosegardenMainWindow::slotMergeRG21);
+//    createAction("file_merge_hydrogen", &RosegardenMainWindow::slotMergeHydrogen);
+    createAction("file_merge_musicxml", &RosegardenMainWindow::slotMergeMusicXML);
+    createAction("file_export_project", &RosegardenMainWindow::slotExportProject);
+    createAction("file_export_midi", &RosegardenMainWindow::slotExportMIDI);
+    createAction("file_export_lilypond", &RosegardenMainWindow::slotExportLilyPond);
+    createAction("file_export_musicxml", &RosegardenMainWindow::slotExportMusicXml);
+    createAction("file_export_wav", &RosegardenMainWindow::slotExportWAV);
+    createAction("file_export_csound", &RosegardenMainWindow::slotExportCsound);
+    createAction("file_export_mup", &RosegardenMainWindow::slotExportMup);
+    createAction("file_print_lilypond", &RosegardenMainWindow::slotPrintLilyPond);
+    createAction("file_preview_lilypond", &RosegardenMainWindow::slotPreviewLilyPond);
+    createAction("file_show_playlist", &RosegardenMainWindow::slotPlayList);
 
     // Help menu
-    createAction("manual", SLOT(slotHelp()));
-    createAction("tutorial", SLOT(slotTutorial()));
-    createAction("guidelines", SLOT(slotBugGuidelines()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
-    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
-    createAction("donate", SLOT(slotDonate()));
+    createAction("manual", &RosegardenMainWindow::slotHelp);
+    createAction("tutorial", &RosegardenMainWindow::slotTutorial);
+    createAction("guidelines", &RosegardenMainWindow::slotBugGuidelines);
+    createAction("help_about_app", &RosegardenMainWindow::slotHelpAbout);
+    createAction("help_about_qt", &RosegardenMainWindow::slotHelpAboutQt);
+    createAction("donate", &RosegardenMainWindow::slotDonate);
 
-    createAction("show_stock_toolbar", SLOT(slotToggleToolBar()));
-    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
-    createAction("show_tracks_toolbar", SLOT(slotToggleTracksToolBar()));
-    createAction("show_editors_toolbar", SLOT(slotToggleEditorsToolBar()));
-    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
-    createAction("show_zoom_toolbar", SLOT(slotToggleZoomToolBar()));
-    createAction("show_status_bar", SLOT(slotToggleStatusBar()));
-    createAction("show_transport", SLOT(slotUpdateTransportVisibility()));
-    createAction("show_tracklabels", SLOT(slotToggleTrackLabels()));
-    createAction("show_rulers", SLOT(slotToggleRulers()));
-    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
-    createAction("show_chord_name_ruler", SLOT(slotToggleChordNameRuler()));
-    createAction("show_previews", SLOT(slotTogglePreviews()));
-    createAction("show_inst_segment_parameters", SLOT(slotHideShowParameterArea()));
-    createAction("full_screen", SLOT(slotFullScreen()));
+    createAction("show_stock_toolbar", &RosegardenMainWindow::slotToggleToolBar);
+    createAction("show_tools_toolbar", &RosegardenMainWindow::slotToggleToolsToolBar);
+    createAction("show_tracks_toolbar", &RosegardenMainWindow::slotToggleTracksToolBar);
+    createAction("show_editors_toolbar", &RosegardenMainWindow::slotToggleEditorsToolBar);
+    createAction("show_transport_toolbar", &RosegardenMainWindow::slotToggleTransportToolBar);
+    createAction("show_zoom_toolbar", &RosegardenMainWindow::slotToggleZoomToolBar);
+    createAction("show_status_bar", &RosegardenMainWindow::slotToggleStatusBar);
+    createAction("show_transport", &RosegardenMainWindow::slotUpdateTransportVisibility);
+    createAction("show_tracklabels", &RosegardenMainWindow::slotToggleTrackLabels);
+    createAction("show_rulers", &RosegardenMainWindow::slotToggleRulers);
+    createAction("show_tempo_ruler", &RosegardenMainWindow::slotToggleTempoRuler);
+    createAction("show_chord_name_ruler", &RosegardenMainWindow::slotToggleChordNameRuler);
+    createAction("show_previews", &RosegardenMainWindow::slotTogglePreviews);
+    createAction("show_inst_segment_parameters", &RosegardenMainWindow::slotHideShowParameterArea);
+    createAction("full_screen", &RosegardenMainWindow::slotFullScreen);
 
-    createAction("select", SLOT(slotPointerSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("split", SLOT(slotSplitSelected()));
-    createAction("join", SLOT(slotJoinSelected()));
-    createAction("harmonize_selection", SLOT(slotHarmonizeSelection()));
-    createAction("add_time_signature", SLOT(slotEditTimeSignature()));
-    createAction("edit_tempos", SLOT(slotEditTempos()));
-    createAction("cut_range", SLOT(slotCutRange()));
-    createAction("copy_range", SLOT(slotCopyRange()));
-    createAction("paste_range", SLOT(slotPasteRange()));
-    createAction("delete_range", SLOT(slotDeleteRange()));
-    createAction("insert_range", SLOT(slotInsertRange()));
-    createAction("paste_conductor_data", SLOT(slotPasteConductorData()));
-    createAction("erase_range_tempos", SLOT(slotEraseRangeTempos()));
-    createAction("delete", SLOT(slotDeleteSelectedSegments()));
-    createAction("select_all", SLOT(slotSelectAll()));
-    createAction("add_tempo", SLOT(slotEditTempo()));
-    createAction("change_composition_length", SLOT(slotChangeCompositionLength()));
-    createAction("edit_markers", SLOT(slotEditMarkers()));
-    createAction("edit_doc_properties", SLOT(slotEditDocumentProperties()));
+    createAction("select", &RosegardenMainWindow::slotPointerSelected);
+    createAction("draw", &RosegardenMainWindow::slotDrawSelected);
+    createAction("erase", &RosegardenMainWindow::slotEraseSelected);
+    createAction("move", &RosegardenMainWindow::slotMoveSelected);
+    createAction("resize", &RosegardenMainWindow::slotResizeSelected);
+    createAction("split", &RosegardenMainWindow::slotSplitSelected);
+    createAction("join", &RosegardenMainWindow::slotJoinSelected);
+    createAction("harmonize_selection", &RosegardenMainWindow::slotHarmonizeSelection);
+    createAction("add_time_signature", &RosegardenMainWindow::slotEditTimeSignature);
+    createAction("edit_tempos", &RosegardenMainWindow::slotEditTempos);
+    createAction("cut_range", &RosegardenMainWindow::slotCutRange);
+    createAction("copy_range", &RosegardenMainWindow::slotCopyRange);
+    createAction("paste_range", &RosegardenMainWindow::slotPasteRange);
+    createAction("delete_range", &RosegardenMainWindow::slotDeleteRange);
+    createAction("insert_range", &RosegardenMainWindow::slotInsertRange);
+    createAction("paste_conductor_data", &RosegardenMainWindow::slotPasteConductorData);
+    createAction("erase_range_tempos", &RosegardenMainWindow::slotEraseRangeTempos);
+    createAction("delete", &RosegardenMainWindow::slotDeleteSelectedSegments);
+    createAction("select_all", &RosegardenMainWindow::slotSelectAll);
+    createAction("add_tempo", &RosegardenMainWindow::slotEditTempo);
+    createAction("change_composition_length", &RosegardenMainWindow::slotChangeCompositionLength);
+    createAction("edit_markers", &RosegardenMainWindow::slotEditMarkers);
+    createAction("edit_doc_properties", &RosegardenMainWindow::slotEditDocumentProperties);
     // throw a redundant copy on the View menu; even though it edits too, we
     // just call it "View -> Document Properties"  (I got this idea when I
     // noticed that some piece of configuration in OO.o was on two different
     // menus, when I looked for it in two different places, and found it in
     // both.  It seems reasonable to me if not overdone.)
-    createAction("view_doc_properties", SLOT(slotEditDocumentProperties()));
-    createAction("edit_default", SLOT(slotEdit()));
-    createAction("edit_matrix", SLOT(slotEditInMatrix()));
-    createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
-    createAction("edit_notation", SLOT(slotEditAsNotation()));
-    createAction("edit_event_list", SLOT(slotEditInEventList()));
-    createAction("edit_pitch_tracker", SLOT(slotEditInPitchTracker()));
-    createAction("quantize_selection", SLOT(slotQuantizeSelection()));
-    createAction("relabel_segment", SLOT(slotRelabelSegments()));
-    createAction("transpose", SLOT(slotTransposeSegments()));
-    createAction("transpose_semitones", SLOT(slotTransposeSemitones()));
-    createAction("switch_preset", SLOT(slotSwitchPreset()));
-    createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
-    createAction("rescale", SLOT(slotRescaleSelection()));
-    createAction("auto_split", SLOT(slotAutoSplitSelection()));
-    createAction("split_by_pitch", SLOT(slotSplitSelectionByPitch()));
-    createAction("split_by_recording", SLOT(slotSplitSelectionByRecordedSrc()));
-    createAction("split_at_time", SLOT(slotSplitSelectionAtTime()));
-    createAction("split_by_drum", SLOT(slotSplitSelectionByDrum()));
-    createAction("jog_left", SLOT(slotJogLeft()));
-    createAction("jog_right", SLOT(slotJogRight()));
-    createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
-    createAction("set_segment_start", SLOT(slotSetSegmentStartTimes()));
-    createAction("set_segment_duration", SLOT(slotSetSegmentDurations()));
-    createAction("join_segments", SLOT(slotJoinSegments()));
-    createAction("expand_figuration", SLOT(slotExpandFiguration()));
-    createAction("update_figurations", SLOT(slotUpdateFigurations()));
-    createAction("repeats_to_real_copies", SLOT(slotRepeatingSegments()));
-    createAction("links_to_real_copies", SLOT(slotLinksToCopies()));
-    createAction("manage_trigger_segments", SLOT(slotManageTriggerSegments()));
-    createAction("groove_quantize", SLOT(slotGrooveQuantize()));
-    createAction("fit_beats", SLOT(slotFitToBeats()));
-    createAction("set_tempo_to_segment_length", SLOT(slotTempoToSegmentLength()));
-    createAction("audio_manager", SLOT(slotAudioManager()));
-    createAction("show_segment_labels", SLOT(slotToggleSegmentLabels()));
-    createAction("add_track", SLOT(slotAddTrack()));
-    createAction("add_tracks", SLOT(slotAddTracks()));
-    createAction("delete_track", SLOT(slotDeleteTrack()));
-    createAction("move_track_down", SLOT(slotMoveTrackDown()));
-    createAction("move_track_up", SLOT(slotMoveTrackUp()));
-    createAction("select_next_track", SLOT(slotSelectNextTrack()));
-    createAction("select_previous_track", SLOT(slotSelectPreviousTrack()));
-    createAction("toggle_mute_track", SLOT(slotToggleMute()));
-    createAction("toggle_arm_track", SLOT(slotToggleRecordCurrentTrack()));
-    createAction("toggle_solo_track", SLOT(slotToggleSoloCurrentTrack()));
-    createAction("mute_all_tracks", SLOT(slotMuteAllTracks()));
-    createAction("unmute_all_tracks", SLOT(slotUnmuteAllTracks()));
-    createAction("remap_instruments", SLOT(slotRemapInstruments()));
-    createAction("audio_mixer", SLOT(slotOpenAudioMixer()));
-    createAction("midi_mixer", SLOT(slotOpenMidiMixer()));
-    createAction("manage_midi_devices", SLOT(slotManageMIDIDevices()));
-    createAction("manage_synths", SLOT(slotManageSynths()));
-    createAction("modify_midi_filters", SLOT(slotModifyMIDIFilters()));
-    createAction("manage_metronome", SLOT(slotManageMetronome()));
-    createAction("toggle_metronome", SLOT(slotToggleMetronome()));
-    createAction("save_default_studio", SLOT(slotSaveDefaultStudio()));
-    createAction("load_default_studio", SLOT(slotImportDefaultStudio()));
-    createAction("load_studio", SLOT(slotImportStudio()));
-    createAction("reset_midi_network", SLOT(slotResetMidiNetwork()));
-    createAction("add_marker", SLOT(slotAddMarker2()));
-    createAction("previous_marker", SLOT(slotPreviousMarker()));
-    createAction("next_marker", SLOT(slotNextMarker()));
-    createAction("set_quick_marker", SLOT(slotSetQuickMarker()));
-    createAction("jump_to_quick_marker", SLOT(slotJumpToQuickMarker()));
+    createAction("view_doc_properties", &RosegardenMainWindow::slotEditDocumentProperties);
+    createAction("edit_default", &RosegardenMainWindow::slotEdit);
+    createAction("edit_matrix", &RosegardenMainWindow::slotEditInMatrix);
+    createAction("edit_percussion_matrix", &RosegardenMainWindow::slotEditInPercussionMatrix);
+    createAction("edit_notation", &RosegardenMainWindow::slotEditAsNotation);
+    createAction("edit_event_list", &RosegardenMainWindow::slotEditInEventList);
+    createAction("edit_pitch_tracker", &RosegardenMainWindow::slotEditInPitchTracker);
+    createAction("quantize_selection", &RosegardenMainWindow::slotQuantizeSelection);
+    createAction("relabel_segment", &RosegardenMainWindow::slotRelabelSegments);
+    createAction("transpose", &RosegardenMainWindow::slotTransposeSegments);
+    createAction("transpose_semitones", &RosegardenMainWindow::slotTransposeSemitones);
+    createAction("switch_preset", &RosegardenMainWindow::slotSwitchPreset);
+    createAction("interpret", &RosegardenMainWindow::slotInterpret);
+    createAction("repeat_quantize", &RosegardenMainWindow::slotRepeatQuantizeSelection);
+    createAction("rescale", &RosegardenMainWindow::slotRescaleSelection);
+    createAction("auto_split", &RosegardenMainWindow::slotAutoSplitSelection);
+    createAction("split_by_pitch", &RosegardenMainWindow::slotSplitSelectionByPitch);
+    createAction("split_by_recording", &RosegardenMainWindow::slotSplitSelectionByRecordedSrc);
+    createAction("split_at_time", &RosegardenMainWindow::slotSplitSelectionAtTime);
+    createAction("split_by_drum", &RosegardenMainWindow::slotSplitSelectionByDrum);
+    createAction("jog_left", &RosegardenMainWindow::slotJogLeft);
+    createAction("jog_right", &RosegardenMainWindow::slotJogRight);
+    createAction("create_anacrusis", &RosegardenMainWindow::slotCreateAnacrusis);
+    createAction("set_segment_start", &RosegardenMainWindow::slotSetSegmentStartTimes);
+    createAction("set_segment_duration", &RosegardenMainWindow::slotSetSegmentDurations);
+    createAction("join_segments", &RosegardenMainWindow::slotJoinSegments);
+    createAction("expand_figuration", &RosegardenMainWindow::slotExpandFiguration);
+    createAction("update_figurations", &RosegardenMainWindow::slotUpdateFigurations);
+    createAction("repeats_to_real_copies", &RosegardenMainWindow::slotRepeatingSegments);
+    createAction("links_to_real_copies", &RosegardenMainWindow::slotLinksToCopies);
+    createAction("manage_trigger_segments", &RosegardenMainWindow::slotManageTriggerSegments);
+    createAction("groove_quantize", &RosegardenMainWindow::slotGrooveQuantize);
+    createAction("fit_beats", &RosegardenMainWindow::slotFitToBeats);
+    createAction("set_tempo_to_segment_length", &RosegardenMainWindow::slotTempoToSegmentLength);
+    createAction("audio_manager", &RosegardenMainWindow::slotAudioManager);
+    createAction("show_segment_labels", &RosegardenMainWindow::slotToggleSegmentLabels);
+    createAction("add_track", &RosegardenMainWindow::slotAddTrack);
+    createAction("add_tracks", &RosegardenMainWindow::slotAddTracks);
+    createAction("delete_track", &RosegardenMainWindow::slotDeleteTrack);
+    createAction("move_track_down", &RosegardenMainWindow::slotMoveTrackDown);
+    createAction("move_track_up", &RosegardenMainWindow::slotMoveTrackUp);
+    createAction("select_next_track", &RosegardenMainWindow::slotSelectNextTrack);
+    createAction("select_previous_track", &RosegardenMainWindow::slotSelectPreviousTrack);
+    createAction("toggle_mute_track", &RosegardenMainWindow::slotToggleMute);
+    createAction("toggle_arm_track", &RosegardenMainWindow::slotToggleRecordCurrentTrack);
+    createAction("toggle_solo_track", &RosegardenMainWindow::slotToggleSoloCurrentTrack);
+    createAction("mute_all_tracks", &RosegardenMainWindow::slotMuteAllTracks);
+    createAction("unmute_all_tracks", &RosegardenMainWindow::slotUnmuteAllTracks);
+    createAction("remap_instruments", &RosegardenMainWindow::slotRemapInstruments);
+    createAction("audio_mixer", &RosegardenMainWindow::slotOpenAudioMixer);
+    createAction("midi_mixer", &RosegardenMainWindow::slotOpenMidiMixer);
+    createAction("manage_midi_devices", &RosegardenMainWindow::slotManageMIDIDevices);
+    createAction("manage_synths", &RosegardenMainWindow::slotManageSynths);
+    createAction("modify_midi_filters", &RosegardenMainWindow::slotModifyMIDIFilters);
+    createAction("manage_metronome", &RosegardenMainWindow::slotManageMetronome);
+    createAction("toggle_metronome", &RosegardenMainWindow::slotToggleMetronome);
+    createAction("save_default_studio", &RosegardenMainWindow::slotSaveDefaultStudio);
+    createAction("load_default_studio", &RosegardenMainWindow::slotImportDefaultStudio);
+    createAction("load_studio", &RosegardenMainWindow::slotImportStudio);
+    createAction("reset_midi_network", &RosegardenMainWindow::slotResetMidiNetwork);
+    createAction("add_marker", &RosegardenMainWindow::slotAddMarker2);
+    createAction("previous_marker", &RosegardenMainWindow::slotPreviousMarker);
+    createAction("next_marker", &RosegardenMainWindow::slotNextMarker);
+    createAction("set_quick_marker", &RosegardenMainWindow::slotSetQuickMarker);
+    createAction("jump_to_quick_marker", &RosegardenMainWindow::slotJumpToQuickMarker);
 
-    createAction("play", SLOT(slotPlay()));
-    createAction("stop", SLOT(slotStop()));
-    createAction("fast_forward", SLOT(slotFastforward()));
-    createAction("rewind", SLOT(slotRewind()));
-    createAction("recordtoggle", SLOT(slotToggleRecord()));
-    createAction("record", SLOT(slotRecord()));
-    createAction("rewindtobeginning", SLOT(slotRewindToBeginning()));
-    createAction("fastforwardtoend", SLOT(slotFastForwardToEnd()));
-    createAction("loop", SLOT(slotLoop()));
-    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
-    createAction("panic", SLOT(slotPanic()));
-    createAction("debug_dump_segments", SLOT(slotDebugDump()));
+    createAction("play", &RosegardenMainWindow::slotPlay);
+    createAction("stop", &RosegardenMainWindow::slotStop);
+    createAction("fast_forward", &RosegardenMainWindow::slotFastforward);
+    createAction("rewind", &RosegardenMainWindow::slotRewind);
+    createAction("recordtoggle", &RosegardenMainWindow::slotToggleRecord);
+    createAction("record", &RosegardenMainWindow::slotRecord);
+    createAction("rewindtobeginning", &RosegardenMainWindow::slotRewindToBeginning);
+    createAction("fastforwardtoend", &RosegardenMainWindow::slotFastForwardToEnd);
+    createAction("loop", &RosegardenMainWindow::slotLoop);
+    createAction("scroll_to_follow", &RosegardenMainWindow::slotScrollToFollow);
+    createAction("panic", &RosegardenMainWindow::slotPanic);
+    createAction("debug_dump_segments", &RosegardenMainWindow::slotDebugDump);
 
-    createAction("repeat_segment_onoff", SLOT(slotToggleRepeat()));
+    createAction("repeat_segment_onoff", &RosegardenMainWindow::slotToggleRepeat);
 
     createMenusAndToolbars("rosegardenmainwindow.rc");
 
@@ -1095,8 +1213,8 @@ RosegardenMainWindow::initView()
     delete m_markerEditor;
     m_markerEditor = nullptr;
 
-    delete m_tempoView;
-    m_tempoView = nullptr;
+    delete m_tempoAndTimeSignatureEditor;
+    m_tempoAndTimeSignatureEditor = nullptr;
 
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = nullptr;
@@ -1188,14 +1306,14 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     if (m_markerEditor)
         m_markerEditor->setDocument(RosegardenDocument::currentDocument);
 
-    delete m_tempoView;
-    m_tempoView = nullptr;
+    delete m_tempoAndTimeSignatureEditor;
+    m_tempoAndTimeSignatureEditor = nullptr;
 
     if (m_triggerSegmentManager)
         m_triggerSegmentManager->setDocument(RosegardenDocument::currentDocument);
 
     m_trackParameterBox->setDocument(RosegardenDocument::currentDocument);
-    m_editTempoController->setDocument(RosegardenDocument::currentDocument);
+    EditTempoController::self()->setDocument(RosegardenDocument::currentDocument);
 
     if (m_pluginGUIManager) {
         m_pluginGUIManager->stopAllGUIs();
@@ -1240,7 +1358,10 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
             SLOT(slotUpdatePosition()), Qt::QueuedConnection);
 
     // start the autosave timer
-    m_autoSaveTimer->start(RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000);
+    m_lastAutoSaveTime = QTime::currentTime();
+    m_autoSaveInterval =
+        RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000;
+    m_autoSaveTimer->start(1000);
 
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::devicesResyncd,
             this, &RosegardenMainWindow::slotDocumentDevicesResyncd);
@@ -1779,6 +1900,8 @@ RosegardenMainWindow::slotFileNew()
     }
 
     if (makeNew) {
+        // do some cleaning up
+        emit documentAboutToChange();
         setDocument(newDocument(
                 true));  // permanent
         leaveActionState("have_segments");
@@ -1861,7 +1984,7 @@ RosegardenMainWindow::openURL(const QString& url)
     openURL(QUrl(url), true);  // replace
 }
 
-void
+bool
 RosegardenMainWindow::openURL(const QUrl &url, bool replace)
 {
     SetWaitCursor waitCursor;
@@ -1872,7 +1995,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Malformed URL\n%1").arg(url.toString()));
 
-        return;
+        return false;
     }
 
     FileSource source(url);
@@ -1880,7 +2003,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     if (!source.isAvailable()) {
         QMessageBox::critical(this, tr("Rosegarden"),
                 tr("Cannot open file %1").arg(url.toString()));
-        return;
+        return false;
     }
 
     //RG_DEBUG << "openURL(): local filename =" << source.getLocalFilename();
@@ -1888,7 +2011,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     // Let the user save the current document if it's been modified.
     // ??? rename: safeToClobber()?  Might be too geared toward the result.
     if (!saveIfModified())
-        return;
+        return false;
 
     // In case the source is remote, wait for the file to be downloaded to
     // the local file.
@@ -1900,8 +2023,10 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
     if (replace)
         openFile(source.getLocalFilename());
     else
-        // this only mergest the first file for now
+        // this only merges the first file for now
         mergeFile(fileList, ImportCheckType);
+
+    return true;
 }
 
 void
@@ -1918,6 +2043,7 @@ RosegardenMainWindow::openFileDialogAt(QString target)
         // Get the last used path for File > Open.
         settings.beginGroup(LastUsedPathsConfigGroup);
         directory = settings.value("open_file", QDir::homePath()).toString();
+        directory = existingDir(directory);
         settings.endGroup();
     } else {
         directory = target;
@@ -1934,14 +2060,6 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     if (fname.isEmpty())
         return;
 
-    if (target.isEmpty()) {
-        // Update the last used path for File > Open.
-        directory = QFileInfo(fname).canonicalPath();
-        settings.beginGroup(LastUsedPathsConfigGroup);
-        settings.setValue("open_file", directory);
-        settings.endGroup();
-    }
-
     // If a document is currently loaded
     if (RosegardenDocument::currentDocument) {
         // Check to see if the user needs/wants to save the current document.
@@ -1954,7 +2072,16 @@ RosegardenMainWindow::openFileDialogAt(QString target)
     }
 
     // Continue opening the file.
-    openURL(QUrl::fromLocalFile(fname), true);  // replace
+    const bool success = openURL(QUrl::fromLocalFile(fname), true);  // replace
+
+    // Only update the .conf directory if we were successful.
+    if (target.isEmpty()  &&  success) {
+        // Update the last used path for File > Open.
+        directory = existingDir(fname);
+        settings.beginGroup(LastUsedPathsConfigGroup);
+        settings.setValue("open_file", directory);
+        settings.endGroup();
+    }
 }
 
 void
@@ -1995,36 +2122,20 @@ RosegardenMainWindow::slotMerge()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_file", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select File(s)"), directory,
                tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
                tr("All files") + " (*)", nullptr);
+    if (fileList.isEmpty())
+        return;
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    mergeFile(fileList, ImportCheckType);
 
-    /* Former behaviour for single file remove this block if accepted
-    const QString file = FileDialog::getOpenFileName(this, tr("Open File"), directory,
-               tr("Rosegarden files") + " (*.rg *.RG)" + ";;" +
-               tr("All files") + " (*)", nullptr);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    */
-
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
+    directory = existingDir(fileList[0]);
     settings.setValue("merge_file", directory);
     settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
-    mergeFile(fileList, ImportCheckType);
 }
 
 void
@@ -2064,7 +2175,7 @@ RosegardenMainWindow::slotFileSave()
     // If it's a new file (no file path), or an imported file
     // (file path doesn't end with .rg), do a "save as".
     if (!RosegardenDocument::currentDocument->isRegularDotRGFile()) {
-        slotFileSaveAs();
+        fileSaveAs(false);
         return;
     }
 
@@ -2090,100 +2201,70 @@ RosegardenMainWindow::slotFileSave()
                                   .arg(docFilePath));
     }
 
+    // If save was successful, update the Save As directory.
+    if (success)
+        setFileSaveAsDirectory(existingDir(docFilePath));
+
     // Let the audio file manager know we've just saved so it can prompt the
     // user for an audio file location if it needs one.
     RosegardenDocument::currentDocument->getAudioFileManager().save();
 }
 
 QString
-RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
-                                            QString label)
+RosegardenMainWindow::launchSaveAsDialog(QString filter,
+                                         QString label)
 {
-    // extract first extension listed in descriptiveExtension, for instance,
+
+    const QFileInfo originalFileInfo(
+            RosegardenDocument::currentDocument->getAbsFilePath());
+
+    // Extract first extension listed in filter, for instance,
     // ".rg" from "Rosegarden files (*.rg)", or ".mid" from
     // "MIDI Files (*.mid *.midi)"
-    //
-    int left = descriptiveExtension.indexOf("*.");
-    int right = descriptiveExtension.indexOf(QRegularExpression("[ ]"),left);
-    QString extension = descriptiveExtension.mid(left+1,right-left-1);
+    const int left = filter.indexOf("*.");
+    const int right = filter.indexOf(
+            QRegularExpression("[ ]"),left);
+    const QString filterExtension =
+            filter.mid(left + 1, right - left - 1);
 
-    // keep track of last place used to save, by type of file (this behavior is
-    // quite new and different, and should probably be considered experimental,
-    // although the more I think about the unexpected consequences of this idea
-    // that I didn't think through at the outset, the more I think the idea is
-    // just better than I realized, and this was a great idea)
-    QString path_key = "save_file";
-
-    if (extension == ".rgt")      path_key = "save_template";
-    else if (extension == ".mid") path_key = "export_midi";
-    else if (extension == ".xml") path_key = "export_music_xml";
-    else if (extension == ".ly")  path_key = "export_lilypond";
-    else if (extension == ".csd") path_key = "export_csound";
-    else if (extension == ".mup") path_key = "export_mup";
-
-//RG_DEBUG <<
-//    "getValidWriteFileName() : extension  = " <<
-//    extension << endl <<
-//    "                                                path key   = " <<
-//    path_key;
-
-    // Get the directory from the settings
-    QSettings settings;
-    settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value(path_key, QDir::homePath()).toString();
-
-    QFileInfo originalFileInfo(RosegardenDocument::currentDocument->getAbsFilePath());
+    QString directory;
 
     // Most applications (e.g. OpenOffice.org and the GIMP) use the document's
     // directory for Save As... and Export rather than the last directory
-    // the user saved to.  To use the document's directory, replace
-    // "directory" in the FileDialog::getSaveFileName() call with
-    // originalFileInfo.absolutePath().
+    // the user saved to.  This code implements that approach along with
+    // remembering the previous save directory for unnamed files.
 
-    // Confirm the overwrite of the file later.
-    //
-    // (Hah, all these compiler warnings are useful for something after all.
-    // This used to not do anything with the label parameter, and always said
-    // "Save File" 100% of the time.)
+    // If the file is unnamed...
+    if (RosegardenDocument::currentDocument->getAbsFilePath().isEmpty()) {
+        directory = existingDir(getFileSaveAsDirectory());
+    } else {  // File has a name.  Go with its directory.
+        directory = originalFileInfo.absolutePath();
+    }
+
+    // Launch the Save As dialog.
     QString name = FileDialog::getSaveFileName(
-        this, label, directory,
-        originalFileInfo.baseName(), descriptiveExtension, nullptr,
-        FileDialog::DontConfirmOverwrite);
-
-//RG_DEBUG << "getValidWriteFileName() : " <<
-//            "FileDialog::getSaveFileName returned " << name;
+            this,  // parent
+            label,  // caption
+            directory,  // dir
+            originalFileInfo.baseName(),  // defaultName
+            filter,  // filter
+            nullptr,  // selectedFilter
+            FileDialog::DontConfirmOverwrite);  // options
 
     if (name.isEmpty())
         return name;
 
-    // Append extension if we don't have one
-    //
-    if (!extension.isEmpty()) {
-        static QRegularExpression rgFile("\\..{1,4}$");
-        if (! rgFile.match(name).hasMatch()) {
-            name += extension;
-        }
+    // If we have a filter extension...
+    if (!filterExtension.isEmpty()) {
+        static QRegularExpression extensionRegEx("\\..{1,4}$");
+        // If the file name has no extension, add the filter extension.
+        if (!extensionRegEx.match(name).hasMatch())
+            name += filterExtension;
     }
 
-    // if we get a string like "/tmp/~/foo.rg" assume the last saved path was
-    // /tmp and the desired new path is ~ and try to doctor the string up, which
-    // may well fail, but it's better to try
-    if (name.contains("~")) {
-        name = name.remove(0, name.indexOf("~") + 1);
-        name = name.prepend(QDir::homePath());
+    const QFileInfo info(name);
 
-//RG_DEBUG << "doctored filename after ~ swap: " << name;
-
-    }
-
-    QFileInfo info(name);
-
-    if (info.isDir()) {
-        QMessageBox::warning(this, tr("Rosegarden"),
-                             tr("You have specified a folder/directory."));
-        return "";
-    }
-
+    // Confirm overwrite.
     if (info.exists()) {
         int overwrite = QMessageBox::question(
                 this,
@@ -2196,33 +2277,28 @@ RosegardenMainWindow::getValidWriteFileName(QString descriptiveExtension,
             return "";
     }
 
-    // Write the directory to the settings
-    QDir d = QFileInfo(name).dir();
-    directory = d.canonicalPath();
-    settings.setValue(path_key, directory);
-    settings.endGroup();
-
     return name;
 }
 
 bool
-RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
+RosegardenMainWindow::fileSaveAs(bool asTemplate)
 {
     if (!RosegardenDocument::currentDocument)
         return false;
 
+    // Display a message on the status bar.
     TmpStatusMsg msg(tr("Saving file%1with a new filename...",
                         "'file%1with' is correct. %1 will either become ' ' or ' as a template ' at runtime").
-                        arg(asTemplate ? tr(" as a template ") : " "), this);
+                        arg(asTemplate ? tr(" as a template ") : " "),  // msg
+                     this);  // window
 
-    QString fileType(asTemplate ? tr("Rosegarden templates") : tr("Rosegarden files"));
-    QString fileExtension(asTemplate ? " (*.rgt *.RGT)" : " (*.rg *.RG)");
-    QString dialogMessage(asTemplate ? tr("Save as template...") : tr("Save as..."));
+    const QString fileType(asTemplate ? tr("Rosegarden templates") : tr("Rosegarden files"));
+    const QString fileExtension(asTemplate ? " (*.rgt *.RGT)" : " (*.rg *.RG)");
+    const QString dialogMessage(asTemplate ? tr("Save as template...") : tr("Save as..."));
 
-    QString newName = getValidWriteFileName
-                      (fileType + fileExtension + ";;" +
-                       tr("All files") + " (*)",
-                       dialogMessage);
+    const QString newName = launchSaveAsDialog(
+            fileType + fileExtension + ";;" + tr("All files") + " (*)",
+            dialogMessage);
     if (newName.isEmpty())
         return false;
 
@@ -2255,6 +2331,9 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
     }
 
+    if (success)
+        setFileSaveAsDirectory(existingDir(newName));
+
     if (!asTemplate) {
         // Let the audio file manager know we've just saved so it can prompt the
         // user for an audio file location if it needs one.
@@ -2267,8 +2346,11 @@ RosegardenMainWindow::slotFileSaveAs(bool asTemplate)
 
     updateTitle();
 
-    // update the edit view's captions too
-    emit compositionStateUpdate();
+    // Remove any autosave file for Untitled
+    QString autoSaveFileName =
+        AutoSaveFinder().checkAutoSaveFile("");
+    RG_DEBUG << "fileSaveAs deleting autosave file" << autoSaveFileName;
+    if (autoSaveFileName != "") QFile::remove(autoSaveFileName);
 
     // Indicate success.
     return true;
@@ -3774,43 +3856,39 @@ void
 RosegardenMainWindow::slotAddTrack()
 {
     if (!m_view)
-        return ;
+        return;
 
-    // default to the base number - might not actually exist though
-    //
-    InstrumentId id = MidiInstrumentBase;
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
 
-    // Get the first Internal/MIDI instrument
-    //
-    DeviceList *devices = RosegardenDocument::currentDocument->getStudio().getDevices();
-    bool have = false;
+    const InstrumentId foundInstrumentID =
+            document->getStudio().getAvailableMIDIInstrument();
 
-    for (DeviceList::iterator it = devices->begin();
-            it != devices->end() && !have; ++it) {
-
-        if ((*it)->getType() != Device::Midi)
-            continue;
-
-        InstrumentList instruments = (*it)->getAllInstruments();
-        for (InstrumentList::iterator iit = instruments.begin();
-                iit != instruments.end(); ++iit) {
-
-            if ((*iit)->getId() >= MidiInstrumentBase) {
-                id = (*iit)->getId();
-                have = true;
-                break;
-            }
-        }
-    }
-
-    Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    TrackId trackId = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(trackId);
+    Composition &comp = document->getComposition();
+    const TrackId trackId = comp.getSelectedTrack();
+    const Track *track = comp.getTrackById(trackId);
 
     int pos = -1;
-    if (track) pos = track->getPosition() + 1;
+    if (track)
+        pos = track->getPosition() + 1;
 
-    m_view->addTrack(id, pos);
+    m_view->addTrack(foundInstrumentID, pos);
+
+    // Move the selected Track to the new Track so that repeated pressings
+    // of Ctrl+T yields a series of new Tracks in correct Instrument order.
+    TrackId newTrackID = comp.getTrackByPosition(pos)->getId();
+    comp.setSelectedTrack(newTrackID);
+    // Make sure everything updates appropriately.
+    comp.notifyTrackSelectionChanged(newTrackID);
+    // Note that we don't call m_view->slotSelectTrackSegments(newTrackId)
+    // because there are no segments on this new track, so there is no point.
+    // Track selection and Segment selection might get out of sync.  Not
+    // sure if that is a problem.
+    //m_view->slotSelectTrackSegments(newTrackId);
+    // Make sure the Instrument Parameter Panel is updated.
+    document->emitDocumentModified();
+
 }
 
 void
@@ -3977,21 +4055,20 @@ RosegardenMainWindow::slotImportProject()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_project", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Rosegarden Project File"), directory,
                tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_project", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     importProject(file);
+
+    directory = existingDir(file);
+    settings.setValue("import_project", directory);
+    settings.endGroup();
 }
 
 void
@@ -4017,21 +4094,20 @@ RosegardenMainWindow::slotImportMIDI()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_midi", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MIDI File"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_midi", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportMIDI); // does everything including setting the document
+
+    directory = existingDir(file);
+    settings.setValue("import_midi", directory);
+    settings.endGroup();
 }
 
 void
@@ -4040,24 +4116,21 @@ RosegardenMainWindow::slotMergeMIDI()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_midi", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select MIDI File(s)"), directory,
                tr("MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    if (fileList.isEmpty())
+        return;
 
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
-    settings.setValue("merge_midi", directory);
-    settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
     mergeFile(fileList, ImportMIDI);
+
+    settings.setValue("merge_midi", directory);
+    directory = existingDir(fileList[0]);
+    settings.endGroup();
 }
 
 QTextCodec *
@@ -4123,7 +4196,7 @@ RosegardenMainWindow::fixTextEncodings(Composition *c)
     if (codec)
         c->setCopyrightNote(convertFromCodec(c->getCopyrightNote(), codec));
 
-    for (Composition::trackcontainer::iterator i =
+    for (Composition::TrackMap::iterator i =
                 c->getTracks().begin(); i != c->getTracks().end(); ++i) {
         if (!codec)
             codec = guessTextCodec(i->second->getLabel());
@@ -4301,21 +4374,20 @@ RosegardenMainWindow::slotImportRG21()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_relic", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open X11 Rosegarden File"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_relic", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportRG21);
+
+    directory = existingDir(file);
+    settings.setValue("import_relic", directory);
+    settings.endGroup();
 }
 
 void
@@ -4324,24 +4396,21 @@ RosegardenMainWindow::slotMergeRG21()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_relic", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select X11 Rosegarden File(s)"), directory,
                tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                tr("All files") + " (*)", nullptr);
 
-    if (fileList.isEmpty()) {
-        return ;
-    }
+    if (fileList.isEmpty())
+        return;
 
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_relic", directory);
-    settings.endGroup();
-
-    // Milti-merge update: note now we pass a fileList to mergeFile function
     mergeFile(fileList, ImportRG21);
+
+    directory = existingDir(fileList[0]);
+    settings.setValue("merge_relic", directory);
+    settings.endGroup();
 }
 
 RosegardenDocument *
@@ -4403,20 +4472,18 @@ RosegardenMainWindow::slotImportHydrogen()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_hydrogen", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_hydrogen", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportHydrogen);
+
+    directory = existingDir(file);
+    settings.setValue("import_hydrogen", directory);
+    settings.endGroup();
 }
 
 void
@@ -4425,20 +4492,18 @@ RosegardenMainWindow::slotMergeHydrogen()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_hydrogen", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open Hydrogen File"), directory,
                tr("All files") + " (*)", 0, 0);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("merge_hydrogen", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     mergeFile(file, ImportHydrogen);
+
+    directory = existingDir(file);
+    settings.setValue("merge_hydrogen", directory);
+    settings.endGroup();
 }
 
 
@@ -4500,21 +4565,19 @@ RosegardenMainWindow::slotImportMusicXML()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("import_musicxml", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QString file = FileDialog::getOpenFileName(this, tr("Open MusicXML File"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
-
-    if (file.isEmpty()) {
-        return ;
-    }
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_musicxml", directory);
-    settings.endGroup();
+    if (file.isEmpty())
+        return;
 
     openFile(file, ImportMusicXML);
+
+    directory = existingDir(file);
+    settings.setValue("import_musicxml", directory);
+    settings.endGroup();
 }
 
 void
@@ -4523,28 +4586,25 @@ RosegardenMainWindow::slotMergeMusicXML()
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
     QString directory = settings.value("merge_musicxml", QDir::homePath()).toString();
+    directory = existingDir(directory);
 
     const QStringList fileList = FileDialog::getOpenFileNames(
             this, tr("Select File(s)"), directory,
                tr("XML files") + " (*.xml *.XML)" + ";;" +
                tr("All files") + " (*)", nullptr);
-
-    if (fileList.isEmpty()) {
-        return ;
-    }
-
-    // Assume same dir also for multiple file merge. Else use the first file's
-    QDir d = QFileInfo(fileList[0]).dir();
-    directory = d.canonicalPath();
-    settings.setValue("merge_musicxml", directory);
-    settings.endGroup();
+    if (fileList.isEmpty())
+        return;
 
     mergeFile(fileList, ImportMusicXML);
+
+    directory = existingDir(fileList[0]);
+    settings.setValue("merge_musicxml", directory);
+    settings.endGroup();
 }
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
-                                                     bool permanent)
+                                                     const bool permanent)
 {
     StartupLogo::hideIfStillThere();
 
@@ -4570,9 +4630,9 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
     //
     RosegardenDocument *newDoc = newDocument(permanent);
 
-    MusicXMLLoader musicxmlLoader(&newDoc->getStudio());
+    MusicXMLLoader musicxmlLoader;
 
-    if (!musicxmlLoader.load(file, newDoc->getComposition(), newDoc->getStudio())) {
+    if (!musicxmlLoader.load(file, newDoc)) {
         QMessageBox::critical(this, tr("Rosegarden"),
                            tr("Can't load MusicXML file:\n")+
                               musicxmlLoader.errorMessage());
@@ -5050,70 +5110,6 @@ RosegardenMainWindow::slotTestStartupTester()
         return ;
     }
 
-/*    QStringList missingFeatures;
-    QStringList allMissing;
-
-    QStringList missing;
-
-#ifdef HAVE_LIBJACK
-    if (m_seqManager && (m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
-
-        m_haveAudioImporter = m_startupTester->haveAudioFileImporter(&missing);
-
-        if (!m_haveAudioImporter) {
-            missingFeatures.push_back(tr("General audio file import and conversion"));
-            if (missing.count() == 0) {
-                allMissing.push_back(tr("The Rosegarden Audio File Importer helper script"));
-            } else {
-                for (int i = 0; i < missing.count(); ++i) {
-                    if (missingFeatures.count() > 1) {
-                        allMissing.push_back(tr("%1 - for audio file import").arg(missing[i]));
-                    } else {
-                        allMissing.push_back(missing[i]);
-                    }
-                }
-            }
-        }
-    }
-#endif
-
-    if (missingFeatures.count() > 0) {
-        QString message = tr("<h3>Helper programs not found</h3><p>Rosegarden could not find one or more helper programs which it needs to provide some features.  The following features will not be available:</p>");
-        message += tr("<ul>");
-        for (int i = 0; i < missingFeatures.count(); ++i) {
-            message += tr("<li>%1</li>").arg(missingFeatures[i]);
-        }
-        message += tr("</ul>");
-        message += tr("<p>To fix this, you should install the following additional programs:</p>");
-        message += tr("<ul>");
-        for (int i = 0; i < allMissing.count(); ++i) {
-            message += tr("<li>%1</li>").arg(allMissing[i]);
-        }
-        message += tr("</ul>");
-
-        awaitDialogClearance();
-
-        QString shortMessage = tr("Helper programs not found");
-
-//        QMessageBox info(m_view);
-//        info.setText(shortMessage);
-//        info.setInformativeText(message);
-//        info.setStandardButtons(QMessageBox::Ok);
-//        info.setDefaultButton(QMessageBox::Ok);
-//        info.setIcon(QMessageBox::Warning);
-//
-//        if (!DialogSuppressor::shouldSuppress
-//            (&info, "startuphelpersmissing")) {
-//            info.exec();
-//        }
-
-        // Looks like Thorn will have to keep the startup test for
-        // audiofile-importer around indefinitely, and so we need to move that
-        // irritating @#@^@#^ dialog into the warning widget, and get it out of
-        // my face before I punch it right in the nose.
-        m_warningWidget->queueMessage(shortMessage, message);
-    }*/
-
     m_startupTester->wait();
     delete m_startupTester;
     m_startupTester = nullptr;
@@ -5189,7 +5185,7 @@ RosegardenMainWindow::slotExportProject()
 {
     TmpStatusMsg msg(tr("Exporting Rosegarden Project file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Rosegarden Project files") + " (*.rgp *.RGP)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5218,6 +5214,10 @@ RosegardenMainWindow::slotExportProject()
     if (dialog->exec() != QDialog::Accepted) {
         return;
     }
+
+    // ProjectPackager has no success() routine.  Stick with existingDir()
+    // just in case we have a bad dir name by this point.
+    setFileSaveAsDirectory(existingDir(fileName));
 }
 
 void
@@ -5225,7 +5225,7 @@ RosegardenMainWindow::slotExportMIDI()
 {
     TmpStatusMsg msg(tr("Exporting MIDI file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Standard MIDI files") + " (*.mid *.midi *.MID *.MIDI)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5233,10 +5233,13 @@ RosegardenMainWindow::slotExportMIDI()
     if (fileName.isEmpty())
         return ;
 
-    exportMIDIFile(fileName);
+    const bool success = exportMIDIFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportMIDIFile(QString file)
 {
     // Progress Dialog
@@ -5263,7 +5266,11 @@ RosegardenMainWindow::exportMIDIFile(QString file)
     if (!midiFile.convertToMidi(RosegardenDocument::currentDocument, file)) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5271,7 +5278,7 @@ RosegardenMainWindow::slotExportCsound()
 {
     TmpStatusMsg msg(tr("Exporting Csound score file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Csound files") + " (*.csd *.CSD)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5279,10 +5286,13 @@ RosegardenMainWindow::slotExportCsound()
     if (fileName.isEmpty())
         return ;
 
-    exportCsoundFile(fileName);
+    const bool success = exportCsoundFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportCsoundFile(QString file)
 {
     // Progress Dialog
@@ -5316,7 +5326,10 @@ RosegardenMainWindow::exportCsoundFile(QString file)
     if (!csoundExporter.write()) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5324,17 +5337,20 @@ RosegardenMainWindow::slotExportMup()
 {
     TmpStatusMsg msg(tr("Exporting Mup file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("Mup files") + " (*.mup *.MUP)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
     if (fileName.isEmpty())
         return ;
 
-    exportMupFile(fileName);
+    const bool success = exportMupFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
-void
+bool
 RosegardenMainWindow::exportMupFile(QString file)
 {
     // Progress Dialog
@@ -5364,7 +5380,11 @@ RosegardenMainWindow::exportMupFile(QString file)
     if (!mupExporter.write()) {
         QMessageBox::warning(this, tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5372,7 +5392,7 @@ RosegardenMainWindow::slotExportLilyPond()
 {
     TmpStatusMsg msg(tr("Exporting LilyPond file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("LilyPond files") + " (*.ly *.LY)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5380,7 +5400,10 @@ RosegardenMainWindow::slotExportLilyPond()
     if (fileName.isEmpty())
         return ;
 
-    exportLilyPondFile(fileName);
+    const bool success = exportLilyPondFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
 
@@ -5439,7 +5462,7 @@ RosegardenMainWindow::getLilyPondTmpFilename()
 
 
 bool
-RosegardenMainWindow::exportLilyPondFile(QString file, bool forPreview)
+RosegardenMainWindow::exportLilyPondFile(const QString &file, bool forPreview)
 {
     QString caption;
     QString heading;
@@ -5494,7 +5517,7 @@ RosegardenMainWindow::slotExportMusicXml()
 {
     TmpStatusMsg msg(tr("Exporting MusicXML file..."), this);
 
-    QString fileName = getValidWriteFileName
+    QString fileName = launchSaveAsDialog
                        (tr("XML files") + " (*.xml *.XML)" + ";;" +
                         tr("All files") + " (*)",
                         tr("Export as..."));
@@ -5502,16 +5525,62 @@ RosegardenMainWindow::slotExportMusicXml()
     if (fileName.isEmpty())
         return ;
 
-    exportMusicXmlFile(fileName);
+    const bool success = exportMusicXmlFile(fileName);
+
+    if (success)
+        setFileSaveAsDirectory(existingDir(fileName));
 }
 
 void
+RosegardenMainWindow::slotExportWAV()
+{
+    RG_DEBUG << "slotExportWAV()";
+
+    if (!m_seqManager)
+        return;
+
+    if (!(m_seqManager->getSoundDriverStatus() & AUDIO_OK)) {
+        QMessageBox::information(
+                    this,  // parent
+                    tr("Rosegarden"),  // title
+                    tr("Unable to export WAV without JACK running."));  // text
+        return;
+    }
+
+    QString fileName = FileDialog::getSaveFileName(
+            this,  // parent
+            tr("Rosegarden"),  // caption
+            "",  // dir
+            "",  // defaultName
+            tr("WAV files") + " (*.wav)");  // filter
+
+    if (fileName.isEmpty())
+        return;
+
+    if (fileName.right(4).toLower() != ".wav")
+        fileName += ".wav";
+
+    QString msg = tr(
+            "Press play to start exporting to\n"
+            "%1\n"
+            "Press stop to stop export.\n"
+            "Only audio and synth plugin tracks will be exported").arg(fileName);
+
+    QMessageBox::information(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            msg);  // text
+
+    m_seqManager->setExportWavFile(fileName);
+}
+
+bool
 RosegardenMainWindow::exportMusicXmlFile(QString file)
 {
     MusicXMLOptionsDialog dialog(this, RosegardenDocument::currentDocument, "", "");
 
     if (dialog.exec() != QDialog::Accepted)
-        return;
+        return false;
 
     // Progress Dialog
     // Note: Label text will be set later in the process.
@@ -5544,7 +5613,11 @@ RosegardenMainWindow::exportMusicXmlFile(QString file)
         QMessageBox::warning(this,
                 tr("Rosegarden"),
                 tr("Export failed.  The file could not be opened for writing."));
+
+        return false;
     }
+
+    return true;
 }
 
 void
@@ -5974,9 +6047,9 @@ RosegardenMainWindow::muteAllTracks(bool mute)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Composition::trackcontainer tracks = comp.getTracks();
+    Composition::TrackMap tracks = comp.getTracks();
 
-    for (Composition::trackiterator trackIt = tracks.begin();
+    for (Composition::TrackMap::iterator trackIt = tracks.begin();
             trackIt != tracks.end(); ++trackIt) {
         Track *track = trackIt->second;
 
@@ -6169,7 +6242,7 @@ void
 RosegardenMainWindow::slotEditTempo(QWidget *parent, timeT atTime)
 {
     RG_DEBUG << "slotEditTempo";
-    m_editTempoController->editTempo(parent, atTime);
+    EditTempoController::self()->editTempo(parent, atTime, false);
 }
 
 void
@@ -6194,7 +6267,7 @@ void
 RosegardenMainWindow::slotEditTimeSignature(QWidget *parent,
         timeT atTime)
 {
-    m_editTempoController->editTimeSignature(parent, atTime);
+    EditTempoController::self()->editTimeSignature(parent, atTime);
 }
 
 void
@@ -6498,10 +6571,10 @@ RosegardenMainWindow::getArmedInstruments()
     std::set
         <InstrumentId> iid;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         RosegardenDocument::currentDocument->getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
         Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById(tid);
@@ -6629,15 +6702,16 @@ RosegardenMainWindow::slotPlayAudioFile(unsigned int id,
     if (aF == nullptr)
         return ;
 
-    MappedEvent mE(RosegardenDocument::currentDocument->getStudio().
-                   getAudioPreviewInstrument(),
-                   id,
-                   RealTime(-120, 0),
-                   duration,                   // duration
-                   startTime);                // start index
+    MappedEvent mE;
+    mE.setType(MappedEvent::Audio);
+    mE.setInstrumentId(RosegardenDocument::currentDocument->getStudio().
+            getAudioPreviewInstrument());
+    mE.setAudioFileID(id);
+    mE.setEventTime(RealTime(-120, 0));  // two minutes into the past
+    mE.setDuration(duration);
+    mE.setAudioStartMarker(startTime);
 
     StudioControl::sendMappedEvent(mE);
-
 }
 
 void
@@ -6676,17 +6750,20 @@ RosegardenMainWindow::slotDeleteSegments(const SegmentSelection &selection)
 }
 
 void
-RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId id)
+RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId audioFileID)
 {
-    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().getAudioFile(id);
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
 
-    if (aF == nullptr)
-        return ;
+    // Make sure the audio file ID is valid.
+    if (!doc->getAudioFileManager().getAudioFile(audioFileID))
+        return;
 
-    MappedEvent mE(RosegardenDocument::currentDocument->getStudio().
-                   getAudioPreviewInstrument(),
-                   MappedEvent::AudioCancel,
-                   id);
+    MappedEvent mE;
+    mE.setInstrumentId(doc->getStudio().getAudioPreviewInstrument());
+    mE.setType(MappedEvent::AudioCancel);
+    mE.setData1(audioFileID);
 
     StudioControl::sendMappedEvent(mE);
 }
@@ -6872,7 +6949,7 @@ RosegardenMainWindow::slotManageMIDIDevices()
                 this, &RosegardenMainWindow::slotEditControlParameters);
 
         connect(this, &RosegardenMainWindow::documentAboutToChange,
-                m_deviceManager.data(), &QWidget::close);
+                m_deviceManager.data(), &DeviceManagerDialog::slotCloseButtonPress);
 
         if (m_midiMixer) {
              connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
@@ -7125,21 +7202,21 @@ RosegardenMainWindow::slotMarkerEditorClosed()
 void
 RosegardenMainWindow::slotEditTempos(timeT openAtTime)
 {
-    if (m_tempoView) {
-        m_tempoView->show();
-        m_tempoView->raise();
-        m_tempoView->activateWindow();
+    if (m_tempoAndTimeSignatureEditor) {
+        m_tempoAndTimeSignatureEditor->show();
+        m_tempoAndTimeSignatureEditor->raise();
+        m_tempoAndTimeSignatureEditor->activateWindow();
         return ;
     }
 
-    m_tempoView = new TempoView(getView(), m_editTempoController, openAtTime);
+    m_tempoAndTimeSignatureEditor = new TempoAndTimeSignatureEditor(openAtTime);
 
-    connect(m_tempoView, &TempoView::closing,
+    connect(m_tempoAndTimeSignatureEditor, &TempoAndTimeSignatureEditor::closing,
             this, &RosegardenMainWindow::slotTempoViewClosed);
 
-    connect(m_tempoView, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
+    connect(m_tempoAndTimeSignatureEditor, &EditViewBase::saveFile, this, &RosegardenMainWindow::slotFileSave);
 
-    m_tempoView->show();
+    m_tempoAndTimeSignatureEditor->show();
 }
 
 void
@@ -7147,7 +7224,7 @@ RosegardenMainWindow::slotTempoViewClosed()
 {
     RG_DEBUG << "slotTempoViewClosed()";
 
-    m_tempoView = nullptr;
+    m_tempoAndTimeSignatureEditor = nullptr;
 }
 
 void
@@ -7279,7 +7356,7 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
 
 void
 RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
-                                     int index, int plugin)
+                                         int index, int plugin)
 {
     const QObject *s = sender();
 
@@ -7432,9 +7509,9 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
 
 void
 RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
-                                       int pluginIndex,
-                                       int portIndex,
-                                       float value)
+                                           int pluginIndex,
+                                           int portIndex,
+                                           float value)
 {
     PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
@@ -7867,6 +7944,7 @@ RosegardenMainWindow::slotBankEditorClosed()
     }
 
     m_bankEditor = nullptr;
+    slotManageMIDIDevices(); // this will raise the device manager
 }
 
 void
@@ -8017,21 +8095,20 @@ RosegardenMainWindow::slotImportStudio()
 
     QSettings settings;
     settings.beginGroup(LastUsedPathsConfigGroup);
-    QString directory = settings.value("import_studio", ResourceFinder().getResourceDir("library")).toString();
+    QString directory = settings.value("import_studio",
+            ResourceFinder().getResourceDir("library")).toString();
 
     const QString file = FileDialog::getOpenFileName(this, tr("Import Studio from File"), directory,
                     tr("All supported files") + " (*.rg *.RG *.rgt *.RGT *.rgp *.RGP)" + ";;" +
                     tr("All files") + " (*)", nullptr);
-
     if (file.isEmpty())
-        return ;
-
-    QDir d = QFileInfo(file).dir();
-    directory = d.canonicalPath();
-    settings.setValue("import_studio", directory);
-    settings.endGroup();
+        return;
 
     slotImportStudioFromFile(file);
+
+    directory = existingDir(file);
+    settings.setValue("import_studio", directory);
+    settings.endGroup();
 }
 
 void
@@ -8081,6 +8158,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
             if (md && (md->getDirection() == MidiDevice::Play)) {
+                RG_DEBUG << "newStudio device" << md->getName();
                 if (di != midiPlayDevices.end()) {
                     MidiDevice::VariationType variation
                     (md->getVariationType());
@@ -8088,6 +8166,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     ProgramList pl(md->getPrograms());
                     ControlList cl(md->getControlParameters());
 
+                    RG_DEBUG << "modify device" << md->getName() << *di;
                     ModifyDeviceCommand *mdCommand =
                         new ModifyDeviceCommand(&oldStudio,
                                                 *di,
@@ -8103,11 +8182,29 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
                     command->addCommand(mdCommand);
                     ++di;
+                } else {
+                    RG_DEBUG << "new device" << md->getName();
+                    command->addCommand(new CreateOrDeleteDeviceCommand
+                                        (&oldStudio,
+                                         md->getName(),
+                                         md->getType(),
+                                         md->getDirection(),
+                                         "",
+                                         true,
+                                         md->getLibrarianName(),
+                                         md->getLibrarianEmail(),
+                                         md->getVariationType(),
+                                         md->getBanks(),
+                                         md->getPrograms(),
+                                         md->getControlParameters(),
+                                         md->getKeyMappings()
+                                         ));
                 }
             }
         }
 
         while (di != midiPlayDevices.end()) {
+            RG_DEBUG << "add device" << *di;
             command->addCommand(new CreateOrDeleteDeviceCommand
                                 (&oldStudio,
                                  *di));
@@ -8186,7 +8283,15 @@ RosegardenMainWindow::slotAutoSave()
     if (!settings.value("autosave", "true").toBool())
         return;
 
+    const QTime now{QTime::currentTime()};
+    // Not time to autosave?  Bail.
+    if (m_lastAutoSaveTime.msecsTo(now) <= (int)m_autoSaveInterval)
+        return;
+
+    RG_DEBUG << "slotAutoSave saving" << m_lastAutoSaveTime <<
+        m_autoSaveInterval << now;
     RosegardenDocument::currentDocument->slotAutoSave();
+    m_lastAutoSaveTime = now;
 }
 
 void
@@ -8194,7 +8299,7 @@ RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
 {
     RG_DEBUG << "slotUpdateAutoSaveInterval - "
     << "changed interval to " << interval;
-    m_autoSaveTimer->setInterval(int(interval) * 1000);
+    m_autoSaveInterval = interval * 1000;
 }
 
 /* unused
@@ -8272,7 +8377,7 @@ RosegardenMainWindow::slotAddMarker2()
 void
 RosegardenMainWindow::slotPreviousMarker()
 {
-    const Composition::markercontainer &markers =
+    const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
     timeT currentTime = RosegardenDocument::currentDocument->getComposition().getPosition();
@@ -8293,7 +8398,7 @@ RosegardenMainWindow::slotPreviousMarker()
 void
 RosegardenMainWindow::slotNextMarker()
 {
-    const Composition::markercontainer &markers =
+    const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
     timeT currentTime = RosegardenDocument::currentDocument->getComposition().getPosition();
@@ -8443,6 +8548,51 @@ RosegardenMainWindow::slotSwitchPreset()
     RosegardenDocument::currentDocument->slotDocumentModified();
 }
 
+void RosegardenMainWindow::slotInterpret()
+{
+    InterpretDialog dialog(this);
+
+    if (dialog.exec() == QDialog::Accepted) {
+        const int interpretations = dialog.getInterpretations();
+
+        const SegmentSelection segmentSelection = m_view->getSelection();
+
+        MacroCommand *command = new MacroCommand(tr("Interpret segments"));
+
+        // Keep track of these so we can delete them.
+        std::vector<EventSelection *> selections;
+
+        // For each Segment...
+        for (Segment *segment : segmentSelection) {
+
+            // Can't interpret an audio Segment.
+            if (segment->getType() == Segment::Audio) continue;
+
+            EventSelection *selection = new EventSelection(
+                    *segment,
+                    segment->getStartTime(),
+                    segment->getEndMarkerTime());
+            selections.push_back(selection);
+
+            const NotationQuantizer *quantizer =
+                    RosegardenDocument::currentDocument->getComposition().
+                            getNotationQuantizer();
+
+            command->addCommand(new InterpretCommand(
+                    *selection,
+                    quantizer,
+                    interpretations));
+        }
+
+        m_view->slotAddCommandToHistory(command);
+
+        // Should be safe to delete now.
+        for (EventSelection *selection : selections) {
+            delete selection;
+        }
+    }
+}
+
 void
 RosegardenMainWindow::checkAudioPath()
 {
@@ -8523,7 +8673,7 @@ bool RosegardenMainWindow::saveIfModified()
 
             //RG_DEBUG << "saveIfModified() : new or imported file";
 
-            completed = slotFileSaveAs();
+            completed = fileSaveAs(false);
 
         } else {
 
@@ -8587,14 +8737,19 @@ RosegardenMainWindow::uiUpdateKludge()
                 RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
 }
 
-RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent)
+RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent,
+                                                      const QString& path)
 {
+    // if the path is set this will load a file so autolaod should be skipped
+    bool skipAutoLoad = false;
+    if (path != "") skipAutoLoad = true;
     return new RosegardenDocument(
             this,  // parent
             m_pluginManager,  // audioPluginManager
-            false,  // skipAutoload
+            skipAutoLoad,  // skipAutoload
             true,  // clearCommandHistory
-            m_useSequencer && permanent);  // enableSound
+            m_useSequencer && permanent,  // enableSound
+            path); // file to load
 }
 
 void

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -38,6 +38,8 @@
 namespace Rosegarden
 {
 
+class PlayableData;
+class WAVExporter;
 
 // Current recording status - whether we're monitoring anything
 // or recording.
@@ -77,7 +79,7 @@ class MappedStudio;
 class SoundDriver
 {
 public:
-    SoundDriver(MappedStudio *studio, const QString &name);
+    SoundDriver(MappedStudio *studio, const QString &versionInfo);
     virtual ~SoundDriver();
 
 
@@ -293,6 +295,10 @@ public:
                                     QString /*key*/,
                                     QString /*value*/)  { return QString(); }
 
+    virtual void savePluginState() { }
+
+    virtual void getPluginPlayableAudio(std::vector<PlayableData*>& ) { }
+
     // Plugin management -- SoundDrivers should maintain a plugin
     // scavenger which the audio process code can use for defunct
     // plugins.  Ownership of plugin is passed to the SoundDriver.
@@ -322,12 +328,15 @@ public:
     unsigned int getDevices();
 */
 
+    // install the manager for rendering the composition to an audio file
+    virtual void installExporter(WAVExporter*) { }
+
 protected:
 
     // *** General ***
 
-    /// Driver name for the audit log.
-    QString m_name;
+    /// Traditionally used to dump version info to the audit log.
+    QString m_versionInfo;
 
     SoundDriverStatus m_driverStatus;
 

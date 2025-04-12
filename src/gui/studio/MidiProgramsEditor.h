@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,93 +18,100 @@
 #ifndef RG_MIDIPROGRAMSEDITOR_H
 #define RG_MIDIPROGRAMSEDITOR_H
 
-#include "base/MidiProgram.h"
+#include "base/MidiProgram.h"  // MidiBank
 #include "NameSetEditor.h"
-
 
 class QWidget;
 class QString;
 class QSpinBox;
 class QTreeWidgetItem;
 class QCheckBox;
-class BankList;
+class QLabel;
 
 
 namespace Rosegarden
 {
 
-class MidiProgram;
+
 class MidiDevice;
 class BankEditorDialog;
+class MidiBankTreeWidgetItem;
 
 
 class MidiProgramsEditor : public NameSetEditor
 {
     Q_OBJECT
+
 public:
+
     MidiProgramsEditor(BankEditorDialog *bankEditor,
                        QWidget *parent);
 
-    void clearAll();
-    void populate(QTreeWidgetItem*);
-    void reset();
+    /// Switch to the cleared and disabled state.
+    /**
+     * Called at the end of BankEditorDialog::updateEditor() if no valid
+     * bank or program is selected in the tree.
+     */
+    void clearAll() override;
 
-public slots:
+    /// Show the programs for the selected bank.
+    void populate(const MidiBankTreeWidgetItem *bankItem);
 
-    // Check that any new MSB/LSB combination is unique for this device
-    //
-    void slotNewMSB(int value);
-    void slotNewLSB(int value);
-    void slotNewPercussion(); // gets value from checkbox
+private slots:
 
-    void slotNameChanged(const QString &) override;
+    /// Check that any new MSB/LSB combination is unique for this device.
+    void slotBankEditClicked(bool checked);
+
+
+    /// Not used - see slotEditingFinished().
+    void slotNameChanged(const QString &) override  { }
+    /// Handles a program name change from the base class, NameSetEditor.
+    void slotEditingFinished() override;
     void slotKeyMapButtonPressed() override;
-    void slotKeyMapMenuItemSelected(QAction *);
-    void slotKeyMapMenuItemSelected(int);
+    void slotKeyMapMenuItemSelected(QAction *action);
 
-protected:
+private:
 
-    MidiBank* getCurrentBank();
+    MidiDevice *m_device{nullptr};
 
-    int ensureUniqueMSB(int msb, bool ascending);
-    int ensureUniqueLSB(int lsb, bool ascending);
+    // Widgets
 
-    // Does the banklist contain this combination already?
-    // Disregard percussion bool, we care only about msb / lsb
-    // in these situations.
-    //
-    bool banklistContains(const MidiBank &);
+    QLabel *m_percussion;
+    QLabel *m_msb;
+    QLabel *m_lsb;
 
-    ProgramList getBankSubset(const MidiBank &);
+    // Banks
 
-    /// Set the currently loaded programs to new MSB and LSB
-    void modifyCurrentPrograms(const MidiBank &oldBank,
-                               const MidiBank &newBank);
+    /// The bank we are editing right now.
+    MidiBank m_currentBank;
 
-    // Get a program (pointer into program list) for modification
-    //
-    MidiProgram* getProgram(const MidiBank &bank, int programNo);
+    /// Find bank and programNo in programList.
+    static const MidiProgram *findProgram(const ProgramList &programList,
+                                          const MidiBank &bank,
+                                          int programNo);
+    static MidiProgram *findProgram(ProgramList &programList,
+                                    const MidiBank &bank,
+                                    int programNo);
 
-    void setBankName(const QString& s);
+    /// Find bank and programNo in programList.
+    static ProgramList::iterator findProgramIter(ProgramList &programList,
+                                          const MidiBank &bank,
+                                          int programNo);
+    /// Within programList, change all programs using oldBank to use newBank.
+    void changeBank(ProgramList &programList,
+                    const MidiBank &oldBank,
+                    const MidiBank &newBank);
 
-    virtual QWidget *makeAdditionalWidget(QWidget *parent);
+    /// For assigning key maps to programs.
+    /**
+     * Holds the index of the key map button that was pressed.  Set by
+     * slotKeyMapButtonPressed().
+     *
+     * Used by slotKeyMapMenuItemSelected() to make sure the keymap
+     * selection ends up associated with the right program.
+     */
+    unsigned int m_keyMapProgramNumber{0};
 
-    void blockAllSignals(bool block);
-
-    //--------------- Data members ---------------------------------
-    QCheckBox                *m_percussion;
-    QSpinBox                 *m_msb;
-    QSpinBox                 *m_lsb;
-
-    MidiDevice   *m_device;
-
-    MidiBank     *m_currentBank;
-    BankList     &m_bankList;
-    ProgramList  &m_programList;
-
-    MidiBank      m_oldBank;
-
-    unsigned int              m_currentMenuProgram;
 };
 
 

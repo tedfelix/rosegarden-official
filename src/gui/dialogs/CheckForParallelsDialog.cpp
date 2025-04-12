@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,6 +30,9 @@
 #include "base/BaseProperties.h"
 #include "gui/widgets/FileDialog.h"
 #include "misc/ConfigGroups.h"
+#include "gui/editors/notation/NotationView.h"
+#include "gui/editors/notation/NotationScene.h"
+#include "gui/editors/notation/NotationStaff.h"
 
 
 #include <QDialog>
@@ -323,7 +326,7 @@ CheckForParallelsDialog::writeTransition(std::vector<Transition>::iterator it)
 
     composition->getMusicalTimeForAbsoluteTime((*it).time, bar, beat, fraction, remainder);
 
-    text += ", " + tr("bar") + tr(" ") + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction);
+    text += ", " + tr("bar") + " " + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction);
     qDebug() << text;
 }
 
@@ -509,7 +512,7 @@ CheckForParallelsDialog::startCheck()
 
                         text = tr("found multiple notes for") + " " + makeTrackString(currentTrackPosition, currentTrackLabel);
 
-                        text += ", " + tr("bar") + tr(" ") + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction) + "\n";
+                        text += ", " + tr("bar") + " " + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction) + "\n";
 
                         text += "    stopped checking for parallels in the current segment.\n\n";
 

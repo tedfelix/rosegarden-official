@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -46,7 +46,6 @@ namespace Rosegarden
 EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
                                            timeT startTime,
                                            timeT endTime,
-                                           // cppcheck-suppress passedByValue
                                            std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer), segment, startTime, endTime,
                  true),  // bruteForceRedo
@@ -55,7 +54,6 @@ EventQuantizeCommand::EventQuantizeCommand(Segment &segment,
 }
 
 EventQuantizeCommand::EventQuantizeCommand(EventSelection &selection,
-                                           // cppcheck-suppress passedByValue
                                            std::shared_ptr<Quantizer> quantizer):
     BasicCommand(getGlobalName(quantizer),
                  selection.getSegment(),

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -82,7 +82,7 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     QCheckBox *checkBox = new QCheckBox;
     bottomLayout->addWidget(checkBox);
     checkBox->setText(tr("Show next time"));
-    checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next"
+    checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next "
                             "time the document is loaded</qt>"));
     checkBox->setChecked(true);
     connect(checkBox, &QCheckBox::stateChanged,

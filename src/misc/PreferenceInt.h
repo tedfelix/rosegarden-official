@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2023 the Rosegarden development team.
+    Copyright 2023-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -38,11 +38,13 @@ namespace Rosegarden
  *
  * Was thinking about doing a template, but there are finicky little
  * differences between the types (QVariant conversions).
+ *
+ * ??? rename: SettingsInt?  It's not just for preferences.
  */
 class PreferenceInt
 {
 public:
-    PreferenceInt(QString group, QString key, int defaultValue) :
+    PreferenceInt(const QString& group, const QString& key, int defaultValue) :
         m_group(group),
         m_key(key),
         m_defaultValue(defaultValue)

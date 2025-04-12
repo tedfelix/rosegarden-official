@@ -1,0 +1,61 @@
+The scripts in this directory should be used only once.
+They are kept here as models in the case or some similar processing would be
+needed in the future.
+
+fix-StaffHeader-ts.raku :
+=========================
+
+Following a weird behaviour of Qt lupdate utility, all translations in
+the "Rosegarden::StaffHeader" context have been accidentally moved in
+the "StaffHeader" context.
+
+The two contexts coexist in each .ts files.
+The translations in "Rosegarden::StaffHeader" are obsolete, the ones in
+"Staffheader" are valid.
+
+For all .ts files, this script :
+    - Remove the "Rosegarden::StaffHeader" context if it exists
+    - Rename "Rosegarden::StaffHeader".the existing "StaffHeader" context
+
+Before using this script, the cause of the problem should be removed (it was
+related to using "class X <class T>" rather than "class X <typename T>")
+
+Run the script from the main directory :
+    raku scripts/tweak-ts/fix-StaffHeader-ts.raku
+
+
+make-ts-new-contexts and fix-ts.raku :
+======================================
+
+To avoid some unwanted translations of program names (or instrument), a specific
+context "INSTRUMENT" is going to be used for instruments and program names.
+Any translation from another context will not be triggered (see bug #1705).
+
+Once the new context created, all the already translated instruments names are obsolete in the old context and unfinished in the new one.
+
+The script "fix-ts.raku" will fix this, but it needs some data.
+
+So, before updating the translations with the usual script "make-ts", the
+script "make-ts-new-contexts" should replace it ther first time.
+
+The following procedure should be used :
+    - Create a directory data/oldLocale
+            mkdir data/oldLocale
+
+    - Copy the current .ts files in this directory
+            cp data/locale/*.ts data/oldLocale
+
+    - Run update the .ts files with the new contexts
+            scripts/tweak-ts/make-ts-new-contexts
+
+    - This call has updated the .ts files and created a data/new_contexts.txt
+      files containing the lists of the new contexts and translations.
+
+    - Fix the translations in the .ts files with the following call :
+            raku scripts/tweak-ts/fix-ts.raku
+      (The execution time is very long. It may be optimised, but, as this script
+       is inteded to be run only once, it's not worth it)
+
+     - Remove the now useless data files :
+            rm -rf data/oldLocale
+            rm data/new_contexts.txt

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -123,7 +123,7 @@ allocateChannelInterval(RealTime startTime,
                      << (thisOverflow ? "the maximum plus" : "only")
                      << thisDuration;
 
-            if ((thisOverflow < leastOverflow) ||
+            if (((! thisOverflow && leastOverflow)) ||
                 ((thisOverflow == leastOverflow) &&
                  (thisDuration < leastDuration))) {
 
@@ -345,7 +345,7 @@ isPercussion(ChannelId channel)
 // @author Tom Breton (Tehom)
 bool
 AllocateChannels::
-isPercussion(ChannelInterval &ci)
+isPercussion(const ChannelInterval &ci)
 {
     return isPercussion(ci.getChannelId());
 }
@@ -456,7 +456,7 @@ reserveFixedChannel(ChannelId channel)
 
 ChannelId
 AllocateChannels::
-reallocateThruChannel(Instrument& instrument, ChannelId channel)
+reallocateThruChannel(const Instrument& instrument, ChannelId channel)
 {
     // If we already have a valid channel and it has the right
     // percussion-ness, we're done.
@@ -477,7 +477,7 @@ reallocateThruChannel(Instrument& instrument, ChannelId channel)
 // @author Tom Breton (Tehom)
 ChannelId
 AllocateChannels::
-allocateThruChannel(Instrument& instrument)
+allocateThruChannel(const Instrument& instrument)
 {
     if (instrument.isPercussion()) { return getPercussionChannel(); }
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -1085,7 +1085,7 @@ MatrixScene::constrainToSegmentArea(QPointF &scenePos)
 */
 
 void
-MatrixScene::playNote(Segment &segment, int pitch, int velocity)
+MatrixScene::playNote(const Segment &segment, int pitch, int velocity)
 {
 //    std::cout << "Scene is playing a note of pitch: " << pitch
 //              << " + " <<  segment.getTranspose();
@@ -1124,6 +1124,29 @@ MatrixScene::updateAll()
     }
     recreatePitchHighlights();
     updateCurrentSegment();
+}
+
+void
+MatrixScene::setExtraPreviewEvents(const EventWithSegmentMap& events)
+{
+    RG_DEBUG << "setExtraPreviewEvents" << events.size();
+    for (auto pair : events) {
+        const Event* e = pair.first;
+        const Segment* segment = pair.second;
+        if (m_additionalPreviewEvents.find(e) !=
+            m_additionalPreviewEvents.end()) continue; // already previewed
+
+        long pitch;
+        if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+            long velocity = -1;
+            (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                playNote(*segment, pitch, velocity);
+            }
+        }
+    }
+    m_additionalPreviewEvents = events;
 }
 
 int

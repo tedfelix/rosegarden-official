@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -195,9 +195,9 @@ public:
     }
 
     void setPluginInstancePortValue(InstrumentId id,
-                                            int position,
-                                            unsigned long portNumber,
-                                            float value) override {
+                                    int position,
+                                    unsigned long portNumber,
+                                    float value) override {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
 #else
@@ -310,6 +310,19 @@ public:
         return QString();
     }
 
+    void savePluginState() override {
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->savePluginState();
+#endif
+    }
+
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable) override
+    {
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->getPluginPlayableAudio(playable);
+#endif
+    }
+
     void setAudioBussLevels(int bussId,
                                     float dB,
                                     float pan) override {
@@ -336,6 +349,8 @@ public:
 
     void claimUnwantedPlugin(void *plugin) override;
     void scavengePlugins() override;
+
+    void installExporter(WAVExporter* wavExporter) override;
 
     /// Update Ports and Connections
     /**
@@ -646,7 +661,7 @@ private:
                                const QString& connection,
                                const ClientPortPair &pair);
     /// Return whether the client/port is in m_devicePortMap.
-    bool portInUse(int client, int port) const;
+    //bool portInUse(int client, int port) const;
     /// Is the given deviceId within m_devicePortMap connected?
     bool isConnected(DeviceId deviceId) const;
 
@@ -660,7 +675,7 @@ private:
         int device;
         int subdevice;
         QString name;
-        long resolution;
+        long resolution;  // usecs
     };
     std::vector<AlsaTimerInfo> m_timers;
     QString m_currentTimerName;
@@ -808,6 +823,11 @@ private:
     TransportSyncStatus m_mmcStatus;
     TransportSyncStatus m_mtcStatus;
 
+    void sendEvent(
+            bool isSoftSynth,
+            InstrumentId instrumentID,
+            snd_seq_event_t &alsaEvent,
+            bool now);
 };
 
 

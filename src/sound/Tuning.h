@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -22,6 +22,7 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <memory>
 
 #include <QXmlStreamReader>
 
@@ -61,7 +62,7 @@ namespace Accidentals {
  */
 class Tuning {
 
- public:
+public:
 
   /**
    * \brief Construct a tuning from its name, and interval and spellings.
@@ -72,14 +73,14 @@ class Tuning {
    *        Spellings which do not have associated intervals will be deleted.
    */
   Tuning(const std::string& name,
-         const IntervalList *intervals,
-	 SpellingList *spellings);
+         std::shared_ptr<const IntervalList> intervals,
+         std::shared_ptr<SpellingList> spellings);
   explicit Tuning(const Tuning *tuning);
 
   /**
    * \brief Access the vector of tunings known to the system
    */
-  static std::vector<Tuning*>* getTunings();
+  static std::vector<std::shared_ptr<Tuning>> *getTunings();
 
   /**
    * \brief Set the frequency associated with the reference pitch
@@ -105,14 +106,18 @@ class Tuning {
   double getFrequency(Rosegarden::Pitch pitch) const;
 
   const std::string getName() const;      /**< Get the Tuning's name */
-  SpellingList *getSpellingList() const;  /**< Get the enharmonic spellings */
-  const IntervalList *getIntervalList() const;  /**< Get intervals in cents*/
   Rosegarden::Pitch getRootPitch() const; /**< Get the root pitch */
   Rosegarden::Pitch getRefPitch() const;  /**< Get the reference pitch */
   double getRefFreq() const;              /**< Get the reference frequency */
   void printTuning() const;               /**< Print the Tuning (debugging) */
 
- protected:
+private:
+
+  /// Get the enharmonic spellings.
+  std::shared_ptr<SpellingList> getSpellingList() const;
+
+  /// Get intervals in cents.
+  std::shared_ptr<const IntervalList> getIntervalList() const;
 
   /** Converts pitch to string */
   static std::string getSpelling(Rosegarden::Pitch &pitch);
@@ -124,12 +129,12 @@ class Tuning {
   /** Parse a note and associate it in the spelling list
       with the most recent interval */
   static void parseSpelling(QString note,
-                            IntervalList *intervals,
-                            SpellingList *spellings);
+                            std::shared_ptr<IntervalList> intervals,
+                            std::shared_ptr<SpellingList> spellings);
   /** Create and cache a new Tuning */
   static void saveTuning(const QString &tuningName,
-                         const IntervalList *intervals,
-                         SpellingList *spellings);
+                         std::shared_ptr<const IntervalList> intervals,
+                         std::shared_ptr<SpellingList> spellings);
   const std::string m_name;
   Rosegarden::Pitch m_rootPitch;
   int m_rootPosition;
@@ -138,15 +143,16 @@ class Tuning {
   int m_cPosition;
   double  m_refFreq;
   double m_cRefFreq;
-  const IntervalList *m_intervals;
+  std::shared_ptr<const IntervalList> m_intervals;
   int m_size;
-  SpellingList *m_spellings;
+  std::shared_ptr<SpellingList> m_spellings;
 
   typedef std::map<const int, const Accidental *> AccMap;
   static AccMap accMap;
   static const unsigned int accMapSize;
   static const AccMap::value_type accMapData[];
-  static std::vector<Tuning*> m_tunings;
+
+  static std::vector<std::shared_ptr<Tuning>> m_tunings;
 
 };
 

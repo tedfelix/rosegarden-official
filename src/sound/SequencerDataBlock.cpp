@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -20,7 +20,6 @@
 
 #include "misc/Debug.h"
 
-//#include <QThread>
 #include <QMutexLocker>
 
 namespace Rosegarden
@@ -130,8 +129,6 @@ SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
 
     // Once the buffer is in a consistent state, move the record index
     // so that the other thread will read the new events.
-    // ??? Is this guaranteed to be atomic and therefore thread safe?
-    //     I believe so, and that's why this has always worked.
     m_recordEventIndex = index;
 }
 

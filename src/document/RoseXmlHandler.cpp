@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -54,6 +54,7 @@
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
+#include "sound/PluginIdentifier.h"
 
 #include <QApplication>
 #include <QMessageBox>
@@ -245,7 +246,6 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_pluginInBuss(false),
     m_colourMap(nullptr),
     m_keyMapping(),
-    m_pluginId(0),
     m_totalElements(elementCount),
     m_elementsSoFar(0),
     m_subHandler(nullptr),
@@ -350,31 +350,25 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 return false;
             }
 
-            long storedId = m_currentEvent->get
-                            <Int>(BEAMED_GROUP_ID);
+            long storedId = m_currentEvent->get<Int>(BEAMED_GROUP_ID);
 
             if (m_groupIdMap.find(storedId) == m_groupIdMap.end()) {
                 m_groupIdMap[storedId] = m_currentSegment->getNextId();
             }
 
-            m_currentEvent->set
-            <Int>(BEAMED_GROUP_ID, m_groupIdMap[storedId]);
+            m_currentEvent->set<Int>(
+                    BEAMED_GROUP_ID, m_groupIdMap[storedId]);
 
         } else if (m_inGroup) {
-            m_currentEvent->set
-            <Int>(BEAMED_GROUP_ID, m_groupId);
-            m_currentEvent->set
-            <String>(BEAMED_GROUP_TYPE, m_groupType);
+            m_currentEvent->set<Int>(BEAMED_GROUP_ID, m_groupId);
+            m_currentEvent->set<String>(BEAMED_GROUP_TYPE, m_groupType);
             if (m_groupType == GROUP_TYPE_TUPLED) {
-                m_currentEvent->set
-                <Int>
-                (BEAMED_GROUP_TUPLET_BASE, m_groupTupletBase);
-                m_currentEvent->set
-                <Int>
-                (BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
-                m_currentEvent->set
-                <Int>
-                (BEAMED_GROUP_UNTUPLED_COUNT, m_groupUntupledCount);
+                m_currentEvent->set<Int>(
+                        BEAMED_GROUP_TUPLET_BASE, m_groupTupletBase);
+                m_currentEvent->set<Int>(
+                        BEAMED_GROUP_TUPLED_COUNT, m_groupTupledCount);
+                m_currentEvent->set<Int>(
+                        BEAMED_GROUP_UNTUPLED_COUNT, m_groupUntupledCount);
             }
         }
 
@@ -958,17 +952,15 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         // set Segment
-        if(lcName == "segment") {
-            m_section = InSegment;
+        m_section = InSegment;
+
+        TrackId trackId{NoTrack};
+        QString trackIdStr = atts.value("track").toString();
+        if (!trackIdStr.isEmpty()) {
+            trackId = trackIdStr.toUInt();
         }
 
-        int track = -1, startTime = 0;
-        unsigned int colourindex = 0;
-        QString trackNbStr = atts.value("track").toString();
-        if (!trackNbStr.isEmpty()) {
-            track = trackNbStr.toInt();
-        }
-
+        int startTime{0};
         QString startIdxStr = atts.value("start").toString();
         if (!startIdxStr.isEmpty()) {
             startTime = startIdxStr.toInt();
@@ -1042,9 +1034,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (!labelStr.isEmpty())
             m_currentSegment->setLabel(qstrtostr(labelStr));
 
-        m_currentSegment->setTrack(track);
+        m_currentSegment->setTrack(trackId);
         //m_currentSegment->setStartTime(startTime);
 
+        unsigned int colourindex{0};
         QString colourIndStr = atts.value("colourindex").toString();
         if (!colourIndStr.isEmpty()) {
             colourindex = colourIndStr.toInt();
@@ -1528,15 +1521,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 QString keyMappingStr = (atts.value("keymapping").toString());
 
                 // Create a new program
-                bool k = !keyMappingStr.isEmpty();
 
-                MidiProgram program
-                (MidiBank(m_percussion,
-                          m_msb,
-                          m_lsb),
-                 pc,
-                 qstrtostr(nameStr),
-                 k ? qstrtostr(keyMappingStr) : "");
+                // ??? But an empty string is an empty string.  Why not
+                //     just always do qstrtostr(keyMappingStr) below?
+                const bool keyMapValid = !keyMappingStr.isEmpty();
+
+                MidiProgram program(
+                        MidiBank(m_percussion, m_msb, m_lsb),
+                        pc,
+                        qstrtostr(nameStr),
+                        keyMapValid ? qstrtostr(keyMappingStr) : "");
 
                 if (m_device->getType() == Device::Midi) {
                     // Insert the program
@@ -1910,7 +1904,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             // string, but we will accept a LADSPA UniqueId if there's
             // no identifier, for backward compatibility
 
-            QString identifier = atts.value("identifier").toString();
+            QString lv2uri = atts.value("lv2uri").toString();
+            QString identifier;
+            // If present, prefer lv2uri.
+            if (!lv2uri.isEmpty())
+                identifier = lv2uri;
+            else
+                identifier = atts.value("identifier").toString();
 
             QSharedPointer<AudioPlugin> plugin;
             QSharedPointer<AudioPluginManager> apm = getAudioPluginManager();
@@ -1942,20 +1942,35 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     m_plugin->setAssigned(true);
                     m_plugin->setBypass(bypassed);
                     m_plugin->setIdentifier( qstrtostr( plugin->getIdentifier() ) );
+                    m_plugin->setArch(plugin->getArch());
+                    m_plugin->setLabel(qstrtostr(plugin->getLabel()));
                     RG_DEBUG << "set identifier to plugin at position " << position << " of container " << container->getId();
                     if (program != "") {
                         m_plugin->setProgram(program);
                     }
                 }
-            } else {
-                // we shouldn't be halting import of the RG file just because
-                // we can't match a plugin
-                //
+            } else {  // Plugin not found.
+                // What is this?  An older file format?
                 QString q = atts.value("id").toString();
 
                 if (!identifier.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: plugin " << identifier << " not found";
-                    m_pluginsNotFound.insert(identifier);
+                    // If present, go with label as it is the most human-readable.
+                    QString label = atts.value("label").toString();
+                    if (!label.isEmpty()) {
+                        m_pluginsNotFound.insert(label);
+                    } else {
+                        // Try to parse a label and .so filename from identifier.
+                        QString type, soName, arch;
+                        PluginIdentifier::parseIdentifier(
+                                identifier, type, soName, label, arch);
+                        // In case the label is bogus, use the identifier.
+                        if (label == "")
+                            label = identifier;
+                        QString pluginFileName = QFileInfo(soName).fileName();
+
+                        m_pluginsNotFound.insert(tr("%1 (from %2)").
+                                arg(label).arg(pluginFileName));
+                    }
                 } else if (!q.isEmpty()) {
                     RG_DEBUG << "WARNING: RoseXmlHandler: plugin uid " << atts.value("id") << " not found";
                 } else {
@@ -1963,15 +1978,18 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                     return false;
                 }
             }
-        } else { // no instrument
+        } else {  // container is null
 
-            if (lcName == "synth") {
-                QString identifier = atts.value("identifier").toString();
-                if (!identifier.isEmpty()) {
-                    RG_DEBUG << "WARNING: RoseXmlHandler: no instrument for plugin " << identifier;
-                    m_pluginsNotFound.insert(identifier);
-                }
-            }
+            // We do not have a valid Instrument or Buss.
+            // It appears as if an invalid Buss is most likely impossible.
+            // An invalid Instrument might occur with an invalid .rg file.
+
+            // If we want to alert the user, we should do that
+            // the moment we discover that there is no matching
+            // Instrument in the Studio.  Right now we do nothing.
+            // See the "instrument" start element handler.  Search
+            // on getInstrumentById.
+
         }
 
         m_section = InPlugin;
@@ -2107,11 +2125,21 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (instrument && instrument->getType() == type) {
             m_instrument = instrument;
 
-            // Synth and Audio instruments always have the channel set to 2.
-            // Preserve this.
+            // Synth instruments always have 2 autio channels.
+            // Soft Synth always has midi channel 0
             MidiByte channel = (MidiByte)atts.value("channel").toInt();
-
-            m_instrument->setNaturalChannel(channel);
+            if (type == Instrument::Midi) {
+                m_instrument->setNaturalMidiChannel(channel);
+                m_instrument->setNumAudioChannels(0);
+            }
+            if (type == Instrument::Audio) {
+                m_instrument->setNaturalMidiChannel(0);
+                m_instrument->setNumAudioChannels(channel);
+            }
+            if (type == Instrument::SoftSynth) {
+                m_instrument->setNaturalMidiChannel(0);
+                m_instrument->setNumAudioChannels(2);
+            }
 
             if (type == Instrument::Midi) {
                 if (atts.value("fixed").toString() == "false")
@@ -2346,7 +2374,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         // from "file" to "actual" IDs.  See discussion in
         // mapToActualInstrument() below.
 
-        for (Composition::trackcontainer::iterator i = comp.getTracks().begin();
+        for (Composition::TrackMap::iterator i = comp.getTracks().begin();
              i != comp.getTracks().end(); ++i) {
             InstrumentId iid = i->second->getInstrument();
             InstrumentId aid = mapToActualInstrument(iid);
@@ -2448,8 +2476,18 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         } else {
             m_section = InInstrument;
         }
+
+        // Clear this since we are done.
+        // Otherwise a previous plugin might start picking up the
+        // elements for a plugin that doesn't load.
         m_plugin = nullptr;
-        m_pluginId = 0;
+
+    } else if (lcName == "synth") {
+
+        // Clear this since we are done.
+        // Otherwise a previous plugin might start picking up the
+        // elements for a plugin that doesn't load.
+        m_plugin = nullptr;
 
     } else if (lcName == "device") {
 
@@ -2697,7 +2735,7 @@ RoseXmlHandler::skipToNextPlayDevice()
 */
 
 void
-RoseXmlHandler::setMIDIDeviceConnection(QString connection)
+RoseXmlHandler::setMIDIDeviceConnection(const QString &connection)
 {
     RG_DEBUG << "setMIDIDeviceConnection(" << connection << ")";
 
@@ -2712,15 +2750,15 @@ RoseXmlHandler::setMIDIDeviceConnection(QString connection)
 }
 
 void
-RoseXmlHandler::setMIDIDeviceName(QString name)
+RoseXmlHandler::setMIDIDeviceName(const QString &name)
 {
     RG_DEBUG << "setMIDIDeviceName(" << name << ")";
 
     MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md) return;
 
-    RosegardenSequencer::getInstance()->renameDevice
-        (md->getId(), name);
+    RosegardenSequencer::getInstance()->renameDevice(
+            md->getId(), name);
 }
 
 bool

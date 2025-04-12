@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -191,7 +191,6 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
         }
 
         // get the length of the data chunk, and scan past it as a side-effect
-        // cppcheck-suppress unreadVariable
 	chunkLength = getIntegerFromLittleEndian(getBytes(file, 4));
 #ifdef DEBUG_RIFF
         RG_DEBUG << "RIFFAudioFile::scanTo() - data chunk size =" << chunkLength;

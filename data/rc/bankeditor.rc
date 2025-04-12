@@ -5,7 +5,10 @@
 <MenuBar>
   <Menu name="file">
     <text>&amp;File</text>
-    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+    <Action name="file_import" text="&amp;Import..." shortcut="Ctrl+I"/>
+    <Action name="file_export" text="&amp;Export..." shortcut="Ctrl+E"/>
+    <Separator/>
+    <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W"/>
   </Menu>
 
   <Menu name="edit">
@@ -13,9 +16,15 @@
     <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
-  <Separator/>
+    <Separator/>
+    <Action name="add_bank" text="Add Bank" shortcut="Ctrl+B"/>
+    <Action name="add_key_mapping" text="Add Key Mapping" shortcut="Ctrl+K"/>
+    <Separator/>
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
     <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
+    <Separator/>
+    <Action name="edit_delete" text="Delete" shortcut="Del"/>
+    <Action name="edit_delete_all" text="Delete All" shortcut="Ctrl+Del"/>
   </Menu>
 
   <Menu name="help" append="about_merge">
@@ -25,12 +34,5 @@
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
   </Menu>
 </MenuBar>
-
-<State name="on_bank_item">
-     <enable>
-        <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
-     </enable>
-</State>
 
 </kpartgui>

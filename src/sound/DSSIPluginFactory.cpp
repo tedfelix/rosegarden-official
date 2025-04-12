@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,19 +13,26 @@
     COPYING included with this distribution for more information.
 */
 
-#include "DSSIPluginFactory.h"
-#include <cstdlib>
-#include "misc/Strings.h"
+#define RG_MODULE_STRING "[DSSIPluginFactory]"
+#define RG_NO_DEBUG_PRINT 1
 
-#include <dlfcn.h>
+#include "DSSIPluginFactory.h"
+
+#include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "DSSIPluginInstance.h"
 #include "MappedStudio.h"
 #include "PluginIdentifier.h"
+#include "misc/Debug.h"
+
+#include <cstdlib>
+#include <dlfcn.h>
 #include <lrdf.h>
+
 
 namespace Rosegarden
 {
+
 
 DSSIPluginFactory::DSSIPluginFactory() :
         LADSPAPluginFactory()
@@ -39,7 +46,7 @@ DSSIPluginFactory::~DSSIPluginFactory()
 }
 
 void
-DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
+DSSIPluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
     for (std::vector<QString>::iterator i = m_identifiers.begin();
             i != m_identifiers.end(); ++i) {
@@ -54,7 +61,15 @@ DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 
         //	std::cerr << "DSSIPluginFactory::enumeratePlugins: Name " << (descriptor->Name ? descriptor->Name : "NONE" ) << std::endl;
 
-        list.push_back(*i);
+        // This list of strings is ordered in such a way that
+        // AudioPluginManager::Enumerator::run() can consume it.
+        // See LADSPAPluginFactory::enumeratePlugins()
+        // and LV2PluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
+
+        list.push_back(*i);  // Identifier
+        // arch
+        list.push_back(QString("%1").arg(static_cast<int>(PluginArch::DSSI)));
         list.push_back(descriptor->Name);
         list.push_back(QString("%1").arg(descriptor->UniqueID));
         list.push_back(descriptor->Label);
@@ -64,6 +79,12 @@ DSSIPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
         list.push_back(ddesc->run_multiple_synths ? "true" : "false");
         list.push_back(m_taxonomy[descriptor->UniqueID]);
         list.push_back(QString("%1").arg(descriptor->PortCount));
+
+        RG_DEBUG << "enumeratePlugins()";
+        RG_DEBUG << "  identifier: " << *i;
+        RG_DEBUG << "  name: " << descriptor->Name;
+        RG_DEBUG << "  label: " << descriptor->Label;
+        RG_DEBUG << "  taxonomy: " << m_taxonomy[descriptor->UniqueID];
 
         for (unsigned long p = 0; p < descriptor->PortCount; ++p) {
 
@@ -148,12 +169,14 @@ DSSIPluginFactory::populatePluginSlot(QString identifier, MappedPluginSlot &slot
 }
 
 RunnablePluginInstance *
-DSSIPluginFactory::instantiatePlugin(QString identifier,
-                                     int instrumentId,
-                                     int position,
-                                     unsigned int sampleRate,
-                                     unsigned int blockSize,
-                                     unsigned int channels)
+DSSIPluginFactory::instantiatePlugin
+(QString identifier,
+ int instrumentId,
+ int position,
+ unsigned int sampleRate,
+ unsigned int blockSize,
+ unsigned int channels,
+ AudioInstrumentMixer*)
 {
     const DSSI_Descriptor *descriptor = getDSSIDescriptor(identifier);
 
@@ -176,8 +199,8 @@ DSSIPluginFactory::instantiatePlugin(QString identifier,
 const DSSI_Descriptor *
 DSSIPluginFactory::getDSSIDescriptor(QString identifier)
 {
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
         loadLibrary(soname);
@@ -273,7 +296,6 @@ DSSIPluginFactory::getLRDFPath(QString &baseUri)
     }
 
 #ifdef DSSI_BASE
-    // cppcheck-suppress ConfigurationNotChecked
     baseUri = DSSI_BASE;
 #else
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -29,16 +29,18 @@ class DSSIPluginFactory : public LADSPAPluginFactory
 public:
     ~DSSIPluginFactory() override;
 
-    void enumeratePlugins(MappedObjectPropertyList &list) override;
+    void enumeratePlugins(std::vector<QString> &list) override;
 
     void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 
-    RunnablePluginInstance *instantiatePlugin(QString identifier,
-                                                      int instrumentId,
-                                                      int position,
-                                                      unsigned int sampleRate,
-                                                      unsigned int blockSize,
-                                                      unsigned int channels) override;
+    RunnablePluginInstance *instantiatePlugin
+        (QString identifier,
+         int instrumentId,
+         int position,
+         unsigned int sampleRate,
+         unsigned int blockSize,
+         unsigned int channels,
+         AudioInstrumentMixer* amixer) override;
 
 protected:
     DSSIPluginFactory();
@@ -57,4 +59,3 @@ protected:
 }
 
 #endif
-

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,9 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ModifyDeviceCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ModifyDeviceCommand.h"
 
+#include "misc/Debug.h"
+#include "misc/Strings.h"
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
@@ -35,7 +39,8 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     DeviceId device,
     const std::string &name,
     const std::string &librarianName,
-    const std::string &librarianEmail) :
+    const std::string &librarianEmail,
+    const QString& commandName) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_device(device),
@@ -52,7 +57,9 @@ ModifyDeviceCommand::ModifyDeviceCommand(
         m_changeControls(false),
         m_changeKeyMappings(false),
         m_clearBankAndProgramList(false)
-{}
+{
+    if (commandName != "") setName(commandName);
+}
 
 void ModifyDeviceCommand::setVariation(MidiDevice::VariationType variationType)
 {
@@ -99,6 +106,9 @@ ModifyDeviceCommand::execute()
         return;
     }
 
+    // block notifications to avoid multiple updates
+    midiDevice->blockNotify(true);
+
     // Save Original Values for Undo
 
     // ??? Really wish we could just m_oldDevice = *(midiDevice).  See below.
@@ -141,9 +151,25 @@ ModifyDeviceCommand::execute()
             if (m_changeBanks || m_changePrograms) {
                 // Make sure the instruments make sense.
                 for (size_t i = 0; i < instruments.size(); ++i) {
-                    instruments[i]->pickFirstProgram(
-                            midiDevice->isPercussionNumber(i));
-                    instruments[i]->sendChannelSetup();
+                    bool programOK = false;
+                    const MidiProgram& program = instruments[i]->getProgram();
+                    if (program.getBank().isPercussion()) continue;
+                    for(const MidiProgram& lprogram : m_programList) {
+                        RG_DEBUG << "compare program" <<
+                            strtoqstr(lprogram.getName());
+                        if (program.partialCompare(lprogram)) {
+                            RG_DEBUG << "found program" <<
+                                strtoqstr(lprogram.getName());
+                            programOK = true;
+                            break;
+                        }
+                    }
+                    if (! programOK) {
+                        RG_DEBUG << "resetting instrument" << i;
+                        instruments[i]->
+                            pickFirstProgram(midiDevice->isPercussionNumber(i));
+                        instruments[i]->sendChannelSetup();
+                    }
                 }
             }
         }
@@ -182,6 +208,9 @@ ModifyDeviceCommand::execute()
         midiDevice->replaceControlParameters(m_controlList);
     }
 
+    // unblock notifactaions. This will trigger a notification
+    midiDevice->blockNotify(false);
+
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,
     //     would update themselves.
@@ -203,6 +232,9 @@ ModifyDeviceCommand::unexecute()
         return;
     }
 
+    // block notifactaions to avoid multiple updates
+    midiDevice->blockNotify(true);
+
     if (m_rename)
         midiDevice->setName(m_oldName);
     midiDevice->replaceBankList(m_oldBankList);
@@ -218,6 +250,9 @@ ModifyDeviceCommand::unexecute()
         instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
         instruments[i]->sendChannelSetup();
     }
+
+    // unblock notifactaions. This will trigger a notification
+    midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
     //     which would then notify all observers (e.g. MIPP) who, in turn,

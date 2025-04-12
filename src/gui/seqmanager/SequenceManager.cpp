@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -55,6 +55,7 @@
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInstrument.h"
+#include "sound/WAVExporter.h"
 #include "misc/Preferences.h"
 
 #include "rosegarden-version.h"  // for VERSION
@@ -95,8 +96,13 @@ SequenceManager::SequenceManager() :
     m_recordTime(new QElapsedTimer()),
     m_lastTransportStartPosition(0),
     m_sampleRate(0),
-    m_tempo(0)
+    m_tempo(0),
+    m_wavExporter(nullptr),
+    m_exportTimer(new QTimer(this))
 {
+    // The timer is started when required
+    connect(m_exportTimer, &QTimer::timeout,
+            this, &SequenceManager::slotExportUpdate);
 }
 
 SequenceManager::~SequenceManager()
@@ -105,6 +111,10 @@ SequenceManager::~SequenceManager()
 
     if (m_doc)
         m_doc->getComposition().removeObserver(this);
+
+    if (m_wavExporter) {
+        delete m_wavExporter;
+    }
 }
 
 void
@@ -377,10 +387,10 @@ SequenceManager::record(bool countIn)
     // a valid audio record path and a working audio subsystem before
     // we go any further
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         comp.getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 recordTracks.begin();
             i != recordTracks.end(); ++i) {
 
@@ -475,7 +485,7 @@ punchin:
         bool haveMIDIInstrument = false;
         //TrackId recordMIDITrack = 0;
 
-        for (Composition::recordtrackcontainer::const_iterator i =
+        for (Composition::TrackIdSet::const_iterator i =
                     comp.getRecordTracks().begin();
                 i != comp.getRecordTracks().end(); ++i) {
 
@@ -535,6 +545,7 @@ punchin:
         settings.endGroup();
 
         m_doc->setRecordStartTime(m_doc->getComposition().getPosition());
+        m_doc->setPointerPositionBeforeRecord(m_lastTransportStartPosition);
 
         if (haveAudioInstrument) {
             // Ask the document to update its record latencies so as to
@@ -544,7 +555,7 @@ punchin:
 
         if (haveMIDIInstrument) {
             // For each recording segment...
-            for (Composition::recordtrackcontainer::const_iterator i =
+            for (Composition::TrackIdSet::const_iterator i =
                         comp.getRecordTracks().begin(); i != comp.getRecordTracks().end(); ++i) {
                 // Get the Instrument for this Track
                 InstrumentId iid = comp.getTrackById(*i)->getInstrument();
@@ -734,12 +745,15 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
         break;
     }
 
+    // For each MappedEvent...
     for (i = mC.begin(); i != mC.end(); ++i ) {
-        if ((*i)->getType() >= MappedEvent::Audio) {
+        // Skip MIDI events.  Handle only non-MIDI events.
+        // ??? Use "continue" to reduce code walk/indent.
+        if (!(*i)->isMidi()) {
             if ((*i)->getType() == MappedEvent::AudioStopped) {
                 //RG_DEBUG << "AUDIO FILE ID = " << int((*i)->getData1()) << " - FILE STOPPED - " << "INSTRUMENT = " << (*i)->getInstrument();
 
-                if (audioManagerDialog && (*i)->getInstrument() ==
+                if (audioManagerDialog && (*i)->getInstrumentId() ==
                         m_doc->getStudio().getAudioPreviewInstrument()) {
                     audioManagerDialog->
                     closePlayingDialog(
@@ -752,7 +766,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 RG_DEBUG << "processAsynchronousMidi(): Received AudioGeneratePreview: data1 is "
                          << int((*i)->getData1()) << ", data2 "
                          << int((*i)->getData2()) << ", instrument is "
-                         << (*i)->getInstrument();
+                         << (*i)->getInstrumentId();
                 m_doc->finalizeAudioFile((int)(*i)->getData1() +
                                          (int)(*i)->getData2() * 256);
             }
@@ -945,35 +959,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             RosegardenMainWindow::self(), "",
                             tr("The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.\nAn attempt to restart the audio service has been made, but some problems may remain.\nQuitting other running applications may improve Rosegarden's performance."));
 
-                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimer &&
-                               shouldWarnForImpreciseTimer()) {
-
-                        RG_WARNING << "Rosegarden: WARNING: No accurate sequencer timer available";
-
-#if 0
-                        //StartupLogo::hideIfStillThere();
-
-                        //RosegardenMainWindow::self()->awaitDialogClearance();
-
-                        // This is to avoid us ever showing the same
-                        // dialog more than once during a single run
-                        // of the program -- it's quite separate from
-                        // the suppression function
-                        static bool showTimerWarning = true;
-
-                        if (showTimerWarning) {
-                            // ??? Um.  Why?  This just goes out of scope.
-                            informativeText =
-                                    tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.</p><p>Some Linux distributors already provide low latency kernels, see the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for instructions.</p>");
-
-                            // Don't show again during this run.
-                            // ??? Don't show what?
-                            showTimerWarning = false;
-                        }
-#endif
-
-                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC &&
-                               shouldWarnForImpreciseTimer()) {
+                    } else if ((*i)->getData1() == MappedEvent::WarningImpreciseTimerTryRTC) {
 
                         RG_WARNING << "WARNING: No accurate sequencer timer available.";
 
@@ -988,7 +974,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                             emit sendWarning(
                                     WarningWidget::Timer,
                                     tr("<h3>System timer resolution is too low!</h3>"),
-                                    tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running <b>sudo modprobe snd-rtctimer</b> in a terminal window and then restarting Rosegarden.</p><p>Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the <a style=\"color:gold\"  href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for notes about this.</p>"));
+                                    tr("<p>Rosegarden was unable to find a high-resolution timing source for MIDI performance.</p><p>Check whether your Linux distribution provides a multimedia-optimized kernel.  See the <a style=\"color:gold\" href=\"http://www.rosegardenmusic.com/wiki/low-latency_kernels\">Rosegarden website</a> for notes about this.</p>"));
 
                             // Don't show again during this run.
                             showAltTimerWarning = false;
@@ -1073,6 +1059,19 @@ void SequenceManager::slotLoopChanged()
                 loopStart, loopEnd,
                 false);
         return;
+    }
+}
+
+void SequenceManager::slotExportUpdate()
+{
+    // The timer is only run when the m_compositionExportManager is set
+    m_wavExporter->update();
+    if (m_wavExporter->isComplete()) {
+        RG_DEBUG << "deleting completed export manager";
+        delete m_wavExporter;
+        m_wavExporter = nullptr;
+        // timer no longer needed
+        m_exportTimer->stop();
     }
 }
 
@@ -1199,8 +1198,11 @@ SequenceManager::reinitialiseSequencerStudio()
     if (submasterOuts)
         ports |= MappedEvent::SubmasterOuts;
 
-    MappedEvent mEports(
-            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
+    MappedEvent mEports;
+    mEports.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEports.setType(MappedEvent::SystemAudioPorts);
+    mEports.setData1(ports);
+
     StudioControl::sendMappedEvent(mEports);
 
     // Audio File Format
@@ -1208,9 +1210,11 @@ SequenceManager::reinitialiseSequencerStudio()
     unsigned int audioFileFormat =
             settings.value("audiorecordfileformat", 1).toUInt() ;
 
-    MappedEvent mEff(
-            MidiInstrumentBase, MappedEvent::SystemAudioFileFormat,
-            audioFileFormat);
+    MappedEvent mEff;
+    mEff.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEff.setType(MappedEvent::SystemAudioFileFormat);
+    mEff.setData1(audioFileFormat);
+
     StudioControl::sendMappedEvent(mEff);
 
     settings.endGroup();
@@ -1223,7 +1227,9 @@ SequenceManager::panic()
 
     stop();
 
-    MappedEvent mE(MidiInstrumentBase, MappedEvent::Panic, 0, 0);
+    MappedEvent mE;
+    mE.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mE.setType(MappedEvent::Panic);
     StudioControl::sendMappedEvent(mE);
 }
 
@@ -1272,7 +1278,7 @@ void SequenceManager::populateCompositionMapper()
         segmentAdded(*i);
     }
 
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
         m_triggerSegments.insert(SegmentRefreshMap::value_type
@@ -1386,7 +1392,7 @@ void SequenceManager::refresh()
     SegmentRefreshMap newTriggerMap;
 
     // For each trigger Segment in the composition
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
              comp.getTriggerSegments().begin();
          i != comp.getTriggerSegments().end(); ++i) {
 
@@ -1473,21 +1479,26 @@ void SequenceManager::segmentAdded(const Composition*, Segment* s)
     m_addedSegments.push_back(s);
 }
 
-void SequenceManager::segmentRemoved(const Composition*, Segment* s)
+void SequenceManager::segmentRemoved(const Composition *comp, Segment *segment)
 {
-    RG_DEBUG << "segmentRemoved(" << s << ")";
+    RG_DEBUG << "segmentRemoved(" << segment << ")";
+
+    // Triggered Segment?
+    if (comp->getTriggerSegmentId(segment) != -1) {
+        m_triggerSegments.erase(segment);
+        return;
+    }
 
     // !!! WARNING !!!
-    // The segment pointer "s" is about to be deleted by
+    // The segment pointer "segment" is about to be deleted by
     // Composition::deleteSegment(Composition::iterator).  After this routine
     // ends, this pointer cannot be dereferenced.
-    m_removedSegments.push_back(s);
+    m_removedSegments.push_back(segment);
 
-    std::vector<Segment*>::iterator i =
-        find(m_addedSegments.begin(), m_addedSegments.end(), s);
-    if (i != m_addedSegments.end()) {
-        m_addedSegments.erase(i);
-    }
+    std::vector<Segment *>::const_iterator segmentIter =
+            find(m_addedSegments.begin(), m_addedSegments.end(), segment);
+    if (segmentIter != m_addedSegments.end())
+        m_addedSegments.erase(segmentIter);
 }
 
 void SequenceManager::segmentRepeatChanged(const Composition*, Segment* s, bool repeat)
@@ -1745,79 +1756,79 @@ void SequenceManager::tempoChanged(const Composition *c)
 }
 
 void
-SequenceManager::sendTransportControlStatuses()
+SequenceManager::sendPreferences()
 {
-    // ??? static function.  Where does this really belong?  I suspect
-    //     RosegardenSequencer.
-
     QSettings settings;
-    settings.beginGroup( SequencerOptionsConfigGroup );
+    settings.beginGroup(SequencerOptionsConfigGroup);
 
-    // Get the settings values
-    //
-    bool jackTransport = qStrToBool( settings.value("jacktransport", "false" ) ) ;
-    bool jackMaster = qStrToBool( settings.value("jackmaster", "false" ) ) ;
-
-    int mmcMode = settings.value("mmcmode", 0).toInt() ;
-    int mtcMode = settings.value("mtcmode", 0).toInt() ;
-
-    int midiClock = settings.value("midiclock", 0).toInt() ;
-    bool midiSyncAuto = qStrToBool( settings.value("midisyncautoconnect", "false" ) ) ;
 
     // Send JACK transport
-    //
-    int jackValue = 0;
-    if (jackTransport && jackMaster)
-        jackValue = 2;
+
+    const bool jackTransport = qStrToBool(settings.value("jacktransport", "false"));
+    const bool jackSource = qStrToBool(settings.value("jackmaster", "false"));
+
+    MidiByte jackValue{0};
+    if (jackTransport && jackSource)
+        jackValue = 2;  // On and source.
     else {
         if (jackTransport)
-            jackValue = 1;
+            jackValue = 1;  // On and follow.
         else
-            jackValue = 0;
+            jackValue = 0;  // Off.
     }
 
-    MappedEvent mEjackValue(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemJackTransport,
-                            MidiByte(jackValue));
+    MappedEvent mEjackValue;
+    mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEjackValue.setType(MappedEvent::SystemJackTransport);
+    mEjackValue.setData1(jackValue);
+
     StudioControl::sendMappedEvent(mEjackValue);
 
 
     // Send MMC transport
-    //
-    MappedEvent mEmmcValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMMCTransport,
-                           MidiByte(mmcMode));
+
+    const int mmcMode = settings.value("mmcmode", 0).toInt();
+    MappedEvent mEmmcValue;
+    mEmmcValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmmcValue.setType(MappedEvent::SystemMMCTransport);
+    mEmmcValue.setData1(mmcMode);
 
     StudioControl::sendMappedEvent(mEmmcValue);
 
 
     // Send MTC transport
-    //
-    MappedEvent mEmtcValue(MidiInstrumentBase,  // InstrumentId
-                           MappedEvent::SystemMTCTransport,
-                           MidiByte(mtcMode));
+
+    const int mtcMode = settings.value("mtcmode", 0).toInt();
+    MappedEvent mEmtcValue;
+    mEmtcValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmtcValue.setType(MappedEvent::SystemMTCTransport);
+    mEmtcValue.setData1(mtcMode);
 
     StudioControl::sendMappedEvent(mEmtcValue);
 
 
     // Send MIDI Clock
-    //
-    MappedEvent mEmidiClock(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemMIDIClock,
-                            MidiByte(midiClock));
+
+    const int midiClock = settings.value("midiclock", 0).toInt();
+    MappedEvent mEmidiClock;
+    mEmidiClock.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmidiClock.setType(MappedEvent::SystemMIDIClock);
+    mEmidiClock.setData1(midiClock);
 
     StudioControl::sendMappedEvent(mEmidiClock);
 
 
     // Send MIDI Sync Auto-Connect
-    //
-    MappedEvent mEmidiSyncAuto(MidiInstrumentBase,  // InstrumentId
-                               MappedEvent::SystemMIDISyncAuto,
-                               MidiByte(midiSyncAuto ? 1 : 0));
+
+    const bool midiSyncAuto =
+            qStrToBool(settings.value("midisyncautoconnect", "false"));
+    MappedEvent mEmidiSyncAuto;
+    mEmidiSyncAuto.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEmidiSyncAuto.setType(MappedEvent::SystemMIDISyncAuto);
+    mEmidiSyncAuto.setData1(midiSyncAuto ? 1 : 0);
 
     StudioControl::sendMappedEvent(mEmidiSyncAuto);
 
-    settings.endGroup();
 }
 
 void
@@ -1849,17 +1860,23 @@ SequenceManager::getSampleRate() const
     return m_sampleRate;
 }
 
-bool
-SequenceManager::shouldWarnForImpreciseTimer()
+void
+SequenceManager::setExportWavFile(const QString& fileName)
 {
-    const QString timer =
-            RosegardenSequencer::getInstance()->getCurrentTimer();
+    RG_DEBUG << "setExportWavFile" << fileName;
+    if (m_wavExporter) {
+        RG_DEBUG << "replacing previous export manager";
+        delete m_wavExporter;
+    }
+    m_wavExporter = new WAVExporter(fileName);
+    // If creation of the WAVExporter has failed, bail.
+    if (!m_wavExporter->isOK())
+        return;
 
-    // If no specific timer has been chosen by the user, do warnings
-    if (timer == "(auto)"  ||  timer == "")
-        return true;
-    else  // The user has chosen a specific timer, leave them alone.
-        return false;
+    // and install in the driver
+    RosegardenSequencer::getInstance()->installExporter(m_wavExporter);
+    // and start the timer
+    m_exportTimer->start(50);
 }
 
 // Return a new metaiterator on the current composition (suitable

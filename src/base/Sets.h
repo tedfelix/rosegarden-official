@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -337,15 +337,13 @@ AbstractSet<Element, Container>::initialise()
         if (sample(j, false)) {
             m_initial = j;
             if (AbstractSet::getAsEvent(j)->isa(Note::EventType)) {
-		m_initialNote = j;
-		if (m_finalNote == getContainer().end()) {
-		    m_finalNote = j;
-		}
-	    }
+                m_initialNote = j;
+                if (m_finalNote == getContainer().end()) {
+                    m_finalNote = j;
+                }
+            }
         }
     }
-
-    j = m_baseIterator;
 
     // then scan forwards to find an element not in the desired set,
     // sampling everything as far forward as the one before it
@@ -354,11 +352,11 @@ AbstractSet<Element, Container>::initialise()
         if (sample(j, true)) {
             m_final = j;
             if (AbstractSet::getAsEvent(j)->isa(Note::EventType)) {
-		m_finalNote = j;
-		if (m_initialNote == getContainer().end()) {
-		    m_initialNote = j;
-		}
-	    }
+                m_finalNote = j;
+                if (m_initialNote == getContainer().end()) {
+                    m_initialNote = j;
+                }
+            }
         }
     }
 
@@ -436,8 +434,8 @@ initialiseFinish()
 {
     if (std::vector<typename Container::iterator>::size() > 1) {
         std::stable_sort(std::vector<typename Container::iterator>::begin(),
-			 std::vector<typename Container::iterator>::end(),
-			 PitchGreater());
+                         std::vector<typename Container::iterator>::end(),
+                         PitchGreater());
     }
  }
 
@@ -447,11 +445,11 @@ GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
     Event *e = GenericChord::getAsEvent(i);
     if (AbstractSet<Element, Container>::
-	getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
-	return false;
+        getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
+        return false;
     }
     if (e->getSubOrdering() != m_subordering) {
-	return false;
+        return false;
     }
 
     // We permit note or rest events etc here, because if a chord is a

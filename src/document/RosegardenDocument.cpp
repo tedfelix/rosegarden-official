@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -62,6 +62,9 @@
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "gui/editors/segment/TrackLabel.h"
+// !!! DO NOT REMOVE THIS!
+//     qDeleteAll() needs this in order to do its work correctly.
+//     Without EditViewBase.h, we crash on close whenever an editor is up.
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ResourceFinder.h"
@@ -70,6 +73,7 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/general/AutoSaveFinder.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
@@ -127,7 +131,8 @@ RosegardenDocument::RosegardenDocument(
         QSharedPointer<AudioPluginManager> audioPluginManager,
         bool skipAutoload,
         bool clearCommandHistory,
-        bool enableSound) :
+        bool enableSound,
+        const QString& path) :
     QObject(parent),
     m_modified(false),
     m_autoSaved(false),
@@ -154,7 +159,7 @@ RosegardenDocument::RosegardenDocument(
         performAutoload();
 
     // now set it up as a "new document"
-    newDocument();
+    newDocument(path);
 }
 
 RosegardenDocument::~RosegardenDocument()
@@ -320,9 +325,6 @@ RosegardenDocument::jumpToQuickMarker()
 QString RosegardenDocument::getAutoSaveFileName()
 {
     QString filename = getAbsFilePath();
-    if (filename.isEmpty())
-        filename = QDir::currentPath() + "/" + getTitle();
-
     //!!! NB this should _not_ use the new TempDirectory class -- that
     //!!! is for files that are more temporary than this.  Its files
     //!!! are cleaned up after a crash, the next time RG is started,
@@ -505,9 +507,13 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     return true;
 }
 
-void RosegardenDocument::newDocument()
+void RosegardenDocument::newDocument(const QString& path)
 {
     m_modified = false;
+    if (path != "") {
+        openDocument(path);
+        m_modified = true;
+    }
     setAbsFilePath(QString());
     setTitle(tr("Untitled"));
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
@@ -697,7 +703,7 @@ void RosegardenDocument::sendChannelSetups(bool reset)
     std::set<InstrumentId> instrumentsSeen;
 
     // For each track in the composition, send the channel setup
-    for (Composition::trackcontainer::const_iterator i =
+    for (Composition::TrackMap::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {
@@ -740,10 +746,10 @@ void RosegardenDocument::sendChannelSetups(bool reset)
             //     then send the channel setups?  Some hardware might need
             //     time to respond to a reset.
 
-            const MappedEvent mappedEvent(
-                    instrumentId,
-                    MappedEvent::MidiSystemMessage,
-                    MIDI_SYSTEM_RESET);
+            MappedEvent mappedEvent;
+            mappedEvent.setInstrumentId(instrumentId);
+            mappedEvent.setType(MappedEvent::MidiSystemMessage);
+            mappedEvent.setData1(MIDI_SYSTEM_RESET);
 
             StudioControl::sendMappedEvent(mappedEvent);
 
@@ -774,6 +780,9 @@ void RosegardenDocument::initialiseStudio()
     //Profiler profiler("initialiseStudio", true);
 
     RG_DEBUG << "initialiseStudio() begin...";
+
+    // stop any running guis
+    RosegardenMainWindow::self()->getPluginGUIManager()->stopAllGUIs();
 
     // Destroy all the mapped objects in the studio.
     RosegardenSequencer::getInstance()->clearStudio();
@@ -868,7 +877,7 @@ void RosegardenDocument::initialiseStudio()
             // Channels
             ids.push_back(mappedId);
             properties.push_back(MappedAudioFader::Channels);
-            values.push_back(static_cast<MappedObjectValue>(instrument.getAudioChannels()));
+            values.push_back(static_cast<MappedObjectValue>(instrument.getNumAudioChannels()));
 
             // Pan
             ids.push_back(mappedId);
@@ -1067,15 +1076,19 @@ void RosegardenDocument::initialiseStudio()
     if (submasterOuts)
         ports |= MappedEvent::SubmasterOuts;
 
-    MappedEvent mEports(
-            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
+    MappedEvent mEports;
+    mEports.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEports.setType(MappedEvent::SystemAudioPorts);
+    mEports.setData1(ports);
     StudioControl::sendMappedEvent(mEports);
 
     // Send System Audio File Format Event
 
-    MappedEvent mEff(MidiInstrumentBase,
-                     MappedEvent::SystemAudioFileFormat,
-                     audioFileFormat);
+    MappedEvent mEff;
+    mEff.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEff.setType(MappedEvent::SystemAudioFileFormat);
+    mEff.setData1(audioFileFormat);
+
     StudioControl::sendMappedEvent(mEff);
 }
 
@@ -1120,7 +1133,10 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 9;
+// Version 10 introduces LV2 plugins and provides values that
+// older versions will interpret as plugins that weren't found.
+// Older versions will issue helpful "plugin not found" messages.
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 10;
 
 bool RosegardenDocument::saveDocument(const QString& filename,
                                     QString& errMsg,
@@ -1213,6 +1229,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     m_studio.resyncDeviceConnections();
 
+    // tell plugins to save state
+    RosegardenSequencer::getInstance()->savePluginState();
+
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
@@ -1231,7 +1250,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         totalEvents += (long)(*segitr)->size();
     }
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
              m_composition.getTriggerSegments().begin();
          ci != m_composition.getTriggerSegments().end(); ++ci) {
         totalEvents += (long)(*ci)->getSegment()->size();
@@ -1281,7 +1300,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     outStream << "\n\n";
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
                 m_composition.getTriggerSegments().begin();
             ci != m_composition.getTriggerSegments().end(); ++ci) {
 
@@ -1742,13 +1761,9 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
                 QString msg(tr("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
 
-                for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
-                     i != handler.pluginsNotFound().end(); ++i) {
-                    QString ident = *i;
-                    QString type, soName, label;
-                    PluginIdentifier::parseIdentifier(ident, type, soName, label);
-                    QString pluginFileName = QFileInfo(soName).fileName();
-                    msg += tr("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
+                // For each plugin that wasn't found...
+                for (const QString &ident : handler.pluginsNotFound()) {
+                    msg += QString("<li>%1</li>").arg(ident);
                 }
                 msg += "</ul>";
 
@@ -1789,13 +1804,13 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
     //Track *midiRecordTrack = 0;
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         getComposition().getRecordTracks();
 
     bool haveMIDIRecordTrack = false;
 
     // For each recording track
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
             recordTracks.begin(); i != recordTracks.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -1985,6 +2000,14 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             // Ignore other SystemMessage events for the moment
             //
 
+            break;
+
+        case MappedEvent::MidiRPN:
+            // ??? Need to implement once the caller is able to generate these.
+            break;
+
+        case MappedEvent::MidiNRPN:
+            // ??? Need to implement once the caller is able to generate these.
             break;
 
         case MappedEvent::MidiNoteOneShot:
@@ -2453,7 +2476,8 @@ RosegardenDocument::stopRecordingMidi()
         // different over in the new Qt4 branch; to facilitate porting.
         transposeRecordedSegment(s);
 
-        CommandHistory::getInstance()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command,
+                                                  m_pointerBeforeRecord);
     }
 
     emit stoppedMIDIRecording();
@@ -2562,10 +2586,10 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     Track *recordTrack = nullptr;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -2633,10 +2657,10 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 void
 RosegardenDocument::updateRecordingAudioSegments()
 {
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
 
         TrackId tid = (*i);
@@ -2778,8 +2802,8 @@ RosegardenDocument::finalizeAudioFile(InstrumentId instrument)
     if (!recordSegment->getComposition())
         getComposition().addSegment(recordSegment);
 
-    CommandHistory::getInstance()->addCommand(
-            new SegmentRecordCommand(recordSegment));
+    CommandHistory::getInstance()->addCommand
+        (new SegmentRecordCommand(recordSegment), m_pointerBeforeRecord);
 
     // update views
     slotUpdateAllViews(nullptr);

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,115 +32,135 @@ class QPainter;
 namespace Rosegarden
 {
 
+
 class VelocityColour;
 
 
+/// Base class for the various VU meter classes.
+/**
+ * This derives from QLabel because it can become a label when it isn't
+ * displaying a level.  This is used by TrackVUMeter to display the track
+ * number.
+ */
 class VUMeter : public QLabel
 {
-Q_OBJECT
+    Q_OBJECT
 
 public:
+
     typedef enum
     {
-        Plain,
-        PeakHold,
-        AudioPeakHoldShort, 
-        AudioPeakHoldLong,
-        AudioPeakHoldIEC,
-        AudioPeakHoldIECLong,
-        FixedHeightVisiblePeakHold
+        //Plain,  // ??? unused
+        PeakHold,  // TrackButtons
+        AudioPeakHoldShort,  // AudioVUMeter
+        AudioPeakHoldLong,  // ??? unused
+        AudioPeakHoldIEC,  // ??? unused
+        AudioPeakHoldIECLong,  // AudioStrip
+        FixedHeightVisiblePeakHold  // MidiMixerWindow
     } VUMeterType;
 
-    typedef enum
-    {
-        Horizontal,
-        Vertical
-    } VUAlignment;
-
-    // Mono and stereo level setting.  The AudioPeakHold meter types
-    // expect levels in dB; other types expect levels between 0 and 1.
-    //
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setLevel(double level);
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setLevel(double leftLevel, double rightLevel);
 
-    // Mono and stereo record level setting.  Same units.  Only
-    // applicable if hasRecord true in constructor.
-    //
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setRecordLevel(double level);
+    /// For audio meters, level is in dB.  For others it is normalized 0-1.
     void setRecordLevel(double leftLevel, double rightLevel);
 
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
 
 protected:
-    // Constructor is protected - we can only create an object
-    // from a sub-class of this type from a sub-class.
-    //
-    VUMeter(QWidget *parent = nullptr,
-            VUMeterType type = Plain,
-            bool stereo = false,
-            bool hasRecord = false,
-            int width = 0,
-            int height = 0,
-            VUAlignment alignment = Horizontal);
+
+    typedef enum
+    {
+        Horizontal,  // TrackVUMeter
+        Vertical  // MidiMixerVUMeter, AudioVUMeter
+    } VUAlignment;
+
+    VUMeter(QWidget *parent,
+            VUMeterType type,
+            bool stereo,
+            bool hasRecord,
+            int width,
+            int height,
+            VUAlignment alignment);
     ~VUMeter() override;
 
-    virtual void meterStart() = 0;
-    virtual void meterStop() = 0;
+    /// Used by TrackVUMeter to hide the text and show the meter.
+    virtual void meterStart()  { }
+    /// Used by TrackVUMeter to show the text and hide the meter.
+    virtual void meterStop()  { }
+    /// Used by TrackVUMeter to turn the meter on and off.
+    bool m_active{true};
 
-    int         m_originalHeight;
-    bool        m_active;
-
-    void setLevel(double leftLevel, double rightLevel, bool record);
+    /// Height passed in via ctor.
+    const int m_originalHeight;
 
 private slots:
+
+    /// Connected to m_decayTimerLeft.
     void slotDecayLeft();
+    /// Connected to m_peakTimerLeft.
     void slotStopShowingPeakLeft();
 
+    /// Connected to m_decayTimerRight.
     void slotDecayRight();
+    /// Connected to m_peakTimerRight.
     void slotStopShowingPeakRight();
 
 private:
+
     // Hide copy ctor and op= due to non-trivial dtor.
     VUMeter(const VUMeter &);
     VUMeter &operator=(const VUMeter &);
 
-    void drawMeterLevel(QPainter *paint);
-    void drawColouredBar(QPainter *paint, int channel,
-                         int x, int y, int w, int h);
+    const VUMeterType m_type;
+    const VUAlignment m_alignment;
+    const bool m_stereo;
+    const bool m_hasRecord;
 
-    VUMeterType m_type;
-    VUAlignment m_alignment;
-    QColor      m_background;
+    /// Meter background color.
+    QColor m_background;
+
+    // Note: All numeric variables use "pixels" for their units unless
+    //       otherwise specified.
 
     // The size of the meter in pixels.
-    short       m_maxLevel;
-    double      m_decayRate;  // pixels per second
+    int m_maxLevelPixels;
+    /// pixels per second, 1 pixel per 50msecs
+    static constexpr double m_decayRate{1/.05};
 
-    // The current playback level in pixels.
-    double      m_levelLeft;
-    double      m_recordLevelLeft;
-    short       m_peakLevelLeft;
-    QTimer     *m_decayTimerLeft;
-    QElapsedTimer *m_timeDecayLeft;
-    QTimer     *m_peakTimerLeft;
+    bool m_showPeakLevel;
 
-    // The current playback level in pixels.
-    double      m_levelRight;
-    double      m_recordLevelRight;
-    short       m_peakLevelRight;
-    QTimer     *m_decayTimerRight;
-    QElapsedTimer *m_timeDecayRight;
-    QTimer     *m_peakTimerRight;
+    // LEFT
+    double m_levelLeft{0};
+    double m_recordLevelLeft{0};
+    QTimer *m_decayTimerLeft{nullptr};
+    QElapsedTimer *m_timeDecayLeft{nullptr};
+    int m_peakLevelLeft{0};
+    QTimer *m_peakTimerLeft{nullptr};
 
-    bool        m_showPeakLevel;
+    // RIGHT
+    double m_levelRight{0};
+    double m_recordLevelRight{0};
+    QTimer *m_decayTimerRight{nullptr};
+    QElapsedTimer *m_timeDecayRight{nullptr};
+    int m_peakLevelRight{0};
+    QTimer *m_peakTimerRight{nullptr};
 
-    bool        m_stereo;
-    bool        m_hasRecord;
+    void setLevel(double leftLeveldB, double rightLeveldB, bool record);
 
-    // We use this to work out our colours
-    //
+    /// Converts level to color.
     VelocityColour *m_velocityColour;
 
+
+    /// Called by drawMeterLevel() to do the actual drawing.
+    void drawColouredBar(QPainter *paint, int channel,
+                         int x, int y, int w, int h);
+    /// Called by paintEvent() to draw the meter.
+    void drawMeterLevel(QPainter *paint);
 
 };
 

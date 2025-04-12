@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -35,14 +35,12 @@ namespace Rosegarden
     const char* const ControlEditorConfigGroup = "Control_Editor";
     const char* const DeviceManagerConfigGroup = "Device_Manager";
     const char* const EventFilterDialogConfigGroup = "EventFilter_Dialog";
-    const char* const EventViewLayoutConfigGroupName = "EventList_Layout";
     const char* const EventViewConfigGroup = "EventList_Options";
     const char* const MarkerEditorConfigGroup = "Marker_Editor";
     const char* const MatrixViewConfigGroup = "Matrix_Options";
     const char* const PlayListConfigGroup = "Playlist";
     const char* const MainWindowConfigGroup = "Main_Window";
     const char* const TransportDialogConfigGroup = "Transport_Controls";
-    const char* const TempoViewLayoutConfigGroupName = "TempoView_Layout";
     const char* const TempoViewConfigGroup = "TempoView_Options";
     const char* const TriggerManagerConfigGroup = "Trigger_Editor";
     const char* const EditViewConfigGroup = "Edit_View";

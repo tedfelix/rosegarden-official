@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -864,11 +864,11 @@ Indication::isValid(const std::string &s)
 
 const std::string Text::EventType = "text";
 const int Text::EventSubOrdering = -70;
-const PropertyName Text::TextPropertyName("text");
-const PropertyName Text::TextTypePropertyName("type");
-const PropertyName Text::LyricVersePropertyName("verse");
 
-// text styles
+// Type of text, e.g. lyric, dynamic, tempo...  See Text::Lyric, etc... below
+// and TextPropertyName.
+const PropertyName Text::TextTypePropertyName("type");
+// Text types for TextTypePropertyName.
 const std::string Text::UnspecifiedType   = "unspecified";
 const std::string Text::StaffName         = "staffname";
 const std::string Text::ChordName         = "chordname";
@@ -882,6 +882,12 @@ const std::string Text::Tempo             = "tempo";
 const std::string Text::LocalTempo        = "local_tempo";
 const std::string Text::Annotation        = "annotation";
 const std::string Text::LilyPondDirective = "lilypond_directive";
+
+// The text.
+const PropertyName Text::TextPropertyName("text");
+
+// Verse number.
+const PropertyName Text::LyricVersePropertyName("verse");
 
 // special LilyPond directives
 const std::string Text::FakeSegno   = "Segno"; // DEPRECATED
@@ -1517,8 +1523,17 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
 // WIP - DMM - munged up to explore #937389, which is temporarily deferred,
 // owing to its non-critical nature, having been hacked around in the LilyPond
 // code
+
+// This is a workaround to prevent lupdate complaining about
+// "Parenthesis/brace mismatch between #if and #else branches"
+#ifdef DEBUG_PITCH
+#define DP true
+#else
+#define DP false
+#endif
+
+    if (DP || (accidental == "")) {
 #ifndef DEBUG_PITCH
-    if (accidental == "") {
         std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
 #else
         std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
@@ -1526,9 +1541,7 @@ Pitch::rawPitchToDisplayPitch(int rawpitch,
                   << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct "
                   << octave << ")  userAcc: " << userAccidental
                   << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
-#ifndef DEBUG_PITCH
     }
-#endif
 
 
     // 6.  "Recenter" height in case it's been changed:
@@ -1667,6 +1680,8 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
 {
     displayPitchToRawPitch
         (heightOnStaff, explicitAccidental, clef, key, m_pitch);
+    if (m_pitch < 0) m_pitch = 0;
+    if (m_pitch > 127) m_pitch = 127;
 }
 
 Pitch::Pitch(const Pitch &p) :

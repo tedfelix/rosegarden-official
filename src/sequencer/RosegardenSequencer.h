@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -18,13 +18,13 @@
 #include "gui/application/TransportStatus.h"
 
 #include "sound/MappedEventList.h"
-#include "sound/MappedStudio.h"
+#include "sound/MappedStudio.h"  // MappedObjectIdList, etc...
 #include "sound/MappedBufMetaIterator.h"
 
 #include "base/MidiDevice.h"
 
 #include <QMutex>
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #include <QRecursiveMutex>
 #endif
 #include <QObject>
@@ -35,8 +35,11 @@
 
 namespace Rosegarden {
 
+
 class MappedInstrument;
 class SoundDriver;
+class WAVExporter;
+
 
 /// MIDI and Audio recording and playback
 /**
@@ -118,7 +121,7 @@ public:
     void setMappedInstrument(int type, unsigned int id);
 
     /// Puts a mapped event on the m_asyncOutQueue
-    void processMappedEvent(MappedEvent mE);
+    void processMappedEvent(const MappedEvent &mE);
 
 
     // --- DEVICES ---
@@ -287,6 +290,8 @@ public:
     float getMappedPort(int pluginId,
                         unsigned long portId);
 
+    void savePluginState();
+
     /// Create a (transient, writeable) MappedObject
     int createMappedObject(int type);
 
@@ -431,6 +436,8 @@ public:
     /// Initialise the virtual studio at this end of the link.
     void initialiseStudio();
 
+    void installExporter(WAVExporter* wavExporter);
+
 
     // --------- Transport Interface --------
     //
@@ -540,7 +547,7 @@ private:
      */
     bool m_isEndOfCompReached;
 
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QRecursiveMutex m_mutex;
 #else
     QMutex m_mutex;

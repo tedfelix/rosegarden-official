@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -36,6 +36,7 @@ class AudioBussMixer;
 class AudioInstrumentMixer;
 class AudioFileReader;
 class AudioFileWriter;
+class WAVExporter;
 
 class JackDriver
 {
@@ -112,6 +113,10 @@ public:
     virtual QString configurePlugin(InstrumentId id,
                                     int position,
                                     QString key, QString value);
+
+    virtual void savePluginState();
+
+    virtual void getPluginPlayableAudio(std::vector<PlayableData*>& playable);
 
     virtual RunnablePluginInstance *getSynthPlugin(InstrumentId id);
 
@@ -191,6 +196,8 @@ public:
     //
     void reportFailure(MappedEvent::FailureCode code);
 
+    void installExporter(WAVExporter* wavExporter);
+
 protected:
 
     // static methods for JACK process thread:
@@ -211,6 +218,10 @@ protected:
 
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
+
+    // jackProcessDone is called at the end of the audio processing
+    void jackProcessDone();
+
     int          jackProcessRecord(InstrumentId id,
                                    jack_nframes_t nframes,
                                    sample_t *, sample_t *, bool);
@@ -282,8 +293,12 @@ protected:
     bool                         m_ok;
 
     bool m_checkLoad;
-};
 
+ private:
+    /// Previous play state for detecting state transition for export.
+    bool m_playing;
+    WAVExporter* m_exportManager;
+};
 
 }
 

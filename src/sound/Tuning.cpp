@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -62,9 +62,9 @@ const unsigned int Tuning::accMapSize =
 Tuning::AccMap Tuning::accMap(Tuning::accMapData,
                               Tuning::accMapData + Tuning::accMapSize);
 
-std::vector<Tuning*> Tuning::m_tunings;
+std::vector<std::shared_ptr<Tuning>> Tuning::m_tunings;
 
-std::vector<Tuning*> *Tuning::getTunings() {
+std::vector<std::shared_ptr<Tuning>> *Tuning::getTunings() {
 
     // if already have tunings, return them
     // TODO: It would be polite to check the mtime on the tunings file
@@ -81,8 +81,8 @@ std::vector<Tuning*> *Tuning::getTunings() {
     #   endif
     QFile infile(tuningsPath);
 
-    IntervalList *intervals = new IntervalList;
-    SpellingList *spellings = new SpellingList;
+    std::shared_ptr<IntervalList> intervals{new IntervalList};
+    std::shared_ptr<SpellingList> spellings{new SpellingList};
 
     if (infile.open(QIODevice::ReadOnly) ) {
         QXmlStreamReader stream(&infile);
@@ -121,8 +121,8 @@ std::vector<Tuning*> *Tuning::getTunings() {
                 if (stream.name().toString() == "tuning") {
                     // Save the tuning and prepare for a new one
                     saveTuning(tuningName, intervals, spellings);
-                    intervals = new IntervalList;
-                    spellings = new SpellingList;
+                    intervals.reset(new IntervalList);
+                    spellings.reset(new SpellingList);
                     state = needTuning;
                 } else if (stream.name().toString() == "name") {
                     // End of tuning name: expect intervals
@@ -131,11 +131,7 @@ std::vector<Tuning*> *Tuning::getTunings() {
                     // After an </interval>, we're expecting another interval
                     state = needInterval;
                 } else if (stream.name().toString() == "rosegarden_scales") {
-                    // XML's fininshed. Don't need the current tuning
-                    // or spelling lists created when the last tuning ended
-                    // so let's not leak memory.
-                    delete intervals;
-                    delete spellings;
+                    // XML's finished.
                     // Don't bother reading any more of the file
                     break;
                 }
@@ -239,8 +235,8 @@ std::vector<Tuning*> *Tuning::getTunings() {
 }
 
 void Tuning::parseSpelling(QString note,
-                           IntervalList *intervals,
-                           SpellingList *spellings)
+                           std::shared_ptr<IntervalList> intervals,
+                           std::shared_ptr<SpellingList> spellings)
 {
     QString acc = note;
     acc.remove(0, 1);
@@ -335,14 +331,14 @@ double Tuning::scalaIntervalToCents(const QString & interval,
 }
 
 void Tuning::saveTuning(const QString &tuningName,
-                        const IntervalList *intervals,
-                        SpellingList *spellings)
+                        std::shared_ptr<const IntervalList> intervals,
+                        std::shared_ptr<SpellingList> spellings)
 {
 #   if (TUNING_DEBUG > 1)
     qDebug() << "End of tuning" << tuningName;
 #   endif
     std::string name = tuningName.toStdString().c_str();
-    Tuning *newTuning = new Tuning(name, intervals, spellings);
+    std::shared_ptr<Tuning> newTuning{new Tuning(name, intervals, spellings)};
     m_tunings.push_back(newTuning);
 #   if (TUNING_DEBUG)
     newTuning->printTuning();
@@ -351,8 +347,8 @@ void Tuning::saveTuning(const QString &tuningName,
 
 
 Tuning::Tuning(const std::string& name,
-               const IntervalList *intervals,
-               SpellingList *spellings) :
+               std::shared_ptr<const IntervalList> intervals,
+               std::shared_ptr<SpellingList> spellings) :
     m_name(name),
     m_rootPitch(9, 3),
     m_refPitch(9, 3),
@@ -646,5 +642,9 @@ Rosegarden::Pitch Tuning::getRootPitch() const { return m_rootPitch; }
 Rosegarden::Pitch Tuning::getRefPitch() const { return m_refPitch; }
 double Tuning::getRefFreq() const{ return m_refFreq; }
 const std::string Tuning::getName() const { return m_name; }
-SpellingList *Tuning::getSpellingList() const{ return m_spellings; }
-const IntervalList *Tuning::getIntervalList() const{ return m_intervals; }
+
+std::shared_ptr<SpellingList> Tuning::getSpellingList() const
+        { return m_spellings; }
+
+std::shared_ptr<const IntervalList> Tuning::getIntervalList() const
+        { return m_intervals; }

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -121,16 +121,12 @@
 #include "gui/dialogs/TupletDialog.h"
 #include "gui/dialogs/InsertTupletDialog.h"
 #include "gui/dialogs/RescaleDialog.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 #include "gui/dialogs/QuantizeDialog.h"
 #include "gui/dialogs/LyricEditDialog.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "gui/dialogs/EventEditDialog.h"
 #include "gui/dialogs/TextEventDialog.h"
-#include "gui/dialogs/SimpleEventEditDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
-
 #include "gui/dialogs/CheckForParallelsDialog.h"
 
 #include "gui/general/EditTempoController.h"
@@ -146,6 +142,7 @@
 #include "gui/application/RosegardenMainViewWidget.h"
 
 #include "gui/editors/parameters/TrackParameterBox.h"
+#include "gui/editors/event/EditEvent.h"
 
 #include "document/io/LilyPondExporter.h"
 
@@ -207,15 +204,16 @@ namespace
     }
 }
 
+
 namespace Rosegarden
 {
+
 
 using namespace Accidentals;
 
 NotationView::NotationView(RosegardenDocument *doc,
-                           const std::vector<Segment *>& segments,
-                           QWidget *parent) :
-    EditViewBase(segments, parent),
+                           const std::vector<Segment *>& segments) :
+    EditViewBase(segments),
     m_document(doc),
     m_durationMode(InsertingRests),
     m_durationPressed(nullptr),
@@ -252,7 +250,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     setupActions();
     createMenusAndToolbars("notation.rc");
     slotUpdateMenuStates();
-    slotTestClipboard();
+    slotUpdateClipboardActionState();
 
     setWindowIcon(IconLoader::loadPixmap("window-notation"));
 
@@ -335,6 +333,22 @@ NotationView::NotationView(RosegardenDocument *doc,
         break;
     }
 
+    // Set initial highlighting
+    const QString defaultHighlightMode = "highlight_within_track";
+    QString highlightMode =
+        settings.value("highlightmode",
+                       defaultHighlightMode).toString();
+    // We can't use ActionFileClient::findAction() because it always returns a
+    // valid pointer.  We use QObject::findChild() instead.
+    QAction *hlAction = findChild<QAction *>(highlightMode);
+    if (hlAction) {
+        hlAction->setChecked(true);
+    } else {  // Not found, go with default.
+        highlightMode = defaultHighlightMode;
+        findAction(highlightMode)->setChecked(true);
+    }
+    m_notationWidget->getScene()->setHighlightMode(highlightMode);
+
     // Set initial visibility of chord name ruler, ...
     visible = settings.value("Chords ruler shown",
                           findAction("show_chords_ruler")->isChecked()
@@ -381,8 +395,8 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Notation_View_Geometry").toByteArray());
-    this->restoreState(settings.value("Notation_View_State").toByteArray());
+    restoreGeometry(settings.value("Notation_View_Geometry").toByteArray());
+    restoreState(settings.value("Notation_View_State").toByteArray());
     settings.endGroup();
 
     connect(m_notationWidget, &NotationWidget::sceneNeedsRebuilding,
@@ -495,8 +509,8 @@ NotationView::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     RG_DEBUG << "storing window geometry for notation view";
-    settings.setValue("Notation_View_Geometry", this->saveGeometry());
-    settings.setValue("Notation_View_State", this->saveState());
+    settings.setValue("Notation_View_Geometry", saveGeometry());
+    settings.setValue("Notation_View_State", saveState());
     settings.endGroup();
 
     QWidget::closeEvent(event);
@@ -604,7 +618,11 @@ void
 NotationView::setupActions()
 {
     //setup actions common to all views.
-    setupBaseActions(true);
+    EditViewBase::setupBaseActions();
+
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
 
     //"file" MenuBar menu
     // "file_save"
@@ -668,6 +686,11 @@ NotationView::setupActions()
     createAction("linear_mode", SLOT(slotLinearMode()));
     createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
     createAction("multi_page_mode", SLOT(slotMultiPageMode()));
+
+    // highlighting menu
+    createAction("highlight_none", SLOT(slotHighlight()));
+    createAction("highlight_within_track", SLOT(slotHighlight()));
+    createAction("highlight", SLOT(slotHighlight()));
 
     createAction("lyric_editor", SLOT(slotEditLyrics()));
     createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
@@ -1034,11 +1057,13 @@ NotationView::setupActions()
             const QString hexValue =
                 QString::asprintf("(0x%x)", it->getControllerNumber());
 
-            // strings extracted from data files must be QObject::tr()
-            itemStr = QObject::tr("%1 Controller %2 %3")
-                .arg(QObject::tr(it->getName().c_str()))
-                .arg(it->getControllerNumber())
-                .arg(hexValue);
+            // strings extracted from data files and related to MIDI
+            // controller are in MIDI_CONTROLLER translation context
+            itemStr = tr("%1 Controller %2 %3")
+                    .arg(QCoreApplication::translate("MIDI_CONTROLLER",
+                                                    it->getName().c_str()))
+                    .arg(it->getControllerNumber())
+                    .arg(hexValue);
 
             addControlRulerMenu->addAction(itemStr);
         }
@@ -1558,25 +1583,40 @@ NotationView::slotShowContextHelp(const QString &help)
 void
 NotationView::readOptions()
 {
-    setCheckBoxState("options_show_toolbar", "General Toolbar");
-    setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
-    setCheckBoxState("show_accidentals_toolbar", "Accidentals Toolbar");
-    setCheckBoxState("show_clefs_toolbar", "Clefs Toolbar");
-    setCheckBoxState("show_marks_toolbar", "Marks Toolbar");
-    setCheckBoxState("show_group_toolbar", "Group Toolbar");
-    setCheckBoxState("show_symbol_toolbar", "Symbols Toolbar");
-    setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
-    setCheckBoxState("show_layout_toolbar", "Layout Toolbar");
-    setCheckBoxState("show_layer_toolbar", "Layer Toolbar");
-    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");
-    setCheckBoxState("show_duration_toolbar", "Duration Toolbar");
-    setCheckBoxState("show_interpret_toolbar", "Interpret Toolbar");
-    // Suspected BUG.  We read the options, but when do we ever write them?  Not
-    // in slotToggleNamedToolBar() I don't imagine.  How would it translate name
-    // "Foo Toolbar" into action "show_foo_toolbar" reliably?  I bet it doesn't,
-    // but haven't looked.  I have a vague feeling all of these toggle actions
-    // have never maintained their persistence reliably, and suspect I know why.
-    // To be investigated one day...
+    // ??? Can we move these to setupActions()?  Is setupActions() called
+    //     after the toolbars are restored (restoreState())?  No.  It is called
+    //     in the ctor before restoreState().  Probably need to review and
+    //     reorganize the ctor.
+
+    // ??? findAction() and findToolbar() are both in ActionFileClient.
+    //     Make this clumsy two-liner a member of ActionFileClient:
+    //       syncToolbarCheck(const QString &action, const QString &toolbar);
+    findAction("options_show_toolbar")->setChecked(
+            !findToolbar("General Toolbar")->isHidden());
+    findAction("show_tools_toolbar")->setChecked(
+            !findToolbar("Tools Toolbar")->isHidden());
+    findAction("show_accidentals_toolbar")->setChecked(
+            !findToolbar("Accidentals Toolbar")->isHidden());
+    findAction("show_clefs_toolbar")->setChecked(
+            !findToolbar("Clefs Toolbar")->isHidden());
+    findAction("show_marks_toolbar")->setChecked(
+            !findToolbar("Marks Toolbar")->isHidden());
+    findAction("show_group_toolbar")->setChecked(
+            !findToolbar("Group Toolbar")->isHidden());
+    findAction("show_symbol_toolbar")->setChecked(
+            !findToolbar("Symbols Toolbar")->isHidden());
+    findAction("show_transport_toolbar")->setChecked(
+            !findToolbar("Transport Toolbar")->isHidden());
+    findAction("show_layout_toolbar")->setChecked(
+            !findToolbar("Layout Toolbar")->isHidden());
+    findAction("show_layer_toolbar")->setChecked(
+            !findToolbar("Layer Toolbar")->isHidden());
+    findAction("show_rulers_toolbar")->setChecked(
+            !findToolbar("Rulers Toolbar")->isHidden());
+    findAction("show_duration_toolbar")->setChecked(
+            !findToolbar("Duration Toolbar")->isHidden());
+    findAction("show_interpret_toolbar")->setChecked(
+            !findToolbar("Interpret Toolbar")->isHidden());
 }
 
 void
@@ -1708,6 +1748,19 @@ NotationView::slotMultiPageMode()
     if (m_notationWidget) m_notationWidget->slotSetMultiPageMode();
 }
 
+void NotationView::slotHighlight()
+{
+    QObject *s = sender();
+    QString highlightMode = s->objectName();
+
+    RG_DEBUG << "slotHighlight" << highlightMode;
+    QSettings settings;
+    settings.beginGroup(NotationViewConfigGroup);
+    settings.setValue("highlightmode", highlightMode);
+    settings.endGroup();
+    m_notationWidget->getScene()->setHighlightMode(highlightMode);
+}
+
 void
 NotationView::slotShowHeadersGroup()
 {
@@ -1836,7 +1889,7 @@ NotationView::slotEditCut()
     CommandHistory::getInstance()->addCommand(
             new CutCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
@@ -1869,7 +1922,7 @@ NotationView::slotEditCopy()
     CommandHistory::getInstance()->addCommand(
             new CopyCommand(getSelection(),
                             getRulerSelection(),
-                            getClipboard()));
+                            Clipboard::mainClipboard()));
 }
 
 void
@@ -1880,17 +1933,17 @@ NotationView::slotEditCutAndClose()
         return;
 
     CommandHistory::getInstance()->addCommand(
-            new CutAndCloseCommand(selection, getClipboard()));
+            new CutAndCloseCommand(selection, Clipboard::mainClipboard()));
 }
 
 void
 NotationView::slotEditPaste()
 {
-    Clipboard *clipboard = getClipboard();
+    Clipboard *clipboard = Clipboard::mainClipboard();
 
     if (clipboard->isEmpty()) return;
     if (!clipboard->isSingleSegment()) {
-        slotStatusHelpMsg(tr("Can't paste multiple Segments into one"));
+        showStatusBarMessage(tr("Can't paste multiple Segments into one"));
         return;
     }
 
@@ -1943,14 +1996,14 @@ NotationView::slotEditPaste()
 void
 NotationView::slotEditGeneralPaste()
 {
-    Clipboard *clipboard = getClipboard();
+    Clipboard *clipboard = Clipboard::mainClipboard();
 
     if (clipboard->isEmpty()) {
-        slotStatusHelpMsg(tr("Clipboard is empty"));
+        showStatusBarMessage(tr("Clipboard is empty"));
         return ;
     }
 
-    slotStatusHelpMsg(tr("Inserting clipboard contents..."));
+    showStatusBarMessage(tr("Inserting clipboard contents..."));
 
     Segment *segment = getCurrentSegment();
     if (!segment) return;
@@ -2265,12 +2318,6 @@ NotationView::slotCurrentSegmentPrior()
     }
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
-
-    // This can take a very long time.  But there is no other indicator
-    // of which notes are in the current Segment.  We should probably
-    // either gray the notes that aren't in the current Segment, or
-    // highlight the notes that are.
-    slotEditSelectWholeStaff();
 }
 
 void
@@ -2294,11 +2341,6 @@ NotationView::slotCurrentSegmentNext()
     m_cursorPosition = staff->getStartTime();
     setCurrentStaff(staff);
 
-    // This can take a very long time.  But there is no other indicator
-    // of which notes are in the current Segment.  We should probably
-    // either gray the notes that aren't in the current Segment, or
-    // highlight the notes that are.
-    slotEditSelectWholeStaff();
 }
 
 void
@@ -2314,6 +2356,11 @@ NotationView::setCurrentStaff(NotationStaff *staff)
         { leaveActionState("focus_adopted_segment"); }
 
     scene->setCurrentStaff(staff);
+
+    // ??? Works fine for the segment chooser wheel, but not for
+    //     clicking on a staff.  I suspect we need NotationScene
+    //     to have a way to call all the way back up to EditViewBase.
+    updateSoloButton();
 }
 
 void
@@ -3242,12 +3289,12 @@ NotationView::slotClefAction()
     QAction *a = dynamic_cast<QAction *>(s);
     QString n = s->objectName();
 
-    Clef type = Clef::Treble;
+    Clef type = Clef(Clef::Treble);
 
-    if (n == "treble_clef") type = Clef::Treble;
-    else if (n == "alto_clef") type = Clef::Alto;
-    else if (n == "tenor_clef") type = Clef::Tenor;
-    else if (n == "bass_clef") type = Clef::Bass;
+    if (n == "treble_clef") type = Clef(Clef::Treble);
+    else if (n == "alto_clef") type = Clef(Clef::Alto);
+    else if (n == "tenor_clef") type = Clef(Clef::Tenor);
+    else if (n == "bass_clef") type = Clef(Clef::Bass);
 
     setCurrentNotePixmapFrom(a);
 
@@ -3800,7 +3847,7 @@ void
 NotationView::slotAddTempo()
 {
     const timeT insertionTime = getInsertionTime();
-    EditTempoController::self()->editTempo(this, insertionTime);
+    EditTempoController::self()->editTempo(this, insertionTime, false);
 }
 
 void
@@ -3929,7 +3976,7 @@ NotationView::slotRegenerateScene()
                m_notationWidget->getScene(), &NotationScene::slotCommandExecuted);
 
     // Look for segments to be removed from vector
-    std::vector<Segment *> * segmentDeleted =
+    const std::vector<Segment *> *segmentDeleted =
         m_notationWidget->getScene()->getSegmentsDeleted();
 
     // If there is no such segment regenerate the notation widget directly
@@ -3946,8 +3993,10 @@ NotationView::slotRegenerateScene()
         }
 
         // then remove the deleted segments
-        for (std::vector<Segment *>::iterator isd = segmentDeleted->begin();
-            isd != segmentDeleted->end(); ++isd) {
+        for (std::vector<Segment *>::const_iterator isd =
+                     segmentDeleted->begin();
+             isd != segmentDeleted->end();
+             ++isd) {
             for (std::vector<Segment *>::iterator i = m_segments.begin();
                 i != m_segments.end(); ++i) {
                 if (*isd == *i) {
@@ -4872,8 +4921,7 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
 
 void
 NotationView::slotEditElement(NotationStaff *staff,
-                              NotationElement *element,
-                              bool advanced)
+                              NotationElement *element)
 {
     NOTATION_DEBUG << "NotationView::slotEditElement()";
 
@@ -4882,22 +4930,7 @@ NotationView::slotEditElement(NotationStaff *staff,
 
     NotePixmapFactory *npf = scene->getNotePixmapFactory();
 
-    if (advanced) {
-
-        EventEditDialog dialog(this, *element->event(), true);
-
-        if (dialog.exec() == QDialog::Accepted &&
-            dialog.isModified()) {
-
-            EventEditCommand *command = new EventEditCommand
-                (staff->getSegment(),
-                 element->event(),
-                 dialog.getEvent());
-
-            CommandHistory::getInstance()->addCommand(command);
-        }
-
-    } else if (element->event()->isa(Clef::EventType)) {
+    if (element->event()->isa(Clef::EventType)) {
 
         try {
             ClefDialog dialog(this, npf,
@@ -4947,7 +4980,7 @@ NotationView::slotEditElement(NotationStaff *staff,
                    because it may still contain legitimate commands
                    (eg to update tags). */
                 MacroCommand *macroCommand = dialog.extractCommand();
-                if (macroCommand->haveCommands()) {
+                if (macroCommand->hasCommands()) {
                     macroCommand->setName(tr("Updated tags for aborted edit"));
                     CommandHistory::getInstance()->addCommand(macroCommand);
                 }
@@ -5027,18 +5060,21 @@ NotationView::slotEditElement(NotationStaff *staff,
 
     } else {
 
-        SimpleEventEditDialog dialog(this, RosegardenDocument::currentDocument, *element->event(), false);
+        EditEvent dialog(this, *element->event());
 
-        if (dialog.exec() == QDialog::Accepted &&
-            dialog.isModified()) {
+        // Launch dialog.  Bail if canceled.
+        if (dialog.exec() != QDialog::Accepted)
+            return;
 
-            EventEditCommand *command = new EventEditCommand
-                (staff->getSegment(),
-                 element->event(),
-                 dialog.getEvent());
+        Event newEvent = dialog.getEvent();
+        // No changes?  Bail.
+        if (newEvent == *element->event())
+            return;
 
-            CommandHistory::getInstance()->addCommand(command);
-        }
+        CommandHistory::getInstance()->addCommand(new EventEditCommand(
+                staff->getSegment(),
+                element->event(),  // eventToModify
+                newEvent));  // newEvent
     }
 }
 

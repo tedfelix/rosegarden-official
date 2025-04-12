@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -155,10 +155,11 @@ void ChannelManager::insertController(
         MidiByte value,
         MappedInserterBase &inserter)
 {
-    MappedEvent mE(instrument->getId(),
-                   MappedEvent::MidiController,
-                   controller,
-                   value);
+    MappedEvent mE;
+    mE.setType(MappedEvent::MidiController);
+    mE.setInstrumentId(instrument->getId());
+    mE.setData1(controller);
+    mE.setData2(value);
     mE.setRecordedChannel(channel);
     mE.setEventTime(insertTime);
     mE.setTrackId(trackId);
@@ -182,10 +183,11 @@ void ChannelManager::insertChannelSetup(
             instrument->sendsBankSelect()) {
             {
                 // Bank Select MSB
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_BANK_MSB,
-                               instrument->getMSB());
+                MappedEvent mE;
+                mE.setType(MappedEvent::MidiController);
+                mE.setInstrumentId(instrument->getId());
+                mE.setData1(MIDI_CONTROLLER_BANK_MSB);
+                mE.setData2(instrument->getMSB());
                 mE.setRecordedChannel(channel);
                 mE.setEventTime(insertTime);
                 mE.setTrackId(trackId);
@@ -193,10 +195,11 @@ void ChannelManager::insertChannelSetup(
             }
             {
                 // Bank Select LSB
-                MappedEvent mE(instrument->getId(),
-                               MappedEvent::MidiController,
-                               MIDI_CONTROLLER_BANK_LSB,
-                               instrument->getLSB());
+                MappedEvent mE;
+                mE.setType(MappedEvent::MidiController);
+                mE.setInstrumentId(instrument->getId());
+                mE.setData1(MIDI_CONTROLLER_BANK_LSB);
+                mE.setData2(instrument->getLSB());
                 mE.setRecordedChannel(channel);
                 mE.setEventTime(insertTime);
                 mE.setTrackId(trackId);
@@ -209,9 +212,10 @@ void ChannelManager::insertChannelSetup(
         if (!instrument->hasFixedChannel()  ||
             instrument->sendsProgramChange()) {
             // Program Change
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiProgramChange,
-                           instrument->getProgramChange());
+            MappedEvent mE;
+            mE.setInstrumentId(instrument->getId());
+            mE.setType(MappedEvent::MidiProgramChange);
+            mE.setData1(instrument->getProgramChange());
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
@@ -229,10 +233,10 @@ void ChannelManager::insertChannelSetup(
         // In case some controllers are on that we don't know about, turn
         // all controllers off.  (Reset All Controllers)
         try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiController,
-                           MIDI_CONTROLLER_RESET,
-                           0);
+            MappedEvent mE;
+            mE.setType(MappedEvent::MidiController);
+            mE.setInstrumentId(instrument->getId());
+            mE.setData1(MIDI_CONTROLLER_RESET);
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
@@ -267,14 +271,12 @@ void ChannelManager::insertChannelSetup(
     // We only do one type of pitchbend, though GM2 allows others.
     if (controllerAndPBList.m_havePitchbend) {
         const int pitchbend = controllerAndPBList.m_pitchbend;
-        const int d1 = (pitchbend >> 7) & 0x7f;
-        const int d2 = pitchbend & 0x7f;
 
         try {
-            MappedEvent mE(instrument->getId(),
-                           MappedEvent::MidiPitchBend,
-                           d1,
-                           d2);
+            MappedEvent mE;
+            mE.setType(MappedEvent::MidiPitchBend);
+            mE.setInstrumentId(instrument->getId());
+            mE.setDataWord(pitchbend);
             mE.setRecordedChannel(channel);
             mE.setEventTime(insertTime);
             mE.setTrackId(trackId);
@@ -316,7 +318,7 @@ void ChannelManager::insertEvent(
     if (!m_channelInterval.validChannel())
         return;
 
-    event.setInstrument(m_instrument->getId());
+    event.setInstrumentId(m_instrument->getId());
     event.setRecordedChannel(m_channelInterval.getChannelId());
     event.setTrackId(trackId);
     inserter.insertCopy(event);
@@ -339,10 +341,10 @@ bool ChannelManager::makeReady(
         // We already tried to get one and failed; don't keep trying.
         if (m_triedToGetChannel)
             return false;
-        
+
         // Try to get a channel.  This sets m_triedToGetChannel.
         allocateChannelInterval(false);
-        
+
         // If we still don't have one, give up.
         if (!m_channelInterval.validChannel())
             return false;
@@ -426,14 +428,14 @@ ChannelManager::setChannelIdDirectly()
 {
     Q_ASSERT(!m_usingAllocator);
 
-    ChannelId channel = m_instrument->getNaturalChannel();
+    ChannelId channel = m_instrument->getNaturalMidiChannel();
 
     if (m_instrument->getType() == Instrument::Midi) {
         // !!! Stopgap measure.  If we ever share allocators between
         // MIDI devices, this will have to become smarter.
         if (m_instrument->isPercussion()) {
             channel = (m_instrument->hasFixedChannel() ?
-                       m_instrument->getNaturalChannel() : 9);
+                       m_instrument->getNaturalMidiChannel() : 9);
         }
     }
 
@@ -500,7 +502,7 @@ ChannelManager::setAllocationMode(Instrument *instrument)
         if (m_usingAllocator != wasUsingAllocator)
             m_channelInterval.clearChannelId();
     }
-}    
+}
 
 void
 ChannelManager::allocateChannelInterval(bool changedInstrument)
@@ -598,7 +600,7 @@ ChannelManager::slotChannelBecomesFixed()
 {
     //RG_DEBUG << "slotChannelBecomesFixed()" << (m_usingAllocator ? "using allocator" : "not using allocator") << "for" << (void *)m_instrument;
 
-    ChannelId channel = m_instrument->getNaturalChannel();
+    ChannelId channel = m_instrument->getNaturalMidiChannel();
 
     // If we're already fixed and set to our natural channel, there's nothing
     // to do.

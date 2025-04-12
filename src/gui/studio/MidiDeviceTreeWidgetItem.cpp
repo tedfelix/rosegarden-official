@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,33 +27,38 @@
 namespace Rosegarden
 {
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
-        QTreeWidget* parent, QString name)
-        : QTreeWidgetItem(parent),
-        m_deviceId(deviceId)
+
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(
+        QTreeWidget *parent, MidiDevice *device, const QString &name) :
+    QTreeWidgetItem(parent),
+    m_name(name),
+    m_device(device)
 {
-    setText( 0, name );
+    setText(0, name);
 }
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
-        QTreeWidgetItem* parent, QString name,
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(
+        MidiDevice *device,
+        QTreeWidgetItem *parent,
+        QString name,
         bool percussion,
-        int msb, int lsb)
-        : QTreeWidgetItem(parent, QStringList()
+        int msb,
+        int lsb) :
+    QTreeWidgetItem(parent, QStringList()
                                  << name
                                  << QString(percussion ? tr("Percussion Bank") : tr("Bank"))
                                  << QString().setNum(msb)
                                  << QString().setNum(lsb)),
-          m_deviceId(deviceId)
+    m_name(name),
+    m_device(device)
 {
 }
 
-MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(DeviceId deviceId,
-                                                   QTreeWidgetItem* parent,
-                                                   QString name)
-    : QTreeWidgetItem(parent, //name,
-                        QStringList() << name << tr("Key Mapping") << "" << ""),
-      m_deviceId(deviceId)
+MidiDeviceTreeWidgetItem::MidiDeviceTreeWidgetItem(
+        MidiDevice *device, QTreeWidgetItem *parent, QString name) :
+    QTreeWidgetItem(parent,
+                    QStringList() << name << tr("Key Mapping") << "" << ""),
+    m_device(device)
 {
 }
 
@@ -66,8 +71,8 @@ int MidiDeviceTreeWidgetItem::compare(QTreeWidgetItem *i, int col, bool ascendin
     }
     if (col == 0)
         return
-            getDeviceId() > item->getDeviceId() ? 1 :
-            getDeviceId() == item->getDeviceId() ? 0 :
+            getDevice() > item->getDevice() ? 1 :
+            getDevice() == item->getDevice() ? 0 :
             -1;
 
     int thisVal = text(col).toInt(),

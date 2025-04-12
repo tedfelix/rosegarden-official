@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A MIDI and audio sequencer and musical notation editor.
-  Copyright 2000-2023 the Rosegarden development team.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2024 the Rosegarden development team.
 
   Other copyrights also apply to some parts of this work.  Please
   see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionView]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionView.h"
 
@@ -116,7 +117,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_currentTool(nullptr),
     //m_toolContextHelp(),
     m_contextHelpShown(false),
-    m_enableDrawing(true)
+    m_enableDrawing(true),
+    m_modeTextChanged(false),
+    m_modeTextWidth(0)
 {
     if (!doc)
         return;
@@ -330,6 +333,15 @@ void CompositionView::hideSplitLine()
     m_splitLinePos.setX( -1);
     m_splitLinePos.setY( -1);
     viewport()->update();
+}
+
+void CompositionView::setModeText(const QString& modeText)
+{
+    if (modeText == m_modeText) return;
+    RG_DEBUG << "setModeText" << modeText;
+    m_modeText = modeText;
+    m_modeTextChanged = true;
+    updateAll();
 }
 
 void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
@@ -786,6 +798,15 @@ void CompositionView::drawArtifacts()
         viewportPainter.drawLine(m_guideX, 0, m_guideX, contentsHeight() - 1);
         // Horizontal Guide
         viewportPainter.drawLine(0, m_guideY, contentsWidth() - 1, m_guideY);
+        if (m_modeTextChanged) {
+            // get the new width
+            QFontMetrics fm(viewportPainter.font());
+            m_modeTextWidth = fm.horizontalAdvance(m_modeText);
+            m_modeTextChanged = false;
+        }
+        viewportPainter.drawText(m_guideX - m_modeTextWidth - 5,
+                                 m_guideY - 5,
+                                 m_modeText);
     }
 
     //
@@ -1432,7 +1453,7 @@ void CompositionView::keyReleaseEvent(QKeyEvent *e)
         return;
 
     // Delegate to the current tool.
-    m_currentTool->keyPressEvent(e);
+    m_currentTool->keyReleaseEvent(e);
 }
 
 void CompositionView::drawPointer(int pos)

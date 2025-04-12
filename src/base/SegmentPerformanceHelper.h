@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -29,7 +29,7 @@ public:
     explicit SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
     ~SegmentPerformanceHelper() override;
 
-    typedef std::vector<iterator> iteratorcontainer;
+    typedef std::vector<Segment::iterator> iteratorcontainer;
 
     /**
      * Returns a sequence of iterators pointing to the note events
@@ -38,7 +38,7 @@ public:
      * in the sequence.  If the given event is tied but is not the
      * first in the tied chain, the returned sequence will be empty.
      */
-    iteratorcontainer getTiedNotes(iterator i);
+    iteratorcontainer getTiedNotes(Segment::iterator i);
 
     /**
      * Returns two sequences of iterators pointing to the note events
@@ -54,7 +54,7 @@ public:
      * the sequences will both be empty and the function will return
      * false.
      */
-    bool getGraceAndHostNotes(iterator i,
+    bool getGraceAndHostNotes(Segment::iterator i,
 			      iteratorcontainer &graceNotes,
 			      iteratorcontainer &hostNotes,
 			      bool &isHostNote);
@@ -62,7 +62,7 @@ public:
     /**
      * Returns the absolute time of the note event pointed to by i.
      */
-    timeT getSoundingAbsoluteTime(iterator i);
+    timeT getSoundingAbsoluteTime(Segment::iterator i);
 
     /**
      * Returns the duration of the note event pointed to by i, taking
@@ -84,7 +84,7 @@ public:
      * event that is tied but lacks a pitch property.  This is
      * expected behaviour; don't create tied notes without pitches.
      */
-    timeT getSoundingDuration(iterator i);
+    timeT getSoundingDuration(Segment::iterator i);
 
     /**
      * Returns the absolute time of the event pointed to by i,
@@ -112,7 +112,7 @@ public:
      * the sounding time and duration are returned through t and d and
      * the function returns true.
      */
-    bool getGraceNoteTimeAndDuration(bool host, iterator i, timeT &t, timeT &d);
+    bool getGraceNoteTimeAndDuration(bool host, Segment::iterator i, timeT &t, timeT &d);
 };
 
 }

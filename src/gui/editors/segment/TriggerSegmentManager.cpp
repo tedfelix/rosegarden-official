@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,7 +37,6 @@
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "gui/general/MidiPitchLabel.h"
-#include "gui/widgets/TmpStatusMsg.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "document/Command.h"
 
@@ -179,20 +178,19 @@ TriggerSegmentManager::slotUpdate()
 
     Composition &comp = m_doc->getComposition();
 
-    const Composition::triggersegmentcontainer &triggers =
+    const Composition::TriggerSegmentSet &triggers =
         comp.getTriggerSegments();
 
-    Composition::triggersegmentcontainerconstiterator it;
-
     QSettings settings;
-
-    settings.beginGroup( TriggerManagerConfigGroup );
-
-    int timeMode = settings.value("timemode", 0).toInt() ;
+    settings.beginGroup(TriggerManagerConfigGroup);
+    const Composition::TimeMode timeMode =
+            static_cast<Composition::TimeMode>(settings.value("timemode", 0).toInt());
 
     int i = 0;
 
-    for (it = triggers.begin(); it != triggers.end(); ++it) {
+    for (Composition::TriggerSegmentSet::const_iterator it = triggers.begin();
+         it != triggers.end();
+         ++it) {
 
         // duration is as of first usage, or 0
 
@@ -219,8 +217,7 @@ TriggerSegmentManager::slotUpdate()
             (*it)->getSegment()->getEndMarkerTime() -
             (*it)->getSegment()->getStartTime();
 
-        QString timeString = makeDurationString
-                             (first, duration, timeMode);
+        QString timeString = comp.makeDurationString(first, duration, timeMode);
 
         QString label = strtoqstr((*it)->getSegment()->getLabel());
         if (label == "")
@@ -314,25 +311,30 @@ TriggerSegmentManager::slotAdd()
 void
 TriggerSegmentManager::slotDelete()
 {
-    RG_DEBUG << "TriggerSegmentManager::slotDelete";
+    RG_DEBUG << "slotDelete()";
 
-    TriggerManagerItem *item =
-        dynamic_cast<TriggerManagerItem*>( m_listView->currentItem() );
+    // ??? If a triggered segment is deleted, it still appears to play just
+    //     fine.  It is never deleted.  Very odd.  I wonder if at some point
+    //     it will cause a crash.  Across a save/load it does indeed stop
+    //     working.  The sequencer must have some sort of memory of it.
+
+    const TriggerManagerItem *item =
+            dynamic_cast<TriggerManagerItem *>(m_listView->currentItem());
 
     if (!item)
-        return ;
+        return;
 
     if (item->getUsage() > 0) {
-        if (QMessageBox::warning(this, tr("Rosegarden"), tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
-                                        QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
-                               ) != QMessageBox::Yes )
-            return ;
+        if (QMessageBox::warning(
+                this,
+                tr("Rosegarden"),
+                tr("This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?", "", item->getUsage()),
+                QMessageBox::Yes | QMessageBox::Cancel,
+                QMessageBox::Cancel) != QMessageBox::Yes)
+            return;
     }
 
-    DeleteTriggerSegmentCommand *command =
-        new DeleteTriggerSegmentCommand(m_doc, item->getId());
-
-    addCommandToHistory(command);
+    addCommandToHistory(new DeleteTriggerSegmentCommand(m_doc, item->getId()));
 }
 
 void
@@ -434,6 +436,17 @@ TriggerSegmentManager::slotEdit(QTreeWidgetItem *i)
 
     RG_DEBUG << "id is " << id;
 
+    // Launch the Event List editor.
+    // ??? Why do we only allow the event list editor?  The user should also be
+    //     allowed to launch the notation and matrix editors.  In fact, those
+    //     would probably be preferred.  We should use the "Double-click opens
+    //     segment in" editor preference ("doubleclickclient") and offer
+    //     context menu items for launching any of the three editors as
+    //     desired.
+    //
+    //     The event list editor used to have code to prevent launching the
+    //     notation and matrix editors on triggered segments.  That has been
+    //     removed.
     emit editTriggerSegment(id);
 }
 
@@ -459,45 +472,6 @@ void
 TriggerSegmentManager::slotItemClicked(QTreeWidgetItem */* item */)
 {
     RG_DEBUG << "TriggerSegmentManager::slotItemClicked";
-}
-
-QString
-TriggerSegmentManager::makeDurationString(timeT startTime,
-        timeT duration, int timeMode)
-{
-    //!!! duplication with EventView::makeDurationString -- merge somewhere?
-
-    switch (timeMode) {
-
-    case 0:  // musical time
-        {
-            int bar, beat, fraction, remainder;
-            m_doc->getComposition().getMusicalTimeForDuration
-                (startTime, duration, bar, beat, fraction, remainder);
-            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
-                   .arg(bar / 100)
-                   .arg((bar % 100) / 10)
-                   .arg(bar % 10)
-                   .arg(beat / 10)
-                   .arg(beat % 10)
-                   .arg(fraction / 10)
-                   .arg(fraction % 10)
-                   .arg(remainder / 10)
-                   .arg(remainder % 10);
-        }
-
-    case 1:  // real time
-        {
-            RealTime rt =
-                m_doc->getComposition().getRealTimeDifference
-                (startTime, startTime + duration);
-            //    return QString("%1  ").arg(rt.toString().c_str());
-            return QString("%1  ").arg(rt.toText().c_str());
-        }
-
-    default:
-        return QString("%1  ").arg(duration);
-    }
 }
 
 void

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
@@ -30,6 +30,7 @@
 #include "misc/Debug.h"
 #include "base/StaffExportTypes.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 
 #include "rosegarden-version.h"
 
@@ -48,7 +49,7 @@ using namespace BaseProperties;
 MusicXmlExporter::MidiInstrument::
 MidiInstrument(Instrument * instrument, int pitch) :
     channel(instrument->hasFixedChannel() ?
-            (int(instrument->getNaturalChannel()) + 1) :
+            (int(instrument->getNaturalMidiChannel()) + 1) :
             -1),
     program(int(instrument->getProgramChange()) + 1),
     unpitched(pitch)

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical matrix editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,6 +31,7 @@
 #include "misc/Strings.h"
 
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 
@@ -126,9 +127,8 @@ namespace Rosegarden
 
 MatrixView::MatrixView(RosegardenDocument *doc,
                        const std::vector<Segment *>& segments,
-                       bool drumMode,
-                       QWidget *parent) :
-    EditViewBase(segments, parent),
+                       bool drumMode) :
+    EditViewBase(segments),
     m_quantizations(Quantizer::getQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
@@ -161,7 +161,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
             this, &MatrixView::slotShowContextHelp);
 
     slotUpdateMenuStates();
-    slotTestClipboard();
+    slotUpdateClipboardActionState();
 
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &MatrixView::slotUpdateMenuStates);
@@ -219,7 +219,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     m_matrixWidget->setTempoRulerVisible(view);
 
     findAction("show_note_names")->
-        setChecked(qStrToBool(settings.value("show_note_names")));
+        setChecked(Preferences::getShowNoteNames());
     MatrixScene::HighlightType chosenHighlightType =
         static_cast<MatrixScene::HighlightType>(
             settings.value("highlight_type",
@@ -238,6 +238,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     }
     settings.endGroup();
 
+    bool constrain = Preferences::getMatrixConstrainNotes();
+    findAction("constrained_move")->setChecked(constrain);
+
     if (segments.size() > 1) {
         enterActionState("have_multiple_segments");
     } else {
@@ -253,9 +256,9 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     // Restore window geometry and toolbar/dock state
     settings.beginGroup(WindowGeometryConfigGroup);
     QString modeStr = (m_drumMode ? "Percussion_Matrix_View_Geometry" : "Matrix_View_Geometry");
-    this->restoreGeometry(settings.value(modeStr).toByteArray());
+    restoreGeometry(settings.value(modeStr).toByteArray());
     modeStr = (m_drumMode ? "Percussion_Matrix_View_State" : "Matrix_View_State");
-    this->restoreState(settings.value(modeStr).toByteArray());
+    restoreState(settings.value(modeStr).toByteArray());
     settings.endGroup();
 
     connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
@@ -319,9 +322,9 @@ MatrixView::closeEvent(QCloseEvent *event)
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     QString modeStr = (m_drumMode ? "Percussion_Matrix_View_Geometry" : "Matrix_View_Geometry");
-    settings.setValue(modeStr, this->saveGeometry());
+    settings.setValue(modeStr, saveGeometry());
     modeStr = (m_drumMode ? "Percussion_Matrix_View_State" : "Matrix_View_State");
-    settings.setValue(modeStr, this->saveState());
+    settings.setValue(modeStr, saveState());
     settings.endGroup();
 
     QWidget::closeEvent(event);
@@ -371,7 +374,11 @@ void
 MatrixView::setupActions()
 {
 
-    setupBaseActions(true);
+    setupBaseActions();
+
+    createAction("edit_cut", SLOT(slotEditCut()));
+    createAction("edit_copy", SLOT(slotEditCopy()));
+    createAction("edit_paste", SLOT(slotEditPaste()));
 
     createAction("select", SLOT(slotSetSelectTool()));
     createAction("draw", SLOT(slotSetPaintTool()));
@@ -380,6 +387,9 @@ MatrixView::setupActions()
     createAction("resize", SLOT(slotSetResizeTool()));
     createAction("velocity", SLOT(slotSetVelocityTool()));
     createAction("chord_mode", SLOT(slotToggleChordMode()));
+    QAction *action = createAction(
+            "constrained_move", &MatrixView::slotConstrainedMove);
+    action->setStatusTip(tr("Preserves precise horizontal and vertical position when moving a note."));
     createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
     createAction("quantize", SLOT(slotQuantize()));
     createAction("repeat_quantize", SLOT(slotRepeatQuantize()));
@@ -476,11 +486,13 @@ MatrixView::setupActions()
             const QString hexValue =
                 QString::asprintf("(0x%x)", it->getControllerNumber());
 
-            // strings extracted from data files must be QObject::tr()
-            itemStr = QObject::tr("%1 Controller %2 %3")
-                .arg(QObject::tr(it->getName().c_str()))
-                .arg(it->getControllerNumber())
-                .arg(hexValue);
+            // strings extracted from data files and related to MIDI
+            // controller are in MIDI_CONTROLLER translation context
+            itemStr = tr("%1 Controller %2 %3")
+                    .arg(QCoreApplication::translate("MIDI_CONTROLLER",
+                                                    it->getName().c_str()))
+                    .arg(it->getControllerNumber())
+                    .arg(hexValue);
 
             addControlRulerMenu->addAction(itemStr);
         }
@@ -615,7 +627,8 @@ MatrixView::initActionsToolbar()
     // The SnapGrid combo and Snap To... menu items
     //
     QLabel *sLabel = new QLabel(tr(" Grid: "), actionsToolbar);
-    sLabel->setIndent(10);
+    // Put some space between this and the previous widget.
+    sLabel->setContentsMargins(10,0,0,0);
     actionsToolbar->addWidget(sLabel);
 
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
@@ -658,16 +671,21 @@ MatrixView::initActionsToolbar()
     // focus away from our more important widgets
 
     QLabel *vlabel = new QLabel(tr(" Velocity: "), actionsToolbar);
-    vlabel->setIndent(10);
+    // Put some space between this and the previous widget.
+    vlabel->setContentsMargins(10,0,0,0);
+    QString toolTip = tr("<qt>Velocity for new notes.</qt>");
+    vlabel->setToolTip(toolTip);
     actionsToolbar->addWidget(vlabel);
 
     m_velocityCombo = new QComboBox(actionsToolbar);
+    m_velocityCombo->setToolTip(toolTip);
     actionsToolbar->addWidget(m_velocityCombo);
 
     for (int i = 0; i <= 127; ++i) {
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
-    m_velocityCombo->setCurrentIndex(100); //!!! associate with segment
+    // ??? Would be nice to persist this on a segment-by-segment basis.
+    m_velocityCombo->setCurrentIndex(100);
     connect(m_velocityCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             m_matrixWidget, &MatrixWidget::slotSetCurrentVelocity);
@@ -675,10 +693,14 @@ MatrixView::initActionsToolbar()
     // Quantize combo
     //
     QLabel *qLabel = new QLabel(tr(" Quantize: "), actionsToolbar);
-    qLabel->setIndent(10);
+    // Put some space between this and the previous widget.
+    qLabel->setContentsMargins(10,0,0,0);
+    toolTip = tr("<qt><p>Quantize the display.</p><p>Notes with start times that are not aligned to the quantize setting are displayed as being aligned.</p></qt>");
+    qLabel->setToolTip(toolTip);
     actionsToolbar->addWidget(qLabel);
 
     m_quantizeCombo = new QComboBox(actionsToolbar);
+    m_quantizeCombo->setToolTip(toolTip);
     actionsToolbar->addWidget(m_quantizeCombo);
 
     for (unsigned int i = 0; i < m_quantizations.size(); ++i) {
@@ -719,13 +741,24 @@ MatrixView::initRulersToolbar()
 void
 MatrixView::readOptions()
 {
-    EditViewBase::readOptions();
+    // ??? Can we move these to setupActions()?  Is setupActions() called
+    //     after the toolbars are restored (restoreState())?  No.  It is called
+    //     in the ctor before restoreState().  Probably need to review and
+    //     reorganize the ctor.
 
-    setCheckBoxState("options_show_toolbar", "General Toolbar");
-    setCheckBoxState("show_tools_toolbar", "Tools Toolbar");
-    setCheckBoxState("show_transport_toolbar", "Transport Toolbar");
-    setCheckBoxState("show_actions_toolbar", "Actions Toolbar");
-    setCheckBoxState("show_rulers_toolbar", "Rulers Toolbar");
+    // ??? findAction() and findToolbar() are both in ActionFileClient.
+    //     Make this clumsy two-liner a member of ActionFileClient:
+    //       syncToolbarCheck(const QString &action, const QString &toolbar);
+    findAction("options_show_toolbar")->setChecked(
+            !findToolbar("General Toolbar")->isHidden());
+    findAction("show_tools_toolbar")->setChecked(
+            !findToolbar("Tools Toolbar")->isHidden());
+    findAction("show_transport_toolbar")->setChecked(
+            !findToolbar("Transport Toolbar")->isHidden());
+    findAction("show_actions_toolbar")->setChecked(
+            !findToolbar("Actions Toolbar")->isHidden());
+    findAction("show_rulers_toolbar")->setChecked(
+            !findToolbar("Rulers Toolbar")->isHidden());
 }
 
 void
@@ -957,7 +990,7 @@ MatrixView::slotEditCut()
     CommandHistory::getInstance()->addCommand(
             new CutCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
@@ -974,17 +1007,17 @@ MatrixView::slotEditCopy()
     CommandHistory::getInstance()->addCommand(
             new CopyCommand(getSelection(),
                            getRulerSelection(),
-                           getClipboard()));
+                           Clipboard::mainClipboard()));
 }
 
 void
 MatrixView::slotEditPaste()
 {
-    if (getClipboard()->isEmpty()) return;
+    if (Clipboard::mainClipboard()->isEmpty()) return;
 
     PasteEventsCommand *command = new PasteEventsCommand
         (*m_matrixWidget->getCurrentSegment(),
-         getClipboard(),
+         Clipboard::mainClipboard(),
          getInsertionTime(),
          PasteEventsCommand::MatrixOverlay);
 
@@ -1432,7 +1465,7 @@ void MatrixView::slotAddTempo()
 {
     timeT insertionTime = getInsertionTime();
 
-    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument);
+    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument, false);
 
     connect(&tempoDlg,
              SIGNAL(changeTempo(timeT,
@@ -1729,12 +1762,9 @@ MatrixView::slotDonate()
 void
 MatrixView::slotShowNames()
 {
-    bool show = findAction("show_note_names")->isChecked();
-    RG_DEBUG << "show names:" << show;
-    QSettings settings;
-    settings.beginGroup(MatrixViewConfigGroup);
-    settings.setValue("show_note_names", show);
-    settings.endGroup();
+    const bool show = findAction("show_note_names")->isChecked();
+    //RG_DEBUG << "show names:" << show;
+    Preferences::setShowNoteNames(show);
     m_matrixWidget->getScene()->updateAll();
 }
 
@@ -2187,6 +2217,15 @@ void
 MatrixView::slotToggleRulersToolBar()
 {
     toggleNamedToolBar("Rulers Toolbar");
+}
+
+void
+MatrixView::slotConstrainedMove()
+{
+    // toggle constrain
+    bool constrain = Preferences::getMatrixConstrainNotes();
+    Preferences::setMatrixConstrainNotes(! constrain);
+    findAction("constrained_move")->setChecked(! constrain);
 }
 
 void

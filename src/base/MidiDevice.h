@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -64,7 +64,7 @@ public:
     //           const std::string &label,
     //           DeviceDirection dir);
 
-    AllocateChannels *getAllocator() override;
+    AllocateChannels *getAllocator() const override;
 
     // Instrument must be on heap; I take ownership of it
     void addInstrument(Instrument*) override;
@@ -86,6 +86,9 @@ public:
     BankList getBanksByMSB(bool percussion, MidiByte msb) const;
     BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
     const MidiBank *getBankByName(const std::string &) const;
+    // unused std::string getBankName(const MidiBank &bank) const;
+    // Generate an unused "new bank" name.
+    std::string makeNewBankName() const;
 
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
@@ -98,9 +101,8 @@ public:
     const KeyMappingList &getKeyMappings() const { return m_keyMappingList; }
     const MidiKeyMapping *getKeyMappingByName(const std::string &) const;
     const MidiKeyMapping *getKeyMappingForProgram(const MidiProgram &program) const;
-    void setKeyMappingForProgram(const MidiProgram &program, std::string mapping);
+    std::string makeNewKeyMappingName() const;
 
-    std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
 
     void replaceBankList(const BankList &bankList);
@@ -111,7 +113,12 @@ public:
     void mergeProgramList(const ProgramList &programList);
     void mergeKeyMappingList(const KeyMappingList &keyMappingList);
 
+    /// Includes special Instrument below MidiInstrumentBase.
     InstrumentList getAllInstruments() const override;
+    /// Omit special system Instruments below MidiInstrumentBase.
+    /**
+     * See generatePresentationList().
+     */
     InstrumentList getPresentationInstruments() const override;
 
     // Retrieve Librarian details
@@ -127,7 +134,7 @@ public:
         { m_librarian = std::pair<std::string, std::string>(name, email); }
 
     DeviceDirection getDirection() const { return m_direction; }
-    void setDirection(DeviceDirection dir) { m_direction = dir; }
+    void setDirection(DeviceDirection dir) { m_direction = dir; notifyDeviceModified(); }
     bool isOutput() const  override { return (m_direction == Play); }
     bool isInput() const  override { return (m_direction == Record); }
 
@@ -138,7 +145,7 @@ public:
     };
 
     VariationType getVariationType() const { return m_variationType; }
-    void setVariationType(VariationType v) { m_variationType = v; }
+    void setVariationType(VariationType v) { m_variationType = v; notifyDeviceModified(); }
 
     // Controllers - for mapping Controller names to values for use in
     // the InstrumentParameterBoxes (IPBs) and Control rulers.
@@ -207,7 +214,7 @@ public:
 
     /// See m_userConnection.
     void setUserConnection(const std::string& connection)
-            { m_userConnection = connection; }
+            { m_userConnection = connection; notifyDeviceModified(); }
     std::string getUserConnection() const
             { return m_userConnection; }
 

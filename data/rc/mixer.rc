@@ -12,17 +12,12 @@
 
   <Menu name="Transport">
     <text>T&amp;ransport</text>
-    <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
     <Action name="play" text="&amp;Play" icon="transport-play" /> 
     <Action name="stop" text="&amp;Stop" icon="transport-stop" /> 
-    <!-- JAS action called "rewind" in rosegardenui.rc.  Is this the same call? -->
-    <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" />
-    <!-- JAS action called "fast_forward" in rosegardenui.rc.  Is this the same call? -->
-    <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" /> 
-    <!-- JAS action called "rewindtobeginning" in rosegardenui.rc.  Is this a different call? -->
-    <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" />
-    <!-- JAS action called "fastforwardtoend" in rosegardenui.rc.  Is this a different call? -->
-    <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" />
+    <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp" />
+    <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown" />
+    <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" shortcut="Home" />
+    <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" shortcut="End" />
     <Action name="record" text="&amp;Record" icon="transport-record" />
     <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
   </Menu>

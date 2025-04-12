@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,8 +16,6 @@
 */
 
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
-
-// Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
 // Warnings are currently done with std::cerr to make sure they appear
 // even in a release build.
 #define RG_NO_DEBUG_PRINT
@@ -134,6 +132,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_bankComboBox->setMaxVisibleItems(maxVisibleItems);
     m_bankComboBox->setMinimumContentsLength(minimumContentsLength);
+    m_bankComboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(m_bankComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectBank);
@@ -442,7 +441,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
-            rotaryIter->label->setText(QObject::tr(it->getName().c_str()));
+            rotaryIter->label->setText(
+                QCoreApplication::translate("MIDI_CONTROLLER",
+                                            it->getName().c_str()));
 
             // Next Rotary widget
             ++rotaryIter;
@@ -479,8 +480,13 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add a label
 
-            SqueezedLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
+            SqueezedLabel *label = new SqueezedLabel(
+                QCoreApplication::translate("MIDI_CONTROLLER",
+                                            it->getName().c_str()), hbox);
+
+            // ??? This has no effect on the font.
             label->setFont(font());
+
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "setupControllers(): Adding new widget at " << (count / 2) << "," << (count % 2);
@@ -566,7 +572,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
         // Find the selected bank in the MIDI Device's bank list.
         for (unsigned int i = 0; i < banks.size(); ++i) {
-            if (getSelectedInstrument()->getProgram().getBank().partialCompare(banks[i])) {
+            if (getSelectedInstrument()->getProgram().getBank().compareKey(
+                        banks[i])) {
                 currentBank = i;
                 break;
             }
@@ -639,7 +646,9 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         m_bankComboBox->clear();
         for (BankList::const_iterator i = m_banks.begin();
                 i != m_banks.end(); ++i) {
-            m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
+            m_bankComboBox->addItem(
+                            QCoreApplication::translate("INSTRUMENT",
+                                                        i->getName().c_str()));
         }
     }
 
@@ -732,9 +741,12 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         // Copy from m_programs to m_programComboBox.
         m_programComboBox->clear();
         for (unsigned i = 0; i < m_programs.size(); ++i) {
-            m_programComboBox->addItem(QObject::tr("%1. %2")
-                                       .arg(m_programs[i].getProgram() + 1)
-                                       .arg(QObject::tr(m_programs[i].getName().c_str())));
+
+            m_programComboBox->addItem(
+                        QObject::tr("%1. %2")
+                        .arg(m_programs[i].getProgram() + 1)
+                        .arg(QCoreApplication::translate("INSTRUMENT",
+                                                 m_programs[i].getName().c_str())));
         }
     }
 
@@ -863,9 +875,11 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
             MidiBank bank = m_variations[i].getBank();
             MidiByte variationBank = useMSB ? bank.getMSB() : bank.getLSB();
 
-            m_variationComboBox->addItem(QObject::tr("%1. %2")
-                                         .arg(variationBank)
-                                         .arg(QObject::tr(programName.c_str())));
+            m_variationComboBox->addItem(
+                                QObject::tr("%1. %2")
+                                .arg(variationBank)
+                                .arg(QCoreApplication::translate("INSTRUMENT",
+                                                            programName.c_str())));
         }
     }
 

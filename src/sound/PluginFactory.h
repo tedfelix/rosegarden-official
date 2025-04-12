@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -26,18 +26,19 @@ namespace Rosegarden
 
 class RunnablePluginInstance;
 class MappedPluginSlot;
+class AudioInstrumentMixer;
 
 class PluginFactory
 {
 public:
     static PluginFactory *instance(QString pluginType);
     static PluginFactory *instanceFor(QString identifier);
-    static void enumerateAllPlugins(MappedObjectPropertyList &);
+    static void enumerateAllPlugins(std::vector<QString>&);
 
     static void setSampleRate(int sampleRate) { m_sampleRate = sampleRate; }
 
     /**
-     * Look up the plugin path and find the plugins in it.  Called 
+     * Look up the plugin path and find the plugins in it.  Called
      * automatically after construction of a factory.
      */
     virtual void discoverPlugins() = 0;
@@ -46,12 +47,18 @@ public:
      * Return a reference to a list of all plugin identifiers that can
      * be created by this factory.
      */
-    virtual const std::vector<QString> &getPluginIdentifiers() const = 0;
+    //virtual const std::vector<QString> &getPluginIdentifiers() const = 0;
 
     /**
      * Append to the given list descriptions of all the available
      * plugins and their ports.  This is in a standard format, see
      * the LADSPA implementation for details.
+     *
+     * ??? MappedObjectPropertyList is being abused here.  This is
+     *     simply a vector<QString>.  Is it NOT a MappedObjectPropertyList.
+     *     This should use vector<QString> or its own type.  e.g.
+     *     typedef std::vector<QString> PluginData;
+     *
      */
     virtual void enumeratePlugins(MappedObjectPropertyList &list) = 0;
 
@@ -68,12 +75,14 @@ public:
     /**
      * Instantiate a plugin.
      */
-    virtual RunnablePluginInstance *instantiatePlugin(QString identifier,
-                                                      int instrumentId,
-                                                      int position,
-                                                      unsigned int sampleRate,
-                                                      unsigned int blockSize,
-                                                      unsigned int channels) = 0;
+    virtual RunnablePluginInstance *instantiatePlugin
+        (QString identifier,
+         int instrumentId,
+         int position,
+         unsigned int sampleRate,
+         unsigned int blockSize,
+         unsigned int channels,
+         AudioInstrumentMixer* amixer) = 0;
 
 protected:
     PluginFactory() { }

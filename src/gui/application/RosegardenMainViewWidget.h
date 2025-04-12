@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -40,6 +40,7 @@ class Command;
 namespace Rosegarden
 {
 
+
 class TrackParameterBox;
 class TrackEditor;
 class SimpleRulerScale;
@@ -54,7 +55,7 @@ class PitchTrackerView;
 class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
-class EventView;
+class EventListEditor;
 class Composition;
 class LevelInfo;
 
@@ -251,12 +252,6 @@ signals:
 
     void toggleSolo(bool);
 
-    /**
-     * Current used to dispatch things like track select changes, solo, etc...
-     * to edit views
-     */
-    void compositionStateUpdate();
-
 
     /**
      * This signal is used to dispatch a notification for a request to
@@ -280,7 +275,7 @@ private:
 
     void createNotationView(const std::vector<Segment *>&);
     void createMatrixView(const std::vector<Segment *>&, bool drumMode);
-    EventView *createEventView(std::vector<Segment *>);
+    EventListEditor *createEventView(Segment *);
     PitchTrackerView *createPitchTrackerView(const std::vector<Segment *>&);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -51,7 +51,6 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     m_librarian(nullptr),
     m_librarianEmail(nullptr),
     m_names(),
-    m_completions(),
     m_numberingBaseButton(nullptr),
     m_numberingBase(1),
     m_labels(),
@@ -84,6 +83,12 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
     // ??? Would be nice if we could edit this.
     m_librarianEmail = new QLabel(groupBox);
     groupBoxLayout->addWidget(m_librarianEmail, 1, 1);
+
+    QPushButton* editLibrarianButton =
+        new QPushButton(tr("Edit"), groupBox);
+    connect(editLibrarianButton, &QPushButton::clicked,
+            m_bankEditor, &BankEditorDialog::slotEditLibrarian);
+    groupBoxLayout->addWidget(editLibrarianButton, 2, 1);
 
     groupBox->setLayout(groupBoxLayout);
 
@@ -155,12 +160,12 @@ NameSetEditor::NameSetEditor(BankEditorDialog *bankEditor,
         // sure why.
         lineEdit->setObjectName(QString("Line Edit %1").arg(index));
         lineEdit->setProperty("index", index);
-        lineEdit->setCompleter(new QCompleter(m_completions));
 
         m_names.push_back(lineEdit);
-        connect(m_names[index],
-                &QLineEdit::textChanged,
+        connect(m_names[index], &QLineEdit::textEdited,
                 this, &NameSetEditor::slotNameChanged);
+        connect(m_names[index], &QLineEdit::editingFinished,
+                this, &NameSetEditor::slotEditingFinished);
 
         rowLayout->addWidget(lineEdit, 1);
 
@@ -198,6 +203,17 @@ NameSetEditor::updateLabels()
     for (size_t i = 0; i < m_labels.size(); ++i) {
         m_labels[i]->setText(QString("%1").arg(index++));
     }
+}
+
+void
+NameSetEditor::clearAll()
+{
+    m_librarian->clear();
+    m_librarianEmail->clear();
+
+    // Clear all name fields.
+    for (size_t i = 0; i < m_names.size(); ++i)
+        m_names[i]->clear();
 }
 
 

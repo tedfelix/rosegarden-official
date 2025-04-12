@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,9 +39,9 @@ void MarkerMapper::fillBuffer()
     resize(0);
 
     Composition& comp = m_doc->getComposition();
-    Composition::markercontainer &marks = comp.getMarkers();
+    Composition::MarkerVector &marks = comp.getMarkers();
 
-    for (Composition::markerconstiterator i = marks.begin();
+    for (Composition::MarkerVector::const_iterator i = marks.begin();
 	 i != marks.end(); ++i) {
 
       std::string metaMessage = (*i)->getName();
@@ -56,7 +56,7 @@ void MarkerMapper::fillBuffer()
       MappedEvent e;
       e.setType(MappedEvent::Marker);
       e.setEventTime(eventTime);
-      e.addDataString(metaMessage);
+      e.setDataBlock(metaMessage);
       mapAnEvent(&e);
     }
 }

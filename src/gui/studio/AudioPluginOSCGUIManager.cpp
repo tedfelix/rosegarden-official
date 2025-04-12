@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -313,8 +313,8 @@ AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
     //   osc.udp://localhost:54343/plugin/dssi/<instrument>/<position>/<label>
     // where <position> will be "synth" for synth plugins
 
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
 
     QString baseUrl = lo_server_thread_get_url(m_serverThread);
     if (!baseUrl.endsWith("/"))
@@ -392,8 +392,8 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     }
 
     QString identifier = strtoqstr(pluginInstance->getIdentifier());
-    QString iType, iSoName, iLabel;
-    PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel);
+    QString iType, iSoName, iLabel, arch;
+    PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel, arch);
     if (iLabel != label) {
         RG_WARNING << "parseOSCPath(): wrong label for plugin at position " << position << " for instrument " << instrument << " in path " << path << " (actual label is " << iLabel << ")";
         return false;
@@ -540,7 +540,6 @@ AudioPluginOSCGUIManager::dispatch()
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
 
                 if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
-                    // cppcheck-suppress ConfigurationNotChecked
                     key = DSSI_PROJECT_DIRECTORY_KEY;
                 }
 #endif
@@ -589,7 +588,6 @@ AudioPluginOSCGUIManager::dispatch()
 
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
-            // cppcheck-suppress ConfigurationNotChecked
             if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX) ||
                     key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
                 RG_WARNING << "dispatch(): illegal reserved configure call from gui: " << key << " -> " << value;
@@ -601,7 +599,6 @@ AudioPluginOSCGUIManager::dispatch()
 
             m_mainWindow->slotChangePluginConfiguration(instrument, position,
 #ifdef DSSI_GLOBAL_CONFIGURE_PREFIX
-// cppcheck-suppress ConfigurationNotChecked
                                                  key.startsWith(DSSI_GLOBAL_CONFIGURE_PREFIX),
 #else
                                                  false,

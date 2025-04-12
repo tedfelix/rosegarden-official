@@ -3,15 +3,15 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
- 
+    Copyright 2000-2024 the Rosegarden development team.
+
     This file is Copyright 2006
         Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -257,7 +257,7 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
 
     // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
-    // rendering would be nice in the future!) //!!! 
+    // rendering would be nice in the future!) //!!!
     QLabel *bracketTypeLabel = new QLabel(tr("Bracket type:"), staffExportOptions);
     bracketTypeLabel->setFont(m_font);
     m_bracketType = new QComboBox(staffExportOptions);
@@ -465,6 +465,17 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
 
     m_doc = doc;
 
+    // ??? We never remove this observer.  Add a dtor.  Might need to consider
+    //     a virtual dtor.  Have this class's dtor call removeObserver().
+    //
+    //     If that works, do the same for the following:
+    //       - CompositionModelImpl
+    //       - TrackButtons
+    //       - NotationScene
+    //       - others?
+    //
+    //     Test by checking the output for
+    //       [Composition] dtor: WARNING: x observers still extant:
     m_doc->getComposition().addObserver(this);
 
     // Populate color combo from the document colors.
@@ -760,17 +771,17 @@ TrackParameterBox::slotColorChanged(int index)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        
+
         QString newName = InputDialog::getText(this,
                                                tr("New Color Name"),
                                                tr("Enter new name:"),
                                                LineEdit::Normal,
                                                tr("New"), &ok);
-        
+
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
 //             int result = box.getColor(newColour);
-            
+
             //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
             QColor newColor = QColorDialog::getColor(Qt::white, this);
 
@@ -1059,18 +1070,23 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
 
         instrumentIds.push_back(loopInstrument.getId());
 
-        QString instrumentName(QObject::tr(loopInstrument.getName().c_str()));
+        QString instrumentName(
+            QCoreApplication::translate("INSTRUMENT",
+                                        loopInstrument.getName().c_str()));
         QString programName(
-                QObject::tr(loopInstrument.getProgramName().c_str()));
+            QCoreApplication::translate("INSTRUMENT",
+                                        loopInstrument.getProgramName().c_str()));
 
         if (loopInstrument.getType() == Instrument::SoftSynth) {
 
-            instrumentName.replace(tr("Synth plugin"), "");
+            instrumentName.replace(
+                                QCoreApplication::translate("INSTRUMENT",
+                                                            "Synth plugin"), "");
 
             programName = "";
 
             AudioPluginInstance *plugin =
-                    instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+                loopInstrument.getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin)
                 programName = strtoqstr(plugin->getDisplayName());
         }

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -42,11 +42,11 @@ constexpr int nanoSecondsPerSecond = 1000000000;
  */
 struct ROSEGARDENPRIVATE_EXPORT RealTime
 {
-    RealTime() : sec(0), nsec(0)  { }
+    RealTime()  { }
     RealTime(int s, int n);
 
-    int sec;
-    int nsec;
+    int sec{0};
+    int nsec{0};
 
     // Delayed construction to fix static init order fiasco.
     static const RealTime &zero()

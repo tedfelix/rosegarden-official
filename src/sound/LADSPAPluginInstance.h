@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,24 +13,30 @@
     COPYING included with this distribution for more information.
 */
 
-#include <vector>
-#include <set>
-#include <QString>
-#include "base/Instrument.h"
 
 #ifndef RG_LADSPAPLUGININSTANCE_H
 #define RG_LADSPAPLUGININSTANCE_H
 
-#include <ladspa.h>
+#include "base/Instrument.h"
 #include "RunnablePluginInstance.h"
+
+#include <ladspa.h>
+
+#include <QString>
+
+#include <vector>
+#include <set>
+
 
 namespace Rosegarden
 {
 
-// LADSPA plugin instance.  LADSPA is a variable block size API, but
-// for one reason and another it's more convenient to use a fixed
-// block size in this wrapper.
-//
+
+/// LADSPA plugin instance.
+/**
+ * LADSPA is a variable block size API, but for one reason and another it's
+ * more convenient to use a fixed block size in this wrapper.
+ */
 class LADSPAPluginInstance : public RunnablePluginInstance
 {
 public:
@@ -66,7 +72,7 @@ protected:
     friend class LADSPAPluginFactory;
 
     // Constructor that creates the buffers internally
-    // 
+    //
     LADSPAPluginInstance(PluginFactory *factory,
                          InstrumentId instrument,
                          QString identifier,
@@ -77,7 +83,7 @@ protected:
                          const LADSPA_Descriptor* descriptor);
 
     // Constructor that uses shared buffers
-    // 
+    //
     LADSPAPluginInstance(PluginFactory *factory,
                          InstrumentId instrument,
                          QString identifier,
@@ -97,11 +103,22 @@ protected:
     // Connection of data (and behind the scenes control) ports
     //
     void connectPorts();
-    
+
     InstrumentId   m_instrument;
     int                        m_position;
+
     std::vector<LADSPA_Handle> m_instanceHandles;
-    size_t                     m_instanceCount;
+    /// Two for a mono plugin on a stereo track.  One otherwise.
+    /**
+     * For a stereo plugin on a stereo track, or a mono plugin on a mono track
+     * this will be 1 indicating that only one instance of the plugin is
+     * needed.  This also goes for a stereo plugin on a mono track.
+     *
+     * For a mono plugin on a stereo track, this will be 2 indicating that we
+     * need two instances, one for each channel (left and right).
+     */
+    size_t m_instanceCount{0};
+
     const LADSPA_Descriptor   *m_descriptor;
 
     std::vector<std::pair<unsigned long, LADSPA_Data*> > m_controlPortsIn;
@@ -115,13 +132,14 @@ protected:
     sample_t                **m_outputBuffers;
     bool                      m_ownBuffers;
     size_t                    m_sampleRate;
-    float                    *m_latencyPort;
-    bool                      m_run;
-    
-    bool                      m_bypassed;
+    float                    *m_latencyPort{nullptr};
+    bool                      m_run{false};
+
+    bool                      m_bypassed{false};
 };
+
 
 }
 
-#endif // RG_LADSPAPLUGININSTANCE_H
 
+#endif // RG_LADSPAPLUGININSTANCE_H

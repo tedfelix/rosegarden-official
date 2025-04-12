@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -48,10 +48,10 @@ ModifyMarkerCommand::~ModifyMarkerCommand()
 void
 ModifyMarkerCommand::execute()
 {
-    Composition::markercontainer markers =
+    Composition::MarkerVector markers =
         m_composition->getMarkers();
 
-    Composition::markerconstiterator it = markers.begin();
+    Composition::MarkerVector::const_iterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
         if ((*it)->getID() == m_id) {
@@ -71,10 +71,10 @@ ModifyMarkerCommand::execute()
 void
 ModifyMarkerCommand::unexecute()
 {
-    Composition::markercontainer markers =
+    Composition::MarkerVector markers =
         m_composition->getMarkers();
 
-    Composition::markerconstiterator it = markers.begin();
+    Composition::MarkerVector::const_iterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
         if ((*it)->getID() == m_id) {

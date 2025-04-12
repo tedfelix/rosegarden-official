@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -54,15 +54,16 @@ LADSPAPluginFactory::~LADSPAPluginFactory()
     unloadUnusedLibraries();
 }
 
+#if 0
 const std::vector<QString> &
-// cppcheck-suppress unusedFunction
 LADSPAPluginFactory::getPluginIdentifiers() const
 {
     return m_identifiers;
 }
+#endif
 
 void
-LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
+LADSPAPluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
     for (std::vector<QString>::iterator i = m_identifiers.begin();
             i != m_identifiers.end(); ++i) {
@@ -76,7 +77,15 @@ LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 
 //        std::cerr << "Enumerating plugin identifier " << *i << std::endl;
 
+        // This list of strings is ordered in such a way that
+        // AudioPluginManager::Enumerator::run() can consume it.
+        // See LV2PluginFactory::enumeratePlugins()
+        // and DSSIPluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
+
         list.push_back(*i);
+        // arch
+        list.push_back(QString("%1").arg(static_cast<int>(PluginArch::LADSPA)));
         list.push_back(descriptor->Name);
         list.push_back(QString("%1").arg(descriptor->UniqueID));
         list.push_back(descriptor->Label);
@@ -407,7 +416,8 @@ LADSPAPluginFactory::instantiatePlugin(QString identifier,
                                        int position,
                                        unsigned int sampleRate,
                                        unsigned int blockSize,
-                                       unsigned int channels)
+                                       unsigned int channels,
+                                       AudioInstrumentMixer*)
 {
     const LADSPA_Descriptor *descriptor = getLADSPADescriptor(identifier);
 
@@ -435,8 +445,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
         return ;
     }
 
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     m_instances.erase(m_instances.find(instance));
 
@@ -445,8 +455,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
     for (std::set
                 <RunnablePluginInstance *>::iterator ii = m_instances.begin();
                 ii != m_instances.end(); ++ii) {
-            QString itype, isoname, ilabel;
-            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+        QString itype, isoname, ilabel, iarch;
+        PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel, iarch);
             if (isoname == soname) {
                 //std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " is still in use for plugin " << ilabel << std::endl;
                 stillInUse = true;
@@ -463,8 +473,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
 const LADSPA_Descriptor *
 LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 {
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
         loadLibrary(soname);
@@ -546,8 +556,8 @@ LADSPAPluginFactory::unloadUnusedLibraries()
                     <RunnablePluginInstance *>::iterator ii = m_instances.begin();
                     ii != m_instances.end(); ++ii) {
 
-                QString itype, isoname, ilabel;
-                PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+            QString itype, isoname, ilabel, iarch;
+            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel, iarch);
                 if (isoname == i->first) {
                     stillInUse = true;
                     break;

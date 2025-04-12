@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -311,6 +311,18 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     ++row;
 
+    // PPQN for MIDI File Export
+    layout->addWidget(new QLabel(tr("PPQN/Division for MIDI File Export")), row, 0);
+    m_ppqnSmfExport = new QSpinBox;
+    m_ppqnSmfExport->setMinimum(96);
+    m_ppqnSmfExport->setMaximum(960);
+    m_ppqnSmfExport->setValue(Preferences::getSMFExportPPQN());
+    connect(m_ppqnSmfExport,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this,
+            &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_ppqnSmfExport, row, 2, 1, 2);
+
     // Fill out the rest of the space so that we do not end up centered.
     layout->setRowStretch(row, 10);
 
@@ -523,6 +535,7 @@ MIDIConfigurationPage::apply()
     settings.setValue("sfxloadpath", m_pathToLoadCommand->text());
     settings.setValue("soundfontpath", m_soundFont->text());
 
+    Preferences::setSMFExportPPQN(m_ppqnSmfExport->value());
 
     // *** MIDI Sync tab
 
@@ -532,28 +545,31 @@ MIDIConfigurationPage::apply()
 
     // Now send it (OLD METHOD - to be removed)
     // !!! No, don't remove -- this controls SPP as well doesn't it?
-    MappedEvent midiClockEvent(MidiInstrumentBase,  // InstrumentId
-                               MappedEvent::SystemMIDIClock,
-                               MidiByte(midiClock));
+    MappedEvent midiClockEvent;
+    midiClockEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    midiClockEvent.setType(MappedEvent::SystemMIDIClock);
+    midiClockEvent.setData1(MidiByte(midiClock));
     StudioControl::sendMappedEvent(midiClockEvent);
 
     settings.setValue("mmcmode", m_midiMachineControlMode->currentIndex());
-    MappedEvent mmcModeEvent(MidiInstrumentBase,  // InstrumentId
-                             MappedEvent::SystemMMCTransport,
-                             MidiByte(m_midiMachineControlMode->currentIndex()));
+    MappedEvent mmcModeEvent;
+    mmcModeEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mmcModeEvent.setType(MappedEvent::SystemMMCTransport);
+    mmcModeEvent.setData1(MidiByte(m_midiMachineControlMode->currentIndex()));
     StudioControl::sendMappedEvent(mmcModeEvent);
 
     settings.setValue("mtcmode", m_midiTimeCodeMode->currentIndex());
-    MappedEvent mtcModeEvent(MidiInstrumentBase,  // InstrumentId
-                             MappedEvent::SystemMTCTransport,
-                             MidiByte(m_midiTimeCodeMode->currentIndex()));
+    MappedEvent mtcModeEvent;
+    mtcModeEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mtcModeEvent.setType(MappedEvent::SystemMTCTransport);
+    mtcModeEvent.setData1(MidiByte(m_midiTimeCodeMode->currentIndex()));
     StudioControl::sendMappedEvent(mtcModeEvent);
 
     settings.setValue("midisyncautoconnect", m_autoConnectSyncOut->isChecked());
-    MappedEvent autoConnectSyncOutEvent(
-            MidiInstrumentBase,  // InstrumentId
-            MappedEvent::SystemMIDISyncAuto,
-            MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
+    MappedEvent autoConnectSyncOutEvent;
+    autoConnectSyncOutEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    autoConnectSyncOutEvent.setType(MappedEvent::SystemMIDISyncAuto);
+    autoConnectSyncOutEvent.setData1(MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
     StudioControl::sendMappedEvent(autoConnectSyncOutEvent);
 
     settings.endGroup();

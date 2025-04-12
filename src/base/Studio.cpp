@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -62,16 +62,19 @@ Studio::Studio() :
     // And we always have one audio and one soft-synth device, whose
     // IDs match the base instrument numbers (for no good reason
     // except easy identifiability)
-    addDevice(QObject::tr("Audio").toUtf8().data(),
+    addDevice(QCoreApplication::translate("INSTRUMENT",
+                                          "Audio").toUtf8().data(),
               AudioInstrumentBase, AudioInstrumentBase,
               Device::Audio);
-    addDevice(QObject::tr("Synth plugin").toUtf8().data(),
+    addDevice(QCoreApplication::translate("INSTRUMENT",
+                                          "Synth plugin").toUtf8().data(),
               SoftSynthInstrumentBase, SoftSynthInstrumentBase,
               Device::SoftSynth);
 }
 
 Studio::~Studio()
 {
+    RG_DEBUG << "dtor";
     DeviceListIterator dIt = m_devices.begin();
 
     for (; dIt != m_devices.end(); ++dIt)
@@ -85,6 +88,11 @@ Studio::~Studio()
 
     for (size_t i = 0; i < m_recordIns.size(); ++i) {
         delete m_recordIns[i];
+    }
+
+    if (!m_observers.empty()) {
+        RG_WARNING << "dtor: Warning:" << m_observers.size() <<
+            "observers still extant";
     }
 }
 
@@ -116,6 +124,12 @@ Studio::addDevice(const std::string &name,
     }
 
     m_devices.push_back(d);
+    // inform the observers
+    for(ObserverList::const_iterator i = m_observers.begin();
+        i != m_observers.end(); ++i) {
+        (*i)->deviceAdded(d);
+    }
+
 }
 
 void
@@ -124,8 +138,14 @@ Studio::removeDevice(DeviceId id)
     DeviceListIterator it;
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
         if ((*it)->getId() == id) {
-            delete *it;
+            Device* d = *it;
             m_devices.erase(it);
+            // inform the observers
+            for(ObserverList::const_iterator i = m_observers.begin();
+                i != m_observers.end(); ++i) {
+                (*i)->deviceRemoved(d);
+            }
+            delete(d);
             return;
         }
     }
@@ -683,7 +703,7 @@ Studio::unassignAllInstruments()
                 {
                     (*iit)->setSendBankSelect(false);
                     (*iit)->setSendProgramChange(false);
-                    (*iit)->setNaturalChannel(channel);
+                    (*iit)->setNaturalMidiChannel(channel);
                     channel = ( channel + 1 ) % 16;
                     (*iit)->setFixedChannel();
                     // ??? This is a "reset" of the instrument.  It doesn't
@@ -867,6 +887,75 @@ Studio::haveMidiDevices() const
         if ((*it)->getType() == Device::Midi) return true;
     }
     return false;
+}
+
+Device *
+Studio::getFirstMIDIOutDevice() const
+{
+    // For each Device...
+    for (Device *device : m_devices) {
+        if (!device)
+            continue;
+
+        // MIDI Devices only.
+        if (device->getType() != Device::Midi)
+            continue;
+        // Output only.
+        if (!device->isOutput())
+            continue;
+
+        return device;
+    }
+
+    // Not found.
+    return nullptr;
+}
+
+InstrumentId
+Studio::getFirstMIDIInstrument() const
+{
+    const Device *device = getFirstMIDIOutDevice();
+    if (!device)
+        return SoftSynthInstrumentBase;
+
+    InstrumentList instruments = device->getPresentationInstruments();
+
+    if (!instruments.empty()) {
+        Instrument *instrument = instruments[0];
+        if (instrument)
+            return instrument->getId();
+    }
+
+    return SoftSynthInstrumentBase;
+}
+
+InstrumentId
+Studio::getAvailableMIDIInstrument(const Composition *composition) const
+{
+    const Device *device = getFirstMIDIOutDevice();
+    if (!device)
+        return SoftSynthInstrumentBase;
+
+    // Find an Instrument we can use.
+    const InstrumentId foundInstrumentID =
+            device->getAvailableInstrument(composition);
+
+    if (foundInstrumentID != NoInstrument)
+        return foundInstrumentID;
+
+    return SoftSynthInstrumentBase;
+}
+
+void Studio::addObserver(StudioObserver *obs)
+{
+    RG_DEBUG << "addObserver" << this << obs;
+    m_observers.push_back(obs);
+}
+
+void Studio::removeObserver(StudioObserver *obs)
+{
+    RG_DEBUG << "removeObserver" << this << obs;
+    m_observers.remove(obs);
 }
 
 

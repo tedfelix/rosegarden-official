@@ -385,10 +385,8 @@ AudioTimeStretcher::putInput(float **input, size_t samples)
 
             for (size_t c = 0; c < m_channels; ++c) {
 
-#ifndef NDEBUG
                 size_t got = m_inbuf[c]->peek(m_tempbuf, m_wlen);
                 Q_ASSERT(got == m_wlen);
-#endif
 
                 analyseBlock(c, m_tempbuf);
             }
@@ -538,7 +536,7 @@ AudioTimeStretcher::analyseBlock(size_t channel, float *in)
     // "in" buffer contains m_wlen samples
 
 #ifdef DEBUG_AUDIO_TIME_STRETCHER
-    std::cerr << "AudioTimeStretcher::analyseBlock (channel " << c << ")" << std::endl;
+    std::cerr << "AudioTimeStretcher::analyseBlock (channel " << channel << ")" << std::endl;
 #endif
 
     m_analysisWindow->cut(in);

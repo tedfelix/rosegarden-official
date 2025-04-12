@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     This file is Copyright 2007-2009
         Yves Guillemot      <yc.guillemot@wanadoo.fr> 
@@ -52,7 +52,7 @@ class Segment;
 class Clef;
 class Key;
 
-template<class T> class Inconsistencies;
+template<typename T> class Inconsistencies;
 
 
 // Class rename from TrackHeader to StaffHeader since paintEvent() method

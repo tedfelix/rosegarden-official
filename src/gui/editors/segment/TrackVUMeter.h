@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,11 +32,11 @@ namespace Rosegarden
 class TrackVUMeter: public VUMeter
 {
 public:
-     TrackVUMeter(QWidget *parent = nullptr,
-                  VUMeterType type = Plain,
-                  int width = 0,
-                  int height = 0,
-                  int position = 0);
+     TrackVUMeter(QWidget *parent,
+                  VUMeterType type,
+                  int width,
+                  int height,
+                  int position);
 
     int getPosition() const { return m_position; }
 

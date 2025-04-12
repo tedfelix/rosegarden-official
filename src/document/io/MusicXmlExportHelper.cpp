@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
@@ -30,6 +30,8 @@
 #include "base/BaseProperties.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "misc/Debug.h"
+#include "base/Composition.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 
 #include <QRegularExpression>
 

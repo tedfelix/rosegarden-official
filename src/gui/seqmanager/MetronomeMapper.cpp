@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -196,8 +196,7 @@ void MetronomeMapper::fillBuffer()
         MappedEvent e;
 
         if (tick->second == MidiTimingClockTick) {
-            e = MappedEvent(0,  // Instrument ID is irrelevant
-                            MappedEvent::MidiSystemMessage);
+            e.setType(MappedEvent::MidiSystemMessage);
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
         } else {
@@ -222,13 +221,13 @@ void MetronomeMapper::fillBuffer()
                 RG_WARNING << "fillBuffer(): Unexpected tick type";
             }
 
-            e = MappedEvent(m_metronome->getInstrument(),
-                            MappedEvent::MidiNoteOneShot,
-                            pitch,
-                            velocity,
-                            eventTime,
-                            tickDuration,
-                            RealTime::zero());  // audioStartMarker
+            e = MappedEvent();
+            e.setInstrumentId(m_metronome->getInstrument());
+            e.setType(MappedEvent::MidiNoteOneShot);
+            e.setData1(pitch);
+            e.setData2(velocity);
+            e.setEventTime(eventTime);
+            e.setDuration(tickDuration);
         }
 
         // Add the event to the buffer.

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -165,10 +165,8 @@ public:
     const Segment &getSegment() const { return m_originalSegment; }
     Segment &getSegment()             { return m_originalSegment; }
 
-    // SegmentObserver methods
-    void eventAdded(const Segment *, Event *) override { }
+    // SegmentObserver overrides.
     void eventRemoved(const Segment *, Event *) override;
-    void endMarkerTimeChanged(const Segment *, bool) override { }
     void segmentDeleted(const Segment *) override;
 
     // Debug

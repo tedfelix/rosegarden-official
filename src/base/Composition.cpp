@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -307,21 +307,26 @@ Composition::weakAddSegment(Segment *segment)
 }
 
 void
-Composition::deleteSegment(Composition::iterator i)
+Composition::deleteSegment(Composition::iterator segmentIter)
 {
-    if (i == end()) return;
+    if (segmentIter == end())
+        return;
+
     clearVoiceCaches();
 
-    Segment *p = (*i);
-    p->setComposition(nullptr);
+    Segment *segment = (*segmentIter);
 
-    m_segments.erase(i);
+    segment->setComposition(nullptr);
+
+    m_segments.erase(segmentIter);
+
     distributeVerses();
-    notifySegmentRemoved(p);
+
+    notifySegmentRemoved(segment);
 
     // ??? If this delete occurs during playback, we may get a crash later in
     //     MappedBufMetaIterator::fetchEvents().
-    delete p;
+    delete segment;
 
     updateRefreshStatuses();
 }
@@ -375,9 +380,9 @@ Composition::addAllSegments(SegmentMultiSet segments)
 }
 
 void
-Composition::addAllSegments(SegmentVec segments)
+Composition::addAllSegments(SegmentVector segments)
 {
-    for (SegmentVec::iterator i = segments.begin();
+    for (SegmentVector::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { addSegment(*i); }
@@ -395,9 +400,9 @@ Composition::detachAllSegments(SegmentMultiSet segments)
 }
 
 void
-Composition::detachAllSegments(SegmentVec segments)
+Composition::detachAllSegments(SegmentVector segments)
 {
-    for (SegmentVec::iterator i = segments.begin();
+    for (SegmentVector::iterator i = segments.begin();
          i != segments.end();
          ++i)
         { detachSegment(*i); }
@@ -458,7 +463,7 @@ Composition::rebuildVoiceCaches() const
     m_trackVoiceCountCache.clear();
     m_segmentVoiceIndexCache.clear();
 
-    for (trackcontainer::const_iterator tci = m_tracks.begin();
+    for (TrackMap::const_iterator tci = m_tracks.begin();
          tci != m_tracks.end(); ++tci) {
 
         TrackId tid = tci->first;
@@ -557,7 +562,7 @@ void
 Composition::deleteTriggerSegment(TriggerSegmentId id)
 {
     TriggerSegmentRec dummyRec(id, nullptr);
-    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    TriggerSegmentSet::iterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return;
     (*i)->getSegment()->setComposition(nullptr);
     delete (*i)->getSegment();
@@ -569,18 +574,31 @@ Composition::deleteTriggerSegment(TriggerSegmentId id)
 void
 Composition::detachTriggerSegment(TriggerSegmentId id)
 {
-    TriggerSegmentRec dummyRec(id, nullptr);
-    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
-    if (i == m_triggerSegments.end()) return;
-    (*i)->getSegment()->setComposition(nullptr);
-    delete *i;
-    m_triggerSegments.erase(i);
+    TriggerSegmentRec triggerSegmentFind(id, nullptr);
+    TriggerSegmentSet::const_iterator triggerSegmentIter =
+            m_triggerSegments.find(&triggerSegmentFind);
+    // Not found?  Bail.
+    if (triggerSegmentIter == m_triggerSegments.end())
+        return;
+
+    TriggerSegmentRec * const triggerSegment = *triggerSegmentIter;
+    Segment * const segment = triggerSegment->getSegment();
+
+    // We must call this before erase() to make sure it can tell
+    // we are deleting a trigger Segment.  If this order becomes
+    // problematic, we might need to pass a triggeredSegment flag.
+    notifySegmentRemoved(segment);
+
+    segment->setComposition(nullptr);
+
+    m_triggerSegments.erase(triggerSegmentIter);
+    delete triggerSegment;
 }
 
 void
 Composition::clearTriggerSegments()
 {
-    for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
+    for (TriggerSegmentSet::iterator i = m_triggerSegments.begin();
          i != m_triggerSegments.end(); ++i) {
         delete (*i)->getSegment();
         delete *i;
@@ -589,9 +607,9 @@ Composition::clearTriggerSegments()
 }
 
 int
-Composition::getTriggerSegmentId(Segment *s)
+Composition::getTriggerSegmentId(const Segment *s) const
 {
-    for (triggersegmentcontaineriterator i = m_triggerSegments.begin();
+    for (TriggerSegmentSet::iterator i = m_triggerSegments.begin();
          i != m_triggerSegments.end(); ++i) {
         if ((*i)->getSegment() == s) return (*i)->getId();
     }
@@ -610,7 +628,7 @@ TriggerSegmentRec *
 Composition::getTriggerSegmentRec(TriggerSegmentId id)
 {
     TriggerSegmentRec dummyRec(id, nullptr);
-    triggersegmentcontaineriterator i = m_triggerSegments.find(&dummyRec);
+    TriggerSegmentSet::iterator i = m_triggerSegments.find(&dummyRec);
     if (i == m_triggerSegments.end()) return nullptr;
     return *i;
 }
@@ -1777,7 +1795,7 @@ Composition::realTime2Time(RealTime rt, tempoT tempo,
 // @returns A tempo that effects this relationship.
 // @author Tom Breton (Tehom)
 tempoT
-Composition::timeRatioToTempo(RealTime &realTime,
+Composition::timeRatioToTempo(const RealTime &realTime,
                                   timeT beatTime, tempoT)
 {
     static const timeT cdur = Note(Note::Crotchet).getDuration();
@@ -1914,9 +1932,9 @@ void Composition::setRecordMetronome(bool value)
 // track debug convenience function
 //
 // cppcheck-suppress unusedFunction
-static void dumpTracks(Composition::trackcontainer& tracks)
+static void dumpTracks(Composition::TrackMap& tracks)
 {
-    Composition::trackiterator it = tracks.begin();
+    Composition::TrackMap::iterator it = tracks.begin();
     for (; it != tracks.end(); ++it) {
         RG_DEBUG << "tracks[" << (*it).first << "] = " << (*it).second;
     }
@@ -1925,14 +1943,14 @@ static void dumpTracks(Composition::trackcontainer& tracks)
 
 Track* Composition::getTrackById(TrackId track) const
 {
-    trackconstiterator i = m_tracks.find(track);
+    TrackMap::const_iterator i = m_tracks.find(track);
 
     if (i != m_tracks.end())
         return (*i).second;
 
     RG_WARNING << "getTrackById(" << track << "): WARNING: Track ID not found.";
     RG_WARNING << "  Available track ids are:";
-    for (trackconstiterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
+    for (TrackMap::const_iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
         RG_WARNING << "    " << (int)(*i).second->getId();
     }
 
@@ -1942,7 +1960,7 @@ Track* Composition::getTrackById(TrackId track) const
 bool
 Composition::haveTrack(TrackId track) const
 {
-    trackconstiterator i = m_tracks.find(track);
+    TrackMap::const_iterator i = m_tracks.find(track);
     return (i != m_tracks.end());
 }
 
@@ -1955,7 +1973,7 @@ Composition::haveTrack(TrackId track) const
 void Composition::resetTrackIdAndPosition(TrackId oldId, TrackId newId,
                                           int position)
 {
-    trackiterator titerator = m_tracks.find(oldId);
+    TrackMap::iterator titerator = m_tracks.find(oldId);
 
     if (titerator != m_tracks.end())
     {
@@ -2033,7 +2051,7 @@ void Composition::addTrack(Track *track)
 // unused
 void Composition::deleteTrack(Rosegarden::TrackId track)
 {
-    trackiterator titerator = m_tracks.find(track);
+    TrackMap::iterator titerator = m_tracks.find(track);
 
     if (titerator == m_tracks.end()) {
 
@@ -2054,7 +2072,7 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
 
 bool Composition::detachTrack(Rosegarden::Track *track)
 {
-    trackiterator it = m_tracks.begin();
+    TrackMap::iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
     {
@@ -2093,11 +2111,11 @@ void Composition::checkSelectedAndRecordTracks()
     }
 
     // For each record track
-    for (recordtrackcontainer::iterator i = m_recordTracks.begin();
+    for (TrackIdSet::iterator i = m_recordTracks.begin();
          i != m_recordTracks.end(); ) {
         // Increment before use.  This way deleting the element does not
         // invalidate the iterator.
-        recordtrackcontainer::iterator j = i++;
+        TrackIdSet::iterator j = i++;
 
         // If the track is no longer in the composition
         if (m_tracks.find(*j) == m_tracks.end()) {
@@ -2112,7 +2130,7 @@ void Composition::refreshRecordTracks()
     m_recordTracks.clear();
 
     // For each Track
-    for (const trackcontainer::value_type &trackPair : m_tracks) {
+    for (const TrackMap::value_type &trackPair : m_tracks) {
         // Armed?  Add to m_recordTracks.
         if (trackPair.second->isArmed())
             m_recordTracks.insert(trackPair.first);
@@ -2125,7 +2143,7 @@ Composition::getClosestValidTrackId(TrackId id) const
     long diff = LONG_MAX;
     TrackId closestValidTrackId = 0;
 
-    for (trackcontainer::const_iterator i = getTracks().begin();
+    for (TrackMap::const_iterator i = getTracks().begin();
          i != getTracks().end(); ++i) {
 
         long cdiff = labs(i->second->getId() - id);
@@ -2146,7 +2164,7 @@ Composition::getMinTrackId() const
 {
     if (getTracks().size() == 0) return 0;
 
-    trackcontainer::const_iterator i = getTracks().begin();
+    TrackMap::const_iterator i = getTracks().begin();
     return i->first;
 }
 
@@ -2155,7 +2173,7 @@ Composition::getMaxTrackId() const
 {
     if (getTracks().size() == 0) return 0;
 
-    trackcontainer::const_iterator i = getTracks().end();
+    TrackMap::const_iterator i = getTracks().end();
     --i;
 
     return i->first;
@@ -2191,7 +2209,7 @@ Composition::isInstrumentRecording(InstrumentId instrumentID) const
     // ??? Performance: LINEAR SEARCH
     //     I see no easy fix.  Each Instrument would need to keep a list
     //     of the Tracks it is on.  Or something equally complicated.
-    for (Composition::trackcontainer::const_iterator ti =
+    for (Composition::TrackMap::const_iterator ti =
              m_tracks.begin();
          ti != m_tracks.end();
          ++ti) {
@@ -2221,7 +2239,7 @@ std::string Composition::toXmlString() const
     composition << "<composition recordtracks=\"";
     bool first = true;
     // For each Track...
-    for (const trackcontainer::value_type &trackPair : m_tracks) {
+    for (const TrackMap::value_type &trackPair : m_tracks) {
         // If the Track isn't really armed, try the next.
         if (!trackPair.second->isReallyArmed())
             continue;
@@ -2281,7 +2299,7 @@ std::string Composition::toXmlString() const
 
     composition << std::endl;
 
-    for (trackconstiterator tit = getTracks().begin();
+    for (TrackMap::const_iterator tit = getTracks().begin();
          tit != getTracks().end();
          ++tit)
         {
@@ -2346,7 +2364,7 @@ std::string Composition::toXmlString() const
                 << "</metadata>" << std::endl << std::endl;
 
     composition << "<markers>" << std::endl;
-    for (markerconstiterator mIt = m_markers.begin();
+    for (MarkerVector::const_iterator mIt = m_markers.begin();
          mIt != m_markers.end(); ++mIt)
     {
         composition << (*mIt)->toXmlString();
@@ -2360,7 +2378,7 @@ std::string Composition::toXmlString() const
 void
 Composition::clearTracks()
 {
-    trackiterator it = m_tracks.begin();
+    TrackMap::iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
         delete ((*it).second);
@@ -2371,7 +2389,7 @@ Composition::clearTracks()
 Track*
 Composition::getTrackByPosition(int position) const
 {
-    trackconstiterator it = m_tracks.begin();
+    TrackMap::const_iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
     {
@@ -2402,7 +2420,7 @@ Composition::getNewTrackId() const
 
     TrackId highWater = 0;
 
-    trackconstiterator it = m_tracks.begin();
+    TrackMap::const_iterator it = m_tracks.begin();
 
     for (; it != m_tracks.end(); ++it)
     {
@@ -2419,16 +2437,13 @@ Composition::hasTrack(InstrumentId instrumentId) const
     // We don't return the TrackId since an Instrument can be on more than
     // one Track.  That would require a std::vector<TrackId>.
 
-    // For each Track
-    for (trackcontainer::const_iterator trackIter =
-                 m_tracks.begin();
-         trackIter != m_tracks.end();
-         ++trackIter) {
 
-        // If this Track is using the Instrument
-        if (trackIter->second->getInstrument() == instrumentId)
+    // For each track...
+    for (const Composition::TrackMap::value_type &pair : m_tracks) {
+        const Track *track = pair.second;
+        // if this track is using the instrumentId, return true
+        if (track->getInstrument() == instrumentId)
             return true;
-
     }
 
     return false;
@@ -2469,7 +2484,7 @@ Composition::enforceArmRule(const Track *track)
         return;
 
     // For each track...
-    for (trackcontainer::value_type &trackPair: m_tracks) {
+    for (TrackMap::value_type &trackPair: m_tracks) {
         Track *otherTrack = trackPair.second;
         // Not armed?  Skip.
         // Use "isReallyArmed()" to make sure we check archived tracks as well.
@@ -2514,24 +2529,36 @@ Composition::notifySegmentAdded(Segment *s) const
 
 
 void
-Composition::notifySegmentRemoved(Segment *s) const
+Composition::notifySegmentRemoved(Segment *segment) const
 {
-    // If there is an earlier repeating segment on the same track, we
-    // need to notify the change of its repeat end time
+    // If not a trigger segment...
+    if (getTriggerSegmentId(segment) == -1) {
 
-    for (const_iterator i = begin(); i != end(); ++i) {
+        // If there is an earlier repeating segment on the same track, we
+        // need to let observers know that the repeat end time has changed.
 
-        if (((*i)->getTrack() == s->getTrack())
-            && ((*i)->isRepeating())
-            && ((*i)->getStartTime() < s->getStartTime())) {
-
-            notifySegmentRepeatEndChanged(*i, (*i)->getRepeatEndTime());
+        // For each Segment...
+        for (const_iterator segmentIter = begin();
+             segmentIter != end();
+             ++segmentIter) {
+            Segment *currentSegment = *segmentIter;
+            // If this Segment is on the same track and it repeats and
+            // it is before the Segment being removed...
+            if (currentSegment->getTrack() == segment->getTrack()  &&
+                currentSegment->isRepeating()  &&
+                currentSegment->getStartTime() < segment->getStartTime()) {
+                notifySegmentRepeatEndChanged(
+                        currentSegment,
+                        currentSegment->getRepeatEndTime());
+            }
         }
+
     }
 
     for (ObserverSet::const_iterator i = m_observers.begin();
-         i != m_observers.end(); ++i) {
-        (*i)->segmentRemoved(this, s);
+         i != m_observers.end();
+         ++i) {
+        (*i)->segmentRemoved(this, segment);
     }
 }
 
@@ -2738,7 +2765,7 @@ void breakpoint()
 void
 Composition::clearMarkers()
 {
-    markerconstiterator it = m_markers.begin();
+    MarkerVector::const_iterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
     {
@@ -2764,7 +2791,7 @@ Composition::addMarker(Rosegarden::Marker *marker)
 bool
 Composition::detachMarker(Rosegarden::Marker *marker)
 {
-    markeriterator it = m_markers.begin();
+    MarkerVector::iterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
     {
@@ -2798,7 +2825,7 @@ Composition::getSegmentByMarking(const QString& marking) const
 bool
 Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 {
-    markerconstiterator it = m_markers.begin();
+    MarkerVector::const_iterator it = m_markers.begin();
 
     for (; it != m_markers.end(); ++it)
         if ((*it)->getTime() == time) return true;
@@ -2875,6 +2902,124 @@ Composition::dump() const
                 << " - label : " << s->getLabel();
                 //<< " - verse : " << s->getVerse()
         RG_DEBUG << *s;
+    }
+}
+
+QString
+Composition::makeTimeString(timeT midiTicks, TimeMode timeMode) const
+{
+    switch (timeMode) {
+
+    case TimeMode::MusicalTime:
+        {
+            int bar;
+            int beat;
+            int fraction;
+            int remainder;
+            getMusicalTimeForAbsoluteTime(
+                            midiTicks, bar, beat, fraction, remainder);
+            // Humans prefer a 1-based bar number.
+            ++bar;
+            return QString("%1%2%3-%4%5-%6%7-%8%9")
+                   .arg(bar / 100)
+                   .arg((bar % 100) / 10)
+                   .arg(bar % 10)
+                   .arg(beat / 10)
+                   .arg(beat % 10)
+                   .arg(fraction / 10)
+                   .arg(fraction % 10)
+                   .arg(remainder / 10)
+                   .arg(remainder % 10);
+        }
+
+    case TimeMode::RealTime:
+        {
+            const RealTime rt = getElapsedRealTime(midiTicks);
+            return QString("%1").arg(rt.toText().c_str());
+        }
+
+    case TimeMode::RawTime:
+        return QString("%1").arg(midiTicks);
+
+    default:
+        return "---";
+    }
+}
+
+QString
+Composition::makeDurationString(
+        timeT time, timeT duration, TimeMode timeMode) const
+{
+    switch (Composition::TimeMode(timeMode)) {
+
+    case Composition::TimeMode::MusicalTime:
+        {
+            int bar;
+            int beat;
+            int fraction;
+            int remainder;
+
+            getMusicalTimeForDuration(time, duration, bar, beat, fraction, remainder);
+
+            return QString("%1%2%3-%4%5-%6%7-%8%9   ")
+                   .arg(bar / 100)
+                   .arg((bar % 100) / 10)
+                   .arg(bar % 10)
+                   .arg(beat / 10)
+                   .arg(beat % 10)
+                   .arg(fraction / 10)
+                   .arg(fraction % 10)
+                   .arg(remainder / 10)
+                   .arg(remainder % 10);
+        }
+
+    case Composition::TimeMode::RealTime:
+        {
+            RealTime rt = getRealTimeDifference(time, time + duration);
+            return QString("%1  ").arg(rt.toText().c_str());
+        }
+
+    case Composition::TimeMode::RawTime:
+    default:
+        return QString("%1  ").arg(duration);
+    }
+}
+
+QVariant
+Composition::makeTimeVariant(timeT midiTicks, TimeMode timeMode) const
+{
+    switch (timeMode) {
+
+    case TimeMode::MusicalTime:
+        {
+            int bar;
+            int beat;
+            int fraction;
+            int remainder;
+            getMusicalTimeForAbsoluteTime(
+                            midiTicks, bar, beat, fraction, remainder);
+            // Humans prefer a 1-based bar number.
+            ++bar;
+            return QString("%1%2%3-%4%5-%6%7-%8%9")
+                   .arg(bar / 100)
+                   .arg((bar % 100) / 10)
+                   .arg(bar % 10)
+                   .arg(beat / 10)
+                   .arg(beat % 10)
+                   .arg(fraction / 10)
+                   .arg(fraction % 10)
+                   .arg(remainder / 10)
+                   .arg(remainder % 10);
+        }
+
+    case TimeMode::RealTime:
+        return getElapsedRealTime(midiTicks).toSeconds();
+
+    case TimeMode::RawTime:
+        return qlonglong(midiTicks);
+
+    default:
+        return "---";
     }
 }
 

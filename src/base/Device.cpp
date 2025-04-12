@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,19 +13,27 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Device]"
+#define RG_NO_DEBUG_PRINT
+
 #include "Device.h"
+
 #include "base/Controllable.h"
 #include "base/MidiDevice.h"
 #include "base/SoftSynthDevice.h"
 #include "misc/Debug.h"
+#include "document/RosegardenDocument.h"
+#include "base/Composition.h"
 
 namespace Rosegarden
 {
+
 
 const DeviceId Device::NO_DEVICE = 10000;
 const DeviceId Device::ALL_DEVICES = 10001;
 // "external controller" port.
 const DeviceId Device::EXTERNAL_CONTROLLER = 10002;
+
 
 Device::~Device()
 {
@@ -36,17 +44,21 @@ Device::~Device()
         (*it)->sendWholeDeviceDestroyed();
         delete (*it);
     }
-        
+
+    if (!m_observers.empty()) {
+        RG_WARNING << "dtor: Warning:" << m_observers.size() <<
+            "observers still extant";
+    }
 }
 
 // Return a Controllable if we are a subtype that also inherits from
 // Controllable, otherwise return nullptr
-Controllable *
-Device::getControllable()
+const Controllable *
+Device::getControllable() const
 {
-    Controllable *c = dynamic_cast<MidiDevice *>(this);
+    const Controllable *c = dynamic_cast<const MidiDevice *>(this);
     if (!c) {
-        c = dynamic_cast<SoftSynthDevice *>(this);
+        c = dynamic_cast<const SoftSynthDevice *>(this);
     }
     // Even if it's zero, return it now.
     return c;
@@ -55,19 +67,83 @@ Device::getControllable()
 // Base case: Device itself doesn't know AllocateChannels so gives nullptr.
 // @author Tom Breton (Tehom)
 AllocateChannels *
-Device::getAllocator()
+Device::getAllocator() const
 { return nullptr; }
 
 void
-Device::sendChannelSetups()
+Device::sendChannelSetups() const
 {
     // For each Instrument, send channel setup
-    for (InstrumentList::iterator it = m_instruments.begin();
+    for (InstrumentList::const_iterator it = m_instruments.begin();
          it != m_instruments.end();
          ++it) {
         (*it)->sendChannelSetup();
     }
 }
 
+InstrumentId
+Device::getAvailableInstrument(const Composition *composition) const
+{
+    InstrumentList instruments = getPresentationInstruments();
+    if (instruments.empty())
+        return NoInstrument;
+
+    if (!composition)
+        composition = &RosegardenDocument::currentDocument->getComposition();
+
+    // Assume not found.
+    InstrumentId firstInstrumentID{NoInstrument};
+
+    // For each instrument on the device
+    for (const Instrument *instrument : instruments) {
+        if (!instrument)
+            continue;
+
+        const InstrumentId instrumentID = instrument->getId();
+
+        // If we've not found the first one yet, save it in case we don't
+        // find anything available.
+        if (firstInstrumentID == NoInstrument)
+            firstInstrumentID = instrumentID;
+
+        // If this instrumentID is not in use, return it.
+        if (!composition->hasTrack(instrumentID))
+            return instrumentID;
+    }
+
+    // Return the first instrumentID for this device.
+    return firstInstrumentID;
+}
+
+void Device::addObserver(DeviceObserver *obs)
+{
+    //RG_DEBUG << "addObserver" << this << obs;
+    m_observers.push_back(obs);
+}
+
+void Device::removeObserver(DeviceObserver *obs)
+{
+    //RG_DEBUG << "removeObserver" << this << obs;
+    m_observers.remove(obs);
+}
+
+void Device::notifyDeviceModified()
+{
+    if (m_notificationsBlocked) return;
+    for(ObserverList::iterator i = m_observers.begin();
+        i != m_observers.end(); ++i) {
+        (*i)->deviceModified(this);
+    }
+
+}
+
+void Device::blockNotify(bool block)
+{
+    m_notificationsBlocked = block;
+    // if we are unblocking then notify
+    if (!block) {
+        notifyDeviceModified();
+    }
+}
 
 }

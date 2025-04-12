@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     This file is Copyright 2009
         Immanuel Litzroth         <immanuel203@gmail.com>
@@ -182,7 +182,7 @@ TranzportClient::soloChanged(const Composition * c,
                              bool  solo,
                              TrackId  selectedTrack )
 {
-    RG_DEBUG << "TranzportClient, CompostionObserver::soloChanged";
+    RG_DEBUG << "TranzportClient, CompositionObserver::soloChanged";
 
     if (device_online) {
         if (solo) {
@@ -217,14 +217,14 @@ void
 TranzportClient::trackChanged(const Composition *c,
                               Track* track)
 {
-    RG_DEBUG << "TranzportClient, CompostionObserver::trackChanged";
+    RG_DEBUG << "TranzportClient, CompositionObserver::trackChanged";
     
     if (device_online) {
         const Track* track2 = c->getTrackById(c->getSelectedTrack());
 
         // If the changed track is the selected track
         if (track == track2) {
-            RG_DEBUG << "TranzportClient, CompostionObserver::trackChanged updateing";
+            RG_DEBUG << "TranzportClient, CompositionObserver::trackChanged updating";
             
             if (track->isArmed()) {
                 LightOn(LightTrackrec);
@@ -479,10 +479,10 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 timeT currentTime = m_composition->getPosition();
-                Composition::markercontainer& mc = m_composition->getMarkers();
+                Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestPrevious = -1;
 
-                for (Composition::markerconstiterator it = mc.begin();
+                for (Composition::MarkerVector::const_iterator it = mc.begin();
                      it != mc.end();
                      ++it) {
                     timeT markerTime = (*it)->getTime();
@@ -508,10 +508,10 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 timeT currentTime = m_composition->getPosition();
-                Composition::markercontainer& mc = m_composition->getMarkers();
+                Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestNext = std::numeric_limits<long>::max();
                 
-                for (Composition::markerconstiterator it = mc.begin();
+                for (Composition::MarkerVector::const_iterator it = mc.begin();
                      it != mc.end();
                      ++it) {
                     timeT markerTime = (*it)->getTime();

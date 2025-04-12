@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -22,7 +22,6 @@
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/ProgressBar.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "base/NotationTypes.h"
 #include "base/Composition.h"
 
@@ -58,8 +57,7 @@ public:
     typedef std::vector<Segment *> SegmentVector;
     typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
     NotationView(RosegardenDocument *doc,
-                 const std::vector<Segment *>& segments,
-                 QWidget *parent = nullptr);
+                 const std::vector<Segment *>& segments);
 
     ~NotationView() override;
 
@@ -71,15 +69,10 @@ public:
 
     virtual void initLayoutToolbar();
     void initRulersToolbar();
-    void initStatusBar() override;
+    void initStatusBar();
     timeT getInsertionTime(bool allowEndTime = false) const;
 
     bool hasSegment(Segment * seg) const;
-
-    /** This turns out to be cruft that is rather annoying to eliminate.  We
-     * don't use this for anything, and provide an empty implementation.
-     */
-    void updateViewCaption() override { }
 
     // Adopt a segment that doesn't live in Composition.
     void adoptSegment(Segment *s);
@@ -104,9 +97,6 @@ signals:
     void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
 
-protected:
-    void readOptions() override;
-
 protected slots:
     /// Some change occurs and the whole scene have to be redrawn.
     /// First remove segments from our list when they are deleted from the
@@ -123,9 +113,9 @@ protected slots:
     /// Preview with LilyPond (via Okular or the like)
     void slotPreviewLilyPond();
 
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
@@ -222,6 +212,8 @@ protected slots:
     void slotLinearMode();
     void slotContinuousPageMode();
     void slotMultiPageMode();
+
+    void slotHighlight();
 
     void slotShowHeadersGroup();
 
@@ -364,7 +356,7 @@ protected slots:
      * Triggered by the editElement() signal emitted by NotationSelector and
      * relayed through NotationWidget.
      */
-    void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
+    void slotEditElement(NotationStaff *, NotationElement *);
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
@@ -491,6 +483,8 @@ private:
     SegmentVector::iterator findAdopted(Segment *s);
     void ForAllSelection(opOnEvent op);
     void setCurrentStaff(NotationStaff *staff);
+
+    void readOptions();
 
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:

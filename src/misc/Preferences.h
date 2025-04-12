@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -70,6 +70,9 @@ namespace Preferences
     void setAdvancedLooping(bool value);
     bool getAdvancedLooping();
 
+    void setJACKStopAtAutoStop(bool value);
+    bool getJACKStopAtAutoStop();
+
     // AudioFileLocationDialog settings
 
     void setAudioFileLocationDlgDontShow(bool value);
@@ -82,18 +85,39 @@ namespace Preferences
     void setCustomAudioLocation(const QString &location);
     QString getCustomAudioLocation();
 
+
+    // Enable/Disable CPU load checks.
     void setJACKLoadCheck(bool value);
     bool getJACKLoadCheck();
+
+    void setShowNoteNames(bool value);
+    bool getShowNoteNames();
+
 
     // Experimental
 
     bool getBug1623();
 
+    // Enable/disable LV2 plugin discovery.
+    void setLV2(bool value);
+    bool getLV2();
+
+    void setDynamicDrag(bool value);
+    bool getDynamicDrag();
+
     void setAutoChannels(bool value);
     bool getAutoChannels();
 
-    void setIncludeAlsaPortNumbersWhenMatching( bool value );
+    void setIncludeAlsaPortNumbersWhenMatching(bool value);
     bool getIncludeAlsaPortNumbersWhenMatching();
+
+    void setSMFExportPPQN(int value);
+    int getSMFExportPPQN();
+
+    // matrix editor note constraint
+    void setMatrixConstrainNotes(bool value);
+    bool getMatrixConstrainNotes();
+
 }
 
 

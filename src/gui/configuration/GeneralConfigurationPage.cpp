@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -246,6 +246,26 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     ++row;
 
     settings.endGroup();
+
+    // JACK stop at auto stop
+    label = new QLabel(tr("JACK stop at auto stop"), frame);
+    layout->addWidget(label, row, 0);
+    tipText = tr(
+            "<qt><p>Unchecking this will allow the JACK transport to roll past "
+            "the end of the Rosegarden composition.  This will lead to the "
+            "JACK transport being out of sync with Rosegarden's transport and "
+            "could cause unexpected starting and stopping of the transport."
+            "</p></qt>");
+    label->setToolTip(tipText);
+    m_jackStopAtAutoStop = new QCheckBox(frame);
+    m_jackStopAtAutoStop->setToolTip(tipText);
+    m_jackStopAtAutoStop->setChecked(Preferences::getJACKStopAtAutoStop());
+    connect(m_jackStopAtAutoStop, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_jackStopAtAutoStop, row, 1, 1, 2);
+
+    ++row;
+
 #endif
 
     layout->addWidget(new QLabel(tr("Stop playback at end of last segment"),
@@ -270,7 +290,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
-    layout->addWidget(new QLabel(tr("Advanced Looping (beta)"),
+    layout->addWidget(new QLabel(tr("Advanced Looping"),
                                  frame), row, 0);
     m_advancedLooping = new QCheckBox(frame);
     m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
@@ -289,6 +309,34 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_autoChannels, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("LV2 Plugin Support (beta)"),
+                                 frame), row, 0);
+    m_lv2 = new QCheckBox(frame);
+    m_lv2->setChecked(Preferences::getLV2());
+    connect(m_lv2, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_lv2, row, 1, 1, 2);
+
+    ++row;
+
+    label = new QLabel(tr("Drag with dynamic modifiers (main/matrix)"), frame);
+    tipText = tr(
+            "<qt><p>If set, the CTRL and ALT keys can be pressed or released "
+            "while a drag is in progress to change copy/move behavior.  "
+            "This applies to the main window and the matrix editor.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+    m_dynamicDrag = new QCheckBox(frame);
+    m_dynamicDrag->setToolTip(tipText);
+    m_dynamicDrag->setChecked(Preferences::getDynamicDrag());
+    connect(m_dynamicDrag, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_dynamicDrag, row, 1, 1, 2);
 
     ++row;
 
@@ -420,16 +468,45 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     // Track size
     layout->addWidget(new QLabel(tr("Track size"), frame), row, 0);
 
+    // The actual values are defined in ./editors/segment/TrackEditor.cpp
     m_trackSize = new QComboBox(frame);
     m_trackSize->addItem(tr("Small"));
     m_trackSize->addItem(tr("Medium"));
     m_trackSize->addItem(tr("Large"));
+    m_trackSize->addItem(tr("Extra Large"));
+
     m_trackSize->setCurrentIndex(
             settings.value("track_size", 0).toInt());
     connect(m_trackSize, static_cast<void(QComboBox::*)(int)>(
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
+    tipText = tr(
+            "<qt><p>Select the track size factor. Larger sizes are useful on "
+            "HDPI displays.</p></qt>");
+    m_trackSize->setToolTip(tipText);
     layout->addWidget(m_trackSize, row, 1, 1, 3);
+
+    ++row;
+
+    // Track label width (after buttons, i.e. just the text)
+    label = new QLabel(tr("Track Label width"), frame);
+    tipText = tr(
+            "<qt><p>Select the width of track labels. This is the text "
+            "after the mute, record and solo buttons</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+
+    m_trackLabelWidth = new QComboBox(frame);
+    m_trackLabelWidth->addItem(tr("Narrow"));
+    m_trackLabelWidth->addItem(tr("Medium"));
+    m_trackLabelWidth->addItem(tr("Wide"));
+
+    m_trackLabelWidth->setCurrentIndex(
+        settings.value("track_label_width", 2).toInt());
+    connect(m_trackLabelWidth, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_trackLabelWidth, row, 1, 1, 3);
 
     ++row;
 
@@ -578,12 +655,16 @@ void GeneralConfigurationPage::apply()
 
     settings.setValue("jacktransport", jackTransport);
 
-    MappedEvent mEjackValue(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemJackTransport,
-                            MidiByte(jackValue));
+    MappedEvent mEjackValue;
+    mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
+    mEjackValue.setType(MappedEvent::SystemJackTransport);
+    mEjackValue.setData1(MidiByte(jackValue));
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();
+
+    Preferences::setJACKStopAtAutoStop(m_jackStopAtAutoStop->isChecked());
+
 #endif // HAVE_LIBJACK
 
 
@@ -591,6 +672,8 @@ void GeneralConfigurationPage::apply()
     Preferences::setJumpToLoop(m_jumpToLoop->isChecked());
     Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
     Preferences::setAutoChannels(m_autoChannels->isChecked());
+    Preferences::setLV2(m_lv2->isChecked());
+    Preferences::setDynamicDrag(m_dynamicDrag->isChecked());
 
     // Presentation tab
 
@@ -617,6 +700,11 @@ void GeneralConfigurationPage::apply()
             (settings.value("track_size", 0).toInt() !=
              m_trackSize->currentIndex());
     settings.setValue("track_size", m_trackSize->currentIndex());
+
+    const bool trackLabelWidthChanged =
+             (settings.value("track_label_width", 2).toInt() !=
+              m_trackLabelWidth->currentIndex());
+    settings.setValue("track_label_width", m_trackLabelWidth->currentIndex());
     settings.endGroup();
 
     Preferences::setUseNativeFileDialogs(m_useNativeFileDialogs->isChecked());
@@ -646,6 +734,12 @@ void GeneralConfigurationPage::apply()
         QMessageBox::information(this, tr("Rosegarden"),
                 tr("You must restart Rosegarden or open a file for the track size change to take effect."));
     }
+
+    if (trackLabelWidthChanged) {
+        QMessageBox::information(this, tr("Rosegarden"),
+                tr("You must restart Rosegarden or open a file for the track label width change to take effect."));
+    }
+
 }
 
 

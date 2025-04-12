@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,24 +13,29 @@
     COPYING included with this distribution for more information.
 */
 
+#include "Event.h"
+#include "XmlExportable.h"
+#include "MidiTypes.h"
+#include "NotationTypes.h"
+#include "BaseProperties.h"
+
+#include "misc/Debug.h"
+#include "base/figuration/GeneratedRegion.h"
+#include "base/figuration/SegmentID.h"
+#include "gui/editors/guitar/Chord.h"
+
+#include <sstream>
 #include <cstdio>
 #include <cctype>
 #include <iostream>
-#include "Event.h"
-#include "XmlExportable.h"
-#include "NotationTypes.h"
-#include "BaseProperties.h"
-#include "misc/Debug.h"
-
-#include <sstream>
 
 namespace Rosegarden
 {
 using std::string;
 using std::ostream;
 
-PropertyName Event::EventData::NotationTime("!notationtime");
-PropertyName Event::EventData::NotationDuration("!notationduration");
+const PropertyName Event::NotationTime("!notationtime");
+const PropertyName Event::NotationDuration("!notationduration");
 
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
@@ -417,8 +422,54 @@ Event::isCopyOf(const Event &e) const
     return false;
 }
 
+int Event::getSubOrdering(std::string eventType)
+{
+    // Missing:
+    // - TimeSignature (private, -150)
+
+    if (eventType == Note::EventType) {
+        return 0;  // Should be Note::EventSubOrdering but there is none.
+    } else if (eventType == Note::EventRestType) {
+        return Note::EventRestSubOrdering;
+    } else if (eventType == ProgramChange::EventType) {
+        return ProgramChange::EventSubOrdering;
+    } else if (eventType == Controller::EventType) {
+        return Controller::EventSubOrdering;
+    } else if (eventType == PitchBend::EventType) {
+        return PitchBend::EventSubOrdering;
+    } else if (eventType == ChannelPressure::EventType) {
+        return ChannelPressure::EventSubOrdering;
+    } else if (eventType == KeyPressure::EventType) {
+        return KeyPressure::EventSubOrdering;
+    } else if (eventType == RPN::EventType) {
+        return RPN::EventSubOrdering;
+    } else if (eventType == NRPN::EventType) {
+        return NRPN::EventSubOrdering;
+    } else if (eventType == Indication::EventType) {
+        return Indication::EventSubOrdering;
+    } else if (eventType == Clef::EventType) {
+        return Clef::EventSubOrdering;
+    } else if (eventType == Key::EventType) {
+        return Key::EventSubOrdering;
+    } else if (eventType == Text::EventType) {
+        return Text::EventSubOrdering;
+    } else if (eventType == SystemExclusive::EventType) {
+        return SystemExclusive::EventSubOrdering;
+    } else if (eventType == GeneratedRegion::EventType) {
+        return GeneratedRegion::EventSubOrdering;
+    } else if (eventType == SegmentID::EventType) {
+        return SegmentID::EventSubOrdering;
+    } else if (eventType == Symbol::EventType) {
+        return Symbol::EventSubOrdering;
+    } else if (eventType == Guitar::Chord::EventType) {
+        return Guitar::Chord::EventSubOrdering;
+    }
+
+    return 0;
+}
+
+
 bool
-// cppcheck-suppress unusedFunction
 operator<(const Event &a, const Event &b)
 {
     timeT at = a.getAbsoluteTime();
@@ -427,7 +478,6 @@ operator<(const Event &a, const Event &b)
     else return a.getSubOrdering() < b.getSubOrdering();
 }
 
-// cppcheck-suppress unusedFunction
 QDebug operator<<(QDebug dbg, const Event &event)
 {
     dbg << "Event type :" << event.m_data->m_type << "\n";

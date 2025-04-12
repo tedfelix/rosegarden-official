@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -206,11 +206,9 @@ void NotationSelector::handleMouseDoubleClick(const NotationMouseEvent *e)
     if (!staff) return;
     m_selectedStaff = staff;
 
-    bool advanced = (e->modifiers & Qt::ShiftModifier);
-
     if (e->element && e->exact) {
 
-        emit editElement(staff, e->element, advanced);
+        emit editElement(staff, e->element);
 
     } else {
 
@@ -403,7 +401,7 @@ void NotationSelector::slotMoveInsertionCursor()
     // and we don't want to see any move of the staves
     m_widget->setScroll(false);
 
-    ///! Warning, this short-circuits NotationView::setCurrentStaff...
+    // ! Warning, this short-circuits NotationView::setCurrentStaff...
     m_scene->setCurrentStaff(m_pointerStaff);
     m_widget->setPointerPosition(m_pointerTime);
 
@@ -705,7 +703,11 @@ void NotationSelector::slotMakeVisible()
 
 void NotationSelector::setViewCurrentSelection(bool preview)
 {
-    EventSelection *selection = getEventsInSelectionRect();
+    NotationScene::EventWithSegmentMap previewEvents;
+    NotationScene::EventWithSegmentMap* previewEventsPtr = nullptr;
+    if (preview) previewEventsPtr = &previewEvents;
+    EventSelection *selection =
+        getEventsInSelectionRect(previewEventsPtr);
 
     if (m_selectionToMerge) {
         if (selection &&
@@ -717,6 +719,7 @@ void NotationSelector::setViewCurrentSelection(bool preview)
     }
 
     m_scene->setSelection(selection, preview);
+    if (preview) m_scene->setExtraPreviewEvents(previewEvents);
 }
 /*!!!
 NotationStaff *
@@ -732,7 +735,8 @@ NotationSelector::getStaffForElement(NotationElement *elt)
 }
 */
 EventSelection *
-NotationSelector::getEventsInSelectionRect()
+NotationSelector::getEventsInSelectionRect
+(NotationScene::EventWithSegmentMap* previewEvents)
 {
     // If selection rect is not visible or too small,
     // return 0
@@ -775,6 +779,7 @@ NotationSelector::getEventsInSelectionRect()
     EventSelection *selection = new EventSelection(segment);
     int nbw = m_selectedStaff->getNotePixmapFactory(false).getNoteBodyWidth();
 
+    if (previewEvents) previewEvents->clear();
     for (int i = 0; i < l.size(); ++i) {
 
         QGraphicsItem *item = l[i];
@@ -810,7 +815,14 @@ NotationSelector::getEventsInSelectionRect()
         if (selection->getSegment().findSingle(element->event()) !=
             selection->getSegment().end()) {
             selection->addEvent(element->event(), m_ties);
-        }
+        } else {
+            if (previewEvents) {
+                // previewEvents should contain all notes from other segments
+                if (! element->isNote()) continue;
+                (*previewEvents)[element->event()] =
+                    element->getSegment();
+            }
+       }
     }
 
     if (selection->getAddedEvents() > 0) {

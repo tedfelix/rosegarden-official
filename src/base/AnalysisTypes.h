@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This file is Copyright 2002
@@ -66,7 +66,7 @@ class ChordLabel
 {
 public:
     ChordLabel();
-    ChordLabel(Key key, int mask, int bass);
+    ChordLabel(const Key& key, int mask, int bass);
     ChordLabel(const ChordType& type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
     int rootPitch() const;
@@ -122,7 +122,7 @@ public:
     /**
      * Returns the key in force during a given event.
      */
-    static Key getKeyForEvent(Event *e, Segment &s);
+    static Key getKeyForEvent(const Event *e, Segment &s);
 
     /**
      * Inserts in the given Segment labels for all of the chords found in
@@ -135,7 +135,7 @@ public:
      * Returns a time signature that is probably reasonable for the
      * given timeslice.
      */
-    TimeSignature guessTimeSignature(CompositionTimeSliceAdapter &c);
+    TimeSignature guessTimeSignature(const CompositionTimeSliceAdapter &c);
 
     /**
      * Returns a guess at the starting key of the given timeslice,
@@ -169,7 +169,7 @@ protected:
     typedef std::pair<double, ChordLabel> ChordPossibility;
     typedef std::vector<ChordPossibility> HarmonyGuess;
     typedef std::vector<std::pair<timeT, HarmonyGuess> > HarmonyGuessList;
-    struct cp_less : public std::binary_function<ChordPossibility, ChordPossibility, bool>
+    struct cp_less
     {
         bool operator()(ChordPossibility l, ChordPossibility r);
     };
@@ -210,9 +210,9 @@ protected:
     /// For use by guessHarmonies (refineHarmonyGuessList)
     // #### grep ProgressionMap to something else
     struct ChordProgression {
-        ChordProgression(const ChordLabel& first_,
-                         const ChordLabel& second_ = ChordLabel(),
-                         const Key& key_ = Key());
+        explicit ChordProgression(const ChordLabel& first_,
+                                  const ChordLabel& second_ = ChordLabel(),
+                                  const Key& key_ = Key());
         ChordLabel first;
         ChordLabel second;
         Key homeKey;

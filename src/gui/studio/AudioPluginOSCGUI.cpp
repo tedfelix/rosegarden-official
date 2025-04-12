@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
- 
+    Copyright 2000-2024 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -48,8 +48,8 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
         throw Exception("No GUI found");
     }
 
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
     QFileInfo soInfo(soName);
 
     //setup osc process
@@ -57,7 +57,7 @@ AudioPluginOSCGUI::AudioPluginOSCGUI(AudioPluginInstance *instance,
 
     m_gui = new QProcess();
     QStringList guiArgs;
-   
+
     guiArgs << m_serverUrl
     << soInfo.fileName()
     << label
@@ -84,8 +84,8 @@ AudioPluginOSCGUI::~AudioPluginOSCGUI()
 QString
 AudioPluginOSCGUI::getGUIFilePath(QString identifier)
 {
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
 
     RG_DEBUG << "AudioPluginOSCGUI::getGUIFilePath(" << identifier << ")";
 
@@ -224,4 +224,3 @@ AudioPluginOSCGUI::sendConfiguration(QString key, QString value)
 }
 
 }
-

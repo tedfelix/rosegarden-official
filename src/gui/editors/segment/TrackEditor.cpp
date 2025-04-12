@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -124,11 +124,13 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     // Write it back out so we can find it.
     settings.setValue("track_size", trackSize);
 
-    int sizeFactor = 100;  // 0: small
-    if (trackSize == 1)  // 1: medium
+    int sizeFactor = 100;     // 0: small (default)
+    if (trackSize == 1)       // 1: medium
         sizeFactor = 125;
     else if (trackSize == 2)  // 2: large
         sizeFactor = 150;
+    else if (trackSize == 3)  // 3: extra large
+        sizeFactor = 194;
 
     m_trackCellHeight = 24 * sizeFactor / 100;
 

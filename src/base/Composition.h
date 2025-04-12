@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -30,20 +30,31 @@
 #include "Marker.h"
 
 // Qt
-#include <QtCore/QWeakPointer>
+#include <QString>
+#include <QVariant>
 
 // System
+#include <utility>  // std::pair
+#include <vector>
 #include <set>
 #include <map>
+#include <string>
+#include <list>
+
 
 namespace Rosegarden
 {
+
+
 // We store tempo in quarter-notes per minute * 10^5 (hundred
 // thousandths of a quarter-note per minute).  This means the maximum
 // tempo in a 32-bit integer is about 21400 qpm.  We use a signed int
 // for compatibility with the Event integer type -- but note that we
 // use 0 (rather than -1) to indicate "tempo not set", by convention
 // (though see usage of target tempo in e.g. addTempoAtTime).
+// ??? I suspect keeping this in Composition.h introduces numerous unnecessary
+//     dependencies on Composition.h.  Consider breaking this out into a
+//     TempoT.h like TimeT.h.
 typedef int tempoT;
 
 class Quantizer;
@@ -52,7 +63,8 @@ class NotationQuantizer;
 
 class CompositionObserver;
 
-/// Composition contains a complete representation of a piece of music.
+
+/// A complete representation of a piece of music.
 /**
  * It is a container for multiple Segment objects (m_segments), as well as
  * any associated non-Event data.
@@ -69,23 +81,15 @@ public:
     typedef SegmentMultiSet::iterator iterator;
     typedef SegmentMultiSet::const_iterator const_iterator;
 
-    typedef std::vector<Segment *> SegmentVec;
+    typedef std::vector<Segment *> SegmentVector;
 
-    typedef std::map<TrackId, Track*> trackcontainer;
-    typedef trackcontainer::iterator trackiterator;
-    typedef trackcontainer::const_iterator trackconstiterator;
+    typedef std::map<TrackId, Track *> TrackMap;
 
-    typedef std::vector<Marker*> markercontainer;
-    typedef markercontainer::iterator markeriterator;
-    typedef markercontainer::const_iterator markerconstiterator;
+    typedef std::vector<Marker *> MarkerVector;
 
-    typedef std::set<TriggerSegmentRec *, TriggerSegmentCmp> triggersegmentcontainer;
-    typedef triggersegmentcontainer::iterator triggersegmentcontaineriterator;
-    typedef triggersegmentcontainer::const_iterator triggersegmentcontainerconstiterator;
+    typedef std::set<TriggerSegmentRec *, TriggerSegmentCmp> TriggerSegmentSet;
 
-    typedef std::set<TrackId> recordtrackcontainer;
-    typedef recordtrackcontainer::iterator recordtrackiterator;
-    typedef recordtrackcontainer::const_iterator recordtrackconstiterator;
+    typedef std::set<TrackId> TrackIdSet;
 
     Composition();
     ~Composition() override;
@@ -133,9 +137,9 @@ public:
 
     int getTrackPositionById(TrackId id) const; // -1 if not found
 
-    trackcontainer& getTracks() { return m_tracks; }
+    TrackMap& getTracks() { return m_tracks; }
 
-    const trackcontainer& getTracks() const { return m_tracks; }
+    const TrackMap& getTracks() const { return m_tracks; }
 
     // Reset id and position
     // unused
@@ -144,7 +148,7 @@ public:
     TrackId getMinTrackId() const;
     TrackId getMaxTrackId() const;
 
-    const recordtrackcontainer &getRecordTracks() const { return m_recordTracks; }
+    const TrackIdSet &getRecordTracks() const { return m_recordTracks; }
     void setTrackRecording(TrackId trackId, bool recording);
     bool isTrackRecording(TrackId track) const;
     bool isInstrumentRecording(InstrumentId instrumentID) const;
@@ -225,8 +229,8 @@ public:
     //
     // MARKERS
 
-    markercontainer& getMarkers() { return m_markers; }
-    const markercontainer& getMarkers() const { return m_markers; }
+    MarkerVector& getMarkers() { return m_markers; }
+    const MarkerVector& getMarkers() const { return m_markers; }
 
     /**
      * Add a new Marker.  The Composition takes ownership of the
@@ -269,7 +273,7 @@ public:
      * NOTE: The Segment is deleted from the Composition and
      * destroyed
      */
-    void deleteSegment(iterator);
+    void deleteSegment(iterator segmentIter);
 
     /**
      * Delete the Segment if it is part of the Composition
@@ -352,20 +356,20 @@ public:
      * Add every segment in SegmentMultiSet
      */
     void addAllSegments(SegmentMultiSet segments);
-    void addAllSegments(SegmentVec segments);
+    void addAllSegments(SegmentVector segments);
 
     /**
      * Detach every segment in SegmentMultiSet
      */
     void detachAllSegments(SegmentMultiSet segments);
-    void detachAllSegments(SegmentVec segments);
+    void detachAllSegments(SegmentVector segments);
 
     //////
     //
     //  TRIGGER SEGMENTS
 
-    triggersegmentcontainer &getTriggerSegments() { return m_triggerSegments; }
-    const triggersegmentcontainer &getTriggerSegments() const { return m_triggerSegments; }
+    TriggerSegmentSet &getTriggerSegments() { return m_triggerSegments; }
+    const TriggerSegmentSet &getTriggerSegments() const { return m_triggerSegments; }
 
     /**
      * Add a new trigger Segment with a given base pitch and base
@@ -393,7 +397,7 @@ public:
      * Return the TriggerSegmentId for the given Segment, or -1 if it is
      * not a trigger Segment.
      */
-    int getTriggerSegmentId(Segment *);
+    int getTriggerSegmentId(const Segment *) const;
 
     /**
      * Return the Segment for a given TriggerSegmentId
@@ -699,7 +703,7 @@ public:
     }
 
     static tempoT
-        timeRatioToTempo(RealTime &realTime,
+        timeRatioToTempo(const RealTime &realTime,
                          timeT beatTime, tempoT rampTo);
 
     //////
@@ -740,6 +744,18 @@ public:
     timeT getDurationForMusicalTime(timeT absTime,
                                     int bars, int beats,
                                     int fractions, int remainder) const;
+
+    enum class TimeMode {
+        MusicalTime,
+        RealTime,
+        RawTime
+    };
+    /// Convert a time in MIDI Ticks (timeT) to various human-readable formats.
+    QString makeTimeString(timeT midiTicks, TimeMode timeMode) const;
+    /// Convert a duration to various human-readable formats.
+    QString makeDurationString(timeT time, timeT duration, TimeMode timeMode) const;
+    /// Convert MIDI ticks to a QVariant suitable for a table key column.
+    QVariant makeTimeVariant(timeT midiTicks, TimeMode timeMode) const;
 
 
     /**
@@ -878,6 +894,7 @@ public:
     void    addObserver(CompositionObserver *obs) { m_observers.push_back(obs); }
     /// Change notification mechanism.
     /// @see addObserver()
+    // cppcheck-suppress constParameterPointer
     void removeObserver(CompositionObserver *obs) { m_observers.remove(obs); }
 
     /// Change notification mechanism.
@@ -972,12 +989,12 @@ protected:
 
     //--------------- Data members ---------------------------------
     //
-    trackcontainer m_tracks;
+    TrackMap m_tracks;
     SegmentMultiSet m_segments;
 
     // The tracks we are armed for record on
     //
-    recordtrackcontainer m_recordTracks;
+    TrackIdSet m_recordTracks;
 
     TrackId m_selectedTrackId;
 
@@ -1086,7 +1103,12 @@ protected:
     void notifySegmentAdded(Segment *) const;
     void notifySegmentRemoved(Segment *) const;
     void notifySegmentRepeatChanged(Segment *, bool) const;
-    void notifySegmentRepeatEndChanged(Segment *, timeT) const;
+    /**
+     * ??? This is always called with segment->getRepeatEndTime() for the
+     *     repeatEndTime argument.  Get rid of the second argument and call
+     *     getRepeatEndTime() within this routine instead.
+     */
+    void notifySegmentRepeatEndChanged(Segment *segment, timeT repeatEndTime) const;
     void notifySegmentEventsTimingChanged(Segment *s, timeT delay, RealTime rtDelay) const;
     void notifySegmentTransposeChanged(Segment *s, int transpose) const;
     void notifySegmentTrackChanged(Segment *s, TrackId oldId, TrackId newId) const;
@@ -1140,11 +1162,11 @@ protected:
 
     // User defined markers in the composition
     //
-    markercontainer                   m_markers;
+    MarkerVector                   m_markers;
 
     // Trigger segments (unsorted segments fired by events elsewhere)
     //
-    triggersegmentcontainer           m_triggerSegments;
+    TriggerSegmentSet           m_triggerSegments;
     TriggerSegmentId                  m_nextTriggerSegmentId;
 
     ColourMap                         m_segmentColourMap;

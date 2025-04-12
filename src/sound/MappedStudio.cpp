@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -310,7 +310,6 @@ MappedStudio::MappedStudio() :
 #else
 #if defined(PTHREAD_MUTEX_RECURSIVE) || defined(__FreeBSD__)
 
-    // cppcheck-suppress ConfigurationNotChecked
     pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
 #else
 
@@ -1664,7 +1663,8 @@ MappedPluginPort::setValue(MappedObjectValue value)
             if (drv) {
                 drv->setPluginInstancePortValue(slot->getInstrument(),
                                                 slot->getPosition(),
-                                                m_portNumber, value);
+                                                m_portNumber,
+                                                value);
             }
         }
     }

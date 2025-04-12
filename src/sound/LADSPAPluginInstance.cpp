@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2023 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2024 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -14,21 +14,30 @@
 
 
 #define RG_MODULE_STRING "[LADSPAPluginInstance]"
+#define RG_NO_DEBUG_PRINT
 
 #include "LADSPAPluginInstance.h"
-#include "LADSPAPluginFactory.h"
 
-#include <QtGlobal>
+#include "LADSPAPluginFactory.h"
 #include "misc/Debug.h"
 
+#include <QtGlobal>
 
 //#define DEBUG_LADSPA 1
+
 
 namespace Rosegarden
 {
 
 
-LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
+// Allocate enough for two instances of a mono to stereo plugin.  That
+// would have 2 ins and 4 outs.
+// See setIdealChannelCount().
+// ??? Is there a situation where we would need more than 4?
+static constexpr size_t maxBuffers = 4ul;
+
+LADSPAPluginInstance::LADSPAPluginInstance(
+        PluginFactory *factory,
         InstrumentId instrument,
         QString identifier,
         int position,
@@ -36,30 +45,38 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
         size_t blockSize,
         int idealChannelCount,
         const LADSPA_Descriptor* descriptor) :
-        RunnablePluginInstance(factory, identifier),
-        m_instrument(instrument),
-        m_position(position),
-        m_instanceCount(0),
-        m_descriptor(descriptor),
-        m_blockSize(blockSize),
-        m_sampleRate(sampleRate),
-        m_latencyPort(nullptr),
-        m_run(false),
-        m_bypassed(false)
+    RunnablePluginInstance(factory, identifier),
+    m_instrument(instrument),
+    m_position(position),
+    m_descriptor(descriptor),
+    m_blockSize(blockSize),
+    m_ownBuffers(true),
+    m_sampleRate(sampleRate)
 {
     init(idealChannelCount);
 
-    m_inputBuffers = new sample_t * [m_instanceCount * m_audioPortsIn.size()];
-    m_outputBuffers = new sample_t * [m_instanceCount * m_audioPortsOut.size()];
+    // We're only expecting 1 or 2.  If we actually see more, we'll need to
+    // allocate more buffers.  E.g. a compressor with a side-chain input.
+    // We probably don't handle those well anyway.  We don't have a way
+    // to patch the side-chain input someplace else.
+    if (m_audioPortsIn.size() > 2) {
+        RG_WARNING << "ctor: Encountered plugin with more than 2 inputs.  Ignoring inputs beyond 2.";
+        m_audioPortsIn.resize(2);
+    }
+    if (m_audioPortsOut.size() > 2) {
+        RG_WARNING << "ctor: Encountered plugin with more than 2 outputs.  Ignoring outputs beyond 2.";
+        m_audioPortsOut.resize(2);
+    }
 
-    for (size_t i = 0; i < m_instanceCount * m_audioPortsIn.size(); ++i) {
+    m_inputBuffers = new sample_t *[maxBuffers];
+    m_outputBuffers = new sample_t *[maxBuffers];
+
+    for (size_t i = 0; i < maxBuffers; ++i) {
         m_inputBuffers[i] = new sample_t[blockSize];
     }
-    for (size_t i = 0; i < m_instanceCount * m_audioPortsOut.size(); ++i) {
+    for (size_t i = 0; i < maxBuffers; ++i) {
         m_outputBuffers[i] = new sample_t[blockSize];
     }
-
-    m_ownBuffers = true;
 
     instantiate(sampleRate);
     if (isOK()) {
@@ -68,7 +85,8 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
     }
 }
 
-LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
+LADSPAPluginInstance::LADSPAPluginInstance(
+        PluginFactory *factory,
         InstrumentId instrument,
         QString identifier,
         int position,
@@ -77,19 +95,15 @@ LADSPAPluginInstance::LADSPAPluginInstance(PluginFactory *factory,
         sample_t **inputBuffers,
         sample_t **outputBuffers,
         const LADSPA_Descriptor* descriptor) :
-        RunnablePluginInstance(factory, identifier),
-        m_instrument(instrument),
-        m_position(position),
-        m_instanceCount(0),
-        m_descriptor(descriptor),
-        m_blockSize(blockSize),
-        m_inputBuffers(inputBuffers),
-        m_outputBuffers(outputBuffers),
-        m_ownBuffers(false),
-        m_sampleRate(sampleRate),
-        m_latencyPort(nullptr),
-        m_run(false),
-        m_bypassed(false)
+    RunnablePluginInstance(factory, identifier),
+    m_instrument(instrument),
+    m_position(position),
+    m_descriptor(descriptor),
+    m_blockSize(blockSize),
+    m_inputBuffers(inputBuffers),
+    m_outputBuffers(outputBuffers),
+    m_ownBuffers(false),
+    m_sampleRate(sampleRate)
 {
     init();
 
@@ -119,7 +133,7 @@ LADSPAPluginInstance::init(int idealChannelCount)
 #endif
 
                 m_audioPortsIn.push_back(i);
-            } else {
+            } else {  // output
 #ifdef DEBUG_LADSPA
                 RG_DEBUG << "LADSPAPluginInstance::init: port " << i << " is audio out";
 #endif
@@ -210,10 +224,10 @@ LADSPAPluginInstance::setIdealChannelCount(size_t channels)
         deactivate();
     }
 
-    //!!! don't we need to reallocate inputBuffers and outputBuffers?
-
     cleanup();
+
     m_instanceCount = channels;
+
     instantiate(m_sampleRate);
     if (isOK()) {
         connectPorts();
@@ -244,10 +258,10 @@ LADSPAPluginInstance::~LADSPAPluginInstance()
     m_controlPortsOut.clear();
 
     if (m_ownBuffers) {
-        for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+        for (size_t i = 0; i < maxBuffers; ++i) {
             delete[] m_inputBuffers[i];
         }
-        for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+        for (size_t i = 0; i < maxBuffers; ++i) {
             delete[] m_outputBuffers[i];
         }
 
@@ -302,25 +316,37 @@ LADSPAPluginInstance::connectPorts()
     if (!m_descriptor || !m_descriptor->connect_port)
         return ;
 
-    Q_ASSERT(sizeof(LADSPA_Data) == sizeof(float));
-    Q_ASSERT(sizeof(sample_t) == sizeof(float));
+    static_assert(sizeof(LADSPA_Data) == sizeof(float));
+    static_assert(sizeof(sample_t) == sizeof(float));
 
     size_t inbuf = 0, outbuf = 0;
 
+    // For each instance...
     for (std::vector<LADSPA_Handle>::iterator hi = m_instanceHandles.begin();
-            hi != m_instanceHandles.end(); ++hi) {
+         hi != m_instanceHandles.end();
+         ++hi) {
 
+        // For each audio in...
         for (size_t i = 0; i < m_audioPortsIn.size(); ++i) {
+            if (inbuf > maxBuffers - 1) {
+                RG_WARNING << "connectPorts(): Not enough in buffers." << m_instrument << m_position;
+                break;
+            }
             m_descriptor->connect_port(*hi,
                                        m_audioPortsIn[i],
-                                       (LADSPA_Data *)m_inputBuffers[inbuf]);
+                                       m_inputBuffers[inbuf]);
             ++inbuf;
         }
 
+        // For each audio out...
         for (size_t i = 0; i < m_audioPortsOut.size(); ++i) {
+            if (outbuf > maxBuffers - 1) {
+                RG_WARNING << "connectPorts(): Not enough out buffers." << m_instrument << m_position;
+                break;
+            }
             m_descriptor->connect_port(*hi,
                                        m_audioPortsOut[i],
-                                       (LADSPA_Data *)m_outputBuffers[outbuf]);
+                                       m_outputBuffers[outbuf]);
             ++outbuf;
         }
 

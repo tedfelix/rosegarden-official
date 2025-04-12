@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -288,13 +288,16 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
             QString iname(QObject::tr((*iit)->getName().c_str()));
             QString ipname((*iit)->getLocalizedPresentationName());
-            QString programName(QObject::tr((*iit)->getProgramName().c_str()));
+            QString programName(
+                QCoreApplication::translate("INSTRUMENT",
+                                            (*iit)->getProgramName().c_str()));
 
             QString text;
 
             if ((*iit)->getType() == Instrument::SoftSynth) {
 
-                iname.replace(QObject::tr("Synth plugin "), "");
+                iname.replace(QCoreApplication::translate("INSTRUMENT",
+                                                          "Synth plugin "), "");
                 programName = "";
 
                 AudioPluginInstance *plugin = (*iit)->getPlugin

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -29,7 +29,7 @@
 #include "Fader.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/application/RosegardenMainWindow.h"
-#include "gui/studio/AudioPluginOSCGUIManager.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "Rotary.h"
 #include "gui/general/IconLoader.h"
 #include "VUMeter.h"
@@ -237,7 +237,7 @@ AudioFaderBox::slotSetInstrument(Studio * /*studio*/,
     if (m_audioOutput)
         m_audioOutput->setInstrument(instrumentId);
     if (instrument)
-        setAudioChannels(instrument->getAudioChannels());
+        setAudioChannels(instrument->getNumAudioChannels());
     if (instrument) {
 
         RG_DEBUG << "AudioFaderBox::slotSetInstrument(" << instrument->getId() << ")";

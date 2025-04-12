@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2023 the Rosegarden development team.
+    Copyright 2023-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ namespace Rosegarden
 class PreferenceBool
 {
 public:
-    PreferenceBool(QString group, QString key, bool defaultValue) :
+    PreferenceBool(const QString& group, const QString& key, bool defaultValue) :
         m_group(group),
         m_key(key),
         m_defaultValue(defaultValue)

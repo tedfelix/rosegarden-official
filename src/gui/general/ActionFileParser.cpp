@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -482,9 +482,9 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
     // shortcuts get all from ActionData
     ActionData* adata = ActionData::getInstance();
     QString key = basefile + ":" + actionName;
-    std::set<QKeySequence> shortcutSet = adata->getShortcuts(key);
+    KeyList shortcuts = adata->getShortcuts(key);
     QList<QKeySequence> shortcutList;
-    foreach(auto ks, shortcutSet) {
+    foreach(auto ks, shortcuts) {
         shortcutList.append(ks);
     }
     RG_DEBUG << "setActionShortcut default shortcut for" << actionName <<

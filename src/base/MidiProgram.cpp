@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -42,7 +42,7 @@ MidiBank::operator==(const MidiBank &rhs) const
 }
 
 bool
-MidiBank::partialCompare(const MidiBank &rhs) const
+MidiBank::compareKey(const MidiBank &rhs) const
 {
     return (m_percussion == rhs.m_percussion  &&
             m_msb == rhs.m_msb  &&
@@ -95,7 +95,7 @@ MidiProgram::MidiProgram(const MidiBank &bank, MidiByte program, const std::stri
 bool
 MidiProgram::partialCompare(const MidiProgram &rhs) const
 {
-    return m_bank.partialCompare(rhs.m_bank)  &&  m_program == rhs.m_program;
+    return m_bank.compareKey(rhs.m_bank)  &&  m_program == rhs.m_program;
 }
 
 bool

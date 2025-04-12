@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,8 +19,8 @@
 #define RG_ACTIONFILECLIENT_H
 
 #include <QString>
+#include <QAction>
 
-class QAction;
 class QActionGroup;
 class QMenu;
 class QToolBar;
@@ -49,6 +49,9 @@ public:
      * DecoyAction will be returned.  Usage such as
      * findAction("action_name")->setChecked(true); is acceptable.
      *
+     * ??? This behavior is problematic if you want to find out whether an
+     *     action actually exists.  Probably need a bool hasAction().
+     *
      * ??? This function is public because it is used by:
      *     NotationTool::findActionInParentView()
      *     MatrixTool::findActionInParentView()
@@ -63,6 +66,30 @@ protected:
     QAction *createAction(QString actionName, QString connection);
     /// Create a child QAction, set its object name, and connect its triggered().
     QAction *createAction(QString actionName, QObject *target, QString connection);
+
+    // template with implementation
+    template<typename ReceiverType>
+    QAction* createAction(const QString& actionName,
+                          void (ReceiverType::*slot)())
+    {
+        QAction *action = makeAction(actionName);
+        if (!action) return nullptr;
+        QObject::connect(action, &QAction::triggered,
+                         (ReceiverType*)this, slot);
+        return action;
+    }
+
+    // template with implementation
+    template<typename ReceiverType>
+    QAction* createAction(const QString& actionName,
+                          ReceiverType* target,
+                          void (ReceiverType::*slot)())
+    {
+        QAction *action = makeAction(actionName);
+        if (!action) return nullptr;
+        QObject::connect(action, &QAction::triggered, target, slot);
+        return action;
+    }
 
     /// Read the .rc file and create the QMenu and QToolBar objects.
     /**
@@ -101,6 +128,8 @@ protected:
 private:
     // ActionCommandRegistry calls createAction().
     friend class ActionCommandRegistry;
+
+    QAction* makeAction(const QString& actionName);
 
     ActionFileParser *m_actionFileParser;
 };

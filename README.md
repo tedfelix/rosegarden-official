@@ -178,7 +178,7 @@ data/appdata.  It is named rosegarden.appdata-old.xml.
 Authors and Copyright
 =====================
 
-Rosegarden is Copyright 2000-2023 The Rosegarden Development Team
+Rosegarden is Copyright 2000-2024 The Rosegarden Development Team
 
 See http://rosegardenmusic.com/resources/authors/ for a complete list of
 developers past and present, and to learn something about the history of our

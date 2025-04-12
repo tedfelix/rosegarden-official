@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -91,6 +91,8 @@ public:
     int getCurrentStaffNumber() { return m_currentStaff; }
     NotationStaff *getCurrentStaff();
     void setCurrentStaff(NotationStaff *);
+    /// Set current staff to the staff nearest time t.
+    void setCurrentStaff(timeT t);
 
     NotationStaff *getStaffAbove(timeT t);
     NotationStaff *getStaffBelow(timeT t);
@@ -101,6 +103,9 @@ public:
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
+    // ??? The UI uses the term "Active" for this.  Evaluate each "current"
+    //     in here and see if it needs to be changed to "active" to match the
+    //     UI.  This one seems like it needs it.
     Segment *getCurrentSegment();
 
     bool segmentsContainNotes() const;
@@ -173,7 +178,7 @@ public:
     /// Remove any visible preview note
     void clearPreviewNote();
 
-    void playNote(Segment &segment, int pitch, int velocity = -1);
+    void playNote(const Segment &segment, int pitch, int velocity = -1);
 
     // unused bool constrainToSegmentArea(QPointF &scenePos);
 
@@ -195,8 +200,9 @@ public:
     bool isEventRedundant(Clef &clef, timeT time, Segment &seg) const;
     bool isEventRedundant(Key &key, timeT time, Segment &seg) const;
 
-    /// Return the segments about to be deleted if any
-    std::vector<Segment *> * getSegmentsDeleted() { return &m_segmentsDeleted; }
+    /// Return the segments about to be deleted if any.
+    const std::vector<Segment *> *getSegmentsDeleted()
+            { return &m_segmentsDeleted; }
 
     /// Return true if all segments in scene are about to be deleted
     /// (Editor needs to be closed)
@@ -219,9 +225,15 @@ public:
 
     void updatePageSize();
 
+    void setHighlightMode(const QString& highlightMode);
+
     /// YG: Only for debug
     void dumpVectors();
     void dumpBarDataMap();
+
+    // extra preview events
+    typedef std::map<const Event*, const Segment*> EventWithSegmentMap;
+    void setExtraPreviewEvents(const EventWithSegmentMap& events);
 
 signals:
     void sceneNeedsRebuilding();
@@ -374,10 +386,14 @@ private:
     bool m_editRepeated;   // Direct edition of repeated segments is allowed
     bool m_haveInittedCurrentStaff;
 
-    NotationStaff * m_previewNoteStaff;  // Remember where the preview note was
+    NotationStaff *m_previewNoteStaff;  // Remember where the preview note was
 
     // Remember current labels of tracks
     std::map<int, std::string> m_trackLabels;
+
+    QString m_highlightMode;
+
+    EventWithSegmentMap m_additionalPreviewEvents;
 };
 
 }

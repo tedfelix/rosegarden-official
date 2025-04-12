@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2020-2023 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2020-2024 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -82,8 +82,8 @@ void KorgNanoKontrol2::init()
         // Ask user if it is ok to reconfigure the device.
         QMessageBox::StandardButton reply = QMessageBox::warning(
                 0,
-                tr("Rosegarden"),
-                tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
+                QObject::tr("Rosegarden"),
+                QObject::tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::Yes);
 

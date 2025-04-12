@@ -28,6 +28,7 @@ UNTRANSLATED=0
 COMPLETION=0
 TOTAL=0
 OBSOLETE=0
+VANISHED=0
 
 function getValues() {
     # analyze the file's strings with grep and friends, since I can't find a
@@ -53,8 +54,11 @@ function getValues() {
     COMPLETION=$((($UNFINISHED*5)/$TOTAL))
     ((COMPLETION = 5 - COMPLETION - 1))
 
-    OBSOLETE=$(grep "<translation" $1 | grep obsolete | wc -l | cut -d \  -f 1)
+    # Today "vanished" seems to replace "obsolete", but they are still coexisting.
+    OBSOLETE=$(grep "<translation type=\"obsolete\">" $1 | wc -l | cut -d \  -f 1)
+    VANISHED=$(grep "<translation type=\"vanished\">" $1 | wc -l | cut -d \  -f 1)
 
+    ((OBSOLETE += VANISHED))
     ((TOTAL -= OBSOLETE))
 }
 
@@ -94,7 +98,8 @@ for P in *.ts; do
 	COUNT=$(($COUNT+1))
     done
     BAR="$BAR]$MSG"
-    printf "%-6s     %-5d     %-5d       %-5d          %-5d        %-5d     %-10s  \n" ${P/.ts/} $TOTAL $TRANSLATED $UNTRANSLATED $UNFINISHED $OBSOLETE $BAR
+    printf "%-6s     %-5d     %-5d       %-5d          %-5d        %-5d     %-10s  \n"\
+       ${P/.ts/}   $TOTAL   $TRANSLATED $UNTRANSLATED $UNFINISHED $OBSOLETE  $BAR
 done | sort -k 5,5n -k 1
 
 

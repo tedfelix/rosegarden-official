@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,10 +18,12 @@
 
 #include "UnusedAudioSelectionDialog.h"
 
+#include "misc/ConfigGroups.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QTableWidget>
+#include <QHeaderView>
 #include <QFileInfo>
 #include <QLabel>
 #include <QTableWidget>
@@ -30,6 +32,7 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QDateTime>
+#include <QSettings>
 #include <iostream>
 
 
@@ -58,6 +61,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     QStringList sl;
     sl << tr("File name") << tr("File size") << tr("Last modified date");
     m_listView->setHorizontalHeaderLabels(sl);
+    m_listView->horizontalHeader()->setStretchLastSection(true);
 
     QTableWidgetItem *item = nullptr;
     unsigned int i;
@@ -84,12 +88,28 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
 
     m_listView->setSelectionMode(QAbstractItemView::MultiSelection);
     m_listView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    m_listView->resizeColumnsToContents();
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     layout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    this->restoreGeometry
+        (settings.value("Unused_Audio_Selection_Geometry").toByteArray());
+    settings.endGroup();
+
 };
+
+UnusedAudioSelectionDialog::~UnusedAudioSelectionDialog()
+{
+    QSettings settings;
+    settings.beginGroup(WindowGeometryConfigGroup);
+    settings.setValue("Unused_Audio_Selection_Geometry", this->saveGeometry());
+    settings.endGroup();
+}
 
 std::vector<QString>
 UnusedAudioSelectionDialog::getSelectedAudioFileNames() const

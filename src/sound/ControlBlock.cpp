@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -99,7 +99,7 @@ ControlBlock::setDocument(RosegardenDocument *doc)
 
     Composition& comp = m_doc->getComposition();
 
-    for (Composition::trackiterator i = comp.getTracks().begin();
+    for (Composition::TrackMap::iterator i = comp.getTracks().begin();
 	 i != comp.getTracks().end(); ++i) {
         Track *track = i->second;
         if (!track) continue;
@@ -575,7 +575,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
     m_useFixedChannel = instrument->hasFixedChannel();
 
     if (m_useFixedChannel) {
-        m_thruChannel = instrument->getNaturalChannel();
+        m_thruChannel = instrument->getNaturalMidiChannel();
         m_hasThruChannel = true;
         m_isThruChannelReady = true;
         return;
@@ -596,7 +596,7 @@ TrackInfo::allocateThruChannel(Studio &studio)
     // natural channel is correct and requires no further setup.
     if (!allocator)
         {
-            m_thruChannel = instrument->getNaturalChannel();
+            m_thruChannel = instrument->getNaturalMidiChannel();
             m_isThruChannelReady = true;
             m_hasThruChannel = true;
             return;

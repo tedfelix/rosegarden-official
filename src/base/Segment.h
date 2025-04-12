@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -117,8 +117,8 @@ public:
     /**
      * Construct a Segment of a given type with a given formal starting time.
      */
-    Segment(SegmentType segmentType = Internal,
-            timeT startTime = 0);
+    explicit Segment(SegmentType segmentType = Internal,
+                     timeT startTime = 0);
 
     /**
      * Virtual copy constructor interface, in case this is actually a linked segment
@@ -657,11 +657,11 @@ public:
      * a notation editor)
      */
     void setVerse (int verse) { m_verse = verse; }
-    
+
     /**
      * Return how many syllables of lyrics the segment can carry.
      */
-    int lyricsPositionsCount();    
+    int lyricsPositionsCount();
 
 
 
@@ -987,8 +987,8 @@ private:
 
 private: // stuff to support SegmentObservers
 
-    typedef std::list<SegmentObserver *> ObserverSet;
-    ObserverSet m_observers;
+    typedef std::list<SegmentObserver *> ObserverList;
+    ObserverList m_observers;
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
@@ -1003,8 +1003,11 @@ private: // stuff to support SegmentObservers
     timeT *m_memoEndMarkerTime;
 
 signals:
+
     void contentsChanged(timeT start, timeT end);
- public:
+
+public:
+
     void signalChanged(timeT start, timeT end)
     { emit contentsChanged(start,end); }
 
@@ -1097,9 +1100,19 @@ public:
     virtual void transposeChanged(const Segment *, int /*transpose*/) { }
 
     /**
-     * Called from the segment dtor
+     * Called from the segment dtor.
      * All observers must implement this and call removeObserver() to
      * remove themselves as observers.
+     *
+     * ??? But this is a const pointer, so we cannot call removeObserver().
+     *     It's optional.  Most don't.  And you'll still get the extant
+     *     observers warning even if you do.
+     *
+     * ??? This doesn't appear to be used very much.  And it's a pure virtual
+     *     which is annoying.
+     *
+     * This seems very specialized and unreliable.  Consider using
+     * CompositionObserver::segmentRemoved() instead of this.
      */
     virtual void segmentDeleted(const Segment *) = 0;
 };
@@ -1110,8 +1123,6 @@ class ROSEGARDENPRIVATE_EXPORT SegmentHelper
 protected:
     explicit SegmentHelper(Segment &t) : m_segment(t) { }
     virtual ~SegmentHelper();
-
-    typedef Segment::iterator iterator;
 
     Segment &segment() { return m_segment; }
 

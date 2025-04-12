@@ -38,6 +38,8 @@
       <Action name="file_export_csound" text="Export &amp;Csound Score File..." />
       <Action name="file_export_mup" text="Export M&amp;up File..." />
       <Action name="file_export_musicxml" text="Export Music&amp;XML File..." />
+      <Separator/>
+      <Action name="file_export_wav" text="Export &amp;WAV File..." />
     </Menu>
     <Action name="file_open" text="&amp;Open..." icon="fileopen" shortcut="Ctrl+O" />
     <Action name="file_open_example" text="Open Examp&amp;le..." />
@@ -203,6 +205,7 @@
     <Action name="transpose" text="Transpose by &amp;Interval..." />
     <Action name="transpose_semitones" text="Transpos&amp;e by Semitones..." />
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
+    <Action name="interpret" text="Interpret..." />
   <Separator/>
     <Action name="rescale" text="Stretch &amp;or Squash..." />
     <Action name="create_anacrusis" text="Create &amp;Anacrusis..." />
@@ -270,8 +273,8 @@
       <Action name="play" text="&amp;Play" icon="transport-play" shortcut="Ctrl+Enter, Enter, Media Play, Ctrl+Return" shortcut-context="application" />
       <Action name="stop" text="&amp;Stop" icon="transport-stop" shortcut="Insert, Media Stop" shortcut-context="application" />
       <!-- JAS swapped rewind / ffwd to match matrix.rc -->
-      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" shortcut-context="application" />
-      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" shortcut-context="application" />
+      <Action name="rewind" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Media Previous" />
+      <Action name="fast_forward" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Media Next" />
       <Action name="record" text="&amp;Record" icon="transport-record" shortcut="Ctrl+Space, Media Record" shortcut-context="application" />
       <Action name="recordtoggle" text="P&amp;unch in Record" icon="transport-record" shortcut="Space" shortcut-context="application" />
       <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" shortcut="Ctrl+L" />
@@ -357,11 +360,11 @@
 
 <ToolBar name="Transport Toolbar">
   <text>Transport Toolbar</text>
-  <Action name="rewindtobeginning" text="Rewind to Beginning" icon="transport-rewind-end" shortcut="Home" shortcut-context="application" />
+  <Action name="rewindtobeginning" text="Rewind to Beginning" icon="transport-rewind-end" shortcut="Home" />
   <Action name="rewind" />
   <Action name="play" />
   <Action name="fast_forward" />
-  <Action name="fastforwardtoend" text="Fast Forward to End" icon="transport-ffwd-end" shortcut="End" shortcut-context="application" />
+  <Action name="fastforwardtoend" text="Fast Forward to End" icon="transport-ffwd-end" shortcut="End" />
   <Action name="stop" />
   <Action name="record" />
   <Action name="loop" />
@@ -428,6 +431,7 @@
     <Action name="repeat_quantize"/>
 <!--    <Action name="harmonize_selection"/> -->
     <Action name="switch_preset"/>
+    <Action name="interpret"/>
     <Action name="jog_left"/>
     <Action name="jog_right"/>
     <Action name="expand_figuration"/>
@@ -474,6 +478,7 @@
     <Action name="quantize_selection"/>
     <Action name="repeat_quantize"/>
     <Action name="switch_preset"/>
+    <Action name="interpret"/>
 <!--        <Action name="rescale"/> -->
     <Action name="split_by_pitch"/>
     <Action name="split_by_recording"/>
@@ -535,6 +540,7 @@
     <Action name="file_open_template" />
     <!-- ??? This doesn't work.  Would be nice. -->
     <menu name="file_open_recent" />
+    <Action name="file_export_wav" />
     <Action name="file_revert" />
     <Action name="file_close" />
     <Action name="file_quit" />

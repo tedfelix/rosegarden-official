@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -53,21 +53,42 @@ public:
 
     /// A full comparison of all fields.
     /**
-     * This probably isn't what you want.  See partialCompare().
+     * MIDIInstrumentParameterPanel::updateBankComboBox() uses this to
+     * detect changes that might require a repopulation of the bank combobox.
+     *
+     * See MidiBank::compareKey().
      */
     bool operator==(const MidiBank &rhs) const;
     bool operator!=(const MidiBank &rhs) const  { return !operator==(rhs); }
-    /// Compare all fields except name.
+    /// Compare Percussion:MSB:LSB.
     /**
      * Since MidiProgram stores a partial MidiBank object (without name),
      * a partial comparison such as this is frequently needed.
+     *
      */
-    bool partialCompare(const MidiBank &rhs) const;
+    bool compareKey(const MidiBank &rhs) const;
+
+    // Only compares percussion, msb, and lsb.
+    // Most useful for sorting and searching.
+    // This is specifically NOT operator<() because it does not compare
+    // all fields.
+    bool lessKey(const MidiBank &rhs) const
+    {
+        if (m_percussion == rhs.m_percussion) {
+            if (m_msb == rhs.m_msb)
+                return (m_lsb < rhs.m_lsb);
+            return (m_msb < rhs.m_msb);
+        }
+        return (m_percussion < rhs.m_percussion);
+    }
 
 private:
+    // Key fields.
     bool m_percussion;
     MidiByte m_msb;
     MidiByte m_lsb;
+
+    // Data fields.
     std::string m_name;
 };
 
@@ -96,13 +117,30 @@ public:
     // m_keyMapping.
     bool partialCompareWithName(const MidiProgram &rhs) const;
 
+    // This only compares bank and program.
+    // Most useful for sorting and searching.
+    // Currently this is only used by MidiProgramsEditor for sorting.
+    bool lessKey(const MidiProgram &rhs) const
+    {
+        if (m_bank.compareKey(rhs.m_bank))
+            return (m_program < rhs.m_program);
+        return m_bank.lessKey(rhs.m_bank);
+    }
+
 private:
+    // Key fields.
     MidiBank m_bank;
     MidiByte m_program;
+
+    // Data fields.
     std::string m_name;
     std::string m_keyMapping;
 };
 
+// ??? std::vector?  This means all throughout rg we have to do linear
+//     searches.  Wouldn't a std::set<> indexed by Percussion:MSB:LSB:PC
+//     make a *lot* more sense in the long run?  Should reduce CPU usage
+//     and complexity significantly.
 typedef std::vector<MidiProgram> ProgramList;
 
 inline bool
@@ -120,6 +158,10 @@ partialCompareWithName(const ProgramList &lhs, const ProgramList &rhs)
     return true;
 }
 
+/**
+ * ??? "Key Mapping" is all throughout the code and the UI.  "Key Map" would
+ *     be simpler.  It's a lot of work to change, though.
+ */
 class MidiKeyMapping
 {
 public:

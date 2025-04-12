@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -110,7 +110,9 @@ SegmentInsertCommand::execute()
 
                 // If possible, translate it
                 QString qname = QString::fromLocal8Bit(name.c_str());
-                QString translatedName = QObject::tr(qname.toLocal8Bit());
+                QString translatedName =
+                            QCoreApplication::translate("INSTRUMENT",
+                                                        qname.toLocal8Bit());
                 label = translatedName.toLocal8Bit().toStdString();
 
                 // If that failed, use the track name.

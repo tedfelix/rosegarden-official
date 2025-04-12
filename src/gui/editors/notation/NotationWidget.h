@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -148,7 +148,13 @@ public:
     void dispatchMouseDoubleClick(const NotationMouseEvent *);
     void dispatchWheelTurned(int, const NotationMouseEvent *);
 
-    //  Valid or inhibit scrolling to kept the cursor in the view
+    /// Temporarily disable/enable follow mode.
+    /**
+     * Used only by NotationSelector::slotMoveInsertionCursor() to turn off
+     * follow mode temporarily.
+     *
+     * See m_scrollToFollow.
+     */
     void setScroll(bool scroll) { m_noScroll = !scroll; }
 
 signals:
@@ -264,11 +270,12 @@ private slots:
 
 signals :
     void adjustNeeded(bool last);
-    void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void editElement(NotationStaff *, NotationElement *);
     void currentSegmentPrior();
     void currentSegmentNext();
 
 private:
+
     RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this
     Panner *m_hpanner; // I own this
@@ -276,6 +283,8 @@ private:
     int m_leftGutter;
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
+
+    /// Follow mode.
     bool m_scrollToFollow;
 
     double m_hZoomFactor;
@@ -355,7 +364,8 @@ private:
 
     bool m_updatesSuspended;
 
-    bool m_noScroll;    // If true, don't scroll to keep the cursor in the view
+    /// Used to temporarily disable follow mode.  See setScroll().
+    bool m_noScroll;
 
     void locatePanner(bool vertical);
 

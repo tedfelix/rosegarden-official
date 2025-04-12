@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -34,8 +34,8 @@ namespace Rosegarden
 {
 
 
-SoundDriver::SoundDriver(MappedStudio *studio, const QString &name) :
-        m_name(name),
+SoundDriver::SoundDriver(MappedStudio *studio, const QString &versionInfo) :
+        m_versionInfo(versionInfo),
         m_driverStatus(NO_DRIVER),
         m_playStartPosition(0, 0),
         m_playing(false),
@@ -71,15 +71,15 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
         // we could make this just get the gui to reload our files
         // when (or before) this fails.
         //
-        AudioFile *audioFile = getAudioFile(i->getAudioID());
+        AudioFile *audioFile = getAudioFile(i->getAudioFileID());
 
         if (audioFile) {
             MappedAudioFader *fader =
                 dynamic_cast<MappedAudioFader*>
-                (m_studio->getAudioFader(i->getInstrument()));
+                (m_studio->getAudioFader(i->getInstrumentId()));
 
             if (!fader) {
-                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument();
+                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrumentId();
                 continue;
             }
 
@@ -99,7 +99,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
             PlayableAudioFile *paf = nullptr;
 
             try {
-                paf = new PlayableAudioFile(i->getInstrument(),
+                paf = new PlayableAudioFile(i->getInstrumentId(),
                                             audioFile,
                                             i->getEventTime(),
                                             i->getAudioStartMarker(),
@@ -138,11 +138,18 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
             newQueue->addScheduled(paf);
         } else {
             RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
-            << "can't find audio file reference for id " << i->getAudioID();
+            << "can't find audio file reference for id " << i->getAudioFileID();
 
             RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
             << "try reloading the current Rosegarden file";
         }
+    }
+
+    // any plugin audio sources
+    std::vector<PlayableData*> pluginPlayable;
+    getPluginPlayableAudio(pluginPlayable);
+    for (PlayableData* pd : pluginPlayable) {
+        newQueue->addScheduled(pd);
     }
 
     RG_DEBUG << "SoundDriver::initialiseAudioQueue -- new queue has "

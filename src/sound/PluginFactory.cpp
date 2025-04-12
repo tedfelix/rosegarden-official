@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -19,9 +19,13 @@
 #include "PluginIdentifier.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include "LADSPAPluginFactory.h"
 #include "DSSIPluginFactory.h"
+#ifdef HAVE_LILV
+#include "LV2PluginFactory.h"
+#endif
 
 #include <locale.h>
 
@@ -32,6 +36,9 @@ int PluginFactory::m_sampleRate = 48000;
 
 static LADSPAPluginFactory *ladspaInstance = nullptr;
 static LADSPAPluginFactory *dssiInstance = nullptr;
+#ifdef HAVE_LILV
+static LV2PluginFactory *lv2Instance = nullptr;
+#endif
 
 PluginFactory *
 PluginFactory::instance(QString pluginType)
@@ -50,6 +57,15 @@ PluginFactory::instance(QString pluginType)
             dssiInstance->discoverPlugins();
         }
         return dssiInstance;
+#ifdef HAVE_LILV
+    } else if (pluginType == "lv2") {
+        if (!lv2Instance) {
+            //RG_DEBUG << "instance(" << pluginType << "): creating new LV2PluginFactory";
+            lv2Instance = new LV2PluginFactory();
+            lv2Instance->discoverPlugins();
+        }
+        return lv2Instance;
+#endif
     } else {
         return nullptr;
     }
@@ -58,13 +74,13 @@ PluginFactory::instance(QString pluginType)
 PluginFactory *
 PluginFactory::instanceFor(QString identifier)
 {
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
-    return instance(type);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
+    return instance(arch);
 }
 
 void
-PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
+PluginFactory::enumerateAllPlugins(std::vector<QString> &list)
 {
     RG_INFO << "enumerateAllPlugins() begin...  Enumerating and loading all plugins...";
 
@@ -88,6 +104,15 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
     if (factory)
         factory->enumeratePlugins(list);
 
+#ifdef HAVE_LILV
+    if (Preferences::getLV2())
+    {
+        factory = instance("lv2");
+        if (factory)
+            factory->enumeratePlugins(list);
+    }
+#endif
+
     setlocale(LC_ALL, loc.c_str());
 
     RG_INFO << "enumerateAllPlugins() end.";
@@ -96,6 +121,5 @@ PluginFactory::enumerateAllPlugins(MappedObjectPropertyList &list)
 PluginFactory::~PluginFactory()
 {
 }
-
 
 }

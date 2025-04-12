@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,6 +30,7 @@
 #include <QDialog>
 #include <QObject>
 
+#include <set>
 
 namespace Rosegarden
 {
@@ -38,13 +39,12 @@ namespace Rosegarden
 typedef std::vector<MidiDevice *> MidiDeviceList;
 
 class RosegardenDocument;
-class Studio;
 
 /// The Manage MIDI Devices dialog
 /**
  * \author Emanuel Rumpf
  */
-class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi
+class DeviceManagerDialog : public QMainWindow, public Ui::DeviceManagerDialogUi, public StudioObserver, public DeviceObserver
 {
     Q_OBJECT
 
@@ -150,8 +150,24 @@ protected:
 
     QString m_noPortName;
 
-private slots:
+ public slots:
     void slotCloseButtonPress();
+
+ private:
+    // studio observer interface
+    virtual void deviceAdded(Device* device) override;
+    virtual void deviceRemoved(Device* device) override;
+
+    // device observer interface
+    virtual void deviceModified(Device* device) override;
+
+    void observeDevice(Device* device);
+    void unobserveAllDevices();
+
+    std::set<Device *> m_observedDevices;
+    bool m_observingStudio;
+    bool m_isClosing;
+
 };
 
 

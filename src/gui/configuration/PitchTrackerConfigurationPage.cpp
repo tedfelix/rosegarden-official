@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -218,7 +218,8 @@ PitchTrackerConfigurationPage::slotPopulateTuningCombo(bool rescan)
 {
     // Read the tunings file to determine those available, and populate the
     // combo box.
-    if (rescan || !m_tunings) m_tunings = Accidentals::Tuning::getTunings();
+    if (rescan || !m_tunings)
+        m_tunings = Accidentals::Tuning::getTunings();
 
     if (m_tunings) {
         // Empty the tuning mode combo box and repopulate.
@@ -226,7 +227,7 @@ PitchTrackerConfigurationPage::slotPopulateTuningCombo(bool rescan)
             m_tuningMode->removeItem(0);
         }
 
-        std::vector<Accidentals::Tuning *>::iterator t;
+        std::vector<std::shared_ptr<Accidentals::Tuning>>::iterator t;
         for (t = m_tunings->begin(); t != m_tunings->end(); ++t) {
             m_tuningMode->addItem(QString((*t)->getName().c_str()));
         }

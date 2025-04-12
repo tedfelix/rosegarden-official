@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A MIDI and audio sequencer and musical notation editor.
-  Copyright 2000-2023 the Rosegarden development team.
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2024 the Rosegarden development team.
 
   This file is Copyright 2002
   Hans Kieserman      <hkieserman@mail.com>
@@ -1279,9 +1279,9 @@ LilyPondExporter::write()
         timeT prevMarkerTime = 0;
 
         // Need the markers sorted by time
-        Composition::markercontainer markers(m_composition->getMarkers()); // copy
+        Composition::MarkerVector markers(m_composition->getMarkers()); // copy
         std::sort(markers.begin(), markers.end(), MarkerComp());
-        Composition::markerconstiterator i_marker = markers.begin();
+        Composition::MarkerVector::const_iterator i_marker = markers.begin();
 
         while  (i_marker != markers.end()) {
             // Allow some oportunities for user to cancel

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -22,11 +22,13 @@
 
 #include <QSettings>
 
+
 namespace Rosegarden
 {
 
 
-PreferenceInt theme(GeneralOptionsConfigGroup, "theme", Preferences::DarkTheme);
+static PreferenceInt theme(
+        GeneralOptionsConfigGroup, "theme", Preferences::DarkTheme);
 
 void Preferences::setTheme(int value)
 {
@@ -43,7 +45,7 @@ bool Preferences::getThorn()
     return (theme.get() != Preferences::NativeTheme);
 }
 
-PreferenceBool sendProgramChangesWhenLooping(
+static PreferenceBool sendProgramChangesWhenLooping(
         GeneralOptionsConfigGroup, "sendProgramChangesWhenLooping", true);
 
 void Preferences::setSendProgramChangesWhenLooping(bool value)
@@ -56,7 +58,7 @@ bool Preferences::getSendProgramChangesWhenLooping()
     return sendProgramChangesWhenLooping.get();
 }
 
-PreferenceBool sendControlChangesWhenLooping(
+static PreferenceBool sendControlChangesWhenLooping(
         GeneralOptionsConfigGroup, "sendControlChangesWhenLooping", true);
 
 void Preferences::setSendControlChangesWhenLooping(bool value)
@@ -69,7 +71,8 @@ bool Preferences::getSendControlChangesWhenLooping()
     return sendControlChangesWhenLooping.get();
 }
 
-PreferenceBool useNativeFileDialogs("FileDialog", "useNativeFileDialogs", true);
+static PreferenceBool useNativeFileDialogs(
+        "FileDialog", "useNativeFileDialogs", true);
 
 void Preferences::setUseNativeFileDialogs(bool value)
 {
@@ -81,7 +84,7 @@ bool Preferences::getUseNativeFileDialogs()
     return useNativeFileDialogs.get();
 }
 
-PreferenceBool stopAtSegmentEnd(
+static PreferenceBool stopAtSegmentEnd(
         SequencerOptionsConfigGroup, "stopatend", false);
 
 void Preferences::setStopAtSegmentEnd(bool value)
@@ -94,7 +97,8 @@ bool Preferences::getStopAtSegmentEnd()
     return stopAtSegmentEnd.get();
 }
 
-PreferenceBool jumpToLoop(SequencerOptionsConfigGroup, "jumpToLoop", true);
+static PreferenceBool jumpToLoop(
+        SequencerOptionsConfigGroup, "jumpToLoop", true);
 
 void Preferences::setJumpToLoop(bool value)
 {
@@ -106,7 +110,7 @@ bool Preferences::getJumpToLoop()
     return jumpToLoop.get();
 }
 
-PreferenceBool advancedLooping(
+static PreferenceBool advancedLooping(
         SequencerOptionsConfigGroup, "advancedLooping", false);
 
 void Preferences::setAdvancedLooping(bool value)
@@ -119,12 +123,25 @@ bool Preferences::getAdvancedLooping()
     return advancedLooping.get();
 }
 
+static PreferenceBool jackStopAtAutoStop(
+        SequencerOptionsConfigGroup, "jackStopAtAutoStop", true);
+
+void Preferences::setJACKStopAtAutoStop(bool value)
+{
+    jackStopAtAutoStop.set(value);
+}
+
+bool Preferences::getJACKStopAtAutoStop()
+{
+    return jackStopAtAutoStop.get();
+}
+
 namespace
 {
     const char *AudioFileLocationDialogGroup = "AudioFileLocationDialog";
+    PreferenceBool afldDontShow(
+            AudioFileLocationDialogGroup, "dontShow", false);
 }
-
-PreferenceBool afldDontShow(AudioFileLocationDialogGroup, "dontShow", false);
 
 void Preferences::setAudioFileLocationDlgDontShow(bool value)
 {
@@ -136,7 +153,7 @@ bool Preferences::getAudioFileLocationDlgDontShow()
     return afldDontShow.get();
 }
 
-PreferenceInt afldLocation(AudioFileLocationDialogGroup, "location", 0);
+static PreferenceInt afldLocation(AudioFileLocationDialogGroup, "location", 0);
 
 void Preferences::setDefaultAudioLocation(int location)
 {
@@ -148,7 +165,7 @@ int Preferences::getDefaultAudioLocation()
     return afldLocation.get();
 }
 
-PreferenceString afldCustomLocation(
+static PreferenceString afldCustomLocation(
         AudioFileLocationDialogGroup, "customLocation", "./sounds");
 
 void Preferences::setCustomAudioLocation(const QString &location)
@@ -161,7 +178,7 @@ QString Preferences::getCustomAudioLocation()
     return afldCustomLocation.get();
 }
 
-PreferenceBool jackLoadCheck(
+static PreferenceBool jackLoadCheck(
         SequencerOptionsConfigGroup, "jackLoadCheck", true);
 
 void Preferences::setJACKLoadCheck(bool value)
@@ -174,14 +191,41 @@ bool Preferences::getJACKLoadCheck()
     return jackLoadCheck.get();
 }
 
-PreferenceBool bug1623(ExperimentalConfigGroup, "bug1623", false);
+static PreferenceBool bug1623(ExperimentalConfigGroup, "bug1623", false);
 
 bool Preferences::getBug1623()
 {
     return bug1623.get();
 }
 
-PreferenceBool autoChannels(ExperimentalConfigGroup, "autoChannels", false);
+static PreferenceBool lv2(ExperimentalConfigGroup, "lv2", false);
+
+void Preferences::setLV2(bool value)
+{
+    lv2.set(value);
+}
+
+bool Preferences::getLV2()
+{
+    return lv2.get();
+}
+
+// NOTE: "dynamicDrag" is deprecated in the .conf as it had the wrong default.
+static PreferenceBool dynamicDrag(
+        GeneralOptionsConfigGroup, "dynamicDrag2", true);
+
+void Preferences::setDynamicDrag(bool value)
+{
+    dynamicDrag.set(value);
+}
+
+bool Preferences::getDynamicDrag()
+{
+    return dynamicDrag.get();
+}
+
+static PreferenceBool autoChannels(
+        ExperimentalConfigGroup, "autoChannels", false);
 
 void Preferences::setAutoChannels(bool value)
 {
@@ -193,17 +237,57 @@ bool Preferences::getAutoChannels()
     return autoChannels.get();
 }
 
-PreferenceBool includeAlsaPortNumbersWhenMatching(
-        GeneralOptionsConfigGroup, "includeAlsaPortNumbersWhenMatching", false );
+static PreferenceBool includeAlsaPortNumbersWhenMatching(
+        GeneralOptionsConfigGroup, "includeAlsaPortNumbersWhenMatching", false);
 
-void Preferences::setIncludeAlsaPortNumbersWhenMatching( bool value )
+void Preferences::setIncludeAlsaPortNumbersWhenMatching(bool value)
 {
-    includeAlsaPortNumbersWhenMatching.set( value );
+    includeAlsaPortNumbersWhenMatching.set(value);
 }
 
 bool Preferences::getIncludeAlsaPortNumbersWhenMatching()
 {
     return includeAlsaPortNumbersWhenMatching.get();
 }
+
+static PreferenceBool showNoteNames(
+        MatrixViewConfigGroup, "show_note_names", false);
+
+void Preferences::setShowNoteNames(bool value)
+{
+    showNoteNames.set(value);
+}
+
+bool Preferences::getShowNoteNames()
+{
+    return showNoteNames.get();
+}
+
+static PreferenceInt smfExportPPQN(
+        GeneralOptionsConfigGroup, "smfExportPPQN", 480);
+
+void Preferences::setSMFExportPPQN(int value)
+{
+    smfExportPPQN.set(value);
+}
+
+int Preferences::getSMFExportPPQN()
+{
+    return smfExportPPQN.get();
+}
+
+static PreferenceBool matrixConstrainNotes(
+        MatrixViewConfigGroup, "constrainNotes", false);
+
+void Preferences::setMatrixConstrainNotes(bool value)
+{
+    matrixConstrainNotes.set(value);
+}
+
+bool Preferences::getMatrixConstrainNotes()
+{
+    return matrixConstrainNotes.get();
+}
+
 
 }

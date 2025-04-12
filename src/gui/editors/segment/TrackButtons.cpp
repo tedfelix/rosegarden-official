@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -366,7 +366,8 @@ TrackButtons::initInstrumentNames(Instrument *ins, TrackLabel *label)
 
         if (ins->sendsProgramChange()) {
             label->setProgramChangeName(
-                    QObject::tr(ins->getProgramName().c_str()));
+                    QCoreApplication::translate("INSTRUMENT",
+                                                ins->getProgramName().c_str()));
         } else {
             label->setProgramChangeName("");
         }
@@ -813,13 +814,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList list = studio.getPresentationInstruments();
 
     // For each instrument
-    for (InstrumentList::iterator it = list.begin(); it != list.end(); ++it) {
+    for (InstrumentList::iterator instrumentIter = list.begin();
+         instrumentIter != list.end();
+         ++instrumentIter) {
 
-        if (!(*it)) continue; // sanity check
+        if (!(*instrumentIter)) continue; // sanity check
 
         // get the Localized instrument name, with the string hackery performed
         // in Instrument
-        QString iname((*it)->getLocalizedPresentationName());
+        QString iname((*instrumentIter)->getLocalizedPresentationName());
 
         // translate the program name
         //
@@ -829,25 +832,27 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         // to coax tr() into behaving nicely.  I decided to change it as little
         // as possible to get it to compile, and not refactor this down to the
         // simplest way to call tr() on a C string.
-        QString programName(strtoqstr((*it)->getProgramName()));
-        programName = QObject::tr(programName.toStdString().c_str());
+        QString programName(strtoqstr((*instrumentIter)->getProgramName()));
+        programName = QCoreApplication::translate(
+                                            "INSTRUMENT",
+                                            programName.toStdString().c_str());
 
-        Device *device = (*it)->getDevice();
+        Device *device = (*instrumentIter)->getDevice();
         DeviceId devId = device->getId();
         bool connectedIcon = false;
 
         // Determine the proper program name and whether it is connected
 
-        if ((*it)->getType() == Instrument::SoftSynth) {
+        if ((*instrumentIter)->getType() == Instrument::SoftSynth) {
             programName = "";
             AudioPluginInstance *plugin =
-                    (*it)->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+                    (*instrumentIter)->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
                 // we don't translate any plugin program names or other texts
                 programName = strtoqstr(plugin->getDisplayName());
                 connectedIcon = (plugin->getIdentifier() != "");
             }
-        } else if ((*it)->getType() == Instrument::Audio) {
+        } else if ((*instrumentIter)->getType() == Instrument::Audio) {
             connectedIcon = true;
         } else {
             QString conn = RosegardenSequencer::getInstance()->
@@ -859,7 +864,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         bool instrUsedByMe = false;
         bool instrUsedByAnyone = false;
 
-        if (thisTrackInstr && thisTrackInstr->getId() == (*it)->getId()) {
+        if (thisTrackInstr && thisTrackInstr->getId() == (*instrumentIter)->getId()) {
             instrUsedByMe = true;
             instrUsedByAnyone = true;
         }
@@ -875,18 +880,20 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             if (instrUsedByMe)
                 deviceUsedByAnyone = true;
             else {
-                for (Composition::trackcontainer::iterator tit =
+                // For each Track...
+                for (Composition::TrackMap::iterator trackIter =
                          comp.getTracks().begin();
-                     tit != comp.getTracks().end(); ++tit) {
+                     trackIter != comp.getTracks().end();
+                     ++trackIter) {
 
-                    if (tit->second->getInstrument() == (*it)->getId()) {
+                    if (trackIter->second->getInstrument() == (*instrumentIter)->getId()) {
                         instrUsedByAnyone = true;
                         deviceUsedByAnyone = true;
                         break;
                     }
 
                     Instrument *instr =
-                        studio.getInstrumentById(tit->second->getInstrument());
+                        studio.getInstrumentById(trackIter->second->getInstrument());
                     if (instr && (instr->getDevice()->getId() == devId)) {
                         deviceUsedByAnyone = true;
                     }
@@ -908,7 +915,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             //subMenu->menuAction()->setIconVisibleInMenu(true);
 
             // Menu title
-            QString deviceName = QObject::tr(device->getName().c_str());
+            QString deviceName = QCoreApplication::translate(
+                                                    "INSTRUMENT",
+                                                    device->getName().c_str());
             subMenu->setTitle(deviceName);
 
             // QObject name
@@ -926,12 +935,12 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         } else if (!instrUsedByMe) {
 
             // Search the tracks to see if anyone else is using this
-            // instrument
-            for (Composition::trackcontainer::iterator tit =
+            // instrument.
+            for (Composition::TrackMap::const_iterator trackIter =
                      comp.getTracks().begin();
-                 tit != comp.getTracks().end(); ++tit) {
-
-                if (tit->second->getInstrument() == (*it)->getId()) {
+                 trackIter != comp.getTracks().end();
+                 ++trackIter) {
+                if (trackIter->second->getInstrument() == (*instrumentIter)->getId()) {
                     instrUsedByAnyone = true;
                     break;
                 }
@@ -1304,6 +1313,10 @@ TrackButtons::makeButton(Track *track)
             m_instListSigMapper, SLOT(map()));
     connect(trackLabel, SIGNAL(clicked()),
             m_clickedSigMapper, SLOT(map()));
+
+
+    // Squash it down to its smallest width.
+    trackHBox->setFixedWidth(hblayout->minimumSize().width());
 
 
     return trackHBox;

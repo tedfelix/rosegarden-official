@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -180,7 +180,6 @@ SegmentLinker::slotUpdateLinkedSegments(Command *command)
                 linkedSegmentsUpdated = true;
             }
         } else {
-            // cppcheck-suppress ConfigurationNotChecked
             RG_WARNING << "oops, trying to update linked segment set twice!";
         }
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationElement]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include <QGraphicsItem>
 #include "NotationElement.h"
@@ -33,14 +34,16 @@ namespace Rosegarden
 
 static const int NotationElementData = 1;
 
-NotationElement::NotationElement(Event *event) :
+NotationElement::NotationElement(Event *event, Segment *segment) :
     ViewElement(event),
     m_airX(0),
     m_airWidth(0),
     m_recentlyRegenerated(false),
     m_isColliding(false),
     m_item(nullptr),
-    m_extraItems(nullptr)
+    m_extraItems(nullptr),
+    m_highlight(true),
+    m_segment(segment)
 {
     //RG_DEBUG << "ctor: " << this << " wrapping " << event;
 }
@@ -126,6 +129,11 @@ NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setPos(sceneX, sceneY);
     m_recentlyRegenerated = true;
     m_item = e;
+    if (m_highlight) {
+        m_item->setOpacity(1.0);
+    } else {
+        m_item->setOpacity(NONHIGHLIGHTOPACITY);
+    }
 }
 
 void
@@ -146,6 +154,7 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
     e->setPos(sceneX, sceneY);
     m_extraItems->push_back(e);
+    setHighlight(m_highlight);
 }
 
 void
@@ -212,6 +221,30 @@ NotationElement::getNotationElement(QGraphicsItem *item)
     QVariant v = item->data(NotationElementData);
     if (v.isNull()) return nullptr;
     return static_cast<NotationElement *>(v.value<void *>());
+}
+
+void NotationElement::setHighlight(bool highlight)
+{
+    //RG_DEBUG << "setHighlight" << highlight << m_highlight << m_item;
+    if (highlight == m_highlight) return;
+    m_highlight = highlight;
+    if (! m_item) return;
+    //RG_DEBUG << "set item opacity" << highlight << *event();
+    if (highlight) {
+        m_item->setOpacity(1.0);
+    } else {
+        m_item->setOpacity(NONHIGHLIGHTOPACITY);
+    }
+    if (m_extraItems) {
+        for (ItemList::iterator i = m_extraItems->begin();
+             i != m_extraItems->end(); ++i) {
+            if (highlight) {
+                (*i)->setOpacity(1.0);
+            } else {
+                (*i)->setOpacity(NONHIGHLIGHTOPACITY);
+            }
+        }
+    }
 }
 
 }

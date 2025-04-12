@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -32,10 +32,12 @@ namespace Rosegarden
 {
 
 
+class Composition;
 class RecordIn;
 class MidiDevice;
 class Segment;
 class Track;
+class StudioObserver;
 
 typedef std::vector<Instrument *> InstrumentList;
 typedef std::vector<Device*> DeviceList;
@@ -119,7 +121,7 @@ public:
     }
 
     // Same again, but with bank select
-    // 
+    //
     Instrument* assignMidiProgramToInstrument(MidiByte program,
                                               int msb, int lsb,
                                               bool percussion);
@@ -142,7 +144,7 @@ public:
 
     void clearBusses();
     void clearRecordIns();
-    
+
     // Get a MIDI metronome from a given device
     //
     const MidiMetronome* getMetronomeFromDevice(DeviceId id);
@@ -151,6 +153,21 @@ public:
     //
     DeviceList *getDevices()  { return &m_devices; }
     const DeviceList *getDevices() const  { return &m_devices; }
+
+    /// Get an available Instrument on the first MIDI Device.
+    /**
+     * If none are available, go with the first MIDI Instrument on the first
+     * Device.  If there are no MIDI Devices, go with the first SoftSynth
+     * Instrument.
+     *
+     * composition can be specified when working with a new Composition
+     * that isn't "current" yet (e.g. during import).  Specify nullptr to
+     * use the current Composition.
+     */
+    InstrumentId getAvailableMIDIInstrument(
+            const Composition *composition = nullptr) const;
+    InstrumentId getFirstMIDIInstrument() const;
+
 
     // Const iterators
     //
@@ -201,9 +218,15 @@ public:
     DeviceId getMetronomeDevice() const { return m_metronomeDevice; }
     void setMetronomeDevice(DeviceId device) { m_metronomeDevice = device; }
 
+    // observer management
+    void addObserver(StudioObserver *obs);
+    void removeObserver(StudioObserver *obs);
+
 private:
 
     DeviceList        m_devices;
+    /// Returns nullptr if there are no MIDI out devices.
+    Device *getFirstMIDIOutDevice() const;
 
     BussList          m_busses;
     RecordInList      m_recordIns;
@@ -214,6 +237,20 @@ private:
     MidiFilter        m_midiRecordFilter;
 
     DeviceId          m_metronomeDevice;
+    typedef std::list<StudioObserver *> ObserverList;
+    ObserverList m_observers;
+
+};
+
+class StudioObserver
+{
+ public:
+    virtual ~StudioObserver() {}
+
+    // called after device has been created
+    virtual void deviceAdded(Device*) {}
+    // called after device has been removed but before it is deleted
+    virtual void deviceRemoved(Device*) {}
 };
 
 }

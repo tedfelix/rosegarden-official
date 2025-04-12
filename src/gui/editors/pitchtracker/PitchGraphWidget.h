@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,6 +21,8 @@
 #include "PitchHistory.h"
 
 #include "base/Event.h"
+
+#include <memory>
 
 #include <QWidget>
 #include <QList>
@@ -51,7 +53,7 @@ public:
     PitchGraphWidget(PitchHistory &history, QWidget *parent = nullptr);
     ~PitchGraphWidget() override;
 
-    void setTuning(Accidentals::Tuning* tuning);
+    void setTuning(const std::shared_ptr<Accidentals::Tuning>& tuning);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -59,8 +61,8 @@ protected:
     unsigned int    m_graphHeight;  // Height of graph (in cents)
     unsigned int    m_graphWidth;   // Width of graph (in milliseconds)
     bool            m_ignoreOctave; // Whether to ignore octave errors
-    
-    Accidentals::Tuning* m_tuning;  // Tuning in use in this widget
+
+    std::shared_ptr<Accidentals::Tuning> m_tuning;  // Tuning in use in this widget
     PitchHistory&   m_history;      // structure of data to plot
 };
 
@@ -69,4 +71,3 @@ protected:
 /**\@}*/
 
 #endif
-

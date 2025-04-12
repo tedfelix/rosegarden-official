@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -103,14 +103,29 @@ public:
     // *** Constructors
 
     Event(const std::string &type,
-          timeT absoluteTime, timeT duration = 0, short subOrdering = 0) :
+          timeT absoluteTime,
+          timeT duration = 0) :
+        m_data(new EventData(type,
+                             absoluteTime,
+                             duration,
+                             getSubOrdering(type))),
+        m_nonPersistentProperties(nullptr)
+    { }
+
+    Event(const std::string &type,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
         m_nonPersistentProperties(nullptr)
     { }
 
     Event(const std::string &type,
-          timeT absoluteTime, timeT duration, short subOrdering,
-          timeT notationAbsoluteTime, timeT notationDuration) :
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering,
+          timeT notationAbsoluteTime,
+          timeT notationDuration) :
         m_data(new EventData(type, absoluteTime, duration, subOrdering)),
         m_nonPersistentProperties(nullptr)
     {
@@ -120,7 +135,8 @@ public:
 
     // these ctors can't use default args: default has to be obtained from e
 
-    Event(const Event &e, timeT absoluteTime) :
+    Event(const Event &e,
+          timeT absoluteTime) :
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -130,7 +146,9 @@ public:
         setNotationDuration(m_data->m_duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration) :
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration) :
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -141,8 +159,10 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime,
-          timeT duration, short subOrdering):
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering):
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -154,7 +174,10 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering,
           timeT notationAbsoluteTime) :
         m_nonPersistentProperties(nullptr)
     {
@@ -167,8 +190,12 @@ public:
         setNotationDuration(duration);
     }
 
-    Event(const Event &e, timeT absoluteTime, timeT duration, short subOrdering,
-          timeT notationAbsoluteTime, timeT notationDuration) :
+    Event(const Event &e,
+          timeT absoluteTime,
+          timeT duration,
+          short subOrdering,
+          timeT notationAbsoluteTime,
+          timeT notationDuration) :
         m_nonPersistentProperties(nullptr)
     {
         share(e);
@@ -212,6 +239,15 @@ public:
     // check if the events are copies
     bool isCopyOf(const Event &e) const;
 
+    bool operator==(const Event &e) const
+    {
+        if (isCopyOf(e))
+            return true;
+
+        // Compare the objects.
+        return *m_data == *e.m_data;
+    }
+
     friend bool operator<(const Event&, const Event&);
 
     /// Type of the Event (E.g. Note, Accidental, Key, etc...)
@@ -231,14 +267,35 @@ public:
     bool isa(const std::string &type) const  { return (m_data->m_type == type); }
 
     timeT getAbsoluteTime() const  { return m_data->m_absoluteTime; }
+
     timeT getNotationAbsoluteTime() const  { return m_data->getNotationTime(); }
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setNotationAbsoluteTime(timeT t)
+            { unshare(); m_data->setNotationTime(t); }
+
     /// Move Event in time without any ancillary coordination.
     /**
      * UNSAFE.  Don't call this unless you know exactly what you're doing.
      */
     void unsafeChangeTime(timeT offset);
 
+    /// Duration
     timeT getDuration() const  { return m_data->m_duration; }
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setDuration(timeT d)  { unshare(); m_data->m_duration = d; }
+
     timeT getNotationDuration() const  { return m_data->getNotationDuration(); }
     /**
      * Returns the greater of getDuration() or getNotationDuration() for Note
@@ -247,8 +304,26 @@ public:
      * \author Tito Latini
      */
     timeT getGreaterDuration() const;
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setNotationDuration(timeT d)
+            { unshare(); m_data->setNotationDuration(d); }
 
+    // Sub-Ordering
     short getSubOrdering() const  { return m_data->m_subOrdering; }
+    /// UNSAFE
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setSubOrdering(short o)  { unshare(); m_data->m_subOrdering = o; }
 
     /**
      * Return whether this Event's section of a triggered ornament
@@ -291,7 +366,6 @@ public:
      * when duplicating the Event) or not
      * \throws NoData
      */
-    template <PropertyType P>
     bool isPersistent(const PropertyName &name) const;
 
     /**
@@ -371,6 +445,9 @@ public:
      */
     std::string toXmlString(timeT expectedTime) const;
 
+    static const PropertyName NotationTime;
+    static const PropertyName NotationDuration;
+
     // *** DEBUG
 
     /// Approximate.  For debugging and inspection purposes.
@@ -388,14 +465,24 @@ protected:
         m_nonPersistentProperties(nullptr)
     { }
 
-    void setType(const std::string &t) { unshare(); m_data->m_type = t; }
-    void setAbsoluteTime(timeT t)      { unshare(); m_data->m_absoluteTime = t; }
-    void setDuration(timeT d)          { unshare(); m_data->m_duration = d; }
-    void setSubOrdering(short o)       { unshare(); m_data->m_subOrdering = o; }
-    void setNotationAbsoluteTime(timeT t) { unshare(); m_data->setNotationTime(t); }
-    void setNotationDuration(timeT d) { unshare(); m_data->setNotationDuration(d); }
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setType(const std::string &t)  { unshare(); m_data->m_type = t; }
+
+    /**
+     * This field is immutable when the Event is in a Segment.  Changing it
+     * will cause serious problems.  DO NOT call this on an Event that is in a
+     * Segment.  Use this only to modify an Event before it is added to a
+     * Segment.
+     */
+    void setAbsoluteTime(timeT t)  { unshare(); m_data->m_absoluteTime = t; }
 
 private:
+
     friend QDebug operator<<(QDebug dbg, const Event &event);
 
     /// Data that are shared between shallow-copied instances
@@ -428,12 +515,24 @@ private:
             { setTime(NotationDuration, d, m_duration); }
         timeT getNotationDuration() const;
 
+        bool operator==(const EventData &rhs) const
+        {
+            if (m_type != rhs.m_type)
+                return false;
+            if (m_absoluteTime != rhs.m_absoluteTime)
+                return false;
+            if (m_duration != rhs.m_duration)
+                return false;
+            if (m_subOrdering != rhs.m_subOrdering)
+                return false;
+            if (*m_properties != *rhs.m_properties)
+                return false;
+            return true;
+        }
+
     private:
         EventData(const EventData &);
         EventData &operator=(const EventData &);
-
-        static PropertyName NotationTime;
-        static PropertyName NotationDuration;
 
         /// Add the time property unless (t == deft).
         void setTime(const PropertyName &name, timeT t, timeT deft);
@@ -442,8 +541,8 @@ private:
     // ??? This is a reference counted smart pointer supporting Copy
     //     On Write.  We probably can't replace it with a QSharedPointer.
     //     It would be more interesting to make Copy On Write disable-able
-    //     and see if it makes any sort of performance or memory difference.
-    //     Might also be a good idea to see if C++11 move semantics would help.
+    //     and see if it makes a noticeable performance or memory difference.
+    //     Especially with undo/redo.
     EventData *m_data;
     // ??? This doesn't seem to participate in Copy On Write, so a
     //     QSharedPointer should simplify managing this.
@@ -519,6 +618,8 @@ private:
 
         return (*map)->insert(pair).first;
     }
+
+    int getSubOrdering(std::string eventType);
 
 #ifndef NDEBUG
     static int m_getCount;
@@ -597,8 +698,7 @@ Event::get(const PropertyName &name) const
 }
 
 
-template <PropertyType P>
-bool
+inline bool
 Event::isPersistent(const PropertyName &name) const
     // throw (NoData)
 {
@@ -671,7 +771,7 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     unshare();
 
     PropertyMap::iterator i;
-    PropertyMap *map = find(name, i);
+    const PropertyMap *map = find(name, i);
 
     // If found, update only if not persistent
     if (map) {

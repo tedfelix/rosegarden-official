@@ -1,3 +1,122 @@
+====== ROSEGARDEN 24.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 24.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * LV2: Fix link problem with no gtk2.  [2e168f0d]
+  * LV2: Add lv2 check for GUI library ok.  [9cb306b3]
+  * Manage MIDI Banks and Programs dialog now allows the same bank
+    MSB/LSB to be used for percussion and non-percussion banks on
+    the same device.  Bug #1692.
+  * Fix wrong ports being assigned on file load.  Bug #1687.
+    [663099cc]
+  * Fix autoscroll and highlighting behavior with multiple segments
+    on a track.  Bug #1672.
+  * Fix missing scroll bar on Instrument Parameters Bank dropdown.
+    Bug #1695.  [295a2f7a]
+  * Fix "turn repeats into copies" misses last segment.  Bug #1696.
+    [afcf2f0e]
+  * Fix shortcut order ignored.  Bug #1702.  [b1272a6d]
+  * Fix unexpected cursor position when moving from note to note
+    on a bar with a clef or time signature.  Bug #1704.  [215b9d27]
+  * Fix unexpected translation of bank and program names.  Bug #1705.
+    [6dbd6bcd]
+  * Fix unexpected Save As... directory.  Feature #522.  [15db9d10]
+  * Fix broken tempo line in tempo ruler after adding a time
+    signature change.  Bug #1706.  [6a7ef89e]
+  * Fix "Modify MIDI Filters" dialog does not mark document as changed.
+    Bug #1707.  [4e505977]
+  * Fix LV2 sfizz plugin support.  [8fce0614]
+  * Fix group box formatting issue in native/light theme.  Bug #1678.
+    [d2df6376]
+  * LV2: Fix crashes and locking related to atom buffers.  [95b09722]
+    [be37b31e]
+
+===== New Features =====
+
+  * Make MIDI File Division value configurable for Export.
+    GH #9.  [991e4839]
+  * WAV export of audio and soft synth tracks.
+    File > Export > Export WAV File...  [5b4d109e]
+  * Apply interpretations to more than one segment.
+    Segment > Interpret...  Feature #517.  [b8a243a5]
+  * LV2 support has been promoted to beta.  [a602850c]
+  * Advanced Looping has been promoted out of beta.  [25bdbf69]
+
+===== General Improvements =====
+
+  * Manage MIDI Banks and Programs dialog is now full-featured and can
+    be used to edit every aspect of an .rgd device file.
+    Studio > Manage MIDI Devices > Banks...
+  * Tempo and Time Signature Editor has been rewritten and improved.
+
+===== Additional Contributions =====
+
+  * Korg-M3-Factory-ALL.rgd (Chuck Elliot) 
+  * Korg-M1.rgd (Chuck Elliot) 
+  * Updated Polish translation (Grzegorz Pruchniakowski) 
+  * Updated Chinese translation (Icenowy Zheng) 
+  * Yamaha-MM6-MM8.rgd (Icenowy Zheng) 
+  * Yamaha-PSR-SX600.rgd (Huanyu Liu) 
+
+====== ROSEGARDEN 24.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 24.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * txt2rgd.py: Fix MSB/LSB bug.  [d501a6f3]
+  * Fix instrument selection for Ctrl+T (add track), file import and
+    merge.  Bug #1670.
+  * Disallow deletion of devices that are in use by tracks.  Bug #1670.
+  * Use track names for segment names on MusicXML import.  Bug #1673.
+    [d477398d]
+  * Fix misplaced TimeWidget title in "Native (Light)" theme.
+    Bug #1678.  [2b63faba]
+  * Fix an .rg parsing error related to softsynths.  [a8547260]
+  * Fix unobtainable segment presets and other preset issues.
+    Bug #1684.  [da32cccc]
+  * Fix audio time stretching erasing all audio data in release build.
+    Bug #1680.  [79d672b1]
+  * Fix submaster port count changing when changing the number of
+    audio input ports.  Bug #1685.  [1ac61ff6]
+  * Fix window focus problem when creating MIDI Devices.
+    Bug #1686.  [7baaffde]
+  * Fix track instrument reset when editing banks.  Bug #1688.
+    [d83d883b] [eab9b9a3]
+  * Fix buffer overflow in notation editor.  Bug #1689.  [dd4549b0]
+  * Fix examples pointing to various audio paths causing unwanted
+    directories to be created.  Bug #1668.  [26b26e6e]
+  * Fix slow refresh of note names in matrix.  Bug #1626.  [de035bfe]
+  * Fix notation not selecting current segment notes on launch.
+    Bug #1672.  [ae27b0c6]
+  * Fix UnusedAudioSelectionDialog column widths.  Feature #520.
+    [5d198075]
+
+===== New Features =====
+
+  * Experimental LV2 plugin support.  Feature request #462.
+    Enable via Edit > Preferences > LV2 Plugin Support.
+
+===== Additional Contributors =====
+
+  * Chuck Elliot - txt2rgd.py fix.
+  * Aere Greenway - ZynAddSubFX-2024.rgd updated device file.
+  * Olivier Seguin - Roland-SR-JV80-07.rgd device file.
+
 ====== ROSEGARDEN 23.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 23.12

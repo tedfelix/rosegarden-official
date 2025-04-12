@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -92,7 +92,7 @@ mapATempo(RealTime eventTime, tempoT tempo, bool ramping)
     // e.g. tempo1 + tempo2).  These events are not actually used
     // on the sequencer side yet, so this may change to something
     // nicer at some point.  MidiInserter however uses it.
-    e.setInstrument(tempo);
+    e.setInstrumentId(tempo);
 
     // data1 holds whether we are ramping.  This is only used by the
     // MIDI exporter and it doesn't need to know where we're ramping

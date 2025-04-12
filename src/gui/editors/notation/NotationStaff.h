@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -51,11 +51,11 @@ class Event;
 class Clef;
 
 
-class NotationStaff : public ViewSegment,
-                      public StaffLayout,
-                      public QObject  // Just for tr().  Could be cleaned up.
+class NotationStaff : public QObject,  // Just for tr().  Could be cleaned up.
+                      public ViewSegment,
+                      public StaffLayout
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     NotationStaff(NotationScene *, Segment *, SnapGrid *,
                   int id,
@@ -260,13 +260,15 @@ public:
      */
     timeT getTimeAtSceneCoords(double cx, int cy) const;
 
-    bool includesTime(timeT t);
+    bool includesTime(timeT t) const;
 
     timeT getStartTime() const;
 
     timeT getEndTime() const;
 
     QString getMarking() const { return m_segmentMarking; }
+
+    virtual void setHighlight(bool highlight) override;
 
 protected:
 
@@ -373,6 +375,7 @@ protected:
     unsigned int m_refreshStatusId;
 
     QString m_segmentMarking;
+
 };
 
 

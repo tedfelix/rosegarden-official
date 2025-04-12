@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -655,7 +655,6 @@ DSSIPluginInstance::connectPorts()
 #endif
 
     Q_ASSERT(sizeof(LADSPA_Data) == sizeof(float));
-    Q_ASSERT(sizeof(sample_t) == sizeof(float));
 
     size_t inbuf = 0, outbuf = 0;
 
@@ -768,16 +767,17 @@ DSSIPluginInstance::getPortValue(unsigned int portNumber)
 }
 
 QString
-DSSIPluginInstance::configure(QString key,
-                              QString value)
+DSSIPluginInstance::configure(const QString& key,
+                              const QString& value)
 {
     if (!m_descriptor || !m_descriptor->configure)
         return QString();
 
-    if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+    QString myKey = key;
+
+    if (myKey == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
-        // cppcheck-suppress ConfigurationNotChecked
-        key = DSSI_PROJECT_DIRECTORY_KEY;
+        myKey = DSSI_PROJECT_DIRECTORY_KEY;
 #else
 
         return QString();
@@ -787,11 +787,11 @@ DSSIPluginInstance::configure(QString key,
 
 
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
+    std::cerr << "DSSIPluginInstance::configure(" << myKey << "," << value << ")" << std::endl;
 #endif
 
     char *message = m_descriptor->configure
-	(m_instanceHandle, key.toLocal8Bit().data(), value.toLocal8Bit().data());
+	(m_instanceHandle, myKey.toLocal8Bit().data(), value.toLocal8Bit().data());
 
     m_programCacheValid = false;
 
@@ -801,8 +801,7 @@ DSSIPluginInstance::configure(QString key,
     // as project directory
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
-    // cppcheck-suppress ConfigurationNotChecked
-    if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
+    if (myKey.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
         return qm;
     }
 #endif
@@ -834,8 +833,10 @@ DSSIPluginInstance::sendEvent(const RealTime &eventTime,
     ev.time.time.tv_sec = eventTime.sec;
     ev.time.time.tv_nsec = eventTime.nsec;
 
-    // DSSI doesn't use MIDI channels, it uses run_multiple_synths instead.
-    ev.data.note.channel = 0;
+#ifdef DEBUG_DSSI_PROCESS
+    std::cerr << "DSSIPluginInstance::sendEvent: type channel " <<
+        (int)ev.type << " " << (int)ev.data.note.channel << std::endl;
+#endif
 
     m_eventBuffer.write(&ev, 1);
 }

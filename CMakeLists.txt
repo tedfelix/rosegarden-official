@@ -5,10 +5,8 @@ cmake_minimum_required(VERSION 3.1)
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "24.06")
-set(ROSEGARDEN_CODENAME "Hermosa")
-#set(ROSEGARDEN_CODENAME "Incredible")
-#set(ROSEGARDEN_CODENAME "Joyfulness")
+set(ROSEGARDEN_VERSION "25.06")
+set(ROSEGARDEN_CODENAME "Joyfulness")
 #set(ROSEGARDEN_CODENAME "Keepsake")
 #set(ROSEGARDEN_CODENAME "Let Freedom Ring")
 #set(ROSEGARDEN_CODENAME "Mountain Music")
@@ -25,6 +23,9 @@ set(ROSEGARDEN_CODENAME "Hermosa")
 #set(ROSEGARDEN_CODENAME "Xenophon")
 #set(ROSEGARDEN_CODENAME "Yellow Brick Road")
 #set(ROSEGARDEN_CODENAME "Zaïd")
+#set(ROSEGARDEN_CODENAME "Amadeus")
+#set(ROSEGARDEN_CODENAME "Blue Moon")
+#set(ROSEGARDEN_CODENAME "Cabaret")
 
 # Make the build type default to "Release"
 if(NOT CMAKE_BUILD_TYPE)
@@ -190,6 +191,18 @@ if(NOT DISABLE_LIRC)
 endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
+# lilv for lv2 plugins
+pkg_check_modules(LILV lilv-0)
+if(NOT LILV_INCLUDE_DIRS)
+  message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
+endif()
+
+pkg_check_modules(LV2 lv2)
+if(LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
+  set(LILV_FOUND TRUE)
+endif()
+add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
+
 # --------------------------------------------------------
 
 # Print out a summary of what was found and what is missing
@@ -217,7 +230,7 @@ set(CPPCHECK_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cppcheck.out)
 # dummy_file will never exist so "make cppcheck" always runs cppcheck
 
 add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
-  COMMAND cppcheck -I${CMAKE_CURRENT_SOURCE_DIR}/src --force --enable=all --inconclusive --std=c++11 --inline-suppr --quiet --suppress=missingInclude ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
+  COMMAND cppcheck -I${CMAKE_CURRENT_SOURCE_DIR}/src --force --enable=all --inconclusive --std=c++14 --library=qt --inline-suppr --quiet --suppress=missingInclude --suppress=missingIncludeSystem ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
 
 add_custom_target(cppcheck DEPENDS ${CPPCHECK_OUTPUT} dummy_file)
 #########################

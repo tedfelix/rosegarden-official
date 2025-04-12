@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2023 the Rosegarden development team.
+    Copyright 2000-2024 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -22,12 +22,13 @@
 #include "base/Instrument.h"
 #include "base/MidiTypes.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <set>
-
+#include <string>
 #include <sstream>
 
 #include <QString>
@@ -65,6 +66,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>")),
     m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
+    //RG_DEBUG << "create midi device" << name << dir;
     createInstruments(ibase);
     generatePresentationList();
     generateDefaultControllers();
@@ -208,7 +210,7 @@ MidiDevice::~MidiDevice()
 }
 
 AllocateChannels *
-MidiDevice::getAllocator()
+MidiDevice::getAllocator() const
 { return m_allocator; }
 
 void
@@ -216,7 +218,8 @@ MidiDevice::createInstruments(InstrumentId base)
 {
     for (int i = 0; i < 16; ++i) {
         Instrument *instrument = new Instrument
-            (base + i, Instrument::Midi, "", i, this);
+            (base + i, Instrument::Midi, "", this);
+        instrument->setNaturalMidiChannel(i);
         instrument->setFixedChannel();
         // ??? Since we don't have a connection yet, this makes
         //     little sense.
@@ -237,6 +240,7 @@ MidiDevice::renameInstruments()
              .arg(isPercussionNumber(i) ? "[D]" : "")
              .toUtf8().data());
     }
+    notifyDeviceModified();
 }
 
 void
@@ -313,18 +317,21 @@ void
 MidiDevice::clearBankList()
 {
     m_bankList.clear();
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::clearProgramList()
 {
     m_programList.clear();
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::clearKeyMappingList()
 {
     m_keyMappingList.clear();
+    notifyDeviceModified();
 }
 
 void
@@ -339,6 +346,7 @@ MidiDevice::clearControlList()
     }
 
     m_controlList.clear();
+    notifyDeviceModified();
 }
 
 void
@@ -351,12 +359,14 @@ MidiDevice::addProgram(const MidiProgram &prog)
     }
 
     m_programList.push_back(prog);
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::addBank(const MidiBank &bank)
 {
     m_bankList.push_back(bank);
+    notifyDeviceModified();
 }
 
 void
@@ -364,6 +374,7 @@ MidiDevice::setMetronome(const MidiMetronome &metronome)
 {
     delete m_metronome;
     m_metronome = new MidiMetronome(metronome);
+    notifyDeviceModified();
 }
 
 BankList
@@ -462,7 +473,7 @@ MidiDevice::getPrograms(const MidiBank &bank) const
 
     for (ProgramList::const_iterator it = m_programList.begin();
          it != m_programList.end(); ++it) {
-        if (it->getBank().partialCompare(bank)) programs.push_back(*it);
+        if (it->getBank().compareKey(bank)) programs.push_back(*it);
     }
 
     return programs;
@@ -491,21 +502,24 @@ MidiDevice::getPrograms0thVariation(bool percussion, const MidiBank &bank) const
     return ProgramList();
 }
 
+/* unused
 std::string
 MidiDevice::getBankName(const MidiBank &bank) const
 {
     for (BankList::const_iterator it = m_bankList.begin();
          it != m_bankList.end(); ++it) {
-        if ((*it).partialCompare(bank)) return it->getName();
+        if ((*it).compareKey(bank)) return it->getName();
     }
     return "";
 }
+*/
 
 void
 MidiDevice::addKeyMapping(const MidiKeyMapping &mapping)
 {
     //!!! handle dup names
     m_keyMappingList.push_back(mapping);
+    notifyDeviceModified();
 }
 
 const MidiKeyMapping *
@@ -533,20 +547,6 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
 
     return nullptr;
 }
-
-void
-MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
-                                    std::string mapping)
-{
-    ProgramList::iterator it;
-
-    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->partialCompare(program)) {
-            it->setKeyMapping(mapping);
-        }
-    }
-}
-
 
 std::string
 MidiDevice::toXmlString() const
@@ -605,7 +605,7 @@ MidiDevice::toXmlString() const
         //
         for (pt = m_programList.begin(); pt != m_programList.end(); ++pt)
         {
-            if (pt->getBank().partialCompare(*it))
+            if (pt->getBank().compareKey(*it))
             {
                 midiDevice << "            <program "
                            << "id=\"" << (int)pt->getProgram() << "\" "
@@ -664,8 +664,6 @@ MidiDevice::getAllInstruments() const
     return m_instruments;
 }
 
-// Omitting special system Instruments
-//
 InstrumentList
 MidiDevice::getPresentationInstruments() const
 {
@@ -694,6 +692,7 @@ MidiDevice::addInstrument(Instrument *instrument)
 
     m_instruments.push_back(instrument);
     generatePresentationList();
+    notifyDeviceModified();
 }
 
 std::string
@@ -713,18 +712,21 @@ void
 MidiDevice::replaceBankList(const BankList &bankList)
 {
     m_bankList = bankList;
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::replaceProgramList(const ProgramList &programList)
 {
     m_programList = programList;
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::replaceKeyMappingList(const KeyMappingList &keyMappingList)
 {
     m_keyMappingList = keyMappingList;
+    notifyDeviceModified();
 }
 
 
@@ -741,7 +743,7 @@ MidiDevice::mergeBankList(const BankList &bankList)
     {
         for (oIt = m_bankList.begin(); oIt != m_bankList.end(); ++oIt)
         {
-            if ((*it).partialCompare(*oIt))
+            if ((*it).compareKey(*oIt))
             {
                 clash = true;
                 break;
@@ -753,7 +755,7 @@ MidiDevice::mergeBankList(const BankList &bankList)
         else
             clash = false;
     }
-
+    notifyDeviceModified();
 }
 
 void
@@ -779,6 +781,7 @@ MidiDevice::mergeProgramList(const ProgramList &programList)
         else
             clash = false;
     }
+    notifyDeviceModified();
 }
 
 void
@@ -804,6 +807,7 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
         else
             clash = false;
     }
+    notifyDeviceModified();
 }
 
 void
@@ -816,6 +820,7 @@ MidiDevice::addControlParameter(const ControlParameter &con,
             addControlToInstrument(con);
         }
     }
+    notifyDeviceModified();
 }
 
 // Add controller CON at INDEX, shifting further controllers one
@@ -850,6 +855,7 @@ MidiDevice::addControlParameter(const ControlParameter &con, int index,
 
     // Assign the ControlList we just made.
     m_controlList = controls;
+    notifyDeviceModified();
 }
 
 
@@ -870,6 +876,7 @@ MidiDevice::removeControlParameter(int index)
         i++;
     }
 
+    notifyDeviceModified();
     return false;
 }
 
@@ -880,6 +887,7 @@ MidiDevice::modifyControlParameter(const ControlParameter &con, int index)
     removeControlFromInstrument(m_controlList[index]);
     m_controlList[index] = con;
     addControlToInstrument(con);
+    notifyDeviceModified();
     return true;
 }
 
@@ -902,6 +910,7 @@ MidiDevice::replaceControlParameters(const ControlList &con)
     for(; cIt != con.end(); ++cIt) {
         addControlParameter(*cIt, true);
     }
+    notifyDeviceModified();
 }
 
 #if 0
@@ -1096,5 +1105,47 @@ MidiDevice::getControlParameterConst(
     return const_cast<MidiDevice *>(this)->
             getControlParameter(type, controllerNumber);
 }
+
+std::string
+MidiDevice::makeNewBankName() const
+{
+    // Generate an unused "new bank" name.
+    std::string name;
+    for (size_t i = 1; i <= m_bankList.size() + 1; ++i) {
+        if (i == 1)
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new bank>"));
+        else
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new bank %1>").arg(i));
+        // No such bank?  Then we have our name.
+        if (getBankByName(name) == nullptr)
+            break;
+    }
+
+    return name;
+}
+
+std::string
+MidiDevice::makeNewKeyMappingName() const
+{
+    // Generate an unused "new mapping" name.
+    std::string name;
+    for (size_t i = 1; i <= m_keyMappingList.size() + 1; ++i) {
+        if (i == 1)
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new mapping>"));
+        else
+            name = qstrtostr(
+                        QCoreApplication::translate("INSTRUMENT",
+                                                    "<new mapping %1>").arg(i));
+        // No such key map?  Then we have our name.
+        if (getKeyMappingByName(name) == nullptr)
+            break;
+    }
+
+    return name;
+}
+
 
 }
