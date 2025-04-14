@@ -1,6 +1,4 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
-
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
@@ -14,22 +12,23 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_SEGMENT_PERFORMANCE_HELPER_H
-#define RG_SEGMENT_PERFORMANCE_HELPER_H
+#ifndef RG_SEGMENTPERFORMANCEHELPER_H
+#define RG_SEGMENTPERFORMANCEHELPER_H
 
 #include "base/Segment.h"
-#include "Composition.h" // for RealTime
+
 
 namespace Rosegarden
 {
+
 
 class ROSEGARDENPRIVATE_EXPORT SegmentPerformanceHelper : protected SegmentHelper
 {
 public:
     explicit SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
-    ~SegmentPerformanceHelper() override;
+    ~SegmentPerformanceHelper() override  { }
 
-    typedef std::vector<Segment::iterator> iteratorcontainer;
+    typedef std::vector<Segment::iterator> IteratorVector;
 
     /**
      * Returns a sequence of iterators pointing to the note events
@@ -38,26 +37,7 @@ public:
      * in the sequence.  If the given event is tied but is not the
      * first in the tied chain, the returned sequence will be empty.
      */
-    iteratorcontainer getTiedNotes(Segment::iterator i);
-
-    /**
-     * Returns two sequences of iterators pointing to the note events
-     * that are grace notes, or host notes for grace notes, associated
-     * with the given event, which is itself either a grace note or a
-     * host note for a grace note.  The grace note iterators are
-     * returned in the graceNotes sequence, and the host note
-     * iterators in hostNotes.  isHostNote is set to true if the
-     * given event is a host note, false otherwise.
-     *
-     * If the given event is not a grace note, is a grace note with no
-     * host note, or is a potential host note without any grace notes,
-     * the sequences will both be empty and the function will return
-     * false.
-     */
-    bool getGraceAndHostNotes(Segment::iterator i,
-			      iteratorcontainer &graceNotes,
-			      iteratorcontainer &hostNotes,
-			      bool &isHostNote);
+    IteratorVector getTiedNotes(Segment::iterator i);
 
     /**
      * Returns the absolute time of the note event pointed to by i.
@@ -103,17 +83,37 @@ public:
      */
     // unused RealTime getRealSoundingDuration(iterator i);
 
+private:
+
+    /**
+     * Returns two sequences of iterators pointing to the note events
+     * that are grace notes, or host notes for grace notes, associated
+     * with the given event, which is itself either a grace note or a
+     * host note for a grace note.  The grace note iterators are
+     * returned in the graceNotes sequence, and the host note
+     * iterators in hostNotes.  isHostNote is set to true if the
+     * given event is a host note, false otherwise.
+     *
+     * If the given event is not a grace note, is a grace note with no
+     * host note, or is a potential host note without any grace notes,
+     * the sequences will both be empty and the function will return
+     * false.
+     */
+    bool getGraceAndHostNotes(Segment::iterator i,
+                  IteratorVector &graceNotes,
+                  IteratorVector &hostNotes,
+                  bool &isHostNote);
+
     /**
      * Return a sounding duration (estimated) and start time for the
-     * note event pointed to by i.  If host is true, i is expected to
-     * be the "host" note for one or more grace notes; if host is
-     * false, i is expected to point to a grace note.  If the relevant
-     * expectation is not met, this function returns false.  Otherwise
-     * the sounding time and duration are returned through t and d and
-     * the function returns true.
+     * note event pointed to by i.
+     *
+     * Returns the sounding time in t and the sounding duration in d.
+     * Returns false on error.
      */
-    bool getGraceNoteTimeAndDuration(bool host, Segment::iterator i, timeT &t, timeT &d);
+    bool getGraceNoteTimeAndDuration(Segment::iterator i, timeT &t, timeT &d);
 };
+
 
 }
 

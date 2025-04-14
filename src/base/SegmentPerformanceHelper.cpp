@@ -14,23 +14,20 @@
 */
 
 #include "base/SegmentPerformanceHelper.h"
+
 #include "base/BaseProperties.h"
+
 #include <iostream>
+
 
 namespace Rosegarden
 {
-using std::endl;
-using std::string;
-
-using namespace BaseProperties;
-
-SegmentPerformanceHelper::~SegmentPerformanceHelper() { }
 
 
-SegmentPerformanceHelper::iteratorcontainer
+SegmentPerformanceHelper::IteratorVector
 SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
 {
-    iteratorcontainer c;
+    IteratorVector c;
     c.push_back(i);
 
     Event *e = *i;
@@ -38,14 +35,14 @@ SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
     Segment::iterator j(i);
 
     bool tiedBack = false, tiedForward = false;
-    e->get<Bool>(TIED_BACKWARD, tiedBack);
-    e->get<Bool>(TIED_FORWARD, tiedForward);
+    e->get<Bool>(BaseProperties::TIED_BACKWARD, tiedBack);
+    e->get<Bool>(BaseProperties::TIED_FORWARD, tiedForward);
 
     timeT d = e->getNotationDuration();
     timeT t = e->getNotationAbsoluteTime();
 
-    if (!e->has(PITCH)) return c;
-    int pitch = e->get<Int>(PITCH);
+    if (!e->has(BaseProperties::PITCH)) return c;
+    int pitch = e->get<Int>(BaseProperties::PITCH);
 
     bool valid = false;
 
@@ -62,11 +59,11 @@ SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
             timeT t2 = e->getNotationAbsoluteTime() + e->getNotationDuration();
             if (t2 < t) break;
 
-            if (t2 > t || !e->has(PITCH) ||
-                e->get<Int>(PITCH) != pitch) continue;
+            if (t2 > t || !e->has(BaseProperties::PITCH) ||
+                e->get<Int>(BaseProperties::PITCH) != pitch) continue;
 
             bool prevTiedForward = false;
-            if (!e->get<Bool>(TIED_FORWARD, prevTiedForward) ||
+            if (!e->get<Bool>(BaseProperties::TIED_FORWARD, prevTiedForward) ||
                 !prevTiedForward) break;
 
             valid = true;
@@ -74,9 +71,9 @@ SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
         }
 
         if (valid) {
-            return iteratorcontainer();
+            return IteratorVector();
         } else {
-            (*i)->unset(TIED_BACKWARD);
+            (*i)->unset(BaseProperties::TIED_BACKWARD);
             return c;
         }
     }
@@ -93,24 +90,24 @@ SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
         timeT t2 = e->getNotationAbsoluteTime();
 
         if (t2 > t + d) break;
-        else if (t2 < t + d || !e->has(PITCH) ||
-                 e->get<Int>(PITCH) != pitch) continue;
+        else if (t2 < t + d || !e->has(BaseProperties::PITCH) ||
+                 e->get<Int>(BaseProperties::PITCH) != pitch) continue;
 
-        if (!e->get<Bool>(TIED_BACKWARD, tiedBack) ||
+        if (!e->get<Bool>(BaseProperties::TIED_BACKWARD, tiedBack) ||
             !tiedBack) break;
 
         d += e->getNotationDuration();
         c.push_back(j);
         valid = true;
 
-        if (!e->get<Bool>(TIED_FORWARD, tiedForward) ||
+        if (!e->get<Bool>(BaseProperties::TIED_FORWARD, tiedForward) ||
             !tiedForward) return c;
     }
 
     if (!valid) {
         // Related to #1171463: If we can find no following
         // TIED_BACKWARD event, then we remove this property
-        (*i)->unset(TIED_FORWARD);
+        (*i)->unset(BaseProperties::TIED_FORWARD);
     }
 
     return c;
@@ -119,8 +116,8 @@ SegmentPerformanceHelper::getTiedNotes(Segment::iterator i)
 
 bool
 SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
-                                               iteratorcontainer &graceNotes,
-                                               iteratorcontainer &hostNotes,
+                                               IteratorVector &graceNotes,
+                                               IteratorVector &hostNotes,
                                                bool &isHostNote)
 {
     if (i == end() || !(*i)->isa(Note::EventType)) return false;
@@ -129,7 +126,8 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
     Segment::iterator firstGraceNote = i;
     Segment::iterator firstHostNote = i;
 
-    if ((*i)->has(IS_GRACE_NOTE) && (*i)->get<Bool>(IS_GRACE_NOTE)) {
+    if ((*i)->has(BaseProperties::IS_GRACE_NOTE)  &&
+        (*i)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
 
         // i is a grace note.  Find the first host note following it
 
@@ -186,7 +184,8 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
             (*firstHostNote)->getNotationAbsoluteTime()) break;
         if ((*j)->getSubOrdering() >= 0) continue;
         if (!(*j)->isa(Note::EventType)) continue;
-        if (!(*j)->has(IS_GRACE_NOTE) || !(*j)->get<Bool>(IS_GRACE_NOTE)) {
+        if (!(*j)->has(BaseProperties::IS_GRACE_NOTE)  ||
+            !(*j)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
             std::cerr << "SegmentPerformanceHelper::getGraceAndHostNotes: WARNING: Note at " << (*j)->getAbsoluteTime() << " (in trackback) has subordering " << (*j)->getSubOrdering() << " but is not a grace note" << std::endl;
             break;
         }
@@ -208,7 +207,8 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
     while (j != end()) {
         if ((*j)->isa(Note::EventType)) {
             if ((*j)->getSubOrdering() < 0) {
-                if ((*j)->has(IS_GRACE_NOTE) && (*j)->get<Bool>(IS_GRACE_NOTE)) {
+                if ((*j)->has(BaseProperties::IS_GRACE_NOTE)  &&
+                    (*j)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
                     graceNotes.push_back(j);
                 }
             } else {
@@ -234,15 +234,15 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(Segment::iterator i)
 
     //std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
 
-    if ((*i)->has(IS_GRACE_NOTE)) {
+    if ((*i)->has(BaseProperties::IS_GRACE_NOTE)) {
         //std::cerr << "it's a grace note" << std::endl;
-        if (getGraceNoteTimeAndDuration(false, i, t, durationUnused))
+        if (getGraceNoteTimeAndDuration(i, t, durationUnused))
             return t;
     }
 
-    if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
+    if ((*i)->has(BaseProperties::MAY_HAVE_GRACE_NOTES)) {
         //std::cerr << "it's a candidate host note" << std::endl;
-        if (getGraceNoteTimeAndDuration(true, i, t, durationUnused))
+        if (getGraceNoteTimeAndDuration(i, t, durationUnused))
             return t;
     }
 
@@ -258,16 +258,16 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 
 //    std::cerr << "SegmentPerformanceHelper::getSoundingDuration at " << (*i)->getAbsoluteTime() << std::endl;
 
-    if ((*i)->has(IS_GRACE_NOTE)) {
+    if ((*i)->has(BaseProperties::IS_GRACE_NOTE)) {
 //        std::cerr << "it's a grace note" << std::endl;
-        if (getGraceNoteTimeAndDuration(false, i, discard, d)) return d;
+        if (getGraceNoteTimeAndDuration(i, discard, d)) return d;
     }
-    if ((*i)->has(MAY_HAVE_GRACE_NOTES)) {
+    if ((*i)->has(BaseProperties::MAY_HAVE_GRACE_NOTES)) {
 //        std::cerr << "it's a candidate host note" << std::endl;
-        if (getGraceNoteTimeAndDuration(true, i, discard, d)) return d;
+        if (getGraceNoteTimeAndDuration(i, discard, d)) return d;
     }
 
-    if ((*i)->has(TIED_BACKWARD)) {
+    if ((*i)->has(BaseProperties::TIED_BACKWARD)) {
 
         // Formerly we just returned d in this case, but now we check
         // with getTiedNotes so as to remove any bogus backward ties
@@ -278,14 +278,14 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
         //anything we've already processed from this helper this time
         //around.
 
-        iteratorcontainer c(getTiedNotes(i));
+        IteratorVector c(getTiedNotes(i));
 
         if (c.empty()) { // the tie back is valid
             return 0;
         }
     }
 
-    if (!(*i)->has(TIED_FORWARD) || !(*i)->isa(Note::EventType)) {
+    if (!(*i)->has(BaseProperties::TIED_FORWARD) || !(*i)->isa(Note::EventType)) {
 
         d = (*i)->getDuration();
 
@@ -293,9 +293,9 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 
         // tied forward but not back
 
-        iteratorcontainer c(getTiedNotes(i));
+        IteratorVector c(getTiedNotes(i));
 
-        for (iteratorcontainer::iterator ci = c.begin();
+        for (IteratorVector::iterator ci = c.begin();
              ci != c.end(); ++ci) {
             d += (**ci)->getDuration();
         }
@@ -341,8 +341,8 @@ SegmentPerformanceHelper::getRealSoundingDuration(iterator i)
 */
 
 bool
-SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::iterator i,
-                                                      timeT &t, timeT &d)
+SegmentPerformanceHelper::getGraceNoteTimeAndDuration(
+        Segment::iterator eventIter, timeT &t, timeT &d)
 {
     // [This code currently assumes appoggiatura.  Acciaccatura later.]
 
@@ -373,31 +373,32 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
     // more than one grace note consecutively of different durations;
     // that isn't handled at all here.
 
-    if (i == end()) return false;
+    if (eventIter == end()) return false;
 
-    iteratorcontainer graceNotes, hostNotes;
+    IteratorVector graceNotes, hostNotes;
     bool isHostNote;
 
-    if (!getGraceAndHostNotes(i, graceNotes, hostNotes, isHostNote)) {
-        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Note at " << (*i)->getAbsoluteTime() << " is not a grace note, or has no grace notes" << std::endl;
+    if (!getGraceAndHostNotes(eventIter, graceNotes, hostNotes, isHostNote)) {
+        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Note at " << (*eventIter)->getAbsoluteTime() << " is not a grace note, or has no grace notes" << std::endl;
         return false;
     }
 
     if (!isHostNote) {
 
-        if (!(*i)->has(IS_GRACE_NOTE) || !(*i)->get<Bool>(IS_GRACE_NOTE)) {
-            std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: WARNING: Note at " << (*i)->getAbsoluteTime() << " is neither grace nor host note, but was reported as suitable by getGraceAndHostNotes" << std::endl;
+        if (!(*eventIter)->has(BaseProperties::IS_GRACE_NOTE)  ||
+            !(*eventIter)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
+            std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: WARNING: Note at " << (*eventIter)->getAbsoluteTime() << " is neither grace nor host note, but was reported as suitable by getGraceAndHostNotes" << std::endl;
             return false;
         }
     }
 
     if (hostNotes.empty()) {
-        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Grace note at " << (*i)->getAbsoluteTime() << " has no host note" << std::endl;
+        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Grace note at " << (*eventIter)->getAbsoluteTime() << " has no host note" << std::endl;
         return false;
     }
 
     if (graceNotes.empty()) {
-        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Note at " << (*i)->getAbsoluteTime() << " has no grace notes" << std::endl;
+        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Note at " << (*eventIter)->getAbsoluteTime() << " has no grace notes" << std::endl;
         return false;
     }
 
@@ -405,7 +406,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
     timeT hostNoteShortestDuration = 0;
     timeT hostNoteNotationDuration = 0;
 
-    for (iteratorcontainer::iterator j = hostNotes.begin();
+    for (IteratorVector::iterator j = hostNotes.begin();
          j != hostNotes.end(); ++j) {
 
         if (j == hostNotes.begin() ||
@@ -420,7 +421,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
             (**j)->getNotationDuration() > hostNoteNotationDuration) {
             hostNoteNotationDuration = (**j)->getNotationDuration();
         }
-        (**j)->set<Bool>(MAY_HAVE_GRACE_NOTES, true);
+        (**j)->set<Bool>(BaseProperties::MAY_HAVE_GRACE_NOTES, true);
     }
 
     timeT graceNoteTime = hostNoteEarliestTime;
@@ -430,15 +431,15 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
     }
 
     if (isHostNote) {
-        t = (*i)->getAbsoluteTime() + graceNoteDuration;
-        d = (*i)->getDuration() - graceNoteDuration;
+        t = (*eventIter)->getAbsoluteTime() + graceNoteDuration;
+        d = (*eventIter)->getDuration() - graceNoteDuration;
     } else {
 
         int count = 0, index = 0;
         bool found = false;
         int prevSubOrdering = 0;
 
-        for (iteratorcontainer::iterator j = graceNotes.begin();
+        for (IteratorVector::iterator j = graceNotes.begin();
              j != graceNotes.end(); ++j) {
 
             bool newChord = false;
@@ -450,7 +451,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
 
             if (newChord) ++count;
 
-            if (*j == i) found = true;
+            if (*j == eventIter) found = true;
 
             if (!found) {
                 if (newChord) ++index;
@@ -465,8 +466,6 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(bool /* host */, Segment::
     }
 
     return true;
-
-
 }
 
 

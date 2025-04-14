@@ -12,13 +12,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include <QDataStream>
 #include "MappedEventList.h"
+
 #include "MappedEvent.h"
-#include "base/SegmentPerformanceHelper.h"
+
 
 namespace Rosegarden
 {
+
 
 MappedEventList::~MappedEventList()
 {
