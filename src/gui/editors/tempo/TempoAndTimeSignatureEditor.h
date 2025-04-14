@@ -107,6 +107,8 @@ private slots:
     /// Filter check box clicked.
     void slotFilterClicked(bool);
 
+    void slotItemSelectionChanged();
+
 private:
 
     void initMenu();

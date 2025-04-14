@@ -149,6 +149,8 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     m_tableWidget->setMinimumWidth(500);
     connect(m_tableWidget, &QTableWidget::cellDoubleClicked,
             this, &TempoAndTimeSignatureEditor::slotPopupEditor);
+    connect(m_tableWidget, &QTableWidget::itemSelectionChanged,
+            this, &TempoAndTimeSignatureEditor::slotItemSelectionChanged);
 
     mainWidget->setMinimumSize(mainLayout->minimumSize());
 
@@ -962,6 +964,17 @@ TempoAndTimeSignatureEditor::slotDocumentModified(bool /*modified*/)
     updateWindowTitle();
 
     updateTable();
+}
+
+void
+TempoAndTimeSignatureEditor::slotItemSelectionChanged()
+{
+    const bool haveSelection = !m_tableWidget->selectedItems().empty();
+
+    if (haveSelection)
+        enterActionState("have_selection");
+    else
+        leaveActionState("have_selection");
 }
 
 

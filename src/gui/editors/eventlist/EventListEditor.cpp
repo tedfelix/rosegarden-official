@@ -1648,7 +1648,7 @@ EventListEditor::slotDocumentModified(bool modified)
 void
 EventListEditor::slotItemSelectionChanged()
 {
-    bool haveSelection = !m_tableWidget->selectedItems().empty();
+    const bool haveSelection = !m_tableWidget->selectedItems().empty();
 
     if (haveSelection)
         enterActionState("have_selection");

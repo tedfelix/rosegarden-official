@@ -65,4 +65,12 @@
   <Action name="time_raw"/>
 </ToolBar>
 
+<State name="have_selection">
+  <enable>
+    <Action name="edit" />
+    <Action name="delete" />
+    <Action name="clear_selection" />
+  </enable>
+</State>
+
 </kpartgui>
