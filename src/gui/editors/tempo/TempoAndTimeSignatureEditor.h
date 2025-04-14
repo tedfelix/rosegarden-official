@@ -135,6 +135,12 @@ private:
     /// Launch editor for an entry.
     void popupEditor(timeT time, Type type);
 
+    // New item selection support.  Used by popupEditor() to make sure the
+    // new/edited item is selected by updateTable().
+    bool m_newItemSelect{false};
+    timeT m_newItemMIDITicks{};
+    Type m_newItemType{};
+
 };
 
 

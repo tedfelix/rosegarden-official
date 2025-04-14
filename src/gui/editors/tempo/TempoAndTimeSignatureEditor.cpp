@@ -373,8 +373,18 @@ TempoAndTimeSignatureEditor::updateTable()
                 }
             }
 
-            // If this one was selected, restore the selection.
-            if (selectionSet.find(key) != selectionSet.end()) {
+            // There's a new item we need to select.
+            const bool newItemSelection = (m_newItemSelect  &&
+                    m_newItemType == Type::TimeSignature  &&
+                    m_newItemMIDITicks == sig.first);
+
+            // If we found it, only select the new item once.
+            if (newItemSelection)
+                m_newItemSelect = false;
+
+            // If this one was selected or is new, restore the selection.
+            if (selectionSet.find(key) != selectionSet.end()  ||
+                newItemSelection) {
                 // Select the entire row.
                 // For each column...
                 for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
@@ -470,8 +480,18 @@ TempoAndTimeSignatureEditor::updateTable()
                             item, QItemSelectionModel::NoUpdate);
             }
 
-            // If this one was selected, restore the selection.
-            if (selectionSet.find(key) != selectionSet.end()) {
+            // There's a new item we need to select.
+            const bool newItemSelection = (m_newItemSelect  &&
+                    m_newItemType == Type::Tempo  &&
+                    m_newItemMIDITicks == time);
+
+            // If we found it, only select the new item once.
+            if (newItemSelection)
+                m_newItemSelect = false;
+
+            // If this one was selected or is new, restore the selection.
+            if (selectionSet.find(key) != selectionSet.end()  ||
+                newItemSelection) {
                 // Select the entire row.
                 // For each column...
                 for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
@@ -859,7 +879,7 @@ TempoAndTimeSignatureEditor::slotViewRawTimes()
 }
 
 void
-TempoAndTimeSignatureEditor::popupEditor(timeT time, const Type type)
+TempoAndTimeSignatureEditor::popupEditor(const timeT time, const Type type)
 {
     switch (type)
     {
@@ -873,6 +893,11 @@ TempoAndTimeSignatureEditor::popupEditor(timeT time, const Type type)
 
             if (tempoDialog.exec() != QDialog::Accepted)
                 return;
+
+            // Let updateTable() know it needs to select this new item.
+            m_newItemSelect = true;
+            m_newItemMIDITicks = tempoDialog.getTime();
+            m_newItemType = Type::Tempo;
 
             Composition &comp = doc->getComposition();
 
@@ -905,23 +930,33 @@ TempoAndTimeSignatureEditor::popupEditor(timeT time, const Type type)
 
             TimeSignatureDialog dialog(this, &composition, time, sig, true);
 
-            if (dialog.exec() == QDialog::Accepted) {
+            if (dialog.exec() != QDialog::Accepted)
+                return;
 
-                time = dialog.getTime();
+            timeT newTime = dialog.getTime();
 
-                if (dialog.shouldNormalizeRests()) {
-                    CommandHistory::getInstance()->addCommand(
-                            new AddTimeSignatureAndNormalizeCommand(
-                                    &composition,
-                                    time,
-                                    dialog.getTimeSignature()));
-                } else {
-                    CommandHistory::getInstance()->addCommand(
-                            new AddTimeSignatureCommand(
-                                    &composition,
-                                    time,
-                                    dialog.getTimeSignature()));
-                }
+            // Let updateTable() know it needs to select this new item.
+            m_newItemSelect = true;
+            m_newItemMIDITicks = newTime;
+            m_newItemType = Type::TimeSignature;
+
+            // ??? Why don't we delete the old?  If the user changes the time,
+            //     they will end up with a duplicate time signature change.
+            //     Does deleting the old make a mess of things?  If so, then
+            //     perhaps we should lock time on the TimeSignatureDialog.
+
+            if (dialog.shouldNormalizeRests()) {
+                CommandHistory::getInstance()->addCommand(
+                        new AddTimeSignatureAndNormalizeCommand(
+                                &composition,
+                                newTime,
+                                dialog.getTimeSignature()));
+            } else {
+                CommandHistory::getInstance()->addCommand(
+                        new AddTimeSignatureCommand(
+                                &composition,
+                                newTime,
+                                dialog.getTimeSignature()));
             }
 
             break;
