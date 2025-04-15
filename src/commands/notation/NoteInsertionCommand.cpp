@@ -277,7 +277,7 @@ NoteInsertionCommand::modifySegment()
         }
 
         if (m_matrixType) {
-            i = SegmentMatrixHelper(segment).insertNote(e);
+            i = SegmentMatrixHelper(segment).matrixInsertNote(e);
         } else {
             i = helper.insertNote(e);
             // e is just a model for SegmentNotationHelper::insertNote

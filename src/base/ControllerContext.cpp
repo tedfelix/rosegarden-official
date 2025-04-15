@@ -83,7 +83,7 @@ searchSegment(const Segment *s, timeT noEarlierThan, timeT noLaterThan) const
 // first.  B may be nullptr but A must exist.
 ControllerSearch::Maybe
 ControllerSearch::
-doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const
+doubleSearch(const Segment *a, const Segment *b, timeT noLaterThan) const
 {
     Profiler profiler("ControllerSearch::doubleSearch", false);
     ControllerSearch::Maybe runningResult =
@@ -120,7 +120,7 @@ matches(Event *e) const
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-getStaticValue(Instrument *instrument,
+getStaticValue(const Instrument *instrument,
                const std::string& eventType,
                int controllerId)
 {
@@ -135,7 +135,8 @@ getStaticValue(Instrument *instrument,
 // @author Tom Breton (Tehom)
 int
 ControllerContextMap::
-getControllerValue(Instrument *instrument, Segment *a, Segment *b,
+getControllerValue(const Instrument *instrument,
+                   const Segment *a, const Segment *b,
                    timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
@@ -222,7 +223,7 @@ getControllerValue(Instrument *instrument, Segment *a, Segment *b,
 // @author Tom Breton (Tehom)
 const ControlParameter *
 ControllerContextMap::
-getControlParameter(Instrument *instrument,
+getControlParameter(const Instrument *instrument,
                     const std::string& eventType,
                     const int controllerId)
 {
@@ -257,8 +258,8 @@ makeAbsolute(const ControlParameter * controlParameter, int value)
 // @author Tom Breton (Tehom)
 void
 ControllerContextMap::
-makeControlValueAbsolute(Instrument *instrument, Segment *a,
-                         Segment *b, Event *e, timeT at)
+makeControlValueAbsolute(const Instrument *instrument, const Segment *a,
+                         const Segment *b, Event *e, timeT at)
 {
     Profiler profiler("ControllerContextMap::makeControlValueAbsolute", false);
     const std::string eventType = e->getType();

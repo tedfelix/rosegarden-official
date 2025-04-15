@@ -92,6 +92,7 @@ public:
      * "Source Deletion" == ViewSegment destroyed.
      */
     void addObserver   (ViewSegmentObserver *obs) { m_observers.push_back(obs); }
+// cppcheck-suppress constParameterPointer
     void removeObserver(ViewSegmentObserver *obs) { m_observers.remove(obs); }
 
 protected:

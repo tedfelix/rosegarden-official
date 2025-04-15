@@ -85,7 +85,7 @@ public:
      */
     void applyTuplingLine(NotationStaff &);
 
-    bool contains(const NELIterator &) const override;
+    //bool contains(const NELIterator &) const;
 
     bool sample(const NELIterator &i, bool goingForwards) override;
 

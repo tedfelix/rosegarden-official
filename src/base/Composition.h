@@ -242,7 +242,7 @@ public:
      * Detach a Marker (revert ownership of the Marker object to the
      * caller).
      */
-    bool detachMarker(Marker *marker);
+    bool detachMarker(const Marker *marker);
 
     // unused
 //    bool isMarkerAtPosition(timeT time) const;
@@ -282,7 +282,7 @@ public:
      * NOTE: The Segment is deleted from the composition and
      * destroyed
      */
-    bool deleteSegment(Segment*);
+    bool deleteSegment(const Segment*);
 
     /**
      * DO NOT USE THIS METHOD
@@ -836,12 +836,12 @@ public:
     // Colour stuff
     ColourMap& getSegmentColourMap() { return m_segmentColourMap; }
     const ColourMap& getSegmentColourMap() const { return m_segmentColourMap; }
-    void setSegmentColourMap(ColourMap &newmap);
+    void setSegmentColourMap(const ColourMap &newmap);
 
     // General colourmap for non-segments
     //
     ColourMap& getGeneralColourMap() { return m_generalColourMap; }
-    void setGeneralColourMap(ColourMap &newmap);
+    void setGeneralColourMap(const ColourMap &newmap);
 
     /// NotationView spacing
     int m_notationSpacing;

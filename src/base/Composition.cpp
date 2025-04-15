@@ -270,7 +270,8 @@ Composition::~Composition()
     if (!m_observers.empty()) {
         RG_WARNING << "dtor: WARNING:" << m_observers.size() << "observers still extant:";
         for (const CompositionObserver *observer : m_observers) {
-            RG_WARNING << "  " << (void *)(observer) << ":" << typeid(*observer).name();
+            RG_WARNING << "  " << static_cast<const void *>(observer) <<
+                ":" << typeid(*observer).name();
         }
     }
 
@@ -332,7 +333,7 @@ Composition::deleteSegment(Composition::iterator segmentIter)
 }
 
 bool
-Composition::deleteSegment(Segment *segment)
+Composition::deleteSegment(const Segment *segment)
 {
     iterator i = findSegment(segment);
     if (i == end()) return false;
@@ -1950,8 +1951,8 @@ Track* Composition::getTrackById(TrackId track) const
 
     RG_WARNING << "getTrackById(" << track << "): WARNING: Track ID not found.";
     RG_WARNING << "  Available track ids are:";
-    for (TrackMap::const_iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-        RG_WARNING << "    " << (int)(*i).second->getId();
+    for (TrackMap::const_iterator i2 = m_tracks.begin(); i2 != m_tracks.end(); ++i2) {
+        RG_WARNING << "    " << (int)(*i2).second->getId();
     }
 
     return nullptr;
@@ -2009,7 +2010,7 @@ InstrumentId Composition::getSelectedInstrumentId() const
     if (m_selectedTrackId == NoTrack)
         return NoInstrument;
 
-    Track *track = getTrackById(m_selectedTrackId);
+    const Track *track = getTrackById(m_selectedTrackId);
 
     if (!track)
         return NoInstrument;
@@ -2083,7 +2084,6 @@ bool Composition::detachTrack(Rosegarden::Track *track)
     if (it == m_tracks.end()) {
         RG_DEBUG << "detachTrack() : no such track " << track;
         throw Exception("track id not found");
-        return false;
     }
 
     ((*it).second)->setOwningComposition(nullptr);
@@ -2213,7 +2213,7 @@ Composition::isInstrumentRecording(InstrumentId instrumentID) const
              m_tracks.begin();
          ti != m_tracks.end();
          ++ti) {
-        Track *track = ti->second;
+        const Track *track = ti->second;
 
         // If this Track has this Instrument
         if (track->getInstrument() == instrumentID) {
@@ -2404,7 +2404,7 @@ Composition::getTrackByPosition(int position) const
 int
 Composition::getTrackPositionById(TrackId id) const
 {
-    Track *track = getTrackById(id);
+    const Track *track = getTrackById(id);
     if (!track) return -1;
     return track->getPosition();
 }
@@ -2484,7 +2484,7 @@ Composition::enforceArmRule(const Track *track)
         return;
 
     // For each track...
-    for (TrackMap::value_type &trackPair: m_tracks) {
+    for (const TrackMap::value_type &trackPair: m_tracks) {
         Track *otherTrack = trackPair.second;
         // Not armed?  Skip.
         // Use "isReallyArmed()" to make sure we check archived tracks as well.
@@ -2572,11 +2572,12 @@ Composition::notifySegmentRepeatChanged(Segment *s, bool repeat) const
 }
 
 void
-Composition::notifySegmentRepeatEndChanged(Segment *s, timeT t) const
+Composition::notifySegmentRepeatEndChanged
+(Segment *segment, timeT repeatEndTime) const
 {
     for (ObserverSet::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
-        (*i)->segmentRepeatEndChanged(this, s, t);
+        (*i)->segmentRepeatEndChanged(this, segment, repeatEndTime);
     }
 }
 
@@ -2783,13 +2784,13 @@ Composition::addMarker(Rosegarden::Marker *marker)
     // Sort the markers.
     // ??? A std::set should be a little more efficient.
     std::sort(m_markers.begin(), m_markers.end(),
-            [](Marker *lhs, Marker *rhs){ return lhs->getTime() < rhs->getTime(); });
+            [](const Marker *lhs, const Marker *rhs){ return lhs->getTime() < rhs->getTime(); });
 
     updateRefreshStatuses();
 }
 
 bool
-Composition::detachMarker(Rosegarden::Marker *marker)
+Composition::detachMarker(const Rosegarden::Marker *marker)
 {
     MarkerVector::iterator it = m_markers.begin();
 
@@ -2835,7 +2836,7 @@ Composition::isMarkerAtPosition(Rosegarden::timeT time) const
 #endif
 
 void
-Composition::setSegmentColourMap(Rosegarden::ColourMap &newmap)
+Composition::setSegmentColourMap(const Rosegarden::ColourMap &newmap)
 {
     m_segmentColourMap = newmap;
 
@@ -2843,7 +2844,7 @@ Composition::setSegmentColourMap(Rosegarden::ColourMap &newmap)
 }
 
 void
-Composition::setGeneralColourMap(Rosegarden::ColourMap &newmap)
+Composition::setGeneralColourMap(const Rosegarden::ColourMap &newmap)
 {
     m_generalColourMap = newmap;
 
@@ -2893,7 +2894,7 @@ Composition::dump() const
     RG_DEBUG << "dump(): Composition segments";
 
     for (const_iterator i = begin(); i != end(); ++i) {
-        Segment *s = *i;
+        const Segment *s = *i;
 
         RG_DEBUG << "Segment start : " << s->getStartTime()
                 << " - end : " << s->getEndMarkerTime()

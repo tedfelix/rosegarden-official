@@ -131,7 +131,6 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
 
         // i is a grace note.  Find the first host note following it
 
-        j = i;
         while (++j != end()) {
             if ((*j)->getNotationAbsoluteTime() >
                 (*i)->getNotationAbsoluteTime()) break;
@@ -297,6 +296,7 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 
         for (IteratorVector::iterator ci = c.begin();
              ci != c.end(); ++ci) {
+            // cppcheck-suppress useStlAlgorithm
             d += (**ci)->getDuration();
         }
     }
@@ -424,7 +424,6 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(
         (**j)->set<Bool>(BaseProperties::MAY_HAVE_GRACE_NOTES, true);
     }
 
-    timeT graceNoteTime = hostNoteEarliestTime;
     timeT graceNoteDuration = hostNoteNotationDuration / 4;
     if (graceNoteDuration > hostNoteShortestDuration / 2) {
         graceNoteDuration = hostNoteShortestDuration / 2;
@@ -435,6 +434,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(
         d = (*eventIter)->getDuration() - graceNoteDuration;
     } else {
 
+        const timeT graceNoteTime = hostNoteEarliestTime;
         int count = 0, index = 0;
         bool found = false;
         int prevSubOrdering = 0;

@@ -268,7 +268,7 @@ SystemExclusive::makeEvent(timeT absoluteTime, const std::string &rawData)
 std::string
 SystemExclusive::toHex(std::string rawData)
 {
-    static char hexchars[] = "0123456789ABCDEF";
+    static const char hexchars[] = "0123456789ABCDEF";
     std::string h;
     // For each character in rawData
     for (size_t i = 0; i < rawData.size(); ++i) {

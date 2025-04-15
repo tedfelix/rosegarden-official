@@ -216,7 +216,7 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
 InstrumentList
 Studio::getAllInstruments()
 {
-    InstrumentList list, subList;
+    InstrumentList list;
 
     DeviceListIterator it;
 
@@ -225,7 +225,7 @@ Studio::getAllInstruments()
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
         // get sub list
-        subList = (*it)->getAllInstruments();
+        InstrumentList subList = (*it)->getAllInstruments();
 
         // concetenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -297,7 +297,7 @@ Studio::getInstrumentFromList(int index)
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice *midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
         {
@@ -327,7 +327,7 @@ Studio::getInstrumentFor(const Segment *segment) const
     if (!segment) return nullptr;
     if (!segment->getComposition()) return nullptr;
     TrackId tid = segment->getTrack();
-    Track *track = segment->getComposition()->getTrackById(tid);
+    const Track *track = segment->getComposition()->getTrackById(tid);
     if (!track) return nullptr;
     return getInstrumentFor(track);
 }
@@ -521,7 +521,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
     } else {
         for (std::vector<DeviceId>::const_iterator di(devices.begin());
              di != devices.end(); ++di) {
-            Device *d = getDevice(*di);
+            const Device *d = getDevice(*di);
             if (!d) {
                 RG_WARNING << "toXmlString(): WARNING: Unknown device id " << (*di);
             } else {
@@ -538,7 +538,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
 }
 
 const MidiMetronome *
-Studio::getMetronomeFromDevice(DeviceId id)
+Studio::getMetronomeFromDevice(DeviceId id) const
 {
     // For each Device
     for (std::vector<Device *>::const_iterator deviceIter = m_devices.begin();
@@ -551,7 +551,7 @@ Studio::getMetronomeFromDevice(DeviceId id)
         if ((*deviceIter)->getId() != id)
             continue;
 
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(*deviceIter);
+        const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(*deviceIter);
 
         // If it's a MidiDevice and it has a metronome, return it.
         if (midiDevice  &&
@@ -560,7 +560,7 @@ Studio::getMetronomeFromDevice(DeviceId id)
             return midiDevice->getMetronome();
         }
 
-        SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*deviceIter);
+        const SoftSynthDevice *ssDevice = dynamic_cast<SoftSynthDevice *>(*deviceIter);
 
         // If it's a SoftSynthDevice and it has a metronome, return it.
         if (ssDevice  &&
@@ -602,7 +602,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
     //
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice && midiDevice->getDirection() == MidiDevice::Play)
         {
@@ -689,7 +689,7 @@ Studio::unassignAllInstruments()
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
         {
@@ -832,7 +832,7 @@ Studio::getSegmentName(InstrumentId id)
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
-        MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
 
         if (midiDevice)
         {
@@ -921,7 +921,7 @@ Studio::getFirstMIDIInstrument() const
     InstrumentList instruments = device->getPresentationInstruments();
 
     if (!instruments.empty()) {
-        Instrument *instrument = instruments[0];
+        const Instrument *instrument = instruments[0];
         if (instrument)
             return instrument->getId();
     }

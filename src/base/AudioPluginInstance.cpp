@@ -202,7 +202,7 @@ AudioPluginInstance::clearPorts()
 }
 
 std::string
-AudioPluginInstance::getConfigurationValue(std::string k) const
+AudioPluginInstance::getConfigurationValue(const std::string& k) const
 {
     ConfigMap::const_iterator i = m_config.find(k);
     if (i != m_config.end()) return i->second;
@@ -255,7 +255,7 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
     if (s < base.length() - 1) base = base.substr(s + 1);
 
     std::string::size_type d = base.rfind('.');
-    if (d < base.length() - 1 && d > 0) base = base.substr(0, d);
+    if (d < base.length() - 1 && d > 0) base.resize(d);
 
     return base;
 }

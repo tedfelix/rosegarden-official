@@ -42,7 +42,7 @@ class SegmentID
   static const std::string Target;
 
   explicit SegmentID(const Event &e);
-  SegmentID(const std::string& type, int ID = -1);
+  explicit SegmentID(const std::string& type, int ID = -1);
 
   /// Returned event is on heap; caller takes responsibility for ownership
   Event *getAsEvent(timeT absoluteTime) const;

@@ -45,7 +45,7 @@ ChordFromCounterpoint::test(const Iterator &i)
 bool
 ChordFromCounterpoint::sample(const Iterator &i, bool goingForwards)
 {
-    Event *e = getAsEvent(i);
+    const Event *e = getAsEvent(i);
     timeT onTime    = e->getAbsoluteTime();
     timeT duration  = e->getDuration();
 
@@ -65,7 +65,7 @@ m_myPreDuration = Note(Note::WholeNote).getDuration();
 NotationQuantizer * FigChord::m_nq = nullptr;
 
 const Quantizer *
-FigChord::getQuantizer()
+FigChord::getNotationQuantizer()
 {
   if (!m_nq) { m_nq = new NotationQuantizer; }
   return m_nq;
@@ -88,7 +88,7 @@ FindFigChords::
 operator++()
 {
     for (;m_iter != m_chordSource->end(); ++m_iter) {
-        Event *e = *m_iter;
+        const Event *e = *m_iter;
         // Events that are part of a previous chord don't imply a new
         // chord.
         if (e->getAbsoluteTime() <= m_timePreviousChord)
@@ -98,8 +98,8 @@ operator++()
             { continue; }
 
         // OK, we have a new chord.
-        const timeT timeNow = e->getAbsoluteTime();
-        m_timePreviousChord = timeNow;
+        const timeT tNow = e->getAbsoluteTime();
+        m_timePreviousChord = tNow;
         break;
     }
     return *this;

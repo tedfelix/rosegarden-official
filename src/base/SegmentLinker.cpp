@@ -201,11 +201,12 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
     // Used to memorize a possible change in lyrics
     bool lyricsChanged = false;
 
-    LinkedSegmentParamsList::iterator itr;
-    for(itr = m_linkedSegmentParamsList.begin();
-        itr!= m_linkedSegmentParamsList.end(); ++itr) {
+    for (LinkedSegmentParamsList::iterator linkedSegmentParamIter =
+                 m_linkedSegmentParamsList.begin();
+         linkedSegmentParamIter != m_linkedSegmentParamsList.end();
+         ++linkedSegmentParamIter) {
 
-        LinkedSegmentParams &linkedSegParams = *itr;
+        LinkedSegmentParams &linkedSegParams = *linkedSegmentParamIter;
         Segment *linkedSegToUpdate = linkedSegParams.m_linkedSegment;
         uint refreshStatusId = linkedSegParams.m_refreshStatusId;
         SegmentRefreshStatus &rs =
@@ -228,9 +229,10 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
 
         //now go through s from 'from' to 'to', inserting the equivalent
         //event in linkedSegToUpdate
-        for(Segment::const_iterator itr = s->findTime(from);
-                                    itr != s->findTime(to); ++itr) {
-            const Event *e = *itr;
+        for (Segment::const_iterator eventIter = s->findTime(from);
+             eventIter != s->findTime(to);
+             ++eventIter) {
+            const Event *e = *eventIter;
 
             timeT eventT = (e->getAbsoluteTime() - sourceSegStartTime)
                            + segStartTime;
@@ -384,7 +386,7 @@ SegmentLinker::refreshSegment(Segment *seg)
     for (itr = m_linkedSegmentParamsList.begin();
         itr!= m_linkedSegmentParamsList.end(); ++itr) {
 
-        LinkedSegmentParams &linkedSegParams = *itr;
+        const LinkedSegmentParams &linkedSegParams = *itr;
         Segment *other = linkedSegParams.m_linkedSegment;
         if (other != seg) {
             sourceSeg = other;

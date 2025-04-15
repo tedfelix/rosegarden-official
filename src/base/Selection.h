@@ -291,7 +291,9 @@ public:
      * with a time signature at beginTime if there is an explicit
      * signature there in the source composition.
      */
-    TimeSignatureSelection(Composition &, timeT beginTime, timeT endTime,
+    TimeSignatureSelection(const Composition &,
+                           timeT beginTime,
+                           timeT endTime,
                            bool includeOpeningTimeSig);
 
     virtual ~TimeSignatureSelection();
@@ -337,7 +339,9 @@ public:
      * tempo at beginTime if there is an explicit tempo change there
      * in the source composition.
      */
-    TempoSelection(Composition &, timeT beginTime, timeT endTime,
+    TempoSelection(const Composition &,
+                   timeT beginTime,
+                   timeT endTime,
                    bool includeOpeningTempo);
 
     virtual ~TempoSelection();

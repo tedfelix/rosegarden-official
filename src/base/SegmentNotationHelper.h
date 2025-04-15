@@ -41,7 +41,7 @@ public:
     /**
      * Return the notation absolute time plus the notation duration.
      */
-    static timeT getNotationEndTime(Event *e);
+    static timeT getNotationEndTime(const Event *e);
 
     /**
      * Return an iterator pointing at the first event in the segment
@@ -332,7 +332,7 @@ public:
      * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    static bool isViable(Event *e, int dots = -1) {
+    static bool isViable(const Event *e, int dots = -1) {
         return isViable(e->getDuration(), dots);
     }
 
@@ -397,7 +397,7 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.  Use makeTupletGroup instead.
      */
-    void makeBeamedGroup(timeT from, timeT to, std::string type);
+    void makeBeamedGroup(timeT from, timeT to, const std::string& type);
 
     /**
      * Give all events between the start of the timeslice containing
@@ -408,7 +408,9 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.  Use makeTupletGroup instead.
      */
-    void makeBeamedGroup(Segment::iterator from, Segment::iterator to, std::string type);
+    void makeBeamedGroup(Segment::iterator from,
+                         Segment::iterator to,
+                         const std::string& type);
 
     /**
      * Give all events between from and to the same new group id and
@@ -422,7 +424,9 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.
      */
-    void makeBeamedGroupExact(Segment::iterator from, Segment::iterator to, std::string type);
+    void makeBeamedGroupExact(Segment::iterator from,
+                              Segment::iterator to,
+                              const std::string& type);
 
 
     /**
@@ -448,7 +452,7 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(timeT from, timeT to, std::string type);
+    void autoBeam(timeT from, timeT to, const std::string& type);
 
     /**
      * Divide the notes between the start of the bar containing
@@ -456,7 +460,9 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(Segment::iterator from, Segment::iterator to, std::string type);
+    void autoBeam(Segment::iterator from,
+                  Segment::iterator to,
+                  const std::string& type);
 
 
     /**
@@ -528,7 +534,7 @@ public:
 
 
 
-    std::pair<Event *, Event *> splitPreservingPerformanceTimes(Event *e,
+    std::pair<Event *, Event *> splitPreservingPerformanceTimes(const Event *e,
                                                                 timeT q1);
 
     /**
@@ -578,8 +584,10 @@ protected:
                              Event *modelEvent, bool tiedBack);
 
     /// for use by insertSomething
-    Segment::iterator insertSingleSomething(Segment::iterator i, int duration,
-                                   Event *modelEvent, bool tiedBack);
+    Segment::iterator insertSingleSomething(Segment::iterator i,
+                                            int duration,
+                                            const Event *modelEvent,
+                                            bool tiedBack);
 
     /// for use by insertSingleSomething
     void setInsertedNoteGroup(Event *e, Segment::iterator i);
@@ -593,11 +601,17 @@ protected:
 
     /// for use by autoBeam
 
-    void autoBeamBar(Segment::iterator from, Segment::iterator to, TimeSignature timesig,
-                     std::string type);
+    void autoBeamBar(Segment::iterator from,
+                     Segment::iterator to,
+                     const TimeSignature& tsig,
+                     const std::string& type);
 
-    void autoBeamBar(Segment::iterator from, Segment::iterator to, timeT average,
-                     timeT minimum, timeT maximum, std::string type);
+    void autoBeamBar(Segment::iterator from,
+                     Segment::iterator to,
+                     timeT average,
+                     timeT minimum,
+                     timeT maximum,
+                     const std::string& type);
 
     /// used by autoBeamAux (duplicate of private method in Segment)
     bool hasEffectiveDuration(Segment::iterator i);

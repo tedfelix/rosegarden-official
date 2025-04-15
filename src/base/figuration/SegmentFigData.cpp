@@ -337,8 +337,6 @@ SegmentFigData::SegmentFigData(Segment* s) :
             m_needsTag = true;
             m_type = Target;
         }
-
-        continue;
     }
 
     // We got to the end without finding anything figuration-relevant,
@@ -467,7 +465,7 @@ updateComposition(MacroCommand* command)
          i != segs.end();
          ++i) {
         Segment *s = i->first;
-        SegmentFigData &data = i->second;
+        const SegmentFigData &data = i->second;
 
         Q_ASSERT(!data.m_needsTag);
 
@@ -591,8 +589,8 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
         (void)target->insert(e);
     }
     // Write the respective notes into target
-    RelativeEventVec & events = figuration->m_events;
-    for (RelativeEventVec::iterator k = events.begin();
+    const RelativeEventVec & events = figuration->m_events;
+    for (RelativeEventVec::const_iterator k = events.begin();
          k != events.end();
          ++k) {
         const timeT eventTime =
@@ -606,6 +604,7 @@ SegmentFigData::expand(SourcedFiguration& sourcedFiguration,
              ++j) {
             if ((eventTime >= j->m_start) &&
                 (eventTime < j->m_end))
+                // cppcheck-suppress useStlAlgorithm
                 {
                     pBlockChord = j->m_chord;
                     break;

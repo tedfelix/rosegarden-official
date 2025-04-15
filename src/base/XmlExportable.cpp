@@ -57,7 +57,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
     if (bufsiz < len * 2 + 10) {
         bufsiz = len * 2 + 10;
-        buffer = (char *)std::realloc(buffer, bufsiz);
+        buffer = static_cast<char *>(std::realloc(buffer, bufsiz));
     }
 
     // Escape any xml special characters, and also make sure we have
@@ -92,7 +92,8 @@ std::string XmlExportable::encode(const std::string &s0)
                 if (length == 0 || mblen == length) {
                     if (bufsiz < buflen + mblen + 1) {
                         bufsiz = 2 * buflen + mblen + 1;
-                        buffer = (char *)std::realloc(buffer, bufsiz);
+                        buffer =
+                            static_cast<char *>(std::realloc(buffer, bufsiz));
                     }
                     std::memcpy(buffer + buflen, multibyte, mblen);
                     buflen += mblen;
@@ -116,7 +117,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
                 if (bufsiz < buflen + 10) {
                     bufsiz = 2 * buflen + 10;
-                    buffer = (char *)std::realloc(buffer, bufsiz);
+                    buffer = static_cast<char *>(std::realloc(buffer, bufsiz));
                 }
 
                 switch (c) {
@@ -199,7 +200,7 @@ std::string XmlExportable::encode(const std::string &s0)
         if (length == 0 || mblen == length) {
             if (bufsiz < buflen + mblen + 1) {
                 bufsiz = 2 * buflen + mblen + 1;
-                buffer = (char *)std::realloc(buffer, bufsiz);
+                buffer = static_cast<char *>(std::realloc(buffer, bufsiz));
             }
             std::memcpy(buffer + buflen, multibyte, mblen);
             buflen += mblen;

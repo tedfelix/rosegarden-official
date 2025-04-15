@@ -68,7 +68,9 @@ class ControllerSearch
     // Search Segments A and B for the latest controller value.  B may
     // be nullptr but A must exist.
     Maybe
-        doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const;
+        doubleSearch(const Segment *a,
+                     const Segment *b,
+                     timeT noLaterThan) const;
 
  private:
     Maybe
@@ -94,16 +96,17 @@ struct ControllerContextMap
     m_PitchBendLatestValue(Maybe(false,ControllerSearchValue()))
     {};
 
-    void makeControlValueAbsolute(Instrument *instrument, Segment *a,
-                                  Segment *b, Event *e, timeT at);
+    void makeControlValueAbsolute(const Instrument *instrument,
+                                  const Segment *a,
+                                  const Segment *b, Event *e, timeT at);
 
     // Return the respective controller value at searchTime.  Segment
     // A is primary and governs timing and repitition.  Segment
     // B, if non-nullptr, will be searched too.  In any case the latest event
     // takes priority.  Defaults from Instrument will be used if
     // neccessary.
-    int getControllerValue(Instrument *instrument,
-                           Segment *a, Segment *b,
+    int getControllerValue(const Instrument *instrument,
+                           const Segment *a, const Segment *b,
                            timeT searchTime, const std::string& eventType,
                            int controllerId);
 
@@ -114,11 +117,11 @@ struct ControllerContextMap
     static int makeAbsolute(const ControlParameter * controlParameter,
                      int value);
     static const ControlParameter
-    *getControlParameter(Instrument *instrument,
+    *getControlParameter(const Instrument *instrument,
                          const std::string& eventType,
                          const int controllerId);
     static int
-    getStaticValue(Instrument *instrument,
+    getStaticValue(const Instrument *instrument,
                    const std::string& eventType, int controllerId);
 
     Cache             m_latestValues;

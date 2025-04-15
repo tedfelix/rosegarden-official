@@ -209,7 +209,7 @@ setProgram(const MidiProgram &program)
 bool
 Instrument::isProgramValid() const
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md)
         return false;
 
@@ -269,7 +269,7 @@ Instrument::sendsProgramChange() const
         //RG_DEBUG << "sendsProgramChange() percussion Instrument...";
         //RG_DEBUG << "  channel:" << getNaturalChannel();
 
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+        const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
         if (!midiDevice)
             return false;
 
@@ -322,7 +322,7 @@ Instrument::getLSB() const
 void
 Instrument::pickFirstProgram(bool percussion)
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md)
         return;
 
@@ -554,6 +554,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
 bool
 Instrument::hasController(MidiByte controlNumber) const
 {
+    // cppcheck-suppress useStlAlgorithm
     for (const StaticControllers::value_type &pair : m_staticControllers) {
         if (pair.first == controlNumber)
             return true;

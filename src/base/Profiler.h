@@ -91,7 +91,7 @@ public:
      * worst-case times will be shown when the program exits or
      * Profiles::dump() is called.
      */
-    Profiler(const char *name, bool showOnDestruct = false);
+    explicit Profiler(const char *name, bool showOnDestruct = false);
     ~Profiler();
 
     //void update() const;
@@ -110,7 +110,7 @@ protected:
 class Profiler
 {
 public:
-    Profiler(const char *, bool = false) { }
+    explicit Profiler(const char *, bool = false) { }
     ~Profiler() { }
 
     // cppcheck-suppress functionStatic

@@ -90,7 +90,7 @@ public:
     // launch the ColourConfigurationPage.
 
     /// Add a colour entry using the lowest available ID.
-    void addEntry(QColor colour, std::string name);
+    void addEntry(QColor colour, const std::string& name);
     void modifyName(unsigned colourID, const std::string& name);
     void modifyColour(unsigned colourID, QColor colour);
     void deleteEntry(unsigned colourID);

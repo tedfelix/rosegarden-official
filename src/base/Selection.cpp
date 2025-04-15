@@ -158,6 +158,7 @@ EventSelection::eraseThisEvent(Event *event)
          ++eventIter) {
 
         // If this is the actual one we want to remove...
+        // cppcheck-suppress useStlAlgorithm
         if (*eventIter == event) {
 
             eventIter = m_segmentEvents.erase(eventIter);
@@ -304,6 +305,7 @@ EventSelection::addObserver(EventSelectionObserver *obs) {
 }
 
 void
+// cppcheck-suppress constParameterPointer
 EventSelection::removeObserver(EventSelectionObserver *obs) {
     m_observers.remove(obs);
 }
@@ -340,6 +342,7 @@ EventSelection::contains(Event *e) const
     for (EventContainer::const_iterator it = interval.first;
          it != interval.second; ++it)
     {
+        // cppcheck-suppress useStlAlgorithm
         if (*it == e) return true;
     }
 
@@ -351,6 +354,7 @@ EventSelection::contains(const std::string &type) const
 {
     for (EventContainer::const_iterator i = m_segmentEvents.begin();
          i != m_segmentEvents.end(); ++i) {
+        // cppcheck-suppress useStlAlgorithm
         if ((*i)->isa(type)) return true;
     }
     return false;
@@ -444,7 +448,7 @@ EventSelection::getRangeTimes() const
 
     for (RangeList::iterator i = ranges.begin(); i != ranges.end(); ++i) {
         timeT startTime = m_originalSegment.getEndTime();
-        timeT   endTime = m_originalSegment.getEndTime();
+        timeT   endTime = startTime;
         if (i->first != m_originalSegment.end()) {
             startTime = (*i->first)->getAbsoluteTime();
         }
@@ -511,7 +515,7 @@ TimewiseSelection<ElementInfo>::AddToComposition(Composition *composition) const
 
 TimeSignatureSelection::TimeSignatureSelection() { }
 
-TimeSignatureSelection::TimeSignatureSelection(Composition &composition,
+TimeSignatureSelection::TimeSignatureSelection(const Composition &composition,
                                                timeT beginTime,
                                                timeT endTime,
                                                bool includeOpeningTimeSig)
@@ -571,7 +575,7 @@ TimeSignatureSelection::AddToComposition(Composition *composition) const
 
 TempoSelection::TempoSelection() { }
 
-TempoSelection::TempoSelection(Composition &composition,
+TempoSelection::TempoSelection(const Composition &composition,
                                timeT beginTime,
                                timeT endTime,
                                bool includeOpeningTempo)

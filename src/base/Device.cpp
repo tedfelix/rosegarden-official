@@ -121,6 +121,7 @@ void Device::addObserver(DeviceObserver *obs)
     m_observers.push_back(obs);
 }
 
+// cppcheck-suppress constParameterPointer
 void Device::removeObserver(DeviceObserver *obs)
 {
     //RG_DEBUG << "removeObserver" << this << obs;

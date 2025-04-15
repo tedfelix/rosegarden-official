@@ -65,7 +65,9 @@ class NotePixmapFactory
 public:
     static const int NO_GRACE_SIZE = -1;
 
-    NotePixmapFactory(const QString& fontName = "", int size = -1, int graceSize = NO_GRACE_SIZE);
+    explicit NotePixmapFactory(const QString& fontName = "",
+                               int size = -1,
+                               int graceSize = NO_GRACE_SIZE);
     NotePixmapFactory(const NotePixmapFactory &);
     NotePixmapFactory &operator=(const NotePixmapFactory &);
     ~NotePixmapFactory();

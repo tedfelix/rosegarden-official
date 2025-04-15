@@ -176,7 +176,7 @@ public:
     typedef std::map<std::string, std::string> ConfigMap;
     void clearConfiguration() { m_config.clear(); }
     const ConfigMap &getConfiguration() const { return m_config; }
-    std::string getConfigurationValue(std::string k) const;
+    std::string getConfigurationValue(const std::string& k) const;
     void setConfigurationValue(const std::string& k, const std::string& v);
 
     std::string getDistinctiveConfigurationText() const;

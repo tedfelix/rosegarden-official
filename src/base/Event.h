@@ -619,7 +619,7 @@ private:
         return (*map)->insert(pair).first;
     }
 
-    int getSubOrdering(std::string eventType);
+    static int getSubOrdering(const std::string& eventType);
 
 #ifndef NDEBUG
     static int m_getCount;
