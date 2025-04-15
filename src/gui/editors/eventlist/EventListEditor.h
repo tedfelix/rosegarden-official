@@ -21,10 +21,10 @@
 #include "base/Segment.h"  // SegmentObserver
 #include "gui/general/EditViewBase.h"
 
+#include <QString>
+
 #include <set>
 #include <vector>
-
-#include <QString>
 
 
 class QWidget;
@@ -164,8 +164,8 @@ private:
     bool m_showSegmentID{true};
     QCheckBox *m_otherCheckBox;
     bool m_showOther{true};
-
-    bool m_allState{true};
+    // All the filter bools.  See slotAllOnOffClicked().
+    std::vector<bool *> m_showStates;
 
     // The Event table.
     QTableWidget *m_tableWidget;
