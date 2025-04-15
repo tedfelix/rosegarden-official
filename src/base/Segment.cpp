@@ -672,8 +672,8 @@ Segment::erase(iterator pos)
 void
 Segment::erase(iterator from, iterator to)
 {
-    timeT startTime = 0, endTime = m_endTime;
-    if (from != end()) startTime = (*from)->getAbsoluteTime();
+    timeT startTimeOuter = 0, endTime = m_endTime;
+    if (from != end()) startTimeOuter = (*from)->getAbsoluteTime();
     if (to != end()) endTime = (*to)->getAbsoluteTime() + (*to)->getGreaterDuration();
 
     // Not very efficient, but without an observer event for
@@ -694,10 +694,10 @@ Segment::erase(iterator from, iterator to)
         i = j;
     }
 
-    if (startTime == m_startTime && begin() != end()) {
-        timeT startTime1 = (*begin())->getAbsoluteTime();
-        if (m_composition) m_composition->setSegmentStartTime(this, startTime1);
-        else m_startTime = startTime1;
+    if (startTimeOuter == m_startTime  &&  begin() != end()) {
+        const timeT startTimeInner = (*begin())->getAbsoluteTime();
+        if (m_composition) m_composition->setSegmentStartTime(this, startTimeInner);
+        else m_startTime = startTimeInner;
         notifyStartChanged(m_startTime);
     }
 
@@ -705,7 +705,7 @@ Segment::erase(iterator from, iterator to)
         updateEndTime();
     }
 
-    updateRefreshStatuses(startTime, endTime);
+    updateRefreshStatuses(startTimeOuter, endTime);
 }
 
 
