@@ -1194,6 +1194,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
         m_q->setToTarget(s, i, t, d);
     }
 /*
+    ++passes;
     cerr << "NotationQuantizer: " << events << " events ("
          << notes << " notes), " << passes << " passes, "
          << setGood << " good sets, " << setBad << " bad sets, "
