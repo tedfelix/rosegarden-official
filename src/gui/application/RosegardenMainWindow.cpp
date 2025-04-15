@@ -1458,7 +1458,7 @@ RosegardenMainWindow::openFile(const QString& filePath, ImportType type)
             filePath,
             type,  // importType
             true,  // permanent
-            !revert,  // lock
+            revert,  // revert
             true);  // clearHistory
 
     if (!doc)
@@ -1515,7 +1515,7 @@ RosegardenMainWindow::openFile(const QString& filePath, ImportType type)
 RosegardenDocument *
 RosegardenMainWindow::createDocument(
         QString filePath, ImportType importType, bool permanent,
-        bool lock, bool clearHistory)
+        bool revert, bool clearHistory)
 {
     // ??? This and the create functions it calls might make more sense in
     //     RosegardenDocument.
@@ -1611,7 +1611,7 @@ RosegardenMainWindow::createDocument(
         doc = createDocumentFromRGFile(
                 filePath,
                 permanent,
-                lock,
+                revert,
                 clearHistory);
         break;
 
@@ -1627,7 +1627,7 @@ RosegardenMainWindow::createDocument(
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromRGFile(
-        const QString &filePath, bool permanent, bool lock, bool clearHistory)
+        const QString &filePath, bool permanent, bool revert, bool clearHistory)
 {
     // ??? This and its caller should probably be moved into
     //     RosegardenDocument as static factory functions.
@@ -1639,7 +1639,7 @@ RosegardenMainWindow::createDocumentFromRGFile(
     // Check for an auto-save file to recover
     QString autoSaveFileName = AutoSaveFinder().checkAutoSaveFile(filePath);
 
-    bool recovering = (autoSaveFileName != "");
+    bool recovering = (autoSaveFileName != ""  &&  !revert);
 
     if (recovering) {
         QFileInfo fileInfo(filePath);
@@ -1684,7 +1684,7 @@ RosegardenMainWindow::createDocumentFromRGFile(
             openFilePath,  // filename
             permanent,  // permanent
             false,  // squelchProcessDialog
-            lock);  // enableLock
+            !revert);  // enableLock
 
     // If the read failed, bail.
     if (!readOk) {
@@ -4034,16 +4034,19 @@ RosegardenMainWindow::slotRevertToSaved()
 {
     RG_DEBUG << "slotRevertToSaved";
 
-    if (RosegardenDocument::currentDocument->isModified()) {
-        int revert =
-            QMessageBox::question(this, tr("Rosegarden"),
-                                       tr("Revert modified document to previous saved version?"));
+    // No changes, no point.  Bail.
+    if (!RosegardenDocument::currentDocument->isModified())
+        return;
 
-        if (revert == QMessageBox::No)
-            return ;
+    const int revert = QMessageBox::question(this, tr("Rosegarden"),
+            tr("Revert modified document to previous saved version?"));
+    if (revert == QMessageBox::No)
+        return;
 
-        openFile(RosegardenDocument::currentDocument->getAbsFilePath());
-    }
+    // Re-open the file.
+    // Further down, we will figure out this is a revert based on the
+    // filename.  This will disable locking and autosave.
+    openFile(RosegardenDocument::currentDocument->getAbsFilePath());
 }
 
 void
@@ -4664,7 +4667,7 @@ RosegardenMainWindow::mergeFile(QStringList filePathList, ImportType type)
                 filePathList[i],
                 type,  // importType
                 false,  // permanent
-                true,  // lock
+                false,  // revert
                 false);  // clearHistory
         if (!srcDoc)
             return;
