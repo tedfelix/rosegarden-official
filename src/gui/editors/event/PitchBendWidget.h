@@ -36,6 +36,7 @@ class PitchBendWidget : public EventWidget
 public:
 
     PitchBendWidget(EditEvent *parent, const Event &event);
+    ~PitchBendWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 

@@ -36,6 +36,7 @@ class KeyPressureWidget : public EventWidget
 public:
 
     KeyPressureWidget(EditEvent *parent, const Event &event);
+    ~KeyPressureWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 

@@ -24,6 +24,7 @@
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/MidiTypes.h"  // For KeyPressure::EventType...
 #include "gui/dialogs/PitchDialog.h"
+#include "misc/PreferenceInt.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -34,6 +35,16 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString KeyPressureWidgetGroup{"KeyPressureWidget"};
+    PreferenceInt a_pitchSetting(KeyPressureWidgetGroup, "Pitch", 60);
+    PreferenceInt a_pressureSetting(KeyPressureWidgetGroup, "Pressure", 0);
+
+}
 
 
 KeyPressureWidget::KeyPressureWidget(EditEvent *parent, const Event &event) :
@@ -70,7 +81,7 @@ KeyPressureWidget::KeyPressureWidget(EditEvent *parent, const Event &event) :
     m_pitchSpinBox = new QSpinBox(propertiesGroup);
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
-    int pitch{0};
+    int pitch{a_pitchSetting.get()};
     if (event.has(KeyPressure::PITCH))
         pitch = event.get<Int>(KeyPressure::PITCH);
     m_pitchSpinBox->setValue(pitch);
@@ -90,7 +101,7 @@ KeyPressureWidget::KeyPressureWidget(EditEvent *parent, const Event &event) :
     m_pressureSpinBox = new QSpinBox(propertiesGroup);
     m_pressureSpinBox->setMinimum(MidiMinValue);
     m_pressureSpinBox->setMaximum(MidiMaxValue);
-    int pressure{0};
+    int pressure{a_pressureSetting.get()};
     if (event.has(KeyPressure::PRESSURE))
         pressure = event.get<Int>(KeyPressure::PRESSURE);
     m_pressureSpinBox->setValue(pressure);
@@ -98,6 +109,12 @@ KeyPressureWidget::KeyPressureWidget(EditEvent *parent, const Event &event) :
 
     ++row;
 
+}
+
+KeyPressureWidget::~KeyPressureWidget()
+{
+    a_pitchSetting.set(m_pitchSpinBox->value());
+    a_pressureSetting.set(m_pressureSpinBox->value());
 }
 
 EventWidget::PropertyNameSet
