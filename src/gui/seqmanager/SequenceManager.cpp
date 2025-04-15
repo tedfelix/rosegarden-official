@@ -87,8 +87,8 @@ SequenceManager::SequenceManager() :
     m_addedSegments(),
     m_removedSegments(),
     m_shownOverrunWarning(false),
-    m_reportTimer(nullptr),
-    m_canReport(true),
+    //m_reportTimer(nullptr),
+    //m_canReport(true),
     m_transportStatus(STOPPED),
     m_lastRewoundAt(clock()),
     m_countdownDialog(nullptr),
@@ -828,10 +828,12 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                     if (handling)
                         continue;
 
+#if 0
                     if (!m_canReport) {
                         RG_DEBUG << "processAsynchronousMidi(): Not reporting it to user just yet";
                         continue;
                     }
+#endif
 
                     if ((*i)->getData1() == MappedEvent::FailureALSACallFailed) {
 
@@ -927,6 +929,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
 
                     }
 
+#if 0
                     // Turn off the report flag and set off a one-shot
                     // timer for 5 seconds.
                     if (!m_reportTimer->isActive()) {
@@ -938,6 +941,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                         m_reportTimer->setSingleShot(true);
                         m_reportTimer->start(5000);
                     }
+#endif
                 }
             } else {  // Neither playing nor recording.
                 //StartupLogo::hideIfStillThere();

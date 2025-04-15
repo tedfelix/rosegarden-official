@@ -90,7 +90,7 @@ class TriggerExpansionContext
 
 public:
     typedef std::queue<TriggerExpansionContext> Queue;
-    typedef std::vector<Segment::iterator> iteratorcontainer;
+    typedef std::vector<Segment::iterator> IteratorVector;
 
     TriggerExpansionContext(int maxDepth,
                             const TriggerSegmentRec *rec,
@@ -527,12 +527,12 @@ getSoundingIntervals(Segment::iterator iTrigger,
     // shorter.  We can cast away the const because getTiedNotes
     // doesn't change segment, though it can change some properties of
     // events in it.
-    iteratorcontainer tiedNotes =
+    IteratorVector tiedNotes =
         SegmentPerformanceHelper(*const_cast<Segment *>(oversegment)).
         getTiedNotes(iTrigger);
 
 
-    iteratorcontainer::iterator ci = tiedNotes.begin();
+    IteratorVector::iterator ci = tiedNotes.begin();
     if (ci == tiedNotes.end()) { return TimeIntervalVector(); }
 
     /** Define state variables across iterations **/

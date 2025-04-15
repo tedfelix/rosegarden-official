@@ -1209,6 +1209,26 @@ EventListEditor::editItem(const QTableWidgetItem *item)
             *segment,
             event,  // eventToModify
             newEvent));  // newEvent
+
+    // ??? Would be nice if we could select the new item to make it clear to
+    //     the user where the new item is.  Especially if the item moves in
+    //     time.
+    //
+    //     Tried creating and storing a key to use to select the new item
+    //     in updateTableWidget().  However, the key used here is pretty
+    //     complicated and requires the use of
+    //     SegmentPerformanceHelper::getSoundingAbsoluteTime() which requires
+    //     an iterator which we do not have at this point in the code.
+    //     See TempoAndTimeSignatureEditor::m_newItemSelect which was the
+    //     inspiration for this.
+    //
+    //     Tried storing a copy of the Event so that updateTableWidget() could
+    //     find that event and select that item.  This introduced a memory
+    //     leak where newEvent is created, and updateTableWidget() couldn't
+    //     find a match for the copy anyway.
+    //
+    //     This is turning out to be more work than it is worth.  Maybe someone
+    //     else can see something that I cannot.  Good luck.
 }
 
 void
@@ -1648,7 +1668,7 @@ EventListEditor::slotDocumentModified(bool modified)
 void
 EventListEditor::slotItemSelectionChanged()
 {
-    bool haveSelection = !m_tableWidget->selectedItems().empty();
+    const bool haveSelection = !m_tableWidget->selectedItems().empty();
 
     if (haveSelection)
         enterActionState("have_selection");

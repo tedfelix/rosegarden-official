@@ -453,8 +453,8 @@ private:
     bool m_shownOverrunWarning;
 
     /// Just to make sure we don't bother the user too often
-    QTimer *m_reportTimer;
-    bool m_canReport;
+    //QTimer *m_reportTimer;
+    //bool m_canReport;
 
     // *** Misc
 
