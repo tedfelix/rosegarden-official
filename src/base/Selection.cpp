@@ -153,12 +153,12 @@ EventSelection::eraseThisEvent(Event *event)
     std::pair<EventContainer::iterator, EventContainer::iterator> interval =
             m_segmentEvents.equal_range(event);
 
-   for (EventContainer::iterator eventIter = interval.first;
+    for (EventContainer::iterator eventIter = interval.first;
          eventIter != interval.second;
          ++eventIter) {
 
         // If this is the actual one we want to remove...
-       // cppcheck-suppress useStlAlgorithm
+        // cppcheck-suppress useStlAlgorithm
         if (*eventIter == event) {
 
             eventIter = m_segmentEvents.erase(eventIter);
@@ -341,10 +341,10 @@ EventSelection::contains(Event *e) const
 
     for (EventContainer::const_iterator it = interval.first;
          it != interval.second; ++it)
-        {
-            // cppcheck-suppress useStlAlgorithm
-            if (*it == e) return true;
-        }
+    {
+        // cppcheck-suppress useStlAlgorithm
+        if (*it == e) return true;
+    }
 
     return false;
 }

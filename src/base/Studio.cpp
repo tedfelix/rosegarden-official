@@ -272,14 +272,16 @@ Studio::getInstrumentById(InstrumentId id) const
     {
         InstrumentList list = (*deviceIter)->getAllInstruments();
 
-        InstrumentList::const_iterator iter =
-            find_if(list.begin(),
-                    list.end(),
-                    [id](const Instrument* instr)
-                    {return instr->getId() == id; } );
-        if (iter != list.end()) return *iter;
+        for (InstrumentList::const_iterator instrumentIter = list.begin();
+             instrumentIter != list.end();
+             ++instrumentIter) {
+            if ((*instrumentIter)->getId() == id)
+                return (*instrumentIter);
+        }
     }
+
     return nullptr;
+
 }
 
 // From a user selection (from a "Presentation" list) return
@@ -798,24 +800,26 @@ Studio::getDevice(DeviceId id) const
 Device *
 Studio::getAudioDevice() const
 {
-    DeviceList::const_iterator iter =
-        find_if(m_devices.begin(),
-                m_devices.end(),
-                [](const Device* device)
-                {return (device->getType() == Device::Audio); } );
-    if (iter != m_devices.end()) return *iter;
+    // For each Device
+    for (Device *device : m_devices) {
+        // Audio?  Return it.
+        if (device->getType() == Device::Audio)
+            return device;
+    }
+
     return nullptr;
 }
 
 Device *
 Studio::getSoftSynthDevice() const
 {
-    DeviceList::const_iterator iter =
-        find_if(m_devices.begin(),
-                m_devices.end(),
-                [](const Device* device)
-                {return (device->getType() == Device::SoftSynth); } );
-    if (iter != m_devices.end()) return *iter;
+    // For each Device
+    for (Device *device : m_devices) {
+        // SoftSynth?  Return it.
+        if (device->getType() == Device::SoftSynth)
+            return device;
+    }
+
     return nullptr;
 }
 

@@ -181,6 +181,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
 void
 NotationGroup::initialiseFinish() {}
 
+#if 0
 bool
 NotationGroup::contains(const NELIterator &i) const
 {
@@ -195,6 +196,7 @@ NotationGroup::contains(const NELIterator &i) const
         ++j;
     }
 }
+#endif
 
 int
 NotationGroup::height(const NELIterator &i) const

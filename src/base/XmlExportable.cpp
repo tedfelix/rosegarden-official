@@ -69,7 +69,7 @@ std::string XmlExportable::encode(const std::string &s0)
     //     Regardless, we should probably redo this with QString at some
     //     point.
 
-    static bool warned = false; // no point in warning forever for long bogus strings
+    bool warned = false; // no point in warning forever for long bogus strings
 
     for (size_t i = 0; i < len; ++i) {
 

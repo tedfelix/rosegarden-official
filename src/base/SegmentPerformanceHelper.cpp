@@ -434,7 +434,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(
         d = (*eventIter)->getDuration() - graceNoteDuration;
     } else {
 
-        timeT graceNoteTime = hostNoteEarliestTime;
+        const timeT graceNoteTime = hostNoteEarliestTime;
         int count = 0, index = 0;
         bool found = false;
         int prevSubOrdering = 0;
