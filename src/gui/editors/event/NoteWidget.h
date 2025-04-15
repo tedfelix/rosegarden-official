@@ -39,6 +39,7 @@ class NoteWidget : public EventWidget
 public:
 
     NoteWidget(EditEvent *parent, const Event &event);
+    ~NoteWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 

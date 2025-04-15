@@ -37,6 +37,7 @@ class ControllerWidget : public EventWidget
 public:
 
     ControllerWidget(EditEvent *parent, const Event &event);
+    ~ControllerWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 

@@ -23,6 +23,7 @@
 #include "base/Event.h"
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/MidiTypes.h"  // For Controller::NUMBER...
+#include "misc/PreferenceInt.h"
 
 #include <QComboBox>
 #include <QGridLayout>
@@ -33,6 +34,16 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString ControllerWidgetGroup{"ControllerWidget"};
+    PreferenceInt a_numberSetting(ControllerWidgetGroup, "Number", 0);
+    PreferenceInt a_valueSetting(ControllerWidgetGroup, "Value", 0);
+
+}
 
 
 ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
@@ -71,7 +82,7 @@ ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
         m_numberComboBox->addItem(
                 QString("%1  %2").arg(number).arg(Controller::getName(number)));
     }
-    int controllerNumber{0};
+    int controllerNumber{a_numberSetting.get()};
     if (event.has(Controller::NUMBER))
         controllerNumber = event.get<Int>(Controller::NUMBER);
     m_numberComboBox->setCurrentIndex(controllerNumber);
@@ -86,7 +97,7 @@ ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
     m_valueSpinBox = new QSpinBox(propertiesGroup);
     m_valueSpinBox->setMinimum(MidiMinValue);
     m_valueSpinBox->setMaximum(MidiMaxValue);
-    int value{0};
+    int value{a_valueSetting.get()};
     if (event.has(Controller::VALUE))
         value = event.get<Int>(Controller::VALUE);
     m_valueSpinBox->setValue(value);
@@ -94,6 +105,12 @@ ControllerWidget::ControllerWidget(EditEvent *parent, const Event &event) :
 
     ++row;
 
+}
+
+ControllerWidget::~ControllerWidget()
+{
+    a_numberSetting.set(m_numberComboBox->currentIndex());
+    a_valueSetting.set(m_valueSpinBox->value());
 }
 
 EventWidget::PropertyNameSet

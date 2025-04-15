@@ -22,6 +22,7 @@
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"  // For RPN::NUMBER...
+#include "misc/PreferenceInt.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -31,6 +32,16 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString RPNWidgetGroup{"RPNWidget"};
+    PreferenceInt a_rpnSetting(RPNWidgetGroup, "RPN", 0);
+    PreferenceInt a_valueSetting(RPNWidgetGroup, "Value", 0);
+
+}
 
 
 RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
@@ -67,7 +78,7 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
     m_rpnSpinBox = new QSpinBox(propertiesGroup);
     m_rpnSpinBox->setMinimum(0);
     m_rpnSpinBox->setMaximum(16383);
-    int rpn{0};
+    int rpn{a_rpnSetting.get()};
     if (event.has(RPN::NUMBER))
         rpn = event.get<Int>(RPN::NUMBER);
     m_rpnSpinBox->setValue(rpn);
@@ -92,7 +103,7 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
     m_valueSpinBox = new QSpinBox(propertiesGroup);
     m_valueSpinBox->setMinimum(0);
     m_valueSpinBox->setMaximum(16383);
-    int value{0};
+    int value{a_valueSetting.get()};
     if (event.has(RPN::VALUE))
         value = event.get<Int>(RPN::VALUE);
     m_valueSpinBox->setValue(value);
@@ -100,6 +111,12 @@ RPNWidget::RPNWidget(EditEvent *parent, const Event &event) :
 
     ++row;
 
+}
+
+RPNWidget::~RPNWidget()
+{
+    a_rpnSetting.set(m_rpnSpinBox->value());
+    a_valueSetting.set(m_valueSpinBox->value());
 }
 
 EventWidget::PropertyNameSet

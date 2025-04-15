@@ -30,6 +30,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/TimeDialog.h"
+#include "misc/PreferenceInt.h"
 
 #include <QCheckBox>
 #include <QGridLayout>
@@ -41,6 +42,17 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString NoteWidgetGroup{"NoteWidget"};
+    PreferenceInt a_durationSetting(NoteWidgetGroup, "Duration", 960);
+    PreferenceInt a_pitchSetting(NoteWidgetGroup, "Pitch", 60);
+    PreferenceInt a_velocitySetting(NoteWidgetGroup, "Velocity", 100);
+
+}
 
 
 NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
@@ -75,10 +87,13 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     propertiesLayout->addWidget(durationLabel, row, 0);
 
     m_durationSpinBox = new QSpinBox(propertiesGroup);
-    m_durationSpinBox->setMinimum(0);
+    m_durationSpinBox->setMinimum(1);
     m_durationSpinBox->setMaximum(INT_MAX);
     m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_durationSpinBox->setValue(event.getDuration());
+    timeT duration{event.getDuration()};
+    if (duration == 0)
+        duration = a_durationSetting.get();
+    m_durationSpinBox->setValue(duration);
     propertiesLayout->addWidget(m_durationSpinBox, row, 1);
 
     QPushButton *durationEditButton =
@@ -96,7 +111,7 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     m_pitchSpinBox = new QSpinBox(propertiesGroup);
     m_pitchSpinBox->setMinimum(MidiMinValue);
     m_pitchSpinBox->setMaximum(MidiMaxValue);
-    int pitch{0};
+    int pitch{a_pitchSetting.get()};
     if (event.has(BaseProperties::PITCH))
         pitch = event.get<Int>(BaseProperties::PITCH);
     m_pitchSpinBox->setValue(pitch);
@@ -117,7 +132,7 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     m_velocitySpinBox = new QSpinBox(propertiesGroup);
     m_velocitySpinBox->setMinimum(MidiMinValue);
     m_velocitySpinBox->setMaximum(MidiMaxValue);
-    int velocity{0};
+    int velocity{a_velocitySetting.get()};
     if (event.has(BaseProperties::VELOCITY))
         velocity = event.get<Int>(BaseProperties::VELOCITY);
     m_velocitySpinBox->setValue(velocity);
@@ -183,6 +198,13 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
 
     // Sync up notation widget enable state.
     slotLockNotationClicked(true);
+}
+
+NoteWidget::~NoteWidget()
+{
+    a_durationSetting.set(m_durationSpinBox->value());
+    a_pitchSetting.set(m_pitchSpinBox->value());
+    a_velocitySetting.set(m_velocitySpinBox->value());
 }
 
 EventWidget::PropertyNameSet
