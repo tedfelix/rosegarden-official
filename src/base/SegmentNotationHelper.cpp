@@ -1101,22 +1101,22 @@ SegmentNotationHelper::insertSingleSomething(Segment::iterator i,
                                              const Event *modelEvent,
                                              bool tiedBack)
 {
-    timeT time;
+    timeT newEventTime;
     timeT notationTime;
     bool eraseI = false;
     timeT effectiveDuration(duration);
 
     if (i == end()) {
-        time = segment().getEndTime();
-        notationTime = time;
+        newEventTime = segment().getEndTime();
+        notationTime = newEventTime;
     } else {
-        time = (*i)->getAbsoluteTime();
+        newEventTime = (*i)->getAbsoluteTime();
         notationTime = (*i)->getNotationAbsoluteTime();
         if (modelEvent->isa(Note::EventRestType) ||
             (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
-    Event *e = new Event(*modelEvent, time, effectiveDuration,
+    Event *e = new Event(*modelEvent, newEventTime, effectiveDuration,
                          modelEvent->getSubOrdering(), notationTime);
 
     // If the model event already has group info, I guess we'd better use it!
@@ -1131,10 +1131,10 @@ SegmentNotationHelper::insertSingleSomething(Segment::iterator i,
     if (eraseI) {
         // erase i and all subsequent events with the same type and
         // absolute time
-        timeT time1((*i)->getAbsoluteTime());
+        const timeT timeToErase((*i)->getAbsoluteTime());
         std::string type((*i)->getType());
         Segment::iterator j(i);
-        while (j != end() && (*j)->getAbsoluteTime() == time1) {
+        while (j != end() && (*j)->getAbsoluteTime() == timeToErase) {
             ++j;
             if ((*i)->isa(type)) erase(i);
             i = j;
