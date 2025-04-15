@@ -204,7 +204,10 @@ SegmentNotationHelper::getNextAdjacentNote(Segment::iterator i,
         bool isGrace = (*i)->has(IS_GRACE_NOTE) &&
             (*i)->get<Bool>(IS_GRACE_NOTE);
         RG_DEBUG << "getNextAdjacentNote isGrace" << isGrace;
-        // jStart < iEnd
+
+        // At this point we know jStart < iEnd.  There was a check for
+        // that here.  It is not needed.
+
         if (isGrace) return j;
     }
 }
