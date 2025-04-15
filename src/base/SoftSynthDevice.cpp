@@ -71,8 +71,8 @@ void
 SoftSynthDevice::createInstruments()
 {
     for (uint i = 0; i < SoftSynthInstrumentCount; ++i) {
-	Instrument *instrument = new Instrument
-	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", this);
+        Instrument *instrument = new Instrument
+            (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", this);
         SoftSynthDevice::addInstrument(instrument);
     }
     SoftSynthDevice::renameInstruments();
