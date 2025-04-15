@@ -91,13 +91,16 @@ PluginContainer::emptyPlugins()
 AudioPluginInstance *
 PluginContainer::getPlugin(unsigned int position) const
 {
-    AudioPluginVector::const_iterator iter =
-        find_if(m_audioPlugins.begin(),
-                m_audioPlugins.end(),
-                [position](const AudioPluginInstance* plugin)
-                {return plugin->getPosition() == position; } );
-    if (iter == m_audioPlugins.end()) return 0;
-    return (*iter);
+    // For each plugin
+    for (AudioPluginVector::const_iterator it = m_audioPlugins.begin();
+         it != m_audioPlugins.end();
+         ++it) {
+        // Found?  Return it.
+        if ((*it)->getPosition() == position)
+            return *it;
+    }
+
+    return nullptr;
 }
 
 
