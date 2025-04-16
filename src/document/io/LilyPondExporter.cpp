@@ -78,6 +78,8 @@
 namespace Rosegarden
 {
 
+
+
 const char* headerDedication() { return "dedication"; }
 const char* headerTitle() { return "title"; }
 const char* headerSubtitle() { return "subtitle"; }
@@ -841,51 +843,20 @@ LilyPondExporter::write()
 
     str << m_language->getImportStatement();
 
-    switch (m_languageLevel) {
+    // Verify that m_languageLevel is in the right range
+    if (    m_languageLevel <= LILYPOND_VERSION_TOO_OLD
+         || m_languageLevel >= LILYPOND_VERSION_TOO_NEW) {
 
-    case LILYPOND_VERSION_2_12:
-        str << "\\version \"2.12.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_14:
-        str << "\\version \"2.14.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_16:
-        str << "\\version \"2.16.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_18:
-        str << "\\version \"2.18.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_19:
-        str << "\\version \"2.19.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_20:
-        str << "\\version \"2.20.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_21:
-        str << "\\version \"2.21.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_22:
-        str << "\\version \"2.22.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_23:
-        str << "\\version \"2.23.0\"" << std::endl;
-        break;
-
-    default:
         // force the default version if there was an error
         RG_WARNING << "ERROR: Unknown language level " << m_languageLevel
-                  << ", using \\version \"2.14.0\" instead";
-        str << "\\version \"2.14.0\"" << std::endl;
-        m_languageLevel = LILYPOND_VERSION_2_14;
+                   << ", using version "
+                   << LilyPond_Version_Names[LILYPOND_VERSION_DEFAULT]
+                   << " instead";
+        m_languageLevel = LILYPOND_VERSION_DEFAULT;
     }
+
+    str << "\\version \"" << LilyPond_Version_Strings[m_languageLevel] << "\"\n";
+
 
     // LilyPond \header block
 

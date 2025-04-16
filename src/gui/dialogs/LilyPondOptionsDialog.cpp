@@ -127,15 +127,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyLanguage = new QComboBox(frameBasic);
     m_lilyLanguage->setToolTip(tr("<qt>Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.</qt>"));
 
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.12")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.14")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.16")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.18")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.19")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.20")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.21")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.22")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.23")));
+    // I don't know why the version number was formerly translated.
+    // It doesn't seem very useful, so I remove the tr() calls.
+    // If nevertheless it's really needed, it can probably be reintroduced
+    // when initializing LilyPond_Version_Names[] at the beginning of
+    // LilyPondExporter.h
+    for (int i = LILYPOND_VERSION_TOO_OLD + 1;
+             i < LILYPOND_VERSION_TOO_NEW; i++) {
+        m_lilyLanguage->addItem(tr("LilyPond %1").arg(LilyPond_Version_Names[i]));
+    }
     layoutBasic->addWidget(m_lilyLanguage, 1, 1);
 
     layoutBasic->addWidget(new QLabel(
