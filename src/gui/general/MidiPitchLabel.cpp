@@ -22,10 +22,10 @@
 
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include <QApplication>
 #include <QSettings>
-#include <QString>
 
 
 namespace Rosegarden
@@ -50,9 +50,7 @@ namespace
     {
         std::vector<QString> pitchTable{128};
 
-        QSettings settings;
-        settings.beginGroup(GeneralOptionsConfigGroup);
-        int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
+        const int baseOctave = Preferences::getMIDIPitchOctave();
 
         for (int pitch = 0; pitch < 128; ++pitch) {
             const int octave = int(pitch / 12.0) + baseOctave;

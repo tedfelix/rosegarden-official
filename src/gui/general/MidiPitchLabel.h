@@ -38,8 +38,8 @@ public:
 
     // ??? This belongs in base, not gui/general.  Maybe in base/MidiTypes.h.
     //     Or maybe NotationTypes.h which has the Pitch class which has a
-    //     getAsString().  Maybe move this to a static Pitch::toString()
-    //     and a Pitch::toStringNoOctave().
+    //     getAsString().  Maybe move this to a static
+    //     Pitch::toStringWithOctave() and a Pitch::toStringNoOctave().
     // ??? There are some other places that seem to do the same thing
     //     and would probably benefit from using this routine which is a
     //     very fast table lookup.

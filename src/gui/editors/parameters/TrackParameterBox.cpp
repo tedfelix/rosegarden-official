@@ -41,6 +41,7 @@
 #include "base/MidiDevice.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "sound/PluginIdentifier.h"
+#include "misc/Preferences.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
@@ -63,7 +64,6 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QPushButton>
-#include <QSettings>
 #include <QString>
 #include <QWidget>
 
@@ -1325,10 +1325,7 @@ TrackParameterBox::updateWidgets2()
 
     // Pitch Lowest
 
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    const int octaveBase = settings.value("midipitchoctave", -2).toInt() ;
-    settings.endGroup();
+    const int octaveBase = Preferences::getMIDIPitchOctave();
 
     const bool includeOctave = false;
 

@@ -45,6 +45,19 @@ bool Preferences::getThorn()
     return (theme.get() != Preferences::NativeTheme);
 }
 
+static PreferenceInt midiPitchOctave(
+        GeneralOptionsConfigGroup, "midipitchoctave", -2);
+
+void Preferences::setMIDIPitchOctave(int octave)
+{
+    midiPitchOctave.set(octave);
+}
+
+int Preferences::getMIDIPitchOctave()
+{
+    return midiPitchOctave.get();
+}
+
 static PreferenceBool sendProgramChangesWhenLooping(
         GeneralOptionsConfigGroup, "sendProgramChangesWhenLooping", true);
 

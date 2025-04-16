@@ -50,6 +50,9 @@ namespace Preferences
     ROSEGARDENPRIVATE_EXPORT int getTheme();
     ROSEGARDENPRIVATE_EXPORT bool getThorn();
 
+    void setMIDIPitchOctave(int value);
+    int getMIDIPitchOctave();
+
     void setSendProgramChangesWhenLooping(bool value);
     bool getSendProgramChangesWhenLooping();
 
