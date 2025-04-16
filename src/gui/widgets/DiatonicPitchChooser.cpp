@@ -18,11 +18,11 @@
 
 #include "DiatonicPitchChooser.h"
 
-#include <iostream>
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
-#include "gui/general/MidiPitchLabel.h"
+//#include "gui/general/MidiPitchLabel.h"
 #include "PitchDragLabel.h"
+
 #include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
@@ -32,8 +32,12 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+#include <iostream>
+
+
 namespace Rosegarden
 {
+
 
 DiatonicPitchChooser::DiatonicPitchChooser(const QString& title,
                                            QWidget *parent,

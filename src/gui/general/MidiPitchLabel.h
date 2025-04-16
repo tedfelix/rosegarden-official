@@ -19,7 +19,6 @@
 #ifndef RG_MIDIPITCHLABEL_H
 #define RG_MIDIPITCHLABEL_H
 
-#include <string>
 #include <QString>
 
 #include <QCoreApplication>
@@ -29,7 +28,10 @@ namespace Rosegarden
 {
 
 
-
+/// Convert a pitch number to a string.
+/**
+ * ??? This belongs in base, not gui/general.
+ */
 class MidiPitchLabel
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiPitchLabel)
@@ -37,13 +39,15 @@ class MidiPitchLabel
 public:
     explicit MidiPitchLabel(int pitch);
 
-    // unused std::string getString() const;
     QString getQString() const;
+
+    // Should be *significantly* faster than getQString().  This one caches
+    // the values and only hits QSettings once on first use.
+    static QString pitchToString(int pitch);
 
 private:
     QString m_midiNote;
 };
-
 
 
 }

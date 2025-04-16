@@ -21,6 +21,7 @@
 #include "EventWidget.h"
 
 class QCheckBox;
+class QComboBox;
 class QLabel;
 class QPushButton;
 class QSpinBox;
@@ -61,7 +62,7 @@ private:
     // Widgets
 
     QSpinBox *m_durationSpinBox;
-    QSpinBox *m_pitchSpinBox;
+    QComboBox *m_pitchComboBox;
     QSpinBox *m_velocitySpinBox;
     QCheckBox *m_lockNotation;
     QLabel *m_notationTimeLabel;
