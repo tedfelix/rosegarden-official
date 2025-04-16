@@ -20,6 +20,7 @@
 
 #include "EventWidget.h"
 
+class QComboBox;
 class QSpinBox;
 
 
@@ -36,6 +37,7 @@ class KeyPressureWidget : public EventWidget
 public:
 
     KeyPressureWidget(EditEvent *parent, const Event &event);
+    ~KeyPressureWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 
@@ -50,7 +52,7 @@ private:
 
     // Widgets
 
-    QSpinBox *m_pitchSpinBox;
+    QComboBox *m_pitchComboBox;
     QSpinBox *m_pressureSpinBox;
 
 };

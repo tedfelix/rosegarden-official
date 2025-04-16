@@ -21,6 +21,7 @@
 #include "EventWidget.h"
 
 class QCheckBox;
+class QComboBox;
 class QLabel;
 class QPushButton;
 class QSpinBox;
@@ -39,6 +40,7 @@ class NoteWidget : public EventWidget
 public:
 
     NoteWidget(EditEvent *parent, const Event &event);
+    ~NoteWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 
@@ -60,7 +62,7 @@ private:
     // Widgets
 
     QSpinBox *m_durationSpinBox;
-    QSpinBox *m_pitchSpinBox;
+    QComboBox *m_pitchComboBox;
     QSpinBox *m_velocitySpinBox;
     QCheckBox *m_lockNotation;
     QLabel *m_notationTimeLabel;

@@ -15,23 +15,29 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MidiPitchLabel]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MidiPitchLabel.h"
+
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include <QApplication>
 #include <QSettings>
-#include <QString>
 
 
 namespace Rosegarden
 {
 
-MidiPitchLabel::MidiPitchLabel(int pitch)
+
+namespace
 {
+
     // this was refactored to take advantage of these translations being
     // available in other contexts, and to avoid extra work for translators
-    static QString notes[] = {
+    QString a_notes[] = {
         QObject::tr("C",  "note name"), QObject::tr("C#", "note name"),
         QObject::tr("D",  "note name"), QObject::tr("D#", "note name"),
         QObject::tr("E",  "note name"), QObject::tr("F",  "note name"),
@@ -40,36 +46,32 @@ MidiPitchLabel::MidiPitchLabel(int pitch)
         QObject::tr("A#", "note name"), QObject::tr("B",  "note name")
     };
 
-    if (pitch < 0 || pitch > 127) {
+    std::vector<QString> initPitchTable()
+    {
+        std::vector<QString> pitchTable{128};
 
-        m_midiNote = "";
+        const int baseOctave = Preferences::getMIDIPitchOctave();
 
-    } else {
+        for (int pitch = 0; pitch < 128; ++pitch) {
+            const int octave = int(pitch / 12.0) + baseOctave;
+            pitchTable[pitch] =
+                    QString("%1 %2").arg(a_notes[pitch % 12]).arg(octave);
+        }
 
-        QSettings settings;
-        settings.beginGroup( GeneralOptionsConfigGroup );
-
-        int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
-
-        int octave = (int)(((float)pitch) / 12.0) + baseOctave;
-        m_midiNote = QString("%1 %2").arg(notes[pitch % 12]).arg(octave);
-
-        settings.endGroup();
+        return pitchTable;
     }
+
 }
 
-/* unused
-std::string
-MidiPitchLabel::getString() const
+QString MidiPitchLabel::pitchToString(int pitch)
 {
-    return std::string(m_midiNote.toUtf8().data());
-}
-*/
+    static std::vector<QString> pitchTable = initPitchTable();
 
-QString
-MidiPitchLabel::getQString() const
-{
-    return m_midiNote;
+    if (pitch < 0  ||  pitch > 127)
+        return QString("*%1*").arg(pitch);
+
+    return pitchTable[pitch];
 }
+
 
 }

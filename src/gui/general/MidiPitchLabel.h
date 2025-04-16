@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,7 +18,6 @@
 #ifndef RG_MIDIPITCHLABEL_H
 #define RG_MIDIPITCHLABEL_H
 
-#include <string>
 #include <QString>
 
 #include <QCoreApplication>
@@ -29,21 +27,28 @@ namespace Rosegarden
 {
 
 
-
+/// Convert a pitch number to a string.
+/**
+ */
 class MidiPitchLabel
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MidiPitchLabel)
 
 public:
-    explicit MidiPitchLabel(int pitch);
 
-    // unused std::string getString() const;
-    QString getQString() const;
+    // ??? This belongs in base, not gui/general.  Maybe in base/MidiTypes.h.
+    //     Or maybe NotationTypes.h which has the Pitch class which has a
+    //     getAsString().  Maybe move this to a static
+    //     Pitch::toStringWithOctave() and a Pitch::toStringNoOctave().
+    // ??? There are some other places that seem to do the same thing
+    //     and would probably benefit from using this routine which is a
+    //     very fast table lookup.
+    //       - Pitch::getAsString()
+    //       - NotationStaff::getNoteNameAtSceneCoords()
+    //       - TrackParameterBox::updateWidgets2() (uses Pitch::getAsString())
+    static QString pitchToString(int pitch);
 
-private:
-    QString m_midiNote;
 };
-
 
 
 }

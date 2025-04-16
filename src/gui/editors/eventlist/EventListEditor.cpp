@@ -274,6 +274,12 @@ EventListEditor::EventListEditor(RosegardenDocument *doc,
             this, &EventListEditor::slotAllOnOffClicked);
     filterGroupLayout->addWidget(allOnOff);
 
+    m_showStates = {
+        &m_showNote, &m_showRest, &m_showProgramChange, &m_showController,
+        &m_showPitchBend, &m_showChannelPressure, &m_showKeyPressure,
+        &m_showRPNNRPN, &m_showSystemExclusive, &m_showIndication, &m_showText,
+        &m_showGeneratedRegion, &m_showSegmentID, &m_showOther };
+
     mainLayout->addWidget(m_filterGroup, 0, 0, Qt::AlignHCenter);
     mainLayout->setRowMinimumHeight(0, m_filterGroup->height());
 
@@ -603,7 +609,7 @@ EventListEditor::updateTableWidget()
         if (event->has(BaseProperties::PITCH)) {
             const int pitch = event->get<Int>(BaseProperties::PITCH);
             pitchStr = QString("%1 %2  ")
-                       .arg(pitch).arg(MidiPitchLabel(pitch).getQString());
+                       .arg(pitch).arg(MidiPitchLabel::pitchToString(pitch));
         } else if (event->isa(Note::EventType)) {
             pitchStr = tr("<not set>");
         }
@@ -1417,13 +1423,28 @@ EventListEditor::slotFilterClicked(bool)
 void
 EventListEditor::slotAllOnOffClicked(bool)
 {
-    m_allState = !m_allState;
+#if 1
+    // Count them
+    size_t enabledCount{0};
+    for (const bool *show : m_showStates) {
+        if (*show)
+            ++enabledCount;
+    }
+#else
+    // Count them (STL)
+    const size_t enabledCount = std::count_if(
+            m_showStates.begin(), m_showStates.end(),
+            [](const bool *show){ return *show; });
+#endif
 
-    m_showNote = m_showRest = m_showProgramChange = m_showController =
-            m_showPitchBend = m_showChannelPressure = m_showKeyPressure =
-            m_showRPNNRPN = m_showSystemExclusive = m_showIndication =
-            m_showText = m_showGeneratedRegion = m_showSegmentID =
-            m_showOther = m_allState;
+    // Do the most work.  If fewer than half are enabled, enable.
+    // Otherwise disable.
+    const bool enable = (enabledCount < m_showStates.size() / 2);
+
+    // Set them
+    for (bool *show : m_showStates) {
+        *show = enable;
+    }
 
     updateFilterCheckBoxes();
     updateTableWidget();

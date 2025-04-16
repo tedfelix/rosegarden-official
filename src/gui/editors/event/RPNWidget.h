@@ -36,6 +36,7 @@ class RPNWidget : public EventWidget
 public:
 
     RPNWidget(EditEvent *parent, const Event &event);
+    ~RPNWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 

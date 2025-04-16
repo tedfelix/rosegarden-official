@@ -75,8 +75,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_baseOctaveNumber = new QSpinBox;
     m_baseOctaveNumber->setMinimum(-10);
     m_baseOctaveNumber->setMaximum(10);
-    m_baseOctaveNumber->setValue(
-            settings.value("midipitchoctave", -2).toInt());
+    m_baseOctaveNumber->setValue(Preferences::getMIDIPitchOctave());
     connect(m_baseOctaveNumber,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &MIDIConfigurationPage::slotModified);
@@ -489,7 +488,7 @@ MIDIConfigurationPage::apply()
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    settings.setValue("midipitchoctave", m_baseOctaveNumber->value());
+    Preferences::setMIDIPitchOctave(m_baseOctaveNumber->value());
     settings.setValue("alwaysusedefaultstudio",
                       m_useDefaultStudio->isChecked());
 

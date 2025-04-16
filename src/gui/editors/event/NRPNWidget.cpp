@@ -22,6 +22,7 @@
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"  // For NRPN::NUMBER...
+#include "misc/PreferenceInt.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -31,6 +32,16 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString NRPNWidgetGroup{"NRPNWidget"};
+    PreferenceInt a_nrpnSetting(NRPNWidgetGroup, "NRPN", 0);
+    PreferenceInt a_valueSetting(NRPNWidgetGroup, "Value", 0);
+
+}
 
 
 NRPNWidget::NRPNWidget(EditEvent *parent, const Event &event) :
@@ -67,7 +78,7 @@ NRPNWidget::NRPNWidget(EditEvent *parent, const Event &event) :
     m_nrpnSpinBox = new QSpinBox(propertiesGroup);
     m_nrpnSpinBox->setMinimum(0);
     m_nrpnSpinBox->setMaximum(16383);
-    int nrpn{0};
+    int nrpn{a_nrpnSetting.get()};
     if (event.has(NRPN::NUMBER))
         nrpn = event.get<Int>(NRPN::NUMBER);
     m_nrpnSpinBox->setValue(nrpn);
@@ -82,7 +93,7 @@ NRPNWidget::NRPNWidget(EditEvent *parent, const Event &event) :
     m_valueSpinBox = new QSpinBox(propertiesGroup);
     m_valueSpinBox->setMinimum(0);
     m_valueSpinBox->setMaximum(16383);
-    int value{0};
+    int value{a_valueSetting.get()};
     if (event.has(NRPN::VALUE))
         value = event.get<Int>(NRPN::VALUE);
     m_valueSpinBox->setValue(value);
@@ -90,6 +101,12 @@ NRPNWidget::NRPNWidget(EditEvent *parent, const Event &event) :
 
     ++row;
 
+}
+
+NRPNWidget::~NRPNWidget()
+{
+    a_nrpnSetting.set(m_nrpnSpinBox->value());
+    a_valueSetting.set(m_valueSpinBox->value());
 }
 
 EventWidget::PropertyNameSet

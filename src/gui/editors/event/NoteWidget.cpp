@@ -30,8 +30,11 @@
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/TimeDialog.h"
+#include "gui/general/MidiPitchLabel.h"
+#include "misc/PreferenceInt.h"
 
 #include <QCheckBox>
+#include <QComboBox>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
@@ -41,6 +44,17 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString NoteWidgetGroup{"NoteWidget"};
+    PreferenceInt a_durationSetting(NoteWidgetGroup, "Duration", 960);
+    PreferenceInt a_pitchSetting(NoteWidgetGroup, "Pitch", 60);
+    PreferenceInt a_velocitySetting(NoteWidgetGroup, "Velocity", 100);
+
+}
 
 
 NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
@@ -75,10 +89,13 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     propertiesLayout->addWidget(durationLabel, row, 0);
 
     m_durationSpinBox = new QSpinBox(propertiesGroup);
-    m_durationSpinBox->setMinimum(0);
+    m_durationSpinBox->setMinimum(1);
     m_durationSpinBox->setMaximum(INT_MAX);
     m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
-    m_durationSpinBox->setValue(event.getDuration());
+    timeT duration{event.getDuration()};
+    if (duration == 0)
+        duration = a_durationSetting.get();
+    m_durationSpinBox->setValue(duration);
     propertiesLayout->addWidget(m_durationSpinBox, row, 1);
 
     QPushButton *durationEditButton =
@@ -93,14 +110,17 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     QLabel *pitchLabel = new QLabel(tr("Pitch:"), propertiesGroup);
     propertiesLayout->addWidget(pitchLabel, row, 0);
 
-    m_pitchSpinBox = new QSpinBox(propertiesGroup);
-    m_pitchSpinBox->setMinimum(MidiMinValue);
-    m_pitchSpinBox->setMaximum(MidiMaxValue);
-    int pitch{0};
+    m_pitchComboBox = new QComboBox(propertiesGroup);
+    for (int pitch = 0; pitch < 128; ++pitch) {
+        m_pitchComboBox->addItem(QString("%1 (%2)").
+                arg(MidiPitchLabel::pitchToString(pitch)).
+                arg(pitch));
+    }
+    int pitch{a_pitchSetting.get()};
     if (event.has(BaseProperties::PITCH))
         pitch = event.get<Int>(BaseProperties::PITCH);
-    m_pitchSpinBox->setValue(pitch);
-    propertiesLayout->addWidget(m_pitchSpinBox, row, 1);
+    m_pitchComboBox->setCurrentIndex(pitch);
+    propertiesLayout->addWidget(m_pitchComboBox, row, 1);
 
     QPushButton *pitchEditButton =
             new QPushButton(tr("edit"), propertiesGroup);
@@ -117,7 +137,7 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     m_velocitySpinBox = new QSpinBox(propertiesGroup);
     m_velocitySpinBox->setMinimum(MidiMinValue);
     m_velocitySpinBox->setMaximum(MidiMaxValue);
-    int velocity{0};
+    int velocity{a_velocitySetting.get()};
     if (event.has(BaseProperties::VELOCITY))
         velocity = event.get<Int>(BaseProperties::VELOCITY);
     m_velocitySpinBox->setValue(velocity);
@@ -185,6 +205,13 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     slotLockNotationClicked(true);
 }
 
+NoteWidget::~NoteWidget()
+{
+    a_durationSetting.set(m_durationSpinBox->value());
+    a_pitchSetting.set(m_pitchComboBox->currentIndex());
+    a_velocitySetting.set(m_velocitySpinBox->value());
+}
+
 EventWidget::PropertyNameSet
 NoteWidget::getPropertyFilter() const
 {
@@ -218,9 +245,9 @@ NoteWidget::slotEditDuration(bool /*checked*/)
 void
 NoteWidget::slotEditPitch(bool /*checked*/)
 {
-    PitchDialog dialog(this, tr("Edit Pitch"), m_pitchSpinBox->value());
+    PitchDialog dialog(this, tr("Edit Pitch"), m_pitchComboBox->currentIndex());
     if (dialog.exec() == QDialog::Accepted)
-        m_pitchSpinBox->setValue(dialog.getPitch());
+        m_pitchComboBox->setCurrentIndex(dialog.getPitch());
 }
 
 void
@@ -269,7 +296,7 @@ void NoteWidget::slotNotationDurationEditClicked(bool /*checked*/)
 void NoteWidget::updateEvent(Event &event) const
 {
     event.setDuration(m_durationSpinBox->value());
-    event.set<Int>(BaseProperties::PITCH, m_pitchSpinBox->value());
+    event.set<Int>(BaseProperties::PITCH, m_pitchComboBox->currentIndex());
     event.set<Int>(BaseProperties::VELOCITY, m_velocitySpinBox->value());
     if (m_lockNotation->isChecked()) {
         event.setNotationAbsoluteTime(m_parent->getAbsoluteTime());

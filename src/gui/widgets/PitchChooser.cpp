@@ -58,8 +58,8 @@ PitchChooser::PitchChooser(const QString& title,
     m_pitch->setMaximum(127);
     m_pitch->setValue(defaultPitch);
 
-    MidiPitchLabel pl(defaultPitch);
-    m_pitchLabel = new QLabel(pl.getQString(), hbox );
+    m_pitchLabel =
+            new QLabel(MidiPitchLabel::pitchToString(defaultPitch), hbox);
     hboxLayout->addWidget(m_pitchLabel);
     hbox->setLayout(hboxLayout);
     m_pitchLabel->setMinimumWidth(40);
@@ -109,8 +109,7 @@ PitchChooser::slotSetPitch(int p)
     if (m_pitchDragLabel->getPitch() != p)
         m_pitchDragLabel->slotSetPitch(p);
 
-    MidiPitchLabel pl(p);
-    m_pitchLabel->setText(pl.getQString());
+    m_pitchLabel->setText(MidiPitchLabel::pitchToString(p));
     update();
 }
 

@@ -313,14 +313,14 @@ protected:
             QString filePath,
             ImportType importType,
             bool permanent,
-            bool lock,
+            bool revert,
             bool clearHistory);
 
     /**
      * Create a document from RG file
      */
     RosegardenDocument *createDocumentFromRGFile(
-            const QString &filePath, bool permanent, bool lock,
+            const QString &filePath, bool permanent, bool revert,
             bool clearHistory);
 
     /**

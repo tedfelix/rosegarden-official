@@ -36,6 +36,7 @@ class ChannelPressureWidget : public EventWidget
 public:
 
     ChannelPressureWidget(EditEvent *parent, const Event &event);
+    ~ChannelPressureWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 

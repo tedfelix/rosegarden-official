@@ -154,9 +154,8 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
         // m_labelKeyPos contains two more octaves than we need
         pitch -= 24;
 
-        MidiPitchLabel label(pitch);
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-                       label.getQString());
+                       MidiPitchLabel::pitchToString(pitch));
     }
 
     // Black Keys

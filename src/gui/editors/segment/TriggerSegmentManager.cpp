@@ -227,7 +227,7 @@ TriggerSegmentManager::slotUpdate()
                             tracks.size()).arg(uses);
 
         QString pitch = QString("%1 (%2)")
-                        .arg(MidiPitchLabel((*it)->getBasePitch()).getQString())
+                        .arg(MidiPitchLabel::pitchToString((*it)->getBasePitch()))
                         .arg((*it)->getBasePitch());
 
         QString velocity = QString("%1").arg((*it)->getBaseVelocity());

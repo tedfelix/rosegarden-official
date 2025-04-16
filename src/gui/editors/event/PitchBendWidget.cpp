@@ -22,6 +22,7 @@
 
 #include "base/Event.h"
 #include "base/MidiTypes.h"  // For PitchBend::EventType...
+#include "misc/PreferenceInt.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -31,6 +32,15 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString PitchBendWidgetGroup{"PitchBendWidget"};
+    PreferenceInt a_valueSetting(PitchBendWidgetGroup, "Value", 8192);
+
+}
 
 
 PitchBendWidget::PitchBendWidget(EditEvent *parent, const Event &event) :
@@ -62,20 +72,29 @@ PitchBendWidget::PitchBendWidget(EditEvent *parent, const Event &event) :
 
     // Number
     QLabel *pitchBendLabel = new QLabel(tr("Pitch Bend:"), propertiesGroup);
+    QString tipText = tr("8192 is center");
+    pitchBendLabel->setToolTip(tipText);
     propertiesLayout->addWidget(pitchBendLabel, row, 0);
 
     m_pitchBendSpinBox = new QSpinBox(propertiesGroup);
+    m_pitchBendSpinBox->setToolTip(tipText);
     m_pitchBendSpinBox->setMinimum(0);
     // 8192 is centered.
     m_pitchBendSpinBox->setMaximum(16383);
-    int msb{0};
+    int value{a_valueSetting.get()};
+    int msb{value >> 7};
     if (event.has(PitchBend::MSB))
         msb = event.get<Int>(PitchBend::MSB);
-    int lsb{0};
+    int lsb{value & 0x7F};
     if (event.has(PitchBend::LSB))
         lsb = event.get<Int>(PitchBend::LSB);
     m_pitchBendSpinBox->setValue((msb << 7) + lsb);
     propertiesLayout->addWidget(m_pitchBendSpinBox, row, 1);
+}
+
+PitchBendWidget::~PitchBendWidget()
+{
+    a_valueSetting.set(m_pitchBendSpinBox->value());
 }
 
 EventWidget::PropertyNameSet

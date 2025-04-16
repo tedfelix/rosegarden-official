@@ -23,6 +23,7 @@
 #include "base/Event.h"
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/MidiTypes.h"  // For ChannelPressure::EventType...
+#include "misc/PreferenceInt.h"
 
 #include <QGridLayout>
 #include <QGroupBox>
@@ -32,6 +33,15 @@
 
 namespace Rosegarden
 {
+
+
+namespace
+{
+
+    QString ChannelPressureWidgetGroup{"ChannelPressureWidget"};
+    PreferenceInt a_pressureSetting(ChannelPressureWidgetGroup, "Pressure", 0);
+
+}
 
 
 ChannelPressureWidget::ChannelPressureWidget(EditEvent *parent, const Event &event) :
@@ -68,7 +78,7 @@ ChannelPressureWidget::ChannelPressureWidget(EditEvent *parent, const Event &eve
     m_pressureSpinBox = new QSpinBox(propertiesGroup);
     m_pressureSpinBox->setMinimum(MidiMinValue);
     m_pressureSpinBox->setMaximum(MidiMaxValue);
-    int pressure{0};
+    int pressure{a_pressureSetting.get()};
     if (event.has(ChannelPressure::PRESSURE))
         pressure = event.get<Int>(ChannelPressure::PRESSURE);
     m_pressureSpinBox->setValue(pressure);
@@ -76,6 +86,11 @@ ChannelPressureWidget::ChannelPressureWidget(EditEvent *parent, const Event &eve
 
     ++row;
 
+}
+
+ChannelPressureWidget::~ChannelPressureWidget()
+{
+    a_pressureSetting.set(m_pressureSpinBox->value());
 }
 
 EventWidget::PropertyNameSet

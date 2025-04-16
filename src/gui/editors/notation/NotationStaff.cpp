@@ -54,6 +54,7 @@
 #include "gui/general/PixmapFunctions.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 
 #include <QApplication>
@@ -433,32 +434,13 @@ QString
 NotationStaff::getNoteNameAtSceneCoords(double x, int y,
         Accidental) const
 {
-    //!!! We have one version of this translate note name stuff in
-    // MidiPitchLabel, another one in TrackParameterBox, and now this one.
-    //
-    // This needs to be refactored one day to avoid all the frigged up hackery,
-    // and just have one unified way of making these strings, used everywhere.
-    // I think putting the tr() nonsense in base/ probably makes sense for
-    // this, and just have a Pitch method that returns a pre-translated string.
-    //
-    // But not just now.  I'll slap a couple of pieces of duct tape on it for
-    // now, and we'll worry about bigger issues.
-
     Clef clef;
     ::Rosegarden::Key key;
     getClefAndKeyAtSceneCoords(x, y, clef, key);
 
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
-    settings.endGroup();
+    const int baseOctave = Preferences::getMIDIPitchOctave();
 
     Pitch p(getHeightAtSceneCoords(x, y), clef, key);
-
-    // This duplicates a lot of code in Pitch::getAsString and elsewhere, but
-    // I'm not taking time out to gather all of this up and merge it together
-    // into something nice and clean we could just call here.
 
     // get the note letter name in the key (eg. A)
     std::string s;

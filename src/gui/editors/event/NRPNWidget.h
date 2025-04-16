@@ -36,6 +36,7 @@ class NRPNWidget : public EventWidget
 public:
 
     NRPNWidget(EditEvent *parent, const Event &event);
+    ~NRPNWidget();
 
     PropertyNameSet getPropertyFilter() const override;
 
