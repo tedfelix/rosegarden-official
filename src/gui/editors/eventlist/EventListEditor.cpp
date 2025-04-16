@@ -609,7 +609,7 @@ EventListEditor::updateTableWidget()
         if (event->has(BaseProperties::PITCH)) {
             const int pitch = event->get<Int>(BaseProperties::PITCH);
             pitchStr = QString("%1 %2  ")
-                       .arg(pitch).arg(MidiPitchLabel(pitch).getQString());
+                       .arg(pitch).arg(MidiPitchLabel::pitchToString(pitch));
         } else if (event->isa(Note::EventType)) {
             pitchStr = tr("<not set>");
         }

@@ -65,31 +65,6 @@ namespace
 
 }
 
-MidiPitchLabel::MidiPitchLabel(int pitch)
-{
-
-    if (pitch < 0 || pitch > 127) {
-
-        m_midiNote = "";
-
-    } else {
-
-        QSettings settings;
-        settings.beginGroup(GeneralOptionsConfigGroup);
-        int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
-
-        int octave = (int)(((float)pitch) / 12.0) + baseOctave;
-        m_midiNote = QString("%1 %2").arg(a_notes[pitch % 12]).arg(octave);
-
-    }
-}
-
-QString
-MidiPitchLabel::getQString() const
-{
-    return m_midiNote;
-}
-
 QString MidiPitchLabel::pitchToString(int pitch)
 {
     static std::vector<QString> pitchTable = initPitchTable();

@@ -871,10 +871,9 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
         if (mE->getVelocity() == 0)
             return ;
 
-        MidiPitchLabel mPL(mE->getPitch());
-        ui->InDisplay->setText
-            (mPL.getQString() +
-             QString("  %1").arg(mE->getVelocity()));
+        ui->InDisplay->setText(
+                MidiPitchLabel::pitchToString(mE->getPitch()) +
+                QString("  %1").arg(mE->getVelocity()));
     }
     break;
 
@@ -968,10 +967,9 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
     case MappedEvent::MidiNote:
     case MappedEvent::MidiNoteOneShot:
     {
-        MidiPitchLabel mPL(mE->getPitch());
-        ui->OutDisplay->setText
-            (mPL.getQString() +
-             QString("  %1").arg(mE->getVelocity()));
+        ui->OutDisplay->setText(
+                MidiPitchLabel::pitchToString(mE->getPitch()) +
+                QString("  %1").arg(mE->getVelocity()));
     }
     break;
 

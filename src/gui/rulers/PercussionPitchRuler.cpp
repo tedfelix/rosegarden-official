@@ -95,12 +95,12 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
 
     for (int i = 0; i < extent; ++i) {
 
-        MidiPitchLabel label(minPitch + i);
+        QString label = MidiPitchLabel::pitchToString(minPitch + i);
         std::string key = m_mapping->getMapForKeyName(minPitch + i);
         //RG_DEBUG << "PercussionPitchRuler::paintEvent()" << i << ": " << label.getQString() << ": " << key;
 
         int yi = (extent - i - 1) * (m_lineSpacing + 1) + offset;
-        paint.drawText(2, yi, label.getQString());
+        paint.drawText(2, yi, label);
 
         if (i != m_highlightPitch) {
             // Draw an unhighlighted note

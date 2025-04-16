@@ -227,7 +227,7 @@ DiatonicPitchChooser::slotSetNote(int pitch, int octave, int step)
     int pitchOffset = pitch - (octave * 12 + scale_Cmajor[step]);
     m_accidental->setCurrentIndex(pitchOffset + 2);
 
-    //MidiPitchLabel pl(p);
+    //QString pl = MidiPitchLabel::pitchToString(pitch);
     m_pitchLabel->setText(QString("%1").arg(pitch));
     update();
 }

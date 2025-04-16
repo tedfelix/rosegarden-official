@@ -242,7 +242,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
                                       : NORMAL_SEGMENT_TEXT_Z);
                 m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
             }
-            QString noteName = MidiPitchLabel(pitch).getQString();
+            QString noteName = MidiPitchLabel::pitchToString(pitch);
             m_textItem->setText(noteName);
             QFont font;
             font.setPixelSize(8);
