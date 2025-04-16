@@ -20,6 +20,7 @@
 
 #include "EventWidget.h"
 
+class QComboBox;
 class QSpinBox;
 
 
@@ -51,7 +52,7 @@ private:
 
     // Widgets
 
-    QSpinBox *m_pitchSpinBox;
+    QComboBox *m_pitchComboBox;
     QSpinBox *m_pressureSpinBox;
 
 };
