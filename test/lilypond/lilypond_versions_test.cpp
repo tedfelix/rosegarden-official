@@ -35,7 +35,8 @@ private Q_SLOTS:
     // Called for each row of test data.
     void testExamples();
 
-    char * destination;     // Directory where LilyPond files will be written
+private:
+    const char * destination;   // Directory where LilyPond files will be written
 };
 
 void TestLilypondVersion::initTestCase()
@@ -50,6 +51,32 @@ void TestLilypondVersion::initTestCase()
     settings.setValue("lilyfontsize", 12); // the default of 26 is really huge!
     settings.setValue("lilyexportbeamings", true);
 
+    // YGYGYG SET HERE OTHER LILYPOND RELATIVE SETTIGS
+    // settings.setValue("lilypapersize", PAPER_A4);
+    settings.setValue("lilypaperlandscape", "false");
+    settings.setValue("lilyraggedbottom", "false");
+
+    // YGYGYG etc... TODO
+    // m_exportEmptyStaves = qStrToBool(settings.value("lilyexportemptystaves", "false"));
+    // m_useShortNames = qStrToBool(settings.value("lilyuseshortnames", "true"));
+    // m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt();
+    // if (settings.value("lilyexporteditedsegments", "false").toBool()) {
+    //     m_exportSelection = EXPORT_EDITED_SEGMENTS;
+    // }
+    // m_exportLyrics = settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT).toUInt();
+    // m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt();
+    // m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false"));
+    // m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true"));
+    //
+    // m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt();
+    // m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
+    // m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
+    // m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
+    // m_useVolta = settings.value("lilyexportrepeat", "true").toBool();
+    // m_altBar = settings.value("lilydrawbaratvolta", "true").toBool();
+    // m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
+    // m_fingeringsInStaff = settings.value("lilyfingeringsinstaff", "true").toBool();
+    // settings.endGroup();
 
     // Define the destination directory and empty it
     destination = "VersionsTestOut";
@@ -60,7 +87,8 @@ void TestLilypondVersion::initTestCase()
         //  Destination directory found: delete it\n";
         if (!dir.removeRecursively()) {
             std::cerr << "ERROR: Can't remove \""
-                      << destination << "\" directory\n";
+                      << destination << "\" directory"
+                      << std::endl;
             exit(-1);
         }
     }
@@ -71,12 +99,12 @@ void TestLilypondVersion::initTestCase()
         QString path(LilyPond_Version_Names[lv]);
         if (!dir.mkpath(path)) {
             std::cerr << "ERROR: Can't create \"" << destination << "/"
-                      << LilyPond_Version_Names[lv] << "\" directory\n";
+                      << LilyPond_Version_Names[lv] << "\" directory"
+                      << std::endl;
             exit(-1);
         }
     }
 }
-
 
 
 void TestLilypondVersion::testExamples_data()
@@ -163,7 +191,11 @@ void TestLilypondVersion::testExamples()
     // GIVEN
     const QString input =
             QFINDTESTDATA("../../data/" + baseDir + "/" + baseName + ".rg");
-    QVERIFY(!input.isEmpty()); // file not found      // YGYGYG
+    if (input.isEmpty()) {
+        std::cerr << "ERROR: File \"" << baseName << ".rg\" not found"
+        << std::endl;
+        exit(-1);
+    }
 
     const QString fileName = QString(destination) + "/"
                                 + LilyPond_Version_Names[lilyVersion]
@@ -173,7 +205,7 @@ void TestLilypondVersion::testExamples()
 
     // Load the .rg file.
 
-    // Set LilyPond version             // YGYGYG ???   settings remembered ???
+    // Set LilyPond version
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
     settings.setValue("lilylanguage", lilyVersion);
@@ -199,11 +231,11 @@ void TestLilypondVersion::testExamples()
     // Export the .ly file.
     exporter.write();
 
-    // Don't clean up anything: we need the created file.
+    // Don't clean up anything: we need the newly created file.
 }
 
 
 QTEST_MAIN(TestLilypondVersion)
 
-#include "lilypond_manual_test.moc"
+#include "lilypond_versions_test.moc"
 
