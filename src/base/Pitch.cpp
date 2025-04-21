@@ -40,11 +40,11 @@ namespace
     // available in other contexts, and to avoid extra work for translators
     QString a_notes[] = {
         QObject::tr("C",  "note name"), QObject::tr("C#", "note name"),
-        QObject::tr("D",  "note name"), QObject::tr("D#", "note name"),
+        QObject::tr("D",  "note name"), QObject::tr("Eb", "note name"),
         QObject::tr("E",  "note name"), QObject::tr("F",  "note name"),
         QObject::tr("F#", "note name"), QObject::tr("G",  "note name"),
-        QObject::tr("G#", "note name"), QObject::tr("A",  "note name"),
-        QObject::tr("A#", "note name"), QObject::tr("B",  "note name")
+        QObject::tr("Ab", "note name"), QObject::tr("A",  "note name"),
+        QObject::tr("Bb", "note name"), QObject::tr("B",  "note name")
     };
 
     std::vector<QString> initPitchTable()
