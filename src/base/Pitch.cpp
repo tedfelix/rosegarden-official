@@ -19,32 +19,15 @@
 #include "NotationRules.h"
 #include "NotationTypes.h"
 
-//#include <iostream>
-//#include <cstdlib> // for atoi
-//#include <limits.h> // for SHRT_MIN
-//#include <sstream>
-//#include <cstdio> // needed for sprintf()
-
 //dmm This will make everything excruciatingly slow if defined:
 //#define DEBUG_PITCH
+
 
 namespace Rosegarden
 {
 
-//using std::string;
-//using std::vector;
-//using std::cout;
-//using std::cerr;
-//using std::endl;
 
-// This is the fundamental definition of the resolution used throughout.
-// It must be a multiple of 16, and should ideally be a multiple of 96.
-// ??? See "timebase" in TimeT.h.  Probably should switch to that everywhere.
-//static const timeT basePPQ = 960;
-
-//const int MIN_SUBORDERING = SHRT_MIN;
-
-bool
+static bool
 pitchInKey(int pitch, const Key& key)
 {
     int pitchOffset = (pitch - key.getTonicPitch() + 12) % 12;
@@ -66,10 +49,10 @@ pitchInKey(int pitch, const Key& key)
  *
  * @author Arnout Engelen
  */
-Accidental
+static Accidental
 resolveNoAccidental(int pitch,
-                  const Key &key,
-                  Accidentals::NoAccidentalStrategy noAccidentalStrategy)
+                    const Key &key,
+                    Accidentals::NoAccidentalStrategy noAccidentalStrategy)
 {
     Accidental outputAccidental;
 
@@ -137,7 +120,7 @@ resolveNoAccidental(int pitch,
  *
  * @author Michael McIntyre
  */
-void
+static void
 resolveSpecifiedAccidental(int pitch,
                               const Clef &/* clef */,
                               const Key &key,
@@ -516,12 +499,13 @@ Pitch::getAsKey(bool isMinor) const {
  * Resolving the accidental was refactored out by Arnout Engelen
  */
 void
-Pitch::rawPitchToDisplayPitch(int rawpitch,
-                              const Clef &clef,
-                              const Key &key,
-                              int &height,
-                              Accidental &accidental,
-                              Accidentals::NoAccidentalStrategy noAccidentalStrategy)
+Pitch::rawPitchToDisplayPitch(
+        int rawpitch,
+        const Clef &clef,
+        const Key &key,
+        int &height,
+        Accidental &accidental,
+        Accidentals::NoAccidentalStrategy noAccidentalStrategy)
 {
 
     // 1. Calculate the octave (for later):
@@ -641,8 +625,6 @@ Pitch::displayPitchToRawPitch(int height,
     pitch += 12 * octave;
 }
 
-
-
 Pitch::Pitch(const Event &e) :
     // throw (Event::NoData)
     m_accidental(Accidentals::NoAccidental)
@@ -716,25 +698,6 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
     if (m_pitch < 0) m_pitch = 0;
     if (m_pitch > 127) m_pitch = 127;
 }
-
-#if 0
-Pitch::Pitch(const Pitch &p) :
-    m_pitch(p.m_pitch),
-    m_accidental(p.m_accidental)
-{
-    // nothing else
-}
-
-Pitch &
-Pitch::operator=(const Pitch &p)
-{
-    if (&p != this) {
-        m_pitch = p.m_pitch;
-        m_accidental = p.m_accidental;
-    }
-    return *this;
-}
-#endif
 
 int
 Pitch::getPerformancePitch() const
@@ -961,4 +924,4 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta) const
 }
 
 
-} // end namespace Rosegarden
+}

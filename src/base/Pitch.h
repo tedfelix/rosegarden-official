@@ -34,7 +34,6 @@ namespace Rosegarden
  *
  * This completely replaces the older NotationDisplayPitch class.
  */
-
 class ROSEGARDENPRIVATE_EXPORT Pitch
 {
 public:
@@ -117,9 +116,6 @@ public:
           const Clef &clef,
           const Key &key,
           const Accidental &explicitAccidental = Accidentals::NoAccidental);
-
-    //Pitch(const Pitch &);
-    //Pitch &operator=(const Pitch &);
 
     /**
      * Return the MIDI pitch for this Pitch object.
@@ -277,18 +273,19 @@ private:
     Accidental m_accidental;
 
     static void rawPitchToDisplayPitch(
-            int,
+            int rawPitch,
             const Clef &,
             const Key &,
-            int &, Accidental &,
+            int &height,
+            Accidental &,
             Accidentals::NoAccidentalStrategy);
 
     static void displayPitchToRawPitch(
-            int,
+            int height,
             Accidental,
             const Clef &,
             const Key &,
-            int &,
+            int &pitch,
             bool ignoreOffset = false);
 
     /**
