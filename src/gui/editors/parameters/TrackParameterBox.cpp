@@ -42,7 +42,6 @@
 #include "base/Pitch.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "sound/PluginIdentifier.h"
-#include "misc/Preferences.h"
 #include "gui/general/PresetHandlerDialog.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
@@ -1325,29 +1324,10 @@ TrackParameterBox::updateWidgets2()
             m_transpose->findText(QString("%1").arg(track->getTranspose())));
 
     // Pitch Lowest
-
-    const int octaveBase = Preferences::getMIDIPitchOctave();
-
-    const Pitch lowest(track->getLowestPlayable(), Accidentals::NoAccidental);
-
-    // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
-    // that explicitly works with the key of C major, and does not allow the
-    // calling code to specify how the accidentals should be written out.
-    //
-    // Separate the note letter from the octave to avoid undue burden on
-    // translators having to retranslate the same thing but for a number
-    // difference
-    QString tmp = QObject::tr(lowest.getAsString(false, octaveBase).c_str(), "note name");
-    tmp += tr(" %1").arg(lowest.getOctave(octaveBase));
-    m_lowest->setText(tmp);
+    m_lowest->setText(Pitch::toStringOctave(track->getLowestPlayable()));
 
     // Pitch Highest
-
-    const Pitch highest(track->getHighestPlayable(), Accidentals::NoAccidental);
-
-    tmp = QObject::tr(highest.getAsString(false, octaveBase).c_str(), "note name");
-    tmp += tr(" %1").arg(highest.getOctave(octaveBase));
-    m_highest->setText(tmp);
+    m_highest->setText(Pitch::toStringOctave(track->getHighestPlayable()));
 
     // Color
     // Note: We only update the combobox contents if there is an actual
