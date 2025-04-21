@@ -220,22 +220,20 @@ public:
      * Return a reference name for this pitch.  (C 4, Bb 2, etc...)
      * using the key of C major explicitly, which should allow the accidentals
      * to take their natural forms of C# Eb F# Ab Bb from the key, rather
-     * than being forced sharp explicilty.
+     * than being forced sharp explicitly.
      *
      * This replaces an earlier version of this function that took a "use
      * sharps" argument to return either sharps or flats, which broke after
      * Arnout Engelen did some really nice accidental spelling improvements to
      * make everything more human.
      */
-    std::string getAsString(bool inclOctave = true,
-                            int octaveBase = -2) const;
+    //std::string getAsString(bool inclOctave = true,
+    //                        int octaveBase = -2) const;
 
-    /// Faster version of getAsString().  Includes the octave.
-    /**
-     * Does not take into account a key.  Always returns one of:
-     * C C# D Eb E F F# G Ab A Bb B
-     */
+    /// Returns one of C C# D Eb E F F# G Ab A Bb B along with the octave.
     static QString toStringOctave(int pitch);
+    /// Returns one of C C# D Eb E F F# G Ab A Bb B.
+    static QString toString(int pitch);
 
     /**
      * Return a number 0-6 corresponding to the given note name, which

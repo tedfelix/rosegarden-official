@@ -76,6 +76,14 @@ QString Pitch::toStringOctave(int pitch)
     return pitchTable[pitch];
 }
 
+QString Pitch::toString(int pitch)
+{
+    if (pitch < 0  ||  pitch > 127)
+        return QString("*%1*").arg(pitch);
+
+    return a_notes[pitch % 12];
+}
+
 static bool
 pitchInKey(int pitch, const Key& key)
 {
@@ -890,6 +898,7 @@ Pitch::isDiatonicInKey(const Key &key) const
     return false;
 }
 
+#if 0
 std::string
 Pitch::getAsString(bool inclOctave, int octaveBase) const
 {
@@ -907,6 +916,7 @@ Pitch::getAsString(bool inclOctave, int octaveBase) const
     sprintf(tmp, "%s%d", s.c_str(), getOctave(octaveBase));
     return std::string(tmp);
 }
+#endif
 
 int
 Pitch::getIndexForNote(char noteName)
