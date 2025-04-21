@@ -30,6 +30,7 @@
 #include "misc/ConfigGroups.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Profiler.h"
 #include "base/TimeSignature.h"
 #include "gui/editors/guitar/Fingering.h"

@@ -521,6 +521,7 @@ set(rg_CPPS
   base/Quantizer.cpp
   base/XmlExportable.cpp
   base/NotationTypes.cpp
+  base/Pitch.cpp
   base/PropertyName.cpp
   base/SegmentPerformanceHelper.cpp
   base/Device.cpp

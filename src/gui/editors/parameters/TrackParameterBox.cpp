@@ -39,6 +39,7 @@
 #include "base/InstrumentStaticSignals.h"
 #include "gui/widgets/LineEdit.h"
 #include "base/MidiDevice.h"
+#include "base/Pitch.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "sound/PluginIdentifier.h"
 #include "misc/Preferences.h"

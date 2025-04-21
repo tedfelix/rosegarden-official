@@ -1,4 +1,5 @@
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include <QTest>

@@ -87,6 +87,7 @@
 #include "base/AnalysisTypes.h"
 #include "base/CompositionTimeSliceAdapter.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Controllable.h"
 #include "base/Studio.h"
 #include "base/Instrument.h"

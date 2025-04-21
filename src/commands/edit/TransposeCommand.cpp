@@ -18,6 +18,7 @@
 #include "TransposeCommand.h"
 
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
 

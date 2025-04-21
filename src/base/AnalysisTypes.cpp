@@ -23,6 +23,7 @@
 #include <cmath> // fabs, pow
 
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "AnalysisTypes.h"
 #include "Event.h"
 #include "base/Segment.h"

@@ -27,6 +27,7 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Segment.h"
 #include "base/Studio.h"
 #include "base/Track.h"

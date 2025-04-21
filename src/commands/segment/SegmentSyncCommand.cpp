@@ -19,6 +19,7 @@
 #include "SegmentSyncCommand.h"
 
 #include "base/Selection.h"
+#include "base/Pitch.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/edit/TransposeCommand.h"
 #include "commands/segment/SegmentChangeTransposeCommand.h"

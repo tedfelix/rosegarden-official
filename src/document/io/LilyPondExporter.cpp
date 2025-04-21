@@ -43,6 +43,7 @@
 #include "base/Exception.h"
 #include "base/Instrument.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/PropertyName.h"
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
