@@ -165,8 +165,14 @@ public:
 
     /**
      * Return the note name for this pitch, as a single character in
-     * the range A to G.  (This is a reference value that should not
-     * normally be shown directly to the user, for i18n reasons.)
+     * the range A to G.
+     *
+     * This is a reference value that should not normally be shown directly to
+     * the user, for i18n reasons.  Instead pass it through tr() using the
+     * "note name" context:
+     *
+     *   QString noteName = pitch.getNoteName(key);
+     *   noteName = QObject::tr(noteName, "note name");
      */
     char getNoteName(const Key &key) const;
 
