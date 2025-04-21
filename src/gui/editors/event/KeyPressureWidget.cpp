@@ -22,9 +22,9 @@
 
 #include "base/Event.h"
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
+#include "base/Pitch.h"
 #include "base/MidiTypes.h"  // For KeyPressure::EventType...
 #include "gui/dialogs/PitchDialog.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "misc/PreferenceInt.h"
 
 #include <QComboBox>
@@ -83,7 +83,7 @@ KeyPressureWidget::KeyPressureWidget(EditEvent *parent, const Event &event) :
     m_pitchComboBox = new QComboBox(propertiesGroup);
     for (int pitch = 0; pitch < 128; ++pitch) {
         m_pitchComboBox->addItem(QString("%1 (%2)").
-                arg(MidiPitchLabel::pitchToString(pitch)).
+                arg(Pitch::toStringOctave(pitch)).
                 arg(pitch));
     }
     int pitch{a_pitchSetting.get()};

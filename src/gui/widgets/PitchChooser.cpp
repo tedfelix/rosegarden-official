@@ -19,7 +19,7 @@
 #include "PitchChooser.h"
 #include "PitchDragLabel.h"
 
-#include "gui/general/MidiPitchLabel.h"
+#include "base/Pitch.h"
 
 #include <QGroupBox>
 #include <QLabel>
@@ -58,8 +58,7 @@ PitchChooser::PitchChooser(const QString& title,
     m_pitch->setMaximum(127);
     m_pitch->setValue(defaultPitch);
 
-    m_pitchLabel =
-            new QLabel(MidiPitchLabel::pitchToString(defaultPitch), hbox);
+    m_pitchLabel = new QLabel(Pitch::toStringOctave(defaultPitch), hbox);
     hboxLayout->addWidget(m_pitchLabel);
     hbox->setLayout(hboxLayout);
     m_pitchLabel->setMinimumWidth(40);
@@ -109,7 +108,7 @@ PitchChooser::slotSetPitch(int p)
     if (m_pitchDragLabel->getPitch() != p)
         m_pitchDragLabel->slotSetPitch(p);
 
-    m_pitchLabel->setText(MidiPitchLabel::pitchToString(p));
+    m_pitchLabel->setText(Pitch::toStringOctave(p));
     update();
 }
 

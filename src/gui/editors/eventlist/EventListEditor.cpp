@@ -28,6 +28,7 @@
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/SegmentPerformanceHelper.h"
@@ -52,7 +53,6 @@
 #include "gui/editors/event/EventTypeDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/general/IconLoader.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/LineEdit.h"
 #include "gui/widgets/InputDialog.h"
@@ -609,7 +609,7 @@ EventListEditor::updateTableWidget()
         if (event->has(BaseProperties::PITCH)) {
             const int pitch = event->get<Int>(BaseProperties::PITCH);
             pitchStr = QString("%1 %2  ")
-                       .arg(pitch).arg(MidiPitchLabel::pitchToString(pitch));
+                       .arg(pitch).arg(Pitch::toStringOctave(pitch));
         } else if (event->isa(Note::EventType)) {
             pitchStr = tr("<not set>");
         }

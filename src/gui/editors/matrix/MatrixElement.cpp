@@ -25,10 +25,10 @@
 #include "base/RulerScale.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/BaseProperties.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/DefaultVelocityColour.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "misc/Preferences.h"
 
 #include <QGraphicsRectItem>
@@ -242,7 +242,7 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
                                       : NORMAL_SEGMENT_TEXT_Z);
                 m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
             }
-            QString noteName = MidiPitchLabel::pitchToString(pitch);
+            QString noteName = Pitch::toStringOctave(pitch);
             m_textItem->setText(noteName);
             QFont font;
             font.setPixelSize(8);

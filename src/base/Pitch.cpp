@@ -13,11 +13,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Pitch]"
+#define RG_NO_DEBUG_PRINT
+
 #include "Pitch.h"
 
 #include "BaseProperties.h"
 #include "NotationRules.h"
 #include "NotationTypes.h"
+
+#include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 //dmm This will make everything excruciatingly slow if defined:
 //#define DEBUG_PITCH
@@ -26,6 +32,47 @@
 namespace Rosegarden
 {
 
+
+namespace
+{
+
+    // this was refactored to take advantage of these translations being
+    // available in other contexts, and to avoid extra work for translators
+    QString a_notes[] = {
+        QObject::tr("C",  "note name"), QObject::tr("C#", "note name"),
+        QObject::tr("D",  "note name"), QObject::tr("D#", "note name"),
+        QObject::tr("E",  "note name"), QObject::tr("F",  "note name"),
+        QObject::tr("F#", "note name"), QObject::tr("G",  "note name"),
+        QObject::tr("G#", "note name"), QObject::tr("A",  "note name"),
+        QObject::tr("A#", "note name"), QObject::tr("B",  "note name")
+    };
+
+    std::vector<QString> initPitchTable()
+    {
+        std::vector<QString> pitchTable{128};
+
+        const int baseOctave = Preferences::getMIDIPitchOctave();
+
+        for (int pitch = 0; pitch < 128; ++pitch) {
+            const int octave = int(pitch / 12.0) + baseOctave;
+            pitchTable[pitch] =
+                    QString("%1 %2").arg(a_notes[pitch % 12]).arg(octave);
+        }
+
+        return pitchTable;
+    }
+
+}
+
+QString Pitch::toStringOctave(int pitch)
+{
+    static std::vector<QString> pitchTable = initPitchTable();
+
+    if (pitch < 0  ||  pitch > 127)
+        return QString("*%1*").arg(pitch);
+
+    return pitchTable[pitch];
+}
 
 static bool
 pitchInKey(int pitch, const Key& key)
@@ -551,13 +598,13 @@ Pitch::rawPitchToDisplayPitch(
 
     if (DP || (accidental == "")) {
 #ifndef DEBUG_PITCH
-        std::cerr << "Pitch::rawPitchToDisplayPitch(): error! returning null accidental for:"
+        RG_DEBUG << "rawPitchToDisplayPitch(): error! returning null accidental for:";
 #else
-        std::cerr << "Pitch::rawPitchToDisplayPitch(): calculating: "
+        RG_DEBUG << "rawPitchToDisplayPitch(): calculating: ";
 #endif
-                  << std::endl << "pitch: " << rawpitch << " (" << pitch << " in oct "
-                  << octave << ")  userAcc: " << userAccidental
-                  << "  clef: " << clef.getClefType() << "  key: " << key.getName() << std::endl;
+        RG_DEBUG << "pitch: " << rawpitch << " (" << pitch << " in oct "
+                 << octave << ")  userAcc: " << userAccidental
+                 << "  clef: " << clef.getClefType() << "  key: " << key.getName();
     }
 
 

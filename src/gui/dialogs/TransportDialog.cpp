@@ -22,6 +22,7 @@
 #include "base/Composition.h"
 #include "base/Configuration.h"  // DocumentConfiguration
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -30,7 +31,6 @@
 #include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenApplication.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"
@@ -872,7 +872,7 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
             return ;
 
         ui->InDisplay->setText(
-                MidiPitchLabel::pitchToString(mE->getPitch()) +
+                Pitch::toStringOctave(mE->getPitch()) +
                 QString("  %1").arg(mE->getVelocity()));
     }
     break;
@@ -968,7 +968,7 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
     case MappedEvent::MidiNoteOneShot:
     {
         ui->OutDisplay->setText(
-                MidiPitchLabel::pitchToString(mE->getPitch()) +
+                Pitch::toStringOctave(mE->getPitch()) +
                 QString("  %1").arg(mE->getVelocity()));
     }
     break;

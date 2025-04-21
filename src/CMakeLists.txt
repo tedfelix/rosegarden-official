@@ -362,7 +362,6 @@ set(rg_CPPS
   gui/general/PixmapFunctions.cpp
   gui/general/EditViewBase.cpp
   gui/general/RecentFiles.cpp
-  gui/general/MidiPitchLabel.cpp
   gui/general/AutoSaveFinder.cpp
   gui/general/RosegardenScrollView.cpp
   gui/general/PresetElement.cpp
