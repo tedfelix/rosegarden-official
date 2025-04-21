@@ -796,9 +796,9 @@ public:
     /**
      * Construct a Pitch object based on the given performance (MIDI) pitch.
      */
-    explicit Pitch
-    (int performancePitch,
-     const Accidental &explicitAccidental = Accidentals::NoAccidental);
+    explicit Pitch(
+            int performancePitch,
+            const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
     /**
      * Construct a Pitch based on octave and pitch in octave.  The
@@ -806,7 +806,8 @@ public:
      * in octave octaveBase + 5.  pitchInOctave must be in the range
      * 0-11 where 0 is C, 1 is C sharp, etc.
      */
-    Pitch(int pitchInOctave, int octave,
+    Pitch(int pitchInOctave,
+          int octave,
           const Accidental &explicitAccidental = Accidentals::NoAccidental,
           int octaveBase = -2);
 
@@ -823,7 +824,9 @@ public:
      *
      * For minor keys, the harmonic scale is used.
      */
-    Pitch(int noteInScale, int octave, const Key &key,
+    Pitch(int noteInScale,
+          int octave,
+          const Key &key,
           const Accidental &explicitAccidental = Accidentals::NoAccidental,
           int octaveBase = -2);
 
@@ -832,7 +835,9 @@ public:
      * performance pitch. The accidental is calculated based on these
      * properties.
      */
-    Pitch(int noteInCMajor, int octave, int pitch,
+    Pitch(int noteInCMajor,
+          int octave,
+          int pitch,
           int octaveBase = -2);
 
     /**
@@ -842,7 +847,9 @@ public:
      * range [CDEFGAB] or lower-case equivalents.  The key is supplied
      * so that we know how to interpret the NoAccidental case.
      */
-    Pitch(char noteName, int octave, const Key &key,
+    Pitch(char noteName,
+          int octave,
+          const Key &key,
           const Accidental &explicitAccidental = Accidentals::NoAccidental,
           int octaveBase = -2);
 
@@ -852,11 +859,13 @@ public:
      * the top has height 8, and both positive and negative values are
      * permissible.
      */
-    Pitch(int heightOnStaff, const Clef &clef, const Key &key,
+    Pitch(int heightOnStaff,
+          const Clef &clef,
+          const Key &key,
           const Accidental &explicitAccidental = Accidentals::NoAccidental);
 
-    Pitch(const Pitch &);
-    Pitch &operator=(const Pitch &);
+    //Pitch(const Pitch &);
+    //Pitch &operator=(const Pitch &);
 
     /**
      * Return the MIDI pitch for this Pitch object.
@@ -893,13 +902,6 @@ public:
      * accidentals have already been displayed in the bar, etc.
      */
     Accidental getDisplayAccidental(const Key &key) const;
-
-    /**
-     * Return the accidental that should be used to display this pitch
-     * in a given key, using the given strategy to resolve pitches where
-     * an accidental is needed but not specified.
-     */
-    Accidental getDisplayAccidental(const Key &key, Accidentals::NoAccidentalStrategy) const;
 
     /**
      * Return the position in the scale for this pitch, as a number in
@@ -946,7 +948,9 @@ public:
      * The octaveBase argument specifies the octave containing MIDI pitch 0;
      * middle-C is in octave octaveBase + 5.
      */
-    int getOctaveAccidental(int octaveBase = -2, const Accidental& acc = Accidentals::NoAccidental) const;
+    int getOctaveAccidental(
+            int octaveBase = -2,
+            const Accidental& acc = Accidentals::NoAccidental) const;
 
     /**
      * Return the pitch within the octave, in the range 0 to 11.
@@ -980,12 +984,6 @@ public:
     static int getIndexForNote(char noteName);
 
     /**
-     * Return a note name corresponding to the given note index, which
-     * must be in the range 0-6 with 0 for C, 1 for D etc.
-     */
-    static char getNoteForIndex(int index);
-
-    /**
      * Calculate and return the performance (MIDI) pitch corresponding
      * to the stored height and accidental, interpreting them as
      * Rosegarden-2.1-style values (for backward compatibility use),
@@ -1004,13 +1002,6 @@ public:
     Pitch transpose(const Key &key, int pitchDelta, int heightDelta) const;
 
     /**
-      * checks whether the accidental specified for this pitch (if any)
-      * is valid - for example, a Sharp for pitch 11 is invalid, as
-      * it's between A# and B#.
-      */
-    bool validAccidental() const;
-
-    /**
      * Returned event is on heap; caller takes responsibility for ownership
      */
     Event *getAsNoteEvent(timeT absoluteTime, timeT duration) const;
@@ -1020,22 +1011,54 @@ public:
      */
     Key getAsKey() const;
 
+#if 0
     /**
      * Get the major or minor key that has this Pitch as the tonic
      */
     Key getAsKey(bool isMinor) const;
+#endif
 
 private:
     int m_pitch;
     Accidental m_accidental;
 
-    static void rawPitchToDisplayPitch
-    (int, const Clef &, const Key &, int &, Accidental &,
-    Accidentals::NoAccidentalStrategy);
+    static void rawPitchToDisplayPitch(
+            int,
+            const Clef &,
+            const Key &,
+            int &, Accidental &,
+            Accidentals::NoAccidentalStrategy);
 
-    static void displayPitchToRawPitch
-    (int, Accidental, const Clef &, const Key &,
-     int &, bool ignoreOffset = false);
+    static void displayPitchToRawPitch(
+            int,
+            Accidental,
+            const Clef &,
+            const Key &,
+            int &,
+            bool ignoreOffset = false);
+
+    /**
+     * Return a note name corresponding to the given note index, which
+     * must be in the range 0-6 with 0 for C, 1 for D etc.
+     */
+    static char getNoteForIndex(int index);
+
+    /**
+     * Return the accidental that should be used to display this pitch
+     * in a given key, using the given strategy to resolve pitches where
+     * an accidental is needed but not specified.
+     */
+    Accidental getDisplayAccidental(
+            const Key &key,
+            Accidentals::NoAccidentalStrategy) const;
+
+    /**
+      * checks whether the accidental specified for this pitch (if any)
+      * is valid - for example, a Sharp for pitch 11 is invalid, as
+      * it's between A# and B#.
+      */
+    bool validAccidental() const;
+
 };
 
 

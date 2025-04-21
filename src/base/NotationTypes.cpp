@@ -1456,6 +1456,7 @@ Pitch::getAsKey() const {
 
 }
 
+#if 0
 Key
 Pitch::getAsKey(bool isMinor) const {
     if (isMinor)
@@ -1463,6 +1464,7 @@ Pitch::getAsKey(bool isMinor) const {
     else
         return getAsKey();
 }
+#endif
 
 /**
  * Converts performance pitch to height on staff + correct accidentals
@@ -1684,6 +1686,7 @@ Pitch::Pitch(int heightOnStaff, const Clef &clef, const Key &key,
     if (m_pitch > 127) m_pitch = 127;
 }
 
+#if 0
 Pitch::Pitch(const Pitch &p) :
     m_pitch(p.m_pitch),
     m_accidental(p.m_accidental)
@@ -1700,6 +1703,7 @@ Pitch::operator=(const Pitch &p)
     }
     return *this;
 }
+#endif
 
 int
 Pitch::getPerformancePitch() const
