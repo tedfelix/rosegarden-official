@@ -1328,8 +1328,6 @@ TrackParameterBox::updateWidgets2()
 
     const int octaveBase = Preferences::getMIDIPitchOctave();
 
-    const bool includeOctave = false;
-
     const Pitch lowest(track->getLowestPlayable(), Accidentals::NoAccidental);
 
     // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
@@ -1339,7 +1337,7 @@ TrackParameterBox::updateWidgets2()
     // Separate the note letter from the octave to avoid undue burden on
     // translators having to retranslate the same thing but for a number
     // difference
-    QString tmp = QObject::tr(lowest.getAsString(includeOctave, octaveBase).c_str(), "note name");
+    QString tmp = QObject::tr(lowest.getAsString(false, octaveBase).c_str(), "note name");
     tmp += tr(" %1").arg(lowest.getOctave(octaveBase));
     m_lowest->setText(tmp);
 
@@ -1347,7 +1345,7 @@ TrackParameterBox::updateWidgets2()
 
     const Pitch highest(track->getHighestPlayable(), Accidentals::NoAccidental);
 
-    tmp = QObject::tr(highest.getAsString(includeOctave, octaveBase).c_str(), "note name");
+    tmp = QObject::tr(highest.getAsString(false, octaveBase).c_str(), "note name");
     tmp += tr(" %1").arg(highest.getOctave(octaveBase));
     m_highest->setText(tmp);
 

@@ -25,6 +25,8 @@
 #include "misc/Debug.h"
 #include "misc/Preferences.h"
 
+#include <vector>
+
 //dmm This will make everything excruciatingly slow if defined:
 //#define DEBUG_PITCH
 
@@ -447,7 +449,7 @@ resolveSpecifiedAccidental(int pitch,
 bool
 Pitch::validAccidental() const
 {
-//      std::cout << "Checking whether accidental is valid " << std::endl;
+        //RG_DEBUG << "Checking whether accidental is valid";
         if (m_accidental == Accidentals::NoAccidental)
         {
                 return true;
@@ -481,7 +483,7 @@ Pitch::validAccidental() const
                 case 11: //B
                         return true;
         };
-        std::cout << "Internal error in validAccidental" << std::endl;
+        RG_WARNING << "validAccidental(): Internal error";
         return false;
 }
 
@@ -502,13 +504,15 @@ Pitch::getAsKey() const {
     // to find the number of accidentals for the key for this tonic
     Pitch p(-1, 0, Accidentals::Flat);
     int accidentalCount = -7;
-    while ((p.getPitchInOctave() != this->getPitchInOctave() || p.getAccidental(cmaj) != this->getAccidental(cmaj))
+    while ((p.getPitchInOctave() != this->getPitchInOctave()  ||
+            p.getAccidental(cmaj) != this->getAccidental(cmaj))
         && accidentalCount < 8) {
         accidentalCount++;
         p = p.transpose(cmaj, 7, 4);
     }
 
-    if (p.getPitchInOctave() == this->getPitchInOctave() && p.getAccidental(cmaj) == this->getAccidental(cmaj)) {
+    if (p.getPitchInOctave() == this->getPitchInOctave()  &&
+        p.getAccidental(cmaj) == this->getAccidental(cmaj)) {
         return Key(abs(accidentalCount), accidentalCount >= 0, false);
     } else {
         // Not any 'regular' key, so the ambiguous ctor is fine
@@ -570,15 +574,15 @@ Pitch::rawPitchToDisplayPitch(
     Accidental userAccidental = accidental;
     accidental = "";
 
-    if (userAccidental == Accidentals::NoAccidental || !Pitch(rawpitch, userAccidental).validAccidental())
+    if (userAccidental == Accidentals::NoAccidental  ||
+        !Pitch(rawpitch, userAccidental).validAccidental())
     {
         userAccidental = resolveNoAccidental(pitch, key, noAccidentalStrategy);
-        //std::cout << "Chose accidental " << userAccidental << " for pitch " << pitch <<
-        //      " in key " << key.getName() << std::endl;
+        //RG_DEBUG << "Chose accidental " << userAccidental << " for pitch " << pitch << " in key " << key.getName();
     }
     //else
     //{
-    //  std::cout << "Accidental was specified, as " << userAccidental << std::endl;
+    //  RG_DEBUG << "Accidental was specified, as " << userAccidental;
     //}
 
     resolveSpecifiedAccidental(pitch, clef, key, height, octave, userAccidental, accidental);
@@ -764,13 +768,14 @@ Pitch::getAccidental(const Key &key) const
 {
     if (m_accidental == Accidentals::NoAccidental || !validAccidental())
     {
-        Accidental retval = resolveNoAccidental(m_pitch, key, Accidentals::UseKey);
-        //std::cout << "Resolved No/invalid accidental: chose " << retval << std::endl;
+        const Accidental retval =
+                resolveNoAccidental(m_pitch, key, Accidentals::UseKey);
+        //RG_DEBUG << "Resolved No/invalid accidental: chose " << retval;
         return retval;
     }
     else
     {
-        //std::cout << "Returning specified accidental" << std::endl;
+        //RG_DEBUG << "Returning specified accidental";
         return m_accidental;
     }
 }
@@ -782,11 +787,14 @@ Pitch::getDisplayAccidental(const Key &key) const
 }
 
 Accidental
-Pitch::getDisplayAccidental(const Key &key, Accidentals::NoAccidentalStrategy noAccidentalStrategy) const
+Pitch::getDisplayAccidental(
+        const Key &key,
+        Accidentals::NoAccidentalStrategy noAccidentalStrategy) const
 {
     int heightOnStaff;
     Accidental accidental(m_accidental);
-    rawPitchToDisplayPitch(m_pitch, Clef(), key, heightOnStaff, accidental, noAccidentalStrategy);
+    rawPitchToDisplayPitch(m_pitch, Clef(), key, heightOnStaff, accidental,
+            noAccidentalStrategy);
     return accidental;
 }
 
@@ -815,7 +823,8 @@ Pitch::getHeightOnStaff(const Clef &clef, const Key &key) const
 {
     int heightOnStaff;
     Accidental accidental(m_accidental);
-    rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental, Accidentals::UseKey);
+    rawPitchToDisplayPitch(m_pitch, clef, key, heightOnStaff, accidental,
+            Accidentals::UseKey);
     return heightOnStaff;
 }
 
@@ -824,8 +833,14 @@ Pitch::getHeightOnStaff(const Clef &clef, bool useSharps) const
 {
     int heightOnStaff;
     Accidental accidental(m_accidental);
-    rawPitchToDisplayPitch(m_pitch, clef, Key("C major"), heightOnStaff, accidental,
-        useSharps ? Accidentals::UseSharps : Accidentals::UseFlats);
+    rawPitchToDisplayPitch(
+            m_pitch,
+            clef,
+            Key("C major"),
+            heightOnStaff,
+            accidental,
+            useSharps ? Accidentals::UseSharps : Accidentals::UseFlats);
+
     return heightOnStaff;
 }
 
@@ -937,11 +952,15 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta) const
     Accidental oldAccidental = getAccidental(key);
 
     // get old step
-    // TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes into account accidentals
-    //  properly (e.g. yielding '0' instead of '1' for B#0). For now workaround here.
-    Pitch oldPitchWithoutAccidental(getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental), Accidentals::Natural);
-    Key cmaj = Key();
-    int oldStep = oldPitchWithoutAccidental.getNoteInScale(cmaj) + oldPitchWithoutAccidental.getOctave(0) * 7;
+    // TODO: maybe we should write an oldPitchObj.getOctave(0, key) that takes
+    //  into account accidentals properly (e.g. yielding '0' instead of '1' for
+    //  B#0). For now workaround here.
+    Pitch oldPitchWithoutAccidental(
+            getPerformancePitch() - Accidentals::getPitchOffset(oldAccidental),
+            Accidentals::Natural);
+    const Key cmaj = Key();
+    const int oldStep = oldPitchWithoutAccidental.getNoteInScale(cmaj) +
+                        oldPitchWithoutAccidental.getOctave(0) * 7;
 
     // calculate new pitch and step
     int newPitch = getPerformancePitch() + pitchDelta;
@@ -955,18 +974,19 @@ Pitch Pitch::transpose(const Key &key, int pitchDelta, int heightDelta) const
 
     // should not happen
     if (newStep < 0 || newPitch < 0) {
-        std::cerr << "Internal error in NotationTypes, Pitch::transpose()"
-            << std::endl;
+        RG_WARNING << "transpose(): Internal error in NotationTypes";
         if (newStep < 0) newStep = 0;
         if (newPitch < 0) newPitch = 0;
     }
 
     // calculate new accidental for step
-    int pitchWithoutAccidental = ((newStep / 7) * 12 + scale_Cmajor[newStep % 7]);
-    int newAccidentalOffset = newPitch - pitchWithoutAccidental;
+    const int pitchWithoutAccidental =
+            ((newStep / 7) * 12 + scale_Cmajor[newStep % 7]);
+    const int newAccidentalOffset = newPitch - pitchWithoutAccidental;
 
     // construct pitch-object to return
     Pitch newPitchObj(newPitch, Accidentals::getAccidental(newAccidentalOffset));
+
     return newPitchObj;
 }
 

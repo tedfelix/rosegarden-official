@@ -20,6 +20,10 @@
 
 #include <rosegardenprivate_export.h>
 
+#include <QString>
+
+#include <string>
+
 
 namespace Rosegarden
 {
@@ -227,6 +231,10 @@ public:
                             int octaveBase = -2) const;
 
     /// Faster version of getAsString().  Includes the octave.
+    /**
+     * Does not take into account a key.  Always returns one of:
+     * C C# D Eb E F F# G Ab A Bb B
+     */
     static QString toStringOctave(int pitch);
 
     /**
@@ -272,6 +280,8 @@ public:
 #endif
 
 private:
+
+    /// MIDI note number.  E.g. 60 is C3.
     int m_pitch;
     Accidental m_accidental;
 
