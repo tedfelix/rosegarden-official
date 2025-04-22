@@ -349,6 +349,7 @@ public:
         TransportStartAtTime, // time arg required
         TransportStopAtTime // time arg required
     };
+    // For debug.  Do not remove.
     static QString transportRequestToString(TransportRequest request);
 
     /// Called by RosegardenMainWindow::slotHandleInputs().

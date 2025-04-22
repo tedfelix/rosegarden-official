@@ -1595,20 +1595,32 @@ JackDriver::jackProcessRecord(InstrumentId id,
     return 0;
 }
 
+#ifdef DEBUG_JACK_TRANSPORT
+static QString transportStateToString(jack_transport_state_t state)
+{
+    static std::vector<QString> states{
+        "Stopped", "Rolling", "Looping", "Starting", "NetStarting"};
+
+    if (state < 0  ||  state >= states.size())
+        return "???";
+
+    return states[state];
+}
+#endif
 
 int
 JackDriver::jackSyncCallback(jack_transport_state_t state,
                              jack_position_t *position,
                              void *arg)
 {
-    JackDriver *inst = static_cast<JackDriver *>(arg);
-    if (!inst)
-        return true; // or rather, return "huh?"
+    JackDriver *jackDriver = static_cast<JackDriver *>(arg);
+    if (!jackDriver)
+        return true;
 
-    inst->m_alsaDriver->checkTimerSync(0); // reset, as not processing
+    jackDriver->m_alsaDriver->checkTimerSync(0); // reset, as not processing
 
-    if (!inst->m_jackTransportEnabled)
-        return true; // ignore
+    if (!jackDriver->m_jackTransportEnabled)
+        return true;
 
     RosegardenSequencer *sequencer =
             RosegardenSequencer::getInstance();
@@ -1617,16 +1629,26 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 
 #ifdef DEBUG_JACK_TRANSPORT
 
-    RG_DEBUG << "jackSyncCallback(): state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : state == 3 ? "starting" : "unknown") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying();
-    RG_DEBUG << "jackSyncCallback(): m_waitingState " << inst->m_waitingState << ", unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2;
-    RG_DEBUG << "jackSyncCallback(): rate " << position->frame_rate << ", bar " << position->bar << ", beat " << position->beat << ", tick " << position->tick << ", bpm " << position->beats_per_minute;
+    RG_DEBUG << "jackSyncCallback() ----------";
+    RG_DEBUG << "    state:" << state << transportStateToString(state);
+    RG_DEBUG << "    frame_rate:" << position->frame_rate << "| frame:" << position->frame << "| frame secs:" << (double)position->frame / (double)position->frame_rate;
+    //RG_DEBUG << "    usecs:" << position->usecs;  // Free-rolling timestamp.  Not very useful.
+    if (position->valid & JackPositionBBT)
+        RG_DEBUG << "    bar:" << position->bar << "| beat:" << position->beat << "| tick:" << position->tick << "| bpm:" << position->beats_per_minute;
+    if (position->unique_1 != position->unique_2)
+        RG_DEBUG << "    INCONSISTENT! unique_1:" << position->unique_1 << "| unique_2:" << position->unique_2;
+    RG_DEBUG << "    ALSA playing:" << jackDriver->m_alsaDriver->isPlaying();
+    RG_DEBUG << "    m_waiting:" << jackDriver->m_waiting << "| m_waitingState:" << jackDriver->m_waitingState << transportStateToString(jackDriver->m_waitingState);
 
 #endif
+
+    // Infer the transport request from the ALSA play state and the
+    // incoming JACK transport state.
 
     RosegardenSequencer::TransportRequest request =
             RosegardenSequencer::TransportNoChange;
 
-    if (inst->m_alsaDriver->isPlaying()) {
+    if (jackDriver->m_alsaDriver->isPlaying()) {
 
         if (state == JackTransportStarting) {
             request = RosegardenSequencer::TransportJumpToTime;
@@ -1634,16 +1656,23 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             request = RosegardenSequencer::TransportStop;
         }
 
-    } else {
+    } else {  // ALSA is stopped.
 
         if (state == JackTransportStarting) {
             request = RosegardenSequencer::TransportStartAtTime;
         } else if (state == JackTransportStopped) {
+            // ??? Not necessarily.  If the position has changed, we probably
+            //     want to seek to that new position.
             request = RosegardenSequencer::TransportNoChange;
         }
     }
 
-    if (!inst->m_waiting || inst->m_waitingState != state) {
+#ifdef DEBUG_JACK_TRANSPORT
+    RG_DEBUG << "    inferred request:" << request << RosegardenSequencer::transportRequestToString(request);
+#endif
+
+    // If we aren't waiting, or the state has changed...
+    if (!jackDriver->m_waiting  ||  jackDriver->m_waitingState != state) {
 
         if (request == RosegardenSequencer::TransportJumpToTime ||
                 request == RosegardenSequencer::TransportStartAtTime) {
@@ -1652,64 +1681,69 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
                                                    position->frame_rate);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Requesting jump to " << rt;
+            RG_DEBUG << "    Requesting jump to " << rt;
 #endif
 
-            inst->m_waitingToken = sequencer->transportJump(request, rt);
+            jackDriver->m_waitingToken = sequencer->transportJump(request, rt);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
+            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
 #endif
 
         } else if (request == RosegardenSequencer::TransportStop) {
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Requesting state change to " << request;
+            RG_DEBUG << "    Requesting state change to " << request;
 #endif
 
-            inst->m_waitingToken = sequencer->transportChange(request);
+            jackDriver->m_waitingToken = sequencer->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
+            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
 #endif
 
         } else if (request == RosegardenSequencer::TransportNoChange) {
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Requesting no state change!";
+            RG_DEBUG << "    Requesting no state change!";
 #endif
 
-            inst->m_waitingToken = sequencer->transportChange(request);
+            // ??? Why are we requesting a token for no change?  Why
+            //     don't we just return true?
+            jackDriver->m_waitingToken = sequencer->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
+            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
 #endif
 
         }
 
-        inst->m_waiting = true;
-        inst->m_waitingState = state;
+        jackDriver->m_waiting = true;
+        jackDriver->m_waitingState = state;
 
 #ifdef DEBUG_JACK_TRANSPORT
-        RG_DEBUG << "jackSyncCallback(): Setting waiting to " << inst->m_waiting << " and waiting state to " << inst->m_waitingState << " (request was " << request << ")";
+        RG_DEBUG << "    Setting m_waiting to true and waiting state to" << jackDriver->m_waitingState << transportStateToString(jackDriver->m_waitingState) << "(request was" << request << ")";
 #endif
 
-        return 0;
+        // Not done.  We need another call to confirm transport sync.
+        return false;
 
-    } else {
+    } else {  // waiting and the state has not changed
 
-        if (sequencer->isTransportSyncComplete(inst->m_waitingToken)) {
+        if (sequencer->isTransportSyncComplete(jackDriver->m_waitingToken)) {
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Sync complete";
+            RG_DEBUG << "    RG transport sync complete";
 #endif
 
-            return 1;
+            // Done.  We have confirmed transport is ready.
+            return true;
         } else {
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Sync not complete";
+            RG_DEBUG << "    RG transport sync not complete";
 #endif
 
-            return 0;
+            // Not done.  We need another call to confirm transport sync.
+            return false;
         }
     }
 }
