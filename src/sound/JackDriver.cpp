@@ -14,20 +14,22 @@
 */
 
 #define RG_MODULE_STRING "[JackDriver]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "JackDriver.h"
+
 #include "AlsaDriver.h"
 #include "MappedStudio.h"
 #include "AudioProcess.h"
 #include "AudioInstrumentMixer.h"
-#include "base/Profiler.h"
-#include "base/AudioLevel.h"
 #include "Audit.h"
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
-#include "sound/WAVExporter.h"
 
+#include "base/Profiler.h"
+#include "base/AudioLevel.h"
+#include "sound/WAVExporter.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "misc/Preferences.h"
@@ -39,10 +41,10 @@
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
-//#define DEBUG_JACK_DRIVER 1
-//#define DEBUG_JACK_TRANSPORT 1
-//#define DEBUG_JACK_PROCESS 1
-//#define DEBUG_JACK_XRUN 1
+//#define DEBUG_JACK_DRIVER
+//#define DEBUG_JACK_TRANSPORT
+//#define DEBUG_JACK_PROCESS
+//#define DEBUG_JACK_XRUN
 
 namespace Rosegarden
 {
@@ -1662,8 +1664,14 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             request = RosegardenSequencer::TransportStartAtTime;
         } else if (state == JackTransportStopped) {
             // ??? Not necessarily.  If the position has changed, we probably
-            //     want to seek to that new position.
+            //     want to seek to that new position.  Since we are stopped and
+            //     these requests come in extremely rarely, we should probably
+            //     just assume that we need to do a position update.
             request = RosegardenSequencer::TransportNoChange;
+            // ??? But this results in an endless loop.  I'm guessing it is
+            //     because we send out a transport jump to JACK which then
+            //     sends another to us.
+            //request = RosegardenSequencer::TransportJumpToTime;
         }
     }
 

@@ -24,7 +24,6 @@
 #include "SoundDriver.h"
 #include "base/Instrument.h"
 #include "base/RealTime.h"
-#include "sequencer/RosegardenSequencer.h"
 
 #include <QStringList>
 
@@ -260,7 +259,7 @@ protected:
 
     bool                         m_waiting;
     jack_transport_state_t       m_waitingState;
-    RosegardenSequencer::TransportToken m_waitingToken;
+    unsigned long m_waitingToken;
     int                          m_ignoreProcessTransportCount;
 
     AudioBussMixer              *m_bussMixer;

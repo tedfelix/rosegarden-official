@@ -540,6 +540,12 @@ private:
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair> m_transportRequests;
+    /// Serial number used to detect completion of processing across threads.
+    /**
+     * ??? If someone calls one of the functions that returns a token (e.g.
+     *     transportChange()) before processing is complete, this serial number
+     *     will be out of sync.  That will cause false reporting of completion.
+     */
     TransportToken m_transportToken;
 
     /// UNUSED
