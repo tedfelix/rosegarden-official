@@ -363,7 +363,8 @@ LilyPondOptionsDialog::populateDefaultValues()
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
 
-    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage", 0).toUInt());
+    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage",
+        LILYPOND_VERSION_DEFAULT - LILYPOND_VERSION_TOO_OLD + 1).toUInt());
     // See also setDefaultLilyPondVersion below
     int defaultPaperSize = 1; // A4
     if (QLocale::system().country() == QLocale::UnitedStates) {

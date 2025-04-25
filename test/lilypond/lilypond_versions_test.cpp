@@ -49,34 +49,28 @@ void TestLilypondVersion::initTestCase()
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
     settings.setValue("lilyfontsize", 12); // the default of 26 is really huge!
-    settings.setValue("lilyexportbeamings", true);
+    settings.setValue("lilyexportbeamings", "true");
 
     // YGYGYG SET HERE OTHER LILYPOND RELATIVE SETTIGS
-    // settings.setValue("lilypapersize", PAPER_A4);
+    settings.setValue("lilypapersize", 1);          // A4
     settings.setValue("lilypaperlandscape", "false");
     settings.setValue("lilyraggedbottom", "false");
 
     // YGYGYG etc... TODO
-    // m_exportEmptyStaves = qStrToBool(settings.value("lilyexportemptystaves", "false"));
-    // m_useShortNames = qStrToBool(settings.value("lilyuseshortnames", "true"));
-    // m_exportSelection = settings.value("lilyexportselection", EXPORT_NONMUTED_TRACKS).toUInt();
-    // if (settings.value("lilyexporteditedsegments", "false").toBool()) {
-    //     m_exportSelection = EXPORT_EDITED_SEGMENTS;
-    // }
-    // m_exportLyrics = settings.value("lilyexportlyrics", EXPORT_LYRICS_LEFT).toUInt();
-    // m_exportTempoMarks = settings.value("lilyexporttempomarks", EXPORT_NONE_TEMPO_MARKS).toUInt();
-    // m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false"));
-    // m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true"));
-    //
-    // m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt();
-    // m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
-    // m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
-    // m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
-    // m_useVolta = settings.value("lilyexportrepeat", "true").toBool();
-    // m_altBar = settings.value("lilydrawbaratvolta", "true").toBool();
-    // m_cancelAccidentals = settings.value("lilycancelaccidentals", "false").toBool();
-    // m_fingeringsInStaff = settings.value("lilyfingeringsinstaff", "true").toBool();
-    // settings.endGroup();
+    settings.value("lilyexportemptystaves", "false");
+    settings.value("lilyuseshortnames", "true");
+    settings.value("lilyexportlyrics", 1);          // Left
+    settings.value("lilyexporttempomarks", 2);      // All
+    settings.value("lilyexportstaffbrackets", "false");
+
+    settings.value("lilyexportmarkermode", 2);      // Marker text
+    // settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS)
+    settings.value("lilychordnamesmode", "false");
+    settings.value("lilyexportrepeat", "true");
+    settings.value("lilydrawbaratvolta", "true");
+    settings.value("lilycancelaccidentals", "false");
+    settings.value("lilyfingeringsinstaff", "true");
+    settings.endGroup();
 
     // Define the destination directory and empty it
     destination = "VersionsTestOut";
