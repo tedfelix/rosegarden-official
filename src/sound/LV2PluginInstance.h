@@ -27,8 +27,8 @@
 
 #include <lv2/options/options.h>
 
-#include <alsa/seq_event.h>
-#include <alsa/seq_midi_event.h>  // for snd_midi_event_t
+// Forward declare from alsa/asoundlib.h
+typedef struct snd_midi_event snd_midi_event_t;
 
 #include <QString>
 #include <QMutex>

@@ -20,8 +20,6 @@
 
 // ALSA
 #include <alsa/asoundlib.h>
-#include <alsa/seq_event.h>
-#include <alsa/version.h>
 
 #include "MappedInstrument.h"
 #include "Midi.h"
