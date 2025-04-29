@@ -1,0 +1,31 @@
+
+# This file is included by the scripts "versions_test_run_lilypond.sh"
+# and "versions_test_check_results.sh".
+# It defines some parameters these scripts need.
+# These parameters are depending of the current system and have to be
+# modified accordingly by the user before running the test.
+
+# Name of the root directory of the LilyPond exported files.
+# This directory is automatically created when lilypond_versions_test is run.
+sources="VersionsTestOut"
+
+# Keywords used for errors and warnings
+# (Depend of the LilyPond i18n language)
+keyerr="Erreur"
+# keyerr="Error"
+keywarn="Avertissement"
+# keywarn="Warning"
+
+# Set here the names of the LilyPond versions to test
+#  - First parameter : Version number used in RG LilyPond dialog
+#  - Second parameter : Path to the installed LilyPond (with the right version)
+#    (Use an empty string to define the system default LilyPond version)
+do_version "2.12" "/opt/lilypond/2.12.0-1/bin"
+do_version "2.14" "/opt/lilypond/2.14.2-1/bin"
+do_version "2.16" "/opt/lilypond/2.16.2-1/bin"
+do_version "2.18" "/opt/lilypond/2.18.2-1/bin"
+do_version "2.19" "/opt/lilypond/2.19.19-1/bin"
+do_version "2.20" "/opt/lilypond/2.20.0-1/bin"
+do_version "2.22" "/opt/lilypond/2.22.2-1/bin"
+do_version "2.24" ""
+
