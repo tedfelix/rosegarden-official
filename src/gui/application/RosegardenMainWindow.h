@@ -67,6 +67,7 @@ class TrackParameterBox;
 class TempoAndTimeSignatureEditor;
 class SynthPluginManagerDialog;
 class StartupTester;
+class StartupLogo;
 class SequenceManager;
 class SegmentParameterBox;
 class RosegardenParameterArea;
@@ -131,14 +132,7 @@ class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow :
 
 public:
 
-    /**
-     * constructor of RosegardenMainWindow, calls all init functions to
-     * create the application.
-     * \arg useSequencer : if true, the sequencer is launched
-     * @see initMenuBar initToolBar
-     */
-    RosegardenMainWindow(bool enableSound = true,
-                         QObject *startupStatusMessageReceiver = nullptr);
+    RosegardenMainWindow(bool enableSound, StartupLogo *startupLogo);
 
     ~RosegardenMainWindow() override;
 
@@ -1561,10 +1555,10 @@ private:
 
     //--------------- Data members ---------------------------------
 
-    bool m_actionsSetup;
+    bool m_actionsSetup{false};
 
     // Action States
-    bool m_notPlaying;
+    bool m_notPlaying{true};
     bool m_haveSelection;
     bool m_haveRange;
     void updateActions();

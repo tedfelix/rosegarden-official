@@ -302,11 +302,9 @@ namespace
     }
 }
 
-RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
-                                           QObject *startupStatusMessageReceiver) :
+RosegardenMainWindow::RosegardenMainWindow(
+        bool enableSound, StartupLogo *startupLogo) :
     QMainWindow(nullptr),
-    m_actionsSetup(false),
-    m_notPlaying(true),
     m_haveSelection(false),
     m_haveRange(false),
     m_view(nullptr),
@@ -365,9 +363,9 @@ RosegardenMainWindow::RosegardenMainWindow(bool enableSound,
     setObjectName("App");
     m_myself = this;
 
-    if (startupStatusMessageReceiver) {
-        connect(this, SIGNAL(startupStatusMessage(QString)),
-                startupStatusMessageReceiver, SLOT(slotShowStatusMessage(QString)));
+    if (startupLogo) {
+        connect(this, &RosegardenMainWindow::startupStatusMessage,
+                startupLogo, &StartupLogo::slotShowStatusMessage);
     }
 
     connect(EditTempoController::self(), &EditTempoController::editTempos,
@@ -1354,8 +1352,10 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
 
     // use QueuedConnection here because the position update can
     // happen after the command is executed
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecutedInitially()),
-            SLOT(slotUpdatePosition()), Qt::QueuedConnection);
+    connect(CommandHistory::getInstance(),
+                &CommandHistory::commandExecutedInitially,
+            this, &RosegardenMainWindow::slotUpdatePosition,
+            Qt::QueuedConnection);
 
     // start the autosave timer
     m_lastAutoSaveTime = QTime::currentTime();
@@ -3011,15 +3011,17 @@ RosegardenMainWindow::createAndSetupTransport()
 
     connect(m_transport, &TransportDialog::panic, this, &RosegardenMainWindow::slotPanic);
 
-    connect(m_transport, SIGNAL(editTempo(QWidget*)),
-            SLOT(slotEditTempo(QWidget*)));
+    connect(m_transport, &TransportDialog::editTempo,
+            this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
+                    &RosegardenMainWindow::slotEditTempo));
 
-    connect(m_transport, SIGNAL(editTimeSignature(QWidget*)),
-            SLOT(slotEditTimeSignature(QWidget*)));
+    connect(m_transport, &TransportDialog::editTimeSignature,
+            this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
+                    &RosegardenMainWindow::slotEditTimeSignature));
 
-    connect(m_transport, SIGNAL(editTransportTime(QWidget*)),
-            SLOT(slotEditTransportTime(QWidget*)));
-
+    connect(m_transport, &TransportDialog::editTransportTime,
+            this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
+                    &RosegardenMainWindow::slotEditTransportTime));
 }
 
 void
@@ -6145,8 +6147,8 @@ RosegardenMainWindow::slotConfigure()
                 this, &RosegardenMainWindow::slotUpdateAutoSaveInterval);
 
         // Close the dialog if the document is changed : fix a potential crash
-        connect(this, SIGNAL(documentAboutToChange()),
-                m_configDlg, SLOT(slotCancelOrClose()));
+        connect(this, &RosegardenMainWindow::documentAboutToChange,
+                m_configDlg, &ConfigureDialog::slotCancelOrClose);
 
         // Clear m_configDlg if the dialog is destroyed
         connect(m_configDlg, &QObject::destroyed,
@@ -6174,8 +6176,8 @@ RosegardenMainWindow::slotEditDocumentProperties()
         m_docConfigDlg = new DocumentConfigureDialog(this);
 
         // Close the dialog if the document is changed : fix #1462
-        connect(this, SIGNAL(documentAboutToChange()),
-                m_docConfigDlg, SLOT(slotCancelOrClose()));
+        connect(this, &RosegardenMainWindow::documentAboutToChange,
+                m_docConfigDlg, &DocumentConfigureDialog::slotCancelOrClose);
 
         // Clear m_docConfigDlg if the dialog is destroyed
         connect(m_docConfigDlg, &QObject::destroyed,
@@ -6195,8 +6197,8 @@ RosegardenMainWindow::slotOpenAudioPathSettings()
         m_docConfigDlg = new DocumentConfigureDialog(this);
 
         // Close the dialog if the document is changed : fix #1462
-        connect(this, SIGNAL(documentAboutToChange()),
-                m_docConfigDlg, SLOT(slotCancelOrClose()));
+        connect(this, &RosegardenMainWindow::documentAboutToChange,
+                m_docConfigDlg, &DocumentConfigureDialog::slotCancelOrClose);
 
         // Clear m_docConfigDlg if the dialog is destroyed
         connect(m_docConfigDlg, &QObject::destroyed,
@@ -6626,17 +6628,13 @@ RosegardenMainWindow::slotAudioManager()
     m_audioManagerDialog =
         new AudioManagerDialog(this, RosegardenDocument::currentDocument);
 
-    connect(m_audioManagerDialog,
-            SIGNAL(playAudioFile(AudioFileId,
-                                 const RealTime &,
-                                 const RealTime&)),
-            SLOT(slotPlayAudioFile(AudioFileId,
-                                   const RealTime &,
-                                   const RealTime &)));
+    connect(m_audioManagerDialog, &AudioManagerDialog::playAudioFile,
+            this, &RosegardenMainWindow::slotPlayAudioFile);
 
     connect(m_audioManagerDialog,
-            SIGNAL(addAudioFile(AudioFileId)),
-            SLOT(slotAddAudioFile(AudioFileId)));
+            static_cast<void(AudioManagerDialog::*)(AudioFileId)>(
+                    &AudioManagerDialog::addAudioFile),
+            this, &RosegardenMainWindow::slotAddAudioFile);
 
     connect(m_audioManagerDialog,
             &AudioManagerDialog::deleteAudioFile,
@@ -6663,13 +6661,9 @@ RosegardenMainWindow::slotAudioManager()
             this, &RosegardenMainWindow::slotDeleteSegments);
 
     connect(m_audioManagerDialog,
-            SIGNAL(insertAudioSegment(AudioFileId,
-                                      const RealTime&,
-                                      const RealTime&)),
+            &AudioManagerDialog::insertAudioSegment,
             m_view,
-            SLOT(slotAddAudioSegmentDefaultPosition(AudioFileId,
-                                                    const RealTime&,
-                                                    const RealTime&)));
+            &RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition);
     connect(m_audioManagerDialog,
             &AudioManagerDialog::cancelPlayingAudioFile,
             this, &RosegardenMainWindow::slotCancelAudioPlayingFile);
@@ -6945,8 +6939,9 @@ RosegardenMainWindow::slotManageMIDIDevices()
 
         m_deviceManager = new DeviceManagerDialog(this);
 
-        connect(m_deviceManager, SIGNAL(editBanks(DeviceId)),
-                this, SLOT(slotEditBanks(DeviceId)));
+        connect(m_deviceManager, &DeviceManagerDialog::editBanks,
+                this, static_cast<void(RosegardenMainWindow::*)(DeviceId)>(
+                        &RosegardenMainWindow::slotEditBanks));
 
         connect(m_deviceManager.data(), &DeviceManagerDialog::editControllers,
                 this, &RosegardenMainWindow::slotEditControlParameters);
@@ -7094,8 +7089,11 @@ RosegardenMainWindow::slotEditControlParameters(DeviceId device)
     connect(this, &RosegardenMainWindow::documentAboutToChange,
             controlEditor, &QWidget::close);
 
-    connect(RosegardenDocument::currentDocument, SIGNAL(devicesResyncd()),
-            controlEditor, SLOT(slotUpdate()));
+    connect(RosegardenDocument::currentDocument,
+            &RosegardenDocument::devicesResyncd,
+            controlEditor,
+            static_cast<void(ControlEditorDialog::*)()>(
+                    &ControlEditorDialog::slotUpdate));
 
 
     controlEditor->resize(780, 360);
