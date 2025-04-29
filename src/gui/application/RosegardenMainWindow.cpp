@@ -305,49 +305,12 @@ namespace
 RosegardenMainWindow::RosegardenMainWindow(
         bool enableSound, StartupLogo *startupLogo) :
     QMainWindow(nullptr),
-    m_haveSelection(false),
-    m_haveRange(false),
-    m_view(nullptr),
-    m_recentFiles(),
-    m_sequencerThread(nullptr),
-    m_sequencerCheckedIn(false),
-    m_cpuBar(nullptr),
-    m_zoomSlider(nullptr),
-    m_zoomLabel(nullptr),
-//    m_statusBarLabel1(0),
-    m_seqManager(nullptr),
-    m_transport(nullptr),
-    m_audioManagerDialog(nullptr),
-    m_originatingJump(false),
     m_useSequencer(enableSound),
     m_autoSaveTimer(new QTimer(this)),
     m_clipboard(Clipboard::mainClipboard()),
-    m_playList(nullptr),
-    m_synthManager(nullptr),
-    m_audioMixerWindow2(),
-    m_midiMixer(nullptr),
-    m_bankEditor(nullptr),
-    m_markerEditor(nullptr),
-    m_tempoAndTimeSignatureEditor(nullptr),
-    m_triggerSegmentManager(nullptr),
-    m_configDlg(nullptr),
-    m_docConfigDlg(nullptr),
-    m_pluginGUIManager(nullptr),
     m_updateUITimer(new QTimer(this)),
     m_inputTimer(new QTimer(this)),
-    m_startupTester(nullptr),
-    m_firstRun(false),
-    m_haveAudioImporter(false),
-    m_parameterArea(nullptr),
-#ifdef HAVE_LIRC
-    m_lircClient(nullptr),
-    m_lircCommander(nullptr),
-#endif
-    m_tranzport(nullptr),
-//  m_deviceManager(),  QPointer inits itself to 0.
-    m_warningWidget(nullptr),
-    m_cpuMeterTimer(new QTimer(this)),
-    m_autoSaveInterval(0)
+    m_cpuMeterTimer(new QTimer(this))
 {
 #ifdef THREAD_DEBUG
     RG_WARNING << "UI Thread gettid(): " << gettid();
@@ -7341,9 +7304,9 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
             &RosegardenMainWindow::slotPluginBypassed);
 
     connect(dialog,
-            SIGNAL(destroyed(InstrumentId, int)),
+            &AudioPluginDialog::destroyed,
             this,
-            SLOT(slotPluginDialogDestroyed(InstrumentId, int)));
+            &RosegardenMainWindow::slotPluginDialogDestroyed);
 
     connect(this, &RosegardenMainWindow::documentAboutToChange, dialog, &QWidget::close);
 
