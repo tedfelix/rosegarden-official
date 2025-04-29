@@ -19,7 +19,6 @@
 
 #include "AudioRouteMenu.h"
 
-#include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/WheelyButton.h"
 #include "base/Instrument.h"

@@ -18,7 +18,6 @@
 #include "TabbedConfigurationPage.h"
 
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
 #include <QTabWidget>

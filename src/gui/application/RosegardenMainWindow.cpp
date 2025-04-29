@@ -102,7 +102,6 @@
 #include "document/MetadataHelper.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Preferences.h"
-#include "gui/application/RosegardenApplication.h"
 #include "gui/dialogs/AddTracksDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"

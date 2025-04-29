@@ -36,7 +36,6 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -197,13 +196,6 @@ TrackButtons::TrackButtons(int trackCellHeight,
 
     // We never remove the observer so we should be ok here.
     RosegardenDocument::currentDocument->getComposition().addObserver(this);
-
-    // We do not care about RWM::documentLoaded() because if a new
-    // document is being loaded, we are going away.  A new TrackButtons
-    // instance is created for each new document.
-    //connect(RosegardenMainWindow::self(),
-    //            &RosegardenMainWindow::documentLoaded,
-    //        this, &TrackButtons::slotDocumentLoaded);
 }
 
 TrackButtons::~TrackButtons()

@@ -22,13 +22,13 @@
 #include "base/Composition.h"
 #include "gui/general/GUIPalette.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include "misc/Debug.h"
 
 #include <QAbstractItemView>
 #include <QPixmap>
 #include <QString>
+
 
 namespace Rosegarden
 {

@@ -55,7 +55,6 @@
 #include "base/Marker.h"
 #include "base/StaffExportTypes.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenApplication.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "gui/editors/notation/NotationView.h"

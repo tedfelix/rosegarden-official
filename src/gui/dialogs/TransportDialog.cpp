@@ -30,7 +30,6 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
-#include "gui/application/RosegardenApplication.h"
 #include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"

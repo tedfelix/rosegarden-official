@@ -20,20 +20,6 @@
 #include "RosegardenApplication.h"
 
 #include "misc/Debug.h"
-#include "misc/ConfigGroups.h"
-#include "document/RosegardenDocument.h"
-#include "RosegardenMainWindow.h"
-
-#include <QMainWindow>
-#include <QStatusBar>
-#include <QMessageBox>
-#include <QProcess>
-#include <QByteArray>
-#include <QEventLoop>
-#include <QSessionManager>
-#include <QString>
-#include <QSettings>
-
 
 using namespace Rosegarden;
 

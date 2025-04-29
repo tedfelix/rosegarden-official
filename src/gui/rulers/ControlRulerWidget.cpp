@@ -35,7 +35,6 @@
 #include "base/MidiTypes.h"  // for PitchBend::EventType
 #include "base/PropertyName.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "base/Segment.h"
 #include "base/Selection.h"  // for EventSelection
 #include "base/parameterpattern/SelectionSituation.h"

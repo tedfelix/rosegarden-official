@@ -24,7 +24,6 @@
 #include "misc/ConfigGroups.h"
 #include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"

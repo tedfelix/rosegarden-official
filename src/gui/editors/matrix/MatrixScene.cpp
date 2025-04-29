@@ -25,7 +25,6 @@
 #include "MatrixWidget.h"
 #include "MatrixElement.h"
 
-#include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"

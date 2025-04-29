@@ -24,6 +24,7 @@
 #include "base/Studio.h"
 #include "base/AudioPluginInstance.h"
 #include "sound/PluginIdentifier.h"
+#include "misc/Strings.h"
 
 #ifdef HAVE_LILV
 #include "gui/studio/AudioPluginLV2GUIManager.h"

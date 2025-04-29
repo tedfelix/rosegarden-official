@@ -26,8 +26,6 @@
 #include "base/Device.h"
 #include "base/Instrument.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainViewWidget.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 

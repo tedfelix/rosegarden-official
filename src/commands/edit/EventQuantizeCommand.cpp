@@ -31,7 +31,6 @@
 #include "document/CommandRegistry.h"
 #include "misc/Strings.h"
 #include "base/BaseProperties.h"
-#include "gui/application/RosegardenApplication.h"
 
 #include <QApplication>
 #include <QProgressDialog>

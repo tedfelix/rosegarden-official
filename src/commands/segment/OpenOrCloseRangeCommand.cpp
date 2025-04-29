@@ -19,7 +19,6 @@
 #include "OpenOrCloseRangeCommand.h"
 
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"

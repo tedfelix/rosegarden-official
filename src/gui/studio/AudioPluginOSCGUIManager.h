@@ -20,8 +20,8 @@
 #define RG_AUDIOPLUGINOSCGUIMANAGER_H
 
 #include "base/MidiProgram.h"
+#include "base/Instrument.h"
 #include "sound/RingBuffer.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
 #include <QCoreApplication>
@@ -32,6 +32,7 @@
 
 namespace Rosegarden
 {
+
 
 class TimerCallbackAssistant;
 class Studio;
