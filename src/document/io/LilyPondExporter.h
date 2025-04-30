@@ -62,7 +62,7 @@ enum {
 };
 
 // Default version used if some error occurs
-const int LILYPOND_VERSION_DEFAULT = LILYPOND_VERSION_2_18;
+const int LILYPOND_VERSION_DEFAULT = LILYPOND_VERSION_TOO_OLD + 1;
 
 // Versions strings associated with the previous enum.
 // They are used inside the LilyPond code.

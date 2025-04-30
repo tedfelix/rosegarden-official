@@ -136,7 +136,7 @@ LilyPondExporter::readConfigVariables()
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false"));
     m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true"));
 
-    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt();
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_DEFAULT).toUInt();
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
