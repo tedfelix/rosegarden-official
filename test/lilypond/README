@@ -1,5 +1,8 @@
-Lilypond export test
-====================
+LILYPOND EXPORT TEST and LILYPOND VERSIONS TEST
+
+
+1) Lilypond export test
+=======================
 
 Run the test with ./lilypond_export_test
 
@@ -43,4 +46,78 @@ $ ./check_all_files.sh
 This will generate a .ps file per file in baseline/*.ly, in baseline/tmp/.
 
 You can open these files to check how things look like visually.
+
+
+
+2) Lilypond export test
+=======================
+
+The goal of this test is to check the LilyPond sources RG exports against
+differents versions of LilyPond.
+This only makes sense when several LilyPond versions are installed on the
+used computer. For that reason, the test is only build when RG is configured
+with:
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DLILY_VERSIONS_TEST=1
+
+This test is not an unit test and is not run whith "make test".
+
+The test is run in three steps:
+
+
+1 - Export the RG examples to LilyPond
+--------------------------------------
+
+This export is done as many time as there are LilyPond versions available
+in the LilyPond export dialog of RG.
+
+Run the test with:
+    cd build/test/lilypond
+    ./lilypond_versions_test
+
+Although build with the Qt test framework, lilypond_versions_test is not
+itself a test and it always returns "success".
+It store the multiple versions of the LilyPond exported files in
+build/test/lilypond/VersionsTestOut/.
+
+
+2 - Run the appropriate version of LilyPond on each file created at step 1
+--------------------------------------------------------------------------
+
+Before this step can be run, it's necessary to defined where the different
+versions of LilyPond are installed.
+
+This is done, always in the same directory, by copying or renaming
+"versions_test_config.example" in "versions_test_config" and editing it.
+The "warning" and "error" keywords used by LilyPond should be defined
+in the appropriate translation and the pathes of the installed LilyPond
+versions given in the "do_version" lines.
+
+Then, still from the "build/test/lilypond" directory, call the script:
+    versions_test_run_lilypond.sh
+
+If LilyPond finds no error, a "VersionsTestOut/<version>/XXX.ly" is converted
+to "VersionsTestOut/<version>/tmp/XXX.ly.ps" and the LilyPond standard output
+is written in "VersionsTestOut/<version>/tmp/XXX.ly.err".
+
+
+3 - Gather and show the results
+-------------------------------
+
+This is done, again from the "build/test/lilypond" directory, by calling
+the following script:
+    versions_test_check_results.sh
+
+It read all the file.ly.err, count possible errors or warning, and write them
+on the standard output.
+
+If a rakudo compiler is available, a more readable table can be displayed
+with this command:
+    versions_test_check_results.sh | versions_test_synthesis.raku
+
+The resulting table use "Enn" for nn errors, "Wnn" for nn warnings, and "OK"
+when there is neither error nor warning.
+
+The "XXX.ly" and "tmp/XXX.ly.err" files are not deleted.
+They are kept available to help fixing possible issues.
+
 

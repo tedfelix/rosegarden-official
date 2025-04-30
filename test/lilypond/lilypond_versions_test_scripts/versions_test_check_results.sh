@@ -1,4 +1,10 @@
 #!/bin/sh
+
+# This script read the LilyPond output messages stored while processing
+# the LilyPond versions test.
+# It can't work without an up to date file "versions_test_config".
+# Please, see the README file in test/lilypond.
+
 PATH0=$PATH
 DIR0=`pwd`
 

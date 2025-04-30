@@ -1,4 +1,10 @@
 #!/bin/sh
+
+# This script run LilyPond on all the sources created while processing
+# the LilyPond versions test.
+# It can't work without an up to date file "versions_test_config".
+# Please, see the README file in test/lilypond.
+
 PATH0=$PATH
 DIR0=`pwd`
 

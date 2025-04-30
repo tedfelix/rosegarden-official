@@ -4,6 +4,7 @@
 # export test.
 # It read on it's standard input the standard output of the
 # versions_test_check_results.sh script.
+# Please, see the README file in test/lilypond.
 
 my $text = $*IN.slurp(); # Read the whole standard input in $text
 

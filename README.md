@@ -145,6 +145,19 @@ Then run the tests with "make test":
     make test
 
 
+Testing the LilyPond export against several LilyPond versions
+=============================================================
+
+In addition to the unit tests, a specific test tool is build with:
+
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DLILY_VERSIONS_TEST=1
+
+This tool, which is independent of the unit tests and is run separately, is
+only useful if several versions of LilyPond are available on the same system.
+
+Please, see the README file in the test/lilypond directory for more details.
+
+
 User documentation
 ==================
 
