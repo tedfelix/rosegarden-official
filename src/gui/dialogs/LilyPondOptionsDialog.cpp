@@ -231,8 +231,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 1, 2);
     m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
 
-    // Lilypond versions prior 2.12 are no more supported since RG 23.06
-    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_2_12);
+    // Currently, the same code is used whatever the LilyPond version is. So the
+    // LilyPond version is set to its minimal value LILYPOND_VERSION_TOO_OLD + 1.
+    // The following LilyVersionAwareCheckBox is only kept to not forget it.
+    // The next time it will be needed, it probably will be with another checkbox.
+    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_TOO_OLD + 1);
     m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher</qt>"));
     layoutNotation->addWidget(m_useShortNames, 4, 0, 1, 2);
 
