@@ -27,6 +27,7 @@
 #include <QXmlStreamReader>
 
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 
 // ??? This file's line endings are CRLF.  Need to convert to LF
 //     along with bringing the formatting up to standards.

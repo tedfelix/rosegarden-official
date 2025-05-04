@@ -53,6 +53,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Selection.h"
 #include "base/SoftSynthDevice.h"
 #include "base/Studio.h"

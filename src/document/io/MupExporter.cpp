@@ -27,6 +27,7 @@
 #include "base/Exception.h"
 #include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
 #include "base/Sets.h"

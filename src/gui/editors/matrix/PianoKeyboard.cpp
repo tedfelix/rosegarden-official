@@ -20,8 +20,8 @@
 #include "PianoKeyboard.h"
 #include "misc/Debug.h"
 
+#include "base/Pitch.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "gui/rulers/PitchRuler.h"
 
 #include <QColor>
@@ -155,7 +155,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
         pitch -= 24;
 
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-                       MidiPitchLabel::pitchToString(pitch));
+                       Pitch::toStringOctave(pitch));
     }
 
     // Black Keys

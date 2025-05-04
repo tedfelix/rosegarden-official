@@ -28,9 +28,10 @@
 // #include "PercussionMap.h"
 
 #include "base/BaseProperties.h"
+#include "base/Composition.h"
+#include "base/Pitch.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "misc/Debug.h"
-#include "base/Composition.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 
 #include <QRegularExpression>

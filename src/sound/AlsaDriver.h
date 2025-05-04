@@ -30,7 +30,9 @@
 #include "JackDriver.h"
 #endif
 
-#include <alsa/asoundlib.h> // ALSA
+// Forward declares from alsa/asoundlib.h
+typedef struct snd_seq_event snd_seq_event_t;
+typedef struct _snd_seq snd_seq_t;
 
 #include <QMutex>
 #include <QSharedPointer>

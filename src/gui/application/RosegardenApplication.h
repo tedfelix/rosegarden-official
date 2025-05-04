@@ -19,24 +19,15 @@
 #define RG_ROSEGARDENAPPLICATION_H
 
 #include <QApplication>
-#include <QByteArray>
-#include <QString>
 
 #include <rosegardenprivate_export.h>
-
-class QSessionManager;
-class QProcess;
 
 
 namespace Rosegarden
 {
 
-/**
- * RosegardenApplication
- *
- * Handles RosegardenMainWindow's perceived uniqueness for us.
- *
- */
+
+/// Handles RosegardenMainWindow's perceived uniqueness for us.
 class ROSEGARDENPRIVATE_EXPORT RosegardenApplication : public QApplication
 {
     Q_OBJECT
@@ -45,8 +36,8 @@ public:
 
     virtual void saveState(QSessionManager&);
     
-    //!!!
-    //@@@ Need session manager commitData() call
+    // !!!
+    // @@@ Need session manager commitData() call
 
 signals:
     // connect this to RosegardenMainWindow
@@ -56,6 +47,7 @@ protected:
 
     bool notify(QObject * receiver, QEvent * event) override;
 };
+
 
 }
 

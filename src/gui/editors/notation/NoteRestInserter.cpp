@@ -26,6 +26,7 @@
 #include "misc/ConfigGroups.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Segment.h"
 #include "base/ViewElement.h"
 #include "base/Composition.h"

@@ -15,12 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[InstrumentParameterPanel]"
+#define RG_NO_DEBUG_PRINT
 
 #include "InstrumentParameterPanel.h"
 
 #include "base/Instrument.h"
 #include "gui/widgets/SqueezedLabel.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QFrame>
 #include <QWidget>
@@ -28,6 +29,7 @@
 
 namespace Rosegarden
 {
+
 
 InstrumentParameterPanel::InstrumentParameterPanel(QWidget *parent) :
     QFrame(parent),

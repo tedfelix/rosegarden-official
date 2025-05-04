@@ -19,6 +19,7 @@
 
 #include "SegmentNotationHelper.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "Quantizer.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"

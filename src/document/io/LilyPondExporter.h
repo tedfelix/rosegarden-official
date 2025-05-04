@@ -34,6 +34,7 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/io/LilyPondLanguage.h"
+
 #include <fstream>
 #include <set>
 #include <string>
@@ -66,8 +67,6 @@ enum {
 
 class TimeSignature;
 class Studio;
-class RosegardenMainWindow;
-class RosegardenMainViewWidget;
 class RosegardenDocument;
 class NotationView;
 class Key;

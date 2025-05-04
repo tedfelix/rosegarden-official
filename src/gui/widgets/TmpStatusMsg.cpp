@@ -15,8 +15,6 @@
 
 #include "TmpStatusMsg.h"
 
-#include "gui/application/RosegardenApplication.h"
-
 #include <QMainWindow>
 #include <QStatusBar>
 #include <QString>

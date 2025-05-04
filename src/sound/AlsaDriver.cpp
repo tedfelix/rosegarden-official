@@ -31,9 +31,6 @@
 
 // ALSA
 #include <alsa/asoundlib.h>
-#include <alsa/seq_event.h>
-#include <alsa/version.h>
-#include <alsa/seq.h>
 
 #include "AlsaDriver.h"
 #include "AlsaPort.h"

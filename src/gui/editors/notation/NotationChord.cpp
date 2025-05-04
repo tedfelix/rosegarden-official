@@ -23,6 +23,7 @@
 #include "base/Event.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Quantizer.h"
 #include "misc/Debug.h"
 #include "NotationProperties.h"

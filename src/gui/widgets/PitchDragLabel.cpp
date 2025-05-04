@@ -21,6 +21,7 @@
 
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ThornStyle.h"

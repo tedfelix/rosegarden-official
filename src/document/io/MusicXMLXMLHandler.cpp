@@ -19,7 +19,9 @@
 #define RG_NO_DEBUG_PRINT
 
 #include "MusicXMLImportHelper.h"
+
 #include "MusicXMLXMLHandler.h"
+
 #include "base/Event.h"
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
@@ -27,6 +29,7 @@
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "base/StaffExportTypes.h"
 #include "base/Segment.h"

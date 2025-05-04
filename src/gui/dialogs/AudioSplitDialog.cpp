@@ -25,7 +25,6 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenApplication.h"
 #include "sound/AudioFileManager.h"
 
 #include <QDialog>

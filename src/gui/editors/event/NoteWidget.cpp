@@ -27,10 +27,10 @@
 #include "base/Event.h"
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/TimeDialog.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "misc/PreferenceInt.h"
 
 #include <QCheckBox>
@@ -113,7 +113,7 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
     m_pitchComboBox = new QComboBox(propertiesGroup);
     for (int pitch = 0; pitch < 128; ++pitch) {
         m_pitchComboBox->addItem(QString("%1 (%2)").
-                arg(MidiPitchLabel::pitchToString(pitch)).
+                arg(Pitch::toStringOctave(pitch)).
                 arg(pitch));
     }
     int pitch{a_pitchSetting.get()};

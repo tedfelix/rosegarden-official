@@ -26,6 +26,7 @@
 #include "base/Clipboard.h"
 #include "base/Composition.h"
 #include "base/CompositionTimeSliceAdapter.h"
+#include "base/Pitch.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "base/TriggerSegment.h"
@@ -36,7 +37,6 @@
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "gui/dialogs/TimeDialog.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "document/Command.h"
 
@@ -227,7 +227,7 @@ TriggerSegmentManager::slotUpdate()
                             tracks.size()).arg(uses);
 
         QString pitch = QString("%1 (%2)")
-                        .arg(MidiPitchLabel::pitchToString((*it)->getBasePitch()))
+                        .arg(Pitch::toStringOctave((*it)->getBasePitch()))
                         .arg((*it)->getBasePitch());
 
         QString velocity = QString("%1").arg((*it)->getBaseVelocity());

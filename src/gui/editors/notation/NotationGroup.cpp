@@ -24,6 +24,7 @@
 #include "base/Event.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Quantizer.h"
 #include "gui/editors/notation/NotationChord.h"
 #include "gui/editors/notation/NotationElement.h"

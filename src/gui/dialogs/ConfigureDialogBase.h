@@ -50,10 +50,13 @@ public:
 
     void setPageByIndex(int index);
 
+public slots:
+
+    virtual void slotCancelOrClose();
+
 protected slots:
     void accept() override;
     virtual void slotApply();
-    virtual void slotCancelOrClose();
     virtual void slotHelpRequested();
 
 public slots:

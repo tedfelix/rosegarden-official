@@ -2,6 +2,7 @@
 //
 
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "misc/Strings.h"
 #include <QTest>

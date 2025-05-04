@@ -23,7 +23,7 @@
 #define RG_ALSAPORT_H
 
 #ifdef HAVE_ALSA
-#include <alsa/asoundlib.h> // ALSA
+
 
 namespace Rosegarden
 {

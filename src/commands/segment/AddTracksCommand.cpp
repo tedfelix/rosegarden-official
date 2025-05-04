@@ -22,7 +22,6 @@
 #include "base/Composition.h"
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 
 #include <algorithm>

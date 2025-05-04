@@ -23,7 +23,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/MidiProgram.h"
-#include "gui/general/MidiPitchLabel.h"
+#include "base/Pitch.h"
 #include "PitchRuler.h"
 #include <QColor>
 #include <QEvent>
@@ -95,7 +95,7 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
 
     for (int i = 0; i < extent; ++i) {
 
-        QString label = MidiPitchLabel::pitchToString(minPitch + i);
+        QString label = Pitch::toStringOctave(minPitch + i);
         std::string key = m_mapping->getMapForKeyName(minPitch + i);
         //RG_DEBUG << "PercussionPitchRuler::paintEvent()" << i << ": " << label.getQString() << ": " << key;
 

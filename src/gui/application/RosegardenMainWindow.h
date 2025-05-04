@@ -67,6 +67,7 @@ class TrackParameterBox;
 class TempoAndTimeSignatureEditor;
 class SynthPluginManagerDialog;
 class StartupTester;
+class StartupLogo;
 class SequenceManager;
 class SegmentParameterBox;
 class RosegardenParameterArea;
@@ -131,14 +132,7 @@ class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow :
 
 public:
 
-    /**
-     * constructor of RosegardenMainWindow, calls all init functions to
-     * create the application.
-     * \arg useSequencer : if true, the sequencer is launched
-     * @see initMenuBar initToolBar
-     */
-    RosegardenMainWindow(bool enableSound = true,
-                         QObject *startupStatusMessageReceiver = nullptr);
+    RosegardenMainWindow(bool enableSound, StartupLogo *startupLogo);
 
     ~RosegardenMainWindow() override;
 
@@ -1519,9 +1513,6 @@ public slots:
     void slotCommandRedone();
     void slotUpdatePosition();
 
-protected slots:
-    void setupRecentFilesMenu();
-
 private:
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
      * unique
@@ -1558,54 +1549,50 @@ private:
 
     bool fileSaveAs(bool asTemplate);
 
-
-    //--------------- Data members ---------------------------------
-
-    bool m_actionsSetup;
+    bool m_actionsSetup{false};
 
     // Action States
-    bool m_notPlaying;
-    bool m_haveSelection;
-    bool m_haveRange;
+    bool m_notPlaying{true};
+    bool m_haveSelection{false};
+    bool m_haveRange{false};
     void updateActions();
 
-    RosegardenMainViewWidget *m_view;
+    RosegardenMainViewWidget *m_view{nullptr};
 
     /**
      *    Menus
      */
     RecentFiles m_recentFiles;
 
-    SequencerThread *m_sequencerThread;
-    bool m_sequencerCheckedIn;
+    SequencerThread *m_sequencerThread{nullptr};
+    bool m_sequencerCheckedIn{false};
 
     /// CPU meter in the main window status bar.
     /**
      * This is NOT a general-purpose progress indicator.  You want to use
      * QProgressDialog for that.
      */
-    ProgressBar *m_cpuBar;
+    ProgressBar *m_cpuBar{nullptr};
 
-    ZoomSlider<double> *m_zoomSlider;
-    QLabel             *m_zoomLabel;
+    ZoomSlider<double> *m_zoomSlider{nullptr};
+    QLabel *m_zoomLabel{nullptr};
 
 
-//    QLabel *m_statusBarLabel1;
     // SequenceManager
     //
-    SequenceManager *m_seqManager;
+    SequenceManager *m_seqManager{nullptr};
 
     // Transport dialog pointer
     //
-    TransportDialog *m_transport;
+    TransportDialog *m_transport{nullptr};
 
     // Dialogs which depend on the document
 
     // Audio file manager
     //
-    AudioManagerDialog *m_audioManagerDialog;
+    AudioManagerDialog *m_audioManagerDialog{nullptr};
 
-    bool m_originatingJump;
+    bool m_originatingJump{false};
 
     bool m_useSequencer;
 
@@ -1615,24 +1602,24 @@ private:
 
     Clipboard *m_clipboard;
 
-    SegmentParameterBox           *m_segmentParameterBox;
-    InstrumentParameterBox        *m_instrumentParameterBox;
-    TrackParameterBox             *m_trackParameterBox;
+    SegmentParameterBox *m_segmentParameterBox{nullptr};
+    InstrumentParameterBox *m_instrumentParameterBox{nullptr};
+    TrackParameterBox *m_trackParameterBox{nullptr};
 
-    PlayListDialog        *m_playList;
-    SynthPluginManagerDialog *m_synthManager;
+    PlayListDialog *m_playList{nullptr};
+    SynthPluginManagerDialog *m_synthManager{nullptr};
     QPointer<AudioMixerWindow2> m_audioMixerWindow2;
-    MidiMixerWindow       *m_midiMixer;
-    BankEditorDialog      *m_bankEditor;
-    MarkerEditor          *m_markerEditor;
-    TempoAndTimeSignatureEditor *m_tempoAndTimeSignatureEditor;
-    TriggerSegmentManager *m_triggerSegmentManager;
-    ConfigureDialog       *m_configDlg;
-    DocumentConfigureDialog *m_docConfigDlg;
+    MidiMixerWindow *m_midiMixer{nullptr};
+    BankEditorDialog *m_bankEditor{nullptr};
+    MarkerEditor *m_markerEditor{nullptr};
+    TempoAndTimeSignatureEditor *m_tempoAndTimeSignatureEditor{nullptr};
+    TriggerSegmentManager *m_triggerSegmentManager{nullptr};
+    ConfigureDialog *m_configDlg{nullptr};
+    DocumentConfigureDialog *m_docConfigDlg{nullptr};
     std::set<ControlEditorDialog *> m_controlEditors;
     /// List of plugin dialogs to make sure we don't launch more than one.
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
-    AudioPluginGUIManager *m_pluginGUIManager;
+    AudioPluginGUIManager *m_pluginGUIManager{nullptr};
 
     static RosegardenMainWindow *m_myself;
 
@@ -1641,22 +1628,22 @@ private:
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
 
-    StartupTester *m_startupTester;
+    StartupTester *m_startupTester{nullptr};
 
-    bool m_firstRun;
-    bool m_haveAudioImporter;
+    bool m_firstRun{false};
+    bool m_haveAudioImporter{false};
 
-    RosegardenParameterArea *m_parameterArea;
+    RosegardenParameterArea *m_parameterArea{nullptr};
 
 #ifdef HAVE_LIRC
-    LircClient *m_lircClient;
-    LircCommander *m_lircCommander;
+    LircClient *m_lircClient{nullptr};
+    LircCommander *m_lircCommander{nullptr};
 #endif
-    TranzportClient *m_tranzport;
+    TranzportClient *m_tranzport{nullptr};
 
     QPointer<DeviceManagerDialog> m_deviceManager;
 
-    WarningWidget *m_warningWidget;
+    WarningWidget *m_warningWidget{nullptr};
 
     // Ladish lv1 support
     static int sigpipe[2];
@@ -1680,12 +1667,15 @@ private:
     // shortcuts for most recent file
     QList<QKeySequence> m_mostRecentShortcuts;
 
-    unsigned m_autoSaveInterval;
+    unsigned m_autoSaveInterval{0};
     QTime m_lastAutoSaveTime;
 
     void doStop(bool autoStop);
 
 private slots:
+
+    void setupRecentFilesMenu();
+
     void signalAction(int);
 
     // New routines to handle inputs and UI updates

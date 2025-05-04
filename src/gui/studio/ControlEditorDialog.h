@@ -59,13 +59,15 @@ public:
 signals:
     void closing();
 
+public slots:
+    void slotUpdate()  { slotUpdate(false); }
+
 protected:
     void closeEvent(QCloseEvent *) override;
 
 private slots:
 
     void slotUpdate(bool added);
-    void slotUpdate()  { slotUpdate(false); }
 
     void slotAdd();
     void slotDelete();

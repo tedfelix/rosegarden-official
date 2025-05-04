@@ -30,6 +30,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Profiler.h"
 #include "base/Segment.h"
 #include "base/Selection.h"

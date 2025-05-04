@@ -35,8 +35,6 @@
 
 #include "document/RosegardenDocument.h"
 
-#include "gui/application/RosegardenMainWindow.h"
-
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
 #include "gui/widgets/Thumbwheel.h"

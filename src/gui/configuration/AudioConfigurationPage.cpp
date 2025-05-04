@@ -25,7 +25,6 @@
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
 #include "gui/seqmanager/SequenceManager.h"
-#include "gui/application/RosegardenApplication.h"
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
 #include "TabbedConfigurationPage.h"

@@ -21,23 +21,23 @@
 #define RG_MODULE_STRING "[StaffHeader]"
 
 #include "StaffHeader.h"
+
 #include "HeadersGroup.h"
+#include "NotePixmapFactory.h"
+#include "NotationScene.h"
+#include "NotationStaff.h"
+#include "Inconsistencies.h"
+
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/StaffExportTypes.h"
 #include "base/ColourMap.h"
 #include "base/Track.h"
 #include "base/Overlaps.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "NotePixmapFactory.h"
-#include "NotationScene.h"
-#include "NotationStaff.h"
-
-#include "Inconsistencies.h"
 
 #include <vector>
 #include <map>

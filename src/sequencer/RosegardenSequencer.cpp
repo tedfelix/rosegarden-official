@@ -1563,9 +1563,9 @@ RosegardenSequencer::transportChange(TransportRequest request)
     SEQUENCER_DEBUG << "RosegardenSequencer::transportChange: " << request;
 #endif
     if (request == TransportNoChange)
-        return m_transportToken;
+        return m_transportToken;  // No change at all.
     else
-        return m_transportToken + 1;
+        return m_transportToken + 1;  // Start or Stop.
 }
 
 RosegardenSequencer::TransportToken
@@ -1580,10 +1580,10 @@ RosegardenSequencer::transportJump(TransportRequest request,
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::transportJump: " << request << ", " << rt;
 #endif
-    if (request == TransportNoChange)
-        return m_transportToken + 1;
+    if (request == TransportNoChange  ||  request == TransportJumpToTime)
+        return m_transportToken + 1;  // Just a jump.
     else
-        return m_transportToken + 2;
+        return m_transportToken + 2;  // Jump and Start.
 }
 
 bool
@@ -1654,6 +1654,19 @@ bool RosegardenSequencer::isLooping() const
         return false;
 
     return m_withinLoop  &&  m_loopStart != m_loopEnd;
+}
+
+QString RosegardenSequencer::transportRequestToString(TransportRequest request)
+{
+    if (request < 0  ||  request > TransportStopAtTime)
+        return "???";
+
+    static const std::vector<QString> requests{
+        "NoChange", "Stop", "Start", "Play", "Record", "JumpToTime",
+        "StartAtTime", "StopAtTime"
+    };
+
+    return requests[request];
 }
 
 

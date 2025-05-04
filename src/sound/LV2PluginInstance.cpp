@@ -38,6 +38,8 @@
 #include <lv2/urid/urid.h>
 #include <lv2/patch/patch.h>
 
+#include <alsa/asoundlib.h>
+
 //#include <QtGlobal>
 #include <QJsonDocument>
 #include <QJsonArray>

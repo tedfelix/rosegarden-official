@@ -362,7 +362,6 @@ set(rg_CPPS
   gui/general/PixmapFunctions.cpp
   gui/general/EditViewBase.cpp
   gui/general/RecentFiles.cpp
-  gui/general/MidiPitchLabel.cpp
   gui/general/AutoSaveFinder.cpp
   gui/general/RosegardenScrollView.cpp
   gui/general/PresetElement.cpp
@@ -521,6 +520,7 @@ set(rg_CPPS
   base/Quantizer.cpp
   base/XmlExportable.cpp
   base/NotationTypes.cpp
+  base/Pitch.cpp
   base/PropertyName.cpp
   base/SegmentPerformanceHelper.cpp
   base/Device.cpp

@@ -16,24 +16,26 @@
     COPYING included with this distribution for more information.
 */
 
+#include "AnalysisTypes.h"
+
+#include "NotationTypes.h"
+#include "Pitch.h"
+#include "Event.h"
+#include "Segment.h"
+#include "CompositionTimeSliceAdapter.h"
+#include "BaseProperties.h"
+#include "Composition.h"
+#include "Sets.h"
+#include "Quantizer.h"
+
+#include "misc/Strings.h"
+
+#include <assert.h>
 #include <iostream>
 #include <string>
 #include <map>
 #include <algorithm>
 #include <cmath> // fabs, pow
-
-#include "base/NotationTypes.h"
-#include "AnalysisTypes.h"
-#include "Event.h"
-#include "base/Segment.h"
-#include "CompositionTimeSliceAdapter.h"
-#include "base/BaseProperties.h"
-#include "Composition.h"
-
-#include "Sets.h"
-#include "Quantizer.h"
-
-#include <assert.h>
 
 
 namespace Rosegarden
@@ -182,7 +184,8 @@ ChordLabel::ChordLabel(const Key& key, int mask, int /* bass */) :
 std::string
 ChordLabel::getName(Key /* key */) const
 {
-    return Pitch(m_data.m_rootPitch).getAsString(false) + m_data.m_type;
+    return qstrtostr(Pitch::toString(m_data.m_rootPitch)) + m_data.m_type;
+    //return Pitch(m_data.m_rootPitch).getAsString(false) + m_data.m_type;
         // + (m_data.m_inversion>0 ? " in first inversion" : "");
 }
 

@@ -27,7 +27,7 @@
 #include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "gui/application/RosegardenMainWindow.h"
+#include "sound/ExternalController.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"

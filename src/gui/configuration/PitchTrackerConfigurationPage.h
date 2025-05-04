@@ -18,14 +18,15 @@
 #ifndef RG_PITCHTRACKERCONFIGURATIONPAGE_H
 #define RG_PITCHTRACKERCONFIGURATIONPAGE_H
 
-#include <string>
-#include <vector>
 #include "TabbedConfigurationPage.h"
+#include "sound/Tuning.h"
+
 #include <QString>
 #include <QStringList>
 #include <QErrorMessage>
 
-#include "sound/Tuning.h"
+#include <string>
+#include <vector>
 
 class QWidget;
 class QPushButton;

@@ -24,6 +24,7 @@
 #include "base/LayoutEngine.h"
 #include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Profiler.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"

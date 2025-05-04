@@ -22,9 +22,9 @@
 
 #include "base/Segment.h"
 #include "base/Composition.h"
+#include "base/Selection.h"
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
 

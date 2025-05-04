@@ -32,6 +32,7 @@
 
 #include "base/Event.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/PropertyName.h"
 #include "base/Selection.h"
 #include "base/ViewElement.h"

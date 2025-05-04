@@ -23,7 +23,6 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
-#include "gui/application/RosegardenApplication.h"
 
 #include <QObject>
 

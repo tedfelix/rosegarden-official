@@ -45,7 +45,6 @@
 #include "commands/segment/SegmentSingleRepeatToCopyCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "RosegardenApplication.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"

@@ -20,18 +20,17 @@
 #include <algorithm>
 
 #include "Event.h"
-#include "base/Segment.h"
+#include "Segment.h"
 #include "CompositionTimeSliceAdapter.h"
-#include "base/BaseProperties.h"
-#include "base/NotationTypes.h"
-#include "base/MidiTypes.h"
+#include "BaseProperties.h"
+#include "NotationTypes.h"
+#include "MidiTypes.h"
 #include "Quantizer.h"
+
 #include "misc/Debug.h"
 
 namespace Rosegarden
 {
-
-class Quantizer;
 
 /**
  * A "set" in Rosegarden terminology is a collection of elements found
