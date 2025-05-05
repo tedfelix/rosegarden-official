@@ -1822,7 +1822,6 @@ LilyPondExporter::write()
                                     // bar has to be written. As #'(double-repeat)
                                     // is currently not defined in
                                     // LilyPond, the ":..:" string is used.
-                                    std::cout << "YG Write double repeat\n";
                                     str << std::endl << indent(col)
                                         << "\\bar \":..:\"";
                                 } else {
@@ -1858,7 +1857,6 @@ LilyPondExporter::write()
                                 // Since LilyPond 2.23, drawing explicitely
                                 // this bar in any other alternative than the
                                 // first one hides the repetion bar.
-                                std::cout << "YG Write att Bar !\n";
                                 str << std::endl << indent(col)
                                     << "\\bar \"|\" ";
                             }
@@ -2395,12 +2393,6 @@ LilyPondExporter::writeBar(Segment *s,
         return ;
 
     //RG_DEBUG << "===== Writing bar" << barNo;
-    str << "\n % YG writeBar"
-        << " nbiAlt1=" << nextBarIsAlt1
-        << " nbiAlt2=" << nextBarIsAlt2
-        << " nbiDbl=" << nextBarIsDouble
-        << " nbiEnd=" << nextBarIsEnd
-        << " caden=" << cadenza << std::endl;
 
     if (MultiMeasureRestCount == 0) {
         str << std::endl;
@@ -3017,7 +3009,6 @@ LilyPondExporter::writeBar(Segment *s,
             // Bar check
             str << " |";
         }
-        str << " \% YG ";
     }
 }                               // End of LilyPondExporter::writeBar() method
 
