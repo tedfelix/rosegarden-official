@@ -30,7 +30,6 @@
 #include "sound/MappedEvent.h"
 #include "sound/Midi.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 

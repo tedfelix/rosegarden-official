@@ -97,6 +97,15 @@ signals:
     void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
 
+public slots:
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
+
+    void slotStepByStepTargetRequested(QObject *);
+
 protected slots:
     /// Some change occurs and the whole scene have to be redrawn.
     /// First remove segments from our list when they are deleted from the
@@ -300,17 +309,10 @@ protected slots:
     void slotLoop();
     void slotLoopChanged();
 
-    /// Note-on received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOnReceived(int pitch, int velocity);
-
-    /// Note-off received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOffReceived(int pitch, int velocity);
-
     /// Note-on or note-off received asynchronously -- as above
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
     void slotToggleStepByStep();
-    void slotStepByStepTargetRequested(QObject *);
 
     /// YG: Only for debug
     void slotDebugDump();

@@ -149,30 +149,6 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             &CompositionView::editSegment,
             this, &RosegardenMainViewWidget::slotEditSegment);
 
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentNotation(Segment *)),
-    //        SLOT(slotEditSegmentNotation(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentPitchView(Segment *)),
-    //        SLOT(slotEditSegmentPitchView(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentMatrix(Segment *)),
-    //        SLOT(slotEditSegmentMatrix(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentAudio(Segment *)),
-    //        SLOT(slotEditSegmentAudio(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(audioSegmentAutoSplit(Segment *)),
-    //        SLOT(slotSegmentAutoSplit(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentEventList(Segment *)),
-    //        SLOT(slotEditSegmentEventList(Segment *)));
-
     connect(m_trackEditor->getCompositionView(),
             &CompositionView::editRepeat,
             this, &RosegardenMainViewWidget::slotEditRepeat);
@@ -403,21 +379,18 @@ RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segme
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
     connect(notationView, &NotationView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    // No such signal comes from NotationView
-    //connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
-    //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
-            notationView, SLOT(slotInsertableNoteOnReceived(int, int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
-            notationView, SLOT(slotInsertableNoteOffReceived(int, int)));
+    connect(sM, &SequenceManager::insertableNoteOnReceived,
+            notationView, &NotationView::slotInsertableNoteOnReceived);
+    connect(sM, &SequenceManager::insertableNoteOffReceived,
+            notationView, &NotationView::slotInsertableNoteOffReceived);
 
     connect(notationView, &NotationView::stepByStepTargetRequested,
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
-    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
-            notationView, SLOT(slotStepByStepTargetRequested(QObject *)));
+    connect(this, &RosegardenMainViewWidget::stepByStepTargetRequested,
+            notationView, &NotationView::slotStepByStepTargetRequested);
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view.  Since scrollToTime is
@@ -530,9 +503,6 @@ RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& s
 
     connect(pitchTrackerView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
-//  This probably is obsolete in Thorn.
-//    connect(pitchTrackerView, SIGNAL(jumpPlaybackTo(timeT)),
-//            RosegardenDocument::currentDocument, SLOT(slotSetPointerPosition(timeT)));
     connect(pitchTrackerView, &PitchTrackerView::openInNotation,
             this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
     connect(pitchTrackerView, &PitchTrackerView::openInMatrix,
@@ -545,21 +515,18 @@ RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& s
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
     connect(pitchTrackerView, &NotationView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    // No such signal comes from PitchTrackerView
-    //connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
-    //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
-            pitchTrackerView, SLOT(slotInsertableNoteOnReceived(int, int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
-            pitchTrackerView, SLOT(slotInsertableNoteOffReceived(int, int)));
+    connect(sM, &SequenceManager::insertableNoteOnReceived,
+            pitchTrackerView, &PitchTrackerView::slotInsertableNoteOnReceived);
+    connect(sM, &SequenceManager::insertableNoteOffReceived,
+            pitchTrackerView, &PitchTrackerView::slotInsertableNoteOffReceived);
 
     connect(pitchTrackerView, &NotationView::stepByStepTargetRequested,
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
-    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
-            pitchTrackerView, SLOT(slotStepByStepTargetRequested(QObject *)));
+    connect(this, &RosegardenMainViewWidget::stepByStepTargetRequested,
+            pitchTrackerView, &PitchTrackerView::slotStepByStepTargetRequested);
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view.  Since scrollToTime is
@@ -728,15 +695,15 @@ RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segment
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
-            matrixView, SLOT(slotInsertableNoteOnReceived(int, int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
-            matrixView, SLOT(slotInsertableNoteOffReceived(int, int)));
+    connect(sM, &SequenceManager::insertableNoteOnReceived,
+            matrixView, &MatrixView::slotInsertableNoteOnReceived);
+    connect(sM, &SequenceManager::insertableNoteOffReceived,
+            matrixView, &MatrixView::slotInsertableNoteOffReceived);
 
     connect(matrixView, &MatrixView::stepByStepTargetRequested,
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
-    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
-            matrixView, SLOT(slotStepByStepTargetRequested(QObject *)));
+    connect(this, &RosegardenMainViewWidget::stepByStepTargetRequested,
+            matrixView, &MatrixView::slotStepByStepTargetRequested);
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view.   Since scrollToTime is
@@ -1385,15 +1352,6 @@ RosegardenMainViewWidget::slotAddCommandToHistory(Command *command)
 {
     CommandHistory::getInstance()->addCommand(command);
 }
-
-#if 0
-void
-RosegardenMainViewWidget::slotChangeTrackLabel(TrackId id,
-                                        QString label)
-{
-    m_trackEditor->getTrackButtons()->changeTrackName(id, label);
-}
-#endif
 
 void
 RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,

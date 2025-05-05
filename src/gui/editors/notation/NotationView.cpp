@@ -1657,9 +1657,13 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    RosegardenMainViewWidget * view = RosegardenMainWindow::self()->getView();
+    RosegardenMainViewWidget *view = RosegardenMainWindow::self()->getView();
 
-    LilyPondExporter e(RosegardenDocument::currentDocument, view->getSelection(), std::string(QFile::encodeName(file)), this);
+    LilyPondExporter e(
+            RosegardenDocument::currentDocument,  // doc
+            view->getSelection(),  // selection
+            std::string(QFile::encodeName(file)),  // fileName
+            this);  // parent
 
     if (!e.write()) {
         QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
