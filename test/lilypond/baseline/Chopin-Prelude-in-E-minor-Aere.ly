@@ -225,7 +225,7 @@ globalTempo = {
                 % warning: bar too short, padding with rests
                 % 272640 + 480 < 276480  &&  1/8 < 4/4
                 r8 r4 r2  |
-                R1  |
+                R1 
                 \bar "|."
             } % Voice
 
@@ -425,7 +425,7 @@ globalTempo = {
                 % warning: bar too short, padding with rests
                 % 272640 + 480 < 276480  &&  1/8 < 4/4
                 r8 r4 r2  |
-                R1  |
+                R1 
                 \bar "|."
             } % Voice
 
@@ -611,7 +611,7 @@ globalTempo = {
                 % warning: bar too short, padding with rests
                 % 272640 + 480 < 276480  &&  1/8 < 4/4
                 r8 r4 r2  |
-                R1  |
+                R1 
                 \bar "|."
             } % Voice
 

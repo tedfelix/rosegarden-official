@@ -48,7 +48,7 @@ globalTempo = {
                     \key e \major
                     e'' 4. b' 8 b' 4 -\staccato r  |
                     gis'' 4. e'' 8 e'' 4 -\staccato r  |
-                    R1  |
+                    R1 
                     \bar "|."
                 } % Voice
 
@@ -77,7 +77,7 @@ globalTempo = {
                     \key e \major
                     e'' 4. b' 8 b' 4 -\staccato r  |
                     gis'' 4. e'' 8 e'' 4 -\staccato r  |
-                    R1  |
+                    R1 
                     \bar "|."
                 } % Voice
 
@@ -106,7 +106,7 @@ globalTempo = {
                     \key g \major
                     g'' 4. d'' 8 d'' 4 -\staccato r  |
                     < b'' b' > 4. < g'' g' > 8 < g'' g' > 4 -\staccato r  |
-                    R1  |
+                    R1 
                     \bar "|."
                 } % Voice
 
@@ -133,7 +133,7 @@ globalTempo = {
                     
                     \clef "bass"
                     \key e \major
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -163,7 +163,7 @@ globalTempo = {
                         
                         \clef "treble"
                         \key c \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -190,7 +190,7 @@ globalTempo = {
                         
                         \clef "treble"
                         \key c \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -218,7 +218,7 @@ globalTempo = {
                     
                     \clef "treble"
                     \key e \major
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -246,7 +246,7 @@ globalTempo = {
                         
                         \clef "tenor"
                         \key e \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -273,7 +273,7 @@ globalTempo = {
                         
                         \clef "bass"
                         \key e \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -303,7 +303,7 @@ globalTempo = {
                     
                     \clef "bass"
                     \key e \major
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -333,7 +333,7 @@ globalTempo = {
                         
                         \clef "treble"
                         \key e \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -360,7 +360,7 @@ globalTempo = {
                         
                         \clef "treble"
                         \key e \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -388,7 +388,7 @@ globalTempo = {
                     
                     \clef "alto"
                     \key e \major
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -416,7 +416,7 @@ globalTempo = {
                         
                         \clef "bass"
                         \key e \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 
@@ -443,7 +443,7 @@ globalTempo = {
                         
                         \clef "bass_8"
                         \key e \major
-                        R1*3  |
+                        R1*3 
                         \bar "|."
                     } % Voice
 

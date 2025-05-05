@@ -66,7 +66,7 @@ globalTempo = {
                         e' 4 d'  |
                         f' 8 [ a' a' gis' ]  |
 %% 20
-                        a' 2  |
+                        a' 2 
                     } % close repeat
                 } % Voice
 
@@ -186,7 +186,7 @@ globalTempo = {
                         c' 4 d'  |
                         f' 8 [ f' e' e' ]  |
 %% 20
-                        a' 2  |
+                        a' 2 
                     } % close repeat
                 } % Voice
 
@@ -237,7 +237,7 @@ globalTempo = {
                         g 4 f  |
                         a 8 [ d' b b ]  |
 %% 20
-                        c' 2  |
+                        c' 2 
                     } % close repeat
                 } % Voice
 
@@ -288,7 +288,7 @@ globalTempo = {
                         c 4 d  |
                         d 8 [ d e e ]  |
 %% 20
-                        a 2  |
+                        a 2 
                     } % close repeat
                 } % Voice
 

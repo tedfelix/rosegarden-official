@@ -64,7 +64,7 @@ globalTempo = {
                     \times 2/3 { fis' 8 [ b a ] } \times 2/3 { g' [ b a ] } \times 2/3 { fis' [ b a ] }  |
 %% 15
                     \times 2/3 { e' 8 [ b g ] } \times 2/3 { e' [ b g ] } \times 2/3 { e' [ b g ] }  |
-                    e' 2.  |
+                    e' 2. 
                 } % close repeat
             } % Voice
 
@@ -97,7 +97,7 @@ globalTempo = {
                     \stemUp gis' 4 gis' gis' \stemNeutral  |
                     \stemUp gis' 4 a' fis' \stemNeutral  |
                     \stemUp e' 4 ^\markup { \large "D.C. al Fine" } e' e' \stemNeutral  |
-                    \stemUp e' 2. \stemNeutral  |
+                    \stemUp e' 2. \stemNeutral 
                 } % close repeat
             } % Voice
 
@@ -133,7 +133,7 @@ globalTempo = {
                     \stemDown dis 2. \stemNeutral  |
 %% 15
                     \stemDown e 4 ^3 b, ^2 g, ^4 \stemNeutral  |
-                    \stemDown < e, b g e b, > 2. \arpeggio _~ r4 r \stemNeutral  |
+                    \stemDown < e, b g e b, > 2. \arpeggio _~ r4 r \stemNeutral 
                 } % close repeat
             } % Voice
 
@@ -166,7 +166,7 @@ globalTempo = {
                     \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \times 2/3 { gis' [ dis' a ] } \stemNeutral  |
                     \times 2/3 { \stemDown gis' 8 [ dis' a ] } \times 2/3 { a' [ dis' a ] } \times 2/3 { fis' [ dis' a ] } \stemNeutral  |
                     \times 2/3 { \stemDown e' 8 [ b gis ] } \times 2/3 { e' [ b gis ] } \times 2/3 { e' [ b gis ] } \stemNeutral  |
-                    \stemDown b 2. \stemNeutral  |
+                    \stemDown b 2. \stemNeutral 
                 } % close repeat
             } % Voice
 
@@ -202,7 +202,7 @@ globalTempo = {
                     \stemUp fis' 4 g' _4 fis' _3 \stemNeutral  |
 %% 15
                     \stemUp e' 4 e' e' \stemNeutral  |
-                    \stemUp e' 2. ^\markup { \large "Fine" } \stemNeutral  |
+                    \stemUp e' 2. ^\markup { \large "Fine" } \stemNeutral 
                 } % close repeat
             } % Voice
 
@@ -235,7 +235,7 @@ globalTempo = {
                     \stemDown b, 2. -\tenuto \stemNeutral  |
                     \stemDown b, 2. -\tenuto \stemNeutral  |
                     \stemDown e 4 b, gis, \stemNeutral  |
-                    \stemDown < e gis b, e, > 2. \arpeggio \stemNeutral  |
+                    \stemDown < e gis b, e, > 2. \arpeggio \stemNeutral 
                 } % close repeat
             } % Voice
 

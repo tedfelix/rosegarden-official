@@ -97,7 +97,7 @@ globalTempo = {
                     a' 4 -\tenuto d' -\tenuto g' 2 -\tenuto  |
 %% 45
                     fis' 2 -\tenuto e' 4. -\startTrillSpan s4*0 \stopTrillSpan _( d' 16 -\tenuto [ e' -\tenuto ) ]  |
-                    d' 2 -\tenuto r  |
+                    d' 2 -\tenuto r 
                     \bar "|."
                 } % Voice
 
@@ -178,7 +178,7 @@ globalTempo = {
                     fis' 4 -\tenuto b -\tenuto e' 2 -\tenuto _~  |
 %% 45
                     e' 4 -\tenuto d' 2 -\tenuto cis' 4 -\tenuto  |
-                    d' 2 -\tenuto r  |
+                    d' 2 -\tenuto r 
                     \bar "|."
                 } % Voice
 
@@ -259,7 +259,7 @@ globalTempo = {
                     d' 2. -\tenuto b 4 -\tenuto  |
 %% 45
                     a 2 -\tenuto g -\tenuto  |
-                    fis 2 -\tenuto r  |
+                    fis 2 -\tenuto r 
                     \bar "|."
                 } % Voice
 
@@ -340,7 +340,7 @@ globalTempo = {
                     b, 2. -\tenuto g, 4 -\tenuto  |
 %% 45
                     a, 1 -\tenuto  |
-                    d 2 -\tenuto r  |
+                    d 2 -\tenuto r 
                     \bar "|."
                 } % Voice
 
@@ -416,7 +416,7 @@ globalTempo = {
                     cis'' 4 b' 8 [ a' ] d'' 4 g'  |
                     fis' 2 e' 4. e' 8  |
                     d' 1  |
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -543,7 +543,7 @@ globalTempo = {
                     r4 d' 8 [ cis' ] d' 4 d'  |
                     d' 2 cis' 4. cis' 8  |
                     d' 1  |
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -670,7 +670,7 @@ globalTempo = {
                     a 2 a 4 g  |
                     a 2 g 4. g 8  |
                     fis 1  |
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -796,7 +796,7 @@ globalTempo = {
                     g 2 fis 4 b,  |
                     a, 2. a, 4  |
                     d 1  |
-                    R1*3  |
+                    R1*3 
                     \bar "|."
                 } % Voice
 
@@ -927,7 +927,7 @@ globalTempo = {
                     < fis' d'' > 4 -\tenuto b e' -\tenuto b'  |
 %% 45
                     a' 4 -\tenuto d' -\tenuto g' -\tenuto cis'  |
-                    < d' fis' > 2 -\tenuto r  |
+                    < d' fis' > 2 -\tenuto r 
                     \bar "|."
                 } % Voice
 
@@ -1004,7 +1004,7 @@ globalTempo = {
                     b, 2. g, 4  |
 %% 45
                     a, 1  |
-                    d 2 -\tenuto r  |
+                    d 2 -\tenuto r 
                     \bar "|."
                 } % Voice
 

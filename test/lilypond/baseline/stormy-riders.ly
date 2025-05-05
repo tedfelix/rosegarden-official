@@ -49,7 +49,7 @@ globalTempo = {
                     e, 8 \sustainOff \sustainOn [ e ] < b d' > [ e ] e, [ < cis' a > \sustainOff \sustainOn ] e [ g, ] e [ < cis' a > ] b, \sustainOff \sustainOn [ e ] < b g > [ e ] b, [ < cis' a > \sustainOff \sustainOn ] e [ g, ]  |
 %% 5
                     fis, 8 \sustainOff \sustainOn [ d ] < d' a > [ d ] fis, [ < d' a > \sustainOff \sustainOn ] d [ fis, ] d [ < a d' > ] e, \sustainOff \sustainOn [ c ] < c' g > [ c ] e, [ < c' g > \sustainOff \sustainOn ] c [ e, ]  |
-                    e, 8 \sustainOff \sustainOn [ e ] < b d' > [ e ] e, [ < cis' a > \sustainOff \sustainOn ] e [ g, ] e [ < cis' a > ] b, \sustainOff \sustainOn [ e ] < b g > [ e ] b, [ < cis' a > \sustainOff \sustainOn ] e [ g, \sustainOff ]  |
+                    e, 8 \sustainOff \sustainOn [ e ] < b d' > [ e ] e, [ < cis' a > \sustainOff \sustainOn ] e [ g, ] e [ < cis' a > ] b, \sustainOff \sustainOn [ e ] < b g > [ e ] b, [ < cis' a > \sustainOff \sustainOn ] e [ g, \sustainOff ] 
                 } % close repeat
             } % Voice
 
@@ -65,7 +65,7 @@ globalTempo = {
                 \key d \major
                 < d' b e, > 1 r4 r r2.  |
 %% 50
-                r2. r r  |
+                r2. r r 
             } % Voice
 
             % End of segment Nylon Guitar
@@ -97,7 +97,7 @@ globalTempo = {
                     e,, 8 [ g,, ] b,, [ g,, ] e,, [ cis, ] a,, [ e,, ] a,, [ cis, ] e,, [ g,, ] b,, [ g,, ] e,, [ cis, ] a,, [ e,, ]  |
 %% 5
                     d,, 8 [ a,, ] d, [ a,, ] d,, [ d, ] a,, [ d,, ] a,, [ d, ] c,, [ g,, ] c, [ g,, ] c,, [ c, ] g,, [ c,, ]  |
-                    e,, 8 [ g,, ] b,, [ g,, ] e,, [ cis, ] a,, [ e,, ] a,, [ cis, ] e,, [ g,, ] b,, [ g,, ] e,, [ cis, ] a,, [ e,, ]  |
+                    e,, 8 [ g,, ] b,, [ g,, ] e,, [ cis, ] a,, [ e,, ] a,, [ cis, ] e,, [ g,, ] b,, [ g,, ] e,, [ cis, ] a,, [ e,, ] 
                 } % close repeat
             } % Voice
 
@@ -113,7 +113,7 @@ globalTempo = {
                 \key b \minor
                 e, \breve _~ e, 4 _~  |
 %% 50
-                e, \breve r4  |
+                e, \breve r4 
             } % Voice
 
             % End of segment Acoustic Bass
@@ -144,7 +144,7 @@ globalTempo = {
                 r4 < c'' e' > 4. < d'' fis' > _~ < d'' fis' > 4 r < e'' g' > 4. < fis'' a' >  |
                 r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. < cis'' a' >  |
                 r4 < d'' fis' > 4. < d'' fis' > _~ < d'' fis' > 4 r < c'' e' > 4. < c'' e' >  |
-                r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. < cis'' a' >  |
+                r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. < cis'' a' > 
             } % Voice
 
             % End of segment breather
@@ -168,7 +168,7 @@ globalTempo = {
                 % warning: overlong bar truncated here |
 %% 30
                 r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. _~ < b' g' > 4 _~ < g' b' > 16. r32 
-                % warning: overlong bar truncated here |
+                % warning: overlong bar truncated here
             } % Voice
 
             % End of segment breather - horn (copied) (copied) (copied)
@@ -188,7 +188,7 @@ globalTempo = {
 %% 40
                 fis'' 8. [ fis'' ] e'' [ d'' ] e'' 16. [ d'' ] cis'' [ b' _~ ] b' 4. _~ b' 2.  |
                 r4 e'' 16. [ fis'' ] e'' [ d'' _~ ] d'' 4 d'' 16. [ e'' ] d'' [ c'' ] g' 1  |
-                fis' 8. [ fis' ] e' [ d' ] e' 16. [ d' ] cis' [ b _~ ] b 4. _~ b 2.  |
+                fis' 8. [ fis' ] e' [ d' ] e' 16. [ d' ] cis' [ b _~ ] b 4. _~ b 2. 
             } % Voice
 
             % End of segment outro (copied)
@@ -207,7 +207,7 @@ globalTempo = {
                 r4 < c'' e' > 4. < d'' fis' > _~ < d'' fis' > 4 r < e'' g' > 4. < fis'' a' >  |
                 r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. < cis'' a' >  |
                 r4 < d'' fis' > 4. < d'' fis' > _~ < d'' fis' > 4 r < c'' e' > 4. < c'' e' >  |
-                r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. _~ < b' g' >  |
+                r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. _~ < b' g' > 
             } % Voice
 
             % End of segment breather
@@ -237,7 +237,7 @@ globalTempo = {
 %% 10
                 d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
                 c' 32 [ cis' ] d' 16 fis' 8 [ a' ] fis' [ d' ] ais' 16 b' 8. [ ais' 16 ] b' 8. a' 8 b' 16 c'' 8. _~ c'' 2.  |
-                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2. 
             } % Voice
 
             % End of segment main theme
@@ -248,7 +248,7 @@ globalTempo = {
                 \override MultiMeasureRest.expand-limit = 1
 
                 \skip 2.*36 
-                r4 r r r2. r  |
+                r4 r r r2. r 
             } % Voice
 
             % End of segment Acoustic Bass (copied)
@@ -266,7 +266,7 @@ globalTempo = {
                 d' 32 [ dis' ] e' 16 a' 8 [ c'' ] a' [ e' ] cis'' 16 d'' 8. [ cis'' 16 ] d'' 8. c'' 8 d'' 32 [ e'' ] d'' 16 [ c'' a' ] \times 4/5 { dis'' [ e'' d'' c'' a' ] } \times 4/5 { g' [ a' e' d' c' ] } g' 32 gis' a' 8.  |
                 d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 dis' 32 [ e' ] g' 16 [ a' g' ais' ] a' [ g' a' d''' ] d''' 64 dis''' e''' 32 b'' 16 [ g'' b'' ] a'' [ g'' ] e''  |
                 c'' 64 cis'' d'' 32 e'' 16 fis'' a'' b'' d'' 64 dis'' e'' 32 fis'' 16 d'' b' a' a' 64 ais' b' 32 d'' 16 a' fis' e' e' 64 f' fis' 32 e' 16 a' ais' b' \times 4/5 { c'' [ g'' e'' g'' b' ] } \times 4/5 { a'' [ c'' e' c'' a'' ] } \times 2/3 { d'' [ e'' b' ais' a' g' ] } \times 2/3 { e' [ g' dis' e' g' b' ] }  |
-                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2. 
             } % Voice
 
             % End of segment main theme
@@ -284,7 +284,7 @@ globalTempo = {
                 d' 32 [ dis' ] e' 16 g' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
 %% 35
                 c' 32 [ cis' ] d' 16 fis' 8 [ a' ] fis' [ d' ] ais' 16 b' 8. [ ais' 16 ] b' 8. a' 8 b' 16 c'' 8. _~ c'' 2.  |
-                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2.  |
+                d'' 32 [ dis'' ] e'' 16 d'' 8 [ b' ] g' [ e' ] fis' 16 g' 8. [ fis' 16 ] g' 8. d' 8 d' 32 [ dis' ] e' 8. _~ e' 2. 
             } % Voice
 
             % End of segment main theme
@@ -303,7 +303,7 @@ globalTempo = {
 %% 40
                 e' 8 [ e' ] < b' d'' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] e' [ < a' cis'' > ] e' [ e' ] < g' b' > [ e' ] e' [ < a' cis'' > ] e' [ e' ]  |
                 fis' 8 [ fis' ] < d'' a' > [ fis' ] fis' [ < d'' a' > ] fis' [ fis' ] fis' [ < d'' a' > ] e' [ e' ] < c'' g' > [ e' ] e' [ < c'' g' > ] e' [ e' ]  |
-                e' 8 [ e' ] < b' d'' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] e' [ < a' cis'' > ] e' [ e' ] < g' b' > [ e' ] e' [ < a' cis'' > ] e' [ e' ]  |
+                e' 8 [ e' ] < b' d'' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] e' [ < a' cis'' > ] e' [ e' ] < g' b' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] 
             } % Voice
 
             % End of segment Organ 3 (copied)
@@ -321,7 +321,7 @@ globalTempo = {
                 e' 8 [ e' ] < c'' a' > [ e' ] e' [ < d'' b' > ] e' [ e' ] e' [ < d'' b' > ] a' [ a' ] < e'' c'' > [ a' ] a' [ < fis'' d'' > ] a' [ a' ]  |
                 e' 8 [ e' ] < b' d'' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] e' [ < a' cis'' > ] e' [ e' ] < g' b' > [ e' ] e' [ < a' cis'' > ] e' [ e' ]  |
                 fis' 8 [ fis' ] < d'' a' > [ fis' ] fis' [ < d'' a' > ] fis' [ fis' ] fis' [ < d'' a' > ] e' [ e' ] < c'' g' > [ e' ] e' [ < c'' g' > ] e' [ e' ]  |
-                e' 8 [ e' ] < b' d'' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] e' [ < a' cis'' > ] e' [ e' ] < g' b' > [ e' ] e' [ < a' cis'' > ] e' [ e' ]  |
+                e' 8 [ e' ] < b' d'' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] e' [ < a' cis'' > ] e' [ e' ] < g' b' > [ e' ] e' [ < a' cis'' > ] e' [ e' ] 
             } % Voice
 
             % End of segment Organ 3
@@ -356,7 +356,7 @@ globalTempo = {
                 r4 < d'' fis' > 4. < d'' fis' > _~ < d'' fis' > 4 r < c'' e' > 4. < c'' e' > 
                 % warning: overlong bar truncated here |
                 r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. _~ < b' g' > 4 _~ < g' b' > 16. r32 
-                % warning: overlong bar truncated here |
+                % warning: overlong bar truncated here
             } % Voice
 
             % End of segment breather - horn (copied) (copied)
@@ -380,7 +380,7 @@ globalTempo = {
                 % warning: overlong bar truncated here |
 %% 30
                 r4 < d'' b' > 4. < cis'' a' > _~ < cis'' a' > 4 r < b' g' > 4. _~ < b' g' > 4 _~ < g' b' > 16. r64 r 
-                % warning: overlong bar truncated here |
+                % warning: overlong bar truncated here
             } % Voice
 
             % End of segment breather - horn (copied) (copied) (copied) (copied)
@@ -392,7 +392,7 @@ globalTempo = {
 
                 \skip 2.*144 
                 \clef "treble"
-                r2. r r  |
+                r2. r r 
             } % Voice
 
             % End of segment gtr2
@@ -416,7 +416,7 @@ globalTempo = {
                 \once \override Staff.TimeSignature.style = #'numbered 
                 \time 9/4
                 
-                r2. r r  |
+                r2. r r 
             } % Voice
 
             % End of segment Trombone
@@ -435,7 +435,7 @@ globalTempo = {
                 b 4 a g 8 e 4. b 4 b 8 [ b ] a [ g ] b 4. g 8  |
 %% 35
                 d 4 a a 8 _~ < a d > 2 d 8 c 4 g g 8 _~ < g c > 4 c 8  |
-                e \breve _~ e 4  |
+                e \breve _~ e 4 
             } % Voice
 
             % End of segment main theme -gtr
@@ -455,7 +455,7 @@ globalTempo = {
 %% 40
                 r2. r r  |
                 r2. r r  |
-                fis' 8. [ fis' ] e' [ d' ] e' 16. [ d' ] cis' [ b _~ ] b 4. _~ b 2.  |
+                fis' 8. [ fis' ] e' [ d' ] e' 16. [ d' ] cis' [ b _~ ] b 4. _~ b 2. 
             } % Voice
 
             % End of segment outro
@@ -486,7 +486,7 @@ globalTempo = {
 %% 10
                 b 4 a g 8 e 4. b 4 b 8 [ b ] a [ g ] b 4. g 8  |
                 d 4 a 32 _~ [ < d' a > _~ ] < fis' d' a > 16 _~ < fis' d' a > 8 _~ [ < fis' d' a > _~ ] < fis' d' a > 32 _~ [ < d' fis' a > _~ ] < fis' d' a > 8. _~ < fis' d' a > 4 d 8 c 4 g 32 _~ [ < c' g > _~ ] < e' c' g > 8. _~ < c' e' g > 8 [ e' 32 _~ < c' e' > _~ < g c' e' > _~ < c g c' e' > _~ ] < e' c' g c > 8 _~ [ < e' c' g c > ]  |
-                e 32 _~ [ < e g > _~ ] < b g e > 8. _~ < b g e > \breve  |
+                e 32 _~ [ < e g > _~ ] < b g e > 8. _~ < b g e > \breve 
             } % Voice
 
             % End of segment main theme - gtr (copied)
@@ -505,7 +505,7 @@ globalTempo = {
                 e 8 [ a ] c' [ a ] e d' 4 d' a 8 d' 4 r2.  |
                 e 8 [ g ] b [ g ] e g 4 g d 8 e 4 r2.  |
                 d 8 [ fis ] a [ fis ] d b 4 b a 8 c' 4 r2.  |
-                e' 8 [ d' ] b [ g ] e g 4 g d 8 e 4 r2.  |
+                e' 8 [ d' ] b [ g ] e g 4 g d 8 e 4 r2. 
             } % Voice
 
             % End of segment Jazz Guitar - unbent
@@ -524,7 +524,7 @@ globalTempo = {
                 b 4 a g 8 e 4. b 4 b 8 [ b ] a [ g ] b 4. g 8  |
 %% 35
                 d 4 a 32 _~ [ < d' a > _~ ] < fis' d' a > 16 _~ < fis' d' a > 8 _~ [ < fis' d' a > _~ ] < fis' d' a > 32 _~ [ < d' fis' a > _~ ] < fis' d' a > 8. _~ < fis' d' a > 4 d 8 c 4 g 32 _~ [ < c' g > _~ ] < e' c' g > 8. _~ < c' e' g > 8 [ e' 32 _~ < c' e' > _~ < g c' e' > _~ < c g c' e' > _~ ] < e' c' g c > 8 _~ [ < e' c' g c > ]  |
-                e 32 _~ [ < e g > _~ ] < b g e > 8. _~ < b g e > \breve  |
+                e 32 _~ [ < e g > _~ ] < b g e > 8. _~ < b g e > \breve 
             } % Voice
 
             % End of segment main theme - gtr
@@ -556,7 +556,7 @@ globalTempo = {
                 % warning: overlong bar truncated here |
                 e 8 r r64 r4 r8 g 4 r8 g 4 r8 e 4 r r2  |
                 d 8 r r4 r64 r8 b 4 b r8 r c' 4 r64 r2 r4  |
-                e' 8 r r4 r8 g 4 g r8 e 4 r2.  |
+                e' 8 r r4 r8 g 4 g r8 e 4 r2. 
             } % Voice
 
             % End of segment jazz guitar - bent
@@ -589,7 +589,7 @@ globalTempo = {
                     gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
 %% 5
                     gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
-                    gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ]  |
+                    gis, 8 ais, 16 ais, gis, 8 fis, ais, 16 ais, ais, 8 fis, fis, 16 ais, fis, 8 ais, fis, gis, fis, gis, ais, 16 fis, ais, 8 fis, 16 gis, e, [ e, ] 
                 } % close repeat
             } % Voice
 
@@ -604,7 +604,7 @@ globalTempo = {
                 \clef "bass"
                 cis 1 r4 r r2.  |
 %% 50
-                r2. r r  |
+                r2. r r 
             } % Voice
 
             % End of segment Creative SBLive! 8MB Soundfont #9
@@ -636,7 +636,7 @@ globalTempo = {
                     < e e, b,, > 8 -\accent _~ [ < e b,, > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e e, > -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e e, > -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > [ < b,, e > _~ ]  |
 %% 5
                     < b,, e e, > 8 -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e e, > -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e e, > -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > [ < b,, e > _~ ]  |
-                    < b,, e e, > 8 -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e e, > -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, c e e, > -\accent _~ [ < b,, c e > 16 _~ ] < e c b,, > _~ [ < b,, c e > 8 _~ < b,, b, e > _~ ] < b,, b, e > 16 _~ [ < b,, b, e > < b,, e a, > 8 ]  |
+                    < b,, e e, > 8 -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e e, > -\accent _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, e > _~ [ < b,, e > _~ ] < b,, c e e, > -\accent _~ [ < b,, c e > 16 _~ ] < e c b,, > _~ [ < b,, c e > 8 _~ < b,, b, e > _~ ] < b,, b, e > 16 _~ [ < b,, b, e > < b,, e a, > 8 ] 
                 } % close repeat
             } % Voice
 
@@ -651,7 +651,7 @@ globalTempo = {
                 \clef "bass"
                 d, 4 r r r2. r  |
 %% 50
-                r2. r r  |
+                r2. r r 
             } % Voice
 
             % End of segment Creative SBLive! 8MB Soundfont #10[D]
@@ -682,7 +682,7 @@ globalTempo = {
                 e' 16 [ g' b' d'' ] fis'' b'' 1 e'' 8. [ fis'' ] d'' [ b' ] g'  |
 %% 5
                 < d' a' > 1 r4 r16 c'' 8. [ e'' ] g'' [ b'' ] d'''  |
-                c''' 16 a'' c''' g'' b'' g'' a'' fis'' a'' e'' g'' e'' fis'' d'' fis'' c'' e'' c'' d'' b' d'' a' c'' a' b' g' b' fis' a' [ fis' g' e' ] g' [ d' fis' d' ]  |
+                c''' 16 a'' c''' g'' b'' g'' a'' fis'' a'' e'' g'' e'' fis'' d'' fis'' c'' e'' c'' d'' b' d'' a' c'' a' b' g' b' fis' a' [ fis' g' e' ] g' [ d' fis' d' ] 
             } % Voice
 
             % End of segment disclaimer (copied)
@@ -693,7 +693,7 @@ globalTempo = {
                 \override MultiMeasureRest.expand-limit = 1
 
                 \skip 2.*18 
-                e' 8. r16 r4 r r2. r  |
+                e' 8. r16 r4 r r2. r 
             } % Voice
 
             % End of segment Guitar harmonics (copied)
@@ -715,8 +715,8 @@ globalTempo = {
                 r2. r r  |
                 r2. r r  |
 %% 50
-                r2. r r  |
-                 |
+                r2. r r 
+                
             } % Voice
 
             % End of segment Volume control
@@ -739,7 +739,7 @@ globalTempo = {
                 r2. r r  |
                 r2. r r  |
                 r2. r r  |
-                r2. r r  |
+                r2. r r 
             } % Voice
 
             % End of segment Volume Control
@@ -758,7 +758,7 @@ globalTempo = {
                 a 16 [ e' b' c'' ] g'' a'' 8. a'' 4 _~ a'' 1.  |
                 b 16 [ fis' g' d'' ] e'' b'' 1 b' 8. [ g' ] fis' [ g' ] a'  |
                 fis' 16 c'' d'' fis'' a'' _~ a'' 1 c'' 8. [ e'' ] g'' [ b'' ] d'''  |
-                c''' 16 [ a'' c''' g'' b'' g'' a'' fis'' a'' e'' g'' e'' fis'' d'' fis'' c'' e'' c'' d'' b' d'' a' c'' a' b' g' b' fis' a' fis' g' e' g' d' fis' d' ]  |
+                c''' 16 [ a'' c''' g'' b'' g'' a'' fis'' a'' e'' g'' e'' fis'' d'' fis'' c'' e'' c'' d'' b' d'' a' c'' a' b' g' b' fis' a' fis' g' e' g' d' fis' d' ] 
             } % Voice
 
             % End of segment disclaimer
@@ -769,7 +769,7 @@ globalTempo = {
                 \override MultiMeasureRest.expand-limit = 1
 
                 \skip 2.*144 
-                e' 8. r16 r4 r r2. r  |
+                e' 8. r16 r4 r r2. r 
             } % Voice
 
             % End of segment Guitar harmonics
@@ -889,7 +889,7 @@ globalTempo = {
                 \skip 4 r16 r8 r4 r2. r 
                 % warning: bar too short, padding with rests
                 % 423360 + 8400 < 432000  &&  35/16 < 9/4
-                r16  |
+                r16 
             } % Voice
 
             % End of segment Choir Aahs track by Aere Greenway
@@ -913,7 +913,7 @@ globalTempo = {
                 r2. r r  |
 %% 50
                 r2. r r  |
-                \skip 64  |
+                \skip 64 
                 \bar "|."
             } % Voice
 

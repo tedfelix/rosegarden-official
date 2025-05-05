@@ -144,7 +144,7 @@ globalTempo = {
 %% 85
                 < f' d' a' f' a' bes d' g' e' d' d'' a' a' > 4 _~ < d' a' d' d'' a' a' f' a' bes d' g' e' > _~ < d' f' a' bes d' g' e' g c' e' d'' a' a' > _~ < a' e' d'' a' a c' f' bes d' g' g c' e' a' > _~  |
                 < bes d' g' a d' g c' e' a' a c' f' > 1 _~  |
-                < a d' g c' e' a c' f' a' > 2 _~ < a c' f' a' > 4  |
+                < a d' g c' e' a c' f' a' > 2 _~ < a c' f' a' > 4 
                 \bar "|."
             } % Voice
 

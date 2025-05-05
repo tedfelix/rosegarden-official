@@ -42,7 +42,7 @@ globalTempo = {
                 \clef "treble"
                 \key c \major
                 \stemUp d'' 8 [ c'' ] r4 r2 \stemNeutral  |
-                R1*54  |
+                R1*54 
                 \bar "|."
             } % Voice
 

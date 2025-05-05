@@ -41,7 +41,7 @@ globalTempo = {
                 \key c \major
                 a' 4 \grace { e' 16 } f' 4 \grace { f' 8 [ fis' ] } g' 2  |
                 \grace { \times 2/3 { \stemUp b'' 16 [ a'' g'' ] } } \stemNeutral e'' 4 r \stemUp < c'' e'' > 8 [ \grace { < bes' d'' > } < b' d'' > ] r4 \stemNeutral  |
-                \stemUp f'' 4 \grace { < des'' f'' > 8 } < d'' f'' > 4 \grace { \stemNeutral e' 16 } f' 4 r  |
+                \stemUp f'' 4 \grace { < des'' f'' > 8 } < d'' f'' > 4 \grace { \stemNeutral e' 16 } f' 4 r 
                 \bar "|."
             } % Voice
 
