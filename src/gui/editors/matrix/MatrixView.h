@@ -229,7 +229,7 @@ protected slots:
     void slotJogRight();
 
     void slotStepBackward();
-    void slotStepForward(bool force = false);
+    void slotStepForward()  { stepForward(false); }
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
@@ -308,6 +308,8 @@ private:
     void initStatusBar();
 
     void readOptions();
+
+    void stepForward(bool force);
 
 };
 

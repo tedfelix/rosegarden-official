@@ -405,13 +405,11 @@ MatrixView::setupActions()
     createAction("select_all", &MatrixView::slotSelectAll);
     createAction("delete", &MatrixView::slotEditDelete);
     createAction("cursor_back", &MatrixView::slotStepBackward);
-    createAction("cursor_forward", SLOT(slotStepForward()));
+    createAction("cursor_forward", &MatrixView::slotStepForward);
     createAction("extend_selection_backward", &MatrixView::slotExtendSelectionBackward);
     createAction("extend_selection_forward", &MatrixView::slotExtendSelectionForward);
     createAction("extend_selection_backward_bar", &MatrixView::slotExtendSelectionBackwardBar);
     createAction("extend_selection_forward_bar", &MatrixView::slotExtendSelectionForwardBar);
-    //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
-    // ensure both get carried across somehow
     createAction("play", SIGNAL(play()));
     createAction("stop", SIGNAL(stop()));
     createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
@@ -1803,12 +1801,12 @@ MatrixView::slotStepBackward()
 }
 
 void
-MatrixView::slotStepForward(bool force)
+MatrixView::stepForward(bool force)
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    // Sanity check.  Move postion marker inside segmet if not
+    // Sanity check.  Move position marker inside segment if not
     timeT time = getInsertionTime();  // Un-checked current insertion time
 
     timeT segmentStartTime = segment->getStartTime();
@@ -2358,8 +2356,10 @@ MatrixView::slotExtendSelectionForward(bool bar)
 
     timeT oldTime = getInsertionTime();
 
-    if (bar) emit fastForwardPlayback();
-    else slotStepForward(true);
+    if (bar)
+        emit fastForwardPlayback();
+    else
+        stepForward(true);
 
     timeT newTime = getInsertionTime();
 
