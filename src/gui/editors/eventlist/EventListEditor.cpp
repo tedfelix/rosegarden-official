@@ -408,7 +408,8 @@ EventListEditor::EventListEditor(RosegardenDocument *doc,
         // Adjust pitch to trigger note by default
         QCheckBox *retune = new QCheckBox(tr("Adjust pitch to trigger note by default"), mainWidget);
         retune->setChecked(triggerSegment->getDefaultRetune());
-        connect(retune, SIGNAL(clicked()), this, SLOT(slotTriggerRetuneChanged()));
+        connect(retune, &QCheckBox::clicked,
+                this, &EventListEditor::slotTriggerRetuneChanged);
         layout->addWidget(retune, 4, 1, 1, 2);
 #endif
 
@@ -1288,25 +1289,26 @@ EventListEditor::setupActions()
 {
     setupBaseActions();
 
-    createAction("edit_cut", SLOT(slotEditCut()));
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("edit_cut", &EventListEditor::slotEditCut);
+    createAction("edit_copy", &EventListEditor::slotEditCopy);
+    createAction("edit_paste", &EventListEditor::slotEditPaste);
 
-    createAction("insert", SLOT(slotEditInsert()));
-    createAction("delete", SLOT(slotEditDelete()));
-    createAction("edit_simple", SLOT(slotEditEvent()));
-    createAction("select_all", SLOT(slotSelectAll()));
-    createAction("clear_selection", SLOT(slotClearSelection()));
-    createAction("event_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("insert", &EventListEditor::slotEditInsert);
+    createAction("delete", &EventListEditor::slotEditDelete);
+    createAction("edit_simple", &EventListEditor::slotEditEvent);
+    createAction("select_all", &EventListEditor::slotSelectAll);
+    createAction("clear_selection", &EventListEditor::slotClearSelection);
+    createAction("event_help", &EventListEditor::slotHelpRequested);
+    createAction("help_about_app", &EventListEditor::slotHelpAbout);
 
-    QAction *musical = createAction("time_musical", SLOT(slotMusicalTime()));
+    QAction *musical =
+            createAction("time_musical", &EventListEditor::slotMusicalTime);
     musical->setCheckable(true);
 
-    QAction *real = createAction("time_real", SLOT(slotRealTime()));
+    QAction *real = createAction("time_real", &EventListEditor::slotRealTime);
     real->setCheckable(true);
 
-    QAction *raw = createAction("time_raw", SLOT(slotRawTime()));
+    QAction *raw = createAction("time_raw", &EventListEditor::slotRawTime);
     raw->setCheckable(true);
 
     createMenusAndToolbars("eventlist.rc");

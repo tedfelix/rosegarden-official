@@ -64,21 +64,23 @@ void EditViewBase::setupBaseActions()
     // Actions all edit views will have
 
     QAction *showStatusBar = createAction(
-            "options_show_statusbar", SLOT(slotToggleStatusBar()));
+            "options_show_statusbar", &EditViewBase::slotToggleStatusBar);
     showStatusBar->setChecked(!statusBar()->isHidden());
 
-    createAction("options_configure", SLOT(slotConfigure()));
+    createAction("options_configure", &EditViewBase::slotConfigure);
 
-    createAction("file_save", SIGNAL(saveFile()));
-    createAction("file_close", SLOT(slotCloseWindow()));
+    createAction("file_save", &EditViewBase::saveFile);
+    createAction("file_close", &EditViewBase::slotCloseWindow);
 
-    createAction("open_in_matrix", SLOT(slotOpenInMatrix()));
-    createAction("open_in_percussion_matrix", SLOT(slotOpenInPercussionMatrix()));
-    createAction("open_in_notation", SLOT(slotOpenInNotation()));
-    createAction("open_in_event_list", SLOT(slotOpenInEventList()));
-    createAction("open_in_pitch_tracker", SLOT(slotOpenInPitchTracker()));
-    createAction("set_segment_start", SLOT(slotSetSegmentStartTime()));
-    createAction("set_segment_duration", SLOT(slotSetSegmentDuration()));
+    createAction("open_in_matrix", &EditViewBase::slotOpenInMatrix);
+    createAction("open_in_percussion_matrix",
+            &EditViewBase::slotOpenInPercussionMatrix);
+    createAction("open_in_notation", &EditViewBase::slotOpenInNotation);
+    createAction("open_in_event_list", &EditViewBase::slotOpenInEventList);
+    createAction("open_in_pitch_tracker",
+            &EditViewBase::slotOpenInPitchTracker);
+    createAction("set_segment_start", &EditViewBase::slotSetSegmentStartTime);
+    createAction("set_segment_duration", &EditViewBase::slotSetSegmentDuration);
 }
 
 void EditViewBase::slotConfigure()
