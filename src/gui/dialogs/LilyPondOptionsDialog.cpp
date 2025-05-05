@@ -127,15 +127,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyLanguage = new QComboBox(frameBasic);
     m_lilyLanguage->setToolTip(tr("<qt>Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.</qt>"));
 
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.12")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.14")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.16")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.18")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.19")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.20")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.21")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.22")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.23")));
+    // I don't know why the version number was formerly translated.
+    // It doesn't seem very useful, so I remove the tr() calls.
+    // If nevertheless it's really needed, it can probably be reintroduced
+    // when initializing LilyPond_Version_Names[] at the beginning of
+    // LilyPondExporter.h
+    for (int i = LILYPOND_VERSION_TOO_OLD + 1;
+             i < LILYPOND_VERSION_TOO_NEW; i++) {
+        m_lilyLanguage->addItem(tr("LilyPond %1").arg(LilyPond_Version_Names[i]));
+    }
     layoutBasic->addWidget(m_lilyLanguage, 1, 1);
 
     layoutBasic->addWidget(new QLabel(
@@ -231,8 +231,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 1, 2);
     m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
 
-    // Lilypond versions prior 2.12 are no more supported since RG 23.06
-    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_2_12);
+    // Currently, the same code is used whatever the LilyPond version is. So the
+    // LilyPond version is set to its minimal value LILYPOND_VERSION_TOO_OLD + 1.
+    // The following LilyVersionAwareCheckBox is only kept to not forget it.
+    // The next time it will be needed, it probably will be with another checkbox.
+    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_TOO_OLD + 1);
     m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher</qt>"));
     layoutNotation->addWidget(m_useShortNames, 4, 0, 1, 2);
 
@@ -363,7 +366,8 @@ LilyPondOptionsDialog::populateDefaultValues()
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
 
-    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage", 0).toUInt());
+    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage",
+        LILYPOND_VERSION_DEFAULT - LILYPOND_VERSION_TOO_OLD + 1).toUInt());
     // See also setDefaultLilyPondVersion below
     int defaultPaperSize = 1; // A4
     if (QLocale::system().country() == QLocale::UnitedStates) {

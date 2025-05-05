@@ -78,6 +78,8 @@
 namespace Rosegarden
 {
 
+
+
 const char* headerDedication() { return "dedication"; }
 const char* headerTitle() { return "title"; }
 const char* headerSubtitle() { return "subtitle"; }
@@ -134,7 +136,7 @@ LilyPondExporter::readConfigVariables()
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false"));
     m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true"));
 
-    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_2_12).toUInt();
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_DEFAULT).toUInt();
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
@@ -398,10 +400,10 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                 // can be removed.
                 //
                 /*
-                    *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
-                    *    str << "\\once \\override Staff.SustainPedal #'transparent = ##t ";
-                    *}
-                    */
+                 *if ((*m)->has(INVISIBLE) && (*m)->get <Bool>(INVISIBLE)) {
+                 *    str << "\\once \\override Staff.SustainPedal.transparent = ##t ";
+                 *}
+                 */
 
                 // NOTE: sustain syntax changed in LilyPond 2.12:
                 //          "Up" --> "Off" and "Down" --> "On"
@@ -841,51 +843,20 @@ LilyPondExporter::write()
 
     str << m_language->getImportStatement();
 
-    switch (m_languageLevel) {
+    // Verify that m_languageLevel is in the right range
+    if (    m_languageLevel <= LILYPOND_VERSION_TOO_OLD
+         || m_languageLevel >= LILYPOND_VERSION_TOO_NEW) {
 
-    case LILYPOND_VERSION_2_12:
-        str << "\\version \"2.12.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_14:
-        str << "\\version \"2.14.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_16:
-        str << "\\version \"2.16.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_18:
-        str << "\\version \"2.18.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_19:
-        str << "\\version \"2.19.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_20:
-        str << "\\version \"2.20.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_21:
-        str << "\\version \"2.21.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_22:
-        str << "\\version \"2.22.0\"" << std::endl;
-        break;
-
-    case LILYPOND_VERSION_2_23:
-        str << "\\version \"2.23.0\"" << std::endl;
-        break;
-
-    default:
         // force the default version if there was an error
         RG_WARNING << "ERROR: Unknown language level " << m_languageLevel
-                  << ", using \\version \"2.14.0\" instead";
-        str << "\\version \"2.14.0\"" << std::endl;
-        m_languageLevel = LILYPOND_VERSION_2_14;
+                   << ", using version "
+                   << LilyPond_Version_Names[LILYPOND_VERSION_DEFAULT]
+                   << " instead";
+        m_languageLevel = LILYPOND_VERSION_DEFAULT;
     }
+
+    str << "\\version \"" << LilyPond_Version_Strings[m_languageLevel] << "\"\n";
+
 
     // LilyPond \header block
 
@@ -1211,7 +1182,7 @@ LilyPondExporter::write()
 
         str << indent(col++) << "globalTempo = {" << std::endl;
         if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS && tempoMarksInvisible == false) {
-            str << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t" << std::endl;
+            str << indent(col) << "\\override Score.MetronomeMark.transparent = ##t" << std::endl;
             tempoMarksInvisible = true;
         }
         str << indent(col) << "\\tempo 4 = " << tempo << "  ";
@@ -1248,7 +1219,7 @@ LilyPondExporter::write()
             // add new \tempo only if tempo was changed
             if (tempo != prevTempo) {
                 if (m_exportTempoMarks == EXPORT_FIRST_TEMPO_MARK && tempoMarksInvisible == false) {
-                    str << std::endl << indent(col) << "\\override Score.MetronomeMark #'transparent = ##t";
+                    str << std::endl << indent(col) << "\\override Score.MetronomeMark.transparent = ##t";
                     tempoMarksInvisible = true;
                 }
                 str << std::endl << indent(col) << "\\tempo 4 = " << tempo << "  ";
@@ -1332,12 +1303,12 @@ LilyPondExporter::write()
     // first track)
     str << indent(++col) << "% Force offset of colliding notes in chords:"
         << std::endl;
-    str << indent(col)   << "\\override Score.NoteColumn #\'force-hshift = #1.0"
+    str << indent(col)   << "\\override Score.NoteColumn.force-hshift = #1.0"
         << std::endl;
     if (m_fingeringsInStaff) {
         str << indent(col) << "% Allow fingerings inside the staff (configured from export options):"
             << std::endl;
-        str << indent(col)   << "\\override Score.Fingering #\'staff-padding = #\'()"
+        str << indent(col)   << "\\override Score.Fingering.staff-padding = #\'()"
             << std::endl;
     }
 
@@ -1610,8 +1581,10 @@ LilyPondExporter::write()
                                     }
 
                                     if (numberOfChords == -1) {
-                                        str << indent(col++) << "\\new ChordNames " << "\\with {alignAboveContext=\"track " <<
-                                            (trackPos + 1) << "\"}" << "\\chordmode {" << std::endl;
+                                        str << indent(col++) << "\\new ChordNames "
+                                            << "\\with {alignAboveContext=\"track "
+                                            << (trackPos + 1) << (staffName == "" ? "" : ", ")
+                                            << staffName << "\"}" << "\\chordmode {" << std::endl;
                                         str << indent(col) << "\\set chordNameExceptions = #chExceptions" << std::endl;
                                         str << indent(col);
                                         numberOfChords++;
@@ -1664,8 +1637,8 @@ LilyPondExporter::write()
 
                     str << std::endl << indent(col) << "% Segment: " << seg->getLabel();
 
-                    str << std::endl << indent(col) << "\\override Voice.TextScript #'padding = #2.0";
-                    str << std::endl << indent(col) << "\\override MultiMeasureRest #'expand-limit = 1" << std::endl;
+                    str << std::endl << indent(col) << "\\override Voice.TextScript.padding = #2.0";
+                    str << std::endl << indent(col) << "\\override MultiMeasureRest.expand-limit = 1" << std::endl;
 
                     // staff notation size
                     int staffSize = track->getStaffSize();
@@ -2079,7 +2052,9 @@ LilyPondExporter::write()
                         if (isFirstPrintedVerse) {
                             str << indent(col)
                                 << "\\with {alignBelowContext=\"track "
-                                << (trackPos + 1) << "\"}" << std::endl;
+                                << (trackPos + 1)
+                                << (staffName == "" ? "" : ", ")
+                                << staffName << "\"}" << std::endl;
                             isFirstPrintedVerse = false;
                         }
                         str << indent(col)
@@ -2089,15 +2064,15 @@ LilyPondExporter::write()
 
                         if (m_exportLyrics == EXPORT_LYRICS_RIGHT) {
                             str << indent(++col)
-                                << "\\override LyricText #'self-alignment-X = #RIGHT"
+                                << "\\override LyricText.self-alignment-X = #RIGHT"
                                 << std::endl;
                         } else if (m_exportLyrics == EXPORT_LYRICS_CENTER) {
                             str << indent(++col)
-                                << "\\override LyricText #'self-alignment-X = #CENTER"
+                                << "\\override LyricText.self-alignment-X = #CENTER"
                                 << std::endl;
                         } else {
                             str << indent(++col)
-                                << "\\override LyricText #'self-alignment-X = #LEFT"
+                                << "\\override LyricText.self-alignment-X = #LEFT"
                                 << std::endl;
                         }
                         str << indent(col)
@@ -2578,7 +2553,7 @@ LilyPondExporter::writeBar(Segment *s,
             if (e->has(DISPLACED_X)) {
                 double xDisplacement = 1 + ((double) e->get
                                             <Int>(DISPLACED_X)) / 1000;
-                str << "\\once \\override NoteColumn #'force-hshift = #"
+                str << "\\once \\override NoteColumn.force-hshift = #"
                     << xDisplacement << " ";
             }
 
@@ -3018,7 +2993,7 @@ LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
 {
     if (timeSignature.isHidden()) {
         str << indent (col)
-            << "\\once \\override Staff.TimeSignature #'break-visibility = #(vector #f #f #f) "
+            << "\\once \\override Staff.TimeSignature.break-visibility = #(vector #f #f #f) "
             << std::endl;
     }
     //
@@ -3034,28 +3009,28 @@ LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
     // Today (2022) Lilypond offers two ways to switch between common and
     // numbered time signature.
     //
-    // -1)  "\\once \\override Staff.TimeSignature #'style = #'default"
-    //      "\\once \\override Staff.TimeSignature #'style = #'numbered"
+    // -1)  "\\once \\override Staff.TimeSignature.style = #'default"
+    //      "\\once \\override Staff.TimeSignature.style = #'numbered"
     //
     // -2)  "\\defaultTimeSignature"
     //      "\\numericTimeSignature"
     //
     // The current (>= 2.20) LilyPond documentation is not clear about what is
     // the prefered way.
-    // The "override Staff.TimeSignature #'style" way is currently used.
+    // The "override Staff.TimeSignature.style" way is currently used.
     // Just comment out and decomment out the lines below to select the
     // other manner.
     //
     if (timeSignature.isCommon() == false) {
         // use numbered time signature: 4/4
         str << indent (col)
-            << "\\once \\override Staff.TimeSignature #'style = #'numbered "
+            << "\\once \\override Staff.TimeSignature.style = #'numbered "
 //             << "\\numericTimeSignature "
             << std::endl;
     } else {
         // use default (common) time signature: C
         str << indent (col)
-            << "\\once \\override Staff.TimeSignature #'style = #'default "
+            << "\\once \\override Staff.TimeSignature.style = #'default "
 //             << "\\defaultTimeSignature "
             << std::endl;
     }
@@ -3322,7 +3297,7 @@ LilyPondExporter::writeStyle(const Event *note, std::string &prevStyle,
         }
 
         if (!isInChord) {
-            str << std::endl << indent(col) << "\\override Voice.NoteHead #'style = #'" << style << std::endl << indent(col);
+            str << std::endl << indent(col) << "\\override Voice.NoteHead.style = #'" << style << std::endl << indent(col);
         } else {
             str << "\\tweak #'style #'" << style << " ";
         }

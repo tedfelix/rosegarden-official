@@ -21,7 +21,7 @@ class TestLilypondExport : public QObject
 
 private Q_SLOTS:
     // QTest special functions...
-    
+
     // Called once.
     void initTestCase();
 
@@ -145,6 +145,10 @@ void TestLilypondExport::testExamples_data()
     // ??? This one creates a directory in the user's home directory!?
     //     The directory's name is simply a space (' ').  Why?
     //     Otherwise this passes.  Please fix this one day.
+    // ??? This should work fine now.  The original issue was an audio path
+    //     that was set to a single space.  I went through all of the examples
+    //     and fixed these sorts of issues.  See [26b26e6e] from May 15, 2024.
+    //     Feel free to re-enable this.
     //QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
 
     QTest::newRow("children") << "examples";
