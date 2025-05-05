@@ -146,7 +146,8 @@ private:
                   std::ofstream &str, int &MultiMeasureRestCount,
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                   bool &nextBarIsDouble, bool &nextBarIsEnd,
-                  bool &nextBarIsDot, bool noTimeSignature);
+                  bool &nextBarIsDot, bool noTimeSignature,
+                  bool cadenza);
 
     timeT calculateDuration(Segment *s,
                                         const Segment::iterator &i,

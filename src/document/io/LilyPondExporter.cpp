@@ -1737,6 +1737,9 @@ LilyPondExporter::write()
                 bool nextBarIsEnd = false;
                 bool nextBarIsDot = false;
 
+                bool cadenza = false;   // When true, bars have to be
+                                        // drawn explicitely
+
                 for (int barNo = m_composition->getBarNumber(seg->getStartTime());
                     barNo <= m_composition->getBarNumber(seg->getEndMarkerTime());
                     ++barNo) {
@@ -1816,9 +1819,10 @@ LilyPondExporter::write()
                                     // "start-repeat" bar hides the "end-repeat"
                                     // bar issued by the previous automatic
                                     // volta. In such a case, a "double-repeat"
-                                    // bar has to be writed. As #'(double-repeat)
+                                    // bar has to be written. As #'(double-repeat)
                                     // is currently not defined in
                                     // LilyPond, the ":..:" string is used.
+                                    std::cout << "YG Write double repeat\n";
                                     str << std::endl << indent(col)
                                         << "\\bar \":..:\"";
                                 } else {
@@ -1842,7 +1846,19 @@ LilyPondExporter::write()
                                         << lsc.getAltText() << "\") end-repeat)";
                                 }
                             }
-                            if (m_altBar) {
+
+                            // From here we are going to explicitely draw the bars
+                            // because when an alternative segment doesn't start
+                            // on a bar, LilyPond may introduce erroneous offsets
+                            // when positioning the bars in next alternatives.
+                            str << std::endl << indent(col) << "\\cadenzaOn";
+                            cadenza = true;
+
+                            if (m_altBar && lsc.isFirstAlt()) {
+                                // Since LilyPond 2.23, drawing explicitely
+                                // this bar in any other alternative than the
+                                // first one hides the repetion bar.
+                                std::cout << "YG Write att Bar !\n";
                                 str << std::endl << indent(col)
                                     << "\\bar \"|\" ";
                             }
@@ -1888,7 +1904,8 @@ LilyPondExporter::write()
                             MultiMeasureRestCount,
                             nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble,
                             nextBarIsEnd, nextBarIsDot,
-                            noTimeSig);
+                            noTimeSig,
+                            cadenza);
 
                 }
 
@@ -1947,6 +1964,10 @@ LilyPondExporter::write()
                                     << lsc.getAltRepeatCount();
                         }
                     }
+
+                    // Remove the cadenza
+                    str << std::endl << indent(col) << "\\cadenzaOff";
+                    cadenza = false;
                     str << std::endl << indent(--col) << "}" << std::endl;  // indent-
 
                     if (lsc.isLastAlt()) {
@@ -2362,7 +2383,8 @@ LilyPondExporter::writeBar(Segment *s,
                            int &MultiMeasureRestCount,
                            bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                            bool &nextBarIsDouble, bool &nextBarIsEnd,
-                           bool &nextBarIsDot,  bool noTimeSignature)
+                           bool &nextBarIsDot,  bool noTimeSignature,
+                           bool cadenza)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
     int isGrace = 0;
@@ -2373,6 +2395,12 @@ LilyPondExporter::writeBar(Segment *s,
         return ;
 
     //RG_DEBUG << "===== Writing bar" << barNo;
+    str << "\n % YG writeBar"
+        << " nbiAlt1=" << nextBarIsAlt1
+        << " nbiAlt2=" << nextBarIsAlt2
+        << " nbiDbl=" << nextBarIsDouble
+        << " nbiEnd=" << nextBarIsEnd
+        << " caden=" << cadenza << std::endl;
 
     if (MultiMeasureRestCount == 0) {
         str << std::endl;
@@ -2980,9 +3008,18 @@ LilyPondExporter::writeBar(Segment *s,
         str << "\\bar \":\" ";
         nextBarIsDot = false;
     } else if (MultiMeasureRestCount == 0) {
-        str << " |";
+        if (cadenza && (barEnd != s->getEndMarkerTime())) {
+            // Last bar of the alternarive is written by LilyPond with
+            // repeat dots if appropriate. So only the previous bars have to
+            // be written when cadenza is on.
+            str << "\\bar \"|\" ";
+        } else {
+            // Bar check
+            str << " |";
+        }
+        str << " \% YG ";
     }
-}
+}                               // End of LilyPondExporter::writeBar() method
 
 void
 LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
