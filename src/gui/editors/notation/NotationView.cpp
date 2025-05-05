@@ -3847,8 +3847,10 @@ NotationView::slotToggleTempoRuler()
 void
 NotationView::slotAddTempo()
 {
-    const timeT insertionTime = getInsertionTime();
-    EditTempoController::self()->editTempo(this, insertionTime, false);
+    EditTempoController::self()->editTempo(
+            this,  // parent
+            getInsertionTime(),  // atTime
+            false);  // timeEditable
 }
 
 void

@@ -98,10 +98,6 @@ signals:
     void panic();
 
     void stepByStepTargetRequested(QObject *);
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // target value
-                     TempoDialog::TempoDialogAction); // tempo action
 
     void noteInsertedFromKeyboard(Segment * segment, int pitch);
 

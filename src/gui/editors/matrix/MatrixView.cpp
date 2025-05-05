@@ -77,6 +77,7 @@
 #include "gui/rulers/ControlRulerWidget.h"
 
 #include "gui/general/ThornStyle.h"
+#include "gui/general/EditTempoController.h"
 
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
@@ -98,7 +99,6 @@
 #include "base/parameterpattern/ParameterPattern.h"
 
 #include "gui/dialogs/RescaleDialog.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 
@@ -119,7 +119,7 @@
 #include <QStatusBar>
 #include <QDesktopServices>
 
-#include <algorithm>
+#include <algorithm>  // std::find()
 
 
 namespace Rosegarden
@@ -1464,23 +1464,10 @@ MatrixView::slotToggleTempoRuler()
 
 void MatrixView::slotAddTempo()
 {
-    timeT insertionTime = getInsertionTime();
-
-    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument, false);
-
-    connect(&tempoDlg,
-             SIGNAL(changeTempo(timeT,
-                    tempoT,
-                    tempoT,
-                    TempoDialog::TempoDialogAction)),
-                    this,
-                    SIGNAL(changeTempo(timeT,
-                           tempoT,
-                           tempoT,
-                           TempoDialog::TempoDialogAction)));
-
-    tempoDlg.setTempoPosition(insertionTime);
-    tempoDlg.exec();
+    EditTempoController::self()->editTempo(
+            this,  // parent
+            getInsertionTime(),  // atTime
+            false);  // timeEditable
 }
 
 void MatrixView::slotAddTimeSignature()
