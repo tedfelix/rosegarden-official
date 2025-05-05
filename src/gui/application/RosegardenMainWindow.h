@@ -1692,6 +1692,7 @@ private slots:
     void slotMuteAllTracks();
     void slotUnmuteAllTracks();
 
+    void slotCommandExecuted();
 };
 
 
