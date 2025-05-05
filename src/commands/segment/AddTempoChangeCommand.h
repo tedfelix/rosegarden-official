@@ -19,17 +19,16 @@
 #ifndef RG_ADDTEMPOCHANGECOMMAND_H
 #define RG_ADDTEMPOCHANGECOMMAND_H
 
-#include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
-#include "base/Composition.h" // for tempoT
+#include "document/Command.h"  // for NamedCommand
+#include "base/Composition.h"  // for tempoT
+
 #include <QCoreApplication>
-
-
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class AddTempoChangeCommand : public NamedCommand
 {
@@ -44,13 +43,10 @@ public:
         m_composition(composition),
         m_time(time),
         m_tempo(tempo),
-        m_target(target),
-        m_oldTempo(0),
-        m_tempoChangeIndex(0) {}
+        m_target(target)
+    { }
 
-    ~AddTempoChangeCommand() override;
-
-    static QString getGlobalName() { return tr("Add Te&mpo Change..."); }
+    static QString getGlobalName()  { return tr("Add Te&mpo Change..."); }
 
     void execute() override;
     void unexecute() override;
@@ -60,10 +56,10 @@ private:
     timeT m_time;
     tempoT m_tempo;
     tempoT m_target;
-    tempoT m_oldTempo;
-    int m_tempoChangeIndex;
-};
 
+    tempoT m_oldTempo{0};
+    int m_tempoChangeIndex{0};
+};
 
 
 }
