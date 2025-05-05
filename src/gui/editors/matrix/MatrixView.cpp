@@ -262,8 +262,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     restoreState(settings.value(modeStr).toByteArray());
     settings.endGroup();
 
-    connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
-            this, SLOT(slotSegmentDeleted(Segment *)));
+    connect(m_matrixWidget, &MatrixWidget::segmentDeleted,
+            this, &MatrixView::slotSegmentDeleted);
     connect(m_matrixWidget, &MatrixWidget::sceneDeleted,
             this, &MatrixView::slotSceneDeleted);
 
@@ -410,18 +410,18 @@ MatrixView::setupActions()
     createAction("extend_selection_forward", &MatrixView::slotExtendSelectionForward);
     createAction("extend_selection_backward_bar", &MatrixView::slotExtendSelectionBackwardBar);
     createAction("extend_selection_forward_bar", &MatrixView::slotExtendSelectionForwardBar);
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
+    createAction("play", &MatrixView::play);
+    createAction("stop", &MatrixView::stop);
+    createAction("playback_pointer_back_bar", &MatrixView::rewindPlayback);
+    createAction("playback_pointer_forward_bar", &MatrixView::fastForwardPlayback);
+    createAction("playback_pointer_start", &MatrixView::rewindPlaybackToBeginning);
+    createAction("playback_pointer_end", &MatrixView::fastForwardPlaybackToEnd);
     createAction("cursor_prior_segment", &MatrixView::slotCurrentSegmentPrior);
     createAction("cursor_next_segment", &MatrixView::slotCurrentSegmentNext);
     createAction("toggle_solo", &MatrixView::slotToggleSolo);
     createAction("scroll_to_follow", &MatrixView::slotScrollToFollow);
     createAction("loop", &MatrixView::slotLoop);
-    createAction("panic", SIGNAL(panic()));
+    createAction("panic", &MatrixView::panic);
     createAction("preview_selection", &MatrixView::slotPreviewSelection);
     createAction("clear_loop", &MatrixView::slotClearLoop);
     createAction("clear_selection", &MatrixView::slotClearSelection);
@@ -446,20 +446,20 @@ MatrixView::setupActions()
     createAction("add_time_signature", &MatrixView::slotAddTimeSignature);
     createAction("add_key_signature", &MatrixView::slotEditAddKeySignature);
 
-    createAction("halve_durations", SLOT(slotHalveDurations()));
-    createAction("double_durations", SLOT(slotDoubleDurations()));
-    createAction("rescale", SLOT(slotRescale()));
-    createAction("transpose_up", SLOT(slotTransposeUp()));
-    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
-    createAction("transpose_down", SLOT(slotTransposeDown()));
-    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
-    createAction("general_transpose", SLOT(slotTranspose()));
-    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
-    createAction("invert", SLOT(slotInvert()));
-    createAction("retrograde", SLOT(slotRetrograde()));
-    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
-    createAction("jog_left", SLOT(slotJogLeft()));
-    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("halve_durations", &MatrixView::slotHalveDurations);
+    createAction("double_durations", &MatrixView::slotDoubleDurations);
+    createAction("rescale", &MatrixView::slotRescale);
+    createAction("transpose_up", &MatrixView::slotTransposeUp);
+    createAction("transpose_up_octave", &MatrixView::slotTransposeUpOctave);
+    createAction("transpose_down", &MatrixView::slotTransposeDown);
+    createAction("transpose_down_octave", &MatrixView::slotTransposeDownOctave);
+    createAction("general_transpose", &MatrixView::slotTranspose);
+    createAction("general_diatonic_transpose", &MatrixView::slotDiatonicTranspose);
+    createAction("invert", &MatrixView::slotInvert);
+    createAction("retrograde", &MatrixView::slotRetrograde);
+    createAction("retrograde_invert", &MatrixView::slotRetrogradeInvert);
+    createAction("jog_left", &MatrixView::slotJogLeft);
+    createAction("jog_right", &MatrixView::slotJogRight);
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -511,58 +511,58 @@ MatrixView::setupActions()
         else if (octave == 2) octaveSuffix = "_low";
 
         createAction(QString("insert_0%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_0_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_1_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_1%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_1_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_2_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_2%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_3%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_3_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_4_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_4%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_4_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_5_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_5%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_5_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_6_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_6%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
     }
 
-    createAction("options_show_toolbar", SLOT(slotToggleGeneralToolBar()));
-    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
-    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
-    createAction("show_actions_toolbar", SLOT(slotToggleActionsToolBar()));
-    createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
+    createAction("options_show_toolbar", &MatrixView::slotToggleGeneralToolBar);
+    createAction("show_tools_toolbar", &MatrixView::slotToggleToolsToolBar);
+    createAction("show_transport_toolbar", &MatrixView::slotToggleTransportToolBar);
+    createAction("show_actions_toolbar", &MatrixView::slotToggleActionsToolBar);
+    createAction("show_rulers_toolbar", &MatrixView::slotToggleRulersToolBar);
 
 
-    createAction("manual", SLOT(slotHelp()));
-    createAction("tutorial", SLOT(slotTutorial()));
-    createAction("guidelines", SLOT(slotBugGuidelines()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
-    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
-    createAction("donate", SLOT(slotDonate()));
+    createAction("manual", &MatrixView::slotHelp);
+    createAction("tutorial", &MatrixView::slotTutorial);
+    createAction("guidelines", &MatrixView::slotBugGuidelines);
+    createAction("help_about_app", &MatrixView::slotHelpAbout);
+    createAction("help_about_qt", &MatrixView::slotHelpAboutQt);
+    createAction("donate", &MatrixView::slotDonate);
 
-    createAction("show_note_names", SLOT(slotShowNames()));
-    createAction("highlight_black_notes", SLOT(slotHighlight()));
-    createAction("highlight_triads", SLOT(slotHighlight()));
+    createAction("show_note_names", &MatrixView::slotShowNames);
+    createAction("highlight_black_notes", &MatrixView::slotHighlight);
+    createAction("highlight_triads", &MatrixView::slotHighlight);
     // add the highlight actions to an ActionGroup
     QActionGroup *ag = new QActionGroup(this);
     ag->addAction(findAction("highlight_black_notes"));
@@ -592,17 +592,17 @@ MatrixView::setupActions()
         timeT d = m_snapValues[i];
 
         if (d == SnapGrid::NoSnap) {
-            createAction("snap_none", SLOT(slotSetSnapFromAction()));
+            createAction("snap_none", &MatrixView::slotSetSnapFromAction);
         } else if (d == SnapGrid::SnapToUnit) {
         } else if (d == SnapGrid::SnapToBeat) {
-            createAction("snap_beat", SLOT(slotSetSnapFromAction()));
+            createAction("snap_beat", &MatrixView::slotSetSnapFromAction);
         } else if (d == SnapGrid::SnapToBar) {
-            createAction("snap_bar", SLOT(slotSetSnapFromAction()));
+            createAction("snap_bar", &MatrixView::slotSetSnapFromAction);
         } else {
             QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
             if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";
             if (d == (crotchetDuration * 3) / 2) actionName = "snap_dotted_4";
-            createAction(actionName, SLOT(slotSetSnapFromAction()));
+            createAction(actionName, &MatrixView::slotSetSnapFromAction);
         }
     }
 }
