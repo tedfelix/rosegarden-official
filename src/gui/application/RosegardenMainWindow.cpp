@@ -2973,10 +2973,6 @@ RosegardenMainWindow::createAndSetupTransport()
 
     connect(m_transport, &TransportDialog::panic, this, &RosegardenMainWindow::slotPanic);
 
-    connect(m_transport, &TransportDialog::editTempo,
-            this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
-                    &RosegardenMainWindow::slotEditTempo));
-
     connect(m_transport, &TransportDialog::editTimeSignature,
             this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
                     &RosegardenMainWindow::slotEditTimeSignature));
