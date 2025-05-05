@@ -56,9 +56,11 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: RH v1 alt1
                         \set Score.repeatCommands = #'((volta "1"))
+                        \cadenzaOn
                         \bar "|" 
                         \clef "treble"
                         \stemDown f' 2. g' 4 \stemNeutral  |
+                        \cadenzaOff
                     }
 
                     % End of segment RH v1 alt1
@@ -66,12 +68,13 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: RH v1 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
+                        \cadenzaOn
                         \clef "treble"
-                        \stemDown f' 2. g' 8 [ f' ] \stemNeutral  |
+                        \stemDown f' 2. g' 8 [ f' ] \stemNeutral \bar "|" 
                         \stemDown bes 1 -\fermata \stemNeutral  |
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
+                        \cadenzaOff
                     }
 
                 } % Voice
@@ -100,9 +103,11 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: RH v2 alt1
                         \set Score.repeatCommands = #'((volta "1"))
+                        \cadenzaOn
                         \bar "|" 
                         \clef "treble"
                         \stemUp ees'' 8 [ c'' ees'' f'' ] a'' [ bes'' a'' bes'' ] \stemNeutral  |
+                        \cadenzaOff
                     }
 
                     % End of segment RH v2 alt1
@@ -110,12 +115,13 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: RH v2 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
+                        \cadenzaOn
                         \clef "treble"
-                        \stemUp bes'' 8 [ g'' ] \stemDown f' 2. -\fermata _~ \stemNeutral  |
+                        \stemUp bes'' 8 [ g'' ] \stemDown f' 2. -\fermata _~ \stemNeutral \bar "|" 
                         \stemUp f' 1 \stemNeutral  |
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
+                        \cadenzaOff
                     }
 
                 } % Voice
@@ -154,9 +160,11 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: LH v1 alt1
                         \set Score.repeatCommands = #'((volta "1"))
+                        \cadenzaOn
                         \bar "|" 
                         \clef "bass"
                         \stemUp < d g > 4 < d bes, > < g, ees, > 2 \stemNeutral  |
+                        \cadenzaOff
                     }
 
                     % End of segment LH v1 alt1
@@ -164,12 +172,13 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: LH v1 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
+                        \cadenzaOn
                         \clef "bass"
-                        s1  |
+                        s1 \bar "|" 
                         s1  |
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
+                        \cadenzaOff
                     }
 
                 } % Voice
@@ -198,9 +207,11 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: LH v2 alt1
                         \set Score.repeatCommands = #'((volta "1"))
+                        \cadenzaOn
                         \bar "|" 
                         \clef "bass"
                         \stemDown < g,, d, > 1 \stemNeutral  |
+                        \cadenzaOff
                     }
 
                     % End of segment LH v2 alt1
@@ -208,12 +219,13 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: LH v2 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
+                        \cadenzaOn
                         \clef "bass"
-                        \stemDown ees, 4 < a, ees, > < c g, > < ees bes, > \stemNeutral  |
+                        \stemDown ees, 4 < a, ees, > < c g, > < ees bes, > \stemNeutral \bar "|" 
                         \stemDown < c a, > 4 < bes, a, > < bes, bes,, > 2 -\fermata \stemNeutral  |
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
+                        \cadenzaOff
                     }
 
                 } % Voice
