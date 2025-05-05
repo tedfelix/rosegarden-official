@@ -2980,8 +2980,10 @@ LilyPondExporter::writeBar(Segment *s,
             // repeat dots if appropriate. So only the previous bars have to
             // be written when cadenza is on.
             str << "\\bar \"|\" ";
-        } else {
-            // Bar check
+        } else if (barEnd != s->getEndMarkerTime()) {
+            // Bar check except for the last bar closing the segment.
+            // A barcheck at the end of a segment gives a "warning: barcheck
+            // failed" when running LilyPond.
             str << " |";
         }
     }
