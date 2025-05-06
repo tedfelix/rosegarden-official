@@ -334,17 +334,27 @@ JackDriver::initialise(bool reinitialise)
     }
 
     // Now set up the default connections, if configured to do so
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool connectDefaultOutputs = settings.value("connect_default_jack_outputs", true).toBool();
-    bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();
-    settings.endGroup();
 
-    const char **ports = jack_get_ports(m_client, nullptr, nullptr,
-            JackPortIsPhysical | JackPortIsInput);
+    // Set up the outputs.
+    // E.g. "rosegarden:master out L" and "rosegarden:master out R" to
+    // "system:playback_1" and "system:playback_2".
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    const bool connectDefaultOutputs =
+            settings.value("connect_default_jack_outputs", true).toBool();
+    settings.endGroup();
 
     if (connectDefaultOutputs) {
 
-        std::string playback_1, playback_2;
+        // Get the physical input ports.
+        const char **ports = jack_get_ports(
+                m_client,  // client
+                nullptr,  // port_name_pattern
+                nullptr,  // type_name_pattern
+                JackPortIsPhysical | JackPortIsInput);  // flags
+
+        std::string playback_1;
+        std::string playback_2;
 
         if (ports) {
             if (ports[0])
@@ -416,26 +426,42 @@ JackDriver::initialise(bool reinitialise)
         AUDIT << "  Go to Edit > Preferences > Audio > Make default JACK connections.\n";
     }
 
+    // Set up the inputs.
+    // E.g. "system:capture_1" and "system:capture_1" to
+    // "rosegarden:record in 1 L" and "rosegarden:record in 1 R".
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    const bool connectDefaultInputs =
+            settings.value("connect_default_jack_inputs", true).toBool();
+    settings.endGroup();
+
     if (connectDefaultInputs) {
 
-        std::string capture_1, capture_2;
+        // We only look at the first two.
+        std::string capture_1;
+        std::string capture_2;
 
-        ports =
-            jack_get_ports(m_client, nullptr, nullptr,
-                           JackPortIsPhysical | JackPortIsOutput);
+        // Get the output ports.  Usually system:capture_1 and system:capture_2
+        // are the first two.
+        const char **ports = jack_get_ports(
+                m_client,  // client
+                nullptr,  // port_name_pattern
+                nullptr,  // type_name_pattern
+                JackPortIsPhysical | JackPortIsOutput);  // flags
 
         if (ports) {
-            if (ports[0])
+            unsigned int count = 0;
+            if (ports[0]) {
                 capture_1 = std::string(ports[0]);
-            if (ports[1])
+                ++count;
+            }
+            if (ports[1]) {
                 capture_2 = std::string(ports[1]);
+                ++count;
+            }
 
-            // count ports
-            unsigned int i = 0;
-            for (i = 0; ports[i]; i++)
-                ;
-            RG_DEBUG << "initialise() - found " << i << " JACK physical inputs";
-            AUDIT << "found " << i << " JACK physical inputs\n";
+            RG_DEBUG << "initialise() - found " << count << " JACK physical inputs";
+            AUDIT << "found " << count << " JACK physical inputs\n";
 
             jack_free(ports);
 
@@ -446,11 +472,14 @@ JackDriver::initialise(bool reinitialise)
 
         if (capture_1 != "") {
 
-            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"";
-            AUDIT << "connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"\n";
+            std::string recordIn1L = jack_port_name(m_inputPorts[0]);
 
-            if (jack_connect(m_client, capture_1.c_str(),
-                             jack_port_name(m_inputPorts[0]))) {
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1 << "\" to \"" << recordIn1L << "\"";
+            AUDIT << "connecting from " << "\"" << capture_1 << "\" to \"" << recordIn1L << "\"\n";
+
+            if (jack_connect(m_client,  // client
+                             capture_1.c_str(),  // source_port
+                             recordIn1L.c_str())) {  // destination_port
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
@@ -458,11 +487,14 @@ JackDriver::initialise(bool reinitialise)
 
         if (capture_2 != "") {
 
-            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"";
-            AUDIT << "connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"\n";
+            std::string recordIn1R = jack_port_name(m_inputPorts[1]);
 
-            if (jack_connect(m_client, capture_2.c_str(),
-                             jack_port_name(m_inputPorts[1]))) {
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2 << "\" to \"" << recordIn1R << "\"";
+            AUDIT << "connecting from " << "\"" << capture_2 << "\" to \"" << recordIn1R << "\"\n";
+
+            if (jack_connect(m_client,  // client
+                             capture_2.c_str(),  // source_port
+                             recordIn1R.c_str())) {  // destination_port
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
