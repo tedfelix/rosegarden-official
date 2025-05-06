@@ -19,16 +19,13 @@
 #include "AddTempoChangeCommand.h"
 
 #include "base/Composition.h"
+
 #include <QString>
 
 
 namespace Rosegarden
 {
 
-AddTempoChangeCommand::~AddTempoChangeCommand()
-{
-    // nothing here either
-}
 
 void
 AddTempoChangeCommand::execute()
@@ -55,5 +52,6 @@ AddTempoChangeCommand::unexecute()
         m_composition->addTempoAtTime(m_time, m_oldTempo);
     }
 }
+
 
 }

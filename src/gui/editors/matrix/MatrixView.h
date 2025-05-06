@@ -98,12 +98,17 @@ signals:
     void panic();
 
     void stepByStepTargetRequested(QObject *);
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // target value
-                     TempoDialog::TempoDialogAction); // tempo action
 
     void noteInsertedFromKeyboard(Segment * segment, int pitch);
+
+public slots:
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
+
+    void slotStepByStepTargetRequested(QObject *);
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition
@@ -224,7 +229,7 @@ protected slots:
     void slotJogRight();
 
     void slotStepBackward();
-    void slotStepForward(bool force = false);
+    void slotStepForward()  { stepForward(false); }
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
@@ -236,12 +241,6 @@ protected slots:
     /// keyboard insert
     void slotInsertNoteFromAction();
 
-    /// Note-on received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOnReceived(int pitch, int velocity);
-
-    /// Note-off received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOffReceived(int pitch, int velocity);
-
     /// Note-on or note-off received asynchronously -- as above
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
@@ -250,7 +249,6 @@ protected slots:
 
     void slotConstrainedMove();
     void slotToggleStepByStep();
-    void slotStepByStepTargetRequested(QObject *);
 
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status
@@ -310,6 +308,8 @@ private:
     void initStatusBar();
 
     void readOptions();
+
+    void stepForward(bool force);
 
 };
 

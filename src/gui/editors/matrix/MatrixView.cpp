@@ -77,6 +77,7 @@
 #include "gui/rulers/ControlRulerWidget.h"
 
 #include "gui/general/ThornStyle.h"
+#include "gui/general/EditTempoController.h"
 
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
@@ -98,7 +99,6 @@
 #include "base/parameterpattern/ParameterPattern.h"
 
 #include "gui/dialogs/RescaleDialog.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/dialogs/IntervalDialog.h"
 #include "gui/dialogs/TimeSignatureDialog.h"
 
@@ -119,7 +119,7 @@
 #include <QStatusBar>
 #include <QDesktopServices>
 
-#include <algorithm>
+#include <algorithm>  // std::find()
 
 
 namespace Rosegarden
@@ -262,8 +262,8 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     restoreState(settings.value(modeStr).toByteArray());
     settings.endGroup();
 
-    connect(m_matrixWidget, SIGNAL(segmentDeleted(Segment *)),
-            this, SLOT(slotSegmentDeleted(Segment *)));
+    connect(m_matrixWidget, &MatrixWidget::segmentDeleted,
+            this, &MatrixView::slotSegmentDeleted);
     connect(m_matrixWidget, &MatrixWidget::sceneDeleted,
             this, &MatrixView::slotSceneDeleted);
 
@@ -377,91 +377,89 @@ MatrixView::setupActions()
 
     setupBaseActions();
 
-    createAction("edit_cut", SLOT(slotEditCut()));
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("edit_cut", &MatrixView::slotEditCut);
+    createAction("edit_copy", &MatrixView::slotEditCopy);
+    createAction("edit_paste", &MatrixView::slotEditPaste);
 
-    createAction("select", SLOT(slotSetSelectTool()));
-    createAction("draw", SLOT(slotSetPaintTool()));
-    createAction("erase", SLOT(slotSetEraseTool()));
-    createAction("move", SLOT(slotSetMoveTool()));
-    createAction("resize", SLOT(slotSetResizeTool()));
-    createAction("velocity", SLOT(slotSetVelocityTool()));
-    createAction("chord_mode", SLOT(slotToggleChordMode()));
+    createAction("select", &MatrixView::slotSetSelectTool);
+    createAction("draw", &MatrixView::slotSetPaintTool);
+    createAction("erase", &MatrixView::slotSetEraseTool);
+    createAction("move", &MatrixView::slotSetMoveTool);
+    createAction("resize", &MatrixView::slotSetResizeTool);
+    createAction("velocity", &MatrixView::slotSetVelocityTool);
+    createAction("chord_mode", &MatrixView::slotToggleChordMode);
     QAction *action = createAction(
             "constrained_move", &MatrixView::slotConstrainedMove);
     action->setStatusTip(tr("Preserves precise horizontal and vertical position when moving a note."));
-    createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
-    createAction("quantize", SLOT(slotQuantize()));
-    createAction("repeat_quantize", SLOT(slotRepeatQuantize()));
-    createAction("collapse_notes", SLOT(slotCollapseNotes()));
-    createAction("legatoize", SLOT(slotLegato()));
-    createAction("velocity_up", SLOT(slotVelocityUp()));
-    createAction("velocity_down", SLOT(slotVelocityDown()));
-    createAction("set_to_current_velocity", SLOT(slotSetVelocitiesToCurrent()));
-    createAction("set_velocities", SLOT(slotSetVelocities()));
-    createAction("trigger_segment", SLOT(slotTriggerSegment()));
-    createAction("remove_trigger", SLOT(slotRemoveTriggers()));
-    createAction("select_all", SLOT(slotSelectAll()));
-    createAction("delete", SLOT(slotEditDelete()));
-    createAction("cursor_back", SLOT(slotStepBackward()));
-    createAction("cursor_forward", SLOT(slotStepForward()));
-    createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
-    createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
-    createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
-    createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
-    //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
-    // ensure both get carried across somehow
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-    createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
-    createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
-    createAction("toggle_solo", SLOT(slotToggleSolo()));
-    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
-    createAction("loop", SLOT(slotLoop()));
-    createAction("panic", SIGNAL(panic()));
-    createAction("preview_selection", SLOT(slotPreviewSelection()));
-    createAction("clear_loop", SLOT(slotClearLoop()));
-    createAction("clear_selection", SLOT(slotClearSelection()));
-    createAction("reset_selection", SLOT(slotEscapePressed()));
-    createAction("filter_selection", SLOT(slotFilterSelection()));
+    createAction("toggle_step_by_step", &MatrixView::slotToggleStepByStep);
+    createAction("quantize", &MatrixView::slotQuantize);
+    createAction("repeat_quantize", &MatrixView::slotRepeatQuantize);
+    createAction("collapse_notes", &MatrixView::slotCollapseNotes);
+    createAction("legatoize", &MatrixView::slotLegato);
+    createAction("velocity_up", &MatrixView::slotVelocityUp);
+    createAction("velocity_down", &MatrixView::slotVelocityDown);
+    createAction("set_to_current_velocity", &MatrixView::slotSetVelocitiesToCurrent);
+    createAction("set_velocities", &MatrixView::slotSetVelocities);
+    createAction("trigger_segment", &MatrixView::slotTriggerSegment);
+    createAction("remove_trigger", &MatrixView::slotRemoveTriggers);
+    createAction("select_all", &MatrixView::slotSelectAll);
+    createAction("delete", &MatrixView::slotEditDelete);
+    createAction("cursor_back", &MatrixView::slotStepBackward);
+    createAction("cursor_forward", &MatrixView::slotStepForward);
+    createAction("extend_selection_backward", &MatrixView::slotExtendSelectionBackward);
+    createAction("extend_selection_forward", &MatrixView::slotExtendSelectionForward);
+    createAction("extend_selection_backward_bar", &MatrixView::slotExtendSelectionBackwardBar);
+    createAction("extend_selection_forward_bar", &MatrixView::slotExtendSelectionForwardBar);
+    createAction("play", &MatrixView::play);
+    createAction("stop", &MatrixView::stop);
+    createAction("playback_pointer_back_bar", &MatrixView::rewindPlayback);
+    createAction("playback_pointer_forward_bar", &MatrixView::fastForwardPlayback);
+    createAction("playback_pointer_start", &MatrixView::rewindPlaybackToBeginning);
+    createAction("playback_pointer_end", &MatrixView::fastForwardPlaybackToEnd);
+    createAction("cursor_prior_segment", &MatrixView::slotCurrentSegmentPrior);
+    createAction("cursor_next_segment", &MatrixView::slotCurrentSegmentNext);
+    createAction("toggle_solo", &MatrixView::slotToggleSolo);
+    createAction("scroll_to_follow", &MatrixView::slotScrollToFollow);
+    createAction("loop", &MatrixView::slotLoop);
+    createAction("panic", &MatrixView::panic);
+    createAction("preview_selection", &MatrixView::slotPreviewSelection);
+    createAction("clear_loop", &MatrixView::slotClearLoop);
+    createAction("clear_selection", &MatrixView::slotClearSelection);
+    createAction("reset_selection", &MatrixView::slotEscapePressed);
+    createAction("filter_selection", &MatrixView::slotFilterSelection);
 
-    createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));
+    createAction("pitch_bend_sequence", &MatrixView::slotPitchBendSequence);
 
     //"controllers" Menubar menu
-    createAction("controller_sequence", SLOT(slotControllerSequence()));
-    createAction("set_controllers",   SLOT(slotSetControllers()));
-    createAction("place_controllers", SLOT(slotPlaceControllers()));
+    createAction("controller_sequence", &MatrixView::slotControllerSequence);
+    createAction("set_controllers",   &MatrixView::slotSetControllers);
+    createAction("place_controllers", &MatrixView::slotPlaceControllers);
 
-    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
-    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+    createAction("show_chords_ruler", &MatrixView::slotToggleChordsRuler);
+    createAction("show_tempo_ruler", &MatrixView::slotToggleTempoRuler);
 
-    createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
-    createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
+    createAction("toggle_velocity_ruler", &MatrixView::slotToggleVelocityRuler);
+    createAction("toggle_pitchbend_ruler", &MatrixView::slotTogglePitchbendRuler);
     createAction("add_control_ruler", "");
 
-    createAction("add_tempo_change", SLOT(slotAddTempo()));
-    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
-    createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
+    createAction("add_tempo_change", &MatrixView::slotAddTempo);
+    createAction("add_time_signature", &MatrixView::slotAddTimeSignature);
+    createAction("add_key_signature", &MatrixView::slotEditAddKeySignature);
 
-    createAction("halve_durations", SLOT(slotHalveDurations()));
-    createAction("double_durations", SLOT(slotDoubleDurations()));
-    createAction("rescale", SLOT(slotRescale()));
-    createAction("transpose_up", SLOT(slotTransposeUp()));
-    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
-    createAction("transpose_down", SLOT(slotTransposeDown()));
-    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
-    createAction("general_transpose", SLOT(slotTranspose()));
-    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
-    createAction("invert", SLOT(slotInvert()));
-    createAction("retrograde", SLOT(slotRetrograde()));
-    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
-    createAction("jog_left", SLOT(slotJogLeft()));
-    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("halve_durations", &MatrixView::slotHalveDurations);
+    createAction("double_durations", &MatrixView::slotDoubleDurations);
+    createAction("rescale", &MatrixView::slotRescale);
+    createAction("transpose_up", &MatrixView::slotTransposeUp);
+    createAction("transpose_up_octave", &MatrixView::slotTransposeUpOctave);
+    createAction("transpose_down", &MatrixView::slotTransposeDown);
+    createAction("transpose_down_octave", &MatrixView::slotTransposeDownOctave);
+    createAction("general_transpose", &MatrixView::slotTranspose);
+    createAction("general_diatonic_transpose", &MatrixView::slotDiatonicTranspose);
+    createAction("invert", &MatrixView::slotInvert);
+    createAction("retrograde", &MatrixView::slotRetrograde);
+    createAction("retrograde_invert", &MatrixView::slotRetrogradeInvert);
+    createAction("jog_left", &MatrixView::slotJogLeft);
+    createAction("jog_right", &MatrixView::slotJogRight);
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -513,58 +511,58 @@ MatrixView::setupActions()
         else if (octave == 2) octaveSuffix = "_low";
 
         createAction(QString("insert_0%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_0_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_1_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_1%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_1_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_2_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_2%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_3%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_3_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_4_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_4%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_4_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_5_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_5%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_5_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_6_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
         createAction(QString("insert_6%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &MatrixView::slotInsertNoteFromAction);
     }
 
-    createAction("options_show_toolbar", SLOT(slotToggleGeneralToolBar()));
-    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
-    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
-    createAction("show_actions_toolbar", SLOT(slotToggleActionsToolBar()));
-    createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
+    createAction("options_show_toolbar", &MatrixView::slotToggleGeneralToolBar);
+    createAction("show_tools_toolbar", &MatrixView::slotToggleToolsToolBar);
+    createAction("show_transport_toolbar", &MatrixView::slotToggleTransportToolBar);
+    createAction("show_actions_toolbar", &MatrixView::slotToggleActionsToolBar);
+    createAction("show_rulers_toolbar", &MatrixView::slotToggleRulersToolBar);
 
 
-    createAction("manual", SLOT(slotHelp()));
-    createAction("tutorial", SLOT(slotTutorial()));
-    createAction("guidelines", SLOT(slotBugGuidelines()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
-    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
-    createAction("donate", SLOT(slotDonate()));
+    createAction("manual", &MatrixView::slotHelp);
+    createAction("tutorial", &MatrixView::slotTutorial);
+    createAction("guidelines", &MatrixView::slotBugGuidelines);
+    createAction("help_about_app", &MatrixView::slotHelpAbout);
+    createAction("help_about_qt", &MatrixView::slotHelpAboutQt);
+    createAction("donate", &MatrixView::slotDonate);
 
-    createAction("show_note_names", SLOT(slotShowNames()));
-    createAction("highlight_black_notes", SLOT(slotHighlight()));
-    createAction("highlight_triads", SLOT(slotHighlight()));
+    createAction("show_note_names", &MatrixView::slotShowNames);
+    createAction("highlight_black_notes", &MatrixView::slotHighlight);
+    createAction("highlight_triads", &MatrixView::slotHighlight);
     // add the highlight actions to an ActionGroup
     QActionGroup *ag = new QActionGroup(this);
     ag->addAction(findAction("highlight_black_notes"));
@@ -594,17 +592,17 @@ MatrixView::setupActions()
         timeT d = m_snapValues[i];
 
         if (d == SnapGrid::NoSnap) {
-            createAction("snap_none", SLOT(slotSetSnapFromAction()));
+            createAction("snap_none", &MatrixView::slotSetSnapFromAction);
         } else if (d == SnapGrid::SnapToUnit) {
         } else if (d == SnapGrid::SnapToBeat) {
-            createAction("snap_beat", SLOT(slotSetSnapFromAction()));
+            createAction("snap_beat", &MatrixView::slotSetSnapFromAction);
         } else if (d == SnapGrid::SnapToBar) {
-            createAction("snap_bar", SLOT(slotSetSnapFromAction()));
+            createAction("snap_bar", &MatrixView::slotSetSnapFromAction);
         } else {
             QString actionName = QString("snap_%1").arg(int((crotchetDuration * 4) / d));
             if (d == (crotchetDuration * 3) / 4) actionName = "snap_dotted_8";
             if (d == (crotchetDuration * 3) / 2) actionName = "snap_dotted_4";
-            createAction(actionName, SLOT(slotSetSnapFromAction()));
+            createAction(actionName, &MatrixView::slotSetSnapFromAction);
         }
     }
 }
@@ -1464,23 +1462,10 @@ MatrixView::slotToggleTempoRuler()
 
 void MatrixView::slotAddTempo()
 {
-    timeT insertionTime = getInsertionTime();
-
-    TempoDialog tempoDlg(this, RosegardenDocument::currentDocument, false);
-
-    connect(&tempoDlg,
-             SIGNAL(changeTempo(timeT,
-                    tempoT,
-                    tempoT,
-                    TempoDialog::TempoDialogAction)),
-                    this,
-                    SIGNAL(changeTempo(timeT,
-                           tempoT,
-                           tempoT,
-                           TempoDialog::TempoDialogAction)));
-
-    tempoDlg.setTempoPosition(insertionTime);
-    tempoDlg.exec();
+    EditTempoController::self()->editTempo(
+            this,  // parent
+            getInsertionTime(),  // atTime
+            false);  // timeEditable
 }
 
 void MatrixView::slotAddTimeSignature()
@@ -1816,12 +1801,12 @@ MatrixView::slotStepBackward()
 }
 
 void
-MatrixView::slotStepForward(bool force)
+MatrixView::stepForward(bool force)
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
 
-    // Sanity check.  Move postion marker inside segmet if not
+    // Sanity check.  Move position marker inside segment if not
     timeT time = getInsertionTime();  // Un-checked current insertion time
 
     timeT segmentStartTime = segment->getStartTime();
@@ -2371,8 +2356,10 @@ MatrixView::slotExtendSelectionForward(bool bar)
 
     timeT oldTime = getInsertionTime();
 
-    if (bar) emit fastForwardPlayback();
-    else slotStepForward(true);
+    if (bar)
+        emit fastForwardPlayback();
+    else
+        stepForward(true);
 
     timeT newTime = getInsertionTime();
 

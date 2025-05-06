@@ -621,16 +621,16 @@ NotationView::setupActions()
     //setup actions common to all views.
     EditViewBase::setupBaseActions();
 
-    createAction("edit_cut", SLOT(slotEditCut()));
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
+    createAction("edit_cut", &NotationView::slotEditCut);
+    createAction("edit_copy", &NotationView::slotEditCopy);
+    createAction("edit_paste", &NotationView::slotEditPaste);
 
     //"file" MenuBar menu
     // "file_save"
     // Created in EditViewBase::setupActions() via creatAction()
 
-    createAction("file_print_lilypond", SLOT(slotPrintLilyPond()));
-    createAction("file_preview_lilypond", SLOT(slotPreviewLilyPond()));
+    createAction("file_print_lilypond", &NotationView::slotPrintLilyPond);
+    createAction("file_preview_lilypond", &NotationView::slotPreviewLilyPond);
 
     // "file_close"
     // Created in EditViewBase::setupActions() via creatAction()
@@ -642,28 +642,29 @@ NotationView::setupActions()
     // "edit_redo"
     // Created in EditViewBase::setupActions() via creatAction()
 
-    createAction("cut_and_close", SLOT(slotEditCutAndClose()));
-    createAction("general_paste", SLOT(slotEditGeneralPaste()));
-    createAction("delete", SLOT(slotEditDelete()));
+    createAction("cut_and_close", &NotationView::slotEditCutAndClose);
+    createAction("general_paste", &NotationView::slotEditGeneralPaste);
+    createAction("delete", &NotationView::slotEditDelete);
     createAction("move_events_up_staff",
-                 SLOT(slotMoveEventsUpStaff()));
+                 &NotationView::slotMoveEventsUpStaff);
     createAction("general_move_events_up_staff",
-                 SLOT(slotMoveEventsUpStaffInteractive()));
+                 &NotationView::slotMoveEventsUpStaffInteractive);
     createAction("move_events_down_staff",
-                 SLOT(slotMoveEventsDownStaff()));
+                 &NotationView::slotMoveEventsDownStaff);
     createAction("general_move_events_down_staff",
-                 SLOT(slotMoveEventsDownStaffInteractive()));
-    createAction("select_from_start", SLOT(slotEditSelectFromStart()));
-    createAction("select_to_end", SLOT(slotEditSelectToEnd()));
-    createAction("select_whole_staff", SLOT(slotEditSelectWholeStaff()));
-    createAction("clear_selection", SLOT(slotClearSelection()));
-    createAction("reset_selection", SLOT(slotEscapePressed()));
-    createAction("search_select", SLOT(slotSearchSelect()));
-    createAction("filter_selection", SLOT(slotFilterSelection()));
-    createAction("select_evenly_spaced_notes", SLOT(slotSelectEvenlySpacedNotes()));
-    createAction("expression_sequence", SLOT(slotExpressionSequence()));
-    createAction("pitch_bend_sequence", SLOT(slotPitchBendSequence()));
-    createAction("controller_sequence", SLOT(slotControllerSequence()));
+                 &NotationView::slotMoveEventsDownStaffInteractive);
+    createAction("select_from_start", &NotationView::slotEditSelectFromStart);
+    createAction("select_to_end", &NotationView::slotEditSelectToEnd);
+    createAction("select_whole_staff", &NotationView::slotEditSelectWholeStaff);
+    createAction("clear_selection", &NotationView::slotClearSelection);
+    createAction("reset_selection", &NotationView::slotEscapePressed);
+    createAction("search_select", &NotationView::slotSearchSelect);
+    createAction("filter_selection", &NotationView::slotFilterSelection);
+    createAction("select_evenly_spaced_notes",
+                 &NotationView::slotSelectEvenlySpacedNotes);
+    createAction("expression_sequence", &NotationView::slotExpressionSequence);
+    createAction("pitch_bend_sequence", &NotationView::slotPitchBendSequence);
+    createAction("controller_sequence", &NotationView::slotControllerSequence);
 
 
     //"view" MenuBar menu
@@ -682,35 +683,36 @@ NotationView::setupActions()
     // Code deactivated.
 
     // "layout" submenu
-    createAction("add_layer", SLOT(slotAddLayer()));
-    createAction("new_layer_from_selection", SLOT(slotNewLayerFromSelection()));
-    createAction("linear_mode", SLOT(slotLinearMode()));
-    createAction("continuous_page_mode", SLOT(slotContinuousPageMode()));
-    createAction("multi_page_mode", SLOT(slotMultiPageMode()));
+    createAction("add_layer", &NotationView::slotAddLayer);
+    createAction("new_layer_from_selection",
+                 &NotationView::slotNewLayerFromSelection);
+    createAction("linear_mode", &NotationView::slotLinearMode);
+    createAction("continuous_page_mode", &NotationView::slotContinuousPageMode);
+    createAction("multi_page_mode", &NotationView::slotMultiPageMode);
 
     // highlighting menu
-    createAction("highlight_none", SLOT(slotHighlight()));
-    createAction("highlight_within_track", SLOT(slotHighlight()));
-    createAction("highlight", SLOT(slotHighlight()));
+    createAction("highlight_none", &NotationView::slotHighlight);
+    createAction("highlight_within_track", &NotationView::slotHighlight);
+    createAction("highlight", &NotationView::slotHighlight);
 
-    createAction("lyric_editor", SLOT(slotEditLyrics()));
-    createAction("show_track_headers", SLOT(slotShowHeadersGroup()));
+    createAction("lyric_editor", &NotationView::slotEditLyrics);
+    createAction("show_track_headers", &NotationView::slotShowHeadersGroup);
 
     //"document" Menubar menu
-    createAction("add_tempo", SLOT(slotAddTempo()));
-    createAction("add_time_signature", SLOT(slotAddTimeSignature()));
-    createAction("check_for_parallels", SLOT(slotCheckForParallels()));
+    createAction("add_tempo", &NotationView::slotAddTempo);
+    createAction("add_time_signature", &NotationView::slotAddTimeSignature);
+    createAction("check_for_parallels", &NotationView::slotCheckForParallels);
 
     //"segment" Menubar menu
     // "open-with" subMenu
     // Created in EditViewBase::setupActions() via creatAction()
 
-    createAction("add_clef", SLOT(slotEditAddClef()));
+    createAction("add_clef", &NotationView::slotEditAddClef);
     //uncomment this when we implement linked segment transposition
-    //createAction("add_clef_this_link_only", SLOT(slotEditAddClefLinkOnly()));
-    createAction("add_key_signature", SLOT(slotEditAddKeySignature()));
-    createAction("add_sustain_down", SLOT(slotEditAddSustainDown()));
-    createAction("add_sustain_up", SLOT(slotEditAddSustainUp()));
+    //createAction("add_clef_this_link_only", &NotationView::slotEditAddClefLinkOnly);
+    createAction("add_key_signature", &NotationView::slotEditAddKeySignature);
+    createAction("add_sustain_down", &NotationView::slotEditAddSustainDown);
+    createAction("add_sustain_up", &NotationView::slotEditAddSustainUp);
 
     // "set_segment_start"
     // Created in EditViewBase::setupActions() via creatAction()
@@ -718,9 +720,9 @@ NotationView::setupActions()
     // "set_segment_duration"
     // Created in EditViewBase::setupActions() via creatAction()
 
-    createAction("transpose_segment", SLOT(slotEditTranspose()));
-    createAction("switch_preset", SLOT(slotEditSwitchPreset()));
-    //createAction("create_anacrusis", SLOT(slotCreateAnacrusis()));
+    createAction("transpose_segment", &NotationView::slotEditTranspose);
+    createAction("switch_preset", &NotationView::slotEditSwitchPreset);
+    //createAction("create_anacrusis", &NotationView::slotCreateAnacrusis);
 
     //"Notes" Menubar menu
 
@@ -730,13 +732,14 @@ NotationView::setupActions()
     //with RemoveMarksCommand::registerCommand()
 
     // "ornaments" subMenu
-    createAction("use_ornament", SLOT(slotUseOrnament()));
-    createAction("make_ornament", SLOT(slotMakeOrnament()));
-    createAction("remove_ornament", SLOT(slotRemoveOrnament()));
-    createAction("edit_ornament_inline", SLOT(slotEditOrnamentInline()));
-    createAction("show_ornament_expansion", SLOT(slotShowOrnamentExpansion()));
-    createAction("mask_ornament", SLOT(slotMaskOrnament()));
-    createAction("unmask_ornament", SLOT(slotUnmaskOrnament()));
+    createAction("use_ornament", &NotationView::slotUseOrnament);
+    createAction("make_ornament", &NotationView::slotMakeOrnament);
+    createAction("remove_ornament", &NotationView::slotRemoveOrnament);
+    createAction("edit_ornament_inline", &NotationView::slotEditOrnamentInline);
+    createAction("show_ornament_expansion",
+                 &NotationView::slotShowOrnamentExpansion);
+    createAction("mask_ornament", &NotationView::slotMaskOrnament);
+    createAction("unmask_ornament", &NotationView::slotUnmaskOrnament);
 
     // "Fingering" subMenu
     // Created in Constructor via NotationCommandRegistry()
@@ -788,8 +791,8 @@ NotationView::setupActions()
 
     // "remove_indications"
 
-    createAction("simple_tuplet", SLOT(slotGroupSimpleTuplet()));
-    createAction("tuplet", SLOT(slotGroupGeneralTuplet()));
+    createAction("simple_tuplet", &NotationView::slotGroupSimpleTuplet);
+    createAction("tuplet", &NotationView::slotGroupGeneralTuplet);
 
     //Where is "break_tuplet" created?
     //"slur" & "phrasing_slur" are created in AddIndicationCommand
@@ -810,41 +813,44 @@ NotationView::setupActions()
     //Actions first appear in "Adjust" Menubar menu
 
     //"rests" subMenu
-    createAction("normalize_rests", SLOT(slotTransformsNormalizeRests()));
+    createAction("normalize_rests",
+                 &NotationView::slotTransformsNormalizeRests);
     //Where is "collapse_rests_aggresively" created?
 
     //"transform_notes" subMenu
-    createAction("collapse_notes", SLOT(slotTransformsCollapseNotes()));
+    createAction("collapse_notes", &NotationView::slotTransformsCollapseNotes);
     //Where are "make_notes_viable" & "de_counterpoint" created?
 
     //Quantitize subMenu
-    createAction("quantize", SLOT(slotTransformsQuantize()));
+    createAction("quantize", &NotationView::slotTransformsQuantize);
     //Where are "fix_quantization" & "remove_quantization" created?
 
-    createAction("interpret", SLOT(slotTransformsInterpret()));
+    createAction("interpret", &NotationView::slotTransformsInterpret);
 
     //"Rescale" subMenu
-    createAction("halve_durations", SLOT(slotHalveDurations()));
-    createAction("double_durations", SLOT(slotDoubleDurations()));
-    createAction("rescale", SLOT(slotRescale()));
+    createAction("halve_durations", &NotationView::slotHalveDurations);
+    createAction("double_durations", &NotationView::slotDoubleDurations);
+    createAction("rescale", &NotationView::slotRescale);
 
     //"Transpose" subMenu
-    createAction("transpose_up", SLOT(slotTransposeUp()));
-    createAction("transpose_down", SLOT(slotTransposeDown()));
-    createAction("transpose_up_octave", SLOT(slotTransposeUpOctave()));
-    createAction("transpose_down_octave", SLOT(slotTransposeDownOctave()));
-    createAction("general_transpose", SLOT(slotTranspose()));
-    createAction("general_diatonic_transpose", SLOT(slotDiatonicTranspose()));
+    createAction("transpose_up", &NotationView::slotTransposeUp);
+    createAction("transpose_down", &NotationView::slotTransposeDown);
+    createAction("transpose_up_octave", &NotationView::slotTransposeUpOctave);
+    createAction("transpose_down_octave",
+                 &NotationView::slotTransposeDownOctave);
+    createAction("general_transpose", &NotationView::slotTranspose);
+    createAction("general_diatonic_transpose",
+                 &NotationView::slotDiatonicTranspose);
 
     //"Convert" subMenu
-    createAction("invert", SLOT(slotInvert()));
-    createAction("retrograde", SLOT(slotRetrograde()));
-    createAction("retrograde_invert", SLOT(slotRetrogradeInvert()));
+    createAction("invert", &NotationView::slotInvert);
+    createAction("retrograde", &NotationView::slotRetrograde);
+    createAction("retrograde_invert", &NotationView::slotRetrogradeInvert);
 
     //"velocities" subMenu
-    createAction("velocity_up", SLOT(slotVelocityUp()));
-    createAction("velocity_down", SLOT(slotVelocityDown()));
-    createAction("set_velocities", SLOT(slotSetVelocities()));
+    createAction("velocity_up", &NotationView::slotVelocityUp);
+    createAction("velocity_down", &NotationView::slotVelocityDown);
+    createAction("set_velocities", &NotationView::slotSetVelocities);
 
     //"fine_positioning" subMenu
     //Where are "fine_position_restore", "fine_position_left",
@@ -852,187 +858,187 @@ NotationView::setupActions()
     //"fine_position_down" created?
 
     //"fine_timing" subMenu
-    createAction("jog_left", SLOT(slotJogLeft()));
-    createAction("jog_right", SLOT(slotJogRight()));
+    createAction("jog_left", &NotationView::slotJogLeft);
+    createAction("jog_right", &NotationView::slotJogRight);
 
     //"visibility" subMenu
     //Where are "make_invisible" & "make_visible" created?
 
     //"controllers" Menubar menu
-    createAction("set_controllers",   SLOT(slotSetControllers()));
-    createAction("place_controllers", SLOT(slotPlaceControllers()));
+    createAction("set_controllers", &NotationView::slotSetControllers);
+    createAction("place_controllers", &NotationView::slotPlaceControllers);
 
     //Actions first appear in "Tools" Menubar menu
-    createAction("select", SLOT(slotSetSelectTool()));
-    createAction("selectnoties", SLOT(slotSetSelectNoTiesTool()));
-    createAction("erase", SLOT(slotSetEraseTool()));
-    createAction("draw", SLOT(slotSetNoteRestInserter()));
+    createAction("select", &NotationView::slotSetSelectTool);
+    createAction("selectnoties", &NotationView::slotSetSelectNoTiesTool);
+    createAction("erase", &NotationView::slotSetEraseTool);
+    createAction("draw", &NotationView::slotSetNoteRestInserter);
 
     // These actions do as their names imply, and in this case, the toggle will
     // call one or the other of these
     // These rely on .rc script keeping the right state visible
-    createAction("switch_to_rests", SLOT(slotSwitchToRests()));
-    createAction("switch_to_notes", SLOT(slotSwitchToNotes()));
+    createAction("switch_to_rests", &NotationView::slotSwitchToRests);
+    createAction("switch_to_notes", &NotationView::slotSwitchToNotes);
 
     // These actions always just pass straight to the toggle.
     // These rely on .rc script keeping the right state visible
-    createAction("switch_dots_on", SLOT(slotToggleDot()));
-    createAction("switch_dots_off", SLOT(slotToggleDot()));
+    createAction("switch_dots_on", &NotationView::slotToggleDot);
+    createAction("switch_dots_off", &NotationView::slotToggleDot);
 
     // Menu uses now "Switch to Notes", "Switch to Rests" and "Durations".
-    createAction("duration_breve", SLOT(slotNoteAction()));
-    createAction("duration_semibreve", SLOT(slotNoteAction()));
-    createAction("duration_minim", SLOT(slotNoteAction()));
-    createAction("duration_crotchet", SLOT(slotNoteAction()));
-    createAction("duration_quaver", SLOT(slotNoteAction()));
-    createAction("duration_semiquaver", SLOT(slotNoteAction()));
-    createAction("duration_demisemi", SLOT(slotNoteAction()));
-    createAction("duration_hemidemisemi", SLOT(slotNoteAction()));
-    createAction("duration_dotted_breve", SLOT(slotNoteAction()));
-    createAction("duration_dotted_semibreve", SLOT(slotNoteAction()));
-    createAction("duration_dotted_minim", SLOT(slotNoteAction()));
-    createAction("duration_dotted_crotchet", SLOT(slotNoteAction()));
-    createAction("duration_dotted_quaver", SLOT(slotNoteAction()));
-    createAction("duration_dotted_semiquaver", SLOT(slotNoteAction()));
-    createAction("duration_dotted_demisemi", SLOT(slotNoteAction()));
-    createAction("duration_dotted_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("duration_breve", &NotationView::slotNoteAction);
+    createAction("duration_semibreve", &NotationView::slotNoteAction);
+    createAction("duration_minim", &NotationView::slotNoteAction);
+    createAction("duration_crotchet", &NotationView::slotNoteAction);
+    createAction("duration_quaver", &NotationView::slotNoteAction);
+    createAction("duration_semiquaver", &NotationView::slotNoteAction);
+    createAction("duration_demisemi", &NotationView::slotNoteAction);
+    createAction("duration_hemidemisemi", &NotationView::slotNoteAction);
+    createAction("duration_dotted_breve", &NotationView::slotNoteAction);
+    createAction("duration_dotted_semibreve", &NotationView::slotNoteAction);
+    createAction("duration_dotted_minim", &NotationView::slotNoteAction);
+    createAction("duration_dotted_crotchet", &NotationView::slotNoteAction);
+    createAction("duration_dotted_quaver", &NotationView::slotNoteAction);
+    createAction("duration_dotted_semiquaver", &NotationView::slotNoteAction);
+    createAction("duration_dotted_demisemi", &NotationView::slotNoteAction);
+    createAction("duration_dotted_hemidemisemi", &NotationView::slotNoteAction);
 
     // since we can't create toolbars with disabled icons, and to avoid having
     // to draw a lot of fancy icons for disabled durations, we have this dummy
     // filler to keep spacing the same across all toolbars, and there have to
     // two of them
     // Without this handler, the action takes up no space on the toolbar.
-    createAction("dummy_1", SLOT(slotDummy1()));
+    createAction("dummy_1", &NotationView::slotDummy1);
 
     //"NoteTool" subMenu
     //NEED to create action methods
-    createAction("breve", SLOT(slotNoteAction()));
-    createAction("semibreve", SLOT(slotNoteAction()));
-    createAction("minim", SLOT(slotNoteAction()));
-    createAction("crotchet", SLOT(slotNoteAction()));
-    createAction("quaver", SLOT(slotNoteAction()));
-    createAction("semiquaver", SLOT(slotNoteAction()));
-    createAction("demisemi", SLOT(slotNoteAction()));
-    createAction("hemidemisemi", SLOT(slotNoteAction()));
-    createAction("dotted_breve", SLOT(slotNoteAction()));
-    createAction("dotted_semibreve", SLOT(slotNoteAction()));
-    createAction("dotted_minim", SLOT(slotNoteAction()));
-    createAction("dotted_crotchet", SLOT(slotNoteAction()));
-    createAction("dotted_quaver", SLOT(slotNoteAction()));
-    createAction("dotted_semiquaver", SLOT(slotNoteAction()));
-    createAction("dotted_demisemi", SLOT(slotNoteAction()));
-    createAction("dotted_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("breve", &NotationView::slotNoteAction);
+    createAction("semibreve", &NotationView::slotNoteAction);
+    createAction("minim", &NotationView::slotNoteAction);
+    createAction("crotchet", &NotationView::slotNoteAction);
+    createAction("quaver", &NotationView::slotNoteAction);
+    createAction("semiquaver", &NotationView::slotNoteAction);
+    createAction("demisemi", &NotationView::slotNoteAction);
+    createAction("hemidemisemi", &NotationView::slotNoteAction);
+    createAction("dotted_breve", &NotationView::slotNoteAction);
+    createAction("dotted_semibreve", &NotationView::slotNoteAction);
+    createAction("dotted_minim", &NotationView::slotNoteAction);
+    createAction("dotted_crotchet", &NotationView::slotNoteAction);
+    createAction("dotted_quaver", &NotationView::slotNoteAction);
+    createAction("dotted_semiquaver", &NotationView::slotNoteAction);
+    createAction("dotted_demisemi", &NotationView::slotNoteAction);
+    createAction("dotted_hemidemisemi", &NotationView::slotNoteAction);
 
     //"RestTool" subMenu
     //NEED to create action methods
-    createAction("rest_breve", SLOT(slotNoteAction()));
-    createAction("rest_semibreve", SLOT(slotNoteAction()));
-    createAction("rest_minim", SLOT(slotNoteAction()));
-    createAction("rest_crotchet", SLOT(slotNoteAction()));
-    createAction("rest_quaver", SLOT(slotNoteAction()));
-    createAction("rest_semiquaver", SLOT(slotNoteAction()));
-    createAction("rest_demisemi", SLOT(slotNoteAction()));
-    createAction("rest_hemidemisemi", SLOT(slotNoteAction()));
-    createAction("rest_dotted_breve", SLOT(slotNoteAction()));
-    createAction("rest_dotted_semibreve", SLOT(slotNoteAction()));
-    createAction("rest_dotted_minim", SLOT(slotNoteAction()));
-    createAction("rest_dotted_crotchet", SLOT(slotNoteAction()));
-    createAction("rest_dotted_quaver", SLOT(slotNoteAction()));
-    createAction("rest_dotted_semiquaver", SLOT(slotNoteAction()));
-    createAction("rest_dotted_demisemi", SLOT(slotNoteAction()));
-    createAction("rest_dotted_hemidemisemi", SLOT(slotNoteAction()));
+    createAction("rest_breve", &NotationView::slotNoteAction);
+    createAction("rest_semibreve", &NotationView::slotNoteAction);
+    createAction("rest_minim", &NotationView::slotNoteAction);
+    createAction("rest_crotchet", &NotationView::slotNoteAction);
+    createAction("rest_quaver", &NotationView::slotNoteAction);
+    createAction("rest_semiquaver", &NotationView::slotNoteAction);
+    createAction("rest_demisemi", &NotationView::slotNoteAction);
+    createAction("rest_hemidemisemi", &NotationView::slotNoteAction);
+    createAction("rest_dotted_breve", &NotationView::slotNoteAction);
+    createAction("rest_dotted_semibreve", &NotationView::slotNoteAction);
+    createAction("rest_dotted_minim", &NotationView::slotNoteAction);
+    createAction("rest_dotted_crotchet", &NotationView::slotNoteAction);
+    createAction("rest_dotted_quaver", &NotationView::slotNoteAction);
+    createAction("rest_dotted_semiquaver", &NotationView::slotNoteAction);
+    createAction("rest_dotted_demisemi", &NotationView::slotNoteAction);
+    createAction("rest_dotted_hemidemisemi", &NotationView::slotNoteAction);
 
     //"Accidentals" submenu
-    createAction("no_accidental", SLOT(slotNoAccidental()));
-    createAction("follow_accidental", SLOT(slotFollowAccidental()));
-    createAction("sharp_accidental", SLOT(slotSharp()));
-    createAction("flat_accidental", SLOT(slotFlat()));
-    createAction("natural_accidental", SLOT(slotNatural()));
-    createAction("double_sharp_accidental", SLOT(slotDoubleSharp()));
-    createAction("double_flat_accidental", SLOT(slotDoubleFlat()));
+    createAction("no_accidental", &NotationView::slotNoAccidental);
+    createAction("follow_accidental", &NotationView::slotFollowAccidental);
+    createAction("sharp_accidental", &NotationView::slotSharp);
+    createAction("flat_accidental", &NotationView::slotFlat);
+    createAction("natural_accidental", &NotationView::slotNatural);
+    createAction("double_sharp_accidental", &NotationView::slotDoubleSharp);
+    createAction("double_flat_accidental", &NotationView::slotDoubleFlat);
 
     //JAS "Clefs" subMenu
-    createAction("treble_clef", SLOT(slotClefAction()));
-    createAction("alto_clef", SLOT(slotClefAction()));
-    createAction("tenor_clef", SLOT(slotClefAction()));
-    createAction("bass_clef", SLOT(slotClefAction()));
+    createAction("treble_clef", &NotationView::slotClefAction);
+    createAction("alto_clef", &NotationView::slotClefAction);
+    createAction("tenor_clef", &NotationView::slotClefAction);
+    createAction("bass_clef", &NotationView::slotClefAction);
 
-    createAction("text", SLOT(slotText()));
-    createAction("guitarchord", SLOT(slotGuitarChord()));
+    createAction("text", &NotationView::slotText);
+    createAction("guitarchord", &NotationView::slotGuitarChord);
 
     // "Symbols" (sub)Menu
-    createAction("add_segno", SLOT(slotSymbolAction()));
-    createAction("add_coda", SLOT(slotSymbolAction()));
-    createAction("add_breath", SLOT(slotSymbolAction()));
+    createAction("add_segno", &NotationView::slotSymbolAction);
+    createAction("add_coda", &NotationView::slotSymbolAction);
+    createAction("add_breath", &NotationView::slotSymbolAction);
 
     //JAS "Move" subMenu
-    createAction("extend_selection_backward", SLOT(slotExtendSelectionBackward()));
-    createAction("extend_selection_forward", SLOT(slotExtendSelectionForward()));
-    createAction("preview_selection", SLOT(slotPreviewSelection()));
-    createAction("clear_loop", SLOT(slotClearLoop()));
+    createAction("extend_selection_backward", &NotationView::slotExtendSelectionBackward);
+    createAction("extend_selection_forward", &NotationView::slotExtendSelectionForward);
+    createAction("preview_selection", &NotationView::slotPreviewSelection);
+    createAction("clear_loop", &NotationView::slotClearLoop);
 
-    createAction("cursor_up_staff", SLOT(slotCurrentStaffUp()));
-    createAction("cursor_down_staff", SLOT(slotCurrentStaffDown()));
-    createAction("cursor_prior_segment", SLOT(slotCurrentSegmentPrior()));
-    createAction("cursor_next_segment", SLOT(slotCurrentSegmentNext()));
-    createAction("unadopt_segment", SLOT(slotUnadoptSegment()));
+    createAction("cursor_up_staff", &NotationView::slotCurrentStaffUp);
+    createAction("cursor_down_staff", &NotationView::slotCurrentStaffDown);
+    createAction("cursor_prior_segment", &NotationView::slotCurrentSegmentPrior);
+    createAction("cursor_next_segment", &NotationView::slotCurrentSegmentNext);
+    createAction("unadopt_segment", &NotationView::slotUnadoptSegment);
 
     //"Transport" subMenu
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
+    createAction("play", &NotationView::play);
+    createAction("stop", &NotationView::stop);
     //Step Backward/Forward are protected signals
-    // so the pitch tracker (our derrived class) can see them
+    // so the pitch tracker (our derived class) can see them
     // Because they're protected, we'll connect them here.
-    createAction("cursor_back", SIGNAL(stepBackward()));
+    createAction("cursor_back", &NotationView::stepBackward);
     connect(this, &NotationView::stepBackward,
             this, &NotationView::slotStepBackward);
-    createAction("cursor_forward", SIGNAL(stepForward()));
+    createAction("cursor_forward", &NotationView::stepForward);
     connect(this, &NotationView::stepForward,
             this, &NotationView::slotStepForward);
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-    createAction("toggle_solo", SLOT(slotToggleSolo()));
-    createAction("scroll_to_follow", SLOT(slotScrollToFollow()));
-    createAction("loop", SLOT(slotLoop()));
-    createAction("panic", SIGNAL(panic()));
+    createAction("playback_pointer_back_bar", &NotationView::rewindPlayback);
+    createAction("playback_pointer_forward_bar", &NotationView::fastForwardPlayback);
+    createAction("playback_pointer_start", &NotationView::rewindPlaybackToBeginning);
+    createAction("playback_pointer_end", &NotationView::fastForwardPlaybackToEnd);
+    createAction("toggle_solo", &NotationView::slotToggleSolo);
+    createAction("scroll_to_follow", &NotationView::slotScrollToFollow);
+    createAction("loop", &NotationView::slotLoop);
+    createAction("panic", &NotationView::panic);
 
     //"insert_note_actionmenu" coded below.
 
-    createAction("chord_mode", SLOT(slotUpdateInsertModeStatus()));
-    createAction("triplet_mode", SLOT(slotUpdateInsertModeStatusTriplet()));
-    createAction("tuplet_mode", SLOT(slotUpdateInsertModeStatusTuplet()));
-    createAction("grace_mode", SLOT(slotUpdateInsertModeStatus()));
-    createAction("toggle_step_by_step", SLOT(slotToggleStepByStep()));
+    createAction("chord_mode", &NotationView::slotUpdateInsertModeStatus);
+    createAction("triplet_mode", &NotationView::slotUpdateInsertModeStatusTriplet);
+    createAction("tuplet_mode", &NotationView::slotUpdateInsertModeStatusTuplet);
+    createAction("grace_mode", &NotationView::slotUpdateInsertModeStatus);
+    createAction("toggle_step_by_step", &NotationView::slotToggleStepByStep);
 
     /// YG: Only for debug
-     createAction("dump_staves", SLOT(slotDebugDump()));
-     createAction("dump_bardata", SLOT(slotBarDataDump()));
+     createAction("dump_staves", &NotationView::slotDebugDump);
+     createAction("dump_bardata", &NotationView::slotBarDataDump);
 
-    createAction("manual", SLOT(slotHelp()));
-    createAction("tutorial", SLOT(slotTutorial()));
-    createAction("guidelines", SLOT(slotBugGuidelines()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
-    createAction("help_about_qt", SLOT(slotHelpAboutQt()));
-    createAction("donate", SLOT(slotDonate()));
+    createAction("manual", &NotationView::slotHelp);
+    createAction("tutorial", &NotationView::slotTutorial);
+    createAction("guidelines", &NotationView::slotBugGuidelines);
+    createAction("help_about_app", &NotationView::slotHelpAbout);
+    createAction("help_about_qt", &NotationView::slotHelpAboutQt);
+    createAction("donate", &NotationView::slotDonate);
 
-    createAction("toggle_velocity_ruler", SLOT(slotToggleVelocityRuler()));
-    createAction("toggle_pitchbend_ruler", SLOT(slotTogglePitchbendRuler()));
+    createAction("toggle_velocity_ruler", &NotationView::slotToggleVelocityRuler);
+    createAction("toggle_pitchbend_ruler", &NotationView::slotTogglePitchbendRuler);
     createAction("add_control_ruler", "");
 
-    createAction("cycle_slashes", SLOT(slotCycleSlashes()));
+    createAction("cycle_slashes", &NotationView::slotCycleSlashes);
 
-    createAction("interpret_activate", SLOT(slotInterpretActivate()));
+    createAction("interpret_activate", &NotationView::slotInterpretActivate);
     // I don't think you can use <qt> in tooltips in .rc files, and this one
     // wants formatting, so I pulled it out here.
     findAction("interpret_activate")->setToolTip(tr("<qt><p>Apply the interpretations selected on this toolbar to the selection.</p><p>If there is no selection, interpretations apply to the entire segment automatically.</p></qt>"));
 
     // These have to connect to something, so connect to the dummy slot:
-    createAction("interpret_text_dynamics", SLOT(slotDummy1()));
-    createAction("interpret_hairpins", SLOT(slotDummy1()));
-    createAction("interpret_slurs", SLOT(slotDummy1()));
-    createAction("interpret_beats", SLOT(slotDummy1()));
+    createAction("interpret_text_dynamics", &NotationView::slotDummy1);
+    createAction("interpret_hairpins", &NotationView::slotDummy1);
+    createAction("interpret_slurs", &NotationView::slotDummy1);
+    createAction("interpret_beats", &NotationView::slotDummy1);
 
     QMenu *addControlRulerMenu = new QMenu;
     Controllable *c =
@@ -1080,55 +1086,55 @@ NotationView::setupActions()
 
     //Actions first appear in "settings" Menubar menu
     //"toolbars" subMenu
-    createAction("options_show_toolbar", SLOT(slotToggleGeneralToolBar()));
-    createAction("show_tools_toolbar", SLOT(slotToggleToolsToolBar()));
-    createAction("show_duration_toolbar", SLOT(slotToggleDurationToolBar()));
-    createAction("show_accidentals_toolbar", SLOT(slotToggleAccidentalsToolBar()));
-    createAction("show_clefs_toolbar", SLOT(slotToggleClefsToolBar()));
-    createAction("show_marks_toolbar", SLOT(slotToggleMarksToolBar()));
-    createAction("show_group_toolbar", SLOT(slotToggleGroupToolBar()));
-    createAction("show_symbol_toolbar", SLOT(slotToggleSymbolsToolBar()));
-    createAction("show_transport_toolbar", SLOT(slotToggleTransportToolBar()));
-    createAction("show_layout_toolbar", SLOT(slotToggleLayoutToolBar()));
-    createAction("show_layer_toolbar", SLOT(slotToggleLayerToolBar()));
-    createAction("show_rulers_toolbar", SLOT(slotToggleRulersToolBar()));
-    createAction("show_interpret_toolbar", SLOT(slotToggleInterpretToolBar()));
+    createAction("options_show_toolbar", &NotationView::slotToggleGeneralToolBar);
+    createAction("show_tools_toolbar", &NotationView::slotToggleToolsToolBar);
+    createAction("show_duration_toolbar", &NotationView::slotToggleDurationToolBar);
+    createAction("show_accidentals_toolbar", &NotationView::slotToggleAccidentalsToolBar);
+    createAction("show_clefs_toolbar", &NotationView::slotToggleClefsToolBar);
+    createAction("show_marks_toolbar", &NotationView::slotToggleMarksToolBar);
+    createAction("show_group_toolbar", &NotationView::slotToggleGroupToolBar);
+    createAction("show_symbol_toolbar", &NotationView::slotToggleSymbolsToolBar);
+    createAction("show_transport_toolbar", &NotationView::slotToggleTransportToolBar);
+    createAction("show_layout_toolbar", &NotationView::slotToggleLayoutToolBar);
+    createAction("show_layer_toolbar", &NotationView::slotToggleLayerToolBar);
+    createAction("show_rulers_toolbar", &NotationView::slotToggleRulersToolBar);
+    createAction("show_interpret_toolbar", &NotationView::slotToggleInterpretToolBar);
 
     //"rulers" subMenu
-    createAction("show_chords_ruler", SLOT(slotToggleChordsRuler()));
-    createAction("show_raw_note_ruler", SLOT(slotToggleRawNoteRuler()));
-    createAction("show_tempo_ruler", SLOT(slotToggleTempoRuler()));
+    createAction("show_chords_ruler", &NotationView::slotToggleChordsRuler);
+    createAction("show_raw_note_ruler", &NotationView::slotToggleRawNoteRuler);
+    createAction("show_tempo_ruler", &NotationView::slotToggleTempoRuler);
 
-    //createAction("show_annotations", SLOT(slotToggleAnnotations()));
-    //createAction("show_lilypond_directives", SLOT(slotToggleLilyPondDirectives()));
+    //createAction("show_annotations", &NotationView::slotToggleAnnotations);
+    //createAction("show_lilypond_directives", &NotationView::slotToggleLilyPondDirectives);
 
-    createAction("extend_selection_backward_bar", SLOT(slotExtendSelectionBackwardBar()));
-    createAction("extend_selection_forward_bar", SLOT(slotExtendSelectionForwardBar()));
-    //!!! not here yet createAction("move_selection_left", SLOT(slotMoveSelectionLeft()));
+    createAction("extend_selection_backward_bar", &NotationView::slotExtendSelectionBackwardBar);
+    createAction("extend_selection_forward_bar", &NotationView::slotExtendSelectionForwardBar);
+    //!!! not here yet createAction("move_selection_left", &NotationView::slotMoveSelectionLeft);
     //&&& NB Play has two shortcuts (Enter and Ctrl+Return) -- need to
     // ensure both get carried across somehow
-    createAction("add_dot", SLOT(slotAddDot()));
-    createAction("add_notation_dot", SLOT(slotAddDotNotationOnly()));
+    createAction("add_dot", &NotationView::slotAddDot);
+    createAction("add_notation_dot", &NotationView::slotAddDotNotationOnly);
 
     //set duration of notes by CTRL+<number>
-    createAction("set_note_type_doublewhole",SLOT(slotSetNoteType()));
-    createAction("set_note_type_whole",SLOT(slotSetNoteType()));
-    createAction("set_note_type_half",SLOT(slotSetNoteType()));
-    createAction("set_note_type_quarter",SLOT(slotSetNoteType()));
-    createAction("set_note_type_eighth",SLOT(slotSetNoteType()));
-    createAction("set_note_type_sixteenth",SLOT(slotSetNoteType()));
-    createAction("set_note_type_thirtysecond",SLOT(slotSetNoteType()));
-    createAction("set_note_type_sixtyfourth",SLOT(slotSetNoteType()));
+    createAction("set_note_type_doublewhole", &NotationView::slotSetNoteType);
+    createAction("set_note_type_whole", &NotationView::slotSetNoteType);
+    createAction("set_note_type_half", &NotationView::slotSetNoteType);
+    createAction("set_note_type_quarter", &NotationView::slotSetNoteType);
+    createAction("set_note_type_eighth", &NotationView::slotSetNoteType);
+    createAction("set_note_type_sixteenth", &NotationView::slotSetNoteType);
+    createAction("set_note_type_thirtysecond", &NotationView::slotSetNoteType);
+    createAction("set_note_type_sixtyfourth", &NotationView::slotSetNoteType);
 
     //set duration of notes by CTRL+ALT+<number>
-    createAction("set_note_type_notation_doublewhole",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_whole",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_half",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_quarter",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_eighth",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_sixteenth",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_thirtysecond",SLOT(slotSetNoteTypeNotationOnly()));
-    createAction("set_note_type_notation_sixtyfourth",SLOT(slotSetNoteTypeNotationOnly()));
+    createAction("set_note_type_notation_doublewhole", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_whole", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_half", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_quarter", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_eighth", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_sixteenth", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_thirtysecond", &NotationView::slotSetNoteTypeNotationOnly);
+    createAction("set_note_type_notation_sixtyfourth", &NotationView::slotSetNoteTypeNotationOnly);
 
     //JAS insert note section is a rewrite
     //JAS from EditView::createInsertPitchActionMenu()
@@ -1138,41 +1144,41 @@ NotationView::setupActions()
         else if (octave == 2) octaveSuffix = "_low";
 
         createAction(QString("insert_0%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_0_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_1_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_1%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_1_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_2_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_2%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_3%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_3_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_4_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_4%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_4_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_5_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_5%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_5_sharp%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_6_flat%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
         createAction(QString("insert_6%1").arg(octaveSuffix),
-                     SLOT(slotInsertNoteFromAction()));
+                     &NotationView::slotInsertNoteFromAction);
     }
-    createAction(QString("insert_rest"),SLOT(slotInsertRestFromAction()));
+    createAction(QString("insert_rest"),&NotationView::slotInsertRestFromAction);
 
     std::set<QString> fs(NoteFontFactory::getFontNames());
     std::vector<QString> f;
@@ -1199,7 +1205,7 @@ NotationView::setupActions()
         m_availableFontNames.push_back(fontQName);
 
         QAction *a = createAction("note_font_" + fontQName,
-                                  SLOT(slotChangeFontFromAction()));
+                &NotationView::slotChangeFontFromAction);
 
         ag->addAction(a);
 
@@ -1221,7 +1227,7 @@ NotationView::setupActions()
         QString actionName = QString("note_font_size_%1").arg(m_availableFontSizes[i]);
 
         QAction *sizeAction = createAction(actionName,
-                                SLOT(slotChangeFontSizeFromAction()));
+                &NotationView::slotChangeFontSizeFromAction);
         sizeAction->setText(tr("%n pixel(s)", "", m_availableFontSizes[i]));
         sizeAction->setCheckable(true);
         ag->addAction(sizeAction);
@@ -1243,7 +1249,7 @@ NotationView::setupActions()
          i != m_availableSpacings.end(); ++i) {
 
         QAction *a = createAction(QString("spacing_%1").arg(*i),
-                                  SLOT(slotChangeSpacingFromAction()));
+                &NotationView::slotChangeSpacingFromAction);
 
         ag->addAction(a);
         a->setText(QString("%1%").arg(*i));
@@ -1475,8 +1481,9 @@ NotationView::initLayoutToolbar()
         m_fontName = NoteFontFactory::getDefaultFontName();
     }
 
-    connect(m_fontCombo, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotFontComboChanged(int)));
+    connect(m_fontCombo, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::currentIndexChanged),
+            this, &NotationView::slotFontComboChanged);
 
     label = new QLabel(tr("  Size:  "), layoutToolbar);
     layoutToolbar->addWidget(label);
@@ -1497,8 +1504,9 @@ NotationView::initLayoutToolbar()
         }
     }
 
-    connect(m_fontSizeCombo, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotSizeComboChanged(int)));
+    connect(m_fontSizeCombo, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::currentIndexChanged),
+            this, &NotationView::slotSizeComboChanged);
 
     label = new QLabel(tr("  Spacing:  "), layoutToolbar);
 
@@ -1521,8 +1529,9 @@ NotationView::initLayoutToolbar()
         }
     }
 
-    connect(m_spacingCombo, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(slotSpacingComboChanged(int)));
+    connect(m_spacingCombo, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::currentIndexChanged),
+            this, &NotationView::slotSpacingComboChanged);
 
     layoutToolbar->addWidget(m_spacingCombo);
 }
@@ -1657,9 +1666,13 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         return false;
     }
 
-    RosegardenMainViewWidget * view = RosegardenMainWindow::self()->getView();
+    RosegardenMainViewWidget *view = RosegardenMainWindow::self()->getView();
 
-    LilyPondExporter e(RosegardenDocument::currentDocument, view->getSelection(), std::string(QFile::encodeName(file)), this);
+    LilyPondExporter e(
+            RosegardenDocument::currentDocument,  // doc
+            view->getSelection(),  // selection
+            std::string(QFile::encodeName(file)),  // fileName
+            this);  // parent
 
     if (!e.write()) {
         QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
@@ -3847,8 +3860,10 @@ NotationView::slotToggleTempoRuler()
 void
 NotationView::slotAddTempo()
 {
-    const timeT insertionTime = getInsertionTime();
-    EditTempoController::self()->editTempo(this, insertionTime, false);
+    EditTempoController::self()->editTempo(
+            this,  // parent
+            getInsertionTime(),  // atTime
+            false);  // timeEditable
 }
 
 void

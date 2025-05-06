@@ -149,7 +149,6 @@ public slots:
 signals:
     void closed();
 
-    void editTempo(QWidget *);
     void editTimeSignature(QWidget *);
     void editTransportTime(QWidget *);
     //void scrollTempo(int);

@@ -1303,14 +1303,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
                 &RosegardenDocument::loopChanged,
             this, &RosegardenMainWindow::slotLoopChanged);
 
-//    CommandHistory::getInstance()->attachView(actionCollection());        //&&& needed ? how to ?
-
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
-            this,
-            static_cast<void(RosegardenMainWindow::*)()>(
-                    &RosegardenMainWindow::update));
-    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
-            this, &RosegardenMainWindow::slotTestClipboard);
+            this, &RosegardenMainWindow::slotCommandExecuted);
 
     // use QueuedConnection here because the position update can
     // happen after the command is executed
@@ -2972,10 +2966,6 @@ RosegardenMainWindow::createAndSetupTransport()
             this, &RosegardenMainWindow::slotCloseTransport);
 
     connect(m_transport, &TransportDialog::panic, this, &RosegardenMainWindow::slotPanic);
-
-    connect(m_transport, &TransportDialog::editTempo,
-            this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
-                    &RosegardenMainWindow::slotEditTempo));
 
     connect(m_transport, &TransportDialog::editTimeSignature,
             this, static_cast<void(RosegardenMainWindow::*)(QWidget *)>(
@@ -6209,7 +6199,10 @@ void
 RosegardenMainWindow::slotEditTempo(QWidget *parent, timeT atTime)
 {
     RG_DEBUG << "slotEditTempo";
-    EditTempoController::self()->editTempo(parent, atTime, false);
+    EditTempoController::self()->editTempo(
+            parent,
+            atTime,
+            false);  // timeEditable
 }
 
 void
@@ -8858,6 +8851,22 @@ RosegardenMainWindow::customEvent(QEvent *event)
         return;
     }
 }
+
+void
+RosegardenMainWindow::slotCommandExecuted()
+{
+    // Refresh the display.
+    update();
+
+    // Update clipboard action states.
+    slotTestClipboard();
+
+    // Refresh the TransportDialog's time display.
+    // This is needed for time signature and tempo changes.
+    slotSetPointerPosition(
+            RosegardenDocument::currentDocument->getComposition().getPosition());
+}
+
 
 
 RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;

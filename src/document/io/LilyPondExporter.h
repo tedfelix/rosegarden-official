@@ -54,16 +54,29 @@ namespace Rosegarden
 // This is now in the Rosegarden namespace so it can be used
 // in LilyPondOptionsDialog with the LilyVersionAwareCheckBox.
 enum {
-  LILYPOND_VERSION_2_12,
-  LILYPOND_VERSION_2_14,
-  LILYPOND_VERSION_2_16,
+  LILYPOND_VERSION_TOO_OLD,
   LILYPOND_VERSION_2_18,
-  LILYPOND_VERSION_2_19,
   LILYPOND_VERSION_2_20,
-  LILYPOND_VERSION_2_21,
   LILYPOND_VERSION_2_22,
-  LILYPOND_VERSION_2_23
+  LILYPOND_VERSION_2_24,
+  LILYPOND_VERSION_TOO_NEW
 };
+
+// Default version used if some error occurs
+const int LILYPOND_VERSION_DEFAULT = LILYPOND_VERSION_TOO_OLD + 1;
+
+// Versions strings associated with the previous enum.
+// They are used inside the LilyPond code.
+static const char* const LilyPond_Version_Strings[LILYPOND_VERSION_TOO_NEW + 1] = {
+    "old", "2.18.0", "2.20.0", "2.22.0", "2.24.0", "new"
+};
+
+// Versions names associated with the previous enum.
+// They are used in the GUI checkboxes.
+static const char* const LilyPond_Version_Names[LILYPOND_VERSION_TOO_NEW + 1] = {
+    "old", "2.18", "2.20", "2.22", "2.24", "new"
+};
+
 
 class TimeSignature;
 class Studio;

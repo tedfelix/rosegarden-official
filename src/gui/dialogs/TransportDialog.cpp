@@ -30,6 +30,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
+#include "gui/general/EditTempoController.h"
 #include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"
@@ -1218,7 +1219,13 @@ TransportDialog::isExpanded()
 void
 TransportDialog::slotEditTempo()
 {
-    emit editTempo(this);
+    const timeT atTime =
+            RosegardenDocument::currentDocument->getComposition().getPosition();
+
+    EditTempoController::self()->editTempo(
+            this,  // parent
+            atTime,  // atTime
+            false);  // timeEditable
 }
 
 void

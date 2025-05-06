@@ -808,27 +808,33 @@ TempoAndTimeSignatureEditor::initMenu()
 {
     setupBaseActions();
 
-    createAction("insert_tempo", SLOT(slotAddTempoChange()));
-    createAction("insert_timesig", SLOT(slotAddTimeSignatureChange()));
-    createAction("delete", SLOT(slotEditDelete()));
-    createAction("edit", SLOT(slotEditItem()));
-    createAction("select_all", SLOT(slotSelectAll()));
-    createAction("clear_selection", SLOT(slotClearSelection()));
-    createAction("tempo_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("insert_tempo",
+            &TempoAndTimeSignatureEditor::slotAddTempoChange);
+    createAction("insert_timesig",
+            &TempoAndTimeSignatureEditor::slotAddTimeSignatureChange);
+    createAction("delete", &TempoAndTimeSignatureEditor::slotEditDelete);
+    createAction("edit", &TempoAndTimeSignatureEditor::slotEditItem);
+    createAction("select_all", &TempoAndTimeSignatureEditor::slotSelectAll);
+    createAction("clear_selection",
+            &TempoAndTimeSignatureEditor::slotClearSelection);
+    createAction("tempo_help", &TempoAndTimeSignatureEditor::slotHelpRequested);
+    createAction("help_about_app", &TempoAndTimeSignatureEditor::slotHelpAbout);
 
     QAction *a;
-    a = createAction("time_musical", SLOT(slotViewMusicalTimes()));
+    a = createAction(
+            "time_musical", &TempoAndTimeSignatureEditor::slotViewMusicalTimes);
     a->setCheckable(true);
     if (a_timeMode.get() == (int)Composition::TimeMode::MusicalTime)
         a->setChecked(true);
 
-    a = createAction("time_real", SLOT(slotViewRealTimes()));
+    a = createAction(
+            "time_real", &TempoAndTimeSignatureEditor::slotViewRealTimes);
     a->setCheckable(true);
     if (a_timeMode.get() == (int)Composition::TimeMode::RealTime)
         a->setChecked(true);
 
-    a = createAction("time_raw", SLOT(slotViewRawTimes()));
+    a = createAction(
+            "time_raw", &TempoAndTimeSignatureEditor::slotViewRawTimes);
     a->setCheckable(true);
     if (a_timeMode.get() == (int)Composition::TimeMode::RawTime)
         a->setChecked(true);
