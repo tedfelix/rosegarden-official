@@ -211,7 +211,7 @@ bool Preferences::getBug1623()
     return bug1623.get();
 }
 
-static PreferenceBool lv2(ExperimentalConfigGroup, "lv2", false);
+static PreferenceBool lv2(ExperimentalConfigGroup, "lv2-b", true);
 
 void Preferences::setLV2(bool value)
 {
