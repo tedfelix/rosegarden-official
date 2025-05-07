@@ -52,6 +52,7 @@ Included in this release...
   * Matrix: Fix Add Tempo Change... not working.  [b9a781ee9c]
   * Transport: Fix time not updating on tempo change.  [4c4d9d17e2]
   * Fix record input connections not happening.  [38d50e757f]
+  * LV2: Graduate out of beta.  Enable by default.  [90fccdab0a]
 
 ===== New Features =====
 
