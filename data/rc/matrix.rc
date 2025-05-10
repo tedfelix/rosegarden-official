@@ -80,6 +80,8 @@
         <Separator/>
         <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
         <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
+        <Action name="toggle_keypressure_ruler" text="Show Key Pressure Ruler" checked="false" />
+        <Action name="toggle_channelpressure_ruler" text="Show Channel Pressure Ruler" checked="false" />
         <Action name="add_control_ruler" text="Add &amp;Control Ruler" icon="ruler-controller" checked="false" />
       </Menu>
   </Menu> <!-- end of menu View -->

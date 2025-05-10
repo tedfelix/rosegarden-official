@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2024 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -91,7 +91,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
            .arg(deviceName)
            .arg(device), mainFrame);
     new QLabel("", mainFrame);
-    
+
     QStringList sl;
     sl  << tr("Name  ")
         << tr("Type  ")
@@ -102,13 +102,13 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
         << tr("Default value  ")
         << tr("Color  ")
         << tr("Position on instrument panel");
-    
+
     m_treeWidget = new QTreeWidget(mainFrame);
     m_treeWidget->setHeaderLabels(sl);
     m_treeWidget->setSortingEnabled(true);
-    
+
     mainFrameLayout->addWidget(m_treeWidget);
-    
+
     QFrame *btnBox = new QFrame(mainFrame);
     mainFrameLayout->addWidget(btnBox);
     mainFrame->setLayout(mainFrameLayout);
@@ -160,11 +160,11 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     // Highlight all columns - enable extended selection mode
     //
     m_treeWidget->setAllColumnsShowFocus(true);
-    
+
     m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     initDialog();
-    
+
     // Set the top item in the list, if able.
     if (m_treeWidget->topLevelItemCount()) {
         m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(0));
@@ -219,7 +219,7 @@ ControlEditorDialog::slotUpdate(bool added)
     if (lastItem) {
         lastControllerId = lastItem->getId();
     }
-    
+
     m_treeWidget->clear();
 
     for (; it != md->endControllers(); ++it) {
@@ -239,7 +239,9 @@ ControlEditorDialog::slotUpdate(bool added)
             QString::asprintf("%d (0x%x)", it->getControllerNumber(),
                       it->getControllerNumber());
 
-        if (it->getType() == PitchBend::EventType) {
+        if (it->getType() == PitchBend::EventType ||
+            it->getType() == KeyPressure::EventType ||
+            it->getType() == ChannelPressure::EventType) {
             item = new ControlParameterItem(
                                             i++,
                                             m_treeWidget,
@@ -252,7 +254,7 @@ ControlEditorDialog::slotUpdate(bool added)
                                                 << QString("%1").arg(it->getMax())
                                                 << QString("%1").arg(it->getDefault())
                                                 << colour
-                                                << position 
+                                                << position
                                           );
         } else {
             item = new ControlParameterItem(
@@ -281,7 +283,7 @@ ControlEditorDialog::slotUpdate(bool added)
         QPixmap colourPixmap(16, 16);
         QColor c = comp.getGeneralColourMap().getColour(it->getColourIndex());
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
-        
+
         item->setIcon(7, QIcon(colourPixmap));
 
         m_treeWidget->addTopLevelItem(item);
@@ -295,7 +297,7 @@ ControlEditorDialog::slotUpdate(bool added)
     } else {
         m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
-    
+
     // This logic is kind of frigged up, and may be too fragile.  It assumes
     // that if you added an item, the last thing iterated through will be that
     // new item, so the value of the variable item will be the last thing

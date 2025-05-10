@@ -440,6 +440,8 @@ MatrixView::setupActions()
 
     createAction("toggle_velocity_ruler", &MatrixView::slotToggleVelocityRuler);
     createAction("toggle_pitchbend_ruler", &MatrixView::slotTogglePitchbendRuler);
+    createAction("toggle_keypressure_ruler", &MatrixView::slotToggleKeyPressureRuler);
+    createAction("toggle_channelpressure_ruler", &MatrixView::slotToggleChannelPressureRuler);
     createAction("add_control_ruler", "");
 
     createAction("add_tempo_change", &MatrixView::slotAddTempo);
@@ -735,6 +737,8 @@ MatrixView::initRulersToolbar()
     // set the "ruler n" tool button to pop up its menu instantly
     QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
     tb->setPopupMode(QToolButton::InstantPopup);
+
+
 }
 
 void
@@ -1435,6 +1439,16 @@ MatrixView::slotTogglePitchbendRuler()
 {
     m_matrixWidget->showPitchBendRuler();
     slotUpdateMenuStates();
+}
+
+void
+MatrixView::slotToggleKeyPressureRuler()
+{
+}
+
+void
+MatrixView::slotToggleChannelPressureRuler()
+{
 }
 
 void
