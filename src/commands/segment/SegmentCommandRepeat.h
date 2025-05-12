@@ -46,29 +46,9 @@ public:
     void unexecute() override;
 
 protected:
-    bool m_repeatState;
+  bool m_newRepeatState;
+  std::vector<bool> m_oldRepeatState;
 };
-
-// Disabled until we find a better solution
-//
-// As it is, command creation happens on every change of the text
-// value of the combo box
-//
-//
-// class SegmentCommandChangeTransposeValue : public SegmentCommand
-// {
-// public:
-//     SegmentCommandChangeTransposeValue(const std::vector<Segment*>&,
-//                                        int transposeValue);
-
-//     virtual void execute();
-//     virtual void unexecute();
-
-// protected:
-//     int m_transposeValue;
-//     std::vector<int> m_savedValues;
-// };
-
 
 
 }
