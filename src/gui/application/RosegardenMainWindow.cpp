@@ -8863,8 +8863,11 @@ RosegardenMainWindow::slotCommandExecuted()
 
     // Refresh the TransportDialog's time display.
     // This is needed for time signature and tempo changes.
-    slotSetPointerPosition(
-            RosegardenDocument::currentDocument->getComposition().getPosition());
+    // See Bug #1721.
+    // ??? This breaks the matrix editor.  When adding notes, the note previews
+    //     last a very long time with this in place.
+    //slotSetPointerPosition(
+    //        RosegardenDocument::currentDocument->getComposition().getPosition());
 }
 
 
