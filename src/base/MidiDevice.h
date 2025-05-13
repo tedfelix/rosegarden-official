@@ -16,23 +16,27 @@
 #ifndef RG_MIDIDEVICE_H
 #define RG_MIDIDEVICE_H
 
-#include <string>
-#include <vector>
-
 #include "Device.h"
+#include "Controllable.h"
 #include "Instrument.h"
 #include "MidiMetronome.h"
 #include "MidiProgram.h"
-#include "ControlParameter.h"
-#include "Controllable.h"
+
+#include <string>
+#include <vector>
+
 
 namespace Rosegarden
 {
 
+
+class AllocateChannels;
+class ControlParameter;
+
+
 typedef std::vector<std::string> StringList;
 typedef std::vector<MidiByte> MidiByteList;
 
-class AllocateChannels;
 
 class MidiDevice : public Device, public Controllable
 {

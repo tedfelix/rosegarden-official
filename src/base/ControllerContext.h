@@ -18,17 +18,22 @@
 #ifndef RG_CONTROLLERCONTEXT_H
 #define RG_CONTROLLERCONTEXT_H
 
-#include <base/Event.h>
+#include "base/TimeT.h"
+
 #include <map>
+#include <string>
+
 
 namespace Rosegarden
 {
-  class ControllerContext;
-  class ControllerContextMap;
-  class ControllerSearch;
-  class ControlParameter;
-  class Instrument;
-  class Segment;
+
+
+class ControllerContextMap;
+class ControlParameter;
+class Event;
+class Instrument;
+class Segment;
+
 
 // @class ControllerSearchValue A (possibly intermediate) value in a
 // parameter search, including what time it was found at.

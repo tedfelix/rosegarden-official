@@ -16,15 +16,19 @@
 #ifndef RG_CONTROLPARAMETER_H
 #define RG_CONTROLPARAMETER_H
 
+#include "TimeT.h"
+#include "XmlExportable.h"
+#include "MidiProgram.h"  // for MidiByte
+
 #include <string>
 
-#include "base/Event.h"
-#include "XmlExportable.h"
-#include "MidiProgram.h"
 
 namespace Rosegarden
 {
+
+
 class Event;
+
 
 class ControlParameter : public XmlExportable
 {
@@ -118,35 +122,35 @@ public:
     // True if "e" is this type of controller / pitchbend.
     bool matches(Event *e) const;
 
-    static const ControlParameter& getPitchBend();
-    static const ControlParameter& getExpression();
+    static const ControlParameter &getPitchBend();
+    static const ControlParameter &getExpression();
 
 protected:
 
     // ControlParameter name as it's displayed (eg "Velocity" or "Controller")
-    std::string    m_name;
+    std::string m_name;
 
     // The type of event this controller controls (eg "controller" or
     // "pitchbend");
-    std::string    m_type;
+    std::string m_type;
 
     // Descriptive name for this control parameter, or "<none>".
-    std::string    m_description;
+    std::string m_description;
 
-    int            m_min;
-    int            m_max;
-    int            m_default;
+    int m_min;
+    int m_max;
+    int m_default;
 
     /// Controller (CC) number.  E.g. 7 for volume, 10 for pan.
-    MidiByte       m_controllerNumber;
+    MidiByte m_controllerNumber;
 
-    unsigned int   m_colourIndex;
+    unsigned int m_colourIndex;
 
     /// Position of the knob on the MIPP.  -1 == <not showing>
     int m_ipbPosition;
 
-
 };
+
 
 }
 

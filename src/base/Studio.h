@@ -20,13 +20,12 @@
 #include "Instrument.h"
 #include "Device.h"
 #include "MidiProgram.h"
-#include "MidiMetronome.h"
-#include "ControlParameter.h"
 
 #include <QCoreApplication>
 
 #include <string>
 #include <vector>
+
 
 namespace Rosegarden
 {
@@ -35,16 +34,18 @@ namespace Rosegarden
 class Composition;
 class RecordIn;
 class MidiDevice;
+class MidiMetronome;
 class Segment;
 class Track;
 class StudioObserver;
 
+
 typedef std::vector<Instrument *> InstrumentList;
-typedef std::vector<Device*> DeviceList;
+typedef std::vector<Device *> DeviceList;
 typedef std::vector<Buss *> BussList;
 typedef std::vector<RecordIn *> RecordInList;
-typedef std::vector<Device*>::iterator DeviceListIterator;
-typedef std::vector<Device*>::const_iterator DeviceListConstIterator;
+typedef std::vector<Device *>::iterator DeviceListIterator;
+typedef std::vector<Device *>::const_iterator DeviceListConstIterator;
 
 
 /// Holds Device objects.

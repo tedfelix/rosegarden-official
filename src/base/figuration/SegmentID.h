@@ -18,11 +18,16 @@
 #ifndef RG_SEGMENTID_H
 #define RG_SEGMENTID_H
 
-#include "base/Event.h"
+#include "base/PropertyName.h"
+#include "base/TimeT.h"
+
 
 namespace Rosegarden
 {
-  class Text;
+
+
+class Event;
+
 
 /**
  * SegmentID supplies ID information for a segment, used for updating
