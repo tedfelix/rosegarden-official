@@ -78,22 +78,22 @@ ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
     connect(m_toolBox, &BaseToolBox::showContextHelp,
             this, &ControlRuler::showContextHelp);
 
-    createAction("snap_none", SLOT(slotSnap()));
-    createAction("snap_editor", SLOT(slotSnap()));
-    createAction("snap_unit", SLOT(slotSnap()));
-    createAction("snap_64", SLOT(slotSnap()));
-    createAction("snap_48", SLOT(slotSnap()));
-    createAction("snap_32", SLOT(slotSnap()));
-    createAction("snap_24", SLOT(slotSnap()));
-    createAction("snap_16", SLOT(slotSnap()));
-    createAction("snap_12", SLOT(slotSnap()));
-    createAction("snap_8", SLOT(slotSnap()));
-    createAction("snap_dotted_8", SLOT(slotSnap()));
-    createAction("snap_4", SLOT(slotSnap()));
-    createAction("snap_dotted_4", SLOT(slotSnap()));
-    createAction("snap_2", SLOT(slotSnap()));
-    createAction("snap_beat", SLOT(slotSnap()));
-    createAction("snap_bar", SLOT(slotSnap()));
+    createAction("snap_none", &ControlRuler::slotSnap);
+    createAction("snap_editor", &ControlRuler::slotSnap);
+    createAction("snap_unit", &ControlRuler::slotSnap);
+    createAction("snap_64", &ControlRuler::slotSnap);
+    createAction("snap_48", &ControlRuler::slotSnap);
+    createAction("snap_32", &ControlRuler::slotSnap);
+    createAction("snap_24", &ControlRuler::slotSnap);
+    createAction("snap_16", &ControlRuler::slotSnap);
+    createAction("snap_12", &ControlRuler::slotSnap);
+    createAction("snap_8", &ControlRuler::slotSnap);
+    createAction("snap_dotted_8", &ControlRuler::slotSnap);
+    createAction("snap_4", &ControlRuler::slotSnap);
+    createAction("snap_dotted_4", &ControlRuler::slotSnap);
+    createAction("snap_2", &ControlRuler::slotSnap);
+    createAction("snap_beat", &ControlRuler::slotSnap);
+    createAction("snap_bar", &ControlRuler::slotSnap);
 
     m_snapGrid = new SnapGrid(m_rulerScale);
     QSettings settings;

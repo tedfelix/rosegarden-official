@@ -166,7 +166,7 @@ TrackButtons::TrackButtons(int trackCellHeight,
     m_layout->addStretch(20);
 
     // connect signal mappers
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     connect(m_recordSigMapper, &QSignalMapper::mappedInt,
             this, &TrackButtons::slotToggleRecord);
     connect(m_muteSigMapper, &QSignalMapper::mappedInt,
@@ -178,16 +178,16 @@ TrackButtons::TrackButtons(int trackCellHeight,
     connect(m_clickedSigMapper, &QSignalMapper::mappedInt,
             this, &TrackButtons::slotTrackSelected);
 #else
-    connect(m_recordSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleRecord(int)));
-    connect(m_muteSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleMute(int)));
-    connect(m_soloSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleSolo(int)));
-    connect(m_instListSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotInstrumentMenu(int)));
-    connect(m_clickedSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotTrackSelected(int)));
+    connect(m_recordSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotToggleRecord);
+    connect(m_muteSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotToggleMute);
+    connect(m_soloSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotToggleSolo);
+    connect(m_instListSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotInstrumentMenu);
+    connect(m_clickedSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotTrackSelected);
 #endif
 
     // We have to force the height for the moment
@@ -919,8 +919,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             instrumentPopup->addMenu(subMenu);
 
             // Connect the submenu to slotInstrumentSelected()
-            connect(subMenu, SIGNAL(triggered(QAction*)),
-                    this, SLOT(slotInstrumentSelected(QAction*)));
+            connect(subMenu, &QMenu::triggered,
+                    this, static_cast<void(TrackButtons::*)(QAction *)>(
+                            &TrackButtons::slotInstrumentSelected));
 
             currentSubMenu = subMenu;
 
@@ -1301,10 +1302,12 @@ TrackButtons::makeButton(Track *track)
     // Connect it
     setButtonMapping(trackLabel, trackId);
 
-    connect(trackLabel, SIGNAL(changeToInstrumentList()),
-            m_instListSigMapper, SLOT(map()));
-    connect(trackLabel, SIGNAL(clicked()),
-            m_clickedSigMapper, SLOT(map()));
+    connect(trackLabel, &TrackLabel::changeToInstrumentList,
+            m_instListSigMapper, static_cast<void(QSignalMapper::*)()>(
+                    &QSignalMapper::map));
+    connect(trackLabel, &TrackLabel::clicked,
+            m_clickedSigMapper, static_cast<void(QSignalMapper::*)()>(
+                    &QSignalMapper::map));
 
 
     // Squash it down to its smallest width.

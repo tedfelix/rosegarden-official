@@ -221,21 +221,21 @@ void
 BankEditorDialog::setupActions()
 {
     // File
-    createAction("file_import", SLOT(slotImport()));
-    createAction("file_export", SLOT(slotExport()));
-    createAction("file_close", SLOT(slotFileClose()));
+    createAction("file_import", &BankEditorDialog::slotImport);
+    createAction("file_export", &BankEditorDialog::slotExport);
+    createAction("file_close", &BankEditorDialog::slotFileClose);
 
     // Edit
-    createAction("add_bank", SLOT(slotAddBank()));
-    createAction("add_key_mapping", SLOT(slotAddKeyMapping()));
-    createAction("edit_copy", SLOT(slotCopy()));
-    createAction("edit_paste", SLOT(slotPaste()));
-    createAction("edit_delete", SLOT(slotDelete()));
-    createAction("edit_delete_all", SLOT(slotDeleteAll()));
+    createAction("add_bank", &BankEditorDialog::slotAddBank);
+    createAction("add_key_mapping", &BankEditorDialog::slotAddKeyMapping);
+    createAction("edit_copy", &BankEditorDialog::slotCopy);
+    createAction("edit_paste", &BankEditorDialog::slotPaste);
+    createAction("edit_delete", &BankEditorDialog::slotDelete);
+    createAction("edit_delete_all", &BankEditorDialog::slotDeleteAll);
 
     // Help
-    createAction("bank_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("bank_help", &BankEditorDialog::slotHelpRequested);
+    createAction("help_about_app", &BankEditorDialog::slotHelpAbout);
 
     createMenusAndToolbars("bankeditor.rc");
 }
