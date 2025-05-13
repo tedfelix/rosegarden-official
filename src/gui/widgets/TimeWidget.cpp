@@ -27,7 +27,6 @@
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/LineEdit.h"
 
-#include <cmath>
 #include <QComboBox>
 #include <QFrame>
 #include <QGroupBox>
@@ -43,6 +42,7 @@
 namespace Rosegarden
 {
 
+
 TimeWidget::TimeWidget(const QString& title,
                        QWidget *parent,
                        Composition *composition,
@@ -55,8 +55,7 @@ TimeWidget::TimeWidget(const QString& title,
         m_constrain(constrainToCompositionDuration),
         m_time(initialTime),
         m_startTime(0),
-        m_defaultTime(initialTime),
-        m_delayUpdateTimer(nullptr)
+        m_defaultTime(initialTime)
 {
     init(editable);
 }
@@ -76,8 +75,7 @@ TimeWidget::TimeWidget(const QString& title,
         m_time(initialDuration),
         m_startTime(startTime),
         m_defaultTime(initialDuration),
-        m_minimumDuration(minimumDuration),
-        m_delayUpdateTimer(nullptr)
+        m_minimumDuration(minimumDuration)
 {
     init(editable);
 }
@@ -138,8 +136,8 @@ TimeWidget::init(bool editable)
 
             m_note = nullptr;
             timeT error = 0;
-            QString label = NotationStrings::makeNoteMenuLabel
-                            (m_time, false, error);
+            QString label = NotationStrings::makeNoteMenuLabel(
+                    m_time, false, error);
             if (error != 0)
                 label = tr("<inexact>");
             LineEdit *le = new LineEdit(label);
@@ -153,10 +151,9 @@ TimeWidget::init(bool editable)
 
         if (editable) {
             m_timeT = new QSpinBox;
-            m_timeT->setSingleStep
-            (Note(Note::Shortest).getDuration());
-            connect(m_timeT, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotTimeTChanged(int)));
+            m_timeT->setSingleStep(Note(Note::Shortest).getDuration());
+            connect(m_timeT, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                    this, &TimeWidget::slotTimeTChanged);
             layout->addWidget(m_timeT, 0, 5);
         } else {
             m_timeT = nullptr;
@@ -175,10 +172,9 @@ TimeWidget::init(bool editable)
 
         if (editable) {
             m_timeT = new QSpinBox;
-            m_timeT->setSingleStep
-            (Note(Note::Shortest).getDuration());
-            connect(m_timeT, SIGNAL(valueChanged(int)),
-                    this, SLOT(slotTimeTChanged(int)));
+            m_timeT->setSingleStep(Note(Note::Shortest).getDuration());
+            connect(m_timeT, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                    this, &TimeWidget::slotTimeTChanged);
             layout->addWidget(m_timeT, 0, 1);
             layout->addWidget(new QLabel(tr("units")), 0, 2);
         } else {
@@ -198,8 +194,8 @@ TimeWidget::init(bool editable)
         m_bar = new QSpinBox;
         if (m_isDuration)
             m_bar->setMinimum(0);
-        connect(m_bar, SIGNAL(valueChanged(int)),
-                this, SLOT(slotBarBeatOrFractionChanged(int)));
+        connect(m_bar, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotBarBeatOrFractionChanged);
         layout->addWidget(m_bar, 1, 1);
     } else {
         m_bar = nullptr;
@@ -216,8 +212,8 @@ TimeWidget::init(bool editable)
         m_beatLabel = nullptr;
         m_beat = new QSpinBox;
         m_beat->setMinimum(1);
-        connect(m_beat, SIGNAL(valueChanged(int)),
-                this, SLOT(slotBarBeatOrFractionChanged(int)));
+        connect(m_beat, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotBarBeatOrFractionChanged);
         layout->addWidget(m_beat, 1, 3);
     } else {
         m_beat = nullptr;
@@ -235,8 +231,8 @@ TimeWidget::init(bool editable)
         m_fractionLabel = nullptr;
         m_fraction = new QSpinBox;
         m_fraction->setMinimum(1);
-        connect(m_fraction, SIGNAL(valueChanged(int)),
-                this, SLOT(slotBarBeatOrFractionChanged(int)));
+        connect(m_fraction, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotBarBeatOrFractionChanged);
         layout->addWidget(m_fraction, 1, 5);
     } else {
         m_fraction = nullptr;
@@ -257,8 +253,8 @@ TimeWidget::init(bool editable)
         m_sec = new QSpinBox;
         if (m_isDuration)
             m_sec->setMinimum(0);
-        connect(m_sec, SIGNAL(valueChanged(int)),
-                this, SLOT(slotSecOrMSecChanged(int)));
+        connect(m_sec, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotSecOrMSecChanged);
         layout->addWidget(m_sec, 2, 1);
     } else {
         m_sec = nullptr;
@@ -276,8 +272,8 @@ TimeWidget::init(bool editable)
         m_msec = new QSpinBox;
         m_msec->setMinimum(0);
         m_msec->setSingleStep(10);
-        connect(m_msec, SIGNAL(valueChanged(int)),
-                this, SLOT(slotMSecChanged()));
+        connect(m_msec, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotMSecChanged);
         layout->addWidget(m_msec, 2, 3);
     } else {
         m_msec = nullptr;
@@ -442,7 +438,7 @@ TimeWidget::populate()
         bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
                        m_composition->getTempoChangeNumberAt(m_startTime));
 
-        //!!! imprecise -- better to work from tempoT directly
+        // imprecise -- better to work from tempoT directly
         double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(m_startTime));
 
         int qpmc = int(tempo * 100.0);
@@ -749,7 +745,7 @@ TimeWidget::slotSecOrMSecChanged(int)
 }
 
 void
-TimeWidget::slotMSecChanged()
+TimeWidget::slotMSecChanged(int)
 {
     m_delayUpdateTimer->stop();
 

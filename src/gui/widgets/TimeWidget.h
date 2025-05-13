@@ -120,7 +120,7 @@ public slots:
     /**
      * Restart the update delay timer and connect it to m_msec.
      */
-    void slotMSecChanged();
+    void slotMSecChanged(int);
 
     /**
      * Stop the delay timer and call slotSecOrMSecChanged(int)
@@ -137,20 +137,20 @@ private:
     timeT m_minimumDuration;
 
     QComboBox *m_note;
-    QSpinBox  *m_timeT;
-    QSpinBox  *m_bar;
-    QSpinBox  *m_beat;
-    QSpinBox  *m_fraction;
-    LineEdit  *m_barLabel;
-    LineEdit  *m_beatLabel;
-    LineEdit  *m_fractionLabel;
-    QLabel    *m_timeSig;
-    QSpinBox  *m_sec;
-    QSpinBox  *m_msec;
-    LineEdit  *m_secLabel;
-    LineEdit  *m_msecLabel;
-    QLabel    *m_tempo;
-    QTimer    *m_delayUpdateTimer;
+    QSpinBox *m_timeT;
+    QSpinBox *m_bar;
+    QSpinBox *m_beat;
+    QSpinBox *m_fraction;
+    LineEdit *m_barLabel;
+    LineEdit *m_beatLabel;
+    LineEdit *m_fractionLabel;
+    QLabel *m_timeSig;
+    QSpinBox *m_sec;
+    QSpinBox *m_msec;
+    LineEdit *m_secLabel;
+    LineEdit *m_msecLabel;
+    QLabel *m_tempo;
+    QTimer *m_delayUpdateTimer;
 
     void init(bool editable);
     void populate();
