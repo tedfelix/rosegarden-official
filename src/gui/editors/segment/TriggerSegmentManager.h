@@ -18,13 +18,9 @@
 #ifndef RG_TRIGGERSEGMENTMANAGER_H
 #define RG_TRIGGERSEGMENTMANAGER_H
 
-#include "base/Event.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
-#include <QString>
-// #include <QTreeWidget>
-// #include <QTreeWidgetItem>
 
 class QWidget;
 class QPushButton;
@@ -39,6 +35,7 @@ namespace Rosegarden
 
 class Command;
 class RosegardenDocument;
+
 
 /// The "Manage Trigger Segments" dialog.
 /**
@@ -57,21 +54,25 @@ class TriggerSegmentManager : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
+
     TriggerSegmentManager(QWidget *parent,
                           RosegardenDocument *doc);
     ~TriggerSegmentManager() override;
 
-    void initDialog();
-
-    void addCommandToHistory(Command *command);
-
-    void setModified(bool modified);
-    // unused void checkModified();
-
     // reset the document
     void setDocument(RosegardenDocument *doc);
 
-public slots:
+signals:
+
+    void editTriggerSegment(int);
+    void closing();
+
+protected:
+
+    void closeEvent(QCloseEvent *) override;
+
+private slots:
+
     void slotUpdate();
 
     void slotAdd();
@@ -88,25 +89,26 @@ public slots:
     void slotHelpRequested();
     void slotHelpAbout();
 
-signals:
-    void editTriggerSegment(int);
-    void closing();
-
-protected:
-    void closeEvent(QCloseEvent *) override;
+private:
 
     void setupActions();
+    void initDialog();
 
-    //--------------- Data members ---------------------------------
-    RosegardenDocument        *m_doc;
+    RosegardenDocument *m_doc;
 
-    QPushButton             *m_addButton;
-    QPushButton             *m_deleteButton;
-    QPushButton             *m_deleteAllButton;
+    QPushButton *m_addButton;
+    QPushButton *m_deleteButton;
+    QPushButton *m_deleteAllButton;
 
-    QTreeWidget               *m_listView;
+    // ??? QTableWidget would make more sense.
+    QTreeWidget *m_treeWidget;
 
-    bool                     m_modified;
+    // ??? Set but never used for anything.  Get rid of this.
+    bool m_modified{false};
+
+    void setModified(bool modified);
+    void addCommandToHistory(Command *command);
+
 };
 
 
