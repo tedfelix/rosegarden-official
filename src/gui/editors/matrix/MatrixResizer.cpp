@@ -16,30 +16,27 @@
 */
 
 #define RG_MODULE_STRING "[MatrixResizer]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MatrixResizer.h"
 
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-#include "commands/matrix/MatrixModifyCommand.h"
-#include "commands/notation/NormalizeRestsCommand.h"
-#include "document/CommandHistory.h"
 #include "MatrixElement.h"
 #include "MatrixScene.h"
 #include "MatrixTool.h"
 #include "MatrixWidget.h"
 #include "MatrixViewSegment.h"
 #include "MatrixMouseEvent.h"
-#include "misc/Debug.h"
 
-#include <Qt>
+#include "base/SnapGrid.h"
+#include "commands/matrix/MatrixModifyCommand.h"
+#include "commands/notation/NormalizeRestsCommand.h"
+#include "document/CommandHistory.h"
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
+
 
 MatrixResizer::MatrixResizer(MatrixWidget *parent) :
     MatrixTool("matrixresizer.rc", "MatrixResizer", parent),
@@ -47,10 +44,10 @@ MatrixResizer::MatrixResizer(MatrixWidget *parent) :
     m_event(nullptr),
     m_currentViewSegment(nullptr)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
+    createAction("select", &MatrixResizer::slotSelectSelected);
+    createAction("draw", &MatrixResizer::slotDrawSelected);
+    createAction("erase", &MatrixResizer::slotEraseSelected);
+    createAction("move", &MatrixResizer::slotMoveSelected);
 
     createMenu();
 }
@@ -259,34 +256,10 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
 
 void MatrixResizer::ready()
 {
-//    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//            this, SLOT(slotMatrixScrolled(int, int)));
     m_widget->setCanvasCursor(Qt::SizeHorCursor);
     setBasicContextHelp();
 }
 
-void MatrixResizer::stow()
-{
-//    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//               this, SLOT(slotMatrixScrolled(int, int)));
-}
-/*!!!
-void MatrixResizer::slotMatrixScrolled(int newX, int newY)
-{
-    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
-                                    m_parentView->getCanvasView()->contentsY());
-
-    QPoint p(newX, newY);
-
-    if (newP1.x() > oldP1.x()) {
-        p.setX(newX + m_parentView->getCanvasView()->visibleWidth());
-    }
-
-    p = m_mParentView->inverseMapPoint(p);
-    int newTime = getSnapGrid()->snapX(p.x());
-    handleMouseMove(newTime, 0, 0);
-}
-*/
 void MatrixResizer::setBasicContextHelp()
 {
     EventSelection *selection = m_scene->getSelection();
@@ -297,6 +270,5 @@ void MatrixResizer::setBasicContextHelp()
     }
 }
 
-QString MatrixResizer::ToolName() { return "resizer"; }
 
 }
