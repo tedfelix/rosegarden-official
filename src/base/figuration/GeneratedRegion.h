@@ -18,10 +18,17 @@
 #ifndef RG_GENERATEDREGION_H
 #define RG_GENERATEDREGION_H
 
-#include "base/Event.h"
+#include "base/PropertyName.h"
+#include "base/TimeT.h"
+
 
 namespace Rosegarden
 {
+
+
+class Event;
+
+
 /**
  * GeneratedRegion indicates an automatically generated region and
  * gives the IDs of the sources that generated it.

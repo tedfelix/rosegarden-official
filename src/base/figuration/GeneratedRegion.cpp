@@ -16,9 +16,13 @@
 */
 
 #include "GeneratedRegion.h"
+
 #include "base/BaseProperties.h"
+#include "base/Event.h"
 #include "misc/Strings.h"
+
 #include <QString>
+
 
 namespace Rosegarden
 {

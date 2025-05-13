@@ -27,10 +27,10 @@
 #include "document/CommandHistory.h"
 #include "misc/Debug.h"
 
-#include <Qt>
 
 namespace Rosegarden
 {
+
 
 MatrixEraser::MatrixEraser(MatrixWidget *parent) :
     MatrixTool("matrixeraser.rc", "MatrixEraser", parent)

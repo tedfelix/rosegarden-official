@@ -20,6 +20,13 @@
 
 #include "MatrixPainter.h"
 
+#include "MatrixElement.h"
+#include "MatrixViewSegment.h"
+#include "MatrixTool.h"
+#include "MatrixWidget.h"
+#include "MatrixScene.h"
+#include "MatrixMouseEvent.h"
+
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"
@@ -30,31 +37,21 @@
 #include "commands/matrix/MatrixEraseCommand.h"
 #include "commands/matrix/MatrixPercussionInsertionCommand.h"
 #include "document/CommandHistory.h"
-#include "MatrixElement.h"
-#include "MatrixViewSegment.h"
-#include "MatrixTool.h"
-#include "MatrixWidget.h"
-#include "MatrixScene.h"
-#include "MatrixMouseEvent.h"
-
 #include "misc/Debug.h"
 
-#include <Qt>
 
 namespace Rosegarden
 {
 
+
 MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     MatrixTool("matrixpainter.rc", "MatrixPainter", widget),
-    m_clickTime(0),
-    m_currentElement(nullptr),
-    m_currentViewSegment(nullptr),
     m_previewElement(nullptr)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
+    createAction("select", &MatrixPainter::slotSelectSelected);
+    createAction("resize", &MatrixPainter::slotResizeSelected);
+    createAction("erase", &MatrixPainter::slotEraseSelected);
+    createAction("move", &MatrixPainter::slotMoveSelected);
 
     createMenu();
     m_previewEvent = new Event(Note::EventType, 0);
@@ -330,46 +327,16 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
 
 void MatrixPainter::ready()
 {
-//    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//            this, SLOT(slotMatrixScrolled(int, int)));
-
-    if (m_widget) m_widget->setCanvasCursor(Qt::CrossCursor);
+    if (m_widget)
+        m_widget->setCanvasCursor(Qt::CrossCursor);
 
     setBasicContextHelp();
 }
 
 void MatrixPainter::stow()
 {
-//    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//               this, SLOT(slotMatrixScrolled(int, int)));
     clearPreview();
 }
-
-//void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
-/* unused
-{
-    // newX = newY = 42;
-    */ /*!!! */ /*
-    if (!m_currentElement)
-        return ;
-
-    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
-                                    m_parentView->getCanvasView()->contentsY());
-
-    QPoint offset = newP1 - oldP1;
-
-    offset = m_widget->inverseMapPoint(offset);
-
-    QPoint p(m_currentElement->getCanvasX() + m_currentElement->getWidth(), m_currentElement->getCanvasY());
-    p += offset;
-
-    timeT newTime = getSnapGrid()->snapX(p.x());
-    int newPitch = m_currentViewSegment->getHeightAtCanvasCoords(p.x(), p.y());
-
-    handleMouseMove(newTime, newPitch, 0);
-*/ /*
-}
-*/
 
 void MatrixPainter::setBasicContextHelp()
 {
@@ -379,8 +346,6 @@ void MatrixPainter::setBasicContextHelp()
         setContextHelp(tr("Click and drag to draw a note"));
     }
 }
-
-QString MatrixPainter::ToolName() { return "painter"; }
 
 void MatrixPainter::showPreview(const MatrixMouseEvent *e)
 {
