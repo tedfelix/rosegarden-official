@@ -25,7 +25,6 @@
 #include "misc/Debug.h"
 #include "gui/dialogs/ShortcutWarnDialog.h"
 #include "gui/dialogs/ShortcutDelegate.h"
-#include "gui/general/ResourceFinder.h"
 
 #include <QSortFilterProxyModel>
 #include <QTreeView>
@@ -36,16 +35,17 @@
 #include <QVBoxLayout>
 #include <QStandardItemModel>
 #include <QSettings>
-#include <QItemSelection>
-#include <QKeySequenceEdit>
+//#include <QItemSelection>
 #include <QPushButton>
 #include <QComboBox>
 #include <QMessageBox>
 #include <QDialogButtonBox>
 #include <QKeyEvent>
 
+
 namespace Rosegarden
 {
+
 
 ShortcutDialog::ShortcutDialog(QWidget *parent) :
     QDialog(parent)
@@ -56,10 +56,8 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     adata->resetChanges();
     m_model = adata->getModel();
 
-    connect(m_model,
-            SIGNAL(dataChanged(const QModelIndex&, const QModelIndex&)),
-            this,
-            SLOT(dataChanged(const QModelIndex&, const QModelIndex&)));
+    connect(m_model, &QStandardItemModel::dataChanged,
+            this, &ShortcutDialog::slotDataChanged);
 
     m_proxyModel = new QSortFilterProxyModel(this);
     m_proxyModel->setSourceModel(m_model);
@@ -76,18 +74,15 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     m_proxyView->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     connect(m_proxyView->selectionModel(),
-            SIGNAL(selectionChanged(const QItemSelection&,
-                                    const QItemSelection&)),
-            this,
-            SLOT(selectionChanged(const QItemSelection&,
-                                  const QItemSelection&)));
+                    &QItemSelectionModel::selectionChanged,
+            this, &ShortcutDialog::slotSelectionChanged);
 
     m_filterPatternLineEdit = new QLineEdit;
     m_filterPatternLineEdit->setClearButtonEnabled(true);
     m_filterPatternLabel = new QLabel(tr("Filter pattern:"));
 
-    connect(m_filterPatternLineEdit, SIGNAL(textChanged(const QString&)),
-            this, SLOT(filterChanged()));
+    connect(m_filterPatternLineEdit, &QLineEdit::textChanged,
+            this, &ShortcutDialog::slotFilterChanged);
 
     QGridLayout *proxyLayout = new QGridLayout;
     proxyLayout->addWidget(m_filterPatternLabel, 0, 0);
@@ -121,32 +116,33 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     QHBoxLayout *hlayout = new QHBoxLayout;
     hlayout->setContentsMargins(0, 10, 0, 10);
 
-    m_defPB = new QPushButton(tr("Reset Selected"));
-    connect(m_defPB, SIGNAL(clicked()),
-            this, SLOT(defPBClicked()));
-    m_defPB->setEnabled(false);
-    m_defPB->setToolTip(tr("Reset selected actions' shortcuts to defaults"));
-    m_clearPB = new QPushButton(tr("Remove shortcuts"));
-    connect(m_clearPB, SIGNAL(clicked()),
-            this, SLOT(clearPBClicked()));
-    m_clearPB->setEnabled(false);
-    m_clearPB->setToolTip(tr("Remove all shortcuts from selected actions"));
-    m_clearAllPB = new QPushButton(tr("Reset All"));
-    connect(m_clearAllPB, SIGNAL(clicked()),
-            this, SLOT(clearAllPBClicked()));
-    m_clearAllPB->setEnabled(true);
-    m_clearAllPB->setToolTip(tr("Reset all shortcuts for all actions"));
+    m_resetSelected = new QPushButton(tr("Reset Selected"));
+    connect(m_resetSelected, &QPushButton::clicked,
+            this, &ShortcutDialog::slotResetSelectedClicked);
+    m_resetSelected->setEnabled(false);
+    m_resetSelected->setToolTip(tr("Reset selected actions' shortcuts to defaults"));
+    m_removeShortcuts = new QPushButton(tr("Remove shortcuts"));
+    connect(m_removeShortcuts, &QPushButton::clicked,
+            this, &ShortcutDialog::slotRemoveShortcutsClicked);
+    m_removeShortcuts->setEnabled(false);
+    m_removeShortcuts->setToolTip(tr("Remove all shortcuts from selected actions"));
+    m_resetAll = new QPushButton(tr("Reset All"));
+    connect(m_resetAll, &QPushButton::clicked,
+            this, &ShortcutDialog::slotResetAllClicked);
+    m_resetAll->setEnabled(true);
+    m_resetAll->setToolTip(tr("Reset all shortcuts for all actions"));
 
     m_warnLabel = new QLabel(tr("Warnings when:"));
-    m_warnSetting = new QComboBox;
-    m_warnSetting->addItem(tr("Never"));
-    m_warnSetting->addItem(tr("Conflict in same context"));
-    m_warnSetting->addItem(tr("Conflict in any context"));
-    connect(m_warnSetting, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(warnSettingChanged(int)));
+    m_warningsWhen = new QComboBox;
+    m_warningsWhen->addItem(tr("Never"));
+    m_warningsWhen->addItem(tr("Conflict in same context"));
+    m_warningsWhen->addItem(tr("Conflict in any context"));
+    connect(m_warningsWhen, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::currentIndexChanged),
+            this, &ShortcutDialog::slotWarningsWhenChanged);
     settings.beginGroup(GeneralOptionsConfigGroup);
     m_warnType = (WarningType)(settings.value("shortcut_warnings", 1).toInt());
-    m_warnSetting->setCurrentIndex(m_warnType);
+    m_warningsWhen->setCurrentIndex(m_warnType);
     settings.endGroup();
 
     m_keyboardLabel = new QLabel(tr("Keyboard:"));
@@ -159,18 +155,19 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
         m_keyboard->addItem(kb);
     }
     m_keyboard->setCurrentIndex(kbIndex);
-    connect(m_keyboard, SIGNAL(currentIndexChanged(int)),
-            this, SLOT(keyboardChanged(int)));
+    connect(m_keyboard, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::currentIndexChanged),
+            this, &ShortcutDialog::slotKeyboardChanged);
 
     hlayout->addStretch();
-    hlayout->addWidget(m_defPB);
+    hlayout->addWidget(m_resetSelected);
     hlayout->addStretch();
-    hlayout->addWidget(m_clearPB);
+    hlayout->addWidget(m_removeShortcuts);
     hlayout->addStretch();
-    hlayout->addWidget(m_clearAllPB);
+    hlayout->addWidget(m_resetAll);
     hlayout->addStretch();
     hlayout->addWidget(m_warnLabel);
-    hlayout->addWidget(m_warnSetting);
+    hlayout->addWidget(m_warningsWhen);
     hlayout->addStretch();
     hlayout->addWidget(m_keyboardLabel);
     hlayout->addWidget(m_keyboard);
@@ -320,12 +317,12 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     editRow();
 }
 
-void ShortcutDialog::filterChanged()
+void ShortcutDialog::slotFilterChanged(const QString &text)
 {
-    m_proxyModel->setFilterFixedString(m_filterPatternLineEdit->text());
+    m_proxyModel->setFilterFixedString(text);
 }
 
-void ShortcutDialog::selectionChanged(const QItemSelection&,
+void ShortcutDialog::slotSelectionChanged(const QItemSelection&,
                                       const QItemSelection&)
 {
     RG_DEBUG << "selection changed";
@@ -344,7 +341,7 @@ void ShortcutDialog::selectionChanged(const QItemSelection&,
     editRow();
 }
 
-void ShortcutDialog::defPBClicked()
+void ShortcutDialog::slotResetSelectedClicked(bool)
 {
     RG_DEBUG << "set shortcut to default";
     ActionData* adata = ActionData::getInstance();
@@ -390,7 +387,7 @@ void ShortcutDialog::defPBClicked()
     editRow();
 }
 
-void ShortcutDialog::clearPBClicked()
+void ShortcutDialog::slotRemoveShortcutsClicked(bool)
 {
     RG_DEBUG << "remove shortcuts on selection";
     ActionData* adata = ActionData::getInstance();
@@ -403,7 +400,7 @@ void ShortcutDialog::clearPBClicked()
     editRow();
 }
 
-void ShortcutDialog::clearAllPBClicked()
+void ShortcutDialog::slotResetAllClicked(bool)
 {
     RG_DEBUG << "remove all shortcuts";
     QMessageBox::StandardButton reply =
@@ -422,20 +419,20 @@ void ShortcutDialog::clearAllPBClicked()
     adata->removeAllUserShortcuts();
 }
 
-void ShortcutDialog::keyboardChanged(int index)
+void ShortcutDialog::slotKeyboardChanged(int index)
 {
     RG_DEBUG << "keyboardChanged" << index;
     ActionData* adata = ActionData::getInstance();
     adata->applyKeyboard(index);
 }
 
-void ShortcutDialog::warnSettingChanged(int index)
+void ShortcutDialog::slotWarningsWhenChanged(int index)
 {
     RG_DEBUG << "warnSettingChanged" << index;
     m_warnType = static_cast<WarningType>(index);
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
-    settings.setValue("shortcut_warnings", m_warnSetting->currentIndex());
+    settings.setValue("shortcut_warnings", m_warningsWhen->currentIndex());
     settings.endGroup();
 }
 
@@ -447,12 +444,12 @@ void ShortcutDialog::reject()
     QDialog::reject();
 }
 
-void ShortcutDialog::dataChanged(const QModelIndex& topLeft,
+void ShortcutDialog::slotDataChanged(const QModelIndex& topLeft,
                                  const QModelIndex& bottomRight)
 {
-    RG_DEBUG << "dataChanged" << topLeft.row() << topLeft.column() <<
-        bottomRight.row() << bottomRight.column() <<
-        (topLeft == bottomRight);
+    // debugging only
+
+    RG_DEBUG << "dataChanged" << topLeft.row() << topLeft.column() << bottomRight.row() << bottomRight.column() << (topLeft == bottomRight);
     if (topLeft != bottomRight) {
         RG_DEBUG << "dataChanged region edit";
     }
@@ -462,8 +459,8 @@ void ShortcutDialog::editRow()
 {
     RG_DEBUG << "editRow:";
     ActionData* adata = ActionData::getInstance();
-    m_defPB->setEnabled(false);
-    m_clearPB->setEnabled(false);
+    m_resetSelected->setEnabled(false);
+    m_removeShortcuts->setEnabled(false);
 
     foreach(auto row, m_editRows) {
         RG_DEBUG << "edit row" << row;
@@ -472,10 +469,10 @@ void ShortcutDialog::editRow()
 
         KeyList ksList = adata->getShortcuts(key);
         if (! adata->isDefault(key, ksList)) {
-            m_defPB->setEnabled(true);
+            m_resetSelected->setEnabled(true);
         }
         if (! ksList.empty()) {
-            m_clearPB->setEnabled(true);
+            m_removeShortcuts->setEnabled(true);
         }
     }
 }

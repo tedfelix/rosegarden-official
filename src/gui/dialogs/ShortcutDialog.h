@@ -27,18 +27,19 @@ class QGroupBox;
 class QTreeView;
 class QLabel;
 class QLineEdit;
-class QAbstractItemModel;
 class QSortFilterProxyModel;
 class QStandardItemModel;
 class QItemSelection;
-class QKeySequenceEdit;
 class QPushButton;
 class QComboBox;
+
 
 namespace Rosegarden
 {
 
+
 class ShortcutDelegate;
+
 
 /// Keyboard Shortcuts dialog
 class ShortcutDialog : public QDialog
@@ -52,16 +53,17 @@ class ShortcutDialog : public QDialog
     void setModelData(const QKeySequence ks, const QModelIndex &index);
 
  private slots:
-    void filterChanged();
-    void selectionChanged(const QItemSelection &selected,
-                          const QItemSelection &deselected);
-    void defPBClicked();
-    void clearPBClicked();
-    void clearAllPBClicked();
-    void keyboardChanged(int index);
-    void warnSettingChanged(int index);
+    void slotFilterChanged(const QString &text);
+    void slotSelectionChanged(const QItemSelection &selected,
+                              const QItemSelection &deselected);
+    void slotResetSelectedClicked(bool checked);
+    void slotRemoveShortcutsClicked(bool checked);
+    void slotResetAllClicked(bool checked);
+    void slotKeyboardChanged(int index);
+    void slotWarningsWhenChanged(int index);
+    void slotDataChanged(const QModelIndex&, const QModelIndex&);
+
     void reject() override;
-    void dataChanged(const QModelIndex&, const QModelIndex&);
 
  private:
     enum WarningType { None, SameContext, AllContexts };
@@ -75,11 +77,12 @@ class ShortcutDialog : public QDialog
     QLabel *m_filterPatternLabel;
     QLineEdit *m_filterPatternLineEdit;
     QStandardItemModel *m_model;
-    QPushButton *m_defPB;
-    QPushButton *m_clearPB;
-    QPushButton *m_clearAllPB;
+    QPushButton *m_resetSelected;
+    QPushButton *m_removeShortcuts;
+    QPushButton *m_resetAll;
+    // ??? Move to local variable.  Never used outside ctor.
     QLabel *m_warnLabel;
-    QComboBox *m_warnSetting;
+    QComboBox *m_warningsWhen;
     QLabel *m_keyboardLabel;
     QComboBox *m_keyboard;
     std::set<int> m_editRows;
@@ -87,6 +90,7 @@ class ShortcutDialog : public QDialog
     ShortcutDelegate *m_delegate;
     std::map<int, QString> m_indexMap;
 };
+
 
 }
 
