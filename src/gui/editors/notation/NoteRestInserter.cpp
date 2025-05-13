@@ -118,17 +118,7 @@ NoteRestInserter::synchronizeWheel()
 
 NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     NotationTool("noterestinserter.rc", "NoteRestInserter", widget),
-    m_noteType(Note::Quaver),
-    m_noteDots(0),
     m_autoBeam(true),
-    m_leftButtonDown(false),
-    m_accidental(Accidentals::NoAccidental),
-    m_lastAccidental(Accidentals::NoAccidental),
-    m_followAccidental(false),
-    m_isaRestInserter(false),
-    m_wheelIndex(0),
-    m_processingWheelTurned(false),
-    m_ready(false),
     m_previousPreviewStaff(nullptr)
 {
     QIcon icon;
@@ -159,7 +149,7 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
 
     QAction *a;
 
-    a = createAction("toggle_auto_beam", SLOT(slotToggleAutoBeam()));
+    a = createAction("toggle_auto_beam", &NoteRestInserter::slotToggleAutoBeam);
     if (m_autoBeam) { a->setCheckable(true); a->setChecked(true); }
 
 //  Obsolete?
@@ -167,16 +157,16 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
 //        a = createAction(m_actionsAccidental[i][1], m_actionsAccidental[i][0]);
 //    }
 
-    createAction("switch_dots_on", SLOT(slotToggleDot()));
-    createAction("switch_dots_off", SLOT(slotToggleDot()));
+    createAction("switch_dots_on", &NoteRestInserter::slotToggleDot);
+    createAction("switch_dots_off", &NoteRestInserter::slotToggleDot);
 
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("switch_to_notes", SLOT(slotNotesSelected()));
-    createAction("switch_to_rests", SLOT(slotRestsSelected()));
+    createAction("select", &NoteRestInserter::slotSelectSelected);
+    createAction("erase", &NoteRestInserter::slotEraseSelected);
+    createAction("switch_to_notes", &NoteRestInserter::slotNotesSelected);
+    createAction("switch_to_rests", &NoteRestInserter::slotRestsSelected);
 
-    //connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
-    //        this, SLOT(slotSetAccidental(Accidental, bool)));
+    //connect(m_widget, &NotationWidget::changeAccidental,
+    //        this, &NoteRestInserter::slotSetAccidental);
 
     // Push down the default RadioAction on Accidentals.
     invokeInParentView("no_accidental");
@@ -185,25 +175,15 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     synchronizeWheel();
 }
 
-NoteRestInserter::NoteRestInserter(const QString& rcFileName,
-                                   const QString& menuName,
-                                   NotationWidget* widget) :
+NoteRestInserter::NoteRestInserter(const QString &rcFileName,
+                                   const QString &menuName,
+                                   NotationWidget *widget) :
     NotationTool(rcFileName, menuName, widget),
-    m_noteType(Note::Quaver),  //OverRide value with NotationView::initializeNoteRestInserter.
-    m_noteDots(0),
     m_autoBeam(false),
-    m_leftButtonDown(false),
-    m_clickHappened(false),
-    m_accidental(Accidentals::NoAccidental),
-    m_lastAccidental(Accidentals::NoAccidental),
-    m_followAccidental(false),
-    m_isaRestInserter(false),
-    m_wheelIndex(0),
-    m_processingWheelTurned(false),
-    m_ready(false)
+    m_clickHappened(false)
 {
-    //connect(m_widget, SIGNAL(changeAccidental(Accidental, bool)),
-    //        this, SLOT(slotSetAccidental(Accidental, bool)));
+    //connect(m_widget, &NotationWidget::changeAccidental,
+    //        this, &NoteRestInserter::slotSetAccidental);
 
     // Push down the default RadioAction on Accidentals.
     invokeInParentView("no_accidental");
@@ -215,9 +195,6 @@ NoteRestInserter::NoteRestInserter(const QString& rcFileName,
     // Setup wheelIndex accordingly to m_noteType and m_noteDots
     synchronizeWheel();
 }
-
-NoteRestInserter::~NoteRestInserter()
-{}
 
 void NoteRestInserter::ready()
 {
@@ -1276,17 +1253,17 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
     return insertionCommand->getLastInsertedEvent();
 }
 
-void NoteRestInserter::slotSetNote(Note::Type nt)
+void NoteRestInserter::setNote(Note::Type nt)
 {
     m_noteType = nt;
 }
 
-void NoteRestInserter::slotSetDots(unsigned int dots)
+void NoteRestInserter::setDots(unsigned int dots)
 {
     m_noteDots = dots;
 }
 
-void NoteRestInserter::slotSetAccidental(const Accidental& accidental,
+void NoteRestInserter::setAccidental(const Accidental& accidental,
                                          bool follow)
 {
     NOTATION_DEBUG << "NoteRestInserter::setAccidental: accidental is "
