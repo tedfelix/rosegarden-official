@@ -20,6 +20,8 @@
 
 #include "TempoRuler.h"
 
+#include "TempoColour.h"
+
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -32,7 +34,6 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/widgets/TextFloat.h"
-#include "TempoColour.h"
 
 #include <QColor>
 #include <QCursor>
@@ -55,39 +56,24 @@
 #include <QMouseEvent>
 
 
-
 namespace Rosegarden
 {
+
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
                        RosegardenDocument *doc,
                        int height,
                        bool small,
                        bool Thorn) :
-        QWidget(nullptr),
-        m_height(height),
-        m_currentXOffset(0),
-        m_width( -1),
-        m_small(small),
-        m_illuminate( -1),
-        m_illuminatePoint(false),
-        m_dragVert(false),
-        m_dragTarget(false),
-        m_dragHoriz(false),
-        m_dragStartY(0),
-        m_dragStartX(0),
-        m_dragFine(false),
-        m_clickX(0),
-        m_dragStartTempo( -1),
-        m_dragStartTarget( -1),
-        m_dragOriginalTempo( -1),
-        m_dragOriginalTarget( -1),
-        m_composition(&doc->getComposition()),
-        m_rulerScale(rulerScale),
-        m_menu(nullptr),
-        m_editTempoController(EditTempoController::self()),
-        m_fontMetrics(m_boldFont),
-        m_Thorn(Thorn)
+    QWidget(nullptr),
+    m_height(height),
+    m_small(small),
+    m_composition(&doc->getComposition()),
+    m_rulerScale(rulerScale),
+    m_menu(nullptr),
+    m_editTempoController(EditTempoController::self()),
+    m_fontMetrics(m_boldFont),
+    m_Thorn(Thorn)
 {
     m_font.setPixelSize(m_height / 3);
     m_boldFont.setPixelSize(m_height * 2 / 5);
@@ -100,20 +86,17 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
             CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, static_cast<void(TempoRuler::*)()>(&TempoRuler::update));
 
-    createAction("insert_tempo_here", SLOT(slotInsertTempoHere()));
-    createAction("insert_tempo_at_pointer", SLOT(slotInsertTempoAtPointer()));
-    createAction("delete_tempo", SLOT(slotDeleteTempoChange()));
-    createAction("ramp_to_next", SLOT(slotRampToNext()));
-    createAction("unramp", SLOT(slotUnramp()));
-    createAction("edit_tempo", SLOT(slotEditTempo()));
-    createAction("edit_time_signature", SLOT(slotEditTimeSignature()));
-    createAction("edit_tempos", SLOT(slotEditTempos()));
+    createAction("insert_tempo_here", &TempoRuler::slotInsertTempoHere);
+    createAction("insert_tempo_at_pointer",
+                 &TempoRuler::slotInsertTempoAtPointer);
+    createAction("delete_tempo", &TempoRuler::slotDeleteTempoChange);
+    createAction("ramp_to_next", &TempoRuler::slotRampToNext);
+    createAction("unramp", &TempoRuler::slotUnramp);
+    createAction("edit_tempo", &TempoRuler::slotEditTempo);
+    createAction("edit_time_signature", &TempoRuler::slotEditTimeSignature);
+    createAction("edit_tempos", &TempoRuler::slotEditTempos);
 
     setMouseTracking(false);
-}
-
-TempoRuler::~TempoRuler()
-{
 }
 
 void

@@ -69,8 +69,6 @@ public:
                bool small = false,
                bool Thorn = true);
 
-    ~TempoRuler() override;
-
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
@@ -109,27 +107,27 @@ protected:
     void createMenu();
 
 private:
-    int  m_height;
-    int  m_currentXOffset;
-    int  m_width;
+    int m_height;
+    int m_currentXOffset{0};
+    int m_width{-1};
     bool m_small;
-    int  m_illuminate;
-    bool m_illuminatePoint;
+    int m_illuminate{-1};
+    bool m_illuminatePoint{false};
 
-    bool m_dragVert;
-    bool m_dragTarget;
-    bool m_dragHoriz;
-    int  m_dragStartY;
-    int  m_dragStartX;
-    bool m_dragFine;
-    int  m_clickX;
+    bool m_dragVert{false};
+    bool m_dragTarget{false};
+    bool m_dragHoriz{false};
+    int m_dragStartY{0};
+    int m_dragStartX{0};
+    bool m_dragFine{false};
+    int m_clickX{0};
 
-    timeT  m_dragStartTime{0};
-    timeT  m_dragPreviousTime{0};
-    tempoT m_dragStartTempo;
-    tempoT m_dragStartTarget;
-    tempoT m_dragOriginalTempo;
-    tempoT m_dragOriginalTarget;
+    timeT m_dragStartTime{0};
+    timeT m_dragPreviousTime{0};
+    tempoT m_dragStartTempo{-1};
+    tempoT m_dragStartTarget{-1};
+    tempoT m_dragOriginalTempo{-1};
+    tempoT m_dragOriginalTarget{-1};
 
     int getYForTempo(tempoT tempo);
     // unused tempoT getTempoForY(int y);
@@ -139,14 +137,14 @@ private:
                        bool showTime = false);
 
     Composition *m_composition;
-    RulerScale  *m_rulerScale;
-    QMenu       *m_menu;
+    RulerScale *m_rulerScale;
+    QMenu *m_menu{nullptr};
     EditTempoController *m_editTempoController;
 
-    QFont        m_font;
-    QFont        m_boldFont;
+    QFont m_font;
+    QFont m_boldFont;
     QFontMetrics m_fontMetrics;
-    QPixmap      m_buffer;
+    QPixmap m_buffer;
 
     bool m_Thorn;
 };
