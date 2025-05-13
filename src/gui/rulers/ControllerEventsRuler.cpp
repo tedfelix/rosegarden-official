@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControllerEventsRuler]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
@@ -561,6 +561,7 @@ bool ControllerEventsRuler::allowSimultaneousEvents()
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
+    RG_DEBUG << "insertEvent" << x << y << m_controller->getType();
     timeT insertTime = m_rulerScale->getTimeForX(x/m_xScale);
 
     Event* controllerEvent = new Event(m_controller->getType(), insertTime);
@@ -608,6 +609,11 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
         int msb = (initialValue >> 7) & 0x7f;
         controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
         controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
+    }
+    else if (m_controller->getType() == Rosegarden::ChannelPressure::EventType)
+    {
+        // Convert to Channel pressure
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE, initialValue);
     }
 
     m_moddingSegment = true;

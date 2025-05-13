@@ -185,4 +185,14 @@ getExpression()
     return expression;
 }
 
+const ControlParameter&
+ControlParameter::
+getChannelPressure()
+{
+    static const ControlParameter
+        channelPressure(
+                        "Channel Pressure", Rosegarden::ChannelPressure::EventType,
+                        "<none>", 0, 127, 100, MidiByte(1), 2, -1);
+    return channelPressure;
+}
 }

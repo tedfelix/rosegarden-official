@@ -1449,6 +1449,8 @@ MatrixView::slotToggleKeyPressureRuler()
 void
 MatrixView::slotToggleChannelPressureRuler()
 {
+    m_matrixWidget->showChannelPressureRuler();
+    slotUpdateMenuStates();
 }
 
 void

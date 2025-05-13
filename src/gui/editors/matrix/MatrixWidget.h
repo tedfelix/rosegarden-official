@@ -183,6 +183,8 @@ public:
     void showVelocityRuler();
     /// View > Rulers > Show Pitch Bend Ruler
     void showPitchBendRuler();
+    /// View > Rulers > Show Channel Pressure Ruler
+    void showChannelPressureRuler();
     /// View > Rulers > Add Control Ruler
     void addControlRuler(QAction *);
 

@@ -79,6 +79,7 @@ public:
     //     up with duplicate rulers.  Need to fix this.
     void addControlRuler(const ControlParameter &);
     void togglePitchBendRuler();
+    void toggleChannelPressureRuler();
     void togglePropertyRuler(const PropertyName &);
 
     /**

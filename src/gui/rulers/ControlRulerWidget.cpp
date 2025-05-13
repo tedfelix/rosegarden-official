@@ -268,7 +268,7 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
 
 namespace
 {
-    bool hasPitchBend(Segment *segment)
+    bool hasControlParameter(Segment *segment, const std::string& type)
     {
         RosegardenDocument *document = RosegardenDocument::currentDocument;
 
@@ -286,11 +286,11 @@ namespace
         if (!controllable)
             return false;
 
-        // Check whether the device has a pitchbend controller
+        // Check whether the device has a controller of this type
         // ??? Why not use
         //     Controllable::getControlParameter(type, controllerNumber)?
         for (const ControlParameter &cp : controllable->getControlParameters()) {
-            if (cp.getType() == PitchBend::EventType)
+            if (cp.getType() == type)
                 return true;
         }
 
@@ -303,7 +303,8 @@ ControlRulerWidget::togglePitchBendRuler()
 {
     // No pitch bend?  Bail.
     // ??? Rude.  We should gray the menu item instead of this.
-    if (!hasPitchBend(&(m_viewSegment->getSegment())))
+    if (!hasControlParameter
+        (&(m_viewSegment->getSegment()), PitchBend::EventType))
         return;
 
     // Check whether we already have a pitchbend ruler
@@ -329,6 +330,40 @@ ControlRulerWidget::togglePitchBendRuler()
     // We don't already have a pitchbend ruler, make one now.
     addControlRuler(ControlParameter::getPitchBend());
 }
+
+void
+ControlRulerWidget::toggleChannelPressureRuler()
+{
+    // No pitch bend?  Bail.
+    // ??? Rude.  We should gray the menu item instead of this.
+    if (!hasControlParameter
+        (&(m_viewSegment->getSegment()), ChannelPressure::EventType))
+        return;
+
+    // Check whether we already have a channel pressure ruler
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(ruler);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler, remove it.
+        if (eventRuler->getControlParameter()->getType() ==
+            ChannelPressure::EventType)
+        {
+            removeRuler(ruler);
+            return;
+        }
+    }
+
+    // We don't already have a ruler, make one now.
+    addControlRuler(ControlParameter::getChannelPressure());
+}
+
 
 namespace
 {
