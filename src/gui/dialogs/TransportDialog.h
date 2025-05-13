@@ -55,7 +55,7 @@ class RealTime;
 class MappedEvent;
 
 
-class TransportDialog : public QDialog
+class TransportDialog : public QDialog, public CompositionObserver
 {
     Q_OBJECT
 
@@ -184,6 +184,10 @@ private:
 
     void setBackgroundColor(QColor color);
     void resetBackground();
+
+    // composition observer
+    void timeSignatureChanged(const Composition *comp) override;
+    void tempoChanged(const Composition *comp) override;
 
     QSharedPointer<Ui_RosegardenTransport> ui;
 

@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TransportDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TransportDialog.h"
 
@@ -305,7 +306,6 @@ TransportDialog::TransportDialog(QWidget *parent):
                       m_enableMIDILabels ? 1 : 0);
 
     settings.endGroup();
-
 }
 
 TransportDialog::~TransportDialog()
@@ -314,15 +314,25 @@ TransportDialog::~TransportDialog()
     // saved if we are hidden.
     if (isVisible())
         saveGeo();
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+    Composition &comp = doc->getComposition();
+    comp.removeObserver(this);
 }
 
 void TransportDialog::init()
 {
+    RG_DEBUG << "init";
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
         return;
 
     Composition &comp = doc->getComposition();
+    RG_DEBUG << "add observer";
+    comp.addObserver(this);
+    RG_DEBUG << "observer added";
 
     setEnabled(true);
 
@@ -1392,6 +1402,23 @@ void TransportDialog::keyPressEvent(QKeyEvent *keyEvent)
         rmw->slotFastForwardToEnd();
 
     QDialog::keyPressEvent(keyEvent);
+}
+
+// Composition Observer
+void TransportDialog::timeSignatureChanged(const Composition *comp)
+{
+    RG_DEBUG << "timeSignatureChanged";
+    // reset pointer position to recalculate display
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    rmw->slotSetPointerPosition(comp->getPosition());
+}
+
+void TransportDialog::tempoChanged(const Composition *comp)
+{
+    RG_DEBUG << "tempoChanged";
+    // reset pointer position to recalculate display
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    rmw->slotSetPointerPosition(comp->getPosition());
 }
 
 
