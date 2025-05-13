@@ -479,10 +479,10 @@ LilyPondSegmentsContext::fixAltStartTimes()
     // we know what segment may be repeated and what segment may be unfolded.
     // We can compute the start time of each segment in the LilyPond score.
 
-    // Validate the output of repeat with alternate edndings in LilyPond score
+    // Validate the output of repeat with alternate endings in LilyPond score
     m_repeatWithAlt = true;
 
-    // Sort the volta/alt sequences from start times
+    // Sort the volta/alt sequences by start times
     std::map<timeT, const SegmentData *> repeatedSegments;
     repeatedSegments.clear();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {

@@ -160,7 +160,7 @@ private:
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                   bool &nextBarIsDouble, bool &nextBarIsEnd,
                   bool &nextBarIsDot, bool noTimeSignature,
-                  bool cadenza);
+                  bool cadenza, bool isLastAlt);
 
     timeT calculateDuration(Segment *s,
                                         const Segment::iterator &i,

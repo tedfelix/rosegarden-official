@@ -1087,6 +1087,9 @@ LilyPondExporter::write()
     // being printed.
     timeT firstSegmentStartTime = lsc.getFirstSegmentStartTime();
 
+    // YGYGYG    SEE lsc.getFirstSegmentStartTime() ABOVE !!!
+    lsc.dump();
+
 
     // define global context which is common for all staffs
     str << indent(col++) << "global = { " << std::endl;
@@ -1486,6 +1489,13 @@ LilyPondExporter::write()
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
                 RG_DEBUG << "lsc iterate segment" << seg;
 
+  // YGYGYG
+  std::cout << seg->getLabel()
+            << " start=" << lsc.getSegmentStartTime()
+            << " isAlt=" << lsc.isAlt()
+            << " N=" << lsc.getAltText()
+            << "\n";
+
                 if (seg->getVerseCount() > verses[voiceIndex]) {
                     verses[voiceIndex] = seg->getVerseCount();
                 }
@@ -1868,6 +1878,9 @@ LilyPondExporter::write()
                         noTimeSig = barNo == firstBar;
                     }
 
+           str << "\n%YG writeBar: alt=" << lsc.isAlt()
+               << " cadenza=" << cadenza << "\n";
+
                     // write out a bar's worth of events
                     writeBar(seg, barNo, barStart, barEnd, col, key,
                             lilyText,
@@ -1876,7 +1889,7 @@ LilyPondExporter::write()
                             nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble,
                             nextBarIsEnd, nextBarIsDot,
                             noTimeSig,
-                            cadenza);
+                            cadenza, lsc.isLastAlt());
 
                 }
 
@@ -1936,7 +1949,7 @@ LilyPondExporter::write()
                         }
                     }
 
-                    // Remove the cadenza
+                    // End the cadenza
                     str << std::endl << indent(col) << "\\cadenzaOff";
                     cadenza = false;
                     str << std::endl << indent(--col) << "}" << std::endl;  // indent-
@@ -2357,7 +2370,7 @@ LilyPondExporter::writeBar(Segment *s,
                            bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                            bool &nextBarIsDouble, bool &nextBarIsEnd,
                            bool &nextBarIsDot,  bool noTimeSignature,
-                           bool cadenza)
+                           bool cadenza, bool isLastAlt)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
     int isGrace = 0;
@@ -2712,7 +2725,8 @@ LilyPondExporter::writeBar(Segment *s,
                 if (hiddenRest) {
                     RG_DEBUG << "HIDDEN REST.  Using duration " << duration;
                     str << "s";
-                } else if (duration == timeSignature.getBarDuration()) {
+                } else if ((duration == timeSignature.getBarDuration())
+                           && !cadenza) {                   // YG
                     // Look ahead the segment in order to detect
                     // the number of measures in the multi measure rest.
                     RG_DEBUG << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)";
@@ -2974,6 +2988,8 @@ LilyPondExporter::writeBar(Segment *s,
     } else if (nextBarIsDot) {
         str << "\\bar \":\" ";
         nextBarIsDot = false;
+    } else if (cadenza && isLastAlt) {      // YG
+        str << "\\bar \"|\"";
     } else if (MultiMeasureRestCount == 0) {
         if (cadenza && (barEnd != s->getEndMarkerTime())) {
             // Last bar of the alternarive is written by LilyPond with
@@ -3054,6 +3070,8 @@ LilyPondExporter::writeSkip(const TimeSignature &timeSig,
     timeSig.getDurationListForInterval(dlist, duration, offset);
     std::pair<int,int> durationRatioSum(0,1);
     std::pair<int,int> durationRatio(0,1);
+
+    str << "\n% WRITESKIP\n";   // YG
 
     int t = 0, count = 0;
 
