@@ -68,18 +68,19 @@ NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     connect(this, &NotationSelector::editElement,
             m_widget, &NotationWidget::editElement);
 
-    createAction("insert", SLOT(slotInsertSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("collapse_rests_aggressively", SLOT(slotCollapseRestsHard()));
-    createAction("respell_flat", SLOT(slotRespellFlat()));
-    createAction("respell_sharp", SLOT(slotRespellSharp()));
-    createAction("respell_natural", SLOT(slotRespellNatural()));
-    createAction("collapse_notes", SLOT(slotCollapseNotes()));
-    createAction("interpret", SLOT(slotInterpret()));
-    createAction("move_events_up_staff", SLOT(slotStaffAbove()));
-    createAction("move_events_down_staff", SLOT(slotStaffBelow()));
-    createAction("make_invisible", SLOT(slotMakeInvisible()));
-    createAction("make_visible", SLOT(slotMakeVisible()));
+    createAction("insert", &NotationSelector::slotInsertSelected);
+    createAction("erase", &NotationSelector::slotEraseSelected);
+    createAction("collapse_rests_aggressively",
+                 &NotationSelector::slotCollapseRestsHard);
+    createAction("respell_flat", &NotationSelector::slotRespellFlat);
+    createAction("respell_sharp", &NotationSelector::slotRespellSharp);
+    createAction("respell_natural", &NotationSelector::slotRespellNatural);
+    createAction("collapse_notes", &NotationSelector::slotCollapseNotes);
+    createAction("interpret", &NotationSelector::slotInterpret);
+    createAction("move_events_up_staff", &NotationSelector::slotStaffAbove);
+    createAction("move_events_down_staff", &NotationSelector::slotStaffBelow);
+    createAction("make_invisible", &NotationSelector::slotMakeInvisible);
+    createAction("make_visible", &NotationSelector::slotMakeVisible);
 
     createMenu();
 
