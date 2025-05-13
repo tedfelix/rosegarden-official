@@ -103,13 +103,6 @@ signals:
     void editElement(NotationStaff *, NotationElement *);
 
 public slots:
-    /**
-     * Hide the selection rectangle
-     *
-     * Should be called after a cut or a copy has been
-     * performed
-     */
-    // unused void slotHideSelection();
 
     void slotInsertSelected();
     void slotEraseSelected();
@@ -148,32 +141,32 @@ protected:
 
     //--------------- Data members ---------------------------------
 
-    QGraphicsRectItem *m_selectionRect;
+    QGraphicsRectItem *m_selectionRect{nullptr};
     QPointF m_selectionOrigin;
-    bool m_updateRect;
+    bool m_updateRect{false};
 
-    NotationStaff *m_selectedStaff;
-    NotationElement *m_clickedElement;
-    bool m_clickedShift;
-    bool m_startedFineDrag;
+    NotationStaff *m_selectedStaff{nullptr};
+    NotationElement *m_clickedElement{nullptr};
+    bool m_clickedShift{false};
+    bool m_startedFineDrag{false};
 
-    EventSelection *m_selectionToMerge;
+    EventSelection *m_selectionToMerge{nullptr};
 
-    long m_lastDragPitch;
-    timeT m_lastDragTime;
+    long m_lastDragPitch{0};
+    timeT m_lastDragTime{0};
 
-    bool m_justSelectedBar;
-    bool m_wholeStaffSelectionComplete;
+    bool m_justSelectedBar{false};
+    bool m_wholeStaffSelectionComplete{false};
     bool m_ties;
 
 private:
-    bool m_doubleClick;
-    bool m_tripleClick;
-    NotationStaff * m_pointerStaff;
-    timeT m_pointerTime;
+    bool m_doubleClick{false};
+    bool m_tripleClick{false};
+    NotationStaff *m_pointerStaff{nullptr};
+    timeT m_pointerTime{0};
     // m_releaseTimer delays execution of mouse button release related code to *
     // allow the execution of a possible double click.
-    QTimer *m_releaseTimer;
+    QTimer *m_releaseTimer{nullptr};
 };
 
 class NotationSelectorNoTies : public NotationSelector

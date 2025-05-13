@@ -138,24 +138,24 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     m_wrongSampleRates->hide();
 
     // file menu
-    createAction("add_audio", SLOT(slotAdd()));
-    createAction("export_audio", SLOT(slotExportAudio()));
-    createAction("file_close", SLOT(slotClose()));
+    createAction("add_audio", &AudioManagerDialog::slotAdd);
+    createAction("export_audio", &AudioManagerDialog::slotExportAudio);
+    createAction("file_close", &AudioManagerDialog::slotClose);
 
     // edit menu
-    createAction("remove_audio", SLOT(slotRemove()));
-    createAction("remove_all_audio", SLOT(slotRemoveAll()));
-    createAction("remove_all_unused_audio", SLOT(slotRemoveAllUnused()));
-    createAction("delete_unused_audio", SLOT(slotDeleteUnused()));
+    createAction("remove_audio", &AudioManagerDialog::slotRemove);
+    createAction("remove_all_audio", &AudioManagerDialog::slotRemoveAll);
+    createAction("remove_all_unused_audio", &AudioManagerDialog::slotRemoveAllUnused);
+    createAction("delete_unused_audio", &AudioManagerDialog::slotDeleteUnused);
 
     // action menu
-    createAction("preview_audio", SLOT(slotPlayPreview()));
-    createAction("insert_audio", SLOT(slotInsert()));
-    createAction("distribute_audio", SLOT(slotDistributeOnMidiSegment()));
+    createAction("preview_audio", &AudioManagerDialog::slotPlayPreview);
+    createAction("insert_audio", &AudioManagerDialog::slotInsert);
+    createAction("distribute_audio", &AudioManagerDialog::slotDistributeOnMidiSegment);
 
     // help menu
-    createAction("audio_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("audio_help", &AudioManagerDialog::slotHelpRequested);
+    createAction("help_about_app", &AudioManagerDialog::slotHelpAbout);
 
 
     //!!! oh now hang on, does this one work?
@@ -163,7 +163,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     // (No, I've never heard of it until poking around in this code.  Julie
     // hadn't either when she redid the old KXMLGUI stuff for us.  I think we've
     // stumbled across a half eaten bagel here)
-    createAction("distribute_audio", SLOT(slotDistributeOnMidiSegment()));
+    createAction("distribute_audio", &AudioManagerDialog::slotDistributeOnMidiSegment);
 
     // Set the column names
     //
@@ -188,8 +188,8 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
     connect(m_fileList, &QTreeWidget::itemSelectionChanged,
             this, &AudioManagerDialog::slotSelectionChanged);
 
-    connect(m_fileList, SIGNAL(dropped(QDropEvent*, QTreeWidget*, QList<QUrl>)),
-            SLOT(slotDropped(QDropEvent*, QTreeWidget*, QList<QUrl>)));
+    connect(m_fileList, &AudioListView::dropped,
+            this, &AudioManagerDialog::slotDropped);
 
 
     slotPopulateFileList();

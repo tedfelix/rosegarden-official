@@ -63,23 +63,8 @@ using namespace BaseProperties;
 
 NotationSelector::NotationSelector(NotationWidget *widget, bool ties) :
     NotationTool("notationselector.rc", "NotationSelector", widget),
-    m_selectionRect(nullptr),
-    m_updateRect(false),
-    m_selectedStaff(nullptr),
-    m_clickedElement(nullptr),
-    m_selectionToMerge(nullptr),
-    m_justSelectedBar(false),
-    m_wholeStaffSelectionComplete(false),
-    m_ties(ties),
-    m_doubleClick(false),
-    m_tripleClick(false),
-    m_pointerStaff(nullptr),
-    m_pointerTime(0),
-    m_releaseTimer(nullptr)
+    m_ties(ties)
 {
-    //connect(m_widget, SIGNAL(usedSelection()),
-    //        this, SLOT(slotHideSelection()));
-
     connect(this, &NotationSelector::editElement,
             m_widget, &NotationWidget::editElement);
 
@@ -633,14 +618,6 @@ void NotationSelector::handleEventRemoved(Event *event)
         m_clickedElement = nullptr;
     }
 }
-
-/* unused
-void NotationSelector::slotHideSelection()
-{
-    if (!m_selectionRect) return;
-    m_selectionRect->hide();
-}
-*/
 
 void NotationSelector::slotInsertSelected()
 {

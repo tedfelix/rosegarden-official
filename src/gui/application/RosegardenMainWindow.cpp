@@ -263,6 +263,8 @@ namespace Rosegarden
 {
 
 
+RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;
+
 namespace
 {
     // Like QFileInfo::canonicalPath(), but returns the largest directory
@@ -1248,11 +1250,6 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     qApp->processEvents(); // to make sure all opened dialogs (mixer, midi devices...) are closed
 
     // Take care of all subparts which depend on the document
-
-    //     // reset AudioManagerDialog
-    //     //
-    //     delete m_audioManagerDialog; // TODO : replace this with a connection to documentAboutToChange() sig.
-    //     m_audioManagerDialog = 0;
 
     RosegardenDocument *oldDoc = RosegardenDocument::currentDocument;
 
@@ -7932,7 +7929,9 @@ RosegardenMainWindow::slotAudioManagerClosed()
             //     are selected.  It may also update the parameter boxes.
             //     We'll need to devise an appropriate way to handle this
             //     before removing this call.
-            m_view->slotSelectTrackSegments(RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
+            m_view->slotSelectTrackSegments(
+                    RosegardenDocument::currentDocument->getComposition().
+                            getSelectedTrack());
         }
     }
 
@@ -8863,7 +8862,7 @@ RosegardenMainWindow::slotCommandExecuted()
 
     // Refresh the TransportDialog's time display.
     // This is needed for time signature and tempo changes.
-    // See Bug #1721.
+    // See Bug #1723.
     // ??? This breaks the matrix editor.  When adding notes, the note previews
     //     last a very long time with this in place.
     //slotSetPointerPosition(
@@ -8871,8 +8870,4 @@ RosegardenMainWindow::slotCommandExecuted()
 }
 
 
-
-RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;
-
-
-}// end namespace Rosegarden
+}  // end namespace Rosegarden
