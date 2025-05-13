@@ -216,13 +216,13 @@ protected:
 //    EditViewBase*               m_parentEditView;
 //    QScrollBar*                 m_mainHorizontalScrollBar;
     RulerScale*     m_rulerScale;
-    EventSelection* m_eventSelection; //,*m_assignedEventSelection;
+    EventSelection *m_eventSelection{nullptr}; //,*m_assignedEventSelection;
 
 //    MatrixScene *m_scene;
 
-    ViewSegment *m_viewSegment;
-    NotationStaff *m_notationStaff;
-    Segment *m_segment;
+    ViewSegment *m_viewSegment{nullptr};
+    NotationStaff *m_notationStaff{nullptr};
+    Segment *m_segment{nullptr};
 
     // ??? MEMORY LEAK.
     //     This map stores pointers and never deletes them.
@@ -241,39 +241,38 @@ protected:
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
-    ControlItem *m_currentIndex;
+    ControlItem *m_currentIndex{nullptr};
 
-    ControlTool *m_currentTool;
+    ControlTool *m_currentTool{nullptr};
     ControlToolBox *m_toolBox;
     QString m_currentToolName;
 
     QRectF m_pannedRect;
-    double m_xScale;
-    double m_yScale;
+    double m_xScale{1};
+    double m_yScale{1};
 
-    long m_maxItemValue;
-    long m_minItemValue;
+    long m_maxItemValue{127};
+    long m_minItemValue{0};
 
-    double m_viewSegmentOffset;
+    double m_viewSegmentOffset{0};
 
-    int m_xOffset;
+    int m_xOffset{0};
 
-    double m_currentX;
+    double m_currentX{0};
 
     QPoint m_lastEventPos;
-    bool m_itemMoved;
+    bool m_itemMoved{false};
 
-    bool m_selecting;
-    ControlSelector* m_selector;
-    QRectF* m_selectionRect;
+    bool m_selecting{false};
+    ControlSelector *m_selector{nullptr};
+    QRectF *m_selectionRect{nullptr};
 
-    QMenu* m_rulerMenu;
-    SnapGrid* m_snapGrid;
+    QMenu *m_rulerMenu{nullptr};
+    SnapGrid *m_snapGrid;
     QString m_snapName;
     timeT m_snapTimeFromEditor;
 
-    //bool m_hposUpdatePending;
-
+    // ??? Rename: SelectionList
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
 

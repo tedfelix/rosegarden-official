@@ -17,19 +17,18 @@
 
 
 #include "ControlTool.h"
-#include "misc/Debug.h"
-#include "misc/Strings.h"
 
 #include "ControlRuler.h"
-#include "ControlItem.h"
-#include "ControlMouseEvent.h"
-#include <iostream>
+
+#include "misc/Debug.h"
+
 
 namespace Rosegarden
 {
 
+
 ControlTool::ControlTool(QString /* rcFileName */,
-                         const QString& menuName,
+                         const QString &menuName,
                          ControlRuler *ruler) :
     BaseTool(menuName, ruler),
     m_ruler(ruler),
@@ -41,5 +40,6 @@ void
 ControlTool::createMenu()
 {
 }
+
 
 }

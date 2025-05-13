@@ -25,7 +25,7 @@
 #include "base/ViewElement.h"
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
-#include "ControlRuler.h"
+//#include "ControlRuler.h"
 #include "ControllerEventsRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"

@@ -60,8 +60,8 @@ protected slots:
 protected:
     ControlEraser(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
-    float m_mouseStartY;
-    float m_mouseLastY;
+    //float m_mouseStartY;
+    //float m_mouseLastY;
 };
 
 }

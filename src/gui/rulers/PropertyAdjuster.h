@@ -63,8 +63,8 @@ protected:
 
     void setBasicContextHelp();
 
-    float m_mouseStartY;
-    float m_mouseLastY;
+    //float m_mouseStartY;
+    float m_mouseLastY{0};
     bool m_canSelect;
 };
 
