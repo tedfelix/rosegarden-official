@@ -20,12 +20,11 @@
 #define RG_MARKEREDITOR_H
 
 #include "gui/general/ActionFileClient.h"
+#include "base/TimeT.h"
 
 #include <QMainWindow>
 #include <QString>
 #include <QModelIndex>
-
-#include "base/Event.h"
 
 class QWidget;
 class QPushButton;
@@ -33,6 +32,7 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QLabel;
 class QCloseEvent;
+
 
 namespace Rosegarden
 {
@@ -48,8 +48,9 @@ class MarkerEditor : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
+
     MarkerEditor(QWidget *parent,
-                       RosegardenDocument *doc);
+                 RosegardenDocument *doc);
     ~MarkerEditor() override;
 
     void initDialog();
@@ -65,7 +66,13 @@ public:
     // update pointer position
     void updatePosition();
 
-public slots:
+signals:
+
+    void closing();
+    void jumpToMarker(timeT);
+
+private slots:
+
     void slotUpdate();
 
     void slotAdd();
@@ -74,7 +81,7 @@ public slots:
     void slotClose();
     void slotEdit(QTreeWidgetItem *, int);
 
-    void slotItemClicked(QTreeWidgetItem *, int);   // item,column
+    void slotItemClicked(QTreeWidgetItem *item, int column);
 
     void slotMusicalTime();
     void slotRealTime();
@@ -82,34 +89,29 @@ public slots:
     void slotHelpRequested();
     void slotHelpAbout();
 
-signals:
-    void closing();
-    void jumpToMarker(timeT);
+private:
 
-protected:
     void closeEvent(QCloseEvent *) override;
 
     void setupActions();
 
-    //--------------- Data members ---------------------------------
-    RosegardenDocument        *m_doc;
+    RosegardenDocument *m_doc;
 
-    QLabel                  *m_absoluteTime;
-    QLabel                  *m_realTime;
-    QLabel                  *m_barTime;
+    QLabel *m_absoluteTime;
+    QLabel *m_realTime;
+    QLabel *m_barTime;
 
-    QPushButton             *m_closeButton;
+    QPushButton *m_closeButton;
 
-
-    QPushButton             *m_addButton;
-    QPushButton             *m_deleteButton;
-    QPushButton             *m_deleteAllButton;
+    QPushButton *m_addButton;
+    QPushButton *m_deleteButton;
+    QPushButton *m_deleteAllButton;
 
     // ??? QTreeWidget seems like overkill.  We never have sub items.
     //     QTableWidget seems like a better choice.
-    QTreeWidget               *m_listView;
+    QTreeWidget *m_treeWidget;
 
-    bool                     m_modified;
+    bool m_modified{false};
 };
 
 
