@@ -2,7 +2,10 @@
 
 #include "base/NotationTypes.h"
 #include "base/Pitch.h"
+
 #include <QTest>
+
+#include <iostream>
 
 using namespace Rosegarden;
 using std::cout;

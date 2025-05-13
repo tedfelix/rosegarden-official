@@ -16,12 +16,16 @@
 #ifndef RG_NOTATION_TYPES_H
 #define RG_NOTATION_TYPES_H
 
-#include <list>
-#include <map>
-
 #include <rosegardenprivate_export.h>
 
-#include "Event.h"
+#include "TimeT.h"
+#include "Exception.h"
+#include "PropertyName.h"
+
+#include <list>
+#include <string>
+#include <vector>
+#include <map>
 
 /*
  * NotationTypes.h
@@ -61,8 +65,12 @@
  * Program Changes.
  */
 
+
 namespace Rosegarden
 {
+
+
+class Event;
 
 extern ROSEGARDENPRIVATE_EXPORT const int MIN_SUBORDERING;
 

@@ -19,12 +19,17 @@
 
 #include "base/BaseProperties.h"
 #include "base/NotationTypes.h" // Just for Text
+#include "base/Event.h"
 #include "misc/Strings.h"
+
 #include <QString>
+
 
 namespace Rosegarden
 {
-   //SegmentID event types
+
+
+// SegmentID event types
 const std::string SegmentID::EventType = "segment ID";
 const int SegmentID::EventSubOrdering = -190;
 const PropertyName SegmentID::IDPropertyName("ID");

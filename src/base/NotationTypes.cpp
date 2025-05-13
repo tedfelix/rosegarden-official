@@ -16,6 +16,7 @@
 #include "NotationTypes.h"
 
 #include "BaseProperties.h"
+#include "Event.h"
 #include "NotationRules.h"
 #include "Pitch.h"
 
