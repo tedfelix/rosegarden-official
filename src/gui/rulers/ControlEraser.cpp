@@ -15,57 +15,52 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlEraser]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ControlEraser.h"
 
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-//#include "commands/matrix/MatrixModifyCommand.h"
-//#include "commands/matrix/MatrixInsertionCommand.h"
-//#include "commands/notation/NormalizeRestsCommand.h"
-#include "document/CommandHistory.h"
+#include "ControlTool.h"
 #include "ControlItem.h"
 #include "ControllerEventsRuler.h"
-#include "ControlTool.h"
 #include "ControlMouseEvent.h"
+
 #include "misc/Debug.h"
 
-#include <QCursor>
 
 namespace Rosegarden
 {
 
+
 ControlEraser::ControlEraser(ControlRuler *parent) :
     ControlTool("", "ControlEraser", parent)
 {
-//    createAction("select", SLOT(slotSelectSelected()));
-//    createAction("draw", SLOT(slotDrawSelected()));
-//    createAction("erase", SLOT(slotEraseSelected()));
-//    createAction("resize", SLOT(slotResizeSelected()));
-//
-//    createMenu();
 }
 
 void
 ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
 {
-    if (!e->itemList.size()) return;
+    if (!e->itemList.size())
+        return;
 
-    ControllerEventsRuler *ruler = static_cast <ControllerEventsRuler*> (m_ruler);
+    ControllerEventsRuler *ruler = dynamic_cast<ControllerEventsRuler *>(m_ruler);
+    if (!ruler)
+        return;
+
     ControlItemVector::const_iterator it;
 
-    // If any of the covered items is selected, delete entire selection
+    // If any items under the cursor are selected, delete entire selection.
     for (it = e->itemList.begin(); it != e->itemList.end(); ++it) {
         if ((*it)->isSelected()) {
+            // Erase the entire selection.
             ruler->eraseControllerEvent();
             break;
         }
     }
 
+    // If none were selected...
     if (it == e->itemList.end()) {
+        // Delete the first.
         it = e->itemList.begin();
         ruler->clearSelectedItems();
         ruler->addToSelection(*it);
@@ -80,16 +75,6 @@ ControlEraser::handleMouseMove(const ControlMouseEvent *e)
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
         setCursor(e);
-    }
-
-    if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A property drag action is in progress
-//        float delta = (e->value-m_mouseLastY);
-//        m_mouseLastY = e->value;
-//        ControlItemList *selected = m_ruler->getSelectedItems();
-//        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-//            (*it)->setValue((*it)->getValue()+delta);
-//        }
     }
 
     return NO_FOLLOW;
@@ -130,37 +115,7 @@ void ControlEraser::ready()
 {
     m_ruler->setCursor(Qt::CrossCursor);
     m_overItem = false;
-//    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-//            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-
-//    m_widget->setCanvasCursor(Qt::sizeAllCursor);
-//    setBasicContextHelp();
 }
 
-void ControlEraser::stow()
-{
-//    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-//               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-}
-
-//void PropertyAdjuster::setBasicContextHelp(bool ctrlPressed)
-//{
-//    EventSelection *selection = m_scene->getSelection();
-//    if (!selection || selection->getAddedEvents() < 2) {
-//        if (!ctrlPressed) {
-//            setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));
-//        } else {
-//            setContextHelp(tr("Click and drag to copy a note"));
-//        }
-//    } else {
-//        if (!ctrlPressed) {
-//            setContextHelp(tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
-//        } else {
-//            setContextHelp(tr("Click and drag to copy selected notes"));
-//        }
-//    }
-//}
-
-QString ControlEraser::ToolName() { return "eraser"; }
 
 }

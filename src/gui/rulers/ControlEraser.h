@@ -19,49 +19,38 @@
 #define RG_CONTROLERASER_H
 
 #include "ControlTool.h"
-//#include <QString>
-//#include "base/Event.h"
+
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-class Event;
+
 class ControlRuler;
+
 
 class ControlEraser : public ControlTool
 {
     Q_OBJECT
 
-    friend class ControlToolBox;
-
 public:
+
+    ControlEraser(ControlRuler *);
+
     void handleLeftButtonPress(const ControlMouseEvent *) override;
     FollowMode handleMouseMove(const ControlMouseEvent *) override;
     void handleMouseRelease(const ControlMouseEvent *) override;
 
-    /**
-     * Respond to an event being deleted -- it may be the one the tool
-     * is remembering as the current event.
-     */
-//    virtual void handleEventRemoved(Event *event);
-
     void ready() override;
-    void stow() override;
+    void stow() override  { }
 
-    static QString ToolName();
+    static QString ToolName()  { return "eraser"; }
 
-signals:
-//    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
+private:
 
-protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
-
-protected:
-    ControlEraser(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
-    //float m_mouseStartY;
-    //float m_mouseLastY;
+
 };
 
 }
