@@ -18,20 +18,18 @@
 #ifndef RG_MATRIXSELECTOR_H
 #define RG_MATRIXSELECTOR_H
 
-#include <QGraphicsRectItem>
 #include "MatrixTool.h"
-#include <QString>
-#include <QList>
-#include "base/Event.h"
-#include "base/Segment.h"
 #include "MatrixScene.h"
 
+#include <QGraphicsRectItem>
+#include <QList>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class MatrixViewSegment;
 class MatrixElement;
 class EventSelection;
@@ -89,14 +87,15 @@ public slots:
      */
     void handleEventRemoved(Event *event) override;
 
-protected slots:
-    // unused void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
-
 signals:
     void gotSelection(); // inform that we've got a new selection
     void editTriggerSegment(int);
 
-protected:
+private slots:
+    // unused void slotMatrixScrolled(int x, int y); // do we need this? probably not
+
+private:
+
     explicit MatrixSelector(MatrixWidget *);
 
     void setContextHelpFor(const MatrixMouseEvent *, bool ctrlPressed = false);
@@ -112,29 +111,27 @@ protected:
         (EventSelection *&selection,
          MatrixScene::EventWithSegmentMap* previewEvents = nullptr);
 
-    //--------------- Data members ---------------------------------
-
-    QGraphicsRectItem *m_selectionRect;
+    QGraphicsRectItem *m_selectionRect{nullptr};
     QPointF m_selectionOrigin;
-    bool m_updateRect;
+    bool m_updateRect{false};
 
-    MatrixViewSegment *m_currentViewSegment;
-    MatrixElement *m_clickedElement;
+    MatrixViewSegment *m_currentViewSegment{nullptr};
+    MatrixElement *m_clickedElement{nullptr};
     /// Event associated with m_clickedElement.
-    Event *m_event;
+    Event *m_event{nullptr};
 
     // tool to delegate to
-    MatrixTool *m_dispatchTool;
+    MatrixTool *m_dispatchTool{nullptr};
 
-    bool m_justSelectedBar;
+    bool m_justSelectedBar{false};
 
-    EventSelection *m_selectionToMerge;
+    EventSelection *m_selectionToMerge{nullptr};
 
     QList<QGraphicsItem *> m_previousCollisions;
 };
 
 
-
 }
+
 
 #endif

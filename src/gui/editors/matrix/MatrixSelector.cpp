@@ -16,23 +16,10 @@
 */
 
 #define RG_MODULE_STRING "[MatrixSelector]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "MatrixSelector.h"
 
-#include "misc/Strings.h"
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/NotationTypes.h"
-#include "base/Selection.h"
-#include "base/ViewElement.h"
-#include "base/SnapGrid.h"
-#include "commands/edit/EventEditCommand.h"
-#include "document/CommandHistory.h"
-#include "document/RosegardenDocument.h"
-#include "misc/ConfigGroups.h"
-#include "gui/editors/event/EditEvent.h"
-#include "gui/general/GUIPalette.h"
 #include "MatrixElement.h"
 #include "MatrixMover.h"
 #include "MatrixPainter.h"
@@ -43,34 +30,32 @@
 #include "MatrixWidget.h"
 #include "MatrixScene.h"
 #include "MatrixMouseEvent.h"
-#include "misc/Debug.h"
 
-#include <QSettings>
+#include "base/BaseProperties.h"
+#include "base/Event.h"
+#include "base/NotationTypes.h"
+#include "base/SnapGrid.h"
+#include "commands/edit/EventEditCommand.h"
+#include "document/CommandHistory.h"
+#include "gui/editors/event/EditEvent.h"
+#include "gui/general/GUIPalette.h"
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
 
-MatrixSelector::MatrixSelector(MatrixWidget *widget) :
-    MatrixTool("matrixselector.rc", "MatrixSelector", widget),
-    m_selectionRect(nullptr),
-    m_selectionOrigin(),
-    m_updateRect(false),
-    m_currentViewSegment(nullptr),
-    m_clickedElement(nullptr),
-    m_event(nullptr),
-    m_dispatchTool(nullptr),
-    m_justSelectedBar(false),
-    m_selectionToMerge(nullptr),
-    m_previousCollisions()
-{
-    //connect(m_widget, SIGNAL(usedSelection()),
-    //        this, SLOT(slotHideSelection()));
 
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
+MatrixSelector::MatrixSelector(MatrixWidget *widget) :
+    MatrixTool("matrixselector.rc", "MatrixSelector", widget)
+{
+    //connect(m_widget, &MatrixWidget::usedSelection,
+    //        this, &MatrixSelector::slotHideSelection);
+
+    createAction("resize", &MatrixSelector::slotResizeSelected);
+    createAction("draw", &MatrixSelector::slotDrawSelected);
+    createAction("erase", &MatrixSelector::slotEraseSelected);
+    createAction("move", &MatrixSelector::slotMoveSelected);
 
     createMenu();
 }
@@ -273,7 +258,7 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
     }
 
 #if 0
-    // Feature Request #124: multiclick select methods shouldwork in matrix
+    // Feature Request #124: multiclick select methods should work in matrix
     // editor (was #988167)
 
     // Postponing this, as it falls foul of world-matrix transformation
@@ -292,7 +277,7 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
 
         m_justSelectedBar = true;
         QTimer::singleShot(QApplication::doubleClickInterval(), this,
-                           SLOT(slotClickTimeout()));
+                           &MatrixSelector::slotClickTimeout);
     }
 #endif
 }
@@ -312,7 +297,7 @@ MatrixSelector::handleMouseTripleClick(const MatrixMouseEvent *e)
         handleLeftButtonPress(e);
         return;
 
-/*!!! see note above
+/* see note above
     } else {
 
         m_selectionRect->setX(staff->getX());
@@ -433,15 +418,11 @@ void MatrixSelector::keyReleaseEvent(QKeyEvent *e)
 void
 MatrixSelector::ready()
 {
-    if (m_widget) m_widget->setCanvasCursor(Qt::ArrowCursor);
+    if (m_widget)
+        m_widget->setCanvasCursor(Qt::ArrowCursor);
 
-
-/*!!!
-    connect(m_widget->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotMatrixScrolled(int, int)));
-*/
-    setContextHelp
-        (tr("Click and drag to select; middle-click and drag to draw new note"));
+    setContextHelp(tr(
+            "Click and drag to select; middle-click and drag to draw new note"));
 }
 
 void
@@ -452,11 +433,6 @@ MatrixSelector::stow()
         m_selectionRect = nullptr;
 //        m_widget->canvas()->update();
     }
-/*!!!
-    disconnect(m_widget->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotMatrixScrolled(int, int)));
-*/
-
 }
 
 /* unused
@@ -465,8 +441,8 @@ MatrixSelector::slotHideSelection()
 {
     if (!m_selectionRect) return;
     m_selectionRect->hide();
-//!!!    m_selectionRect->setSize(0, 0);
-//!!!    m_widget->canvas()->update();
+//    m_selectionRect->setSize(0, 0);
+//    m_widget->canvas()->update();
 }
 */
 
@@ -475,7 +451,7 @@ void
 MatrixSelector::slotMatrixScrolled(int , int)
 {
 */
-/*!!!
+/*
     if (m_updateRect) {
 
         int offsetX = newX - m_widget->getCanvasView()->contentsX();
