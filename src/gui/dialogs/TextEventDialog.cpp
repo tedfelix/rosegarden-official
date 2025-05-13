@@ -16,8 +16,10 @@
 */
 
 #define RG_MODULE_STRING "[TextEventDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TextEventDialog.h"
+
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
@@ -41,13 +43,14 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QSpinBox>
-#include <QApplication>
+//#include <QApplication>
 #include <QUrl>
 #include <QDesktopServices>
 
 
 namespace Rosegarden
 {
+
 
 TextEventDialog::TextEventDialog(QWidget *parent,
                                  NotePixmapFactory *npf,
@@ -63,12 +66,12 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    QWidget *vbox = dynamic_cast<QWidget*>( this );
-    vbox->setLayout( vboxLayout );
+    QWidget *vbox = dynamic_cast<QWidget*>(this);
+    vbox->setLayout(vboxLayout);
 
-    QGroupBox *entryBox = new QGroupBox( tr("Specification"), vbox );
+    QGroupBox *entryBox = new QGroupBox(tr("Specification"), vbox);
     vboxLayout->addWidget(entryBox);
-    QGroupBox *exampleBox = new QGroupBox( tr("Preview"), vbox );
+    QGroupBox *exampleBox = new QGroupBox(tr("Preview"), vbox);
     QVBoxLayout *exampleBoxLayout = new QVBoxLayout;
     exampleBox->setLayout(exampleBoxLayout);
 
@@ -357,25 +360,52 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_prevLyric = settings.value("previous_lyric", "").toString();
     m_prevAnnotation = settings.value("previous_annotation", "").toString();
 
-    QObject::connect(m_text, &QLineEdit::textChanged,
-                     this, &TextEventDialog::slotTextChanged);
-    QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotTypeChanged(const QString &)));
-    QObject::connect(m_dynamicShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotDynamicShortcutChanged(const QString &)));
-    QObject::connect(m_directionShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotDirectionShortcutChanged(const QString &)));
-    QObject::connect(m_localDirectionShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLocalDirectionShortcutChanged(const QString &)));
-    QObject::connect(m_tempoShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotTempoShortcutChanged(const QString &)));
-    QObject::connect(m_localTempoShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLocalTempoShortcutChanged(const QString &)));
-    QObject::connect(m_lilyPondDirectiveCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLilyPondDirectiveChanged(const QString &)));
+    connect(m_text, &QLineEdit::textChanged,
+            this, &TextEventDialog::slotTextChanged);
 
-    QObject::connect(m_optionLabel, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
-    QObject::connect(m_optionWidget, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    connect(m_typeCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotTypeChanged);
+    connect(m_dynamicShortcutCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotDynamicShortcutChanged);
+    connect(m_directionShortcutCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotDirectionShortcutChanged);
+    connect(m_localDirectionShortcutCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotLocalDirectionShortcutChanged);
+    connect(m_tempoShortcutCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotTempoShortcutChanged);
+    connect(m_localTempoShortcutCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotLocalTempoShortcutChanged);
+    connect(m_lilyPondDirectiveCombo, &QComboBox::textActivated,
+            this, &TextEventDialog::slotLilyPondDirectiveChanged);
+#else
+    connect(m_typeCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotTypeChanged);
+    connect(m_dynamicShortcutCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotDynamicShortcutChanged);
+    connect(m_directionShortcutCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotDirectionShortcutChanged);
+    connect(m_localDirectionShortcutCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotLocalDirectionShortcutChanged);
+    connect(m_tempoShortcutCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotTempoShortcutChanged);
+    connect(m_localTempoShortcutCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotLocalTempoShortcutChanged);
+    connect(m_lilyPondDirectiveCombo, (void(QComboBox::*)(const QString &))
+                    &QComboBox::activated,
+            this, &TextEventDialog::slotLilyPondDirectiveChanged);
+#endif
+
+    connect(m_optionLabel, &QStackedWidget::currentChanged,
+            this, &TextEventDialog::slotUpdateSize);
+    connect(m_optionWidget, &QStackedWidget::currentChanged,
+            this, &TextEventDialog::slotUpdateSize);
 
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
