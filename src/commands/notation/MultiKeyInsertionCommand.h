@@ -20,21 +20,19 @@
 #define RG_MULTIKEYINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
+#include "base/TimeT.h"
 #include "misc/Strings.h"
 #include "document/Command.h"
 #include "document/RosegardenDocument.h"
 
-
-class Add;
+#include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-//class Composition;
+
 class RosegardenDocument;
 
 

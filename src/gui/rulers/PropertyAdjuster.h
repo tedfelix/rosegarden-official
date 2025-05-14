@@ -19,15 +19,17 @@
 #define RG_PROPERTYADJUSTER_H
 
 #include "ControlTool.h"
-//#include <QString>
-//#include "base/Event.h"
+
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class Event;
 class ControlRuler;
+
 
 class PropertyAdjuster : public ControlTool
 {

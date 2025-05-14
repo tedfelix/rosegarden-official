@@ -21,18 +21,20 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class Segment;
 class LinkedSegment;
 class Event;
+
 
 class ClefInsertionCommand : public BasicCommand
 {

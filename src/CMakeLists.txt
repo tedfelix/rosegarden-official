@@ -597,7 +597,6 @@ set(rg_CPPS
   commands/notation/CycleSlashesCommand.cpp
   commands/notation/ClefInsertionCommand.cpp
   commands/notation/ChangeStyleCommand.cpp
-  commands/notation/GraceCommand.cpp
   commands/notation/RespellCommand.cpp
   commands/notation/TieNotesCommand.cpp
   commands/notation/KeyInsertionCommand.cpp

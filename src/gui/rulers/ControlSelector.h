@@ -19,19 +19,21 @@
 #define RG_CONTROLSELECTOR_H
 
 #include "ControlMover.h"
-//#include <QString>
-//#include "base/Event.h"
 #include "ControlItem.h"
 
+#include <QString>
 
 class QRectF;
 class QPoint;
 
+
 namespace Rosegarden
 {
 
+
 class Event;
 class ControlRuler;
+
 
 class ControlSelector : public ControlMover
 {

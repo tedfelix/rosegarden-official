@@ -20,7 +20,6 @@
 #define RG_LOOPRULER_H
 
 #include "base/SnapGrid.h"
-//#include "base/Event.h"
 
 #include <QSize>
 #include <QWidget>

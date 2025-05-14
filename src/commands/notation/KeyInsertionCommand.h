@@ -21,20 +21,20 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
+#include "base/TimeT.h"
 #include "misc/Strings.h"
 
-
-class Add;
+#include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class Segment;
 class Event;
+
 
 //!!! Note, the shouldIgnorePercussion parameter probably shouldn't have been
 // added to the individual KeyInsertionCommand in the first place, but I haven't

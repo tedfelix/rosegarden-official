@@ -20,13 +20,14 @@
 #define RG_MATRIXINSERTIONCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Event;

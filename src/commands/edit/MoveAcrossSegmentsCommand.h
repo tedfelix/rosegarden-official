@@ -19,15 +19,16 @@
 #ifndef RG_MOVEACROSSSEGMENTSCOMMAND_H
 #define RG_MOVEACROSSSEGMENTSCOMMAND_H
 
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/Command.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class EventSelection;
@@ -51,7 +52,6 @@ private:
     Clipboard *m_clipboard;
 };
     
-
 
 }
 

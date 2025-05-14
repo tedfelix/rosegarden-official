@@ -19,12 +19,14 @@
 #define RG_MOVECOMMAND_H
 
 #include "document/BasicCommand.h"
+
 #include <QString>
 #include <QCoreApplication>
-#include "base/Event.h"
+
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class EventSelection;

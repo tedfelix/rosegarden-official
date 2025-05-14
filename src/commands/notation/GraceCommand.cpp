@@ -18,19 +18,19 @@
 
 #include "GraceCommand.h"
 
-#include "base/NotationTypes.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "document/BasicCommand.h"
-#include "base/BaseProperties.h"
-#include "document/CommandRegistry.h"
-#include <QString>
+//#include "base/NotationTypes.h"
+//#include "base/Segment.h"
+//#include "base/Selection.h"
+//#include "document/BasicCommand.h"
+//#include "base/BaseProperties.h"
+//#include "document/CommandRegistry.h"
+//#include <QString>
 
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
+//using namespace BaseProperties;
 
 /*!!!
 

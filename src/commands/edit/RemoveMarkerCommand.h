@@ -19,17 +19,18 @@
 #ifndef RG_REMOVEMARKERCOMMAND_H
 #define RG_REMOVEMARKERCOMMAND_H
 
-#include <string>
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
+
 #include <QCoreApplication>
+#include <QString>
 
-
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Marker;
 class Composition;

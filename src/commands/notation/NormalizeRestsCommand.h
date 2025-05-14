@@ -20,15 +20,15 @@
 #define RG_NORMALIZERESTSCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
+
 #include <QCoreApplication>
-
-
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class EventSelection;
@@ -40,8 +40,8 @@ class NormalizeRestsCommand : public BasicCommand
 
 public:
     NormalizeRestsCommand(Segment &s,
-                                        timeT startTime,
-                                        timeT endTime) :
+                          timeT startTime,
+                          timeT endTime) :
         BasicCommand(getGlobalName(), s, startTime, endTime) { }
 
     explicit NormalizeRestsCommand(EventSelection &selection);

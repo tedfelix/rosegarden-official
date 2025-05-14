@@ -20,15 +20,15 @@
 #define RG_COLLAPSERESTSCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
+
 #include <QCoreApplication>
-
-
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class EventSelection;

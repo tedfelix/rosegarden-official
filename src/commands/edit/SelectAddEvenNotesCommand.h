@@ -18,17 +18,22 @@
 #ifndef RG_SELECTADDEVENNOTESSCOMMAND_H
 #define RG_SELECTADDEVENNOTESSCOMMAND_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/BasicCommand.h"
 #include "document/Command.h"
 
 #include <QCoreApplication>
 #include <QString>
 
+
 namespace Rosegarden
 {
+
+
+class Event;
 class Segment;
- class EventSelection;
+class EventSelection;
+
 
 // Select evenly spaced note events, adding new ones where needed.
 class SelectAddEvenNotesCommand : public BasicCommand

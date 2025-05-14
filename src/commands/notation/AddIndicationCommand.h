@@ -20,15 +20,17 @@
 #define RG_ADDINDICATIONCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include <string>
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+#include <QString>
+
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class EventSelection;
 class Event;

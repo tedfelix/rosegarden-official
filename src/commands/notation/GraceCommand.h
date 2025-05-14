@@ -19,22 +19,21 @@
 #ifndef RG_GRACECOMMAND_H
 #define RG_GRACECOMMAND_H
 
-#include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
+//#include "document/BasicCommand.h"
+//#include "base/Event.h"
 
-
-class Make;
+//#include <QCoreApplication>
+//#include <QString>
 
 
 namespace Rosegarden
 {
 
-class EventSelection;
-class CommandRegistry;
+//class Make;
+//class EventSelection;
+//class CommandRegistry;
 
-/*!!!
+/*
 class GraceCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::GraceCommand)

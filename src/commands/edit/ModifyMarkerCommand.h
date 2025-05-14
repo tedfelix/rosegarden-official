@@ -20,7 +20,6 @@
 #define RG_MODIFYMARKERCOMMAND_H
 
 #include "document/Command.h"
-//#include "base/Event.h"
 #include "base/TimeT.h"
 
 #include <QCoreApplication>

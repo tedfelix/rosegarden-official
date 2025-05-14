@@ -21,16 +21,16 @@
 
 #include "document/BasicCommand.h"
 #include "base/Selection.h"
-#include <map>
-#include <QString>
-#include "base/Event.h"
+
 #include <QCoreApplication>
+#include <QString>
 
-
+#include <map>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Clipboard;

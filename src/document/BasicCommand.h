@@ -21,7 +21,6 @@
 
 #include "base/Segment.h"
 #include "document/Command.h"
-#include "base/Event.h"
 #include "misc/Debug.h"
 
 #include <memory>  // for shared_ptr

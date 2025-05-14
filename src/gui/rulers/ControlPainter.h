@@ -19,15 +19,17 @@
 #define RG_CONTROLPAINTER_H
 
 #include "ControlMover.h"
-//#include <QString>
-//#include "base/Event.h"
+
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class Event;
 class ControlRuler;
+
 
 class ControlPainter : public ControlMover
 {

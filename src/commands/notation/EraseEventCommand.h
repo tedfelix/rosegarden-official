@@ -20,14 +20,14 @@
 #define RG_ERASEEVENTCOMMAND_H
 
 #include "document/BasicCommand.h"
+#include "base/TimeT.h"
+
 #include <string>
-#include "base/Event.h"
-
-
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Event;

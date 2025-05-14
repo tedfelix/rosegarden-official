@@ -20,14 +20,14 @@
 #define RG_MATRIXERASECOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 
-
 namespace Rosegarden
 {
+
 
 class Segment;
 class Event;
@@ -49,8 +49,6 @@ protected:
     Event *m_event; // only used on 1st execute (cf bruteForceRedo)
     timeT m_relayoutEndTime;
 };
-
-//------------------------------
 
 
 }
