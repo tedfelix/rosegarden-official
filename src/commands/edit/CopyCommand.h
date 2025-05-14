@@ -20,12 +20,10 @@
 #define RG_COPYCOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
 #include "base/Selection.h"
+
+#include <QString>
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden

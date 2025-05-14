@@ -17,14 +17,20 @@
 #ifndef RG_VIEWELEMENT_H
 #define RG_VIEWELEMENT_H
 
-
 #include "Event.h"
+#include "TimeT.h"
 
 #include <set>
-#include <list>
+#include <string>
+#include <iostream>
+
 
 namespace Rosegarden
 {
+
+
+class Event;
+
 
 /// An event (note, rest) on an editor (notation, matrix).
 /**

@@ -20,15 +20,15 @@
 #define RG_CUTANDCLOSECOMMAND_H
 
 #include "document/Command.h"
+#include "base/TimeT.h"
+
 #include <QString>
-#include "base/Event.h"
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class EventSelection;

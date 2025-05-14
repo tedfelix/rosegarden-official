@@ -19,17 +19,19 @@
 #ifndef RG_MODIFYMARKERCOMMAND_H
 #define RG_MODIFYMARKERCOMMAND_H
 
-#include <string>
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
+//#include "base/Event.h"
+#include "base/TimeT.h"
+
 #include <QCoreApplication>
+#include <QString>
 
-
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 

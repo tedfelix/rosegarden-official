@@ -19,7 +19,6 @@
 #define RG_EVENTQUANTIZECOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
 
 #include <QObject>
 #include <QPointer>

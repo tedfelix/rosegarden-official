@@ -18,13 +18,15 @@
 #ifndef RG_RULER_SCALE_H
 #define RG_RULER_SCALE_H
 
-#include "Event.h"
 #include "base/Segment.h"
 #include "Selection.h"
 
+
 namespace Rosegarden {
 
+
 class Composition;
+
 
 /**
  * RulerScale is a base for classes that may be queried in order to
@@ -50,7 +52,6 @@ class Composition;
  * theory though we should probably subclass out these "default"
  * implementations into an intermediate abstract class.)
  */
-
 class RulerScale
 {
 public:

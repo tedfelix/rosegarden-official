@@ -17,11 +17,6 @@
 #ifndef RG_SEGMENT_H
 #define RG_SEGMENT_H
 
-#include <set>
-#include <list>
-#include <string>
-#include <memory>
-
 #include "Track.h"
 #include "Event.h"
 #include "base/NotationTypes.h"
@@ -33,8 +28,23 @@
 #include <QColor>
 #include <QSharedPointer>
 
+#include <set>
+#include <list>
+#include <string>
+#include <memory>
+
+
 namespace Rosegarden
 {
+
+
+class SegmentObserver;
+class Quantizer;
+class BasicQuantizer;
+class Composition;
+class SegmentLinker;
+class BasicCommand;
+
 
 /// A refresh flag with a time range.
 class SegmentRefreshStatus : public RefreshStatus
@@ -51,13 +61,6 @@ protected:
     timeT m_from;
     timeT m_to;
 };
-
-class SegmentObserver;
-class Quantizer;
-class BasicQuantizer;
-class Composition;
-class SegmentLinker;
-class BasicCommand;
 
 /// Container of Events.
 /**

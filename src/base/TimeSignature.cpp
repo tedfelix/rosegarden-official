@@ -15,6 +15,8 @@
 
 #include "TimeSignature.h"
 
+#include "Event.h"
+
 
 namespace Rosegarden
 {

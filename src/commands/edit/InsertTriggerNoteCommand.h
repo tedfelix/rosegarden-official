@@ -23,14 +23,15 @@
 #include "base/TriggerSegment.h"
 #include "document/BasicCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
-#include <string>
-#include "base/Event.h"
 
 #include <QCoreApplication>
+
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -42,7 +43,7 @@ class InsertTriggerNoteCommand : public BasicCommand
 public:
     InsertTriggerNoteCommand(Segment &,
                              timeT time,
-			     timeT duration,
+                             timeT duration,
                              int pitch,
                              int velocity,
                              NoteStyleName noteStyle,

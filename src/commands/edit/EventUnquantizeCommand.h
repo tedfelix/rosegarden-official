@@ -20,7 +20,6 @@
 #define RG_EVENTUNQUANTIZECOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
 
 #include <QCoreApplication>
 
@@ -32,6 +31,7 @@ namespace Rosegarden
 class Segment;
 class Quantizer;
 class EventSelection;
+
 
 /// Unquantize the selection or segment.
 /**

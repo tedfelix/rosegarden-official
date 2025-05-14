@@ -16,22 +16,28 @@
 #ifndef SELECTION_H
 #define SELECTION_H
 
-#include <set>
-#include "Event.h"
+#include "Composition.h"  // for TempoT
+
 #include "base/Segment.h"
 #include "base/NotationTypes.h"
-#include "Composition.h"
+#include "base/TimeSignature.h"
+
+#include <set>
+
 
 namespace Rosegarden {
 
+
+class Event;
 class EventSelection;
+
 
 class EventSelectionObserver {
 public:
     virtual ~EventSelectionObserver();
-    virtual void eventSelected(EventSelection *e,Event *)=0;
-    virtual void eventDeselected(EventSelection *e,Event *)=0;
-    virtual void eventSelectionDestroyed(EventSelection *e)=0;
+    virtual void eventSelected(EventSelection *e, Event *) = 0;
+    virtual void eventDeselected(EventSelection *e, Event *) = 0;
+    virtual void eventSelectionDestroyed(EventSelection *e) = 0;
 };
 
 /**
@@ -39,7 +45,6 @@ public:
  * that are contained in a single Segment, used for cut'n paste operations.  It
  * does not take a copy of those Events, it just remembers which ones they are.
  */
-
 class ROSEGARDENPRIVATE_EXPORT EventSelection : public SegmentObserver
 {
 public:

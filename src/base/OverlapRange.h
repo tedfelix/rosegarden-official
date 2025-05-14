@@ -13,20 +13,15 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #ifndef RG_OVERLAP_RANGE_H
 #define RG_OVERLAP_RANGE_H
 
 #include <vector>
-#include <map>
-
-#include "Event.h"
-
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 class Segment;
@@ -76,15 +71,13 @@ public :
     }
 
 
-private :
-    //--------------- Data members ---------------------------------
+private:
 
     std::vector<Segment *> m_segments;
-    bool           m_inconsistancy;
-    T              m_property;
+    bool m_inconsistancy;
+    T m_property;
 
 };
-
 
 //------------- Specialized functions -----------------------------------
 

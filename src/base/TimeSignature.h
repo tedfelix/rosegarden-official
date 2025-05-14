@@ -18,16 +18,20 @@
 
 #include <rosegardenprivate_export.h>
 
-#include "Event.h"
 #include "NotationTypes.h"
 #include "PropertyName.h"
 #include "TimeT.h"
 
 #include <list>
+#include <string>
+#include <vector>
 
 
 namespace Rosegarden
 {
+
+
+class Event;
 
 
 typedef std::list<int> DurationList;

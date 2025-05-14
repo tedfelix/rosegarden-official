@@ -13,22 +13,19 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #ifndef RG_OVERLAPS_H
 #define RG_OVERLAPS_H
+
+#include "Segment.h"
+#include "OverlapRange.h"
 
 #include <vector>
 #include <map>
 
-#include "Event.h"
-#include "Segment.h"
-#include "OverlapRange.h"
-
-
 
 namespace Rosegarden
 {
+
 
 /**
  * This class aims to pack in an unique object the list of notation
@@ -41,7 +38,6 @@ namespace Rosegarden
  * The template parameter may be Clef, Key or int (the last one to find out
  * transposition inconsistencies)
  */
-
 template <class T>
 class Overlaps : public std::map<timeT, OverlapRange<T> >
 {
