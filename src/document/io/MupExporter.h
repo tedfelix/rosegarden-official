@@ -20,19 +20,20 @@
 #define RG_MUPEXPORTER_H
 
 #include "base/Track.h"
+#include "base/TimeT.h"
+#include "base/NotationTypes.h"
+
+#include <fstream>
 #include <map>
 #include <string>
 #include <utility>
-#include "base/Event.h"
-#include "base/NotationTypes.h"
-#include <fstream>
-
 
 class QObject;
 
 
 namespace Rosegarden
 {
+
 
 class TimeSignature;
 class Segment;
@@ -43,7 +44,6 @@ class Composition;
 /**
  * Mup file export
  */
-
 class MupExporter
 {
 public:
@@ -54,11 +54,11 @@ public:
 
 protected:
     timeT writeBar(std::ofstream &,
-                               Composition *,
-                               Segment *,
-                               timeT, timeT,
-                               TimeSignature &,
-                               TrackId);
+                   Composition *,
+                   Segment *,
+                   timeT, timeT,
+                   TimeSignature &,
+                   TrackId);
     void writeClefAndKey(std::ofstream &, TrackId trackNo);
     static void writeInventedRests(std::ofstream &,
                             TimeSignature &timeSig,

@@ -36,6 +36,8 @@
 #include <QCoreApplication>
 #include <QObject>
 
+#include <fstream>
+
 using std::string;
 
 namespace Rosegarden

@@ -20,13 +20,15 @@
 #define RG_SEGMENTRESIZEFROMSTARTCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -48,7 +50,7 @@ public:
                                   timeT newStartTime);
     ~SegmentResizeFromStartCommand() override;
 
-    static QString getGlobalName() { return tr("Resize Segment"); }
+    static QString getGlobalName()  { return tr("Resize Segment"); }
 
 protected:
     void modifySegment() override;
@@ -58,7 +60,6 @@ private:
     timeT m_oldStartTime;
     timeT m_newStartTime;
 };
-
 
 
 }

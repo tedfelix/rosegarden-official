@@ -43,6 +43,7 @@
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "sound/PluginIdentifier.h"
 #include "gui/general/PresetHandlerDialog.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"

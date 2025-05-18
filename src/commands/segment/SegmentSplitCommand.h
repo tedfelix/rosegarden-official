@@ -19,16 +19,17 @@
 #ifndef RG_SEGMENTSPLITCOMMAND_H
 #define RG_SEGMENTSPLITCOMMAND_H
 
-#include <string>
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 #include <vector>
 
+
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -46,16 +47,16 @@ public:
                         bool keepLabel = false);
     ~SegmentSplitCommand() override;
 
-    bool isValid() { return isValid(m_segment, m_splitTime); }
-    static bool isValid(Segment * segment, timeT splitTime);
+    bool isValid()  { return isValid(m_segment, m_splitTime); }
+    static bool isValid(Segment *segment, timeT splitTime);
 
     void execute() override;
     void unexecute() override;
 
     static SegmentVec getNewSegments(Segment *segment, timeT splitTime,
 				     bool keepLabel);
-    Segment *getSegmentA() { return m_newSegmentA; }
-    Segment *getSegmentB() { return m_newSegmentB; }
+    Segment *getSegmentA()  { return m_newSegmentA; }
+    Segment *getSegmentB()  { return m_newSegmentB; }
 
 private:
     Segment *m_segment;

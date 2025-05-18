@@ -20,16 +20,14 @@
 #define RG_SEGMENTSYNCCLEFCOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
 #include "base/NotationTypes.h"
-#include "base/Selection.h"
-#include "document/CommandHistory.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -39,13 +37,14 @@ class SegmentSyncClefCommand : public MacroCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentSyncClefCommand)
 
 public:
-    SegmentSyncClefCommand(Segment &segment, const Clef& clef);
+    SegmentSyncClefCommand(Segment &segment, const Clef &clef);
 
     ~SegmentSyncClefCommand() override;
 
 protected:
-    void processSegment(Segment &segment, const Clef& clef);
+    void processSegment(Segment &segment, const Clef &clef);
 };
+
 
 }
 

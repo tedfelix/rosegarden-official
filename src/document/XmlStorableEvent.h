@@ -20,11 +20,14 @@
 #define RG_XMLSTORABLEEVENT_H
 
 #include "base/Event.h"
+#include "base/TimeT.h"
 
 class QXmlStreamAttributes;
 
+
 namespace Rosegarden
 {
+
 
 /**
  * An Event which can generate an XML representation of itself,

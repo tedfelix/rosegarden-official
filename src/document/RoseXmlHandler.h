@@ -20,23 +20,22 @@
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/io/XMLHandler.h"
 
 #include <QString>
-#include <QtCore/QSharedPointer>
 #include <QPointer>
 #include <QProgressDialog>
 #include <QSharedPointer>
 
 #include <map>
 #include <set>
-#include <vector>
 #include <string>
 
 
 namespace Rosegarden
 {
+
 
 class XmlStorableEvent;
 class XmlSubHandler;

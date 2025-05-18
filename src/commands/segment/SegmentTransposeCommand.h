@@ -20,13 +20,16 @@
 #define RG_SEGMENTTRANSPOSECOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
 #include "base/Selection.h"
-#include "document/CommandHistory.h"
+
 #include <QCoreApplication>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -52,11 +55,13 @@ public:
 
 private:
 
-    void processSegment(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack);
+    void processSegment(Segment &segment, bool changeKey, int steps,
+            int semitones, bool transposeSegmentBack);
 
     std::vector<EventSelection *> m_selections;
 
 };
+
 
 }
 

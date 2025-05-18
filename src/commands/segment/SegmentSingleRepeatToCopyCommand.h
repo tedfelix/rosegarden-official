@@ -20,13 +20,14 @@
 #define RG_SEGMENTSINGLEREPEATTOCOPYCOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Composition;

@@ -27,7 +27,7 @@
 #include "base/Studio.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "sound/AudioFileManager.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QObject>
 #include <QString>
@@ -36,13 +36,12 @@
 #include <QPointer>
 #include <QSharedPointer>
 
+class QLockFile;
+class QTextStream;
+
 #include <map>
 #include <vector>
 
-class QLockFile;
-class QWidget;
-class QTextStream;
-class NoteOnRecSet;
 
 namespace Rosegarden
 {

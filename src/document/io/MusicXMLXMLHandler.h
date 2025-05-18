@@ -18,29 +18,28 @@
 #ifndef RG_MUSICXMLXMLHANDLER_H
 #define RG_MUSICXMLXMLHANDLER_H
 
-#include "MusicXMLImportHelper.h"
-#include "MusicXMLLoader.h"
+#include "XMLHandler.h"
+
 #include "base/MidiProgram.h"
-#include "base/Event.h"
-#include "base/Track.h"
+#include "base/TimeT.h"
 #include "base/NotationTypes.h"
-#include "misc/Version.h"
-#include "document/io/XMLHandler.h"
 
 #include <QCoreApplication>
 #include <QString>
 
+#include <map>
 #include <string>
-#include <vector>
-#include <queue>
 
 
 namespace Rosegarden
 {
 
 
+class Event;
+class MusicXMLImportHelper;
 class RosegardenDocument;
 class Segment;
+class Track;
 
 
 class MusicXMLXMLHandler : public XMLHandler
