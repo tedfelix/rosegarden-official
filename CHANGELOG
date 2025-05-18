@@ -1,6 +1,6 @@
 ====== ROSEGARDEN 25.06 RELEASED ======
 
-The Rosegarden team is proud to announce the release of version 24.12
+The Rosegarden team is proud to announce the release of version 25.06
 of Rosegarden, a MIDI sequencer that features a rich understanding of
 music notation along with basic support for digital audio.
 
@@ -10,9 +10,9 @@ Included in this release...
 
 ===== Bug Fixes =====
 
-  * Lilypond: Fix the missing dot in property paths (LilyPond > 2.22)
+  * Lilypond: Fix the missing dot in property paths (LilyPond > 2.22).
     [3957c97969]
-  * lv2 add port sampleRate feature.  [03d35cad0a]
+  * LV2: Add port sampleRate feature.  [03d35cad0a]
   * Fixed Import Studio does not create new devices.  Bug #1709.
     [4460f3521b]
   * Notation: Improve wording of highlight menu items.  Bug #1708.
@@ -29,7 +29,7 @@ Included in this release...
   * Fix file dialogs forget paths.  Feature Request #518.  [5588528e46]
   * Fix crash when deleting a repeating segment opened in notation.
     Bug #1711.  [119e4672d9]
-  * Fix crash on Manage MIDI Devices window close.  Debian #1091859
+  * Fix crash on Manage MIDI Devices window close.  Debian #1091859.
     [64943ed3d8]
   * Fix crash on new document with bank editor open.  Bug #1712.
     [f68d7dbcd6]
@@ -50,9 +50,9 @@ Included in this release...
   * LilyPond: Fix deprecation warnings while processing RG output.
     Bug #1675.  [39bef99be1]
   * Matrix: Fix Add Tempo Change... not working.  [b9a781ee9c]
-  * Transport: Fix time not updating on tempo change.  [4c4d9d17e2]
   * Fix record input connections not happening.  [38d50e757f]
-  * LV2: Graduate out of beta.  Enable by default.  [90fccdab0a]
+  * Fix "toggle repeat" not handling mixed state in undo.  Bug #1722.
+    [1128116d13]
 
 ===== New Features =====
 
@@ -73,6 +73,7 @@ Included in this release...
   * MIDI Export: Add RPN and NRPN support.  Feature Request #467.
     [f02f6bf8fb]
   * Event List Editor: Add filtering All On/Off button.  [42f8635286]
+  * LV2: Graduate out of beta.  Enable by default.  [90fccdab0a]
 
 ===== General Improvements =====
 

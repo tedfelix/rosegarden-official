@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -55,7 +55,7 @@ class RealTime;
 class MappedEvent;
 
 
-class TransportDialog : public QDialog
+class TransportDialog : public QDialog, public CompositionObserver
 {
     Q_OBJECT
 
@@ -184,6 +184,10 @@ private:
 
     void setBackgroundColor(QColor color);
     void resetBackground();
+
+    // composition observer
+    void timeSignatureChanged(const Composition *comp) override;
+    void tempoChanged(const Composition *comp) override;
 
     QSharedPointer<Ui_RosegardenTransport> ui;
 
