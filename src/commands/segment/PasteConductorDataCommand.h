@@ -20,7 +20,7 @@
 #define RG_PASTECONDUCTORDATACOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/Selection.h"
 
 #include <QCoreApplication>
@@ -28,6 +28,7 @@
 
 namespace Rosegarden
 {
+
 
 class Composition;
 class Clipboard;
@@ -57,7 +58,6 @@ private:
     TimeSignatureSelection m_timesigsPre;
     TempoSelection m_temposPre;
 };
-
 
 
 }

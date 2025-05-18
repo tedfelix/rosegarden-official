@@ -21,10 +21,12 @@
 
 #include "document/Command.h"
 #include "base/Track.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QString>
+
 #include <vector>
+
 
 namespace Rosegarden
 {
@@ -33,6 +35,7 @@ namespace Rosegarden
 class Composition;
 class Segment;
 
+
 /// Move or resize segments, or change their tracks.
 class SegmentReconfigureCommand : public NamedCommand
 {
@@ -40,7 +43,7 @@ public:
     SegmentReconfigureCommand(QString name, Composition *composition);
     ~SegmentReconfigureCommand() override;
 
-    // rename: addChange()
+    // ??? rename: addChange()
     void addSegment(Segment *segment,
                     timeT newStartTime,
                     timeT newEndMarkerTime,

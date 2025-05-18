@@ -20,13 +20,14 @@
 #define RG_SEGMENTCHANGETRANSPOSECOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
+
 #include <QCoreApplication>
-#include <vector>
-#include "base/Event.h"
+#include <QString>
+
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -55,7 +56,6 @@ private:
     int m_oldUnit;
     int m_unit;
 };
-
 
 
 }

@@ -18,15 +18,16 @@
 #ifndef RG_SEGMENTINSERTCOMMAND_H
 #define RG_SEGMENTINSERTCOMMAND_H
 
+#include "base/TimeT.h"
 #include "base/Track.h"
 #include "document/Command.h"
-#include "base/Event.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 class Segment;
@@ -55,14 +56,13 @@ public:
     
 private:
     Composition *m_composition;
-    Studio      *m_studio;
-    Segment     *m_segment;
-    int                      m_track;
-    timeT        m_startTime;
-    timeT        m_endTime;
+    Studio *m_studio;
+    Segment *m_segment;
+    int m_track;
+    timeT m_startTime;
+    timeT m_endTime;
     bool m_detached;
 };
-
 
 
 }

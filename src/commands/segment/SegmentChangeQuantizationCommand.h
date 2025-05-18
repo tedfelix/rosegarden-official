@@ -19,14 +19,18 @@
 #define RG_SEGMENTCHANGEQUANTIZATIONCOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
-#include <QCoreApplication>
-#include <vector>
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "gui/editors/notation/NotationStrings.h"
+
+#include <QCoreApplication>
+#include <QString>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -66,7 +70,6 @@ private:
 
     timeT m_unit;
 };
-
 
 
 }

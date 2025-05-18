@@ -21,17 +21,20 @@
 
 #include "base/Selection.h"
 #include "document/Command.h"
-#include <vector>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+
+#include <vector>
 
 
 namespace Rosegarden
 {
 
+
 class Segment;
 class Composition;
+
 
 /**
  * Pull all segments, time sigs, tempos etc starting after the end of
@@ -78,7 +81,6 @@ private:
     timeT m_loopBegin;
     timeT m_loopEnd;
 };
-
 
 
 }

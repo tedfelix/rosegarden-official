@@ -20,19 +20,15 @@
 #define RG_REMOVETEMPOCHANGECOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/Composition.h" // for tempoT
+
 #include <QCoreApplication>
-
-
-class Remove;
+#include <QString>
 
 
 namespace Rosegarden
 {
-
-class Composition;
 
 
 class RemoveTempoChangeCommand : public NamedCommand
@@ -50,19 +46,17 @@ public:
 
     ~RemoveTempoChangeCommand() override {}
 
-    static QString getGlobalName() { return tr("Remove &Tempo Change..."); }
+    static QString getGlobalName()  { return tr("Remove &Tempo Change..."); }
 
     void execute() override;
     void unexecute() override;
 
 private:
     Composition *m_composition;
-    int                      m_tempoChangeIndex;
-    timeT        m_oldTime;
-    tempoT       m_oldTempo;
+    int m_tempoChangeIndex;
+    timeT m_oldTime;
+    tempoT m_oldTempo;
 };
-
-
 
 
 }

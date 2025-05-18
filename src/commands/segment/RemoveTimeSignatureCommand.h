@@ -20,15 +20,11 @@
 #define RG_REMOVETIMESIGNATURECOMMAND_H
 
 #include "base/TimeSignature.h"
+#include "base/TimeT.h"
 #include "document/Command.h"
-#include "base/Event.h"
-
 
 #include <QCoreApplication>
 #include <QString>
-
-
-//class Remove;
 
 
 namespace Rosegarden
@@ -51,20 +47,20 @@ public:
         m_oldTime(0),
         m_oldTimeSignature() { }
 
-    ~RemoveTimeSignatureCommand() override {}
+    ~RemoveTimeSignatureCommand() override  { }
 
-    static QString getGlobalName() { return tr("Remove &Time Signature Change..."); }
+    static QString getGlobalName()
+            { return tr("Remove &Time Signature Change..."); }
 
     void execute() override;
     void unexecute() override;
 
 private:
-    Composition  *m_composition;
-    int                       m_timeSigIndex;
-    timeT         m_oldTime;
+    Composition *m_composition;
+    int m_timeSigIndex;
+    timeT m_oldTime;
     TimeSignature m_oldTimeSignature;
 };    
-
 
 
 }

@@ -19,7 +19,7 @@
 #ifndef RG_PASTERANGECOMMAND_H
 #define RG_PASTERANGECOMMAND_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/Command.h"
 
 #include <QCoreApplication>
@@ -27,6 +27,7 @@
 
 namespace Rosegarden
 {
+
 
 class Composition;
 class Clipboard;
@@ -42,7 +43,6 @@ public:
                       timeT pasteTime);
 };
     
-
 
 }
 
