@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControllerEventsRuler]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "ControllerEventsRuler.h"
 #include "ControlRuler.h"
