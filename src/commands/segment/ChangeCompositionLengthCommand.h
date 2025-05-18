@@ -20,16 +20,15 @@
 #define RG_CHANGECOMPOSITIONLENGTHCOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
+
 #include <QCoreApplication>
-
-
-class Change;
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 

@@ -18,19 +18,22 @@
 #ifndef RG_SYMBOLINSERTIONCOMMAND_H
 #define RG_SYMBOLINSERTIONCOMMAND_H
 
-#include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/NotationTypes.h"
+#include "base/Selection.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class Segment;
 class Event;
+
 
 class SymbolInsertionCommand : public BasicCommand
 {

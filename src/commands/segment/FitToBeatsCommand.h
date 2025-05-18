@@ -19,15 +19,19 @@
 #define RG_FITTOBEATSCOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
-#include "base/Composition.h"
+#include "base/TimeT.h"
+#include "base/Composition.h"  // for tempoT
+#include "base/Segment.h"  // for SegmentMultiSet
+
 #include <QCoreApplication>
 #include <QString>
+
 #include <map>
 
 
 namespace Rosegarden
 {
+
 
 // @class FitToBeatsCommand
 // @remarks Implements the command "Fit Existing Beats to Beat Segment".
@@ -57,12 +61,9 @@ private:
     void changeSegments(SegmentMultiSet oldSegments,
                         SegmentMultiSet newSegments);
 
-    static int
-        getBeatRealTimes(Segment *s, vecRealTime &beatRealTimes);
-    static TempoChange
-        getTempoChange(Composition &composition, int i);
-    static void
-        getCurrentTempi(Composition &composition, TempoMap &Tempos);
+    static int getBeatRealTimes(Segment *s, vecRealTime &beatRealTimes);
+    static TempoChange getTempoChange(Composition &composition, int i);
+    static void getCurrentTempi(Composition &composition, TempoMap &Tempos);
 
     Composition *m_composition;
 
@@ -72,8 +73,9 @@ private:
     // with a timeT.  Could just use a TempoChange.
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
-    bool                              m_executed;
+    bool m_executed;
 };
+
 
 }
 

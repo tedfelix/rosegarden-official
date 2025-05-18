@@ -20,12 +20,13 @@
 #define RG_ADDTIMESIGNATUREANDNORMALIZECOMMAND_H
 
 #include "base/TimeSignature.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/Command.h"
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 
@@ -38,7 +39,6 @@ public:
                                         TimeSignature timeSig);
     ~AddTimeSignatureAndNormalizeCommand() override;
 };
-
 
 
 }

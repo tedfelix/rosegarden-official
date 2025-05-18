@@ -21,13 +21,12 @@
 
 #include "base/NotationTypes.h"
 #include "NoteInsertionCommand.h"
-#include "base/Event.h"
-
-
+#include "base/TimeT.h"
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 

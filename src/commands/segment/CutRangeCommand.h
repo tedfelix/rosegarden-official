@@ -19,7 +19,7 @@
 #ifndef RG_CUTRANGECOMMAND_H
 #define RG_CUTRANGECOMMAND_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/Command.h"
 
 #include <QCoreApplication>
@@ -27,6 +27,7 @@
 
 namespace Rosegarden
 {
+
 
 class Composition;
 class Clipboard;
@@ -43,7 +44,6 @@ public:
                     Clipboard *clipboard);
 };
     
-
 
 }
 

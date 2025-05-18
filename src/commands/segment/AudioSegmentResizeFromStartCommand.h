@@ -20,7 +20,7 @@
 #define RG_AUDIOSEGMENTRESIZEFROMSTARTCOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
@@ -28,12 +28,10 @@
 namespace Rosegarden
 {
 
+
 class Segment;
 
 
-/**
- * As above, but for audio segments.
- */
 class AudioSegmentResizeFromStartCommand : public NamedCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioSegmentResizeFromStartCommand)
@@ -53,7 +51,6 @@ private:
     timeT m_oldStartTime;
     timeT m_newStartTime;
 };
-
 
 
 }

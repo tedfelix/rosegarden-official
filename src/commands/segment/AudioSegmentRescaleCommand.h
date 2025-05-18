@@ -19,21 +19,24 @@
 #define RG_AUDIOSEGMENTRESCALECOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
+#include "base/TimeT.h"
 
+#include <QCoreApplication>
 #include <QPointer>
+#include <QString>
 
 class QProgressDialog;
 
+
 namespace Rosegarden
 {
+
 
 class Segment;
 class AudioFileManager;
 class AudioFileTimeStretcher;
 class RosegardenDocument;
+
 
 class AudioSegmentRescaleCommand : public NamedCommand
 {
@@ -71,7 +74,6 @@ private:
     float m_ratio;
     bool m_detached;
 };
-
 
 
 }

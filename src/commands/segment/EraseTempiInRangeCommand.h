@@ -20,8 +20,7 @@
 
 #include "base/Selection.h"
 #include "document/Command.h"
-#include <vector>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
@@ -29,7 +28,7 @@
 namespace Rosegarden
 {
 
-class Segment;
+
 class Composition;
 
 
@@ -42,8 +41,8 @@ class EraseTempiInRangeCommand : public NamedCommand
 
 public:
     EraseTempiInRangeCommand(Composition *composition,
-                            timeT rangeBegin,
-                            timeT rangeEnd);
+                             timeT rangeBegin,
+                             timeT rangeEnd);
     ~EraseTempiInRangeCommand() override;
 
     void execute() override;
@@ -53,7 +52,6 @@ private:
     Composition *m_composition;
     TempoSelection m_temposPre;
 };
-
 
 
 }

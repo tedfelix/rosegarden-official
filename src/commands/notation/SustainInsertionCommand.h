@@ -20,16 +20,16 @@
 #define RG_SUSTAININSERTIONCOMMAND_H
 
 #include "document/BasicCommand.h"
+#include "base/TimeT.h"
+#include "base/Selection.h"
+
 #include <QString>
-#include "base/Event.h"
 #include <QCoreApplication>
-
-
-class Pedal;
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Event;

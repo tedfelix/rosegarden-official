@@ -21,13 +21,14 @@
 
 #include "base/TriggerSegment.h"
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class RosegardenDocument;

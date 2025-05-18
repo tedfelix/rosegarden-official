@@ -20,12 +20,16 @@
 #define RG_ERASESEGMENTSSTARTINGINRANGECOMMAND_H
 
 #include "document/Command.h"
-#include <vector>
-#include "base/Event.h"
+#include "base/TimeT.h"
+
 #include <QCoreApplication>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Composition;

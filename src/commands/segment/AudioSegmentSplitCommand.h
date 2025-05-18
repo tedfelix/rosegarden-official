@@ -19,15 +19,17 @@
 #ifndef RG_AUDIOSEGMENTSPLITCOMMAND_H
 #define RG_AUDIOSEGMENTSPLITCOMMAND_H
 
-#include <string>
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 

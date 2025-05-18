@@ -19,16 +19,15 @@
 #define RG_DELETERANGECOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
-#include <QCoreApplication>
+#include "base/TimeT.h"
 
-#include "SegmentJoinCommand.h"
+#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
-class Segment;
+
 class Composition;
 
 
@@ -42,7 +41,6 @@ public:
                        timeT end);
     ~DeleteRangeCommand() override;
 };
-
 
 
 }

@@ -20,10 +20,10 @@
 #define RG_AUDIOSEGMENTINSERTCOMMAND_H
 
 #include "base/RealTime.h"
+#include "base/TimeT.h"
 #include "base/Track.h"
 #include "sound/AudioFile.h"
 #include "document/Command.h"
-#include "base/Event.h"
 
 #include <QCoreApplication>
 
@@ -31,7 +31,7 @@
 namespace Rosegarden
 {
 
-class Studio;
+
 class Segment;
 class RosegardenDocument;
 class Composition;

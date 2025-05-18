@@ -18,12 +18,13 @@
 #ifndef RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H
 #define RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H
 
-#include <map>
 #include "document/Command.h"
-#include "base/Event.h"
-#include "base/Composition.h" // for tempoT
+#include "base/TimeT.h"
+#include "base/Composition.h"  // for tempoT
 
 #include <QCoreApplication>
+
+#include <map>
 
 
 namespace Rosegarden
@@ -34,7 +35,6 @@ namespace Rosegarden
  * CreateTempoMapFromSegment applies timings found in a reference
  * segment to the composition as a whole via the tempo map.
  */
-
 class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
   Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand);
@@ -55,7 +55,6 @@ private:
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
 };
-
 
 
 }
