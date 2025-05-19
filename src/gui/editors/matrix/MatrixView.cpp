@@ -607,6 +607,40 @@ MatrixView::setupActions()
             createAction(actionName, &MatrixView::slotSetSnapFromAction);
         }
     }
+
+    // check ruler availability
+    // enbale the ruler if any segment uses a device with that control
+    bool pitchBendEnabled = false;
+    bool channelPressureEnabled = false;
+    bool keyPressureEnabled = false;
+    for(const Segment* segment : m_segments) {
+        Track *track =
+            m_document->getComposition().getTrackById(segment->getTrack());
+
+        Instrument *instrument = m_document->getStudio().
+            getInstrumentById(track->getInstrument());
+
+        if (instrument) {
+            const Controllable *controllable =
+                instrument->getDevice()->getControllable();
+
+            if (controllable) {
+
+                for (const ControlParameter &cp :
+                         controllable->getControlParameters()) {
+                    if (cp.getType() == PitchBend::EventType)
+                        pitchBendEnabled = true;
+                    if (cp.getType() == ChannelPressure::EventType)
+                        channelPressureEnabled = true;
+                    if (cp.getType() == KeyPressure::EventType)
+                        keyPressureEnabled = true;
+                }
+            }
+        }
+    }
+    findAction("toggle_pitchbend_ruler")->setEnabled(pitchBendEnabled);
+    findAction("toggle_keypressure_ruler")->setEnabled(keyPressureEnabled);
+    findAction("toggle_channelpressure_ruler")->setEnabled(channelPressureEnabled);
 }
 
 

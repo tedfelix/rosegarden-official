@@ -203,6 +203,9 @@ ControlRulerWidget::launchRulers()
         } else if (ruler.type == PitchBend::EventType) {
             RG_DEBUG << "launchInitialRulers(): Launching pitchbend ruler";
             addControlRuler(ControlParameter::getPitchBend());
+        } else if (ruler.type == ChannelPressure::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching channelpressure ruler";
+            addControlRuler(ControlParameter::getChannelPressure());
         } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
             RG_DEBUG << "launchInitialRulers(): Launching velocity ruler";
             addPropertyRuler(static_cast<PropertyName>(ruler.type));
@@ -266,47 +269,9 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
     addPropertyRuler(propertyName);
 }
 
-namespace
-{
-    bool hasControlParameter(Segment *segment, const std::string& type)
-    {
-        RosegardenDocument *document = RosegardenDocument::currentDocument;
-
-        Track *track =
-                document->getComposition().getTrackById(segment->getTrack());
-
-        Instrument *instrument = document->getStudio().
-            getInstrumentById(track->getInstrument());
-
-        if (!instrument)
-            return false;
-
-        const Controllable *controllable = instrument->getDevice()->getControllable();
-
-        if (!controllable)
-            return false;
-
-        // Check whether the device has a controller of this type
-        // ??? Why not use
-        //     Controllable::getControlParameter(type, controllerNumber)?
-        for (const ControlParameter &cp : controllable->getControlParameters()) {
-            if (cp.getType() == type)
-                return true;
-        }
-
-        return false;
-    }
-}
-
 void
 ControlRulerWidget::togglePitchBendRuler()
 {
-    // No pitch bend?  Bail.
-    // ??? Rude.  We should gray the menu item instead of this.
-    if (!hasControlParameter
-        (&(m_viewSegment->getSegment()), PitchBend::EventType))
-        return;
-
     // Check whether we already have a pitchbend ruler
 
     // For each ruler...
@@ -334,12 +299,6 @@ ControlRulerWidget::togglePitchBendRuler()
 void
 ControlRulerWidget::toggleChannelPressureRuler()
 {
-    // No pitch bend?  Bail.
-    // ??? Rude.  We should gray the menu item instead of this.
-    if (!hasControlParameter
-        (&(m_viewSegment->getSegment()), ChannelPressure::EventType))
-        return;
-
     // Check whether we already have a channel pressure ruler
 
     // For each ruler...

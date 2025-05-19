@@ -79,6 +79,11 @@ void ControllerEventAdapter::setValue(long val)
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
+    else if (m_event->getType() == Rosegarden::ChannelPressure::EventType)
+    {
+        m_event->set<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE,
+                                      val);
+    }
     else if (m_event->getType() == Rosegarden::Note::EventType)
     {
         if (val > 127) { val = 127; }
