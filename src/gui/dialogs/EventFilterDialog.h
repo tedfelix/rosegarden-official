@@ -93,20 +93,15 @@ public:
      * whether a particular event should continue to be selected.  See
      * MatrixView::slotFilterSelection() and NotationView::slotFilterSelection()
      * for examples of how to use this routine.
-     *
-     * ??? Why doesn't this just take a const Event *?
      */
-    bool keepEvent(Event * const &e);
+    bool keepEvent(const Event *e);
 
-protected:
-
-    //--------[ member functions ]-------------------------
+private:
 
     // initialize the dialog
     void initDialog();
 
-    // populate the duration combos
-    void populateDurationCombos();
+    void populateDurationCombo(QComboBox *durationCombo);
 
     // convert duration from combobox index into actual RG duration
     // between 0 and LONG_MAX
@@ -151,7 +146,7 @@ private:
 
     //---------[ data members ]-----------------------------
 
-    QGridLayout* layout;
+    QGridLayout* m_layout;
 
     QComboBox*   m_noteDurationFromComboBox;
     QComboBox*   m_noteDurationIncludeComboBox;
@@ -172,7 +167,7 @@ private:
     QCheckBox*   m_useNotationDuration;
     QCheckBox*   m_selectRests;
 
-    std::vector<timeT> m_standardQuantizations;
+    std::vector<timeT> m_comboDurations;
 
 };
 

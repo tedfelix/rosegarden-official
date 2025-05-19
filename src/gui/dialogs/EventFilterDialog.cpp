@@ -61,9 +61,8 @@ namespace Rosegarden
 {
 
 
-EventFilterDialog::EventFilterDialog(QWidget* parent)
-        : QDialog(parent),
-        m_standardQuantizations(Quantizer::getQuantizations())
+EventFilterDialog::EventFilterDialog(QWidget *parent) :
+    QDialog(parent)
 {
     initDialog();
 }
@@ -85,6 +84,9 @@ EventFilterDialog::initDialog()
     metagrid->addWidget(mainWidget, 0, 0);
 
     //----------[ Note Filter Widgets ]-------------------------
+
+    // ??? See suggestions for re-ordering these fields on the wiki:
+    //     https://www.rosegardenmusic.com/wiki/doc:guitar_midi_controller_to_notation#future_direction
 
     // Frame
     QGroupBox* noteFrame = new QGroupBox(tr("Note Events"));
@@ -110,7 +112,7 @@ EventFilterDialog::initDialog()
     noteFrameLayout->addWidget(durationLabel, 3, 1);
 
     QSettings settings;
-    settings.beginGroup( EventFilterDialogConfigGroup );
+    settings.beginGroup(EventFilterDialogConfigGroup);
 
     m_useNotationDuration = new QCheckBox(tr("Use notation duration"));
     noteFrameLayout->addWidget(m_useNotationDuration, 4, 2);   // 4, 1
@@ -204,24 +206,27 @@ EventFilterDialog::initDialog()
             this, &EventFilterDialog::slotVelocityToChanged);
 
 
-    // Duration From/To
+    // Duration From
     m_noteDurationFromComboBox = new QComboBox(noteFrame);
+    populateDurationCombo(m_noteDurationFromComboBox);
     m_noteDurationFromComboBox->setEditable(false);
-    m_noteDurationFromComboBox->addItem(tr("longest"));
+    m_noteDurationFromComboBox->setCurrentIndex(settings.value(
+            "durationfrom", m_noteDurationFromComboBox->count() - 1).toUInt());
     noteFrameLayout->addWidget(m_noteDurationFromComboBox, 3, 2);
     connect(m_noteDurationFromComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &EventFilterDialog::slotDurationFromChanged);
 
+    // Duration To
     m_noteDurationToComboBox = new QComboBox(noteFrame);
+    populateDurationCombo(m_noteDurationToComboBox);
     m_noteDurationToComboBox->setEditable(false);
-    m_noteDurationToComboBox->addItem(tr("longest"));
+    m_noteDurationToComboBox->setCurrentIndex(settings.value(
+            "durationto", 0).toUInt());
     noteFrameLayout->addWidget(m_noteDurationToComboBox, 3, 4);
     connect(m_noteDurationToComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &EventFilterDialog::slotDurationToChanged);
-
-    populateDurationCombos();
 
 
     //---------[ Buttons ]--------------------------------------
@@ -244,14 +249,12 @@ EventFilterDialog::initDialog()
     connect(m_buttonAll, &QAbstractButton::clicked, this, &EventFilterDialog::slotToggleAll);
     connect(m_buttonNone, &QAbstractButton::clicked, this, &EventFilterDialog::slotToggleNone);
 
-    settings.endGroup();
-
     privateLayoutWidget->setLayout(buttonLayout);
     noteFrame->setLayout(noteFrameLayout);
     mainWidget->setLayout(mainWidgetLayout);
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
     connect(buttonBox, &QDialogButtonBox::accepted,
@@ -260,35 +263,28 @@ EventFilterDialog::initDialog()
 }
 
 void
-EventFilterDialog::populateDurationCombos()
+EventFilterDialog::populateDurationCombo(QComboBox *durationCombo)
 {
+    // We'll do this twice.  Just clear it.
+    m_comboDurations.clear();
+
+    durationCombo->addItem(tr("longest"));
+    m_comboDurations.push_back(LONG_MAX);
+
     QPixmap noMap = NotePixmapFactory::makeToolbarPixmap("menu-no-note");
+    std::vector<timeT> quantizations = Quantizer::getQuantizations();
 
-    for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
-        timeT time = m_standardQuantizations[i];
+    for (unsigned int i = 0; i < quantizations.size(); ++i) {
+        const timeT duration = quantizations[i];
         timeT error = 0;
-        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
-        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
-        m_noteDurationFromComboBox->addItem(error ? noMap : pmap, label);
-        m_noteDurationToComboBox ->addItem(error ? noMap : pmap, label);
+        QString label = NotationStrings::makeNoteMenuLabel(duration, true, error);
+        QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
+        durationCombo->addItem(error ? noMap : pmap, label);
+        m_comboDurations.push_back(duration);
     }
-    m_noteDurationFromComboBox->addItem(tr("shortest"));
-    m_noteDurationToComboBox->addItem(tr("shortest"));
 
-    m_noteDurationFromComboBox->setMaxVisibleItems(
-        m_standardQuantizations.size() + 2);
-    m_noteDurationToComboBox->setMaxVisibleItems(
-        m_standardQuantizations.size() + 2);
-
-    QSettings settings;
-    settings.beginGroup( EventFilterDialogConfigGroup );
-
-    m_noteDurationFromComboBox->setCurrentIndex( settings.value("durationfrom",
-        (m_noteDurationToComboBox->count() - 1)).toUInt() );
-    m_noteDurationToComboBox->setCurrentIndex( settings.value("durationto",
-        0).toUInt());
-
-    settings.endGroup();
+    durationCombo->addItem(tr("shortest"));
+    m_comboDurations.push_back(quantizations.back());
 }
 
 void
@@ -299,9 +295,8 @@ EventFilterDialog::resetValuesToAll()
     m_velocityFromSpinBox->setValue(  0);
     m_velocityToSpinBox  ->setValue(127);
 
-    m_noteDurationFromComboBox->setCurrentIndex(    m_noteDurationToComboBox
-                                                  ->count()
-                                                - 1);
+    m_noteDurationFromComboBox->setCurrentIndex(
+            m_noteDurationToComboBox->count() - 1);
     m_noteDurationToComboBox  ->setCurrentIndex(0);
 }
 
@@ -432,24 +427,10 @@ EventFilterDialog::slotPitchToChooser()
 long
 EventFilterDialog::getDurationFromIndex(unsigned index)
 {
-    // Combo Contains:
-    // - Longest
-    // - whole
-    // - half
-    // - ...
-    // - Shortest
-
-    // ??? Why not make sure m_standardQuantizations has the Longest
-    //     at the front and the Shortest at the back.  Then this becomes
-    //       return m_standardQuantizations[index];
-
-    // Longest
-    if (index == 0)
+    if (index >= m_comboDurations.size())
         return LONG_MAX;
-    else if (index >= m_standardQuantizations.size() + 1)  // Shortest
-        return m_standardQuantizations[m_standardQuantizations.size() - 1];
-    else  // Standard Quantizations
-        return m_standardQuantizations[index - 1];
+
+    return m_comboDurations[index];
 }
 
 void
@@ -494,13 +475,13 @@ EventFilterDialog::getDuration()
 }
 
 bool
-EventFilterDialog::keepEvent(Event* const &e)
+EventFilterDialog::keepEvent(const Event *event)
 {
-    if ((*e).isa(Note::EventType)) {
+    if (event->isa(Note::EventType)) {
         long property = 0;
 
         // pitch
-        (*e).get<Int>(BaseProperties::PITCH, property);
+        event->get<Int>(BaseProperties::PITCH, property);
         if (!eventInRange(getPitch(), property)) {
             RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; pitch " << property
                      << " out of range.";
@@ -509,7 +490,7 @@ EventFilterDialog::keepEvent(Event* const &e)
         property = 0;
 
         // velocity
-        (*e).get<Int>(BaseProperties::VELOCITY, property);
+        event->get<Int>(BaseProperties::VELOCITY, property);
         if (!EventFilterDialog::eventInRange(getVelocity(), property)) {
             RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; velocity " << property
                      << " out of range.";
@@ -517,7 +498,7 @@ EventFilterDialog::keepEvent(Event* const &e)
         }
 
         // duration
-        property = m_useNotationDuration->isChecked() ? (*e).getNotationDuration() : (*e).getDuration();
+        property = m_useNotationDuration->isChecked() ? event->getNotationDuration() : event->getDuration();
 
         if (!EventFilterDialog::eventInRange(getDuration(), property)) {
             RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting event; duration " << property
@@ -527,9 +508,9 @@ EventFilterDialog::keepEvent(Event* const &e)
         property = 0;
 
         return true;
-    } else if ((*e).isa(Note::EventRestType)) {
+    } else if (event->isa(Note::EventRestType)) {
         if (m_selectRests->isChecked()) {
-            long property = m_useNotationDuration->isChecked() ? (*e).getNotationDuration() : (*e).getDuration();
+            long property = m_useNotationDuration->isChecked() ? event->getNotationDuration() : event->getDuration();
 
             if (!EventFilterDialog::eventInRange(getDuration(), property)) {
                 RG_DEBUG << "EventFilterDialog::keepEvent(): rejecting rest; duration " << property
