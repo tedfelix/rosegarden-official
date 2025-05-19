@@ -476,16 +476,14 @@ const Key Key::DefaultKey = Key("C major");
 const Key Key::UndefinedKey = Key("undefined");
 
 Key::Key() :
-    m_name(DefaultKey.m_name),
-    m_accidentalHeights(nullptr)
+    m_name(DefaultKey.m_name)
 {
     checkMap();
 }
 
 
 Key::Key(const Event &e) :
-    m_name(""),
-    m_accidentalHeights(nullptr)
+    m_name("")
 {
     checkMap();
     if (e.getType() != EventType) {
@@ -503,8 +501,7 @@ Key::Key(const Event &e) :
 }
 
 Key::Key(const std::string &name) :
-    m_name(name),
-    m_accidentalHeights(nullptr)
+    m_name(name)
 {
     if (name == "undefined") return;
     checkMap();
@@ -513,8 +510,7 @@ Key::Key(const std::string &name) :
     }
 }
 
-Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
-    m_accidentalHeights(nullptr)
+Key::Key(int accidentalCount, bool isSharp, bool isMinor)
 {
     checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
@@ -540,8 +536,7 @@ Key::Key(int accidentalCount, bool isSharp, bool isMinor) :
 // We need an isSharp argument, but we already have a constructor
 // with that signature.  Not quite sure what's the best solution.
 
-Key::Key(int tonicPitch, bool isMinor) :
-    m_accidentalHeights(nullptr)
+Key::Key(int tonicPitch, bool isMinor)
 {
         checkMap();
     for (KeyDetailMap::const_iterator i = m_keyDetailMap.begin();
@@ -563,8 +558,7 @@ Key::Key(int tonicPitch, bool isMinor) :
 
 
 Key::Key(const Key &kc) :
-    m_name(kc.m_name),
-    m_accidentalHeights(nullptr)
+    m_name(kc.m_name)
 {
 }
 
@@ -663,17 +657,26 @@ vector<int> Key::getAccidentalHeights(const Clef &clef) const
 
 void Key::checkAccidentalHeights() const
 {
-    if (m_accidentalHeights) return;
-    m_accidentalHeights = new vector<int>;
+    if (m_accidentalHeights)
+        return;
 
-    bool sharp = isSharp();
-    int accidentals = getAccidentalCount();
+    m_accidentalHeights.reset(new vector<int>);
+
+    const bool sharp = isSharp();
+    const int accidentals = getAccidentalCount();
     int height = sharp ? 8 : 4;
 
     for (int i = 0; i < accidentals; ++i) {
         m_accidentalHeights->push_back(height);
-        if (sharp) { height -= 3; if (height < 3) height += 7; }
-        else       { height += 3; if (height > 7) height -= 7; }
+        if (sharp) {
+            height -= 3;
+            if (height < 3)
+                height += 7;
+        } else {
+            height += 3;
+            if (height > 7)
+                height -= 7;
+        }
     }
 }
 

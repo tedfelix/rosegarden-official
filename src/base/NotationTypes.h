@@ -26,6 +26,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 /*
  * NotationTypes.h
@@ -441,7 +442,6 @@ public:
     Key(const Key &kc);
 
     ~Key() {
-        delete m_accidentalHeights;
     }
 
     Key &operator=(const Key &kc);
@@ -590,8 +590,9 @@ public:
     Key transpose(int pitchDelta, int heightDelta) const;
 
 private:
+
     std::string m_name;
-    mutable std::vector<int> *m_accidentalHeights;
+    mutable std::shared_ptr<std::vector<int>> m_accidentalHeights;
 
     struct KeyDetails {
         bool   m_sharps;
