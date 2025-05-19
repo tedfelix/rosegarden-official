@@ -18,32 +18,34 @@
 #ifndef RG_NOTEPIXMAPFACTORY_H
 #define RG_NOTEPIXMAPFACTORY_H
 
-#include <QGraphicsPixmapItem>
-
-#include "base/NotationTypes.h"
 #include "NoteCharacter.h"
+#include "NoteCharacterNames.h"
 #include "NoteItem.h"
-#include "base/Event.h"
-#include "gui/editors/notation/NoteCharacterNames.h"
-#include <map>
-#include <string>
+
+#include "base/TimeT.h"
 
 #include <QFont>
 #include <QFontMetrics>
 #include <QPixmap>
-#include <QPoint>
 #include <QCoreApplication> // for Q_DECLARE_TR_FUNCTIONS
 #include <QSharedPointer>
 
+class QGraphicsPixmapItem;
 class QPainter;
-class QBitmap;
+class QPoint;
 class QString;
+
+#include <map>
+#include <ostream>
+#include <string>
 
 
 namespace Rosegarden
 {
 
+
 namespace Guitar { class Fingering; }
+
 
 class TimeSignature;
 class Text;
@@ -52,7 +54,7 @@ class NotePixmapParameters;
 class NoteFont;
 class NotePixmapPainter;
 class Clef;
-class StaffHeader;
+
 
 /**
  * Generates pixmaps and graphics items for various notation items.
@@ -356,7 +358,7 @@ protected:
                                         const bool isLilyPondDirective);
 
     void createPixmap(int width, int height);
-    QGraphicsPixmapItem *makeItem(QPoint hotspot);
+    QGraphicsPixmapItem *makeItem(const QPoint &hotspot);
     QPixmap makePixmap();
 
     /// draws selected/shaded status from m_selected/m_shaded:

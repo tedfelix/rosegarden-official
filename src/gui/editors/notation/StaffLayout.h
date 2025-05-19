@@ -18,18 +18,22 @@
 #ifndef RG_STAFFLAYOUT_H
 #define RG_STAFFLAYOUT_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/ViewElement.h"
+
 #include <QRect>
+
+class QGraphicsScene;
+class QGraphicsItem;
+
+#include <set>
 #include <utility>
 #include <vector>
 
-class QGraphicsScene;
-class QGraphicsLineItem;
-class QGraphicsItem;
 
 namespace Rosegarden
 {
+
 
 class BarLineItem;
 class TimeSignature;
@@ -618,8 +622,6 @@ protected:
     void initCursors();
 
 protected:
-
-    //--------------- Data members ---------------------------------
 
     QGraphicsScene *m_scene;
     ViewSegment *m_viewSegment;

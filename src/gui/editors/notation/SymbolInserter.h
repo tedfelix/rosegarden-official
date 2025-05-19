@@ -18,9 +18,9 @@
 #ifndef RG_SYMBOLINSERTER_H
 #define RG_SYMBOLINSERTER_H
 
-#include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include "base/Event.h"
+
+#include "base/NotationTypes.h"
 
 #include <QString>
 
@@ -28,8 +28,9 @@
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class NotationWidget;
+
 
 /**
  * This tool will insert symbols on mouse click events

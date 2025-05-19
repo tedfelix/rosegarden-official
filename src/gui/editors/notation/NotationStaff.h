@@ -18,26 +18,26 @@
 #ifndef RG_NOTATIONSTAFF_H
 #define RG_NOTATIONSTAFF_H
 
+#include "NotationElement.h"
+#include "StaffLayout.h"
+
 #include "base/ViewSegment.h"
 #include "base/ViewElement.h"
-#include "StaffLayout.h"
-#include <map>
-#include <set>
-#include <string>
-#include <utility>
-#include "base/Event.h"
-#include "NotationElement.h"
-
+#include "base/TimeT.h"
 
 class QPainter;
 class QGraphicsItem;
-class StaffLayoutCoords;
+
+#include <set>
+#include <string>
+#include <utility>
+#include <vector>
 
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class TimeSignature;
 class SnapGrid;
 class Segment;

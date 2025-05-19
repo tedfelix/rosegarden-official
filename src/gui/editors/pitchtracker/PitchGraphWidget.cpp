@@ -16,6 +16,9 @@
 */
 
 #include "PitchGraphWidget.h"
+
+#include "PitchHistory.h"
+
 #include "misc/ConfigGroups.h"
 #include "gui/configuration/PitchTrackerConfigurationPage.h"
 #include "sound/PitchDetector.h"

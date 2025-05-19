@@ -18,14 +18,15 @@
 #ifndef RG_TEXTINSERTER_H
 #define RG_TEXTINSERTER_H
 
-#include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include "base/Event.h"
+
+#include "base/NotationTypes.h"
+
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class NotationWidget;
 
 

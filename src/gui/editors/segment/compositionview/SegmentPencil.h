@@ -19,11 +19,13 @@
 #ifndef RG_SEGMENTPENCIL_H
 #define RG_SEGMENTPENCIL_H
 
-#include "base/Track.h"
 #include "SegmentTool.h"
-#include <QString>
-#include "base/Event.h"
 
+#include "base/TimeT.h"
+
+#include <QPoint>
+#include <QString>
+#include <Qt>
 
 class QMouseEvent;
 class QKeyEvent;
@@ -31,6 +33,7 @@ class QKeyEvent;
 
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class CompositionView;

@@ -18,20 +18,18 @@
 #ifndef RG_PITCH_GRAPH_WIDGET_H
 #define RG_PITCH_GRAPH_WIDGET_H
 
-#include "PitchHistory.h"
-
-#include "base/Event.h"
+#include <QWidget>
 
 #include <memory>
 
-#include <QWidget>
-#include <QList>
 
-namespace Rosegarden {
+namespace Rosegarden
+{
+
 
 namespace Accidentals { class Tuning; }
+class PitchHistory;
 
-struct RealTime;
 
 /**
  * \addtogroup Codicil
@@ -63,10 +61,11 @@ protected:
     bool            m_ignoreOctave; // Whether to ignore octave errors
 
     std::shared_ptr<Accidentals::Tuning> m_tuning;  // Tuning in use in this widget
-    PitchHistory&   m_history;      // structure of data to plot
+    PitchHistory &m_history;      // structure of data to plot
 };
 
-} // End namespace Rosegarden
+
+}
 
 /**\@}*/
 

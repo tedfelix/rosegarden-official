@@ -21,15 +21,14 @@
 
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
-
 
 
 /**
@@ -110,6 +109,7 @@ private:
                            bool hyphenate, bool internationalize);
 
 };    
+
 
 }
 

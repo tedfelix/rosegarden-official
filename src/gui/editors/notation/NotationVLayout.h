@@ -19,20 +19,21 @@
 #ifndef RG_NOTATIONVLAYOUT_H
 #define RG_NOTATIONVLAYOUT_H
 
-#include "base/LayoutEngine.h"
-#include <map>
-#include <vector>
-#include "base/Event.h"
-
 #include "NotationElement.h"
 
+#include "base/LayoutEngine.h"
+#include "base/TimeT.h"
 
-class SlurList;
+//class SlurList;
 class QObject;
+
+#include <map>
+#include <vector>
 
 
 namespace Rosegarden
 {
+
 
 class ViewSegment;
 class Quantizer;
@@ -40,7 +41,6 @@ class Composition;
 class NotePixmapFactory;
 class NotationStaff;
 class NotationProperties;
-class Composition;
 
 
 /// Vertical notation layout
@@ -54,7 +54,7 @@ class NotationVLayout : public QObject,  // For tr().  Can probably be cleaned u
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
                     const NotationProperties &properties,
-                    QObject* parent);
+                    QObject *parent);
 
     ~NotationVLayout() override;
 
@@ -90,8 +90,6 @@ private:
 
     typedef std::vector<NotationElementList::iterator> SlurList;
     typedef std::map<ViewSegment *, SlurList> SlurListMap;
-
-    //--------------- Data members ---------------------------------
 
     SlurListMap m_slurs;
     SlurList &getSlurList(ViewSegment &);

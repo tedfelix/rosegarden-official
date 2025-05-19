@@ -3577,7 +3577,7 @@ NotePixmapFactory::createPixmap(int width, int height)
 }
 
 QGraphicsPixmapItem *
-NotePixmapFactory::makeItem(QPoint hotspot)
+NotePixmapFactory::makeItem(const QPoint &hotspot)
 {
 //    NOTATION_DEBUG << "NotePixmapFactory::makeItem(" << hotspot << ")";
 
