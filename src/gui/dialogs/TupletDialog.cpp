@@ -17,29 +17,31 @@
 
 
 #include "TupletDialog.h"
-#include <QLayout>
 
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+
+#include <QCheckBox>
 #include <QComboBox>
+#include <QDesktopServices>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QCheckBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QLayout>
 #include <QObject>
 #include <QString>
 #include <QWidget>
-#include <QVBoxLayout>
 #include <QUrl>
-#include <QDesktopServices>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
+
 
 TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
                            timeT maxDuration) :
@@ -191,18 +193,33 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     updateTimingDisplays();
 
-    QObject::connect(m_unitCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotUnitChanged(const QString &)));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QObject::connect(m_unitCombo, &QComboBox::textActivated,
+                     this, &TupletDialog::slotUnitChanged);
+#else
+    QObject::connect(m_unitCombo, (void(QComboBox::*)(const QString &))
+                             &QComboBox::activated,
+                     this, &TupletDialog::slotUnitChanged);
+#endif
 
-    QObject::connect(m_untupledCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotUntupledChanged(const QString &)));
-    QObject::connect(m_untupledCombo, SIGNAL(textChanged(const QString &)),
-                     this, SLOT(slotUntupledChanged(const QString &)));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QObject::connect(m_untupledCombo, &QComboBox::textActivated,
+                     this, &TupletDialog::slotUntupledChanged);
+#else
+    QObject::connect(m_untupledCombo, (void(QComboBox::*)(const QString &))
+                             &QComboBox::activated,
+                     this, &TupletDialog::slotUntupledChanged);
+#endif
 
-    QObject::connect(m_tupledCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotTupledChanged(const QString &)));
-    QObject::connect(m_tupledCombo, SIGNAL(textChanged(const QString &)),
-                     this, SLOT(slotTupledChanged(const QString &)));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
+    QObject::connect(m_tupledCombo, &QComboBox::textActivated,
+                     this, &TupletDialog::slotTupledChanged);
+#else
+    QObject::connect(m_tupledCombo, (void(QComboBox::*)(const QString &))
+                             &QComboBox::activated,
+                     this, &TupletDialog::slotTupledChanged);
+#endif
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);

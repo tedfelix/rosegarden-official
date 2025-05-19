@@ -19,27 +19,27 @@
 
 #include "MatrixVelocity.h"
 
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-#include "document/CommandHistory.h"
-#include "commands/edit/ChangeVelocityCommand.h"
 #include "MatrixElement.h"
 #include "MatrixViewSegment.h"
 #include "MatrixMouseEvent.h"
 #include "MatrixTool.h"
 #include "MatrixScene.h"
 #include "MatrixWidget.h"
+
+#include "base/BaseProperties.h"
+#include "base/Selection.h"
+#include "base/ViewElement.h"
+#include "document/CommandHistory.h"
+#include "commands/edit/ChangeVelocityCommand.h"
 #include "misc/Debug.h"
 #include "gui/rulers/ControlItem.h"
 #include "gui/rulers/ControlRulerWidget.h"
 #include "gui/rulers/PropertyControlRuler.h"
 
+
 namespace Rosegarden
 {
+
 
 MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     MatrixTool("matrixvelocity.rc", "MatrixVelocity", widget),
@@ -52,11 +52,11 @@ MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     m_currentViewSegment(nullptr),
     m_start(false)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("select", &MatrixVelocity::slotSelectSelected);
+    createAction("draw", &MatrixVelocity::slotDrawSelected);
+    createAction("erase", &MatrixVelocity::slotEraseSelected);
+    createAction("move", &MatrixVelocity::slotMoveSelected);
+    createAction("resize", &MatrixVelocity::slotResizeSelected);
 
     createMenu();
 }
@@ -156,7 +156,7 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 
 
     // Is a velocity ruler visible ?
-    ControlRulerWidget * controlRulerWidget =
+    ControlRulerWidget *controlRulerWidget =
             m_scene->getMatrixWidget()->getControlsWidget();
 
     // Assuming velocity is the only one property ruler
