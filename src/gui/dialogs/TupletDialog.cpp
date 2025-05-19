@@ -21,6 +21,7 @@
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "misc/ConnectCBActivated.h"
 
 #include <QCheckBox>
 #include <QComboBox>
@@ -193,32 +194,9 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     updateTimingDisplays();
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QObject::connect(m_unitCombo, &QComboBox::textActivated,
-                     this, &TupletDialog::slotUnitChanged);
-#else
-    QObject::connect(m_unitCombo, (void(QComboBox::*)(const QString &))
-                             &QComboBox::activated,
-                     this, &TupletDialog::slotUnitChanged);
-#endif
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QObject::connect(m_untupledCombo, &QComboBox::textActivated,
-                     this, &TupletDialog::slotUntupledChanged);
-#else
-    QObject::connect(m_untupledCombo, (void(QComboBox::*)(const QString &))
-                             &QComboBox::activated,
-                     this, &TupletDialog::slotUntupledChanged);
-#endif
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    QObject::connect(m_tupledCombo, &QComboBox::textActivated,
-                     this, &TupletDialog::slotTupledChanged);
-#else
-    QObject::connect(m_tupledCombo, (void(QComboBox::*)(const QString &))
-                             &QComboBox::activated,
-                     this, &TupletDialog::slotTupledChanged);
-#endif
+    ConnectCBActivated(m_unitCombo, this, &TupletDialog::slotUnitChanged);
+    ConnectCBActivated(m_untupledCombo, this, &TupletDialog::slotUntupledChanged);
+    ConnectCBActivated(m_tupledCombo, this, &TupletDialog::slotTupledChanged);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);

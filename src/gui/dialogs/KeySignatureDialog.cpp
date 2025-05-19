@@ -21,6 +21,7 @@
 
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/ConnectCBActivated.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
@@ -215,8 +216,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     connect(m_keyCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &KeySignatureDialog::slotKeyNameChanged);
-    QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotMajorMinorChanged(const QString &)));
+    ConnectCBActivated(m_majorMinorCombo,
+                       this, &KeySignatureDialog::slotMajorMinorChanged);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);

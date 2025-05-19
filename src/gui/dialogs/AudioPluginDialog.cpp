@@ -22,6 +22,7 @@
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "misc/ConnectCBActivated.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
@@ -738,8 +739,8 @@ AudioPluginDialog::slotPluginSelected(int index)
             m_programCombo->addItem(tr("<none selected>"));
             m_pluginParamsBoxLayout->addWidget(m_programLabel, 0, 0, Qt::AlignRight);
             m_pluginParamsBoxLayout->addWidget(m_programCombo, 0, 1, Qt::AlignLeft);
-            connect(m_programCombo, SIGNAL(activated(const QString &)),
-                    this, SLOT(slotPluginProgramChanged(const QString &)));
+            ConnectCBActivated(m_programCombo,
+                               this, &AudioPluginDialog::slotPluginProgramChanged);
 
             m_programCombo->clear();
             m_programCombo->addItem(tr("<none selected>"));
@@ -967,6 +968,8 @@ AudioPluginDialog::updatePluginProgramControl()
     if (inst) {
         std::string program = inst->getProgram();
         if (m_programCombo) {
+            // ??? This shouldn't be needed.  activated() is only emitted
+            //     on a user change, not a programmatic change.
             m_programCombo->blockSignals(true);
             m_programCombo->setItemText( m_index, strtoqstr(program) );    //@@@ m_index param correct ? (=index-nr)
             m_programCombo->blockSignals(false);
@@ -1017,9 +1020,11 @@ AudioPluginDialog::updatePluginProgramList()
             m_programLabel->show();
             m_programCombo->show();
 
+            // ??? This shouldn't be needed.  activated() is only emitted
+            //     on a user change, not a programmatic change.
             m_programCombo->blockSignals(true);
-            connect(m_programCombo, SIGNAL(activated(const QString &)),
-                    this, SLOT(slotPluginProgramChanged(const QString &)));
+            ConnectCBActivated(m_programCombo,
+                               this, &AudioPluginDialog::slotPluginProgramChanged);
 
         } else {
             return ;

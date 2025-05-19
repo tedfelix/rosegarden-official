@@ -20,11 +20,10 @@
 #define RG_KEYSIGNATUREDIALOG_H
 
 #include "base/NotationTypes.h"
-#include <string>
+
 #include <QDialog>
 #include <QString>
-#include <QCheckBox>
-
+//#include <QCheckBox>
 
 class QWidget;
 class QRadioButton;
@@ -32,13 +31,20 @@ class QLabel;
 class QComboBox;
 class QCheckBox;
 
+#include <string>
+
 
 namespace Rosegarden
 {
 
+
 class NotePixmapFactory;
 
 
+/// The "Key Change" dialog.
+/**
+ * Launch from the Notation Editor's menu: Segment > Add Key Change...
+ */
 class KeySignatureDialog : public QDialog
 {
     Q_OBJECT

@@ -49,6 +49,13 @@ class AudioPluginManager;
 class AudioPluginInstance;
 
 
+/// The "Audio Plugin" dialog.
+/**
+ * This dialog is used for both synth plugins and audio plugins.
+ * It can be accessed from the Instrument Parameters panel in the left
+ * column of the main window.  Pressing the synth or the audio plugin
+ * buttons launches this dialog.
+ */
 class AudioPluginDialog : public QDialog
 {
     Q_OBJECT

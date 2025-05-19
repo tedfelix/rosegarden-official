@@ -34,6 +34,9 @@ namespace Rosegarden
 class FontViewFrame;
 
 /// UNUSED.  Consider removing.
+/**
+ * "Note Font Viewer" Dialog.
+ */
 class NoteFontViewer : public QDialog
 {
     Q_OBJECT

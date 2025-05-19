@@ -23,6 +23,7 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
+#include "misc/ConnectCBActivated.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/LineEdit.h"
@@ -363,44 +364,20 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     connect(m_text, &QLineEdit::textChanged,
             this, &TextEventDialog::slotTextChanged);
 
-#if QT_VERSION >= QT_VERSION_CHECK(5, 14, 0)
-    connect(m_typeCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotTypeChanged);
-    connect(m_dynamicShortcutCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotDynamicShortcutChanged);
-    connect(m_directionShortcutCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotDirectionShortcutChanged);
-    connect(m_localDirectionShortcutCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotLocalDirectionShortcutChanged);
-    connect(m_tempoShortcutCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotTempoShortcutChanged);
-    connect(m_localTempoShortcutCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotLocalTempoShortcutChanged);
-    connect(m_lilyPondDirectiveCombo, &QComboBox::textActivated,
-            this, &TextEventDialog::slotLilyPondDirectiveChanged);
-#else
-    connect(m_typeCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotTypeChanged);
-    connect(m_dynamicShortcutCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotDynamicShortcutChanged);
-    connect(m_directionShortcutCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotDirectionShortcutChanged);
-    connect(m_localDirectionShortcutCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotLocalDirectionShortcutChanged);
-    connect(m_tempoShortcutCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotTempoShortcutChanged);
-    connect(m_localTempoShortcutCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotLocalTempoShortcutChanged);
-    connect(m_lilyPondDirectiveCombo, (void(QComboBox::*)(const QString &))
-                    &QComboBox::activated,
-            this, &TextEventDialog::slotLilyPondDirectiveChanged);
-#endif
+    ConnectCBActivated(m_typeCombo,
+                       this, &TextEventDialog::slotTypeChanged);
+    ConnectCBActivated(m_dynamicShortcutCombo,
+                       this, &TextEventDialog::slotDynamicShortcutChanged);
+    ConnectCBActivated(m_directionShortcutCombo,
+                       this, &TextEventDialog::slotDirectionShortcutChanged);
+    ConnectCBActivated(m_localDirectionShortcutCombo,
+                       this, &TextEventDialog::slotLocalDirectionShortcutChanged);
+    ConnectCBActivated(m_tempoShortcutCombo,
+                       this, &TextEventDialog::slotTempoShortcutChanged);
+    ConnectCBActivated(m_localTempoShortcutCombo,
+                       this, &TextEventDialog::slotLocalTempoShortcutChanged);
+    ConnectCBActivated(m_lilyPondDirectiveCombo,
+                       this, &TextEventDialog::slotLilyPondDirectiveChanged);
 
     connect(m_optionLabel, &QStackedWidget::currentChanged,
             this, &TextEventDialog::slotUpdateSize);

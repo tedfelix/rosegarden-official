@@ -42,6 +42,7 @@ class LineEdit;
 class NotePixmapFactory;
 
 
+/// "Text" dialog accessed via the text tool in notation.
 class TextEventDialog : public QDialog
 {
     Q_OBJECT
