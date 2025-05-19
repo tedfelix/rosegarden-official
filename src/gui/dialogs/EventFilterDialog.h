@@ -44,16 +44,17 @@ namespace Rosegarden
 class Event;
 
 
-/// The Event Filter dialog.
+/// The "Event Filter" dialog.
 /**
- * Launched by Edit > Filter Selection in the Matrix and Notation editors.
- *
  * Creates a dialog box to allow the user to dial up various selection
- * criteria used for removing events from a selection.  It is up to the caller
- * to actually manipulate the selection.  After the dialog has been accepted,
- * its filterEvent() method can be used to decide whether a particular event
- * should continue to be selected.  See MatrixView::slotFilterSelection()
- * and NotationView::slotFilterSelection() for examples of how to use this.
+ * criteria used for removing events from a selection.
+ *
+ * To use: Select some notes in either notation or the matrix.  In the
+ * menu, select Edit > Filter Selection.  Dial up whatever filtering criteria
+ * you want and press OK.  The selection will be modified accordingly.
+ *
+ * ??? It would be nice to be able to see the effect of the filtering
+ *     in real-time on the selection.
  */
 class EventFilterDialog : public QDialog
 {
@@ -83,11 +84,19 @@ public:
         else
             return (property >= foo.first && property <= foo.second); }
 
-    // Used to do the work of deciding whether to keep or reject an event
-    // based on the state of the dialog's widgets.  Returns TRUE if an event
-    // should continue to be selected.  This method is the heart of the
-    // EventFilterDialog's public interface.
-    bool keepEvent(Event* const &e);
+    /**
+     * Used to do the work of deciding whether to keep or reject an event
+     * based on the state of the dialog's widgets.  Returns TRUE if an event
+     * should continue to be selected.
+     *
+     * After the dialog has been accepted, keepEvent() can be used to decide
+     * whether a particular event should continue to be selected.  See
+     * MatrixView::slotFilterSelection() and NotationView::slotFilterSelection()
+     * for examples of how to use this routine.
+     *
+     * ??? Why doesn't this just take a const Event *?
+     */
+    bool keepEvent(Event * const &e);
 
 protected:
 

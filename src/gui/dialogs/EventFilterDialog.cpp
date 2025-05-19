@@ -20,6 +20,7 @@
 */
 
 #define RG_MODULE_STRING "[EventFilterDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "EventFilterDialog.h"
 
@@ -59,12 +60,11 @@
 namespace Rosegarden
 {
 
+
 EventFilterDialog::EventFilterDialog(QWidget* parent)
         : QDialog(parent),
         m_standardQuantizations(Quantizer::getQuantizations())
 {
-    //###JAS next line not needed.  Commented out.
-    //###settings = confq4;
     initDialog();
 }
 
@@ -150,13 +150,15 @@ EventFilterDialog::initDialog()
     noteFrameLayout->addWidget(m_noteDurationIncludeComboBox, 3, 0);
 
     // Pitch From
+    // ??? This is really painful to use.  Instead of a spin box, use a
+    //     combo box.  See NoteWidget::m_pitchComboBox.
     m_pitchFromSpinBox = new QSpinBox(noteFrame);
     m_pitchFromSpinBox->setMaximum(127);
 
     m_pitchFromSpinBox->setValue( settings.value("pitchfrom", 0).toUInt() );
     noteFrameLayout->addWidget(m_pitchFromSpinBox, 1, 2);
-    connect(m_pitchFromSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotPitchFromChanged(int)));
+    connect(m_pitchFromSpinBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &EventFilterDialog::slotPitchFromChanged);
 
     m_pitchFromChooserButton = new QPushButton(tr("edit"), noteFrame);
     m_pitchFromChooserButton->setSizePolicy(QSizePolicy(QSizePolicy::Fixed,
@@ -168,13 +170,15 @@ EventFilterDialog::initDialog()
             this, &EventFilterDialog::slotPitchFromChooser);
 
     // Pitch To
+    // ??? This is really painful to use.  Instead of a spin box, use a
+    //     combo box.  See NoteWidget::m_pitchComboBox.
     m_pitchToSpinBox = new QSpinBox(noteFrame);
     m_pitchToSpinBox->setMaximum(127);
 
     m_pitchToSpinBox->setValue( settings.value("pitchto", 127).toUInt() );
     noteFrameLayout->addWidget(m_pitchToSpinBox, 1, 4);
-    connect(m_pitchToSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotPitchToChanged(int)));
+    connect(m_pitchToSpinBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &EventFilterDialog::slotPitchToChanged);
 
     m_pitchToChooserButton = new QPushButton(tr("edit"), noteFrame);
     m_pitchToChooserButton->setToolTip(tr("choose a pitch using a staff"));
@@ -188,16 +192,16 @@ EventFilterDialog::initDialog()
 
     m_velocityFromSpinBox->setValue( settings.value("velocityfrom", 0).toUInt() );
     noteFrameLayout->addWidget(m_velocityFromSpinBox, 2, 2);
-    connect(m_velocityFromSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotVelocityFromChanged(int)));
+    connect(m_velocityFromSpinBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &EventFilterDialog::slotVelocityFromChanged);
 
     m_velocityToSpinBox = new QSpinBox(noteFrame);
     m_velocityToSpinBox->setMaximum(127);
 
     m_velocityToSpinBox->setValue( settings.value("velocityto", 127).toUInt() );
     noteFrameLayout->addWidget( m_velocityToSpinBox, 2, 4 );
-    connect(m_velocityToSpinBox, SIGNAL(valueChanged(int)),
-            SLOT(slotVelocityToChanged(int)));
+    connect(m_velocityToSpinBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &EventFilterDialog::slotVelocityToChanged);
 
 
     // Duration From/To
@@ -250,7 +254,8 @@ EventFilterDialog::initDialog()
         = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &EventFilterDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
@@ -349,6 +354,7 @@ EventFilterDialog::accept()
 void
 EventFilterDialog::slotPitchFromChanged(int pitch)
 {
+    // Adjust "Pitch To" to make sense.
     if (pitch > m_pitchToSpinBox->value())
         m_pitchToSpinBox->setValue(pitch);
 }
@@ -356,6 +362,12 @@ EventFilterDialog::slotPitchFromChanged(int pitch)
 void
 EventFilterDialog::slotPitchToChanged(int pitch)
 {
+    // Adjust "Pitch From" to make sense.
+    // ??? This is problematic.  If the user enters 34 into the "from" field
+    //     then enters 46 in the "to" field, the "from" field becomes 4.
+    // ??? Changing to a ComboBox would eliminate this.
+    //     See NoteWidget::m_pitchComboBox.  Still, we should probably allow
+    //     mixed up values and either warn the user or just swap them.
     if (pitch < m_pitchFromSpinBox->value())
         m_pitchFromSpinBox->setValue(pitch);
 }
@@ -363,6 +375,7 @@ EventFilterDialog::slotPitchToChanged(int pitch)
 void
 EventFilterDialog::slotVelocityFromChanged(int velocity)
 {
+    // Adjust "Velocity To" to make sense.
     if (velocity > m_velocityToSpinBox->value())
         m_velocityToSpinBox->setValue(velocity);
 }
@@ -370,6 +383,12 @@ EventFilterDialog::slotVelocityFromChanged(int velocity)
 void
 EventFilterDialog::slotVelocityToChanged(int velocity)
 {
+    // Adjust "Velocity From" to make sense.
+    // ??? This is problematic.  If the user enters 34 into the "from" field
+    //     then enters 46 in the "to" field, the "from" field becomes 4.
+    // ??? Changing to a ComboBox would eliminate this.
+    //     See NoteWidget::m_pitchComboBox.  Still, we should probably allow
+    //     mixed up values and either warn the user or just swap them.
     if (velocity < m_velocityFromSpinBox->value())
         m_velocityFromSpinBox->setValue(velocity);
 }
@@ -377,6 +396,7 @@ EventFilterDialog::slotVelocityToChanged(int velocity)
 void
 EventFilterDialog::slotDurationFromChanged(int index)
 {
+    // Adjust "Duration To" to make sense.
     if (index < m_noteDurationToComboBox->currentIndex())
         m_noteDurationToComboBox->setCurrentIndex(index);
 }
@@ -384,10 +404,10 @@ EventFilterDialog::slotDurationFromChanged(int index)
 void
 EventFilterDialog::slotDurationToChanged(int index)
 {
+    // Adjust "Duration From" to make sense.
     if (index > m_noteDurationFromComboBox->currentIndex())
         m_noteDurationFromComboBox->setCurrentIndex(index);
 }
-
 
 void
 EventFilterDialog::slotPitchFromChooser()
@@ -412,21 +432,24 @@ EventFilterDialog::slotPitchToChooser()
 long
 EventFilterDialog::getDurationFromIndex(unsigned index)
 {
-    if (index == 0) {
-        // both combo boxes had addItem("longest") at instantiaion,
-        // prior to populateCombos()
+    // Combo Contains:
+    // - Longest
+    // - whole
+    // - half
+    // - ...
+    // - Shortest
+
+    // ??? Why not make sure m_standardQuantizations has the Longest
+    //     at the front and the Shortest at the back.  Then this becomes
+    //       return m_standardQuantizations[index];
+
+    // Longest
+    if (index == 0)
         return LONG_MAX;
-    }
-    else if (index >= m_standardQuantizations.size() + 1) {
-        // number of combo box items is m_standardQuantizations.size() + 2
-        // ("longest" added before, "shortest" after) so this one
-        // is "shortest"
+    else if (index >= m_standardQuantizations.size() + 1)  // Shortest
         return m_standardQuantizations[m_standardQuantizations.size() - 1];
-    }
-    else {
-        // because index == 0 is "longest", as per above
+    else  // Standard Quantizations
         return m_standardQuantizations[index - 1];
-    }
 }
 
 void
@@ -518,5 +541,6 @@ EventFilterDialog::keepEvent(Event* const &e)
     }
     return false;
 }
+
 
 }
