@@ -19,21 +19,15 @@
 #ifndef RG_INSERTTUPLETDIALOG_H
 #define RG_INSERTTUPLETDIALOG_H
 
-#include "base/NotationTypes.h"
 #include <QDialog>
-#include "base/Event.h"
-
 
 class QWidget;
-class QString;
 class QSpinBox;
 class QGroupBox;
 
 
-
 namespace Rosegarden
 {
-
 
 
 class InsertTupletDialog : public QDialog
@@ -59,7 +53,6 @@ protected:
 
     QGroupBox *m_timingDisplayGrid;
 };
-
 
 
 }

@@ -19,9 +19,9 @@
 #ifndef RG_RESCALEDIALOG_H
 #define RG_RESCALEDIALOG_H
 
-#include <QDialog>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
+#include <QDialog>
 
 class QWidget;
 class QCheckBox;
@@ -29,6 +29,7 @@ class QCheckBox;
 
 namespace Rosegarden
 {
+
 
 class TimeWidget;
 class Composition;
@@ -55,7 +56,6 @@ protected:
     QCheckBox *m_closeGap;
 };
     
-
 
 }
 

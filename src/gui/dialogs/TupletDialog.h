@@ -20,9 +20,9 @@
 #define RG_TUPLETDIALOG_H
 
 #include "base/NotationTypes.h"
-#include <QDialog>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
+#include <QDialog>
 
 class QWidget;
 class QString;
@@ -34,7 +34,6 @@ class QComboBox;
 
 namespace Rosegarden
 {
-
 
 
 class TupletDialog : public QDialog
@@ -85,7 +84,6 @@ protected:
 
     timeT m_maxDuration;
 };
-
 
 
 }

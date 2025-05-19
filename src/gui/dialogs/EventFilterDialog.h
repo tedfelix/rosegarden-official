@@ -22,22 +22,27 @@
 #ifndef RG_EVENTFILTERDIALOG_H
 #define RG_EVENTFILTERDIALOG_H
 
+#include "base/TimeT.h"
+
 #include <QDialog>
-#include <utility>
-#include <vector>
-#include "base/Event.h"
-#include <QCheckBox>
 #include <QComboBox>
 
+class QCheckBox;
 class QWidget;
 class QSpinBox;
 class QPushButton;
 class QGridLayout;
 
+#include <utility>
+#include <vector>
+
+
 namespace Rosegarden
 {
 
+
 class Event;
+
 
 /// The Event Filter dialog.
 /**

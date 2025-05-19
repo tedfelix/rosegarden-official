@@ -20,7 +20,6 @@
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include "base/Event.h"
 
 #include <QString>
 
@@ -28,8 +27,10 @@
 namespace Rosegarden
 {
 
-class ViewElement;
+
+class NotationMouseEvent;
 class NotationWidget;
+
 
 /**
  * This tool will insert clefs on mouse click events
@@ -45,11 +46,6 @@ public:
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
 
-
-
-    /**
-     * Useful to get the tool name from a NotationTool object
-     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -57,7 +53,7 @@ public:
     static QString ToolName();
 
 public slots:
-    void slotSetClef(const Clef& clefType);
+    void slotSetClef(const Clef &clefType);
 
 protected slots:
     void slotNotesSelected();
@@ -68,6 +64,7 @@ protected:
     explicit ClefInserter(NotationWidget *);
     Clef m_clef;
 };
+
 
 }
 

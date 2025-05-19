@@ -20,14 +20,13 @@
 
 #include "MatrixTool.h"
 
-#include "base/Event.h"
-
 #include <QString>
+
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class MatrixViewSegment;
 class MatrixElement;
 class Event;

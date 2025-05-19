@@ -21,7 +21,7 @@
 #include "base/MidiProgram.h"
 #include "gui/widgets/ZoomSlider.h"
 #include "gui/general/RecentFiles.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/Selection.h"
 #include "base/Typematic.h"
 #include "sound/AudioFile.h"
@@ -40,11 +40,6 @@
 #include <QSharedPointer>
 #include <QTime>
 
-#include <map>
-#include <set>
-
-#include <rosegardenprivate_export.h>
-
 class QWidget;
 class QTimer;
 class QTextCodec;
@@ -54,6 +49,11 @@ class QLabel;
 class QTemporaryFile;
 class QProcess;
 class QAction;
+
+#include <map>
+#include <set>
+
+#include <rosegardenprivate_export.h>
 
 
 namespace Rosegarden

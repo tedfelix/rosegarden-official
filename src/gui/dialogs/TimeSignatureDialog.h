@@ -19,7 +19,7 @@
 #ifndef RG_TIMESIGNATUREDIALOG_H
 #define RG_TIMESIGNATUREDIALOG_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/TimeSignature.h"
 
 #include <QDialog>

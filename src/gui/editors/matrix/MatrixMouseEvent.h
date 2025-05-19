@@ -18,16 +18,18 @@
 #ifndef RG_MATRIX_MOUSE_EVENT_H
 #define RG_MATRIX_MOUSE_EVENT_H
 
-#include <QString>
+#include "base/TimeT.h"
+
 #include <QPoint>
 
-#include "base/Event.h" // for timeT
 
 namespace Rosegarden
 {
 
+
 class MatrixViewSegment;
 class MatrixElement;
+
 
 class MatrixMouseEvent
 {
@@ -58,6 +60,7 @@ public:
         sceneX(0), sceneY(0),
         modifiers(), buttons() { }
 };
+
 
 }
 

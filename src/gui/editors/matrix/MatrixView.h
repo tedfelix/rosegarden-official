@@ -18,25 +18,20 @@
 #ifndef RG_NEW_MATRIX_VIEW_H
 #define RG_NEW_MATRIX_VIEW_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/NotationTypes.h"
 
-#include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
-#include "gui/widgets/DeferScrollArea.h"
-#include "gui/dialogs/TempoDialog.h"
 
-#include <QMainWindow>
+class QComboBox;
 
 #include <vector>
 
-class QWidget;
-class QLabel;
-class QComboBox;
 
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class MatrixWidget;
@@ -45,8 +40,8 @@ class CommandRegistry;
 class EventSelection;
 class SnapGrid;
 class Device;
-class ControlRulerWidget;
 class ControlParameter;
+
 
 /// Top-level window containing the matrix editor.
 /**
@@ -312,6 +307,7 @@ private:
     void stepForward(bool force);
 
 };
+
 
 }
 

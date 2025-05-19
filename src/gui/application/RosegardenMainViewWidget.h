@@ -18,7 +18,7 @@
 #ifndef RG_ROSEGARDENGUIVIEW_H
 #define RG_ROSEGARDENGUIVIEW_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/MidiProgram.h"
 #include "base/Selection.h"
 #include "base/Track.h"
@@ -28,13 +28,8 @@
 
 #include <QString>
 #include <QWidget>
-#include <QVBoxLayout>
 
-
-class QWidget;
 class QObject;
-class LevelInfo;
-class Command;
 
 
 namespace Rosegarden
@@ -58,6 +53,7 @@ class InstrumentParameterBox;
 class EventListEditor;
 class Composition;
 class LevelInfo;
+
 
 /// Parent for the TrackEditor
 /**

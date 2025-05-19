@@ -18,16 +18,12 @@
 #ifndef RG_MATRIX_WIDGET_H
 #define RG_MATRIX_WIDGET_H
 
-#include "base/Event.h"             // for timeT
-#include "MatrixTool.h"
-#include "base/MidiTypes.h"         // for MidiByte
+#include "base/TimeT.h"
+#include "base/MidiTypes.h"  // for MidiByte
 #include "gui/general/AutoScroller.h"
 #include "gui/general/SelectionManager.h"
 
-#include <vector>
-
 #include <QSharedPointer>
-#include <QTimer>
 #include <QWidget>
 
 class QGraphicsScene;
@@ -35,12 +31,17 @@ class QGridLayout;
 class QLabel;
 class QPushButton;
 
+#include <vector>
+
+
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class Segment;
 class MatrixScene;
+class MatrixTool;
 class MatrixToolBox;
 class MatrixMouseEvent;
 class SnapGrid;

@@ -18,14 +18,15 @@
 #ifndef RG_FINGERING_H
 #define RG_FINGERING_H
 
-#include <vector>
-#include <QString>
-#include "base/Event.h"
-
 #include <QCoreApplication>
+#include <QString>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 namespace Guitar
 {
@@ -86,6 +87,7 @@ protected:
 bool operator<(const Fingering&, const Fingering&);
 
 }
+
 
 }
 

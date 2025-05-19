@@ -19,16 +19,17 @@
 #ifndef RG_TIMEDIALOG_H
 #define RG_TIMEDIALOG_H
 
+#include "base/TimeT.h"
+
 #include <QDialog>
 #include <QString>
-#include "base/Event.h"
-
 
 class QWidget;
 
 
 namespace Rosegarden
 {
+
 
 class TimeWidget;
 class Composition;
@@ -57,7 +58,6 @@ protected:
     TimeWidget *m_timeWidget;
 };
                      
-
 
 }
 

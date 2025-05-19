@@ -19,17 +19,20 @@
 #define RG_CHORD_H
 
 #include "Fingering.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "misc/Debug.h"
 
 #include <QString>
 
 #include <rosegardenprivate_export.h>
 
+
 namespace Rosegarden
 {
 
+
 class Event;
+
 
 namespace Guitar
 {
@@ -90,6 +93,7 @@ bool operator<(const Chord&, const Chord&);
 }
 
 ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const Rosegarden::Guitar::Chord &);
+
 
 }
 

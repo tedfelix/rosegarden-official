@@ -19,9 +19,9 @@
 #ifndef RG_COMPOSITIONLENGTHDIALOG_H
 #define RG_COMPOSITIONLENGTHDIALOG_H
 
-#include <QDialog>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
+#include <QDialog>
 
 class QWidget;
 class QSpinBox;
@@ -31,12 +31,14 @@ class QCheckBox;
 namespace Rosegarden
 {
 
+
 class Composition;
 
 
 class CompositionLengthDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     CompositionLengthDialog(QWidget *parent,
                             Composition *composition);
@@ -52,7 +54,6 @@ protected:
     QCheckBox               *m_autoExpandCheckBox;
     Composition *m_composition;
 };
-
 
 
 }
