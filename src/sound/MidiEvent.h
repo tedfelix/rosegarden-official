@@ -11,12 +11,18 @@
   COPYING included with this distribution for more information.
 */
 
-
 #ifndef RG_MIDIEVENT_H
 #define RG_MIDIEVENT_H
 
 #include "Midi.h"
-#include "base/Event.h"
+
+#include "base/MidiProgram.h"
+#include "base/TimeT.h"
+
+#include <QDebug>
+
+#include <string>
+
 
 namespace Rosegarden
 {

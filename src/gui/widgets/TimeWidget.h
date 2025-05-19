@@ -20,25 +20,25 @@
 #define RG_TIMEWIDGET_H
 
 #include "base/RealTime.h"
-#include "base/Event.h"
-#include "gui/widgets/LineEdit.h"
+#include "base/TimeT.h"
 
 #include <QGroupBox>
-#include <QString>
+
+class QComboBox;
+class QLabel;
+class QSpinBox;
+class QString;
+class QWidget;
 
 #include <vector>
-
-
-class QWidget;
-class QSpinBox;
-class QLabel;
-class QComboBox;
 
 
 namespace Rosegarden
 {
 
+
 class Composition;
+class LineEdit;
 
 
 class TimeWidget : public QGroupBox
@@ -46,7 +46,7 @@ class TimeWidget : public QGroupBox
     Q_OBJECT
 public:
     /// Constructor for absolute time widget.
-    TimeWidget(const QString& title,
+    TimeWidget(const QString &title,
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
                timeT initialTime,
@@ -60,7 +60,7 @@ public:
      * startTime is needed to get the correct bar counts based on the current
      * time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
      */
-    TimeWidget(const QString& title,
+    TimeWidget(const QString &title,
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
                timeT startTime,

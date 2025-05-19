@@ -18,9 +18,15 @@
 #ifndef RG_ELEMENTADAPTER_H
 #define RG_ELEMENTADAPTER_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 
-namespace Rosegarden {
+
+namespace Rosegarden
+{
+
+
+class Event;
+
 
 class ElementAdapter
 {
@@ -31,8 +37,9 @@ public:
     virtual void   setValue(long)  = 0;
     virtual timeT  getTime()       = 0;
     virtual timeT  getDuration()   = 0;
-    virtual Event* getEvent()      = 0;
+    virtual Event *getEvent()      = 0;
 };
+
 
 }
 

@@ -12,21 +12,24 @@
     COPYING included with this distribution for more information.
 */
 
+#if 0
+
 #ifndef RG_ROSEGARDENSEQUENCERIFACE_H
 #define RG_ROSEGARDENSEQUENCERIFACE_H
 
+#include "base/Instrument.h"
 #include "gui/application/TransportStatus.h"
-
-#include "base/Event.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
-#include "base/Instrument.h"
 #include "sound/MappedDevice.h"
 #include "sound/MappedStudio.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedBufMetaIterator.h"
 
-namespace Rosegarden {
+
+namespace Rosegarden
+{
+
 
 /// UNUSED
 /**
@@ -321,6 +324,9 @@ public:
     virtual void remapTracks() = 0;
 };
 
+
 }
 
-#endif // RG_ROSEGARDENSEQUENCERIFACE_H
+#endif
+
+#endif

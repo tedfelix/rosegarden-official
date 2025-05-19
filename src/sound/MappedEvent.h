@@ -15,18 +15,18 @@
 #ifndef RG_MAPPEDEVENT_H
 #define RG_MAPPEDEVENT_H
 
-#include <QDataStream>
-
 #include "base/RealTime.h"
 #include "base/Track.h"
-#include "base/Event.h"
 #include "sound/AudioFile.h"
+
+#include <string>
 
 
 namespace Rosegarden
 {
 
 
+class Event;
 class MappedEvent;
 
 
@@ -40,10 +40,10 @@ public:
     friend class MappedEvent;
     typedef unsigned long blockid;
 
-    static DataBlockRepository* getInstance();
-    static std::string getDataBlockForEvent(const MappedEvent*);
-    static void setDataBlockForEvent(MappedEvent*, const std::string&,
-                                     bool extend = false);
+    static DataBlockRepository *getInstance();
+    static std::string getDataBlockForEvent(const MappedEvent *);
+    static void setDataBlockForEvent(
+            MappedEvent *, const std::string &, bool extend = false);
     /**
      * Clear all block files
      */
@@ -55,11 +55,11 @@ protected:
 
     static std::string getDataBlock(blockid);
 
-    static blockid registerDataBlock(const std::string&);
+    static blockid registerDataBlock(const std::string &);
     // unused static void unregisterDataBlock(blockid);
 
-    static void registerDataBlockForEvent(const std::string&, MappedEvent*);
-    // unused static void unregisterDataBlockForEvent(MappedEvent*);
+    static void registerDataBlockForEvent(const std::string &, MappedEvent *);
+    // unused static void unregisterDataBlockForEvent(MappedEvent *);
 
 
     //--------------- Data members ---------------------------------

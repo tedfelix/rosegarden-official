@@ -20,19 +20,21 @@
 #define RG_RAWNOTERULER_H
 
 #include "base/Segment.h"
+#include "base/TimeT.h"
+
 #include <QSize>
 #include <QWidget>
-#include <utility>
-#include <vector>
-#include "base/Event.h"
-
 
 class QPaintEvent;
 class QPainter;
 
+#include <utility>
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class RulerScale;
 class DefaultVelocityColour;
@@ -78,7 +80,7 @@ public slots:
     void slotScrollHoriz(int x);
 
 protected:
-    void paintEvent(QPaintEvent*) override;
+    void paintEvent(QPaintEvent *) override;
 
 private:
     int  m_height;

@@ -13,15 +13,19 @@
     COPYING included with this distribution for more information.
 */
 
-#include <sstream>
-#include <cstdio>
-
 #include "ControlParameter.h"
+
+#include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "gui/rulers/ControllerEventAdapter.h"
 
+#include <sstream>
+#include <cstdio>
+
+
 namespace Rosegarden
 {
+
 
 ControlParameter::ControlParameter():
     m_name("<unnamed>"),

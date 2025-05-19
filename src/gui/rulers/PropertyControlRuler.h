@@ -19,10 +19,10 @@
 #ifndef RG_PROPERTYCONTROLRULER_H
 #define RG_PROPERTYCONTROLRULER_H
 
-#include "base/PropertyName.h"
 #include "ControlRuler.h"
-#include "base/Event.h"
-#include "base/Segment.h"
+
+#include "base/PropertyName.h"
+#include "base/TimeT.h"
 #include "base/ViewSegment.h"
 
 #include <QString>
@@ -35,10 +35,11 @@ class QContextMenuEvent;
 namespace Rosegarden
 {
 
+
 class ViewElement;
-class ViewSegment;
 class Segment;
 class RulerScale;
+
 
 /// The Velocity Ruler
 /**
@@ -48,7 +49,7 @@ class RulerScale;
 class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {
 public:
-    PropertyControlRuler(const PropertyName& propertyName,
+    PropertyControlRuler(const PropertyName &propertyName,
                          ViewSegment *viewSegment,
                          RulerScale *rulerScale,
                          QWidget *parent);
@@ -61,7 +62,7 @@ public:
 
     QString getName() override;
 
-    const PropertyName& getPropertyName()     { return m_propertyName; }
+    const PropertyName &getPropertyName()     { return m_propertyName; }
 
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
@@ -103,7 +104,6 @@ protected:
 
     PropertyName m_propertyName;
 };
-
 
 
 }

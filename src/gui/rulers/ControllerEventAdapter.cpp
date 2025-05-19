@@ -18,7 +18,9 @@
 #define RG_MODULE_STRING "[ControllerEventAdapter]"
 
 #include "ControllerEventAdapter.h"
+
 #include "base/BaseProperties.h"
+#include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
 #include "misc/Debug.h"

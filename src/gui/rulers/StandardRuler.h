@@ -19,8 +19,10 @@
 #ifndef RG_STANDARDRULER_H
 #define RG_STANDARDRULER_H
 
+#include "base/TimeT.h"
+
 #include <QWidget>
-#include "base/Event.h"
+
 
 namespace Rosegarden
 {
@@ -43,11 +45,11 @@ public:
                   RulerScale *rulerScale,
                   bool invert = false, // draw upside-down
                   bool isForMainWindow = false,
-                  QWidget* parent = nullptr);
+                  QWidget *parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
 
-    LoopRuler* getLoopRuler() { return m_loopRuler; }
+    LoopRuler *getLoopRuler() { return m_loopRuler; }
 
     /**
      * Make connections from the LoopRuler to the document's
@@ -79,13 +81,12 @@ private:
     bool m_isForMainWindow;
     int m_currentXOffset;
 
-    RosegardenDocument       *m_doc;
+    RosegardenDocument *m_doc;
     RulerScale *m_rulerScale;
 
     MarkerRuler *m_markerRuler;
     LoopRuler *m_loopRuler;
 };
-
 
 
 }

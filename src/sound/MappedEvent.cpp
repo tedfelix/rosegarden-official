@@ -15,8 +15,10 @@
 #define RG_MODULE_STRING "[MappedEvent]"
 
 #include "MappedEvent.h"
-#include "base/BaseProperties.h"
 #include "Midi.h"
+
+#include "base/BaseProperties.h"
+#include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h" // for Note::EventType
 #include "misc/Debug.h"

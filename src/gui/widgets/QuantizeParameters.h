@@ -18,11 +18,10 @@
 #ifndef RG_QUANTIZEPARAMETERS_H
 #define RG_QUANTIZEPARAMETERS_H
 
-#include "base/Event.h"  // For timeT
+#include "base/TimeT.h"
 
 #include <QFrame>
 #include <QSettings>
-#include <memory>
 
 class QCheckBox;
 class QComboBox;
@@ -31,7 +30,7 @@ class QLabel;
 class QVBoxLayout;
 class QWidget;
 
-#include <vector>
+#include <memory>
 
 
 namespace Rosegarden

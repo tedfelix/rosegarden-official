@@ -20,8 +20,7 @@
 
 #include "gui/general/ActionFileClient.h"
 
-#include "base/Composition.h" // for tempoT!?
-#include "base/Event.h"
+#include "base/Composition.h"  // for tempoT!?
 #include "base/TimeT.h"
 
 #include <QFont>
@@ -30,15 +29,16 @@
 #include <QSize>
 #include <QWidget>
 
-
 class QWheelEvent;
 class QMenu;
 class QPaintEvent;
 class QMouseEvent;
 class QEvent;
 
+
 namespace Rosegarden
 {
+
 
 class EditTempoController;
 class RulerScale;
@@ -50,7 +50,6 @@ class Composition;
  * TempoRuler is a widget that shows a strip of tempo values at
  * x-coordinates corresponding to tempo changes in a Composition.
  */
-
 class TempoRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT

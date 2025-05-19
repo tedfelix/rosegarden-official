@@ -18,24 +18,30 @@
 #ifndef RG_CONTROLLEREVENTERASECOMMAND_H
 #define RG_CONTROLLEREVENTERASECOMMAND_H
 
-#include "base/Event.h"
-#include "document/BasicCommand.h"
 #include "ControlItem.h"
 
+#include "base/TimeT.h"
+#include "document/BasicCommand.h"
+
 #include <QCoreApplication>
+
 
 namespace Rosegarden
 {
 
+
+class Segment;
+
+
 class ControlRulerEventEraseCommand : public BasicCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ControlRulerEventEraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(ControlRulerEventEraseCommand)
 
 public:
 
     ControlRulerEventEraseCommand(ControlItemList selectedItems,
-                                Segment &segment,
-                                Rosegarden::timeT start, Rosegarden::timeT end);
+                                  Segment &segment,
+                                  timeT start, Rosegarden::timeT end);
     ~ControlRulerEventEraseCommand() override {;}
 
 
@@ -46,6 +52,7 @@ protected:
     ControlItemList m_selectedItems;
 };
 
+
 }
 
-#endif /*CONTROLLEREVENTERASECOMMAND_H_*/
+#endif
