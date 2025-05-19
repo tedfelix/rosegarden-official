@@ -20,15 +20,17 @@
 #define RG_SEGMENTSPLITTER_H
 
 #include "SegmentTool.h"
-#include <QString>
-#include "base/Event.h"
 
+#include "base/TimeT.h"
+
+#include <QString>
 
 class QMouseEvent;
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class RosegardenDocument;

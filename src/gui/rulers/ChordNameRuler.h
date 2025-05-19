@@ -20,20 +20,22 @@
 #define RG_CHORDNAMERULER_H
 
 #include "base/PropertyName.h"
-#include <map>
+#include "base/TimeT.h"
+
 #include <QFont>
 #include <QFontMetrics>
 #include <QSize>
 #include <QWidget>
-#include <vector>
-#include "base/Event.h"
-
 
 class QPaintEvent;
+
+#include <map>
+#include <vector>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 class Segment;

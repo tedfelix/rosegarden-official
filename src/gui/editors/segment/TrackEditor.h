@@ -18,30 +18,26 @@
 #ifndef RG_TRACKEDITOR_H
 #define RG_TRACKEDITOR_H
 
-#include "base/MidiProgram.h"
-#include "base/Event.h"
-#include "gui/editors/segment/TrackButtons.h"
+#include "base/Instrument.h"
+#include "base/TimeT.h"
+#include "base/Track.h"
 
 #include <QString>
 #include <QWidget>
-#include <QScrollArea>
+
+class QDropEvent;
+class QDragEnterEvent;
 
 #include <vector>
 
 
-class QPaintEvent;
-class QDropEvent;
-class QDragEnterEvent;
-class QScrollBar;
-class QScrollArea;
-
 namespace Rosegarden
 {
+
 
 class Command;
 class TrackButtons;
 class TempoRuler;
-class Segment;
 class SimpleRulerScale;
 class RosegardenDocument;
 class RosegardenMainViewWidget;
@@ -50,6 +46,7 @@ class CompositionView;
 class CompositionModelImpl;
 class ChordNameRuler;
 class StandardRuler;
+
 
 /// Holds the CompositionView, TrackButtons, and Rulers.
 /**

@@ -23,6 +23,7 @@
 
 #include "TrackParameterBox.h"
 
+#include "gui/editors/segment/TrackButtons.h"
 #include "base/AudioPluginInstance.h"
 #include "gui/general/ClefIndex.h"  // Clef enum
 #include "gui/widgets/CollapsingFrame.h"

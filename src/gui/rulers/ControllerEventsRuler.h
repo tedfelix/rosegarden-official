@@ -19,8 +19,12 @@
 #define RG_CONTROLLEREVENTSRULER_H
 
 #include "ControlRuler.h"
-#include "base/Event.h"
+
 #include "base/Segment.h"
+
+#include <QLineF>
+#include <QRectF>
+#include <QSharedPointer>
 #include <QString>
 
 class QWidget;
@@ -30,11 +34,12 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-class Segment;
+
 class RulerScale;
 class Event;
 class ControlParameter;
 class ControlItem;
+
 
 /// Controller Ruler (volume, pan, pitchbend, etc...)
 /**
@@ -43,12 +48,13 @@ class ControlItem;
 class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 {
     Q_OBJECT
+
 public:
-    ControllerEventsRuler(ViewSegment*,
-                          RulerScale*,
-                          QWidget* parent=nullptr,
+    ControllerEventsRuler(ViewSegment *,
+                          RulerScale *,
+                          QWidget *parent = nullptr,
                           const ControlParameter *controller = nullptr,
-                          const char* name=nullptr );
+                          const char *name = nullptr );
 
     ~ControllerEventsRuler() override;
 
@@ -93,7 +99,7 @@ public:
      */
     virtual void stopRubberBand();
 
-    virtual Event * insertEvent(float,float);
+    virtual Event *insertEvent(float,float);
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
 

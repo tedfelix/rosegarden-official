@@ -18,16 +18,11 @@
 #ifndef RG_EDITVIEWBASE_H
 #define RG_EDITVIEWBASE_H
 
-#include "base/Event.h"
 #include "ActionFileClient.h"
 
 #include <QMainWindow>
 #include <QString>
 
-class QCloseEvent;
-
-#include <set>
-#include <string>
 #include <vector>
 
 
@@ -35,11 +30,8 @@ namespace Rosegarden
 {
 
 
-class Clipboard;
-class Command;
 class RosegardenDocument;
 class Segment;
-class Event;
 
 
 class EditViewBase : public QMainWindow, public ActionFileClient
@@ -48,8 +40,8 @@ class EditViewBase : public QMainWindow, public ActionFileClient
 
 public:
 
-    explicit EditViewBase
-        (const std::vector<Segment *> &segments = std::vector<Segment *>());
+    explicit EditViewBase(
+            const std::vector<Segment *> &segments = std::vector<Segment *>());
 
     ~EditViewBase() override;
 

@@ -18,14 +18,14 @@
 #ifndef RG_CONTROL_MOUSE_EVENT_H
 #define RG_CONTROL_MOUSE_EVENT_H
 
-#include <QPoint>
+#include "ControlItem.h"
 
-#include "base/Event.h" // for timeT
+#include <Qt>
+
 
 namespace Rosegarden
 {
 
-class ControlItem;
 
 class ControlMouseEvent
 {
@@ -55,6 +55,7 @@ public:
         snappedXLeft(e->snappedXLeft), snappedXRight(e->snappedXRight),
         modifiers(e->modifiers), buttons(e->buttons) { }
 };
+
 
 }
 
