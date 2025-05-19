@@ -417,7 +417,7 @@ EventFilterDialog::getDurationFromIndex(unsigned index)
         // prior to populateCombos()
         return LONG_MAX;
     }
-    else if (index > m_standardQuantizations.size() + 1) {
+    else if (index >= m_standardQuantizations.size() + 1) {
         // number of combo box items is m_standardQuantizations.size() + 2
         // ("longest" added before, "shortest" after) so this one
         // is "shortest"
