@@ -19,16 +19,17 @@
 #ifndef RG_NOTATIONGROUP_H
 #define RG_NOTATIONGROUP_H
 
-#include "base/Sets.h"
-#include <utility>
-#include "base/Event.h"
 #include "NotationElement.h"
 
+#include "base/Sets.h"
+#include "base/TimeT.h"
 
+#include <utility>
 
 
 namespace Rosegarden
 {
+
 
 class Quantizer;
 class NotationStaff;
@@ -38,7 +39,6 @@ class Clef;
 
 
 /// Several sorts of "Beamed Group"
-
 class NotationGroup : public AbstractSet<NotationElement,
                                          NotationElementList>
 {

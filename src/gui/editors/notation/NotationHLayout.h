@@ -18,20 +18,21 @@
 #ifndef RG_NOTATIONHLAYOUT_H
 #define RG_NOTATIONHLAYOUT_H
 
-#include "base/LayoutEngine.h"
-#include "base/NotationTypes.h"
 #include "NotationElement.h"
+
+#include "base/LayoutEngine.h"
+#include "base/TimeT.h"
+
 #include <map>
+#include <string>
 #include <vector>
-#include "base/Event.h"
 
-
-class TieMap;
 class QObject;
 
 
 namespace Rosegarden
 {
+
 
 class ViewElement;
 class ViewSegment;
@@ -39,7 +40,6 @@ class Quantizer;
 class NotePixmapFactory;
 class NotationProperties;
 class NotationGroup;
-class NotationChord;
 class Key;
 class Composition;
 class Clef;
@@ -391,15 +391,19 @@ protected:
                 bool full);
 
     /// Find earliest element with quantized time of t or greater
-    static NotationElementList::iterator getStartOfQuantizedSlice
-        (NotationElementList *, timeT t);
+    static NotationElementList::iterator getStartOfQuantizedSlice(
+            NotationElementList *, timeT t);
 
-    void scanChord
-    (NotationElementList *notes, NotationElementList::iterator &i,
-     const Clef &, const ::Rosegarden::Key &,
-     AccidentalTable &, float &lyricWidth,
-     ChunkList &chunks, NotePixmapFactory *, int ottavaShift,
-     NotationElementList::iterator &to);
+    void scanChord(NotationElementList *notes,
+                   NotationElementList::iterator &i,
+                   const Clef &,
+                   const Key &,
+                   AccidentalTable &,
+                   float &lyricWidth,
+                   ChunkList &chunks,
+                   NotePixmapFactory *,
+                   int ottavaShift,
+                   NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 
@@ -407,14 +411,17 @@ protected:
     // moving it on to the last note in the chord; updates the TieMap;
     // and may modify the to-iterator if it turns out to point at a
     // note within the chord
-    void positionChord
-    (ViewSegment &staff,
-     NotationElementList::iterator &, const Clef &clef,
-     const ::Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
+    void positionChord(ViewSegment &staff,
+                       NotationElementList::iterator &,
+                       const Clef &clef,
+                       const ::Rosegarden::Key &key,
+                       TieMap &,
+                       NotationElementList::iterator &to);
 
-    void sampleGroupElement
-    (ViewSegment &staff, const Clef &clef,
-     const ::Rosegarden::Key &key, const NotationElementList::iterator &);
+    void sampleGroupElement(ViewSegment &staff,
+                            const Clef &clef,
+                            const ::Rosegarden::Key &key,
+                            const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
     // unused timeT getSpacingDuration

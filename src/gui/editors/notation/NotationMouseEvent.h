@@ -19,14 +19,18 @@
 #define RG_NOTATION_MOUSE_EVENT_H
 
 #include "base/NotationTypes.h"
-#include "base/Event.h"
-#include <QString>
+#include "base/TimeT.h"
+
+#include <Qt>
+
 
 namespace Rosegarden
 {
 
+
 class NotationStaff;
 class NotationElement;
+
 
 class NotationMouseEvent
 {
@@ -51,6 +55,7 @@ public:
         sceneX(0), sceneY(0),
         modifiers(), buttons() { }
 };
+
 
 }
 

@@ -19,16 +19,17 @@
 #define RG_GUITAR_CHORD_INSERTER_H
 
 #include "NotationTool.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class NotationWidget;
 class GuitarChordSelectorDialog;
 class NotationStaff;
+
 
 /**
  * This tool will insert guitar chord on mouse click events
@@ -70,6 +71,7 @@ private:
 
     bool processDialog(NotationStaff *staff, timeT &insertionTime);
 };
+
 
 }
 

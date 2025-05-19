@@ -18,7 +18,6 @@
 #define RG_MODULE_STRING "[NotationElement]"
 #define RG_NO_DEBUG_PRINT 1
 
-#include <QGraphicsItem>
 #include "NotationElement.h"
 #include "misc/Debug.h"
 
@@ -28,6 +27,9 @@
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
 #include "base/Profiler.h"
+
+#include <QGraphicsItem>
+
 
 namespace Rosegarden
 {

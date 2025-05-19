@@ -20,20 +20,22 @@
 
 #include "base/Exception.h"
 #include "base/ViewElement.h"
-#include <vector>
-#include "base/Event.h"
-
+#include "base/TimeT.h"
 
 class QGraphicsItem;
-class ItemList;
+
+#include <vector>
 
 #define NONHIGHLIGHTOPACITY 0.3
+
 
 namespace Rosegarden
 {
 
+
 class Event;
 class Segment;
+
 
 /**
  * The Notation H and V layout is performed on a
@@ -207,7 +209,6 @@ protected:
 };
 
 typedef ViewElementList NotationElementList;
-
 
 
 }

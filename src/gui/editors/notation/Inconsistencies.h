@@ -13,15 +13,10 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #ifndef RG_INCONSISTENCIES_H
 #define RG_INCONSISTENCIES_H
 
-#include <vector>
-#include <map>
-
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/Segment.h"
 #include "base/Composition.h"
 #include "base/Overlaps.h"
@@ -33,14 +28,20 @@
 #include <QString>
 #include <QCoreApplication>
 
+#include <vector>
+#include <map>
+
+
 namespace Rosegarden
 {
+
 
 template <class T>
 class Inconsistencies : public Overlaps<T>
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::Inconsistencies)
-public :
+
+public:
 
     explicit Inconsistencies(std::vector<Segment *> segments) : Overlaps<T>(segments) {}
 
@@ -84,13 +85,9 @@ public :
         }
     }
 
-protected :
+private:
 
     QString getTranslatedName(T property) const;
-
-
-private :
-    //--------------- Data members ---------------------------------
 
 };
 

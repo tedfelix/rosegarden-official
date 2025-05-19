@@ -19,10 +19,13 @@
 #define RG_NOTATIONERASER_H
 
 #include "NotationTool.h"
-#include "base/Event.h"
+
+#include <QString>
+
 
 namespace Rosegarden
 {
+
 
 /**
  * This tool will erase a note on mouse click events
@@ -58,6 +61,7 @@ protected:
 
     bool m_collapseRest;
 };
+
 
 }
 
