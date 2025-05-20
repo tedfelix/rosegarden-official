@@ -70,9 +70,7 @@ public:
      */
     // unused void completeToHeight(int height);
 
-    NotationWidget * getNotationWidget()
-    { return m_widget;
-    }
+    //NotationWidget *getNotationWidget()  { return m_widget; }
 
     Composition *getComposition()
     { return &m_composition;

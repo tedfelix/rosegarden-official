@@ -43,7 +43,6 @@
 #include "gui/general/ThornStyle.h"
 #include "misc/Preferences.h"
 
-
 #include <QBrush>
 #include <QColor>
 #include <QEvent>
@@ -154,10 +153,12 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     connect(m_toolBox, &BaseToolBox::showContextHelp,
             this, &CompositionView::slotToolHelpChanged);
 
-    connect(m_model, SIGNAL(needUpdate()),
-            this, SLOT(slotUpdateAll()));
-    connect(m_model, SIGNAL(needUpdate(const QRect&)),
-            this, SLOT(slotAllNeedRefresh(const QRect&)));
+    connect(m_model, (void(CompositionModelImpl::*)())
+                    &CompositionModelImpl::needUpdate,
+            this, &CompositionView::slotUpdateAll);
+    connect(m_model, (void(CompositionModelImpl::*)(const QRect &))
+                    &CompositionModelImpl::needUpdate,
+            this, &CompositionView::slotAllNeedRefresh);
     connect(m_model, &CompositionModelImpl::needArtifactsUpdate,
             this, &CompositionView::slotUpdateArtifacts);
     connect(m_model, &CompositionModelImpl::needSizeUpdate,

@@ -230,13 +230,14 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
 
     // Rotary Mapper
     m_rotaryMapper = new QSignalMapper(this);
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     connect(m_rotaryMapper, &QSignalMapper::mappedInt,
             this, &MIDIInstrumentParameterPanel::slotControllerChanged);
 #else
-    connect(m_rotaryMapper, SIGNAL(mapped(int)),
-            SLOT(slotControllerChanged(int)));
+    connect(m_rotaryMapper, (void(QSignalMapper::*)(int))&QSignalMapper::mapped,
+            this, &MIDIInstrumentParameterPanel::slotControllerChanged);
 #endif
+
     // Layout
 
     QGridLayout *mainGrid = new QGridLayout(this);
@@ -503,8 +504,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             m_rotaries.push_back(ri);
 
             // Connect for changes to the Rotary by the user.
-            connect(rotary, SIGNAL(valueChanged(float)),
-                    m_rotaryMapper, SLOT(map()));
+            connect(rotary, &Rotary::valueChanged,
+                    m_rotaryMapper, (void(QSignalMapper::*)())
+                            &QSignalMapper::map);
 
             rotaryIter = m_rotaries.end();
         }

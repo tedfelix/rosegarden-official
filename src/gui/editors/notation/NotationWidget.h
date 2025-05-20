@@ -102,7 +102,7 @@ public:
     unsigned int getUntupledCount() const { return  m_untupledCount;}
     void setGraceMode(bool state = true) { m_graceMode = state; }
 
-    bool getPlayTracking() const { return m_scrollToFollow; }
+    //bool getPlayTracking() const { return m_scrollToFollow; }
 
     NotationToolBox *getToolBox() { return m_toolBox; }
     NotationTool *getCurrentTool() const;
@@ -183,15 +183,18 @@ public slots:
     void slotSetNoteInserter();
     void slotSetRestInserter();
     void slotSetInsertedNote(Note::Type type, int dots);
-    void slotSetAccidental(Accidental accidental, bool follow);
+    // ??? Never used as a slot.  Move to public and rename.
+    void slotSetAccidental(const Accidental &accidental, bool follow);
     void slotSetClefInserter();
-    void slotSetInsertedClef(Clef type);
+    // ??? Never used as a slot.  Move to public and rename.
+    void slotSetInsertedClef(const Clef &type);
     void slotSetTextInserter();
     void slotSetGuitarChordInserter();
     void slotSetLinearMode();
     void slotSetContinuousPageMode();
     void slotSetMultiPageMode();
-    void slotSetFontName(QString);
+    // ??? Never used as a slot.  Move to public and rename.
+    void slotSetFontName(const QString &name);
     void slotSetFontSize(int);
     void slotScrollToFollow();
     void slotSetSymbolInserter();

@@ -434,15 +434,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::sceneNeedsRebuilding,
             this, &NotationWidget::sceneNeedsRebuilding, Qt::QueuedConnection);
 
-    // To fix this, create a new slot called slotCurrentStaffChanged() and
-    // have it call slotUpdatePointerPosition(true).
-    //connect(m_scene, SIGNAL(currentStaffChanged()),
-    //        this, SLOT(slotUpdatePointerPosition(true)));
-
-    // There is a Panner::updateScene(), but it's not a slot.
-    //connect(m_scene, SIGNAL(selectionChanged()),
-    //        m_view, SLOT(updateScene()));
-
     m_view->setScene(m_scene);
 
     m_toolBox->setScene(m_scene);
@@ -760,9 +751,10 @@ NotationWidget::slotSetMultiPageMode()
 }
 
 void
-NotationWidget::slotSetFontName(QString name)
+NotationWidget::slotSetFontName(const QString &name)
 {
-    if (m_scene) m_scene->setFontName(name);
+    if (m_scene)
+        m_scene->setFontName(name);
 
     // Note: See slotSetFontSize, if standard rulers and position do not refresh
 }
@@ -855,7 +847,7 @@ NotationWidget::slotSetInsertedNote(Note::Type type, int dots)
 }
 
 void
-NotationWidget::slotSetAccidental(Accidental accidental, bool follow)
+NotationWidget::slotSetAccidental(const Accidental &accidental, bool follow)
 {
     // You don't have to be in note insertion mode to change the accidental
     NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
@@ -873,10 +865,11 @@ NotationWidget::slotSetClefInserter()
 }
 
 void
-NotationWidget::slotSetInsertedClef(Clef type)
+NotationWidget::slotSetInsertedClef(const Clef &type)
 {
     ClefInserter *ci = dynamic_cast<ClefInserter *>(m_currentTool);
-    if (ci) ci->slotSetClef(type);
+    if (ci)
+        ci->slotSetClef(type);
 }
 
 void
@@ -952,7 +945,6 @@ NotationWidget::updatePointer(timeT t)
 
     // p will also contain sensible Y (although not 100% sensible yet)
     double pointerX = p.x1();
-    double pointerY = std::min(p.y1(), p.y2());
     double pointerHeight = fabs(p.dy());
 
     double sceneXMin = m_scene->sceneRect().left();
@@ -964,6 +956,7 @@ NotationWidget::updatePointer(timeT t)
         m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
+        double pointerY = std::min(p.y1(), p.y2());
         m_view->showPositionPointer(QPointF(pointerX, pointerY),
                                     pointerHeight);
         m_hpanner->slotShowPositionPointer(QPointF(pointerX, pointerY),
@@ -1702,7 +1695,6 @@ NotationWidget::slotAddControlRuler(QAction *action)
 
     const ControlList &list = c->getControlParameters();
 
-    QString itemStr;
 //  int i = 0;
 
     for (ControlList::const_iterator it = list.begin();

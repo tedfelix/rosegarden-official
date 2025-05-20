@@ -94,8 +94,8 @@ NotationToolBox::createTool(QString toolName)
         // This would be great, if NotationTool had such a slot.  All
         // of its derivers do.  This needs to be reworked and carefully
         // tested to make sure it is doing what it should be doing.
-        //connect(m_scene, SIGNAL(eventRemoved(Event *)),
-        //        tool, SLOT(handleEventRemoved(Event *)));
+        //connect(m_scene, &NotationScene::eventRemoved,
+        //        tool, &NotationTool::handleEventRemoved);
     }
 
     return tool;
@@ -114,8 +114,8 @@ NotationToolBox::setScene(NotationScene *scene)
             // This would be great, if NotationTool had such a slot.  All
             // of its derivers do.  This needs to be reworked and carefully
             // tested to make sure it is doing what it should be doing.
-            //connect(scene, SIGNAL(eventRemoved(Event *)),
-            //        nt, SLOT(handleEventRemoved(Event *)));
+            //connect(scene, &NotationScene::eventRemoved,
+            //        nt, &NotationTool::handleEventRemoved);
         }
     }
 }

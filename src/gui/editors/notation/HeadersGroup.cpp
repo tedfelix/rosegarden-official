@@ -182,7 +182,7 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
         int neededWidth = 0;
 
         // Compute times of left and right of view
-        NotationHLayout *nhl = m_scene->getHLayout();
+        const NotationHLayout *nhl = m_scene->getHLayout();
         m_startOfView = nhl->getTimeForX(x);
         m_endOfView = nhl->getTimeForX(m_widget->getViewRightX());
 
