@@ -1722,10 +1722,12 @@ str << "\n%YG " << tempoChange.first
                 // at barTime + offset:
                 //     If segment is the first one
                 //     or if segment is an alternate ending:
-                //         Add partial (barDuration - offset)
+                //         Add partial (barDuration - offset) if not using
+                //         LilyPond automatic volta mode
                 //     else  do nothing (skip (offset) already added if needed)
                 if (segStartTime - m_composition->getBarStart(firstBar) > 0) {
-                    if ((segStartTime == firstSegmentStartTime) || lsc.isAlt()) {
+                    if ((segStartTime == firstSegmentStartTime)
+                        || (lsc.isAlt() && !lsc.isAutomaticVoltaUsable())) {
                         timeT partialDuration =
                             m_composition->getBarStart(firstBar + 1) - segStartTime;
                         str << indent(col) << "\\partial ";
