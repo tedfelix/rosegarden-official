@@ -1090,6 +1090,9 @@ LilyPondExporter::write()
     // YGYGYG    SEE lsc.getFirstSegmentStartTime() ABOVE !!!
     lsc.dump();
 
+    std::cout << "YGYGYG : Last segment end time = "
+              << lsc.getLastSegmentEndTime() << "\n";
+
 
     // define global context which is common for all staffs
     str << indent(col++) << "global = { " << std::endl;
@@ -1135,7 +1138,7 @@ LilyPondExporter::write()
                 if (rightTime > compositionEndTime) {
                     rightTime = compositionEndTime;
                 };
-                writeSkip(timeSignature, leftTime, rightTime - leftTime, false, str);
+                writeSkip(1, timeSignature, leftTime, rightTime - leftTime, false, str);
                 str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
 
                 timeSignature = m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
@@ -1157,7 +1160,7 @@ LilyPondExporter::write()
         //  - place skips up to the end of the composition;
         //    this justifies the printed staffs
         str << indent(col);
-        writeSkip(timeSignature, lsc.getFirstSegmentStartTime(),
+        writeSkip(2, timeSignature, lsc.getFirstSegmentStartTime(),
                   lsc.getLastSegmentEndTime() - lsc.getFirstSegmentStartTime(),
                   false, str);
         str << std::endl;
@@ -1200,10 +1203,21 @@ LilyPondExporter::write()
 
             std::pair<timeT, tempoT> tempoChange =
                 m_composition->getTempoChange(i);
+str << "\n%YG " << tempoChange.first
+           << " --> tempo = " << tempoChange.second
+           << "   QPM = " << Composition::getTempoQpm(tempoChange.second)
+           << "   compo: [" << compositionStartTime
+                    << ", " << compositionEndTime << "]";
+
 
             timeT tempoChangeTime = tempoChange.first;
 
             tempo = int(Composition::getTempoQpm(tempoChange.second));
+
+            // Don't apply any tempo change coming after the end of the
+            // composition: this avoids LilyPond adding a blank measure at
+            // the end of the score.
+            if (tempoChangeTime >= compositionEndTime) break;
 
             // First tempo change may be before the first segment.
             // Do not apply it before the first segment appears.
@@ -1217,7 +1231,7 @@ LilyPondExporter::write()
             } else if (prevTempoChangeTime >= compositionEndTime) {
                 prevTempoChangeTime = compositionEndTime;
             }
-            writeSkip(m_composition->getTimeSignatureAt(tempoChangeTime),
+            writeSkip(3, m_composition->getTimeSignatureAt(tempoChangeTime),
                       tempoChangeTime, tempoChangeTime - prevTempoChangeTime, false, str);
             // add new \tempo only if tempo was changed
             if (tempo != prevTempo) {
@@ -1240,7 +1254,7 @@ LilyPondExporter::write()
         }
         if (!m_useVolta) {   ///!!! Quick hack bis to remove the last blank measure
             /// The writeSkip() is just not called when exporting repeats
-            writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime),
+            writeSkip(4, m_composition->getTimeSignatureAt(prevTempoChangeTime),
                       prevTempoChangeTime, compositionEndTime - prevTempoChangeTime, false, str);
         }   /// Quick hack bis to remove the last blank measure
         str << std::endl;
@@ -1268,7 +1282,7 @@ LilyPondExporter::write()
             // how to cope with time signature changes?
             if (markerTime > prevMarkerTime) {
                 str << indent(col);
-                writeSkip(m_composition->getTimeSignatureAt(markerTime),
+                writeSkip(5, m_composition->getTimeSignatureAt(markerTime),
                           markerTime, markerTime - prevMarkerTime, false, str);
                 str << "\\mark ";
                 switch (m_exportMarkerMode) {
@@ -1603,7 +1617,7 @@ LilyPondExporter::write()
                                         // The chord intervals are specified with skips.
                                         RG_DEBUG << "writing chord" << myTime <<
                                             lastTime;
-                                        writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                                        writeSkip(6, m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
                                         str << qStrToStrUtf8(chord) << " ";
                                         numberOfChords++;
                                     }
@@ -1614,12 +1628,15 @@ LilyPondExporter::write()
                             myTime = lsc.getSegmentStartTime() +
                                 (iRepeat + 1.0) * segLength;
                                 RG_DEBUG << "myTime3" << myTime;
-                            writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+
+                            /// Seems useless (YG)
+                            // writeSkip(7, m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+
                             lastTime = myTime;
                             str << std::endl << indent(col);
                         } // for iRepeat
                         if (numberOfChords >= 0) {
-                            writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, lsc.getLastSegmentEndTime() - lastTime, false, str);
+                            writeSkip(8, m_composition->getTimeSignatureAt(lastTime), lastTime, lsc.getLastSegmentEndTime() - lastTime, false, str);
                             if (numberOfChords == 1) str << "s8 ";
                             str << std::endl;
                             str << indent(--col) << "} % ChordNames " << std::endl;
@@ -1659,9 +1676,10 @@ LilyPondExporter::write()
                 SegmentNotationHelper helper(*seg);
                 helper.setNotationProperties();
 
-                int firstBar = m_composition->getBarNumber(seg->getStartTime());
+                int segStartTime = seg->getStartTime();
+                int firstBar = m_composition->getBarNumber(segStartTime);
 
-                if (!lsc.isAlt()) {  // Don't write any skip in an alt. ending
+                if (!lsc.isAlt()) { // Don't write any skip in an alt. ending
                     if (firstBar > 0) {
                         // Add a skip for the duration until the start of the first
                         // bar in the segment.  If the segment doesn't start on a
@@ -1673,30 +1691,54 @@ LilyPondExporter::write()
                         // writing actual rests, and write a skip instead, so
                         // visible rests do not appear before the start of short
                         // bars
+
+
+            // // YGYGYG
+            //  std::ostringstream tmp;
+            //  tmp << std::endl << indent(col);
+            // writeSkip(timeSignature, compositionStartTime,
+            //         lsc.getSegmentStartTime(), false, tmp);
+            // // YGYGYG
+            // // NE FONCTIONNE PAS !!! ==> Il faut une variable intermediaire !
+               // // ==> Surcharger writeskip()
+               // // ==> Autorise :
+               // //       std::ostringstream tmp;
+               // //       writeSkip(timeSignature, compositionStartTime,
+               // //              lsc.getSegmentStartTime(), false, tmp);
+               // //           (...)
+               // //       str << tmp.str();
+               // //
+            // MAIS VERIFIER QU'IL SOIT VRAIMENT NECESSAIRE D'EN ARRIVER LA !!!
+
+
                         str << std::endl << indent(col);
-                        writeSkip(timeSignature, compositionStartTime,
+                        writeSkip(9, timeSignature, compositionStartTime,
                                 lsc.getSegmentStartTime(), false, str);
                     }
+                }
 
-                    // If segment is not starting on a bar, but is starting at barTime + offset,
-                    // we have to do :
-                    //     if segment is the first one : add partial (barDuration - offset)
-                    //     else  add skip (offset)
-                    if (seg->getStartTime() - m_composition->getBarStart(firstBar) > 0) {
-                        if (seg->getStartTime() == firstSegmentStartTime) {
-                            timeT partialDuration = m_composition->getBarStart(firstBar + 1)
-                                                    - seg->getStartTime();
-                            str << indent(col) << "\\partial ";
-                            // Arbitrary partial durations are handled by the following
-                            // way: split the partial duration to 64th notes: instead
-                            // of "4" write "64*16". (hjj)
-                            Note partialNote = Note::getNearestNote(1, MAX_DOTS);
-                            writeDuration(1, str);
-                            str << "*" << ((int)(partialDuration / partialNote.getDuration()))
-                                << std::endl;
-                        }
+
+                // If segment is not starting on a bar, but is starting
+                // at barTime + offset:
+                //     If segment is the first one
+                //     or if segment is an alternate ending:
+                //         Add partial (barDuration - offset)
+                //     else  do nothing (skip (offset) already added if needed)
+                if (segStartTime - m_composition->getBarStart(firstBar) > 0) {
+                    if ((segStartTime == firstSegmentStartTime) || lsc.isAlt()) {
+                        timeT partialDuration =
+                            m_composition->getBarStart(firstBar + 1) - segStartTime;
+                        str << indent(col) << "\\partial ";
+                        // Arbitrary partial durations are handled by the following
+                        // way: split the partial duration to 64th notes: instead
+                        // of "4" write "64*16". (hjj)
+                        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+                        writeDuration(1, str);
+                        str << "*" << ((int)(partialDuration / partialNote.getDuration()))
+                            << std::endl;
                     }
-                } /// if (!lsc.isAlt())
+                }
+
 
 
                 std::string lilyText = "";      // text events
@@ -1829,12 +1871,12 @@ LilyPondExporter::write()
                                 }
                             }
 
-                            // From here we are going to explicitely draw the bars
-                            // because when an alternative segment doesn't start
-                            // on a bar, LilyPond may introduce erroneous offsets
-                            // when positioning the bars in next alternatives.
-                            str << std::endl << indent(col) << "\\cadenzaOn";
-                            cadenza = true;
+// YGYGYG                            // // From here we are going to explicitely draw the bars
+                            // // because when an alternative segment doesn't start
+                            // // on a bar, LilyPond may introduce erroneous offsets
+                            // // when positioning the bars in next alternatives.
+                            // str << std::endl << indent(col) << "\\cadenzaOn";
+                            // cadenza = true;
 
                             if (m_altBar && lsc.isFirstAlt()) {
                                 // Since LilyPond 2.23, drawing explicitely
@@ -1847,8 +1889,8 @@ LilyPondExporter::write()
                         }
                     }
 
-                    // open the \alternative section if this bar is alternative ending 1
-                    // ending (because there was an "Alt1" flag in the
+                    // open the \alternative section if this bar is alternative
+                    // ending 1 ending (because there was an "Alt1" flag in the
                     // previous bar to the left of where we are right now)
                     //
                     // Alt1 remains in effect until we run into Alt2, which
@@ -1949,9 +1991,9 @@ LilyPondExporter::write()
                         }
                     }
 
-                    // End the cadenza
-                    str << std::endl << indent(col) << "\\cadenzaOff";
-                    cadenza = false;
+// YGYGYG                    // // End the cadenza
+                    // str << std::endl << indent(col) << "\\cadenzaOff";
+                    // cadenza = false;
                     str << std::endl << indent(--col) << "}" << std::endl;  // indent-
 
                     if (lsc.isLastAlt()) {
@@ -2407,7 +2449,7 @@ LilyPondExporter::writeBar(Segment *s,
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
         writtenDuration += note.getDuration();
-        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), false, str);
+        durationRatio = writeSkip(10, timeSignature, 0, note.getDuration(), false, str);
         durationRatioSum = fractionSum(durationRatioSum,durationRatio);
         // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
@@ -2972,7 +3014,7 @@ LilyPondExporter::writeBar(Segment *s,
                       arg(barDurationRatio.second))
             << std::endl << indent(col);
 
-        durationRatio = writeSkip(timeSignature, writtenDuration,
+        durationRatio = writeSkip(11, timeSignature, writtenDuration,
                                   (barEnd - barStart) - writtenDuration, true, str);
         durationRatioSum = fractionSum(durationRatioSum, durationRatio);
     }
@@ -3060,18 +3102,23 @@ LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
 }
 
 std::pair<int,int>
-LilyPondExporter::writeSkip(const TimeSignature &timeSig,
+LilyPondExporter::writeSkip(int wsid, const TimeSignature &timeSig,
                             timeT offset,
                             timeT duration,
                             bool useRests,
-                            std::ofstream &str)
+                            std::ostringstream &str)
 {
     DurationList dlist;
     timeSig.getDurationListForInterval(dlist, duration, offset);
     std::pair<int,int> durationRatioSum(0,1);
     std::pair<int,int> durationRatio(0,1);
 
-    str << "\n% WRITESKIP\n";   // YG
+    str << "\n%YG WRITESKIP " << wsid     // YG
+        << "  timeSig = " << timeSig.getNumerator()
+                   << "/" << timeSig.getDenominator()
+        << "  offset = " << offset
+        << "  duration = " << duration
+        << "\n";
 
     int t = 0, count = 0;
 
@@ -3112,6 +3159,20 @@ LilyPondExporter::writeSkip(const TimeSignature &timeSig,
             break;
     }
     return durationRatioSum;
+}
+
+std::pair<int,int>
+LilyPondExporter::writeSkip(int wsid, const TimeSignature &timeSig,
+                            timeT offset,
+                            timeT duration,
+                            bool useRests,
+                            std::ofstream &str)
+{
+    std::pair<int,int> ret;
+    std::ostringstream tmp;
+    ret = writeSkip(wsid, timeSig, offset, duration, useRests, tmp);
+    str << tmp.str();
+    return ret;
 }
 
 bool
@@ -3326,7 +3387,7 @@ LilyPondExporter::writeStyle(const Event *note, std::string &prevStyle,
 
 std::pair<int,int>
 LilyPondExporter::writeDuration(timeT duration,
-                                std::ofstream &str)
+                                std::ostringstream &str)
 {
     Note note(Note::getNearestNote(duration, MAX_DOTS));
     std::pair<int,int> durationRatio(0,1);
@@ -3374,6 +3435,17 @@ LilyPondExporter::writeDuration(timeT duration,
     return durationRatio;
 }
 
+std::pair<int,int>
+LilyPondExporter::writeDuration(timeT duration,
+                                std::ofstream &str)
+{
+    std::pair<int,int> ret;
+    std::ostringstream tmp;
+    ret = writeDuration(duration, tmp);
+    str << tmp.str();
+    return ret;
+}
+
 void
 LilyPondExporter::writeSlashes(const Event *note, std::ofstream &str)
 {
@@ -3403,7 +3475,7 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
 {
     ////////////////////////////////////////////////////////////////////
     // The comment at the end of LilyPondExporter.h explains what the //
-    // following code does.                                          //
+    // following code does.                                           //
     ////////////////////////////////////////////////////////////////////
 
     int voltaCount = 1;

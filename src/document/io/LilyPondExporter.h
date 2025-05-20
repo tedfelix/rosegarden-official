@@ -209,7 +209,13 @@ private:
                                    int col,
                                    std::ofstream &str);
 
-    std::pair<int,int> writeSkip(const TimeSignature &timeSig,
+    std::pair<int,int> writeSkip(int wsid, const TimeSignature &timeSig,
+				 timeT offset,
+				 timeT duration,
+				 bool useRests,
+				 std::ostringstream &);
+
+    std::pair<int,int> writeSkip(int wsid, const TimeSignature &timeSig,
 				 timeT offset,
 				 timeT duration,
 				 bool useRests,
@@ -228,7 +234,10 @@ private:
     static void handleGuitarChord(Segment::iterator i, std::ofstream &str);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
+
+    std::pair<int,int> writeDuration(timeT duration, std::ostringstream &);
     std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
+
     void writeSlashes(const Event *note, std::ofstream &);
 
     /*
