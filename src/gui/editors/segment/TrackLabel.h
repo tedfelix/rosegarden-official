@@ -151,7 +151,7 @@ signals:
     /**
      * Connected to TrackButtons::slotRenameTrack().
      */
-    void renameTrack(QString longLabel, QString shortLabel, TrackId trackId);
+    void renameTrack(const QString &longLabel, const QString &shortLabel, TrackId trackId);
 
     /// Sent on right-click to launch the instrument popup menu.
     /**

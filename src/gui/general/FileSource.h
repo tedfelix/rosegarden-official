@@ -182,9 +182,6 @@ signals:
     /**
      * Emitted during URL retrieval, when the retrieval progress
      * notches up to a new percentage.
-     *
-     * ??? It looks like this is unused.  A search on "SIGNAL(progress"
-     *     turns up nothing.
      */
     void progress(int percent);
 
@@ -207,7 +204,7 @@ protected slots:
     void replyFailed(QNetworkReply::NetworkError);
     void replyFinished();
     void downloadProgress(qint64 done, qint64 total);
-    void cancelled();
+    //void cancelled();
 
 protected:
     FileSource &operator=(const FileSource &); // not provided

@@ -35,22 +35,19 @@
 
 //#define DEBUG_FILE_SOURCE 1
 
+
 namespace Rosegarden {
 
-int
-FileSource::m_count = 0;
 
-QMutex
-FileSource::m_fileCreationMutex;
+int FileSource::m_count = 0;
 
-FileSource::RemoteRefCountMap
-FileSource::m_refCountMap;
+QMutex FileSource::m_fileCreationMutex;
 
-FileSource::RemoteLocalMap
-FileSource::m_remoteLocalMap;
+FileSource::RemoteRefCountMap FileSource::m_refCountMap;
 
-QMutex
-FileSource::m_mapMutex;
+FileSource::RemoteLocalMap FileSource::m_remoteLocalMap;
+
+QMutex FileSource::m_mapMutex;
 
 #ifdef DEBUG_FILE_SOURCE
 static int extantCount = 0;
@@ -443,9 +440,10 @@ FileSource::init()
 //        if (m_progress && !m_done) {
 //            m_progress->setLabelText
 //                (tr("Downloading %1...").arg(m_url.toString()));
-//            connect(m_progress, SIGNAL(canceled()), this, SLOT(cancelled()));
-//            connect(this, SIGNAL(progress(int)),
-//                    m_progress, SLOT(setValue(int)));
+//            connect(m_progress, &QProgressDialog::canceled,
+//                    this, &FileSource::cancelled);
+//            connect(this, &FileSource::progress,
+//                    m_progress, &QProgressDialog::setValue);
 //        }
     }
 }
@@ -479,8 +477,14 @@ FileSource::initRemote()
 
     connect(m_reply, &QIODevice::readyRead,
             this, &FileSource::readyRead);
-    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(replyFailed(QNetworkReply::NetworkError)));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    connect(m_reply, &QNetworkReply::errorOccurred,
+            this, &FileSource::replyFailed);
+#else
+    connect(m_reply, (void(QNetworkReply::*)(QNetworkReply::NetworkError))
+                    &QNetworkReply::error,
+            this, &FileSource::replyFailed);
+#endif
     connect(m_reply, &QNetworkReply::finished,
             this, &FileSource::replyFinished);
     connect(m_reply, &QNetworkReply::metaDataChanged,
@@ -752,6 +756,7 @@ FileSource::downloadProgress(qint64 done, qint64 total)
     emit progress(percent);
 }
 
+#if 0
 void
 FileSource::cancelled()
 {
@@ -761,6 +766,7 @@ FileSource::cancelled()
     m_ok = false;
     m_errorString = tr("Download cancelled");
 }
+#endif
 
 void
 FileSource::replyFinished()

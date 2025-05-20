@@ -18,15 +18,14 @@
 #ifndef RG_TRACKBUTTONS_H
 #define RG_TRACKBUTTONS_H
 
+#include "TrackLabel.h"
+
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "TrackLabel.h"
+
 #include <QFrame>
 #include <QString>
-#include <QSharedPointer>
-#include <vector>
-
 
 class QWidget;
 class QVBoxLayout;
@@ -35,15 +34,19 @@ class QPopupMenu;
 class QObject;
 class QMenu;
 
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class TrackVUMeter;
 class RosegardenDocument;
 class LedButton;
 class Instrument;
 class InstrumentStaticSignals;
+
 
 /// The QFrame containing the various widgets for each track.
 /**
@@ -156,7 +159,9 @@ public slots:
      *
      * @see changeTrackName()
      */
-    void slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId);
+    void slotRenameTrack(const QString &longLabel,
+                         const QString &shortLabel,
+                         TrackId trackId);
 
     /// Sets the level of the VU meter on a track.
     /**

@@ -23,6 +23,7 @@
 #include "TrackVUMeter.h"
 
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Composition.h"
@@ -44,24 +45,16 @@
 #include "sound/ControlBlock.h"
 #include "sound/PluginIdentifier.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "misc/Preferences.h"
 
 #include <QApplication>
-#include <QLayout>
-#include <QMessageBox>
+#include <QVBoxLayout>
 #include <QCursor>
 #include <QFrame>
 #include <QIcon>
-#include <QLabel>
-#include <QObject>
 #include <QPixmap>
 #include <QMenu>
 #include <QSignalMapper>
 #include <QString>
-#include <QTimer>
-#include <QWidget>
-#include <QStackedWidget>
-#include <QToolTip>
 
 
 namespace
@@ -672,7 +665,8 @@ TrackButtons::getHighlightedTracks()
 #endif
 
 void
-TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId)
+TrackButtons::slotRenameTrack(
+        const QString &longLabel, const QString &shortLabel, TrackId trackId)
 {
     if (!RosegardenDocument::currentDocument) return;
 
@@ -680,7 +674,7 @@ TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId tra
 
     if (!track) return;
 
-    TrackLabel *label = m_trackLabels[track->getPosition()];
+    const TrackLabel *label = m_trackLabels[track->getPosition()];
 
     // If neither label is changing, skip it
     if (label->getTrackName() == longLabel &&
@@ -1237,8 +1231,8 @@ TrackButtons::makeButton(Track *track)
     mute->setToolTip(tr("Mute track"));
     hblayout->addWidget(mute);
 
-    connect(mute, SIGNAL(stateChanged(bool)),
-            m_muteSigMapper, SLOT(map()));
+    connect(mute, &LedButton::stateChanged,
+            m_muteSigMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     m_muteSigMapper->setMapping(mute, track->getPosition());
 
     m_muteLeds.push_back(mute);
@@ -1255,8 +1249,8 @@ TrackButtons::makeButton(Track *track)
     record->setToolTip(tr("Record on this track"));
     hblayout->addWidget(record);
 
-    connect(record, SIGNAL(stateChanged(bool)),
-            m_recordSigMapper, SLOT(map()));
+    connect(record, &LedButton::stateChanged,
+            m_recordSigMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     m_recordSigMapper->setMapping(record, track->getPosition());
 
     m_recordLeds.push_back(record);
@@ -1271,8 +1265,8 @@ TrackButtons::makeButton(Track *track)
     solo->setToolTip(tr("Solo track"));
     hblayout->addWidget(solo);
 
-    connect(solo, SIGNAL(stateChanged(bool)),
-            m_soloSigMapper, SLOT(map()));
+    connect(solo, &LedButton::stateChanged,
+            m_soloSigMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     m_soloSigMapper->setMapping(solo, track->getPosition());
 
     m_soloLeds.push_back(solo);
