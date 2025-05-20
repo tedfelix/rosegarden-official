@@ -66,7 +66,7 @@ protected:
     explicit GuitarChordInserter(NotationWidget *);
 
 private:
-    void handleSelectedGuitarChord(const NotationMouseEvent *e);
+    void handleSelectedGuitarChord(const NotationMouseEvent *event);
     void createNewGuitarChord(const NotationMouseEvent *e);
 
     bool processDialog(NotationStaff *staff, timeT &insertionTime);

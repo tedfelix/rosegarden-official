@@ -17,28 +17,29 @@
 
 #include "SymbolInserter.h"
 
-#include "commands/notation/SymbolInsertionCommand.h"
-
 #include "NotationTool.h"
 #include "NotationWidget.h"
 #include "NotationElement.h"
 #include "NotationStaff.h"
 #include "NotationScene.h"
 #include "NotationMouseEvent.h"
+
+#include "commands/notation/SymbolInsertionCommand.h"
+#include "document/CommandHistory.h"
 #include "gui/widgets/Panned.h"
 
-#include "document/CommandHistory.h"
 
 namespace Rosegarden
 {
+
 
 SymbolInserter::SymbolInserter(NotationWidget *widget) :
     NotationTool("symbolinserter.rc", "SymbolInserter", widget),
     m_symbol(Symbol::Segno)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("notes", SLOT(slotNotesSelected()));
+    createAction("select", &SymbolInserter::slotSelectSelected);
+    createAction("erase", &SymbolInserter::slotEraseSelected);
+    createAction("notes", &SymbolInserter::slotNotesSelected);
 }
 
 void

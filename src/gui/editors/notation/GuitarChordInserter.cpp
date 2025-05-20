@@ -31,16 +31,18 @@
 #include "NotePixmapFactory.h"
 #include "gui/widgets/Panned.h"
 
+
 namespace Rosegarden
 {
+
 
 GuitarChordInserter::GuitarChordInserter(NotationWidget *widget) :
     NotationTool("guitarchordinserter.rc", "GuitarChordInserter", widget),
     m_guitarChordSelector(nullptr)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("notes", SLOT(slotNotesSelected()));
+    createAction("select", &GuitarChordInserter::slotSelectSelected);
+    createAction("erase", &GuitarChordInserter::slotEraseSelected);
+    createAction("notes", &GuitarChordInserter::slotNotesSelected);
 
     m_guitarChordSelector = new GuitarChordSelectorDialog(m_widget);
     m_guitarChordSelector->init();
@@ -117,27 +119,28 @@ GuitarChordInserter::processDialog(NotationStaff* staff,
 }
 
 void
-GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *e)
+GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *event)
 {
     // Get time of where guitar chord is inserted
-    timeT insertionTime = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+    timeT insertionTime = event->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
     // edit an existing guitar chord, if that's what we clicked on
     try {
-        Guitar::Chord chord(*(e->element->event()));
+        Guitar::Chord chord(*(event->element->event()));
 
         m_guitarChordSelector->setChord(chord);
 
-        if (processDialog(e->staff, insertionTime)) {
+        if (processDialog(event->staff, insertionTime)) {
             // Erase old guitar chord
             EraseEventCommand *command =
-                new EraseEventCommand(e->staff->getSegment(),
-                                      e->element->event(),
+                new EraseEventCommand(event->staff->getSegment(),
+                                      event->element->event(),
                                       false);
 
             CommandHistory::getInstance()->addCommand(command);
         }
-    } catch (const Exception &e) {}
+    } catch (const Exception &e) {
+    }
 }
 
 void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)

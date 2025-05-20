@@ -15,16 +15,20 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[GuitarChordSelectorDialog]"
+//#define RG_NO_DEBUG_PRINT
+
 #include "GuitarChordSelectorDialog.h"
 #include "GuitarChordEditorDialog.h"
 #include "ChordXmlHandler.h"
 #include "FingeringBox.h"
 #include "FingeringListBoxItem.h"
-#include "misc/Debug.h"
+
+#include "document/io/XMLReader.h"
 #include "gui/general/ResourceFinder.h"
 #include "gui/general/IconLoader.h"
 #include "misc/Strings.h"
-#include "document/io/XMLReader.h"
+#include "misc/Debug.h"
 
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -37,13 +41,13 @@
 #include <QGroupBox>
 #include <QFile>
 
-//#include <QDir>
 
 namespace Rosegarden
 {
 
-GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
-    : QDialog(parent)
+
+GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent) :
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(tr("Guitar Chord Selector"));
@@ -112,14 +116,10 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     connect(m_chordExtList, &QListWidget::currentRowChanged,
             this, &GuitarChordSelectorDialog::slotChordExtHighlighted);
 
-    // connect itemClicked() so it will fire if a user clicks directly on the
-    // fingering list doodad thingummy (and comments like "fingering list doodad
-    // thingummy" are what you get when you abandon half-finished code the core
-    // developers don't really understand, and expect them to keep it alive for
-    // you in perpetuity)
-    //
-    connect(m_fingeringsList, SIGNAL(itemClicked(QListWidgetItem*)),
-            this, SLOT(slotFingeringHighlighted(QListWidgetItem*)));
+    // Connect itemClicked() so it will fire if a user clicks directly on the
+    // fingering list.
+    connect(m_fingeringsList, &QListWidget::itemClicked,
+            this, &GuitarChordSelectorDialog::slotFingeringItem);
 
     // connect currentRowChanged() so this can be fired when other widgets are
     // manipulated, which will cause this one to pop back up to the top.  This
@@ -127,15 +127,16 @@ GuitarChordSelectorDialog::GuitarChordSelectorDialog(QWidget *parent)
     // fashion, so we have to wire it to some input to get those updates to
     // happen, and overloading this to fire two different ways was quick and
     // cheap
-    //
-    connect(m_fingeringsList, SIGNAL(currentRowChanged(int)),
-            this, SLOT(slotFingeringHighlighted(int)));
+    connect(m_fingeringsList, &QListWidget::currentRowChanged,
+            this, &GuitarChordSelectorDialog::slotFingeringRow);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
                                                        QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &GuitarChordSelectorDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
@@ -226,21 +227,27 @@ GuitarChordSelectorDialog::slotChordExtHighlighted(int i)
 }
 
 void
-GuitarChordSelectorDialog::slotFingeringHighlighted(int i)
+GuitarChordSelectorDialog::slotFingeringRow(int row)
 {
-// RG_DEBUG << "GuitarChordSelectorDialog::slotFingeringHighlighted(int)";
+    RG_DEBUG << "slotFingeringRow()";
 
-    QListWidgetItem* it = m_fingeringsList->item(i);
-    if (it) slotFingeringHighlighted(it);
+    // ??? I suspect this is not needed.  In every case both this routine
+    //     and slotFingeringItem() are called.  Might as well just get rid
+    //     of this.
+
+    QListWidgetItem *it = m_fingeringsList->item(row);
+    if (it)
+        slotFingeringItem(it);
 }
 
 void
-GuitarChordSelectorDialog::slotFingeringHighlighted(QListWidgetItem* listBoxItem)
+GuitarChordSelectorDialog::slotFingeringItem(QListWidgetItem *listBoxItem)
 {
-// RG_DEBUG << "GuitarChordSelectorDialog::slotFingeringHighlighted("
-//   "QListWidgetItem*)";
+    RG_DEBUG << "slotFingeringItem()";
     
-    FingeringListBoxItem* fingeringItem = dynamic_cast<FingeringListBoxItem*>(listBoxItem);
+    FingeringListBoxItem *fingeringItem =
+            dynamic_cast<FingeringListBoxItem*>(listBoxItem);
+
     if (fingeringItem) {
         m_chord = fingeringItem->getChord();
         m_fingeringBox->setFingering(m_chord.getFingering());
@@ -271,13 +278,13 @@ GuitarChordSelectorDialog::slotNewFingering()
     
     GuitarChordEditorDialog* chordEditorDialog = new GuitarChordEditorDialog(newChord, m_chordMap, this);
     //QListWidgetItem *tmpItem = 0; (unused)
-    QList<QListWidgetItem*> tmpItemList;
     
     if (chordEditorDialog->exec() == QDialog::Accepted) {
         m_chordMap.insert(newChord);
         // populate lists
         //
-        tmpItemList = m_rootNotesList->findItems(newChord.getRoot(), Qt::MatchExactly);
+        QList<QListWidgetItem*> tmpItemList =
+                m_rootNotesList->findItems(newChord.getRoot(), Qt::MatchExactly);
         if (tmpItemList.isEmpty() ) {
             m_rootNotesList->addItem(newChord.getRoot());
             m_rootNotesList->sortItems(Qt::AscendingOrder );
@@ -374,7 +381,7 @@ GuitarChordSelectorDialog::setChord(const Guitar::Chord& chord)
     // select the chord's extension
     //
     if (chordExt.isEmpty()) {
-        chordExt = "";
+        //chordExt = "";
         //m_chordExtList->setSelected(0, true);
         m_chordExtList->setCurrentItem(nullptr);
     } else {                

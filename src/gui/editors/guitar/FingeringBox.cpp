@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[FingeringBox]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FingeringBox.h"
 #include "Fingering.h"
@@ -24,8 +25,10 @@
 
 #include <QMouseEvent>
 
+
 namespace Rosegarden
 {
+
 
 FingeringBox::FingeringBox(
         unsigned int nbFrets,

@@ -17,33 +17,35 @@
 
 #include "TextInserter.h"
 
+#include "NotationMouseEvent.h"
+#include "NotationScene.h"
+#include "NotationStaff.h"
+#include "NotationTool.h"
+#include "NotationWidget.h"
+
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
 #include "gui/dialogs/TextEventDialog.h"
-#include "NotationTool.h"
-#include "NotationWidget.h"
-#include "NotationElement.h"
-#include "NotationStaff.h"
-#include "NotationScene.h"
-#include "NotationMouseEvent.h"
 #include "gui/widgets/Panned.h"
 #include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
 
 #include <QSettings>
 
+
 namespace Rosegarden
 {
+
 
 TextInserter::TextInserter(NotationWidget *widget) :
     NotationTool("textinserter.rc", "TextInserter", widget),
     m_text("", Text::Dynamic)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("notes", SLOT(slotNotesSelected()));
+    createAction("select", &TextInserter::slotSelectSelected);
+    createAction("erase", &TextInserter::slotEraseSelected);
+    createAction("notes", &TextInserter::slotNotesSelected);
 
     QSettings settings;
     settings.beginGroup(TextEventDialogConfigGroup);

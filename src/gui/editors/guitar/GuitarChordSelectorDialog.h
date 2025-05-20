@@ -51,22 +51,13 @@ public:
 
     void setChord(const Guitar::Chord&);
 
-protected slots:
+private slots:
+
     void slotRootHighlighted(int);
     void slotChordExtHighlighted(int);
 
-    /** Overloaded function to allow activation both through int-based and
-     * QListWidgetItem*-based signals.  This version takes an int in the form of
-     * a row coordinate, and obtains the correct QListWidgetItem* to pass into
-     * the version below, which does the real work.
-     */
-    void slotFingeringHighlighted(int);
-
-    /** Overloaded function to allow activation both through int-based and
-     * QListWidgetItem*-based signals.  This version takes a QListWidgetItem*
-     * and does real work accordingly.
-     */
-    void slotFingeringHighlighted(QListWidgetItem*);
+    void slotFingeringRow(int row);
+    void slotFingeringItem(QListWidgetItem *);
 
     void slotComplexityChanged(int);
 
@@ -76,7 +67,7 @@ protected slots:
 
     void accept() override;
 
-protected:
+private:
 
     void parseChordFile(const QString& chordFileName);
     void populateFingerings(const Guitar::ChordMap::chordarray&, const Guitar::Fingering& refFingering=Guitar::Fingering(0));

@@ -17,16 +17,21 @@
 */
 
 #define RG_MODULE_STRING "[NoteSymbols]"
+#define RG_NO_DEBUG_PRINT
 
 #include "NoteSymbols.h"
+
 #include "Fingering.h"
 #include "misc/Debug.h"
+
 
 namespace Rosegarden
 {
 
+
 namespace Guitar
 {
+
 NoteSymbols::posPair
 NoteSymbols::getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings )
 {
