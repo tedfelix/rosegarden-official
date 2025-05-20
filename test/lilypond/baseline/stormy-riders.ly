@@ -16,7 +16,7 @@ global = {
 }
 globalTempo = {
     \override Score.MetronomeMark.transparent = ##t
-    \tempo 4 = 104  \skip 2 \skip 2.*149 \skip 64 
+    \tempo 4 = 104  
 }
 \score {
     << % common

@@ -91,8 +91,7 @@ globalTempo = {
     \tempo 4 = 116  \skip 32 \skip 8 
     \tempo 4 = 115  \skip 8 \skip 64 \skip 64 
     \tempo 4 = 113  \skip 32. 
-    \tempo 4 = 112  \skip 32 \skip 32 \skip 64 \skip 64 
-    \tempo 4 = 111  
+    \tempo 4 = 112  \skip 32 
 }
 \score {
     << % common
