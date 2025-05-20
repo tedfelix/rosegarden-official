@@ -44,6 +44,12 @@ public:
 
 protected:
     QString m_pastLog;
+
+private:
+
+    DummyDriver(const DummyDriver &) = delete;
+    DummyDriver &operator=(const DummyDriver &) = delete;
+
 };
 
 

@@ -74,8 +74,6 @@ class MappedStudio;
  * of a sub class of this class and directing it as required
  * by RosegardenSequencer itself.
  */
-
-// cppcheck-suppress noCopyConstructor
 class SoundDriver
 {
 public:
@@ -386,6 +384,11 @@ protected:
 
     /// Sequencer-side representation of the audio portion of the Studio.
     MappedStudio *m_studio;
+
+private:
+
+    SoundDriver(const SoundDriver &) = delete;
+    SoundDriver &operator=(const SoundDriver &) = delete;
 
 };
 

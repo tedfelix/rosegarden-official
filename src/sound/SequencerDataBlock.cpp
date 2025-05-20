@@ -33,7 +33,6 @@ SequencerDataBlock::getInstance()
     return instance;
 }
 
-// cppcheck-suppress uninitMemberVar
 SequencerDataBlock::SequencerDataBlock()
 {
     clearTemporaries();
@@ -61,7 +60,7 @@ SequencerDataBlock::getVisual(MappedEvent &ev)
     //     worth worrying about.
 
     // Copy the event to the caller.
-    ev = *((MappedEvent *) & m_visualEvent);
+    ev = *reinterpret_cast<MappedEvent *>(&m_visualEvent);
 
     // Remember where we were for next time.
     m_getVisualIndex = thisEventIndex;
@@ -77,7 +76,7 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 
     if (ev) {
         // Save the visual event
-        *((MappedEvent *)&m_visualEvent) = *ev;
+        *reinterpret_cast<MappedEvent *>(&m_visualEvent) = *ev;
 
         // Indicate that it has changed and it is safe to read now.
         ++m_setVisualIndex;
@@ -380,7 +379,7 @@ SequencerDataBlock::clearTemporaries()
     m_setVisualIndex = 0;
     m_getVisualIndex = 0;
     m_haveVisualEvent = false;
-    *((MappedEvent *)&m_visualEvent) = MappedEvent();
+    *reinterpret_cast<MappedEvent *>(&m_visualEvent) = MappedEvent();
 
     m_recordEventIndex = 0;
     m_readIndex = 0;
@@ -403,5 +402,6 @@ SequencerDataBlock::clearTemporaries()
     m_masterLevel.level = 0;
     m_masterLevel.levelRight = 0;
 }
+
 
 }

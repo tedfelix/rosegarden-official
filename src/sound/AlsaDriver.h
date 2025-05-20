@@ -541,6 +541,10 @@ protected:
     virtual void processAudioQueue(bool /* now */) { }
 
 private:
+
+    AlsaDriver(const AlsaDriver &) = delete;
+    AlsaDriver &operator=(const AlsaDriver &) = delete;
+
     RealTime getAlsaTime();
 
     // Locally convenient to control our devices

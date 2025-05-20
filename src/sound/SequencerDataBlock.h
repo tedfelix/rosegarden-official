@@ -16,14 +16,15 @@
 #ifndef RG_SEQUENCERDATABLOCK_H
 #define RG_SEQUENCERDATABLOCK_H
 
-#include "ControlBlock.h"
 #include "base/RealTime.h"
 #include "MappedEvent.h"
 
 #include <QMutex>
 
+
 namespace Rosegarden
 {
+
 
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
@@ -38,12 +39,14 @@ struct LevelInfo
     int levelRight; // if stereo audio
 };
 
+
 class MappedEventList;
 
 
 #define SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS 512 // can't be a symbol
 #define SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS   64 // can't be a symbol
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
+
 
 /// Holds MIDI data going from RosegardenSequencer to RosegardenMainWindow
 /**
@@ -159,7 +162,12 @@ protected:
     int m_getVisualIndex;
     bool m_haveVisualEvent;
     /// MIDI OUT event for display on the transport during playback.
-    char m_visualEvent[sizeof(MappedEvent)];
+    /**
+     * ??? This is a character buffer because this used to be shared memory.
+     *     Now that it isn't, we should be able to make this a MappedEvent
+     *     object.
+     */
+    char m_visualEvent[sizeof(MappedEvent)]{};
 
     /// Index of the next available position in m_recordBuffer.
     /**
@@ -205,6 +213,7 @@ protected:
     int m_masterLevelUpdateIndex;
     LevelInfo m_masterLevel;
 };
+
 
 }
 
