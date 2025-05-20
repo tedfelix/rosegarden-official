@@ -5,6 +5,9 @@
 # On a specific file:
 #   scripts/cppcheck-rg 2>&1 | grep SoundDriver
 
+# We can add "-j `nproc`" and this will run *really* fast, however the
+# unusedFunction check is not supported with -j so I've left it out.
+
 cppcheck --language=c++ --std=c++14 --library=qt.cfg --quiet \
          --enable=all --inconclusive \
          --inline-suppr --suppress=useStlAlgorithm \
