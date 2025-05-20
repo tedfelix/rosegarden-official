@@ -16,8 +16,6 @@
 */
 
 #define RG_MODULE_STRING "[MidiMixerWindow]"
-
-// Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
 #define RG_NO_DEBUG_PRINT
 
 #include "MidiMixerWindow.h"
@@ -62,6 +60,7 @@
 namespace Rosegarden
 {
 
+
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                                  RosegardenDocument *document):
     MixerWindow(parent, document),
@@ -71,18 +70,18 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     //
     setupTabs();
 
-    createAction("file_close", SLOT(slotClose()));
+    createAction("file_close", &MidiMixerWindow::slotClose);
 
-    createAction("play", SIGNAL(play()));
-    createAction("stop", SIGNAL(stop()));
-    createAction("playback_pointer_back_bar", SIGNAL(rewindPlayback()));
-    createAction("playback_pointer_forward_bar", SIGNAL(fastForwardPlayback()));
-    createAction("playback_pointer_start", SIGNAL(rewindPlaybackToBeginning()));
-    createAction("playback_pointer_end", SIGNAL(fastForwardPlaybackToEnd()));
-    createAction("record", SIGNAL(record()));
-    createAction("panic", SIGNAL(panic()));
-    createAction("midimix_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    createAction("play", &MidiMixerWindow::play);
+    createAction("stop", &MidiMixerWindow::stop);
+    createAction("playback_pointer_back_bar", &MidiMixerWindow::rewindPlayback);
+    createAction("playback_pointer_forward_bar", &MidiMixerWindow::fastForwardPlayback);
+    createAction("playback_pointer_start", &MidiMixerWindow::rewindPlaybackToBeginning);
+    createAction("playback_pointer_end", &MidiMixerWindow::fastForwardPlaybackToEnd);
+    createAction("record", &MidiMixerWindow::record);
+    createAction("panic", &MidiMixerWindow::panic);
+    createAction("midimix_help", &MidiMixerWindow::slotHelpRequested);
+    createAction("help_about_app", &MidiMixerWindow::slotHelpAbout);
 
     createMenusAndToolbars("midimixer.rc");
 
@@ -182,8 +181,7 @@ MidiMixerWindow::setupTabs()
             for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
 
                 // Add new fader struct
-                //
-                m_faders.push_back(new FaderStruct());
+                m_faders.push_back(std::make_shared<FaderStruct>());
 
                 // Store the first ID
                 //
@@ -226,7 +224,6 @@ MidiMixerWindow::setupTabs()
                                           Qt::AlignCenter);
 
                     // Store the rotary
-                    //
                     m_faders[faderCount]->m_controllerRotaries.push_back(
                         std::pair<MidiByte, Rotary*>
                         (controls[i].getControllerNumber(), controller));
@@ -485,7 +482,7 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
                     try {
                         value = float((*iIt)->getControllerValue
                                       (controls[i].getControllerNumber()));
-                    } catch (std::string& s) {
+                    } catch (const std::string &s) {
                         //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerNumber()) << " - \"" << s << "\"";
                         continue;
                     }
