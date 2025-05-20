@@ -19,9 +19,10 @@
 #ifndef RG_MANAGEMETRONOMEDIALOG_H
 #define RG_MANAGEMETRONOMEDIALOG_H
 
-#include "base/MidiMetronome.h"
-#include <QDialog>
+//#include "base/MidiMetronome.h"
+#include "base/MidiProgram.h"
 
+#include <QDialog>
 
 class QWidget;
 class QSpinBox;
@@ -29,12 +30,15 @@ class QCheckBox;
 class QComboBox;
 class QDialogButtonBox;
 
+
 namespace Rosegarden
 {
 
-class RosegardenDocument;
-class PitchChooser;
+
 class Device;
+class MidiMetronome;
+class PitchChooser;
+class RosegardenDocument;
 
 
 class ManageMetronomeDialog : public QDialog
@@ -58,8 +62,6 @@ public slots:
 
 protected:
 
-    //--------------- Data members ---------------------------------
-
     RosegardenDocument       *m_doc;
 
     QDialogButtonBox       *m_buttonBox;
@@ -74,10 +76,13 @@ protected:
     QCheckBox              *m_playEnabled;
     QCheckBox              *m_recordEnabled;
 
-    bool                   m_modified;
-    MidiByte   m_barPitch;
-    MidiByte   m_beatPitch;
-    MidiByte   m_subBeatPitch;
+    // ??? Set but never used.  Probably intended to enable the Apply
+    //     button or something.
+    bool m_modified;
+
+    MidiByte m_barPitch;
+    MidiByte m_beatPitch;
+    MidiByte m_subBeatPitch;
 
     bool isSuitable(Device *, bool *hasConnectionReturn = nullptr);
     void setMetronome(Device *, const MidiMetronome &);

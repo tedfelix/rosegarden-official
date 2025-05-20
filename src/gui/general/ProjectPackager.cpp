@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ProjectPackager]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ProjectPackager.h"
 
@@ -90,7 +91,7 @@ RG_DEBUG << "ProjectPackager::ProjectPackager():  mode: " << mode <<
     layout->addWidget(m_progress, 1, 1);
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);
-    connect(ok, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(ok, &QPushButton::clicked, this, &ProjectPackager::reject);
     layout->addWidget(ok, 3, 1);
 
     sanityCheck();
@@ -554,8 +555,9 @@ ProjectPackager::sanityCheck() {
         puke(tr("<qt><p>The <b>wvunpack</b> command was not found.</p><p>WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called \"wavpack\".</p>"));
         return;
     }
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runPackUnpack(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &ProjectPackager::runPackUnpack);
 }
 
 void
@@ -850,8 +852,9 @@ ProjectPackager::startAudioEncoder(QStringList files)
     m_process = new QProcess;
     m_process->setWorkingDirectory(m_packTmpDirName);
     m_process->start("bash", QStringList() << scriptName);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(finishPack(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &ProjectPackager::finishPack);
 }
 
 void
@@ -1088,8 +1091,9 @@ RG_DEBUG << "flad -d " << o1 << " -o " << o2;
     // was apparently the reason why tar always failed to do anything
     m_process->setWorkingDirectory(dirname);
     m_process->start("bash", QStringList() << scriptName);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(finishUnpack(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &ProjectPackager::finishUnpack);
 
     // wait up to 30 seconds for process to start
     m_info->setText(tr("Decoding audio files..."));

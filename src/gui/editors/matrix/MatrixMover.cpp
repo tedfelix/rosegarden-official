@@ -20,6 +20,13 @@
 
 #include "MatrixMover.h"
 
+#include "MatrixElement.h"
+#include "MatrixScene.h"
+#include "MatrixWidget.h"
+#include "MatrixTool.h"
+#include "MatrixMouseEvent.h"
+#include "MatrixViewSegment.h"
+
 #include "base/BaseProperties.h"
 #include "base/Event.h"
 #include "base/Segment.h"
@@ -31,27 +38,23 @@
 #include "commands/notation/NormalizeRestsCommand.h"
 #include "document/CommandHistory.h"
 #include "misc/Preferences.h"
-#include "MatrixElement.h"
-#include "MatrixScene.h"
-#include "MatrixWidget.h"
-#include "MatrixTool.h"
-#include "MatrixMouseEvent.h"
-#include "MatrixViewSegment.h"
 #include "misc/Debug.h"
 
 #include <QGraphicsRectItem>
 #include <QKeyEvent>
 
+
 namespace Rosegarden
 {
+
 
 MatrixMover::MatrixMover(MatrixWidget *parent) :
     MatrixTool("matrixmover.rc", "MatrixMover", parent)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("select", &MatrixMover::slotSelectSelected);
+    createAction("draw", &MatrixMover::slotDrawSelected);
+    createAction("erase", &MatrixMover::slotEraseSelected);
+    createAction("resize", &MatrixMover::slotResizeSelected);
 
     createMenu();
 }

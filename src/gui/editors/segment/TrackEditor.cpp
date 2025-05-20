@@ -15,9 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #define RG_MODULE_STRING "[TrackEditor]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TrackEditor.h"
 #include "TrackButtons.h"
@@ -220,8 +219,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     // Connections
 
-    //connect(m_trackButtons, SIGNAL(widthChanged()),
-    //        this, SLOT(slotTrackButtonsWidthChanged()));
+    //connect(m_trackButtons, &TrackButtons::widthChanged,
+    //        this, &TrackEditor::slotTrackButtonsWidthChanged);
 
     connect(m_trackButtons, &TrackButtons::trackSelected,
             mainViewWidget, &RosegardenMainViewWidget::slotSelectTrackSegments);
@@ -230,8 +229,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             mainViewWidget, &RosegardenMainViewWidget::stateChange);
 
     // No such signal.  Was there ever?
-//    connect(m_trackButtons, SIGNAL(modified()),
-//            m_doc, SLOT(slotDocumentModified()));
+//    connect(m_trackButtons, &TrackButtons::modified,
+//            m_doc, &RosegardenDocument::slotDocumentModified);
 
     // Connect for all standard ruler mouse move starts and stops.  This
     // allows for auto-scroll while the user drags (pointer or loop) in
@@ -252,14 +251,14 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_tempoRuler, &TempoRuler::mouseRelease,
             this, &TrackEditor::slotTRMouseRelease);
 
-    //&&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
+    // &&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
     // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable
     // signals whatsoever.  I think this is why autoscrolling is still slightly
     // wonky in Thorn, but I don't reckon there's much to do about this one
     // unless we write a custom widget or something.
     //
-    //connect(m_compositionView, SIGNAL(contentsMoving(int, int)),
-    //        this, SLOT(slotCanvasScrolled(int, int)));
+    //connect(m_compositionView, &CompositionView::contentsMoving,
+    //        this, &TrackEditor::slotCanvasScrolled);
 
     // Synchronize TrackButtons scroll area (m_trackButtonScroll) with
     // segment canvas's vertical scrollbar.
@@ -295,9 +294,9 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_compositionView->horizontalScrollBar(), &QAbstractSlider::sliderMoved,
             m_chordNameRuler, &ChordNameRuler::slotScrollHoriz);
 
-    // Was only emitted from dead code.
-    //connect(this, SIGNAL(needUpdate()),
-    //        m_compositionView, SLOT(slotUpdateAll()));
+    // Was only emitted from unused code.
+    //connect(this, &TrackEditor::needUpdate,
+    //        m_compositionView, &CompositionView::slotUpdateAll);
 
     connect(m_compositionView->getModel(),
             &CompositionModelImpl::selectionChanged,

@@ -47,10 +47,10 @@ namespace Rosegarden
 ControlSelector::ControlSelector(ControlRuler *parent) :
     ControlMover(parent,"ControlSelector")
 {
-//    createAction("select", SLOT(slotSelectSelected()));
-//    createAction("draw", SLOT(slotDrawSelected()));
-//    createAction("erase", SLOT(slotEraseSelected()));
-//    createAction("resize", SLOT(slotResizeSelected()));
+//    createAction("select", &ControlSelector::slotSelectSelected);
+//    createAction("draw", &ControlSelector::slotDrawSelected);
+//    createAction("erase", &ControlSelector::slotEraseSelected);
+//    createAction("resize", &ControlSelector::slotResizeSelected);
 //
 //    createMenu();
 }

@@ -35,10 +35,10 @@ namespace Rosegarden
 MatrixEraser::MatrixEraser(MatrixWidget *parent) :
     MatrixTool("matrixeraser.rc", "MatrixEraser", parent)
 {
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
+    createAction("resize", &MatrixEraser::slotResizeSelected);
+    createAction("draw", &MatrixEraser::slotDrawSelected);
+    createAction("select", &MatrixEraser::slotSelectSelected);
+    createAction("move", &MatrixEraser::slotMoveSelected);
 
     createMenu();
 }
