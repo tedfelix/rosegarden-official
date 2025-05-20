@@ -33,12 +33,15 @@
 
 #include <iostream>
 
+
 namespace Rosegarden
 {
 
-LilyPondProcessor::LilyPondProcessor(QWidget *parent, int mode, QString filename) :
-        QDialog(parent),
-        m_mode(mode)
+
+LilyPondProcessor::LilyPondProcessor(
+        QWidget *parent, int mode, const QString &filename) :
+    QDialog(parent),
+    m_mode(mode)
 {
     // We have to split the combined filename (eg. "/tmp/rosegarden_tmp_T73123.ly"
     // into a separate filename and directory component, to hack around a
@@ -125,8 +128,9 @@ LilyPondProcessor::runConvertLy()
     m_process = new QProcess;
     m_process->setWorkingDirectory(m_dir);
     m_process->start("convert-ly", QStringList() << "-e" << m_filename);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runLilyPond(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &LilyPondProcessor::runLilyPond);
 
     // wait up to 30 seconds for process to start
     if (m_process->waitForStarted()) {
@@ -156,8 +160,9 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     m_process->setWorkingDirectory(m_dir);
     m_info->setText(tr("Running <b>lilypond</b>..."));
     m_process->start("lilypond", QStringList() << "--pdf" << m_filename);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runFinalStage(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &LilyPondProcessor::runFinalStage);
             
 
     if (m_process->waitForStarted()) {
@@ -281,7 +286,7 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
     m_process->setWorkingDirectory(m_dir);
     m_process->start(finalProcessor, QStringList() << pdfName);
     if (m_process->waitForStarted()) {
-        QString t = QString(tr("<b>%1</b> started...").arg(finalProcessor));
+        //QString t = QString(tr("<b>%1</b> started...").arg(finalProcessor));
     } else {
         QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Edit -> Preferences -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).arg(finalProcessor).arg(
                 (m_mode == LilyPondProcessor::Print ? tr("file printer") : tr("PDF viewer")));

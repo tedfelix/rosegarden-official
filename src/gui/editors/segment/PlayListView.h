@@ -27,7 +27,7 @@ class PlayListView : public QTreeWidget
 {
     Q_OBJECT
 public:
-    PlayListView(QWidget *parent=nullptr, const char *name=nullptr);
+    explicit PlayListView(QWidget *parent, const char *objectName = nullptr);
 
     // unused QTreeWidgetItem* previousSibling(QTreeWidgetItem*);
 

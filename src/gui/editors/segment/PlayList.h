@@ -21,7 +21,6 @@
 
 #include <QWidget>
 
-
 class QWidget;
 class QPushButton;
 class QTreeWidget;
@@ -34,6 +33,7 @@ class QDropEvent;
 namespace Rosegarden
 {
 
+
 class PlayListView;
 
 
@@ -45,9 +45,9 @@ public:
     explicit PlayList(QWidget *parent = nullptr);
     ~PlayList() override;
 
-    PlayListView* getListView() { return m_listView; }
+    PlayListView *getListView()  { return m_listView; }
 
-    void enableButtons(QTreeWidgetItem*);
+    void enableButtons(QTreeWidgetItem *);
 
 
 signals:
@@ -60,9 +60,9 @@ protected slots:
     void slotMoveDown();
     void slotDeleteCurrent();
     void slotClear();
-    void slotCurrentItemChanged(QTreeWidgetItem*, QTreeWidgetItem*);
+    void slotCurrentItemChanged(QTreeWidgetItem *, QTreeWidgetItem *);
 //     void slotDropped(QDropEvent*, QTreeWidgetItem*);
-    void slotDroppedURIs(QDropEvent* ev, QTreeWidget*, QStringList sl);
+    void slotDroppedURIs(QDropEvent *ev, QTreeWidget *, QStringList sl);
 
 protected:
     void save();

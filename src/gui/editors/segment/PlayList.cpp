@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[PlayList]"
+#define RG_NO_DEBUG_PRINT
 
 #include "misc/Debug.h"
 #include "PlayList.h"
@@ -71,30 +72,31 @@ PlayList::PlayList(QWidget *parent) : QWidget(parent),
     m_barLayout->addStretch();
 
 
-    m_openButton ->setText(tr("Add..."));
-    m_playButton ->setText(tr("Play"));
-    m_moveUpButton ->setText(tr("Move Up"));
+    m_openButton->setText(tr("Add..."));
+    m_playButton->setText(tr("Play"));
+    m_moveUpButton->setText(tr("Move Up"));
     m_moveDownButton->setText(tr("Move Down"));
-    m_deleteButton ->setText(tr("Remove"));
-    m_clearButton ->setText(tr("Clear whole List"));
+    m_deleteButton->setText(tr("Remove"));
+    m_clearButton->setText(tr("Clear whole List"));
 
-    connect(m_openButton, &QAbstractButton::clicked, this, &PlayList::slotOpenFiles);
-    connect(m_playButton, &QAbstractButton::clicked,this, &PlayList::slotPlay);
-    connect(m_deleteButton, &QAbstractButton::clicked, this, &PlayList::slotDeleteCurrent);
-    connect(m_clearButton, &QAbstractButton::clicked, this, &PlayList::slotClear);
-    connect(m_moveUpButton, &QAbstractButton::clicked, this, &PlayList::slotMoveUp);
-    connect(m_moveDownButton, &QAbstractButton::clicked, this, &PlayList::slotMoveDown);
+    connect(m_openButton, &QAbstractButton::clicked,
+            this, &PlayList::slotOpenFiles);
+    connect(m_playButton, &QAbstractButton::clicked,
+            this, &PlayList::slotPlay);
+    connect(m_deleteButton, &QAbstractButton::clicked,
+            this, &PlayList::slotDeleteCurrent);
+    connect(m_clearButton, &QAbstractButton::clicked,
+            this, &PlayList::slotClear);
+    connect(m_moveUpButton, &QAbstractButton::clicked,
+            this, &PlayList::slotMoveUp);
+    connect(m_moveDownButton, &QAbstractButton::clicked,
+            this, &PlayList::slotMoveDown);
 
     connect(m_listView, &PlayListView::droppedURIs,
             this, &PlayList::slotDroppedURIs);
 
     connect(m_listView, &QTreeWidget::currentItemChanged,
-                this, &PlayList::slotCurrentItemChanged);
-
-//     connect(m_listView, SIGNAL(currentChanged(QTreeWidgetItem*)),
-//             SLOT(slotCurrentItemChanged(QTreeWidgetItem*)));
-//     connect(m_listView, SIGNAL(dropped(QDropEvent*, QTreeWidgetItem*)),
-//             SLOT(slotDropped(QDropEvent*, QTreeWidgetItem*)));
+            this, &PlayList::slotCurrentItemChanged);
 
     restore();
 
@@ -115,14 +117,12 @@ void PlayList::slotOpenFiles()
                         tr("X11 Rosegarden files") + " (*.rose)" + ";;" +
                         tr("All files") + " (*)", nullptr);
 
-    QString fname;
-
-    for( int i=0; i < files.size(); i++ ){
-        fname = files.at( i );
-        new PlayListViewItem(m_listView, QUrl(fname) );
+    for (int i = 0; i < files.size(); ++i ) {
+        QString fname = files.at(i);
+        new PlayListViewItem(m_listView, QUrl(fname));
     }
 
-    enableButtons( m_listView->currentItem() );
+    enableButtons(m_listView->currentItem());
 }
 
 
@@ -170,16 +170,15 @@ void PlayList::slotDropped(QDropEvent *event, QTreeWidgetItem* after)
 
 void PlayList::slotPlay()
 {
-    QString fname;
     PlayListViewItem *item;
     item = dynamic_cast<PlayListViewItem*>( m_listView->currentItem() );
 
     RG_DEBUG << "PlayList::slotPlay() - called. ";
     if (item){
-        fname = item->text(1); // 1==column1==filename
+        QString fname = item->text(1); // 1==column1==filename
         emit play(fname);
 //         emit play( item->getURL().toString() );
-    }else{
+    } else {
         RG_DEBUG << "PlayList::slotPlay() - No item selected. ";
     }
 }
@@ -190,10 +189,10 @@ void PlayList::slotMoveUp()
 //     QTreeWidgetItem *previousItem = m_listView->previousSibling( currentIndex );
 
     QTreeWidgetItem *currentItem = m_listView->currentItem();
-    QTreeWidgetItem *previousItem = m_listView->itemAbove( currentItem );
+    const QTreeWidgetItem *previousItem = m_listView->itemAbove(currentItem);
     int ix = m_listView->indexOfTopLevelItem( currentItem );
 
-    if (previousItem){
+    if (previousItem) {
 //         previousItem->moveItem(currentIndex);
         QTreeWidgetItem *ti = m_listView->takeTopLevelItem( ix );
         m_listView->insertTopLevelItem( ix -1, ti );
@@ -217,10 +216,10 @@ void PlayList::slotMoveDown()
     */
 
     QTreeWidgetItem *currentItem = m_listView->currentItem();
-    QTreeWidgetItem *nextItem = m_listView->itemBelow( currentItem );
+    const QTreeWidgetItem *nextItem = m_listView->itemBelow(currentItem);
     int ix = m_listView->indexOfTopLevelItem( currentItem );
 
-    if (nextItem){
+    if (nextItem) {
 //         previousItem->moveItem(currentIndex);
         QTreeWidgetItem *ti = m_listView->takeTopLevelItem( ix );
         m_listView->insertTopLevelItem( ix +1, ti );
@@ -309,10 +308,9 @@ void PlayList::restore()
 //     KConfigGroupSaver cs(kc, PlayListConfigGroup);
     kc.beginGroup(PlayListConfigGroup);
     QStringList urlList = kc.value("Playlist Files").toStringList();
-    QString ss;
 
-    for( int i=0; i< urlList.count(); i ++ ){
-        ss = urlList.at( i );
+    for (int i=0; i< urlList.count(); ++i) {
+        QString ss = urlList.at(i);
         new PlayListViewItem( getListView(), QUrl(ss) );
     }
     /*

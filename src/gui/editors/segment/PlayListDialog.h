@@ -22,13 +22,13 @@
 #include <QDialog>
 #include <QString>
 
-
 class QWidget;
 class QCloseEvent;
 
 
 namespace Rosegarden
 {
+
 
 class PlayList;
 
@@ -38,24 +38,26 @@ class PlayListDialog : public QDialog
     Q_OBJECT
 
 public:
-    PlayListDialog( QString caption, QWidget* parent = nullptr, const char* name = nullptr);
+    explicit PlayListDialog(QString caption,
+                            QWidget *parent,
+                            const char *name = nullptr);
 
-    PlayList* getPlayList() { return m_playList; }
-
-public slots:
-    void slotClose();
+    PlayList *getPlayList()  { return m_playList; }
 
 signals:
     void closing();
 
-protected:    
+protected:
     void closeEvent(QCloseEvent *e) override;
 
+private slots:
+    void slotClose();
+
+private:
     void save();
     void restore();
 
-    //--------------- Data members ---------------------------------
-    PlayList* m_playList;
+    PlayList *m_playList;
 };
 
 

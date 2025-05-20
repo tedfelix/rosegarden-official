@@ -32,10 +32,10 @@
 
 namespace Rosegarden {
 
-PlayListView::PlayListView(QWidget *parent, const char *name)
-    : QTreeWidget(parent)
+PlayListView::PlayListView(QWidget *parent, const char *objectName) :
+    QTreeWidget(parent)
 {
-	this->setObjectName( name );
+	setObjectName(objectName);
 
 //     addColumn(tr("Title"));
 //     addColumn(tr("File name"));
@@ -148,7 +148,6 @@ QStringList PlayListView::mimeTypes() const{
 // cppcheck-suppress unusedFunction
 void PlayListView::dropEvent(QDropEvent* e)
 {
-    QList<QUrl> uList;
     QStringList uriList;
     QString text;
 
@@ -169,7 +168,7 @@ void PlayListView::dropEvent(QDropEvent* e)
         }
 
         if (e->mimeData()->hasUrls()) {
-            uList = e->mimeData()->urls();
+            QList<QUrl> uList = e->mimeData()->urls();
             if (!uList.isEmpty()) {
                 for (int i = 0; i < uList.size(); ++i)  {
                     uriList.append(QString::fromLocal8Bit(uList.value(i).toEncoded().data()));

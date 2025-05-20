@@ -73,7 +73,7 @@ public:
 
     LilyPondProcessor(QWidget *parent,
                       int mode,
-                      QString filename);
+                      const QString &filename);
     ~LilyPondProcessor() override { };
 
 protected:
