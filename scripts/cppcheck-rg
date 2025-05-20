@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# To filter on a specific problem:
+#   scripts/cppcheck-rg 2>&1 | grep noCopyConstructor
+# On a specific file:
+#   scripts/cppcheck-rg 2>&1 | grep SoundDriver
+
+cppcheck --language=c++ --std=c++14 --library=qt.cfg --quiet \
+         --enable=all --inconclusive \
+         --inline-suppr --suppress=useStlAlgorithm \
+         --suppress=missingInclude --suppress=missingIncludeSystem \
+         -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_LIBSNDFILE -DHAVE_LILV -DHAVE_GTK2 \
+         src
+
