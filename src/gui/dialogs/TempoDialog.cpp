@@ -19,6 +19,7 @@
 #define RG_NO_DEBUG_PRINT
 
 #include "TempoDialog.h"
+
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -45,9 +46,9 @@
 #include <QDesktopServices>
 
 
-
 namespace Rosegarden
 {
+
 
 TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
                          bool timeEditable):
@@ -76,8 +77,9 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
     m_tempoValueSpinBox->setMinimum(1);
     m_tempoValueSpinBox->setSingleStep(1);
     m_tempoValueSpinBox->setValue(120); // will set properly below
-    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(double)),
-            SLOT(slotTempoChanged(double)));
+    connect(m_tempoValueSpinBox, (void(QDoubleSpinBox::*)(double))
+                    &QDoubleSpinBox::valueChanged,
+            this, &TempoDialog::slotTempoChanged);
     tempoLayout->addWidget(m_tempoValueSpinBox, 0, 2);
 
     // Tap
@@ -123,8 +125,10 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
     m_tempoTargetSpinBox->setMinimum(1);
     m_tempoTargetSpinBox->setSingleStep(1);
     m_tempoTargetSpinBox->setValue(120);
-    connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(double)),
-            SLOT(slotTargetChanged(double)));
+    // ??? slotTargetChanged() is empty.
+    //connect(m_tempoTargetSpinBox, (void(QDoubleSpinBox::*)(double))
+    //             &QDoubleSpinBox::valueChanged,
+    //        this, &TempoDialog::slotTargetChanged);
     tempoLayout->addWidget(m_tempoTargetSpinBox, 3, 2);
 
     if (timeEditable) {
@@ -151,8 +155,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         QVBoxLayout * currentBoxLayout = scopeBoxLayout;
         QWidget * currentBox = scopeGroup;
 
-        QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox);
-        currentBoxLayout->addWidget(child_15);
+        currentBoxLayout->addWidget(new QLabel(
+                tr("The pointer is currently at "), currentBox));
         m_tempoTimeLabel = new QLabel(currentBox);
         currentBoxLayout->addWidget(m_tempoTimeLabel);
         m_tempoBarLabel = new QLabel(currentBox);
@@ -201,8 +205,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         changeWhereVBoxLayout->addWidget(optionHBox);
         changeWhereVBox->setLayout(changeWhereVBoxLayout);
         QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
-        QLabel *child_6 = new QLabel("         ", optionHBox);
-        optionHBoxLayout->addWidget(child_6);
+        optionHBoxLayout->addWidget(new QLabel("         ", optionHBox));
         m_defaultBox = new QCheckBox(
                 tr("Also make this the default tempo"), optionHBox);
         optionHBoxLayout->addWidget(m_defaultBox);
@@ -231,7 +234,7 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
             QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &TempoDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested,
             this, &TempoDialog::slotHelpRequested);
@@ -400,11 +403,12 @@ TempoDialog::slotTempoChanged(double val)
     updateBeatLabels(val);
 }
 
+#if 0
 void
 TempoDialog::slotTargetChanged(double)
 {
-    //...
 }
+#endif
 
 void
 TempoDialog::slotTempoConstantClicked()

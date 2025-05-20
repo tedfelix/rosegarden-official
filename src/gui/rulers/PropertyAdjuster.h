@@ -27,10 +27,10 @@ namespace Rosegarden
 {
 
 
-class Event;
 class ControlRuler;
 
 
+/// Adjusts velocity within the velocity ruler.
 class PropertyAdjuster : public ControlTool
 {
     Q_OBJECT
@@ -38,29 +38,20 @@ class PropertyAdjuster : public ControlTool
     friend class ControlToolBox;
 
 public:
+
     void handleLeftButtonPress(const ControlMouseEvent *) override;
     FollowMode handleMouseMove(const ControlMouseEvent *) override;
     void handleMouseRelease(const ControlMouseEvent *) override;
-
-    /**
-     * Respond to an event being deleted -- it may be the one the tool
-     * is remembering as the current event.
-     */
-//    virtual void handleEventRemoved(Event *event);
 
     void ready() override;
     void stow() override;
 
     static QString ToolName();
 
-signals:
-//    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
+private:
 
-protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
+    explicit PropertyAdjuster(ControlRuler *);
 
-protected:
-    PropertyAdjuster(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
 
     void setBasicContextHelp();
@@ -68,7 +59,9 @@ protected:
     //float m_mouseStartY;
     float m_mouseLastY{0};
     bool m_canSelect;
+
 };
+
 
 }
 

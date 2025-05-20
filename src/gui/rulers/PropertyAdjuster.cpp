@@ -15,7 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PropertyAdjuster]"
+//#define RG_NO_DEBUG_PRINT
+
 #include "PropertyAdjuster.h"
+
+#include "ControlItem.h"
+//#include "ControlRuler.h"
+#include "ControllerEventsRuler.h"
+#include "ControlTool.h"
+#include "ControlMouseEvent.h"
+#include "PropertyControlRuler.h"
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -24,18 +34,12 @@
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
 #include "document/CommandHistory.h"
-#include "ControlItem.h"
-//#include "ControlRuler.h"
-#include "ControllerEventsRuler.h"
-#include "ControlTool.h"
-#include "ControlMouseEvent.h"
-#include "PropertyControlRuler.h"
 #include "misc/Debug.h"
 
-#include <QCursor>
 
 namespace Rosegarden
 {
+
 
 PropertyAdjuster::PropertyAdjuster(ControlRuler *parent) :
     ControlTool("", "PropertyAdjuster", parent)
@@ -155,19 +159,12 @@ PropertyAdjuster::setCursor(const ControlMouseEvent *e)
 void
 PropertyAdjuster::ready()
 {
-//    connect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-//            m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
-
-//    m_widget->setCanvasCursor(Qt::sizeAllCursor);
-
     setBasicContextHelp();
 }
 
 void
 PropertyAdjuster::stow()
 {
-//    disconnect(this, SIGNAL(hoveredOverNoteChanged(int, bool, timeT)),
-//               m_widget, SLOT(slotHoveredOverNoteChanged(int, bool, timeT)));
 }
 
 void
@@ -182,5 +179,5 @@ PropertyAdjuster::ToolName()
     return "adjuster";
 }
 
-}
 
+}

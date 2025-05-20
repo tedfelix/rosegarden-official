@@ -66,15 +66,16 @@ public:
     tempoT getTempo() const  { return m_tempo; }
     tempoT getTargetTempo() const  { return m_targetTempo; }
 
-public slots:
+private slots:
 
     void accept() override;
+
     void slotActionChanged();
     void slotTempoChanged(double);
     void slotTempoConstantClicked();
     void slotTempoRampToNextClicked();
     void slotTempoRampToTargetClicked();
-    void slotTargetChanged(double);
+    //void slotTargetChanged(double);
     void slotTapClicked();
     void slotHelpRequested();
 

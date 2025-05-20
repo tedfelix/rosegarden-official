@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[PropertyControlRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include <QMouseEvent>
 #include "PropertyControlRuler.h"
