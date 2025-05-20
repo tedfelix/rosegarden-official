@@ -1087,13 +1087,6 @@ LilyPondExporter::write()
     // being printed.
     timeT firstSegmentStartTime = lsc.getFirstSegmentStartTime();
 
-    // YGYGYG    SEE lsc.getFirstSegmentStartTime() ABOVE !!!
-    lsc.dump();
-
-    std::cout << "YGYGYG : Last segment end time = "
-              << lsc.getLastSegmentEndTime() << "\n";
-
-
     // define global context which is common for all staffs
     str << indent(col++) << "global = { " << std::endl;
     TimeSignature timeSignature = m_composition->
@@ -1138,7 +1131,7 @@ LilyPondExporter::write()
                 if (rightTime > compositionEndTime) {
                     rightTime = compositionEndTime;
                 };
-                writeSkip(1, timeSignature, leftTime, rightTime - leftTime, false, str);
+                writeSkip(timeSignature, leftTime, rightTime - leftTime, false, str);
                 str << " %% " << (leftBar + 1) << "-" << (rightBar + 1) << std::endl;
 
                 timeSignature = m_composition->getTimeSignatureInBar(rightBar + 1, isNew);
@@ -1160,7 +1153,7 @@ LilyPondExporter::write()
         //  - place skips up to the end of the composition;
         //    this justifies the printed staffs
         str << indent(col);
-        writeSkip(2, timeSignature, lsc.getFirstSegmentStartTime(),
+        writeSkip(timeSignature, lsc.getFirstSegmentStartTime(),
                   lsc.getLastSegmentEndTime() - lsc.getFirstSegmentStartTime(),
                   false, str);
         str << std::endl;
@@ -1203,12 +1196,6 @@ LilyPondExporter::write()
 
             std::pair<timeT, tempoT> tempoChange =
                 m_composition->getTempoChange(i);
-str << "\n%YG " << tempoChange.first
-           << " --> tempo = " << tempoChange.second
-           << "   QPM = " << Composition::getTempoQpm(tempoChange.second)
-           << "   compo: [" << compositionStartTime
-                    << ", " << compositionEndTime << "]";
-
 
             timeT tempoChangeTime = tempoChange.first;
 
@@ -1231,7 +1218,7 @@ str << "\n%YG " << tempoChange.first
             } else if (prevTempoChangeTime >= compositionEndTime) {
                 prevTempoChangeTime = compositionEndTime;
             }
-            writeSkip(3, m_composition->getTimeSignatureAt(tempoChangeTime),
+            writeSkip(m_composition->getTimeSignatureAt(tempoChangeTime),
                       tempoChangeTime, tempoChangeTime - prevTempoChangeTime, false, str);
             // add new \tempo only if tempo was changed
             if (tempo != prevTempo) {
@@ -1254,7 +1241,7 @@ str << "\n%YG " << tempoChange.first
         }
         if (!m_useVolta) {   ///!!! Quick hack bis to remove the last blank measure
             /// The writeSkip() is just not called when exporting repeats
-            writeSkip(4, m_composition->getTimeSignatureAt(prevTempoChangeTime),
+            writeSkip(m_composition->getTimeSignatureAt(prevTempoChangeTime),
                       prevTempoChangeTime, compositionEndTime - prevTempoChangeTime, false, str);
         }   /// Quick hack bis to remove the last blank measure
         str << std::endl;
@@ -1282,7 +1269,7 @@ str << "\n%YG " << tempoChange.first
             // how to cope with time signature changes?
             if (markerTime > prevMarkerTime) {
                 str << indent(col);
-                writeSkip(5, m_composition->getTimeSignatureAt(markerTime),
+                writeSkip(m_composition->getTimeSignatureAt(markerTime),
                           markerTime, markerTime - prevMarkerTime, false, str);
                 str << "\\mark ";
                 switch (m_exportMarkerMode) {
@@ -1503,27 +1490,17 @@ str << "\n%YG " << tempoChange.first
             for (seg = lsc.useFirstSegment(); seg; seg = lsc.useNextSegment()) {
                 RG_DEBUG << "lsc iterate segment" << seg;
 
-  // YGYGYG
-  std::cout << seg->getLabel()
-            << " start=" << lsc.getSegmentStartTime()
-            << " isAlt=" << lsc.isAlt()
-            << " N=" << lsc.getAltText()
-            << "\n";
-
                 if (seg->getVerseCount() > verses[voiceIndex]) {
                     verses[voiceIndex] = seg->getVerseCount();
                 }
 
                 if (!lsc.isAlt()) {
 
-
                     //!!! how will all these indentions work out?  Probably not well,
                     // but maybe if users always provide sensible input, this will work
                     // out sensibly.  Maybe.  If not, we'll need some tracking gizmos to
                     // figure out the indention, or just skip the indention for these or
                     // something.  TBA.
-
-
 
                     if (m_progressDialog)
                         m_progressDialog->setValue(
@@ -1617,7 +1594,7 @@ str << "\n%YG " << tempoChange.first
                                         // The chord intervals are specified with skips.
                                         RG_DEBUG << "writing chord" << myTime <<
                                             lastTime;
-                                        writeSkip(6, m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                                        writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
                                         str << qStrToStrUtf8(chord) << " ";
                                         numberOfChords++;
                                     }
@@ -1629,14 +1606,15 @@ str << "\n%YG " << tempoChange.first
                                 (iRepeat + 1.0) * segLength;
                                 RG_DEBUG << "myTime3" << myTime;
 
-                            /// Seems useless (YG)
-                            // writeSkip(7, m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+                            // The next instruction seems at best useless.
+                            // Commented out (YG)
+                            // writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
 
                             lastTime = myTime;
                             str << std::endl << indent(col);
                         } // for iRepeat
                         if (numberOfChords >= 0) {
-                            writeSkip(8, m_composition->getTimeSignatureAt(lastTime), lastTime, lsc.getLastSegmentEndTime() - lastTime, false, str);
+                            writeSkip(m_composition->getTimeSignatureAt(lastTime), lastTime, lsc.getLastSegmentEndTime() - lastTime, false, str);
                             if (numberOfChords == 1) str << "s8 ";
                             str << std::endl;
                             str << indent(--col) << "} % ChordNames " << std::endl;
@@ -1691,28 +1669,8 @@ str << "\n%YG " << tempoChange.first
                         // writing actual rests, and write a skip instead, so
                         // visible rests do not appear before the start of short
                         // bars
-
-
-            // // YGYGYG
-            //  std::ostringstream tmp;
-            //  tmp << std::endl << indent(col);
-            // writeSkip(timeSignature, compositionStartTime,
-            //         lsc.getSegmentStartTime(), false, tmp);
-            // // YGYGYG
-            // // NE FONCTIONNE PAS !!! ==> Il faut une variable intermediaire !
-               // // ==> Surcharger writeskip()
-               // // ==> Autorise :
-               // //       std::ostringstream tmp;
-               // //       writeSkip(timeSignature, compositionStartTime,
-               // //              lsc.getSegmentStartTime(), false, tmp);
-               // //           (...)
-               // //       str << tmp.str();
-               // //
-            // MAIS VERIFIER QU'IL SOIT VRAIMENT NECESSAIRE D'EN ARRIVER LA !!!
-
-
                         str << std::endl << indent(col);
-                        writeSkip(9, timeSignature, compositionStartTime,
+                        writeSkip(timeSignature, compositionStartTime,
                                 lsc.getSegmentStartTime(), false, str);
                     }
                 }
@@ -1763,9 +1721,6 @@ str << "\n%YG " << tempoChange.first
                 bool nextBarIsDouble = false;
                 bool nextBarIsEnd = false;
                 bool nextBarIsDot = false;
-
-                bool cadenza = false;   // When true, bars have to be
-                                        // drawn explicitely
 
                 for (int barNo = m_composition->getBarNumber(seg->getStartTime());
                     barNo <= m_composition->getBarNumber(seg->getEndMarkerTime());
@@ -1873,13 +1828,6 @@ str << "\n%YG " << tempoChange.first
                                 }
                             }
 
-// YGYGYG                            // // From here we are going to explicitely draw the bars
-                            // // because when an alternative segment doesn't start
-                            // // on a bar, LilyPond may introduce erroneous offsets
-                            // // when positioning the bars in next alternatives.
-                            // str << std::endl << indent(col) << "\\cadenzaOn";
-                            // cadenza = true;
-
                             if (m_altBar && lsc.isFirstAlt()) {
                                 // Since LilyPond 2.23, drawing explicitely
                                 // this bar in any other alternative than the
@@ -1922,9 +1870,6 @@ str << "\n%YG " << tempoChange.first
                         noTimeSig = barNo == firstBar;
                     }
 
-           str << "\n%YG writeBar: alt=" << lsc.isAlt()
-               << " cadenza=" << cadenza << "\n";
-
                     // write out a bar's worth of events
                     writeBar(seg, barNo, barStart, barEnd, col, key,
                             lilyText,
@@ -1932,9 +1877,7 @@ str << "\n%YG " << tempoChange.first
                             MultiMeasureRestCount,
                             nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble,
                             nextBarIsEnd, nextBarIsDot,
-                            noTimeSig,
-                            cadenza, lsc.isLastAlt());
-
+                            noTimeSig);
                 }
 
                 // close \repeat
@@ -1993,9 +1936,6 @@ str << "\n%YG " << tempoChange.first
                         }
                     }
 
-// YGYGYG                    // // End the cadenza
-                    // str << std::endl << indent(col) << "\\cadenzaOff";
-                    // cadenza = false;
                     str << std::endl << indent(--col) << "}" << std::endl;  // indent-
 
                     if (lsc.isLastAlt()) {
@@ -2413,8 +2353,7 @@ LilyPondExporter::writeBar(Segment *s,
                            int &MultiMeasureRestCount,
                            bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                            bool &nextBarIsDouble, bool &nextBarIsEnd,
-                           bool &nextBarIsDot,  bool noTimeSignature,
-                           bool cadenza, bool isLastAlt)
+                           bool &nextBarIsDot,  bool noTimeSignature)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
     int isGrace = 0;
@@ -2451,7 +2390,7 @@ LilyPondExporter::writeBar(Segment *s,
     if (absTime > barStart) {
         Note note(Note::getNearestNote(absTime - barStart, MAX_DOTS));
         writtenDuration += note.getDuration();
-        durationRatio = writeSkip(10, timeSignature, 0, note.getDuration(), false, str);
+        durationRatio = writeSkip(timeSignature, 0, note.getDuration(), false, str);
         durationRatioSum = fractionSum(durationRatioSum,durationRatio);
         // str << qstrtostr(QString(" %{ %1/%2 %} ").arg(durationRatio.first).arg(durationRatio.second)); // DEBUG
     }
@@ -2769,8 +2708,7 @@ LilyPondExporter::writeBar(Segment *s,
                 if (hiddenRest) {
                     RG_DEBUG << "HIDDEN REST.  Using duration " << duration;
                     str << "s";
-                } else if ((duration == timeSignature.getBarDuration())
-                           && !cadenza) {                   // YG
+                } else if (duration == timeSignature.getBarDuration()) {
                     // Look ahead the segment in order to detect
                     // the number of measures in the multi measure rest.
                     RG_DEBUG << "INCREMENTING MULTI-MEASURE COUNTER (offset rest height will be ignored)";
@@ -3016,7 +2954,7 @@ LilyPondExporter::writeBar(Segment *s,
                       arg(barDurationRatio.second))
             << std::endl << indent(col);
 
-        durationRatio = writeSkip(11, timeSignature, writtenDuration,
+        durationRatio = writeSkip(timeSignature, writtenDuration,
                                   (barEnd - barStart) - writtenDuration, true, str);
         durationRatioSum = fractionSum(durationRatioSum, durationRatio);
     }
@@ -3032,15 +2970,8 @@ LilyPondExporter::writeBar(Segment *s,
     } else if (nextBarIsDot) {
         str << "\\bar \":\" ";
         nextBarIsDot = false;
-    } else if (cadenza && isLastAlt) {      // YG
-        str << "\\bar \"|\"";
     } else if (MultiMeasureRestCount == 0) {
-        if (cadenza && (barEnd != s->getEndMarkerTime())) {
-            // Last bar of the alternarive is written by LilyPond with
-            // repeat dots if appropriate. So only the previous bars have to
-            // be written when cadenza is on.
-            str << "\\bar \"|\" ";
-        } else if (barEnd != s->getEndMarkerTime()) {
+        if (barEnd != s->getEndMarkerTime()) {
             // Bar check except for the last bar closing the segment.
             // A barcheck at the end of a segment gives a "warning: barcheck
             // failed" when running LilyPond.
@@ -3104,24 +3035,16 @@ LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
 }
 
 std::pair<int,int>
-LilyPondExporter::writeSkip(int wsid, const TimeSignature &timeSig,
+LilyPondExporter::writeSkip(const TimeSignature &timeSig,
                             timeT offset,
                             timeT duration,
                             bool useRests,
-                            std::ostringstream &str)
+                            std::ofstream &str)
 {
     DurationList dlist;
     timeSig.getDurationListForInterval(dlist, duration, offset);
     std::pair<int,int> durationRatioSum(0,1);
     std::pair<int,int> durationRatio(0,1);
-
-    str << "\n%YG WRITESKIP " << wsid     // YG
-        << "  timeSig = " << timeSig.getNumerator()
-                   << "/" << timeSig.getDenominator()
-        << "  offset = " << offset
-        << "  duration = " << duration
-        << "\n";
-
     int t = 0, count = 0;
 
     for (DurationList::iterator i = dlist.begin(); ; ++i) {
@@ -3161,20 +3084,6 @@ LilyPondExporter::writeSkip(int wsid, const TimeSignature &timeSig,
             break;
     }
     return durationRatioSum;
-}
-
-std::pair<int,int>
-LilyPondExporter::writeSkip(int wsid, const TimeSignature &timeSig,
-                            timeT offset,
-                            timeT duration,
-                            bool useRests,
-                            std::ofstream &str)
-{
-    std::pair<int,int> ret;
-    std::ostringstream tmp;
-    ret = writeSkip(wsid, timeSig, offset, duration, useRests, tmp);
-    str << tmp.str();
-    return ret;
 }
 
 bool
@@ -3389,7 +3298,7 @@ LilyPondExporter::writeStyle(const Event *note, std::string &prevStyle,
 
 std::pair<int,int>
 LilyPondExporter::writeDuration(timeT duration,
-                                std::ostringstream &str)
+                                std::ofstream &str)
 {
     Note note(Note::getNearestNote(duration, MAX_DOTS));
     std::pair<int,int> durationRatio(0,1);
@@ -3435,17 +3344,6 @@ LilyPondExporter::writeDuration(timeT duration,
     durationRatio = fractionProduct(durationRatio,
                                     std::pair<int,int>((1<<(note.getDots()+1))-1,1<<note.getDots()));
     return durationRatio;
-}
-
-std::pair<int,int>
-LilyPondExporter::writeDuration(timeT duration,
-                                std::ofstream &str)
-{
-    std::pair<int,int> ret;
-    std::ostringstream tmp;
-    ret = writeDuration(duration, tmp);
-    str << tmp.str();
-    return ret;
 }
 
 void

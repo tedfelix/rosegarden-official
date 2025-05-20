@@ -159,8 +159,7 @@ private:
                   std::ofstream &str, int &MultiMeasureRestCount,
                   bool &nextBarIsAlt1, bool &nextBarIsAlt2,
                   bool &nextBarIsDouble, bool &nextBarIsEnd,
-                  bool &nextBarIsDot, bool noTimeSignature,
-                  bool cadenza, bool isLastAlt);
+                  bool &nextBarIsDot, bool noTimeSignature);
 
     timeT calculateDuration(Segment *s,
                                         const Segment::iterator &i,
@@ -209,17 +208,11 @@ private:
                                    int col,
                                    std::ofstream &str);
 
-    std::pair<int,int> writeSkip(int wsid, const TimeSignature &timeSig,
-				 timeT offset,
-				 timeT duration,
-				 bool useRests,
-				 std::ostringstream &);
-
-    std::pair<int,int> writeSkip(int wsid, const TimeSignature &timeSig,
-				 timeT offset,
-				 timeT duration,
-				 bool useRests,
-				 std::ofstream &);
+    std::pair<int,int> writeSkip(const TimeSignature &timeSig,
+                                 timeT offset,
+	                             timeT duration,
+                                 bool useRests,
+                                 std::ofstream &);
 
     /*
      * Handle LilyPond directive.  Returns true if the event was a directive,
@@ -234,10 +227,7 @@ private:
     static void handleGuitarChord(Segment::iterator i, std::ofstream &str);
     void writePitch(const Event *note, const Rosegarden::Key &key, std::ofstream &);
     void writeStyle(const Event *note, std::string &prevStyle, int col, std::ofstream &, bool isInChord);
-
-    std::pair<int,int> writeDuration(timeT duration, std::ostringstream &);
     std::pair<int,int> writeDuration(timeT duration, std::ofstream &);
-
     void writeSlashes(const Event *note, std::ofstream &);
 
     /*
