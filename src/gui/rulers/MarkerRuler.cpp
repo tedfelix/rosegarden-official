@@ -16,9 +16,9 @@
 */
 
 #define RG_MODULE_STRING "[MarkerRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MarkerRuler.h"
-
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -48,43 +48,50 @@
 #include <QMainWindow>
 #include <QRegion>
 
+
 namespace Rosegarden
 {
 
+
 MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          RulerScale *rulerScale,
-                         QWidget* parent,
-                         const char* name)
-        : QWidget(parent),
-        m_currentXOffset(0),
-        m_width(-1),
-        m_clickX(0),
-        m_menu(nullptr),
-        m_doc(doc),
-        m_rulerScale(rulerScale),
-        m_parentMainWindow( dynamic_cast<QMainWindow*>(doc->parent()) )
+                         QWidget *parent,
+                         const char *name) :
+    QWidget(parent),
+    m_currentXOffset(0),
+    m_width(-1),
+    m_clickX(0),
+    m_menu(nullptr),
+    m_doc(doc),
+    m_rulerScale(rulerScale),
+    m_parentMainWindow(dynamic_cast<QMainWindow *>(doc->parent()))  // ??? Gets clobbered inside.
 {
+    setObjectName(name);
+
     // If the parent window has a main window above it, we need to use
     // that as the parent main window, not the document's parent.
     // Otherwise we'll end up adding all actions to the same
     // (document-level) action collection regardless of which window
     // we're in.
 
-    this->setObjectName(name);
     QObject *probe = parent;
-    while (probe && !dynamic_cast<QMainWindow *>(probe)) probe = probe->parent();
-    if (probe) m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
+    while (probe  &&  !dynamic_cast<QMainWindow *>(probe)) {
+        probe = probe->parent();
+    }
+    if (probe)
+        m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
 
     QFont font;
     font.setPointSize((font.pointSize() * 9) / 10);
     setFont(font);
 
-    createAction("insert_marker_here", SLOT(slotInsertMarkerHere()));
-    createAction("insert_marker_at_pointer", SLOT(slotInsertMarkerAtPointer()));
-    createAction("delete_marker", SLOT(slotDeleteMarker()));
-    createAction("edit_marker", SLOT(slotEditMarker()));
+    createAction("insert_marker_here", &MarkerRuler::slotInsertMarkerHere);
+    createAction("insert_marker_at_pointer",
+                 &MarkerRuler::slotInsertMarkerAtPointer);
+    createAction("delete_marker", &MarkerRuler::slotDeleteMarker);
+    createAction("edit_marker", &MarkerRuler::slotEditMarker);
 
-    this->setToolTip(tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
+    setToolTip(tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
 
 MarkerRuler::~MarkerRuler()

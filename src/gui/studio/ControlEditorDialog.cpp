@@ -369,12 +369,15 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-    createAction("file_close", SLOT(slotClose()));
+    createAction("file_close", &ControlEditorDialog::slotClose);
     m_closeButton->setText(tr("Close"));
-    connect(m_closeButton, &QAbstractButton::released, this, &ControlEditorDialog::slotClose);
-    createAction("remove_all_from_ip", SLOT(slotRemoveAllFromInstrumentPanel()));
-    createAction("control_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    connect(m_closeButton, &QAbstractButton::released,
+            this, &ControlEditorDialog::slotClose);
+
+    createAction("remove_all_from_ip",
+                 &ControlEditorDialog::slotRemoveAllFromInstrumentPanel);
+    createAction("control_help", &ControlEditorDialog::slotHelpRequested);
+    createAction("help_about_app", &ControlEditorDialog::slotHelpAbout);
 
     createMenusAndToolbars("controleditor.rc");
 }

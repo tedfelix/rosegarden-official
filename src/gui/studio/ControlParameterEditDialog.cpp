@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlParameterEditDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlParameterEditDialog.h"
 
@@ -46,14 +47,15 @@
 namespace Rosegarden
 {
 
+
 ControlParameterEditDialog::ControlParameterEditDialog(
-    QWidget *parent,
-    ControlParameter *control,
-    RosegardenDocument *doc):
-        QDialog(parent),
-        m_doc(doc),
-        m_control(control),
-        m_dialogControl(*control) // copy in the ControlParameter
+        QWidget *parent,
+        ControlParameter *control,
+        RosegardenDocument *doc) :
+    QDialog(parent),
+    m_doc(doc),
+    m_control(control),
+    m_dialogControl(*control) // copy in the ControlParameter
 {
     setModal(true);
     setWindowTitle(tr("Edit Controller"));
@@ -130,17 +132,17 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     connect(m_description, &QLineEdit::textChanged,
             this, &ControlParameterEditDialog::slotDescriptionChanged);
 
-    connect(m_controllerBox, SIGNAL(valueChanged(int)),
-            SLOT(slotControllerChanged(int)));
+    connect(m_controllerBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotControllerChanged);
 
-    connect(m_minBox, SIGNAL(valueChanged(int)),
-            SLOT(slotMinChanged(int)));
+    connect(m_minBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotMinChanged);
 
-    connect(m_maxBox, SIGNAL(valueChanged(int)),
-            SLOT(slotMaxChanged(int)));
+    connect(m_maxBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotMaxChanged);
 
-    connect(m_defaultBox, SIGNAL(valueChanged(int)),
-            SLOT(slotDefaultChanged(int)));
+    connect(m_defaultBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotDefaultChanged);
 
     connect(m_colourCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
@@ -157,6 +159,9 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_controllerBox->setMinimum(0);
     m_controllerBox->setMaximum(127);
 
+    // ??? Really?  Since control changes can only do 0-127, this seems
+    //     very wrong.  At the very least we should limit to 0-8192 for
+    //     double-byte controllers like pitchbend.
     m_minBox->setMinimum(INT_MIN);
     m_minBox->setMaximum(INT_MAX);
 

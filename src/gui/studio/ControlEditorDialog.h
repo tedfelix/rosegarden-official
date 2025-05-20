@@ -34,12 +34,13 @@ class QTreeWidgetItem;
 namespace Rosegarden
 {
 
+
 class Command;
 class Studio;
 class RosegardenDocument;
 
 
-/// Manage Controllers dialog
+/// The "Manage Controllers" dialog
 /**
  * Launched from the "Controllers..." button on the Manage MIDI Devices dialog
  * (DeviceManagerDialog).

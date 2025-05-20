@@ -23,7 +23,6 @@
 
 #include <QDialog>
 
-
 class QWidget;
 class QString;
 class QSpinBox;
@@ -35,9 +34,15 @@ class QComboBox;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 
 
+/// The "Edit Controller" dialog.
+/**
+ * Studio > Manage MIDI Devices > Controllers... > double-click on an entry
+ * in the tree.
+ */
 class ControlParameterEditDialog : public QDialog
 {
     Q_OBJECT
