@@ -171,24 +171,24 @@ public:
     */
 
     /// merge a file, explicitly specifying its type, allow multiple files
-    void mergeFile(QStringList filePathList, ImportType type);
+    void mergeFile(const QStringList &filePathList, ImportType type);
 
     bool openURL(const QUrl &url, bool replace);
 
     bool exportMIDIFile(QString file);
 
     /// export a Csound scorefile
-    bool exportCsoundFile(QString file);
+    bool exportCsoundFile(const QString &file);
 
-    bool exportMupFile(QString file);
+    bool exportMupFile(const QString &file);
 
     bool exportLilyPondFile(const QString &file, bool forPreview = false);
 
-    bool exportMusicXmlFile(QString file);
+    bool exportMusicXmlFile(const QString &file);
 
     SequenceManager *getSequenceManager() { return m_seqManager; }
 
-    ProgressBar *getCPUBar() { return m_cpuBar; }
+    //ProgressBar *getCPUBar() { return m_cpuBar; }
 
     QPointer<DeviceManagerDialog> getDeviceManager()  { return m_deviceManager; }
 
@@ -243,7 +243,7 @@ public:
      * the audio path for validity, and does not create anything if the audio
      * path does not exist.
      */
-    bool testAudioPath(QString operation); // and open the dialog to set it if unset
+    bool testAudioPath(const QString &operation); // and open the dialog to set it if unset
 
     bool haveAudioImporter() const  { return m_haveAudioImporter; }
 
@@ -421,7 +421,7 @@ protected:
     /*
      * Return AudioManagerDialog
      */
-    AudioManagerDialog *getAudioManagerDialog() { return m_audioManagerDialog; }
+    //AudioManagerDialog *getAudioManagerDialog() { return m_audioManagerDialog; }
 
     /**
      * Ask the user for a file to save to, and check that it's
@@ -461,7 +461,7 @@ protected:
      * Open a file dialog pointing to directory, if target is empty, this opens
      * a generic file open dialog at the last location the user used
      */
-    void openFileDialogAt(QString target);
+    void openFileDialogAt(const QString &target);
 
     /**
      * Returns a suitable location for storing user data, typically
@@ -1471,11 +1471,11 @@ public slots:
      * happen from an external GUI, we have no way to manage these
      * internally.)
      */
-    void slotChangePluginConfiguration(InstrumentId,
+    void slotChangePluginConfiguration(InstrumentId instrumentId,
                                        int index,
                                        bool global,
-                                       const QString& key,
-                                       const QString& value);
+                                       const QString &configKey,
+                                       const QString &configValue);
     void slotPluginDialogDestroyed(InstrumentId instrumentId,
                                    int index);
     void slotPluginBypassed(InstrumentId,

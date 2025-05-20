@@ -666,7 +666,7 @@ RosegardenMainWindow::installSignalHandlers()
     }
 
     /*install notifier to handle pipe messages*/
-    QSocketNotifier *signalNotifier = new QSocketNotifier(sigpipe[0],
+    const QSocketNotifier *signalNotifier = new QSocketNotifier(sigpipe[0],
             QSocketNotifier::Read, this);
     connect(signalNotifier, &QSocketNotifier::activated,
             this, &RosegardenMainWindow::signalAction);
@@ -936,11 +936,11 @@ RosegardenMainWindow::setupActions()
 
     // Hook up for aboutToShow() so we can set up the menu when it is
     // needed.
-    QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
+    const QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
     connect(fileOpenRecentMenu, &QMenu::aboutToShow,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
 
-    QMenu *setTrackInstrumentMenu =
+    const QMenu *setTrackInstrumentMenu =
             findChild<QMenu *>("set_track_instrument");
 
     if (setTrackInstrumentMenu) {
@@ -1209,15 +1209,15 @@ RosegardenMainWindow::initView()
     // created but its tool won't be set, even though it will appear
     // to be selected.
     //
-    QAction *actionx = this->findAction(QString("move"));
-    actionx->trigger();
+    QAction *moveAction = findAction(QString("move"));
+    moveAction->trigger();
 
     if (RosegardenDocument::currentDocument->getComposition().getNbSegments() > 0){
-        QAction *actionx = this->findAction(QString("select"));
-        actionx->trigger();
+        QAction *selectAction = findAction(QString("select"));
+        selectAction->trigger();
     } else {
-        QAction *actionx = this->findAction(QString("draw"));
-        actionx->trigger();
+        QAction *drawAction = findAction(QString("draw"));
+        drawAction->trigger();
     }
 
     int zoomLevel = RosegardenDocument::currentDocument->getConfiguration().get<Int>(DocumentConfiguration::ZoomLevel);
@@ -1983,7 +1983,7 @@ RosegardenMainWindow::openURL(const QUrl &url, bool replace)
 }
 
 void
-RosegardenMainWindow::openFileDialogAt(QString target)
+RosegardenMainWindow::openFileDialogAt(const QString &target)
 {
     slotStatusHelpMsg(tr("Opening file..."));
 
@@ -2281,11 +2281,9 @@ RosegardenMainWindow::fileSaveAs(bool asTemplate)
 
         // Indicate failure.
         return false;
-
     }
 
-    if (success)
-        setFileSaveAsDirectory(existingDir(newName));
+    setFileSaveAsDirectory(existingDir(newName));
 
     if (!asTemplate) {
         // Let the audio file manager know we've just saved so it can prompt the
@@ -2801,7 +2799,7 @@ RosegardenMainWindow::slotRescaleSelection()
 }
 
 bool
-RosegardenMainWindow::testAudioPath(QString operation)
+RosegardenMainWindow::testAudioPath(const QString &operation)
 {
     try {
         RosegardenDocument::currentDocument->getAudioFileManager().testAudioPath();
@@ -4608,7 +4606,7 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
 }
 
 void
-RosegardenMainWindow::mergeFile(QStringList filePathList, ImportType type)
+RosegardenMainWindow::mergeFile(const QStringList &filePathList, ImportType type)
 {
     if (!RosegardenDocument::currentDocument)
         return;
@@ -5247,7 +5245,7 @@ RosegardenMainWindow::slotExportCsound()
 }
 
 bool
-RosegardenMainWindow::exportCsoundFile(QString file)
+RosegardenMainWindow::exportCsoundFile(const QString &file)
 {
     // Progress Dialog
     // ??? The Csound export process is so fast, this never has a
@@ -5305,7 +5303,7 @@ RosegardenMainWindow::slotExportMup()
 }
 
 bool
-RosegardenMainWindow::exportMupFile(QString file)
+RosegardenMainWindow::exportMupFile(const QString &file)
 {
     // Progress Dialog
     QProgressDialog progressDialog(
@@ -5529,7 +5527,7 @@ RosegardenMainWindow::slotExportWAV()
 }
 
 bool
-RosegardenMainWindow::exportMusicXmlFile(QString file)
+RosegardenMainWindow::exportMusicXmlFile(const QString &file)
 {
     MusicXMLOptionsDialog dialog(this, RosegardenDocument::currentDocument, "", "");
 
@@ -5887,24 +5885,27 @@ RosegardenMainWindow::doStop(bool autoStop)
 void
 RosegardenMainWindow::slotRewind()
 {
-    // ignore requests if recording
-    //
+    if (!m_seqManager)
+        return;
+
+    // Rewind is not allowed when recording.
     if (m_seqManager->getTransportStatus() == RECORDING)
-        return ;
-    if (m_seqManager)
-        m_seqManager->rewind();
+        return;
+
+    m_seqManager->rewind();
 }
 
 void
 RosegardenMainWindow::slotFastforward()
 {
-    // ignore requests if recording
-    //
-    if (m_seqManager->getTransportStatus() == RECORDING)
-        return ;
+    if (!m_seqManager)
+        return;
 
-    if (m_seqManager)
-        m_seqManager->fastforward();
+    // Fast Forward is not allowed when recording.
+    if (m_seqManager->getTransportStatus() == RECORDING)
+        return;
+
+    m_seqManager->fastforward();
 }
 
 void
@@ -6887,28 +6888,26 @@ RosegardenMainWindow::slotManageMIDIDevices()
         m_deviceManager->activateWindow();
         return;
     }
-    if (!m_deviceManager) {
 
-        m_deviceManager = new DeviceManagerDialog(this);
+    m_deviceManager = new DeviceManagerDialog(this);
 
-        connect(m_deviceManager, &DeviceManagerDialog::editBanks,
-                this, static_cast<void(RosegardenMainWindow::*)(DeviceId)>(
-                        &RosegardenMainWindow::slotEditBanks));
+    connect(m_deviceManager, &DeviceManagerDialog::editBanks,
+            this, static_cast<void(RosegardenMainWindow::*)(DeviceId)>(
+                    &RosegardenMainWindow::slotEditBanks));
 
-        connect(m_deviceManager.data(), &DeviceManagerDialog::editControllers,
-                this, &RosegardenMainWindow::slotEditControlParameters);
+    connect(m_deviceManager.data(), &DeviceManagerDialog::editControllers,
+            this, &RosegardenMainWindow::slotEditControlParameters);
 
-        connect(this, &RosegardenMainWindow::documentAboutToChange,
-                m_deviceManager.data(), &DeviceManagerDialog::slotCloseButtonPress);
+    connect(this, &RosegardenMainWindow::documentAboutToChange,
+            m_deviceManager.data(), &DeviceManagerDialog::slotCloseButtonPress);
 
-        if (m_midiMixer) {
-             connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
-                     m_midiMixer, &MidiMixerWindow::slotSynchronise);
-        }
-
-        connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
-                     m_trackParameterBox, &TrackParameterBox::devicesChanged);
+    if (m_midiMixer) {
+         connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
+                 m_midiMixer, &MidiMixerWindow::slotSynchronise);
     }
+
+    connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
+                 m_trackParameterBox, &TrackParameterBox::devicesChanged);
 
     QToolButton *tb = findChild<QToolButton*>("manage_midi_devices");
     if(tb){
@@ -7238,14 +7237,11 @@ RosegardenMainWindow::slotShowPluginDialog(QWidget *parent,
     }
 
     // only create a dialog if we've got a plugin instance
-    AudioPluginInstance *inst =
-        container->getPlugin(index);
+    const AudioPluginInstance *inst = container->getPlugin(index);
 
     if (!inst) {
-        RG_DEBUG << "slotShowPluginDialog - "
-        << "no AudioPluginInstance found for index "
-        << index;
-        return ;
+        RG_DEBUG << "slotShowPluginDialog - no AudioPluginInstance found for index " << index;
+        return;
     }
 
     // Create the plugin dialog
@@ -7651,8 +7647,8 @@ void
 RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
                                                     int index,
                                                     bool global,
-                                                    const QString& key,
-                                                    const QString& value)
+                                                    const QString &configKey,
+                                                    const QString &configValue)
 {
     PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
     if (!container) {
@@ -7689,10 +7685,10 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
 
                         slotChangePluginConfiguration
                         ((*i)->getId(), (*pli)->getPosition(),
-                         false, key, value);
+                         false, configKey, configValue);
 
                         m_pluginGUIManager->updateConfiguration
-                        ((*i)->getId(), (*pli)->getPosition(), key);
+                        ((*i)->getId(), (*pli)->getPosition(), configKey);
                     }
                 }
             }
@@ -7701,7 +7697,7 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
 
     if (inst) {
 
-        inst->setConfigurationValue(qstrtostr(key), qstrtostr(value));
+        inst->setConfigurationValue(qstrtostr(configKey), qstrtostr(configValue));
 
         MappedObjectPropertyList config;
         for (AudioPluginInstance::ConfigMap::const_iterator
@@ -7723,9 +7719,9 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
         // Set modified
         RosegardenDocument::currentDocument->slotDocumentModified();
 
-        int key = (index << 16) + instrumentId;
-        if (m_pluginDialogs[key]) {
-            m_pluginDialogs[key]->updatePluginProgramList();
+        const int dialogKey = (index << 16) + instrumentId;
+        if (m_pluginDialogs[dialogKey]) {
+            m_pluginDialogs[dialogKey]->updatePluginProgramList();
         }
     }
 }
@@ -8559,33 +8555,34 @@ RosegardenMainWindow::checkAudioPath()
     if (!dir.exists()) {
 
         text = tr("<h3>Created audio path</h3>");
-        QString informativeText(tr("<qt><p>Rosegarden created the audio path \"%1\" to use for audio recording, and to receive dropped audio files.</p><p>If you wish to use a different path, change this in <b>View -> Document Properties -> Audio</b>.</p></qt>").arg(audioPath));
-        slotDisplayWarning(WarningWidget::Info, text, informativeText);
+        slotDisplayWarning(WarningWidget::Info, text,
+                tr("<qt><p>Rosegarden created the audio path \"%1\" to use for audio recording, and to receive dropped audio files.</p><p>If you wish to use a different path, change this in <b>View -> Document Properties -> Audio</b>.</p></qt>").arg(audioPath));
 
         if (!dir.mkpath(audioPath)) {
             RG_DEBUG << "RosegardenDocument::testAudioPath() - audio path did not exist.  Tried to create it, and failed.";
 
-            QString informativeText(tr("<qt><p>The audio path \"%1\" did not exist, and could not be created.</p>%2</qt>").arg(audioPath).arg(correctThis));
-            slotDisplayWarning(WarningWidget::Audio, text, informativeText);
+            slotDisplayWarning(WarningWidget::Audio, text,
+                    tr("<qt><p>The audio path \"%1\" did not exist, and could not be created.</p>%2</qt>").arg(audioPath).arg(correctThis));
         }
     } else {
         QTemporaryFile tmp(audioPath);
-        QString informativeText(tr("<qt><p>The audio path \"%1\" exists, but is not writable.</p>%2</qt>").arg(audioPath).arg(correctThis));
-        bool showError = false;
+        bool failure = false;
         if (tmp.open()) {
             if (tmp.write("0", 1) == -1) {
                 std::cout << "could not write file" << std::endl;
-                showError = true;
+                failure = true;
             }
         } else {
-            showError = true;
+            failure = true;
         }
 
-        if (showError) {
-            slotDisplayWarning(WarningWidget::Audio, text, informativeText);
+        if (failure) {
+            slotDisplayWarning(WarningWidget::Audio, text,
+                    tr("<qt><p>The audio path \"%1\" exists, but is not writable.</p>%2</qt>").arg(audioPath).arg(correctThis));
         }
 
-        if (tmp.isOpen()) tmp.close();
+        if (tmp.isOpen())
+            tmp.close();
     }
 
 // This is all more convenient than intentionally breaking things in my system
