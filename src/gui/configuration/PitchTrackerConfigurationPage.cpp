@@ -16,17 +16,16 @@
 */
 
 #define RG_MODULE_STRING "[PitchTrackerConfigurationPage]"
+#define RG_NO_DEBUG_PRINT
 
 #include "PitchTrackerConfigurationPage.h"
+
 #include "sound/Tuning.h"
 #include "sound/PitchDetector.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
-// Might need default analysis sizes
-#include "gui/configuration/PitchTrackerConfigurationPage.h"
 #include "sound/PitchDetector.h"
-// Tunings are returned a stl vector. See sound/Tuning.h
-#include <vector>
+
 #include <QLabel>
 #include <QComboBox>
 #include <QSpinBox>
@@ -37,12 +36,17 @@
 #include <QToolTip>
 #include <QLayout>
 
+#include <vector>
+
+
 namespace Rosegarden
 {
+
 
 const int PitchTrackerConfigurationPage::defaultGraphWidth = 4000;
 const int PitchTrackerConfigurationPage::defaultGraphHeight = 100;
 const bool PitchTrackerConfigurationPage::defaultIgnore8ve = true;
+
 
 PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
         TabbedConfigurationPage(parent),
@@ -132,22 +136,21 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Frame Size"), frame), row, 0);
     m_frameSize = new QSpinBox(frame);
-    connect(m_frameSize, SIGNAL(valueChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_frameSize, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchTrackerConfigurationPage::slotModified);
     m_frameSize->setMinimum(64);
     m_frameSize->setMaximum(32768);
     int frameSize = settings.value("framesize",
                                    PitchDetector::defaultFrameSize).toInt();
-    if (frameSize >= 64 && frameSize <= 32768) {
+    if (frameSize >= 64  &&  frameSize <= 32768)
         m_frameSize->setValue(frameSize);
-    }
     layout->addWidget(m_frameSize, row, 1, 1, 2);
     ++row;
 
     layout->addWidget(new QLabel(tr("Step Size"), frame), row, 0);
     m_stepSize = new QSpinBox(frame);
-    connect(m_stepSize, SIGNAL(valueChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_stepSize, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchTrackerConfigurationPage::slotModified);
     m_stepSize->setMinimum(64);
     m_stepSize->setMaximum(8192);
     int stepSize = settings.value("stepsize",
@@ -181,8 +184,8 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
     row = 0;
     layout->addWidget(new QLabel(tr("Graph Width (ms)"), frame), row, 0);
     m_graphWidth = new QSpinBox(frame);
-    connect(m_graphWidth, SIGNAL(valueChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_graphWidth, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchTrackerConfigurationPage::slotModified);
     m_graphWidth->setMinimum(200);
     m_graphWidth->setMaximum(20000);
     const int graphWidth =
@@ -195,8 +198,8 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
 
     layout->addWidget(new QLabel(tr("Graph Height (cents)"), frame), row, 0);
     m_graphHeight = new QSpinBox(frame);
-    connect(m_graphHeight, SIGNAL(valueChanged(int)),
-            this, SLOT(slotModified()));
+    connect(m_graphHeight, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchTrackerConfigurationPage::slotModified);
     m_graphHeight->setMinimum(20);
     m_graphHeight->setMaximum(600);
     const int graphHeight =

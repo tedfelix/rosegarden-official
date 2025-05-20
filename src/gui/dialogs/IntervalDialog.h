@@ -34,9 +34,11 @@ class QCheckBox;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 
 
+/// The "Specify Interval" dialog.
 class ROSEGARDENPRIVATE_EXPORT IntervalDialog : public QDialog
 {
     Q_OBJECT

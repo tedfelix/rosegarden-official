@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -32,14 +31,16 @@ class QLabel;
 namespace Rosegarden
 {
 
+
 class PitchDragLabel;
 
 
+/// The "Reference note:" and "Target note:" sections of the "Specify Interval" dialog.
 class DiatonicPitchChooser : public QGroupBox
 {
     Q_OBJECT
 public:
-    DiatonicPitchChooser(const QString& title,
+    DiatonicPitchChooser(const QString &title,
                          QWidget *parent,
                          int defaultNote = 0,
                          int defaultPitch = 60,

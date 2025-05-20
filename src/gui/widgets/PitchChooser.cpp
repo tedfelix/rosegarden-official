@@ -15,8 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PitchChooser]"
+#define RG_NO_DEBUG_PRINT
 
 #include "PitchChooser.h"
+
 #include "PitchDragLabel.h"
 
 #include "base/Pitch.h"
@@ -33,14 +36,16 @@
 namespace Rosegarden
 {
 
-PitchChooser::PitchChooser(const QString& title,
+
+PitchChooser::PitchChooser(const QString &title,
                            QWidget *parent,
                            int defaultPitch) :
-        QGroupBox(title, parent),
-        m_defaultPitch(defaultPitch)
+    QGroupBox(title, parent),
+    m_defaultPitch(defaultPitch)
 {
     m_layout = new QVBoxLayout;
 
+    // Edit Pitch
     m_pitchDragLabel = new PitchDragLabel(this, defaultPitch);
     m_layout->addWidget(m_pitchDragLabel);
 
@@ -49,6 +54,7 @@ PitchChooser::PitchChooser(const QString& title,
     hboxLayout->setSpacing(6);
     m_layout->addWidget(hbox);
 
+    // Pitch:
     QLabel *child_4 = new QLabel(tr("Pitch:"), hbox );
     hboxLayout->addWidget(child_4);
 
@@ -65,23 +71,27 @@ PitchChooser::PitchChooser(const QString& title,
 
     setLayout(m_layout);
 
-    connect(m_pitch, SIGNAL(valueChanged(int)),
-            this, SLOT(slotSetPitch(int)));
+    // ??? Three connections is expensive CPU-wise.  Make a single
+    //     connection to a single routine that calls the other three.
+    connect(m_pitch, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchChooser::slotSetPitch);
+    connect(m_pitch, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchChooser::pitchChanged);
+    connect(m_pitch, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &PitchChooser::preview);
 
-    connect(m_pitch, SIGNAL(valueChanged(int)),
-            this, SIGNAL(pitchChanged(int)));
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int))
+                    &PitchDragLabel::pitchDragged,
+            this, &PitchChooser::slotSetPitch);
 
-    connect(m_pitch, SIGNAL(valueChanged(int)),
-            this, SIGNAL(preview(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int)),
-            this, SLOT(slotSetPitch(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
-            this, SLOT(slotSetPitch(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
-            this, SIGNAL(pitchChanged(int)));
+    // ??? Two connections is a bit expensive CPU-wise.  Make a single
+    //     connection to a single routine that calls the other two.
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int))
+                    &PitchDragLabel::pitchChanged,
+            this, &PitchChooser::slotSetPitch);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int))
+                    &PitchDragLabel::pitchChanged,
+            this, &PitchChooser::pitchChanged);
 
     connect(m_pitchDragLabel, &PitchDragLabel::preview,
             this, &PitchChooser::preview);

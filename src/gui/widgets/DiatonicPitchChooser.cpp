@@ -15,13 +15,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[DiatonicPitchChooser]"
+#define RG_NO_DEBUG_PRINT
 
 #include "DiatonicPitchChooser.h"
 
+#include "PitchDragLabel.h"
+
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "misc/Debug.h"
 //#include "gui/general/MidiPitchLabel.h"
-#include "PitchDragLabel.h"
 
 #include <QComboBox>
 #include <QGroupBox>
@@ -32,20 +36,18 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
-#include <iostream>
-
 
 namespace Rosegarden
 {
 
 
-DiatonicPitchChooser::DiatonicPitchChooser(const QString& title,
+DiatonicPitchChooser::DiatonicPitchChooser(const QString &title,
                                            QWidget *parent,
                                            int defaultNote,
                                            int defaultPitch,
                                            int defaultOctave) :
-        QGroupBox(title, parent),
-        m_defaultPitch(defaultPitch)
+    QGroupBox(title, parent),
+    m_defaultPitch(defaultPitch)
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -111,30 +113,18 @@ DiatonicPitchChooser::DiatonicPitchChooser(const QString& title,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &DiatonicPitchChooser::slotSetStep);
 
-    //connect(m_pitch, SIGNAL(valueChanged(int)),
-    //        this, SIGNAL(pitchChanged(int)));
-
-    //connect(m_pitch, SIGNAL(valueChanged(int)),
-    //        this, SIGNAL(preview(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
-            this, SLOT(slotSetNote(int,int,int)));
-
-    //connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
-    //        this, SLOT(slotSetPitch(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
-            this, SLOT(slotSetNote(int,int,int)));
-
-    //connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
-    //        this, SIGNAL(pitchChanged(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
-            this, SIGNAL(noteChanged(int,int,int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
-            this, SIGNAL(noteChanged(int,int,int)));
-
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchDragged,
+            this, &DiatonicPitchChooser::slotSetNote);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchDragged,
+            this, &DiatonicPitchChooser::noteChanged);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchChanged,
+            this, &DiatonicPitchChooser::slotSetNote);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchChanged,
+            this, &DiatonicPitchChooser::noteChanged);
     connect(m_pitchDragLabel, &PitchDragLabel::preview,
             this, &DiatonicPitchChooser::preview);
 
@@ -176,9 +166,10 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
 void
 DiatonicPitchChooser::slotSetStep(int step)
 {
+    RG_DEBUG << "slotSetStep()";
+
     if (m_step->currentIndex() != step)
        m_step->setCurrentIndex(step);
-    std::cout << "slot_step called" << std::endl;
     setLabelsIfNeeded();
     update();
 }
