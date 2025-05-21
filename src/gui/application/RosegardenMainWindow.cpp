@@ -5371,7 +5371,8 @@ RosegardenMainWindow::slotPrintLilyPond()
         return ;
     }
 
-    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Print, filename);
+    LilyPondProcessor *dialog = new LilyPondProcessor(
+            this, LilyPondProcessor::Print, filename);
     dialog->exec();
 }
 
@@ -5387,7 +5388,8 @@ RosegardenMainWindow::slotPreviewLilyPond()
         return ;
     }
 
-    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
+    LilyPondProcessor *dialog = new LilyPondProcessor(
+            this, LilyPondProcessor::Preview, filename);
     dialog->exec();
 }
 
@@ -5397,13 +5399,12 @@ RosegardenMainWindow::getLilyPondTmpFilename()
     QString mask = QString("%1/rosegarden_tmp_XXXXXX.ly").arg(QDir::tempPath());
     RG_WARNING << "getLilyPondTmpName() - using tmp file: " << qstrtostr(mask);
 
-    QTemporaryFile *file = new QTemporaryFile(mask);
+    std::unique_ptr<QTemporaryFile> file{new QTemporaryFile(mask)};
     file->setAutoRemove(true);
     if (!file->open()) {
         QMessageBox::warning(this, tr("Rosegarden"), tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
                                           "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
                                        arg(QDir::tempPath()));
-        delete file;
         return QString();
     }
     QString filename = file->fileName(); // must call this before close()
@@ -5411,7 +5412,6 @@ RosegardenMainWindow::getLilyPondTmpFilename()
 
     return filename;
 }
-
 
 bool
 RosegardenMainWindow::exportLilyPondFile(const QString &file, bool forPreview)

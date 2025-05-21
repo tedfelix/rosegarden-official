@@ -15,11 +15,16 @@
     COPYING included with this distribution for more m_information.
 */
 
+#define RG_MODULE_STRING "[LilyPondProcessor]"
+#define RG_NO_DEBUG_PRINT
+
 #include "LilyPondProcessor.h"
 
-#include "gui/general/IconLoader.h"
+#include "IconLoader.h"
+
 #include "gui/widgets/ProgressBar.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 
 #include <QDialog>
 #include <QProcess>
@@ -30,8 +35,6 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QTextCodec>
-
-#include <iostream>
 
 
 namespace Rosegarden
@@ -53,9 +56,9 @@ LilyPondProcessor::LilyPondProcessor(
     // (I'm not sure why RG_DEBUG didn't work from in here.  Having to use
     // iostream is mildly irritating, as QStrings have to be converted, but
     // whatever, I'll figure that out later, or just leave well enough alone)
-    std::cerr << "LilyPondProcessor::LilyPondProcessor():  mode: " << mode << " m_filename: " << m_filename.toStdString() << std::endl;
+    RG_DEBUG << "ctor:  mode: " << mode << " m_filename: " << m_filename.toStdString();
 
-    this->setModal(false);
+    setModal(false);
 
     setWindowIcon(IconLoader::loadPixmap("window-lilypond"));
 
@@ -71,7 +74,7 @@ LilyPondProcessor::LilyPondProcessor(
         case LilyPondProcessor::Preview: modeStr = tr("Preview"); break;
         case LilyPondProcessor::Print:   modeStr = tr("Print");   break;
     }
-    this->setWindowTitle(tr("Rosegarden - %1 with LilyPond...").arg(modeStr));
+    setWindowTitle(tr("Rosegarden - %1 with LilyPond...").arg(modeStr));
 
     m_info = new QLabel(this);
     m_info->setWordWrap(true);
@@ -100,6 +103,9 @@ LilyPondProcessor::LilyPondProcessor(
 void
 LilyPondProcessor::puke(const QString& error, const QString &details)
 {
+    delete m_process;
+    m_process = nullptr;
+
     m_progress->setMaximum(100);
     m_progress->hide();
 
@@ -122,7 +128,7 @@ LilyPondProcessor::puke(const QString& error, const QString &details)
 void
 LilyPondProcessor::runConvertLy()
 {
-    std::cerr << "LilyPondProcessor::runConvertLy()" << std::endl;
+    RG_DEBUG << "runConvertLy()";
 
     m_info->setText(tr("Running <b>convert-ly</b>..."));
     m_process = new QProcess;
@@ -145,7 +151,7 @@ LilyPondProcessor::runConvertLy()
 void
 LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
 {
-    std::cerr << "LilyPondProcessor::runLilyPond()" << std::endl;
+    RG_DEBUG << "runLilyPond()";
 
     if (exitCode == 0) {
         m_info->setText(tr("<b>convert-ly</b> finished..."));
@@ -176,12 +182,14 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     // monitoring and guessing code that's easy to do in a script and hell to do
     // in real code
     m_progress->setMaximum(0);
+
+    // runFinalStage() will take over when the process ends...
 }
 
 void
 LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
 {
-    std::cerr << "LilyPondProcessor::runFinalStage()" << std::endl;
+    RG_DEBUG << "runFinalStage()";
 
     if (exitCode == 0) {
         m_info->setText(tr("<b>lilypond</b> finished..."));
@@ -196,8 +204,8 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         bool exportedBrackets = settings.value("lilyexportstaffbrackets", false).toBool();
         settings.endGroup();
 
-        std::cerr << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false") << std::endl
-                  << " exportedBrackets == " << (exportedBrackets ? "true" : "false") << std::endl;
+        RG_DEBUG << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false");
+        RG_DEBUG << " exportedBrackets == " << (exportedBrackets ? "true" : "false");
 
         QString vomitus = "<html>";
         vomitus += tr("<p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p>");
@@ -267,6 +275,9 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
     QString finalProcessor;
 
     m_process = new QProcess;
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &LilyPondProcessor::finished2);
 
     switch (m_mode) {
         case LilyPondProcessor::Print:
@@ -296,8 +307,19 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
     m_progress->setMaximum(100);
     m_progress->setValue(100);
 
+    // Once the viewing/printing is done, finished2() will be called...
+}
+
+void LilyPondProcessor::finished2(int /*exitCode*/, QProcess::ExitStatus)
+{
+    RG_DEBUG << "finished2()";
+
+    delete m_process;
+    m_process = nullptr;
+
+    // Dismiss the dialog.
     accept();
 }
 
-}
 
+}

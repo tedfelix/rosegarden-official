@@ -76,7 +76,7 @@ public:
                       const QString &filename);
     ~LilyPondProcessor() override { };
 
-protected:
+private:
     int           m_mode;
     QString       m_filename;
     QString       m_dir;
@@ -84,7 +84,7 @@ protected:
     QLabel       *m_info;
     QProcess     *m_process;
 
-protected slots:
+private slots:
     /**
      * Display an explanatory failure message and terminate processing
      */
@@ -105,6 +105,9 @@ protected slots:
      * processed .pdf file
      */
     void runFinalStage(int exitCode, QProcess::ExitStatus);
+
+    /// Clean up when everything is done.
+    void finished2(int exitCode, QProcess::ExitStatus);
 };
 
 
