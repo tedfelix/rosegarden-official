@@ -87,7 +87,7 @@ globalTempo = {
 %% 35
                 < d''' d'' > 8 [ < f'' a' > < e'' g' > < f'' f' > ] d' 2  |
                 d' 1  |
-                R1^\markup { \large "Left hand techniques" }   |
+                R1^\markup { \large "Left hand techniques" }  
                 \bar "|."
             } % Voice
 

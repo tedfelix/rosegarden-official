@@ -91,8 +91,7 @@ globalTempo = {
     \tempo 4 = 116  \skip 32 \skip 8 
     \tempo 4 = 115  \skip 8 \skip 64 \skip 64 
     \tempo 4 = 113  \skip 32. 
-    \tempo 4 = 112  \skip 32 \skip 32 \skip 64 \skip 64 
-    \tempo 4 = 111  
+    \tempo 4 = 112  \skip 32 
 }
 \score {
     << % common
@@ -274,7 +273,7 @@ globalTempo = {
                     c'' 16 [ e'' g'' e'' ] d'' [ f'' b' d'' ]  |
                     c'' 16 [ g' e' c' ] d' [ f' b d' ]  |
                     c' 16 [ g c' e' ] c'' [ e'' g'' e'' ]  |
-                    < g e' c'' > 32 [ < g e' c'' > < c'' e' g > < c'' e' g > ] < c'' e' g > 8 r4  |
+                    < g e' c'' > 32 [ < g e' c'' > < c'' e' g > < c'' e' g > ] < c'' e' g > 8 r4 
                     \bar "|."
                 } % Voice
 
@@ -445,7 +444,7 @@ globalTempo = {
                         < c'' e' > 4 r8 < f'' b' >  |
                         < e'' c'' > 4 r8 < b'' f'' >  |
                         < c''' e'' > 4 r  |
-                        R2*2  |
+                        R2*2 
                         \bar "|."
                     } % Voice
 
@@ -629,7 +628,7 @@ globalTempo = {
                         c 4 r8 g,  |
                         c, 4 r8 < g,, f b g, >  |
                         < c' e c c, > 8 r < c, c e g c' > r  |
-                        < c' g e c c, > 4 r  |
+                        < c' g e c c, > 4 r 
                         \bar "|."
                     } % Voice
 

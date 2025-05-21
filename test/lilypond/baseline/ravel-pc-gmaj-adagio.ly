@@ -467,7 +467,7 @@ globalTempo = {
                     b'' 2. \> _~ 
                     % warning: overlong bar truncated here |
                     b'' 2.  |
-                    b'' 2 -\fermata \! r4  |
+                    b'' 2 -\fermata \! r4 
                     \bar "|."
                 } % Voice
 
@@ -623,7 +623,7 @@ globalTempo = {
                     e, 8 [ < dis b > ] < b e > [ e, ] < b gis > [ < gis b > ]  |
                     e, 8 [ < gis b > ] < gis b > [ e, ] < gis b > [ < gis b > ]  |
                     e, 4 < gis b > < gis b >  |
-                    e, 2 -\fermata r4  |
+                    e, 2 -\fermata r4 
                     \bar "|."
                 } % Voice
 

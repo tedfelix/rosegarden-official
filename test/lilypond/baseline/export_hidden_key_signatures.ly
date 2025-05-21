@@ -42,7 +42,7 @@ globalTempo = {
                 \clef "treble"
                 \key e \major
                 cis' 4 fis' dis'' gis''  |
-                cis'' 4 fis dis' fis''  |
+                cis'' 4 fis dis' fis'' 
             } % Voice
 
             % End of segment Acoustic Grand Piano
@@ -55,7 +55,7 @@ globalTempo = {
                 \skip 1*2 
                 \clef "treble"
                 cis' 4 fis' dis'' gis''  |
-                cis'' 4 fis dis' fis''  |
+                cis'' 4 fis dis' fis'' 
             } % Voice
 
             % End of segment Acoustic Grand Piano
@@ -69,7 +69,7 @@ globalTempo = {
 %% 5
                 \clef "treble"
                 cis' 4 fis' dis'' gis''  |
-                cis'' 4 fis dis' fis''  |
+                cis'' 4 fis dis' fis'' 
                 \bar "|."
             } % Voice
 

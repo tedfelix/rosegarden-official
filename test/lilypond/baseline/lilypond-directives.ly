@@ -47,7 +47,7 @@ globalTempo = {
 %% 5
                 r4\normalsize  r < c' e' g' c'' e'' g'' c''' > 2 \arpeggio  |
                 r2^\markup { \musicglyph #"scripts.segno" }  r^\markup { \musicglyph #"scripts.coda" }   |
-                s4\small  s^\markup { \bold "To" }  s^\markup { \musicglyph #"scripts.coda" }  s  |
+                s4\small  s^\markup { \bold "To" }  s^\markup { \musicglyph #"scripts.coda" }  s 
                 \bar "|."
             } % Voice
 
