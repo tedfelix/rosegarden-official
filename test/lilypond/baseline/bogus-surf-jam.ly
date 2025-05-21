@@ -40,7 +40,7 @@ globalTempo = {
                 \once \override Staff.TimeSignature.style = #'numbered 
                 \time 4/4
                 
-                R1 \sustainOff  |
+                R1 \sustainOff 
             } % Voice
 
             % End of segment Overdrive Guitar
@@ -72,7 +72,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d _( c a, ) ] fis, _( [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -104,7 +104,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -136,7 +136,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -169,7 +169,7 @@ globalTempo = {
 %% 95
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -202,7 +202,7 @@ globalTempo = {
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
 %% 120
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -227,7 +227,7 @@ globalTempo = {
 %% 130
                 \times 2/3 { e 32 [ f g _~ ] } g 16 des bes, g, ees, 8. r8 r r des 16 [ d ]  |
                 \times 2/3 { ees 32 [ e fis _~ ] } fis 16 c a, fis, d, 8. r4 r8 c 16 [ des ]  |
-                d 16 [ ees fis g ] a [ bes c' des' ] des' 8 r r4  |
+                d 16 [ ees fis g ] a [ bes c' des' ] des' 8 r r4 
             } % Voice
 
             % End of segment plausible
@@ -258,7 +258,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -284,7 +284,7 @@ globalTempo = {
                 \times 2/3 { fis 16 [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis 32 [ aes a 16 bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { c' 8 [ des' ees' ] }  |
 %% 155
                 \times 2/3 { f 16 [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f 32 [ g aes 16 a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { b 8 [ c' d' ] }  |
-                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r  |
+                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r 
             } % Voice
 
             % End of segment implausible
@@ -297,7 +297,7 @@ globalTempo = {
                 \skip 1*167 
                 \clef "treble"
                 \key g \minor
-                r2 r4 r8 \times 2/3 { f' 16 [ ees' d' ] }  |
+                r2 r4 r8 \times 2/3 { f' 16 [ ees' d' ] } 
             } % Voice
 
             % End of segment MIDI soundcard synth #6 (split)
@@ -323,7 +323,7 @@ globalTempo = {
                 g' 8 [ g' bes' des'' ] c'' 4. \times 2/3 { des'' 16 [ c'' bes' ] }  |
                 fis' 8 [ fis' a' c'' ] e'' [ e'' d'' c'' ]  |
 %% 180
-                bes' 8 c'' a' f' fis' 4. \times 2/3 { f' 16 [ ees' d' ] }  |
+                bes' 8 c'' a' f' fis' 4. \times 2/3 { f' 16 [ ees' d' ] } 
             } % Voice
 
             % End of segment theme 1 8va (copied)
@@ -348,7 +348,7 @@ globalTempo = {
 %% 190
                 g' 8 [ g' bes' des'' ] c'' 4. \times 2/3 { des'' 16 [ c'' bes' ] }  |
                 fis' 8 [ fis' a' c'' ] e'' [ e'' d'' c'' ]  |
-                bes' 8 [ c'' a' f' ] fis' 2  |
+                bes' 8 [ c'' a' f' ] fis' 2 
             } % Voice
 
             % End of segment theme 1 8va
@@ -387,7 +387,7 @@ globalTempo = {
                 \times 2/3 { e 32 [ f g _~ ] } g 16 des bes, g, ees, 8. r8 r r des 16 [ d ]  |
 %% 35
                 \times 2/3 { ees 32 [ e fis _~ ] } fis 16 c a, fis, d, 8. r4 r8 c 16 [ des ]  |
-                d 16 [ ees fis g ] a [ bes c' des' ] des' 8 r r4  |
+                d 16 [ ees fis g ] a [ bes c' des' ] des' 8 r r4 
             } % Voice
 
             % End of segment plausible 
@@ -414,7 +414,7 @@ globalTempo = {
                 \times 2/3 { fis 16 [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis 32 [ aes a 16 bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { c' 8 [ des' ees' ] }  |
                 \times 2/3 { f 16 [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f 32 [ g aes 16 a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { b 8 [ c' d' ] }  |
 %% 60
-                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r  |
+                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r 
             } % Voice
 
             % End of segment implausible
@@ -427,7 +427,7 @@ globalTempo = {
                 \skip 1*167 
                 \clef "treble"
                 \key g \minor
-                r2 r4 r8 \times 2/3 { f'' 16 [ ees'' d'' ] }  |
+                r2 r4 r8 \times 2/3 { f'' 16 [ ees'' d'' ] } 
             } % Voice
 
             % End of segment MIDI soundcard synth #6 (split)
@@ -453,7 +453,7 @@ globalTempo = {
                 g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                 fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
 %% 180
-                bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 [ ees'' d'' ] }  |
+                bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 [ ees'' d'' ] } 
             } % Voice
 
             % End of segment theme 1a 8va (copied)
@@ -478,7 +478,7 @@ globalTempo = {
 %% 190
                 g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                 fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
-                bes'' 8 [ c''' a'' f'' ] fis'' 2  |
+                bes'' 8 [ c''' a'' f'' ] fis'' 2 
             } % Voice
 
             % End of segment theme 1a 8va
@@ -522,7 +522,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2a
@@ -554,7 +554,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2a
@@ -587,7 +587,7 @@ globalTempo = {
 %% 95
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2a
@@ -620,7 +620,7 @@ globalTempo = {
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
 %% 120
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2a
@@ -652,7 +652,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d c a, ) ] fis, [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2a
@@ -676,7 +676,7 @@ globalTempo = {
                 < f' c' > 1  |
                 < ees' bes > 1  |
                 < d' a > 1 _~  |
-                < d' a > 1  |
+                < d' a > 1 
             } % Voice
 
             % End of segment Creative SBLive! 8MB Soundfont #11 (copied)
@@ -701,7 +701,7 @@ globalTempo = {
                     ees'' 8 [ ees'' g'' bes'' ] a'' 4. bes'' 16 [ f'' ]  |
                     d'' 8 [ d'' fis'' a'' ] c''' [ c''' a'' fis'' ]  |
 %% 180
-                    d'' 8 d'' c'' des'' d'' 4. d'' 16 [ bes' ]  |
+                    d'' 8 d'' c'' des'' d'' 4. d'' 16 [ bes' ] 
                 } % close repeat
             } % Voice
 
@@ -727,7 +727,7 @@ globalTempo = {
 %% 190
                 ees'' 8 [ ees'' g'' bes'' ] a'' 4. bes'' 16 [ f'' ]  |
                 d'' 8 [ d'' fis'' a'' ] c''' [ c''' a'' fis'' ]  |
-                d'' 8 [ d'' c'' des'' ] d'' 2  |
+                d'' 8 [ d'' c'' des'' ] d'' 2 
             } % Voice
 
             % End of segment Creative SBLive! 8MB Soundfont #11 (copied)
@@ -765,7 +765,7 @@ globalTempo = {
                 \times 2/3 { fis' 32 [ g' a' _~ ] } a' 16 ees' c' a f 8. r8 r r d' 16 [ ees' ]  |
                 \times 2/3 { e' 32 [ f' g' _~ ] } g' 16 des' bes g ees 8. r8 r r des' 16 [ d' ]  |
                 \times 2/3 { ees' 32 [ e' fis' _~ ] } fis' 16 c' a fis d 8. r4 r8 c' 16 [ des' ]  |
-                d' 16 [ ees' fis' g' ] a' [ bes' c'' des'' ] des'' 8 r r4  |
+                d' 16 [ ees' fis' g' ] a' [ bes' c'' des'' ] des'' 8 r r4 
             } % Voice
 
             % End of segment plausible
@@ -791,7 +791,7 @@ globalTempo = {
                 \times 2/3 { aes 16 [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes 32 [ bes b 16 c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { aes [ bes c' ] } \times 2/3 { ees' [ c' c' ] } \times 2/3 { d' 8 [ ees' f' ] }  |
                 \times 2/3 { fis 16 [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis 32 [ aes a 16 bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { fis [ aes bes ] } \times 2/3 { des' [ bes bes ] } \times 2/3 { c' 8 [ des' ees' ] }  |
                 \times 2/3 { f 16 [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f 32 [ g aes 16 a ] } \times 2/3 { c' [ a a ] } \times 2/3 { f [ g a ] } \times 2/3 { c' [ a a ] } \times 2/3 { b 8 [ c' d' ] }  |
-                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r  |
+                \times 2/3 { fis' 16 [ ees' d' ] } \times 2/3 { c' [ bes a ] } \times 2/3 { fis [ ees d ] } \times 2/3 { c [ bes, a, ] } \times 2/3 { fis, [ ees, d, ] } \times 2/3 { c, [ bes,, a,, ] } g,, 8 r 
             } % Voice
 
             % End of segment implausible
@@ -823,7 +823,7 @@ globalTempo = {
                 ees 8 [ g ees g ] ees 2 ) _~  |
                 ees 8 [ d _( c a, ) ] fis, _( [ d, ] d, 4 _~ 
                 % warning: overlong bar truncated here |
-                d, 1 )  |
+                d, 1 ) 
             } % Voice
 
             % End of segment theme 2
@@ -856,7 +856,7 @@ globalTempo = {
                 < f' c' > 1  |
                 < ees' bes > 1  |
                 < d' a > 1 _~  |
-                < d' a > 1  |
+                < d' a > 1 
             } % Voice
 
             % End of segment Creative SBLive! 8MB Soundfont #11
@@ -878,7 +878,7 @@ globalTempo = {
                     g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                     fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
 %% 180
-                    bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 [ ees'' d'' ] }  |
+                    bes'' 8 c''' a'' f'' fis'' 4. \times 2/3 { f'' 16 [ ees'' d'' ] } 
                 } % close repeat
             } % Voice
 
@@ -904,7 +904,7 @@ globalTempo = {
 %% 190
                 g'' 8 [ g'' bes'' des''' ] c''' 4. \times 2/3 { des''' 16 [ c''' bes'' ] }  |
                 fis'' 8 [ fis'' a'' c''' ] e''' [ e''' d''' c''' ]  |
-                bes'' 8 [ c''' a'' f'' ] fis'' 2  |
+                bes'' 8 [ c''' a'' f'' ] fis'' 2 
             } % Voice
 
             % End of segment MIDI soundcard synth #6 (copied)
@@ -942,7 +942,7 @@ globalTempo = {
 %% 190
                 \times 2/3 { ees 8 [ g bes ] } \times 2/3 { g [ a bes ] } a 2  |
                 \times 2/3 { d 8 [ ges a ] } \times 2/3 { ges [ g a ] } \times 2/3 { g [ a ges ] } \times 2/3 { a [ g f ] }  |
-                d 1  |
+                d 1 
             } % Voice
 
             % End of segment Mute Trumpet (split)
@@ -981,7 +981,7 @@ globalTempo = {
 %% 10
                 g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 [ c' bes ] }  |
                 fis 8 [ fis a c' ] e' [ e' d' c' ]  |
-                bes 8 c' a f fis 4. \times 2/3 { f 16 [ ees d ] }  |
+                bes 8 c' a f fis 4. \times 2/3 { f 16 [ ees d ] } 
             } % Voice
 
             % End of segment theme 1a (copied)
@@ -1008,7 +1008,7 @@ globalTempo = {
                 g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 [ c' bes ] }  |
                 fis 8 [ fis a c' ] e' [ e' d' c' ]  |
 %% 180
-                bes 8 c' a f fis 4. \times 2/3 { f 16 [ ees d ] }  |
+                bes 8 c' a f fis 4. \times 2/3 { f 16 [ ees d ] } 
             } % Voice
 
             % End of segment theme 1a (copied)
@@ -1033,7 +1033,7 @@ globalTempo = {
 %% 190
                 g 8 [ g bes des' ] c' 4. \times 2/3 { des' 16 [ c' bes ] }  |
                 fis 8 [ fis a c' ] e' [ e' d' c' ]  |
-                bes 8 [ c' a f ] fis 2  |
+                bes 8 [ c' a f ] fis 2 
             } % Voice
 
             % End of segment theme 1a
@@ -1048,7 +1048,7 @@ globalTempo = {
                 g, 8 [ g, bes, d ] c [ c d bes, ]  |
                 g, 8 [ g, a, f, ] g, 4 _~ < bes g, > 32 _~ [ < bes e' g, > _~ < bes e' a' g, > _~ < bes e' a' d'' g, > _~ ] < d'' a' e' bes g, > 8 _~  |
 %% 195
-                < d'' a' e' bes g, > 1  |
+                < d'' a' e' bes g, > 1 
                 \bar "|."
             } % Voice
 
@@ -1089,7 +1089,7 @@ globalTempo = {
 %% 10
                     r4 < bes' des' f' > 16 r r8 r4 < c'' g' ees' > 16 r r8  |
                     r4 < a' e' c' > 16 r r8 r4 < fis' b' d' > 16 r r8  |
-                    r4 < a' e' c' > 16 r r8 r4 < fis' b' d' > 16 r r8  |
+                    r4 < a' e' c' > 16 r r8 r4 < fis' b' d' > 16 r r8 
                 } % close repeat
             } % Voice
 
@@ -1117,7 +1117,7 @@ globalTempo = {
 %% 190
                     r4 < bes' des' f' > 16 r r8 r4 < c'' g' ees' > 16 r r8  |
                     r4 < a' e' c' > 16 r r8 r4 < fis' b' d' > 16 r r8  |
-                    r4 < a' e' c' > 16 r r8 r4 < fis' b' d' > 16 r r8  |
+                    r4 < a' e' c' > 16 r r8 r4 < fis' b' d' > 16 r r8 
                 } % close repeat
             } % Voice
 
@@ -1133,7 +1133,7 @@ globalTempo = {
                 g, 8 [ g, bes, d ] c [ c d bes, ]  |
                 g, 8 [ g, a, f, ] g, 4 _~ < bes g, > 32 _~ [ < bes e' g, > _~ < bes e' a' g, > _~ < bes e' a' d'' g, > _~ ] < d'' a' e' bes g, > 8 _~  |
 %% 195
-                < d'' a' e' bes g, > 1  |
+                < d'' a' e' bes g, > 1 
                 \bar "|."
             } % Voice
 
@@ -1174,7 +1174,7 @@ globalTempo = {
 %% 10
                     ees, 8 [ ees, g, bes, ] a, 4. bes, 16 [ f, ]  |
                     d, 8 [ d, fis, a, ] c [ c a, fis, ]  |
-                    d, 8 d, c, des, d, 4. d, 16 [ bes,, ]  |
+                    d, 8 d, c, des, d, 4. d, 16 [ bes,, ] 
                 } % close repeat
             } % Voice
 
@@ -1201,7 +1201,7 @@ globalTempo = {
 %% 190
                 ees, 8 [ ees, g, bes, ] a, 4. bes, 16 [ f, ]  |
                 d, 8 [ d, fis, a, ] c [ c a, fis, ]  |
-                d, 8 [ d, c, des, ] d, 4. a, 16 [ ees, ]  |
+                d, 8 [ d, c, des, ] d, 4. a, 16 [ ees, ] 
             } % Voice
 
             % End of segment theme 1 8vb
@@ -1217,7 +1217,7 @@ globalTempo = {
                 g,, 8 [ g,, bes,, d, ] c, [ c, d, bes,, ]  |
                 g,, 8 [ g,, a,, f,, ] g,, 2  |
 %% 195
-                R1  |
+                R1 
                 \bar "|."
             } % Voice
 
@@ -1257,7 +1257,7 @@ globalTempo = {
 %% 10
                     b, 8 [ b, c b, ] d [ d c b, ]  |
                     a, 8 [ a, c b, ] c [ c b, c ]  |
-                    b, 8 [ b, c b, ] d [ d c b, ]  |
+                    b, 8 [ b, c b, ] d [ d c b, ] 
                 } % close repeat
             } % Voice
 
@@ -1284,7 +1284,7 @@ globalTempo = {
                 b, 8 [ b, c b, ] d [ d c b, ]  |
                 a, 8 [ a, c b, ] c [ c b, c ]  |
                 b, 8 [ b, c b, ] d [ d c b, ]  |
-                R1*3  |
+                R1*3 
                 \bar "|."
             } % Voice
 
@@ -1324,7 +1324,7 @@ globalTempo = {
 %% 10
                     b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4  |
                     b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4  |
-                    b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4  |
+                    b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4 
                 } % close repeat
             } % Voice
 
@@ -1352,7 +1352,7 @@ globalTempo = {
                 b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4  |
                 b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4  |
                 b,, 8 [ b,, ] e, 4 b,, 8 [ b,, ] e, 4  |
-                R1*2  |
+                R1*2 
                 \bar "|."
             } % Voice
 

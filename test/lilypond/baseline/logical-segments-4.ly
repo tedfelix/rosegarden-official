@@ -43,7 +43,7 @@ globalTempo = {
                 \key c \major
                 r8 r16 g' r8 g c' g r g  |
                 c' 8 g r g c' g c' g  |
-                c' 2 r  |
+                c' 2 r 
             } % Voice
 
             % End of segment 4
@@ -61,7 +61,7 @@ globalTempo = {
                 \key c \major
                 r8 e' r b c' b r b  |
                 c' 8 b r b c' b c' b  |
-                g 2 r  |
+                g 2 r 
             } % Voice
 
             % End of segment 3
@@ -79,7 +79,7 @@ globalTempo = {
                 \key c \major
                 r16 d' r8 r f' c' f' r f'  |
                 c' 8 f' r f' c' f' c' f'  |
-                e' 2 r  |
+                e' 2 r 
             } % Voice
 
             % End of segment 2
@@ -97,7 +97,7 @@ globalTempo = {
                 \key c \major
                 c' 4 c' 8 d' c' d' c' d'  |
                 c' 8 d' c' d' c' d' c' d'  |
-                c' 2 r  |
+                c' 2 r 
             } % Voice
 
             % End of segment 1
@@ -124,7 +124,7 @@ globalTempo = {
                 c'' 1 _~  |
 %% 5
                 c'' 1 _~  |
-                c'' 1  |
+                c'' 1 
                 \bar "|."
             } % Voice
 
@@ -143,7 +143,7 @@ globalTempo = {
                 c' 1 _~  |
 %% 5
                 c' 1 _~  |
-                c' 1  |
+                c' 1 
                 \bar "|."
             } % Voice
 
@@ -168,7 +168,7 @@ globalTempo = {
                 \skip 1*2 
                 \clef "treble"
                 \key c \major
-                c' 8 [ d' e' f' ] e' [ g' b' d'' ]  |
+                c' 8 [ d' e' f' ] e' [ g' b' d'' ] 
             } % Voice
 
             % End of segment On fixed channel
@@ -183,7 +183,7 @@ globalTempo = {
                 \skip 1*2 
                 \clef "treble"
                 \key c \major
-                e' 8 [ f' g' f' ] e' [ g' b' d'' ]  |
+                e' 8 [ f' g' f' ] e' [ g' b' d'' ] 
             } % Voice
 
             % End of segment On fixed channel

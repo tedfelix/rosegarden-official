@@ -43,7 +43,7 @@ globalTempo = {
                     g, 1  |
                     f, 1  |
                     ees, 1  |
-                    d, 1  |
+                    d, 1 
                 } % close repeat
             } % Voice
 
@@ -72,7 +72,7 @@ globalTempo = {
                     f 8 -\staccato [ f -\staccato f -\staccato f -\staccato ] f -\staccato [ f -\staccato f -\staccato f -\staccato ]  |
                     ees 8 -\staccato [ ees -\staccato ees -\staccato ees -\staccato ] ees -\staccato [ ees -\staccato ees -\staccato ees -\staccato ]  |
                     d 8 -\staccato [ d -\staccato d -\staccato d -\staccato ] d -\staccato [ d -\staccato d -\staccato d -\staccato ] r16 
-                    % warning: overlong bar truncated here |
+                    % warning: overlong bar truncated here
                 } % close repeat
             } % Voice
 
@@ -220,7 +220,7 @@ globalTempo = {
                 < g' a' > 8 -\tenuto r r16 bes' 2 -\tenuto r16.. 
                 % warning: bar too short, padding with rests
                 % 380160 + 3540 < 384000  &&  59/64 < 4/4
-                r64 r16  |
+                r64 r16 
                 \bar "|."
             } % Voice
 
@@ -244,7 +244,7 @@ globalTempo = {
                 \override MultiMeasureRest.expand-limit = 1
 
                 \repeat unfold 101 {
-                    < c, aes, > 8 aes, 32 r aes, 16 r < e, aes, > 8 r32 r < aes, c, > 16 < c, aes, > 8 aes, 16 bes, r < e, aes, > 8 r32 r aes, 16 r  |
+                    < c, aes, > 8 aes, 32 r aes, 16 r < e, aes, > 8 r32 r < aes, c, > 16 < c, aes, > 8 aes, 16 bes, r < e, aes, > 8 r32 r aes, 16 r 
                 } % close repeat
             } % Voice
 
@@ -268,7 +268,7 @@ globalTempo = {
                 \override MultiMeasureRest.expand-limit = 1
 
                 \repeat unfold 101 {
-                    d 8 [ d 16 d ] d 64 r r32 r16 d r d r d r r8 d 16 r  |
+                    d 8 [ d 16 d ] d 64 r r32 r16 d r d r d r r8 d 16 r 
                 } % close repeat
             } % Voice
 

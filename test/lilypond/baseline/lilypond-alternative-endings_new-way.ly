@@ -48,7 +48,7 @@ globalTempo = {
                         \key bes \major
                         \stemDown bes 2 ^\markup { \bold \large "Allegretto" } d' 4 ees' \stemNeutral  |
                         \stemDown c' 2 f' \stemNeutral  |
-                        \stemDown d'' 8 [ c'' bes' a' ] g'' 2 \stemNeutral  |
+                        \stemDown d'' 8 [ c'' bes' a' ] g'' 2 \stemNeutral 
                     } % close main repeat
 
                     % End of segment right hand, voice 1 (lié)
@@ -58,7 +58,7 @@ globalTempo = {
                         \set Score.repeatCommands = #'((volta "1"))
                         \bar "|" 
                         \clef "treble"
-                        \stemDown f' 2. g' 4 \stemNeutral  |
+                        \stemDown f' 2. g' 4 \stemNeutral 
                     }
 
                     % End of segment RH v1 alt1
@@ -66,10 +66,9 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: RH v1 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
                         \clef "treble"
                         \stemDown f' 2. g' 8 [ f' ] \stemNeutral  |
-                        \stemDown bes 1 -\fermata \stemNeutral  |
+                        \stemDown bes 1 -\fermata \stemNeutral 
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
                     }
@@ -92,7 +91,7 @@ globalTempo = {
                         \key bes \major
                         \stemUp d'' 4 d'' g' 2 \stemNeutral  |
                         \stemUp c' 2 d'' 8 [ bes' ] r4 \stemNeutral  |
-                        \stemUp g'' 8 [ a'' bes'' d''' ] g'' [ d'' ] ees'' r \stemNeutral  |
+                        \stemUp g'' 8 [ a'' bes'' d''' ] g'' [ d'' ] ees'' r \stemNeutral 
                     } % close main repeat
 
                     % End of segment right hand, voice 2 (lié)
@@ -102,7 +101,7 @@ globalTempo = {
                         \set Score.repeatCommands = #'((volta "1"))
                         \bar "|" 
                         \clef "treble"
-                        \stemUp ees'' 8 [ c'' ees'' f'' ] a'' [ bes'' a'' bes'' ] \stemNeutral  |
+                        \stemUp ees'' 8 [ c'' ees'' f'' ] a'' [ bes'' a'' bes'' ] \stemNeutral 
                     }
 
                     % End of segment RH v2 alt1
@@ -110,10 +109,9 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: RH v2 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
                         \clef "treble"
                         \stemUp bes'' 8 [ g'' ] \stemDown f' 2. -\fermata _~ \stemNeutral  |
-                        \stemUp f' 1 \stemNeutral  |
+                        \stemUp f' 1 \stemNeutral 
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
                     }
@@ -146,7 +144,7 @@ globalTempo = {
                         \key bes \major
                         \stemUp bes, 2 bes, \stemNeutral  |
                         \stemUp a, 2 a, \stemNeutral  |
-                        \stemUp c 2 c \stemNeutral  |
+                        \stemUp c 2 c \stemNeutral 
                     } % close main repeat
 
                     % End of segment left hand, voice 1 (lié)
@@ -156,7 +154,7 @@ globalTempo = {
                         \set Score.repeatCommands = #'((volta "1"))
                         \bar "|" 
                         \clef "bass"
-                        \stemUp < d g > 4 < d bes, > < g, ees, > 2 \stemNeutral  |
+                        \stemUp < d g > 4 < d bes, > < g, ees, > 2 \stemNeutral 
                     }
 
                     % End of segment LH v1 alt1
@@ -164,10 +162,9 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: LH v1 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
                         \clef "bass"
                         s1  |
-                        s1  |
+                        s1 
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
                     }
@@ -190,7 +187,7 @@ globalTempo = {
                         \key bes \major
                         \stemDown g,, 2 g, 8 [ f, ees, d, ] \stemNeutral  |
                         \stemDown g,, 4 a,, bes,, d, \stemNeutral  |
-                        \stemDown bes, 4. bes, 8 a, 4. a, 8 \stemNeutral  |
+                        \stemDown bes, 4. bes, 8 a, 4. a, 8 \stemNeutral 
                     } % close main repeat
 
                     % End of segment left hand, voice 2 (lié)
@@ -200,7 +197,7 @@ globalTempo = {
                         \set Score.repeatCommands = #'((volta "1"))
                         \bar "|" 
                         \clef "bass"
-                        \stemDown < g,, d, > 1 \stemNeutral  |
+                        \stemDown < g,, d, > 1 \stemNeutral 
                     }
 
                     % End of segment LH v2 alt1
@@ -208,10 +205,9 @@ globalTempo = {
                     {   % Alternative start here
                         % Segment: LH v2 alt2
                         \set Score.repeatCommands = #'((volta #f) (volta "2") end-repeat)
-                        \bar "|" 
                         \clef "bass"
                         \stemDown ees, 4 < a, ees, > < c g, > < ees bes, > \stemNeutral  |
-                        \stemDown < c a, > 4 < bes, a, > < bes, bes,, > 2 -\fermata \stemNeutral  |
+                        \stemDown < c a, > 4 < bes, a, > < bes, bes,, > 2 -\fermata \stemNeutral 
                         \bar "|."
                         \set Score.repeatCommands = #'((volta #f))
                     }

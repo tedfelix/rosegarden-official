@@ -53,7 +53,7 @@ globalTempo = {
                 {  % open alternative 2
 %% 5
                         \stemDown f' 2. g' 8 [ f' ] \stemNeutral  |
-                        \stemDown bes 1 -\fermata \stemNeutral  |
+                        \stemDown bes 1 -\fermata \stemNeutral 
                     } % close alternative 2 
                 } % close alternatives
             } % Voice
@@ -81,7 +81,7 @@ globalTempo = {
                 {  % open alternative 2
 %% 5
                         \stemUp bes'' 8 [ g'' ] \stemDown f' 2. -\fermata _~ \stemNeutral  |
-                        \stemUp f' 1 \stemNeutral  |
+                        \stemUp f' 1 \stemNeutral 
                     } % close alternative 2 
                 } % close alternatives
             } % Voice
@@ -119,7 +119,7 @@ globalTempo = {
                 {  % open alternative 2
 %% 5
                         s1  |
-                        s1  |
+                        s1 
                     } % close alternative 2 
                 } % close alternatives
             } % Voice
@@ -147,7 +147,7 @@ globalTempo = {
                 {  % open alternative 2
 %% 5
                         \stemDown ees, 4 < a, ees, > < c g, > < ees bes, > \stemNeutral  |
-                        \stemDown < c a, > 4 < bes, a, > < bes, bes,, > 2 -\fermata \stemNeutral  |
+                        \stemDown < c a, > 4 < bes, a, > < bes, bes,, > 2 -\fermata \stemNeutral 
                     } % close alternative 2 
                 } % close alternatives
             } % Voice

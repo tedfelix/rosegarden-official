@@ -161,7 +161,7 @@ globalTempo = {
                 e' 16 [ d' ] c' 8 [ b 16 a ] b 8 [ aes a, a ] c'  |
                 b 16 [ a ] e, 8 [ b d' c' 16 b ] c' 8 [ a ] a,  |
                 a 8 [ d, a e, ] aes a, 4. _~  |
-                a, 16  |
+                a, 16 
                 \bar "|."
             } % Voice
 
@@ -308,7 +308,7 @@ globalTempo = {
                     c'' 16 [ b' ] e'' r < e' a' > r < d' f' > r < b e' > r < c' e' a' > 8. r16 r8  |
                     a' 8 < aes' b' e'' > 8. r16 r8 e'' < c'' e'' a'' > 8. r16 r8  |
                     < c'' e'' a'' > 8 < b' f'' a'' > 8. r16 < b' e'' aes'' > 8. r16 < c'' e'' a'' > 4. _~  |
-                    < c'' e'' a'' > 16  |
+                    < c'' e'' a'' > 16 
                     \bar "|."
                 } % Voice
 
@@ -454,7 +454,7 @@ globalTempo = {
                     aes, 16 r a, r c r d r e r a, 8. r16 r8  |
                     r8 e, 8. r16 r8 r4 a 8 [ a, ]  |
                     a 8 d, 8. r16 e, 8. r16 < a,, a, > 4. _~  |
-                    < a,, a, > 16  |
+                    < a,, a, > 16 
                     \bar "|."
                 } % Voice
 

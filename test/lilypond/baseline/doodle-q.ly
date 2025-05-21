@@ -83,7 +83,7 @@ globalTempo = {
                 a' 4 bes' 8 [ a' ] g' 4 f' 8 [ g' ]  |
 %% 40
                 a' 8 [ d' f' e' ] cis' 4 d' _~  |
-                d' 2. r4  |
+                d' 2. r4 
                 \bar "|."
             } % Voice
 
@@ -157,7 +157,7 @@ globalTempo = {
                 f' 4 d' f' d'  |
 %% 40
                 a 4 a a d' _~  |
-                c' 2. r4  |
+                c' 2. r4 
                 \bar "|."
             } % Voice
 
@@ -231,7 +231,7 @@ globalTempo = {
                 d 8 [ bes, ] f, 4 bes, d  |
 %% 40
                 a, 4 cis a, 8 [ g ] f 4 _~  |
-                f 2. r4  |
+                f 2. r4 
                 \bar "|."
             } % Voice
 
@@ -310,7 +310,7 @@ globalTempo = {
                 d, 2. 
                 % warning: bar too short, padding with rests
                 % 153600 + 2880 < 157440  &&  3/4 < 4/4
-                r4  |
+                r4 
                 \bar "|."
             } % Voice
 

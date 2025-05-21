@@ -53,6 +53,12 @@ Included in this release...
   * Fix record input connections not happening.  [38d50e757f]
   * Fix "toggle repeat" not handling mixed state in undo.  Bug #1722.
     [1128116d13]
+  * Fix transport dialog time/bars not updating on Tempo and Time
+    Signature changes prior to the pointer position.  [66401b64fc]
+  * EventFilterDialog: Fix invalid read with "shortest" duration.
+    [8068e139ba]
+  * Fix LilyPond doesn't draw the repeat double bar when there are
+    alternative endings.  Bug #1676.  [2e4b03092a]
 
 ===== New Features =====
 

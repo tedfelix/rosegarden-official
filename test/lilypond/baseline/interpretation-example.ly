@@ -44,7 +44,7 @@ globalTempo = {
                 d'' 8 [ e'' f'' g'' ] a'' [ b'' c''' -\ff \! b'' \> ] 
                 % warning: overlong bar truncated here |
                 a'' 8 [ g'' f'' e'' ] d'' [ c'' b' a' ]  |
-                g' 8 [ f' e' d' ] c' 2 -\pp \!  |
+                g' 8 [ f' e' d' ] c' 2 -\pp \! 
                 \bar "|."
             } % Voice
 
@@ -74,7 +74,7 @@ globalTempo = {
                 d'' 8 -\tenuto [ e'' -\tenuto f'' -\tenuto g'' -\tenuto ] a'' [ b'' c''' -\ff -\accent \! b'' \> ] 
                 % warning: overlong bar truncated here |
                 a'' 8 -\tenuto [ g'' -\tenuto f'' -\staccato e'' -\staccato ] d'' -\tenuto [ c'' -\tenuto b' -\staccato a' -\staccato ]  |
-                g' 8 -\staccato [ f' -\staccato e' -\staccato d' -\staccato ] c' 2 -\pp \!  |
+                g' 8 -\staccato [ f' -\staccato e' -\staccato d' -\staccato ] c' 2 -\pp \! 
                 \bar "|."
             } % Voice
 

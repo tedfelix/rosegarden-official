@@ -190,7 +190,7 @@ globalTempo = {
 %% 130
                 < d''' c''' > 8 -\tenuto r b'' -\tenuto-\staccato r64 r a'' 2 -\tenuto 
                 % warning: overlong bar truncated here |
-                \skip 2 r2  |
+                \skip 2 r2 
                 \bar "|."
             } % Voice
 
@@ -399,7 +399,7 @@ globalTempo = {
                 r32  |
 %% 130
                 \skip 2 \skip 4 \skip 8 \skip 16 \skip 32 r32 
-                % warning: overlong bar truncated here |
+                % warning: overlong bar truncated here
             } % Voice
 
             % End of segment Kalimba (recorded) (split)
@@ -437,7 +437,7 @@ globalTempo = {
 %% 10
                     g' 8 [ d'' b' fis'' ] d'' [ b' fis'' d'' ]  |
                     g' 8 [ d'' b' f'' ] d'' [ b' f'' d'' ]  |
-                    g' 8 [ d'' b' e'' ] d'' [ b' e'' d'' ]  |
+                    g' 8 [ d'' b' e'' ] d'' [ b' e'' d'' ] 
                 } % close repeat
             } % Voice
 
@@ -462,7 +462,7 @@ globalTempo = {
                 c' 8 [ g' e' a' ] g' [ e' a' g' ]  |
                 g' 8 [ d'' b' g'' ] d'' [ b' g'' d'' ]  |
 %% 130
-                g' 8 [ d'' b' fis'' ] d'' [ b' fis'' d'' ]  |
+                g' 8 [ d'' b' fis'' ] d'' [ b' fis'' d'' ] 
             } % Voice
 
             % End of segment Hammered Dulcimer (left pan) (step recorded) (split)
@@ -500,7 +500,7 @@ globalTempo = {
 %% 10
                     g 8 [ d' b fis' ] d' [ b fis' d' ]  |
                     g 8 [ d' b f' ] d' [ b f' d' ]  |
-                    g 8 [ d' b e' ] d' [ b e' d' ]  |
+                    g 8 [ d' b e' ] d' [ b e' d' ] 
                 } % close repeat
             } % Voice
 
@@ -525,7 +525,7 @@ globalTempo = {
                 \stemDown c'' 8 [ g'' e'' a'' ] g'' [ e'' a'' g'' ] \stemNeutral  |
                 g 8 [ d' b g' ] d' [ b g' d' ]  |
 %% 130
-                g 8 [ d' b fis' ] d' [ b fis' d' ]  |
+                g 8 [ d' b fis' ] d' [ b fis' d' ] 
             } % Voice
 
             % End of segment Hammered Dulcimer (right pan) (copied , transposed, and doctored) (split)
@@ -561,7 +561,7 @@ globalTempo = {
 %% 10
                 g,, 4. -\tenuto d, g,, 8 -\staccato r  |
                 g,, 4. -\tenuto d, -\tenuto g,, 8 -\staccato r  |
-                g,, 4 -\tenuto a,, -\tenuto b,, -\tenuto c, -\tenuto  |
+                g,, 4 -\tenuto a,, -\tenuto b,, -\tenuto c, -\tenuto 
             } % Voice
 
             % End of segment Intro Bass (recorded)
@@ -587,7 +587,7 @@ globalTempo = {
                     g,, 4. -\tenuto d, -\tenuto g,, 8 -\staccato r  |
                     g,, 4. -\tenuto d, -\tenuto g,, 8 -\staccato r  |
                     g,, 4. d, -\tenuto g,, 8 -\staccato r  |
-                    g,, 4 -\tenuto a,, -\tenuto b,, -\tenuto c, -\tenuto  |
+                    g,, 4 -\tenuto a,, -\tenuto b,, -\tenuto c, -\tenuto 
                 } % close repeat
             } % Voice
 
@@ -612,7 +612,7 @@ globalTempo = {
                 g,, 4. -\tenuto d, -\tenuto g,, 8 -\staccato r  |
 %% 130
                 g,, 4. -\tenuto d, -\tenuto g,, 8 -\staccato r8 r64 
-                % warning: overlong bar truncated here |
+                % warning: overlong bar truncated here
             } % Voice
 
             % End of segment Looping Bass (recorded) (split)
@@ -640,7 +640,7 @@ globalTempo = {
                     cis'' 16 -\staccato cis'' d'' -\tenuto cis'' cis'' cis'' d'' cis'' -\staccato 
                     % warning: bar too short, padding with rests
                     % 0 + 1920 < 3840  &&  1/2 < 4/4
-                    r2  |
+                    r2 
                 } % close repeat
             } % Voice
 
@@ -657,7 +657,7 @@ globalTempo = {
                     cis'' 16 -\staccato cis'' d'' -\tenuto cis'' cis'' cis'' d'' cis'' -\staccato 
                     % warning: bar too short, padding with rests
                     % 491520 + 1920 < 495360  &&  1/2 < 4/4
-                    r2  |
+                    r2 
                 } % close repeat
             } % Voice
 
@@ -670,7 +670,7 @@ globalTempo = {
 
                 \skip 1*130 
 %% 130
-                cis'' 16 -\staccato r cis'' r d'' -\tenuto r cis'' r cis'' r cis'' r d'' r cis'' -\staccato r  |
+                cis'' 16 -\staccato r cis'' r d'' -\tenuto r cis'' r cis'' r cis'' r d'' r cis'' -\staccato r 
             } % Voice
 
             % End of segment Standard (split)
@@ -822,7 +822,7 @@ globalTempo = {
                     ees'' 8 -\staccato r r4 r2  |
                     r2 r4 r8 ees'' 16 r  |
 %% 105
-                    ees'' 32. -\tenuto r64 r16 r8 r4 r2  |
+                    ees'' 32. -\tenuto r64 r16 r8 r4 r2 
                 } % close repeat
             } % Voice
 
@@ -867,7 +867,7 @@ globalTempo = {
                 % warning: bar too short, padding with rests
                 % 495360 + 1920 < 499200  &&  1/2 < 4/4
                 r2  |
-                c''' 2 r  |
+                c''' 2 r 
                 \bar "|."
             } % Voice
 
@@ -1032,7 +1032,7 @@ globalTempo = {
                 \times 2/3 { g 8 -\staccato [ fis -\staccato ] r } \times 2/3 { e [ fis -\staccato ] r } r2  |
                 r2 r  |
 %% 130
-                r2 r  |
+                r2 r 
             } % Voice
 
             % End of segment Vibes (w) (Roland) (recorded)

@@ -209,10 +209,10 @@ private:
                                    std::ofstream &str);
 
     std::pair<int,int> writeSkip(const TimeSignature &timeSig,
-				 timeT offset,
-				 timeT duration,
-				 bool useRests,
-				 std::ofstream &);
+                                 timeT offset,
+	                             timeT duration,
+                                 bool useRests,
+                                 std::ofstream &);
 
     /*
      * Handle LilyPond directive.  Returns true if the event was a directive,

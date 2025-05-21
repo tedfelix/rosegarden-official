@@ -40,7 +40,7 @@ globalTempo = {
                  s4*0^\markup \fret-diagram #"6-o;5-7;4-6;3-7;2-5;1-o;" R1  |
 %% 5
                  s4*0^\markup \fret-diagram #"6-x;5-o;4-o;3-2;2-1;1-2;" R1  |
-                 s4*0^\markup \fret-diagram #"6-x;5-o;4-2;3-o;2-2;1-o;" R1*3  |
+                 s4*0^\markup \fret-diagram #"6-x;5-o;4-2;3-o;2-2;1-o;" R1*3 
                 \bar "|."
             } % Voice
 

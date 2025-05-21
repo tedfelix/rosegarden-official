@@ -123,7 +123,7 @@ globalTempo = {
 %% 60
                 gis' 2. ^\markup { \bold "rallent." } -\f -\accent \! ^( fis' 4 )  |
                 a' 1 _\markup { \bold \italic "dim." } _~  |
-                 << a' 1 -\fermata { s2 \> s2 \! } >>  |
+                 << a' 1 -\fermata { s2 \> s2 \! } >> 
                 \bar "|."
             } % Voice
 
@@ -229,7 +229,7 @@ globalTempo = {
 %% 60
                     r4 < a' cis'' a'' > -\f < a'' a''' cis''' > 2  |
                     r2 < fis' fis'' cis'' a' > -\p  |
-                    < a cis' fis' > 1 -\fermata  |
+                    < a cis' fis' > 1 -\fermata 
                     \bar "|."
                 } % Voice
 
@@ -333,7 +333,7 @@ globalTempo = {
 %% 60
                     r4 < fis, cis a > < a' fis cis' > 2  |
                     r2 < a fis cis' >  |
-                    < fis,, fis, > 1 -\fermata  |
+                    < fis,, fis, > 1 -\fermata 
                     \bar "|."
                 } % Voice
 

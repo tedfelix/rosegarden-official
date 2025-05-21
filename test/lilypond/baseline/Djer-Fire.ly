@@ -43,7 +43,7 @@ globalTempo = {
                 \repeat unfold 3 {
                     \clef "treble_8"
                     b 16 c' e' 8 g' [ e' ] c' ) [ < g' c'' > 16 _~ < a' c'' > ] g' 8 [ e' ] g' [ c'' ) ] g 16 a c' 8 e' [ c' ] a ) [ < d' b' > ] < e' c'' > [ a ) ]  |
-                    e 16 f a 8 c' [ a ] f ) [ < c' f' > 16 _~ < d' f' > ] c' 8 [ a ] c' [ f' ) ] f 16 g b 8 d' [ b ] g ) [ < c' a' > ] < d' b' > [ g ) ]  |
+                    e 16 f a 8 c' [ a ] f ) [ < c' f' > 16 _~ < d' f' > ] c' 8 [ a ] c' [ f' ) ] f 16 g b 8 d' [ b ] g ) [ < c' a' > ] < d' b' > [ g ) ] 
                 } % close repeat
             } % Voice
 
@@ -57,7 +57,7 @@ globalTempo = {
                 \skip 4.*42 
                 \clef "treble_8"
                 a 64 _~ [ < a c' > _~ < a e' c' > _~ < a a' e' c' > _~ ] < e' a' a c' > 8. _~ < a' c' e' a > 4 _~ < a' c' e' g > < e a > 64 _~ [ < e c' a > _~ < e c' e' a > _~ < e a' c' e' a > _~ ] < a' e' e c' a > 8. _~ < a' e' c' e a > 4 _~ < a' g, d g c' e' > < a, a e > 64 _~ [ < a, a c' e > _~ < a, a e' c' e > _~ < a, a' a e' c' e > _~ ] < e' a' a, a c' e > 8. _~ < a' a, a c' e' e > 4 _~ < a' a, e a c' e' >  |
-                r4. r r r r r  |
+                r4. r r r r r 
             } % Voice
 
             % End of segment SBLive #3 (copied) (copied)
@@ -72,7 +72,7 @@ globalTempo = {
 %% 10
                     \clef "treble_8"
                     b 16 c' e' 8 g' [ e' ] c' ) [ < g' c'' > 16 _~ < a' c'' > ] g' 8 [ e' ] g' [ c'' ) ] g 16 a c' 8 e' [ c' ] a ) [ < d' b' > ] < e' c'' > [ a ) ]  |
-                    e 16 f a 8 c' [ a ] f ) [ < c' f' > 16 _~ < d' f' > ] c' 8 [ a ] c' [ f' ) ] f 16 g b 8 d' [ b ] g ) [ < c' a' > ] < d' b' > [ g ) ]  |
+                    e 16 f a 8 c' [ a ] f ) [ < c' f' > 16 _~ < d' f' > ] c' 8 [ a ] c' [ f' ) ] f 16 g b 8 d' [ b ] g ) [ < c' a' > ] < d' b' > [ g ) ] 
                 } % close repeat
             } % Voice
 
@@ -86,7 +86,7 @@ globalTempo = {
                 \skip 4.*90 
                 \clef "treble_8"
                 a 64 _~ [ < a c' > _~ < a e' c' > _~ < a a' e' c' > _~ ] < e' a' a c' > 8. _~ < a' c' e' a > 4 _~ < a' c' e' g > < e a > 64 _~ [ < e c' a > _~ < e c' e' a > _~ < e a' c' e' a > _~ ] < a' e' e c' a > 8. _~ < a' e' c' e a > 4 _~ < a' g, d g c' e' > < a, a e > 64 _~ [ < a, a c' e > _~ < a, a e' c' e > _~ < a, a' a e' c' e > _~ ] < e' a' a, a c' e > 8. _~ < a' a, a c' e' e > 4 _~ < a' a, e a c' e' >  |
-                r4. r r r r r  |
+                r4. r r r r r 
             } % Voice
 
             % End of segment SBLive #3
@@ -107,7 +107,7 @@ globalTempo = {
                 < d g, > 8 \times 2/3 { g' 64 _~ [ < d' g' > _~ < d' g' b > _~ ] } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d g b > _~ ] } < b g d > 16. _~ < b g d > 8 g, g, < d g, > \times 2/3 { g' 64 _~ [ < d' g' > _~ < d' g' b > _~ ] } < d' g' b > 16. _~ < g' d' b > 8 < g d g, > \times 2/3 { d 64 _~ [ < d g > _~ < d b g > _~ ] } < b g d > 16. _~ < b g d > 8 g, 4 e,  |
                 f, 8 _~ [ < c f, > ] < c' a > [ f ] < c f > [ < a c' > ] f [ < f c > _~ ] < a f c > [ c _~ ] < f c > _~ [ < a f c > ] < f' c' > [ a ] f < g c' > 32 _~ < a c' > 16. f 8 [ f, 16 fis, ]  |
 %% 25
-                g, 8 _~ [ < g, d > ] < b d' > [ g ] < d g > [ < b d' > ] g [ < d g > _~ ] < d b g > [ d _~ ] < d g > _~ [ < d b g > ] < g' d' > [ b ] g < d' a > 32 _~ < d' b > 16. g 8 [ g, 16 a, ]  |
+                g, 8 _~ [ < g, d > ] < b d' > [ g ] < d g > [ < b d' > ] g [ < d g > _~ ] < d b g > [ d _~ ] < d g > _~ [ < d b g > ] < g' d' > [ b ] g < d' a > 32 _~ < d' b > 16. g 8 [ g, 16 a, ] 
             } % Voice
 
             % End of segment Nylon Guitar
@@ -121,7 +121,7 @@ globalTempo = {
                 \repeat unfold 3 {
                     \clef "treble_8"
                     b 16 ^( c' e' 8 g' [ e' ] c' ) [ < g' c'' > 16 ^( _~ < a' c'' > ] g' 8 [ e' ] g' [ c'' ) ] g 16 ^( a c' 8 e' [ c' ] a ) [ < d' b' > ^( ] < e' c'' > [ a ) ]  |
-                    e 16 ^( f a 8 c' [ a ] f ) [ < c' f' > 16 ^( _~ < d' f' > ] c' 8 [ a ] c' [ f' ) ] f 16 ^( g b 8 d' [ b ] g ) [ < c' a' > ^( ] < d' b' > [ g ) ]  |
+                    e 16 ^( f a 8 c' [ a ] f ) [ < c' f' > 16 ^( _~ < d' f' > ] c' 8 [ a ] c' [ f' ) ] f 16 ^( g b 8 d' [ b ] g ) [ < c' a' > ^( ] < d' b' > [ g ) ] 
                 } % close repeat
             } % Voice
 
@@ -135,7 +135,7 @@ globalTempo = {
                 \skip 4.*186 
                 \clef "treble_8"
                 a 64 _~ [ < a c' > _~ < a e' c' > _~ < a a' e' c' > _~ ] < e' a' a c' > 8. _~ < a' c' e' a > 4 _~ < a' c' e' g > < e a > 64 _~ [ < e c' a > _~ < e c' e' a > _~ < e a' c' e' a > _~ ] < a' e' e c' a > 8. _~ < a' e' c' e a > 4 _~ < a' g, d g c' e' > < a, a e > 64 _~ [ < a, a c' e > _~ < a, a e' c' e > _~ < a, a' a e' c' e > _~ ] < e' a' a, a c' e > 8. _~ < a' a, a c' e' e > 4 _~ < a' a, e a c' e' >  |
-                r4. r r r r r  |
+                r4. r r r r r 
             } % Voice
 
             % End of segment SBLive #3 (copied)
@@ -161,7 +161,7 @@ globalTempo = {
                 \repeat unfold 3 {
                     \clef "treble"
                     r8 r < c'' g' e' > r r r r < c'' g' e' > r r r r < e' a' c' > r r < c' a' e' > r < a' e' c' >  |
-                    r8 r < f' a' c' > r r r r < f' a' c' > r r r r < b' g' d' > r r < d' b' g' > r < c'' a' d' >  |
+                    r8 r < f' a' c' > r r r r < f' a' c' > r r r r < b' g' d' > r r < d' b' g' > r < c'' a' d' > 
                 } % close repeat
             } % Voice
 
@@ -174,7 +174,7 @@ globalTempo = {
 
                 \skip 4.*42 
                 r4. r r r r r  |
-                r8 r g' < e'' c'' > 4 c'' 8 r r r < e'' c'' > 4 c'' 8 [ g' ] a' _~ [ < a' c'' > ] < e'' c'' > 4 c'' 8  |
+                r8 r g' < e'' c'' > 4 c'' 8 r r r < e'' c'' > 4 c'' 8 [ g' ] a' _~ [ < a' c'' > ] < e'' c'' > 4 c'' 8 
             } % Voice
 
             % End of segment SBLive #3 (copied) (copied) (copied)
@@ -189,7 +189,7 @@ globalTempo = {
 %% 10
                     \clef "treble"
                     r8 r < c'' g' e' > r r r r < c'' g' e' > r r r r < e' a' c' > r r < c' a' e' > r < a' e' c' >  |
-                    r8 r < f' a' c' > r r r r < f' a' c' > r r r r < b' g' d' > r r < d' b' g' > r < c'' a' d' >  |
+                    r8 r < f' a' c' > r r r r < f' a' c' > r r r r < b' g' d' > r r < d' b' g' > r < c'' a' d' > 
                 } % close repeat
             } % Voice
 
@@ -202,7 +202,7 @@ globalTempo = {
 
                 \skip 4.*90 
                 r4. r r r r r  |
-                r8 r g' < e'' c'' > 4 c'' 8 r r r < e'' c'' > 4 c'' 8 [ g' ] a' _~ [ < a' c'' > ] < e'' c'' > 4 c'' 8  |
+                r8 r g' < e'' c'' > 4 c'' 8 r r r < e'' c'' > 4 c'' 8 [ g' ] a' _~ [ < a' c'' > ] < e'' c'' > 4 c'' 8 
             } % Voice
 
             % End of segment SBLive #3 (copied) (copied) (copied)
@@ -222,7 +222,7 @@ globalTempo = {
                 r8 r < g' b d' > 4 r8 r < g' b d' > 4 r8 r < g' b d' > 4 r8 r < g' b d' > 4 < fis' cis' >  |
                 < f' a c' > 4 < f' a c' > 4. < f' a c' > 4 < f' a c' > 4. < f' a c' > 4 < f' a c' > 4. < f' a c' > 4 < fis' cis' bes > 8  |
 %% 25
-                < g' d' b > 4 < g' d' b > 4. < g' d' b > 4 < g' d' b > 4. < g' d' b > 4 < g' d' b > 4. < g' d' b > 4 _~ < g' d' c' > 8  |
+                < g' d' b > 4 < g' d' b > 4. < g' d' b > 4 < g' d' b > 4. < g' d' b > 4 < g' d' b > 4. < g' d' b > 4 _~ < g' d' c' > 8 
             } % Voice
 
             % End of segment SBLive #3
@@ -236,7 +236,7 @@ globalTempo = {
                 \repeat unfold 3 {
                     \clef "treble"
                     r8 r < c'' g' e' > r r r r < c'' g' e' > r r r r < e' a' c' > r r < c' a' e' > r < a' e' c' >  |
-                    r8 r < f' a' c' > r r r r < f' a' c' > r r r r < b' g' d' > r r < d' b' g' > r < c'' a' d' >  |
+                    r8 r < f' a' c' > r r r r < f' a' c' > r r r r < b' g' d' > r r < d' b' g' > r < c'' a' d' > 
                 } % close repeat
             } % Voice
 
@@ -249,7 +249,7 @@ globalTempo = {
 
                 \skip 4.*186 
                 r4. r r r r r  |
-                r8 r g' < e'' c'' > 4 c'' 8 r r r < e'' c'' > 4 c'' 8 [ g' ] a' _~ [ < a' c'' > ] < e'' c'' > 4 c'' 8  |
+                r8 r g' < e'' c'' > 4 c'' 8 r r r < e'' c'' > 4 c'' 8 [ g' ] a' _~ [ < a' c'' > ] < e'' c'' > 4 c'' 8 
             } % Voice
 
             % End of segment SBLive #3 (copied) (copied)
@@ -260,7 +260,7 @@ globalTempo = {
                 \override MultiMeasureRest.expand-limit = 1
 
                 \skip 4.*198 
-                \times 2/3 { c' 64 _~ [ < c' g' > _~ < c' g' c'' > _~ ] } \times 2/3 { < c' g' c'' e'' > _~ [ < c' g' c'' e'' g'' > _~ < c' g' c'' e'' g'' c''' > _~ ] } < c''' g'' e'' c'' g' c' > 1 r16 r4. r r  |
+                \times 2/3 { c' 64 _~ [ < c' g' > _~ < c' g' c'' > _~ ] } \times 2/3 { < c' g' c'' e'' > _~ [ < c' g' c'' e'' g'' > _~ < c' g' c'' e'' g'' c''' > _~ ] } < c''' g'' e'' c'' g' c' > 1 r16 r4. r r 
             } % Voice
 
             % End of segment Bright Piano
@@ -284,7 +284,7 @@ globalTempo = {
 
                 \skip 4.*42 
                 r4. r r r r r  |
-                d' 8 [ e' _~ ] < e' g' > 2 g' 8 [ a' _~ ] < c'' a' > _~ < c'' a' > 4 r8 d [ e _~ ] < g e > 2  |
+                d' 8 [ e' _~ ] < e' g' > 2 g' 8 [ a' _~ ] < c'' a' > _~ < c'' a' > 4 r8 d [ e _~ ] < g e > 2 
             } % Voice
 
             % End of segment SBLive #3 (copied)
@@ -296,7 +296,7 @@ globalTempo = {
 
                 \skip 4.*90 
                 r4. r r r r r  |
-                d' 8 [ e' _~ ] < e' g' > 2 g' 8 [ a' _~ ] < c'' a' > _~ < c'' a' > 4 r8 d' [ e' _~ ] < g' e' > 2  |
+                d' 8 [ e' _~ ] < e' g' > 2 g' 8 [ a' _~ ] < c'' a' > _~ < c'' a' > 4 r8 d' [ e' _~ ] < g' e' > 2 
             } % Voice
 
             % End of segment SBLive #3 (copied)
@@ -308,7 +308,7 @@ globalTempo = {
 
                 \skip 4.*186 
                 r4. r r r r r  |
-                d' 8 [ e' _~ ] < e' g' > 2 g' 8 [ a' _~ ] < c'' a' > _~ < c'' a' > 4 r8 d [ e _~ ] < g e > 2  |
+                d' 8 [ e' _~ ] < e' g' > 2 g' 8 [ a' _~ ] < c'' a' > _~ < c'' a' > 4 r8 d [ e _~ ] < g e > 2 
             } % Voice
 
             % End of segment SBLive #3
@@ -341,7 +341,7 @@ globalTempo = {
 %% 15
                 a' 4 r8 r4. r r8 b' 4 b' g' g'  |
                 g' 2. _~ g' 8 [ a' _~ ] a' 2. _~ a' 2  |
-                r4. r r r r r  |
+                r4. r r r r r 
             } % Voice
 
             % End of segment SBLive #5 (copied)
@@ -361,7 +361,7 @@ globalTempo = {
                 r2 r8 a' c'' 4 e'' 8 g'' 4 e'' 8 e'' 2.  |
                 r4. r c'' 4 c'' 8 b' 4 a' 8 _~ a' 4. r  |
 %% 25
-                r4. r r2 c''' 8 [ c''' ] c''' [ a'' ] g'' [ a'' ] c''' 4  |
+                r4. r r2 c''' 8 [ c''' ] c''' [ a'' ] g'' [ a'' ] c''' 4 
             } % Voice
 
             % End of segment Campbells Violin
@@ -381,7 +381,7 @@ globalTempo = {
                 e'' 8 c'' 4 r4. r4 g' a' c'' r8 r c'' a' _~  |
                 a' 4 r8 r4. r r8 b' 4 b' g' g'  |
                 g' 2. _~ g' 8 [ a' _~ ] a' 2. _~ a' 2  |
-                r4. r r r r r  |
+                r4. r r r r r 
             } % Voice
 
             % End of segment SBLive #5
@@ -413,7 +413,7 @@ globalTempo = {
                 c, 4 c, 4. e, 8 [ f, ] g, 4. a,, 4 a,, 4. a,, 8 [ c, ] a,,  |
                 f,, 4 f,, 4. f,, 4 r8 r r g,, 4 g,, 4. g,, 4 a,, 8  |
                 a,, \breve _~ a,, 4  |
-                a,, \breve r8 r  |
+                a,, \breve r8 r 
             } % Voice
 
             % End of segment MIDI soundcard synth #4 (split) (split) (split)
@@ -440,7 +440,7 @@ globalTempo = {
                 % 120960 + 7200 < 129600  &&  15/8 < 18/8
                 r4.  |
                 a,, \breve _~ a,, 4  |
-                a,, \breve r8 r  |
+                a,, \breve r8 r 
             } % Voice
 
             % End of segment MIDI soundcard synth #4 (split) (split) (split)
@@ -476,7 +476,7 @@ globalTempo = {
                 % 259200 + 7200 < 267840  &&  15/8 < 18/8
                 r4.  |
                 a,, \breve _~ a,, 4  |
-                a,, \breve r8 r  |
+                a,, \breve r8 r 
             } % Voice
 
             % End of segment MIDI soundcard synth #4 (split) (split) (split)
@@ -488,7 +488,7 @@ globalTempo = {
 
                 \skip 4.*198 
                 \clef "bass"
-                c 32 [ g, ] c, _~ c, 1 r32 r4. r r  |
+                c 32 [ g, ] c, _~ c, 1 r32 r4. r r 
             } % Voice
 
             % End of segment PizzicatoStrings
@@ -520,7 +520,7 @@ globalTempo = {
                 c, 4 c, 4. e, 8 [ f, ] g, 4. a,, 4 a,, 4. a,, 8 [ c, ] a,,  |
                 f,, 4 f,, 4. f,, 4 r8 r r g,, 4 g,, 4. g,, 4 a,, 8  |
                 a,, \breve _~ a,, 4  |
-                a,, \breve r8 r  |
+                a,, \breve r8 r 
             } % Voice
 
             % End of segment SBLive #7 (copied)
@@ -541,7 +541,7 @@ globalTempo = {
 %% 15
                 f,, 4 f,, 4. f,, 4 r8 r r g,, 4 g,, 4. g,, 4 a,, 8  |
                 a,, \breve _~ a,, 4  |
-                a,, \breve r8 r  |
+                a,, \breve r8 r 
             } % Voice
 
             % End of segment SBLive #7 (copied) (split)
@@ -562,7 +562,7 @@ globalTempo = {
                 g,, 8 g,, 4 fis,, 8 g,, 4 r8 r g,, g,, 4 fis,, 8 g,, 4 r8 r aes,, 4  |
                 f,, 4 f,, e,, 8 f,, 4 f,, e,, 8 f,, 4 f,, e,, 8 f,, 4 fis,, 8  |
 %% 25
-                g,, 4 g,, fis,, 8 g,, 4 g,, fis,, 8 g,, 4 g,, fis,, 8 g,, 4 aes,, 8  |
+                g,, 4 g,, fis,, 8 g,, 4 g,, fis,, 8 g,, 4 g,, fis,, 8 g,, 4 aes,, 8 
             } % Voice
 
             % End of segment SBLive #7 (copied) (split) (split)
@@ -582,7 +582,7 @@ globalTempo = {
                 c, 4 c, 4. e, 8 [ f, ] g, 4. a,, 4 a,, 4. a,, 8 [ c, ] a,,  |
                 f,, 4 f,, 4. f,, 4 r8 r r g,, 4 g,, 4. g,, 4 a,, 8  |
                 a,, \breve _~ a,, 4  |
-                a,, \breve r8 r  |
+                a,, \breve r8 r 
             } % Voice
 
             % End of segment SBLive #7
@@ -594,7 +594,7 @@ globalTempo = {
 
                 \skip 4.*198 
                 \clef "bass"
-                c 16 [ g, ] c, _~ c, 1 r16 r8 r r4. r  |
+                c 16 [ g, ] c, _~ c, 1 r16 r8 r r4. r 
             } % Voice
 
             % End of segment +++Slap Bass 2
@@ -619,7 +619,7 @@ globalTempo = {
                 \skip 4.*6 
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied) (copied)
@@ -633,7 +633,7 @@ globalTempo = {
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
 %% 5
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied) (copied)
@@ -646,7 +646,7 @@ globalTempo = {
                 \skip 4.*30 
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied) (copied)
@@ -659,7 +659,7 @@ globalTempo = {
                 \skip 4.*42 
                 \clef "bass"
                 cis 4 fis, fis, aes, r8 fis, fis, 4 aes, fis, 8 r fis, 4  |
-                cis 4 fis, 8 r fis, 4 aes, r8 fis, fis, 4 aes, fis, a, 8 [ a, ]  |
+                cis 4 fis, 8 r fis, 4 aes, r8 fis, fis, 4 aes, fis, a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied)
@@ -673,7 +673,7 @@ globalTempo = {
 %% 10
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied) (copied)
@@ -686,7 +686,7 @@ globalTempo = {
                 \skip 4.*66 
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied) (copied)
@@ -700,7 +700,7 @@ globalTempo = {
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
 %% 15
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied) (copied)
@@ -713,7 +713,7 @@ globalTempo = {
                 \skip 4.*90 
                 \clef "bass"
                 cis 4 fis, fis, aes, r8 fis, fis, 4 aes, fis, 8 r fis, 4  |
-                cis 4 fis, 8 r fis, 4 aes, r8 fis, fis, 4 aes, fis, a, 8 [ a, ]  |
+                cis 4 fis, 8 r fis, 4 aes, r8 fis, fis, 4 aes, fis, a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied)
@@ -726,7 +726,7 @@ globalTempo = {
                 \skip 4.*102 
                 \clef "bass"
                 cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
-                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
+                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ] 
             } % Voice
 
             % End of segment SBLive #9 (copied)
@@ -740,7 +740,7 @@ globalTempo = {
 %% 20
                 \clef "bass"
                 cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
-                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
+                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ] 
             } % Voice
 
             % End of segment SBLive #9 (copied)
@@ -753,7 +753,7 @@ globalTempo = {
                 \skip 4.*126 
                 \clef "bass"
                 cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
-                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
+                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ] 
             } % Voice
 
             % End of segment SBLive #9 (copied)
@@ -767,7 +767,7 @@ globalTempo = {
                 \clef "bass"
                 cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
 %% 25
-                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ]  |
+                cis 4 aes, aes, aes, < a' aes, > aes, aes, aes, a' 8 [ aes, ] 
             } % Voice
 
             % End of segment SBLive #9
@@ -780,7 +780,7 @@ globalTempo = {
                 \skip 4.*150 
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied)
@@ -793,7 +793,7 @@ globalTempo = {
                 \skip 4.*162 
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied)
@@ -807,7 +807,7 @@ globalTempo = {
 %% 30
                 \clef "bass"
                 cis 4 < fis, a' > fis, aes, a' 8 [ fis, ] fis, 4 aes, fis, 8 [ a' ] fis, 4  |
-                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ]  |
+                cis 4 fis, 8 a' fis, 4 aes, a' 8 fis, fis, 4 aes, < a' fis, > a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split) (copied)
@@ -820,7 +820,7 @@ globalTempo = {
                 \skip 4.*186 
                 \clef "bass"
                 cis 4 fis, fis, aes, r8 fis, fis, 4 aes, fis, 8 r fis, 4  |
-                cis 4 fis, 8 r fis, 4 aes, r8 fis, fis, 4 aes, fis, a, 8 [ a, ]  |
+                cis 4 fis, 8 r fis, 4 aes, r8 fis, fis, 4 aes, fis, a, 8 [ a, ] 
             } % Voice
 
             % End of segment SBLive #9 (split)
@@ -832,7 +832,7 @@ globalTempo = {
 
                 \skip 4.*198 
                 \clef "bass"
-                cis 1 r8 r4. r r  |
+                cis 1 r8 r4. r r 
             } % Voice
 
             % End of segment SBLive #9
@@ -857,7 +857,7 @@ globalTempo = {
                 \time 18/8
                 
                 \clef "bass"
-                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 [ d, d, ] } d, 8 d, c c b, b,  |
+                r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 [ d, d, ] } d, 8 d, c c b, b, 
             } % Voice
 
             % End of segment Power (copied)
@@ -870,7 +870,7 @@ globalTempo = {
                 \skip 4.*6 
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied) (copied)
@@ -884,7 +884,7 @@ globalTempo = {
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
 %% 5
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied) (copied)
@@ -897,7 +897,7 @@ globalTempo = {
                 \skip 4.*30 
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied) (copied)
@@ -910,7 +910,7 @@ globalTempo = {
                 \skip 4.*42 
                 \clef "bass"
                 b,, 4 r r d, r c r8 d, r d, r d,  |
-                d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ]  |
+                d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied)
@@ -924,7 +924,7 @@ globalTempo = {
 %% 10
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied) (copied)
@@ -937,7 +937,7 @@ globalTempo = {
                 \skip 4.*66 
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied) (copied)
@@ -951,7 +951,7 @@ globalTempo = {
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
 %% 15
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied) (copied)
@@ -964,7 +964,7 @@ globalTempo = {
                 \skip 4.*90 
                 \clef "bass"
                 b,, 4 r r d, r c r8 d, r d, r d,  |
-                d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ]  |
+                d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied)
@@ -977,7 +977,7 @@ globalTempo = {
                 \skip 4.*102 
                 \clef "bass"
                 b,, 4 r8 c, d, 4 r8 c, b,, 4 r8 c, d, 4 r8 c, < b, e, > [ a, ]  |
-                b,, 4 r8 c, d, 4 r8 c, b,, 4 r8 c, d, 4 r8 c, < a, e, > [ g, ]  |
+                b,, 4 r8 c, d, 4 r8 c, b,, 4 r8 c, d, 4 r8 c, < a, e, > [ g, ] 
             } % Voice
 
             % End of segment Standard (copied)
@@ -991,7 +991,7 @@ globalTempo = {
 %% 20
                 \clef "bass"
                 b,, 8 c, r c, d, 4 r8 c, b,, c, r c, d, 4 r8 c, < b, e, > [ a, ]  |
-                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ]  |
+                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ] 
             } % Voice
 
             % End of segment Standard (copied)
@@ -1004,7 +1004,7 @@ globalTempo = {
                 \skip 4.*126 
                 \clef "bass"
                 b,, 8 c, r c, d, 4 r8 c, b,, c, r c, d, 4 r8 c, < b, e, > [ a, ]  |
-                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ]  |
+                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ] 
             } % Voice
 
             % End of segment Standard (copied)
@@ -1018,7 +1018,7 @@ globalTempo = {
                 \clef "bass"
                 b,, 8 c, r c, d, 4 r8 c, b,, c, r c, d, 4 r8 c, < b, e, > [ a, ]  |
 %% 25
-                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ]  |
+                c, 8 b,, r c, d, 4 r8 c, c, b,, r c, d, 4 r8 c, < a, e, > [ g, ] 
             } % Voice
 
             % End of segment Standard
@@ -1031,7 +1031,7 @@ globalTempo = {
                 \skip 4.*150 
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied)
@@ -1044,7 +1044,7 @@ globalTempo = {
                 \skip 4.*162 
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied)
@@ -1058,7 +1058,7 @@ globalTempo = {
 %% 30
                 \clef "bass"
                 < b,, d, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
-                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ]  |
+                < d, b,, > 8 -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ < b,, e, > ] < b,, d, > -\accent [ c, ] c, [ b,, ] c, [ b,, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split) (copied)
@@ -1071,7 +1071,7 @@ globalTempo = {
                 \skip 4.*186 
                 \clef "bass"
                 b,, 4 r r d, r c r8 d, r d, r d,  |
-                d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ]  |
+                d, 8 [ d, ] d, 4 r8 c 4 c c 8 c 4 c 8 [ c ] b, [ b, ] a, [ a, ] 
             } % Voice
 
             % End of segment MIDI soundcard synth #10[D] (split) (split)
@@ -1085,7 +1085,7 @@ globalTempo = {
                 \clef "bass"
                 r8 d, d, [ d, ] d, 4 r d, r8 \times 2/3 { d, 16 [ d, d, ] } d, 8 d, c c b, b,  |
 %% 35
-                < a, b,, d, cis > 4 r8 r4. r r  |
+                < a, b,, d, cis > 4 r8 r4. r r 
                 \bar "|."
             } % Voice
 

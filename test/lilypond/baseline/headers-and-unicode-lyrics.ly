@@ -52,7 +52,7 @@ globalTempo = {
                 c' 4 d'  |
                 e' 4 d'  |
                 c' 2 _~  |
-                c' 2  |
+                c' 2 
                 \bar "|."
             } % Voice
 

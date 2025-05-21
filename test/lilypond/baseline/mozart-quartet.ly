@@ -203,7 +203,7 @@ globalTempo = {
                         c' 2 -\tenuto d' 8 -\tenuto [ c' -\tenuto d' -\tenuto e' -\tenuto ]  |
 %% 125
                         c' 2 -\tenuto d' 8 -\tenuto [ c' -\tenuto d' -\tenuto e' -\tenuto ]  |
-                        c' 4 -\tenuto c''' -\tenuto c''' 2 -\tenuto  |
+                        c' 4 -\tenuto c''' -\tenuto c''' 2 -\tenuto 
                         \bar "|."
                     } % Voice
 
@@ -383,7 +383,7 @@ globalTempo = {
                         c' 2 -\tenuto b -\tenuto  |
 %% 125
                         c' 2 -\tenuto b -\tenuto  |
-                        c' 4 -\tenuto e'' -\tenuto e'' 2 -\tenuto  |
+                        c' 4 -\tenuto e'' -\tenuto e'' 2 -\tenuto 
                         \bar "|."
                     } % Voice
 
@@ -575,7 +575,7 @@ globalTempo = {
                         e 2 -\tenuto f 8 -\tenuto [ e -\tenuto f -\tenuto g -\tenuto ]  |
 %% 125
                         e 2 -\tenuto f 8 -\tenuto [ e -\tenuto f -\tenuto g -\tenuto ]  |
-                        e 4 -\tenuto g -\tenuto c' 2 -\tenuto  |
+                        e 4 -\tenuto g -\tenuto c' 2 -\tenuto 
                         \bar "|."
                     } % Voice
 
@@ -766,7 +766,7 @@ globalTempo = {
                         % warning: overlong bar truncated here |
 %% 125
                         \skip 1  |
-                        r4 c -\tenuto c, 2 -\tenuto  |
+                        r4 c -\tenuto c, 2 -\tenuto 
                         \bar "|."
                     } % Voice
 
