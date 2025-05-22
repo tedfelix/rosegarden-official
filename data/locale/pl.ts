@@ -2349,7 +2349,7 @@
     </message>
     <message>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation type="obsolete">Diminuendo - ustaw %1 wyciszanie od maks. do min.</translation>
+        <translation type="obsolete">Diminuendo - ustaw %1 ściszanie od maks. do min.</translation>
     </message>
     <message>
         <source>Low Value</source>
@@ -10600,7 +10600,7 @@ zamiast tego?</translation>
     <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+33"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
-        <translation>Diminuendo ćwierćfalowe - ustaw %1 wyciszanie od maks. do min. w konturze ćwierćsinusoidy</translation>
+        <translation>Diminuendo ćwierćfalowe - ustaw %1 ściszanie od maks. do min. w konturze ćwierćsinusoidy</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10610,7 +10610,7 @@ zamiast tego?</translation>
     <message>
         <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+33"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
-        <translation>Diminuendo półfalowe - ustaw %1 wyciszanie od maks. do min. w konturze półsinusoidy</translation>
+        <translation>Diminuendo półfalowe - ustaw %1 ściszanie od maks. do min. w konturze półsinusoidy</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10677,7 +10677,7 @@ zamiast tego?</translation>
     <message>
         <location filename="../../src/base/parameterpattern/LinearParameterPattern.cpp" line="+33"/>
         <source>Diminuendo - set %1 falling from max to min</source>
-        <translation>Diminuendo - ustaw %1 wyciszanie od maks. do min.</translation>
+        <translation>Diminuendo - ustaw %1 ściszanie od maks. do min.</translation>
     </message>
     <message>
         <location line="+2"/>
