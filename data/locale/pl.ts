@@ -16408,7 +16408,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+4"/>
         <source>Subsubtitle</source>
-        <translation>Podpodtytuł</translation>
+        <translation>Drugi podtytuł</translation>
     </message>
     <message>
         <location line="+4"/>
