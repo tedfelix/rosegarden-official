@@ -25832,7 +25832,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>Common, hidden</source>
-        <translation type="vanished">Wspólne, ukryte</translation>
+        <translation type="vanished">Zwykłe, ukryte</translation>
     </message>
     <message>
         <source>Hidden</source>
@@ -25840,7 +25840,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>Common</source>
-        <translation type="vanished">Wspólne</translation>
+        <translation type="vanished">Zwykłe</translation>
     </message>
     <message>
         <source>Time Signature   </source>
