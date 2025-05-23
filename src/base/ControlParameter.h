@@ -121,6 +121,7 @@ public:
     static const ControlParameter& getPitchBend();
     static const ControlParameter& getExpression();
     static const ControlParameter& getChannelPressure();
+    static const ControlParameter& getKeyPressure();
 
 protected:
 

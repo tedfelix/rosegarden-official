@@ -54,6 +54,14 @@ bool ControllerEventAdapter::getValue(long& val)
         val = value;
         return true;
     }
+    else if (m_event->getType() == Rosegarden::KeyPressure::EventType)
+    {
+        long value;
+        m_event->get<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
+                                      value);
+        val = value;
+        return true;
+    }
     else if (m_event->getType() == Note::EventType)
     {
         return m_event->get<Int>(BaseProperties::VELOCITY, val);
@@ -82,6 +90,11 @@ void ControllerEventAdapter::setValue(long val)
     else if (m_event->getType() == Rosegarden::ChannelPressure::EventType)
     {
         m_event->set<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE,
+                                      val);
+    }
+    else if (m_event->getType() == Rosegarden::KeyPressure::EventType)
+    {
+        m_event->set<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
                                       val);
     }
     else if (m_event->getType() == Rosegarden::Note::EventType)

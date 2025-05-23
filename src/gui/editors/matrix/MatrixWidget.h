@@ -185,6 +185,8 @@ public:
     void showPitchBendRuler();
     /// View > Rulers > Show Channel Pressure Ruler
     void showChannelPressureRuler();
+    /// View > Rulers > Show Channel Pressure Ruler
+    void showKeyPressureRuler();
     /// View > Rulers > Add Control Ruler
     void addControlRuler(QAction *);
 

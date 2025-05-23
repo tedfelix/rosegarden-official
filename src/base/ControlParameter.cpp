@@ -195,4 +195,16 @@ getChannelPressure()
                         "<none>", 0, 127, 100, MidiByte(1), 2, -1);
     return channelPressure;
 }
+
+const ControlParameter&
+ControlParameter::
+getKeyPressure()
+{
+    static const ControlParameter
+        keyPressure(
+                    "Key Pressure", Rosegarden::KeyPressure::EventType,
+                        "<none>", 0, 127, 100, MidiByte(1), 2, -1);
+    return keyPressure;
+}
+
 }

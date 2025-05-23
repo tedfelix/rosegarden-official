@@ -80,6 +80,7 @@ public:
     void addControlRuler(const ControlParameter &);
     void togglePitchBendRuler();
     void toggleChannelPressureRuler();
+    void toggleKeyPressureRuler();
     void togglePropertyRuler(const PropertyName &);
 
     /**

@@ -1478,6 +1478,8 @@ MatrixView::slotTogglePitchbendRuler()
 void
 MatrixView::slotToggleKeyPressureRuler()
 {
+    m_matrixWidget->showKeyPressureRuler();
+    slotUpdateMenuStates();
 }
 
 void

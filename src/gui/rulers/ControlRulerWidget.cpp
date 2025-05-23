@@ -206,6 +206,9 @@ ControlRulerWidget::launchRulers()
         } else if (ruler.type == ChannelPressure::EventType) {
             RG_DEBUG << "launchInitialRulers(): Launching channelpressure ruler";
             addControlRuler(ControlParameter::getChannelPressure());
+        } else if (ruler.type == KeyPressure::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching keypressure ruler";
+            addControlRuler(ControlParameter::getKeyPressure());
         } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
             RG_DEBUG << "launchInitialRulers(): Launching velocity ruler";
             addPropertyRuler(static_cast<PropertyName>(ruler.type));
@@ -321,6 +324,33 @@ ControlRulerWidget::toggleChannelPressureRuler()
 
     // We don't already have a ruler, make one now.
     addControlRuler(ControlParameter::getChannelPressure());
+}
+
+void
+ControlRulerWidget::toggleKeyPressureRuler()
+{
+    // Check whether we already have a key pressure ruler
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(ruler);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler, remove it.
+        if (eventRuler->getControlParameter()->getType() ==
+            KeyPressure::EventType)
+        {
+            removeRuler(ruler);
+            return;
+        }
+    }
+
+    // We don't already have a ruler, make one now.
+    addControlRuler(ControlParameter::getKeyPressure());
 }
 
 

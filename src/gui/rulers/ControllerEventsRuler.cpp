@@ -615,6 +615,11 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
         // Convert to Channel pressure
         controllerEvent->set<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE, initialValue);
     }
+    else if (m_controller->getType() == Rosegarden::KeyPressure::EventType)
+    {
+        // Convert to Key pressure
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE, initialValue);
+    }
 
     m_moddingSegment = true;
     m_segment->insert(controllerEvent);

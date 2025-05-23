@@ -1056,6 +1056,12 @@ MatrixWidget::showChannelPressureRuler()
 }
 
 void
+MatrixWidget::showKeyPressureRuler()
+{
+    m_controlsWidget->toggleKeyPressureRuler();
+}
+
+void
 MatrixWidget::addControlRuler(QAction *action)
 {
     QString name = action->text();
