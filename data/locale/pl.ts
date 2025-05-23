@@ -15911,7 +15911,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Odznaczenie tej opcji spowoduje, że transport JACK będzie mógł przewinąć się poza koniec kompozycji Rosegarden. Spowoduje to, że transport JACK będzie niezsynchronizowany z transportem Rosegarden i może spowodować nieoczekiwane uruchomienie i zatrzymanie transportu.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Odznaczenie tej opcji spowoduje, że transport JACK będzie mógł przewinąć się poza koniec utworu Rosegarden. Spowoduje to, że transport JACK będzie niezsynchronizowany z transportem Rosegarden i może spowodować nieoczekiwane uruchomienie i zatrzymanie transportu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+18"/>
