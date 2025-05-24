@@ -35,8 +35,10 @@
 
 #include <QCoreApplication>
 
+
 namespace Rosegarden
 {
+
 
 ActionCommandRegistry::ActionCommandRegistry(ActionFileClient *c) :
     m_client(c)
@@ -47,12 +49,13 @@ ActionCommandRegistry::~ActionCommandRegistry()
 {
 }
 
-
 void
 ActionCommandRegistry::addAction(QString actionName)
 {
     m_client->createAction(actionName, this, SLOT(slotInvokeCommand()));
+    //m_client->createAction(actionName, this, &ActionCommandRegistry::slotInvokeCommand);
 }
+
 
 class ActionCommandArgumentQuerier : public CommandArgumentQuerier
 {

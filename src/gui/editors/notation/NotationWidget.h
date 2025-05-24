@@ -206,6 +206,8 @@ public slots:
 
     void slotRegenerateHeaders();
 
+    void slotShowHeaderToolTip(QString toolTipText);
+
 private:
     void setScrollToFollow(bool);
     void showEvent(QShowEvent * event) override;
@@ -255,7 +257,6 @@ private slots:
     void slotSyncPannerZoomOut();
 
     void slotGenerateHeaders();
-    void slotShowHeaderToolTip(QString toolTipText);
     void slotHeadersResized(int width);
     void slotAdjustHeadersHorizontalPos(bool last);
     void slotAdjustHeadersVerticalPos(QRectF r);

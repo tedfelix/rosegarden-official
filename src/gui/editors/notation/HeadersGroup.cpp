@@ -77,10 +77,11 @@ HeadersGroup::
 void
 HeadersGroup::removeAllHeaders()
 {
-    TrackHeaderVector::iterator i;
-    for (i=m_headers.begin(); i!=m_headers.end(); ++i) {
-        disconnect(*i, SIGNAL(showToolTip(QString)),
-                   m_widget, SLOT(slotShowHeaderToolTip(QString)));
+    for (TrackHeaderVector::iterator i = m_headers.begin();
+         i != m_headers.end();
+         ++i) {
+        disconnect(*i, &StaffHeader::showToolTip,
+                   m_widget, &NotationWidget::slotShowHeaderToolTip);
         delete *i;
     }
     m_headers.erase(m_headers.begin(), m_headers.end());
@@ -101,13 +102,14 @@ HeadersGroup::addHeader(int trackId, int height, int ypos, double /* xcur */)
     m_headers.push_back(sh);
     m_usedHeight += height;
 
-    connect(sh, SIGNAL(showToolTip(QString)),
-            m_widget, SLOT(slotShowHeaderToolTip(QString)));
+    connect(sh, &StaffHeader::showToolTip,
+            m_widget, &NotationWidget::slotShowHeaderToolTip);
 
+    // Without Qt::QueuedConnection, headers may be deleted
+    // from themselves leading to crash
     connect(sh, &StaffHeader::staffModified,
-            m_widget, &NotationWidget::slotRegenerateHeaders, Qt::QueuedConnection);
-            // Without Qt::QueuedConnection, headers may be deleted
-            // from themselves leading to crash
+            m_widget, &NotationWidget::slotRegenerateHeaders,
+            Qt::QueuedConnection);
 }
 
 void

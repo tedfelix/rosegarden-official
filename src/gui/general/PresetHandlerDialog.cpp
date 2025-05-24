@@ -167,13 +167,16 @@ PresetHandlerDialog::initDialog()
 
     settings.endGroup();
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
+            QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &PresetHandlerDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &PresetHandlerDialog::help);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &PresetHandlerDialog::help);
 }
 
 void

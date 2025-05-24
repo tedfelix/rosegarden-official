@@ -42,10 +42,11 @@
 namespace Rosegarden
 {
 
-RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
-        RosegardenDocument *doc):
-        QDialog(parent),
-        m_doc(doc)
+
+RemapInstrumentDialog::RemapInstrumentDialog(
+        QWidget *parent, RosegardenDocument *doc) :
+    QDialog(parent),
+    m_doc(doc)
 {
     setModal(true);
     setWindowTitle(tr("Remap Instrument assignments..."));
@@ -61,8 +62,9 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
     QVBoxLayout *buttonGroupLayout = new QVBoxLayout;
     vBoxLayout->addWidget(buttonGroup);
 
-    buttonGroupLayout->addWidget(new QLabel(tr("Remap Tracks by all "
-                            "Instruments on a Device or by single Instrument")));
+    buttonGroupLayout->addWidget(new QLabel(
+            tr("Remap Tracks by all "
+               "Instruments on a Device or by single Instrument")));
     m_deviceButton = new QRadioButton(tr("Device"));
     buttonGroupLayout->addWidget(m_deviceButton);
     m_instrumentButton = new QRadioButton(tr("Instrument"));
@@ -98,7 +100,8 @@ RemapInstrumentDialog::RemapInstrumentDialog(QWidget *parent,
                                                        QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &RemapInstrumentDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
@@ -166,25 +169,28 @@ RemapInstrumentDialog::accept()
 void
 RemapInstrumentDialog::slotApply()
 {
-    if (m_deviceButton->isChecked()) // devices
+    // Devices
+    if (m_deviceButton->isChecked())
     {
-        ModifyDeviceMappingCommand *command =
-            new ModifyDeviceMappingCommand
-            (m_doc,
-             m_devices[m_fromCombo->currentIndex()]->getId(),
-             m_devices[m_toCombo->currentIndex()]->getId());
+
+        ModifyDeviceMappingCommand *command = new ModifyDeviceMappingCommand(
+                m_doc,
+                m_devices[m_fromCombo->currentIndex()]->getId(),
+                m_devices[m_toCombo->currentIndex()]->getId());
         CommandHistory::getInstance()->addCommand(command);
-    } else // instruments
-    {
-        ModifyInstrumentMappingCommand *command =
-            new ModifyInstrumentMappingCommand
-            (m_doc,
-             m_instruments[m_fromCombo->currentIndex()]->getId(),
-             m_instruments[m_toCombo->currentIndex()]->getId());
+
+    } else {  // Instruments
+
+        ModifyInstrumentMappingCommand *command = new ModifyInstrumentMappingCommand(
+                m_doc,
+                m_instruments[m_fromCombo->currentIndex()]->getId(),
+                m_instruments[m_toCombo->currentIndex()]->getId());
         CommandHistory::getInstance()->addCommand(command);
+
     }
 
     emit applyClicked();
 }
+
 
 }

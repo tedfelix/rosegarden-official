@@ -93,12 +93,13 @@ AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     m_audioFader->setFont(font);
     connect(m_audioFader, &AudioFaderBox::audioChannelsChanged,
             this, &AudioInstrumentParameterPanel::slotAudioChannels);
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     connect(m_audioFader->m_signalMapper, &QSignalMapper::mappedInt,
             this, &AudioInstrumentParameterPanel::slotSelectPlugin);
 #else
-    connect(m_audioFader->m_signalMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotSelectPlugin(int)));
+    connect(m_audioFader->m_signalMapper, (void(QSignalMapper::*)(int))
+                    &QSignalMapper::mapped,
+            this, &AudioInstrumentParameterPanel::slotSelectPlugin);
 #endif
     connect(m_audioFader->m_fader, &Fader::faderChanged,
             this, &AudioInstrumentParameterPanel::slotSelectAudioLevel);
