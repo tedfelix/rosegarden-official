@@ -16010,7 +16010,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+152"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
-        <translation>Musisz ponownie uruchomić Rosegarden, aby zmiana rozmiaru ścieżki została uwzględniona.</translation>
+        <translation>Musisz zrestartować Rosegarden, aby zmiana rozmiaru ścieżki została uwzględniona.</translation>
     </message>
     <message>
         <location line="-674"/>
@@ -16068,7 +16068,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+169"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
-        <translation>Musisz ponownie uruchomić Rosegarden, aby zmiana w prezentacji została uwzględniona.</translation>
+        <translation>Musisz zrestartować Rosegarden, aby zmiana w prezentacji została uwzględniona.</translation>
     </message>
     <message>
         <location line="-317"/>
@@ -16242,7 +16242,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+192"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
-        <translation>Zmiany teksturowanego tła w głównym oknie zostaną uwzględnione po ponownym uruchomieniu Rosegarden.</translation>
+        <translation>Zmiany teksturowanego tła w głównym oknie zostaną uwzględnione po zrestartowaniu Rosegarden.</translation>
     </message>
     <message>
         <location line="-1"/>
@@ -16254,7 +16254,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     </message>
     <message>
         <source>You must restart Rosegarden for the graphics system change to take effect.</source>
-        <translation type="vanished">Musisz ponownie uruchomić Rosegarden, aby zmiana systemu grafiki została uwzględniona.</translation>
+        <translation type="vanished">Musisz zrestartować Rosegarden, aby zmiana systemu grafiki została uwzględniona.</translation>
     </message>
 </context>
 <context>
@@ -23504,7 +23504,7 @@ Zostaną wyeksportowane tylko ścieżki dźwiękowe i wtyczki syntezatora</trans
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>Rosegarden niespodziewanie zakończył pracę. Dźwięk i nagrywanie będą niedostępne dla tej sesji.
-Uruchom ponownie Rosegarden, aby przywrócić funkcje dźwiękowe.</translation>
+Zrestartuj Rosegarden, aby przywrócić funkcje dźwiękowe.</translation>
     </message>
     <message>
         <location line="-4783"/>
@@ -24672,7 +24672,7 @@ Chcesz ją teraz ustawić?</translation>
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
         <translation>Podsystem JACK Audio zawiódł lub stanął i wstrzymał Rosegarden w przetwarzaniu dźwięku.
-Uruchom ponownie Rosegarden, aby kontynuować pracę z dźwiękiem.
+Zrestartuj Rosegarden, aby kontynuować pracę z dźwiękiem.
 Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</translation>
     </message>
     <message>
@@ -24725,7 +24725,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Rosegarden nie był w stanie znaleźć źródła sygnału o wysokiej rozdzielczości odpowiedzialnego za wydajność MIDI.&lt;/p&gt;&lt;p&gt;Możesz rozwiązać ten problem poprzez załadowanie modułu jądra zegara RTC. Aby to zrobić, spróbuj uruchomić &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; w oknie terminala, a następnie ponownie uruchom Rosegarden.&lt;/p&gt;&lt;p&gt;Możesz też sprawdzić, czy dystrybutor Linuksa zapewnia jądro zoptymalizowane do multimediów. Zobacz &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;, aby przeczytać więcej na ten temat.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Rosegarden nie był w stanie znaleźć źródła sygnału o wysokiej rozdzielczości odpowiedzialnego za wydajność MIDI.&lt;/p&gt;&lt;p&gt;Możesz rozwiązać ten problem poprzez załadowanie modułu jądra zegara RTC. Aby to zrobić, spróbuj uruchomić &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; w oknie terminala, a następnie zrestartuj Rosegarden.&lt;/p&gt;&lt;p&gt;Możesz też sprawdzić, czy dystrybutor Linuksa zapewnia jądro zoptymalizowane do multimediów. Zobacz &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;, aby przeczytać więcej na ten temat.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+144"/>
@@ -24735,11 +24735,11 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Nie udało się zainicjować obu podsystemów MIDI i dźwięku.&lt;/p&gt;&lt;p&gt;Jeśli chcesz umyślnie uruchomić bez sekwencera, użyj &quot;rosegarden --nosound&quot;, aby uniknąć tego błędu w przyszłości. W przeciwnym razie zaleca się naprawić konfigurację systemu i ponownie uruchomić Rosegarden.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Nie udało się zainicjować obu podsystemów MIDI i dźwięku.&lt;/p&gt;&lt;p&gt;Jeśli chcesz umyślnie uruchomić bez sekwencera, użyj &quot;rosegarden --nosound&quot;, aby uniknąć tego błędu w przyszłości. W przeciwnym razie zaleca się naprawić konfigurację systemu i uruchomić ponownie Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Nie udało się zainicjować obu podsystemów MIDI i dźwięku.&lt;/p&gt;&lt;p&gt;Jeśli chcesz umyślnie uruchomić bez sekwencera, użyj &quot;rosegarden --nosequencer&quot;, aby uniknąć tego błędu w przyszłości. W przeciwnym razie zaleca się naprawić konfigurację systemu i ponownie uruchomić Rosegarden.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Nie udało się zainicjować obu podsystemów MIDI i dźwięku.&lt;/p&gt;&lt;p&gt;Jeśli chcesz umyślnie uruchomić bez sekwencera, użyj &quot;rosegarden --nosequencer&quot;, aby uniknąć tego błędu w przyszłości. W przeciwnym razie zaleca się naprawić konfigurację systemu i uruchomić ponownie Rosegarden.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -24930,7 +24930,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+1"/>
         <source>You must restart Rosegarden for shortcut changes to take effect.</source>
-        <translation>Musisz ponownie uruchomić Rosegarden, aby zmiany skrótów zostały uwzględnione.</translation>
+        <translation>Musisz zrestartować Rosegarden, aby zmiany skrótów zostały uwzględnione.</translation>
     </message>
     <message>
         <location line="+197"/>
