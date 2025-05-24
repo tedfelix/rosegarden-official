@@ -97,8 +97,8 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
             m_rgGUIApp, &RosegardenMainWindow::slotSelectNextTrack);
     connect(this, &TranzportClient::trackUp,
             m_rgGUIApp, &RosegardenMainWindow::slotSelectPreviousTrack);
-    connect(this, SIGNAL(trackMute()),
-            m_rgGUIApp, SLOT(slotToggleMute()) );
+    connect(this, &TranzportClient::trackMute,
+            m_rgGUIApp, &RosegardenMainWindow::slotToggleMute);
     connect(this, &TranzportClient::trackRecord,
             m_rgGUIApp, &RosegardenMainWindow::slotToggleRecordCurrentTrack );
     connect(this, &TranzportClient::solo,

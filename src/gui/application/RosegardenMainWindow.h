@@ -1513,6 +1513,9 @@ public slots:
     void slotCommandRedone();
     void slotUpdatePosition();
 
+    /// Toggles mute state of the currently selected track.
+    void slotToggleMute();
+
 private:
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
      * unique
@@ -1687,8 +1690,6 @@ private slots:
      */
     void slotUpdateCPUMeter();
 
-    /// Toggles mute state of the currently selected track.
-    void slotToggleMute();
     void slotMuteAllTracks();
     void slotUnmuteAllTracks();
 

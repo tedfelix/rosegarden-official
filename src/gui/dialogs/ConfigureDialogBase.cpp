@@ -40,8 +40,9 @@ namespace Rosegarden
 {
 
 
-ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, const QString &label, const char *name  )
-: QDialog(parent)
+ConfigureDialogBase::ConfigureDialogBase(
+        QWidget *parent, const QString &label, const char *name) :
+    QDialog(parent)
 {
     this->setAttribute( Qt::WA_DeleteOnClose );
 
@@ -60,9 +61,12 @@ ConfigureDialogBase::ConfigureDialogBase(QWidget *parent, const QString &label, 
                                                        QDialogButtonBox::Help);
     dlgLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &ConfigureDialogBase::slotCancelOrClose);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &ConfigureDialogBase::slotHelpRequested );
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &ConfigureDialogBase::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &ConfigureDialogBase::slotCancelOrClose);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &ConfigureDialogBase::slotHelpRequested );
 
     m_applyButton = buttonBox->button(QDialogButtonBox::Apply);
     m_applyButton->setEnabled(false);

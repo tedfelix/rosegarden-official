@@ -24,17 +24,19 @@
 #include <QComboBox>
 #include <QLabel>
 
+
 namespace Rosegarden
 {
-   //
-GeneratedRegionDialog::
-GeneratedRegionDialog(QWidget *parent,
-		      NotePixmapFactory */*npf*/,
-		      const GeneratedRegion& defaultGeneratedRegion,
-                      const QString& commandName) :
-        QDialog(parent),
-        m_generatedRegion(defaultGeneratedRegion),
-        m_command(new MacroCommand(commandName))
+
+
+GeneratedRegionDialog::GeneratedRegionDialog(
+        QWidget *parent,
+		NotePixmapFactory */*npf*/,
+		const GeneratedRegion &defaultGeneratedRegion,
+        const QString &commandName) :
+    QDialog(parent),
+    m_generatedRegion(defaultGeneratedRegion),
+    m_command(new MacroCommand(commandName))
 {
   setModal(true);
   setWindowTitle(tr("Generated region"));
@@ -63,13 +65,15 @@ GeneratedRegionDialog(QWidget *parent,
 
   initializeCombos();
 
-  connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-  connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
-  connect(m_figSourcesBox,   SIGNAL(currentIndexChanged(int)),
-	  this, SLOT(assignFigurationSource(int)));
-  connect(m_chordSourcesBox, SIGNAL(currentIndexChanged(int)),
-	  this, SLOT(assignChordSource(int)));
+    connect(m_figSourcesBox, (void(QComboBox::*)(int))
+                    &QComboBox::currentIndexChanged,
+            this, &GeneratedRegionDialog::assignFigurationSource);
+    connect(m_chordSourcesBox, (void(QComboBox::*)(int))
+                    &QComboBox::currentIndexChanged,
+            this, &GeneratedRegionDialog::assignChordSource);
 }
 
 void

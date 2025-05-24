@@ -727,7 +727,7 @@ int main(int argc, char *argv[])
 
         if (visibleFor < RealTime(2, 0)) {
             int waitTime = visibleFor.sec * 1000 + visibleFor.msec();
-            QTimer::singleShot(2500 - waitTime, startLogo, SLOT(close()));
+            QTimer::singleShot(2500 - waitTime, startLogo, &StartupLogo::close);
         } else {
             startLogo->close();
         }

@@ -20,6 +20,7 @@
 
 #include "document/RosegardenDocument.h"
 #include "document/MetadataHelper.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QVBoxLayout>
 #include <QCheckBox>
@@ -32,8 +33,8 @@ namespace Rosegarden
 {
 
 CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
-                                         QWidget *parent):
-    QDialog(parent),
+                                         RosegardenMainWindow *parent):
+    QDialog(static_cast<QWidget *>(parent)),
     m_doc(doc)
 {
     setModal(false);
@@ -95,7 +96,8 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     closeButton->setDefault(false);
     closeButton->setAutoDefault(false);
 
-    connect(parent, SIGNAL(documentAboutToChange()), this, SLOT(close()));
+    connect(parent, &RosegardenMainWindow::documentAboutToChange,
+            this, &CommentsPopupDialog::close);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     show();

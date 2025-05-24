@@ -150,21 +150,25 @@ ClefDialog::ClefDialog(QWidget *parent,
     }
 
     // hook up the up/down left/right buttons
-    QObject::connect(clefUp, &QAbstractButton::clicked, this, &ClefDialog::slotClefUp);
-    QObject::connect(clefDown, &QAbstractButton::clicked, this, &ClefDialog::slotClefDown);
-    QObject::connect(m_octaveUp, &QAbstractButton::clicked, this, &ClefDialog::slotOctaveUp);
-    QObject::connect(m_octaveDown, &QAbstractButton::clicked, this, &ClefDialog::slotOctaveDown);
+    connect(clefUp, &QAbstractButton::clicked, this, &ClefDialog::slotClefUp);
+    connect(clefDown, &QAbstractButton::clicked,
+            this, &ClefDialog::slotClefDown);
+    connect(m_octaveUp, &QAbstractButton::clicked,
+            this, &ClefDialog::slotOctaveUp);
+    connect(m_octaveDown, &QAbstractButton::clicked,
+            this, &ClefDialog::slotOctaveDown);
 
     redrawClefPixmap();
 
     // the strip of standard buttons at the bottom, sans the help button,
     // because I'm pretty much the one who would ever make context sensitive
     // help work, and I think there's little chance of ever doing that.
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &ClefDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &ClefDialog::reject);
 }
 
 Clef

@@ -25,6 +25,7 @@ namespace Rosegarden
 {
 
 class RosegardenDocument;
+class RosegardenMainWindow;
 
 /**
  * This class create a pop up dialog which displays notes about the current
@@ -39,7 +40,7 @@ class CommentsPopupDialog : public QDialog
     Q_OBJECT
 
 public:
-    CommentsPopupDialog(RosegardenDocument *doc, QWidget *parent = nullptr);
+    CommentsPopupDialog(RosegardenDocument *doc, RosegardenMainWindow *parent);
     
 public slots:
     void slotCheckChanged(int state);

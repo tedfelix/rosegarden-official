@@ -92,7 +92,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_countIn->setMinimum(0);
     m_countIn->setMaximum(10);
     m_countIn->setValue(settings.value("countinbars", 0).toUInt());
-    connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
+    connect(m_countIn, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_countIn, row, 1, 1, 2);
 
     ++row;

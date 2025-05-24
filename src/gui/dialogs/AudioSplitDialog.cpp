@@ -100,8 +100,8 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     m_thresholdSpin = new QSpinBox;
     hboxLayout->addWidget(m_thresholdSpin);
     m_thresholdSpin->setSuffix(" %");
-    connect(m_thresholdSpin, SIGNAL(valueChanged(int)),
-            SLOT(slotThresholdChanged(int)));
+    connect(m_thresholdSpin, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &AudioSplitDialog::slotThresholdChanged);
 
     // ensure this is cleared
     m_previewBoxes.clear();

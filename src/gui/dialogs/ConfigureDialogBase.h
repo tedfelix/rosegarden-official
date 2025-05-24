@@ -70,7 +70,7 @@ protected:
     ConfigurationPages m_configurationPages;
     
     QPushButton       *m_applyButton;
-    QDialogButtonBox  *m_dialogButtonBox;
+    //QDialogButtonBox  *m_dialogButtonBox;
     IconStackedWidget *m_iconWidget;    
 };
 
