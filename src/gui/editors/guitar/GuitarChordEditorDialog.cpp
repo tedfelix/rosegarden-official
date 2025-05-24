@@ -28,13 +28,18 @@
 #include <QLabel>
 #include <QDialogButtonBox>
 
+
 namespace Rosegarden
 {
 
-GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Guitar::ChordMap& chordMap, QWidget *parent)
-    : QDialog(parent),
-      m_chord(chord),
-      m_chordMap(chordMap)
+
+GuitarChordEditorDialog::GuitarChordEditorDialog(
+        Guitar::Chord &chord,
+        const Guitar::ChordMap &chordMap,
+        QWidget *parent) :
+    QDialog(parent),
+    m_chord(chord),
+    m_chordMap(chordMap)
 {
     setModal(true);
     setWindowTitle(tr("Guitar Chord Editor"));
@@ -50,8 +55,8 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
     m_startFret->setSingleStep(1);
     topLayout->addWidget(m_startFret, 1, 1);
     
-    connect(m_startFret, SIGNAL(valueChanged(int)),
-            this, SLOT(slotStartFretChanged(int)));
+    connect(m_startFret, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &GuitarChordEditorDialog::slotStartFretChanged);
     
     topLayout->addWidget(new QLabel(tr("Root"), page), 2, 1);
     m_rootNotesList = new QComboBox(page);
@@ -89,11 +94,12 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(Guitar::Chord& chord, const Gui
         m_ext->setCurrentIndex(extList.indexOf(m_chord.getExt()));
     }
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok |
-                                                       QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &GuitarChordEditorDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 

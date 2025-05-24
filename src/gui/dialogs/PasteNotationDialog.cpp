@@ -88,9 +88,11 @@ PasteNotationDialog::PasteNotationDialog(QWidget *parent) :
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help );
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &PasteNotationDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &PasteNotationDialog::slotHelpRequested);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &PasteNotationDialog::slotHelpRequested);
 }
 
 PasteEventsCommand::PasteType

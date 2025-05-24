@@ -326,22 +326,25 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Apply | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metaGridLayout->addWidget(buttonBox, 1, 0);
     metaGridLayout->setRowStretch(0, 10);
 
     setLayout(metaGridLayout);
 
-    connect(m_lilyLanguage,
-                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+    connect(m_lilyLanguage, (void(QComboBox::*)(int))&QComboBox::activated,
             m_useShortNames, &LilyVersionAwareCheckBox::slotCheckVersion);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &LilyPondOptionsDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &LilyPondOptionsDialog::help);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &LilyPondOptionsDialog::help);
 
     populateDefaultValues();
 
-    // Initally enable or disable m_useShortNames according to inital setting of m_lilyLanguage
+    // Enable or disable m_useShortNames based on m_lilyLanguage.
     m_useShortNames->checkVersion(m_lilyLanguage->currentIndex());
 
     resize(minimumSizeHint());

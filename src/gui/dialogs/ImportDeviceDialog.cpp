@@ -234,12 +234,14 @@ ImportDeviceDialog::doImport()
 
     settings.endGroup();
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &ImportDeviceDialog::slotCancel);
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &ImportDeviceDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected,
+            this, &ImportDeviceDialog::slotCancel);
 
     return true;
 }

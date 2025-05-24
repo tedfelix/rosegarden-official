@@ -46,8 +46,8 @@ QWidget* ShortcutDelegate::createEditor(QWidget *parent,
 {
     RG_DEBUG << "createEditor";
     m_editor = new QKeySequenceEdit(parent);
-    connect(m_editor, SIGNAL(editingFinished()),
-            this, SLOT(ksEditFinished()));
+    connect(m_editor, &QKeySequenceEdit::editingFinished,
+            this, &ShortcutDelegate::ksEditFinished);
     m_editor->setFocusPolicy(Qt::StrongFocus);
     m_editor->setFocus();
     return m_editor;

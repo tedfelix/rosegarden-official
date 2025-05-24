@@ -178,19 +178,19 @@ MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply |
-                                                       QDialogButtonBox::Ok |
-                                                       QDialogButtonBox::Cancel |
-                                                       QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Apply | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metaGridLayout->addWidget(buttonBox, 1, 0);
     metaGridLayout->setRowStretch(0, 10);
 
     setLayout(metaGridLayout);
 
-
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &MusicXMLOptionsDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &MusicXMLOptionsDialog::help);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &MusicXMLOptionsDialog::help);
 
     populateDefaultValues();
 
