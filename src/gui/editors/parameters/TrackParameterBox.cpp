@@ -493,8 +493,8 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
     // Detect when the document colours are updated.
     // Document colors can never be updated.  See explanation in
     // slotDocColoursChanged().
-    //connect(m_doc, SIGNAL(docColoursChanged()),
-    //        this, SLOT(slotDocColoursChanged()));
+    //connect(m_doc, &RosegardenDocument::docColoursChanged,
+    //        this, &TrackParameterBox::slotDocColoursChanged);
 
     updateWidgets2();
 }

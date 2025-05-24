@@ -65,8 +65,8 @@ ControlToolBox::createTool(QString toolName)
 
 //    if (m_scene) {
 //        tool->setScene(m_scene);
-//        connect(m_scene, SIGNAL(eventRemoved(Event *)),
-//                tool, SLOT(handleEventRemoved(Event *)));
+//        connect(m_scene, &Scene::eventRemoved(Event *),
+//                tool, &ControlTool::handleEventRemoved(Event *));
 //    }
 
     return tool;

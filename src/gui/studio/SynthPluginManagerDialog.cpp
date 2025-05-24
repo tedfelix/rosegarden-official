@@ -141,9 +141,12 @@ SynthPluginManagerDialog:: setupGuiMain()
         btApply->setEnabled ( false );
     }
 
-//         connect(m_dialogButtonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect ( m_dialogButtonBox, &QDialogButtonBox::rejected, this, &SynthPluginManagerDialog::slotClose );
-    connect ( m_dialogButtonBox, &QDialogButtonBox::helpRequested, this, &SynthPluginManagerDialog::slotHelpRequested );
+    //connect(m_dialogButtonBox, &QDialogButtonBox::accepted,
+    //        this, &SynthPluginManagerDialog::accept);
+    connect(m_dialogButtonBox, &QDialogButtonBox::rejected,
+            this, &SynthPluginManagerDialog::slotClose);
+    connect(m_dialogButtonBox, &QDialogButtonBox::helpRequested,
+            this, &SynthPluginManagerDialog::slotHelpRequested);
 
     //
     // end dialog button-box setup

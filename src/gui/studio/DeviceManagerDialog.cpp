@@ -1057,49 +1057,38 @@ DeviceManagerDialog::connectSignalsToSlots()
     // which is send by the AlsaDriver, when devices have been added or removed,
     // or if AlsaDriver::checkForNewClients() found any news
     //
-    connect(
-        RosegardenDocument::currentDocument,
-            &RosegardenDocument::devicesResyncd,
-        this,
-            &DeviceManagerDialog::slotResyncDevicesReceived );
+    connect(RosegardenDocument::currentDocument,
+                    &RosegardenDocument::devicesResyncd,
+            this, &DeviceManagerDialog::slotResyncDevicesReceived );
 
-//     //
-//     connect( m_doc,
-//         SIGNAL(signalAlsaSeqPortConnectionChanged()), this,
-//         SLOT(slotResyncDevicesReceived()) );
+    //connect(m_doc, &RosegardenDocument::signalAlsaSeqPortConnectionChanged,
+    //        this, &DeviceManagerDialog::slotResyncDevicesReceived);
 
 
     // playback devices
-    connect(m_treeWidget_outputPorts,
-            &QTreeWidget::itemClicked, this,
-            &DeviceManagerDialog::slotOutputPortClicked);
+    connect(m_treeWidget_outputPorts, &QTreeWidget::itemClicked,
+            this, &DeviceManagerDialog::slotOutputPortClicked);
 
-    connect(m_treeWidget_playbackDevices,
-            &QTreeWidget::itemSelectionChanged, this,
-            &DeviceManagerDialog::slotPlaybackDeviceSelected);
+    connect(m_treeWidget_playbackDevices, &QTreeWidget::itemSelectionChanged,
+            this, &DeviceManagerDialog::slotPlaybackDeviceSelected);
 
-    connect(m_treeWidget_playbackDevices,
-            &QTreeWidget::itemChanged, this,
-            &DeviceManagerDialog::slotDeviceItemChanged);
+    connect(m_treeWidget_playbackDevices, &QTreeWidget::itemChanged,
+            this, &DeviceManagerDialog::slotDeviceItemChanged);
 
-    connect(m_treeWidget_playbackDevices,
-            &QTreeWidget::itemDoubleClicked,
+    connect(m_treeWidget_playbackDevices, &QTreeWidget::itemDoubleClicked,
             this, &DeviceManagerDialog::slotEdit);
 
     // record devices
-    connect(m_treeWidget_inputPorts,
-            &QTreeWidget::itemClicked, this,
-            &DeviceManagerDialog::slotInputPortClicked);
+    connect(m_treeWidget_inputPorts, &QTreeWidget::itemClicked,
+            this, &DeviceManagerDialog::slotInputPortClicked);
 
     connect(m_treeWidget_recordDevices, &QTreeWidget::itemSelectionChanged,
             this, &DeviceManagerDialog::slotRecordDeviceSelected);
 
-    connect(m_treeWidget_recordDevices,
-            &QTreeWidget::itemChanged, this,
-            &DeviceManagerDialog::slotDeviceItemChanged);
+    connect(m_treeWidget_recordDevices, &QTreeWidget::itemChanged,
+            this, &DeviceManagerDialog::slotDeviceItemChanged);
 
-    connect(m_treeWidget_recordDevices,
-            &QTreeWidget::itemDoubleClicked,
+    connect(m_treeWidget_recordDevices, &QTreeWidget::itemDoubleClicked,
             this, &DeviceManagerDialog::slotEdit);
 
     // refresh buttons
@@ -1112,23 +1101,24 @@ DeviceManagerDialog::connectSignalsToSlots()
     QDialogButtonBox *bbox;
     // connect help button
     bbox = findChild < QDialogButtonBox * >("buttonBox");
-    connect(bbox, &QDialogButtonBox::helpRequested, this,
-            &DeviceManagerDialog::slotHelpRequested);
+    connect(bbox, &QDialogButtonBox::helpRequested,
+            this, &DeviceManagerDialog::slotHelpRequested);
     // connect close button
     QPushButton *pbClose;
     pbClose = bbox->button(QDialogButtonBox::Close);
-    connect(pbClose, &QAbstractButton::clicked, this, &DeviceManagerDialog::slotCloseButtonPress);
+    connect(pbClose, &QAbstractButton::clicked,
+            this, &DeviceManagerDialog::slotCloseButtonPress);
 
     // buttons
-    connect(pushButton_newPlaybackDevice, &QAbstractButton::clicked, this,
-            &DeviceManagerDialog::slotAddPlaybackDevice);
-    connect(pushButton_newRecordDevice, &QAbstractButton::clicked, this,
-            &DeviceManagerDialog::slotAddRecordDevice);
+    connect(pushButton_newPlaybackDevice, &QAbstractButton::clicked,
+            this, &DeviceManagerDialog::slotAddPlaybackDevice);
+    connect(pushButton_newRecordDevice, &QAbstractButton::clicked,
+            this, &DeviceManagerDialog::slotAddRecordDevice);
 
-    connect(pushButton_deletePlaybackDevice, &QAbstractButton::clicked, this,
-            &DeviceManagerDialog::slotDeletePlaybackDevice);
-    connect(pushButton_deleteRecordDevice, &QAbstractButton::clicked, this,
-            &DeviceManagerDialog::slotDeleteRecordDevice);
+    connect(pushButton_deletePlaybackDevice, &QAbstractButton::clicked,
+            this, &DeviceManagerDialog::slotDeletePlaybackDevice);
+    connect(pushButton_deleteRecordDevice, &QAbstractButton::clicked,
+            this, &DeviceManagerDialog::slotDeleteRecordDevice);
 
     connect(pushButton_manageBanksOfPlaybackDevice, &QAbstractButton::clicked,
             this, &DeviceManagerDialog::slotManageBanksOfPlaybackDevice);

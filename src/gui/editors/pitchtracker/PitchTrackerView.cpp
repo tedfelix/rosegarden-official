@@ -247,8 +247,8 @@ PitchTrackerView::setSegments(RosegardenDocument *document,
 {
     // m_document is owned by our parent, NotationView
     if (m_document) {
-        //disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-        //           this, SLOT(slotPointerPositionChanged(timeT)));
+        //disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
+        //           this, &PitchTrackerView::slotPointerPositionChanged);
     }
     m_document = document;
 

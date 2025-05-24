@@ -335,8 +335,8 @@ MatrixWidget::MatrixWidget(bool drumMode) :
 
 //    MatrixVelocity *matrixVelocityTool = dynamic_cast <MatrixVelocity *> (m_toolBox->getTool(MatrixVelocity::ToolName()));
 //    if (matrixVelocityTool) {
-//        connect(matrixVelocityTool, SIGNAL(hoveredOverNoteChanged()),
-//                m_controlsWidget, SLOT(slotHoveredOverNoteChanged()));
+//        connect(matrixVelocityTool, &MatrixVelocity::hoveredOverNoteChanged,
+//                m_controlsWidget, &ControlRulerWidget::slotHoveredOverNoteChanged);
 //    }
 
     connect(this, &MatrixWidget::toolChanged,

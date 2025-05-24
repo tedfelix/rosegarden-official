@@ -82,7 +82,7 @@ InsertTupletDialog::InsertTupletDialog(QWidget *parent, unsigned int untupledCou
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     // No such slot
-    // connect(buttonBox, SIGNAL(helpRequested()), this, SLOT(slotHelpRequested()));
+    //connect(buttonBox, &QDialogButtonBox::helpRequested, this, &InsertTupletDialog::slotHelpRequested);
 }
 
 

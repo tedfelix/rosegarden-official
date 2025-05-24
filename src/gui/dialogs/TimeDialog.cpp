@@ -60,8 +60,8 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     // QPushButton *resetButton =
     // buttonBox->button(QDialogButtonBox::Reset);
     // No such slot
-    // connect(resetButton, SIGNAL(clicked()),
-    //         m_timeWidget, SLOT(slotResetToDefault()));
+    // connect(resetButton, &QPushButton::clicked,
+    //         m_timeWidget, &TimeWidget::slotResetToDefault);
 }
 
 TimeDialog::TimeDialog(QWidget *parent, QString title,
@@ -90,9 +90,11 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     vboxLayout->addWidget(m_timeWidget);
 
     // No such slot
-    // connect(this, SIGNAL(ResetClicked()),
-    //         m_timeWidget, SLOT(slotResetToDefault()));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    //connect(this, &TimeDialog::ResetClicked,
+    //        m_timeWidget, &TimeWidget::slotResetToDefault);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Reset | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
