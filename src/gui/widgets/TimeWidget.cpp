@@ -197,7 +197,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 1, 0);
 
     if (editable) {
-        m_barLabel = nullptr;
+        m_measureReadOnly = nullptr;
         m_measureSpin = new QSpinBox;
         if (m_isDuration)
             m_measureSpin->setMinimum(0);
@@ -206,9 +206,9 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_measureSpin, 1, 1);
     } else {
         m_measureSpin = nullptr;
-        m_barLabel = new LineEdit;
-        m_barLabel->setReadOnly(true);
-        layout->addWidget(m_barLabel, 1, 1);
+        m_measureReadOnly = new LineEdit;
+        m_measureReadOnly->setReadOnly(true);
+        layout->addWidget(m_measureReadOnly, 1, 1);
     }
 
     // Beat/Beats
@@ -217,7 +217,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 1, 2);
 
     if (editable) {
-        m_beatLabel = nullptr;
+        m_beatReadOnly = nullptr;
         m_beatSpin = new QSpinBox;
         m_beatSpin->setMinimum(1);
         connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
@@ -225,9 +225,9 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_beatSpin, 1, 3);
     } else {
         m_beatSpin = nullptr;
-        m_beatLabel = new LineEdit;
-        m_beatLabel->setReadOnly(true);
-        layout->addWidget(m_beatLabel, 1, 3);
+        m_beatReadOnly = new LineEdit;
+        m_beatReadOnly->setReadOnly(true);
+        layout->addWidget(m_beatReadOnly, 1, 3);
     }
 
     // 64ths
@@ -238,7 +238,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 1, 4);
 
     if (editable) {
-        m_fractionLabel = nullptr;
+        m_fractionReadOnly = nullptr;
         m_fractionSpin = new QSpinBox;
         m_fractionSpin->setMinimum(1);
         connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
@@ -246,9 +246,9 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_fractionSpin, 1, 5);
     } else {
         m_fractionSpin = nullptr;
-        m_fractionLabel = new LineEdit;
-        m_fractionLabel->setReadOnly(true);
-        layout->addWidget(m_fractionLabel, 1, 5);
+        m_fractionReadOnly = new LineEdit;
+        m_fractionReadOnly->setReadOnly(true);
+        layout->addWidget(m_fractionReadOnly, 1, 5);
     }
 
     // Time Signature (e.g. 4/4 time)
@@ -261,7 +261,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 2, 0);
 
     if (editable) {
-        m_secondsLabel = nullptr;
+        m_secondsReadOnly = nullptr;
         m_secondsSpin = new QSpinBox;
         if (m_isDuration)
             m_secondsSpin->setMinimum(0);
@@ -270,9 +270,9 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_secondsSpin, 2, 1);
     } else {
         m_secondsSpin = nullptr;
-        m_secondsLabel = new LineEdit;
-        m_secondsLabel->setReadOnly(true);
-        layout->addWidget(m_secondsLabel, 2, 1);
+        m_secondsReadOnly = new LineEdit;
+        m_secondsReadOnly->setReadOnly(true);
+        layout->addWidget(m_secondsReadOnly, 2, 1);
     }
 
     // msec
@@ -281,7 +281,7 @@ TimeWidget::init(bool editable)
     layout->addWidget(label, 2, 2);
 
     if (editable) {
-        m_msecLabel = nullptr;
+        m_msecReadOnly = nullptr;
         m_msecSpin = new QSpinBox;
         m_msecSpin->setMinimum(0);
         m_msecSpin->setSingleStep(10);
@@ -290,9 +290,9 @@ TimeWidget::init(bool editable)
         layout->addWidget(m_msecSpin, 2, 3);
     } else {
         m_msecSpin = nullptr;
-        m_msecLabel = new LineEdit;
-        m_msecLabel->setReadOnly(true);
-        layout->addWidget(m_msecLabel, 2, 3);
+        m_msecReadOnly = new LineEdit;
+        m_msecReadOnly->setReadOnly(true);
+        layout->addWidget(m_msecReadOnly, 2, 3);
     }
 
     if (m_isDuration) {
@@ -393,7 +393,7 @@ TimeWidget::populate()
             }
             m_measureSpin->setValue(bars);
         } else {
-            m_barLabel->setText(QString("%1").arg(bars));
+            m_measureReadOnly->setText(QString("%1").arg(bars));
         }
 
         if (m_beatSpin) {
@@ -401,7 +401,7 @@ TimeWidget::populate()
             m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
             m_beatSpin->setValue(beats);
         } else {
-            m_beatLabel->setText(QString("%1").arg(beats));
+            m_beatReadOnly->setText(QString("%1").arg(beats));
         }
 
         if (m_fractionSpin) {
@@ -411,7 +411,7 @@ TimeWidget::populate()
                                     getDuration() - 1);
             m_fractionSpin->setValue(hemidemis);
         } else {
-            m_fractionLabel->setText(QString("%1").arg(hemidemis));
+            m_fractionReadOnly->setText(QString("%1").arg(hemidemis));
         }
 
         m_timeSig->setText(tr("(%1/%2 time)")
@@ -433,7 +433,7 @@ TimeWidget::populate()
             }
             m_secondsSpin->setValue(rt.sec);
         } else {
-            m_secondsLabel->setText(QString("%1").arg(rt.sec));
+            m_secondsReadOnly->setText(QString("%1").arg(rt.sec));
         }
 
         if (m_msecSpin) {
@@ -445,7 +445,7 @@ TimeWidget::populate()
             // which creates odd typing behavior
             m_msecSpin->setValue(getRoundedMSec(rt));
         } else {
-            m_msecLabel->setText(QString("%1").arg(rt.msec()));
+            m_msecReadOnly->setText(QString("%1").arg(rt.msec()));
         }
 
         bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
@@ -527,7 +527,7 @@ TimeWidget::populate()
             }
             m_measureSpin->setValue(bar + 1);
         } else {
-            m_barLabel->setText(QString("%1").arg(bar + 1));
+            m_measureReadOnly->setText(QString("%1").arg(bar + 1));
         }
 
         if (m_beatSpin) {
@@ -535,7 +535,7 @@ TimeWidget::populate()
             m_beatSpin->setMaximum(timeSig.getBeatsPerBar());
             m_beatSpin->setValue(beat);
         } else {
-            m_beatLabel->setText(QString("%1").arg(beat));
+            m_beatReadOnly->setText(QString("%1").arg(beat));
         }
 
         if (m_fractionSpin) {
@@ -545,7 +545,7 @@ TimeWidget::populate()
                                     getDuration() - 1);
             m_fractionSpin->setValue(hemidemis);
         } else {
-            m_fractionLabel->setText(QString("%1").arg(hemidemis));
+            m_fractionReadOnly->setText(QString("%1").arg(hemidemis));
         }
 
         m_timeSig->setText(tr("(%1/%2 time)")
@@ -564,7 +564,7 @@ TimeWidget::populate()
             }
             m_secondsSpin->setValue(rt.sec);
         } else {
-            m_secondsLabel->setText(QString("%1").arg(rt.sec));
+            m_secondsReadOnly->setText(QString("%1").arg(rt.sec));
         }
 
         if (m_msecSpin) {
@@ -585,7 +585,7 @@ TimeWidget::populate()
             // which creates odd typing behavior
             m_msecSpin->setValue(getRoundedMSec(rt));
         } else {
-            m_msecLabel->setText(QString("%1").arg(rt.msec()));
+            m_msecReadOnly->setText(QString("%1").arg(rt.msec()));
         }
     }
 

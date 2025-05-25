@@ -151,7 +151,7 @@ private:
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
-    LineEdit *m_barLabel;
+    LineEdit *m_measureReadOnly;
 
     /// Beat/Beats field when editable.
     QSpinBox *m_beatSpin;
@@ -160,7 +160,7 @@ private:
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
-    LineEdit *m_beatLabel;
+    LineEdit *m_beatReadOnly;
 
     /// 64ths field when editable.
     QSpinBox *m_fractionSpin;
@@ -169,7 +169,7 @@ private:
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
-    LineEdit *m_fractionLabel;
+    LineEdit *m_fractionReadOnly;
     /// Time sig field that appears after 64ths (4/4 time).
     QLabel *m_timeSig;
 
@@ -180,7 +180,7 @@ private:
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
-    LineEdit *m_secondsLabel;
+    LineEdit *m_secondsReadOnly;
     /// msec field when editable.
     QSpinBox *m_msecSpin;
     /// msec field when not editable.
@@ -188,7 +188,7 @@ private:
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
-    LineEdit *m_msecLabel;
+    LineEdit *m_msecReadOnly;
 
     // Duration only.
     QLabel *m_tempo;
