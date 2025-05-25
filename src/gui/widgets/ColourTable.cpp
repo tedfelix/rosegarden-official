@@ -37,11 +37,11 @@
 namespace Rosegarden
 {
 
-ColourTable::ColourTable
-(QWidget *parent, ColourMap &input, ColourList &list)
-    : QTableWidget(1, 2, parent )    //, "RColourTable")
+
+ColourTable::ColourTable(QWidget *parent, ColourMap &input, ColourList &list) :
+    QTableWidget(1, 2, parent )    //, "RColourTable")
 {
-    this->setObjectName( "RColourTable" );
+    setObjectName( "RColourTable" );
     
     //### JAS Deactivated next line 
     //&&& setSorting(FALSE);
@@ -58,9 +58,10 @@ ColourTable::ColourTable
     setHorizontalHeaderLabels( QStringList() << tr("Name") << tr("Color") );
     
     populate_table(input, list);
-    connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
-            SLOT(slotEditEntry(int, int)));
 
+    // ??? Need to fix this if we want this to work.
+    //connect(this, &ColourTable::doubleClicked,
+    //        this, &ColourTable::slotEditEntry);
 }
 
 void

@@ -145,8 +145,9 @@ AudioRouteMenu::slotShowMenu()
         a->setObjectName(QString("%1").arg(i));
     }
 
-    connect(menu, SIGNAL(triggered(QAction *)),
-            SLOT(slotEntrySelected(QAction *)));
+    connect(menu, &QMenu::triggered,
+            this, (void(AudioRouteMenu::*)(QAction *))
+                    &AudioRouteMenu::slotEntrySelected);
 
     // Compute the position for the pop-up menu.
 

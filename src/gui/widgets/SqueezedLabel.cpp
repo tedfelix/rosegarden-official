@@ -199,6 +199,15 @@ void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
         QMenu menu(this);
 
         QAction *act = new QAction(tr("&Copy Full Text"), this);
+        // ??? Not sure how to get rid of this SIGNAL() and SLOT().
+        //     k_copyFullText() uses Q_PRIVATE_SLOT().  I suspect that bigger
+        //     picture we do not care about the pop-up menu that allows us
+        //     to copy the complete text.  We can probably just remove that
+        //     and then this goes away as well.  Yeah, everywhere we use this,
+        //     right-click doesn't even work so there is no way to get this
+        //     context menu.
+        //     QLabel requires setTextInteractionFlags() to be called to
+        //     enable selection behavior.  We NEVER call that anywhere in rg.
         connect(act, SIGNAL(triggered()), this, SLOT(k_copyFullText()));
         menu.addAction(act);
 

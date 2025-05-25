@@ -34,9 +34,8 @@ namespace Rosegarden
 class RosegardenDocument;
 
 
+/// UNUSED.
 /**
- * Colour Configuration Page
- *
  * (document-wide settings)
  */
 class ColourConfigurationPage : public TabbedConfigurationPage

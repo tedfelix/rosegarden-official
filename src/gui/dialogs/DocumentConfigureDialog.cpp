@@ -22,7 +22,6 @@
 #include "ConfigureDialogBase.h"
 #include "document/RosegardenDocument.h"
 #include "gui/configuration/AudioPropertiesPage.h"
-#include "gui/configuration/ColourConfigurationPage.h"
 #include "gui/configuration/DocumentMetaConfigurationPage.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/general/IconLoader.h"

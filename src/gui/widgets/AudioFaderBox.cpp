@@ -81,8 +81,8 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
         m_plugins.push_back(plugin);
         m_signalMapper->setMapping(plugin, i);
-        connect(plugin, SIGNAL(clicked()),
-                m_signalMapper, SLOT(map()));
+        connect(plugin, &PluginPushButton::clicked,
+                m_signalMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     }
     pluginVbox->setLayout(pluginVboxLayout);
 

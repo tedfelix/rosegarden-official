@@ -61,7 +61,7 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
         setStyleSheet(localStyle);
     }
 
-    connect(this, SIGNAL(toggled(bool)), this, SLOT(toggle(bool)));
+    connect(this, &CheckButton::toggled, this, &CheckButton::toggle);
 
     // thinking out loud...
     // since I'm subclassing anyway, I might add the ability to make a master

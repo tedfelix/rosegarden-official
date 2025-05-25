@@ -22,10 +22,12 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 
+
 namespace Rosegarden
 {
 
 
+/// UNUSED.
 class ColourTableItem : public QTableWidgetItem
 {
 public:

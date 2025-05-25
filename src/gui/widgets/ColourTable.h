@@ -33,9 +33,11 @@ class ColourList;
 namespace Rosegarden
 {
 
+
 class ColourMap;
 
 
+/// UNUSED.  Its one client (ColourConfigurationPage) is unused.
 class ColourTable : public QTableWidget
 {
     Q_OBJECT

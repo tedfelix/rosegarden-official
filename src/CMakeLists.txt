@@ -190,7 +190,6 @@ set(rg_CPPS
   gui/widgets/PluginControl.cpp
   gui/widgets/AudioFaderBox.cpp
   gui/widgets/QuantizeParameters.cpp
-  gui/widgets/ColourTableItem.cpp
   gui/widgets/VUMeter.cpp
   gui/widgets/TmpStatusMsg.cpp
   gui/widgets/BaseTextFloat.cpp
@@ -207,7 +206,6 @@ set(rg_CPPS
   gui/widgets/WarningDialog.cpp
   gui/widgets/AudioRouteMenu.cpp
   gui/widgets/ScrollBox.cpp
-  gui/widgets/ColourTable.cpp
   gui/widgets/PitchChooser.cpp
   gui/widgets/WarningWidget.cpp
   gui/widgets/TextFloat.cpp
@@ -336,7 +334,6 @@ set(rg_CPPS
   gui/editors/segment/PlayListViewItem.cpp
   gui/editors/segment/MarkerEditor.cpp
   gui/editors/segment/TrackEditor.cpp
-  gui/configuration/ColourConfigurationPage.cpp
   gui/configuration/MatrixConfigurationPage.cpp
   gui/configuration/MIDIConfigurationPage.cpp
   gui/configuration/DocumentMetaConfigurationPage.cpp
