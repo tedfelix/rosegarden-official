@@ -43,6 +43,12 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+    constexpr int UPDATE_DELAY_TIME = 1500;  // msecs
+}
+
+
 TimeWidget::TimeWidget(const QString& title,
                        QWidget *parent,
                        Composition *composition,
@@ -609,25 +615,6 @@ TimeWidget::getRealTime()
     }
 }
 
-void
-TimeWidget::disconnectSignals()
-{
-    // Disconnect any signals from timer
-    m_delayUpdateTimer->disconnect();
-
-    // Disconnect singals from m_timeT
-    if (m_timeT)
-    {
-        m_timeT->disconnect(SIGNAL(editingFinished()));
-    }
-
-    // Disconnect singals from m_msec
-    if (m_msec)
-    {
-        m_msec->disconnect(SIGNAL(editingFinished()));
-    }
-}
-
 int
 TimeWidget::getRoundedMSec(RealTime rt)
 {
@@ -644,7 +631,10 @@ TimeWidget::slotSetTime(timeT t)
 
     m_time = t;
     populate();
+
+    // ??? No one appears to ever connect to this signal.
     emit timeChanged(getTime());
+    // ??? No one appears to ever connect to this signal.
     emit realTimeChanged(getRealTime());
 }
 
@@ -683,16 +673,49 @@ TimeWidget::slotTimeTChanged(int t)
 {
     RG_DEBUG << "slotTimeTChanged: t is " << t << ", value is " << m_timeT->value();
 
+    // The Time field has changed.  Either from the user typing into it or
+    // from the up/down arrows on the spin box.
+
+    // Not editable?  Then how did we ever get here?
+    if (!m_timeT)
+        return;
+    // Not editable?  Then how did we ever get here?
+    if (!m_msec)
+        return;
+    // No timer?  Bail.
+    if (!m_delayUpdateTimer)
+        return;
+
+    // Avoid duplicate connections.
+    // ??? Isn't there a flag we can pass that will do that.  Yes.
+    //     Qt::UniqueConnection
+    disconnect(m_timeT, &QAbstractSpinBox::editingFinished,
+               this, &TimeWidget::slotTimeTUpdate);
+    // Since we are in the middle of a change to Time, we want to
+    // be informed if the user tabs out of the field.
+    connect(m_timeT, &QAbstractSpinBox::editingFinished,
+            this, &TimeWidget::slotTimeTUpdate);
+
+    // No need to monitor the user tabbing out of the msec field.  The
+    // Time field is in play now.
+    // This prevents an update if the user clicks on the msec field then
+    // tabs out of it without making any changes.
+    disconnect(m_msec, &QAbstractSpinBox::editingFinished,
+               this, &TimeWidget::slotMSecUpdate);
+
+    // Delay Update Timer.
+    //   - Connect it to slotTimeTUpdate().
+    //   - Restart it.
+
+    // Stop the timer since we are going to restart it for the new connection.
+    // ??? Necessary?
     m_delayUpdateTimer->stop();
 
-    disconnectSignals();
+    // Disconnect the timer from everything to avoid duplicate connections
+    // and to make sure we will only be connected to slotTimeTUpdate().
+    m_delayUpdateTimer->disconnect();
 
-    if (m_timeT)  // Checking in case called by accident
-    {
-        connect(m_timeT, &QAbstractSpinBox::editingFinished,
-                this, &TimeWidget::slotTimeTUpdate);
-    }
-
+    // Connect the timer to slotTimeTUpdate().
     connect(m_delayUpdateTimer, &QTimer::timeout,
             this, &TimeWidget::slotTimeTUpdate);
 
@@ -749,7 +772,21 @@ TimeWidget::slotMSecChanged(int)
 {
     m_delayUpdateTimer->stop();
 
-    disconnectSignals();
+    // Disconnect any signals from timer
+    m_delayUpdateTimer->disconnect();
+
+    // Disconnect signals from m_timeT
+    if (m_timeT) {
+        disconnect(m_timeT, &QAbstractSpinBox::editingFinished,
+                   this, &TimeWidget::slotTimeTUpdate);
+
+    }
+
+    // Disconnect signals from m_msec
+    if (m_msec) {
+        disconnect(m_msec, &QAbstractSpinBox::editingFinished,
+                   this, &TimeWidget::slotMSecUpdate);
+    }
 
     if (m_msec)  // Checking in case called by accident
     {
@@ -773,5 +810,6 @@ TimeWidget::slotMSecUpdate()
     // Perform an immediate update.
     slotSecOrMSecChanged(0); // Doesn't matter the value of argument.
 }
+
 
 }

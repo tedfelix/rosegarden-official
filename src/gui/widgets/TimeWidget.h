@@ -75,22 +75,14 @@ public:
 private:
 
     /**
-     * Update delay in msec.
-     */
-    static const int UPDATE_DELAY_TIME = 1500;
-
-    /**
-     * Disconnect m_timeT, m_msec, and m_delayUpdateTimer
-     */
-    void disconnectSignals();
-
-    /**
      * Return a rounded msec reading from the given realTime argument.
      */
     int getRoundedMSec(RealTime rt);
 
 signals:
+    // ??? No one appears to ever connect to this signal.
     void timeChanged(timeT);
+    // ??? No one appears to ever connect to this signal.
     void realTimeChanged(RealTime);
 
 public slots:
@@ -149,7 +141,24 @@ private:
     QSpinBox *m_msec;
     LineEdit *m_secLabel;
     LineEdit *m_msecLabel;
+    // Duration only.
     QLabel *m_tempo;
+
+    /// Timer to fire off a delayed update.
+    /**
+     * To see this in action, use the up/down arrows in the spin box to change
+     * the Time field and keep an eye on the msecs field.  It will update 1.5
+     * seconds later.  Only the Time and msec fields use this.  All others
+     * update immediately.
+     *
+     * ??? Why?  Why not just update it immediately?  I suspect this is to
+     *     prevent the manic updating of all the fields while the user is
+     *     typing into one.  E.g. if you double-click in the time field and
+     *     slowly type in 52406, nothing will update until 1.5 seconds after
+     *     you finish.  What is odd is that this is only implemented for the
+     *     Time and msec fields.  Seems like it should be implemented for
+     *     all fields, or not implemented at all.
+     */
     QTimer *m_delayUpdateTimer;
 
     void init(bool editable);
