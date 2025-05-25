@@ -28,6 +28,7 @@ class QComboBox;
 class QLabel;
 class QSpinBox;
 class QString;
+class QTimer;
 class QWidget;
 
 #include <vector>
@@ -41,10 +42,19 @@ class Composition;
 class LineEdit;
 
 
+/// Absolute time and duration editing widget.
+/**
+ * This can be seen by double-clicking on a note (in notation or the matrix)
+ * and then clicking the "Edit" button next to the absolute time or duration
+ * fields.  That will launch the TimeDialog which consists mainly of a
+ * TimeWidget.
+ */
 class TimeWidget : public QGroupBox
 {
     Q_OBJECT
+
 public:
+
     /// Constructor for absolute time widget.
     TimeWidget(const QString &title,
                QWidget *parent,
@@ -69,78 +79,117 @@ public:
                bool editable = true,
                bool constrainToCompositionDuration = true);
 
+    /// Get the time in MIDI clocks.
     timeT getTime();
+    /// Get the time in seconds.
     RealTime getRealTime();
 
-private:
-
-    /**
-     * Return a rounded msec reading from the given realTime argument.
-     */
-    int getRoundedMSec(RealTime rt);
-
-signals:
+//signals:
     // ??? No one appears to ever connect to this signal.
-    void timeChanged(timeT);
+    //void timeChanged(timeT);
     // ??? No one appears to ever connect to this signal.
-    void realTimeChanged(RealTime);
+    //void realTimeChanged(RealTime);
 
 public slots:
+
+    // ??? This is never used as a slot.  Rename and move to public.
     void slotSetTime(timeT);
-    void slotSetRealTime(RealTime);
+
     void slotResetToDefault();
+
+private slots:
+
+    // ??? This is never used as a slot.  Move to private.
+    void slotSetRealTime(RealTime);
 
     void slotNoteChanged(int);
 
-    /**
-     * Restart the update delay timer and connect it for m_timeT.
-     */
+    /// Restart the update delay timer and connect it for m_timeT.
     void slotTimeTChanged(int);
 
-    /**
-     * Stop the delay timer and call slotSetTime(int)
-     */
+    /// Stop the delay timer and call slotSetTime(int)
     void slotTimeTUpdate();
 
     void slotBarBeatOrFractionChanged(int);
 
-    /**
-     * Determine realtime based on Sec or msec update and repopulate boxes.
-     */
+    /// Determine realtime based on Sec or msec update and repopulate boxes.
     void slotSecOrMSecChanged(int);
 
-    /**
-     * Restart the update delay timer and connect it to m_msec.
-     */
+    /// Restart the update delay timer and connect it to m_msec.
     void slotMSecChanged(int);
 
-    /**
-     * Stop the delay timer and call slotSecOrMSecChanged(int)
-     */
+    /// Stop the delay timer and call slotSecOrMSecChanged(int)
     void slotMSecUpdate();
 
 private:
+
     Composition *m_composition;
-    bool m_isDuration;
-    bool m_constrain;
-    timeT m_time;
+
+    /// true for duration mode, false for absolute time mode.
+    const bool m_isDuration;
+    bool m_constrainToCompositionDuration;
+    /// For durations, this lets us know where we are in the Composition.
     timeT m_startTime;
-    timeT m_defaultTime;
-    timeT m_minimumDuration;
+    /// Initial time in case we need to reset.
+    const timeT m_defaultTime;
+    /// When editing a duration, this is the smallest allowed.
+    const timeT m_minimumDuration;
+
+    /// The time or duration that is currently displayed on the widget.
+    timeT m_time;
+
+    // Widgets
 
     QComboBox *m_note;
-    QSpinBox *m_timeT;
-    QSpinBox *m_bar;
-    QSpinBox *m_beat;
-    QSpinBox *m_fraction;
+    /// Time field for editable absolute time mode.
+    QSpinBox *m_timeSpin;
+
+    /// Measure/Measures field when editable.
+    QSpinBox *m_measureSpin;
+    /// Measure/Measures field when not editable.
+    /**
+     * ??? Why LineEdit instead of QLabel?
+     * ??? Why do we need a member if we can't edit it?
+     */
     LineEdit *m_barLabel;
+
+    /// Beat/Beats field when editable.
+    QSpinBox *m_beatSpin;
+    /// Beat/Beats field when not editable.
+    /**
+     * ??? Why LineEdit instead of QLabel?
+     * ??? Why do we need a member if we can't edit it?
+     */
     LineEdit *m_beatLabel;
+
+    /// 64ths field when editable.
+    QSpinBox *m_fractionSpin;
+    /// 64ths field when not editable.
+    /**
+     * ??? Why LineEdit instead of QLabel?
+     * ??? Why do we need a member if we can't edit it?
+     */
     LineEdit *m_fractionLabel;
+    /// Time sig field that appears after 64ths (4/4 time).
     QLabel *m_timeSig;
-    QSpinBox *m_sec;
-    QSpinBox *m_msec;
-    LineEdit *m_secLabel;
+
+    /// Seconds field when editable.
+    QSpinBox *m_secondsSpin;
+    /// Seconds field when not editable.
+    /**
+     * ??? Why LineEdit instead of QLabel?
+     * ??? Why do we need a member if we can't edit it?
+     */
+    LineEdit *m_secondsLabel;
+    /// msec field when editable.
+    QSpinBox *m_msecSpin;
+    /// msec field when not editable.
+    /**
+     * ??? Why LineEdit instead of QLabel?
+     * ??? Why do we need a member if we can't edit it?
+     */
     LineEdit *m_msecLabel;
+
     // Duration only.
     QLabel *m_tempo;
 
@@ -162,7 +211,10 @@ private:
     QTimer *m_delayUpdateTimer;
 
     void init(bool editable);
+    /// Copy from m_time to the widgets.
     void populate();
+    /// Return a rounded msec reading from the given realTime argument.
+    static int getRoundedMSec(RealTime rt);
 
     std::vector<timeT> m_noteDurations;
 };
