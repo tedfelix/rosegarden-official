@@ -62,7 +62,6 @@ RescaleDialog::RescaleDialog(QWidget *parent,
             startTime,
             originalDuration,  // initialDuration
             minimumDuration,
-            true,  // editable
             constrainToCompositionDuration);
     vboxLayout->addWidget(m_newDuration);
 

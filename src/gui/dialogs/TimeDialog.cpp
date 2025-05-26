@@ -51,7 +51,6 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
             vbox,  // parent
             composition,
             defaultTime,  // initialTime
-            true,  // editable
             constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
 
@@ -90,7 +89,6 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
             startTime,
             defaultDuration,  // initialDuration
             minimumDuration,
-            true,  // editable
             constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
 

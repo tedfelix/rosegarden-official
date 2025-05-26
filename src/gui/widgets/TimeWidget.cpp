@@ -51,7 +51,6 @@ TimeWidget::TimeWidget(const QString &title,
                        QWidget *parent,
                        Composition *composition,
                        timeT initialTime,
-                       bool editable,
                        bool constrainToCompositionDuration) :
         QGroupBox(title, parent),
         m_composition(composition),
@@ -62,7 +61,7 @@ TimeWidget::TimeWidget(const QString &title,
         m_minimumDuration(0),  // Unused in absolute time mode.
         m_time(initialTime)
 {
-    init(editable);
+    init();
 }
 
 TimeWidget::TimeWidget(const QString& title,
@@ -71,7 +70,6 @@ TimeWidget::TimeWidget(const QString& title,
                        timeT startTime,
                        timeT initialDuration,
                        timeT minimumDuration,
-                       bool editable,
                        bool constrainToCompositionDuration) :
         QGroupBox(title, parent),
         m_composition(composition),
@@ -82,15 +80,12 @@ TimeWidget::TimeWidget(const QString& title,
         m_minimumDuration(minimumDuration),
         m_time(initialDuration)
 {
-    init(editable);
+    init();
 }
 
 void
-TimeWidget::init(bool editable)
+TimeWidget::init()
 {
-    bool savedEditable = editable;
-    editable = true;
-
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
     QLabel *label = nullptr;
@@ -102,93 +97,66 @@ TimeWidget::init(bool editable)
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
-        if (editable) {
-            m_note = new QComboBox;
-            m_noteDurations.push_back(0);
-            m_note->addItem(tr("<inexact>"));
-            int denoms[] = {
-                1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128
-            };
+        m_noteCombo = new QComboBox;
+        m_noteDurations.push_back(0);
+        m_noteCombo->addItem(tr("<inexact>"));
+        int denoms[] = {
+            1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128
+        };
 
-            for (size_t i = 0; i < sizeof(denoms) / sizeof(denoms[0]); ++i) {
+        for (size_t i = 0; i < sizeof(denoms) / sizeof(denoms[0]); ++i) {
 
-                timeT duration =
-                    Note(Note::Breve).getDuration() / denoms[i];
+            timeT duration =
+                Note(Note::Breve).getDuration() / denoms[i];
 
-                if (denoms[i] > 1 && denoms[i] < 128 && (denoms[i] % 3) != 0) {
-                    // not breve or hemidemi, not a triplet
-                    timeT dottedDuration = duration * 3 / 2;
-                    m_noteDurations.push_back(dottedDuration);
-                    timeT error = 0;
-                    QString label = NotationStrings::makeNoteMenuLabel
-                                    (dottedDuration, false, error);
-                    QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error);
-                    m_note->addItem(pmap, label); // ignore error
-                }
-
-                m_noteDurations.push_back(duration);
+            if (denoms[i] > 1 && denoms[i] < 128 && (denoms[i] % 3) != 0) {
+                // not breve or hemidemi, not a triplet
+                timeT dottedDuration = duration * 3 / 2;
+                m_noteDurations.push_back(dottedDuration);
                 timeT error = 0;
                 QString label = NotationStrings::makeNoteMenuLabel
-                                (duration, false, error);
-                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
-                m_note->addItem(pmap, label); // ignore error
+                                (dottedDuration, false, error);
+                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error);
+                m_noteCombo->addItem(pmap, label); // ignore error
             }
-            connect(m_note,
-                        static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-                    this, &TimeWidget::slotNoteChanged);
-            layout->addWidget(m_note, 0, 1, 0-0+ 1, 3);
 
-        } else {
-
-            m_note = nullptr;
+            m_noteDurations.push_back(duration);
             timeT error = 0;
-            QString label = NotationStrings::makeNoteMenuLabel(
-                    m_time, false, error);
-            if (error != 0)
-                label = tr("<inexact>");
-            LineEdit *le = new LineEdit(label);
-            le->setReadOnly(true);
-            layout->addWidget(le, 0, 1, 0- 0+1, 3);
+            QString label = NotationStrings::makeNoteMenuLabel
+                            (duration, false, error);
+            QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
+            m_noteCombo->addItem(pmap, label); // ignore error
         }
+        connect(m_noteCombo,
+                    static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+                this, &TimeWidget::slotNoteChanged);
+        layout->addWidget(m_noteCombo, 0, 1, 0-0+ 1, 3);
 
         label = new QLabel(tr("Units:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 4);
 
-        if (editable) {
-            m_timeSpin = new QSpinBox;
-            m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
-            connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                    this, &TimeWidget::slotTimeTChanged);
-            layout->addWidget(m_timeSpin, 0, 5);
-        } else {
-            m_timeSpin = nullptr;
-            LineEdit *le = new LineEdit(QString("%1").arg(m_time));
-            le->setReadOnly(true);
-            layout->addWidget(le, 0, 5);
-        }
+        m_timeSpin = new QSpinBox;
+        m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTimeTChanged);
+        layout->addWidget(m_timeSpin, 0, 5);
 
     } else {  // Absolute Time Mode
 
-        m_note = nullptr;
+        m_noteCombo = nullptr;
 
         label = new QLabel(tr("Time:"));
         label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(label, 0, 0);
 
-        if (editable) {
-            m_timeSpin = new QSpinBox;
-            m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
-            connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                    this, &TimeWidget::slotTimeTChanged);
-            layout->addWidget(m_timeSpin, 0, 1);
-            layout->addWidget(new QLabel(tr("units")), 0, 2);
-        } else {
-            m_timeSpin = nullptr;
-            LineEdit *le = new LineEdit(QString("%1").arg(m_time));
-            le->setReadOnly(true);
-            layout->addWidget(le, 0, 2);
-        }
+        m_timeSpin = new QSpinBox;
+        m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTimeTChanged);
+        layout->addWidget(m_timeSpin, 0, 1);
+        layout->addWidget(new QLabel(tr("units")), 0, 2);
+
     }
 
     // Measure/Measures
@@ -196,39 +164,25 @@ TimeWidget::init(bool editable)
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 0);
 
-    if (editable) {
-        m_measureReadOnly = nullptr;
-        m_measureSpin = new QSpinBox;
-        if (m_isDuration)
-            m_measureSpin->setMinimum(0);
-        connect(m_measureSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotBarBeatOrFractionChanged);
-        layout->addWidget(m_measureSpin, 1, 1);
-    } else {
-        m_measureSpin = nullptr;
-        m_measureReadOnly = new LineEdit;
-        m_measureReadOnly->setReadOnly(true);
-        layout->addWidget(m_measureReadOnly, 1, 1);
-    }
+    m_measureReadOnly = nullptr;
+    m_measureSpin = new QSpinBox;
+    if (m_isDuration)
+        m_measureSpin->setMinimum(0);
+    connect(m_measureSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+            this, &TimeWidget::slotBarBeatOrFractionChanged);
+    layout->addWidget(m_measureSpin, 1, 1);
 
     // Beat/Beats
     label = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 2);
 
-    if (editable) {
-        m_beatReadOnly = nullptr;
-        m_beatSpin = new QSpinBox;
-        m_beatSpin->setMinimum(1);
-        connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotBarBeatOrFractionChanged);
-        layout->addWidget(m_beatSpin, 1, 3);
-    } else {
-        m_beatSpin = nullptr;
-        m_beatReadOnly = new LineEdit;
-        m_beatReadOnly->setReadOnly(true);
-        layout->addWidget(m_beatReadOnly, 1, 3);
-    }
+    m_beatReadOnly = nullptr;
+    m_beatSpin = new QSpinBox;
+    m_beatSpin->setMinimum(1);
+    connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+            this, &TimeWidget::slotBarBeatOrFractionChanged);
+    layout->addWidget(m_beatSpin, 1, 3);
 
     // 64ths
     label = new QLabel(tr("%1:").arg(NotationStrings::getShortNoteName(
@@ -237,19 +191,12 @@ TimeWidget::init(bool editable)
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 4);
 
-    if (editable) {
-        m_fractionReadOnly = nullptr;
-        m_fractionSpin = new QSpinBox;
-        m_fractionSpin->setMinimum(1);
-        connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotBarBeatOrFractionChanged);
-        layout->addWidget(m_fractionSpin, 1, 5);
-    } else {
-        m_fractionSpin = nullptr;
-        m_fractionReadOnly = new LineEdit;
-        m_fractionReadOnly->setReadOnly(true);
-        layout->addWidget(m_fractionReadOnly, 1, 5);
-    }
+    m_fractionReadOnly = nullptr;
+    m_fractionSpin = new QSpinBox;
+    m_fractionSpin->setMinimum(1);
+    connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+            this, &TimeWidget::slotBarBeatOrFractionChanged);
+    layout->addWidget(m_fractionSpin, 1, 5);
 
     // Time Signature (e.g. 4/4 time)
     m_timeSig = new QLabel;
@@ -260,63 +207,32 @@ TimeWidget::init(bool editable)
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 0);
 
-    if (editable) {
-        m_secondsReadOnly = nullptr;
-        m_secondsSpin = new QSpinBox;
-        if (m_isDuration)
-            m_secondsSpin->setMinimum(0);
-        connect(m_secondsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotSecOrMSecChanged);
-        layout->addWidget(m_secondsSpin, 2, 1);
-    } else {
-        m_secondsSpin = nullptr;
-        m_secondsReadOnly = new LineEdit;
-        m_secondsReadOnly->setReadOnly(true);
-        layout->addWidget(m_secondsReadOnly, 2, 1);
-    }
+    m_secondsReadOnly = nullptr;
+    m_secondsSpin = new QSpinBox;
+    if (m_isDuration)
+        m_secondsSpin->setMinimum(0);
+    connect(m_secondsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+            this, &TimeWidget::slotSecOrMSecChanged);
+    layout->addWidget(m_secondsSpin, 2, 1);
 
     // msec
     label = new QLabel(tr("msec:"));
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 2);
 
-    if (editable) {
-        m_msecReadOnly = nullptr;
-        m_msecSpin = new QSpinBox;
-        m_msecSpin->setMinimum(0);
-        m_msecSpin->setSingleStep(10);
-        connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotMSecChanged);
-        layout->addWidget(m_msecSpin, 2, 3);
-    } else {
-        m_msecSpin = nullptr;
-        m_msecReadOnly = new LineEdit;
-        m_msecReadOnly->setReadOnly(true);
-        layout->addWidget(m_msecReadOnly, 2, 3);
-    }
+    m_msecReadOnly = nullptr;
+    m_msecSpin = new QSpinBox;
+    m_msecSpin->setMinimum(0);
+    m_msecSpin->setSingleStep(10);
+    connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+            this, &TimeWidget::slotMSecChanged);
+    layout->addWidget(m_msecSpin, 2, 3);
 
     if (m_isDuration) {
         m_tempo = new QLabel;
         layout->addWidget(m_tempo, 2, 6);
     } else {
         m_tempo = nullptr;
-    }
-
-    if (!savedEditable) {
-        if (m_note)
-            m_note ->setEnabled(false);
-        if (m_timeSpin)
-            m_timeSpin ->setEnabled(false);
-        if (m_measureSpin)
-            m_measureSpin ->setEnabled(false);
-        if (m_beatSpin)
-            m_beatSpin ->setEnabled(false);
-        if (m_fractionSpin)
-            m_fractionSpin ->setEnabled(false);
-        if (m_secondsSpin)
-            m_secondsSpin ->setEnabled(false);
-        if (m_msecSpin)
-            m_msecSpin ->setEnabled(false);
     }
 
     populate();
@@ -331,8 +247,8 @@ TimeWidget::populate()
 {
     // populate everything from m_time and m_startTime
 
-    if (m_note)
-        m_note->blockSignals(true);
+    if (m_noteCombo)
+        m_noteCombo->blockSignals(true);
     if (m_timeSpin)
         m_timeSpin->blockSignals(true);
     if (m_measureSpin)
@@ -362,11 +278,11 @@ TimeWidget::populate()
             m_timeSpin->setValue(m_time);
         }
 
-        if (m_note) {
-            m_note->setCurrentIndex(0);
+        if (m_noteCombo) {
+            m_noteCombo->setCurrentIndex(0);
             for (size_t i = 0; i < m_noteDurations.size(); ++i) {
                 if (m_time == m_noteDurations[i]) {
-                    m_note->setCurrentIndex(i);
+                    m_noteCombo->setCurrentIndex(i);
                     break;
                 }
             }
@@ -589,8 +505,8 @@ TimeWidget::populate()
         }
     }
 
-    if (m_note)
-        m_note ->blockSignals(false);
+    if (m_noteCombo)
+        m_noteCombo ->blockSignals(false);
     if (m_timeSpin)
         m_timeSpin ->blockSignals(false);
     if (m_measureSpin)

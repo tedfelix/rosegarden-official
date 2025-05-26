@@ -55,8 +55,9 @@ class TimeWidget : public QGroupBox
 
 public:
 
-    /// Constructor for absolute time widget.
+    /// Constructor for absolute time mode.
     /**
+     * When is constrainToCompositionDuration false?
      * EditViewBase::slotSetSegmentStartTime() results in
      * constrainToCompositionDuration set to false.  This would be a good
      * test case for that.  There might be others that send a false
@@ -70,16 +71,15 @@ public:
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
                timeT initialTime,
-               bool editable,
                bool constrainToCompositionDuration);
 
-    /// Constructor for duration widget.
+    /// Constructor for duration mode.
     /**
      * startTime is the absolute time at which this duration begins.
-     *
      * startTime is needed to get the correct bar counts based on the current
      * time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
      *
+     * When is constrainToCompositionDuration false?
      * RosegardenMainWindow::slotRescaleSelection() results in
      * constrainToCompositionDuration set to false.  This would be a good
      * test case for that.  TimeDialog's clients might do the same.  Might
@@ -94,7 +94,6 @@ public:
                timeT startTime,
                timeT initialDuration,
                timeT minimumDuration,
-               bool editable,
                bool constrainToCompositionDuration);
 
     /// Get the time in MIDI clocks.
@@ -158,7 +157,8 @@ private:
 
     // Widgets
 
-    QComboBox *m_note;
+    QComboBox *m_noteCombo;
+    std::vector<timeT> m_noteDurations;
     /// Time field for editable absolute time mode.
     QSpinBox *m_timeSpin;
 
@@ -166,6 +166,7 @@ private:
     QSpinBox *m_measureSpin;
     /// Measure/Measures field when not editable.
     /**
+     * ??? editable is never false, so this is never used.  Remove.
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
@@ -175,6 +176,7 @@ private:
     QSpinBox *m_beatSpin;
     /// Beat/Beats field when not editable.
     /**
+     * ??? editable is never false, so this is never used.  Remove.
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
@@ -184,6 +186,7 @@ private:
     QSpinBox *m_fractionSpin;
     /// 64ths field when not editable.
     /**
+     * ??? editable is never false, so this is never used.  Remove.
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
@@ -195,6 +198,7 @@ private:
     QSpinBox *m_secondsSpin;
     /// Seconds field when not editable.
     /**
+     * ??? editable is never false, so this is never used.  Remove.
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
@@ -203,6 +207,7 @@ private:
     QSpinBox *m_msecSpin;
     /// msec field when not editable.
     /**
+     * ??? editable is never false, so this is never used.  Remove.
      * ??? Why LineEdit instead of QLabel?
      * ??? Why do we need a member if we can't edit it?
      */
@@ -228,13 +233,13 @@ private:
      */
     QTimer *m_delayUpdateTimer;
 
-    void init(bool editable);
+    /// Init code shared by the two ctors.
+    void init();
     /// Copy from m_time to the widgets.
     void populate();
     /// Return a rounded msec reading from the given realTime argument.
     static int getRoundedMSec(RealTime rt);
 
-    std::vector<timeT> m_noteDurations;
 };
 
 

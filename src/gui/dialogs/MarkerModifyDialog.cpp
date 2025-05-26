@@ -81,7 +81,6 @@ MarkerModifyDialog::initialise(Composition *composition,
                                 vbox,  // parent
                                 composition,
                                 time,  // initialTime
-                                true,  // editable
                                 true);  // constrainToCompositionDuration
     vboxLayout->addWidget(m_timeEdit);
 

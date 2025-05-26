@@ -135,7 +135,6 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
                 this,  // parent
                 composition,
                 m_time,  // initialTime
-                true,  // editable
                 true);  // constrainToCompositionDuration
         vboxLayout->addWidget(m_timeEditor);
         m_asGivenButton = nullptr;
