@@ -317,10 +317,10 @@ TimeWidget::populate()
         // starting at the start of a bar, in the time signature in effect
         // at m_startTime.
 
-        int bars{0};
-        int beats{0};
-        int hemidemis{0};
-        int remainder{0};
+        int bars;
+        int beats;
+        int hemidemis;
+        int remainder;
         m_composition->getMusicalTimeForDuration(
                 m_startTime, m_time, bars, beats, hemidemis, remainder);
         const TimeSignature timeSig =
@@ -363,8 +363,8 @@ TimeWidget::populate()
 
         m_secondsSpin->setMinimum(0);
         if (m_constrainToCompositionDuration) {
-            m_secondsSpin->setMaximum(m_composition->getRealTimeDifference
-                               (m_startTime, m_composition->getEndMarker()).sec);
+            m_secondsSpin->setMaximum(m_composition->getRealTimeDifference(
+                    m_startTime, m_composition->getEndMarker()).sec);
         } else {
             m_secondsSpin->setMaximum(9999);
         }
@@ -374,60 +374,78 @@ TimeWidget::populate()
         m_msecSpin->setMinimum(0);
         m_msecSpin->setMaximum(999);
 
-        // Round value instead of direct read from rt.msec
+        // Round value instead of direct read from rt.nsec.
         // Causes cycle of rounding between msec and units
-        // which creates odd typing behavior
+        // which creates odd typing behavior.
         m_msecSpin->setValue(getRoundedMSec(realTime));
 
-        bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
-                       m_composition->getTempoChangeNumberAt(m_startTime));
+        // Tempo
+
+        // Does the tempo change over the duration?
+        const bool change =
+                (m_composition->getTempoChangeNumberAt(endTime) !=
+                 m_composition->getTempoChangeNumberAt(m_startTime));
 
         // imprecise -- better to work from tempoT directly
-        double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(m_startTime));
+        const double tempo = m_composition->getTempoQpm(
+                m_composition->getTempoAtTime(m_startTime));
 
-        int qpmc = int(tempo * 100.0);
-        int bpmc = qpmc;
-        if (timeSig.getBeatDuration()
-                != Note(Note::Crotchet).getDuration()) {
-            bpmc = int(tempo * 100.0 *
+        // ??? lround()?
+        const int qpmCents = int(tempo * 100.0);
+        int bpmCents = qpmCents;
+        // Crotchet is not the beat?
+        if (timeSig.getBeatDuration() != Note(Note::Crotchet).getDuration()) {
+            // ??? lround()?
+            bpmCents = int(tempo * 100.0 *
                        Note(Note::Crotchet).getDuration() /
                        timeSig.getBeatDuration());
         }
+
+        // If the tempo changes over the duration...
+        // ??? All we seem to be doing here is adding the word "starting" to
+        //     the front.  We can do that more simply.
+        // ??? Formatting looks wrong.  E.g. this will display 100.01 as 100.1.
+        //     Recommend just formatting the double:
+        //       arg(qpmCents / 100.0, 0, 'f', 2)
         if (change) {
-            if (bpmc != qpmc) {
+            if (bpmCents != qpmCents) {
                 m_tempo->setText(tr("(starting %1.%2 qpm, %3.%4 bpm)")
-                                 .arg(qpmc / 100)
-                                 .arg(qpmc % 100)
-                                 .arg(bpmc / 100)
-                                 .arg(bpmc % 100));
+                                 .arg(qpmCents / 100)
+                                 .arg(qpmCents % 100)
+                                 .arg(bpmCents / 100)
+                                 .arg(bpmCents % 100));
             } else {
                 m_tempo->setText(tr("(starting %1.%2 bpm)")
-                                 .arg(bpmc / 100)
-                                 .arg(bpmc % 100));
+                                 .arg(bpmCents / 100)
+                                 .arg(bpmCents % 100));
             }
-        } else {
-            if (bpmc != qpmc) {
+        } else {  // Tempo is fixed over the duration.
+            if (bpmCents != qpmCents) {
                 m_tempo->setText(tr("(%1.%2 qpm, %3.%4 bpm)")
-                                 .arg(qpmc / 100)
-                                 .arg(qpmc % 100)
-                                 .arg(bpmc / 100)
-                                 .arg(bpmc % 100));
+                                 .arg(qpmCents / 100)
+                                 .arg(qpmCents % 100)
+                                 .arg(bpmCents / 100)
+                                 .arg(bpmCents % 100));
             } else {
                 m_tempo->setText(tr("(%1.%2 bpm)")
-                                 .arg(bpmc / 100)
-                                 .arg(bpmc % 100));
+                                 .arg(bpmCents / 100)
+                                 .arg(bpmCents % 100));
             }
         }
 
     } else {  // Absolute Time mode
 
-        if (m_constrainToCompositionDuration && m_time > m_composition->getEndMarker()) {
+        // Past the end?  Constrain.
+        if (m_constrainToCompositionDuration  &&
+            m_time > m_composition->getEndMarker())
             m_time = m_composition->getEndMarker();
-        }
 
-        if (m_constrainToCompositionDuration && m_time < m_composition->getStartMarker()) {
+        // Past the beginning?  Constrain.
+        if (m_constrainToCompositionDuration  &&
+            m_time < m_composition->getStartMarker())
             m_time = m_composition->getStartMarker();
-        }
+
+        // Time
 
         if (m_constrainToCompositionDuration) {
             m_timeSpin->setMinimum(m_composition->getStartMarker());
@@ -436,14 +454,18 @@ TimeWidget::populate()
             m_timeSpin->setMinimum(INT_MIN);
             m_timeSpin->setMaximum(INT_MAX);
         }
+
         m_timeSpin->setValue(m_time);
 
-        int bar = 1, beat = 1, hemidemis = 0, remainder = 0;
-        m_composition->getMusicalTimeForAbsoluteTime
-        (m_time, bar, beat, hemidemis, remainder);
+        int bar;
+        int beat;
+        int hemidemis;
+        int remainder;
+        m_composition->getMusicalTimeForAbsoluteTime(
+                m_time, bar, beat, hemidemis, remainder);
 
-        TimeSignature timeSig =
-            m_composition->getTimeSignatureAt(m_time);
+        const TimeSignature timeSig =
+                m_composition->getTimeSignatureAt(m_time);
 
         m_measureSpin->setMinimum(INT_MIN);
         if (m_constrainToCompositionDuration) {
