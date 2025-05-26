@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TimeWidget]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TimeWidget.h"
 
@@ -263,18 +264,6 @@ TimeWidget::populate()
 {
     // Update all widgets from m_time and m_startTime.
 
-    // ??? Get rid of these blockSignals() calls!
-
-    if (m_noteCombo)
-        m_noteCombo->blockSignals(true);
-
-    m_timeOrUnitsSpin->blockSignals(true);
-    m_measureSpin->blockSignals(true);
-    m_beatSpin->blockSignals(true);
-    m_fractionSpin->blockSignals(true);
-    m_secondsSpin->blockSignals(true);
-    m_msecSpin->blockSignals(true);
-
     // Duration mode.
     if (m_isDuration) {
 
@@ -286,8 +275,31 @@ TimeWidget::populate()
 
         // Units
 
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_timeOrUnitsSpin->blockSignals(true);
+
+        // ??? Shouldn't this be set to m_minimumDuration?
         // ??? Should we really allow durations of 0?  That causes problems
-        //     in other parts of rg.
+        //     in other parts of rg.  Actually, I suspect this never allows
+        //     0 since the eventual update puts it back to 1.
+        //     V RescaleDialog ctor - Handles it ok.  Becomes tiny.  Must
+        //       catch it further down.
+        //       - Zero is not valid here.
+        //     V EditViewBase::slotSetSegmentDuration()
+        //       - Zero is not valid here.
+        //     V NoteWidget Duration catches this in its own spin box.
+        //       - Zero is not valid here.
+        //     -> NoteWidget notation duration?  Allows 0, but doesn't crash.
+        //       - Zero is not valid here.
+        //     -> RestWidget duration.  Zero is allowed in RestWidget.
+        //       - Zero is not valid here.
+        //     - RMW::slotCreateAnacrusis().  Can't do smaller than 60 ticks.
+        //       - Looks like a minimum has been set.
+        //       - Zero is not valid here.
+        //     - RMW::slotInsertRange()
+        //     - RMW::slotSetSegmentDurations()
+        //     - TriggerSegmentManager::slotAdd()
         m_timeOrUnitsSpin->setMinimum(0);
 
         if (m_constrainToCompositionDuration)
@@ -296,6 +308,8 @@ TimeWidget::populate()
             m_timeOrUnitsSpin->setMaximum(INT_MAX);
 
         m_timeOrUnitsSpin->setValue(m_time);
+
+        m_timeOrUnitsSpin->blockSignals(false);
 
         // ??? We're in duration mode.  Don't we always have a m_noteCombo
         //     in that case?  This might be a leftover read-only check.
@@ -326,6 +340,10 @@ TimeWidget::populate()
         const TimeSignature timeSig =
                 m_composition->getTimeSignatureAt(m_startTime);
 
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_measureSpin->blockSignals(true);
+
         m_measureSpin->setMinimum(0);
 
         if (m_constrainToCompositionDuration)
@@ -337,16 +355,26 @@ TimeWidget::populate()
 
         m_measureSpin->setValue(bars);
 
+        m_measureSpin->blockSignals(false);
+
         // Beats
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_beatSpin->blockSignals(true);
         m_beatSpin->setMinimum(0);
         m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
         m_beatSpin->setValue(beats);
+        m_beatSpin->blockSignals(false);
 
         // 64ths
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_fractionSpin->blockSignals(true);
         m_fractionSpin->setMinimum(0);
         m_fractionSpin->setMaximum(
                 timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
+        m_fractionSpin->blockSignals(false);
 
         // Time Signature
         m_timeSig->setText(tr("(%1/%2 time)")
@@ -355,12 +383,18 @@ TimeWidget::populate()
 
         // Seconds
 
+        // ??? This should take into account m_minimumDuration.  But it would
+        //     need to coordinate with m_msecSpin.
+
         const timeT endTime = m_startTime + m_time;
 
         // Duration in seconds.
         RealTime realTime = m_composition->getRealTimeDifference(
                 m_startTime, endTime);
 
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_secondsSpin->blockSignals(true);
         m_secondsSpin->setMinimum(0);
         if (m_constrainToCompositionDuration) {
             m_secondsSpin->setMaximum(m_composition->getRealTimeDifference(
@@ -369,8 +403,16 @@ TimeWidget::populate()
             m_secondsSpin->setMaximum(9999);
         }
         m_secondsSpin->setValue(realTime.sec);
+        m_secondsSpin->blockSignals(false);
 
         // msec
+
+        // ??? This should take into account m_minimumDuration.  But it would
+        //     need to coordinate with m_secondsSpin.
+
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_msecSpin->blockSignals(true);
         m_msecSpin->setMinimum(0);
         m_msecSpin->setMaximum(999);
 
@@ -378,6 +420,7 @@ TimeWidget::populate()
         // Causes cycle of rounding between msec and units
         // which creates odd typing behavior.
         m_msecSpin->setValue(getRoundedMSec(realTime));
+        m_msecSpin->blockSignals(false);
 
         // Tempo
 
@@ -447,6 +490,10 @@ TimeWidget::populate()
 
         // Time
 
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_timeOrUnitsSpin->blockSignals(true);
+
         if (m_constrainToCompositionDuration) {
             m_timeOrUnitsSpin->setMinimum(m_composition->getStartMarker());
             m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker());
@@ -457,6 +504,8 @@ TimeWidget::populate()
 
         m_timeOrUnitsSpin->setValue(m_time);
 
+        m_timeOrUnitsSpin->blockSignals(false);
+
         int bar;
         int beat;
         int hemidemis;
@@ -465,6 +514,10 @@ TimeWidget::populate()
                 m_time, bar, beat, hemidemis, remainder);
 
         // Measure
+
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_measureSpin->blockSignals(true);
 
         // ??? Thought we only went to bar 0 at most.
         m_measureSpin->setMinimum(INT_MIN);
@@ -476,19 +529,29 @@ TimeWidget::populate()
         }
         m_measureSpin->setValue(bar + 1);
 
+        m_measureSpin->blockSignals(false);
+
         // Beat
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_beatSpin->blockSignals(true);
         m_beatSpin->setMinimum(1);
         const TimeSignature timeSig =
                 m_composition->getTimeSignatureAt(m_time);
         m_beatSpin->setMaximum(timeSig.getBeatsPerBar());
         m_beatSpin->setValue(beat);
+        m_beatSpin->blockSignals(false);
 
         // 64ths
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_fractionSpin->blockSignals(true);
         m_fractionSpin->setMinimum(0);
         m_fractionSpin->setMaximum(timeSig.getBeatDuration() /
                                 Note(Note::Shortest).
                                 getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
+        m_fractionSpin->blockSignals(false);
 
         // Time Signature
         m_timeSig->setText(tr("(%1/%2 time)")
@@ -499,6 +562,9 @@ TimeWidget::populate()
 
         RealTime realTime = m_composition->getElapsedRealTime(m_time);
 
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_secondsSpin->blockSignals(true);
         m_secondsSpin->setMinimum(INT_MIN);
         if (m_constrainToCompositionDuration) {
             m_secondsSpin->setMaximum(m_composition->getElapsedRealTime
@@ -507,8 +573,13 @@ TimeWidget::populate()
             m_secondsSpin->setMaximum(9999);
         }
         m_secondsSpin->setValue(realTime.sec);
+        m_secondsSpin->blockSignals(false);
 
         // msec
+
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_msecSpin->blockSignals(true);
 
         if (m_time >= 0)
         {
@@ -525,19 +596,9 @@ TimeWidget::populate()
         // Causes cycle of rounding between msec and Time
         // which creates odd typing behavior.
         m_msecSpin->setValue(getRoundedMSec(realTime));
+        m_msecSpin->blockSignals(false);
     }
 
-    // ??? Get rid of these blockSignals() calls.
-
-    if (m_noteCombo)
-        m_noteCombo->blockSignals(false);
-
-    m_timeOrUnitsSpin->blockSignals(false);
-    m_measureSpin->blockSignals(false);
-    m_beatSpin->blockSignals(false);
-    m_fractionSpin->blockSignals(false);
-    m_secondsSpin->blockSignals(false);
-    m_msecSpin->blockSignals(false);
 }
 
 int

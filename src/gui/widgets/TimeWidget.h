@@ -177,8 +177,14 @@ private:
      *     typing into one.  E.g. if you double-click in the time field and
      *     slowly type in 52406, nothing will update until 1.5 seconds after
      *     you finish.  What is odd is that this is only implemented for the
-     *     Time and msec fields.  Seems like it should be implemented for
-     *     all fields, or not implemented at all.
+     *     Time/Units and msec fields.  Seems like it should be implemented for
+     *     all fields, or not implemented at all.  E.g. if you enter a large
+     *     measure number right now, you get the manic updates.
+     * ??? If there is a minimumDuration, this timer is being used to update
+     *     the offending field when it goes too low.  We should handle this
+     *     with limits in the spin boxes, not with an update on a timer.
+     *     This will be difficult with the msec field since its limit would
+     *     need to depend on the Seconds field being 0.
      */
     QTimer *m_delayUpdateTimer;
 
