@@ -77,8 +77,12 @@ MarkerModifyDialog::initialise(Composition *composition,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-    m_timeEdit = new TimeWidget(tr("Marker Time"), vbox, composition,
-                                time);
+    m_timeEdit = new TimeWidget(tr("Marker Time"),  // title
+                                vbox,  // parent
+                                composition,
+                                time,  // initialTime
+                                true,  // editable
+                                true);  // constrainToCompositionDuration
     vboxLayout->addWidget(m_timeEdit);
 
     /*!!!

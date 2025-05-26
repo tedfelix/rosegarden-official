@@ -3061,9 +3061,12 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
     QString title = tr("Split %n Segment(s) at Time", "",
                          selection.size());
 
-    TimeDialog dialog(m_view, title,
-                      &RosegardenDocument::currentDocument->getComposition(),
-                      now, true);
+    TimeDialog dialog(
+            m_view,  // parent
+            title,
+            &RosegardenDocument::currentDocument->getComposition(),  // composition
+            now,  // defaultTime
+            true);  // constrainToCompositionDuration
 
     MacroCommand *command = new MacroCommand(title);
 
@@ -3285,9 +3288,12 @@ RosegardenMainWindow::slotSetSegmentStartTimes()
 
     timeT someTime = (*selection.begin())->getStartTime();
 
-    TimeDialog dialog(m_view, tr("Segment Start Time"),
-                      &RosegardenDocument::currentDocument->getComposition(),
-                      someTime, false);
+    TimeDialog dialog(
+            m_view,  // parent
+            tr("Segment Start Time"),  // title
+            &RosegardenDocument::currentDocument->getComposition(),  // composition
+            someTime,  // defaultTime
+            false);  // constrainToCompositionDuration
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -6237,10 +6243,12 @@ RosegardenMainWindow::slotEditTransportTime()
 void
 RosegardenMainWindow::slotEditTransportTime(QWidget *parent)
 {
-    TimeDialog dialog(parent, tr("Move playback pointer to time"),
-                      &RosegardenDocument::currentDocument->getComposition(),
-                      RosegardenDocument::currentDocument->getComposition().getPosition(),
-                      true);
+    TimeDialog dialog(
+            parent,
+            tr("Move playback pointer to time"),  // title
+            &RosegardenDocument::currentDocument->getComposition(),  // composition
+            RosegardenDocument::currentDocument->getComposition().getPosition(),  // defaultTime
+            true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted) {
         RosegardenDocument::currentDocument->slotSetPointerPosition(dialog.getTime());
     }

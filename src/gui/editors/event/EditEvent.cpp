@@ -282,10 +282,11 @@ EditEvent::slotEditAbsoluteTime()
     Composition &composition =
             RosegardenDocument::currentDocument->getComposition();
 
-    TimeDialog dialog(this, tr("Edit Event Time"),
+    TimeDialog dialog(this,  // parent
+                      tr("Edit Event Time"),  // title
                       &composition,
-                      m_timeSpinBox->value(),
-                      true);
+                      m_timeSpinBox->value(),  // defaultTime
+                      true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted)
         m_timeSpinBox->setValue(dialog.getTime());
 }

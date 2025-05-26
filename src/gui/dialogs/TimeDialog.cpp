@@ -46,8 +46,13 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
 
-    m_timeWidget = new TimeWidget(title, vbox, composition,
-                defaultTime, true, constrainToCompositionDuration);
+    m_timeWidget = new TimeWidget(
+            title,
+            vbox,  // parent
+            composition,
+            defaultTime,  // initialTime
+            true,  // editable
+            constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

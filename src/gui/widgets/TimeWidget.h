@@ -56,12 +56,22 @@ class TimeWidget : public QGroupBox
 public:
 
     /// Constructor for absolute time widget.
+    /**
+     * EditViewBase::slotSetSegmentStartTime() results in
+     * constrainToCompositionDuration set to false.  This would be a good
+     * test case for that.  There might be others that send a false
+     * via TimeDialog for more test cases.
+     * RosegardenMainWindow::slotSetSegmentStartTimes() looks like another.
+     *
+     * ??? I can't find anyone who asks for non-editable.  Remove editable
+     *     and all code related to non-editable.
+     */
     TimeWidget(const QString &title,
                QWidget *parent,
                Composition *composition, // for bar/beat/msec
                timeT initialTime,
-               bool editable = true,
-               bool constrainToCompositionDuration = true);
+               bool editable,
+               bool constrainToCompositionDuration);
 
     /// Constructor for duration widget.
     /**
@@ -69,6 +79,14 @@ public:
      *
      * startTime is needed to get the correct bar counts based on the current
      * time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
+     *
+     * RosegardenMainWindow::slotRescaleSelection() results in
+     * constrainToCompositionDuration set to false.  This would be a good
+     * test case for that.  TimeDialog's clients might do the same.  Might
+     * want to trace them back as well for more test cases.
+     *
+     * ??? I can't find anyone who asks for non-editable.  Remove editable
+     *     and all code related to non-editable.
      */
     TimeWidget(const QString &title,
                QWidget *parent,
@@ -76,8 +94,8 @@ public:
                timeT startTime,
                timeT initialDuration,
                timeT minimumDuration,
-               bool editable = true,
-               bool constrainToCompositionDuration = true);
+               bool editable,
+               bool constrainToCompositionDuration);
 
     /// Get the time in MIDI clocks.
     timeT getTime();
@@ -190,7 +208,7 @@ private:
      */
     LineEdit *m_msecReadOnly;
 
-    // Duration only.
+    /// Tempo field (e.g. 120.0 bpm) in the lower right in duration mode.
     QLabel *m_tempo;
 
     /// Timer to fire off a delayed update.

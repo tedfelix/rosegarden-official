@@ -55,10 +55,15 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     setLayout(vboxLayout);
 
 
-    m_newDuration = new TimeWidget(tr("Duration of selection"), vbox,
-                     composition, startTime, originalDuration, 
-                     minimumDuration, true,
-                     constrainToCompositionDuration);
+    m_newDuration = new TimeWidget(
+            tr("Duration of selection"),  // title
+            vbox,  // parent
+            composition,
+            startTime,
+            originalDuration,  // initialDuration
+            minimumDuration,
+            true,  // editable
+            constrainToCompositionDuration);
     vboxLayout->addWidget(m_newDuration);
 
     if (showCloseGapOption) {

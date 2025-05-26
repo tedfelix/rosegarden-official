@@ -130,12 +130,13 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     if (timeEditable) {
 
-        m_timeEditor = new TimeWidget
-                       (tr("Time where signature takes effect"),
-                        this,
-                        composition,
-                        m_time,
-                        true);
+        m_timeEditor = new TimeWidget(
+                tr("Time where signature takes effect"),  // title
+                this,  // parent
+                composition,
+                m_time,  // initialTime
+                true,  // editable
+                true);  // constrainToCompositionDuration
         vboxLayout->addWidget(m_timeEditor);
         m_asGivenButton = nullptr;
         m_startOfBarButton = nullptr;

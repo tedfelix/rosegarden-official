@@ -138,7 +138,8 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
                 this,  // parent
                 &m_doc->getComposition(),  // composition
                 0,  // initialTime
-                true);  // editable
+                true,  // editable
+                true);  // constrainToCompositionDuration
 
         vboxLayout->addWidget(m_timeEditor);
 
