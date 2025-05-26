@@ -104,12 +104,12 @@ private slots:
     void slotTimeOrUnitsChanged(int);
 
     /// Stop the delay timer and call slotSetTime(int)
-    void slotTimeTUpdate();
+    void slotTimeOrUnitsUpdate();
 
-    void slotBarBeatOrFractionChanged(int);
+    void slotMeasureBeatOrFractionChanged(int);
 
     /// Determine realtime based on Sec or msec update and repopulate boxes.
-    void slotSecOrMSecChanged(int);
+    void slotSecondsOrMSecChanged(int);
 
     /// Restart the update delay timer and connect it to m_msec.
     void slotMSecChanged(int);

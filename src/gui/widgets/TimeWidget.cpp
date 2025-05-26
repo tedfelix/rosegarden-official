@@ -187,7 +187,7 @@ TimeWidget::init()
     if (m_isDuration)
         m_measureSpin->setMinimum(0);
     connect(m_measureSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotBarBeatOrFractionChanged);
+            this, &TimeWidget::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_measureSpin, row, 1);
 
     // Beat/Beats
@@ -198,7 +198,7 @@ TimeWidget::init()
     m_beatSpin = new QSpinBox(this);
     m_beatSpin->setMinimum(1);
     connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotBarBeatOrFractionChanged);
+            this, &TimeWidget::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_beatSpin, row, 3);
 
     // 64ths
@@ -212,7 +212,7 @@ TimeWidget::init()
     m_fractionSpin = new QSpinBox(this);
     m_fractionSpin->setMinimum(1);
     connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotBarBeatOrFractionChanged);
+            this, &TimeWidget::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_fractionSpin, row, 5);
 
     // Time Signature (e.g. 4/4 time)
@@ -230,7 +230,7 @@ TimeWidget::init()
     if (m_isDuration)
         m_secondsSpin->setMinimum(0);
     connect(m_secondsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotSecOrMSecChanged);
+            this, &TimeWidget::slotSecondsOrMSecChanged);
     layout->addWidget(m_secondsSpin, row, 1);
 
     // msec
@@ -600,10 +600,10 @@ TimeWidget::slotNoteChanged(int n)
 void
 TimeWidget::slotTimeOrUnitsChanged(int t)
 {
-    RG_DEBUG << "slotTimeOrUnitChanged: t is " << t << ", value is " << m_timeOrUnitsSpin->value();
+    RG_DEBUG << "slotTimeOrUnitsChanged(): t is " << t << ", value is " << m_timeOrUnitsSpin->value();
 
-    // The Time field has changed.  Either from the user typing into it or
-    // from the up/down arrows on the spin box.
+    // The Time/Units field has changed.  Either from the user typing into it
+    // or from the up/down arrows on the spin box.
 
     // No timer?  Bail.
     if (!m_delayUpdateTimer)
@@ -613,11 +613,11 @@ TimeWidget::slotTimeOrUnitsChanged(int t)
     // ??? Isn't there a flag we can pass that will do that.  Yes.
     //     Qt::UniqueConnection
     disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotTimeTUpdate);
+               this, &TimeWidget::slotTimeOrUnitsUpdate);
     // Since we are in the middle of a change to Time, we want to
     // be informed if the user tabs out of the field.
     connect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
-            this, &TimeWidget::slotTimeTUpdate);
+            this, &TimeWidget::slotTimeOrUnitsUpdate);
 
     // No need to monitor the user tabbing out of the msec field.  The
     // Time field is in play now.
@@ -627,7 +627,7 @@ TimeWidget::slotTimeOrUnitsChanged(int t)
                this, &TimeWidget::slotMSecUpdate);
 
     // Delay Update Timer.
-    //   - Connect it to slotTimeTUpdate().
+    //   - Connect it to slotTimeOrUnitsUpdate().
     //   - Restart it.
 
     // Stop the timer since we are going to restart it for the new connection.
@@ -640,14 +640,18 @@ TimeWidget::slotTimeOrUnitsChanged(int t)
 
     // Connect the timer to slotTimeTUpdate().
     connect(m_delayUpdateTimer, &QTimer::timeout,
-            this, &TimeWidget::slotTimeTUpdate);
+            this, &TimeWidget::slotTimeOrUnitsUpdate);
 
     m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
-TimeWidget::slotTimeTUpdate()
+TimeWidget::slotTimeOrUnitsUpdate()
 {
+    // Either the user has tabbed out of the Time/Units field, or the
+    // delayed update timer has gone off.  Update the rest of the fields
+    // based on the Time/Units field.
+
     // May have fired already, but stop it in case called when widget lost
     // focus.
     m_delayUpdateTimer->stop();
@@ -657,52 +661,68 @@ TimeWidget::slotTimeTUpdate()
 }
 
 void
-TimeWidget::slotBarBeatOrFractionChanged(int)
+TimeWidget::slotMeasureBeatOrFractionChanged(int)
 {
-    int bar = m_measureSpin->value();
-    int beat = m_beatSpin->value();
-    int fraction = m_fractionSpin->value();
+    const int bar = m_measureSpin->value();
+    const int beat = m_beatSpin->value();
+    const int fraction = m_fractionSpin->value();
 
     if (m_isDuration) {
-        setTime(m_composition->getDurationForMusicalTime
-                    (m_startTime, bar, beat, fraction, 0));
-
+        setTime(m_composition->getDurationForMusicalTime(
+                m_startTime, bar, beat, fraction, 0));
     } else {
-        setTime(m_composition->getAbsoluteTimeForMusicalTime
-                    (bar, beat, fraction, 0));
+        setTime(m_composition->getAbsoluteTimeForMusicalTime(
+                bar, beat, fraction, 0));
     }
 }
 
 void
-TimeWidget::slotSecOrMSecChanged(int)
+TimeWidget::slotSecondsOrMSecChanged(int)
 {
-    int sec = m_secondsSpin->value();
-    int msec = m_msecSpin->value();
-
-    setRealTime(RealTime(sec, msec * 1000000));
+    // Update the rest of the fields based on the Seconds and msec fields.
+    setRealTime(RealTime(m_secondsSpin->value(), m_msecSpin->value() * 1000000));
 }
 
 void
 TimeWidget::slotMSecChanged(int)
 {
-    // ??? See slotTimeOrUnitChanged() which has more helpful comments and
-    //     make this look more like that.
+    // The msec field has changed.  Either from the user typing into it
+    // or from the up/down arrows on the spin box.
 
-    m_delayUpdateTimer->stop();
+    // No timer?  Bail.
+    if (!m_delayUpdateTimer)
+        return;
 
-    // Disconnect any signals from timer
-    m_delayUpdateTimer->disconnect();
-
-    // Disconnect signals from m_timeT
-    disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotTimeTUpdate);
-
-    // Disconnect signals from m_msec
+    // Avoid duplicate connections.
+    // ??? Isn't there a flag we can pass that will do that.  Yes.
+    //     Qt::UniqueConnection
     disconnect(m_msecSpin, &QAbstractSpinBox::editingFinished,
                this, &TimeWidget::slotMSecUpdate);
+    // Since we are in the middle of a change to msec, we want to
+    // be informed if the user tabs out of the field.
     connect(m_msecSpin, &QAbstractSpinBox::editingFinished,
             this, &TimeWidget::slotMSecUpdate);
 
+    // No need to monitor the user tabbing out of the Time/Units field.  The
+    // msec field is in play now.
+    // This prevents an update if the user clicks on the Time/Units field then
+    // tabs out of it without making any changes.
+    disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
+               this, &TimeWidget::slotTimeOrUnitsUpdate);
+
+    // Delay Update Timer.
+    //   - Connect it to slotMSecUpdate().
+    //   - Restart it.
+
+    // Stop the timer since we are going to restart it for the new connection.
+    // ??? Necessary?
+    m_delayUpdateTimer->stop();
+
+    // Disconnect the timer from everything to avoid duplicate connections
+    // and to make sure we will only be connected to slotMSecUpdate().
+    m_delayUpdateTimer->disconnect();
+
+    // Connect the timer to slotMSecUpdate().
     connect(m_delayUpdateTimer, &QTimer::timeout,
             this, &TimeWidget::slotMSecUpdate);
 
@@ -712,12 +732,16 @@ TimeWidget::slotMSecChanged(int)
 void
 TimeWidget::slotMSecUpdate()
 {
+    // Either the user has tabbed out of the msec field, or the
+    // delayed update timer has gone off.  Update the rest of the fields
+    // based on the Seconds and msec fields.
+
     // May have fired already, but stop it in case called when widget lost
     // focus.
     m_delayUpdateTimer->stop();
 
-    // Perform an immediate update.
-    slotSecOrMSecChanged(0); // Doesn't matter the value of argument.
+    // Perform an immediate update.  Arg is ignored.
+    slotSecondsOrMSecChanged(0);
 }
 
 
