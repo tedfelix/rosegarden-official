@@ -25,7 +25,6 @@
 #include "base/RealTime.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "gui/widgets/LineEdit.h"
 
 #include <QComboBox>
 #include <QGroupBox>
@@ -164,7 +163,6 @@ TimeWidget::init()
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 0);
 
-    m_measureReadOnly = nullptr;
     m_measureSpin = new QSpinBox;
     if (m_isDuration)
         m_measureSpin->setMinimum(0);
@@ -177,7 +175,6 @@ TimeWidget::init()
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 2);
 
-    m_beatReadOnly = nullptr;
     m_beatSpin = new QSpinBox;
     m_beatSpin->setMinimum(1);
     connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
@@ -191,7 +188,6 @@ TimeWidget::init()
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 1, 4);
 
-    m_fractionReadOnly = nullptr;
     m_fractionSpin = new QSpinBox;
     m_fractionSpin->setMinimum(1);
     connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
@@ -207,7 +203,6 @@ TimeWidget::init()
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 0);
 
-    m_secondsReadOnly = nullptr;
     m_secondsSpin = new QSpinBox;
     if (m_isDuration)
         m_secondsSpin->setMinimum(0);
@@ -220,7 +215,6 @@ TimeWidget::init()
     label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(label, 2, 2);
 
-    m_msecReadOnly = nullptr;
     m_msecSpin = new QSpinBox;
     m_msecSpin->setMinimum(0);
     m_msecSpin->setSingleStep(10);
@@ -245,12 +239,15 @@ TimeWidget::init()
 void
 TimeWidget::populate()
 {
-    // populate everything from m_time and m_startTime
+    // Update all widgets from m_time and m_startTime.
+
+    // ??? Get rid of these blockSignals() calls!
 
     if (m_noteCombo)
         m_noteCombo->blockSignals(true);
     if (m_timeSpin)
         m_timeSpin->blockSignals(true);
+
     if (m_measureSpin)
         m_measureSpin->blockSignals(true);
     if (m_beatSpin)
@@ -262,6 +259,7 @@ TimeWidget::populate()
     if (m_msecSpin)
         m_msecSpin->blockSignals(true);
 
+    // Duration mode.
     if (m_isDuration) {
 
         if (m_time + m_startTime > m_composition->getEndMarker()) {
@@ -308,16 +306,12 @@ TimeWidget::populate()
                 m_measureSpin->setMaximum(9999);
             }
             m_measureSpin->setValue(bars);
-        } else {
-            m_measureReadOnly->setText(QString("%1").arg(bars));
         }
 
         if (m_beatSpin) {
             m_beatSpin->setMinimum(0);
             m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
             m_beatSpin->setValue(beats);
-        } else {
-            m_beatReadOnly->setText(QString("%1").arg(beats));
         }
 
         if (m_fractionSpin) {
@@ -326,8 +320,6 @@ TimeWidget::populate()
                                     Note(Note::Shortest).
                                     getDuration() - 1);
             m_fractionSpin->setValue(hemidemis);
-        } else {
-            m_fractionReadOnly->setText(QString("%1").arg(hemidemis));
         }
 
         m_timeSig->setText(tr("(%1/%2 time)")
@@ -348,8 +340,6 @@ TimeWidget::populate()
                 m_secondsSpin->setMaximum(9999);
             }
             m_secondsSpin->setValue(rt.sec);
-        } else {
-            m_secondsReadOnly->setText(QString("%1").arg(rt.sec));
         }
 
         if (m_msecSpin) {
@@ -360,8 +350,6 @@ TimeWidget::populate()
             // Causes cycle of rounding between msec and units
             // which creates odd typing behavior
             m_msecSpin->setValue(getRoundedMSec(rt));
-        } else {
-            m_msecReadOnly->setText(QString("%1").arg(rt.msec()));
         }
 
         bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
@@ -404,7 +392,7 @@ TimeWidget::populate()
             }
         }
 
-    } else {
+    } else {  // Absolute Time mode
 
         if (m_constrainToCompositionDuration && m_time > m_composition->getEndMarker()) {
             m_time = m_composition->getEndMarker();
@@ -442,16 +430,12 @@ TimeWidget::populate()
                 m_measureSpin->setMaximum(9999);
             }
             m_measureSpin->setValue(bar + 1);
-        } else {
-            m_measureReadOnly->setText(QString("%1").arg(bar + 1));
         }
 
         if (m_beatSpin) {
             m_beatSpin->setMinimum(1);
             m_beatSpin->setMaximum(timeSig.getBeatsPerBar());
             m_beatSpin->setValue(beat);
-        } else {
-            m_beatReadOnly->setText(QString("%1").arg(beat));
         }
 
         if (m_fractionSpin) {
@@ -460,8 +444,6 @@ TimeWidget::populate()
                                     Note(Note::Shortest).
                                     getDuration() - 1);
             m_fractionSpin->setValue(hemidemis);
-        } else {
-            m_fractionReadOnly->setText(QString("%1").arg(hemidemis));
         }
 
         m_timeSig->setText(tr("(%1/%2 time)")
@@ -479,8 +461,6 @@ TimeWidget::populate()
                 m_secondsSpin->setMaximum(9999);
             }
             m_secondsSpin->setValue(rt.sec);
-        } else {
-            m_secondsReadOnly->setText(QString("%1").arg(rt.sec));
         }
 
         if (m_msecSpin) {
@@ -500,8 +480,6 @@ TimeWidget::populate()
             // Causes cycle of rounding between msec and units
             // which creates odd typing behavior
             m_msecSpin->setValue(getRoundedMSec(rt));
-        } else {
-            m_msecReadOnly->setText(QString("%1").arg(rt.msec()));
         }
     }
 

@@ -39,7 +39,6 @@ namespace Rosegarden
 
 
 class Composition;
-class LineEdit;
 
 
 /// Absolute time and duration editing widget.
@@ -157,61 +156,29 @@ private:
 
     // Widgets
 
+    /// Note field for duration mode.
     QComboBox *m_noteCombo;
     std::vector<timeT> m_noteDurations;
-    /// Time field for editable absolute time mode.
+
+    /// Time field for absolute time mode.
     QSpinBox *m_timeSpin;
 
-    /// Measure/Measures field when editable.
+    /// Measure/Measures field.
     QSpinBox *m_measureSpin;
-    /// Measure/Measures field when not editable.
-    /**
-     * ??? editable is never false, so this is never used.  Remove.
-     * ??? Why LineEdit instead of QLabel?
-     * ??? Why do we need a member if we can't edit it?
-     */
-    LineEdit *m_measureReadOnly;
 
-    /// Beat/Beats field when editable.
+    /// Beat/Beats field.
     QSpinBox *m_beatSpin;
-    /// Beat/Beats field when not editable.
-    /**
-     * ??? editable is never false, so this is never used.  Remove.
-     * ??? Why LineEdit instead of QLabel?
-     * ??? Why do we need a member if we can't edit it?
-     */
-    LineEdit *m_beatReadOnly;
 
-    /// 64ths field when editable.
+    /// 64ths field.
     QSpinBox *m_fractionSpin;
-    /// 64ths field when not editable.
-    /**
-     * ??? editable is never false, so this is never used.  Remove.
-     * ??? Why LineEdit instead of QLabel?
-     * ??? Why do we need a member if we can't edit it?
-     */
-    LineEdit *m_fractionReadOnly;
+
     /// Time sig field that appears after 64ths (4/4 time).
     QLabel *m_timeSig;
 
-    /// Seconds field when editable.
+    /// Seconds field.
     QSpinBox *m_secondsSpin;
-    /// Seconds field when not editable.
-    /**
-     * ??? editable is never false, so this is never used.  Remove.
-     * ??? Why LineEdit instead of QLabel?
-     * ??? Why do we need a member if we can't edit it?
-     */
-    LineEdit *m_secondsReadOnly;
-    /// msec field when editable.
+    /// msec field.
     QSpinBox *m_msecSpin;
-    /// msec field when not editable.
-    /**
-     * ??? editable is never false, so this is never used.  Remove.
-     * ??? Why LineEdit instead of QLabel?
-     * ??? Why do we need a member if we can't edit it?
-     */
-    LineEdit *m_msecReadOnly;
 
     /// Tempo field (e.g. 120.0 bpm) in the lower right in duration mode.
     QLabel *m_tempo;
