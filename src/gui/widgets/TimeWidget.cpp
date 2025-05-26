@@ -87,14 +87,14 @@ TimeWidget::init()
 {
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
-    QLabel *label = nullptr;
+    QLabel *labelWidget = nullptr;
 
     // Duration Mode
     if (m_isDuration) {
 
-        label = new QLabel(tr("Note:"));
-        label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(label, 0, 0);
+        labelWidget = new QLabel(tr("Note:"));
+        labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        layout->addWidget(labelWidget, 0, 0);
 
         m_noteCombo = new QComboBox;
         m_noteDurations.push_back(0);
@@ -113,28 +113,29 @@ TimeWidget::init()
                 timeT dottedDuration = duration * 3 / 2;
                 m_noteDurations.push_back(dottedDuration);
                 timeT error = 0;
-                QString label = NotationStrings::makeNoteMenuLabel
-                                (dottedDuration, false, error);
-                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(dottedDuration, error);
+                QString label = NotationStrings::makeNoteMenuLabel(
+                        dottedDuration, false, error);
+                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(
+                        dottedDuration, error);
                 m_noteCombo->addItem(pmap, label); // ignore error
             }
 
             m_noteDurations.push_back(duration);
             timeT error = 0;
-            QString label = NotationStrings::makeNoteMenuLabel
-                            (duration, false, error);
+            QString label = NotationStrings::makeNoteMenuLabel(
+                    duration, false, error);
             QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
             m_noteCombo->addItem(pmap, label); // ignore error
         }
         connect(m_noteCombo,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &TimeWidget::slotNoteChanged);
-        layout->addWidget(m_noteCombo, 0, 1, 0-0+ 1, 3);
+        layout->addWidget(m_noteCombo, 0, 1, 1, 3);
 
         // Units
-        label = new QLabel(tr("Units:"));
-        label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(label, 0, 4);
+        labelWidget = new QLabel(tr("Units:"));
+        labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        layout->addWidget(labelWidget, 0, 4);
 
         m_timeSpin = new QSpinBox;
         m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
@@ -149,9 +150,9 @@ TimeWidget::init()
         m_noteCombo = nullptr;
 
         // Time
-        label = new QLabel(tr("Time:"));
-        label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(label, 0, 0);
+        labelWidget = new QLabel(tr("Time:"));
+        labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        layout->addWidget(labelWidget, 0, 0);
 
         m_timeSpin = new QSpinBox;
         m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
@@ -163,9 +164,9 @@ TimeWidget::init()
     }
 
     // Measure/Measures
-    label = new QLabel(m_isDuration ? tr("Measures:") : tr("Measure:"));
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(label, 1, 0);
+    labelWidget = new QLabel(m_isDuration ? tr("Measures:") : tr("Measure:"));
+    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(labelWidget, 1, 0);
 
     m_measureSpin = new QSpinBox;
     if (m_isDuration)
@@ -175,9 +176,9 @@ TimeWidget::init()
     layout->addWidget(m_measureSpin, 1, 1);
 
     // Beat/Beats
-    label = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"));
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(label, 1, 2);
+    labelWidget = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"));
+    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(labelWidget, 1, 2);
 
     m_beatSpin = new QSpinBox;
     m_beatSpin->setMinimum(1);
@@ -186,11 +187,11 @@ TimeWidget::init()
     layout->addWidget(m_beatSpin, 1, 3);
 
     // 64ths
-    label = new QLabel(tr("%1:").arg(NotationStrings::getShortNoteName(
+    labelWidget = new QLabel(tr("%1:").arg(NotationStrings::getShortNoteName(
             Note(Note::Shortest),  // note
             true)));  // plural
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(label, 1, 4);
+    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(labelWidget, 1, 4);
 
     m_fractionSpin = new QSpinBox;
     m_fractionSpin->setMinimum(1);
@@ -203,9 +204,9 @@ TimeWidget::init()
     layout->addWidget(m_timeSig, 1, 6);
 
     // Seconds
-    label = new QLabel(tr("Seconds:"));
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(label, 2, 0);
+    labelWidget = new QLabel(tr("Seconds:"));
+    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(labelWidget, 2, 0);
 
     m_secondsSpin = new QSpinBox;
     if (m_isDuration)
@@ -215,9 +216,9 @@ TimeWidget::init()
     layout->addWidget(m_secondsSpin, 2, 1);
 
     // msec
-    label = new QLabel(tr("msec:"));
-    label->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(label, 2, 2);
+    labelWidget = new QLabel(tr("msec:"));
+    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(labelWidget, 2, 2);
 
     m_msecSpin = new QSpinBox;
     m_msecSpin->setMinimum(0);
@@ -472,17 +473,6 @@ TimeWidget::getTime()
     return m_time;
 }
 
-RealTime
-TimeWidget::getRealTime()
-{
-    if (m_isDuration) {
-        return m_composition->getRealTimeDifference(m_startTime,
-                m_startTime + m_time);
-    } else {
-        return m_composition->getElapsedRealTime(m_time);
-    }
-}
-
 int
 TimeWidget::getRoundedMSec(RealTime rt)
 {
@@ -503,20 +493,20 @@ TimeWidget::slotSetTime(timeT t)
 }
 
 void
-TimeWidget::slotSetRealTime(RealTime rt)
+TimeWidget::slotSetRealTime(RealTime realTime)
 {
     if (m_isDuration) {
         RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
         // ??? Yikes!  A duration of zero is a serious problem.  Didn't I
         //     fix this years ago?  Did I miss this one?
-        if (rt >= RealTime::zero()) {
-            slotSetTime(m_composition->getElapsedTimeForRealTime(startRT + rt) -
+        if (realTime >= RealTime::zero()) {
+            slotSetTime(m_composition->getElapsedTimeForRealTime(startRT + realTime) -
                         m_startTime);
         } else {
-            RG_DEBUG << "WARNING: TimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << rt << ")";
+            RG_DEBUG << "WARNING: TimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << realTime << ")";
         }
     } else {
-        slotSetTime(m_composition->getElapsedTimeForRealTime(rt));
+        slotSetTime(m_composition->getElapsedTimeForRealTime(realTime));
     }
 }
 

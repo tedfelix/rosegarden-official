@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -97,8 +96,6 @@ public:
 
     /// Get the time in MIDI clocks.
     timeT getTime();
-    /// Get the time in seconds.
-    RealTime getRealTime();
 
 public slots:
 
@@ -109,8 +106,9 @@ public slots:
 
 private slots:
 
+    /// Set m_time based on RealTime.
     // ??? This is never used as a slot.  Move to private.
-    void slotSetRealTime(RealTime);
+    void slotSetRealTime(RealTime realTime);
 
     void slotNoteChanged(int);
 
