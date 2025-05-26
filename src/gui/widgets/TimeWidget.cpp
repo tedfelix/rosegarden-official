@@ -87,17 +87,19 @@ TimeWidget::init()
 {
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
+    int row{0};
+
     QLabel *labelWidget = nullptr;
 
     // Duration Mode
     if (m_isDuration) {
 
         // Note
-        labelWidget = new QLabel(tr("Note:"));
+        labelWidget = new QLabel(tr("Note:"), this);
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(labelWidget, 0, 0);
+        layout->addWidget(labelWidget, row, 0);
 
-        m_noteCombo = new QComboBox;
+        m_noteCombo = new QComboBox(this);
         m_noteDurations.push_back(0);
         m_noteCombo->addItem(tr("<inexact>"));
 
@@ -110,7 +112,7 @@ TimeWidget::init()
         for (const int divisor : divisors) {
 
             const timeT duration =
-                Note(Note::Breve).getDuration() / divisor;
+                    Note(Note::Breve).getDuration() / divisor;
 
             // If not breve or hemidemi, not a triplet, add dotted duration.
             if (divisor > 1  &&  divisor < 128  &&  (divisor % 3) != 0) {
@@ -118,40 +120,40 @@ TimeWidget::init()
                 m_noteDurations.push_back(dottedDuration);
                 // Ignored
                 timeT error = 0;
-                QString label = NotationStrings::makeNoteMenuLabel(
+                const QString text = NotationStrings::makeNoteMenuLabel(
                         dottedDuration, false, error);
-                QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(
+                const QPixmap pixmap = NotePixmapFactory::makeNoteMenuPixmap(
                         dottedDuration, error);
 
-                m_noteCombo->addItem(pmap, label);
+                m_noteCombo->addItem(pixmap, text);
             }
 
             m_noteDurations.push_back(duration);
             // Ignored
             timeT error = 0;
-            QString label = NotationStrings::makeNoteMenuLabel(
+            const QString text = NotationStrings::makeNoteMenuLabel(
                     duration, false, error);
-            QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(
+            const QPixmap pixmap = NotePixmapFactory::makeNoteMenuPixmap(
                     duration, error);
 
-            m_noteCombo->addItem(pmap, label);
+            m_noteCombo->addItem(pixmap, text);
         }
 
         connect(m_noteCombo,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &TimeWidget::slotNoteChanged);
-        layout->addWidget(m_noteCombo, 0, 1, 1, 3);
+        layout->addWidget(m_noteCombo, row, 1, 1, 3);
 
         // Units
-        labelWidget = new QLabel(tr("Units:"));
+        labelWidget = new QLabel(tr("Units:"), this);
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(labelWidget, 0, 4);
+        layout->addWidget(labelWidget, row, 4);
 
-        m_timeSpin = new QSpinBox;
+        m_timeSpin = new QSpinBox(this);
         m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget::slotTimeTChanged);
-        layout->addWidget(m_timeSpin, 0, 5);
+        layout->addWidget(m_timeSpin, row, 5);
 
     } else {  // Absolute Time Mode
 
@@ -160,93 +162,98 @@ TimeWidget::init()
         m_noteCombo = nullptr;
 
         // Time
-        labelWidget = new QLabel(tr("Time:"));
+        labelWidget = new QLabel(tr("Time:"), this);
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(labelWidget, 0, 0);
+        layout->addWidget(labelWidget, row, 0);
 
-        m_timeSpin = new QSpinBox;
+        m_timeSpin = new QSpinBox(this);
         m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget::slotTimeTChanged);
-        layout->addWidget(m_timeSpin, 0, 1);
-        layout->addWidget(new QLabel(tr("units")), 0, 2);
+        layout->addWidget(m_timeSpin, row, 1);
+        layout->addWidget(new QLabel(tr("units"), this), row, 2);
 
     }
 
-    // Measure/Measures
-    labelWidget = new QLabel(m_isDuration ? tr("Measures:") : tr("Measure:"));
-    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(labelWidget, 1, 0);
+    ++row;
 
-    m_measureSpin = new QSpinBox;
+    // Measure/Measures
+    labelWidget = new QLabel(
+            m_isDuration ? tr("Measures:") : tr("Measure:"), this);
+    labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    layout->addWidget(labelWidget, row, 0);
+
+    m_measureSpin = new QSpinBox(this);
     if (m_isDuration)
         m_measureSpin->setMinimum(0);
     connect(m_measureSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget::slotBarBeatOrFractionChanged);
-    layout->addWidget(m_measureSpin, 1, 1);
+    layout->addWidget(m_measureSpin, row, 1);
 
     // Beat/Beats
-    labelWidget = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"));
+    labelWidget = new QLabel(m_isDuration ? tr("beats:") : tr("beat:"), this);
     labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(labelWidget, 1, 2);
+    layout->addWidget(labelWidget, row, 2);
 
-    m_beatSpin = new QSpinBox;
+    m_beatSpin = new QSpinBox(this);
     m_beatSpin->setMinimum(1);
     connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget::slotBarBeatOrFractionChanged);
-    layout->addWidget(m_beatSpin, 1, 3);
+    layout->addWidget(m_beatSpin, row, 3);
 
     // 64ths
     labelWidget = new QLabel(tr("%1:").arg(NotationStrings::getShortNoteName(
             Note(Note::Shortest),  // note
-            true)));  // plural
+            true)),  // plural
+            this);  // parent
     labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(labelWidget, 1, 4);
+    layout->addWidget(labelWidget, row, 4);
 
-    m_fractionSpin = new QSpinBox;
+    m_fractionSpin = new QSpinBox(this);
     m_fractionSpin->setMinimum(1);
     connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget::slotBarBeatOrFractionChanged);
-    layout->addWidget(m_fractionSpin, 1, 5);
+    layout->addWidget(m_fractionSpin, row, 5);
 
     // Time Signature (e.g. 4/4 time)
-    m_timeSig = new QLabel;
-    layout->addWidget(m_timeSig, 1, 6);
+    m_timeSig = new QLabel(this);
+    layout->addWidget(m_timeSig, row, 6);
+
+    ++row;
 
     // Seconds
-    labelWidget = new QLabel(tr("Seconds:"));
+    labelWidget = new QLabel(tr("Seconds:"), this);
     labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(labelWidget, 2, 0);
+    layout->addWidget(labelWidget, row, 0);
 
-    m_secondsSpin = new QSpinBox;
+    m_secondsSpin = new QSpinBox(this);
     if (m_isDuration)
         m_secondsSpin->setMinimum(0);
     connect(m_secondsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget::slotSecOrMSecChanged);
-    layout->addWidget(m_secondsSpin, 2, 1);
+    layout->addWidget(m_secondsSpin, row, 1);
 
     // msec
-    labelWidget = new QLabel(tr("msec:"));
+    labelWidget = new QLabel(tr("msec:"), this);
     labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-    layout->addWidget(labelWidget, 2, 2);
+    layout->addWidget(labelWidget, row, 2);
 
-    m_msecSpin = new QSpinBox;
+    m_msecSpin = new QSpinBox(this);
     m_msecSpin->setMinimum(0);
     m_msecSpin->setSingleStep(10);
     connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget::slotMSecChanged);
-    layout->addWidget(m_msecSpin, 2, 3);
+    layout->addWidget(m_msecSpin, row, 3);
 
     if (m_isDuration) {
-        m_tempo = new QLabel;
-        layout->addWidget(m_tempo, 2, 6);
+        m_tempo = new QLabel(this);
+        layout->addWidget(m_tempo, row, 6);
     } else {
         m_tempo = nullptr;
     }
 
     populate();
 
-    // Create a One-shot timer for use in msec and unit box to delay updates
     m_delayUpdateTimer = new QTimer(this);
     m_delayUpdateTimer->setSingleShot(true);
 }
@@ -271,20 +278,31 @@ TimeWidget::populate()
     // Duration mode.
     if (m_isDuration) {
 
-        if (m_time + m_startTime > m_composition->getEndMarker()) {
+        // Limit duration to the Composition end.
+        // ??? Shouldn't we only do this if m_constrainToCompositionDuration?
+        //     Otherwise we might be cutting off a valid value.
+        if (m_time + m_startTime > m_composition->getEndMarker())
             m_time = m_composition->getEndMarker() - m_startTime;
-        }
 
+        // Units
+
+        // ??? Should we really allow durations of 0?  That causes problems
+        //     in other parts of rg.
         m_timeSpin->setMinimum(0);
-        if (m_constrainToCompositionDuration) {
+
+        if (m_constrainToCompositionDuration)
             m_timeSpin->setMaximum(m_composition->getEndMarker() - m_startTime);
-        } else {
+        else
             m_timeSpin->setMaximum(INT_MAX);
-        }
+
         m_timeSpin->setValue(m_time);
 
+        // ??? We're in duration mode.  Don't we always have a m_noteCombo
+        //     in that case?  This might be a leftover read-only check.
+        //     Remove this "if".
         if (m_noteCombo) {
             m_noteCombo->setCurrentIndex(0);
+            // Set the note combo to the appropriate value if found.
             for (size_t i = 0; i < m_noteDurations.size(); ++i) {
                 if (m_time == m_noteDurations[i]) {
                     m_noteCombo->setCurrentIndex(i);
@@ -293,44 +311,55 @@ TimeWidget::populate()
             }
         }
 
-        // the bar/beat etc timings are considered to be times of a note
-        // starting at the start of a bar, in the time signature in effect
-        // at m_startTime
+        // Measures
 
-        int bars = 0, beats = 0, hemidemis = 0, remainder = 0;
-        m_composition->getMusicalTimeForDuration(m_startTime, m_time,
-                bars, beats, hemidemis, remainder);
-        TimeSignature timeSig =
-            m_composition->getTimeSignatureAt(m_startTime);
+        // The bar/beat etc timings are considered to be times of a note
+        // starting at the start of a bar, in the time signature in effect
+        // at m_startTime.
+
+        int bars{0};
+        int beats{0};
+        int hemidemis{0};
+        int remainder{0};
+        m_composition->getMusicalTimeForDuration(
+                m_startTime, m_time, bars, beats, hemidemis, remainder);
+        const TimeSignature timeSig =
+                m_composition->getTimeSignatureAt(m_startTime);
 
         m_measureSpin->setMinimum(0);
-        if (m_constrainToCompositionDuration) {
-            m_measureSpin->setMaximum
-                (m_composition->getBarNumber(m_composition->getEndMarker()) -
-                 m_composition->getBarNumber(m_startTime));
-        } else {
+
+        if (m_constrainToCompositionDuration)
+            m_measureSpin->setMaximum(
+                    m_composition->getBarNumber(m_composition->getEndMarker()) -
+                    m_composition->getBarNumber(m_startTime));
+        else
             m_measureSpin->setMaximum(9999);
-        }
+
         m_measureSpin->setValue(bars);
 
+        // Beats
         m_beatSpin->setMinimum(0);
         m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
         m_beatSpin->setValue(beats);
 
+        // 64ths
         m_fractionSpin->setMinimum(0);
-        m_fractionSpin->setMaximum(timeSig.getBeatDuration() /
-                                Note(Note::Shortest).
-                                getDuration() - 1);
+        m_fractionSpin->setMaximum(
+                timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
 
+        // Time Signature
         m_timeSig->setText(tr("(%1/%2 time)")
 			   .arg(timeSig.getNumerator())
                            .arg(timeSig.getDenominator()));
 
-        timeT endTime = m_startTime + m_time;
+        // Seconds
 
-        RealTime rt = m_composition->getRealTimeDifference
-                      (m_startTime, endTime);
+        const timeT endTime = m_startTime + m_time;
+
+        // Duration in seconds.
+        RealTime realTime = m_composition->getRealTimeDifference(
+                m_startTime, endTime);
 
         m_secondsSpin->setMinimum(0);
         if (m_constrainToCompositionDuration) {
@@ -339,15 +368,16 @@ TimeWidget::populate()
         } else {
             m_secondsSpin->setMaximum(9999);
         }
-        m_secondsSpin->setValue(rt.sec);
+        m_secondsSpin->setValue(realTime.sec);
 
+        // msec
         m_msecSpin->setMinimum(0);
         m_msecSpin->setMaximum(999);
 
         // Round value instead of direct read from rt.msec
         // Causes cycle of rounding between msec and units
         // which creates odd typing behavior
-        m_msecSpin->setValue(getRoundedMSec(rt));
+        m_msecSpin->setValue(getRoundedMSec(realTime));
 
         bool change = (m_composition->getTempoChangeNumberAt(endTime) !=
                        m_composition->getTempoChangeNumberAt(m_startTime));
