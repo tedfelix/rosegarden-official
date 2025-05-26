@@ -296,7 +296,7 @@ TempoDialog::populateTempo()
     updateBeatLabels(comp.getTempoQpm(tempo));
 
     if (m_timeEditor) {
-        m_timeEditor->slotSetTime(m_tempoTime);
+        m_timeEditor->setTime(m_tempoTime);
         return ;
     }
 

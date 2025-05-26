@@ -51,14 +51,14 @@ TimeWidget::TimeWidget(const QString &title,
                        Composition *composition,
                        timeT initialTime,
                        bool constrainToCompositionDuration) :
-        QGroupBox(title, parent),
-        m_composition(composition),
-        m_isDuration(false),
-        m_constrainToCompositionDuration(constrainToCompositionDuration),
-        m_startTime(0),
-        m_defaultTime(initialTime),
-        m_minimumDuration(0),  // Unused in absolute time mode.
-        m_time(initialTime)
+    QGroupBox(title, parent),
+    m_composition(composition),
+    m_isDuration(false),
+    m_constrainToCompositionDuration(constrainToCompositionDuration),
+    m_startTime(0),
+    m_defaultTime(initialTime),
+    m_minimumDuration(0),  // Unused in absolute time mode.
+    m_time(initialTime)
 {
     init();
 }
@@ -70,14 +70,14 @@ TimeWidget::TimeWidget(const QString& title,
                        timeT initialDuration,
                        timeT minimumDuration,
                        bool constrainToCompositionDuration) :
-        QGroupBox(title, parent),
-        m_composition(composition),
-        m_isDuration(true),
-        m_constrainToCompositionDuration(constrainToCompositionDuration),
-        m_startTime(startTime),
-        m_defaultTime(initialDuration),
-        m_minimumDuration(minimumDuration),
-        m_time(initialDuration)
+    QGroupBox(title, parent),
+    m_composition(composition),
+    m_isDuration(true),
+    m_constrainToCompositionDuration(constrainToCompositionDuration),
+    m_startTime(startTime),
+    m_defaultTime(initialDuration),
+    m_minimumDuration(minimumDuration),
+    m_time(initialDuration)
 {
     init();
 }
@@ -92,6 +92,7 @@ TimeWidget::init()
     // Duration Mode
     if (m_isDuration) {
 
+        // Note
         labelWidget = new QLabel(tr("Note:"));
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(labelWidget, 0, 0);
@@ -99,34 +100,43 @@ TimeWidget::init()
         m_noteCombo = new QComboBox;
         m_noteDurations.push_back(0);
         m_noteCombo->addItem(tr("<inexact>"));
-        int denoms[] = {
+
+        // Divisors of a breve.
+        const std::vector<int> divisors = {
             1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128
         };
 
-        for (size_t i = 0; i < sizeof(denoms) / sizeof(denoms[0]); ++i) {
+        // For each divisor, and an entry to m_noteCombo.
+        for (const int divisor : divisors) {
 
-            timeT duration =
-                Note(Note::Breve).getDuration() / denoms[i];
+            const timeT duration =
+                Note(Note::Breve).getDuration() / divisor;
 
-            if (denoms[i] > 1 && denoms[i] < 128 && (denoms[i] % 3) != 0) {
-                // not breve or hemidemi, not a triplet
-                timeT dottedDuration = duration * 3 / 2;
+            // If not breve or hemidemi, not a triplet, add dotted duration.
+            if (divisor > 1  &&  divisor < 128  &&  (divisor % 3) != 0) {
+                const timeT dottedDuration = duration * 3 / 2;
                 m_noteDurations.push_back(dottedDuration);
+                // Ignored
                 timeT error = 0;
                 QString label = NotationStrings::makeNoteMenuLabel(
                         dottedDuration, false, error);
                 QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(
                         dottedDuration, error);
-                m_noteCombo->addItem(pmap, label); // ignore error
+
+                m_noteCombo->addItem(pmap, label);
             }
 
             m_noteDurations.push_back(duration);
+            // Ignored
             timeT error = 0;
             QString label = NotationStrings::makeNoteMenuLabel(
                     duration, false, error);
-            QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(duration, error);
-            m_noteCombo->addItem(pmap, label); // ignore error
+            QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(
+                    duration, error);
+
+            m_noteCombo->addItem(pmap, label);
         }
+
         connect(m_noteCombo,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
                 this, &TimeWidget::slotNoteChanged);
@@ -477,12 +487,15 @@ int
 TimeWidget::getRoundedMSec(RealTime rt)
 {
     double msecDouble = rt.usec() / 1000.0;
+    // ??? I think lround() is the same as this.  Check how it
+    //     handles negatives.
+    //       return lround(msecDouble);
     return rt.sec > 0 ? floor(msecDouble + 0.5) : ceil(msecDouble - 0.5);
 
 }
 
 void
-TimeWidget::slotSetTime(timeT t)
+TimeWidget::setTime(timeT t)
 {
     if (m_isDuration  &&  t < m_minimumDuration)
         t = m_minimumDuration;
@@ -493,34 +506,33 @@ TimeWidget::slotSetTime(timeT t)
 }
 
 void
-TimeWidget::slotSetRealTime(RealTime realTime)
+TimeWidget::setRealTime(RealTime realTime)
 {
     if (m_isDuration) {
         RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
         // ??? Yikes!  A duration of zero is a serious problem.  Didn't I
         //     fix this years ago?  Did I miss this one?
         if (realTime >= RealTime::zero()) {
-            slotSetTime(m_composition->getElapsedTimeForRealTime(startRT + realTime) -
-                        m_startTime);
+            setTime(m_composition->getElapsedTimeForRealTime(startRT + realTime) - m_startTime);
         } else {
             RG_DEBUG << "WARNING: TimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << realTime << ")";
         }
     } else {
-        slotSetTime(m_composition->getElapsedTimeForRealTime(realTime));
+        setTime(m_composition->getElapsedTimeForRealTime(realTime));
     }
 }
 
 void
 TimeWidget::slotResetToDefault()
 {
-    slotSetTime(m_defaultTime);
+    setTime(m_defaultTime);
 }
 
 void
 TimeWidget::slotNoteChanged(int n)
 {
     if (n > 0) {
-        slotSetTime(m_noteDurations[n]);
+        setTime(m_noteDurations[n]);
     }
 }
 
@@ -580,7 +592,7 @@ TimeWidget::slotTimeTUpdate()
     m_delayUpdateTimer->stop();
 
     // Perform an immediate update.
-    slotSetTime(m_timeSpin->value());
+    setTime(m_timeSpin->value());
 }
 
 void
@@ -591,11 +603,11 @@ TimeWidget::slotBarBeatOrFractionChanged(int)
     int fraction = m_fractionSpin->value();
 
     if (m_isDuration) {
-        slotSetTime(m_composition->getDurationForMusicalTime
+        setTime(m_composition->getDurationForMusicalTime
                     (m_startTime, bar, beat, fraction, 0));
 
     } else {
-        slotSetTime(m_composition->getAbsoluteTimeForMusicalTime
+        setTime(m_composition->getAbsoluteTimeForMusicalTime
                     (bar, beat, fraction, 0));
     }
 }
@@ -606,7 +618,7 @@ TimeWidget::slotSecOrMSecChanged(int)
     int sec = m_secondsSpin->value();
     int msec = m_msecSpin->value();
 
-    slotSetRealTime(RealTime(sec, msec * 1000000));
+    setRealTime(RealTime(sec, msec * 1000000));
 }
 
 void

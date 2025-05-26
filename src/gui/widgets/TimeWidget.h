@@ -61,9 +61,6 @@ public:
      * test case for that.  There might be others that send a false
      * via TimeDialog for more test cases.
      * RosegardenMainWindow::slotSetSegmentStartTimes() looks like another.
-     *
-     * ??? I can't find anyone who asks for non-editable.  Remove editable
-     *     and all code related to non-editable.
      */
     TimeWidget(const QString &title,
                QWidget *parent,
@@ -82,9 +79,6 @@ public:
      * constrainToCompositionDuration set to false.  This would be a good
      * test case for that.  TimeDialog's clients might do the same.  Might
      * want to trace them back as well for more test cases.
-     *
-     * ??? I can't find anyone who asks for non-editable.  Remove editable
-     *     and all code related to non-editable.
      */
     TimeWidget(const QString &title,
                QWidget *parent,
@@ -94,21 +88,15 @@ public:
                timeT minimumDuration,
                bool constrainToCompositionDuration);
 
+    void setTime(timeT);
     /// Get the time in MIDI clocks.
     timeT getTime();
 
 public slots:
 
-    // ??? This is never used as a slot.  Rename and move to public.
-    void slotSetTime(timeT);
-
     void slotResetToDefault();
 
 private slots:
-
-    /// Set m_time based on RealTime.
-    // ??? This is never used as a slot.  Move to private.
-    void slotSetRealTime(RealTime realTime);
 
     void slotNoteChanged(int);
 
@@ -135,9 +123,9 @@ private:
 
     /// true for duration mode, false for absolute time mode.
     const bool m_isDuration;
-    bool m_constrainToCompositionDuration;
+    const bool m_constrainToCompositionDuration;
     /// For durations, this lets us know where we are in the Composition.
-    timeT m_startTime;
+    const timeT m_startTime;
     /// Initial time in case we need to reset.
     const timeT m_defaultTime;
     /// When editing a duration, this is the smallest allowed.
@@ -145,6 +133,8 @@ private:
 
     /// The time or duration that is currently displayed on the widget.
     timeT m_time;
+    /// Set m_time based on RealTime.
+    void setRealTime(RealTime realTime);
 
     // Widgets
 
