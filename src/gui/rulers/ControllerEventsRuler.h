@@ -106,6 +106,9 @@ public:
 
     virtual bool allowSimultaneousEvents() override;
 
+    // for key pressure
+    virtual int getPitch() {return 0;}
+
 protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);

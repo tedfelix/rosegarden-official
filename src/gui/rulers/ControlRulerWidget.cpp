@@ -24,6 +24,7 @@
 #include "ControlRulerTabBar.h"
 #include "ControllerEventsRuler.h"
 #include "PropertyControlRuler.h"
+#include "KeyPressureRuler.h"
 
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
@@ -461,8 +462,18 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     if (!m_viewSegment)
         return;
 
-    ControlRuler *controlRuler = new ControllerEventsRuler(
-            m_viewSegment, m_scale, this, &controlParameter);
+    ControlRuler* controlRuler;
+    if (controlParameter == ControlParameter::getKeyPressure()) {
+        KeyPressureRuler* keyPressureRuler =
+            new KeyPressureRuler
+            (m_viewSegment, m_scale, this, &controlParameter);
+        keyPressureRuler->setElementSelection(m_selectedElements);
+        controlRuler = keyPressureRuler;
+    } else {
+        controlRuler =
+            new ControllerEventsRuler
+            (m_viewSegment, m_scale, this, &controlParameter);
+    }
 
     controlRuler->setXOffset(m_leftMargin);
 
@@ -575,6 +586,7 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
     }
 
     // Send new selection to all PropertyControlRulers.  IOW the velocity ruler.
+    // Also the KeyPressureRuler needs the element selection
     // For each ruler...
     for (ControlRuler *ruler : m_controlRulerList) {
         PropertyControlRuler *propertyRuler =
@@ -582,7 +594,14 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
         // Is this the velocity ruler?  Then pass on the selection.
         if (propertyRuler)
             propertyRuler->updateSelection(m_selectedElements);
+
+        KeyPressureRuler *keyPressureRuler =
+            dynamic_cast<KeyPressureRuler *>(ruler);
+        if (keyPressureRuler)
+            keyPressureRuler->setElementSelection(m_selectedElements);
     }
+
+    //
 }
 
 void

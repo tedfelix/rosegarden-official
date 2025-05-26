@@ -618,7 +618,10 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
     else if (m_controller->getType() == Rosegarden::KeyPressure::EventType)
     {
         // Convert to Key pressure
-        controllerEvent->set<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE, initialValue);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
+                                              initialValue);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::KeyPressure::PITCH,
+                                              getPitch());
     }
 
     m_moddingSegment = true;
