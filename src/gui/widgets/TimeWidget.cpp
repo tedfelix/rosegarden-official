@@ -149,11 +149,11 @@ TimeWidget::init()
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(labelWidget, row, 4);
 
-        m_timeSpin = new QSpinBox(this);
-        m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
-        connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTimeTChanged);
-        layout->addWidget(m_timeSpin, row, 5);
+        m_timeOrUnitsSpin = new QSpinBox(this);
+        m_timeOrUnitsSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_timeOrUnitsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTimeOrUnitsChanged);
+        layout->addWidget(m_timeOrUnitsSpin, row, 5);
 
     } else {  // Absolute Time Mode
 
@@ -166,11 +166,11 @@ TimeWidget::init()
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(labelWidget, row, 0);
 
-        m_timeSpin = new QSpinBox(this);
-        m_timeSpin->setSingleStep(Note(Note::Shortest).getDuration());
-        connect(m_timeSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTimeTChanged);
-        layout->addWidget(m_timeSpin, row, 1);
+        m_timeOrUnitsSpin = new QSpinBox(this);
+        m_timeOrUnitsSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_timeOrUnitsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTimeOrUnitsChanged);
+        layout->addWidget(m_timeOrUnitsSpin, row, 1);
         layout->addWidget(new QLabel(tr("units"), this), row, 2);
 
     }
@@ -268,7 +268,7 @@ TimeWidget::populate()
     if (m_noteCombo)
         m_noteCombo->blockSignals(true);
 
-    m_timeSpin->blockSignals(true);
+    m_timeOrUnitsSpin->blockSignals(true);
     m_measureSpin->blockSignals(true);
     m_beatSpin->blockSignals(true);
     m_fractionSpin->blockSignals(true);
@@ -288,14 +288,14 @@ TimeWidget::populate()
 
         // ??? Should we really allow durations of 0?  That causes problems
         //     in other parts of rg.
-        m_timeSpin->setMinimum(0);
+        m_timeOrUnitsSpin->setMinimum(0);
 
         if (m_constrainToCompositionDuration)
-            m_timeSpin->setMaximum(m_composition->getEndMarker() - m_startTime);
+            m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker() - m_startTime);
         else
-            m_timeSpin->setMaximum(INT_MAX);
+            m_timeOrUnitsSpin->setMaximum(INT_MAX);
 
-        m_timeSpin->setValue(m_time);
+        m_timeOrUnitsSpin->setValue(m_time);
 
         // ??? We're in duration mode.  Don't we always have a m_noteCombo
         //     in that case?  This might be a leftover read-only check.
@@ -448,14 +448,14 @@ TimeWidget::populate()
         // Time
 
         if (m_constrainToCompositionDuration) {
-            m_timeSpin->setMinimum(m_composition->getStartMarker());
-            m_timeSpin->setMaximum(m_composition->getEndMarker());
+            m_timeOrUnitsSpin->setMinimum(m_composition->getStartMarker());
+            m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker());
         } else {
-            m_timeSpin->setMinimum(INT_MIN);
-            m_timeSpin->setMaximum(INT_MAX);
+            m_timeOrUnitsSpin->setMinimum(INT_MIN);
+            m_timeOrUnitsSpin->setMaximum(INT_MAX);
         }
 
-        m_timeSpin->setValue(m_time);
+        m_timeOrUnitsSpin->setValue(m_time);
 
         int bar;
         int beat;
@@ -464,33 +464,40 @@ TimeWidget::populate()
         m_composition->getMusicalTimeForAbsoluteTime(
                 m_time, bar, beat, hemidemis, remainder);
 
-        const TimeSignature timeSig =
-                m_composition->getTimeSignatureAt(m_time);
+        // Measure
 
+        // ??? Thought we only went to bar 0 at most.
         m_measureSpin->setMinimum(INT_MIN);
         if (m_constrainToCompositionDuration) {
-            m_measureSpin->setMaximum(m_composition->getBarNumber
-                               (m_composition->getEndMarker()));
+            m_measureSpin->setMaximum(m_composition->getBarNumber(
+                    m_composition->getEndMarker()));
         } else {
             m_measureSpin->setMaximum(9999);
         }
         m_measureSpin->setValue(bar + 1);
 
+        // Beat
         m_beatSpin->setMinimum(1);
+        const TimeSignature timeSig =
+                m_composition->getTimeSignatureAt(m_time);
         m_beatSpin->setMaximum(timeSig.getBeatsPerBar());
         m_beatSpin->setValue(beat);
 
+        // 64ths
         m_fractionSpin->setMinimum(0);
         m_fractionSpin->setMaximum(timeSig.getBeatDuration() /
                                 Note(Note::Shortest).
                                 getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
 
+        // Time Signature
         m_timeSig->setText(tr("(%1/%2 time)")
 	                   .arg(timeSig.getNumerator())
                            .arg(timeSig.getDenominator()));
 
-        RealTime rt = m_composition->getElapsedRealTime(m_time);
+        // Seconds
+
+        RealTime realTime = m_composition->getElapsedRealTime(m_time);
 
         m_secondsSpin->setMinimum(INT_MIN);
         if (m_constrainToCompositionDuration) {
@@ -499,7 +506,9 @@ TimeWidget::populate()
         } else {
             m_secondsSpin->setMaximum(9999);
         }
-        m_secondsSpin->setValue(rt.sec);
+        m_secondsSpin->setValue(realTime.sec);
+
+        // msec
 
         if (m_time >= 0)
         {
@@ -512,27 +521,23 @@ TimeWidget::populate()
             m_msecSpin->setMaximum(0);
         }
 
-        // Round value instead of direct read from rt.msec
-        // Causes cycle of rounding between msec and units
-        // which creates odd typing behavior
-        m_msecSpin->setValue(getRoundedMSec(rt));
+        // Round value instead of direct read from rt.nsec.
+        // Causes cycle of rounding between msec and Time
+        // which creates odd typing behavior.
+        m_msecSpin->setValue(getRoundedMSec(realTime));
     }
+
+    // ??? Get rid of these blockSignals() calls.
 
     if (m_noteCombo)
         m_noteCombo->blockSignals(false);
 
-    m_timeSpin->blockSignals(false);
+    m_timeOrUnitsSpin->blockSignals(false);
     m_measureSpin->blockSignals(false);
     m_beatSpin->blockSignals(false);
     m_fractionSpin->blockSignals(false);
     m_secondsSpin->blockSignals(false);
     m_msecSpin->blockSignals(false);
-}
-
-timeT
-TimeWidget::getTime()
-{
-    return m_time;
 }
 
 int
@@ -561,13 +566,13 @@ void
 TimeWidget::setRealTime(RealTime realTime)
 {
     if (m_isDuration) {
-        RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+        const RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
         // ??? Yikes!  A duration of zero is a serious problem.  Didn't I
         //     fix this years ago?  Did I miss this one?
         if (realTime >= RealTime::zero()) {
             setTime(m_composition->getElapsedTimeForRealTime(startRT + realTime) - m_startTime);
         } else {
-            RG_DEBUG << "WARNING: TimeWidget::slotSetRealTime: rt must be >0 for duration widget (was " << realTime << ")";
+            RG_DEBUG << "setRealTime(): WARNING: realTime must be > 0 for duration widget (was " << realTime << ")";
         }
     } else {
         setTime(m_composition->getElapsedTimeForRealTime(realTime));
@@ -583,15 +588,19 @@ TimeWidget::slotResetToDefault()
 void
 TimeWidget::slotNoteChanged(int n)
 {
-    if (n > 0) {
-        setTime(m_noteDurations[n]);
-    }
+    // 0 is <inexact>.  Nothing we can do with that.
+    if (n <= 0)
+        return;
+    if (n >= (int)m_noteDurations.size())
+        return;
+
+    setTime(m_noteDurations[n]);
 }
 
 void
-TimeWidget::slotTimeTChanged(int t)
+TimeWidget::slotTimeOrUnitsChanged(int t)
 {
-    RG_DEBUG << "slotTimeTChanged: t is " << t << ", value is " << m_timeSpin->value();
+    RG_DEBUG << "slotTimeOrUnitChanged: t is " << t << ", value is " << m_timeOrUnitsSpin->value();
 
     // The Time field has changed.  Either from the user typing into it or
     // from the up/down arrows on the spin box.
@@ -603,11 +612,11 @@ TimeWidget::slotTimeTChanged(int t)
     // Avoid duplicate connections.
     // ??? Isn't there a flag we can pass that will do that.  Yes.
     //     Qt::UniqueConnection
-    disconnect(m_timeSpin, &QAbstractSpinBox::editingFinished,
+    disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
                this, &TimeWidget::slotTimeTUpdate);
     // Since we are in the middle of a change to Time, we want to
     // be informed if the user tabs out of the field.
-    connect(m_timeSpin, &QAbstractSpinBox::editingFinished,
+    connect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
             this, &TimeWidget::slotTimeTUpdate);
 
     // No need to monitor the user tabbing out of the msec field.  The
@@ -644,7 +653,7 @@ TimeWidget::slotTimeTUpdate()
     m_delayUpdateTimer->stop();
 
     // Perform an immediate update.
-    setTime(m_timeSpin->value());
+    setTime(m_timeOrUnitsSpin->value());
 }
 
 void
@@ -676,8 +685,8 @@ TimeWidget::slotSecOrMSecChanged(int)
 void
 TimeWidget::slotMSecChanged(int)
 {
-    // ??? See slotTimeTChanged() which has more helpful comments and sync this
-    //     with that.
+    // ??? See slotTimeOrUnitChanged() which has more helpful comments and
+    //     make this look more like that.
 
     m_delayUpdateTimer->stop();
 
@@ -685,7 +694,7 @@ TimeWidget::slotMSecChanged(int)
     m_delayUpdateTimer->disconnect();
 
     // Disconnect signals from m_timeT
-    disconnect(m_timeSpin, &QAbstractSpinBox::editingFinished,
+    disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
                this, &TimeWidget::slotTimeTUpdate);
 
     // Disconnect signals from m_msec

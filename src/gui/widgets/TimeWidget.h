@@ -90,7 +90,7 @@ public:
 
     void setTime(timeT);
     /// Get the time in MIDI clocks.
-    timeT getTime();
+    timeT getTime()  { return m_time; }
 
 public slots:
 
@@ -101,7 +101,7 @@ private slots:
     void slotNoteChanged(int);
 
     /// Restart the update delay timer and connect it for m_timeT.
-    void slotTimeTChanged(int);
+    void slotTimeOrUnitsChanged(int);
 
     /// Stop the delay timer and call slotSetTime(int)
     void slotTimeTUpdate();
@@ -143,7 +143,7 @@ private:
     std::vector<timeT> m_noteDurations;
 
     /// Time field for absolute time mode.  Units field for duration mode.
-    QSpinBox *m_timeSpin;
+    QSpinBox *m_timeOrUnitsSpin;
 
     /// Measure/Measures field.
     QSpinBox *m_measureSpin;
