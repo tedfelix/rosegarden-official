@@ -100,12 +100,6 @@ public:
     /// Get the time in seconds.
     RealTime getRealTime();
 
-//signals:
-    // ??? No one appears to ever connect to this signal.
-    //void timeChanged(timeT);
-    // ??? No one appears to ever connect to this signal.
-    //void realTimeChanged(RealTime);
-
 public slots:
 
     // ??? This is never used as a slot.  Rename and move to public.
@@ -160,7 +154,7 @@ private:
     QComboBox *m_noteCombo;
     std::vector<timeT> m_noteDurations;
 
-    /// Time field for absolute time mode.
+    /// Time field for absolute time mode.  Units field for duration mode.
     QSpinBox *m_timeSpin;
 
     /// Measure/Measures field.
