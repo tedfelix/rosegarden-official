@@ -61,10 +61,13 @@ TimeWidget::TimeWidget(const QString &title,
     m_minimumDuration(0),  // Unused in absolute time mode.
     m_time(initialTime)
 {
+    RG_DEBUG << "ctor for time mode";
+    RG_DEBUG << "  m_constrainToCompositionDuration: " << m_constrainToCompositionDuration;
+
     init();
 }
 
-TimeWidget::TimeWidget(const QString& title,
+TimeWidget::TimeWidget(const QString &title,
                        QWidget *parent,
                        Composition *composition,
                        timeT startTime,
@@ -80,6 +83,9 @@ TimeWidget::TimeWidget(const QString& title,
     m_minimumDuration(minimumDuration),
     m_time(initialDuration)
 {
+    RG_DEBUG << "ctor for duration mode";
+    RG_DEBUG << "  m_constrainToCompositionDuration: " << m_constrainToCompositionDuration;
+
     init();
 }
 
@@ -480,8 +486,8 @@ TimeWidget::populate()
 
         // Past the end?  Constrain.
         if (m_constrainToCompositionDuration  &&
-            m_time > m_composition->getEndMarker())
-            m_time = m_composition->getEndMarker();
+            m_time >= m_composition->getEndMarker())
+            m_time = m_composition->getEndMarker() - 1;
 
         // Past the beginning?  Constrain.
         if (m_constrainToCompositionDuration  &&
@@ -496,7 +502,7 @@ TimeWidget::populate()
 
         if (m_constrainToCompositionDuration) {
             m_timeOrUnitsSpin->setMinimum(m_composition->getStartMarker());
-            m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker());
+            m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker() - 1);
         } else {
             m_timeOrUnitsSpin->setMinimum(INT_MIN);
             m_timeOrUnitsSpin->setMaximum(INT_MAX);
@@ -519,7 +525,9 @@ TimeWidget::populate()
         // programmatic changes as well as user changes.
         m_measureSpin->blockSignals(true);
 
-        // ??? Thought we only went to bar 0 at most.
+        // ??? This is actually a no-op as is the setMaximum() call.  This
+        //     field is value limited elsewhere.  We could just leave it wide
+        //     open and it will fix itself.
         m_measureSpin->setMinimum(INT_MIN);
         if (m_constrainToCompositionDuration) {
             m_measureSpin->setMaximum(m_composition->getBarNumber(
@@ -567,8 +575,8 @@ TimeWidget::populate()
         m_secondsSpin->blockSignals(true);
         m_secondsSpin->setMinimum(INT_MIN);
         if (m_constrainToCompositionDuration) {
-            m_secondsSpin->setMaximum(m_composition->getElapsedRealTime
-                               (m_composition->getEndMarker()).sec);
+            m_secondsSpin->setMaximum(m_composition->getElapsedRealTime(
+                    m_composition->getEndMarker()).sec);
         } else {
             m_secondsSpin->setMaximum(9999);
         }
