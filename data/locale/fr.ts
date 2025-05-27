@@ -6876,17 +6876,17 @@
     <message>
         <location line="+117"/>
         <source>Highlight Active Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Faire ressortir le segment actif</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Within &amp;Track</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Across &amp;All Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+104"/>
@@ -8840,7 +8840,7 @@
     <message>
         <location line="+1"/>
         <source>Split by &amp;Pitch...</source>
-        <translation>Séparer par &amp;tonalité...</translation>
+        <translation>Séparer par &amp;hauteur...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9976,7 +9976,7 @@ Voulez-vous utiliser
     <message>
         <location line="+10"/>
         <source>&lt;p&gt;Copyright 2000-%5 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2020 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version : %2&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt; {2000-%5 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-%5 par l&apos;équipe de développement de Rosegarden&lt;/p&gt;&lt;p&gt;Version : %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version : %2&lt;/p&gt;&lt;p&gt;Rosegarden vous a été apporté par un groupe de volontaires du monde entier.  Pour une liste des contributeurs, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;.&lt;br&gt;pour plus d&apos;informations sur Rosegarden, voir &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;.&lt;/p&gt;&lt;p&gt;License : GNU General Public License Version 2 ou ultérieure&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2024 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -12271,12 +12271,12 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location filename="../../src/gui/editors/event/ChannelPressureWidget.cpp" line="+65"/>
         <source>Channel Pressure Properties</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pressure:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12831,7 +12831,7 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Si coché, ces notes seront affichées au prochain chargement de ce document&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
@@ -13163,17 +13163,17 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location filename="../../src/gui/editors/event/ControllerWidget.cpp" line="+67"/>
         <source>Controller Properties</source>
-        <translation type="unfinished">Caractéristiques du Contrôleur</translation>
+        <translation>Caractéristiques du Contrôleur</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Numéro :</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur :</translation>
     </message>
 </context>
 <context>
@@ -13205,12 +13205,12 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location filename="../../src/commands/segment/CopySegmentCommand.cpp" line="+95"/>
         <source>(linked)</source>
-        <translation type="unfinished">(lié)</translation>
+        <translation>(lié)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>(copied)</source>
-        <translation type="unfinished">(copié)</translation>
+        <translation>(copié)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/CopySegmentCommand.h" line="+50"/>
@@ -13661,92 +13661,92 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location filename="../../src/gui/editors/event/EditEvent.cpp" line="+63"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Éditer Événement</translation>
+        <translation>Éditer Événement</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés  </translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Event type:</source>
-        <translation type="unfinished">Type d&apos;événement:</translation>
+        <translation>Type d&apos;événement :</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Temps absolu:</translation>
+        <translation>Temps absolu :</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>edit</source>
-        <translation type="unfinished">Éditer</translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Advanced Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propiétés avancées</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Sub-ordering: </source>
-        <translation type="unfinished">Sous-ordonnancement: </translation>
+        <translation>Sous-ordonnancement : </translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Additional Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Propriétés supplémentaires</translation>
     </message>
     <message>
         <location line="+143"/>
         <source>Edit Event Time</source>
-        <translation type="unfinished">Éditer le temps de l&apos;événement</translation>
+        <translation>Éditer le temps de l&apos;événement</translation>
     </message>
     <message>
         <location line="+43"/>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Value</source>
-        <translation type="unfinished">Valeur</translation>
+        <translation>Valeur</translation>
     </message>
     <message>
         <location line="+94"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>About to delete property &quot;%1&quot;.  Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>La propriété &quot;%1&quot; est sur le point d&apos;être supprimée.  Continuer ?</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Add Integer Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter propriété numértique</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Add String Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter propriété texte</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Add Boolean Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter propriété booléenne</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished">Supprimer</translation>
+        <translation>Supprimer</translation>
     </message>
 </context>
 <context>
@@ -14114,42 +14114,43 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+195"/>
         <source>Event filters</source>
-        <translation type="unfinished">Filtres d&apos;événement</translation>
+        <translation>Filtres d&apos;événement</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Note</source>
-        <translation type="unfinished">Note</translation>
+        <translation>Note</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Rest</source>
-        <translation type="unfinished">Silence</translation>
+        <translation>Silence</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Program Change</source>
-        <translation type="unfinished">Changement de programme</translation>
+        <translation>Changement de programme</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Controller</source>
-        <translation type="unfinished">Contrôleur</translation>
+        <translation>Contrôleur</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Pitch Bend</translation>
+        <translatorcomment>Glissement de hauteur</translatorcomment>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Pression de canal</translation>
+        <translation>Pression de canal</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Pression de touche</translation>
+        <translation>Pression de touche</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -14159,195 +14160,196 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+5"/>
         <source>System Exclusive</source>
-        <translation type="unfinished"></translation>
+        <translation>Exclusivité système</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Indication</source>
-        <translation type="unfinished">Indication</translation>
+        <translation>Indication</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Text</source>
-        <translation type="unfinished">Texte</translation>
+        <translation>Texte</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Generated regions</source>
-        <translation type="unfinished">Régions engendrées</translation>
+        <translation>Régions engendrées</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Segment ID</source>
-        <translation type="unfinished">Identificateur de segment</translation>
+        <translation>Identificateur de segment</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Other</source>
-        <translation type="unfinished">Autre</translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>All On/Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Cocher/décocher tout</translation>
     </message>
     <message>
         <location line="+45"/>
         <source>Time  </source>
-        <translation type="unfinished">Temps  </translation>
+        <translation>Temps  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Duration  </source>
-        <translation type="unfinished">Durée  </translation>
+        <translation>Durée  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Event Type  </source>
-        <translation type="unfinished">Type d&apos;événement  </translation>
+        <translation>Type d&apos;événement  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pitch  </source>
-        <translation type="unfinished">Ton  </translation>
+        <translation>Hauteur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Velocity  </source>
-        <translation type="unfinished">Vélocité  </translation>
+        <translation>Vélocité  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Data1</source>
-        <translation type="unfinished"></translation>
+        <translation>Donnée 1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Data2</source>
-        <translation type="unfinished"></translation>
+        <translation>Donnée 2</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Triggered Segment Properties</source>
-        <translation type="unfinished">Propriétés du segment déclenché</translation>
+        <translation>Propriétés du segment déclenché</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Label:  </source>
-        <translation type="unfinished">Étiquette:  </translation>
+        <translation>Étiquette :  </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;Aucune étiquette&gt;</translation>
+        <translation>&lt;Aucune étiquette&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+10"/>
         <location line="+10"/>
         <source>edit</source>
-        <translation type="unfinished">Éditer</translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Base pitch:  </source>
-        <translation type="unfinished">Ton:  </translation>
+        <translatorcomment>Hauteur de base :</translatorcomment>
+        <translation>Ton:  </translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Base velocity:  </source>
-        <translation type="unfinished">Vélocité:  </translation>
+        <translation>Vélocité de base :</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Default timing:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Durée par défaut :</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>As stored</source>
-        <translation type="unfinished">Comme stocké</translation>
+        <translation>Comme enregistrée</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Tronquer si plus long que la note</translation>
+        <translation>Tronquer si plus long que la note</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End at same time as note</source>
-        <translation type="unfinished">Finir en même temps que la note</translation>
+        <translation>Finir en même temps que la note</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation type="unfinished">Etirer ou comprimer le segment à la durée de la note</translation>
+        <translation>Etirer ou comprimer le segment à la durée de la note</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Adjust pitch to trigger note by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajuster par défaut la hauteur à celle de la note déclencheuse</translation>
     </message>
     <message>
         <location line="+206"/>
         <location line="+11"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;non défini&gt;</translation>
     </message>
     <message>
         <location line="+88"/>
         <source>(group %1)  </source>
-        <translation type="unfinished">(groupe %1)  </translation>
+        <translation>(groupe %1)  </translation>
     </message>
     <message>
         <location line="+152"/>
         <source>Segment label</source>
-        <translation type="unfinished">Étiquette du segment</translation>
+        <translation>Étiquette du segment</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Label:</source>
-        <translation type="unfinished">Étiquette:</translation>
+        <translation>Étiquette :</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Ton de base</translation>
+        <translation>Hauteur de base</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Vélocité</translation>
+        <translation>Vélocité de base</translation>
     </message>
     <message>
         <location line="+147"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished"></translation>
+        <translation>Insertion du contenu du presse-papiers...</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Couldn&apos;t paste at this point</source>
-        <translation type="unfinished">Impossible de coller à cet endroit</translation>
+        <translation>Impossible de coller à cet endroit</translation>
     </message>
     <message>
         <location line="+453"/>
         <source>Open in Event Editor</source>
-        <translation type="unfinished">Ouvrir dans l&apos;éditeur d&apos;événement</translation>
+        <translation>Ouvrir dans l&apos;éditeur d&apos;événement</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Edit Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Editer le segment déclenché</translation>
     </message>
     <message>
         <location line="+68"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished">%1%2 - Segment déclenché: %3</translation>
+        <translation>%1%2 - Segment déclenché : %3</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Event List Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Editeur de liste d&apos;événements</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -14400,7 +14402,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location filename="../../src/gui/editors/event/EventTypeDialog.cpp" line="+54"/>
         <source>Select Event type to insert.</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir le  type d&apos;événement à insérer</translation>
     </message>
 </context>
 <context>
@@ -14931,7 +14933,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Décocher cette case autorise le transport de JACK à dépasser la fin de la composition Rosegarden.  Ceci peut introduire une désynchronisationt des transports de JACK et de Rosegarden et provoquer des arrêts ou départs inattendus du transport.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -14941,7 +14943,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+469"/>
         <source>You must restart Rosegarden or open a file for the track label width change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez redémarrer Rosegarden ou ouvrir un fichier pour que le changement de largeur du label de la piste soit pris en compte.</translation>
     </message>
     <message>
         <source>Advanced Looping (experimental)</source>
@@ -15048,32 +15050,32 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+1"/>
         <source>Extra Large</source>
-        <translation type="unfinished"></translation>
+        <translation>Très grande</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Select the track size factor. Larger sizes are useful on HDPI displays.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Choix de la hauteur de la piste. Une grande taille est utile avec les écrans haute-résolution.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Track Label width</source>
-        <translation type="unfinished"></translation>
+        <translation>Largeur des étiquettes de piste</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Select the width of track labels. This is the text after the mute, record and solo buttons&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Choix de la largeur des étiquettes de piste (le texte à droite des boutons/indicateurs &quot;assourdir&quot;, &quot;enregistrer&quot; et &quot;solo&quot;).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Narrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Etroit</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Wide</source>
-        <translation type="unfinished"></translation>
+        <translation>Large</translation>
     </message>
     <message>
         <location line="+57"/>
@@ -16123,27 +16125,27 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location filename="../../src/gui/editors/event/KeyPressureWidget.cpp" line="+70"/>
         <source>Key Pressure Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Attributs de la pression de touche</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Ton:</translation>
+        <translation>Hauteur :</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>edit</source>
-        <translation type="unfinished">Éditer</translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Pressure:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pression :</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Éditer le ton</translation>
+        <translation>Éditer la hauteur</translation>
     </message>
 </context>
 <context>
@@ -17950,7 +17952,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Velocity for new notes.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location line="+19"/>
@@ -17960,7 +17962,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Quantize the display.&lt;/p&gt;&lt;p&gt;Notes with start times that are not aligned to the quantize setting are displayed as being aligned.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Quantifie l&apos;affichage.&lt;/p&gt;&lt;p&gt;Les notes dont le début n&apos;est pas aligné sur la valeur de quantification seront affichées comme si elles étaient alignées.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -18612,7 +18614,7 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location line="+15"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur :</translation>
     </message>
 </context>
 <context>
@@ -19736,7 +19738,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+10"/>
         <source>Duration:</source>
-        <translation type="unfinished">Durée:</translation>
+        <translation>Durée :</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -19744,52 +19746,52 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
         <location line="+53"/>
         <location line="+20"/>
         <source>edit</source>
-        <translation type="unfinished">Éditer</translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <location line="-89"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Ton:</translation>
+        <translation>Hauteur :</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Vélocité:</translation>
+        <translation>Vélocité :</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Lock notation to performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraindre la notation aux paramètres d&apos;exécution</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Notation time:</source>
-        <translation type="unfinished">Temps partition:</translation>
+        <translation>Temps (partition) :</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Notation duration:</source>
-        <translation type="unfinished">Durée partition:</translation>
+        <translation>Durée (partition) :</translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Définir la durée</translation>
+        <translation>Edition de la durée</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Éditer le ton</translation>
+        <translation>Édition de la hauteur</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Edit Event Notation Time</source>
-        <translation type="unfinished">Éditer le temps de l&apos;événement (partition)</translation>
+        <translation>Edition du temps de l&apos;événement (partition)</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Edit Notation Duration</source>
-        <translation type="unfinished">Définir la durée (partition)</translation>
+        <translation>Edition de la durée (partition)</translation>
     </message>
 </context>
 <context>
@@ -20218,7 +20220,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/widgets/PitchChooser.cpp" line="+52"/>
         <source>Pitch:</source>
-        <translation>Ton:</translation>
+        <translation>Hauteur :</translation>
     </message>
 </context>
 <context>
@@ -20268,7 +20270,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/dialogs/PitchPickerDialog.cpp" line="+38"/>
         <source>Pitch Selector</source>
-        <translation>Sélecteur de ton</translation>
+        <translation>Sélecteur de hauteur</translation>
     </message>
 </context>
 <context>
@@ -20549,12 +20551,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/editors/event/ProgramChangeWidget.cpp" line="+55"/>
         <source>Program Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Attributs du programme</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Program:</source>
-        <translation type="unfinished"></translation>
+        <translation>Programme :</translation>
     </message>
 </context>
 <context>
@@ -21007,7 +21009,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+25"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur :</translation>
     </message>
 </context>
 <context>
@@ -21249,22 +21251,22 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/editors/event/RestWidget.cpp" line="+60"/>
         <source>Rest Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Attributs du silence</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Duration:</source>
-        <translation type="unfinished">Durée:</translation>
+        <translation>Durée :</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>edit</source>
-        <translation type="unfinished">Éditer</translation>
+        <translation>Éditer</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Définir la durée</translation>
+        <translation>Modifier la durée</translation>
     </message>
 </context>
 <context>
@@ -22255,7 +22257,8 @@ Veuillez quitter puis relancer Rosegarden pour rétablir ces fonctionnalités.</
         <location line="+28"/>
         <source>An auto-save file for an unsaved document has been found.
 Do you want to open it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Un fichier de sauvegarde automatique a été trouvé pour un document non enregistré.
+Voulez-vous l&apos;ouvrir ?</translation>
     </message>
     <message>
         <location line="+1157"/>
@@ -22915,7 +22918,7 @@ Erreur obtenue : %2</translation>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+84"/>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer</translation>
     </message>
     <message>
         <location line="+96"/>
@@ -23337,12 +23340,12 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="+1"/>
         <source>Copy</source>
-        <translation type="unfinished">Copier</translation>
+        <translation>Copier</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy as Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Copier comme lien</translation>
     </message>
     <message numerus="yes">
         <location line="+248"/>
@@ -23397,12 +23400,12 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.h" line="+63"/>
         <source>Split by &amp;Pitch...</source>
-        <translation>Séparer par &amp;ton...</translation>
+        <translation>Séparer par &amp;hauteur...</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/SegmentSplitByPitchCommand.cpp" line="+46"/>
         <source>Split by Pitch</source>
-        <translation>Séparation par ton</translation>
+        <translation>Séparation par hauteur</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -23751,7 +23754,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location filename="../../src/commands/segment/SetTriggerSegmentBasePitchCommand.cpp" line="+31"/>
         <source>Set Base Pitch</source>
-        <translation>Définir ton de base</translation>
+        <translation>Définir la hauteur de base</translation>
     </message>
 </context>
 <context>
@@ -24469,17 +24472,17 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+10"/>
         <source>Data:</source>
-        <translation type="unfinished">Données:</translation>
+        <translation>Données :</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Load data</source>
-        <translation type="unfinished">Charger donnée</translation>
+        <translation>Charger données</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Save data</source>
-        <translation type="unfinished">Enregistrer les données</translation>
+        <translation>Enregistrer données</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -24490,23 +24493,23 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
         <location line="+2"/>
         <location line="+49"/>
         <source>System exclusive files</source>
-        <translation type="unfinished">Fichier &quot;system exclusive&quot;</translation>
+        <translation type="unfinished">Fichiers &quot;system exclusive&quot;</translation>
     </message>
     <message>
         <location line="-48"/>
         <location line="+49"/>
         <source>All files</source>
-        <translation type="unfinished">Tous les fichiers</translation>
+        <translation>Tous les fichiers</translation>
     </message>
     <message>
         <location line="-25"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not load SysEx file.</source>
-        <translation type="unfinished">Echec de chargement du fichier SysEx.</translation>
+        <translation>Echec de chargement du fichier SysEx.</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -24596,7 +24599,7 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location line="+286"/>
         <source>Edit Tempo Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Editer un changement de tempo</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -25957,7 +25960,7 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
         <location line="+774"/>
         <location line="+96"/>
         <source>PITCH WHEEL</source>
-        <translation>MOLETTE DE TONALITE</translation>
+        <translation>MOLETTE DE HAUTEUR</translation>
     </message>
     <message>
         <location line="-92"/>
@@ -26077,7 +26080,7 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location line="+2"/>
         <source>Adjust pitch to note</source>
-        <translation>Ajuster le ton à la note</translation>
+        <translation>Ajuster la hauteur à la note</translation>
     </message>
 </context>
 <context>
@@ -26105,7 +26108,7 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location line="+1"/>
         <source>Base pitch</source>
-        <translation>Ton de base</translation>
+        <translation>Hauteur de base</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -26438,7 +26441,7 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location line="+2"/>
         <source>Adjust pitch to note</source>
-        <translation>Ajuster le ton à la note</translation>
+        <translation>Ajuster la hauteur à la note</translation>
     </message>
 </context>
 <context>
