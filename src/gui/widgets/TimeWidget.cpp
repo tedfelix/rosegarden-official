@@ -151,16 +151,16 @@ TimeWidget::init()
                 this, &TimeWidget::slotNoteChanged);
         layout->addWidget(m_noteCombo, row, 1, 1, 3);
 
-        // Units
-        labelWidget = new QLabel(tr("Units:"), this);
+        // Ticks
+        labelWidget = new QLabel(tr("Ticks:"), this);
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(labelWidget, row, 4);
 
-        m_timeOrUnitsSpin = new QSpinBox(this);
-        m_timeOrUnitsSpin->setSingleStep(Note(Note::Shortest).getDuration());
-        connect(m_timeOrUnitsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTimeOrUnitsChanged);
-        layout->addWidget(m_timeOrUnitsSpin, row, 5);
+        m_ticksSpin = new QSpinBox(this);
+        m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTicksChanged);
+        layout->addWidget(m_ticksSpin, row, 5);
 
         ++row;
 
@@ -251,17 +251,17 @@ TimeWidget::init()
 
     if (!m_isDuration) {
 
-        // Time
-        labelWidget = new QLabel(tr("Time:"), this);
+        // Ticks
+        labelWidget = new QLabel(tr("Ticks:"), this);
         labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
         layout->addWidget(labelWidget, row, 0);
 
-        m_timeOrUnitsSpin = new QSpinBox(this);
-        m_timeOrUnitsSpin->setSingleStep(Note(Note::Shortest).getDuration());
-        connect(m_timeOrUnitsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTimeOrUnitsChanged);
-        layout->addWidget(m_timeOrUnitsSpin, row, 1);
-        layout->addWidget(new QLabel(tr("units"), this), row, 2);
+        m_ticksSpin = new QSpinBox(this);
+        m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTicksChanged);
+        layout->addWidget(m_ticksSpin, row, 1);
+        layout->addWidget(new QLabel(tr("ticks"), this), row, 2);
 
     }
 
@@ -285,11 +285,11 @@ TimeWidget::populate()
         if (m_time + m_startTime > m_composition->getEndMarker())
             m_time = m_composition->getEndMarker() - m_startTime;
 
-        // Units
+        // Ticks
 
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
-        m_timeOrUnitsSpin->blockSignals(true);
+        m_ticksSpin->blockSignals(true);
 
         // ??? Shouldn't this be set to m_minimumDuration?
         // ??? Should we really allow durations of 0?  That causes problems
@@ -312,16 +312,16 @@ TimeWidget::populate()
         //     - RMW::slotInsertRange()
         //     - RMW::slotSetSegmentDurations()
         //     - TriggerSegmentManager::slotAdd()
-        m_timeOrUnitsSpin->setMinimum(0);
+        m_ticksSpin->setMinimum(0);
 
         if (m_constrainToCompositionDuration)
-            m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker() - m_startTime);
+            m_ticksSpin->setMaximum(m_composition->getEndMarker() - m_startTime);
         else
-            m_timeOrUnitsSpin->setMaximum(INT_MAX);
+            m_ticksSpin->setMaximum(INT_MAX);
 
-        m_timeOrUnitsSpin->setValue(m_time);
+        m_ticksSpin->setValue(m_time);
 
-        m_timeOrUnitsSpin->blockSignals(false);
+        m_ticksSpin->blockSignals(false);
 
         // ??? We're in duration mode.  Don't we always have a m_noteCombo
         //     in that case?  This might be a leftover read-only check.
@@ -429,7 +429,7 @@ TimeWidget::populate()
         m_msecSpin->setMaximum(999);
 
         // Round value instead of direct read from rt.nsec.
-        // Causes cycle of rounding between msec and units
+        // Causes cycle of rounding between msec and ticks
         // which creates odd typing behavior.
         m_msecSpin->setValue(getRoundedMSec(realTime));
         m_msecSpin->blockSignals(false);
@@ -500,23 +500,7 @@ TimeWidget::populate()
             m_time < m_composition->getStartMarker())
             m_time = m_composition->getStartMarker();
 
-        // Time
-
-        // Have to block since QSpinBox::valueChanged() fires on
-        // programmatic changes as well as user changes.
-        m_timeOrUnitsSpin->blockSignals(true);
-
-        if (m_constrainToCompositionDuration) {
-            m_timeOrUnitsSpin->setMinimum(m_composition->getStartMarker());
-            m_timeOrUnitsSpin->setMaximum(m_composition->getEndMarker() - 1);
-        } else {
-            m_timeOrUnitsSpin->setMinimum(INT_MIN);
-            m_timeOrUnitsSpin->setMaximum(INT_MAX);
-        }
-
-        m_timeOrUnitsSpin->setValue(m_time);
-
-        m_timeOrUnitsSpin->blockSignals(false);
+        // Measure
 
         int bar;
         int beat;
@@ -524,8 +508,6 @@ TimeWidget::populate()
         int remainder;
         m_composition->getMusicalTimeForAbsoluteTime(
                 m_time, bar, beat, hemidemis, remainder);
-
-        // Measure
 
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
@@ -611,6 +593,25 @@ TimeWidget::populate()
         // which creates odd typing behavior.
         m_msecSpin->setValue(getRoundedMSec(realTime));
         m_msecSpin->blockSignals(false);
+
+        // Ticks
+
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_ticksSpin->blockSignals(true);
+
+        if (m_constrainToCompositionDuration) {
+            m_ticksSpin->setMinimum(m_composition->getStartMarker());
+            m_ticksSpin->setMaximum(m_composition->getEndMarker() - 1);
+        } else {
+            m_ticksSpin->setMinimum(INT_MIN);
+            m_ticksSpin->setMaximum(INT_MAX);
+        }
+
+        m_ticksSpin->setValue(m_time);
+
+        m_ticksSpin->blockSignals(false);
+
     }
 
 }
@@ -673,11 +674,11 @@ TimeWidget::slotNoteChanged(int n)
 }
 
 void
-TimeWidget::slotTimeOrUnitsChanged(int t)
+TimeWidget::slotTicksChanged(int t)
 {
-    RG_DEBUG << "slotTimeOrUnitsChanged(): t is " << t << ", value is " << m_timeOrUnitsSpin->value();
+    RG_DEBUG << "slotTicksChanged(): t is " << t << ", value is " << m_ticksSpin->value();
 
-    // The Time/Units field has changed.  Either from the user typing into it
+    // The Ticks field has changed.  Either from the user typing into it
     // or from the up/down arrows on the spin box.
 
     // No timer?  Bail.
@@ -687,22 +688,22 @@ TimeWidget::slotTimeOrUnitsChanged(int t)
     // Avoid duplicate connections.
     // ??? Isn't there a flag we can pass that will do that.  Yes.
     //     Qt::UniqueConnection
-    disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotTimeOrUnitsUpdate);
-    // Since we are in the middle of a change to Time, we want to
+    disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
+               this, &TimeWidget::slotTicksUpdate);
+    // Since we are in the middle of a change to Ticks, we want to
     // be informed if the user tabs out of the field.
-    connect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
-            this, &TimeWidget::slotTimeOrUnitsUpdate);
+    connect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
+            this, &TimeWidget::slotTicksUpdate);
 
     // No need to monitor the user tabbing out of the msec field.  The
-    // Time field is in play now.
+    // Ticks field is in play now.
     // This prevents an update if the user clicks on the msec field then
     // tabs out of it without making any changes.
     disconnect(m_msecSpin, &QAbstractSpinBox::editingFinished,
                this, &TimeWidget::slotMSecUpdate);
 
     // Delay Update Timer.
-    //   - Connect it to slotTimeOrUnitsUpdate().
+    //   - Connect it to slotTicksUpdate().
     //   - Restart it.
 
     // Stop the timer since we are going to restart it for the new connection.
@@ -710,29 +711,29 @@ TimeWidget::slotTimeOrUnitsChanged(int t)
     m_delayUpdateTimer->stop();
 
     // Disconnect the timer from everything to avoid duplicate connections
-    // and to make sure we will only be connected to slotTimeTUpdate().
+    // and to make sure we will only be connected to slotTicksUpdate().
     m_delayUpdateTimer->disconnect();
 
-    // Connect the timer to slotTimeTUpdate().
+    // Connect the timer to slotTicksUpdate().
     connect(m_delayUpdateTimer, &QTimer::timeout,
-            this, &TimeWidget::slotTimeOrUnitsUpdate);
+            this, &TimeWidget::slotTicksUpdate);
 
     m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
-TimeWidget::slotTimeOrUnitsUpdate()
+TimeWidget::slotTicksUpdate()
 {
-    // Either the user has tabbed out of the Time/Units field, or the
+    // Either the user has tabbed out of the Ticks field, or the
     // delayed update timer has gone off.  Update the rest of the fields
-    // based on the Time/Units field.
+    // based on the Ticks field.
 
     // May have fired already, but stop it in case called when widget lost
     // focus.
     m_delayUpdateTimer->stop();
 
     // Perform an immediate update.
-    setTime(m_timeOrUnitsSpin->value());
+    setTime(m_ticksSpin->value());
 }
 
 void
@@ -778,12 +779,12 @@ TimeWidget::slotMSecChanged(int)
     connect(m_msecSpin, &QAbstractSpinBox::editingFinished,
             this, &TimeWidget::slotMSecUpdate);
 
-    // No need to monitor the user tabbing out of the Time/Units field.  The
+    // No need to monitor the user tabbing out of the Ticks field.  The
     // msec field is in play now.
-    // This prevents an update if the user clicks on the Time/Units field then
+    // This prevents an update if the user clicks on the Ticks field then
     // tabs out of it without making any changes.
-    disconnect(m_timeOrUnitsSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotTimeOrUnitsUpdate);
+    disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
+               this, &TimeWidget::slotTicksUpdate);
 
     // Delay Update Timer.
     //   - Connect it to slotMSecUpdate().

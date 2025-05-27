@@ -89,7 +89,7 @@ public:
                bool constrainToCompositionDuration);
 
     void setTime(timeT);
-    /// Get the time in MIDI clocks.
+    /// Get the time in MIDI ticks.
     timeT getTime()  { return m_time; }
 
 public slots:
@@ -101,10 +101,10 @@ private slots:
     void slotNoteChanged(int);
 
     /// Restart the update delay timer and connect it for m_timeT.
-    void slotTimeOrUnitsChanged(int);
+    void slotTicksChanged(int t);
 
     /// Stop the delay timer and call slotSetTime(int)
-    void slotTimeOrUnitsUpdate();
+    void slotTicksUpdate();
 
     void slotMeasureBeatOrFractionChanged(int);
 
@@ -142,8 +142,8 @@ private:
     QComboBox *m_noteCombo;
     std::vector<timeT> m_noteDurations;
 
-    /// Time field for absolute time mode.  Units field for duration mode.
-    QSpinBox *m_timeOrUnitsSpin;
+    /// Ticks field.
+    QSpinBox *m_ticksSpin;
 
     /// Measure/Measures field.
     QSpinBox *m_measureSpin;
@@ -168,16 +168,16 @@ private:
     /// Timer to fire off a delayed update.
     /**
      * To see this in action, use the up/down arrows in the spin box to change
-     * the Time field and keep an eye on the msecs field.  It will update 1.5
-     * seconds later.  Only the Time and msec fields use this.  All others
+     * the Ticks field and keep an eye on the msecs field.  It will update 1.5
+     * seconds later.  Only the Ticks and msec fields use this.  All others
      * update immediately.
      *
      * ??? Why?  Why not just update it immediately?  I suspect this is to
      *     prevent the manic updating of all the fields while the user is
-     *     typing into one.  E.g. if you double-click in the time field and
+     *     typing into one.  E.g. if you double-click in the ticks field and
      *     slowly type in 52406, nothing will update until 1.5 seconds after
      *     you finish.  What is odd is that this is only implemented for the
-     *     Time/Units and msec fields.  Seems like it should be implemented for
+     *     Ticks and msec fields.  Seems like it should be implemented for
      *     all fields, or not implemented at all.  E.g. if you enter a large
      *     measure number right now, you get the manic updates.
      * ??? If there is a minimumDuration, this timer is being used to update
