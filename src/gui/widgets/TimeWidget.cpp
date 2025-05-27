@@ -436,57 +436,37 @@ TimeWidget::populate()
 
         // Tempo
 
-        // Does the tempo change over the duration?
+        // Does the tempo change over the duration?  If so we'll include
+        // the qualifier "starting".
         const bool change =
                 (m_composition->getTempoChangeNumberAt(endTime) !=
                  m_composition->getTempoChangeNumberAt(m_startTime));
+        QString starting;
+        if (change)
+            starting = tr("starting") + " ";  // As in "starting bpm".
 
-        // imprecise -- better to work from tempoT directly
         const double tempo = m_composition->getTempoQpm(
                 m_composition->getTempoAtTime(m_startTime));
+        QString qpm = QString::number(tempo, 'f', 2);
 
-        // ??? lround()?
-        const int qpmCents = int(tempo * 100.0);
-        int bpmCents = qpmCents;
-        // Crotchet is not the beat?
-        if (timeSig.getBeatDuration() != Note(Note::Crotchet).getDuration()) {
-            // ??? lround()?
-            bpmCents = int(tempo * 100.0 *
-                       Note(Note::Crotchet).getDuration() /
-                       timeSig.getBeatDuration());
+        QString text;
+        // Crotchet is the beat?
+        if (timeSig.getBeatDuration() == Note(Note::Crotchet).getDuration()) {
+            // qpm is bpm
+            text = "(" + starting + qpm + " " + tr("bpm") + ")";
+        } else {
+            const double bpmDouble = tempo *
+                    Note(Note::Crotchet).getDuration() /
+                    timeSig.getBeatDuration();
+            const QString bpm = QString::number(bpmDouble, 'f', 2);
+
+            // Had to move away from QString::arg() because it was dropping
+            // characters when I did things like %1%2.  Bizarre.
+            text = "(" + starting + qpm + " " + tr("qpm") + ", " + bpm + " " +
+                    tr("bpm") + ")";
         }
 
-        // If the tempo changes over the duration...
-        // ??? All we seem to be doing here is adding the word "starting" to
-        //     the front.  We can do that more simply.
-        // ??? Formatting looks wrong.  E.g. this will display 100.01 as 100.1.
-        //     Recommend just formatting the double:
-        //       arg(qpmCents / 100.0, 0, 'f', 2)
-        if (change) {
-            if (bpmCents != qpmCents) {
-                m_tempo->setText(tr("(starting %1.%2 qpm, %3.%4 bpm)")
-                                 .arg(qpmCents / 100)
-                                 .arg(qpmCents % 100)
-                                 .arg(bpmCents / 100)
-                                 .arg(bpmCents % 100));
-            } else {
-                m_tempo->setText(tr("(starting %1.%2 bpm)")
-                                 .arg(bpmCents / 100)
-                                 .arg(bpmCents % 100));
-            }
-        } else {  // Tempo is fixed over the duration.
-            if (bpmCents != qpmCents) {
-                m_tempo->setText(tr("(%1.%2 qpm, %3.%4 bpm)")
-                                 .arg(qpmCents / 100)
-                                 .arg(qpmCents % 100)
-                                 .arg(bpmCents / 100)
-                                 .arg(bpmCents % 100));
-            } else {
-                m_tempo->setText(tr("(%1.%2 bpm)")
-                                 .arg(bpmCents / 100)
-                                 .arg(bpmCents % 100));
-            }
-        }
+        m_tempo->setText(text);
 
     } else {  // Absolute Time mode
 
