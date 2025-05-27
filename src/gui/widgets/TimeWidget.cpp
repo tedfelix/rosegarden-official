@@ -162,27 +162,15 @@ TimeWidget::init()
                 this, &TimeWidget::slotTimeOrUnitsChanged);
         layout->addWidget(m_timeOrUnitsSpin, row, 5);
 
+        ++row;
+
     } else {  // Absolute Time Mode
 
         // Only duration mode has the note combo.  Always check m_noteCombo
         // before using.
         m_noteCombo = nullptr;
 
-        // Time
-        labelWidget = new QLabel(tr("Time:"), this);
-        labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
-        layout->addWidget(labelWidget, row, 0);
-
-        m_timeOrUnitsSpin = new QSpinBox(this);
-        m_timeOrUnitsSpin->setSingleStep(Note(Note::Shortest).getDuration());
-        connect(m_timeOrUnitsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTimeOrUnitsChanged);
-        layout->addWidget(m_timeOrUnitsSpin, row, 1);
-        layout->addWidget(new QLabel(tr("units"), this), row, 2);
-
     }
-
-    ++row;
 
     // Measure/Measures
     labelWidget = new QLabel(
@@ -257,6 +245,24 @@ TimeWidget::init()
         layout->addWidget(m_tempo, row, 6);
     } else {
         m_tempo = nullptr;
+    }
+
+    ++row;
+
+    if (!m_isDuration) {
+
+        // Time
+        labelWidget = new QLabel(tr("Time:"), this);
+        labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        layout->addWidget(labelWidget, row, 0);
+
+        m_timeOrUnitsSpin = new QSpinBox(this);
+        m_timeOrUnitsSpin->setSingleStep(Note(Note::Shortest).getDuration());
+        connect(m_timeOrUnitsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
+                this, &TimeWidget::slotTimeOrUnitsChanged);
+        layout->addWidget(m_timeOrUnitsSpin, row, 1);
+        layout->addWidget(new QLabel(tr("units"), this), row, 2);
+
     }
 
     populate();
