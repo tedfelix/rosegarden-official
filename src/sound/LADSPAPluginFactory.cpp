@@ -760,9 +760,8 @@ LADSPAPluginFactory::discoverPlugin(const QString &soName)
         //         << ", label is " << descriptor->Label;
 
         def_uri = lrdf_get_default_uri(descriptor->UniqueID);
-        if (def_uri) {
+        if (def_uri)
             defs = lrdf_get_setting_values(def_uri);
-        }
 
         int controlPortNumber = 1;
 
@@ -784,6 +783,8 @@ LADSPAPluginFactory::discoverPlugin(const QString &soName)
                 ++controlPortNumber;
             }
         }
+
+        lrdf_free_setting_values(defs);
 
         QString identifier = PluginIdentifier::createIdentifier
                              ("ladspa", soName, descriptor->Label);
