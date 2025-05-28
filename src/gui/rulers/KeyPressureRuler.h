@@ -40,6 +40,8 @@ public:
 
     int getPitch() override;
 
+    void paintEvent(QPaintEvent *) override;
+
 private:
     int m_notePitch;
     timeT m_noteStart;

@@ -113,6 +113,10 @@ protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);
 
+    void drawItems(QPainter& painter, QPen& pen, QBrush& brush);
+    void drawSelectionRect(QPainter& painter, QPen& pen, QBrush& brush);
+    void drawRubberBand(QPainter& painter);
+
     //--------------- Data members ---------------------------------
     int  m_defaultItemWidth;
 

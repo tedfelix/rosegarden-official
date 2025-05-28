@@ -170,67 +170,9 @@ ControllerEventsRuler::init()
     update();
 }
 
-void ControllerEventsRuler::paintEvent(QPaintEvent *event)
+void ControllerEventsRuler::drawItems
+(QPainter& painter, QPen& pen, QBrush& brush)
 {
-    ControlRuler::paintEvent(event);
-
-    // If this is the first time we've drawn this view,
-    //  reconfigure all items to make sure their icons
-    //  come out the right size
-    ///@TODO Only reconfigure all items if zoom has changed
-    if (m_lastDrawnRect != m_pannedRect) {
-        for (ControlItemMap::iterator it = m_controlItemMap.begin();
-             it != m_controlItemMap.end();
-             ++it) {
-            it->second->reconfigure();
-        }
-        m_lastDrawnRect = m_pannedRect;
-    }
-
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    QBrush brush(GUIPalette::getColour(GUIPalette::ControlItem),Qt::SolidPattern);
-
-    QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
-            0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
-
-    painter.setBrush(brush);
-    painter.setPen(pen);
-
-    QString str;
-
-    ControlItemMap::iterator mapIt;
-    float lastX, lastY;
-    lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
-
-    if (m_nextItemLeft != m_controlItemMap.end()) {
-        lastY = m_nextItemLeft->second->y();
-    } else {
-        lastY = valueToY(m_controller->getDefault());
-    }
-
-    mapIt = m_firstVisibleItem;
-    while (mapIt != m_controlItemMap.end()) {
-        QSharedPointer<ControlItem> item = mapIt->second;
-
-        painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-                mapXToWidget(item->xStart()),mapYToWidget(lastY));
-        painter.drawLine(mapXToWidget(item->xStart()),mapYToWidget(lastY),
-                mapXToWidget(item->xStart()),mapYToWidget(item->y()));
-        lastX = item->xStart();
-        lastY = item->y();
-        if (mapIt == m_lastVisibleItem) {
-            mapIt = m_controlItemMap.end();
-        } else {
-            ++mapIt;
-        }
-    }
-
-    painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
-            mapYToWidget(lastY));
-
     // Use a fast vector list to record selected items that are currently visible so that they
     // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     ControlItemVector selectedVector;
@@ -265,7 +207,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         // rather than the usual 0 to 127.  Note, the == 64 is hard coded
         // elsewhere, so one more won't hurt.  Fixes #1451.
         int offsetFactor = (m_controller->getDefault() == 64 ? 64 : 0);
-        str = QString::number(yToValue((*it)->y()) - offsetFactor);
+        QString str = QString::number(yToValue((*it)->y()) - offsetFactor);
         int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
         int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
 
@@ -277,7 +219,11 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         painter.setBrush(brush);
         painter.drawText(x,y,str);
     }
+}
 
+void ControllerEventsRuler::drawSelectionRect
+(QPainter& painter, QPen& pen, QBrush& brush)
+{
     if (m_selectionRect) {
         pen.setColor(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
         pen.setWidthF(0.5);
@@ -286,7 +232,10 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         painter.setBrush(brush);
         painter.drawRect(mapRectToWidget(m_selectionRect));
     }
+}
 
+void ControllerEventsRuler::drawRubberBand(QPainter& painter)
+{
     // draw the rubber band indicating where a line of controllers will go
     if (m_rubberBand && m_rubberBandVisible) {
         int x1 = mapXToWidget(m_rubberBand->x1());
@@ -296,6 +245,70 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         painter.setPen(Qt::red);
         painter.drawLine(x1, y1, x2, y2);
     }
+}
+
+void ControllerEventsRuler::paintEvent(QPaintEvent *event)
+{
+    ControlRuler::paintEvent(event);
+
+    // If this is the first time we've drawn this view,
+    //  reconfigure all items to make sure their icons
+    //  come out the right size
+    ///@TODO Only reconfigure all items if zoom has changed
+    if (m_lastDrawnRect != m_pannedRect) {
+        for (ControlItemMap::iterator it = m_controlItemMap.begin();
+             it != m_controlItemMap.end();
+             ++it) {
+            it->second->reconfigure();
+        }
+        m_lastDrawnRect = m_pannedRect;
+    }
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    QBrush brush(GUIPalette::getColour(GUIPalette::ControlItem),Qt::SolidPattern);
+
+    QPen pen(GUIPalette::getColour(GUIPalette::MatrixElementBorder),
+            0.5, Qt::SolidLine, Qt::SquareCap, Qt::MiterJoin);
+
+    painter.setBrush(brush);
+    painter.setPen(pen);
+
+    ControlItemMap::iterator mapIt;
+    float lastX, lastY;
+    lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
+
+    if (m_nextItemLeft != m_controlItemMap.end()) {
+        lastY = m_nextItemLeft->second->y();
+    } else {
+        lastY = valueToY(m_controller->getDefault());
+    }
+
+    mapIt = m_firstVisibleItem;
+    while (mapIt != m_controlItemMap.end()) {
+        QSharedPointer<ControlItem> item = mapIt->second;
+
+        painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
+                mapXToWidget(item->xStart()),mapYToWidget(lastY));
+        painter.drawLine(mapXToWidget(item->xStart()),mapYToWidget(lastY),
+                mapXToWidget(item->xStart()),mapYToWidget(item->y()));
+        lastX = item->xStart();
+        lastY = item->y();
+        if (mapIt == m_lastVisibleItem) {
+            mapIt = m_controlItemMap.end();
+        } else {
+            ++mapIt;
+        }
+    }
+
+    painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
+            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
+            mapYToWidget(lastY));
+
+    drawItems(painter, pen, brush);
+    drawSelectionRect(painter, pen, brush);
+    drawRubberBand(painter);
 }
 
 QString ControllerEventsRuler::getName()

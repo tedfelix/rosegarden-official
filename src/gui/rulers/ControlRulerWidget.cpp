@@ -581,7 +581,8 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
             ViewElementList::iterator viewElementIter =
                     m_viewSegment->findEvent(event);
             // Add it to m_selectedElements.
-            m_selectedElements.push_back(*viewElementIter);
+            if (viewElementIter != m_viewSegment->getViewElementList()->end())
+                m_selectedElements.push_back(*viewElementIter);
         }
     }
 
