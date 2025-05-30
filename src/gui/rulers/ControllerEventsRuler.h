@@ -109,6 +109,8 @@ public:
     // for key pressure
     virtual int getPitch() {return 0;}
 
+    virtual void getLimits(float& xmin, float& xmax);
+
 protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);

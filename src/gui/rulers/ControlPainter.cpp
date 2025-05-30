@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlPainter]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ControlPainter.h"
 
 #include "base/BaseProperties.h"
@@ -56,8 +59,13 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
 void
 ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 {
+    ControllerEventsRuler *ruler =
+        static_cast <ControllerEventsRuler*> (m_ruler);
+    float xmin, xmax;
+    ruler->getLimits(xmin, xmax);
+    RG_DEBUG << "handleLeftButtonPress limits" << xmin << xmax;
+    if (e->x < xmin || e->x > xmax) return;
     if (e->itemList.size()) {
-        ControllerEventsRuler *ruler = static_cast <ControllerEventsRuler*> (m_ruler);
         ControlItemVector::const_iterator it = e->itemList.begin();
         ruler->clearSelectedItems();
         ruler->addToSelection(*it);

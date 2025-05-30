@@ -35,7 +35,7 @@ public:
                 QPolygonF polygon);
 
     ~EventControlItem() override;
-    
+
     void update() override;
     virtual void updateFromEvent();
 

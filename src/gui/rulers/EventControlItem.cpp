@@ -116,9 +116,9 @@ void EventControlItem::reconfigure(float x, float y)
     } else {
         m_xstart = x;
     }
-    
+
     ControlItem::reconfigure();
-    
+
 ///@TODO ??
     ControlItem::update();
 

@@ -40,7 +40,8 @@ ControlItem::ControlItem(ControlRuler *controlRuler,
     m_data(0),
     m_controlRuler(controlRuler),
 //    m_elementAdapter(elementAdapter),
-    m_event(event)
+    m_event(event),
+    m_active(true)
 {
 }
 
@@ -117,5 +118,16 @@ void ControlItem::setX(int /* x */)
 void ControlItem::setWidth(int /* width */)
 {
 }
+
+void ControlItem::setActive(bool active)
+{
+    m_active = active;
+}
+
+bool ControlItem::active() const
+{
+    return m_active;
+}
+
 
 }

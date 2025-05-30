@@ -41,6 +41,9 @@ public:
     int getPitch() override;
 
     void paintEvent(QPaintEvent *) override;
+    void setSegment(Segment *) override;
+
+    void getLimits(float& xmin, float& xmax) override;
 
 private:
     int m_notePitch;

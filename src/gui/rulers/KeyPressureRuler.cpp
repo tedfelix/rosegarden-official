@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[KeyPressureRuler]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "KeyPressureRuler.h"
 
@@ -25,6 +25,7 @@
 #include "base/BaseProperties.h"
 #include "base/RulerScale.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/rulers/EventControlItem.h"
 
 #include <QPainter>
 
@@ -38,8 +39,8 @@ KeyPressureRuler::KeyPressureRuler(ViewSegment* segment,
                                    const char* name) :
     ControllerEventsRuler(segment, rulerScale, parent, controller, name),
     m_notePitch(-1),
-    m_noteStart(0),
-    m_noteDuration(0)
+    m_noteStart(-1),
+    m_noteDuration(-1)
 {
 }
 
@@ -59,6 +60,8 @@ void KeyPressureRuler::setElementSelection
             if (m_notePitch != -1) {
                 RG_DEBUG << "setElementSelection more than one note";
                 m_notePitch = -1;
+                m_noteStart = -1;
+                m_noteDuration = -1;
                 break;
             }
             m_notePitch = event->get<Int>(BaseProperties::PITCH);
@@ -68,6 +71,28 @@ void KeyPressureRuler::setElementSelection
         }
     }
 
+    // set element active flag
+    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+         it != m_controlItemMap.end();
+         ++it) {
+        ControlItem* item = it->second.data();
+        EventControlItem *ecItem = dynamic_cast<EventControlItem*>(item);
+        if (ecItem == nullptr) continue;
+        Event* controlEvent = ecItem->getEvent();
+        long value;
+        controlEvent->get<Rosegarden::Int>(Rosegarden::KeyPressure::PITCH,
+                                           value);
+        int cPitch = value;
+        timeT controlTime = controlEvent->getAbsoluteTime();
+        if (cPitch == m_notePitch &&
+            controlTime >= m_noteStart &&
+            controlTime <= m_noteStart + m_noteDuration) {
+            item->setActive(true);
+        } else {
+            item->setActive(false);
+        }
+    }
+    update();
 }
 
 int KeyPressureRuler::getPitch()
@@ -141,6 +166,29 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
     drawItems(painter, pen, brush);
     drawSelectionRect(painter, pen, brush);
     drawRubberBand(painter);
+}
+
+void
+KeyPressureRuler::setSegment(Segment *segment)
+{
+    ControllerEventsRuler::setSegment(segment); // create all items
+    // and deactivate them
+    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+         it != m_controlItemMap.end();
+         ++it) {
+        it->second->setActive(false);
+    }
+}
+
+void KeyPressureRuler::getLimits(float& xmin, float& xmax)
+{
+    if (m_noteStart == -1) {// nothing selected
+        xmin = -1;
+        xmax = -1;
+    } else {
+        xmin = m_rulerScale->getXForTime(m_noteStart);
+        xmax = m_rulerScale->getXForTime(m_noteStart + m_noteDuration);
+    }
 }
 
 }

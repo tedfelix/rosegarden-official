@@ -177,13 +177,39 @@ void ControllerEventsRuler::drawItems
     // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     ControlItemVector selectedVector;
 
+    bool activeColours = true; // pen and brush initialy with active setting
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+        RG_DEBUG << "drawItems item active" << (*it)->active();
         if (!(*it)->isSelected()) {
+            if ((*it)->active()) {
+                if (!activeColours) {
+                    pen.setColor(GUIPalette::getColour
+                                 (GUIPalette::MatrixElementBorder));
+                    brush.setColor(GUIPalette::getColour
+                                   (GUIPalette::ControlItem));
+                    painter.setBrush(brush);
+                    painter.setPen(pen);
+                    activeColours = true;
+                }
+            } else {
+                if (activeColours) {
+                    pen.setColor(GUIPalette::getColour
+                                 (GUIPalette::MatrixElementLightBorder));
+                    brush.setColor(Qt::white);
+                    painter.setBrush(brush);
+                    painter.setPen(pen);
+                    activeColours = false;
+                }
+            }
             painter.drawPolygon(mapItemToWidget(*it));
         } else {
             selectedVector.push_back(*it);
         }
     }
+
+    brush.setColor(GUIPalette::getColour
+                   (GUIPalette::ControlItem));
+    painter.setBrush(brush);
 
     pen.setColor(GUIPalette::getColour(GUIPalette::SelectedElement));
     pen.setWidthF(2.0);
@@ -570,6 +596,13 @@ void ControllerEventsRuler::createRulerMenu()
 bool ControllerEventsRuler::allowSimultaneousEvents()
 {
     return false;
+}
+
+void ControllerEventsRuler::getLimits(float& xmin, float& xmax)
+{
+    // no limit
+    xmin = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
+    xmax = m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale;
 }
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)

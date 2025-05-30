@@ -65,7 +65,23 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
     if (m_overItem) {
         m_ruler->setCursor(Qt::BlankCursor);
 
+        bool activeFound = false;
         ControlItemVector::const_iterator it = e->itemList.begin();
+        while (it != e->itemList.end()) {
+            if ((*it)->active()) {
+                activeFound = true;
+                break;
+            }
+            it++;
+        }
+        if (! activeFound) {
+            if (!(e->modifiers & (Qt::ShiftModifier))) {
+                // No add to selection modifiers so clear the current selection
+                m_ruler->clearSelectedItems();
+            }
+            return;
+        }
+
         if ((*it)->isSelected()) {
             if (e->modifiers & (Qt::ShiftModifier))
                 m_ruler->removeFromSelection(*it);
