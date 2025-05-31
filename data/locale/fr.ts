@@ -6871,7 +6871,7 @@
     <message>
         <location line="-252"/>
         <source>&amp;Constrained move</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacement &amp;contraint</translation>
     </message>
     <message>
         <location line="+117"/>
@@ -13215,7 +13215,7 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location filename="../../src/commands/segment/CopySegmentCommand.h" line="+50"/>
         <source>&amp;CopySegment</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;CopySegment</translation>
     </message>
 </context>
 <context>
@@ -14155,7 +14155,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+5"/>
         <source>RPN/NRPN</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN/NRPN</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -14354,7 +14354,7 @@ Cela peut causer des problèmes si elle masque une valeur différente devant êt
     <message>
         <location line="+14"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -14928,12 +14928,12 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+20"/>
         <source>JACK stop at auto stop</source>
-        <translation type="unfinished"></translation>
+        <translation>Arrêt automatique du curseur de JACK</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Décocher cette case autorise le transport de JACK à dépasser la fin de la composition Rosegarden.  Ceci peut introduire une désynchronisationt des transports de JACK et de Rosegarden et provoquer des arrêts ou départs inattendus du transport.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Décocher cette case autorise le curseur de JACK à dépasser la fin de la composition Rosegarden.  Ceci peut introduire une désynchronisationt des curseurs de JACK et de Rosegarden et provoquer des démarrages ou des arrêts inattendus de la lecture ou de l&apos;enregistrement.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -15065,7 +15065,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Select the width of track labels. This is the text after the mute, record and solo buttons&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished">&lt;qt&gt;&lt;p&gt;Choix de la largeur des étiquettes de piste (le texte à droite des boutons/indicateurs &quot;assourdir&quot;, &quot;enregistrer&quot; et &quot;solo&quot;).&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Choix de la largeur des étiquettes de piste (le texte à droite des boutons/indicateurs &quot;assourdir&quot;, &quot;enregistrer&quot; et &quot;solo&quot;).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -15263,17 +15263,17 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="-266"/>
         <source>LV2 Plugin Support</source>
-        <translation type="unfinished"></translation>
+        <translation>Support des greffons LV2</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Drag with dynamic modifiers (main/matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>Modifieurs dynamiques pendant le glissé (fenêtre principale et matrice)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If set, the CTRL and ALT keys can be pressed or released while a drag is in progress to change copy/move behavior.  This applies to the main window and the matrix editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Si coché, les touches CTRL et ALT peuvent être pressées ou relachées au cours d&apos;une opération de glissé pour modifier le comportement d&apos;un copier/déplacer.  Ceci fonctionne dans la fenêtre principale et dans l&apos;éditeur matriciel.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+247"/>
@@ -18014,7 +18014,7 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="-1109"/>
         <source>Preserves precise horizontal and vertical position when moving a note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Conserve une position verticale et horizontale précise pendant le déplacement d&apos;une note.</translation>
     </message>
     <message>
         <location line="+97"/>
@@ -18604,12 +18604,12 @@ MSB/LSB sont toujours uniques pour tous les périphériques)</translation>
     <message>
         <location filename="../../src/gui/editors/event/NRPNWidget.cpp" line="+65"/>
         <source>NRPN Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres NRPN</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>NRPN:</source>
-        <translation type="unfinished"></translation>
+        <translation>NRPN :</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -19733,7 +19733,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/editors/event/NoteWidget.cpp" line="+78"/>
         <source>Note Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Attributs de la note</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -20202,17 +20202,17 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/editors/event/PitchBendWidget.cpp" line="+64"/>
         <source>Pitch Bend Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres du Pitch Bend</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pitch Bend:</source>
-        <translation type="unfinished"></translation>
+        <translation>Pitch Bend</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>8192 is center</source>
-        <translation type="unfinished"></translation>
+        <translation>La valeur centrale est 8192</translation>
     </message>
 </context>
 <context>
@@ -20999,12 +20999,12 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location filename="../../src/gui/editors/event/RPNWidget.cpp" line="+65"/>
         <source>RPN Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres RPN</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>RPN:</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN :</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -23335,7 +23335,7 @@ Souhaitez vous le faire tout de suite ?</translation>
     <message>
         <location line="-603"/>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -23678,7 +23678,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;Check whether your Linux distribution provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden n&apos;a pas trouvé d&apos;horloge haute résolution pour l&apos;exécution MIDI.&lt;/p&gt;&lt;p&gt;Vérifiez si votre distribution Linux fournit un noyau optimisé pour le multimédia.  Consultez le site Rosegarden &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;&lt;/a&gt; pour plus d&apos;informations sur ce sujet.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+144"/>
@@ -24467,7 +24467,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location filename="../../src/gui/editors/event/SysExWidget.cpp" line="+64"/>
         <source>SysEx Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Paramètres SysEx</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -24487,13 +24487,13 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+25"/>
         <source>Load System Exclusive data in File</source>
-        <translation type="unfinished">Chargement des données &quot;système exclusive&quot; dans un fichier</translation>
+        <translation>Chargement des données SysEx depuis un fichier</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+49"/>
         <source>System exclusive files</source>
-        <translation type="unfinished">Fichiers &quot;system exclusive&quot;</translation>
+        <translation>Fichiers SysEx</translation>
     </message>
     <message>
         <location line="-48"/>
@@ -24514,7 +24514,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+21"/>
         <source>Save System Exclusive data to...</source>
-        <translation type="unfinished">Sauver les données &quot;système exclusive&quot; vers...</translation>
+        <translation>Sauver les données SysEx dans un ficher</translation>
     </message>
 </context>
 <context>
