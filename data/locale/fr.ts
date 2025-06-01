@@ -6860,7 +6860,7 @@
     <message>
         <location line="-510"/>
         <source>Remove All From Instrument Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout retirer du panneau des instruments</translation>
     </message>
     <message>
         <location line="+128"/>
