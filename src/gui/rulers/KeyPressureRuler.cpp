@@ -92,6 +92,9 @@ void KeyPressureRuler::setElementSelection
             item->setActive(false);
         }
     }
+
+    // and clear any selection
+    if (m_selectedItems.size() > 0) clearSelectedItems();
     update();
 }
 
@@ -130,38 +133,27 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
     painter.setBrush(brush);
     painter.setPen(pen);
 
-    /*
-    ControlItemMap::iterator mapIt;
+    // only connect active items
     float lastX, lastY;
-    lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
-
-    if (m_nextItemLeft != m_controlItemMap.end()) {
-        lastY = m_nextItemLeft->second->y();
-    } else {
-        lastY = valueToY(m_controller->getDefault());
-    }
-
-    mapIt = m_firstVisibleItem;
-    while (mapIt != m_controlItemMap.end()) {
-        QSharedPointer<ControlItem> item = mapIt->second;
-
-        painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-                mapXToWidget(item->xStart()),mapYToWidget(lastY));
-        painter.drawLine(mapXToWidget(item->xStart()),mapYToWidget(lastY),
-                mapXToWidget(item->xStart()),mapYToWidget(item->y()));
-        lastX = item->xStart();
-        lastY = item->y();
-        if (mapIt == m_lastVisibleItem) {
-            mapIt = m_controlItemMap.end();
-        } else {
-            ++mapIt;
+    bool first = true;
+    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+         it != m_controlItemMap.end();
+         ++it) {
+        if (!it->second->active()) continue;
+        QSharedPointer<ControlItem> item = it->second;
+        if (first) {
+            lastX = item->xStart();
+            lastY = item->y();
+            first = false;
+            continue;
         }
+        float itemX = item->xStart();
+        float itemY = item->y();
+        painter.drawLine(mapXToWidget(lastX), mapYToWidget(lastY),
+                         mapXToWidget(itemX), mapYToWidget(itemY));
+        lastX = itemX;
+        lastY = itemY;
     }
-
-    painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
-            mapYToWidget(lastY));
-    */
 
     drawItems(painter, pen, brush);
     drawSelectionRect(painter, pen, brush);
