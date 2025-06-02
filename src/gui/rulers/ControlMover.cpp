@@ -215,7 +215,14 @@ void ControlMover::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
 
-    if (e->itemList.size()) isOverItem = true;
+    ControlItemVector::const_iterator it = e->itemList.begin();
+    while (it != e->itemList.end()) {
+        if ((*it)->active()) {
+            isOverItem = true;
+            break;
+        }
+        it++;
+    }
 
     if (!m_overItem) {
         if (isOverItem) {

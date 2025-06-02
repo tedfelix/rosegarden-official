@@ -86,7 +86,7 @@ void KeyPressureRuler::setElementSelection
         timeT controlTime = controlEvent->getAbsoluteTime();
         if (cPitch == m_notePitch &&
             controlTime >= m_noteStart &&
-            controlTime <= m_noteStart + m_noteDuration) {
+            controlTime < m_noteStart + m_noteDuration) {
             item->setActive(true);
         } else {
             item->setActive(false);
@@ -98,7 +98,7 @@ void KeyPressureRuler::setElementSelection
     update();
 }
 
-int KeyPressureRuler::getPitch()
+int KeyPressureRuler::getPitch() const
 {
     RG_DEBUG << "getPitch" << m_notePitch;
     if (m_notePitch == -1) return 0; // always return a valid pitch
@@ -181,6 +181,14 @@ void KeyPressureRuler::getLimits(float& xmin, float& xmax)
         xmin = m_rulerScale->getXForTime(m_noteStart);
         xmax = m_rulerScale->getXForTime(m_noteStart + m_noteDuration);
     }
+}
+
+Event* KeyPressureRuler::getNewEvent(timeT time, long value) const
+{
+    Event* event = m_controller->newEvent(time, value);
+    int pitch = getPitch();
+    event->set<Rosegarden::Int>(Rosegarden::KeyPressure::PITCH, pitch);
+    return event;
 }
 
 }

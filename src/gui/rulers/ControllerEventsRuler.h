@@ -107,7 +107,7 @@ public:
     virtual bool allowSimultaneousEvents() override;
 
     // for key pressure
-    virtual int getPitch() {return 0;}
+    virtual int getPitch() const {return 0;}
 
     virtual void getLimits(float& xmin, float& xmax);
 
@@ -118,6 +118,8 @@ protected:
     void drawItems(QPainter& painter, QPen& pen, QBrush& brush);
     void drawSelectionRect(QPainter& painter, QPen& pen, QBrush& brush);
     void drawRubberBand(QPainter& painter);
+
+    virtual Event* getNewEvent(timeT time, long value) const;
 
     //--------------- Data members ---------------------------------
     int  m_defaultItemWidth;

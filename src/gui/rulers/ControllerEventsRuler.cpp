@@ -179,7 +179,7 @@ void ControllerEventsRuler::drawItems
 
     bool activeColours = true; // pen and brush initialy with active setting
     for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
-        RG_DEBUG << "drawItems item active" << (*it)->active();
+        //RG_DEBUG << "drawItems item active" << (*it)->active();
         if (!(*it)->isSelected()) {
             if ((*it)->active()) {
                 if (!activeColours) {
@@ -495,8 +495,11 @@ ControllerEventsRuler::addControlLine(
             Event *e = *i;
 
             // If this is a relevant event, add it to the selection.
-            if (m_controller->matches(e))
+            if (m_controller->matches(e)) {
+                RG_DEBUG << "addControlLine event to delete" <<
+                    e->getAbsoluteTime();
                 selection->addEvent(e, false);
+            }
         }
 
         // If there is something in the selection, add the EraseCommand.
@@ -531,7 +534,7 @@ ControllerEventsRuler::addControlLine(
         // Add an Event to the MacroCommand
         macro->addCommand(new EventInsertionCommand(
                 *m_segment,
-                m_controller->newEvent(time2, value)));
+                getNewEvent(time2, value)));
 
     }
 
@@ -539,7 +542,8 @@ ControllerEventsRuler::addControlLine(
 
     // How else to re-initialize and bring things into view?  I'm missing
     // something, but this works...
-    init();
+    // init destroys the active flag information - do we need it ?
+    //init();
 
 }
 
@@ -699,5 +703,9 @@ void ControllerEventsRuler::eraseControllerEvent()
     updateSelection();
 }
 
+Event* ControllerEventsRuler::getNewEvent(timeT time, long value) const
+{
+    return m_controller->newEvent(time, value);
+}
 
 }

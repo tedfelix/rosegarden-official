@@ -38,12 +38,14 @@ public:
 
     void setElementSelection(const std::vector<ViewElement *> &elementList);
 
-    int getPitch() override;
+    int getPitch() const override;
 
     void paintEvent(QPaintEvent *) override;
     void setSegment(Segment *) override;
 
     void getLimits(float& xmin, float& xmax) override;
+
+    virtual Event* getNewEvent(timeT time, long value) const override;
 
 private:
     int m_notePitch;
