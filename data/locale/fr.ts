@@ -6881,12 +6881,12 @@
     <message>
         <location line="+2"/>
         <source>Within &amp;Track</source>
-        <translation></translation>
+        <translation>Dans sa &amp;piste</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Across &amp;All Tracks</source>
-        <translation></translation>
+        <translation>Parmi &amp;toutes les pistes</translation>
     </message>
     <message>
         <location line="+104"/>
@@ -12271,12 +12271,12 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location filename="../../src/gui/editors/event/ChannelPressureWidget.cpp" line="+65"/>
         <source>Channel Pressure Properties</source>
-        <translation></translation>
+        <translation>Paramètre de la pression de canal</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pressure:</source>
-        <translation></translation>
+        <translation>Pression :</translation>
     </message>
 </context>
 <context>
@@ -16125,7 +16125,7 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location filename="../../src/gui/editors/event/KeyPressureWidget.cpp" line="+70"/>
         <source>Key Pressure Properties</source>
-        <translation>Attributs de la pression de touche</translation>
+        <translation>Paramètres de la pression de touche</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -16870,7 +16870,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+72"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to switch between loop range and loop all.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le curseur de lecture.&lt;/p&gt;&lt;p&gt;Clic droit et glisser pour définir une plage pour boucler ou éditer.&lt;/p&gt;&lt;p&gt;Clic droit pour commuter entre boucler sur une plage ou boucler sur tout.&lt;/p&gt;&lt;p&gt;Ctrl+cliquer et glisser pour déplacer le curseur en s&apos;accrochant aux temps.&lt;/p&gt;&lt;p&gt;Double-cliquer pour commencer à jouer.&lt;/p&gt;&lt;/</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -17947,12 +17947,12 @@ Double-cliquer pour ouvrir l&apos;éditeur de marqueur.</translation>
     <message>
         <location line="+23"/>
         <source> Velocity: </source>
-        <translation> Vélocité: </translation>
+        <translation> Vélocité : </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Velocity for new notes.&lt;/qt&gt;</source>
-        <translation></translation>
+        <translation>&lt;qt&gt;Velocité des nouvelles notes.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
