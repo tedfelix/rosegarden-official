@@ -67,10 +67,16 @@ ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
     }
 
     if (it == e->itemList.end()) {
-        it = e->itemList.begin();
-        ruler->clearSelectedItems();
-        ruler->addToSelection(*it);
-        ruler->eraseControllerEvent();
+        for (it = e->itemList.begin(); it != e->itemList.end(); ++it) {
+            if ((*it)->active()) {
+
+                it = e->itemList.begin();
+                ruler->clearSelectedItems();
+                ruler->addToSelection(*it);
+                ruler->eraseControllerEvent();
+                break;
+            }
+        }
     }
 }
 
@@ -112,7 +118,14 @@ void ControlEraser::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
 
-    if (e->itemList.size()) isOverItem = true;
+    ControlItemVector::const_iterator it = e->itemList.begin();
+    while (it != e->itemList.end()) {
+        if ((*it)->active()) {
+            isOverItem = true;
+            break;
+        }
+        it++;
+    }
 
     if (!m_overItem) {
         if (isOverItem) {
