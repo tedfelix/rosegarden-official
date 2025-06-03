@@ -1,0 +1,39 @@
+#!/bin/python3
+
+# Python script to list the "untranslated" strings in a .ts file.  I.e.
+# those with empty translation tags.
+
+# TODO
+#  - Add an option to mark untranslated as unfinished: '-u'
+#    <translation type="unfinished"></translation>
+
+import argparse
+import xml.etree.ElementTree as ET
+
+parser = argparse.ArgumentParser(
+        prog="ts-untrans",
+        description="List empty translations in a Qt .ts file.")
+#parser.add_argument(
+#        '-u',
+#        help='Mark untranslated as unfinished in each file.')
+parser.add_argument('filename', nargs='+', help='.ts file name')
+args = parser.parse_args()
+
+# For each file from the command line...
+for filename in args.filename:
+
+    tree = ET.parse(filename)
+    root = tree.getroot()
+
+    # For each context tag...
+    for context in root.iter('context'):
+        # For each message tag in the context...
+        for message in context.iter('message'):
+            translation = message.find('translation').text
+            # No translation text?
+            if (translation == None):
+                source = message.find('source').text
+                # <source> tag found and has text?  Print it.
+                if (source != None):
+                    print(source)
+
