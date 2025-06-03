@@ -21,6 +21,9 @@ See http://ponzo.net/Rosegarden/ .
 
 ly2ps - run Lilypond and view the results in a PS viewer
 
+lookForUntranslatedStrings - show translated strings with an empty translation
+in a .ts file
+
 rgedit, rgview - edit or view .rg files as XML (in-place-ish)
 
 seqscavenger.rb - get rid of old sequencer processes, core files etc
