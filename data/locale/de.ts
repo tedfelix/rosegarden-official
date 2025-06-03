@@ -2222,7 +2222,7 @@
         <location line="+19"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Bearbeite die mit diesem Gerät verbundenen Kontroller.&lt;/p&gt;&lt;p&gt;Damit Kontroller irgendwo in Rosegarden, wie zum Beispiel im Kontroller-Lineal oder der Box für die &lt;b&gt;Instrumenten-Parameter&lt;/b&gt;, benutzt werden können, 
-müssen sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroller in der Box für die &lt;b&gt;Instrumenten-Parameter&lt;/b&gt; angezeigt und ein Layout bestimmt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
+müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroller in der Box für die &lt;b&gt;Instrumenten-Parameter&lt;/b&gt; angezeigt und ein Layout bestimmt werden.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4966,14 +4966,14 @@ a quarter sine wave contour</source>
         <translation>Synthesizer-Plugin </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1083"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+746"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1083"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
         <translation>Synthesizer Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -5785,7 +5785,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+11"/>
         <source>Remove All From Instrument Panel</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle aus Instrumentenansicht entfernen</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -6060,7 +6060,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="-405"/>
         <source>Trigger Se&amp;gment...</source>
-        <translation>Trigger Se&amp;gment...</translation>
+        <translation>Se&amp;gment triggern...</translation>
     </message>
     <message>
         <location line="+28"/>
@@ -6702,7 +6702,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Trigger &amp;Ornament...</source>
-        <translation>&amp;Trigger Verzierung setzen...</translation>
+        <translation>&amp;Verzierung triggern...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -6967,22 +6967,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="-252"/>
         <source>&amp;Constrained move</source>
-        <translation type="unfinished"></translation>
+        <translation>Eingeschrän&amp;ktes Verschieben</translation>
     </message>
     <message>
         <location line="+117"/>
         <source>Highlight Active Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktives Segment hervorheben</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Within &amp;Track</source>
-        <translation type="unfinished"></translation>
+        <translation>Innerhalb der S&amp;pur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Across &amp;All Tracks</source>
-        <translation type="unfinished"></translation>
+        <translation>Über alle Sp&amp;uren</translation>
     </message>
     <message>
         <location line="+104"/>
@@ -9693,12 +9693,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Show Segment Pre&amp;views</source>
-        <translation>Segment&amp;vorschauen anzeigen</translation>
+        <translation>Segment-&amp;Vorschauen anzeigen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sh&amp;ow Segment Labels</source>
-        <translation>Seg&amp;mentbenennungen zeigen</translation>
+        <translation>Seg&amp;ment-Benennungen zeigen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10329,14 +10329,14 @@ a quarter sine wave contour</source>
         <translation type="obsolete">Rosegarden - ein Sequenzer und Notensatz-Editor</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+461"/>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
+        <location filename="../../src/gui/application/main.cpp" line="+461"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+295"/>
+        <location filename="../../src/gui/application/main.cpp" line="+295"/>
         <source>Welcome!</source>
         <translation>Willkommen!</translation>
     </message>
@@ -10348,7 +10348,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, einem Audio- und MIDI- Sequencer sowie Notensatzprogramm.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Sofern Sie es noch nicht getan haben, sollten Sie ein DSSI-Synthesizer-Plugin oder ein separates Synthesizer-Programm wie z.B. QSynth installieren.  Rosegarden selber erzeugt nämlich keine Klänge aus MIDI-Daten, daher hören Sie ohne diese Synthesizer Nichts.&lt;/li&gt;&lt;li&gt;Rosegarden verwendet den JACK-Audio-Server für Aufnahme und Wiedergabe von Audio sowie DSSI-Synthesizer-Plugins.  Diese Möglichkeiten stehen nur zur Verfügung, wenn der JACK-Audio-Server läuft.&lt;/li&gt;&lt;li&gt;Rosegarden besitzt eine umfassende Dokumentation: besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; für das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorials&lt;/a&gt;, und weitere Information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden wird dir zur Verfügung gestellt von einem Team Beitragender aus aller Welt.  Um mehr zu erfahren, besuche die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Willkommen bei Rosegarden!&lt;/h2&gt;&lt;p&gt;Willkommen bei Rosegarden, einem Audio- und MIDI- Sequencer sowie Notensatzprogramm.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Sofern Sie es noch nicht getan haben, sollten Sie ein DSSI-Synthesizer-Plugin oder ein separates Synthesizer-Programm wie z.B. QSynth installieren.  Rosegarden selber erzeugt nämlich keine Klänge aus MIDI-Daten, daher hören Sie ohne diese Synthesizer Nichts.&lt;/li&gt;&lt;li&gt;Rosegarden verwendet den JACK-Audio-Server für Aufnahme und Wiedergabe von Audio sowie DSSI-Synthesizer-Plugins.  Diese Möglichkeiten stehen nur zur Verfügung, wenn der JACK-Audio-Server läuft.&lt;/li&gt;&lt;li&gt;Rosegarden besitzt eine umfassende Dokumentation: besuchen Sie die &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden Webseite&lt;/a&gt; für das &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;Handbuch&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;Tutorials&lt;/a&gt;, und weitere Information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden wird Ihnen zur Verfügung gestellt von einem Team Beitragender aus aller Welt.  Um mehr zu erfahren, besuchen Sie die &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may 
@@ -10643,17 +10643,17 @@ Kanälen</translation>
     <message>
         <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
         <source>Replace segment contents</source>
-        <translation>Segmentinhalte ersetzen</translation>
+        <translation>Segment-Inhalte ersetzen</translation>
     </message>
     <message>
         <location filename="../../src/base/figuration/SegmentID.cpp" line="+69"/>
         <source>Chord Source Segment</source>
-        <translation>Segmentquelle für Akkord</translation>
+        <translation>Segment-Quelle für Akkord</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Figuration Source Segment</source>
-        <translation>Segmentquelle für Figuration</translation>
+        <translation>Segment-Quelle für Figuration</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -10746,14 +10746,14 @@ abgeschnitten</translation>
         <translation>Wechselnd - %1-Werte wechselnd auf Max und Min setzen</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Maximum</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Minimum</translation>
     </message>
@@ -10975,7 +10975,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Trigger manager</source>
-        <translation></translation>
+        <translation>Trigger Manager</translation>
     </message>
     <message>
         <location line="+269"/>
@@ -11074,8 +11074,8 @@ a quarter sine wave contour</source>
     <message>
         <location line="+10"/>
         <source>&lt;p&gt;Copyright 2000-%5 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Copyright 2000-2020 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
-Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für mehr Information über Rosegarden, besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 oder später&lt;/p&gt; {2000-%5 ?} {1 ?} {4&quot;?} {3&lt;?} {2&lt;?} {2 ?}</translation>
+        <translation>&lt;p&gt;Copyright 2000-%5 Rosegarden Entwicklerteam&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Kompilierschlüssel: %3&lt;br&gt;Qt Version: %2&lt;/p&gt;&lt;p&gt;Rosegarden wurde dir zur Verfügung gestellt von einem Team 
+Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;Für mehr Information über Rosegarden, besuche&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 oder später&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Copyright 2000-2024 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
@@ -12084,7 +12084,7 @@ resampled werden muss</translation>
     <message>
         <location line="+52"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation>Versuchen Sie diese Datei in ein Verzeichnis zu kopieren, für das Sie Schreib-berechtigung besitzen und fügen Sie diese erneut hinzu</translation>
+        <translation>Versuchen Sie diese Datei in ein Verzeichnis zu kopieren, für das Sie Schreibberechtigung besitzen und fügen Sie diese erneut hinzu</translation>
     </message>
     <message>
         <location line="-690"/>
@@ -12740,7 +12740,7 @@ here.</source>
     <message>
         <location line="+1"/>
         <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
-        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten sie, dass dies ein Sichern der Datei erzwingt.</translation>
+        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten Sie, dass dies ein Sichern der Datei erzwingt.</translation>
     </message>
     <message>
         <source>Choose Audio File Path</source>
@@ -13446,12 +13446,12 @@ Zielgerät hat bereits eine Bank für
     <message>
         <location filename="../../src/gui/editors/event/ChannelPressureWidget.cpp" line="+65"/>
         <source>Channel Pressure Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Kanal-Tastenachdruck Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pressure:</source>
-        <translation type="unfinished"></translation>
+        <translation>tastennachdruck:</translation>
     </message>
 </context>
 <context>
@@ -14016,7 +14016,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Falls angekreuzt, Anmerkungen zeigen beim nächsten Laden des Dokuments&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
@@ -14348,17 +14348,17 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/editors/event/ControllerWidget.cpp" line="+67"/>
         <source>Controller Properties</source>
-        <translation type="unfinished">Kontroller-Eigenschaften</translation>
+        <translation>Kontroller-Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Number:</source>
-        <translation type="unfinished"></translation>
+        <translation>Nummer:</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert:</translation>
     </message>
 </context>
 <context>
@@ -14390,17 +14390,17 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/commands/segment/CopySegmentCommand.cpp" line="+95"/>
         <source>(linked)</source>
-        <translation type="unfinished">(verlinkt)</translation>
+        <translation>(verlinkt)</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>(copied)</source>
-        <translation type="unfinished">(kopiert)</translation>
+        <translation>(kopiert)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/CopySegmentCommand.h" line="+50"/>
         <source>&amp;CopySegment</source>
-        <translation type="unfinished"></translation>
+        <translation>Seg&amp;ment kopieren</translation>
     </message>
 </context>
 <context>
@@ -14847,92 +14847,92 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/editors/event/EditEvent.cpp" line="+63"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Ereignis bearbeiten</translation>
+        <translation>Ereignis bearbeiten</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaften</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Event type:</source>
-        <translation type="unfinished">Ereignistyp:</translation>
+        <translation>Ereignistyp:</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Absolute Zeit:</translation>
+        <translation>Absolute Zeit:</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>edit</source>
-        <translation type="unfinished">bearbeiten</translation>
+        <translation>bearbeiten</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Advanced Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Erweiterte Eigenschaften</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Sub-ordering: </source>
-        <translation type="unfinished">Unter-Ordnung: </translation>
+        <translation>Unter-Ordnung: </translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Additional Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche Eigenschaften</translation>
     </message>
     <message>
         <location line="+143"/>
         <source>Edit Event Time</source>
-        <translation type="unfinished">Ereigniszeit bearbeiten</translation>
+        <translation>Ereigniszeit bearbeiten</translation>
     </message>
     <message>
         <location line="+43"/>
         <source>Name</source>
-        <translation type="unfinished">Name</translation>
+        <translation>Name</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Type</source>
-        <translation type="unfinished">Typ</translation>
+        <translation>Typ</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location line="+94"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>About to delete property &quot;%1&quot;.  Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Eigenschaft &quot;%1&quot; wird gelöscht.  Sind Sie sicher?</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Add Integer Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Ganzzahlige Eigenschaft hinzufügen</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Add String Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Serielle Eigenschaft hinzufügen</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Add Boolean Property</source>
-        <translation type="unfinished"></translation>
+        <translation>Boolesche Eigenschaft hinzufügen</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschen</translation>
     </message>
 </context>
 <context>
@@ -15309,245 +15309,245 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+195"/>
         <source>Event filters</source>
-        <translation type="unfinished">Ereignisfilter</translation>
+        <translation>Ereignisfilter</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Note</source>
-        <translation type="unfinished">Note</translation>
+        <translation>Note</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Rest</source>
-        <translation type="unfinished">Pause</translation>
+        <translation>Pause</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Program Change</source>
-        <translation type="unfinished">Programmwechsel</translation>
+        <translation>Programmwechsel</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Controller</source>
-        <translation type="unfinished">Kontroller</translation>
+        <translation>Kontroller</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Pitch Bend</source>
-        <translation type="unfinished">Tonhöhenbeugung</translation>
+        <translation>Tonhöhenbeugung</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Channel Pressure</source>
-        <translation type="unfinished">Kanal-Aftertouch</translation>
+        <translation>Kanal-Tastennachdruck</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Key Pressure</source>
-        <translation type="unfinished">Tasten-Aftertouch</translation>
+        <translation>Einzel-Tastennachdruck</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>RPN/NRPN</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN/NRPN</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>System Exclusive</source>
-        <translation type="unfinished">System Exclusive</translation>
+        <translation>System Exclusive</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Indication</source>
-        <translation type="unfinished">Anzeige</translation>
+        <translation>Anzeige</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Text</source>
-        <translation type="unfinished"></translation>
+        <translation>Text</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Generated regions</source>
-        <translation type="unfinished">Erzeugte Regionen</translation>
+        <translation>Erzeugte Regionen</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Segment ID</source>
-        <translation type="unfinished">Segment ID</translation>
+        <translation>Segment ID</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Other</source>
-        <translation type="unfinished">Andere</translation>
+        <translation>Andere</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>All On/Off</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle An/Aus</translation>
     </message>
     <message>
         <location line="+45"/>
         <source>Time  </source>
-        <translation type="unfinished">Zeit  </translation>
+        <translation>Zeit  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Duration  </source>
-        <translation type="unfinished">Dauer  </translation>
+        <translation>Dauer  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Event Type  </source>
-        <translation type="unfinished">Ereignistyp  </translation>
+        <translation>Ereignistyp  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Pitch  </source>
-        <translation type="unfinished">Tonhöhe  </translation>
+        <translation>Tonhöhe  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Velocity  </source>
-        <translation type="unfinished">Anschlagstärke  </translation>
+        <translation>Anschlagstärke  </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Data1</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Data2</source>
-        <translation type="unfinished"></translation>
+        <translation>Daten2</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Triggered Segment Properties</source>
-        <translation type="unfinished">Eigenschaften des getriggerten Segmentes</translation>
+        <translation>Eigenschaften des getriggerten Segmentes</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Label:  </source>
-        <translation type="unfinished">Benennung:  </translation>
+        <translation>Benennung:  </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;keine Benennung&gt;</translation>
+        <translation>&lt;keine Benennung&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+10"/>
         <location line="+10"/>
         <source>edit</source>
-        <translation type="unfinished">bearbeiten</translation>
+        <translation>bearbeiten</translation>
     </message>
     <message>
         <location line="-14"/>
         <source>Base pitch:  </source>
-        <translation type="unfinished">Basis-Tonhöhe:  </translation>
+        <translation>Basis-Tonhöhe:  </translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Base velocity:  </source>
-        <translation type="unfinished">Basis-Anschlagstärke:  </translation>
+        <translation>Basis-Anschlagstärke:  </translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Default timing:  </source>
-        <translation type="unfinished"></translation>
+        <translation>Standard Zeitwahl:  </translation>
     </message>
     <message>
         <location line="+3"/>
         <source>As stored</source>
-        <translation type="unfinished">Wie gesichert</translation>
+        <translation>Wie gesichert</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Truncate if longer than note</source>
-        <translation type="unfinished">Abschneiden, wenn länger als Note</translation>
+        <translation>Abschneiden, wenn länger als Note</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>End at same time as note</source>
-        <translation type="unfinished">Zusammen mit der Note beenden</translation>
+        <translation>Zusammen mit der Note beenden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation type="unfinished">Segment gemäß Notendauer strecken oder stauchen</translation>
+        <translation>Segment gemäß Notendauer strecken oder stauchen</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Adjust pitch to trigger note by default</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardmäßig Tonhöhe an Triggernote anpassen</translation>
     </message>
     <message>
         <location line="+206"/>
         <location line="+11"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;nicht gesetzt&gt;</translation>
     </message>
     <message>
         <location line="+88"/>
         <source>(group %1)  </source>
-        <translation type="unfinished">(Gruppe %1)  </translation>
+        <translation>(Gruppe %1)  </translation>
     </message>
     <message>
         <location line="+152"/>
         <source>Segment label</source>
-        <translation type="unfinished">Segmentbenennung ändern</translation>
+        <translation>Segmentbenennung</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Label:</source>
-        <translation type="unfinished">Benennung:</translation>
+        <translation>Benennung:</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Base pitch</source>
-        <translation type="unfinished">Basis-Tonhöhe</translation>
+        <translation>Basis-Tonhöhe</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>Base velocity</source>
-        <translation type="unfinished">Basis-Anschlagstärke</translation>
+        <translation>Basis-Anschlagstärke</translation>
     </message>
     <message>
         <location line="+147"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished">Inhalt der Zwischenablage einfügen...</translation>
+        <translation>Inhalte der Zwischenablage einfügen...</translation>
     </message>
     <message>
         <location line="+28"/>
         <source>Couldn&apos;t paste at this point</source>
-        <translation type="unfinished">An dieser Stelle kein Einfügen möglich</translation>
+        <translation>An dieser Stelle kein Einfügen möglich</translation>
     </message>
     <message>
         <location line="+453"/>
         <source>Open in Event Editor</source>
-        <translation type="unfinished">Im Ereignis-Editor öffnen</translation>
+        <translation>Im Ereignis-Editor öffnen</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Edit Triggered Segment</source>
-        <translation type="unfinished"></translation>
+        <translation>Getriggertes Segment bearbeiten</translation>
     </message>
     <message>
         <location line="+68"/>
         <source>%1%2 - Triggered Segment: %3</source>
-        <translation type="unfinished">%1%2 - Getriggertes Segment: %3</translation>
+        <translation>%1%2 - Getriggertes Segment: %3</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Event List Editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Ereignislisten-Editor</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
-        <translation type="unfinished">http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
+        <translation>http://rosegardenmusic.com/wiki/doc:eventView-en</translation>
     </message>
 </context>
 <context>
@@ -15595,7 +15595,7 @@ Dies könnte Probleme verursachen, wenn so später ein berechneter Wert übersch
     <message>
         <location filename="../../src/gui/editors/event/EventTypeDialog.cpp" line="+54"/>
         <source>Select Event type to insert.</source>
-        <translation type="unfinished"></translation>
+        <translation>Einzufügenden Ereignistyp wählen</translation>
     </message>
 </context>
 <context>
@@ -15853,7 +15853,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+10"/>
         <source>&lt;p&gt;Could not find audio file:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;at expected audio file location:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.&lt;/p&gt;&lt;p&gt;Which would you like to do?&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Konnte Audio-Datei nicht finden:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;am erwarteten Ort der Audio-Datei:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;Sie können entweder das Öffnen abbrechen und die Datei selber verschieben oder die fehlende Datei lokalisieren und den Ort der Audio-Datei dementsprechend anpassen.&lt;/p&gt;&lt;p&gt;Was möchten sie tun?&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Konnte Audio-Datei nicht finden:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%1&lt;/p&gt;&lt;p&gt;am erwarteten Ort der Audio-Datei:&lt;/p&gt;&lt;p&gt;&amp;nbsp;&amp;nbsp;%2&lt;/p&gt;&lt;p&gt;Sie können entweder das Öffnen abbrechen und die Datei selber verschieben oder die fehlende Datei lokalisieren und den Ort der Audio-Datei dementsprechend anpassen.&lt;/p&gt;&lt;p&gt;Was möchten Sie tun?&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -16132,7 +16132,7 @@ für den Schriftnamen %1 (treffendste ist %2)</translation>
     <message>
         <location line="+14"/>
         <source>Use track name for new segments</source>
-        <translation>Spurname für neue Segmente verwenden</translation>
+        <translation>Spurbenennung für neue Segmente verwenden</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;If checked, the label for new segments 
@@ -16167,12 +16167,12 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+20"/>
         <source>JACK stop at auto stop</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK anhalten bei Autostopp</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wenn Sie diese Option deaktivieren, kann der JACK-Transport über das Ende der Rosegarden-Komposition hinauslaufen. Dies führt dazu, dass der JACK-Transport nicht mehr mit dem Transport von Rosegarden synchronisiert ist und der Transport unerwartet gestartet oder gestoppt werden kann.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -16225,7 +16225,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+360"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
-        <translation>Für die Spurgrößenänderung muss Rosegarden neu gestartet werden.</translation>
+        <translation>Für die Spurhöhenänderung muss Rosegarden neu gestartet werden.</translation>
     </message>
     <message>
         <location line="-674"/>
@@ -16278,7 +16278,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+13"/>
         <source>Track size</source>
-        <translation>Spurgröße im Hauptfenster</translation>
+        <translation>Spurhöhe im Hauptfenster</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -16299,32 +16299,32 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+1"/>
         <source>Extra Large</source>
-        <translation type="unfinished"></translation>
+        <translation>Sehr Groß</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;Select the track size factor. Larger sizes are useful on HDPI displays.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wählen Sie den Spurhöhenfaktor. Größere Höhen sind auf HDPI-Displays sinnvoll.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Track Label width</source>
-        <translation type="unfinished"></translation>
+        <translation>Breite der Spurbenennung</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;Select the width of track labels. This is the text after the mute, record and solo buttons&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wählen Sie die Breite der Spurbenennungen. Dies ist der Text nach den Schaltflächen „Stumm“, „Aufnahme“ und „Solo“.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Narrow</source>
-        <translation type="unfinished"></translation>
+        <translation>Schmal</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Wide</source>
-        <translation type="unfinished"></translation>
+        <translation>Breit</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -16369,7 +16369,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+10"/>
         <source>You must restart Rosegarden or open a file for the track label width change to take effect.</source>
-        <translation type="unfinished"></translation>
+        <translation>Rosegarden muss neu gestartet oder eine Datei geöffnet werden, damit die Änderungen bei der Spurbenennungsbreite aktiv werden.</translation>
     </message>
     <message>
         <source>HPLIP (Qt 4)</source>
@@ -16506,17 +16506,17 @@ available on your path.  When choosing an application to use, please ensure that
     <message>
         <location line="-218"/>
         <source>LV2 Plugin Support</source>
-        <translation type="unfinished"></translation>
+        <translation>LV2-Plugin-Unterstützung</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Drag with dynamic modifiers (main/matrix)</source>
-        <translation type="unfinished"></translation>
+        <translation>Mit dynamischen Modifikatoren (Hauptfenster/Matrixeditor) ziehen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If set, the CTRL and ALT keys can be pressed or released while a drag is in progress to change copy/move behavior.  This applies to the main window and the matrix editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wenn diese Option aktiviert ist, können die Tasten STRG und ALT während eines Ziehevorgangs gedrückt bzw. losgelassen werden, um das Kopier-/Verschiebeverhalten zu ändern. Dies gilt für das Hauptfenster und den Matrixeditor.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+398"/>
@@ -17023,7 +17023,7 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/commands/edit/InsertTriggerNoteCommand.cpp" line="+48"/>
         <source>Insert Trigger Note</source>
-        <translation>Trigger Note einfügen</translation>
+        <translation>Triggernote einfügen</translation>
     </message>
 </context>
 <context>
@@ -17366,27 +17366,27 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/gui/editors/event/KeyPressureWidget.cpp" line="+70"/>
         <source>Key Pressure Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Einzel-Tastennachdruck Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Tonhöhe:</translation>
+        <translation>Tonhöhe:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>edit</source>
-        <translation type="unfinished">bearbeiten</translation>
+        <translation>bearbeiten</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Pressure:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tastennachdruck:</translation>
     </message>
     <message>
         <location line="+31"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Tonhöhe bearbeiten</translation>
+        <translation>Tonhöhe bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -18351,7 +18351,7 @@ verursacht.</translation>
     <message>
         <location line="+16"/>
         <source>Accept transport CCs (116-118)</source>
-        <translation>Transport CCs (116-118) erlauben</translation>
+        <translation>Transportkontroller (CC 116-118) erlauben</translation>
     </message>
     <message>
         <source>Rosegarden will discard these CCs, so disable this if you 
@@ -18636,7 +18636,7 @@ es auf sämtliche Perkussion Tabellen und Schlagzeuge, die im Studio konfigurier
         <location line="+4"/>
         <source>&lt;qt&gt;The name is used to identify both the ornament and the triggered segment that stores the ornament&apos;s notes.&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Der Name wird dazu verwendet um sowohl die 
-Verzierung als auch das getriggerte Segment, welches die Verzierungs-Noten enthält, zu identifizieren.&lt;/qt&gt;</translation>
+Verzierung als auch das getriggerte Segment, welches die Verzierungsnoten enthält, zu identifizieren.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -19283,7 +19283,7 @@ zu ändern</translation>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;Velocity for new notes.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Anschlagstärke für neue Noten.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -19293,7 +19293,7 @@ zu ändern</translation>
     <message>
         <location line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Quantize the display.&lt;/p&gt;&lt;p&gt;Notes with start times that are not aligned to the quantize setting are displayed as being aligned.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Quantisieren Sie die Anzeige.&lt;/p&gt;&lt;p&gt;Noten mit Startzeiten, die nicht an der Quantisierungseinstellung ausgerichtet sind, werden als ausgerichtet angezeigt.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -19345,7 +19345,7 @@ zu ändern</translation>
     <message>
         <location line="-1109"/>
         <source>Preserves precise horizontal and vertical position when moving a note.</source>
-        <translation type="unfinished"></translation>
+        <translation>Behält beim Verschieben einer Note die genaue horizontale und vertikale Position bei.</translation>
     </message>
     <message>
         <location line="+97"/>
@@ -19552,13 +19552,13 @@ zu ändern&lt;/qt&gt;</translation>
         <location line="-52"/>
         <location line="+59"/>
         <source>Key Pressure</source>
-        <translation>Tasten-Aftertouch</translation>
+        <translation>Einzel-Tastennachdruck</translation>
     </message>
     <message>
         <location line="-52"/>
         <location line="+59"/>
         <source>Channel Pressure</source>
-        <translation>Kanal-Aftertouch</translation>
+        <translation>Kanal-Tastennachdruck</translation>
     </message>
     <message>
         <location line="-52"/>
@@ -19945,17 +19945,17 @@ check transposing instruments carefully in both concert and notated pitch. When 
     <message>
         <location filename="../../src/gui/editors/event/NRPNWidget.cpp" line="+65"/>
         <source>NRPN Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>NRPN Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>NRPN:</source>
-        <translation type="unfinished"></translation>
+        <translation>NRPN:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert:</translation>
     </message>
 </context>
 <context>
@@ -21089,12 +21089,12 @@ Attribut shape oder das Attribut charname haben</translation>
     <message>
         <location filename="../../src/gui/editors/event/NoteWidget.cpp" line="+78"/>
         <source>Note Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Noteneigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Duration:</source>
-        <translation type="unfinished">Dauer:</translation>
+        <translation>Dauer:</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -21102,52 +21102,52 @@ Attribut shape oder das Attribut charname haben</translation>
         <location line="+53"/>
         <location line="+20"/>
         <source>edit</source>
-        <translation type="unfinished">bearbeiten</translation>
+        <translation>bearbeiten</translation>
     </message>
     <message>
         <location line="-89"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Tonhöhe:</translation>
+        <translation>Tonhöhe:</translation>
     </message>
     <message>
         <location line="+24"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Anschlagstärke:</translation>
+        <translation>Anschlagstärke:</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Lock notation to performance</source>
-        <translation type="unfinished"></translation>
+        <translation>Notation an die Aufführung binden</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Notation time:</source>
-        <translation type="unfinished">Notenzeit:</translation>
+        <translation>Notationszeit:</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Notation duration:</source>
-        <translation type="unfinished">Notendauer:</translation>
+        <translation>Notationsdauer:</translation>
     </message>
     <message>
         <location line="+47"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Dauer ändern</translation>
+        <translation>Dauer ändern</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Tonhöhe bearbeiten</translation>
+        <translation>Tonhöhe bearbeiten</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Edit Event Notation Time</source>
-        <translation type="unfinished">Ereignisnotenzeit ändern</translation>
+        <translation>Ereignisnotation bearbeiten</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Edit Notation Duration</source>
-        <translation type="unfinished">Notendauer ändern</translation>
+        <translation>Notationsdauer bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -21572,17 +21572,17 @@ enthalten. Vibrato ist möglich, falls der Verlaufsmodus &lt;i&gt;linear&lt;/i&g
     <message>
         <location filename="../../src/gui/editors/event/PitchBendWidget.cpp" line="+64"/>
         <source>Pitch Bend Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Tonhöhenbeugung Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Pitch Bend:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tonhöhenbeugung:</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>8192 is center</source>
-        <translation type="unfinished"></translation>
+        <translation>8192 ist Mittelstellung</translation>
     </message>
 </context>
 <context>
@@ -21930,12 +21930,12 @@ no other tracker clients are open.</source>
     <message>
         <location filename="../../src/gui/editors/event/ProgramChangeWidget.cpp" line="+55"/>
         <source>Program Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Programmeigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Program:</source>
-        <translation type="unfinished"></translation>
+        <translation>Programm:</translation>
     </message>
 </context>
 <context>
@@ -21980,7 +21980,7 @@ no other tracker clients are open.</source>
     <message>
         <location line="+11"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wvunpack&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called &quot;wavpack&quot;.&lt;/p&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Das &lt;b&gt;wunpack&lt;/b&gt;-Kommando konnte nicht gefunden werden.&lt;/p&gt;&lt;p&gt;WavPack ist ein Audio-Komprimierungs-Format, welches die Größe von Rosegarden-Projekten verringern kann, ohne dabei die Audio-Qualität zu mindern.  Bitte installieren sie WavPack und versuchen es noch einmal. Dieses Hilfsprogramm ist bei den meisten Distributionen im Paket &quot;wavpack&quot; enthalten.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Das &lt;b&gt;wunpack&lt;/b&gt;-Kommando konnte nicht gefunden werden.&lt;/p&gt;&lt;p&gt;WavPack ist ein Audio-Komprimierungs-Format, welches die Größe von Rosegarden-Projekten verringern kann, ohne dabei die Audio-Qualität zu mindern.  Bitte installieren Sie WavPack und versuchen es noch einmal. Dieses Hilfsprogramm ist bei den meisten Distributionen im Paket &quot;wavpack&quot; enthalten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -22044,7 +22044,7 @@ no other tracker clients are open.</source>
     <message>
         <location line="+24"/>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;flac&lt;/b&gt; command was not found.&lt;/p&gt;&lt;p&gt;FLAC is a lossless audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install FLAC and try again.  This utility is typically available to most distros as a package called &quot;flac&quot;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Das &lt;b&gt;flac&lt;/b&gt;-Kommando konnte nicht gefunden werden.&lt;/p&gt;&lt;p&gt;FLAC ist ein verlustloses Audio-Komprimierungs-Format, welches die Größe von Rosegarden-Projekten verringern kann, ohne dabei die Audio-Qualität zu mindern.  Bitte installieren sie FLAC und versuchen es noch einmal. Dieses Hilfsprogramm ist bei den meisten Distributionen im Paket &quot;flac&quot; enthalten.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Das &lt;b&gt;flac&lt;/b&gt;-Kommando konnte nicht gefunden werden.&lt;/p&gt;&lt;p&gt;FLAC ist ein verlustloses Audio-Komprimierungs-Format, welches die Größe von Rosegarden-Projekten verringern kann, ohne dabei die Audio-Qualität zu mindern.  Bitte installieren Sie FLAC und versuchen es noch einmal. Dieses Hilfsprogramm ist bei den meisten Distributionen im Paket &quot;flac&quot; enthalten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;The &lt;b&gt;wavpack&lt;/b&gt; command 
@@ -22396,17 +22396,17 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location filename="../../src/gui/editors/event/RPNWidget.cpp" line="+65"/>
         <source>RPN Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>RPN:</source>
-        <translation type="unfinished"></translation>
+        <translation>RPN:</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Value:</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert:</translation>
     </message>
 </context>
 <context>
@@ -22648,22 +22648,22 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location filename="../../src/gui/editors/event/RestWidget.cpp" line="+60"/>
         <source>Rest Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>Pauseneigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Duration:</source>
-        <translation type="unfinished">Dauer:</translation>
+        <translation>Dauer:</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>edit</source>
-        <translation type="unfinished">bearbeiten</translation>
+        <translation>bearbeiten</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Dauer ändern</translation>
+        <translation>Dauer bearbeiten</translation>
     </message>
 </context>
 <context>
@@ -22823,7 +22823,7 @@ und werden daher vom zu sichernden Dokument nicht mehr verwendet.
 Sie können entscheiden diese Dateien zu löschen, um Plattenplatz 
 zu sparen.
 
-Bitte wählen diejenigen aus, die Sie permanent von der Festplatte entfernen möchten.
+Bitte diejenigen auswählen, die Sie permanent von der Festplatte entfernen möchten.
 </translation>
     </message>
     <message numerus="yes">
@@ -22935,7 +22935,7 @@ editing this file, you may press Ignore to open the file.
 
 Ein anderer Benutzer oder Instanz von Rosegarden könnte
 die Datei bereits bearbeiten.  Falls sicher ist, dass niemand
-die Datei bearbeitet, können sie Ignorieren drücken um sie zu öffnen.
+die Datei bearbeitet, können Sie Ignorieren drücken um diese zu öffnen.
 
 </translation>
     </message>
@@ -23472,7 +23472,8 @@ Möchten Sie den Pfad jetzt setzen?</translation>
         <location line="-2931"/>
         <source>An auto-save file for an unsaved document has been found.
 Do you want to open it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Es wurde eine automatisch gespeicherte Datei für ein nicht gespeichertes Dokument gefunden.
+Möchten Sie diese öffnen?</translation>
     </message>
     <message>
         <location line="+1550"/>
@@ -23707,7 +23708,7 @@ the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;You are using version %1.  Version %2 is now available.&lt;/p&gt;&lt;p&gt;Please consult the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden website&lt;/a&gt; for more information.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;SIe benutzen Version %1.  Version %2 ist nun verfügbar.&lt;/p&gt;&lt;p&gt;Bitte schauen SIe auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Webseite von Rosegarden&lt;/a&gt; nach weiteren Infomationen.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Sie benutzen Version %1.  Version %2 ist nun verfügbar.&lt;/p&gt;&lt;p&gt;Bitte schauen Sie auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Webseite von Rosegarden&lt;/a&gt; nach weiteren Infomationen.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="-4261"/>
@@ -24041,7 +24042,7 @@ Nur Audio- und Synth-Plugin-Spuren werden exportiert</translation>
     <message>
         <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden created the audio path &quot;%1&quot; to use for audio recording, and to receive dropped audio files.&lt;/p&gt;&lt;p&gt;If you wish to use a different path, change this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden hat den Audiopfad &quot;%1&quot; erzeugt um Audio aufzunehmen oder losgelassene Audio-Dateien zu empfangen.&lt;/p&gt;&lt;p&gt;Falls Sie einen anderen Pfad nutzen möchten, ändern sie ihn in &lt;b&gt;Ansicht -&gt; Dokumenteigenschaften-&gt;Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Rosegarden hat den Audiopfad &quot;%1&quot; erzeugt um Audio aufzunehmen oder losgelassene Audio-Dateien zu empfangen.&lt;/p&gt;&lt;p&gt;Falls Sie einen anderen Pfad nutzen möchten, ändern Sie ihn in &lt;b&gt;Ansicht -&gt; Dokumenteigenschaften-&gt;Audio&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-4035"/>
@@ -24087,8 +24088,7 @@ Please set the audio file path to a valid directory in Document Properties befor
 Would you like to set it now?</source>
         <translation>Der angegebene Audio-Dateipfad existiert entweder nicht oder ist nicht schreibbar.
 Bitte setzen Sie den Audio-Dateipfad auf ein gültiges Verzeichnis in 
-dem
-Dokumenteigenschaften bevor Sie Audio aufnehmen.
+den Dokumenteigenschaften bevor Sie Audio aufnehmen.
 Möchten Sie den Pfad jetzt setzen?</translation>
     </message>
     <message>
@@ -24460,7 +24460,7 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+84"/>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewegen</translation>
     </message>
     <message>
         <location line="+96"/>
@@ -24922,17 +24922,17 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
     <message>
         <location line="-250"/>
         <source>Move</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewegen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy</source>
-        <translation type="unfinished">Kopieren</translation>
+        <translation>Kopieren</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy as Link</source>
-        <translation type="unfinished"></translation>
+        <translation>Als Link kopieren</translation>
     </message>
     <message numerus="yes">
         <location line="+251"/>
@@ -25048,7 +25048,7 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
     <message>
         <location filename="../../src/commands/segment/SegmentSyncClefCommand.cpp" line="+27"/>
         <source>Sync segment clef</source>
-        <translation>Syncronisiere Segmentnotenschlüssel</translation>
+        <translation>Synchronisiere Segmentnotenschlüssel</translation>
     </message>
 </context>
 <context>
@@ -25059,7 +25059,7 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
         <location line="+11"/>
         <location line="+8"/>
         <source>Sync segment parameters</source>
-        <translation>Syncronisiere Segment-Parameter</translation>
+        <translation>Synchronisiere Segment-Parameter</translation>
     </message>
 </context>
 <context>
@@ -25246,12 +25246,12 @@ fortfahren.</translation>
     <message>
         <location line="+238"/>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Das MIDI-Subsystem konnte nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Sie können mit dem Sequenzer fortfahren, allerdings empfehlen wir Rosegarden zu schließen, &quot;modprobe snd-seq-midi&quot; als root auszuführen, und Rosegarden neu zu starten. Falls sie Rosegarden absichtlich ohne Sequenzer laufen lassen möchten, können sie &quot;rosegarden --nosequencer&quot; verwenden um diese Fehlermeldung in Zukunft nicht mehr zu sehen.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Das MIDI-Subsystem konnte nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Sie können mit dem Sequenzer fortfahren, allerdings empfehlen wir Rosegarden zu schließen, &quot;modprobe snd-seq-midi&quot; als root auszuführen, und Rosegarden neu zu starten. Falls Sie Rosegarden absichtlich ohne Sequenzer laufen lassen möchten, können Sie &quot;rosegarden --nosequencer&quot; verwenden um diese Fehlermeldung in Zukunft nicht mehr zu sehen.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audio-Server verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audio-Server nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann. Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc. Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audio-Server in Zukunft automatisch starten.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden konnte sich nicht mit dem JACK-Audio-Server verbinden.  Dies bedeutet wahrscheinlich, das Rosegarden den Audio-Server nicht starten konnte, weil entweder die Konfiguration, die Installation oder beides nicht korrekt ist.&lt;/p&gt;&lt;p&gt;Falls Sie Audio-Dateien abspielen oder aufnehmen, bzw. Plugins benutzen wollen, müssen Sie Rosegarden verlassen und die Einstellungen von JACK z.B. mit qjackctl solange verändern, bis JACK gestartet werden kann. Außerdem könnte die Installation eines Echtzeitkernels nötig sein, die Sicherheitseinstellungen des Systems verändert werden, etc. Unglücklicherweise ist dies ein sehr komplexes Thema.&lt;/p&gt;&lt;p&gt;Sobald eine funktionierende Konfiguration von JACK gefunden wurde, kann Rosegarden den Audio-Server in Zukunft automatisch starten.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  
@@ -25298,7 +25298,7 @@ Multimedia-Anwendungen anbietet.  Bitte schauen Sie auf der &lt;a style=&quot;co
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Both MIDI and Audio subsystems have failed to initialize.&lt;/p&gt;&lt;p&gt;If you wish to run with no sequencer by design, then use &quot;rosegarden --nosound&quot; to avoid seeing this error in the future.  Otherwise, we recommend that you repair your system configuration and start Rosegarden again.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Sowohl das MIDI- als auch das Audio-System konnten nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Falls sie Rosegarden absichtlich ohne Sequenzer laufen lassen möchten, können Sie &quot;rosegarden --nosequencer&quot; verwenden um diese Fehlermeldung in Zukunft nicht mehr zu sehen. Anderenfalls empfehlen wir die Konfiguration 
+        <translation>&lt;p&gt;Sowohl das MIDI- als auch das Audio-System konnten nicht initialisiert werden.&lt;/p&gt;&lt;p&gt;Falls Sie Rosegarden absichtlich ohne Sequenzer laufen lassen möchten, können Sie &quot;rosegarden --nosequencer&quot; verwenden um diese Fehlermeldung in Zukunft nicht mehr zu sehen. Anderenfalls empfehlen wir die Konfiguration 
 des Systems zu reparieren und Rosegarden neu zu starten.&lt;/p&gt;</translation>
     </message>
     <message>
@@ -25345,7 +25345,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+75"/>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;Check whether your Linux distribution provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden konnte keine hochauflösende Zeitgeberquelle für MIDI-Ausführung finden.&lt;/p&gt;&lt;p&gt;Überprüfen Sie, ob Ihre Linux-Distribution einen multimediaoptimierten Kernel bietet. Hinweise hierzu finden Sie auf der &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden-Webseite&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
@@ -25430,7 +25430,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+16"/>
         <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Eine Maßnahme in der Tabelle unten wählen, dann Doppel-Klick auf eines der vier &lt;b&gt;Kürzel&lt;/b&gt; Tabellenfelder.  Drücken sie die Taste des neuen Kürzels.  Ein Kürzel kann entfernt werden durch Drücken der Hochstelltaste im &lt;b&gt;Kürzel&lt;/b&gt; Feld.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Maßnahmen die mit einem &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;hellblauen Hintergrund&lt;/span&gt; gekennzeichnet sind, sind global zugeordnet und gelten in allen Fenstern.&lt;/i&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Eine Maßnahme in der Tabelle unten wählen, dann Doppel-Klick auf eines der vier &lt;b&gt;Kürzel&lt;/b&gt; Tabellenfelder.  Drücken Sie die Taste des neuen Kürzels.  Ein Kürzel kann entfernt werden durch Drücken der Hochstelltaste im &lt;b&gt;Kürzel&lt;/b&gt; Feld.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Maßnahmen die mit einem &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;hellblauen Hintergrund&lt;/span&gt; gekennzeichnet sind, sind global zugeordnet und gelten in allen Fenstern.&lt;/i&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -25511,7 +25511,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+1"/>
         <source>This will reset all shortcuts for all actions across all contexts. Are you sure?</source>
-        <translation>Dies wird alle Kürzel für alle Maßnahmen in allen Zuordnungen zurücksetzen. Sind sie sicher?</translation>
+        <translation>Dies wird alle Kürzel für alle Maßnahmen in allen Zuordnungen zurücksetzen. Sind Sie sicher?</translation>
     </message>
 </context>
 <context>
@@ -26092,54 +26092,54 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location filename="../../src/gui/editors/event/SysExWidget.cpp" line="+64"/>
         <source>SysEx Properties</source>
-        <translation type="unfinished"></translation>
+        <translation>SysEx Eigenschaften</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Data:</source>
-        <translation type="unfinished">Daten:</translation>
+        <translation>Daten:</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Load data</source>
-        <translation type="unfinished">Lade Daten</translation>
+        <translation>Daten laden</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Save data</source>
-        <translation type="unfinished">Daten sichern</translation>
+        <translation>Daten sichern</translation>
     </message>
     <message>
         <location line="+25"/>
         <source>Load System Exclusive data in File</source>
-        <translation type="unfinished">Lade systemexklusive (SYSEX) Daten aus Datei</translation>
+        <translation>Systemexklusive (SYSEX) Daten aus Datei laden</translation>
     </message>
     <message>
         <location line="+2"/>
         <location line="+49"/>
         <source>System exclusive files</source>
-        <translation type="unfinished">Systemexklusive (SYSEX) Daten</translation>
+        <translation>Systemexklusive (SYSEX) Daten</translation>
     </message>
     <message>
         <location line="-48"/>
         <location line="+49"/>
         <source>All files</source>
-        <translation type="unfinished">Alle Dateien</translation>
+        <translation>Alle Dateien</translation>
     </message>
     <message>
         <location line="-25"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Could not load SysEx file.</source>
-        <translation type="unfinished">Konnte SysEx-Datei nicht laden.</translation>
+        <translation>Konnte SysEx-Datei nicht laden.</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>Save System Exclusive data to...</source>
-        <translation type="unfinished">Sichere exklusive System Daten nach...</translation>
+        <translation>Systemexklusive Daten sichern nach...</translation>
     </message>
 </context>
 <context>
@@ -26222,7 +26222,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+286"/>
         <source>Edit Tempo Change</source>
-        <translation type="unfinished"></translation>
+        <translation>Tempoänderung bearbeiten</translation>
     </message>
     <message>
         <location line="+65"/>
@@ -27124,17 +27124,17 @@ with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt
     <message>
         <location line="+123"/>
         <source>Change track name</source>
-        <translation>Spurnamen ändern</translation>
+        <translation>Spurbenennung ändern</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new track name</source>
-        <translation>Neuen Spurnamen eingeben</translation>
+        <translation>Neue Spurbenennung eingeben</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;The track name is also the notation staff name, eg. &amp;quot;Trumpet.&amp;quot;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Der Spurname ist zugleich Notensatzname, z.B. &amp;quot;Trompete &amp;quot;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Die Spurbenennung ist zugleich Notensatzbenennung, z.B. &amp;quot;Trompete &amp;quot;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;The track name is also the notation staff name, 
@@ -27711,7 +27711,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <location line="-91"/>
         <location line="+96"/>
         <source>PRESSURE</source>
-        <translation>PRESSURE</translation>
+        <translation>TASTENNACHDRUCK</translation>
     </message>
     <message>
         <location line="-92"/>
@@ -27864,7 +27864,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="-2"/>
         <source>Delete a Triggered Segment</source>
-        <translation>Lösche getriggertes Segment</translation>
+        <translation>Ein getriggertes Segment löschen</translation>
     </message>
     <message>
         <location line="-4"/>
@@ -27874,7 +27874,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+1"/>
         <source>Add a Triggered Segment</source>
-        <translation>Getriggertes Segment hinzufügen</translation>
+        <translation>Ein getriggertes Segment hinzufügen</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -27902,7 +27902,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+17"/>
         <source>This will remove all triggered segments from the whole composition.  Are you sure?</source>
-        <translation>Das wird alle getriggerten Segmente der gesamten Komposition entfernen. Sind Sie sicher?</translation>
+        <translation>Dies wird alle getriggerten Segmente der gesamten Komposition entfernen. Sind Sie sicher?</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -27914,7 +27914,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="-71"/>
         <source>Remove all triggered segments</source>
-        <translation>Entferne alle getriggerten Segmente</translation>
+        <translation>Alle getriggerten Segmente entfernen</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -27925,8 +27925,8 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
         <location line="+30"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation>
-            <numerusform>Dieses getriggerte Segment wird %n mal in der aktuellen Komposition benutzt.  Möchten Sie es wirklich entfernen?</numerusform>
-            <numerusform>Dieses getriggerte Segment wird %n mal in der aktuellen Komposition benutzt.  Möchten Sie es wirklich löschen?</numerusform>
+            <numerusform>Dieses getriggerte Segment wird %n mal in der aktuellen Komposition benutzt.  Möchten Sie dieses wirklich entfernen?</numerusform>
+            <numerusform>Diese getriggerten Segmente werden %n mal in der aktuellen Komposition benutzt.  Möchten Sie diese wirklich löschen?</numerusform>
         </translation>
     </message>
     <message>
@@ -28142,7 +28142,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+8"/>
         <source>Perform using triggered segment: </source>
-        <translation>Durchführen mit getriggertem Segmemt: </translation>
+        <translation>Mit getriggertem Segment durchführen: </translation>
     </message>
     <message>
         <location line="+14"/>
@@ -28409,7 +28409,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
-        <translation>Spielt von der aktuellen Zeigerposition, oder hält die Wiedergabe an, wenn sie schon im Gang ist.</translation>
+        <translation>Spielt von der aktuellen Zeigerposition, oder hält die Wiedergabe an, wenn diese schon im Gang ist.</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -28457,7 +28457,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>
