@@ -274,9 +274,9 @@ TempoAndTimeSignatureEditor::updateTable()
 
     // Preserve the "current item".
 
-    bool haveCurrentItem;
+    bool haveCurrentItem{false};
     Key currentItemKey;
-    int currentItemColumn;
+    int currentItemColumn{0};
 
     // Scope to avoid accidentally reusing currentItem after it is gone.
     {
