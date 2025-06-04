@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -479,10 +479,10 @@ LilyPondSegmentsContext::fixAltStartTimes()
     // we know what segment may be repeated and what segment may be unfolded.
     // We can compute the start time of each segment in the LilyPond score.
 
-    // Validate the output of repeat with alternate edndings in LilyPond score
+    // Validate the output of repeat with alternate endings in LilyPond score
     m_repeatWithAlt = true;
 
-    // Sort the volta/alt sequences from start times
+    // Sort the volta/alt sequences by start times
     std::map<timeT, const SegmentData *> repeatedSegments;
     repeatedSegments.clear();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {

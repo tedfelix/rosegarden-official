@@ -228,7 +228,7 @@ globalTempo = {
                     c''' 8 [ e''' 16 f''' ] g''' 8 [ c'''' ] g''' [ e''' ]  |
                     c''' 8 [ c'''' ] e''' [ c'''' ] d''' [ b''' ]  |
 %% 155
-                    c'''' 4 r r  |
+                    c'''' 4 r r 
                     \bar "|."
                 } % Voice
 
@@ -399,7 +399,7 @@ globalTempo = {
                         c'' 8 [ e'' 16 f'' ] g'' 8 [ c''' ] g'' [ e'' ]  |
                         c'' 8 [ c''' ] e'' [ c''' ] d'' [ b'' ]  |
 %% 155
-                        c''' 4 r r  |
+                        c''' 4 r r 
                         \bar "|."
                     } % Voice
 
@@ -566,7 +566,7 @@ globalTempo = {
                         g' 8 [ c'' 16 d'' ] e'' 8 [ g'' ] e'' [ c'' ]  |
                         g' 8 [ e'' ] c'' [ e'' ] b' [ d'' ]  |
 %% 155
-                        e'' 4 r r  |
+                        e'' 4 r r 
                         \bar "|."
                     } % Voice
 
@@ -737,7 +737,7 @@ globalTempo = {
                     e' 8 [ g' ] c'' [ e'' ] c'' [ g' ]  |
                     e' 8 [ g' ] g' [ g' ] g' [ g' ]  |
 %% 155
-                    g' 4 r r  |
+                    g' 4 r r 
                     \bar "|."
                 } % Voice
 
@@ -901,7 +901,7 @@ globalTempo = {
                     c 8 [ c' ] c [ c' ] c [ c' ]  |
                     c 8 [ c' ] c [ c' ] g, [ g ]  |
 %% 155
-                    c 4 r r  |
+                    c 4 r r 
                     \bar "|."
                 } % Voice
 

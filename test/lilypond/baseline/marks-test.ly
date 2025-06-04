@@ -55,7 +55,7 @@ globalTempo = {
                 f' 4 _\markup { \italic Text }  r f' 2 \startTrillSpan _~ 
                 % warning: overlong bar truncated here |
                 f' 2 _~ f'  |
-                f' 1 \stopTrillSpan \startTrillSpan  |
+                f' 1 \stopTrillSpan \startTrillSpan 
                 \bar "|."
             } % Voice
 

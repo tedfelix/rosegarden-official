@@ -206,7 +206,7 @@ globalTempo = {
 %% 50
                     c'' 16 [ d'' e'' f'' ] g'' [ a'' b'' 8 ] c''' [ d''' 16 e''' ] c''' 8 \sustainOff [ < e'' g'' > \sustainOn ]  |
                     < g'' e'' > 8 -\staccato r r4 r < c''' c''' g'' g'' e'' e'' > 8 < c''' g'' e'' >  |
-                    < c''' g'' e'' > 2 r  |
+                    < c''' g'' e'' > 2 r 
                     \bar "|."
                 } % Voice
 
@@ -399,7 +399,7 @@ globalTempo = {
 %% 50
                     r2 r4 < c' g' e' > \sustainOff  |
                     c'' 8 [ < c'' g' > ] < c' g' e' > 4 < c e > < c, c > _~  |
-                    < c c, > 2 _~ r \sustainOff  |
+                    < c c, > 2 _~ r \sustainOff 
                     \bar "|."
                 } % Voice
 

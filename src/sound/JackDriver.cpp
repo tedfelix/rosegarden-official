@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -321,6 +321,8 @@ JackDriver::initialise(bool reinitialise)
         return ;
     }
 
+    // Start with an initial single stereo input pair so that we can
+    // make the default connections.  See connectDefaultInputs below.
     if (!createRecordInputs(1)) {
         RG_WARNING << "initialise() - failed to create record inputs!";
         AUDIT << "WARNING: failed to create record inputs!\n";
@@ -334,17 +336,27 @@ JackDriver::initialise(bool reinitialise)
     }
 
     // Now set up the default connections, if configured to do so
-    settings.beginGroup(SequencerOptionsConfigGroup);
-    bool connectDefaultOutputs = settings.value("connect_default_jack_outputs", true).toBool();
-    bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();
-    settings.endGroup();
 
-    const char **ports = jack_get_ports(m_client, nullptr, nullptr,
-            JackPortIsPhysical | JackPortIsInput);
+    // Set up the outputs.
+    // E.g. "rosegarden:master out L" and "rosegarden:master out R" to
+    // "system:playback_1" and "system:playback_2".
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    const bool connectDefaultOutputs =
+            settings.value("connect_default_jack_outputs", true).toBool();
+    settings.endGroup();
 
     if (connectDefaultOutputs) {
 
-        std::string playback_1, playback_2;
+        // Get the physical input ports.
+        const char **ports = jack_get_ports(
+                m_client,  // client
+                nullptr,  // port_name_pattern
+                nullptr,  // type_name_pattern
+                JackPortIsPhysical | JackPortIsInput);  // flags
+
+        std::string playback_1;
+        std::string playback_2;
 
         if (ports) {
             if (ports[0])
@@ -416,26 +428,42 @@ JackDriver::initialise(bool reinitialise)
         AUDIT << "  Go to Edit > Preferences > Audio > Make default JACK connections.\n";
     }
 
+    // Set up the inputs.
+    // E.g. "system:capture_1" and "system:capture_1" to
+    // "rosegarden:record in 1 L" and "rosegarden:record in 1 R".
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    const bool connectDefaultInputs =
+            settings.value("connect_default_jack_inputs", true).toBool();
+    settings.endGroup();
+
     if (connectDefaultInputs) {
 
-        std::string capture_1, capture_2;
+        // We only look at the first two.
+        std::string capture_1;
+        std::string capture_2;
 
-        ports =
-            jack_get_ports(m_client, nullptr, nullptr,
-                           JackPortIsPhysical | JackPortIsOutput);
+        // Get the output ports.  Usually system:capture_1 and system:capture_2
+        // are the first two.
+        const char **ports = jack_get_ports(
+                m_client,  // client
+                nullptr,  // port_name_pattern
+                nullptr,  // type_name_pattern
+                JackPortIsPhysical | JackPortIsOutput);  // flags
 
         if (ports) {
-            if (ports[0])
+            unsigned int count = 0;
+            if (ports[0]) {
                 capture_1 = std::string(ports[0]);
-            if (ports[1])
+                ++count;
+            }
+            if (ports[1]) {
                 capture_2 = std::string(ports[1]);
+                ++count;
+            }
 
-            // count ports
-            unsigned int i = 0;
-            for (i = 0; ports[i]; i++)
-                ;
-            RG_DEBUG << "initialise() - found " << i << " JACK physical inputs";
-            AUDIT << "found " << i << " JACK physical inputs\n";
+            RG_DEBUG << "initialise() - found " << count << " JACK physical inputs";
+            AUDIT << "found " << count << " JACK physical inputs\n";
 
             jack_free(ports);
 
@@ -446,11 +474,14 @@ JackDriver::initialise(bool reinitialise)
 
         if (capture_1 != "") {
 
-            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"";
-            AUDIT << "connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"\n";
+            std::string recordIn1L = jack_port_name(m_inputPorts[0]);
 
-            if (jack_connect(m_client, capture_1.c_str(),
-                             jack_port_name(m_inputPorts[0]))) {
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1 << "\" to \"" << recordIn1L << "\"";
+            AUDIT << "connecting from " << "\"" << capture_1 << "\" to \"" << recordIn1L << "\"\n";
+
+            if (jack_connect(m_client,  // client
+                             capture_1.c_str(),  // source_port
+                             recordIn1L.c_str())) {  // destination_port
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
@@ -458,11 +489,14 @@ JackDriver::initialise(bool reinitialise)
 
         if (capture_2 != "") {
 
-            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"";
-            AUDIT << "connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"\n";
+            std::string recordIn1R = jack_port_name(m_inputPorts[1]);
 
-            if (jack_connect(m_client, capture_2.c_str(),
-                             jack_port_name(m_inputPorts[1]))) {
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2 << "\" to \"" << recordIn1R << "\"";
+            AUDIT << "connecting from " << "\"" << capture_2 << "\" to \"" << recordIn1R << "\"\n";
+
+            if (jack_connect(m_client,  // client
+                             capture_2.c_str(),  // source_port
+                             recordIn1R.c_str())) {  // destination_port
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
@@ -620,21 +654,29 @@ JackDriver::createSubmasterOutputs(int pairs)
 }
 
 bool
-JackDriver::createRecordInputs(int pairs)
+JackDriver::createRecordInputs(int newPairs)
 {
     if (!m_client)
         return false;
 
-    int pairsNow = int(m_inputPorts.size()) / 2;
-    if (pairs == pairsNow)
+    // Don't allow zero pairs.
+    if (newPairs < 1)
+        newPairs = 1;
+
+    const int oldPairs = int(m_inputPorts.size()) / 2;
+    // No change or a reduction?  Bail.
+    if (newPairs <= oldPairs)
         return true;
 
-    for (int i = pairsNow; i < pairs; ++i) {
+    // For each additional input port pair...
+    for (int pairNumber = oldPairs + 1; pairNumber <= newPairs; ++pairNumber) {
 
         QString name;
         jack_port_t *port;
 
-        name = QString("record in %1 L").arg(i + 1);
+        // Register the Left.
+
+        name = QString("record in %1 L").arg(pairNumber);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -642,9 +684,12 @@ JackDriver::createRecordInputs(int pairs)
                                   0);
         if (!port)
             return false;
+
         m_inputPorts.push_back(port);
 
-        name = QString("record in %1 R").arg(i + 1);
+        // Register the Right.
+
+        name = QString("record in %1 R").arg(pairNumber);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -652,15 +697,29 @@ JackDriver::createRecordInputs(int pairs)
                                   0);
         if (!port)
             return false;
+
         m_inputPorts.push_back(port);
     }
 
-    while ((int)m_inputPorts.size() > pairs * 2) {
-        std::vector<jack_port_t *>::iterator itr = m_inputPorts.end();
-        --itr;
+#if 0
+    // ??? Removing this since it will cause connections to be dropped.
+    //     If the user goes from a Composition with 4 inputs to one with
+    //     2 inputs, there's no need to delete input ports.  In fact,
+    //     there used to be a bug here where the input ports would never
+    //     be deleted.  No one complained.
+    //
+    //     I suspect the real solution would be to implement JACK input
+    //     connections the way we do MIDI input connections.  Try to find
+    //     all the ports and connect to them on Composition load.
+
+    // Delete any extra ports if we've gone down from say 2 pairs to 1.
+
+    while ((int)m_inputPorts.size() > newPairs * 2) {
+        std::vector<jack_port_t *>::iterator itr = m_inputPorts.end() - 1;
         jack_port_unregister(m_client, *itr);
         m_inputPorts.erase(itr);
     }
+#endif
 
     return true;
 }
@@ -2230,13 +2289,17 @@ JackDriver::updateAudioData()
     m_directMasterAudioInstruments = directMasterAudioInstruments;
     m_directMasterSynthInstruments = directMasterSynthInstruments;
 
-    int inputs = m_alsaDriver->getMappedStudio()->
+    // Update the number of record inputs.
+    const int inputs = m_alsaDriver->getMappedStudio()->
                  getObjectCount(MappedObject::AudioInput);
-
-    if (m_client) {
-        // this will return with no work if the inputs are already correct:
-        createRecordInputs(inputs);
-    }
+    // Does no work if the inputs are already correct.
+    // ??? Why are we doing this in updateAudioData()?!  We should be doing
+    //     this when we load a new document and when the user changes it
+    //     in the document (via the audio mixer).  This is getting called
+    //     *constantly* on the JACK audio thread.  Does it need to be on the
+    //     JACK audio thread?  Or can we safely call it from the GUI
+    //     thread?
+    createRecordInputs(inputs);
 
     m_bussMixer->updateInstrumentConnections();
     m_instrumentMixer->updateInstrumentMuteStates();

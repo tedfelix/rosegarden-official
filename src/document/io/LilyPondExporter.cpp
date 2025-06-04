@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This file is Copyright 2002
   Hans Kieserman      <hkieserman@mail.com>
@@ -1086,7 +1086,6 @@ LilyPondExporter::write()
     // being printed.
     timeT firstSegmentStartTime = lsc.getFirstSegmentStartTime();
 
-
     // define global context which is common for all staffs
     str << indent(col++) << "global = { " << std::endl;
     TimeSignature timeSignature = m_composition->
@@ -1200,6 +1199,11 @@ LilyPondExporter::write()
             timeT tempoChangeTime = tempoChange.first;
 
             tempo = int(Composition::getTempoQpm(tempoChange.second));
+
+            // Don't apply any tempo change coming after the end of the
+            // composition: this avoids LilyPond adding a blank measure at
+            // the end of the score.
+            if (tempoChangeTime >= compositionEndTime) break;
 
             // First tempo change may be before the first segment.
             // Do not apply it before the first segment appears.
@@ -1491,14 +1495,11 @@ LilyPondExporter::write()
 
                 if (!lsc.isAlt()) {
 
-
                     //!!! how will all these indentions work out?  Probably not well,
                     // but maybe if users always provide sensible input, this will work
                     // out sensibly.  Maybe.  If not, we'll need some tracking gizmos to
                     // figure out the indention, or just skip the indention for these or
                     // something.  TBA.
-
-
 
                     if (m_progressDialog)
                         m_progressDialog->setValue(
@@ -1603,7 +1604,11 @@ LilyPondExporter::write()
                             myTime = lsc.getSegmentStartTime() +
                                 (iRepeat + 1.0) * segLength;
                                 RG_DEBUG << "myTime3" << myTime;
-                            writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+
+                            // The next instruction seems at best useless.
+                            // Commented out (YG)
+                            // writeSkip(m_composition->getTimeSignatureAt(myTime), lastTime, myTime - lastTime, false, str);
+
                             lastTime = myTime;
                             str << std::endl << indent(col);
                         } // for iRepeat
@@ -1648,9 +1653,10 @@ LilyPondExporter::write()
                 SegmentNotationHelper helper(*seg);
                 helper.setNotationProperties();
 
-                int firstBar = m_composition->getBarNumber(seg->getStartTime());
+                int segStartTime = seg->getStartTime();
+                int firstBar = m_composition->getBarNumber(segStartTime);
 
-                if (!lsc.isAlt()) {  // Don't write any skip in an alt. ending
+                if (!lsc.isAlt()) { // Don't write any skip in an alt. ending
                     if (firstBar > 0) {
                         // Add a skip for the duration until the start of the first
                         // bar in the segment.  If the segment doesn't start on a
@@ -1666,26 +1672,32 @@ LilyPondExporter::write()
                         writeSkip(timeSignature, compositionStartTime,
                                 lsc.getSegmentStartTime(), false, str);
                     }
+                }
 
-                    // If segment is not starting on a bar, but is starting at barTime + offset,
-                    // we have to do :
-                    //     if segment is the first one : add partial (barDuration - offset)
-                    //     else  add skip (offset)
-                    if (seg->getStartTime() - m_composition->getBarStart(firstBar) > 0) {
-                        if (seg->getStartTime() == firstSegmentStartTime) {
-                            timeT partialDuration = m_composition->getBarStart(firstBar + 1)
-                                                    - seg->getStartTime();
-                            str << indent(col) << "\\partial ";
-                            // Arbitrary partial durations are handled by the following
-                            // way: split the partial duration to 64th notes: instead
-                            // of "4" write "64*16". (hjj)
-                            Note partialNote = Note::getNearestNote(1, MAX_DOTS);
-                            writeDuration(1, str);
-                            str << "*" << ((int)(partialDuration / partialNote.getDuration()))
-                                << std::endl;
-                        }
+
+                // If segment is not starting on a bar, but is starting
+                // at barTime + offset:
+                //     If segment is the first one
+                //     or if segment is an alternate ending:
+                //         Add partial (barDuration - offset) if not using
+                //         LilyPond automatic volta mode
+                //     else  do nothing (skip (offset) already added if needed)
+                if (segStartTime - m_composition->getBarStart(firstBar) > 0) {
+                    if ((segStartTime == firstSegmentStartTime)
+                        || (lsc.isAlt() && !lsc.isAutomaticVoltaUsable())) {
+                        timeT partialDuration =
+                            m_composition->getBarStart(firstBar + 1) - segStartTime;
+                        str << indent(col) << "\\partial ";
+                        // Arbitrary partial durations are handled by the following
+                        // way: split the partial duration to 64th notes: instead
+                        // of "4" write "64*16". (hjj)
+                        Note partialNote = Note::getNearestNote(1, MAX_DOTS);
+                        writeDuration(1, str);
+                        str << "*" << ((int)(partialDuration / partialNote.getDuration()))
+                            << std::endl;
                     }
-                } /// if (!lsc.isAlt())
+                }
+
 
 
                 std::string lilyText = "";      // text events
@@ -1788,7 +1800,7 @@ LilyPondExporter::write()
                                     // "start-repeat" bar hides the "end-repeat"
                                     // bar issued by the previous automatic
                                     // volta. In such a case, a "double-repeat"
-                                    // bar has to be writed. As #'(double-repeat)
+                                    // bar has to be written. As #'(double-repeat)
                                     // is currently not defined in
                                     // LilyPond, the ":..:" string is used.
                                     str << std::endl << indent(col)
@@ -1814,7 +1826,11 @@ LilyPondExporter::write()
                                         << lsc.getAltText() << "\") end-repeat)";
                                 }
                             }
-                            if (m_altBar) {
+
+                            if (m_altBar && lsc.isFirstAlt()) {
+                                // Since LilyPond 2.23, drawing explicitely
+                                // this bar in any other alternative than the
+                                // first one hides the repetion bar.
                                 str << std::endl << indent(col)
                                     << "\\bar \"|\" ";
                             }
@@ -1822,8 +1838,8 @@ LilyPondExporter::write()
                         }
                     }
 
-                    // open the \alternative section if this bar is alternative ending 1
-                    // ending (because there was an "Alt1" flag in the
+                    // open the \alternative section if this bar is alternative
+                    // ending 1 ending (because there was an "Alt1" flag in the
                     // previous bar to the left of where we are right now)
                     //
                     // Alt1 remains in effect until we run into Alt2, which
@@ -1861,7 +1877,6 @@ LilyPondExporter::write()
                             nextBarIsAlt1, nextBarIsAlt2, nextBarIsDouble,
                             nextBarIsEnd, nextBarIsDot,
                             noTimeSig);
-
                 }
 
                 // close \repeat
@@ -1919,6 +1934,7 @@ LilyPondExporter::write()
                                     << lsc.getAltRepeatCount();
                         }
                     }
+
                     str << std::endl << indent(--col) << "}" << std::endl;  // indent-
 
                     if (lsc.isLastAlt()) {
@@ -2954,9 +2970,14 @@ LilyPondExporter::writeBar(Segment *s,
         str << "\\bar \":\" ";
         nextBarIsDot = false;
     } else if (MultiMeasureRestCount == 0) {
-        str << " |";
+        if (barEnd != s->getEndMarkerTime()) {
+            // Bar check except for the last bar closing the segment.
+            // A barcheck at the end of a segment gives a "warning: barcheck
+            // failed" when running LilyPond.
+            str << " |";
+        }
     }
-}
+}                               // End of LilyPondExporter::writeBar() method
 
 void
 LilyPondExporter::writeTimeSignature(const TimeSignature& timeSignature,
@@ -3023,7 +3044,6 @@ LilyPondExporter::writeSkip(const TimeSignature &timeSig,
     timeSig.getDurationListForInterval(dlist, duration, offset);
     std::pair<int,int> durationRatioSum(0,1);
     std::pair<int,int> durationRatio(0,1);
-
     int t = 0, count = 0;
 
     for (DurationList::iterator i = dlist.begin(); ; ++i) {
@@ -3354,7 +3374,7 @@ LilyPondExporter::writeVersesWithVolta(LilyPondSegmentsContext & lsc,
 {
     ////////////////////////////////////////////////////////////////////
     // The comment at the end of LilyPondExporter.h explains what the //
-    // following code does.                                          //
+    // following code does.                                           //
     ////////////////////////////////////////////////////////////////////
 
     int voltaCount = 1;

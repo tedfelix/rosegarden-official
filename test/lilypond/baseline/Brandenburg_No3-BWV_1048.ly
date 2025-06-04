@@ -212,7 +212,7 @@ globalTempo = {
 %% 135
                     b' 16 [ d'' ] c'' [ b' a' g' ] fis' [ e' d' g' ] fis' [ e' d' c' ] b [ a ]  |
                     b 8 [ a 16 g ] d' 8 [ d' ] g 4. r8  |
-                    a' 2 b'  |
+                    a' 2 b' 
                     \bar "|."
                 } % Voice
 
@@ -405,7 +405,7 @@ globalTempo = {
 %% 135
                     g'' 8 fis'' 16 [ e'' d'' c'' ] b' [ a' ] g' 8 [ fis' 16 e' ] d' [ c' ] b [ a ]  |
                     b 8 [ a 16 g ] d' 8 [ d' ] g 4. r8  |
-                    e' 2 fis'  |
+                    e' 2 fis' 
                     \bar "|."
                 } % Voice
 
@@ -589,7 +589,7 @@ globalTempo = {
 %% 135
                     b' 8 a' 16 [ g' fis' e' ] d' [ c' b g' ] fis' [ e' d' c' ] b [ a ]  |
                     b 8 [ a 16 g ] d' 8 [ d' ] g 4. r8  |
-                    e' 2 ees'  |
+                    e' 2 ees' 
                     \bar "|."
                 } % Voice
 
@@ -783,7 +783,7 @@ globalTempo = {
 %% 135
                     g 16 [ b ] c' [ d' e' fis' ] g' [ a' b' g' ] fis' [ e' d' c' ] b [ a ]  |
                     b 8 [ a 16 g ] d' 8 [ d ] g 4. r8  |
-                    a' 2 ees'  |
+                    a' 2 ees' 
                     \bar "|."
                 } % Voice
 
@@ -975,7 +975,7 @@ globalTempo = {
 %% 135
                     g 8 [ a 16 b ] c' [ d' e' fis' ] g' 8 [ fis' 16 e' ] d' [ c' ] b [ a ]  |
                     b 8 [ a 16 g ] d' 8 [ d ] g 4. r8  |
-                    c' 2 fis  |
+                    c' 2 fis 
                     \bar "|."
                 } % Voice
 
@@ -1167,7 +1167,7 @@ globalTempo = {
 %% 135
                     g 16 [ d ] e [ fis g a ] b [ c' d' g' ] fis' [ e' d' c' ] b [ a ]  |
                     b 8 [ a 16 g ] d' 8 [ d ] g 4. r8  |
-                    e 2 b  |
+                    e 2 b 
                     \bar "|."
                 } % Voice
 
@@ -1362,7 +1362,7 @@ globalTempo = {
 %% 135
                     r4 r8 d [ g ] fis 16 [ e d c ] b, [ a, ]  |
                     b, 8 [ a, 16 g, ] d 8 [ d, ] g, 4. r8  |
-                    c 2 b,  |
+                    c 2 b, 
                     \bar "|."
                 } % Voice
 
@@ -1555,7 +1555,7 @@ globalTempo = {
 %% 135
                     r4 r8 d [ g ] fis 16 [ e d c ] b, [ a, ]  |
                     b, 8 [ a, 16 g, ] d 8 [ d, ] g, 4. r8  |
-                    c 2 b,  |
+                    c 2 b, 
                     \bar "|."
                 } % Voice
 
@@ -1748,7 +1748,7 @@ globalTempo = {
 %% 135
                     r4 r8 d [ g ] fis 16 [ e d c ] b, [ a, ]  |
                     b, 8 [ a, 16 g, ] d 8 [ d, ] g, 4. r8  |
-                    c 2 b,  |
+                    c 2 b, 
                     \bar "|."
                 } % Voice
 
@@ -1943,7 +1943,7 @@ globalTempo = {
 %% 135
                     g, 8 [ g, g, ] d [ g ] fis 16 [ e d c ] b, [ a, ]  |
                     b, 8 [ a, 16 g, ] d 8 [ d, ] g, 4. r8  |
-                    c 2 b,  |
+                    c 2 b, 
                     \bar "|."
                 } % Voice
 

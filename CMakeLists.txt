@@ -1,13 +1,13 @@
-# CMake version required. This must be the very first line, because it sets default policies affecting everything else
-cmake_minimum_required(VERSION 3.1)
+# CMake version required. This must be the very first line, because it sets
+# default policies affecting everything else.
+cmake_minimum_required(VERSION 3.5)
 
 # Project name
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "25.06")
-set(ROSEGARDEN_CODENAME "Joyfulness")
-#set(ROSEGARDEN_CODENAME "Keepsake")
+set(ROSEGARDEN_VERSION "25.12")
+set(ROSEGARDEN_CODENAME "Keepsake")
 #set(ROSEGARDEN_CODENAME "Let Freedom Ring")
 #set(ROSEGARDEN_CODENAME "Mountain Music")
 #set(ROSEGARDEN_CODENAME "Night Owl")
@@ -26,6 +26,29 @@ set(ROSEGARDEN_CODENAME "Joyfulness")
 #set(ROSEGARDEN_CODENAME "Amadeus")
 #set(ROSEGARDEN_CODENAME "Blue Moon")
 #set(ROSEGARDEN_CODENAME "Cabaret")
+#set(ROSEGARDEN_CODENAME "Duet")
+#set(ROSEGARDEN_CODENAME "Etude")
+#set(ROSEGARDEN_CODENAME "Foxtrot")
+#set(ROSEGARDEN_CODENAME "Gloire du Midi")
+#set(ROSEGARDEN_CODENAME "Harmonie")
+#set(ROSEGARDEN_CODENAME "Intermezzo")
+#set(ROSEGARDEN_CODENAME "Jazz")
+#set(ROSEGARDEN_CODENAME "Koto")
+#set(ROSEGARDEN_CODENAME "Lyric")
+#set(ROSEGARDEN_CODENAME "Mozart")
+#set(ROSEGARDEN_CODENAME "Nocturne")
+#set(ROSEGARDEN_CODENAME "Operetta")
+#set(ROSEGARDEN_CODENAME "Piccolo")
+#set(ROSEGARDEN_CODENAME "Quintet")
+#set(ROSEGARDEN_CODENAME "Rumba")
+#set(ROSEGARDEN_CODENAME "Symphony")
+#set(ROSEGARDEN_CODENAME "Tenor")
+#set(ROSEGARDEN_CODENAME "Unforgettable")
+#set(ROSEGARDEN_CODENAME "Violina")
+#set(ROSEGARDEN_CODENAME "Wind Chimes")
+#set(ROSEGARDEN_CODENAME "Xanadu")
+#set(ROSEGARDEN_CODENAME "Yodel")
+#set(ROSEGARDEN_CODENAME "Ziggy Stardust")
 
 # Make the build type default to "Release"
 if(NOT CMAKE_BUILD_TYPE)

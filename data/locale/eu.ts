@@ -4931,8 +4931,8 @@
         <translation type="unfinished">Sintetizagailu pluginak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1072"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+752"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1083"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+746"/>
         <location filename="../../src/base/Studio.cpp" line="+69"/>
         <source>Synth plugin</source>
         <translation type="unfinished"></translation>
@@ -5073,10 +5073,10 @@
         <location filename="../QMenuStrings.cpp" line="+30"/>
         <location line="+17"/>
         <location line="+17"/>
-        <location line="+23"/>
-        <location line="+34"/>
+        <location line="+24"/>
+        <location line="+33"/>
         <location line="+27"/>
-        <location line="+205"/>
+        <location line="+206"/>
         <location line="+16"/>
         <location line="+41"/>
         <location line="+571"/>
@@ -5086,7 +5086,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1190"/>
+        <location line="-1191"/>
         <source>&amp;Add Audio File...</source>
         <translation type="unfinished">Audio Artxiboa &amp;Gehitu </translation>
     </message>
@@ -5099,10 +5099,10 @@
         <location line="+1"/>
         <location line="+17"/>
         <location line="+16"/>
-        <location line="+23"/>
-        <location line="+33"/>
+        <location line="+24"/>
+        <location line="+32"/>
         <location line="+28"/>
-        <location line="+205"/>
+        <location line="+206"/>
         <location line="+16"/>
         <location line="+43"/>
         <location line="+602"/>
@@ -5112,13 +5112,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1188"/>
+        <location line="-1189"/>
         <location line="+17"/>
         <location line="+16"/>
-        <location line="+23"/>
-        <location line="+33"/>
+        <location line="+24"/>
+        <location line="+32"/>
         <location line="+28"/>
-        <location line="+264"/>
+        <location line="+265"/>
         <location line="+603"/>
         <location line="+181"/>
         <location line="+24"/>
@@ -5126,7 +5126,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1188"/>
+        <location line="-1189"/>
         <source>&amp;Unload Audio File</source>
         <translation type="unfinished">Audio Artxiboa &amp;Deskargatu</translation>
     </message>
@@ -5154,13 +5154,13 @@
         <location line="+3"/>
         <location line="+15"/>
         <location line="+1"/>
-        <location line="+9"/>
+        <location line="+10"/>
         <location line="+1"/>
-        <location line="+44"/>
+        <location line="+43"/>
         <location line="+1"/>
         <location line="+14"/>
         <location line="+1"/>
-        <location line="+199"/>
+        <location line="+200"/>
         <location line="+37"/>
         <location line="+1"/>
         <location line="+37"/>
@@ -5182,12 +5182,12 @@
         <translation type="unfinished">Akatsak Jakinarazteko Direktibak</translation>
     </message>
     <message>
-        <location line="-1107"/>
+        <location line="-1108"/>
         <location line="+15"/>
-        <location line="+10"/>
-        <location line="+45"/>
+        <location line="+11"/>
+        <location line="+44"/>
         <location line="+15"/>
-        <location line="+202"/>
+        <location line="+203"/>
         <location line="+35"/>
         <location line="+38"/>
         <location line="+393"/>
@@ -5198,39 +5198,39 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1185"/>
-        <location line="+289"/>
+        <location line="-1186"/>
+        <location line="+290"/>
         <location line="+466"/>
         <source>General Toolbar</source>
         <translation type="unfinished">Trena-Barra Orokorra</translation>
     </message>
     <message>
-        <location line="-747"/>
+        <location line="-748"/>
         <location line="+42"/>
         <location line="+57"/>
-        <location line="+264"/>
+        <location line="+265"/>
         <location line="+605"/>
         <location line="+149"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1116"/>
+        <location line="-1117"/>
         <location line="+42"/>
         <location line="+57"/>
-        <location line="+264"/>
+        <location line="+265"/>
         <location line="+605"/>
         <location line="+149"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1111"/>
+        <location line="-1112"/>
         <location line="+57"/>
         <location line="+18"/>
         <location line="+4"/>
         <location line="+4"/>
-        <location line="+196"/>
+        <location line="+197"/>
         <location line="+8"/>
         <location line="+59"/>
         <location line="+560"/>
@@ -5240,19 +5240,19 @@
         <translation type="unfinished">Hautatzeko Lanabesera Aldatu</translation>
     </message>
     <message>
-        <location line="-1156"/>
+        <location line="-1157"/>
         <location line="+57"/>
-        <location line="+1067"/>
+        <location line="+1068"/>
         <location line="+33"/>
         <source>Switch to Inserting Notes</source>
         <translation type="unfinished">Notak Txertatzera Aldatu</translation>
     </message>
     <message>
-        <location line="-1156"/>
+        <location line="-1157"/>
         <location line="+57"/>
         <location line="+22"/>
         <location line="+4"/>
-        <location line="+197"/>
+        <location line="+198"/>
         <location line="+3"/>
         <location line="+4"/>
         <location line="+606"/>
@@ -5263,10 +5263,10 @@
         <translation type="unfinished">Ezabaketa Lanabesera Aldatu</translation>
     </message>
     <message>
-        <location line="-1155"/>
-        <location line="+23"/>
-        <location line="+61"/>
-        <location line="+205"/>
+        <location line="-1156"/>
+        <location line="+24"/>
+        <location line="+60"/>
+        <location line="+206"/>
         <location line="+16"/>
         <location line="+41"/>
         <location line="+597"/>
@@ -5295,21 +5295,20 @@
         <translation type="unfinished">Gertaera &amp;Editatu</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>&amp;Advanced Event Editor</source>
-        <translation type="unfinished">Gertaeren Iragazki &amp;Aurreratua</translation>
+        <translation type="obsolete">Gertaeren Iragazki &amp;Aurreratua</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+57"/>
-        <location line="+264"/>
+        <location line="+265"/>
         <location line="+605"/>
         <location line="+149"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished">Ebak&amp;i</translation>
     </message>
     <message>
-        <location line="-1072"/>
+        <location line="-1073"/>
         <source>&amp;Select All</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5321,12 +5320,12 @@
     </message>
     <message>
         <location line="+2"/>
-        <location line="+273"/>
+        <location line="+274"/>
         <source>&amp;Filter Selection</source>
         <translation type="unfinished">Hautatutakoa &amp;Iragazi</translation>
     </message>
     <message>
-        <location line="-332"/>
+        <location line="-333"/>
         <source>Set Se&amp;gment Start Time...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5339,7 +5338,7 @@
         <location line="+2"/>
         <location line="+21"/>
         <location line="+37"/>
-        <location line="+274"/>
+        <location line="+275"/>
         <location line="+600"/>
         <location line="+172"/>
         <location line="+18"/>
@@ -5347,58 +5346,58 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1121"/>
+        <location line="-1122"/>
         <location line="+21"/>
-        <location line="+1083"/>
+        <location line="+1084"/>
         <location line="+18"/>
         <source>&amp;Musical Times</source>
         <translation type="unfinished">&amp;Musika Denborak</translation>
     </message>
     <message>
-        <location line="-1121"/>
+        <location line="-1122"/>
         <location line="+21"/>
-        <location line="+1083"/>
+        <location line="+1084"/>
         <location line="+18"/>
         <source>&amp;Real Times</source>
         <translation type="unfinished">Denbora E&amp;rrealak</translation>
     </message>
     <message>
-        <location line="-1121"/>
+        <location line="-1122"/>
         <location line="+21"/>
-        <location line="+1083"/>
+        <location line="+1084"/>
         <location line="+18"/>
         <source>Ra&amp;w Times</source>
         <translation type="unfinished">Denbora &amp;Gordinak</translation>
     </message>
     <message>
-        <location line="-1119"/>
+        <location line="-1120"/>
         <location line="+91"/>
-        <location line="+279"/>
+        <location line="+280"/>
         <location line="+603"/>
         <source>Se&amp;gment</source>
         <translation type="unfinished">Seg&amp;mentua</translation>
     </message>
     <message>
-        <location line="-972"/>
+        <location line="-973"/>
         <location line="+91"/>
-        <location line="+279"/>
+        <location line="+280"/>
         <location line="+604"/>
         <source>Edit &amp;With</source>
         <translation type="unfinished">(Ondokoarekin) &amp;Editatu</translation>
     </message>
     <message>
-        <location line="-973"/>
+        <location line="-974"/>
         <location line="+93"/>
-        <location line="+278"/>
+        <location line="+279"/>
         <location line="+604"/>
         <location line="+79"/>
         <source>Open in Matri&amp;x Editor</source>
         <translation type="unfinished">Matri&amp;z Editorean Ireki</translation>
     </message>
     <message>
-        <location line="-1053"/>
+        <location line="-1054"/>
         <location line="+91"/>
-        <location line="+885"/>
+        <location line="+886"/>
         <location line="+79"/>
         <source>Open in &amp;Notation Editor</source>
         <translation type="unfinished">&amp;Notazio Editorean Ireki</translation>
@@ -5572,16 +5571,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1096"/>
-        <location line="+222"/>
+        <location line="-1097"/>
+        <location line="+223"/>
         <location line="+878"/>
         <source>Actions Toolbar</source>
         <translation type="unfinished">Eragiketen Tresna-Barra</translation>
     </message>
     <message>
-        <location line="-1099"/>
+        <location line="-1100"/>
         <location line="+14"/>
-        <location line="+1086"/>
+        <location line="+1087"/>
         <location line="+15"/>
         <source>Time Toolbar</source>
         <translation type="unfinished">Denboraren Tresna-Barra</translation>
@@ -5651,7 +5650,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-821"/>
+        <location line="-822"/>
         <source>Insert Marker</source>
         <translation type="unfinished">Tartea Txertatu</translation>
     </message>
@@ -5673,52 +5672,52 @@
     <message>
         <location line="+2"/>
         <location line="+8"/>
-        <location line="+196"/>
+        <location line="+197"/>
         <location line="+4"/>
         <location line="+6"/>
         <source>Switch to Move Tool</source>
         <translation type="unfinished">Mugimendu Lanabesera Aldatu</translation>
     </message>
     <message>
-        <location line="-213"/>
+        <location line="-214"/>
         <location line="+3"/>
-        <location line="+201"/>
+        <location line="+202"/>
         <location line="+2"/>
         <location line="+5"/>
         <source>Switch to Draw Tool</source>
         <translation type="unfinished">Marrazketa Lanabesera Aldatu</translation>
     </message>
     <message>
-        <location line="-210"/>
+        <location line="-211"/>
         <location line="+4"/>
         <location line="+4"/>
-        <location line="+200"/>
+        <location line="+201"/>
         <location line="+5"/>
         <source>Switch to Resize Tool</source>
         <translation type="unfinished">Tamaina Aldatzeko Lanabesera Aldatu</translation>
     </message>
     <message>
-        <location line="-197"/>
-        <location line="+870"/>
+        <location line="-198"/>
+        <location line="+871"/>
         <location line="+148"/>
         <location line="+29"/>
         <source>&amp;Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1036"/>
+        <location line="-1037"/>
         <source>&amp;Grid</source>
         <translation type="unfinished">Sa&amp;reta</translation>
     </message>
     <message>
-        <location line="-95"/>
-        <location line="+96"/>
+        <location line="-94"/>
+        <location line="+95"/>
         <source>&amp;No Snap</source>
         <translation type="unfinished">&amp;Ez Doitu</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>&amp;Snap to 1/64</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5728,14 +5727,14 @@
         <translation type="obsolete">0</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to &amp;1/48</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Sn&amp;ap to 1/32</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5745,14 +5744,14 @@
         <translation type="obsolete">A3</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to 1/&amp;24</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Sna&amp;p to 1/16</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5762,14 +5761,14 @@
         <translation type="obsolete">A6</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap t&amp;o 1/12</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to 1/&amp;8</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5779,14 +5778,14 @@
         <translation type="obsolete">A8</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to &amp;3/16</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to 1/4</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5796,14 +5795,14 @@
         <translation type="obsolete">A4</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to 3/8</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to 1/2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5813,8 +5812,8 @@
         <translation type="obsolete">A2</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to Bea&amp;t</source>
         <translation type="unfinished">&amp;Pultsora Doitu</translation>
     </message>
@@ -5824,8 +5823,8 @@
         <translation type="obsolete">%1</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+94"/>
+        <location line="-92"/>
+        <location line="+93"/>
         <source>Snap to &amp;Bar</source>
         <translation type="unfinished">&amp;Konpasera Doitu</translation>
     </message>
@@ -5836,70 +5835,70 @@
     </message>
     <message>
         <location line="+13"/>
-        <location line="+276"/>
+        <location line="+277"/>
         <source>Add &amp;Control Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-272"/>
-        <location line="+278"/>
+        <location line="-273"/>
+        <location line="+279"/>
         <location line="+581"/>
         <source>&amp;Composition</source>
         <translation type="unfinished">&amp;Konposizioa</translation>
     </message>
     <message>
-        <location line="-858"/>
-        <location line="+278"/>
+        <location line="-859"/>
+        <location line="+279"/>
         <location line="+581"/>
         <location line="+143"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation type="unfinished">&amp;Klabearen Aldaketa Gehitu...</translation>
     </message>
     <message>
-        <location line="-1001"/>
-        <location line="+278"/>
+        <location line="-1002"/>
+        <location line="+279"/>
         <location line="+581"/>
         <location line="+143"/>
         <source>Add Time Si&amp;gnature Change...</source>
         <translation type="unfinished">Gehitu &amp;Konpasaren Neurriaren Aldaketa</translation>
     </message>
     <message>
-        <location line="-999"/>
-        <location line="+279"/>
+        <location line="-1000"/>
+        <location line="+280"/>
         <location line="+608"/>
         <location line="+79"/>
         <source>Open in &amp;Event List Editor</source>
         <translation type="unfinished">&amp;Gertaeren Zerrenda Editorean Irekin</translation>
     </message>
     <message>
-        <location line="-928"/>
-        <location line="+419"/>
+        <location line="-929"/>
+        <location line="+420"/>
         <source>&amp;Place a Controller for Each Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-417"/>
-        <location line="+420"/>
+        <location line="-418"/>
+        <location line="+421"/>
         <source>Insert C&amp;ontroller Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-416"/>
-        <location line="+420"/>
+        <location line="-417"/>
+        <location line="+421"/>
         <source>Cursor Back &amp;Bar and Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-419"/>
-        <location line="+420"/>
+        <location line="-420"/>
+        <location line="+421"/>
         <source>Cursor For&amp;ward and Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-394"/>
+        <location line="-395"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>I/do</source>
@@ -5911,60 +5910,60 @@
         <translation type="obsolete">A4</translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>I/do sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>II/re flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>II/re</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>II/re sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>III/mi flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>III/mi</source>
@@ -5976,100 +5975,100 @@
         <translation type="obsolete">ID</translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>IV/fa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>IV/fa sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>V/sol flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>V/sol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>V/sol sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>VI/la flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>VI/la</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>VI/la sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>VII/ti flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-497"/>
+        <location line="-498"/>
         <location line="+18"/>
         <location line="+18"/>
-        <location line="+426"/>
+        <location line="+427"/>
         <location line="+18"/>
         <location line="+18"/>
         <source>VII/ti</source>
@@ -6172,27 +6171,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-340"/>
-        <location line="+386"/>
+        <location line="-341"/>
+        <location line="+387"/>
         <source>Ad&amp;just</source>
         <translation type="unfinished">&amp;Doitu</translation>
     </message>
     <message>
-        <location line="-385"/>
-        <location line="+411"/>
+        <location line="-386"/>
+        <location line="+412"/>
         <source>&amp;Quantize</source>
         <translation type="unfinished">&amp;Kuantizatu</translation>
     </message>
     <message>
-        <location line="-410"/>
-        <location line="+411"/>
+        <location line="-411"/>
+        <location line="+412"/>
         <location line="+470"/>
         <location line="+83"/>
         <source>&amp;Quantize...</source>
         <translation type="unfinished">&amp;Kuantifikatu...</translation>
     </message>
     <message>
-        <location line="-963"/>
+        <location line="-964"/>
         <source>&amp;Repeat Last Quantize</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6203,36 +6202,36 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+386"/>
+        <location line="+387"/>
         <source>Collapse &amp;Equal-Pitch Notes</source>
         <translation type="unfinished">Altuera &amp;Bereko Notak Batu</translation>
     </message>
     <message>
-        <location line="-385"/>
-        <location line="+437"/>
+        <location line="-386"/>
+        <location line="+438"/>
         <location line="+450"/>
         <source>Jog &amp;Left</source>
         <translation type="unfinished">Ez&amp;kerrerantz Mugitu</translation>
     </message>
     <message>
-        <location line="-886"/>
+        <location line="-887"/>
         <source>&amp;Jog Right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+425"/>
+        <location line="+426"/>
         <source>&amp;Increase Velocity</source>
         <translation type="unfinished">Abiadura &amp;Gehitu</translation>
     </message>
     <message>
-        <location line="-424"/>
-        <location line="+425"/>
+        <location line="-425"/>
+        <location line="+426"/>
         <source>&amp;Reduce Velocity</source>
         <translation type="unfinished">Abiadura G&amp;utxitu</translation>
     </message>
     <message>
-        <location line="-424"/>
+        <location line="-425"/>
         <source>&amp;Set to Current Velocity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6248,61 +6247,61 @@
     </message>
     <message>
         <location line="+1"/>
-        <location line="+405"/>
+        <location line="+406"/>
         <source>&amp;Halve Durations</source>
         <translation type="unfinished">Iraupena</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>&amp;Double Durations</source>
         <translation type="unfinished">Bemol bikoitza</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>Stretch or S&amp;quash...</source>
         <translation type="unfinished">Tenkatu edo T&amp;xikitu...</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>Trans&amp;pose</source>
         <translation type="unfinished">Trans&amp;posatu</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>&amp;Up a Semitone</source>
         <translation type="unfinished">Tonuerdi bat &amp;Igo</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>&amp;Down a Semitone</source>
         <translation type="unfinished">Tonuerdi bat &amp;Jaitsi</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>Up an &amp;Octave</source>
         <translation type="unfinished">&amp;Oktaba bat Igo</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>Down an Octa&amp;ve</source>
         <translation type="unfinished">Ok&amp;taba bat Jaitsi</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>&amp;Transpose by Semitones...</source>
         <translation type="unfinished">Transposatzen tonuerdi bat gora...</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+261"/>
+        <location line="-405"/>
+        <location line="+262"/>
         <location line="+144"/>
         <location line="+458"/>
         <location line="+84"/>
@@ -6310,109 +6309,109 @@
         <translation type="unfinished">&amp;Transposatu...</translation>
     </message>
     <message>
-        <location line="-946"/>
+        <location line="-947"/>
         <source>&amp;Convert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+405"/>
+        <location line="+406"/>
         <source>&amp;Invert</source>
         <translation type="unfinished">Inb&amp;ertitu</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>&amp;Retrograde</source>
         <translation type="unfinished">A&amp;tzerakaria</translation>
     </message>
     <message>
-        <location line="-404"/>
-        <location line="+405"/>
+        <location line="-405"/>
+        <location line="+406"/>
         <source>Re&amp;trograde Invert</source>
         <translation type="unfinished">Atze&amp;rako Inbertsioa</translation>
     </message>
     <message>
-        <location line="-404"/>
+        <location line="-405"/>
         <source>Trigger Se&amp;gment...</source>
         <translation type="unfinished">&amp;Segmentua Aktibatu...</translation>
     </message>
     <message>
         <location line="+28"/>
-        <location line="+427"/>
+        <location line="+428"/>
         <location line="+440"/>
         <source>&amp;Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-866"/>
-        <location line="+427"/>
+        <location line="-867"/>
+        <location line="+428"/>
         <location line="+440"/>
         <location line="+47"/>
         <source>&amp;Select and Edit</source>
         <translation type="unfinished">A&amp;ukeratu eta Editatu</translation>
     </message>
     <message>
-        <location line="-913"/>
-        <location line="+867"/>
+        <location line="-914"/>
+        <location line="+868"/>
         <location line="+48"/>
         <source>&amp;Draw</source>
         <translation type="unfinished">&amp;Marraztu</translation>
     </message>
     <message>
-        <location line="-914"/>
-        <location line="+428"/>
+        <location line="-915"/>
+        <location line="+429"/>
         <location line="+439"/>
         <location line="+48"/>
         <source>&amp;Erase</source>
         <translation type="unfinished">E&amp;zabatu</translation>
     </message>
     <message>
-        <location line="-939"/>
+        <location line="-940"/>
         <location line="+25"/>
-        <location line="+395"/>
+        <location line="+396"/>
         <location line="+472"/>
         <location line="+45"/>
         <source>&amp;Move</source>
         <translation type="unfinished">&amp;Mugitu</translation>
     </message>
     <message>
-        <location line="-911"/>
+        <location line="-912"/>
         <source>Resi&amp;ze</source>
         <translation type="unfinished">&amp;Tamaina Aldatu</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+867"/>
+        <location line="+868"/>
         <location line="+47"/>
         <source>S&amp;plit</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-913"/>
+        <location line="-914"/>
         <source>&amp;Velocity</source>
         <translation type="unfinished">&amp;Abiadura</translation>
     </message>
     <message>
-        <location line="+393"/>
+        <location line="+394"/>
         <source>Cursor back and Se&amp;lect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-419"/>
-        <location line="+420"/>
+        <location line="-420"/>
+        <location line="+421"/>
         <source>Cursor Forward and &amp;Select</source>
         <translation type="unfinished">Kurtsorea Aurrera eta &amp;Hautatu</translation>
     </message>
     <message>
-        <location line="-417"/>
-        <location line="+420"/>
+        <location line="-418"/>
+        <location line="+421"/>
         <source>Set Loop &amp;to Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-419"/>
-        <location line="+420"/>
+        <location line="-420"/>
+        <location line="+421"/>
         <source>Clear L&amp;oop</source>
         <translation type="unfinished">Errepikapena &amp;Kendu</translation>
     </message>
@@ -6424,8 +6423,8 @@
         <translation type="unfinished">T&amp;ransportea</translation>
     </message>
     <message>
-        <location line="-886"/>
-        <location line="+105"/>
+        <location line="-887"/>
+        <location line="+106"/>
         <location line="+16"/>
         <location line="+301"/>
         <location line="+465"/>
@@ -6433,8 +6432,8 @@
         <translation type="unfinished">&amp;Jo</translation>
     </message>
     <message>
-        <location line="-886"/>
-        <location line="+105"/>
+        <location line="-887"/>
+        <location line="+106"/>
         <location line="+16"/>
         <location line="+301"/>
         <location line="+465"/>
@@ -6442,8 +6441,8 @@
         <translation type="unfinished">&amp;Gelditu</translation>
     </message>
     <message>
-        <location line="-884"/>
-        <location line="+103"/>
+        <location line="-885"/>
+        <location line="+104"/>
         <location line="+16"/>
         <location line="+303"/>
         <location line="+463"/>
@@ -6451,8 +6450,8 @@
         <translation type="unfinished">Bi&amp;rbobinatu</translation>
     </message>
     <message>
-        <location line="-884"/>
-        <location line="+103"/>
+        <location line="-885"/>
+        <location line="+104"/>
         <location line="+16"/>
         <location line="+303"/>
         <location line="+463"/>
@@ -6460,37 +6459,37 @@
         <translation type="unfinished">&amp;Bizkor Aurreratu</translation>
     </message>
     <message>
-        <location line="-884"/>
-        <location line="+103"/>
+        <location line="-885"/>
+        <location line="+104"/>
         <location line="+16"/>
         <location line="+303"/>
         <source>Rewind to &amp;Beginning</source>
         <translation type="unfinished">Birbobinatu &amp;Hasierara</translation>
     </message>
     <message>
-        <location line="-421"/>
-        <location line="+103"/>
+        <location line="-422"/>
+        <location line="+104"/>
         <location line="+16"/>
         <location line="+303"/>
         <source>Fast Forward to &amp;End</source>
         <translation type="unfinished">Bizkor Aurreratu &amp;Bukaerara</translation>
     </message>
     <message>
-        <location line="-420"/>
-        <location line="+423"/>
+        <location line="-421"/>
+        <location line="+424"/>
         <source>S&amp;olo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-422"/>
-        <location line="+427"/>
+        <location line="-423"/>
+        <location line="+428"/>
         <location line="+458"/>
         <source>Scro&amp;ll to Follow Playback</source>
         <translation type="unfinished">Erreprodukzioarekin Batera &amp;Mugitu</translation>
     </message>
     <message>
-        <location line="-884"/>
-        <location line="+101"/>
+        <location line="-885"/>
+        <location line="+102"/>
         <location line="+16"/>
         <location line="+310"/>
         <location line="+458"/>
@@ -6498,14 +6497,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-858"/>
-        <location line="+462"/>
+        <location line="-859"/>
+        <location line="+463"/>
         <source>&amp;Upper Octave</source>
         <translation type="unfinished">&amp;Goiko Oktaba</translation>
     </message>
     <message>
-        <location line="-426"/>
-        <location line="+463"/>
+        <location line="-427"/>
+        <location line="+464"/>
         <source>C&amp;hord Insert Mode</source>
         <translation type="unfinished">&amp;Akordeak Txertatzeko Modua</translation>
     </message>
@@ -6516,14 +6515,14 @@
         <translation type="unfinished">&amp;Pausuz pausuko Grabaketa</translation>
     </message>
     <message>
-        <location line="-612"/>
-        <location line="+267"/>
+        <location line="-613"/>
+        <location line="+268"/>
         <location line="+590"/>
         <source>&amp;Toolbars</source>
         <translation type="unfinished">&amp;Tresna-Barrak</translation>
     </message>
     <message>
-        <location line="-990"/>
+        <location line="-991"/>
         <source>&amp;Import...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6553,7 +6552,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>From &amp;Editor</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6563,13 +6562,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+85"/>
-        <location line="+273"/>
+        <location line="+84"/>
+        <location line="+274"/>
         <source>&amp;Reset Selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-269"/>
+        <location line="-270"/>
         <source>Show note names</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6590,26 +6589,26 @@
     </message>
     <message>
         <location line="+23"/>
-        <location line="+275"/>
+        <location line="+276"/>
         <location line="+582"/>
         <source>&amp;Rulers</source>
         <translation type="unfinished">&amp;Erregelak</translation>
     </message>
     <message>
-        <location line="-856"/>
-        <location line="+275"/>
+        <location line="-857"/>
+        <location line="+276"/>
         <source>Show Ch&amp;ord Name Ruler</source>
         <translation type="unfinished">A&amp;korde Izenen Erregela Erakutsi</translation>
     </message>
     <message>
-        <location line="-274"/>
-        <location line="+276"/>
+        <location line="-275"/>
+        <location line="+277"/>
         <source>Show &amp;Tempo Ruler</source>
         <translation type="unfinished">&amp;Tenpoaren Erregela Erakutsi</translation>
     </message>
     <message>
-        <location line="-206"/>
-        <location line="+423"/>
+        <location line="-207"/>
+        <location line="+424"/>
         <location line="+462"/>
         <source>L&amp;oop</source>
         <translation type="unfinished"></translation>
@@ -6815,22 +6814,7 @@
         <translation type="unfinished">Orri &amp;Anitzaren Formatoa</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Highlighting</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>&amp;Current</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Current on &amp;same track</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Open L&amp;yric Editor</source>
         <translation type="unfinished">L&amp;etraren Editorea Ireki</translation>
     </message>
@@ -6840,8 +6824,8 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-265"/>
-        <location line="+278"/>
+        <location line="-266"/>
+        <location line="+279"/>
         <location line="+604"/>
         <location line="+79"/>
         <source>Open in &amp;Percussion Matrix Editor</source>
@@ -6853,14 +6837,14 @@
         <translation type="unfinished">&amp;Klabearen Aldaketa Gehitu...</translation>
     </message>
     <message>
-        <location line="-279"/>
-        <location line="+281"/>
+        <location line="-280"/>
+        <location line="+282"/>
         <source>Add &amp;Key Change...</source>
         <translation type="unfinished">T&amp;ono Aldaketa Gehitu...</translation>
     </message>
     <message>
-        <location line="-246"/>
-        <location line="+420"/>
+        <location line="-247"/>
+        <location line="+421"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7168,8 +7152,8 @@
         <translation type="unfinished">P&amp;liken Kalkulatutako Norabidea Berjarri</translation>
     </message>
     <message>
-        <location line="-368"/>
-        <location line="+369"/>
+        <location line="-369"/>
+        <location line="+370"/>
         <source>&amp;Phrase</source>
         <translation type="unfinished">E&amp;zabatu</translation>
     </message>
@@ -7239,14 +7223,14 @@
         <translation type="unfinished">Ligatura Be&amp;hean</translation>
     </message>
     <message>
-        <location line="-381"/>
-        <location line="+382"/>
+        <location line="-382"/>
+        <location line="+383"/>
         <source>T&amp;ie</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-381"/>
-        <location line="+382"/>
+        <location line="-382"/>
+        <location line="+383"/>
         <source>&amp;Untie</source>
         <translation type="unfinished">Notak &amp;Desligatu</translation>
     </message>
@@ -7467,26 +7451,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-421"/>
-        <location line="+422"/>
+        <location line="-422"/>
+        <location line="+423"/>
         <source>Pre&amp;vious Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-421"/>
-        <location line="+422"/>
+        <location line="-422"/>
+        <location line="+423"/>
         <source>Ne&amp;xt Segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-419"/>
-        <location line="+422"/>
+        <location line="-420"/>
+        <location line="+423"/>
         <source>Step &amp;Back</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-421"/>
-        <location line="+422"/>
+        <location line="-422"/>
+        <location line="+423"/>
         <source>Step &amp;Forward</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7631,14 +7615,14 @@
         <translation type="unfinished"> Akordea</translation>
     </message>
     <message>
-        <location line="-442"/>
-        <location line="+462"/>
+        <location line="-443"/>
+        <location line="+463"/>
         <source>&amp;Insert Note</source>
         <translation type="unfinished">Nota &amp;Txertatu</translation>
     </message>
     <message>
-        <location line="-426"/>
-        <location line="+462"/>
+        <location line="-427"/>
+        <location line="+463"/>
         <source>&amp;Lower Octave</source>
         <translation type="unfinished">&amp;Beheko Oktaba</translation>
     </message>
@@ -7735,7 +7719,7 @@
         <translation type="unfinished">Markatzaileen Tresna-Barra</translation>
     </message>
     <message>
-        <location line="-772"/>
+        <location line="-773"/>
         <source>Select &amp;All Events</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7755,37 +7739,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+146"/>
         <location line="+466"/>
         <location line="+355"/>
         <source>Rosegarden &amp;Manual</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1048"/>
+        <location line="-1049"/>
         <location line="+58"/>
         <source>Preferences...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+31"/>
-        <location line="+276"/>
+        <location line="+277"/>
         <source>Show &amp;Velocity Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-275"/>
-        <location line="+276"/>
+        <location line="-276"/>
+        <location line="+277"/>
         <source>Show Pitch &amp;Bend Ruler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-224"/>
+        <location line="-225"/>
         <source>Cursor Back and Se&amp;lect</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+95"/>
+        <location line="+96"/>
         <location line="+593"/>
         <source>Rulers Toolbar</source>
         <translation type="unfinished"></translation>
@@ -7806,7 +7790,7 @@
         <translation type="obsolete">Jo</translation>
     </message>
     <message>
-        <location line="-420"/>
+        <location line="-421"/>
         <source>&amp;Action</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7826,7 +7810,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+141"/>
+        <location line="+24"/>
+        <source>Remove All From Instrument Panel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+117"/>
         <source>Show A&amp;ctions Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7837,18 +7826,23 @@
     </message>
     <message>
         <location line="+52"/>
-        <location line="+419"/>
+        <location line="+420"/>
         <source>Co&amp;ntrollers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-418"/>
-        <location line="+419"/>
+        <location line="-419"/>
+        <location line="+420"/>
         <source>&amp;Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-265"/>
+        <location line="-332"/>
+        <source>&amp;Constrained move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+67"/>
         <source>Panning &amp;Law</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7883,7 +7877,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+18"/>
+        <source>Highlight Active Segment</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Within &amp;Track</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Across &amp;All Tracks</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
         <source>Show &amp;Duration Toolbar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8584,15 +8593,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-891"/>
-        <location line="+283"/>
+        <location line="-892"/>
+        <location line="+284"/>
         <location line="+610"/>
         <source>Set Start &amp;Time...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-892"/>
-        <location line="+283"/>
+        <location line="-893"/>
+        <location line="+284"/>
         <location line="+610"/>
         <source>Set &amp;Duration...</source>
         <translation type="unfinished"></translation>
@@ -8735,9 +8744,9 @@
         <translation type="unfinished">P&amp;unch in Grabaketa</translation>
     </message>
     <message>
-        <location line="-1037"/>
+        <location line="-1038"/>
         <location line="+75"/>
-        <location line="+267"/>
+        <location line="+268"/>
         <location line="+590"/>
         <source>Show Main &amp;Toolbar</source>
         <translation type="unfinished"></translation>
@@ -8758,9 +8767,9 @@
         <translation type="unfinished">&amp;Zoomaren Tresna-Barra Erakutsi</translation>
     </message>
     <message>
-        <location line="-936"/>
+        <location line="-937"/>
         <location line="+79"/>
-        <location line="+275"/>
+        <location line="+276"/>
         <location line="+592"/>
         <source>Show St&amp;atusbar</source>
         <translation type="unfinished"></translation>
@@ -8930,13 +8939,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../../src/base/Pitch.cpp" line="+45"/>
+        <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>Eb</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>E#</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
@@ -8948,19 +8958,21 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location filename="../../src/base/Pitch.cpp" line="+3"/>
+        <location filename="../InstrumentStrings.cpp" line="+5"/>
         <source>Ab</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+1"/>
+        <location filename="../InstrumentStrings.cpp" line="+3"/>
         <source>Bb</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>B#</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
@@ -9002,7 +9014,7 @@
         <translation type="unfinished">%1 (%2) {1.?}</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+479"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+478"/>
         <source>%1</source>
         <translation type="unfinished">%1</translation>
     </message>
@@ -9019,7 +9031,7 @@
         <translation type="obsolete">Rosegarden - Sekuentziadorea eta partitura editorea</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+462"/>
+        <location filename="../../src/gui/application/main.cpp" line="+461"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
         <source>Rosegarden</source>
@@ -9041,7 +9053,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/MidiPitchLabel.cpp" line="+35"/>
+        <location filename="../../src/base/Pitch.cpp" line="-5"/>
         <location filename="../InstrumentStrings.cpp" line="-17"/>
         <source>C</source>
         <comment>note name</comment>
@@ -9060,12 +9072,6 @@
         <source>D</source>
         <comment>note name</comment>
         <translation type="unfinished">ID</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>D#</source>
-        <comment>note name</comment>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9096,28 +9102,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+1"/>
         <source>G#</source>
         <comment>note name</comment>
         <translation type="unfinished">Sol#%1</translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location filename="../../src/base/Pitch.cpp" line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+3"/>
         <source>A</source>
         <comment>note name</comment>
         <translation type="unfinished">A4</translation>
     </message>
     <message>
-        <location line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="-1"/>
         <source>A#</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+0"/>
+        <location filename="../../src/base/Pitch.cpp" line="+1"/>
         <location filename="../InstrumentStrings.cpp" line="+3"/>
         <source>B</source>
         <comment>note name</comment>
@@ -9636,7 +9640,7 @@ bere ordezr? </translation>
 <context>
     <name>Rosegarden::AboutDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="+36"/>
+        <location filename="../../src/gui/dialogs/AboutDialog.cpp" line="+37"/>
         <source>About Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9646,8 +9650,8 @@ bere ordezr? </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>&lt;p&gt;Copyright 2000-2024 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
+        <location line="+10"/>
+        <source>&lt;p&gt;Copyright 2000-%5 the Rosegarden development team&lt;/p&gt;&lt;p&gt;Version: %1 &amp;nbsp; &quot;%4&quot;&lt;br&gt;Build key: %3&lt;br&gt;Qt version: %2&lt;/p&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  For a list of contributors, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/resources/authors&quot;&gt;http://www.rosegardenmusic.com/resources/authors&lt;/a&gt;&lt;/p&gt;&lt;p&gt;For more information about Rosegarden, visit&lt;br&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com&quot;&gt;http://www.rosegardenmusic.com&lt;/a&gt;&lt;/p&gt;&lt;p&gt;License: GNU General Public License Version 2 or later&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -9933,7 +9937,7 @@ bere ordezr? </translation>
 <context>
     <name>Rosegarden::AddTempoChangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AddTempoChangeCommand.h" line="+53"/>
+        <location filename="../../src/commands/segment/AddTempoChangeCommand.h" line="+49"/>
         <source>Add Te&amp;mpo Change...</source>
         <translation type="unfinished">&amp;Klabearen Aldaketa Gehitu...</translation>
     </message>
@@ -9962,7 +9966,7 @@ bere ordezr? </translation>
 <context>
     <name>Rosegarden::AddTracksCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AddTracksCommand.cpp" line="+37"/>
+        <location filename="../../src/commands/segment/AddTracksCommand.cpp" line="+36"/>
         <location line="+11"/>
         <location line="+11"/>
         <source>Add Tracks...</source>
@@ -9972,7 +9976,7 @@ bere ordezr? </translation>
 <context>
     <name>Rosegarden::AddTracksDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="+58"/>
+        <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="+56"/>
         <source>Add Tracks</source>
         <translation type="unfinished">&amp;Pista Gehitu</translation>
     </message>
@@ -10046,7 +10050,7 @@ bere ordezr? </translation>
         <translation type="unfinished">Audioaren Ezarpenak</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+90"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+88"/>
         <source>Audio preview scale</source>
         <translation type="unfinished">Audio aurrebistaren eskala</translation>
     </message>
@@ -10306,7 +10310,7 @@ bere ordezr? </translation>
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+615"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+614"/>
         <source>Cannot download file %1</source>
         <translation type="unfinished">Ezin da %1 artxiboa jaitsi</translation>
     </message>
@@ -10680,7 +10684,7 @@ Mesedez, aukera itzazu disko gogorretik betiko ezabatu nahi dituzunak.
 <context>
     <name>Rosegarden::AudioMixerWindow2</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow2.cpp" line="+52"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow2.cpp" line="+51"/>
         <source>Audio Mixer</source>
         <translation type="unfinished">Audioaren Nahastailea</translation>
     </message>
@@ -11225,7 +11229,7 @@ Mesedez, aukera itzazu disko gogorretik betiko ezabatu nahi dituzunak.
 <context>
     <name>Rosegarden::AudioRouteMenu</name>
     <message>
-        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+265"/>
+        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+264"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11353,7 +11357,7 @@ Mesedez, aukera itzazu disko gogorretik betiko ezabatu nahi dituzunak.
 <context>
     <name>Rosegarden::AudioSplitDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="+72"/>
+        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="+71"/>
         <source>Autosplit Audio Segment</source>
         <translation type="unfinished">Audio Segmentua Automatikoki Zatitu</translation>
     </message>
@@ -11561,7 +11565,7 @@ Mesedez, aukera itzazu disko gogorretik betiko ezabatu nahi dituzunak.
         <translation type="obsolete">&lt;mapa berria %1&gt;</translation>
     </message>
     <message>
-        <location line="+615"/>
+        <location line="+616"/>
         <source>Really delete this bank?</source>
         <translation type="unfinished">Benetan nahi duzu banku hau ezabatu?</translation>
     </message>
@@ -11699,7 +11703,7 @@ Destination device already has a bank for
         <translation type="unfinished">Honela Esportatu Dispositiboa...</translation>
     </message>
     <message>
-        <location line="+144"/>
+        <location line="+159"/>
         <source>The following tracks are using bank %1:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11713,7 +11717,7 @@ Destination device already has a bank for
         <translation type="obsolete">Direktorio bat adierazi duzu</translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-150"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation type="unfinished">Adierazitako artxiboa existitzen da. Gainidatzi?</translation>
     </message>
@@ -11727,12 +11731,12 @@ Destination device already has a bank for
         <location line="+226"/>
         <location line="+40"/>
         <location line="+6"/>
-        <location line="+93"/>
+        <location line="+108"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-98"/>
+        <location line="-113"/>
         <source>Could not export studio to file at %1
 (%2)</source>
         <translation type="unfinished"></translation>
@@ -11743,7 +11747,7 @@ Destination device already has a bank for
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+45"/>
         <source>http://rosegardenmusic.com/wiki/doc:bankEditorDialog-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11855,6 +11859,19 @@ Destination device already has a bank for
     </message>
 </context>
 <context>
+    <name>Rosegarden::ChannelPressureWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/ChannelPressureWidget.cpp" line="+65"/>
+        <source>Channel Pressure Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Pressure:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::CheckForParallelsDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="+67"/>
@@ -11895,12 +11912,6 @@ Destination device already has a bank for
         <location line="+208"/>
         <location line="+186"/>
         <source>bar</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-186"/>
-        <location line="+186"/>
-        <source> </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -12399,7 +12410,7 @@ Destination device already has a bank for
     </message>
     <message>
         <location line="+1"/>
-        <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -12434,7 +12445,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+309"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+312"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -12465,7 +12476,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+81"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+82"/>
         <source>&lt;no device&gt;</source>
         <translation type="unfinished">&lt;dispositiborik gabe&gt;</translation>
     </message>
@@ -12571,7 +12582,7 @@ Destination device already has a bank for
         <translation type="unfinished">&lt;ezer ez&gt;</translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+150"/>
         <source>http://rosegardenmusic.com/wiki/doc:controlEditorDialog-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12682,7 +12693,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+508"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+507"/>
         <source>Velocity</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12724,9 +12735,27 @@ Destination device already has a bank for
     </message>
 </context>
 <context>
+    <name>Rosegarden::ControllerWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/ControllerWidget.cpp" line="+67"/>
+        <source>Controller Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Number:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
+        <source>Value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::CopyCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CopyCommand.h" line="+67"/>
+        <location filename="../../src/commands/edit/CopyCommand.h" line="+71"/>
         <source>&amp;Copy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12745,6 +12774,24 @@ Destination device already has a bank for
         <location line="+8"/>
         <source>Copy Range</source>
         <translation type="unfinished">Tartea Kopiatu</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::CopySegmentCommand</name>
+    <message>
+        <location filename="../../src/commands/segment/CopySegmentCommand.cpp" line="+95"/>
+        <source>(linked)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>(copied)</source>
+        <translation type="unfinished">(kopiatuta)</translation>
+    </message>
+    <message>
+        <location filename="../../src/commands/segment/CopySegmentCommand.h" line="+50"/>
+        <source>&amp;CopySegment</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -12778,7 +12825,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CreateOrDeleteDeviceCommand</name>
     <message>
-        <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="+63"/>
+        <location filename="../../src/commands/studio/CreateOrDeleteDeviceCommand.h" line="+83"/>
         <source>Delete Device</source>
         <translation type="unfinished">Dispositiboa Ezabatu</translation>
     </message>
@@ -12807,7 +12854,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CutCommand</name>
     <message>
-        <location filename="../../src/commands/edit/CutCommand.h" line="+55"/>
+        <location filename="../../src/commands/edit/CutCommand.h" line="+60"/>
         <source>Cu&amp;t</source>
         <translation type="unfinished">Ebak&amp;i</translation>
     </message>
@@ -12898,7 +12945,7 @@ Destination device already has a bank for
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-903"/>
+        <location line="-904"/>
         <source>[ No port ]</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12906,7 +12953,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
-        <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="+59"/>
+        <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="+63"/>
         <source>C</source>
         <comment>note name</comment>
         <translation type="unfinished"></translation>
@@ -13186,24 +13233,117 @@ Destination device already has a bank for
     </message>
 </context>
 <context>
+    <name>Rosegarden::EditEvent</name>
+    <message>
+        <location filename="../../src/gui/editors/event/EditEvent.cpp" line="+63"/>
+        <source>Edit Event</source>
+        <translation type="unfinished">Gertaera Editatu</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Event type:</source>
+        <translation type="unfinished">Gertaera Mota</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Absolute time:</source>
+        <translation type="unfinished">Denbora Absolutua:</translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>edit</source>
+        <translation type="unfinished">editatu</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Advanced Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Sub-ordering: </source>
+        <translation type="unfinished">Azpi-antolamendua: </translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Additional Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+143"/>
+        <source>Edit Event Time</source>
+        <translation type="unfinished">Editatu Gertaeraren Denbora</translation>
+    </message>
+    <message>
+        <location line="+43"/>
+        <source>Name</source>
+        <translation type="unfinished">Izena</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Type</source>
+        <translation type="unfinished">Mota</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Value</source>
+        <translation type="unfinished">Baloreak</translation>
+    </message>
+    <message>
+        <location line="+94"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>About to delete property &quot;%1&quot;.  Are you sure?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Add Integer Property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Add String Property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Add Boolean Property</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Delete</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::EditTempoController</name>
     <message>
-        <location filename="../../src/gui/general/EditTempoController.cpp" line="+105"/>
+        <location filename="../../src/gui/general/EditTempoController.cpp" line="+90"/>
         <source>Move Tempo Change</source>
         <translation type="unfinished">Mugitu Tenpoaren Aldaketa</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+48"/>
         <source>Replace Tempo Change at %1</source>
         <translation type="unfinished">Tenpo aldaketa ordezkatu %1 (e)an</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+17"/>
         <source>Set Global Tempo</source>
         <translation type="unfinished">Tenpo Globala Ezarri</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Set Global and Default Tempo</source>
         <translation type="unfinished">Ezarri Tenpo Globala eta Lehenetsia</translation>
     </message>
@@ -13215,7 +13355,7 @@ Destination device already has a bank for
         <translation type="obsolete">Egoera barra Jarri edo Kendu...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/EditViewBase.cpp" line="+211"/>
+        <location filename="../../src/gui/general/EditViewBase.cpp" line="+213"/>
         <source>Segment Start Time</source>
         <translation type="unfinished">Segmentuaren Hasiera Denbora</translation>
     </message>
@@ -13287,7 +13427,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EventEditCommand</name>
     <message>
-        <location filename="../../src/commands/edit/EventEditCommand.h" line="+50"/>
+        <location filename="../../src/commands/edit/EventEditCommand.h" line="+46"/>
         <source>Edit E&amp;vent</source>
         <translation type="unfinished">&amp;Gertaera Editatu</translation>
     </message>
@@ -13295,138 +13435,92 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EventEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventEditDialog.cpp" line="+77"/>
-        <source>Advanced Event Edit</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Advanced Event Viewer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
         <source>Intrinsics</source>
-        <translation type="unfinished">Intrintsekoak</translation>
+        <translation type="obsolete">Intrintsekoak</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Event type: </source>
-        <translation type="unfinished">Gertaera mota</translation>
+        <translation type="obsolete">Gertaera mota</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Absolute time: </source>
-        <translation type="unfinished">Denbora absolutua: </translation>
+        <translation type="obsolete">Denbora absolutua: </translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Duration: </source>
-        <translation type="unfinished">Iraupena: </translation>
+        <translation type="obsolete">Iraupena: </translation>
     </message>
     <message>
-        <location line="+18"/>
         <source>Sub-ordering: </source>
-        <translation type="unfinished">Azpi-antolamendua: </translation>
+        <translation type="obsolete">Azpi-antolamendua: </translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Persistent properties</source>
-        <translation type="unfinished">Propietate iraunkorrak</translation>
+        <translation type="obsolete">Propietate iraunkorrak</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Name</source>
-        <translation type="unfinished">Izena</translation>
+        <translation type="obsolete">Izena</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Type</source>
-        <translation type="unfinished">Mota</translation>
+        <translation type="obsolete">Mota</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Value</source>
-        <translation type="unfinished">Baloreak</translation>
+        <translation type="obsolete">Baloreak</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Non-persistent properties</source>
-        <translation type="unfinished">Propietate ez iraunkorrak</translation>
+        <translation type="obsolete">Propietate ez iraunkorrak</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>These are cached values, lost if the event is modified.</source>
-        <translation type="unfinished">Balore hauek katxean daude eta </translation>
+        <translation type="obsolete">Balore hauek katxean daude eta </translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Name       </source>
-        <translation type="unfinished">Izena       </translation>
+        <translation type="obsolete">Izena       </translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Type       </source>
-        <translation type="unfinished">Mota       </translation>
+        <translation type="obsolete">Mota       </translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Value      </source>
-        <translation type="unfinished">Balorea      </translation>
+        <translation type="obsolete">Balorea      </translation>
     </message>
     <message>
-        <location line="+29"/>
         <source>Make persistent</source>
-        <translation type="unfinished">Iraunkorra bihurtu</translation>
+        <translation type="obsolete">Iraunkorra bihurtu</translation>
     </message>
     <message>
-        <location line="+79"/>
-        <source>sec</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>nsec</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+40"/>
         <source>Delete this property</source>
-        <translation type="unfinished">Propietate hau ezabatu</translation>
+        <translation type="obsolete">Propietate hau ezabatu</translation>
     </message>
     <message>
-        <location line="+143"/>
-        <location line="+33"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Gertaera Editatu</translation>
+        <translation type="obsolete">Gertaera Editatu</translation>
     </message>
     <message>
-        <location line="-32"/>
         <source>Are you sure you want to delete the &quot;%1&quot; property?
 
 Removing necessary properties may cause unexpected behavior.</source>
-        <translation type="unfinished">Ziur zaude &quot;%1&quot; propietatea ezabatu nahi izateaz?
+        <translation type="obsolete">Ziur zaude &quot;%1&quot; propietatea ezabatu nahi izateaz?
 
 Beharrezkoak diren propietateak ezabatzeak ustekabeko ondorioak eduki ditzake.</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
         <source>Are you sure you want to make the &quot;%1&quot; property persistent?
 
 This could cause problems if it overrides a different computed value later on.</source>
-        <translation type="unfinished">Ziur zaude &quot;%1&quot; propietatea iraunkor bihurtu nahi izateaz?
+        <translation type="obsolete">Ziur zaude &quot;%1&quot; propietatea iraunkor bihurtu nahi izateaz?
 
 Honek arazoak sortu ditzake aurrerago modu ezberdin batean kalkulatutako balore batekin ordezkatzen bada.</translation>
     </message>
     <message>
-        <location line="+4"/>
         <source>Make &amp;Persistent</source>
-        <translation type="unfinished">&amp;Iraunkorra Bihurtu</translation>
+        <translation type="obsolete">&amp;Iraunkorra Bihurtu</translation>
     </message>
 </context>
 <context>
@@ -13564,164 +13658,89 @@ Honek arazoak sortu ditzake aurrerago modu ezberdin batean kalkulatutako balore 
     </message>
 </context>
 <context>
-    <name>Rosegarden::EventParameterDialog</name>
+    <name>Rosegarden::EventListEditor</name>
     <message>
-        <source>Rosegarden</source>
-        <translation type="obsolete">Rosegarden</translation>
-    </message>
-    <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+108"/>
-        <source>Set the %1 property of the event selection:</source>
-        <translation type="unfinished">Ezarri gertaeraren selekzioaren %1 propietatea:</translation>
-    </message>
-    <message>
-        <location line="+11"/>
-        <source>Pattern</source>
-        <translation type="unfinished">Patroia</translation>
-    </message>
-    <message>
-        <location line="-68"/>
-        <source>Value</source>
-        <translation type="unfinished">Baloreak</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EventQuantizeCommand</name>
-    <message>
-        <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="+106"/>
-        <source>Heuristic Notation &amp;Quantize</source>
-        <translation type="unfinished">Notazioaren &amp;Kuantizatze Heuristikoa</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Grid &amp;Quantize</source>
-        <translation type="unfinished">Kuantifikazio-&amp;sarea</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>&amp;Quantize...</source>
-        <translation type="unfinished">&amp;Kuantifikatu...</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EventUnquantizeCommand</name>
-    <message>
-        <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="+36"/>
-        <location line="+11"/>
-        <source>Unquantize Events</source>
-        <translation type="unfinished">Gertaerak deskuantifikatzea</translation>
-    </message>
-    <message>
-        <source>&amp;Quantize...</source>
-        <translation type="obsolete">&amp;Kuantifikatu...</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::EventView</name>
-    <message>
-        <location filename="../../src/gui/editors/eventlist/EventView.cpp" line="+134"/>
+        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+195"/>
         <source>Event filters</source>
         <translation type="unfinished">Gertaeraren iragazkiak</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+7"/>
         <source>Note</source>
         <translation type="unfinished">Nota</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Program Change</source>
-        <translation type="unfinished">Programa Aldaketa</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Controller</source>
-        <translation type="unfinished">Kontroladorea</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Pitch Bend</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>System Exclusive</source>
-        <translation type="unfinished">Sistema Esklusiboa</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Key Pressure</source>
-        <translation type="unfinished">Teklaren Presioa</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Channel Pressure</source>
-        <translation type="unfinished">Kanalaren Presioa</translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Rest</source>
         <translation type="unfinished">Isilunea</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+5"/>
+        <source>Program Change</source>
+        <translation type="unfinished">Programa Aldaketa</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Controller</source>
+        <translation type="unfinished">Kontroladorea</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Pitch Bend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Channel Pressure</source>
+        <translation type="unfinished">Kanalaren Presioa</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Key Pressure</source>
+        <translation type="unfinished">Teklaren Presioa</translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>RPN/NRPN</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>System Exclusive</source>
+        <translation type="unfinished">Sistema Esklusiboa</translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Indication</source>
         <translation type="unfinished">Adierazpena</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Text</source>
         <translation type="unfinished">Testua</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Generated regions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Segment ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+5"/>
         <source>Other</source>
         <translation type="unfinished">Bestelakoa </translation>
     </message>
     <message>
-        <location line="+32"/>
-        <source>Triggered Segment Properties</source>
-        <translation type="unfinished">Segmentu aktibatuaren propietateak</translation>
+        <location line="+5"/>
+        <source>All On/Off</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Label:  </source>
-        <translation type="unfinished">Etiketa:  </translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>&lt;no label&gt;</source>
-        <translation type="unfinished">&lt;etiketarik gabe&gt;</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <location line="+9"/>
-        <location line="+9"/>
-        <source>edit</source>
-        <translation type="unfinished">editatu</translation>
-    </message>
-    <message>
-        <location line="-12"/>
-        <source>Base pitch:  </source>
-        <translation type="unfinished">Oinarrizko altuera:  </translation>
-    </message>
-    <message>
-        <location line="+9"/>
-        <source>Base velocity:  </source>
-        <translation type="unfinished">Oinarrizko abiadura:  </translation>
-    </message>
-    <message>
-        <location line="+70"/>
+        <location line="+45"/>
         <source>Time  </source>
         <translation type="unfinished">Denbora  </translation>
     </message>
@@ -13747,38 +13766,89 @@ Honek arazoak sortu ditzake aurrerago modu ezberdin batean kalkulatutako balore 
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1"/>
-        <source>Type (Data1)  </source>
-        <translation type="unfinished">Mota (Datu 1)  </translation>
+        <source>Data1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Value (Data2)  </source>
-        <translation type="unfinished">Balorea (Datu 2)  </translation>
+        <source>Data2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+195"/>
-        <location line="+8"/>
+        <location line="+21"/>
+        <source>Triggered Segment Properties</source>
+        <translation type="unfinished">Segmentu aktibatuaren propietateak</translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Label:  </source>
+        <translation type="unfinished">Etiketa:  </translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>&lt;no label&gt;</source>
+        <translation type="unfinished">&lt;etiketarik gabe&gt;</translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+10"/>
+        <location line="+10"/>
+        <source>edit</source>
+        <translation type="unfinished">editatu</translation>
+    </message>
+    <message>
+        <location line="-14"/>
+        <source>Base pitch:  </source>
+        <translation type="unfinished">Oinarrizko altuera:  </translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Base velocity:  </source>
+        <translation type="unfinished">Oinarrizko abiadura:  </translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Default timing:  </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>As stored</source>
+        <translation type="unfinished">Gordetzen den bezala</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Truncate if longer than note</source>
+        <translation type="unfinished">Moztu nota baino luzeago baldin bada</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>End at same time as note</source>
+        <translation type="unfinished">Bukatu notaren aldi berean</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Stretch or squash segment to note duration</source>
+        <translation type="unfinished">Tenkatu edo konprimitu segmentua notaren iraupenaren arabera</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Adjust pitch to trigger note by default</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+206"/>
+        <location line="+11"/>
         <source>&lt;not set&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+88"/>
         <source>(group %1)  </source>
         <translation type="unfinished">(multzoa %1)  </translation>
     </message>
     <message>
-        <location line="+75"/>
-        <source>&lt;no events at this filter level&gt;</source>
-        <translation type="unfinished">&lt;iragazte maila honetan ez dago gertaerarik&gt;</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>&lt;no events&gt;</source>
-        <translation type="unfinished">&lt;ez dago gertaerarik&gt;</translation>
-    </message>
-    <message>
-        <location line="+132"/>
+        <location line="+152"/>
         <source>Segment label</source>
         <translation type="unfinished">Segmentuaren etiketa</translation>
     </message>
@@ -13788,49 +13858,261 @@ Honek arazoak sortu ditzake aurrerago modu ezberdin batean kalkulatutako balore 
         <translation type="unfinished">Etiketa:</translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+28"/>
         <source>Base pitch</source>
         <translation type="unfinished">Oinarrizko altuera(tonua)</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+26"/>
         <source>Base velocity</source>
         <translation type="unfinished">Oinarrizko abiadura</translation>
     </message>
     <message>
-        <location line="+156"/>
-        <source>Clipboard is empty</source>
-        <translation type="unfinished">Arbela hutsik</translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+147"/>
         <source>Inserting clipboard contents...</source>
         <translation type="unfinished">Arbelaren edukia txertatzen...</translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+28"/>
         <source>Couldn&apos;t paste at this point</source>
         <translation type="unfinished">Ezin da itsatsi puntu honetan</translation>
     </message>
     <message>
-        <location line="+516"/>
+        <location line="+453"/>
         <source>Open in Event Editor</source>
         <translation type="unfinished">Gertaeren Editorean Ireki</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>Open in Expert Event Editor</source>
-        <translation type="unfinished">Gertaeren Editore Aurreratuan Ireki</translation>
+        <location line="+7"/>
+        <source>Edit Triggered Segment</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+92"/>
+        <location line="+68"/>
         <source>%1%2 - Triggered Segment: %3</source>
         <translation type="unfinished">%1 - Segmentu Aktibatua: %3 {1%2 ?}</translation>
     </message>
     <message>
-        <location line="+17"/>
-        <source>Event List</source>
+        <location line="+8"/>
+        <source>Event List Editor</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::EventParameterDialog</name>
+    <message>
+        <source>Rosegarden</source>
+        <translation type="obsolete">Rosegarden</translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+108"/>
+        <source>Set the %1 property of the event selection:</source>
+        <translation type="unfinished">Ezarri gertaeraren selekzioaren %1 propietatea:</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Pattern</source>
+        <translation type="unfinished">Patroia</translation>
+    </message>
+    <message>
+        <location line="-68"/>
+        <source>Value</source>
+        <translation type="unfinished">Baloreak</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::EventQuantizeCommand</name>
+    <message>
+        <location filename="../../src/commands/edit/EventQuantizeCommand.cpp" line="+103"/>
+        <source>Heuristic Notation &amp;Quantize</source>
+        <translation type="unfinished">Notazioaren &amp;Kuantizatze Heuristikoa</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Grid &amp;Quantize</source>
+        <translation type="unfinished">Kuantifikazio-&amp;sarea</translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>&amp;Quantize...</source>
+        <translation type="unfinished">&amp;Kuantifikatu...</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::EventTypeDialog</name>
+    <message>
+        <location filename="../../src/gui/editors/event/EventTypeDialog.cpp" line="+54"/>
+        <source>Select Event type to insert.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::EventUnquantizeCommand</name>
+    <message>
+        <location filename="../../src/commands/edit/EventUnquantizeCommand.cpp" line="+35"/>
+        <location line="+10"/>
+        <source>Unquantize Events</source>
+        <translation type="unfinished">Gertaerak deskuantifikatzea</translation>
+    </message>
+    <message>
+        <source>&amp;Quantize...</source>
+        <translation type="obsolete">&amp;Kuantifikatu...</translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::EventView</name>
+    <message>
+        <source>Event filters</source>
+        <translation type="obsolete">Gertaeraren iragazkiak</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation type="obsolete">Nota</translation>
+    </message>
+    <message>
+        <source>Program Change</source>
+        <translation type="obsolete">Programa Aldaketa</translation>
+    </message>
+    <message>
+        <source>Controller</source>
+        <translation type="obsolete">Kontroladorea</translation>
+    </message>
+    <message>
+        <source>System Exclusive</source>
+        <translation type="obsolete">Sistema Esklusiboa</translation>
+    </message>
+    <message>
+        <source>Key Pressure</source>
+        <translation type="obsolete">Teklaren Presioa</translation>
+    </message>
+    <message>
+        <source>Channel Pressure</source>
+        <translation type="obsolete">Kanalaren Presioa</translation>
+    </message>
+    <message>
+        <source>Rest</source>
+        <translation type="obsolete">Isilunea</translation>
+    </message>
+    <message>
+        <source>Indication</source>
+        <translation type="obsolete">Adierazpena</translation>
+    </message>
+    <message>
+        <source>Text</source>
+        <translation type="obsolete">Testua</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation type="obsolete">Bestelakoa </translation>
+    </message>
+    <message>
+        <source>Triggered Segment Properties</source>
+        <translation type="obsolete">Segmentu aktibatuaren propietateak</translation>
+    </message>
+    <message>
+        <source>Label:  </source>
+        <translation type="obsolete">Etiketa:  </translation>
+    </message>
+    <message>
+        <source>&lt;no label&gt;</source>
+        <translation type="obsolete">&lt;etiketarik gabe&gt;</translation>
+    </message>
+    <message>
+        <source>edit</source>
+        <translation type="obsolete">editatu</translation>
+    </message>
+    <message>
+        <source>Base pitch:  </source>
+        <translation type="obsolete">Oinarrizko altuera:  </translation>
+    </message>
+    <message>
+        <source>Base velocity:  </source>
+        <translation type="obsolete">Oinarrizko abiadura:  </translation>
+    </message>
+    <message>
+        <source>Time  </source>
+        <translation type="obsolete">Denbora  </translation>
+    </message>
+    <message>
+        <source>Duration  </source>
+        <translation type="obsolete">Iraupena  </translation>
+    </message>
+    <message>
+        <source>Event Type  </source>
+        <translation type="obsolete">Gertaera Mota  </translation>
+    </message>
+    <message>
+        <source>Pitch  </source>
+        <translation type="obsolete">Altuera  </translation>
+    </message>
+    <message>
+        <source>Velocity  </source>
+        <translation type="obsolete">Abiadura  </translation>
+    </message>
+    <message>
+        <source>Type (Data1)  </source>
+        <translation type="obsolete">Mota (Datu 1)  </translation>
+    </message>
+    <message>
+        <source>Value (Data2)  </source>
+        <translation type="obsolete">Balorea (Datu 2)  </translation>
+    </message>
+    <message>
+        <source>(group %1)  </source>
+        <translation type="obsolete">(multzoa %1)  </translation>
+    </message>
+    <message>
+        <source>&lt;no events at this filter level&gt;</source>
+        <translation type="obsolete">&lt;iragazte maila honetan ez dago gertaerarik&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;no events&gt;</source>
+        <translation type="obsolete">&lt;ez dago gertaerarik&gt;</translation>
+    </message>
+    <message>
+        <source>Segment label</source>
+        <translation type="obsolete">Segmentuaren etiketa</translation>
+    </message>
+    <message>
+        <source>Label:</source>
+        <translation type="obsolete">Etiketa:</translation>
+    </message>
+    <message>
+        <source>Base pitch</source>
+        <translation type="obsolete">Oinarrizko altuera(tonua)</translation>
+    </message>
+    <message>
+        <source>Base velocity</source>
+        <translation type="obsolete">Oinarrizko abiadura</translation>
+    </message>
+    <message>
+        <source>Clipboard is empty</source>
+        <translation type="obsolete">Arbela hutsik</translation>
+    </message>
+    <message>
+        <source>Inserting clipboard contents...</source>
+        <translation type="obsolete">Arbelaren edukia txertatzen...</translation>
+    </message>
+    <message>
+        <source>Couldn&apos;t paste at this point</source>
+        <translation type="obsolete">Ezin da itsatsi puntu honetan</translation>
+    </message>
+    <message>
+        <source>Open in Event Editor</source>
+        <translation type="obsolete">Gertaeren Editorean Ireki</translation>
+    </message>
+    <message>
+        <source>Open in Expert Event Editor</source>
+        <translation type="obsolete">Gertaeren Editore Aurreratuan Ireki</translation>
+    </message>
+    <message>
+        <source>%1%2 - Triggered Segment: %3</source>
+        <translation type="obsolete">%1 - Segmentu Aktibatua: %3 {1%2 ?}</translation>
     </message>
     <message>
         <source>%1%2 - Segment Track #%3 - Event List</source>
@@ -13839,11 +14121,6 @@ Honek arazoak sortu ditzake aurrerago modu ezberdin batean kalkulatutako balore 
     <message>
         <source>%1%2 - %3 Segments - Event List</source>
         <translation type="obsolete">%1 - %2 Segmentu - Gertaeren Zerrenda {1%2 ?} {3 ?}</translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -14079,7 +14356,7 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished">Konfigurazio Orokorra</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+70"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+69"/>
         <source>Double-click opens segment in</source>
         <translation type="unfinished">Editore Lehenetsia (segmentuan klik bikoitza egiten denean)</translation>
     </message>
@@ -14195,6 +14472,16 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
     </message>
     <message>
         <location line="+20"/>
+        <source>JACK stop at auto stop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>Stop playback at end of last segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14209,7 +14496,22 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+11"/>
+        <source>LV2 Plugin Support</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Drag with dynamic modifiers (main/matrix)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;&lt;p&gt;If set, the CTRL and ALT keys can be pressed or released while a drag is in progress to change copy/move behavior.  This applies to the main window and the matrix editor.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <source>Sequencer status</source>
         <translation type="unfinished">Sekuenziadorearen egoera</translation>
     </message>
@@ -14264,7 +14566,37 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+73"/>
+        <source>Extra Large</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>&lt;qt&gt;&lt;p&gt;Select the track size factor. Larger sizes are useful on HDPI displays.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+9"/>
+        <source>Track Label width</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>&lt;qt&gt;&lt;p&gt;Select the width of track labels. This is the text after the mute, record and solo buttons&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Narrow</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Wide</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+13"/>
         <source>Use native file dialogs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14279,27 +14611,27 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+143"/>
+        <location line="+152"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-599"/>
+        <location line="+5"/>
+        <source>You must restart Rosegarden or open a file for the track label width change to take effect.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-679"/>
         <source>Behavior</source>
         <translation type="unfinished">Jokabidea </translation>
     </message>
     <message>
-        <location line="+212"/>
+        <location line="+232"/>
         <source>Advanced Looping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
-        <source>LV2 Plugin Support (beta)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+124"/>
+        <location line="+163"/>
         <source>Show full path in window titles</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14309,22 +14641,23 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Small</source>
         <translation type="unfinished">Denak</translation>
     </message>
     <message>
         <location line="+1"/>
+        <location line="+27"/>
         <source>Medium</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-26"/>
         <source>Large</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+84"/>
         <source>MuPDF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14339,19 +14672,20 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+154"/>
+        <location line="+163"/>
+        <location line="+5"/>
         <location line="+5"/>
         <location line="+5"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-4"/>
+        <location line="-9"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-279"/>
+        <location line="-317"/>
         <source>Note name style</source>
         <translation type="unfinished">Noten izenen estiloa</translation>
     </message>
@@ -14386,7 +14720,7 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished">Aurkezpena</translation>
     </message>
     <message>
-        <location line="+123"/>
+        <location line="+152"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14441,7 +14775,7 @@ Nahi duzu artxibo hau bilatzen saiatu edo aurrera jarraitu?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+183"/>
+        <location line="+192"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation type="unfinished">Leiho nagusiko testuradun hondoari egindako aldaketek ez dute eraginik edukiko Rosegarden berrasi arte.</translation>
     </message>
@@ -14997,7 +15331,7 @@ Artxiboan dagoen testuaren adibidea:</translation>
 <context>
     <name>Rosegarden::InstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+61"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+63"/>
         <source>none</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15284,6 +15618,34 @@ Artxiboan dagoen testuaren adibidea:</translation>
     </message>
 </context>
 <context>
+    <name>Rosegarden::KeyPressureWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/KeyPressureWidget.cpp" line="+70"/>
+        <source>Key Pressure Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Pitch:</source>
+        <translation type="unfinished">Altuera:</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>edit</source>
+        <translation type="unfinished">editatu</translation>
+    </message>
+    <message>
+        <location line="+8"/>
+        <source>Pressure:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Edit Pitch</source>
+        <translation type="unfinished">Altuera Editatu</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::KeySignatureDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="+73"/>
@@ -15403,7 +15765,7 @@ Artxiboan dagoen testuaren adibidea:</translation>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+825"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+826"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15425,7 +15787,7 @@ bere ordezr? </translation>
         <translation type="unfinished">Esportatzeak huts egin du. Artxiboa ezin izan da ireki idazteko.</translation>
     </message>
     <message>
-        <location line="+185"/>
+        <location line="+154"/>
         <source>Export succeeded, but the composition was empty.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15445,7 +15807,7 @@ bere ordezr? </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1869"/>
+        <location line="+1889"/>
         <source>warning: overlong bar truncated here</source>
         <translation type="unfinished">oharra: konpas luzeegia, hemen moztua</translation>
     </message>
@@ -15488,15 +15850,7 @@ bere ordezr? </translation>
         <translation type="unfinished">Bateragarritasun maila</translation>
     </message>
     <message>
-        <location line="+5"/>
-        <location line="+1"/>
-        <location line="+1"/>
-        <location line="+1"/>
-        <location line="+1"/>
-        <location line="+1"/>
-        <location line="+1"/>
-        <location line="+1"/>
-        <location line="+1"/>
+        <location line="+12"/>
         <source>LilyPond %1</source>
         <translation type="unfinished">LilyPond 2.2 </translation>
     </message>
@@ -15513,52 +15867,43 @@ bere ordezr? </translation>
         <translation type="obsolete">A2.10</translation>
     </message>
     <message>
-        <location line="-8"/>
         <source>2.12</source>
-        <translation type="unfinished">A2.12</translation>
+        <translation type="obsolete">A2.12</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.14</source>
-        <translation type="unfinished">A2.14</translation>
+        <translation type="obsolete">A2.14</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.16</source>
-        <translation type="unfinished">A2.16</translation>
+        <translation type="obsolete">A2.16</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.18</source>
-        <translation type="unfinished">A2.18</translation>
+        <translation type="obsolete">A2.18</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.19</source>
-        <translation type="unfinished">A2.19</translation>
+        <translation type="obsolete">A2.19</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.20</source>
-        <translation type="unfinished">A2.20</translation>
+        <translation type="obsolete">A2.20</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.21</source>
-        <translation type="unfinished">A2.21</translation>
+        <translation type="obsolete">A2.21</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.22</source>
-        <translation type="unfinished">A2.22</translation>
+        <translation type="obsolete">A2.22</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>2.23</source>
-        <translation type="unfinished">A2.23</translation>
+        <translation type="obsolete">A2.23</translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+5"/>
         <source>Paper size</source>
         <translation type="unfinished">Paperaren tamaina</translation>
     </message>
@@ -15613,7 +15958,7 @@ bere ordezr? </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Print short staff names</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15683,7 +16028,7 @@ bere ordezr? </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-249"/>
+        <location line="-252"/>
         <source>Export content</source>
         <translation type="unfinished">Edukia esportatu</translation>
     </message>
@@ -15774,7 +16119,7 @@ bere ordezr? </translation>
         <translation type="unfinished">Esportatu tenpo markatzailea</translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+32"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15789,7 +16134,7 @@ bere ordezr? </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-47"/>
+        <location line="-50"/>
         <source>Export lyrics</source>
         <translation type="unfinished">Esportatu \lyric blokeak (letrak)</translation>
     </message>
@@ -15834,7 +16179,7 @@ bere ordezr? </translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+25"/>
         <source>Ragged bottom (systems will not be spread vertically across the page)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16091,7 +16436,7 @@ bere ordezr? </translation>
         <translation type="unfinished">MIDI nota erakusteko oinarrizko oktaba zenbakia</translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+20"/>
         <source>Always use default studio when loading files</source>
         <translation type="unfinished">Beti erabili estudio lehenetsia artxiboak kargatzen direnean</translation>
     </message>
@@ -16150,12 +16495,12 @@ sortuko duela erreprodukzioaren hasieran, igortzen den datuen kopurua dela eta</
         <translation type="unfinished">SoundFont</translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-241"/>
         <source>General</source>
         <translation type="unfinished">Orokorra</translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+48"/>
         <source>Match ALSA port numbers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16327,7 +16672,7 @@ sortuko duela erreprodukzioaren hasieran, igortzen den datuen kopurua dela eta</
 <context>
     <name>Rosegarden::MIDIInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-699"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="-701"/>
         <source>&lt;qt&gt;Set variations on the program above, if available in the studio&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16847,12 +17192,12 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+200"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+222"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished">Shift sakatuta mantendu pultsoaren saretarekin lotzea ekiditeko</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+141"/>
         <source>Copy and Move Event</source>
         <translation type="unfinished">Gertaera Kopiatu eta Mugitu</translation>
     </message>
@@ -16872,7 +17217,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Gertaerak Mugitu</translation>
     </message>
     <message>
-        <location line="+102"/>
+        <location line="+118"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16950,7 +17295,7 @@ Double-click to open the marker editor.</source>
     <name>Rosegarden::MatrixSelector</name>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+444"/>
-        <location line="+147"/>
+        <location line="+165"/>
         <source>Click and drag to select; middle-click and drag to draw new note</source>
         <translation type="unfinished">Klik egin eta arrastatu hautatzeko; erdiko-klika eta arrastatu nota berri bat marrazteko</translation>
     </message>
@@ -17033,7 +17378,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2033"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2035"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Nota ezezaguna txertatzeko eragiketa: %1</translation>
     </message>
@@ -17054,12 +17399,12 @@ Double-click to open the marker editor.</source>
         </translation>
     </message>
     <message>
-        <location line="-1410"/>
+        <location line="-1407"/>
         <source> Grid: </source>
         <translation type="unfinished"> Sareta: </translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>None</source>
         <translation type="unfinished">Ezer Ez</translation>
     </message>
@@ -17084,12 +17429,22 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Abiadura:</translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+3"/>
+        <source>&lt;qt&gt;Velocity for new notes.&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
         <source> Quantize: </source>
         <translation type="unfinished"> Kuantifikazioa: </translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+3"/>
+        <source>&lt;qt&gt;&lt;p&gt;Quantize the display.&lt;/p&gt;&lt;p&gt;Notes with start times that are not aligned to the quantize setting are displayed as being aligned.&lt;/p&gt;&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+17"/>
         <source>Off</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17099,7 +17454,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+528"/>
+        <location line="+515"/>
         <source>http://rosegardenmusic.com/wiki/doc:matrix-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17126,22 +17481,27 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+448"/>
+        <location line="+459"/>
         <source>Estimated key signature shown</source>
         <translation type="unfinished">Estimatutako armadura erakusten da</translation>
     </message>
     <message>
-        <location line="-918"/>
+        <location line="-929"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Konpasaren iraupen estimatua erakusten da</translation>
     </message>
     <message>
-        <location line="-1015"/>
+        <location line="-1109"/>
+        <source>Preserves precise horizontal and vertical position when moving a note.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+97"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 kontroladore%2 %3</translation>
     </message>
     <message>
-        <location line="+1105"/>
+        <location line="+1102"/>
         <source>Transpose</source>
         <translation type="unfinished">Transposatu</translation>
     </message>
@@ -17151,7 +17511,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Sartu transposatu beharreko tonuerdien kopurua:</translation>
     </message>
     <message>
-        <location line="-366"/>
+        <location line="-353"/>
         <source>Trigger Segment</source>
         <translation type="unfinished">Segmentua Aktibatu</translation>
     </message>
@@ -17161,7 +17521,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">Aktibatzaileak Ezabatu</translation>
     </message>
     <message>
-        <location line="-876"/>
+        <location line="-887"/>
         <source>Matrix</source>
         <translation type="unfinished">Matriza</translation>
     </message>
@@ -17169,7 +17529,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+217"/>
         <source>Zoom</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17194,7 +17554,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished">%1 kontroladore%2 %3</translation>
     </message>
     <message>
-        <location line="+378"/>
+        <location line="+386"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;izenbururik gabe&gt;</translation>
     </message>
@@ -17204,7 +17564,7 @@ Double-click to open the marker editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1296"/>
+        <location line="-1304"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17712,6 +18072,24 @@ Double-click to open the marker editor.</source>
     </message>
 </context>
 <context>
+    <name>Rosegarden::NRPNWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/NRPNWidget.cpp" line="+65"/>
+        <source>NRPN Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>NRPN:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Value:</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
         <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+72"/>
@@ -18053,7 +18431,7 @@ Double-click to open the marker editor.</source>
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+481"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+464"/>
         <source> %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18301,7 +18679,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1183"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1191"/>
         <source>Note &amp;Font</source>
         <translation type="unfinished">Notaren &amp;Letra-Tipoa</translation>
     </message>
@@ -18335,22 +18713,22 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">&quot;%1&quot; Letra-Tipo ezezaguna, lehenetsia erabiliko da</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>  Size:  </source>
         <translation type="unfinished">  Tamaina:  </translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+23"/>
         <source>  Spacing:  </source>
         <translation type="unfinished">  Hutsuneen Tartekatzea:  </translation>
     </message>
     <message>
-        <location line="-145"/>
+        <location line="-147"/>
         <source>  No selection </source>
         <translation type="unfinished">  Hautaketarik ez </translation>
     </message>
     <message>
-        <location line="+2820"/>
+        <location line="+2831"/>
         <source>Chord</source>
         <translation type="unfinished">Akordea</translation>
     </message>
@@ -18367,7 +18745,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">%1 (%2)</translation>
     </message>
     <message>
-        <location line="-2356"/>
+        <location line="-2360"/>
         <source>Unknown spacing action %1</source>
         <translation type="unfinished">Hutsuneak tartekatzeko eragiketa ezezaguna %1</translation>
     </message>
@@ -18382,7 +18760,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Letra-Tiporako tamaina eragiketa ezezaguna %1</translation>
     </message>
     <message>
-        <location line="-162"/>
+        <location line="-166"/>
         <source>LilyPond Preview Options</source>
         <translation type="unfinished">Lilypond Aurrebista Opzioak</translation>
     </message>
@@ -18392,7 +18770,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Lilypond aurrebista opzioak</translation>
     </message>
     <message>
-        <location line="+351"/>
+        <location line="+355"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Arbela hutsik</translation>
     </message>
@@ -18402,7 +18780,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Ezin dira segmentu asko batean itsatsi</translation>
     </message>
     <message>
-        <location line="-918"/>
+        <location line="-925"/>
         <source>&lt;qt&gt;&lt;p&gt;Apply the interpretations selected on this toolbar to the selection.&lt;/p&gt;&lt;p&gt;If there is no selection, interpretations apply to the entire segment automatically.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18417,7 +18795,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
     </message>
     <message>
         <location line="+118"/>
-        <location line="+192"/>
+        <location line="+199"/>
         <location line="+52"/>
         <location line="+70"/>
         <location line="+26"/>
@@ -18427,12 +18805,12 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <location line="+874"/>
         <location line="+81"/>
         <location line="+746"/>
-        <location line="+1070"/>
+        <location line="+1074"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-3133"/>
+        <location line="-3137"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18464,12 +18842,12 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Ezin da puntu honetan itsatsi.</translation>
     </message>
     <message>
-        <location line="+2856"/>
+        <location line="+2860"/>
         <source>Move Events to Staff Above</source>
         <translation type="unfinished">Gertaerak &amp;Mugitu Beste Segmentu Batera</translation>
     </message>
     <message>
-        <location line="-2691"/>
+        <location line="-2695"/>
         <source>Raising velocities...</source>
         <translation type="unfinished">Abiadurak igotzen...</translation>
     </message>
@@ -18479,17 +18857,17 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Abiadurak jaisten...</translation>
     </message>
     <message>
-        <location line="+1845"/>
+        <location line="+1849"/>
         <source>Notation</source>
         <translation type="unfinished">Partitura</translation>
     </message>
     <message>
-        <location line="+993"/>
+        <location line="+977"/>
         <source>Edit Text Event</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+51"/>
         <source>Normalizing rests...</source>
         <translation type="unfinished">Isiluneak normalizatzen...</translation>
     </message>
@@ -18499,7 +18877,7 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Notak batzen...</translation>
     </message>
     <message>
-        <location line="-2122"/>
+        <location line="-2113"/>
         <source>Unknown note insert action %1</source>
         <translation type="unfinished">Nota ezezaguna txertatzeko eragiketa: %1</translation>
     </message>
@@ -18509,23 +18887,23 @@ Hau bug bat da (programak krask egin beharko zukeen dagoeneko)</translation>
         <translation type="unfinished">Nota txertatzen</translation>
     </message>
     <message>
-        <location line="+2302"/>
+        <location line="+2293"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation type="unfinished">Puntutxoa gehitzen...</translation>
     </message>
     <message>
-        <location line="-1907"/>
+        <location line="-1898"/>
         <source>Ornament track %1 bar %2</source>
         <translation type="unfinished">%1 Apaindura Pista konpas %2</translation>
     </message>
     <message>
-        <location line="-2338"/>
+        <location line="-2345"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 kontroladore%2 %3</translation>
     </message>
     <message>
-        <location line="+1171"/>
+        <location line="+1178"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18582,7 +18960,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dispositiboak Kudeatu&quot; dialogoan, leiho nagusian. </translation>
     </message>
     <message>
-        <location line="+148"/>
+        <location line="+150"/>
         <source>Estimated time signature shown</source>
         <translation type="unfinished">Konpasaren iraupen estimatua erakusten da</translation>
     </message>
@@ -18603,7 +18981,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         </translation>
     </message>
     <message>
-        <location line="+291"/>
+        <location line="+293"/>
         <source>Tuplet</source>
         <translation type="unfinished">Multzo Irregularra</translation>
     </message>
@@ -18643,7 +19021,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+79"/>
+        <location line="+63"/>
         <source>Edit Generated region mark</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18653,7 +19031,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+324"/>
+        <location line="+327"/>
         <source>Set Note Type...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18791,7 +19169,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+198"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+199"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -18825,9 +19203,75 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     </message>
 </context>
 <context>
+    <name>Rosegarden::NoteWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/NoteWidget.cpp" line="+78"/>
+        <source>Note Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Duration:</source>
+        <translation type="unfinished">Iraupena:</translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <location line="+24"/>
+        <location line="+53"/>
+        <location line="+20"/>
+        <source>edit</source>
+        <translation type="unfinished">editatu</translation>
+    </message>
+    <message>
+        <location line="-89"/>
+        <source>Pitch:</source>
+        <translation type="unfinished">Altuera:</translation>
+    </message>
+    <message>
+        <location line="+24"/>
+        <source>Velocity:</source>
+        <translation type="unfinished">Abiadura:</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Lock notation to performance</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Notation time:</source>
+        <translation type="unfinished">Notazioaren denbora:</translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Notation duration:</source>
+        <translation type="unfinished">Notazioaren iraupena:</translation>
+    </message>
+    <message>
+        <location line="+47"/>
+        <source>Edit Duration</source>
+        <translation type="unfinished">Iraupena Editatu</translation>
+    </message>
+    <message>
+        <location line="+13"/>
+        <source>Edit Pitch</source>
+        <translation type="unfinished">Altuera Editatu</translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <source>Edit Event Notation Time</source>
+        <translation type="unfinished">Editatu Gertaeraren Notazio Denbora</translation>
+    </message>
+    <message>
+        <location line="+15"/>
+        <source>Edit Notation Duration</source>
+        <translation type="unfinished">Notazioaren Iraupena Editatu</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::OpenOrCloseRangeCommand</name>
     <message>
-        <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="+38"/>
+        <location filename="../../src/commands/segment/OpenOrCloseRangeCommand.cpp" line="+37"/>
         <source>Open or Close Range</source>
         <translation type="unfinished">Ireki edo itxi tartea</translation>
     </message>
@@ -18930,7 +19374,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
 <context>
     <name>Rosegarden::PasteSegmentsCommand</name>
     <message>
-        <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="+55"/>
+        <location filename="../../src/commands/edit/PasteSegmentsCommand.h" line="+54"/>
         <source>&amp;Paste</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18962,12 +19406,12 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+96"/>
-        <location line="+763"/>
+        <location line="+760"/>
         <source>%1 Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-750"/>
+        <location line="-747"/>
         <source>Replacement mode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19023,12 +19467,12 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     </message>
     <message>
         <location line="+1"/>
-        <location line="+141"/>
+        <location line="+139"/>
         <source>Vibrato</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-123"/>
+        <location line="-121"/>
         <source>Saved setting %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19038,7 +19482,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+9"/>
         <source>Start at value:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19063,7 +19507,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+9"/>
         <source>Bend duration (%):</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19078,7 +19522,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+14"/>
         <source>Start amplitude:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19173,7 +19617,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-996"/>
+        <location line="-993"/>
         <source>Pre Bend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19183,7 +19627,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+116"/>
         <source>Ramp duration (%):</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19203,23 +19647,41 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-29"/>
+        <location line="-28"/>
         <source>Bend Sequence</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+48"/>
         <source>&lt;qt&gt;Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and &lt;i&gt;Use this many steps&lt;/i&gt; is set.&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+37"/>
         <source>Hertz (Hz):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+22"/>
         <source>&lt;qt&gt;Ramp slopes linearly. Vibrato is possible if &lt;i&gt;Use this many steps&lt;/i&gt; is set&lt;/qt&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::PitchBendWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/PitchBendWidget.cpp" line="+64"/>
+        <source>Pitch Bend Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Pitch Bend:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>8192 is center</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -19284,7 +19746,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
 <context>
     <name>Rosegarden::PitchTrackerConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+59"/>
+        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.h" line="+60"/>
         <location line="+3"/>
         <source>Pitch Tracker</source>
         <translation type="unfinished"></translation>
@@ -19473,7 +19935,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
 <context>
     <name>Rosegarden::PresetHandlerDialog</name>
     <message>
-        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+56"/>
+        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+57"/>
         <source>Convert notation for...</source>
         <translation type="unfinished">Audio artxiboa bihurtzen...</translation>
     </message>
@@ -19550,6 +20012,19 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     <message>
         <location line="+54"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-preset-handler-en</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::ProgramChangeWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/ProgramChangeWidget.cpp" line="+55"/>
+        <source>Program Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Program:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -19949,7 +20424,7 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+312"/>
+        <location line="+311"/>
         <source>Can&apos;t find RIFF identifier</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19981,6 +20456,24 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     <message>
         <location line="+4"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Rosegarden::RPNWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/RPNWidget.cpp" line="+65"/>
+        <source>RPN Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>RPN:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Value:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -20219,6 +20712,29 @@ Mesdez, egiaztatu dispositiboa modu egokian konfiguratuta dagoela &quot;MIDI Dis
     </message>
 </context>
 <context>
+    <name>Rosegarden::RestWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/RestWidget.cpp" line="+60"/>
+        <source>Rest Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Duration:</source>
+        <translation type="unfinished">Iraupena:</translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>edit</source>
+        <translation type="unfinished">editatu</translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Edit Duration</source>
+        <translation type="unfinished">Iraupena Editatu</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::RestoreSlursCommand</name>
     <message>
         <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+39"/>
@@ -20311,8 +20827,8 @@ Bateragarritasun arazoak izan daitezke artxibo formatoarekin.</translation>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+500"/>
-        <location line="+60"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+498"/>
+        <location line="+64"/>
         <location line="+12"/>
         <location line="+63"/>
         <location line="+32"/>
@@ -20332,7 +20848,7 @@ Bateragarritasun arazoak izan daitezke artxibo formatoarekin.</translation>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message numerus="yes">
-        <location line="-2566"/>
+        <location line="-2570"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation type="unfinished">
             <numerusform>
@@ -20372,7 +20888,7 @@ Mesedez, erabaki ea betiko ezabatu nahi dituzun disko gogorretik.
         <translation type="unfinished">%1 artxiboa ezin izan da ezabatu.</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+20"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20556,18 +21072,18 @@ Gomendatzen dugu Rosegarden bertsio honen artxibo hau birgrabatzea,  etorkizunek
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+261"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+235"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation type="unfinished">Hautatutakoak bakarrik audio edo ez-audio segmentuak eduki ditzake</translation>
     </message>
     <message>
         <location line="+0"/>
         <location line="+100"/>
-        <location line="+277"/>
+        <location line="+268"/>
         <location line="+39"/>
         <location line="+112"/>
         <location line="+83"/>
-        <location line="+665"/>
+        <location line="+655"/>
         <location line="+3"/>
         <location line="+30"/>
         <location line="+31"/>
@@ -20577,9 +21093,9 @@ Gomendatzen dugu Rosegarden bertsio honen artxibo hau birgrabatzea,  etorkizunek
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-1253"/>
-        <location line="+120"/>
-        <location line="+157"/>
+        <location line="-1234"/>
+        <location line="+117"/>
+        <location line="+151"/>
         <location line="+39"/>
         <location line="+112"/>
         <source>No non-audio segments selected</source>
@@ -20592,17 +21108,17 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+694"/>
+        <location line="+684"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1079"/>
+        <location line="-1063"/>
         <source>Pitch Tracker can only contain 1 segment.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1050"/>
+        <location line="+1034"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20640,12 +21156,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 <context>
     <name>Rosegarden::RosegardenMainWindow</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+358"/>
+        <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="+392"/>
         <source>Initializing plugin manager...</source>
         <translation type="unfinished">Pluginen kudeatzailea hasieratzen...</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+29"/>
         <source>Initializing view...</source>
         <translation type="unfinished">Bista hasieratzen...</translation>
     </message>
@@ -20669,7 +21185,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="unfinished">Hasieratzen...</translation>
     </message>
     <message>
-        <location line="+506"/>
+        <location line="+508"/>
         <source>  Zoom:  </source>
         <translation type="unfinished">  Handitu:  </translation>
     </message>
@@ -20678,7 +21194,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">%1 (%2)</translation>
     </message>
     <message>
-        <location line="+471"/>
+        <location line="+470"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation type="unfinished">&quot;%1&quot; artxiboa ez da existitzen</translation>
     </message>
@@ -20700,22 +21216,22 @@ Do you want to open it instead ?</source>
 Ireki nahi duzu artxibo hori?</translation>
     </message>
     <message>
-        <location line="+4873"/>
+        <location line="+4857"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4340"/>
-        <location line="+159"/>
+        <location line="-4336"/>
+        <location line="+126"/>
         <source>Could not save document at %1
 Error was : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-156"/>
-        <location line="+159"/>
-        <location line="+6311"/>
+        <location line="-123"/>
+        <location line="+126"/>
+        <location line="+6363"/>
         <source>Could not save document at %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20724,7 +21240,7 @@ Error was : %2</source>
         <translation type="obsolete">Aplikazioaren leiho berri bat irekitzen...</translation>
     </message>
     <message>
-        <location line="-6791"/>
+        <location line="-6798"/>
         <source>Creating new document...</source>
         <translation type="unfinished">Dokumentu berri bat sortzen...</translation>
     </message>
@@ -20736,61 +21252,61 @@ Error was : %2</source>
 %1</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location line="+134"/>
+        <location line="+39"/>
+        <location line="+120"/>
         <source>Opening file...</source>
         <translation type="unfinished">Artxiboa irekitzen...</translation>
     </message>
     <message>
-        <location line="-116"/>
-        <location line="+6070"/>
+        <location line="-101"/>
+        <location line="+6048"/>
         <source>All supported files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-6069"/>
-        <location line="+72"/>
-        <location line="+216"/>
+        <location line="-6047"/>
+        <location line="+74"/>
+        <location line="+166"/>
         <source>Rosegarden files</source>
         <translation type="unfinished">Rosegarden artxiboak</translation>
     </message>
     <message>
-        <location line="-287"/>
-        <location line="+2083"/>
-        <location line="+24"/>
+        <location line="-239"/>
+        <location line="+2045"/>
+        <location line="+23"/>
         <source>MIDI files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2106"/>
-        <location line="+71"/>
-        <location line="+220"/>
-        <location line="+1752"/>
-        <location line="+40"/>
-        <location line="+24"/>
-        <location line="+260"/>
-        <location line="+24"/>
-        <location line="+77"/>
+        <location line="-2067"/>
+        <location line="+73"/>
+        <location line="+170"/>
+        <location line="+1763"/>
+        <location line="+39"/>
+        <location line="+23"/>
+        <location line="+257"/>
+        <location line="+23"/>
+        <location line="+74"/>
+        <location line="+20"/>
+        <location line="+74"/>
         <location line="+22"/>
-        <location line="+76"/>
-        <location line="+24"/>
-        <location line="+600"/>
-        <location line="+36"/>
-        <location line="+46"/>
+        <location line="+596"/>
+        <location line="+40"/>
         <location line="+53"/>
-        <location line="+48"/>
-        <location line="+122"/>
-        <location line="+2573"/>
+        <location line="+59"/>
+        <location line="+55"/>
+        <location line="+125"/>
+        <location line="+2580"/>
         <source>All files</source>
         <translation type="unfinished">Artxibo Guztiak</translation>
     </message>
     <message>
-        <location line="-6072"/>
+        <location line="-6050"/>
         <source>Open File</source>
         <translation type="unfinished">Artxiboa Ireki</translation>
     </message>
     <message>
-        <location line="-108"/>
+        <location line="-111"/>
         <source>%1%2 - %3</source>
         <translation type="unfinished">%1 (%3) {1%2 ?}</translation>
     </message>
@@ -20800,17 +21316,17 @@ Error was : %2</source>
         <translation type="unfinished">Ezin da %1 artxiboa ireki</translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+168"/>
         <source>Saving file...</source>
         <translation type="unfinished">Artxiboa gordetzen...</translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+99"/>
         <source>The specified file exists.  Overwrite?</source>
         <translation type="unfinished">Adierazitako artxiboa existitzen da. Gainidatzi?</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+23"/>
         <source>Rosegarden templates</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20825,7 +21341,7 @@ Error was : %2</source>
         <translation type="unfinished">Honela gorde...</translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+70"/>
         <source>Closing file...</source>
         <translation type="unfinished">Artxiboa ixten...</translation>
     </message>
@@ -20886,12 +21402,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2868"/>
+        <location line="+2885"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2867"/>
+        <location line="-2884"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -20905,7 +21421,7 @@ Konfiguratu nahi duzu orain?</translation>
         <translation type="unfinished">Hautatutakoa Mugitu</translation>
     </message>
     <message numerus="yes">
-        <location line="+180"/>
+        <location line="+178"/>
         <location line="+34"/>
         <source>Split %n Segment(s) at Time</source>
         <translation type="unfinished">
@@ -21009,23 +21525,23 @@ Konfiguratu nahi duzu orain?</translation>
         <translation type="unfinished">Batzeko tresna ez dago inplementatuta oraindik</translation>
     </message>
     <message>
-        <location line="+196"/>
+        <location line="+198"/>
         <source>Revert modified document to previous saved version?</source>
         <translation type="unfinished">Bueltatu aldatutako dokumentuaren aurreko bertsiora?</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+21"/>
         <source>Import Rosegarden Project File</source>
         <translation type="unfinished">Rosegarden Proiektu Artxiboa Inportatu</translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1147"/>
+        <location line="+1128"/>
         <source>Rosegarden Project files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+327"/>
+        <location line="+357"/>
         <source>Unable to export WAV without JACK running.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21043,12 +21559,12 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+950"/>
+        <location line="+957"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+346"/>
+        <location line="+338"/>
         <source>Transpose</source>
         <translation type="unfinished">Transposatu</translation>
     </message>
@@ -21058,12 +21574,13 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished">Sartu transposatu beharreko tonuerdien kopurua:</translation>
     </message>
     <message>
-        <location line="+1027"/>
+        <location line="+1031"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-6383"/>
+        <location line="-7476"/>
+        <location line="+1113"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -21071,69 +21588,69 @@ Only audio and synth plugin tracks will be exported</source>
         <location line="+309"/>
         <location line="+30"/>
         <location line="+9"/>
-        <location line="+205"/>
+        <location line="+193"/>
         <location line="+3"/>
-        <location line="+100"/>
-        <location line="+56"/>
+        <location line="+71"/>
+        <location line="+52"/>
         <location line="+3"/>
-        <location line="+301"/>
+        <location line="+310"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
         <location line="+105"/>
-        <location line="+344"/>
+        <location line="+342"/>
         <location line="+76"/>
         <location line="+25"/>
-        <location line="+787"/>
-        <location line="+203"/>
+        <location line="+789"/>
+        <location line="+199"/>
         <location line="+19"/>
-        <location line="+175"/>
+        <location line="+171"/>
         <location line="+20"/>
-        <location line="+78"/>
+        <location line="+74"/>
         <location line="+19"/>
-        <location line="+82"/>
+        <location line="+77"/>
         <location line="+19"/>
         <location line="+359"/>
         <location line="+175"/>
         <location line="+4"/>
         <location line="+34"/>
-        <location line="+36"/>
+        <location line="+43"/>
         <location line="+16"/>
-        <location line="+34"/>
+        <location line="+41"/>
         <location line="+19"/>
-        <location line="+29"/>
+        <location line="+35"/>
         <location line="+19"/>
-        <location line="+63"/>
+        <location line="+70"/>
         <location line="+34"/>
         <location line="+20"/>
-        <location line="+37"/>
+        <location line="+40"/>
         <location line="+7"/>
         <location line="+19"/>
         <location line="+21"/>
         <location line="+22"/>
-        <location line="+118"/>
+        <location line="+122"/>
         <location line="+22"/>
         <location line="+37"/>
         <location line="+13"/>
         <location line="+79"/>
         <location line="+2"/>
         <location line="+40"/>
-        <location line="+584"/>
+        <location line="+587"/>
         <location line="+97"/>
-        <location line="+118"/>
+        <location line="+110"/>
         <location line="+13"/>
-        <location line="+1177"/>
+        <location line="+1181"/>
         <location line="+124"/>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+587"/>
+        <location line="+614"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-1845"/>
+        <location line="-1876"/>
         <source>Relabel Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21143,12 +21660,12 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1080"/>
+        <location line="+1084"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+435"/>
+        <location line="+462"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21158,7 +21675,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-4219"/>
+        <location line="-4261"/>
         <source>Open MIDI File</source>
         <translation type="unfinished">MIDI Artxiboa Ireki</translation>
     </message>
@@ -21167,7 +21684,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="obsolete">MIDI Artxiboa Nahasi</translation>
     </message>
     <message>
-        <location line="+139"/>
+        <location line="+134"/>
         <source>Importing MIDI file...</source>
         <translation type="unfinished">MIDI Artxiboa Inportatzen...</translation>
     </message>
@@ -21182,18 +21699,18 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished">Partitura Kalkulatu</translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+51"/>
         <source>Open X11 Rosegarden File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+24"/>
+        <location line="+23"/>
         <source>X11 Rosegarden files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+20"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21203,24 +21720,30 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+985"/>
+        <location line="+1003"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-254"/>
+        <location line="-281"/>
         <source>The Rosegarden sequencer process has exited unexpectedly.  Sound and recording will no longer be available for this session.
 Please exit and restart Rosegarden to restore sound capability.</source>
         <translation type="unfinished">Rosegardenen sekuentziazio prozesua bukatu da ustekabean. Soinua eta. grabaketa ez dira eskuragarri egongo saio honetarako
 Mesedez, irten eta berrasi Rosegarden soinurako gaitasuna berreskuratzeko.</translation>
     </message>
     <message>
-        <location line="-4795"/>
+        <location line="-4783"/>
         <source>Starting sequencer...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1144"/>
+        <location line="+28"/>
+        <source>An auto-save file for an unsaved document has been found.
+Do you want to open it?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1157"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21240,13 +21763,13 @@ Mesedez, irten eta berrasi Rosegarden soinurako gaitasuna berreskuratzeko.</tran
         <translation type="unfinished">Nahasi</translation>
     </message>
     <message>
-        <location line="+151"/>
-        <location line="+2519"/>
+        <location line="+156"/>
+        <location line="+2465"/>
         <source>Select File(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2307"/>
+        <location line="-2303"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation type="unfinished"></translation>
@@ -21257,26 +21780,26 @@ Mesedez, irten eta berrasi Rosegarden soinurako gaitasuna berreskuratzeko.</tran
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+402"/>
+        <location line="+411"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+101"/>
-        <location line="+1435"/>
-        <location line="+194"/>
-        <location line="+98"/>
-        <location line="+101"/>
-        <location line="+627"/>
-        <location line="+50"/>
-        <location line="+48"/>
-        <location line="+116"/>
-        <location line="+104"/>
+        <location line="+1431"/>
+        <location line="+190"/>
+        <location line="+94"/>
+        <location line="+96"/>
+        <location line="+634"/>
+        <location line="+57"/>
+        <location line="+54"/>
+        <location line="+123"/>
+        <location line="+107"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2425"/>
+        <location line="-2440"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation type="unfinished"></translation>
@@ -21307,23 +21830,23 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+805"/>
+        <location line="+807"/>
         <source>Select MIDI File(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+284"/>
+        <location line="+280"/>
         <source>Select X11 Rosegarden File(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+78"/>
-        <location line="+22"/>
+        <location line="+75"/>
+        <location line="+20"/>
         <source>Open Hydrogen File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+20"/>
         <source>Importing Hydrogen file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21333,7 +21856,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+638"/>
+        <location line="+633"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation type="unfinished">Rosegardenen sekuentziadorea ezin izan da hasieratu, beraz ez da egongosoinurik edo grabatzeko aukerarik saio honetan.
@@ -21346,73 +21869,73 @@ Audio eta MIDI konfigurazio zuzen bati buruzko laguntza eskuratzeko, joahttp://r
     </message>
     <message>
         <location line="+5"/>
-        <location line="+36"/>
-        <location line="+46"/>
+        <location line="+40"/>
         <location line="+53"/>
-        <location line="+48"/>
-        <location line="+122"/>
+        <location line="+59"/>
+        <location line="+55"/>
+        <location line="+125"/>
         <source>Export as...</source>
         <translation type="unfinished">Honela esportatu...</translation>
     </message>
     <message>
-        <location line="-288"/>
+        <location line="-315"/>
         <source>Saving Rosegarden file to package failed: %1</source>
         <translation type="unfinished">Rosegarden artxiboa pakete batera grabatzeak huts egin du: %1</translation>
     </message>
     <message>
-        <location line="+14"/>
         <location line="+18"/>
+        <location line="+21"/>
         <source>Exporting MIDI file...</source>
         <translation type="unfinished">MIDI Artxiboa Esportatzen...</translation>
     </message>
     <message>
-        <location line="-15"/>
+        <location line="-18"/>
         <source>Standard MIDI files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
-        <location line="+53"/>
-        <location line="+48"/>
-        <location line="+223"/>
+        <location line="+39"/>
+        <location line="+60"/>
+        <location line="+54"/>
+        <location line="+233"/>
         <source>Export failed.  The file could not be opened for writing.</source>
         <translation type="unfinished">Esportatzeak huts egin du. Artxiboa ezin izan da ireki idazteko.</translation>
     </message>
     <message>
-        <location line="-317"/>
-        <location line="+22"/>
+        <location line="-336"/>
+        <location line="+25"/>
         <source>Exporting Csound score file...</source>
         <translation type="unfinished">Csound partitura artxiboa esportatzen...</translation>
     </message>
     <message>
-        <location line="-19"/>
+        <location line="-22"/>
         <source>Csound files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+50"/>
-        <location line="+17"/>
+        <location line="+56"/>
+        <location line="+20"/>
         <source>Exporting Mup file...</source>
         <translation type="unfinished">Mup artxiboa esportatzen...</translation>
     </message>
     <message>
-        <location line="-14"/>
+        <location line="-17"/>
         <source>Mup files</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
-        <location line="+85"/>
+        <location line="+52"/>
+        <location line="+88"/>
         <source>Exporting LilyPond file...</source>
         <translation type="unfinished">Lilypond artxiboa esportatzen...</translation>
     </message>
     <message>
-        <location line="-82"/>
+        <location line="-85"/>
         <source>LilyPond files</source>
         <translation type="unfinished">LilyPond artxiboak</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+17"/>
         <source>Printing with LilyPond...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21437,14 +21960,14 @@ Audio eta MIDI konfigurazio zuzen bati buruzko laguntza eskuratzeko, joahttp://r
         <translation type="unfinished">MusicXML artxiboa esportatzen...</translation>
     </message>
     <message>
-        <location line="-926"/>
-        <location line="+24"/>
-        <location line="+905"/>
+        <location line="-947"/>
+        <location line="+22"/>
+        <location line="+928"/>
         <source>XML files</source>
         <translation type="unfinished">XML artxiboak</translation>
     </message>
     <message numerus="yes">
-        <location line="-2344"/>
+        <location line="-2356"/>
         <location line="+54"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -21458,12 +21981,12 @@ Audio eta MIDI konfigurazio zuzen bati buruzko laguntza eskuratzeko, joahttp://r
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1354"/>
+        <location line="+1345"/>
         <source>Open MusicXML File</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+43"/>
         <source>Importing MusicXML file...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21474,7 +21997,7 @@ Audio eta MIDI konfigurazio zuzen bati buruzko laguntza eskuratzeko, joahttp://r
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1074"/>
+        <location line="+1108"/>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
@@ -21497,7 +22020,7 @@ Mesedez, jarri audio artxiboen bide baliozko bat Dokumentuaren Propietateetanaud
 Konfiguratu nahi duzu orain?</translation>
     </message>
     <message>
-        <location line="+483"/>
+        <location line="+486"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished">Mugitu erreprodukzioaren punteroa denborara</translation>
     </message>
@@ -21529,7 +22052,7 @@ Konfiguratu nahi duzu orain?</translation>
         <translation type="unfinished">Deskribapena</translation>
     </message>
     <message>
-        <location line="+389"/>
+        <location line="+381"/>
         <source>Sequencer failed to add audio file %1</source>
         <translation type="unfinished">Sekuentziadoreak huts egin du %1 audio artxiboa gehitzerakoan</translation>
     </message>
@@ -21555,7 +22078,7 @@ Konfiguratu nahi duzu orain?</translation>
         <translation type="obsolete">Etiketa berria sartu</translation>
     </message>
     <message>
-        <location line="+1113"/>
+        <location line="+1117"/>
         <source>Play List</source>
         <translation type="unfinished">Erreprodukzio Zerrenda</translation>
     </message>
@@ -21595,17 +22118,17 @@ Error was : %2</source>
         <translation type="unfinished">Ziur zaude zure estudio lehenetsia inportatzeko eta oraingoa galtzeko?</translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+28"/>
         <source>Import Studio from File</source>
         <translation type="unfinished">Inportatu Estudioa Artxibotik</translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+37"/>
         <source>Import Studio</source>
         <translation type="unfinished">Estudioa Inportatu</translation>
     </message>
     <message>
-        <location line="+394"/>
+        <location line="+422"/>
         <source>Interpret segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21742,7 +22265,7 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::SegmentCommandRepeat</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentCommandRepeat.cpp" line="+31"/>
+        <location filename="../../src/commands/segment/SegmentCommandRepeat.cpp" line="+32"/>
         <source>Repeat Segments</source>
         <translation type="unfinished">Errepikatu Segmentuak</translation>
     </message>
@@ -21845,7 +22368,12 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::SegmentMover</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+178"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+84"/>
+        <source>Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+96"/>
         <source>Move Segment</source>
         <translation type="unfinished">Segmentua Mugitu</translation>
     </message>
@@ -22072,27 +22600,12 @@ before new transposition can be applied.</source>
 <context>
     <name>Rosegarden::SegmentQuickCopyCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentQuickCopyCommand.h" line="+49"/>
         <source>Quick-Copy Segment</source>
-        <translation type="unfinished">Segmentuaren kopia arina</translation>
+        <translation type="obsolete">Segmentuaren kopia arina</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/SegmentQuickCopyCommand.cpp" line="+56"/>
         <source>(copied)</source>
-        <translation type="unfinished">(kopiatuta)</translation>
-    </message>
-</context>
-<context>
-    <name>Rosegarden::SegmentQuickLinkCommand</name>
-    <message>
-        <location filename="../../src/commands/segment/SegmentQuickLinkCommand.h" line="+42"/>
-        <source>Quick-Link Segment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/commands/segment/SegmentQuickLinkCommand.cpp" line="+54"/>
-        <source>(linked)</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">(kopiatuta)</translation>
     </message>
 </context>
 <context>
@@ -22205,7 +22718,7 @@ Konfiguratu nahi duzu orain?</translation>
         <translation type="obsolete">Klik egin eta arrastatu segmentuak hautatzeko</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+312"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+321"/>
         <source>Move %n Segment(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -22213,7 +22726,7 @@ Konfiguratu nahi duzu orain?</translation>
         </translation>
     </message>
     <message>
-        <location line="+341"/>
+        <location line="+312"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished">Shift sakatuta mantendu pultsoaren saretarekin lotzea ekiditeko</translation>
     </message>
@@ -22247,8 +22760,23 @@ Konfiguratu nahi duzu orain?</translation>
         <source>Click and drag to copy segments</source>
         <translation type="unfinished">Klik eta arrastatu segmentuak kopiatzeko</translation>
     </message>
+    <message>
+        <location line="-603"/>
+        <source>Move</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Copy as Link</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location line="-382"/>
+        <location line="+248"/>
         <source>Copy %n Segment(s) as link(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -22264,7 +22792,7 @@ Konfiguratu nahi duzu orain?</translation>
         </translation>
     </message>
     <message>
-        <location line="+385"/>
+        <location line="+356"/>
         <source>Click and drag to copy segment</source>
         <translation type="unfinished">Klik egin eta arrastatu segmentua kopiatzeko</translation>
     </message>
@@ -22370,7 +22898,7 @@ Konfiguratu nahi duzu orain?</translation>
 <context>
     <name>Rosegarden::SegmentSyncCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentSyncCommand.cpp" line="+31"/>
+        <location filename="../../src/commands/segment/SegmentSyncCommand.cpp" line="+32"/>
         <location line="+6"/>
         <location line="+11"/>
         <location line="+8"/>
@@ -22516,7 +23044,7 @@ Konfiguratu nahi duzu orain?</translation>
     <name>Rosegarden::SequenceManager</name>
     <message>
         <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+151"/>
-        <location line="+145"/>
+        <location line="+149"/>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -22525,8 +23053,8 @@ Mesedez, Rosegarden berrasi audioarekin lan egiteko.
 Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translation>
     </message>
     <message>
-        <location line="-139"/>
-        <location line="+148"/>
+        <location line="-143"/>
+        <location line="+152"/>
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
@@ -22535,7 +23063,7 @@ Audio zerbitzua berpizteko saio bat egin da, baina oraindik egon daitezkearazo b
 Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translation>
     </message>
     <message>
-        <location line="-116"/>
+        <location line="-118"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
         <translation type="unfinished">Errore larri bat izan da ALSA MIDI azpisisteman. Izan daiteke sekuentziazioarekin aurrera ezin jarraitzea.  Mesedez, egiaztatu kontsolaren irteera informazio gehiagorako.</translation>
     </message>
@@ -22555,18 +23083,13 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+86"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-23"/>
-        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+24"/>
-        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
+        <location line="+1"/>
+        <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;Check whether your Linux distribution provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -22600,7 +23123,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-280"/>
+        <location line="-254"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation type="unfinished">Audio nahastailearen azpisitema huts egiten ari da.</translation>
     </message>
@@ -22802,270 +23325,200 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::ShowSequencerStatusDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="+42"/>
+        <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="+46"/>
         <source>Sequencer status</source>
         <translation type="unfinished">Sekuenziadorearen egoera</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Sequencer status:</source>
-        <translation type="unfinished">Sekuenziadorearen egoera:</translation>
+        <translation type="obsolete">Sekuenziadorearen egoera:</translation>
     </message>
 </context>
 <context>
     <name>Rosegarden::SimpleEventEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/SimpleEventEditDialog.cpp" line="+72"/>
         <source>Insert Event</source>
-        <translation type="unfinished">Txertatu gertaera</translation>
+        <translation type="obsolete">Txertatu gertaera</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Edit Event</source>
-        <translation type="unfinished">Gertaera Editatu</translation>
+        <translation type="obsolete">Gertaera Editatu</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Event Properties</source>
-        <translation type="unfinished">Gertaeraren Propietateak</translation>
+        <translation type="obsolete">Gertaeraren Propietateak</translation>
     </message>
     <message>
-        <location line="+6"/>
         <source>Event type:</source>
-        <translation type="unfinished">Gertaera Mota</translation>
+        <translation type="obsolete">Gertaera Mota</translation>
     </message>
     <message>
-        <location line="+37"/>
-        <location line="+158"/>
         <source>Absolute time:</source>
-        <translation type="unfinished">Denbora Absolutua:</translation>
+        <translation type="obsolete">Denbora Absolutua:</translation>
     </message>
     <message>
-        <location line="-152"/>
-        <location line="+15"/>
-        <location line="+12"/>
-        <location line="+69"/>
-        <location line="+15"/>
         <source>edit</source>
-        <translation type="unfinished">editatu</translation>
+        <translation type="obsolete">editatu</translation>
     </message>
     <message>
-        <location line="-102"/>
-        <location line="+149"/>
         <source>Duration:</source>
-        <translation type="unfinished">Iraupena:</translation>
+        <translation type="obsolete">Iraupena:</translation>
     </message>
     <message>
-        <location line="-134"/>
         <source>Pitch:</source>
-        <translation type="unfinished">Altuera:</translation>
+        <translation type="obsolete">Altuera:</translation>
     </message>
     <message>
-        <location line="+15"/>
-        <location line="+197"/>
         <source>Controller name:</source>
-        <translation type="unfinished">Kontroladorearen izena:</translation>
+        <translation type="obsolete">Kontroladorearen izena:</translation>
     </message>
     <message>
-        <location line="-196"/>
-        <location line="+419"/>
-        <location line="+34"/>
-        <location line="+1"/>
-        <location line="+43"/>
-        <location line="+31"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished">&lt;ezer ez&gt;</translation>
+        <translation type="obsolete">&lt;ezer ez&gt;</translation>
     </message>
     <message>
-        <location line="-522"/>
         <source>Velocity:</source>
-        <translation type="unfinished">Abiadura:</translation>
+        <translation type="obsolete">Abiadura:</translation>
     </message>
     <message>
-        <location line="+11"/>
         <source>Meta string:</source>
-        <translation type="unfinished">Meta Katea:</translation>
+        <translation type="obsolete">Meta Katea:</translation>
     </message>
     <message>
-        <location line="+5"/>
         <source>Load data</source>
-        <translation type="unfinished">Datuak kargatu</translation>
+        <translation type="obsolete">Datuak kargatu</translation>
     </message>
     <message>
-        <location line="+2"/>
         <source>Save data</source>
-        <translation type="unfinished">Datuak gorde</translation>
+        <translation type="obsolete">Datuak gorde</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Notation Properties</source>
-        <translation type="unfinished">Partituraren edizioaren propietateak</translation>
+        <translation type="obsolete">Partituraren edizioaren propietateak</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Lock to changes in performed values</source>
-        <translation type="unfinished">Interpretatutako baloreen aldaketen arabera jokatu</translation>
+        <translation type="obsolete">Interpretatutako baloreen aldaketen arabera jokatu</translation>
     </message>
     <message>
-        <location line="+7"/>
         <source>Notation time:</source>
-        <translation type="unfinished">Notazioaren denbora:</translation>
+        <translation type="obsolete">Notazioaren denbora:</translation>
     </message>
     <message>
-        <location line="+15"/>
         <source>Notation duration:</source>
-        <translation type="unfinished">Notazioaren iraupena:</translation>
+        <translation type="obsolete">Notazioaren iraupena:</translation>
     </message>
     <message>
-        <location line="+89"/>
         <source>Note pitch:</source>
-        <translation type="unfinished">Notaren altuera:</translation>
+        <translation type="obsolete">Notaren altuera:</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Note velocity:</source>
-        <translation type="unfinished">Notaren Abiadura:</translation>
+        <translation type="obsolete">Notaren Abiadura:</translation>
     </message>
     <message>
-        <location line="+28"/>
         <source>Controller number:</source>
-        <translation type="unfinished">Kontroladorearen zenbakia:</translation>
+        <translation type="obsolete">Kontroladorearen zenbakia:</translation>
     </message>
     <message>
-        <location line="+9"/>
         <source>Controller value:</source>
-        <translation type="unfinished">Kontroladorearen balorea:</translation>
+        <translation type="obsolete">Kontroladorearen balorea:</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Key pitch:</source>
-        <translation type="unfinished">Notaren altuera:</translation>
+        <translation type="obsolete">Notaren altuera:</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Key pressure:</source>
-        <translation type="unfinished">Teklaren presioa:</translation>
+        <translation type="obsolete">Teklaren presioa:</translation>
     </message>
     <message>
-        <location line="+30"/>
         <source>Channel pressure:</source>
-        <translation type="unfinished">Kanalaren presioa:</translation>
+        <translation type="obsolete">Kanalaren presioa:</translation>
     </message>
     <message>
-        <location line="+33"/>
         <source>Program change:</source>
-        <translation type="unfinished">Programa aldaketa:</translation>
+        <translation type="obsolete">Programa aldaketa:</translation>
     </message>
     <message>
-        <location line="+45"/>
         <source>Data length:</source>
-        <translation type="unfinished">Datuen tamaina:</translation>
+        <translation type="obsolete">Datuen tamaina:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Data:</source>
-        <translation type="unfinished">Datuak:</translation>
+        <translation type="obsolete">Datuak:</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Pitchbend MSB:</source>
-        <translation type="unfinished">MSB Tonu inflexioa:</translation>
+        <translation type="obsolete">MSB Tonu inflexioa:</translation>
     </message>
     <message>
-        <location line="+8"/>
         <source>Pitchbend LSB:</source>
-        <translation type="unfinished">LSB Tonu inflexioa:</translation>
+        <translation type="obsolete">LSB Tonu inflexioa:</translation>
     </message>
     <message>
-        <location line="+37"/>
         <source>Indication:</source>
-        <translation type="unfinished">Adierazpena:</translation>
+        <translation type="obsolete">Adierazpena:</translation>
     </message>
     <message>
-        <location line="+32"/>
         <source>Text type:</source>
-        <translation type="unfinished">Testu mota:</translation>
+        <translation type="obsolete">Testu mota:</translation>
     </message>
     <message>
-        <location line="+1"/>
         <source>Text:</source>
-        <translation type="unfinished">Testua:</translation>
+        <translation type="obsolete">Testua:</translation>
     </message>
     <message>
-        <location line="+46"/>
         <source>Clef type:</source>
-        <translation type="unfinished">Klabe mota:</translation>
+        <translation type="obsolete">Klabe mota:</translation>
     </message>
     <message>
-        <location line="+31"/>
         <source>Key name:</source>
-        <translation type="unfinished">Klabearen izena:</translation>
+        <translation type="obsolete">Klabearen izena:</translation>
     </message>
     <message>
-        <location line="+53"/>
         <source>Unsupported event type:</source>
-        <translation type="unfinished">Jasota ez dagoen gertaera mota:</translation>
+        <translation type="obsolete">Jasota ez dagoen gertaera mota:</translation>
     </message>
     <message>
-        <location line="+257"/>
         <source>Edit Event Time</source>
-        <translation type="unfinished">Editatu Gertaeraren Denbora</translation>
+        <translation type="obsolete">Editatu Gertaeraren Denbora</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Edit Event Notation Time</source>
-        <translation type="unfinished">Editatu Gertaeraren Notazio Denbora</translation>
+        <translation type="obsolete">Editatu Gertaeraren Notazio Denbora</translation>
     </message>
     <message>
-        <location line="+12"/>
         <source>Edit Duration</source>
-        <translation type="unfinished">Iraupena Editatu</translation>
+        <translation type="obsolete">Iraupena Editatu</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Edit Notation Duration</source>
-        <translation type="unfinished">Notazioaren Iraupena Editatu</translation>
+        <translation type="obsolete">Notazioaren Iraupena Editatu</translation>
     </message>
     <message>
-        <location line="+14"/>
         <source>Edit Pitch</source>
-        <translation type="unfinished">Altuera Editatu</translation>
+        <translation type="obsolete">Altuera Editatu</translation>
     </message>
     <message>
-        <location line="+16"/>
         <source>Load System Exclusive data in File</source>
-        <translation type="unfinished">Sistema Esklusiboaren datuak Artxibora Kargatu</translation>
+        <translation type="obsolete">Sistema Esklusiboaren datuak Artxibora Kargatu</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <location line="+50"/>
-        <source>System exclusive files</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-49"/>
-        <location line="+50"/>
         <source>All files</source>
-        <translation type="unfinished">Artxibo Guztiak</translation>
+        <translation type="obsolete">Artxibo Guztiak</translation>
     </message>
     <message>
-        <location line="-25"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Could not load SysEx file.</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Rosegarden</translation>
     </message>
     <message>
         <source>*.syx|System exclusive files (*.syx)</source>
         <translation type="obsolete">*.syx|Sistemaren artxibo esklusiboak (*.syx)</translation>
     </message>
     <message>
-        <location line="+21"/>
         <source>Save System Exclusive data to...</source>
-        <translation type="unfinished">(Non) Gorde Sistema Esklusiboaren Datuak...</translation>
+        <translation type="obsolete">(Non) Gorde Sistema Esklusiboaren Datuak...</translation>
     </message>
 </context>
 <context>
@@ -23176,7 +23629,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::SqueezedLabel</name>
     <message>
-        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+196"/>
+        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+201"/>
         <source>&amp;Copy Full Text</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23417,9 +23870,64 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
     </message>
 </context>
 <context>
+    <name>Rosegarden::SysExWidget</name>
+    <message>
+        <location filename="../../src/gui/editors/event/SysExWidget.cpp" line="+64"/>
+        <source>SysEx Properties</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Data:</source>
+        <translation type="unfinished">Datuak:</translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Load data</source>
+        <translation type="unfinished">Datuak kargatu</translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Save data</source>
+        <translation type="unfinished">Datuak gorde</translation>
+    </message>
+    <message>
+        <location line="+25"/>
+        <source>Load System Exclusive data in File</source>
+        <translation type="unfinished">Sistema Esklusiboaren datuak Artxibora Kargatu</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location line="+49"/>
+        <source>System exclusive files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-48"/>
+        <location line="+49"/>
+        <source>All files</source>
+        <translation type="unfinished">Artxibo Guztiak</translation>
+    </message>
+    <message>
+        <location line="-25"/>
+        <source>Rosegarden</source>
+        <translation type="unfinished">Rosegarden</translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Could not load SysEx file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Save System Exclusive data to...</source>
+        <translation type="unfinished">(Non) Gorde Sistema Esklusiboaren Datuak...</translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::TempoAndTimeSignatureEditor</name>
     <message>
-        <location filename="../../src/gui/editors/tempo/TempoAndTimeSignatureEditor.cpp" line="+106"/>
+        <location filename="../../src/gui/editors/tempo/TempoAndTimeSignatureEditor.cpp" line="+104"/>
         <source>Filter</source>
         <translation type="unfinished">Iragazkia</translation>
     </message>
@@ -23454,7 +23962,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">Propietateak  </translation>
     </message>
     <message>
-        <location line="+167"/>
+        <location line="+179"/>
         <source>Common, hidden</source>
         <translation type="unfinished">Arrunta, ezkutua</translation>
     </message>
@@ -23474,7 +23982,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">Konpasaren neurria   </translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+78"/>
         <source>%1.%2%3</source>
         <translation type="unfinished">%1.%2%3</translation>
     </message>
@@ -23489,12 +23997,17 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">Tenpoa   </translation>
     </message>
     <message>
-        <location line="+175"/>
+        <location line="+170"/>
         <source>Delete Tempo or Time Signature</source>
         <translation type="unfinished">Tenpoa edo konpasaren neurria ezabatu</translation>
     </message>
     <message>
-        <location line="+303"/>
+        <location line="+286"/>
+        <source>Edit Tempo Change</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+65"/>
         <source>%1 - Tempo and Time Signature Editor</source>
         <translation type="unfinished">%1 - Tenpo eta Konpas-Neurriaren Editorea</translation>
     </message>
@@ -23507,17 +24020,17 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::TempoDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+59"/>
+        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+58"/>
         <source>Insert Tempo Change</source>
         <translation type="unfinished">Tenpo Aldaketa Txertatu</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+6"/>
         <source>Tempo</source>
         <translation type="unfinished">Tenpoa</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>New tempo:</source>
         <translation type="unfinished">Tenpo Berria:</translation>
     </message>
@@ -23527,27 +24040,27 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+16"/>
         <source>Tempo is fixed until the following tempo change</source>
         <translation type="unfinished">Tenpoa hurrengo tenpo aldaketa egon arte mantenduko da</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+7"/>
         <source>Tempo ramps to the following tempo</source>
         <translation type="unfinished">Tenpoa mailaka aldatzen da datorren tenporaren arabera</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+9"/>
         <source>Tempo ramps to:</source>
         <translation type="unfinished">Tenpoa mailaka aldatzen da ondokaren arabera:</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+17"/>
         <source>Time of tempo change</source>
         <translation type="unfinished">Tenpoa aldatzeko denbora</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+11"/>
         <source>Scope</source>
         <translation type="unfinished">Esparrua</translation>
     </message>
@@ -23557,32 +24070,32 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">Kurtsorea orain ondokoan dago </translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+28"/>
         <source>Apply this tempo from here onwards</source>
         <translation type="unfinished">Ezarri tengo hau hemendik aurrera</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Replace the last tempo change</source>
         <translation type="unfinished">Ordezkatu azkenengo tenpo aldaketa</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Apply this tempo from the start of this bar</source>
         <translation type="unfinished">Tenpo hau ezarri konpas honen hasieratik</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+4"/>
         <source>Apply this tempo to the whole composition</source>
         <translation type="unfinished">Tenpo hau ezarri konposizio osorako</translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Also make this the default tempo</source>
         <translation type="unfinished">Gainera tenpo hau lehenetsi</translation>
     </message>
     <message>
-        <location line="+92"/>
+        <location line="+95"/>
         <source>%1.%2 s,</source>
         <translation type="unfinished">%1.%2 s,</translation>
     </message>
@@ -23617,7 +24130,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+154"/>
         <source>http://rosegardenmusic.com/wiki/doc:tempoDialog-en</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24215,7 +24728,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::TimeWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+104"/>
+        <location filename="../../src/gui/widgets/TimeWidget.cpp" line="+97"/>
         <source>Note:</source>
         <translation type="unfinished">Nota:</translation>
     </message>
@@ -24276,7 +24789,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">milisegundu:</translation>
     </message>
     <message>
-        <location line="+140"/>
+        <location line="+138"/>
         <location line="+134"/>
         <source>(%1/%2 time)</source>
         <translation type="unfinished">(%1/%2 erritmoa)</translation>
@@ -24305,7 +24818,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+375"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+367"/>
         <source>&lt;no instrument&gt;</source>
         <translation type="unfinished">&lt;instrumenturik gabe&gt;</translation>
     </message>
@@ -24338,7 +24851,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+366"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+368"/>
         <source>Delete Tracks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24377,7 +24890,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::TrackLabel</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+107"/>
+        <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+134"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24414,18 +24927,18 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="obsolete">Pista</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-996"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="-1007"/>
         <source>Track Parameters</source>
         <translation type="unfinished">Pistaren Parametroak</translation>
     </message>
     <message>
         <location line="+16"/>
-        <location line="+1126"/>
+        <location line="+1137"/>
         <source>&lt;untitled&gt;</source>
         <translation type="unfinished">&lt;izenbururik gabe&gt;</translation>
     </message>
     <message>
-        <location line="-1118"/>
+        <location line="-1129"/>
         <source>Playback parameters</source>
         <translation type="unfinished">Erreprodukzioaren parametroak</translation>
     </message>
@@ -24827,23 +25340,17 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
     </message>
     <message>
         <location line="-205"/>
-        <location line="+958"/>
+        <location line="+969"/>
         <source>All</source>
         <translation type="unfinished">Denak</translation>
     </message>
     <message>
-        <location line="+188"/>
-        <location line="+8"/>
-        <source> %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-118"/>
+        <location line="+78"/>
         <source>[ Track %1 - %2 ]</source>
         <translation type="unfinished">[ Pista#%1 - %2 ]</translation>
     </message>
     <message>
-        <location line="-824"/>
+        <location line="-835"/>
         <source>Reset to Defaults</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24852,7 +25359,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="obsolete">Kolore Berria Gehitu</translation>
     </message>
     <message>
-        <location line="+365"/>
+        <location line="+376"/>
         <source>New Color Name</source>
         <translation type="unfinished">Kolore Berriaren Izena</translation>
     </message>
@@ -24894,55 +25401,55 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+116"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+117"/>
         <source>Rosegarden Transport</source>
         <translation type="unfinished">Rosegardenen Transportea</translation>
     </message>
     <message>
-        <location line="+766"/>
-        <location line="+97"/>
+        <location line="+774"/>
+        <location line="+96"/>
         <source>PITCH WHEEL</source>
         <translation type="unfinished">TONU-GURPILA</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+97"/>
+        <location line="-92"/>
+        <location line="+96"/>
         <source>CONTROLLER</source>
         <translation type="unfinished">KONTROLADOREA</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+97"/>
+        <location line="-92"/>
+        <location line="+96"/>
         <source>PROG CHNGE</source>
         <translation type="unfinished">PROG. ALDAKETA</translation>
     </message>
     <message>
-        <location line="-92"/>
-        <location line="+97"/>
+        <location line="-91"/>
+        <location line="+96"/>
         <source>PRESSURE</source>
         <translation type="unfinished">PRESIOA</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+97"/>
+        <location line="-92"/>
+        <location line="+96"/>
         <source>SYS MESSAGE</source>
         <translation type="unfinished">SIST. MEZUA</translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+97"/>
+        <location line="-92"/>
+        <location line="+96"/>
         <source>RPN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-93"/>
-        <location line="+97"/>
+        <location line="-92"/>
+        <location line="+96"/>
         <source>NRPN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-52"/>
-        <location line="+97"/>
+        <location line="-51"/>
+        <location line="+96"/>
         <source>NO EVENTS</source>
         <translation type="unfinished">GERTAERARIK GABE</translation>
     </message>
@@ -25091,7 +25598,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">Segmentu Aktibatu Guztiak Ezabatu</translation>
     </message>
     <message>
-        <location line="+114"/>
+        <location line="+112"/>
         <source>&lt;no label&gt;</source>
         <translation type="unfinished">&lt;etiketarik gabe&gt;</translation>
     </message>
@@ -25116,13 +25623,13 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
     </message>
     <message>
         <location line="+0"/>
-        <location line="+52"/>
-        <location line="+18"/>
+        <location line="+59"/>
+        <location line="+16"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
-        <location line="-66"/>
+        <location line="-71"/>
         <source>Remove all triggered segments</source>
         <translation type="unfinished">Segmentu aktibatu guztiak ezabatu</translation>
     </message>
@@ -25132,7 +25639,7 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         <translation type="unfinished">Segmentu Aktibatuaren Iraupena</translation>
     </message>
     <message numerus="yes">
-        <location line="+22"/>
+        <location line="+30"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
         <translation type="unfinished">
             <numerusform>
@@ -25141,12 +25648,12 @@ Beste programa batzuk ixteak hobetu dezake Rosegardenen errendimendua.</translat
         </translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+15"/>
         <source>Clipboard is empty</source>
         <translation type="unfinished">Arbela hutsik</translation>
     </message>
     <message>
-        <location line="+214"/>
+        <location line="+185"/>
         <source>http://rosegardenmusic.com/wiki/doc:triggerSegmentManager-en</source>
         <translation type="unfinished"></translation>
     </message>

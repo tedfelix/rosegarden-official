@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -197,7 +197,7 @@ public:
 
     void installExporter(WAVExporter* wavExporter);
 
-protected:
+private:
 
     // static methods for JACK process thread:
     static int   jackProcessStatic(jack_nframes_t nframes, void *arg);
@@ -234,7 +234,17 @@ protected:
     bool createMainOutputs();
     bool createFaderOutputs(int audioPairs, int synthPairs);
     bool createSubmasterOutputs(int pairs);
-    bool createRecordInputs(int pairs);
+
+    /// Updates the number of rg JACK recording ports.
+    /**
+     * This is called constantly by updateAudioData().  It does no
+     * work if the number of pairs hasn't changed.  It treats 0
+     * newPairs as 1.  It does not allow a reduction in the number of
+     * input ports.
+     *
+     * See updateAudioData() for suggestions for improvement.
+     */
+    bool createRecordInputs(int newPairs);
 
     bool relocateTransportInternal(bool alsoStart);
 

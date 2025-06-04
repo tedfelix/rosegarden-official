@@ -71,7 +71,7 @@ globalTempo = {
                 < fis'' d'' > 4. < d'' b' > 4 < fis'' d'' > 8  |
                 < e'' cis'' > 8 [ < fis'' d'' > < e'' cis'' > ] < d'' b' > [ < cis'' a' > < b' gis' > ]  |
 %% 25
-                a' 4. r8 r4  |
+                a' 4. r8 r4 
                 \bar "|."
             } % Voice
 

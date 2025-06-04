@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -8863,8 +8863,11 @@ RosegardenMainWindow::slotCommandExecuted()
 
     // Refresh the TransportDialog's time display.
     // This is needed for time signature and tempo changes.
-    slotSetPointerPosition(
-            RosegardenDocument::currentDocument->getComposition().getPosition());
+    // See Bug #1721.
+    // ??? This breaks the matrix editor.  When adding notes, the note previews
+    //     last a very long time with this in place.
+    //slotSetPointerPosition(
+    //        RosegardenDocument::currentDocument->getComposition().getPosition());
 }
 
 

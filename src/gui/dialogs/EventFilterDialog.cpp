@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2024 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     Modifications and additions Copyright (c) 2023 Mark R. Rubin aka "thanks4opensource" aka "thanks4opensrc"
 
     This file is Copyright 2003-2006
@@ -417,7 +417,7 @@ EventFilterDialog::getDurationFromIndex(unsigned index)
         // prior to populateCombos()
         return LONG_MAX;
     }
-    else if (index > m_standardQuantizations.size() + 1) {
+    else if (index >= m_standardQuantizations.size() + 1) {
         // number of combo box items is m_standardQuantizations.size() + 2
         // ("longest" added before, "shortest" after) so this one
         // is "shortest"

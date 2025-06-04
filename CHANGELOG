@@ -1,3 +1,101 @@
+====== ROSEGARDEN 25.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 25.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Lilypond: Fix the missing dot in property paths (LilyPond > 2.22).
+    [3957c97969]
+  * LV2: Add port sampleRate feature.  [03d35cad0a]
+  * Fixed Import Studio does not create new devices.  Bug #1709.
+    [4460f3521b]
+  * Notation: Improve wording of highlight menu items.  Bug #1708.
+    [fdc4a3553c]
+  * Event Viewer: Fix editor closes when editing triggered segments.
+    [baeb7bad81]
+  * Fix crash when deleting a triggered segment that was being edited
+    with the notation or matrix editors.  [c9cafc8ad8]
+  * Fix wrong matrix editor window closed during segment split.
+    Bug #1699.  [80d3e70642]
+  * Handle unsaved untitled autosave.  Bug #1700.  [cef44d35e3]
+  * Matrix: Fix notes not sounding across a drag select.  Bug #1697.
+    [31ec6ed535]
+  * Fix file dialogs forget paths.  Feature Request #518.  [5588528e46]
+  * Fix crash when deleting a repeating segment opened in notation.
+    Bug #1711.  [119e4672d9]
+  * Fix crash on Manage MIDI Devices window close.  Debian #1091859.
+    [64943ed3d8]
+  * Fix crash on new document with bank editor open.  Bug #1712.
+    [f68d7dbcd6]
+  * Fix missing time resolution warning.  [6cbef7a786]
+  * Instrument Parameters: Fix "Pan" control label cut off on the
+    right.  [8a78c11ae2]
+  * Fix UI locks up when hitting "Record".  Bug #1713.  [e8d16c4792]
+  * Fix lyric editor with anacrusis [-1] problem.  Bug #1715.
+    [82045d5ca4]
+  * Fix LV2 plugin JC303 not working.  Bug #1714.  [b341fd1ce3]
+  * Add JACK stop at auto stop preference.  Bug #1693.  [c86d9ca6a7]
+  * Tempo And Time Signature Editor: Fix tempo time change leftovers.
+    Bug #1718.  [017bdd1b60]
+  * Fix potential crash when fast-forwarding or rewinding through a
+    large composition while it is playing.  Bug #1717.  [01ddaca815]
+  * Fix RG handling of jumping JACK transport.  Bug #1721.
+    [dc2062d42e]
+  * LilyPond: Fix deprecation warnings while processing RG output.
+    Bug #1675.  [39bef99be1]
+  * Matrix: Fix Add Tempo Change... not working.  [b9a781ee9c]
+  * Fix record input connections not happening.  [38d50e757f]
+  * Fix "toggle repeat" not handling mixed state in undo.  Bug #1722.
+    [1128116d13]
+  * Fix transport dialog time/bars not updating on Tempo and Time
+    Signature changes prior to the pointer position.  [66401b64fc]
+  * EventFilterDialog: Fix invalid read with "shortest" duration.
+    [8068e139ba]
+  * Fix LilyPond doesn't draw the repeat double bar when there are
+    alternative endings.  Bug #1676.  [2e4b03092a]
+
+===== New Features =====
+
+  * Add an extra large track size in presentation preferences.
+    Feature Request #524.  [76247e4efd]
+  * Add track label width to presentation preferences.  Feature Request
+    #525.  [a401a663d4]
+  * EditView: Add "Edit Triggered Segment" feature.  [287a3765e1]
+  * Add "Drag with dynamic modifiers (main window)" preference.
+    [561db23422]
+  * Constrained selection move in matrix editor.  Feature Request #298.
+    [4dfb643cf5]
+  * Add preference for dynamic drag.  Bug #1699.  [561db23422]
+  * Add "remove all from panel" command to the Manage Controllers
+    dialog Edit menu.  Feature Request #526.  [68a2373fd4]
+  * RPN and NRPN editing has been added to the Event List Editor.
+    Feature Request #467.  [bc567b76b3]  [0a43462bdb]
+  * MIDI Export: Add RPN and NRPN support.  Feature Request #467.
+    [f02f6bf8fb]
+  * Event List Editor: Add filtering All On/Off button.  [42f8635286]
+  * LV2: Graduate out of beta.  Enable by default.  [90fccdab0a]
+
+===== General Improvements =====
+
+  * The Event List Editor has been rewritten.
+  * The "Edit Event" dialog has been rewritten.  This pops up when double-
+    clicking on notes in Notation, the Matrix, and the Event List Editor.
+
+===== Additional Contributions =====
+
+  * Brazilian Portuguese translation. (Jeronimo Pellegrini)
+  * Emu-Vintage-Keys.rgd (Hugo van Galen)
+  * Roland-TD-7.rgd (Hugo van Galen)
+  * Updated Polish translation (Grzegorz Pruchniakowski)
+  * Updated German translation (Michael Stockinger)
+  * Updated French translation (Yves Guillemot)
+
 ====== ROSEGARDEN 24.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 24.12
