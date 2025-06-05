@@ -102,8 +102,8 @@ CollapseNotesCommand::modifySegment()
         // we may have destroyed some beaming with the
         // collapse. Try to repair it.
         // find start and end including beamed groups
-        for (auto i = segment.begin(); i != segment.end(); ++i) {
-            Event* event = *i;
+        for (auto i1 = segment.begin(); i1 != segment.end(); ++i1) {
+            Event* event = *i1;
             if (event->getNotationAbsoluteTime() >= start) break;
             if (event->has(BaseProperties::BEAMED_GROUP_ID)) {
                 int id = event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
@@ -114,8 +114,8 @@ CollapseNotesCommand::modifySegment()
                 }
             }
         }
-        for (auto i = segment.rbegin(); i != segment.rend(); ++i) {
-            Event* event = *i;
+        for (auto i1 = segment.rbegin(); i1 != segment.rend(); ++i1) {
+            Event* event = *i1;
             time_t eventEnd =
                 event->getNotationAbsoluteTime() + event->getNotationDuration();
             if (eventEnd <= end) break;

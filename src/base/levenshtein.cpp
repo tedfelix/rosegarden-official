@@ -50,7 +50,7 @@ int i4_min ( int i1, int i2 )
 }
 //****************************************************************************80
 
-int levenshtein_distance ( int m, string s, int n, string t )
+int levenshtein_distance ( int m, const string& s, int n, const string& t )
 
 //****************************************************************************80
 //
@@ -147,7 +147,7 @@ int levenshtein_distance ( int m, string s, int n, string t )
 //****************************************************************************80
 
 // cppcheck-suppress unusedFunction
-int *levenshtein_matrix ( int m, string s, int n, string t )
+int *levenshtein_matrix ( int m, const string& s, int n, const string& t )
 
 //****************************************************************************80
 //

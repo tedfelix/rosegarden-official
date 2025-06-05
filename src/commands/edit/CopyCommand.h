@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -67,6 +66,9 @@ public:
                 Clipboard *clipboard);
 
     ~CopyCommand() override;
+
+    CopyCommand(const CopyCommand&) = delete;
+    CopyCommand& operator=(const CopyCommand&) = delete;
 
     static QString getGlobalName() { return tr("&Copy"); }
 

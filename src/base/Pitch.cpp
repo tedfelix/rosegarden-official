@@ -559,7 +559,7 @@ Pitch::getAsKey(bool isMinor) const {
  */
 void
 Pitch::rawPitchToDisplayPitch(
-        int rawpitch,
+        int rawPitch,
         const Clef &clef,
         const Key &key,
         int &height,
@@ -568,14 +568,14 @@ Pitch::rawPitchToDisplayPitch(
 {
 
     // 1. Calculate the octave (for later):
-    int octave = rawpitch / 12;
+    int octave = rawPitch / 12;
 
     // 2. Set initial height to 0
     height = 0;
 
     // 3.  Calculate raw semitone number, yielding a value between 0 (C) and
     // 11 (B)
-    int pitch  = rawpitch % 12;
+    int pitch  = rawPitch % 12;
 
     // clear the in-coming accidental so we can trap any failure to re-set
     // it on the way out:
@@ -583,7 +583,7 @@ Pitch::rawPitchToDisplayPitch(
     accidental = "";
 
     if (userAccidental == Accidentals::NoAccidental  ||
-        !Pitch(rawpitch, userAccidental).validAccidental())
+        !Pitch(rawPitch, userAccidental).validAccidental())
     {
         userAccidental = resolveNoAccidental(pitch, key, noAccidentalStrategy);
         //RG_DEBUG << "Chose accidental " << userAccidental << " for pitch " << pitch << " in key " << key.getName();
@@ -614,7 +614,7 @@ Pitch::rawPitchToDisplayPitch(
 #else
         RG_DEBUG << "rawPitchToDisplayPitch(): calculating: ";
 #endif
-        RG_DEBUG << "pitch: " << rawpitch << " (" << pitch << " in oct "
+        RG_DEBUG << "pitch: " << rawPitch << " (" << pitch << " in oct "
                  << octave << ")  userAcc: " << userAccidental
                  << "  clef: " << clef.getClefType() << "  key: " << key.getName();
     }

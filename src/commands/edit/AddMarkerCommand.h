@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -45,6 +44,9 @@ public:
                      const std::string &name,
                      const std::string &description);
     ~AddMarkerCommand() override;
+
+    AddMarkerCommand(const AddMarkerCommand&) = delete;
+    AddMarkerCommand& operator=(const AddMarkerCommand&) = delete;
 
     static QString getGlobalName() { return tr("&Add Marker"); }
 

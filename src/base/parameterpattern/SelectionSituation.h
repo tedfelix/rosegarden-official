@@ -46,7 +46,7 @@ public:
 
     QString getPropertyNameQString() const;
 
-    bool isSuitable(Event *e) const  { return e->isa(m_eventType); }
+    bool isSuitable(const Event *e) const  { return e->isa(m_eventType); }
 
     /// The min and max value for the selected events.
     std::pair<int,int> getMinMax() const;
