@@ -45,9 +45,6 @@ public:
                      const std::string &description);
     ~AddMarkerCommand() override;
 
-    AddMarkerCommand(const AddMarkerCommand&) = delete;
-    AddMarkerCommand& operator=(const AddMarkerCommand&) = delete;
-
     static QString getGlobalName() { return tr("&Add Marker"); }
 
     void execute() override;

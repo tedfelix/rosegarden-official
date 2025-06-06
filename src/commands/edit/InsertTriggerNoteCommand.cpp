@@ -40,11 +40,11 @@ InsertTriggerNoteCommand::InsertTriggerNoteCommand(Segment &segment,
         timeT duration,
         int pitch,
         int velocity,
-        NoteStyleName noteStyle,
+        const NoteStyleName& noteStyle,
         TriggerSegmentId id,
         bool retune,
         const std::string& timeAdjust,
-        Mark mark) :
+        const Mark& mark) :
         BasicCommand(tr("Insert Trigger Note"), segment,
                      time, time + duration),
         m_time(time),

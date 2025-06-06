@@ -45,11 +45,11 @@ public:
 			     timeT duration,
                              int pitch,
                              int velocity,
-                             NoteStyleName noteStyle,
+                             const NoteStyleName& noteStyle,
                              TriggerSegmentId id,
                              bool retune,
                              const std::string& timeAdjust,
-                             Mark mark);
+                             const Mark& mark);
     ~InsertTriggerNoteCommand() override;
 
 protected:

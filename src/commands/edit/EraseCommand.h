@@ -39,8 +39,8 @@ class EraseCommand : public BasicCommand
 
 public:
     /// Allow for multiple selections.  E.g. matrix and CC ruler.
-    EraseCommand(EventSelection *selection1,
-                 EventSelection *selection2 = nullptr);
+    explicit EraseCommand(EventSelection *selection1,
+                          EventSelection *selection2 = nullptr);
     ~EraseCommand() override;
 
     /// Erase the events in segment that are in selection.
@@ -49,7 +49,7 @@ public:
      * were done, meaning key or clef deletions.
      */
     static bool eraseInSegment(EventSelection *selection);
-    
+
     timeT getRelayoutEndTime() override;
 
 protected:

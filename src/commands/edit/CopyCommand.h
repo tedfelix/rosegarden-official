@@ -67,9 +67,6 @@ public:
 
     ~CopyCommand() override;
 
-    CopyCommand(const CopyCommand&) = delete;
-    CopyCommand& operator=(const CopyCommand&) = delete;
-
     static QString getGlobalName() { return tr("&Copy"); }
 
     void execute() override;

@@ -115,7 +115,7 @@ class CommandRegistry : public QObject
 public:
     ~CommandRegistry() override;
 
-    void registerCommand(QString actionName,
+    void registerCommand(const QString& actionName,
                          AbstractCommandBuilder *builder) {
         addAction(actionName);
         m_builders[actionName] = builder;
