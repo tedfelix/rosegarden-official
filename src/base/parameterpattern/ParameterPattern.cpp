@@ -41,7 +41,7 @@ namespace Rosegarden
 
 // Get the selection we have.
 EventSelection *
-ParameterPattern::Result::getSelection()
+ParameterPattern::Result::getSelection() const
 {
     return m_situation->getEventSelection();
 }

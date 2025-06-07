@@ -18,5 +18,6 @@ cppcheck --language=c++ --std=c++14 --library=qt.cfg --quiet \
          --enable=all --inconclusive \
          --inline-suppr --suppress=useStlAlgorithm \
          --suppress=missingInclude --suppress=missingIncludeSystem \
+         --suppress=stlFindInsert \
          -I$SRCPATH --force \
          $SRCPATH

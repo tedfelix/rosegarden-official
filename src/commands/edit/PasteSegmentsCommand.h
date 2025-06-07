@@ -44,7 +44,7 @@ class PasteSegmentsCommand : public NamedCommand
 
 public:
     PasteSegmentsCommand(Composition *composition,
-                         Clipboard *clipboard,
+                         const Clipboard *clipboard,
                          timeT pasteTime,
                          TrackId baseTrack,
                          bool useExactTracks);

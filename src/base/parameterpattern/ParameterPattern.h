@@ -123,7 +123,7 @@ protected:
             m_parameters(1, soleParameter)
         {}
 
-        EventSelection *getSelection();
+        EventSelection *getSelection() const;
         //cppcheck-suppress functionConst
         void            modifySegment();
 
