@@ -47,7 +47,8 @@ public:
         m_fingering(fingering)
     { }
 
-    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+    static std::string getArgument(const QString& actionName,
+                                   CommandArgumentQuerier &);
 
     static void registerCommand(CommandRegistry *r);
 

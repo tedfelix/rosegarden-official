@@ -302,7 +302,7 @@ SelectAddEvenNotesCommand::
 findBeatEvents(EventSelection *eventSelection)
 {
     typedef EventContainer::iterator iterator;
-    EventContainer &segmentEvents = eventSelection->getSegmentEvents();
+    const EventContainer &segmentEvents = eventSelection->getSegmentEvents();
 
     /**
      * Get the first two note Events in selection.  If they don't

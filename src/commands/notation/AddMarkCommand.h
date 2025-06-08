@@ -45,7 +45,8 @@ public:
         m_mark(mark)
     { }
 
-    static Mark getArgument(QString actionName, CommandArgumentQuerier &);
+    static Mark getArgument(const QString& actionName,
+                            CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:
