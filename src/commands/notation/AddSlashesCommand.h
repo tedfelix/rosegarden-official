@@ -43,7 +43,7 @@ public:
         m_number(number)
     { }
 
-    static int getArgument(QString actionName, CommandArgumentQuerier &);
+    static int getArgument(const QString& actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:
@@ -53,7 +53,7 @@ private:
     // only used on 1st execute (cf bruteForceRedo)
     EventSelection *m_selection;
     int m_number;
-};    
+};
 
 
 }

@@ -39,8 +39,8 @@ class ProgressBar : public QProgressBar
 public:
     explicit ProgressBar(QWidget *parent = nullptr);
 
-    ProgressBar(int totalSteps,
-                QWidget *parent = nullptr);
+    explicit ProgressBar(int totalSteps,
+                         QWidget *parent = nullptr);
 
 public slots:
     void WTF(int);

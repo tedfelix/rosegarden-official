@@ -351,7 +351,7 @@ InterpretCommand::applyHairpins()
 void
 InterpretCommand::stressBeats()
 {
-    Composition *c = getSegment().getComposition();
+    const Composition *c = getSegment().getComposition();
 
     for (EventContainer::iterator itr =
                 m_selection->getSegmentEvents().begin();
@@ -609,7 +609,7 @@ InterpretCommand::articulate()
 
 InterpretCommand::IndicationMap::iterator
 
-InterpretCommand::findEnclosingIndication(Event *e,
+InterpretCommand::findEnclosingIndication(const Event *e,
                                           const std::string& type)
 {
     // a bit slow, but let's wait and see whether it's a bottleneck
