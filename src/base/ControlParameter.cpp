@@ -181,7 +181,7 @@ getExpression()
     static const ControlParameter
         expression(
                   "Expression", Rosegarden::Controller::EventType,
-                  "<none>", 0, 127, 100, MidiByte(11), 2, -1);
+                  "<none>", 0, 127, 127, MidiByte(11), 2, -1);
     return expression;
 }
 
@@ -192,7 +192,7 @@ getChannelPressure()
     static const ControlParameter
         channelPressure(
                         "Channel Pressure", Rosegarden::ChannelPressure::EventType,
-                        "<none>", 0, 127, 100, MidiByte(1), 2, -1);
+                        "<none>", 0, 127, 0, MidiByte(1), 2, -1);
     return channelPressure;
 }
 
@@ -203,8 +203,9 @@ getKeyPressure()
     static const ControlParameter
         keyPressure(
                     "Key Pressure", Rosegarden::KeyPressure::EventType,
-                        "<none>", 0, 127, 100, MidiByte(1), 2, -1);
+                        "<none>", 0, 127, 0, MidiByte(1), 2, -1);
     return keyPressure;
 }
+
 
 }
