@@ -34,6 +34,10 @@ public:
     Command() : m_updateLinks(true) { }
     virtual ~Command() { }
 
+    // commands should not be copied
+    Command(const Command&) = delete;
+    Command& operator=(const Command&) = delete;
+
     virtual void execute() = 0;
     virtual void unexecute() = 0;
     virtual QString getName() const = 0;

@@ -212,7 +212,6 @@ std::string XmlExportable::encode(const std::string &s0)
                     << mblen << " octet"
                     << (mblen != 1 ? "s" : "")
                     << ", expected " << length << ")";
-                warned = true;
             }
             // and drop the character
         }

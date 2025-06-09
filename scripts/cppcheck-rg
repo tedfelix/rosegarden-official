@@ -8,11 +8,20 @@
 # We can add "-j `nproc`" and this will run *really* fast, however the
 # unusedFunction check is not supported with -j so I've left it out.
 
+SRC=$1
+
+if [ -z "$SRC" ]
+then
+    SRC=src
+fi
+
+SRCPATH=`realpath $SRC`
+
 cppcheck --language=c++ --std=c++14 --library=qt.cfg --quiet \
          --enable=all --inconclusive \
          --inline-suppr --suppress=useStlAlgorithm \
          --suppress=missingInclude --suppress=missingIncludeSystem \
-         -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_LIBSNDFILE -DHAVE_LILV -DHAVE_GTK2 \
-         -DHAVE_LIRC \
-         src
+         --suppress=stlFindInsert \
+         -I$SRCPATH --force \
+         $SRCPATH
 

@@ -166,6 +166,7 @@ ClefLinkInsertionCommand::getThisGlobalName(const Clef *clef)
 }
 
 QString
+// cppcheck-suppress duplInheritedMember
 ClefLinkInsertionCommand::getGlobalName(const Clef */* clef */)
 {
     return tr("Add Cl&ef Change for linked segment...");

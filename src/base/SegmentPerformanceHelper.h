@@ -111,7 +111,9 @@ private:
      * Returns the sounding time in t and the sounding duration in d.
      * Returns false on error.
      */
-    bool getGraceNoteTimeAndDuration(Segment::iterator i, timeT &t, timeT &d);
+    bool getGraceNoteTimeAndDuration(Segment::iterator eventIter,
+                                     timeT &t,
+                                     timeT &d);
 };
 
 

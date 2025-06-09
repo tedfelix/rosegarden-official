@@ -147,11 +147,6 @@ EventQuantizeCommand::modifySegment()
     // Kick the event loop.
     qApp->processEvents();
 
-    const timeT endTime = segment.getEndTime();
-
-    if (segment.getEndTime() < endTime)
-        segment.setEndTime(endTime);
-
     if (m_progressTotal > 0) {
         if (rebeam || makeViable || decounterpoint) {
             if (m_progressDialog)

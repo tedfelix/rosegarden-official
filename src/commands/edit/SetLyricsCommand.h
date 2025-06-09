@@ -39,9 +39,9 @@ class SetLyricsCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetLyricsCommand)
 
 public:
-    SetLyricsCommand(Segment *segment, int verse, QString newLyricData);
+    SetLyricsCommand(Segment *segment, int verse, const QString& newLyricData);
     ~SetLyricsCommand() override;
-    
+
     static QString getGlobalName() { return tr("Edit L&yrics"); }
 
     void execute() override;

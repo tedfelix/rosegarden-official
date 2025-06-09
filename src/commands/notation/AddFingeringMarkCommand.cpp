@@ -72,7 +72,7 @@ AddFingeringMarkCommand::getActionName(const std::string& fingering)
 }
 
 std::string
-AddFingeringMarkCommand::getArgument(QString actionName,
+AddFingeringMarkCommand::getArgument(const QString& actionName,
                                      CommandArgumentQuerier &querier)
 {
     QString pfx = "add_fingering_";

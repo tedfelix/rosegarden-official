@@ -279,12 +279,12 @@ namespace
 {
     // Find the next Event of "type".
     EventContainer::iterator
-    findEventOfType(EventContainer &c,
+    findEventOfType(const EventContainer &c,
                     EventContainer::iterator i,
                     const std::string &type)
     {
         for (; i != c.end(); ++i) {
-            Event *e = *i;
+            const Event *e = *i;
             if (e->isa(type)) { return i; }
         }
         return i;
@@ -302,7 +302,7 @@ SelectAddEvenNotesCommand::
 findBeatEvents(EventSelection *eventSelection)
 {
     typedef EventContainer::iterator iterator;
-    EventContainer &segmentEvents = eventSelection->getSegmentEvents();
+    const EventContainer &segmentEvents = eventSelection->getSegmentEvents();
 
     /**
      * Get the first two note Events in selection.  If they don't
@@ -397,7 +397,7 @@ SelectAddEvenNotesCommand::getSubsequentSelection()
     for (BeatEventVector::iterator i = m_beatEventVector.begin();
          i != m_beatEventVector.end();
          ++i) {
-        BeatEvent &beatEvent = *i;
+        const BeatEvent &beatEvent = *i;
         // Skip ties
         selection->addEvent(beatEvent.m_event, false);
     }

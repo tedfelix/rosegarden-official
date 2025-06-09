@@ -37,7 +37,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 PasteEventsCommand::PasteEventsCommand(Segment &segment,
-                                       Clipboard *clipboard,
+                                       const Clipboard *clipboard,
                                        timeT pasteTime,
                                        PasteType pasteType) :
     BasicCommand(getGlobalName(), segment, pasteTime,
@@ -65,7 +65,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
 }
 
 PasteEventsCommand::PasteEventsCommand(const QString& marking,
-                                       Clipboard *clipboard,
+                                       const Clipboard *clipboard,
                                        timeT pasteTime,
                                        PasteType pasteType) :
     BasicCommand(getGlobalName(), pasteTime, marking),
@@ -92,7 +92,7 @@ PasteEventsCommand::PasteEventsCommand(const QString& marking,
 }
 
 PasteEventsCommand::PasteEventsCommand(Segment &segment,
-                                       Clipboard *clipboard,
+                                       const Clipboard *clipboard,
                                        timeT pasteTime,
                                        timeT pasteEndTime,
                                        PasteType pasteType) :
@@ -132,7 +132,7 @@ PasteEventsCommand::getPasteTypes()
 
 timeT
 PasteEventsCommand::getEffectiveEndTime(Segment &segment,
-                                        Clipboard *clipboard,
+                                        const Clipboard *clipboard,
                                         timeT pasteTime) const
 {
     if (!clipboard->isSingleSegment()) {
@@ -280,8 +280,8 @@ PasteEventsCommand::modifySegment()
     case Restricted: {
             // removeRests() changes the duration destructively but the
             // variable "duration" is used by normalizeRests()
-            timeT d = duration;
-            if (!helper.removeRests(pasteTime, d)) {
+            timeT dur = duration;
+            if (!helper.removeRests(pasteTime, dur)) {
                 return;
             }
             break;

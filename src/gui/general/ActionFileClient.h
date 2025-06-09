@@ -75,7 +75,7 @@ protected:
         QAction *action = makeAction(actionName);
         if (!action) return nullptr;
         QObject::connect(action, &QAction::triggered,
-                         (ReceiverType*)this, slot);
+                         static_cast<ReceiverType*>(this), slot);
         return action;
     }
 

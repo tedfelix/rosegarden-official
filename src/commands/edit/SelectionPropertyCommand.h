@@ -36,7 +36,7 @@ class SelectionPropertyCommand : public BasicCommand
 
 public:
     // cppcheck-suppress noConstructor
-    explicit SelectionPropertyCommand(ParameterPattern::Result result);
+    explicit SelectionPropertyCommand(const ParameterPattern::Result& result);
 
     void modifySegment() override;
 

@@ -105,7 +105,7 @@ AddMarkCommand::getActionName(const Mark& mark)
 }
 
 Mark
-AddMarkCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+AddMarkCommand::getArgument(const QString& actionName, CommandArgumentQuerier &)
 {
     QString pfx = "add_";
     if (actionName.startsWith(pfx)) {

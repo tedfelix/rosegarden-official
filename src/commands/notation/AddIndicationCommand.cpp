@@ -224,12 +224,12 @@ AddIndicationCommand::modifySegment()
     m_lastInsertedEvent = e;
 
     if (indication.isOttavaType()) {
-        for (Segment::iterator i = getSegment().findTime(getStartTime());
-             i != getSegment().findTime(getStartTime() + m_indicationDuration);
-             ++i) {
-            if ((*i)->isa(Note::EventType)) {
-                (*i)->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT,
-                                    indication.getOttavaShift());
+        for (Segment::iterator i1 = getSegment().findTime(getStartTime());
+             i1 != getSegment().findTime(getStartTime() + m_indicationDuration);
+             ++i1) {
+            if ((*i1)->isa(Note::EventType)) {
+                (*i1)->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT,
+                                     indication.getOttavaShift());
             }
         }
     }

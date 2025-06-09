@@ -34,7 +34,7 @@ namespace Rosegarden
 
 MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument *doc,
         timeT time,
-        Key key,
+        const Key& key,
         bool shouldConvert,
         bool shouldTranspose,
         bool shouldTransposeKey,
@@ -47,7 +47,7 @@ MultiKeyInsertionCommand::MultiKeyInsertionCommand(RosegardenDocument *doc,
     for (Composition::iterator i = c.begin(); i != c.end(); ++i) {
         Segment *segment = *i;
 
-	Instrument *instrument = s.getInstrumentFor(segment);
+	const Instrument *instrument = s.getInstrumentFor(segment);
 	// if (instrument) {
 	//    RG_DEBUG <<
 	//                "PERC DEBUG: instrument->isPercussion " << instrument->isPercussion() <<

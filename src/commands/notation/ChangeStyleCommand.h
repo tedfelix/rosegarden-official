@@ -39,14 +39,15 @@ class ChangeStyleCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ChangeStyleCommand)
 
 public:
-    ChangeStyleCommand(NoteStyleName style,
+    ChangeStyleCommand(const NoteStyleName& style,
                        EventSelection &selection) :
         BasicCommand(getGlobalName(style), selection, true),
         m_selection(&selection),
         m_style(style)
     { }
 
-    static NoteStyleName getArgument(QString actionName, CommandArgumentQuerier &);
+    static NoteStyleName getArgument(const QString& actionName,
+                                     CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

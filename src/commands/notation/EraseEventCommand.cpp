@@ -135,12 +135,12 @@ EraseEventCommand::modifySegment()
             Indication indication(*m_event);
             if (indication.isOttavaType()) {
 
-                for (Segment::iterator i = getSegment().findTime
-                                           (m_event->getAbsoluteTime());
-                        i != getSegment().findTime
+                for (Segment::iterator i1 = getSegment().findTime
+                         (m_event->getAbsoluteTime());
+                        i1 != getSegment().findTime
                         (m_event->getAbsoluteTime() + indication.getIndicationDuration());
-                        ++i) {
-                    (*i)->unset(NotationProperties::OTTAVA_SHIFT);
+                        ++i1) {
+                    (*i1)->unset(NotationProperties::OTTAVA_SHIFT);
                 }
             }
         } catch (...) {}

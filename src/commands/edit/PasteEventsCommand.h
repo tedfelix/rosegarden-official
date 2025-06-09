@@ -59,7 +59,7 @@ public:
      * the events to be pasted.
      */
     PasteEventsCommand(Segment &segment,
-                       Clipboard *clipboard,
+                       const Clipboard *clipboard,
                        timeT pasteTime,
                        PasteType pasteType);
 
@@ -68,7 +68,7 @@ public:
      * the events to be pasted. Identify the segment by marking
      */
     PasteEventsCommand(const QString& marking,
-                       Clipboard *clipboard,
+                       const Clipboard *clipboard,
                        timeT pasteTime,
                        PasteType pasteType);
 
@@ -81,11 +81,11 @@ public:
      * latest time in the destination segment that may be modified
      * by the paste.
      */
-    PasteEventsCommand(Segment &segment,
-                       Clipboard *clipboard,
-                       timeT pasteTime,
-                       timeT pasteEndTime,
-                       PasteType pasteType);
+  PasteEventsCommand(Segment &segment,
+                     const Clipboard *clipboard,
+                     timeT pasteTime,
+                     timeT pasteEndTime,
+                     PasteType pasteType);
 
     ~PasteEventsCommand() override;
 
@@ -99,7 +99,7 @@ public:
 protected:
     void modifySegment() override;
     timeT getEffectiveEndTime(Segment &,
-                              Clipboard *,
+                              const Clipboard *,
                               timeT) const;
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
