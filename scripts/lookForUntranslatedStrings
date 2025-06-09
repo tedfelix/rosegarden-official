@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# See ts-untrans for a python version of this.
+
 if (scalar @ARGV != 1) {
     print "\n";
     print "Show untranslated, but finished, strings in a .ts file.\n";
