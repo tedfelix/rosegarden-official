@@ -35,12 +35,12 @@ SetNoteTypeCommand::modifySegment()
     EventVec toErase;
     EventVec toInsert;
 
-    EventContainer::iterator i;
     timeT endTime = getEndTime();
     SegmentNotationHelper segmentNotationHelper(m_selection->getSegment());
 
-    for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+    for (EventContainer::iterator i = m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end();
+         ++i) {
 
         if ((*i)->isa(Note::EventType)) {
             toErase.push_back(*i);
