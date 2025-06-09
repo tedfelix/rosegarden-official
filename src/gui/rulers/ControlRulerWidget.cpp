@@ -24,6 +24,7 @@
 #include "ControlRulerTabBar.h"
 #include "ControllerEventsRuler.h"
 #include "PropertyControlRuler.h"
+#include "KeyPressureRuler.h"
 
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
@@ -203,6 +204,12 @@ ControlRulerWidget::launchRulers()
         } else if (ruler.type == PitchBend::EventType) {
             RG_DEBUG << "launchInitialRulers(): Launching pitchbend ruler";
             addControlRuler(ControlParameter::getPitchBend());
+        } else if (ruler.type == ChannelPressure::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching channelpressure ruler";
+            addControlRuler(ControlParameter::getChannelPressure());
+        } else if (ruler.type == KeyPressure::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching keypressure ruler";
+            addControlRuler(ControlParameter::getKeyPressure());
         } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
             RG_DEBUG << "launchInitialRulers(): Launching velocity ruler";
             addPropertyRuler(static_cast<PropertyName>(ruler.type));
@@ -266,46 +273,9 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
     addPropertyRuler(propertyName);
 }
 
-namespace
-{
-    bool hasPitchBend(Segment *segment)
-    {
-        RosegardenDocument *document = RosegardenDocument::currentDocument;
-
-        Track *track =
-                document->getComposition().getTrackById(segment->getTrack());
-
-        Instrument *instrument = document->getStudio().
-            getInstrumentById(track->getInstrument());
-
-        if (!instrument)
-            return false;
-
-        const Controllable *controllable = instrument->getDevice()->getControllable();
-
-        if (!controllable)
-            return false;
-
-        // Check whether the device has a pitchbend controller
-        // ??? Why not use
-        //     Controllable::getControlParameter(type, controllerNumber)?
-        for (const ControlParameter &cp : controllable->getControlParameters()) {
-            if (cp.getType() == PitchBend::EventType)
-                return true;
-        }
-
-        return false;
-    }
-}
-
 void
 ControlRulerWidget::togglePitchBendRuler()
 {
-    // No pitch bend?  Bail.
-    // ??? Rude.  We should gray the menu item instead of this.
-    if (!hasPitchBend(&(m_viewSegment->getSegment())))
-        return;
-
     // Check whether we already have a pitchbend ruler
 
     // For each ruler...
@@ -329,6 +299,61 @@ ControlRulerWidget::togglePitchBendRuler()
     // We don't already have a pitchbend ruler, make one now.
     addControlRuler(ControlParameter::getPitchBend());
 }
+
+void
+ControlRulerWidget::toggleChannelPressureRuler()
+{
+    // Check whether we already have a channel pressure ruler
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(ruler);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler, remove it.
+        if (eventRuler->getControlParameter()->getType() ==
+            ChannelPressure::EventType)
+        {
+            removeRuler(ruler);
+            return;
+        }
+    }
+
+    // We don't already have a ruler, make one now.
+    addControlRuler(ControlParameter::getChannelPressure());
+}
+
+void
+ControlRulerWidget::toggleKeyPressureRuler()
+{
+    // Check whether we already have a key pressure ruler
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(ruler);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler, remove it.
+        if (eventRuler->getControlParameter()->getType() ==
+            KeyPressure::EventType)
+        {
+            removeRuler(ruler);
+            return;
+        }
+    }
+
+    // We don't already have a ruler, make one now.
+    addControlRuler(ControlParameter::getKeyPressure());
+}
+
 
 namespace
 {
@@ -437,8 +462,18 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     if (!m_viewSegment)
         return;
 
-    ControlRuler *controlRuler = new ControllerEventsRuler(
-            m_viewSegment, m_scale, this, &controlParameter);
+    ControlRuler* controlRuler;
+    if (controlParameter == ControlParameter::getKeyPressure()) {
+        KeyPressureRuler* keyPressureRuler =
+            new KeyPressureRuler
+            (m_viewSegment, m_scale, this, &controlParameter);
+        keyPressureRuler->setElementSelection(m_selectedElements);
+        controlRuler = keyPressureRuler;
+    } else {
+        controlRuler =
+            new ControllerEventsRuler
+            (m_viewSegment, m_scale, this, &controlParameter);
+    }
 
     controlRuler->setXOffset(m_leftMargin);
 
@@ -546,11 +581,13 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
             ViewElementList::iterator viewElementIter =
                     m_viewSegment->findEvent(event);
             // Add it to m_selectedElements.
-            m_selectedElements.push_back(*viewElementIter);
+            if (viewElementIter != m_viewSegment->getViewElementList()->end())
+                m_selectedElements.push_back(*viewElementIter);
         }
     }
 
     // Send new selection to all PropertyControlRulers.  IOW the velocity ruler.
+    // Also the KeyPressureRuler needs the element selection
     // For each ruler...
     for (ControlRuler *ruler : m_controlRulerList) {
         PropertyControlRuler *propertyRuler =
@@ -558,7 +595,14 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
         // Is this the velocity ruler?  Then pass on the selection.
         if (propertyRuler)
             propertyRuler->updateSelection(m_selectedElements);
+
+        KeyPressureRuler *keyPressureRuler =
+            dynamic_cast<KeyPressureRuler *>(ruler);
+        if (keyPressureRuler)
+            keyPressureRuler->setElementSelection(m_selectedElements);
     }
+
+    //
 }
 
 void

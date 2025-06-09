@@ -89,6 +89,9 @@ public:
 
     virtual void reconfigure();
 
+    void setActive(bool active);
+    bool active() const;
+
 protected:
 
     //--------------- Data members ---------------------------------
@@ -106,6 +109,8 @@ protected:
 
     ControlRuler* m_controlRuler;
     Event* m_event;
+
+    bool m_active;
 
     static const unsigned int BorderThickness;
     static const unsigned int DefaultWidth;

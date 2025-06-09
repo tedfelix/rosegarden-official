@@ -94,14 +94,15 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 
         // Add them if they're within the rectangle
         for (ControlItemMap::iterator it = itmin; it != itmax; ++it) {
-            if (pRectF->contains(it->second->boundingRect().center())) {
+            if (pRectF->contains(it->second->boundingRect().center()) &&
+                (*it).second->active()) {
                 m_addedItems.push_back(it->second);
                 it->second->setSelected(true);
             }
         }
 
     }
-    
+
     return ControlMover::handleMouseMove(e);
 }
 
@@ -128,4 +129,3 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
 QString ControlSelector::ToolName() { return "selector"; }
 
 }
-

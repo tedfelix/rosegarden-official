@@ -1666,6 +1666,18 @@ NotationWidget::slotTogglePitchbendRuler()
 }
 
 void
+NotationWidget::slotToggleKeyPressureRuler()
+{
+    m_controlRulerWidget->toggleKeyPressureRuler();
+}
+
+void
+NotationWidget::slotToggleChannelPressureRuler()
+{
+    m_controlRulerWidget->toggleChannelPressureRuler();
+}
+
+void
 NotationWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();

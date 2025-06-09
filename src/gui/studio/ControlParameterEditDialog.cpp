@@ -174,10 +174,8 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     // populate combos
     m_typeCombo->addItem(strtoqstr(Controller::EventType));
     m_typeCombo->addItem(strtoqstr(PitchBend::EventType));
-    /*
     m_typeCombo->addItem(strtoqstr(KeyPressure::EventType));
     m_typeCombo->addItem(strtoqstr(ChannelPressure::EventType));
-    */
 
     // Populate colour combo
     //
@@ -209,12 +207,10 @@ ControlParameterEditDialog::ControlParameterEditDialog(
         m_typeCombo->setCurrentIndex(0);
     else if (m_control->getType() == PitchBend::EventType)
         m_typeCombo->setCurrentIndex(1);
-    /*
     else if (m_control->getType() == KeyPressure::EventType)
         m_typeCombo->setCurrentIndex(2);
     else if (m_control->getType() == ChannelPressure::EventType)
         m_typeCombo->setCurrentIndex(3);
-        */
 
     populate();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

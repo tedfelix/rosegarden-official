@@ -202,6 +202,8 @@ public slots:
 
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
+    void slotToggleKeyPressureRuler();
+    void slotToggleChannelPressureRuler();
     void slotAddControlRuler(QAction*);
 
     void slotRegenerateHeaders();

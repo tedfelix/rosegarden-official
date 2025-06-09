@@ -384,6 +384,7 @@ set(rg_CPPS
   gui/rulers/ControlItem.cpp
   gui/rulers/DefaultVelocityColour.cpp
   gui/rulers/ControllerEventsRuler.cpp
+  gui/rulers/KeyPressureRuler.cpp
   gui/rulers/ControlRulerEventEraseCommand.cpp
   gui/rulers/TextRuler.cpp
   gui/rulers/PropertyControlRuler.cpp

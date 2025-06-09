@@ -1050,6 +1050,18 @@ MatrixWidget::showPitchBendRuler()
 }
 
 void
+MatrixWidget::showChannelPressureRuler()
+{
+    m_controlsWidget->toggleChannelPressureRuler();
+}
+
+void
+MatrixWidget::showKeyPressureRuler()
+{
+    m_controlsWidget->toggleKeyPressureRuler();
+}
+
+void
 MatrixWidget::addControlRuler(QAction *action)
 {
     QString name = action->text();

@@ -1025,6 +1025,8 @@ NotationView::setupActions()
 
     createAction("toggle_velocity_ruler", &NotationView::slotToggleVelocityRuler);
     createAction("toggle_pitchbend_ruler", &NotationView::slotTogglePitchbendRuler);
+    createAction("toggle_keypressure_ruler", &NotationView::slotToggleKeyPressureRuler);
+    createAction("toggle_channelpressure_ruler", &NotationView::slotToggleChannelPressureRuler);
     createAction("add_control_ruler", "");
 
     createAction("cycle_slashes", &NotationView::slotCycleSlashes);
@@ -4769,6 +4771,20 @@ void
 NotationView::slotTogglePitchbendRuler()
 {
     m_notationWidget->slotTogglePitchbendRuler();
+    slotUpdateMenuStates();
+}
+
+void
+NotationView::slotToggleKeyPressureRuler()
+{
+    m_notationWidget->slotToggleKeyPressureRuler();
+    slotUpdateMenuStates();
+}
+
+void
+NotationView::slotToggleChannelPressureRuler()
+{
+    m_notationWidget->slotToggleChannelPressureRuler();
     slotUpdateMenuStates();
 }
 

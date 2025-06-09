@@ -170,6 +170,109 @@ ControllerEventsRuler::init()
     update();
 }
 
+void ControllerEventsRuler::drawItems
+(QPainter& painter, QPen& pen, QBrush& brush)
+{
+    // Use a fast vector list to record selected items that are currently visible so that they
+    // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
+    ControlItemVector selectedVector;
+
+    bool activeColours = true; // pen and brush initialy with active setting
+    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
+        //RG_DEBUG << "drawItems item active" << (*it)->active();
+        if (!(*it)->isSelected()) {
+            if ((*it)->active()) {
+                if (!activeColours) {
+                    pen.setColor(GUIPalette::getColour
+                                 (GUIPalette::MatrixElementBorder));
+                    brush.setColor(GUIPalette::getColour
+                                   (GUIPalette::ControlItem));
+                    painter.setBrush(brush);
+                    painter.setPen(pen);
+                    activeColours = true;
+                }
+            } else {
+                if (activeColours) {
+                    pen.setColor(GUIPalette::getColour
+                                 (GUIPalette::MatrixElementLightBorder));
+                    brush.setColor(Qt::white);
+                    painter.setBrush(brush);
+                    painter.setPen(pen);
+                    activeColours = false;
+                }
+            }
+            painter.drawPolygon(mapItemToWidget(*it));
+        } else {
+            selectedVector.push_back(*it);
+        }
+    }
+
+    brush.setColor(GUIPalette::getColour
+                   (GUIPalette::ControlItem));
+    painter.setBrush(brush);
+
+    pen.setColor(GUIPalette::getColour(GUIPalette::SelectedElement));
+    pen.setWidthF(2.0);
+    painter.setPen(pen);
+    QFontMetrics fontMetrics(painter.font());
+    int fontHeight = fontMetrics.height();
+    int fontOffset = fontMetrics.boundingRect('+').width();
+
+    for (ControlItemVector::iterator it = selectedVector.begin();
+         it != selectedVector.end();
+         ++it)
+    {
+        // Draw the marker
+        painter.drawPolygon(mapItemToWidget(*it));
+
+        // For selected items, draw the value in text alongside the marker
+        // By preference, this should sit on top of the new line that represents this value change
+
+        // Any controller that has a default of 64 is presumed to be or behave
+        // like pan, and display a working range of -64 to 64, centered on 0,
+        // rather than the usual 0 to 127.  Note, the == 64 is hard coded
+        // elsewhere, so one more won't hurt.  Fixes #1451.
+        int offsetFactor = (m_controller->getDefault() == 64 ? 64 : 0);
+        QString str = QString::number(yToValue((*it)->y()) - offsetFactor);
+        int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
+        int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
+
+        painter.setPen(QPen(Qt::NoPen));
+        painter.setBrush(QBrush(Qt::white));
+        painter.drawRect(QRect(x,y+2,fontMetrics.boundingRect(str).width(),
+                               -(fontMetrics.height()-2)));
+        painter.setPen(pen);
+        painter.setBrush(brush);
+        painter.drawText(x,y,str);
+    }
+}
+
+void ControllerEventsRuler::drawSelectionRect
+(QPainter& painter, QPen& pen, QBrush& brush)
+{
+    if (m_selectionRect) {
+        pen.setColor(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
+        pen.setWidthF(0.5);
+        painter.setPen(pen);
+        brush.setStyle(Qt::NoBrush);
+        painter.setBrush(brush);
+        painter.drawRect(mapRectToWidget(m_selectionRect));
+    }
+}
+
+void ControllerEventsRuler::drawRubberBand(QPainter& painter)
+{
+    // draw the rubber band indicating where a line of controllers will go
+    if (m_rubberBand && m_rubberBandVisible) {
+        int x1 = mapXToWidget(m_rubberBand->x1());
+        int y1 = mapYToWidget(m_rubberBand->y1());
+        int x2 = mapXToWidget(m_rubberBand->x2());
+        int y2 = mapYToWidget(m_rubberBand->y2());
+        painter.setPen(Qt::red);
+        painter.drawLine(x1, y1, x2, y2);
+    }
+}
+
 void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 {
     ControlRuler::paintEvent(event);
@@ -197,8 +300,6 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     painter.setBrush(brush);
     painter.setPen(pen);
-
-    QString str;
 
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
@@ -231,71 +332,9 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
             mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
             mapYToWidget(lastY));
 
-    // Use a fast vector list to record selected items that are currently visible so that they
-    // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
-    ControlItemVector selectedVector;
-
-    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
-        if (!(*it)->isSelected()) {
-            painter.drawPolygon(mapItemToWidget(*it));
-        } else {
-            selectedVector.push_back(*it);
-        }
-    }
-
-    pen.setColor(GUIPalette::getColour(GUIPalette::SelectedElement));
-    pen.setWidthF(2.0);
-    painter.setPen(pen);
-    QFontMetrics fontMetrics(painter.font());
-    int fontHeight = fontMetrics.height();
-    int fontOffset = fontMetrics.boundingRect('+').width();
-
-    for (ControlItemVector::iterator it = selectedVector.begin();
-         it != selectedVector.end();
-         ++it)
-    {
-        // Draw the marker
-        painter.drawPolygon(mapItemToWidget(*it));
-
-        // For selected items, draw the value in text alongside the marker
-        // By preference, this should sit on top of the new line that represents this value change
-
-        // Any controller that has a default of 64 is presumed to be or behave
-        // like pan, and display a working range of -64 to 64, centered on 0,
-        // rather than the usual 0 to 127.  Note, the == 64 is hard coded
-        // elsewhere, so one more won't hurt.  Fixes #1451.
-        int offsetFactor = (m_controller->getDefault() == 64 ? 64 : 0);
-        str = QString::number(yToValue((*it)->y()) - offsetFactor);
-        int x = mapXToWidget((*it)->xStart())+0.4*fontOffset;
-        int y = std::max(mapYToWidget((*it)->y())-0.2f*fontHeight,float(fontHeight));
-
-        painter.setPen(QPen(Qt::NoPen));
-        painter.setBrush(QBrush(Qt::white));
-        painter.drawRect(QRect(x,y+2,fontMetrics.boundingRect(str).width(),
-                               -(fontMetrics.height()-2)));
-        painter.setPen(pen);
-        painter.setBrush(brush);
-        painter.drawText(x,y,str);
-    }
-
-    if (m_selectionRect) {
-        pen.setColor(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
-        pen.setWidthF(0.5);
-        painter.setPen(pen);
-        brush.setStyle(Qt::NoBrush);
-        painter.setBrush(brush);
-        painter.drawRect(mapRectToWidget(m_selectionRect));
-    }
-
-    // draw the rubber band indicating where a line of controllers will go
-    if (m_rubberBand && m_rubberBandVisible) {
-        int x1 = mapXToWidget(m_rubberBand->x1());
-        int y1 = mapYToWidget(m_rubberBand->y1());
-        int x2 = mapXToWidget(m_rubberBand->x2());
-        int y2 = mapYToWidget(m_rubberBand->y2());
-        painter.setPen(Qt::red);
-        painter.drawLine(x1, y1, x2, y2);
-    }
+    drawItems(painter, pen, brush);
+    drawSelectionRect(painter, pen, brush);
+    drawRubberBand(painter);
 }
 
 QString ControllerEventsRuler::getName()
@@ -456,8 +495,11 @@ ControllerEventsRuler::addControlLine(
             Event *e = *i;
 
             // If this is a relevant event, add it to the selection.
-            if (m_controller->matches(e))
+            if (m_controller->matches(e)) {
+                RG_DEBUG << "addControlLine event to delete" <<
+                    e->getAbsoluteTime();
                 selection->addEvent(e, false);
+            }
         }
 
         // If there is something in the selection, add the EraseCommand.
@@ -492,7 +534,7 @@ ControllerEventsRuler::addControlLine(
         // Add an Event to the MacroCommand
         macro->addCommand(new EventInsertionCommand(
                 *m_segment,
-                m_controller->newEvent(time2, value)));
+                getNewEvent(time2, value)));
 
     }
 
@@ -500,7 +542,8 @@ ControllerEventsRuler::addControlLine(
 
     // How else to re-initialize and bring things into view?  I'm missing
     // something, but this works...
-    init();
+    // init destroys the active flag information - do we need it ?
+    //init();
 
 }
 
@@ -559,8 +602,16 @@ bool ControllerEventsRuler::allowSimultaneousEvents()
     return false;
 }
 
+void ControllerEventsRuler::getLimits(float& xmin, float& xmax)
+{
+    // no limit
+    xmin = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
+    xmax = m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale;
+}
+
 Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
+    RG_DEBUG << "insertEvent" << x << y << m_controller->getType();
     timeT insertTime = m_rulerScale->getTimeForX(x/m_xScale);
 
     Event* controllerEvent = new Event(m_controller->getType(), insertTime);
@@ -609,6 +660,17 @@ Event *ControllerEventsRuler::insertEvent(float x, float y)
         controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
         controllerEvent->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
+    else if (m_controller->getType() == Rosegarden::ChannelPressure::EventType)
+    {
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE, initialValue);
+    }
+    else if (m_controller->getType() == Rosegarden::KeyPressure::EventType)
+    {
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
+                                              initialValue);
+        controllerEvent->set<Rosegarden::Int>(Rosegarden::KeyPressure::PITCH,
+                                              getPitch());
+    }
 
     m_moddingSegment = true;
     m_segment->insert(controllerEvent);
@@ -639,5 +701,9 @@ void ControllerEventsRuler::eraseControllerEvent()
     updateSelection();
 }
 
+Event* ControllerEventsRuler::getNewEvent(timeT time, long value) const
+{
+    return m_controller->newEvent(time, value);
+}
 
 }

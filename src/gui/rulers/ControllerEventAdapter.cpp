@@ -48,6 +48,22 @@ bool ControllerEventAdapter::getValue(long& val)
         val = value;
         return true;
     }
+    else if (m_event->getType() == Rosegarden::ChannelPressure::EventType)
+    {
+        long value;
+        m_event->get<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE,
+                                      value);
+        val = value;
+        return true;
+    }
+    else if (m_event->getType() == Rosegarden::KeyPressure::EventType)
+    {
+        long value;
+        m_event->get<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
+                                      value);
+        val = value;
+        return true;
+    }
     else if (m_event->getType() == Note::EventType)
     {
         return m_event->get<Int>(BaseProperties::VELOCITY, val);
@@ -73,13 +89,23 @@ void ControllerEventAdapter::setValue(long val)
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::MSB, msb);
         m_event->set<Rosegarden::Int>(Rosegarden::PitchBend::LSB, lsb);
     }
+    else if (m_event->getType() == Rosegarden::ChannelPressure::EventType)
+    {
+        m_event->set<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE,
+                                      val);
+    }
+    else if (m_event->getType() == Rosegarden::KeyPressure::EventType)
+    {
+        m_event->set<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
+                                      val);
+    }
     else if (m_event->getType() == Rosegarden::Note::EventType)
     {
         if (val > 127) { val = 127; }
         else if (val < 0) { val = 0; }
         m_event->set<Int>(BaseProperties::VELOCITY, val);
     }
-    
+
 }
 
 timeT ControllerEventAdapter::getTime()

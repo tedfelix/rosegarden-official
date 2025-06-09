@@ -440,6 +440,8 @@ MatrixView::setupActions()
 
     createAction("toggle_velocity_ruler", &MatrixView::slotToggleVelocityRuler);
     createAction("toggle_pitchbend_ruler", &MatrixView::slotTogglePitchbendRuler);
+    createAction("toggle_keypressure_ruler", &MatrixView::slotToggleKeyPressureRuler);
+    createAction("toggle_channelpressure_ruler", &MatrixView::slotToggleChannelPressureRuler);
     createAction("add_control_ruler", "");
 
     createAction("add_tempo_change", &MatrixView::slotAddTempo);
@@ -605,6 +607,40 @@ MatrixView::setupActions()
             createAction(actionName, &MatrixView::slotSetSnapFromAction);
         }
     }
+
+    // check ruler availability
+    // enbale the ruler if any segment uses a device with that control
+    bool pitchBendEnabled = false;
+    bool channelPressureEnabled = false;
+    bool keyPressureEnabled = false;
+    for(const Segment* segment : m_segments) {
+        Track *track =
+            m_document->getComposition().getTrackById(segment->getTrack());
+
+        Instrument *instrument = m_document->getStudio().
+            getInstrumentById(track->getInstrument());
+
+        if (instrument) {
+            const Controllable *controllable =
+                instrument->getDevice()->getControllable();
+
+            if (controllable) {
+
+                for (const ControlParameter &cp :
+                         controllable->getControlParameters()) {
+                    if (cp.getType() == PitchBend::EventType)
+                        pitchBendEnabled = true;
+                    if (cp.getType() == ChannelPressure::EventType)
+                        channelPressureEnabled = true;
+                    if (cp.getType() == KeyPressure::EventType)
+                        keyPressureEnabled = true;
+                }
+            }
+        }
+    }
+    findAction("toggle_pitchbend_ruler")->setEnabled(pitchBendEnabled);
+    findAction("toggle_keypressure_ruler")->setEnabled(keyPressureEnabled);
+    findAction("toggle_channelpressure_ruler")->setEnabled(channelPressureEnabled);
 }
 
 
@@ -735,6 +771,8 @@ MatrixView::initRulersToolbar()
     // set the "ruler n" tool button to pop up its menu instantly
     QToolButton *tb = dynamic_cast<QToolButton *>(findToolbar("Rulers Toolbar")->widgetForAction(findAction("add_control_ruler")));
     tb->setPopupMode(QToolButton::InstantPopup);
+
+
 }
 
 void
@@ -1434,6 +1472,20 @@ void
 MatrixView::slotTogglePitchbendRuler()
 {
     m_matrixWidget->showPitchBendRuler();
+    slotUpdateMenuStates();
+}
+
+void
+MatrixView::slotToggleKeyPressureRuler()
+{
+    m_matrixWidget->showKeyPressureRuler();
+    slotUpdateMenuStates();
+}
+
+void
+MatrixView::slotToggleChannelPressureRuler()
+{
+    m_matrixWidget->showChannelPressureRuler();
     slotUpdateMenuStates();
 }
 
