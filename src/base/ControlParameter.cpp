@@ -132,8 +132,7 @@ ControlParameter::toXmlString() const
 // Return a new event setting our controller to VALUE at TIME
 // @author Tom Breton (Tehom)
 Event *
-ControlParameter::
-newEvent(timeT time, int value) const
+ControlParameter::newEvent(timeT time, int value) const
 {
     Event *event = new Event (getType(), time);
     ControllerEventAdapter(event).setValue(value);
@@ -147,8 +146,7 @@ newEvent(timeT time, int value) const
 // Return whether "e" is this type of controller / pitchbend.
 // @author Tom Breton (Tehom)
 bool
-ControlParameter::
-matches(Event *e) const
+ControlParameter::matches(Event *e) const
 {
     return
         e->isa(m_type) &&
@@ -163,47 +161,71 @@ matches(Event *e) const
 // expression rather than getting a ControlParameter from a ruler or
 // device.  This can't be just a static member of ControlParameter, in
 // order to prevent the "static initialization order fiasco".
-const ControlParameter&
-ControlParameter::
-getPitchBend()
+const ControlParameter &
+ControlParameter::getPitchBend()
 {
-    static const ControlParameter
-        pitchBend(
-                  "PitchBend", Rosegarden::PitchBend::EventType, "<none>",
-                  0, 16383, 8192, MidiByte(1), 4, -1);
+    static const ControlParameter pitchBend(
+            "PitchBend",  // name
+            Rosegarden::PitchBend::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            16383,  // max
+            8192,  // def
+            MidiByte(1),  // controllerNumber  ??? ignored?
+            4,  // colour
+            -1);  // ipbPosition
+
     return pitchBend;
 }
 
-const ControlParameter&
-ControlParameter::
-getExpression()
+const ControlParameter &
+ControlParameter::getExpression()
 {
-    static const ControlParameter
-        expression(
-                  "Expression", Rosegarden::Controller::EventType,
-                  "<none>", 0, 127, 127, MidiByte(11), 2, -1);
+    static const ControlParameter expression(
+            "Expression",  // name
+            Rosegarden::Controller::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            127,  // max
+            127,  // def
+            MidiByte(11),  // controllerNumber
+            2,  // colour
+            -1);  // ipbPosition
+
     return expression;
 }
 
-const ControlParameter&
-ControlParameter::
-getChannelPressure()
+const ControlParameter &
+ControlParameter::getChannelPressure()
 {
-    static const ControlParameter
-        channelPressure(
-                        "Channel Pressure", Rosegarden::ChannelPressure::EventType,
-                        "<none>", 0, 127, 0, MidiByte(1), 2, -1);
+    static const ControlParameter channelPressure(
+            "Channel Pressure",  // name
+            Rosegarden::ChannelPressure::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            127,  // max
+            0,  // def
+            MidiByte(1),  // controllerNumber  ??? ignored?
+            2,  // colour
+            -1);  // ipbPosition
+
     return channelPressure;
 }
 
-const ControlParameter&
-ControlParameter::
-getKeyPressure()
+const ControlParameter &
+ControlParameter::getKeyPressure()
 {
-    static const ControlParameter
-        keyPressure(
-                    "Key Pressure", Rosegarden::KeyPressure::EventType,
-                        "<none>", 0, 127, 0, MidiByte(1), 2, -1);
+    static const ControlParameter keyPressure(
+            "Key Pressure",  // name
+            Rosegarden::KeyPressure::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            127,  // max
+            0,  // def
+            MidiByte(1),  // controllerNumber  ??? ignored?
+            2,  // colour
+            -1);  // ipbPosition
+
     return keyPressure;
 }
 
