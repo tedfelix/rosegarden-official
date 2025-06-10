@@ -76,7 +76,7 @@ public:
   Tuning(const std::string& name,
          std::shared_ptr<const IntervalList> intervals,
          std::shared_ptr<SpellingList> spellings);
-  explicit Tuning(const Tuning *tuning);
+  //explicit Tuning(const Tuning *tuning);
 
   /**
    * \brief Access the vector of tunings known to the system
