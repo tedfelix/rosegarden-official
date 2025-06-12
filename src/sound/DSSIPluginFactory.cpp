@@ -202,8 +202,10 @@ DSSIPluginFactory::getDSSIDescriptor(QString identifier)
     QString type, soname, label, arch;
     PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
+    // Not already loaded?
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
         loadLibrary(soname);
+        // Load not successful?
         if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
             std::cerr << "WARNING: DSSIPluginFactory::getDSSIDescriptor: loadLibrary failed for " << soname << std::endl;
             return nullptr;
@@ -212,10 +214,11 @@ DSSIPluginFactory::getDSSIDescriptor(QString identifier)
 
     void *libraryHandle = m_libraryHandles[soname];
 
-    DSSI_Descriptor_Function fn = (DSSI_Descriptor_Function)
-                                  dlsym(libraryHandle, "dssi_descriptor");
+    DSSI_Descriptor_Function dssi_descriptor =
+            reinterpret_cast<DSSI_Descriptor_Function>(
+                    dlsym(libraryHandle, "dssi_descriptor"));
 
-    if (!fn) {
+    if (!dssi_descriptor) {
         std::cerr << "WARNING: DSSIPluginFactory::getDSSIDescriptor: No descriptor function in library " << soname << std::endl;
         return nullptr;
     }
@@ -223,7 +226,7 @@ DSSIPluginFactory::getDSSIDescriptor(QString identifier)
     const DSSI_Descriptor *descriptor = nullptr;
 
     int index = 0;
-    while ((descriptor = fn(index))) {
+    while ((descriptor = dssi_descriptor(index))) {
         if (descriptor->LADSPA_Plugin->Label == label)
             return descriptor;
         ++index;
@@ -313,26 +316,27 @@ DSSIPluginFactory::discoverPlugin(const QString &soName)
     // we see before a plugin crashes or causes ASan to stop the run.
     std::cerr << "DSSIPluginFactory::discoverPlugin(): " << soName << std::endl;
 
-    void *libraryHandle = dlopen( qstrtostr(soName).c_str(), RTLD_LAZY);
+    void *libraryHandle = dlopen(qstrtostr(soName).c_str(), RTLD_LAZY);
 
     if (!libraryHandle) {
-        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin: couldn't dlopen "
-        << soName << " - " << dlerror() << std::endl;
-        return ;
+        std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin: couldn't dlopen " << soName << " - " << dlerror() << std::endl;
+        return;
     }
 
-    DSSI_Descriptor_Function fn = (DSSI_Descriptor_Function)
-                                  dlsym(libraryHandle, "dssi_descriptor");
+    DSSI_Descriptor_Function dssi_descriptor =
+            reinterpret_cast<DSSI_Descriptor_Function>(
+                    dlsym(libraryHandle, "dssi_descriptor"));
 
-    if (!fn) {
+    if (!dssi_descriptor) {
         std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin: No descriptor function in " << soName << std::endl;
-        return ;
+        dlclose(libraryHandle);
+        return;
     }
 
     const DSSI_Descriptor *descriptor = nullptr;
 
     int index = 0;
-    while ((descriptor = fn(index))) {
+    while ((descriptor = dssi_descriptor(index))) {
 
         const LADSPA_Descriptor * ladspaDescriptor = descriptor->LADSPA_Plugin;
         if (!ladspaDescriptor) {
@@ -400,7 +404,6 @@ DSSIPluginFactory::discoverPlugin(const QString &soName)
 
     if (dlclose(libraryHandle) != 0) {
         std::cerr << "WARNING: DSSIPluginFactory::discoverPlugin - can't unload " << libraryHandle << std::endl;
-        return ;
     }
 }
 
