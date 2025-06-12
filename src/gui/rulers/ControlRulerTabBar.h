@@ -19,14 +19,18 @@
 #define RG_CONTROLRULERTABBAR_H
 
 #include <QTabBar>
-#include <QString>
+
+class QString;
 
 
 namespace Rosegarden
 {
 
 
-/// Manages the tabs at the bottom of the control rulers.
+/// Adds close buttons to QTabBar.  Used by the control rulers.
+/**
+ * ??? rename: TabBar (this is a generic QTabBar with close buttons)
+ */
 class ControlRulerTabBar : public QTabBar
 {
     Q_OBJECT
@@ -36,7 +40,6 @@ public:
     virtual int addTab(const QString &text);
     void paintEvent(QPaintEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
-//    virtual void handleLeftButtonPress(const ControlMouseEvent *);
 
 signals:
     void tabCloseRequest(int);
@@ -50,8 +53,8 @@ protected:
     typedef std::vector<std::shared_ptr<QRect>> CloseButtonVector;
     CloseButtonVector m_closeButtons;
 
-    static const int hMargin = 5;
 };
+
 
 }
 

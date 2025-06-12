@@ -15,9 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlRulerTabBar]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ControlRulerTabBar.h"
 
-#include "misc/Debug.h"
+//#include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
 
 #include <QTabBar>
@@ -25,10 +28,13 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+
 namespace Rosegarden
 {
 
-ControlRulerTabBar::ControlRulerTabBar():QTabBar()
+
+ControlRulerTabBar::ControlRulerTabBar() :
+    QTabBar()
 {
     m_closeIcon = QPixmap(IconLoader::loadPixmap("tab-close"));
 }
@@ -39,7 +45,10 @@ void ControlRulerTabBar::paintEvent(QPaintEvent *event)
 
     QPainter painter(this);
 
-    for (CloseButtonVector::const_iterator it = m_closeButtons.begin(); it != m_closeButtons.end(); ++it) {
+    // For each close button, draw it.
+    for (CloseButtonVector::const_iterator it = m_closeButtons.begin();
+         it != m_closeButtons.end();
+         ++it) {
         painter.drawPixmap((*it)->topLeft(), m_closeIcon);
     }
 }
@@ -48,12 +57,16 @@ void ControlRulerTabBar::mousePressEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         int index = 0;
-        for (CloseButtonVector::const_iterator it = m_closeButtons.begin(); it != m_closeButtons.end(); ++it) {
+        // For each close button...
+        for (CloseButtonVector::const_iterator it = m_closeButtons.begin();
+             it != m_closeButtons.end();
+             ++it) {
+            // If this is the one the user clicked, emit.
             if ((*it)->contains(event->pos())) {
                 emit tabCloseRequest(index);
                 return;
             }
-            index++;
+            ++index;
         }
     }
 
@@ -65,10 +78,13 @@ void ControlRulerTabBar::tabLayoutChange()
     m_closeButtons.clear();
 
     QRect rect;
+    // For each tab...
     for (int index = 0; index < count(); ++index) {
         rect = tabRect(index);
+        constexpr int horizontalMargin = 5;
+        // Create a new button rect.
         std::shared_ptr<QRect> newButton(
-            new QRect(rect.right()-hMargin-m_closeIcon.width(),
+            new QRect(rect.right()-horizontalMargin-m_closeIcon.width(),
                       rect.top()+(rect.height()-m_closeIcon.height())/2,
                       m_closeIcon.width(),
                       m_closeIcon.height()));
@@ -79,7 +95,7 @@ void ControlRulerTabBar::tabLayoutChange()
 int ControlRulerTabBar::addTab(const QString &text)
 {
     // Append some white space to the tab name to make room
-    // for our close icon
+    // for our close icon.
     QString str = text;
     str.append("        ");
 
@@ -87,5 +103,6 @@ int ControlRulerTabBar::addTab(const QString &text)
 
     return newindex;
 }
+
 
 }
