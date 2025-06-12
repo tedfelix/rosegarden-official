@@ -21,9 +21,12 @@
 #include <QTabBar>
 #include <QString>
 
+
 namespace Rosegarden
 {
 
+
+/// Manages the tabs at the bottom of the control rulers.
 class ControlRulerTabBar : public QTabBar
 {
     Q_OBJECT
@@ -43,7 +46,10 @@ protected slots:
 protected:
     void tabLayoutChange() override;
     QPixmap m_closeIcon;
-    std::vector <QRect*> m_closeButtons;
+
+    typedef std::vector<std::shared_ptr<QRect>> CloseButtonVector;
+    CloseButtonVector m_closeButtons;
+
     static const int hMargin = 5;
 };
 

@@ -48,12 +48,13 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
     m_highlightPitch(-1),
     m_lastHighlightPitch( -1)
 {
-    m_font = new QFont();
+    m_font.reset(new QFont);
     m_font->setPixelSize(9);
-    m_fontMetrics = new QFontMetrics(*m_font);
+    m_fontMetrics.reset(new QFontMetrics(*m_font));
+
     //: Note to the translators: Don't translate literally.
     //: This string is never displayed but defines the largest width of the
-    //: text (pitch and intrument name) in the percussion ruler.
+    //: text (pitch and instrument name) in the percussion ruler.
     m_width =
         m_fontMetrics->boundingRect(tr("  A#2   Acoustic Bass Drum  ")).width();
 

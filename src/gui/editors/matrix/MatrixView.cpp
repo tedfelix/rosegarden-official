@@ -463,7 +463,7 @@ MatrixView::setupActions()
     createAction("jog_left", &MatrixView::slotJogLeft);
     createAction("jog_right", &MatrixView::slotJogRight);
 
-    QMenu *addControlRulerMenu = new QMenu;
+    QMenu *addControlRulerMenu = new QMenu(this);
     Controllable *c =
         dynamic_cast<MidiDevice *>(getCurrentDevice());
     if (!c) {

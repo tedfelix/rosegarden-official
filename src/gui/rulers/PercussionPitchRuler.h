@@ -24,7 +24,6 @@
 #include <QSharedPointer>
 #include <QSize>
 
-
 class QWidget;
 class QPaintEvent;
 class QMouseEvent;
@@ -32,9 +31,12 @@ class QFontMetrics;
 class QFont;
 class QEvent;
 
+#include <memory>
+
 
 namespace Rosegarden
 {
+
 
 class MidiKeyMapping;
 
@@ -81,8 +83,8 @@ protected:
     int                       m_highlightPitch;
     int                       m_lastHighlightPitch;
 
-    QFont                    *m_font;
-    QFontMetrics             *m_fontMetrics;
+    std::unique_ptr<QFont> m_font;
+    std::unique_ptr<QFontMetrics> m_fontMetrics;
 };
 
 
