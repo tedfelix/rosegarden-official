@@ -154,6 +154,8 @@ private:
     /// 64ths field.
     QSpinBox *m_fractionSpin;
 
+    void updateMeasureBeat64();
+
     /// Time sig field that appears after 64ths (4/4 time).
     QLabel *m_timeSig;
 

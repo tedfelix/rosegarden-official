@@ -335,6 +335,7 @@ TimeWidget2::updateWidgets()
             }
         }
 
+#if 0
         // Measures
 
         // The bar/beat etc timings are considered to be times of a note
@@ -379,11 +380,9 @@ TimeWidget2::updateWidgets()
                 timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
         m_fractionSpin->blockSignals(false);
+#endif
 
-        // Time Signature
-        m_timeSig->setText(tr("(%1/%2 time)")
-			   .arg(timeSig.getNumerator())
-                           .arg(timeSig.getDenominator()));
+        updateMeasureBeat64();
 
         // Seconds
 
@@ -421,6 +420,11 @@ TimeWidget2::updateWidgets()
 
         // Tempo
 
+        // ??? Tempo is a special field that never changes.  We just need
+        //     to do this on init and leave it alone.  Same might be said for
+        //     the m_timeSig field.  Might be able to just update that once
+        //     at init.
+
         // Does the tempo change over the duration?  If so we'll include
         // the qualifier "starting".
         const bool change =
@@ -430,6 +434,8 @@ TimeWidget2::updateWidgets()
         if (change)
             starting = tr("starting") + " ";  // As in "starting bpm".
 
+        const TimeSignature timeSig =
+                m_composition->getTimeSignatureAt(m_startTime);
         const double tempo = m_composition->getTempoQpm(
                 m_composition->getTempoAtTime(m_startTime));
         QString qpm = QString::number(tempo, 'f', 2);
@@ -598,6 +604,68 @@ TimeWidget2::slotResetToDefault()
     setTime(m_defaultTime);
 }
 
+void TimeWidget2::updateMeasureBeat64()
+{
+    // Duration mode.
+    if (m_isDuration) {
+
+        // Measures
+
+        // The bar/beat etc timings are considered to be times of a note
+        // starting at the start of a bar, in the time signature in effect
+        // at m_startTime.
+
+        int bars;
+        int beats;
+        int hemidemis;
+        int remainder;
+        m_composition->getMusicalTimeForDuration(
+                m_startTime, m_time, bars, beats, hemidemis, remainder);
+        // ??? Should we cache this when we init m_timeSig and m_tempo?
+        const TimeSignature timeSig =
+                m_composition->getTimeSignatureAt(m_startTime);
+
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_measureSpin->blockSignals(true);
+        m_measureSpin->setMinimum(0);
+        m_measureSpin->setMaximum(9999);
+        m_measureSpin->setValue(bars);
+        m_measureSpin->blockSignals(false);
+
+        // Beats
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_beatSpin->blockSignals(true);
+        m_beatSpin->setMinimum(0);
+        m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
+        m_beatSpin->setValue(beats);
+        m_beatSpin->blockSignals(false);
+
+        // 64ths
+        // Have to block since QSpinBox::valueChanged() fires on
+        // programmatic changes as well as user changes.
+        m_fractionSpin->blockSignals(true);
+        m_fractionSpin->setMinimum(0);
+        m_fractionSpin->setMaximum(
+                timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
+        m_fractionSpin->setValue(hemidemis);
+        m_fractionSpin->blockSignals(false);
+
+        // Time Signature
+        // ??? m_timeSig is a special field that never changes.  We just need
+        //     to do this on init and leave it alone.
+        m_timeSig->setText(tr("(%1/%2 time)").
+                arg(timeSig.getNumerator()).
+                arg(timeSig.getDenominator()));
+
+    } else {  // Absolute time mode
+        // Convert m_time to bar/beat/fraction.
+
+        // Update the widgets.
+    }
+}
+
 void
 TimeWidget2::slotNoteChanged(int n)
 {
@@ -608,19 +676,20 @@ TimeWidget2::slotNoteChanged(int n)
         return;
 
     // Update the other fields.
-    const timeT ticks = m_noteDurations[n];
-    updateMeasureBeat64(ticks);
-    updateSecondsMsec(ticks);
-    updateTicks(ticks);
+    m_time = m_noteDurations[n];
+    updateMeasureBeat64();
+    updateSecondsMsec();
+    updateTicks();
     updateLimitWarning();
 }
 
 void
 TimeWidget2::slotTicksChanged(int ticks)
 {
-    updateMeasureBeat64(ticks);
-    updateNote(ticks);
-    updateSecondsMsec(ticks);
+    m_time = ticks;
+    updateMeasureBeat64();
+    updateNote();
+    updateSecondsMsec();
     updateLimitWarning();
 }
 
