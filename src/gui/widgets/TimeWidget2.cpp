@@ -15,10 +15,10 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[TimeWidget]"
+#define RG_MODULE_STRING "[TimeWidget2]"
 #define RG_NO_DEBUG_PRINT
 
-#include "TimeWidget.h"
+#include "TimeWidget2.h"
 
 #include "misc/Debug.h"
 #include "base/Composition.h"
@@ -47,11 +47,11 @@ namespace
 }
 
 
-TimeWidget::TimeWidget(const QString &title,
-                       QWidget *parent,
-                       Composition *composition,
-                       timeT initialTime,
-                       bool constrainToCompositionDuration) :
+TimeWidget2::TimeWidget2(const QString &title,
+                         QWidget *parent,
+                         Composition *composition,
+                         timeT initialTime,
+                         bool constrainToCompositionDuration) :
     QGroupBox(title, parent),
     m_composition(composition),
     m_isDuration(false),
@@ -67,13 +67,13 @@ TimeWidget::TimeWidget(const QString &title,
     init();
 }
 
-TimeWidget::TimeWidget(const QString &title,
-                       QWidget *parent,
-                       Composition *composition,
-                       timeT startTime,
-                       timeT initialDuration,
-                       timeT minimumDuration,
-                       bool constrainToCompositionDuration) :
+TimeWidget2::TimeWidget2(const QString &title,
+                         QWidget *parent,
+                         Composition *composition,
+                         timeT startTime,
+                         timeT initialDuration,
+                         timeT minimumDuration,
+                         bool constrainToCompositionDuration) :
     QGroupBox(title, parent),
     m_composition(composition),
     m_isDuration(true),
@@ -90,7 +90,7 @@ TimeWidget::TimeWidget(const QString &title,
 }
 
 void
-TimeWidget::init()
+TimeWidget2::init()
 {
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
@@ -148,7 +148,7 @@ TimeWidget::init()
 
         connect(m_noteCombo,
                     static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-                this, &TimeWidget::slotNoteChanged);
+                this, &TimeWidget2::slotNoteChanged);
         layout->addWidget(m_noteCombo, row, 1, 1, 3);
 
         // Ticks
@@ -159,7 +159,7 @@ TimeWidget::init()
         m_ticksSpin = new QSpinBox(this);
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTicksChanged);
+                this, &TimeWidget2::slotTicksChanged);
         layout->addWidget(m_ticksSpin, row, 5);
 
         ++row;
@@ -182,7 +182,7 @@ TimeWidget::init()
     if (m_isDuration)
         m_measureSpin->setMinimum(0);
     connect(m_measureSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotMeasureBeatOrFractionChanged);
+            this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_measureSpin, row, 1);
 
     // Beat/Beats
@@ -193,7 +193,7 @@ TimeWidget::init()
     m_beatSpin = new QSpinBox(this);
     m_beatSpin->setMinimum(1);
     connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotMeasureBeatOrFractionChanged);
+            this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_beatSpin, row, 3);
 
     // 64ths
@@ -207,7 +207,7 @@ TimeWidget::init()
     m_fractionSpin = new QSpinBox(this);
     m_fractionSpin->setMinimum(1);
     connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotMeasureBeatOrFractionChanged);
+            this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_fractionSpin, row, 5);
 
     // Time Signature (e.g. 4/4 time)
@@ -225,7 +225,7 @@ TimeWidget::init()
     if (m_isDuration)
         m_secondsSpin->setMinimum(0);
     connect(m_secondsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotSecondsOrMSecChanged);
+            this, &TimeWidget2::slotSecondsOrMSecChanged);
     layout->addWidget(m_secondsSpin, row, 1);
 
     // msec
@@ -237,7 +237,7 @@ TimeWidget::init()
     m_msecSpin->setMinimum(0);
     m_msecSpin->setSingleStep(10);
     connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget::slotMSecChanged);
+            this, &TimeWidget2::slotMSecChanged);
     layout->addWidget(m_msecSpin, row, 3);
 
     if (m_isDuration) {
@@ -259,7 +259,7 @@ TimeWidget::init()
         m_ticksSpin = new QSpinBox(this);
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-                this, &TimeWidget::slotTicksChanged);
+                this, &TimeWidget2::slotTicksChanged);
         layout->addWidget(m_ticksSpin, row, 1);
         layout->addWidget(new QLabel(tr("ticks"), this), row, 2);
 
@@ -272,7 +272,7 @@ TimeWidget::init()
 }
 
 void
-TimeWidget::updateWidgets()
+TimeWidget2::updateWidgets()
 {
     // Update all widgets from m_time and m_startTime.
 
@@ -597,7 +597,7 @@ TimeWidget::updateWidgets()
 }
 
 int
-TimeWidget::getRoundedMSec(RealTime rt)
+TimeWidget2::getRoundedMSec(RealTime rt)
 {
     double msecDouble = rt.usec() / 1000.0;
     // ??? I think lround() is the same as this.  Check how it
@@ -608,7 +608,7 @@ TimeWidget::getRoundedMSec(RealTime rt)
 }
 
 void
-TimeWidget::setTime(timeT t)
+TimeWidget2::setTime(timeT t)
 {
     if (m_isDuration  &&  t < m_minimumDuration)
         t = m_minimumDuration;
@@ -619,7 +619,7 @@ TimeWidget::setTime(timeT t)
 }
 
 void
-TimeWidget::setRealTime(RealTime realTime)
+TimeWidget2::setRealTime(RealTime realTime)
 {
     if (m_isDuration) {
         const RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
@@ -636,13 +636,13 @@ TimeWidget::setRealTime(RealTime realTime)
 }
 
 void
-TimeWidget::slotResetToDefault()
+TimeWidget2::slotResetToDefault()
 {
     setTime(m_defaultTime);
 }
 
 void
-TimeWidget::slotNoteChanged(int n)
+TimeWidget2::slotNoteChanged(int n)
 {
     // 0 is <inexact>.  Nothing we can do with that.
     if (n <= 0)
@@ -654,7 +654,7 @@ TimeWidget::slotNoteChanged(int n)
 }
 
 void
-TimeWidget::slotTicksChanged(int t)
+TimeWidget2::slotTicksChanged(int t)
 {
     RG_DEBUG << "slotTicksChanged(): t is " << t << ", value is " << m_ticksSpin->value();
 
@@ -669,18 +669,18 @@ TimeWidget::slotTicksChanged(int t)
     // ??? Isn't there a flag we can pass that will do that.  Yes.
     //     Qt::UniqueConnection
     disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotTicksUpdate);
+               this, &TimeWidget2::slotTicksUpdate);
     // Since we are in the middle of a change to Ticks, we want to
     // be informed if the user tabs out of the field.
     connect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
-            this, &TimeWidget::slotTicksUpdate);
+            this, &TimeWidget2::slotTicksUpdate);
 
     // No need to monitor the user tabbing out of the msec field.  The
     // Ticks field is in play now.
     // This prevents an update if the user clicks on the msec field then
     // tabs out of it without making any changes.
     disconnect(m_msecSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotMSecUpdate);
+               this, &TimeWidget2::slotMSecUpdate);
 
     // Delay Update Timer.
     //   - Connect it to slotTicksUpdate().
@@ -696,13 +696,13 @@ TimeWidget::slotTicksChanged(int t)
 
     // Connect the timer to slotTicksUpdate().
     connect(m_delayUpdateTimer, &QTimer::timeout,
-            this, &TimeWidget::slotTicksUpdate);
+            this, &TimeWidget2::slotTicksUpdate);
 
     m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
-TimeWidget::slotTicksUpdate()
+TimeWidget2::slotTicksUpdate()
 {
     // Either the user has tabbed out of the Ticks field, or the
     // delayed update timer has gone off.  Update the rest of the fields
@@ -717,7 +717,7 @@ TimeWidget::slotTicksUpdate()
 }
 
 void
-TimeWidget::slotMeasureBeatOrFractionChanged(int)
+TimeWidget2::slotMeasureBeatOrFractionChanged(int)
 {
     const int bar = m_measureSpin->value();
     const int beat = m_beatSpin->value();
@@ -733,14 +733,14 @@ TimeWidget::slotMeasureBeatOrFractionChanged(int)
 }
 
 void
-TimeWidget::slotSecondsOrMSecChanged(int)
+TimeWidget2::slotSecondsOrMSecChanged(int)
 {
     // Update the rest of the fields based on the Seconds and msec fields.
     setRealTime(RealTime(m_secondsSpin->value(), m_msecSpin->value() * 1000000));
 }
 
 void
-TimeWidget::slotMSecChanged(int)
+TimeWidget2::slotMSecChanged(int)
 {
     // The msec field has changed.  Either from the user typing into it
     // or from the up/down arrows on the spin box.
@@ -753,18 +753,18 @@ TimeWidget::slotMSecChanged(int)
     // ??? Isn't there a flag we can pass that will do that.  Yes.
     //     Qt::UniqueConnection
     disconnect(m_msecSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotMSecUpdate);
+               this, &TimeWidget2::slotMSecUpdate);
     // Since we are in the middle of a change to msec, we want to
     // be informed if the user tabs out of the field.
     connect(m_msecSpin, &QAbstractSpinBox::editingFinished,
-            this, &TimeWidget::slotMSecUpdate);
+            this, &TimeWidget2::slotMSecUpdate);
 
     // No need to monitor the user tabbing out of the Ticks field.  The
     // msec field is in play now.
     // This prevents an update if the user clicks on the Ticks field then
     // tabs out of it without making any changes.
     disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget::slotTicksUpdate);
+               this, &TimeWidget2::slotTicksUpdate);
 
     // Delay Update Timer.
     //   - Connect it to slotMSecUpdate().
@@ -780,13 +780,13 @@ TimeWidget::slotMSecChanged(int)
 
     // Connect the timer to slotMSecUpdate().
     connect(m_delayUpdateTimer, &QTimer::timeout,
-            this, &TimeWidget::slotMSecUpdate);
+            this, &TimeWidget2::slotMSecUpdate);
 
     m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
-TimeWidget::slotMSecUpdate()
+TimeWidget2::slotMSecUpdate()
 {
     // Either the user has tabbed out of the msec field, or the
     // delayed update timer has gone off.  Update the rest of the fields

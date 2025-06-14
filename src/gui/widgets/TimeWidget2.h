@@ -15,8 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_TIMEWIDGET_H
-#define RG_TIMEWIDGET_H
+#ifndef RG_TIMEWIDGET2_H
+#define RG_TIMEWIDGET2_H
 
 #include "base/RealTime.h"
 #include "base/TimeT.h"
@@ -45,9 +45,9 @@ class Composition;
  * This can be seen by double-clicking on a note (in notation or the matrix)
  * and then clicking the "Edit" button next to the absolute time or duration
  * fields.  That will launch the TimeDialog which consists mainly of a
- * TimeWidget.
+ * TimeWidget2.
  */
-class TimeWidget : public QGroupBox
+class TimeWidget2 : public QGroupBox
 {
     Q_OBJECT
 
@@ -62,11 +62,11 @@ public:
      * via TimeDialog for more test cases.
      * RosegardenMainWindow::slotSetSegmentStartTimes() looks like another.
      */
-    TimeWidget(const QString &title,
-               QWidget *parent,
-               Composition *composition, // for bar/beat/msec
-               timeT initialTime,
-               bool constrainToCompositionDuration);
+    TimeWidget2(const QString &title,
+                QWidget *parent,
+                Composition *composition, // for bar/beat/msec
+                timeT initialTime,
+                bool constrainToCompositionDuration);
 
     /// Constructor for duration mode.
     /**
@@ -80,13 +80,13 @@ public:
      * test case for that.  TimeDialog's clients might do the same.  Might
      * want to trace them back as well for more test cases.
      */
-    TimeWidget(const QString &title,
-               QWidget *parent,
-               Composition *composition, // for bar/beat/msec
-               timeT startTime,
-               timeT initialDuration,
-               timeT minimumDuration,
-               bool constrainToCompositionDuration);
+    TimeWidget2(const QString &title,
+                QWidget *parent,
+                Composition *composition, // for bar/beat/msec
+                timeT startTime,
+                timeT initialDuration,
+                timeT minimumDuration,
+                bool constrainToCompositionDuration);
 
     void setTime(timeT);
     /// Get the time in MIDI ticks.
