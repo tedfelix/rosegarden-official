@@ -186,7 +186,7 @@ private:
      *     This will be difficult with the msec field since its limit would
      *     need to depend on the Seconds field being 0.
      */
-    QTimer *m_delayUpdateTimer;
+    //QTimer *m_delayUpdateTimer;
 
     /// Init code shared by the two ctors.
     void init();

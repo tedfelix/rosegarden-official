@@ -160,6 +160,9 @@ TimeWidget2::init()
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
+        // ??? What abouyt QAbstractSpinBox::editingFinished()?  I suspect we
+        //     need this to properly handle typing in the field and tabbing
+        //     away.  Need to check this for all fields.
         layout->addWidget(m_ticksSpin, row, 5);
 
         ++row;
@@ -266,15 +269,14 @@ TimeWidget2::init()
     }
 
     updateWidgets();
-
-    m_delayUpdateTimer = new QTimer(this);
-    m_delayUpdateTimer->setSingleShot(true);
 }
 
 void
 TimeWidget2::updateWidgets()
 {
     // Update all widgets from m_time and m_startTime.
+
+    // ??? Split this big if into two routines?
 
     // Duration mode.
     if (m_isDuration) {
@@ -313,11 +315,7 @@ TimeWidget2::updateWidgets()
         //     - RMW::slotSetSegmentDurations()
         //     - TriggerSegmentManager::slotAdd()
         m_ticksSpin->setMinimum(0);
-
-        if (m_constrainToCompositionDuration)
-            m_ticksSpin->setMaximum(m_composition->getEndMarker() - m_startTime);
-        else
-            m_ticksSpin->setMaximum(INT_MAX);
+        m_ticksSpin->setMaximum(INT_MAX);
 
         m_ticksSpin->setValue(m_time);
 
@@ -357,13 +355,7 @@ TimeWidget2::updateWidgets()
         m_measureSpin->blockSignals(true);
 
         m_measureSpin->setMinimum(0);
-
-        if (m_constrainToCompositionDuration)
-            m_measureSpin->setMaximum(
-                    m_composition->getBarNumber(m_composition->getEndMarker()) -
-                    m_composition->getBarNumber(m_startTime));
-        else
-            m_measureSpin->setMaximum(9999);
+        m_measureSpin->setMaximum(9999);
 
         m_measureSpin->setValue(bars);
 
@@ -408,19 +400,12 @@ TimeWidget2::updateWidgets()
         // programmatic changes as well as user changes.
         m_secondsSpin->blockSignals(true);
         m_secondsSpin->setMinimum(0);
-        if (m_constrainToCompositionDuration) {
-            m_secondsSpin->setMaximum(m_composition->getRealTimeDifference(
-                    m_startTime, m_composition->getEndMarker()).sec);
-        } else {
-            m_secondsSpin->setMaximum(9999);
-        }
+        // ??? This will be a problem for ticks since it can't go this high.
+        m_secondsSpin->setMaximum(INT_MAX);
         m_secondsSpin->setValue(realTime.sec);
         m_secondsSpin->blockSignals(false);
 
         // msec
-
-        // ??? This should take into account m_minimumDuration.  But it would
-        //     need to coordinate with m_secondsSpin.
 
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
@@ -492,19 +477,9 @@ TimeWidget2::updateWidgets()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_measureSpin->blockSignals(true);
-
-        // ??? This is actually a no-op as is the setMaximum() call.  This
-        //     field is value limited elsewhere.  We could just leave it wide
-        //     open and it will fix itself.
         m_measureSpin->setMinimum(INT_MIN);
-        if (m_constrainToCompositionDuration) {
-            m_measureSpin->setMaximum(m_composition->getBarNumber(
-                    m_composition->getEndMarker()));
-        } else {
-            m_measureSpin->setMaximum(9999);
-        }
+        m_measureSpin->setMaximum(INT_MAX);
         m_measureSpin->setValue(bar + 1);
-
         m_measureSpin->blockSignals(false);
 
         // Beat
@@ -542,12 +517,8 @@ TimeWidget2::updateWidgets()
         // programmatic changes as well as user changes.
         m_secondsSpin->blockSignals(true);
         m_secondsSpin->setMinimum(INT_MIN);
-        if (m_constrainToCompositionDuration) {
-            m_secondsSpin->setMaximum(m_composition->getElapsedRealTime(
-                    m_composition->getEndMarker()).sec);
-        } else {
-            m_secondsSpin->setMaximum(9999);
-        }
+        // ??? This will be a problem for ticks since it can't go this high.
+        m_secondsSpin->setMaximum(INT_MAX);
         m_secondsSpin->setValue(realTime.sec);
         m_secondsSpin->blockSignals(false);
 
@@ -557,16 +528,10 @@ TimeWidget2::updateWidgets()
         // programmatic changes as well as user changes.
         m_msecSpin->blockSignals(true);
 
-        if (m_time >= 0)
-        {
-            m_msecSpin->setMinimum(0);
-            m_msecSpin->setMaximum(999);
-        }
-        else
-        {
-            m_msecSpin->setMinimum(-999);
-            m_msecSpin->setMaximum(0);
-        }
+        // ??? We need special handling for negative secs.  We'll
+        //     need to subtract this number instead of adding.
+        m_msecSpin->setMinimum(0);
+        m_msecSpin->setMaximum(999);
 
         // Round value instead of direct read from rt.nsec.
         // Causes cycle of rounding between msec and Time
@@ -579,17 +544,9 @@ TimeWidget2::updateWidgets()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_ticksSpin->blockSignals(true);
-
-        if (m_constrainToCompositionDuration) {
-            m_ticksSpin->setMinimum(m_composition->getStartMarker());
-            m_ticksSpin->setMaximum(m_composition->getEndMarker() - 1);
-        } else {
-            m_ticksSpin->setMinimum(INT_MIN);
-            m_ticksSpin->setMaximum(INT_MAX);
-        }
-
+        m_ticksSpin->setMinimum(INT_MIN);
+        m_ticksSpin->setMaximum(INT_MAX);
         m_ticksSpin->setValue(m_time);
-
         m_ticksSpin->blockSignals(false);
 
     }
@@ -650,70 +607,21 @@ TimeWidget2::slotNoteChanged(int n)
     if (n >= (int)m_noteDurations.size())
         return;
 
-    setTime(m_noteDurations[n]);
+    // Update the other fields.
+    const timeT ticks = m_noteDurations[n];
+    updateMeasureBeat64(ticks);
+    updateSecondsMsec(ticks);
+    updateTicks(ticks);
+    updateLimitWarning();
 }
 
 void
-TimeWidget2::slotTicksChanged(int t)
+TimeWidget2::slotTicksChanged(int ticks)
 {
-    RG_DEBUG << "slotTicksChanged(): t is " << t << ", value is " << m_ticksSpin->value();
-
-    // The Ticks field has changed.  Either from the user typing into it
-    // or from the up/down arrows on the spin box.
-
-    // No timer?  Bail.
-    if (!m_delayUpdateTimer)
-        return;
-
-    // Avoid duplicate connections.
-    // ??? Isn't there a flag we can pass that will do that.  Yes.
-    //     Qt::UniqueConnection
-    disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget2::slotTicksUpdate);
-    // Since we are in the middle of a change to Ticks, we want to
-    // be informed if the user tabs out of the field.
-    connect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
-            this, &TimeWidget2::slotTicksUpdate);
-
-    // No need to monitor the user tabbing out of the msec field.  The
-    // Ticks field is in play now.
-    // This prevents an update if the user clicks on the msec field then
-    // tabs out of it without making any changes.
-    disconnect(m_msecSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget2::slotMSecUpdate);
-
-    // Delay Update Timer.
-    //   - Connect it to slotTicksUpdate().
-    //   - Restart it.
-
-    // Stop the timer since we are going to restart it for the new connection.
-    // ??? Necessary?
-    m_delayUpdateTimer->stop();
-
-    // Disconnect the timer from everything to avoid duplicate connections
-    // and to make sure we will only be connected to slotTicksUpdate().
-    m_delayUpdateTimer->disconnect();
-
-    // Connect the timer to slotTicksUpdate().
-    connect(m_delayUpdateTimer, &QTimer::timeout,
-            this, &TimeWidget2::slotTicksUpdate);
-
-    m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
-}
-
-void
-TimeWidget2::slotTicksUpdate()
-{
-    // Either the user has tabbed out of the Ticks field, or the
-    // delayed update timer has gone off.  Update the rest of the fields
-    // based on the Ticks field.
-
-    // May have fired already, but stop it in case called when widget lost
-    // focus.
-    m_delayUpdateTimer->stop();
-
-    // Perform an immediate update.
-    setTime(m_ticksSpin->value());
+    updateMeasureBeat64(ticks);
+    updateNote(ticks);
+    updateSecondsMsec(ticks);
+    updateLimitWarning();
 }
 
 void
@@ -745,10 +653,6 @@ TimeWidget2::slotMSecChanged(int)
     // The msec field has changed.  Either from the user typing into it
     // or from the up/down arrows on the spin box.
 
-    // No timer?  Bail.
-    if (!m_delayUpdateTimer)
-        return;
-
     // Avoid duplicate connections.
     // ??? Isn't there a flag we can pass that will do that.  Yes.
     //     Qt::UniqueConnection
@@ -766,23 +670,6 @@ TimeWidget2::slotMSecChanged(int)
     disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
                this, &TimeWidget2::slotTicksUpdate);
 
-    // Delay Update Timer.
-    //   - Connect it to slotMSecUpdate().
-    //   - Restart it.
-
-    // Stop the timer since we are going to restart it for the new connection.
-    // ??? Necessary?
-    m_delayUpdateTimer->stop();
-
-    // Disconnect the timer from everything to avoid duplicate connections
-    // and to make sure we will only be connected to slotMSecUpdate().
-    m_delayUpdateTimer->disconnect();
-
-    // Connect the timer to slotMSecUpdate().
-    connect(m_delayUpdateTimer, &QTimer::timeout,
-            this, &TimeWidget2::slotMSecUpdate);
-
-    m_delayUpdateTimer->start(UPDATE_DELAY_TIME);
 }
 
 void
@@ -791,10 +678,6 @@ TimeWidget2::slotMSecUpdate()
     // Either the user has tabbed out of the msec field, or the
     // delayed update timer has gone off.  Update the rest of the fields
     // based on the Seconds and msec fields.
-
-    // May have fired already, but stop it in case called when widget lost
-    // focus.
-    m_delayUpdateTimer->stop();
 
     // Perform an immediate update.  Arg is ignored.
     slotSecondsOrMSecChanged(0);
