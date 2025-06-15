@@ -141,9 +141,14 @@ private:
     /// Note field for duration mode.
     QComboBox *m_noteCombo;
     std::vector<timeT> m_noteDurations;
+    /// Update the note widget from m_time.
+    void updateNote();
 
     /// Ticks field.
     QSpinBox *m_ticksSpin;
+
+    /// Update the ticks widget from m_time.
+    void updateTicks();
 
     /// Measure/Measures field.
     QSpinBox *m_measureSpin;
@@ -154,41 +159,26 @@ private:
     /// 64ths field.
     QSpinBox *m_fractionSpin;
 
-    void updateMeasureBeat64();
-
     /// Time sig field that appears after 64ths (4/4 time).
     QLabel *m_timeSig;
+
+    /// Update the measure, beat and 64ths widgets from m_time.
+    void updateMeasureBeat64();
 
     /// Seconds field.
     QSpinBox *m_secondsSpin;
     /// msec field.
     QSpinBox *m_msecSpin;
 
+    /// Update the seconds and msec fields from m_time.
+    void updateSecondsMsec();
+
     /// Tempo field (e.g. 120.0 bpm) in the lower right in duration mode.
     QLabel *m_tempo;
+    /// Update m_tempo from m_time.
+    void updateTempo();
 
-    /// Timer to fire off a delayed update.
-    /**
-     * To see this in action, use the up/down arrows in the spin box to change
-     * the Ticks field and keep an eye on the msecs field.  It will update 1.5
-     * seconds later.  Only the Ticks and msec fields use this.  All others
-     * update immediately.
-     *
-     * ??? Why?  Why not just update it immediately?  I suspect this is to
-     *     prevent the manic updating of all the fields while the user is
-     *     typing into one.  E.g. if you double-click in the ticks field and
-     *     slowly type in 52406, nothing will update until 1.5 seconds after
-     *     you finish.  What is odd is that this is only implemented for the
-     *     Ticks and msec fields.  Seems like it should be implemented for
-     *     all fields, or not implemented at all.  E.g. if you enter a large
-     *     measure number right now, you get the manic updates.
-     * ??? If there is a minimumDuration, this timer is being used to update
-     *     the offending field when it goes too low.  We should handle this
-     *     with limits in the spin boxes, not with an update on a timer.
-     *     This will be difficult with the msec field since its limit would
-     *     need to depend on the Seconds field being 0.
-     */
-    //QTimer *m_delayUpdateTimer;
+    void updateLimitWarning();
 
     /// Init code shared by the two ctors.
     void init();
