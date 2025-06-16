@@ -26,14 +26,13 @@
 #include "base/RealTime.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
 #include <QDoubleSpinBox>
 #include <QCheckBox>
-#include <QFrame>
 #include <QLabel>
 #include <QRadioButton>
 #include <QPushButton>
@@ -41,7 +40,6 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLayout>
 #include <QUrl>
 #include <QDesktopServices>
 
@@ -133,14 +131,15 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
     if (timeEditable) {
 
-        m_timeEditor = new TimeWidget(
+        m_timeWidget = new TimeWidget2(
                 tr("Time of tempo change"),  // title
                 this,  // parent
                 &m_doc->getComposition(),  // composition
                 0,  // initialTime
                 true);  // constrainToCompositionDuration
-
-        vboxLayout->addWidget(m_timeEditor);
+        connect(m_timeWidget, &TimeWidget2::signalIsValid,
+                this, &TempoDialog::slotIsValid);
+        vboxLayout->addWidget(m_timeWidget);
 
     } else {
 
@@ -229,21 +228,17 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         m_defaultBox->setEnabled(false);
     }
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+    m_buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
             QDialogButtonBox::Help);
-    vboxLayout->addWidget(buttonBox);
-
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &TempoDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested,
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &TempoDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(m_buttonBox, &QDialogButtonBox::helpRequested,
             this, &TempoDialog::slotHelpRequested);
+    vboxLayout->addWidget(m_buttonBox);
 
     populateTempo();
 }
-
-TempoDialog::~TempoDialog()
-{}
 
 void
 TempoDialog::setTempoPosition(timeT time)
@@ -295,8 +290,8 @@ TempoDialog::populateTempo()
 
     updateBeatLabels(comp.getTempoQpm(tempo));
 
-    if (m_timeEditor) {
-        m_timeEditor->setTime(m_tempoTime);
+    if (m_timeWidget) {
+        m_timeWidget->setTime(m_tempoTime);
         return ;
     }
 
@@ -456,9 +451,9 @@ TempoDialog::accept()
 
     RG_DEBUG << "Target is " << m_targetTempo;
 
-    if (m_timeEditor) {
+    if (m_timeWidget) {
 
-        m_tempoTime = m_timeEditor->getTime();
+        m_tempoTime = m_timeWidget->getTime();
 
         emit changeTempo(m_tempoTime,
                          m_tempo,
@@ -518,7 +513,12 @@ TempoDialog::slotTapClicked()
     m_tapMinusOne = now;
 }
 
-
+void
+TempoDialog::slotIsValid(bool valid)
+{
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
+}
 
 void
 TempoDialog::slotHelpRequested()
@@ -531,4 +531,6 @@ TempoDialog::slotHelpRequested()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:tempoDialog-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
+
+
 }

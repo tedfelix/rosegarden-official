@@ -19,12 +19,13 @@
 #ifndef RG_TEMPODIALOG_H
 #define RG_TEMPODIALOG_H
 
-#include "base/Composition.h" // for tempoT
+#include "base/Composition.h"  // for tempoT
 
 #include <QDialog>
 #include <QTime>
 
 class QCheckBox;
+class QDialogButtonBox;
 class QDoubleSpinBox;
 class QLabel;
 class QPushButton;
@@ -36,7 +37,7 @@ namespace Rosegarden
 {
 
 
-class TimeWidget;
+class TimeWidget2;
 class RosegardenDocument;
 
 
@@ -56,7 +57,6 @@ public:
 
     TempoDialog(QWidget *parent, RosegardenDocument *doc,
                 bool timeEditable);
-    ~TempoDialog() override;
 
     /// Set the position at which we're checking the tempo.
     void setTempoPosition(timeT time);
@@ -65,6 +65,17 @@ public:
     timeT getTime() const  { return m_tempoTime; }
     tempoT getTempo() const  { return m_tempo; }
     tempoT getTargetTempo() const  { return m_targetTempo; }
+
+signals:
+
+    /// Results are returned via this signal.
+    /**
+     * Or use the getters above.
+     */
+    void changeTempo(timeT time,
+                     tempoT tempo,
+                     tempoT target,
+                     TempoDialog::TempoDialogAction action);
 
 private slots:
 
@@ -79,16 +90,7 @@ private slots:
     void slotTapClicked();
     void slotHelpRequested();
 
-signals:
-
-    /// Results are returned via this signal.
-    /**
-     * Or use the getters above.
-     */
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // target tempo value
-                     TempoDialog::TempoDialogAction); // tempo action
+    void slotIsValid(bool valid);
 
 private:
 
@@ -116,7 +118,7 @@ private:
 
     // Time of Tempo Change Group
 
-    TimeWidget *m_timeEditor{nullptr};
+    TimeWidget2 *m_timeWidget{nullptr};
 
     // Scope Group
 
@@ -135,6 +137,8 @@ private:
     QRadioButton *m_tempoChangeGlobal;
     // Also make this the default tempo
     QCheckBox *m_defaultBox;
+
+    QDialogButtonBox *m_buttonBox;
 
     void populateTempo();
 
