@@ -93,6 +93,14 @@ public:
     /// Get the time in MIDI ticks.
     timeT getTime()  { return m_time; }
 
+signals:
+
+    /// Emitted when the value transitions between in-range and out-of-range.
+    /**
+     * Use this to enable/disable the OK button on the parent dialog.
+     */
+    void signalIsValid(bool valid);
+
 public slots:
 
     void slotResetToDefault();
@@ -103,7 +111,7 @@ private slots:
     void slotNoteChanged(int);
 
     /// Update m_time and the other fields.
-    void slotTicksChanged(int t);
+    void slotTicksChanged(int ticks);
 
     /// Update m_time and the other fields.
     void slotMeasureBeatOrFractionChanged(int);

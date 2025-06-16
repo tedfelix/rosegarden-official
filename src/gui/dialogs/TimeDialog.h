@@ -24,6 +24,7 @@
 #include <QDialog>
 #include <QString>
 
+class QDialogButtonBox;
 class QWidget;
 
 
@@ -56,10 +57,16 @@ public:
 
     timeT getTime() const;
 
+private slots:
+
+    void slotIsValid(bool valid);
+
 private:
 
     TimeWidget *m_timeWidget{nullptr};
     TimeWidget2 *m_timeWidget2{nullptr};
+
+    QDialogButtonBox *m_buttonBox;
 
 };
                      

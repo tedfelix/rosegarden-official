@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TimeDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TimeDialog.h"
 
@@ -58,6 +60,8 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
             composition,
             defaultTime,  // initialTime
             constrainToCompositionDuration);
+    connect(m_timeWidget2, &TimeWidget2::signalIsValid,
+            this, &TimeDialog::slotIsValid);
     vboxLayout->addWidget(m_timeWidget2);
 #else
     m_timeWidget = new TimeWidget(
@@ -69,20 +73,21 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     vboxLayout->addWidget(m_timeWidget);
 #endif
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+    m_buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Reset | QDialogButtonBox::Ok |
             QDialogButtonBox::Cancel);
-    vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-    // Without a real slot to connect to, this is unused and misleads
-    // the user.
-    // QPushButton *resetButton =
-    // buttonBox->button(QDialogButtonBox::Reset);
-    // No such slot
-    // connect(resetButton, &QPushButton::clicked,
-    //         m_timeWidget, &TimeWidget::slotResetToDefault);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    const QPushButton *resetButton =
+            m_buttonBox->button(QDialogButtonBox::Reset);
+#ifdef TIMEWIDGET2
+    connect(resetButton, &QPushButton::clicked,
+            m_timeWidget2, &TimeWidget2::slotResetToDefault);
+#else
+    connect(resetButton, &QPushButton::clicked,
+            m_timeWidget, &TimeWidget::slotResetToDefault);
+#endif
+    vboxLayout->addWidget(m_buttonBox);
 }
 
 TimeDialog::TimeDialog(QWidget *parent, QString title,
@@ -108,6 +113,8 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
             defaultDuration,  // initialDuration
             minimumDuration,
             constrainToCompositionDuration);
+    connect(m_timeWidget2, &TimeWidget2::signalIsValid,
+            this, &TimeDialog::slotIsValid);
     vboxLayout->addWidget(m_timeWidget2);
 #else
     m_timeWidget = new TimeWidget(
@@ -121,15 +128,21 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     vboxLayout->addWidget(m_timeWidget);
 #endif
 
-    // No such slot
-    //connect(this, &TimeDialog::ResetClicked,
-    //        m_timeWidget, &TimeWidget::slotResetToDefault);
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+    m_buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Reset | QDialogButtonBox::Ok |
             QDialogButtonBox::Cancel);
-    vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    const QPushButton *resetButton =
+            m_buttonBox->button(QDialogButtonBox::Reset);
+#ifdef TIMEWIDGET2
+    connect(resetButton, &QPushButton::clicked,
+            m_timeWidget2, &TimeWidget2::slotResetToDefault);
+#else
+    connect(resetButton, &QPushButton::clicked,
+            m_timeWidget, &TimeWidget::slotResetToDefault);
+#endif
+    vboxLayout->addWidget(m_buttonBox);
 }
 
 timeT
@@ -142,6 +155,13 @@ TimeDialog::getTime() const
         return m_timeWidget2->getTime();
 
     return 0;
+}
+
+void
+TimeDialog::slotIsValid(bool valid)
+{
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
 }
 
 

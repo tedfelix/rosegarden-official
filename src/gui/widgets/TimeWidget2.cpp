@@ -544,7 +544,7 @@ TimeWidget2::updateSecondsMsec()
         } else if (realTime.sec < 0) {
             m_msecSpin->setMinimum(-999);
             m_msecSpin->setMaximum(0);
-        } else if (realTime.sec > 0) {
+        } else {  // realTime.sec > 0
             m_msecSpin->setMinimum(0);
             m_msecSpin->setMaximum(999);
         }
@@ -603,6 +603,7 @@ TimeWidget2::updateLimitWarning()
         // Enable the limit button.
         m_limitButton->setEnabled(true);
         m_limit = m_minimumDuration;
+        emit signalIsValid(false);
         return;
     }
 
@@ -621,6 +622,7 @@ TimeWidget2::updateLimitWarning()
                 // Enable the limit button.
                 m_limitButton->setEnabled(true);
                 m_limit = compositionEnd - m_startTime;
+                emit signalIsValid(false);
                 return;
             }
 
@@ -637,6 +639,7 @@ TimeWidget2::updateLimitWarning()
                 // Enable the limit button.
                 m_limitButton->setEnabled(true);
                 m_limit = compositionStart;
+                emit signalIsValid(false);
                 return;
             }
 
@@ -649,6 +652,7 @@ TimeWidget2::updateLimitWarning()
                 // Enable the limit button.
                 m_limitButton->setEnabled(true);
                 m_limit = compositionEnd - 1;
+                emit signalIsValid(false);
                 return;
             }
         }
@@ -658,6 +662,8 @@ TimeWidget2::updateLimitWarning()
     m_limitMessage->setText("");
     // Disable the limit button.
     m_limitButton->setEnabled(false);
+
+    emit signalIsValid(true);
 }
 
 void
@@ -740,7 +746,7 @@ TimeWidget2::slotSecondsOrMSecChanged(int)
         m_msecSpin->setMaximum(0);
         if (oldMsec > 0)
             m_msecSpin->setValue(-oldMsec);
-    } else if (seconds > 0) {
+    } else {  // seconds > 0
         m_msecSpin->setMinimum(0);
         m_msecSpin->setMaximum(999);
         if (oldMsec < 0)
