@@ -25,13 +25,14 @@
 
 class QWidget;
 class QCheckBox;
+class QDialogButtonBox;
 
 
 namespace Rosegarden
 {
 
 
-class TimeWidget;
+class TimeWidget2;
 class Composition;
 
 
@@ -40,8 +41,9 @@ class RescaleDialog : public QDialog
     Q_OBJECT
 
 public:
+
     RescaleDialog(QWidget *parent,
-                  Composition *composition, // for TimeWidget calculations
+                  Composition *composition,  // for TimeWidget2 calculations
                   timeT startTime,
                   timeT originalDuration,
                   timeT minimumDuration,
@@ -51,9 +53,16 @@ public:
     timeT getNewDuration();
     bool shouldCloseGap();
 
-protected:
-    TimeWidget *m_newDuration;
+private slots:
+
+    void slotIsValid(bool valid);
+
+private:
+
+    TimeWidget2 *m_newDuration;
     QCheckBox *m_closeGap;
+    QDialogButtonBox *m_buttonBox;
+
 };
     
 

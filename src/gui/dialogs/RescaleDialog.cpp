@@ -15,12 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[RescaleDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "RescaleDialog.h"
 
 #include "misc/ConfigGroups.h"
 #include "base/Composition.h"
-#include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 #include "misc/Strings.h"
 
 #include <QSettings>
@@ -28,15 +30,14 @@
 #include <QDialogButtonBox>
 #include <QCheckBox>
 #include <QGroupBox>
-#include <QString>
 #include <QWidget>
 #include <QVBoxLayout>
-#include <QApplication>
 #include <QPushButton>
 
 
 namespace Rosegarden
 {
+
 
 RescaleDialog::RescaleDialog(QWidget *parent,
                              Composition *composition,
@@ -45,7 +46,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
                              timeT minimumDuration,
                              bool showCloseGapOption,
                              bool constrainToCompositionDuration) :
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(tr("Stretch or Squash"));
@@ -55,7 +56,7 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     setLayout(vboxLayout);
 
 
-    m_newDuration = new TimeWidget(
+    m_newDuration = new TimeWidget2(
             tr("Duration of selection"),  // title
             vbox,  // parent
             composition,
@@ -63,6 +64,8 @@ RescaleDialog::RescaleDialog(QWidget *parent,
             originalDuration,  // initialDuration
             minimumDuration,
             constrainToCompositionDuration);
+    connect(m_newDuration, &TimeWidget2::signalIsValid,
+            this, &RescaleDialog::slotIsValid);
     vboxLayout->addWidget(m_newDuration);
 
     if (showCloseGapOption) {
@@ -84,14 +87,15 @@ RescaleDialog::RescaleDialog(QWidget *parent,
         m_closeGap = nullptr;
     }
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-    QPushButton *resetButton = buttonBox->button(QDialogButtonBox::Reset);
+    m_buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Reset | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    const QPushButton *resetButton = m_buttonBox->button(QDialogButtonBox::Reset);
     connect(resetButton, &QAbstractButton::clicked,
-            m_newDuration, &TimeWidget::slotResetToDefault);
+            m_newDuration, &TimeWidget2::slotResetToDefault);
+    vboxLayout->addWidget(m_buttonBox);
 
     updateGeometry();
 }
@@ -118,38 +122,12 @@ RescaleDialog::shouldCloseGap()
     }
 }
 
-/*
-int
-RescaleDialog::getMultiplier()
-{
-    return m_to;
-}
-
-int
-RescaleDialog::getDivisor()
-{
-    return m_from;
-}
-
 void
-RescaleDialog::slotFromChanged(int i)
+RescaleDialog::slotIsValid(bool valid)
 {
-    m_from = i + 1;
-    int perTenThou = m_to * 10000 / m_from;
-    m_percent->setText(QString("%1.%2%").
-                       arg(perTenThou / 100).
-                       arg(perTenThou % 100));
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
 }
 
-void
-RescaleDialog::slotToChanged(int i)
-{
-    m_to = i + 1;
-    int perTenThou = m_to * 10000 / m_from;
-    m_percent->setText(QString("%1.%2%").
-                       arg(perTenThou / 100).
-                       arg(perTenThou % 100));
-}
-*/
 
 }
