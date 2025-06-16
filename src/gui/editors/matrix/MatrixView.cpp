@@ -1604,15 +1604,14 @@ void MatrixView::slotRescale()
     EventSelection *selection = getSelection();
     if (!selection) return;
 
-    RescaleDialog dialog(this,
-                         &RosegardenDocument::currentDocument->getComposition(),
-                         selection->getStartTime(),
-                         selection->getEndTime() -
-                             selection->getStartTime(),
-                         1,
-                         true,
-                         true
-                        );
+    RescaleDialog dialog(
+            this,  // parent
+            &RosegardenDocument::currentDocument->getComposition(),  // composition
+            selection->getStartTime(),  // startTime
+            selection->getEndTime() - selection->getStartTime(),  // originalDuration
+            1,  // minimumDuration
+            true,  // showCloseGapOption
+            true);  // constrainToCompositionDuration
 
     if (dialog.exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand(new RescaleCommand

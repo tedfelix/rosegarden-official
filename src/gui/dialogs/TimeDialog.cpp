@@ -29,8 +29,9 @@
 #include <QVBoxLayout>
 #include <QPushButton>
 
-
+// Define for TimeWidget2 testing.
 //#define TIMEWIDGET2
+
 
 namespace Rosegarden
 {

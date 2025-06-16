@@ -25,6 +25,7 @@
 
 class QComboBox;
 class QLabel;
+class QPushButton;
 class QSpinBox;
 class QString;
 class QTimer;
@@ -110,8 +111,7 @@ private slots:
     /// Update m_time and the other fields.
     void slotSecondsOrMSecChanged(int);
 
-    /// Update m_time and the other fields.
-    void slotMSecChanged(int);
+    void slotLimitClicked(bool);
 
 private:
 
@@ -174,14 +174,15 @@ private:
     /// Update m_tempo from m_time.
     void updateTempo();
 
+    QLabel *m_limitMessage;
+    QPushButton *m_limitButton;
+    timeT m_limit;
     void updateLimitWarning();
 
     /// Init code shared by the two ctors.
     void init();
     /// Copy from m_time to the widgets.
     void updateWidgets();
-    /// Return a rounded msec reading from the given realTime argument.
-    static int getRoundedMSec(RealTime rt);
 
 };
 

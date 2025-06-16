@@ -31,6 +31,7 @@
 #include <QGroupBox>
 #include <QLabel>
 #include <QPixmap>
+#include <QPushButton>
 #include <QSpinBox>
 #include <QString>
 #include <QGridLayout>
@@ -154,9 +155,6 @@ TimeWidget2::init()
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
-        // ??? What about QAbstractSpinBox::editingFinished()?  I suspect we
-        //     need this to properly handle typing in the field and tabbing
-        //     away.  Need to check this for all fields.
         layout->addWidget(m_ticksSpin, row, 5);
 
         ++row;
@@ -234,7 +232,7 @@ TimeWidget2::init()
     m_msecSpin->setMinimum(0);
     m_msecSpin->setSingleStep(10);
     connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
-            this, &TimeWidget2::slotMSecChanged);
+            this, &TimeWidget2::slotSecondsOrMSecChanged);
     layout->addWidget(m_msecSpin, row, 3);
 
     if (m_isDuration) {
@@ -257,13 +255,22 @@ TimeWidget2::init()
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
-        // ??? What about QAbstractSpinBox::editingFinished()?  I suspect we
-        //     need this to properly handle typing in the field and tabbing
-        //     away.  Need to check this for all fields.
         layout->addWidget(m_ticksSpin, row, 1);
         layout->addWidget(new QLabel(tr("ticks"), this), row, 2);
 
+        ++row;
+
     }
+
+    // ??? This needs its own spacing.  We need a QHBoxLayout.
+
+    m_limitMessage = new QLabel("", this);
+    layout->addWidget(m_limitMessage, row, 0, 1, 2);
+    m_limitButton = new QPushButton(tr("Limit"), this);
+    m_limitButton->setToolTip(tr("Adjust time to be within valid limits."));
+    connect(m_limitButton, &QPushButton::clicked,
+            this, &TimeWidget2::slotLimitClicked);
+    layout->addWidget(m_limitButton, row, 2);
 
     updateWidgets();
 }
@@ -281,8 +288,8 @@ TimeWidget2::updateWidgets()
     updateLimitWarning();
 }
 
-int
-TimeWidget2::getRoundedMSec(RealTime rt)
+static int
+getRoundedMSec(RealTime rt)
 {
     double msecDouble = rt.usec() / 1000.0;
     // ??? I think lround() is the same as this.  Check how it
@@ -308,8 +315,6 @@ TimeWidget2::setRealTime(RealTime realTime)
 {
     if (m_isDuration) {
         const RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
-        // ??? Yikes!  A duration of zero is a serious problem.  Didn't I
-        //     fix this years ago?  Did I miss this one?
         if (realTime >= RealTime::zero()) {
             setTime(m_composition->getElapsedTimeForRealTime(startRT + realTime) - m_startTime);
         } else {
@@ -494,6 +499,9 @@ TimeWidget2::updateSecondsMsec()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_secondsSpin->blockSignals(true);
+        // ??? We shouldn't set min/max when updating.  Move this to init().
+        //     Check all calls to setMinimum() and setMaximum() and move them
+        //     all to init().
         m_secondsSpin->setMinimum(0);
         // ??? This will be a problem for ticks since it can't go this high.
         m_secondsSpin->setMaximum(INT_MAX);
@@ -515,6 +523,10 @@ TimeWidget2::updateSecondsMsec()
         m_msecSpin->blockSignals(false);
 
     } else {  // Absolute time mode.
+
+        // ??? Need to test negative times.  I think for the user we want
+        //     to see negative seconds and positive msec.  I'm not sure
+        //     how negative time is stored in RealTime.  Are they both negative?
 
         // Seconds
 
@@ -552,47 +564,19 @@ TimeWidget2::updateSecondsMsec()
 void
 TimeWidget2::updateTicks()
 {
-
     // Have to block since QSpinBox::valueChanged() fires on
     // programmatic changes as well as user changes.
     m_ticksSpin->blockSignals(true);
 
     // Duration mode.
-    if (m_isDuration) {
-
-        // ??? Shouldn't this be set to m_minimumDuration?
-        // ??? Should we really allow durations of 0?  That causes problems
-        //     in other parts of rg.  Actually, I suspect this never allows
-        //     0 since the eventual update puts it back to 1.
-        //     V RescaleDialog ctor - Handles it ok.  Becomes tiny.  Must
-        //       catch it further down.
-        //       - Zero is not valid here.
-        //     V EditViewBase::slotSetSegmentDuration()
-        //       - Zero is not valid here.
-        //     V NoteWidget Duration catches this in its own spin box.
-        //       - Zero is not valid here.
-        //     -> NoteWidget notation duration?  Allows 0, but doesn't crash.
-        //       - Zero is not valid here.
-        //     -> RestWidget duration.  Zero is allowed in RestWidget.
-        //       - Zero is not valid here.
-        //     - RMW::slotCreateAnacrusis().  Can't do smaller than 60 ticks.
-        //       - Looks like a minimum has been set.
-        //       - Zero is not valid here.
-        //     - RMW::slotInsertRange()
-        //     - RMW::slotSetSegmentDurations()
-        //     - TriggerSegmentManager::slotAdd()
+    if (m_isDuration)
         m_ticksSpin->setMinimum(0);
-
-    } else {  // Absolute time mode.
-
+    else  // Absolute time mode.
         m_ticksSpin->setMinimum(INT_MIN);
-
-    }
 
     m_ticksSpin->setMaximum(INT_MAX);
     m_ticksSpin->setValue(m_time);
     m_ticksSpin->blockSignals(false);
-
 }
 
 void
@@ -617,18 +601,74 @@ TimeWidget2::updateNote()
 void
 TimeWidget2::updateLimitWarning()
 {
-    // No limits?  Bail.
-
-    // If m_time is outside of the limits
-    {
+    if (m_isDuration  &&  m_time < m_minimumDuration) {
         // Set a message of "Out of Range".
+        m_limitMessage->setText(tr("Out Of Range"));
         // Enable the limit button.
+        m_limitButton->setEnabled(true);
+        m_limit = m_minimumDuration;
+        return;
     }
-    //else
-    {
-        // Clear the message.
-        // Disable the limit button.
+
+    if (m_constrainToCompositionDuration) {
+        if (m_isDuration) {
+
+            // Test Case: RescaleDialog: Matrix View > Adjust > Rescale >
+            //            Stretch or Squash...
+
+            const timeT compositionEnd = m_composition->getEndMarker();
+            // Too big to fit?
+            if (m_startTime + m_time > compositionEnd)
+            {
+                // Set a message of "Out of Range".
+                m_limitMessage->setText(tr("Out Of Range"));
+                // Enable the limit button.
+                m_limitButton->setEnabled(true);
+                m_limit = compositionEnd - m_startTime;
+                return;
+            }
+
+        } else {  // Absolute time.
+
+            // Test Case: TempoDialog
+
+            const timeT compositionStart = m_composition->getStartMarker();
+            // Before start?
+            if (m_time < compositionStart)
+            {
+                // Set a message of "Out of Range".
+                m_limitMessage->setText(tr("Out Of Range"));
+                // Enable the limit button.
+                m_limitButton->setEnabled(true);
+                m_limit = compositionStart;
+                return;
+            }
+
+            const timeT compositionEnd = m_composition->getEndMarker();
+            // After end?
+            if (m_time >= compositionEnd)
+            {
+                // Set a message of "Out of Range".
+                m_limitMessage->setText(tr("Out Of Range"));
+                // Enable the limit button.
+                m_limitButton->setEnabled(true);
+                m_limit = compositionEnd - 1;
+                return;
+            }
+        }
     }
+
+    // Clear the message.
+    m_limitMessage->setText("");
+    // Disable the limit button.
+    m_limitButton->setEnabled(false);
+}
+
+void
+TimeWidget2::slotLimitClicked(bool)
+{
+    m_time = m_limit;
+    updateWidgets();
 }
 
 void
@@ -666,31 +706,58 @@ TimeWidget2::slotTicksChanged(int ticks)
 void
 TimeWidget2::slotMeasureBeatOrFractionChanged(int)
 {
-#if 0
     const int bar = m_measureSpin->value();
     const int beat = m_beatSpin->value();
     const int fraction = m_fractionSpin->value();
 
     if (m_isDuration) {
-        setTime(m_composition->getDurationForMusicalTime(
-                m_startTime, bar, beat, fraction, 0));
+        m_time = m_composition->getDurationForMusicalTime(
+                m_startTime, bar, beat, fraction, 0);
     } else {
-        setTime(m_composition->getAbsoluteTimeForMusicalTime(
-                bar, beat, fraction, 0));
+        m_time = m_composition->getAbsoluteTimeForMusicalTime(
+                bar, beat, fraction, 0);
     }
-#endif
+
+    // Update the other fields.
+    updateNote();
+    updateSecondsMsec();
+    updateTempo();
+    updateTicks();
+    updateLimitWarning();
 }
 
 void
 TimeWidget2::slotSecondsOrMSecChanged(int)
 {
-    // Update the rest of the fields based on the Seconds and msec fields.
-    //setRealTime(RealTime(m_secondsSpin->value(), m_msecSpin->value() * 1000000));
-}
+    // ??? For negative times, we need to be careful with m_msecSpin.
+    //     Need to test this.
 
-void
-TimeWidget2::slotMSecChanged(int)
-{
+    const int seconds = m_secondsSpin->value();
+    int msec = m_msecSpin->value();
+    if (seconds < 0)
+        msec = -msec;
+
+    RealTime realTime(seconds, msec * 1000000);
+
+    if (m_isDuration) {
+        const RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
+        // ??? Yikes!  A duration of zero is a serious problem.  Didn't I
+        //     fix this years ago?  Did I miss this one?
+        if (realTime >= RealTime::zero()) {
+            m_time = m_composition->getElapsedTimeForRealTime(startRT + realTime) - m_startTime;
+        } else {
+            RG_DEBUG << "slotSecondsOrMSecChanged(): WARNING: realTime must be > 0 for duration widget (was " << realTime << ")";
+        }
+    } else {
+        m_time = m_composition->getElapsedTimeForRealTime(realTime);
+    }
+
+    // Update the other fields.
+    updateNote();
+    updateMeasureBeat64();
+    updateTempo();
+    updateTicks();
+    updateLimitWarning();
 }
 
 

@@ -4288,15 +4288,14 @@ NotationView::slotRescale()
 {
     if (!getSelection()) return ;
 
-    RescaleDialog dialog
-    (this,
-     &RosegardenDocument::currentDocument->getComposition(),
-     getSelection()->getStartTime(),
-     getSelection()->getEndTime() -
-         getSelection()->getStartTime(),
-     1,
-     true,
-     true);
+    RescaleDialog dialog(
+            this,  // parent
+            &RosegardenDocument::currentDocument->getComposition(),  // composition
+            getSelection()->getStartTime(),  // startTime
+            getSelection()->getEndTime() - getSelection()->getStartTime(),  // originalDuration
+            1,  // minimumDuration
+            true,  // showCloseGapOption
+            true);  // constrainToCompositionDuration
 
     if (dialog.exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand(new RescaleCommand
