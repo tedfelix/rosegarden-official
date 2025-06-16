@@ -168,7 +168,6 @@ set(rg_CPPS
   gui/widgets/TristateCheckBox.cpp
   gui/widgets/FileDialog.cpp
   gui/widgets/FontRequester.cpp
-  gui/widgets/TimeWidget.cpp
   gui/widgets/TimeWidget2.cpp
   gui/widgets/WarningGroupBox.cpp
   gui/widgets/MidiFaderWidget.cpp
