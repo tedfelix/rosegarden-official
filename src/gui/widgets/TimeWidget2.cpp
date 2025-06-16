@@ -87,6 +87,9 @@ TimeWidget2::TimeWidget2(const QString &title,
 void
 TimeWidget2::init()
 {
+    // ??? We shouldn't set min/max when updating.  Move as many setMinimum()
+    //     and setMaximum() calls as we can to here.
+
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
     int row{0};
@@ -219,6 +222,9 @@ TimeWidget2::init()
     m_secondsSpin = new QSpinBox(this);
     if (m_isDuration)
         m_secondsSpin->setMinimum(0);
+    else
+        m_secondsSpin->setMinimum(INT_MIN);
+    m_secondsSpin->setMaximum(INT_MAX);
     connect(m_secondsSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotSecondsOrMSecChanged);
     layout->addWidget(m_secondsSpin, row, 1);
@@ -229,7 +235,9 @@ TimeWidget2::init()
     layout->addWidget(labelWidget, row, 2);
 
     m_msecSpin = new QSpinBox(this);
+    // Set for duration mode.  Time mode will change this as needed.
     m_msecSpin->setMinimum(0);
+    m_msecSpin->setMinimum(999);
     m_msecSpin->setSingleStep(10);
     connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotSecondsOrMSecChanged);
@@ -499,12 +507,6 @@ TimeWidget2::updateSecondsMsec()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_secondsSpin->blockSignals(true);
-        // ??? We shouldn't set min/max when updating.  Move this to init().
-        //     Check all calls to setMinimum() and setMaximum() and move them
-        //     all to init().
-        m_secondsSpin->setMinimum(0);
-        // ??? This will be a problem for ticks since it can't go this high.
-        m_secondsSpin->setMaximum(INT_MAX);
         m_secondsSpin->setValue(realTime.sec);
         m_secondsSpin->blockSignals(false);
 
@@ -513,20 +515,13 @@ TimeWidget2::updateSecondsMsec()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_msecSpin->blockSignals(true);
-        m_msecSpin->setMinimum(0);
-        m_msecSpin->setMaximum(999);
-
-        // Round value instead of direct read from rt.nsec.
-        // Causes cycle of rounding between msec and ticks
-        // which creates odd typing behavior.
+        // ??? Is getRoundedMSec() actually needed now?  It was there for an
+        //     update issue with the old design.  Might be able to get rid of
+        //     it.
         m_msecSpin->setValue(getRoundedMSec(realTime));
         m_msecSpin->blockSignals(false);
 
     } else {  // Absolute time mode.
-
-        // ??? Need to test negative times.  I think for the user we want
-        //     to see negative seconds and positive msec.  I'm not sure
-        //     how negative time is stored in RealTime.  Are they both negative?
 
         // Seconds
 
@@ -535,9 +530,6 @@ TimeWidget2::updateSecondsMsec()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_secondsSpin->blockSignals(true);
-        m_secondsSpin->setMinimum(INT_MIN);
-        // ??? This will be a problem for ticks since it can't go this high.
-        m_secondsSpin->setMaximum(INT_MAX);
         m_secondsSpin->setValue(realTime.sec);
         m_secondsSpin->blockSignals(false);
 
@@ -546,15 +538,19 @@ TimeWidget2::updateSecondsMsec()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_msecSpin->blockSignals(true);
-
-        // ??? We need special handling for negative secs.  We'll
-        //     need to subtract this number instead of adding.
-        m_msecSpin->setMinimum(0);
-        m_msecSpin->setMaximum(999);
-
-        // Round value instead of direct read from rt.nsec.
-        // Causes cycle of rounding between msec and Time
-        // which creates odd typing behavior.
+        if (realTime.sec == 0) {
+            m_msecSpin->setMinimum(-999);
+            m_msecSpin->setMaximum(999);
+        } else if (realTime.sec < 0) {
+            m_msecSpin->setMinimum(-999);
+            m_msecSpin->setMaximum(0);
+        } else if (realTime.sec > 0) {
+            m_msecSpin->setMinimum(0);
+            m_msecSpin->setMaximum(999);
+        }
+        // ??? Is getRoundedMSec() actually needed now?  It was there for an
+        //     update issue with the old design.  Might be able to get rid of
+        //     it.
         m_msecSpin->setValue(getRoundedMSec(realTime));
         m_msecSpin->blockSignals(false);
 
@@ -729,24 +725,41 @@ TimeWidget2::slotMeasureBeatOrFractionChanged(int)
 void
 TimeWidget2::slotSecondsOrMSecChanged(int)
 {
-    // ??? For negative times, we need to be careful with m_msecSpin.
-    //     Need to test this.
+    // Update msec range based on seconds.
 
     const int seconds = m_secondsSpin->value();
-    int msec = m_msecSpin->value();
-    if (seconds < 0)
-        msec = -msec;
+    // Save the old value so we can put it back if the sign changes.
+    const int oldMsec = m_msecSpin->value();
+
+    m_msecSpin->blockSignals(true);
+    if (seconds == 0) {
+        m_msecSpin->setMinimum(-999);
+        m_msecSpin->setMaximum(999);
+    } else if (seconds < 0) {
+        m_msecSpin->setMinimum(-999);
+        m_msecSpin->setMaximum(0);
+        if (oldMsec > 0)
+            m_msecSpin->setValue(-oldMsec);
+    } else if (seconds > 0) {
+        m_msecSpin->setMinimum(0);
+        m_msecSpin->setMaximum(999);
+        if (oldMsec < 0)
+            m_msecSpin->setValue(-oldMsec);
+    }
+    m_msecSpin->blockSignals(false);
+
+    // Update m_time.
+
+    const int msec = m_msecSpin->value();
 
     RealTime realTime(seconds, msec * 1000000);
 
     if (m_isDuration) {
         const RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
-        // ??? Yikes!  A duration of zero is a serious problem.  Didn't I
-        //     fix this years ago?  Did I miss this one?
         if (realTime >= RealTime::zero()) {
             m_time = m_composition->getElapsedTimeForRealTime(startRT + realTime) - m_startTime;
         } else {
-            RG_DEBUG << "slotSecondsOrMSecChanged(): WARNING: realTime must be > 0 for duration widget (was " << realTime << ")";
+            RG_DEBUG << "slotSecondsOrMSecChanged(): WARNING: realTime must be >= 0 for duration widget (was " << realTime << ")";
         }
     } else {
         m_time = m_composition->getElapsedTimeForRealTime(realTime);

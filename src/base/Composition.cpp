@@ -1700,13 +1700,13 @@ Composition::time2RealTime(timeT time, tempoT tempo,
 timeT
 Composition::realTime2Time(RealTime rt, tempoT tempo)
 {
-    static timeT cdur = Note(Note::Crotchet).getDuration();
+    static const timeT cdur = Note(Note::Crotchet).getDuration();
 
-    double tsec = (double(rt.sec) * cdur) * (tempo / (60.0 * 100000.0));
-    double tnsec = (double(rt.nsec) * cdur) * (tempo / 100000.0);
+    const double tsec = (double(rt.sec) * cdur) * (tempo / (60.0 * 100000.0));
+    const double tnsec = (double(rt.nsec) * cdur) * (tempo / 100000.0);
 
-    double dt = tsec + (tnsec / 60000000000.0);
-    timeT t = (timeT)(dt + (dt < 0 ? -1e-6 : 1e-6));
+    const double dt = tsec + (tnsec / 60000000000.0);
+    const timeT t = (timeT)(dt + (dt < 0 ? -1e-6 : 1e-6));
 
 #ifdef DEBUG_TEMPO_STUFF
     if (!DEBUG_silence_recursive_tempo_printout) {

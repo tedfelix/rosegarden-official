@@ -174,6 +174,13 @@ private:
     /// Update m_tempo from m_time.
     void updateTempo();
 
+    /// Out Of Range message area.
+    /**
+     * Trying to set ranges on the various spin boxes based on limits results
+     * in all sorts of frustrating complications for the user and the code.
+     * This approach allows the user to enter whatever they want and easily
+     * fix it if it is out of range.
+     */
     QLabel *m_limitMessage;
     QPushButton *m_limitButton;
     timeT m_limit;
