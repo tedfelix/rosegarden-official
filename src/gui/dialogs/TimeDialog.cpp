@@ -20,6 +20,7 @@
 
 #include "base/Composition.h"
 #include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -29,14 +30,17 @@
 #include <QPushButton>
 
 
+//#define TIMEWIDGET2
+
 namespace Rosegarden
 {
+
 
 TimeDialog::TimeDialog(QWidget *parent, QString title,
                        Composition *composition,
                        timeT defaultTime,
                        bool constrainToCompositionDuration) :
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(title);
@@ -46,6 +50,15 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
 
+#ifdef TIMEWIDGET2
+    m_timeWidget2 = new TimeWidget2(
+            title,
+            vbox,  // parent
+            composition,
+            defaultTime,  // initialTime
+            constrainToCompositionDuration);
+    vboxLayout->addWidget(m_timeWidget2);
+#else
     m_timeWidget = new TimeWidget(
             title,
             vbox,  // parent
@@ -53,8 +66,11 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
             defaultTime,  // initialTime
             constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
+#endif
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Reset | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -82,6 +98,17 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
 
     QVBoxLayout *vboxLayout = new QVBoxLayout(this);
 
+#ifdef TIMEWIDGET2
+    m_timeWidget2 = new TimeWidget2(
+            title,
+            this,  // parent
+            composition,
+            startTime,
+            defaultDuration,  // initialDuration
+            minimumDuration,
+            constrainToCompositionDuration);
+    vboxLayout->addWidget(m_timeWidget2);
+#else
     m_timeWidget = new TimeWidget(
             title,
             this,  // parent
@@ -91,6 +118,7 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
             minimumDuration,
             constrainToCompositionDuration);
     vboxLayout->addWidget(m_timeWidget);
+#endif
 
     // No such slot
     //connect(this, &TimeDialog::ResetClicked,
@@ -106,7 +134,14 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
 timeT
 TimeDialog::getTime() const
 {
-    return m_timeWidget->getTime();
+    if (m_timeWidget)
+        return m_timeWidget->getTime();
+
+    if (m_timeWidget2)
+        return m_timeWidget2->getTime();
+
+    return 0;
 }
+
 
 }

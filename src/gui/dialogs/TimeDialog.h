@@ -32,12 +32,14 @@ namespace Rosegarden
 
 
 class TimeWidget;
+class TimeWidget2;
 class Composition;
 
 
 class TimeDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     /// for absolute times
     TimeDialog(QWidget *parent, QString title, Composition *composition,
@@ -54,8 +56,11 @@ public:
 
     timeT getTime() const;
 
-protected:
-    TimeWidget *m_timeWidget;
+private:
+
+    TimeWidget *m_timeWidget{nullptr};
+    TimeWidget2 *m_timeWidget2{nullptr};
+
 };
                      
 

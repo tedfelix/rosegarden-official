@@ -41,12 +41,6 @@ namespace Rosegarden
 {
 
 
-namespace
-{
-    constexpr int UPDATE_DELAY_TIME = 1500;  // msecs
-}
-
-
 TimeWidget2::TimeWidget2(const QString &title,
                          QWidget *parent,
                          Composition *composition,
@@ -160,7 +154,7 @@ TimeWidget2::init()
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
-        // ??? What abouyt QAbstractSpinBox::editingFinished()?  I suspect we
+        // ??? What about QAbstractSpinBox::editingFinished()?  I suspect we
         //     need this to properly handle typing in the field and tabbing
         //     away.  Need to check this for all fields.
         layout->addWidget(m_ticksSpin, row, 5);
@@ -263,6 +257,9 @@ TimeWidget2::init()
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
+        // ??? What about QAbstractSpinBox::editingFinished()?  I suspect we
+        //     need this to properly handle typing in the field and tabbing
+        //     away.  Need to check this for all fields.
         layout->addWidget(m_ticksSpin, row, 1);
         layout->addWidget(new QLabel(tr("ticks"), this), row, 2);
 
@@ -276,22 +273,12 @@ TimeWidget2::updateWidgets()
 {
     // Update all widgets from m_time and m_startTime.
 
-    // Duration mode.
-    if (m_isDuration) {
-
-        updateNote();
-        updateMeasureBeat64();
-        updateSecondsMsec();
-        updateTempo();
-
-    } else {  // Absolute Time mode
-
-        updateMeasureBeat64();
-        updateSecondsMsec();
-        updateTicks();
-
-    }
-
+    updateNote();
+    updateMeasureBeat64();
+    updateSecondsMsec();
+    updateTempo();
+    updateTicks();
+    updateLimitWarning();
 }
 
 int
@@ -679,6 +666,7 @@ TimeWidget2::slotTicksChanged(int ticks)
 void
 TimeWidget2::slotMeasureBeatOrFractionChanged(int)
 {
+#if 0
     const int bar = m_measureSpin->value();
     const int beat = m_beatSpin->value();
     const int fraction = m_fractionSpin->value();
@@ -690,49 +678,19 @@ TimeWidget2::slotMeasureBeatOrFractionChanged(int)
         setTime(m_composition->getAbsoluteTimeForMusicalTime(
                 bar, beat, fraction, 0));
     }
+#endif
 }
 
 void
 TimeWidget2::slotSecondsOrMSecChanged(int)
 {
     // Update the rest of the fields based on the Seconds and msec fields.
-    setRealTime(RealTime(m_secondsSpin->value(), m_msecSpin->value() * 1000000));
+    //setRealTime(RealTime(m_secondsSpin->value(), m_msecSpin->value() * 1000000));
 }
 
 void
 TimeWidget2::slotMSecChanged(int)
 {
-    // The msec field has changed.  Either from the user typing into it
-    // or from the up/down arrows on the spin box.
-
-    // Avoid duplicate connections.
-    // ??? Isn't there a flag we can pass that will do that.  Yes.
-    //     Qt::UniqueConnection
-    disconnect(m_msecSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget2::slotMSecUpdate);
-    // Since we are in the middle of a change to msec, we want to
-    // be informed if the user tabs out of the field.
-    connect(m_msecSpin, &QAbstractSpinBox::editingFinished,
-            this, &TimeWidget2::slotMSecUpdate);
-
-    // No need to monitor the user tabbing out of the Ticks field.  The
-    // msec field is in play now.
-    // This prevents an update if the user clicks on the Ticks field then
-    // tabs out of it without making any changes.
-    disconnect(m_ticksSpin, &QAbstractSpinBox::editingFinished,
-               this, &TimeWidget2::slotTicksUpdate);
-
-}
-
-void
-TimeWidget2::slotMSecUpdate()
-{
-    // Either the user has tabbed out of the msec field, or the
-    // delayed update timer has gone off.  Update the rest of the fields
-    // based on the Seconds and msec fields.
-
-    // Perform an immediate update.  Arg is ignored.
-    slotSecondsOrMSecChanged(0);
 }
 
 

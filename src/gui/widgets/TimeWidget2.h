@@ -98,24 +98,20 @@ public slots:
 
 private slots:
 
+    /// Update m_time and the other fields.
     void slotNoteChanged(int);
 
-    /// Restart the update delay timer and connect it for m_timeT.
+    /// Update m_time and the other fields.
     void slotTicksChanged(int t);
 
-    /// Stop the delay timer and call slotSetTime(int)
-    void slotTicksUpdate();
-
+    /// Update m_time and the other fields.
     void slotMeasureBeatOrFractionChanged(int);
 
-    /// Determine realtime based on Sec or msec update and repopulate boxes.
+    /// Update m_time and the other fields.
     void slotSecondsOrMSecChanged(int);
 
-    /// Restart the update delay timer and connect it to m_msec.
+    /// Update m_time and the other fields.
     void slotMSecChanged(int);
-
-    /// Stop the delay timer and call slotSecOrMSecChanged(int)
-    void slotMSecUpdate();
 
 private:
 

@@ -169,6 +169,7 @@ set(rg_CPPS
   gui/widgets/FileDialog.cpp
   gui/widgets/FontRequester.cpp
   gui/widgets/TimeWidget.cpp
+  gui/widgets/TimeWidget2.cpp
   gui/widgets/WarningGroupBox.cpp
   gui/widgets/MidiFaderWidget.cpp
   gui/widgets/ProgressBar.cpp
