@@ -32,7 +32,6 @@ namespace Rosegarden
 {
 
 
-class TimeWidget;
 class TimeWidget2;
 class Composition;
 
@@ -63,7 +62,6 @@ private slots:
 
 private:
 
-    TimeWidget *m_timeWidget{nullptr};
     TimeWidget2 *m_timeWidget2{nullptr};
 
     QDialogButtonBox *m_buttonBox;
