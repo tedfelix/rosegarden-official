@@ -470,8 +470,8 @@ MarkerEditor::slotEdit(QTreeWidgetItem *i, int)
                                     item->getID(),
                                     dialog.getOriginalTime(),
                                     dialog.getTime(),
-                                    qstrtostr(dialog.getName()),
-                                    qstrtostr(dialog.getDescription()));
+                                    qstrtostr(dialog.getText()),
+                                    qstrtostr(dialog.getComment()));
 
         addCommandToHistory(command);
     }

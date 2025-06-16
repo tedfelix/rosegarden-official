@@ -15,23 +15,20 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MarkerModifyDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MarkerModifyDialog.h"
 
 #include "base/Composition.h"
 #include "document/RosegardenDocument.h"
-#include "gui/widgets/TimeWidget.h"
 #include "misc/Strings.h"
-#include "gui/widgets/LineEdit.h"
 
-#include <QLayout>
-#include <QDialog>
 #include <QDialogButtonBox>
 #include <QFrame>
 #include <QGroupBox>
 #include <QLabel>
-#include <QSpinBox>
-#include <QString>
+#include <QPushButton>
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
@@ -40,14 +37,15 @@
 namespace Rosegarden
 {
 
+
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
                                        Composition *composition,
                                        int time,
-                                       const QString &name,
-                                       const QString &des):
+                                       const QString &text,
+                                       const QString &comment):
     QDialog(parent)
 {
-    initialise(composition, time, name, des);
+    initialise(composition, time, text, comment);
 }
 
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
@@ -63,8 +61,8 @@ MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
 void
 MarkerModifyDialog::initialise(Composition *composition,
                                int time,
-                               const QString &name,
-                               const QString &des)
+                               const QString &text,
+                               const QString &comment)
 {
 
     m_originalTime = time;
@@ -77,26 +75,17 @@ MarkerModifyDialog::initialise(Composition *composition,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-    m_timeEdit = new TimeWidget(tr("Marker Time"),  // title
-                                vbox,  // parent
-                                composition,
-                                time,  // initialTime
-                                true);  // constrainToCompositionDuration
-    vboxLayout->addWidget(m_timeEdit);
+    // Marker Time
+    m_timeWidget = new TimeWidget2(tr("Marker Time"),  // title
+                                   vbox,  // parent
+                                   composition,
+                                   time,  // initialTime
+                                   true);  // constrainToCompositionDuration
+    connect(m_timeWidget, &TimeWidget2::signalIsValid,
+            this, &MarkerModifyDialog::slotIsValid);
+    vboxLayout->addWidget(m_timeWidget);
 
-    /*!!!
-     
-        layout->addWidget(new QLabel(tr("Absolute Time:"), frame), 0, 0);
-        m_timeEdit = new QSpinBox(frame);
-        layout->addWidget(m_timeEdit, 0, 1);
-     
-        m_timeEdit->setMinimum(INT_MIN);
-        m_timeEdit->setMaximum(INT_MAX);
-        m_timeEdit->setSingleStep(
-                Note(Note::Shortest).getDuration());
-        m_timeEdit->setValue(time);
-    */
-
+    // Marker Properties
     QGroupBox *groupBox = new QGroupBox(tr("Marker Properties"));
     QHBoxLayout *groupBoxLayout = new QHBoxLayout;
     vboxLayout->addWidget(groupBox);
@@ -107,27 +96,37 @@ MarkerModifyDialog::initialise(Composition *composition,
     layout->setSpacing(5);
     groupBoxLayout->addWidget(frame);
 
+    // Text
     layout->addWidget(new QLabel(tr("Text:"), frame), 0, 0);
-    m_nameEdit = new LineEdit(name, frame);
-    layout->addWidget(m_nameEdit, 0, 1);
+    m_text = new LineEdit(text, frame);
+    layout->addWidget(m_text, 0, 1);
 
+    // Comment
     layout->addWidget(new QLabel(tr("Comment:"), frame), 1, 0);
-    m_desEdit = new LineEdit(des, frame);
-    layout->addWidget(m_desEdit, 1, 1);
+    m_comment = new LineEdit(comment, frame);
+    layout->addWidget(m_comment, 1, 1);
 
-    m_nameEdit->selectAll();
-    m_nameEdit->setFocus();
+    m_text->selectAll();
+    m_text->setFocus();
 
     frame->setLayout(layout);
     groupBox->setLayout(groupBoxLayout);
     vbox->setLayout(vboxLayout);
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
+    m_buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
+
+void
+MarkerModifyDialog::slotIsValid(bool valid)
+{
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
+}
+
 
 }

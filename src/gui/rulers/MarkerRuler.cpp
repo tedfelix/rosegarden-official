@@ -190,8 +190,8 @@ MarkerRuler::slotEditMarker()
                                     marker->getID(),
                                     dialog.getOriginalTime(),
                                     dialog.getTime(),
-                                    qstrtostr(dialog.getName()),
-                                    qstrtostr(dialog.getDescription()));
+                                    qstrtostr(dialog.getText()),
+                                    qstrtostr(dialog.getComment()));
         CommandHistory::getInstance()->addCommand(command);
     }
 }
