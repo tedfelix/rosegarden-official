@@ -21,7 +21,7 @@
 #include "misc/ConfigGroups.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
-#include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 #include "gui/widgets/BigArrowButton.h"
 #include "misc/Strings.h"
 
@@ -64,7 +64,7 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_normalizeRestsButton(nullptr),
         m_asGivenButton(nullptr),
         m_startOfBarButton(nullptr),
-        m_timeEditor(nullptr)
+        m_timeWidget(nullptr)
 {
     setModal(true);
     setWindowTitle(tr("Time Signature"));
@@ -105,9 +105,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     BigArrowButton *denomDown = new BigArrowButton(Qt::LeftArrow);
     denomBoxLayout->addWidget(denomDown);
 
-    m_numLabel = new QLabel(QString("%1").arg(m_timeSignature.getNumerator()), numBox );
+    m_numLabel = new QLabel(
+            QString("%1").arg(m_timeSignature.getNumerator()), numBox);
     numBoxLayout->addWidget(m_numLabel);
-    m_denomLabel = new QLabel(QString("%1").arg(m_timeSignature.getDenominator()), denomBox );
+    m_denomLabel = new QLabel(
+            QString("%1").arg(m_timeSignature.getDenominator()), denomBox);
     denomBoxLayout->addWidget(m_denomLabel);
 
     m_numLabel->setAlignment(Qt::AlignCenter);
@@ -123,26 +125,33 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     denomBoxLayout->addWidget(denomUp);
     denomBox->setLayout(denomBoxLayout);
 
-    QObject::connect(numDown, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotNumDown);
-    QObject::connect(numUp, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotNumUp);
-    QObject::connect(denomDown, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotDenomDown);
-    QObject::connect(denomUp, &QAbstractButton::clicked, this, &TimeSignatureDialog::slotDenomUp);
+    QObject::connect(numDown, &QAbstractButton::clicked,
+            this, &TimeSignatureDialog::slotNumDown);
+    QObject::connect(numUp, &QAbstractButton::clicked,
+            this, &TimeSignatureDialog::slotNumUp);
+    QObject::connect(denomDown, &QAbstractButton::clicked,
+            this, &TimeSignatureDialog::slotDenomDown);
+    QObject::connect(denomUp, &QAbstractButton::clicked,
+            this, &TimeSignatureDialog::slotDenomUp);
 
     if (timeEditable) {
 
-        m_timeEditor = new TimeWidget(
+        m_timeWidget = new TimeWidget2(
                 tr("Time where signature takes effect"),  // title
                 this,  // parent
                 composition,
                 m_time,  // initialTime
                 true);  // constrainToCompositionDuration
-        vboxLayout->addWidget(m_timeEditor);
+        connect(m_timeWidget, &TimeWidget2::signalIsValid,
+                this, &TimeSignatureDialog::slotIsValid);
+        vboxLayout->addWidget(m_timeWidget);
+
         m_asGivenButton = nullptr;
         m_startOfBarButton = nullptr;
 
     } else {
 
-        m_timeEditor = nullptr;
+        m_timeWidget = nullptr;
 
         groupBox = new QGroupBox(tr("Scope"));
         groupBoxLayout = new QVBoxLayout;
@@ -160,18 +169,18 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
                 .arg(barNo + 1);
 
             groupBoxLayout->addWidget(new QLabel(scopeText));
-            m_asGivenButton = new QRadioButton
-                (tr("Start measure %1 here").arg(barNo + 2), groupBox);
+            m_asGivenButton = new QRadioButton(
+                    tr("Start measure %1 here").arg(barNo + 2), groupBox);
             groupBoxLayout->addWidget(m_asGivenButton);
-            m_startOfBarButton = new QRadioButton
-                (tr("Change time from start of measure %1")
-                 .arg(barNo + 1), groupBox);
+            m_startOfBarButton = new QRadioButton(
+                    tr("Change time from start of measure %1").arg(barNo + 1),
+                    groupBox);
             groupBoxLayout->addWidget(m_startOfBarButton);
             m_startOfBarButton->setChecked(true);
         } else {
-            groupBoxLayout->addWidget(
-                new QLabel(tr("Time change will take effect at the start of"
-                              " measure %1.").arg(barNo + 1)));
+            groupBoxLayout->addWidget(new QLabel(
+                    tr("Time change will take effect at the start of"
+                       " measure %1.").arg(barNo + 1)));
         }
     }
     groupBox->setLayout(groupBoxLayout);
@@ -184,24 +193,24 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     m_hideSignatureButton = new QCheckBox(tr("Hide the time signature"));
     groupBoxLayout->addWidget(m_hideSignatureButton);
-    m_hideSignatureButton->setChecked
-    ( qStrToBool( settings.value("timesigdialogmakehidden", "false" ) ) );
+    m_hideSignatureButton->setChecked(qStrToBool(
+            settings.value("timesigdialogmakehidden", "false")));
 
     m_hideBarsButton = new QCheckBox(tr("Hide the affected bar lines"));
     groupBoxLayout->addWidget(m_hideBarsButton);
-    m_hideBarsButton->setChecked
-    ( qStrToBool( settings.value("timesigdialogmakehiddenbars", "false" ) ) );
+    m_hideBarsButton->setChecked(qStrToBool(
+            settings.value("timesigdialogmakehiddenbars", "false")));
 
     m_commonTimeButton = new QCheckBox(tr("Show as common time"));
     groupBoxLayout->addWidget(m_commonTimeButton);
-    m_commonTimeButton->setChecked
-    ( qStrToBool( settings.value("timesigdialogshowcommon", "true" ) ) );
+    m_commonTimeButton->setChecked(qStrToBool(
+            settings.value("timesigdialogshowcommon", "true")));
 
     m_normalizeRestsButton = new QCheckBox
                              (tr("Correct the durations of following measures"));
     groupBoxLayout->addWidget(m_normalizeRestsButton);
-    m_normalizeRestsButton->setChecked
-    ( qStrToBool( settings.value("timesigdialognormalize", "true" ) ) );
+    m_normalizeRestsButton->setChecked(qStrToBool(
+            settings.value("timesigdialognormalize", "true")));
 
     groupBox->setLayout(groupBoxLayout);
 
@@ -212,16 +221,14 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
 
     settings.endGroup();
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(  QDialogButtonBox::Ok
-                                                       | QDialogButtonBox::Cancel
-                                                       | QDialogButtonBox::Help);
-
-    vboxLayout->addWidget(buttonBox);
-
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TimeSignatureDialog::slotHelpRequested);
-
+    m_buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
+            QDialogButtonBox::Help);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(m_buttonBox, &QDialogButtonBox::helpRequested,
+            this, &TimeSignatureDialog::slotHelpRequested);
+    vboxLayout->addWidget(m_buttonBox);
 }
 
 TimeSignature
@@ -230,22 +237,30 @@ TimeSignatureDialog::getTimeSignature() const
     QSettings settings;
     settings.beginGroup( GeneralOptionsConfigGroup );
 
-    settings.setValue("timesigdialogmakehidden", m_hideSignatureButton->isChecked());
-    settings.setValue("timesigdialogmakehiddenbars", m_hideBarsButton->isChecked());
-    settings.setValue("timesigdialogshowcommon", m_commonTimeButton->isChecked());
-    settings.setValue("timesigdialognormalize", m_normalizeRestsButton->isChecked());
+    settings.setValue("timesigdialogmakehidden",
+            m_hideSignatureButton->isChecked());
+    settings.setValue("timesigdialogmakehiddenbars",
+            m_hideBarsButton->isChecked());
+    settings.setValue("timesigdialogshowcommon",
+            m_commonTimeButton->isChecked());
+    settings.setValue("timesigdialognormalize",
+            m_normalizeRestsButton->isChecked());
 
-    TimeSignature ts(m_timeSignature.getNumerator(),
-                     m_timeSignature.getDenominator(),
-                     (m_commonTimeButton &&
-                      m_commonTimeButton->isEnabled() &&
-                      m_commonTimeButton->isChecked()),
-                     (m_hideSignatureButton &&
-                      m_hideSignatureButton->isEnabled() &&
-                      m_hideSignatureButton->isChecked()),
-                     (m_hideBarsButton &&
-                      m_hideBarsButton->isEnabled() &&
-                      m_hideBarsButton->isChecked()));
+    // ??? m_hideSignatureButton cannot be disabled or nullptr.  Just call
+    //     isChecked().
+    // ??? m_hideBarsButton cannot be disabled or nullptr.  Just call
+    //     isChecked().
+    TimeSignature ts(m_timeSignature.getNumerator(),  // numerator
+                     m_timeSignature.getDenominator(),  // denominator
+                     (m_commonTimeButton  &&
+                         m_commonTimeButton->isEnabled()  &&
+                         m_commonTimeButton->isChecked()),  // preferCommon
+                     (m_hideSignatureButton  &&
+                         m_hideSignatureButton->isEnabled()  &&
+                         m_hideSignatureButton->isChecked()),  // hidden
+                     (m_hideBarsButton  &&
+                         m_hideBarsButton->isEnabled()  &&
+                         m_hideBarsButton->isChecked()));  // hiddenBars
 
     settings.endGroup();
 
@@ -320,8 +335,8 @@ TimeSignatureDialog::slotUpdateCommonTimeButton()
 timeT
 TimeSignatureDialog::getTime() const
 {
-    if (m_timeEditor) {
-        return m_timeEditor->getTime();
+    if (m_timeWidget) {
+        return m_timeWidget->getTime();
     } else if (m_asGivenButton && m_asGivenButton->isChecked()) {
         return m_time;
     } else if (m_startOfBarButton && m_startOfBarButton->isChecked()) {
@@ -339,6 +354,12 @@ TimeSignatureDialog::shouldNormalizeRests() const
             m_normalizeRestsButton->isChecked());
 }
 
+void
+TimeSignatureDialog::slotIsValid(bool valid)
+{
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
+}
 
 void
 TimeSignatureDialog::slotHelpRequested()
@@ -351,4 +372,6 @@ TimeSignatureDialog::slotHelpRequested()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:timeSignatureDialog-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
+
+
 }

@@ -28,6 +28,7 @@
 class QWidget;
 class QRadioButton;
 class QLabel;
+class QDialogButtonBox;
 class QCheckBox;
 
 
@@ -35,7 +36,7 @@ namespace Rosegarden
 {
 
 
-class TimeWidget;
+class TimeWidget2;
 class Composition;
 
 
@@ -44,6 +45,7 @@ class TimeSignatureDialog : public QDialog
     Q_OBJECT
 
 public:
+
     TimeSignatureDialog(QWidget *parent,
                         Composition *composition,
                         timeT insertionTime,
@@ -58,6 +60,7 @@ public:
     bool shouldNormalizeRests() const;
 
 public slots:
+
     void slotNumUp();
     void slotNumDown();
     void slotDenomUp();
@@ -65,8 +68,11 @@ public slots:
     void slotUpdateCommonTimeButton();
     void slotHelpRequested();
 
-protected:
-    //--------------- Data members ---------------------------------
+private slots:
+
+    void slotIsValid(bool valid);
+
+private:
 
     Composition *m_composition;
     TimeSignature m_timeSignature;
@@ -84,7 +90,9 @@ protected:
     QRadioButton *m_asGivenButton;
     QRadioButton *m_startOfBarButton;
 
-    TimeWidget *m_timeEditor;
+    TimeWidget2 *m_timeWidget;
+
+    QDialogButtonBox *m_buttonBox;
 };
 
 
