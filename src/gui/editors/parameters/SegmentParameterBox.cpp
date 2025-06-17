@@ -54,7 +54,6 @@
 #include <QColor>
 #include <QColorDialog>
 #include <QComboBox>
-#include <QFontMetrics>
 #include <QGridLayout>
 #include <QLabel>
 #include <QMessageBox>

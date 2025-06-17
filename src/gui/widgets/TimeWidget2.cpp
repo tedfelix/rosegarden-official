@@ -43,6 +43,14 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+
+    // Message displayed when the time value is outside the valid time range.
+    const QString outOfRange = TimeWidget2::tr("Out Of Range");
+
+}
+
 TimeWidget2::TimeWidget2(const QString &title,
                          QWidget *parent,
                          timeT initialTime,
@@ -273,15 +281,30 @@ TimeWidget2::init()
 
     }
 
-    // ??? This needs its own spacing.  We need a QHBoxLayout.
+    // Make a widget for the Out Of Range area so that it can have its
+    // own horizontal layout and spacing independent of the other widgets.
+    QWidget *widget = new QWidget(this);
+    layout->addWidget(widget, row, 0, 1, 7);
+    QHBoxLayout *hBox = new QHBoxLayout(widget);
+    hBox->setContentsMargins(0,0,0,0);
 
-    m_limitMessage = new QLabel("", this);
-    layout->addWidget(m_limitMessage, row, 0, 1, 2);
-    m_limitButton = new QPushButton(tr("Limit"), this);
+    // Center the widgets.
+    hBox->insertStretch(-1, 1);
+
+    // Out Of Range and Limit button
+    m_limitMessage = new QLabel("", widget);
+    // Set a minimum width so that the widgets don't bounce around.
+    int width = fontMetrics().boundingRect(outOfRange).width() + 2;
+    m_limitMessage->setMinimumWidth(width);
+    hBox->addWidget(m_limitMessage);
+    m_limitButton = new QPushButton(tr("Limit"), widget);
     m_limitButton->setToolTip(tr("Adjust time to be within valid limits."));
     connect(m_limitButton, &QPushButton::clicked,
             this, &TimeWidget2::slotLimitClicked);
-    layout->addWidget(m_limitButton, row, 2);
+    hBox->addWidget(m_limitButton);
+
+    // Center the widgets.
+    hBox->insertStretch(-1, 1);
 
     updateWidgets();
 }
@@ -574,7 +597,7 @@ TimeWidget2::updateLimitWarning()
 {
     if (m_isDuration  &&  m_time < m_minimumDuration) {
         // Set a message of "Out of Range".
-        m_limitMessage->setText(tr("Out Of Range"));
+        m_limitMessage->setText(outOfRange);
         // Enable the limit button.
         m_limitButton->setEnabled(true);
         m_limit = m_minimumDuration;
@@ -593,7 +616,7 @@ TimeWidget2::updateLimitWarning()
             if (m_startTime + m_time > compositionEnd)
             {
                 // Set a message of "Out of Range".
-                m_limitMessage->setText(tr("Out Of Range"));
+                m_limitMessage->setText(outOfRange);
                 // Enable the limit button.
                 m_limitButton->setEnabled(true);
                 m_limit = compositionEnd - m_startTime;
@@ -610,7 +633,7 @@ TimeWidget2::updateLimitWarning()
             if (m_time < compositionStart)
             {
                 // Set a message of "Out of Range".
-                m_limitMessage->setText(tr("Out Of Range"));
+                m_limitMessage->setText(outOfRange);
                 // Enable the limit button.
                 m_limitButton->setEnabled(true);
                 m_limit = compositionStart;
@@ -623,7 +646,7 @@ TimeWidget2::updateLimitWarning()
             if (m_time >= compositionEnd)
             {
                 // Set a message of "Out of Range".
-                m_limitMessage->setText(tr("Out Of Range"));
+                m_limitMessage->setText(outOfRange);
                 // Enable the limit button.
                 m_limitButton->setEnabled(true);
                 m_limit = compositionEnd - 1;
