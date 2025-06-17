@@ -322,17 +322,6 @@ TimeWidget2::updateWidgets()
     updateLimitWarning();
 }
 
-static int
-getRoundedMSec(RealTime rt)
-{
-    double msecDouble = rt.usec() / 1000.0;
-    // ??? I think lround() is the same as this.  Check how it
-    //     handles negatives.
-    //       return lround(msecDouble);
-    return rt.sec > 0 ? floor(msecDouble + 0.5) : ceil(msecDouble - 0.5);
-
-}
-
 void
 TimeWidget2::setTime(timeT t)
 {
@@ -521,10 +510,7 @@ TimeWidget2::updateSecondsMsec()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_msecSpin->blockSignals(true);
-        // ??? Is getRoundedMSec() actually needed now?  It was there for an
-        //     update issue with the old design.  Might be able to get rid of
-        //     it.
-        m_msecSpin->setValue(getRoundedMSec(realTime));
+        m_msecSpin->setValue(realTime.msec());
         m_msecSpin->blockSignals(false);
 
     } else {  // Absolute time mode.
@@ -554,10 +540,7 @@ TimeWidget2::updateSecondsMsec()
             m_msecSpin->setMinimum(0);
             m_msecSpin->setMaximum(999);
         }
-        // ??? Is getRoundedMSec() actually needed now?  It was there for an
-        //     update issue with the old design.  Might be able to get rid of
-        //     it.
-        m_msecSpin->setValue(getRoundedMSec(realTime));
+        m_msecSpin->setValue(realTime.msec());
         m_msecSpin->blockSignals(false);
 
     }
