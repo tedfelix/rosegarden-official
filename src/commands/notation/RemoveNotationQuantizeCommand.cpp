@@ -37,13 +37,12 @@ RemoveNotationQuantizeCommand::registerCommand(CommandRegistry *r)
 void
 RemoveNotationQuantizeCommand::modifySegment()
 {
-    EventContainer::iterator i;
-
     std::vector<Event *> toInsert;
     std::vector<Event *> toErase;
 
-    for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+    for (EventContainer::iterator i = m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end();
+         ++i) {
 
         toInsert.push_back(new Event(**i,
                                      (*i)->getAbsoluteTime(),
@@ -63,13 +62,17 @@ RemoveNotationQuantizeCommand::modifySegment()
         toErase.push_back(*i);
     }
 
-    for (std::vector<Event *>::iterator i = toErase.begin(); i != toErase.end();
-            ++i) {
+    // Erase
+    for (std::vector<Event *>::iterator i = toErase.begin();
+         i != toErase.end();
+         ++i) {
         m_selection->getSegment().eraseSingle(*i);
     }
 
-    for (std::vector<Event *>::iterator i = toInsert.begin(); i != toInsert.end();
-            ++i) {
+    // Insert
+    for (std::vector<Event *>::iterator i = toInsert.begin();
+         i != toInsert.end();
+         ++i) {
         m_selection->getSegment().insert(*i);
     }
 }

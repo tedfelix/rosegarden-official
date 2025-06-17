@@ -107,7 +107,7 @@ NoteInsertionCommand::modifySegment()
 {
     Segment &segment(getSegment());
     SegmentNotationHelper helper(segment);
-    Segment::iterator i, j;
+    Segment::iterator i1, j1;
 
     // insert via a model event, so as to apply the note style
 
@@ -139,8 +139,8 @@ NoteInsertionCommand::modifySegment()
 
     } else {
 
-        segment.getTimeSlice(m_insertionTime, i, j);
-        for (Segment::iterator k = i; k != j; ++k) {
+        segment.getTimeSlice(m_insertionTime, i1, j1);
+        for (Segment::iterator k = i1; k != j1; ++k) {
             if ((*k)->isa(Indication::EventType) &&
                 (*k)->getSubOrdering() <= actualSubordering) {
                 // Decrement subordering to put the grace note
@@ -178,9 +178,9 @@ NoteInsertionCommand::modifySegment()
             // is at least one with the same subordering and
             // suborderingExact is not set
 
-            segment.getTimeSlice(m_insertionTime, i, j);
+            segment.getTimeSlice(m_insertionTime, i1, j1);
             bool collision = false;
-            for (Segment::iterator k = i; k != j; ++k) {
+            for (Segment::iterator k = i1; k != j1; ++k) {
                 if ((*k)->getSubOrdering() == actualSubordering) {
                     collision = true;
                     break;
@@ -189,7 +189,7 @@ NoteInsertionCommand::modifySegment()
 
             if (collision) {
                 std::vector<Event *> toInsert, toErase;
-                for (Segment::iterator k = i; k != j; ++k) {
+                for (Segment::iterator k = i1; k != j1; ++k) {
                     if ((*k)->isa(Note::EventType) &&
                         (*k)->getSubOrdering() <= actualSubordering) {
                         toErase.push_back(*k);
@@ -210,22 +210,22 @@ NoteInsertionCommand::modifySegment()
         }
 
         e->set<Bool>(IS_GRACE_NOTE, true);
-        i = segment.insert(e);
+        i1 = segment.insert(e);
 
         Segment::iterator k;
-        segment.getTimeSlice(m_insertionTime, j, k);
+        segment.getTimeSlice(m_insertionTime, j1, k);
         Segment::iterator bg0 = segment.end(), bg1 = segment.end();
-        while (j != k) {
-            RG_DEBUG << "testing for truthiness: time " << (*j)->getAbsoluteTime() << ", subordering " << (*j)->getSubOrdering();
-            if ((*j)->isa(Note::EventType) &&
-                (*j)->getSubOrdering() < 0 &&
-                (*j)->has(IS_GRACE_NOTE) &&
-                (*j)->get<Bool>(IS_GRACE_NOTE)) {
+        while (j1 != k) {
+            RG_DEBUG << "testing for truthiness: time " << (*j1)->getAbsoluteTime() << ", subordering " << (*j1)->getSubOrdering();
+            if ((*j1)->isa(Note::EventType) &&
+                (*j1)->getSubOrdering() < 0 &&
+                (*j1)->has(IS_GRACE_NOTE) &&
+                (*j1)->get<Bool>(IS_GRACE_NOTE)) {
                 RG_DEBUG << "truthiful";
-                if (bg0 == segment.end()) bg0 = j;
-                bg1 = j;
+                if (bg0 == segment.end()) bg0 = j1;
+                bg1 = j1;
             }
-            ++j;
+            ++j1;
         }
 
         if (bg0 != segment.end() && bg1 != bg0) {
@@ -260,32 +260,32 @@ NoteInsertionCommand::modifySegment()
         // If we're attempting to insert at the same time and pitch as
         // an existing note, then we remove the existing note first
         // (so as to change its duration, if the durations differ)
-        segment.getTimeSlice(m_insertionTime, i, j);
-        while (i != j) {
-            if ((*i)->isa(Note::EventType)) {
+        segment.getTimeSlice(m_insertionTime, i1, j1);
+        while (i1 != j1) {
+            if ((*i1)->isa(Note::EventType)) {
                 long pitch;
-                if ((*i)->get<Int>(PITCH, pitch) && pitch == m_pitch) {
+                if ((*i1)->get<Int>(PITCH, pitch) && pitch == m_pitch) {
                     // allow grace note and note with the same pitch
-                    if (! (*i)->has(IS_GRACE_NOTE) ||
-                        ! (*i)->get<Bool>(IS_GRACE_NOTE)) {
-                        helper.deleteNote(*i);
+                    if (! (*i1)->has(IS_GRACE_NOTE) ||
+                        ! (*i1)->get<Bool>(IS_GRACE_NOTE)) {
+                        helper.deleteNote(*i1);
                     }
                     break;
                 }
             }
-            ++i;
+            ++i1;
         }
 
         if (m_matrixType) {
-            i = SegmentMatrixHelper(segment).matrixInsertNote(e);
+            i1 = SegmentMatrixHelper(segment).matrixInsertNote(e);
         } else {
-            i = helper.insertNote(e);
+            i1 = helper.insertNote(e);
             // e is just a model for SegmentNotationHelper::insertNote
             delete e;
         }
     }
 
-    if (i != segment.end()) m_lastInsertedEvent = *i;
+    if (i1 != segment.end()) m_lastInsertedEvent = *i1;
 
     if (m_autoBeam) {
 
@@ -296,14 +296,14 @@ NoteInsertionCommand::modifySegment()
         timeT barStartTime = segment.getBarStartForTime(m_insertionTime);
         timeT barEndTime = segment.getBarEndForTime(m_insertionTime);
 
-        for (Segment::iterator j = i;
-                j != segment.end() && (*j)->getAbsoluteTime() < barEndTime;
-                ++j) {
+        for (Segment::iterator j = i1;
+             j != segment.end() && (*j)->getAbsoluteTime() < barEndTime;
+             ++j) {
             if ((*j)->has(BEAMED_GROUP_ID))
-                return ;
+                return;
         }
 
-        for (Segment::iterator j = i;
+        for (Segment::iterator j = i1;
                 j != segment.end() && (*j)->getAbsoluteTime() >= barStartTime;
                 --j) {
             if ((*j)->has(BEAMED_GROUP_TUPLET_BASE))

@@ -30,6 +30,8 @@ namespace Rosegarden
 class EventSelection;
 class CommandRegistry;
 
+
+/// Notation: Adjust > Quantize > Remove Notation Quantization
 class RemoveNotationQuantizeCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveNotationQuantizeCommand);
