@@ -237,7 +237,7 @@ TimeWidget2::init()
     m_msecSpin = new QSpinBox(this);
     // Set for duration mode.  Time mode will change this as needed.
     m_msecSpin->setMinimum(0);
-    m_msecSpin->setMinimum(999);
+    m_msecSpin->setMaximum(999);
     m_msecSpin->setSingleStep(10);
     connect(m_msecSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotSecondsOrMSecChanged);
