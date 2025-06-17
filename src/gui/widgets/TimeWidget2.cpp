@@ -55,9 +55,6 @@ TimeWidget2::TimeWidget2(const QString &title,
     m_minimumDuration(0),  // Unused in absolute time mode.
     m_time(initialTime)
 {
-    RG_DEBUG << "ctor for time mode";
-    RG_DEBUG << "  m_constrainToCompositionDuration: " << m_constrainToCompositionDuration;
-
     init();
 }
 
@@ -75,18 +72,12 @@ TimeWidget2::TimeWidget2(const QString &title,
     m_minimumDuration(minimumDuration),
     m_time(initialDuration)
 {
-    RG_DEBUG << "ctor for duration mode";
-    RG_DEBUG << "  m_constrainToCompositionDuration: " << m_constrainToCompositionDuration;
-
     init();
 }
 
 void
 TimeWidget2::init()
 {
-    // ??? We shouldn't set min/max when updating.  Move as many setMinimum()
-    //     and setMaximum() calls as we can to here.
-
     m_composition = &RosegardenDocument::currentDocument->getComposition();
 
     QGridLayout *layout = new QGridLayout(this);
@@ -154,6 +145,8 @@ TimeWidget2::init()
         layout->addWidget(labelWidget, row, 4);
 
         m_ticksSpin = new QSpinBox(this);
+        m_ticksSpin->setMinimum(0);
+        m_ticksSpin->setMaximum(INT_MAX);
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
@@ -178,6 +171,9 @@ TimeWidget2::init()
     m_measureSpin = new QSpinBox(this);
     if (m_isDuration)
         m_measureSpin->setMinimum(0);
+    else
+        m_measureSpin->setMinimum(INT_MIN);
+    m_measureSpin->setMaximum(INT_MAX);
     connect(m_measureSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_measureSpin, row, 1);
@@ -188,7 +184,10 @@ TimeWidget2::init()
     layout->addWidget(labelWidget, row, 2);
 
     m_beatSpin = new QSpinBox(this);
-    m_beatSpin->setMinimum(1);
+    if (m_isDuration)
+        m_beatSpin->setMinimum(0);
+    else
+        m_beatSpin->setMinimum(1);
     connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_beatSpin, row, 3);
@@ -202,7 +201,8 @@ TimeWidget2::init()
     layout->addWidget(labelWidget, row, 4);
 
     m_fractionSpin = new QSpinBox(this);
-    m_fractionSpin->setMinimum(1);
+    // Always 0 to n-1.
+    m_fractionSpin->setMinimum(0);
     connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_fractionSpin, row, 5);
@@ -235,6 +235,7 @@ TimeWidget2::init()
 
     m_msecSpin = new QSpinBox(this);
     // Set for duration mode.  Time mode will change this as needed.
+    // See updateSecondsMsec().
     m_msecSpin->setMinimum(0);
     m_msecSpin->setMaximum(999);
     m_msecSpin->setSingleStep(10);
@@ -251,6 +252,7 @@ TimeWidget2::init()
 
     ++row;
 
+    // Absolute Time mode.
     if (!m_isDuration) {
 
         // Ticks
@@ -259,6 +261,8 @@ TimeWidget2::init()
         layout->addWidget(labelWidget, row, 0);
 
         m_ticksSpin = new QSpinBox(this);
+        m_ticksSpin->setMinimum(INT_MIN);
+        m_ticksSpin->setMaximum(INT_MAX);
         m_ticksSpin->setSingleStep(Note(Note::Shortest).getDuration());
         connect(m_ticksSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
                 this, &TimeWidget2::slotTicksChanged);
@@ -395,8 +399,6 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_measureSpin->blockSignals(true);
-        m_measureSpin->setMinimum(0);
-        m_measureSpin->setMaximum(9999);
         m_measureSpin->setValue(bars);
         m_measureSpin->blockSignals(false);
 
@@ -404,7 +406,8 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_beatSpin->blockSignals(true);
-        m_beatSpin->setMinimum(0);
+        // ??? In duration mode, m_timeSig never changes.  We just need
+        //     to do this on init and leave it alone.
         m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
         m_beatSpin->setValue(beats);
         m_beatSpin->blockSignals(false);
@@ -413,7 +416,8 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_fractionSpin->blockSignals(true);
-        m_fractionSpin->setMinimum(0);
+        // ??? In duration mode, m_timeSig never changes.  We just need
+        //     to do this on init and leave it alone.
         m_fractionSpin->setMaximum(
                 timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
@@ -440,8 +444,6 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_measureSpin->blockSignals(true);
-        m_measureSpin->setMinimum(INT_MIN);
-        m_measureSpin->setMaximum(INT_MAX);
         m_measureSpin->setValue(bar + 1);
         m_measureSpin->blockSignals(false);
 
@@ -449,7 +451,6 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_beatSpin->blockSignals(true);
-        m_beatSpin->setMinimum(1);
         const TimeSignature timeSig =
                 m_composition->getTimeSignatureAt(m_time);
         m_beatSpin->setMaximum(timeSig.getBeatsPerBar());
@@ -460,10 +461,8 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_fractionSpin->blockSignals(true);
-        m_fractionSpin->setMinimum(0);
-        m_fractionSpin->setMaximum(timeSig.getBeatDuration() /
-                                Note(Note::Shortest).
-                                getDuration() - 1);
+        m_fractionSpin->setMaximum(
+                timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
         m_fractionSpin->blockSignals(false);
 
@@ -547,14 +546,6 @@ TimeWidget2::updateTicks()
     // Have to block since QSpinBox::valueChanged() fires on
     // programmatic changes as well as user changes.
     m_ticksSpin->blockSignals(true);
-
-    // Duration mode.
-    if (m_isDuration)
-        m_ticksSpin->setMinimum(0);
-    else  // Absolute time mode.
-        m_ticksSpin->setMinimum(INT_MIN);
-
-    m_ticksSpin->setMaximum(INT_MAX);
     m_ticksSpin->setValue(m_time);
     m_ticksSpin->blockSignals(false);
 }

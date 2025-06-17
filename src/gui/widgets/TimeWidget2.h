@@ -138,44 +138,44 @@ private:
 
     // Widgets
 
-    /// Note field for duration mode.
+    /// Note (for duration mode)
     QComboBox *m_noteCombo;
     std::vector<timeT> m_noteDurations;
     /// Update the note widget from m_time.
     void updateNote();
 
-    /// Ticks field.
+    /// Ticks
     QSpinBox *m_ticksSpin;
 
     /// Update the ticks widget from m_time.
     void updateTicks();
 
-    /// Measure/Measures field.
+    /// Measure/Measures
     QSpinBox *m_measureSpin;
 
-    /// Beat/Beats field.
+    /// Beat/Beats
     QSpinBox *m_beatSpin;
 
-    /// 64ths field.
+    /// 64ths
     QSpinBox *m_fractionSpin;
 
-    /// Time sig field that appears after 64ths (4/4 time).
+    /// Time signature that appears after 64ths, e.g. "(4/4 time)".
     QLabel *m_timeSig;
 
     /// Update the measure, beat and 64ths widgets from m_time.
     void updateMeasureBeat64();
 
-    /// Seconds field.
+    /// Seconds
     QSpinBox *m_secondsSpin;
-    /// msec field.
+    /// msec
     QSpinBox *m_msecSpin;
 
-    /// Update the seconds and msec fields from m_time.
+    /// Update the seconds and msec widgets from m_time.
     void updateSecondsMsec();
 
-    /// Tempo field (e.g. 120.0 bpm) in the lower right in duration mode.
+    /// Tempo (e.g. "120.0 bpm" in the lower right in duration mode)
     QLabel *m_tempo;
-    /// Update m_tempo from m_time.
+    /// Update tempo widget (m_tempo) from m_time.
     void updateTempo();
 
     /// Out Of Range message area.
