@@ -33,7 +33,6 @@ namespace Rosegarden
 
 
 class TimeWidget2;
-class Composition;
 
 
 class TimeDialog : public QDialog
@@ -42,16 +41,21 @@ class TimeDialog : public QDialog
 
 public:
     /// for absolute times
-    TimeDialog(QWidget *parent, QString title, Composition *composition,
-               timeT defaultTime, bool constrainToCompositionDuration);
+    TimeDialog(QWidget *parent,
+               QString title,
+               timeT defaultTime,
+               bool constrainToCompositionDuration);
 
     /// for durations
     /**
      * startTime is needed to get the correct bar counts based on the current
      * time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
      */
-    TimeDialog(QWidget *parent, QString title, Composition *composition,
-               timeT startTime, timeT defaultDuration, timeT minimumDuration,
+    TimeDialog(QWidget *parent,
+               QString title,
+               timeT startTime,
+               timeT defaultDuration,
+               timeT minimumDuration,
                bool constrainToCompositionDuration);
 
     timeT getTime() const;

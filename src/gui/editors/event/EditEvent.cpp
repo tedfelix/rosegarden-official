@@ -25,7 +25,6 @@
 #include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
-#include "document/RosegardenDocument.h"
 #include "gui/editors/guitar/Chord.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
@@ -279,12 +278,8 @@ EditEvent::getEvent()
 void
 EditEvent::slotEditAbsoluteTime()
 {
-    Composition &composition =
-            RosegardenDocument::currentDocument->getComposition();
-
     TimeDialog dialog(this,  // parent
                       tr("Edit Event Time"),  // title
-                      &composition,
                       m_timeSpinBox->value(),  // defaultTime
                       true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted)

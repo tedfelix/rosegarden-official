@@ -20,8 +20,6 @@
 
 #include "MarkerModifyDialog.h"
 
-#include "base/Composition.h"
-#include "document/RosegardenDocument.h"
 #include "misc/Strings.h"
 
 #include <QDialogButtonBox>
@@ -39,28 +37,25 @@ namespace Rosegarden
 
 
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
-                                       Composition *composition,
                                        int time,
                                        const QString &text,
                                        const QString &comment):
     QDialog(parent)
 {
-    initialise(composition, time, text, comment);
+    initialise(time, text, comment);
 }
 
 MarkerModifyDialog::MarkerModifyDialog(QWidget *parent,
-                                       Composition *composition,
                                        Marker *marker) :
     QDialog(parent)
 {
-    initialise(composition, marker->getTime(),
+    initialise(marker->getTime(),
                strtoqstr(marker->getName()),
                strtoqstr(marker->getDescription()));
 }
 
 void
-MarkerModifyDialog::initialise(Composition *composition,
-                               int time,
+MarkerModifyDialog::initialise(int time,
                                const QString &text,
                                const QString &comment)
 {
@@ -78,7 +73,6 @@ MarkerModifyDialog::initialise(Composition *composition,
     // Marker Time
     m_timeWidget = new TimeWidget2(tr("Marker Time"),  // title
                                    vbox,  // parent
-                                   composition,
                                    time,  // initialTime
                                    true);  // constrainToCompositionDuration
     connect(m_timeWidget, &TimeWidget2::signalIsValid,

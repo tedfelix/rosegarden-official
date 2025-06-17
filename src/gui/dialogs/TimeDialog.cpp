@@ -20,7 +20,6 @@
 
 #include "TimeDialog.h"
 
-#include "base/Composition.h"
 #include "gui/widgets/TimeWidget2.h"
 
 #include <QDialog>
@@ -35,8 +34,8 @@ namespace Rosegarden
 {
 
 
-TimeDialog::TimeDialog(QWidget *parent, QString title,
-                       Composition *composition,
+TimeDialog::TimeDialog(QWidget *parent,
+                       QString title,
                        timeT defaultTime,
                        bool constrainToCompositionDuration) :
     QDialog(parent)
@@ -52,7 +51,6 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     m_timeWidget2 = new TimeWidget2(
             title,
             vbox,  // parent
-            composition,
             defaultTime,  // initialTime
             constrainToCompositionDuration);
     connect(m_timeWidget2, &TimeWidget2::signalIsValid,
@@ -71,13 +69,13 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     vboxLayout->addWidget(m_buttonBox);
 }
 
-TimeDialog::TimeDialog(QWidget *parent, QString title,
-                       Composition *composition,
+TimeDialog::TimeDialog(QWidget *parent,
+                       QString title,
                        timeT startTime,
                        timeT defaultDuration,
                        timeT minimumDuration,
                        bool constrainToCompositionDuration) :
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(title);
@@ -88,7 +86,6 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     m_timeWidget2 = new TimeWidget2(
             title,
             this,  // parent
-            composition,
             startTime,
             defaultDuration,  // initialDuration
             minimumDuration,

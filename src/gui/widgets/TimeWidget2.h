@@ -65,7 +65,6 @@ public:
      */
     TimeWidget2(const QString &title,
                 QWidget *parent,
-                Composition *composition, // for bar/beat/msec
                 timeT initialTime,
                 bool constrainToCompositionDuration);
 
@@ -83,7 +82,6 @@ public:
      */
     TimeWidget2(const QString &title,
                 QWidget *parent,
-                Composition *composition, // for bar/beat/msec
                 timeT startTime,
                 timeT initialDuration,
                 timeT minimumDuration,
@@ -137,8 +135,6 @@ private:
 
     /// The time or duration that is currently displayed on the widget.
     timeT m_time;
-    /// Set m_time based on RealTime.
-    void setRealTime(RealTime realTime);
 
     // Widgets
 

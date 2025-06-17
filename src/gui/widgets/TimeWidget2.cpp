@@ -24,6 +24,7 @@
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
+#include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
@@ -44,11 +45,9 @@ namespace Rosegarden
 
 TimeWidget2::TimeWidget2(const QString &title,
                          QWidget *parent,
-                         Composition *composition,
                          timeT initialTime,
                          bool constrainToCompositionDuration) :
     QGroupBox(title, parent),
-    m_composition(composition),
     m_isDuration(false),
     m_constrainToCompositionDuration(constrainToCompositionDuration),
     m_startTime(0),
@@ -64,13 +63,11 @@ TimeWidget2::TimeWidget2(const QString &title,
 
 TimeWidget2::TimeWidget2(const QString &title,
                          QWidget *parent,
-                         Composition *composition,
                          timeT startTime,
                          timeT initialDuration,
                          timeT minimumDuration,
                          bool constrainToCompositionDuration) :
     QGroupBox(title, parent),
-    m_composition(composition),
     m_isDuration(true),
     m_constrainToCompositionDuration(constrainToCompositionDuration),
     m_startTime(startTime),
@@ -89,6 +86,8 @@ TimeWidget2::init()
 {
     // ??? We shouldn't set min/max when updating.  Move as many setMinimum()
     //     and setMaximum() calls as we can to here.
+
+    m_composition = &RosegardenDocument::currentDocument->getComposition();
 
     QGridLayout *layout = new QGridLayout(this);
     layout->setSpacing(5);
@@ -316,21 +315,6 @@ TimeWidget2::setTime(timeT t)
     m_time = t;
 
     updateWidgets();
-}
-
-void
-TimeWidget2::setRealTime(RealTime realTime)
-{
-    if (m_isDuration) {
-        const RealTime startRT = m_composition->getElapsedRealTime(m_startTime);
-        if (realTime >= RealTime::zero()) {
-            setTime(m_composition->getElapsedTimeForRealTime(startRT + realTime) - m_startTime);
-        } else {
-            RG_DEBUG << "setRealTime(): WARNING: realTime must be > 0 for duration widget (was " << realTime << ")";
-        }
-    } else {
-        setTime(m_composition->getElapsedTimeForRealTime(realTime));
-    }
 }
 
 void

@@ -21,7 +21,6 @@
 #include "RescaleDialog.h"
 
 #include "misc/ConfigGroups.h"
-#include "base/Composition.h"
 #include "gui/widgets/TimeWidget2.h"
 #include "misc/Strings.h"
 
@@ -40,7 +39,6 @@ namespace Rosegarden
 
 
 RescaleDialog::RescaleDialog(QWidget *parent,
-                             Composition *composition,
                              timeT startTime,
                              timeT originalDuration,
                              timeT minimumDuration,
@@ -59,7 +57,6 @@ RescaleDialog::RescaleDialog(QWidget *parent,
     m_newDuration = new TimeWidget2(
             tr("Duration of selection"),  // title
             vbox,  // parent
-            composition,
             startTime,
             originalDuration,  // initialDuration
             minimumDuration,

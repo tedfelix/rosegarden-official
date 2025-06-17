@@ -33,23 +33,17 @@ namespace Rosegarden
 {
 
 
-class RosegardenDocument;
-class Composition;
-
-
 class MarkerModifyDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     MarkerModifyDialog(QWidget *parent,
-                       Composition *composition,
                        int time,
                        const QString &text,
                        const QString &comment);
 
     MarkerModifyDialog(QWidget *parent,
-                       Composition *composition,
                        Marker *marker);
 
     QString getText() const  { return m_text->text(); }
@@ -63,12 +57,9 @@ private slots:
 
 private:
 
-    void initialise(Composition *composition,
-                    int time,
+    void initialise(int time,
                     const QString &text,
                     const QString &comment);
-
-    RosegardenDocument *m_doc;
 
     TimeWidget2 *m_timeWidget;
     LineEdit *m_text;

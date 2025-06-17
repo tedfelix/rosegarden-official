@@ -33,7 +33,6 @@ namespace Rosegarden
 
 
 class TimeWidget2;
-class Composition;
 
 
 class RescaleDialog : public QDialog
@@ -43,7 +42,6 @@ class RescaleDialog : public QDialog
 public:
 
     RescaleDialog(QWidget *parent,
-                  Composition *composition,  // for TimeWidget2 calculations
                   timeT startTime,
                   timeT originalDuration,
                   timeT minimumDuration,

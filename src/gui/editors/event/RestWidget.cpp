@@ -22,10 +22,8 @@
 
 #include "EditEvent.h"
 
-#include "base/Composition.h"
 #include "base/Event.h"
 #include "base/NotationTypes.h"  // For Note::EventRestType...
-#include "document/RosegardenDocument.h"
 #include "gui/dialogs/TimeDialog.h"
 
 #include <QGridLayout>
@@ -96,9 +94,6 @@ RestWidget::getPropertyFilter() const
 void
 RestWidget::slotEditDuration(bool /*checked*/)
 {
-    Composition &composition =
-            RosegardenDocument::currentDocument->getComposition();
-
     // This is needed to get the correct bar counts based on the current
     // time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
     const timeT startTime = m_parent->getAbsoluteTime();
@@ -106,7 +101,6 @@ RestWidget::slotEditDuration(bool /*checked*/)
     TimeDialog dialog(
             this,  // parent
             tr("Edit Duration"),  // title
-            &composition,  // composition
             startTime,  // startTime
             m_durationSpinBox->value(),  // defaultDuration
             1,  // minimumDuration

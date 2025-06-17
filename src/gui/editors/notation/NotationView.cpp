@@ -4290,7 +4290,6 @@ NotationView::slotRescale()
 
     RescaleDialog dialog(
             this,  // parent
-            &RosegardenDocument::currentDocument->getComposition(),  // composition
             getSelection()->getStartTime(),  // startTime
             getSelection()->getEndTime() - getSelection()->getStartTime(),  // originalDuration
             1,  // minimumDuration

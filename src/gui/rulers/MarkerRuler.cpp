@@ -183,7 +183,7 @@ MarkerRuler::slotEditMarker()
     // inconsistent with the other methods, so if anyone wants to move
     // it, be my guest.
 
-    MarkerModifyDialog dialog(this, &m_doc->getComposition(), marker);
+    MarkerModifyDialog dialog(this, marker);
     if (dialog.exec() == QDialog::Accepted) {
         ModifyMarkerCommand *command =
             new ModifyMarkerCommand(&m_doc->getComposition(),

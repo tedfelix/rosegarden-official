@@ -23,12 +23,10 @@
 #include "EditEvent.h"
 
 #include "base/BaseProperties.h"
-#include "base/Composition.h"
 #include "base/Event.h"
 #include "base/MidiProgram.h"  // For MidiMinValue, etc...
 #include "base/NotationTypes.h"
 #include "base/Pitch.h"
-#include "document/RosegardenDocument.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "misc/PreferenceInt.h"
@@ -223,9 +221,6 @@ NoteWidget::getPropertyFilter() const
 void
 NoteWidget::slotEditDuration(bool /*checked*/)
 {
-    Composition &composition =
-            RosegardenDocument::currentDocument->getComposition();
-
     // This is needed to get the correct bar counts based on the current
     // time signature.  E.g. in 4/4, 3840 is one bar, in 2/4, 3840 is two bars.
     const timeT startTime = m_parent->getAbsoluteTime();
@@ -233,7 +228,6 @@ NoteWidget::slotEditDuration(bool /*checked*/)
     TimeDialog dialog(
             this,  // parent
             tr("Edit Duration"),  // title
-            &composition,  // composition
             startTime,  // startTime
             m_durationSpinBox->value(),  // defaultDuration
             1,  // minimumDuration
@@ -263,13 +257,9 @@ NoteWidget::slotLockNotationClicked(bool checked)
 
 void NoteWidget::slotNotationTimeEditClicked(bool /*checked*/)
 {
-    Composition &composition =
-            RosegardenDocument::currentDocument->getComposition();
-
     TimeDialog dialog(
             this,  // parent
             tr("Edit Event Notation Time"),  // title
-            &composition,  // composition
             m_notationTimeSpinBox->value(),  // defaultTime
             true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted)
@@ -278,13 +268,9 @@ void NoteWidget::slotNotationTimeEditClicked(bool /*checked*/)
 
 void NoteWidget::slotNotationDurationEditClicked(bool /*checked*/)
 {
-    Composition &composition =
-            RosegardenDocument::currentDocument->getComposition();
-
     TimeDialog dialog(
             this,  // parent
             tr("Edit Notation Duration"),  // title
-            &composition,  // composition
             m_notationTimeSpinBox->value(),  // startTime
             m_notationDurationSpinBox->value(),  // defaultDuration
             1,  // minimumDuration

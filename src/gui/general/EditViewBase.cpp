@@ -27,6 +27,7 @@
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/TimeDialog.h"
 #include "base/Clipboard.h"
+#include "base/Composition.h"
 #include "commands/segment/SegmentReconfigureCommand.h"
 #include "misc/Debug.h"
 
@@ -210,9 +211,10 @@ EditViewBase::slotSetSegmentStartTime()
     if (!segment)
         return;
 
-    TimeDialog dialog(this, tr("Segment Start Time"),
-                      &RosegardenDocument::currentDocument->getComposition(),
-                      segment->getStartTime(), false);
+    TimeDialog dialog(this,
+                      tr("Segment Start Time"),
+                      segment->getStartTime(),
+                      false);  // constrainToCompositionDuration
 
     if (dialog.exec() == QDialog::Accepted) {
 
@@ -238,8 +240,8 @@ EditViewBase::slotSetSegmentDuration()
     if (!segment)
         return;
 
-    TimeDialog dialog(this, tr("Segment Duration"),
-                      &RosegardenDocument::currentDocument->getComposition(),
+    TimeDialog dialog(this,
+            tr("Segment Duration"),
                       segment->getStartTime(),
                       segment->getEndMarkerTime() - segment->getStartTime(),
                       Note(Note::Shortest).getDuration(),

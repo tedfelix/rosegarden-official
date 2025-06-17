@@ -289,9 +289,12 @@ TriggerSegmentManager::slotDeleteAll()
 void
 TriggerSegmentManager::slotAdd()
 {
-    TimeDialog dialog(this, tr("Trigger Segment Duration"),
-                      &m_doc->getComposition(),
-                      0, 3840, 0, false);
+    TimeDialog dialog(this,  // parent
+                      tr("Trigger Segment Duration"),  // title
+                      0,  // startTime
+                      3840,  // defaultDuration
+                      0,  // minimumDuration
+                      false);  // constrainToCompositionDuration
 
     if (dialog.exec() == QDialog::Accepted) {
         addCommandToHistory(new AddTriggerSegmentCommand

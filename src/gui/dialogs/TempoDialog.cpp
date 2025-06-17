@@ -134,7 +134,6 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         m_timeWidget = new TimeWidget2(
                 tr("Time of tempo change"),  // title
                 this,  // parent
-                &m_doc->getComposition(),  // composition
                 0,  // initialTime
                 true);  // constrainToCompositionDuration
         connect(m_timeWidget, &TimeWidget2::signalIsValid,

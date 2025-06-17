@@ -2476,9 +2476,16 @@ void
 RosegardenMainWindow::slotInsertRange()
 {
     timeT t0 = RosegardenDocument::currentDocument->getComposition().getPosition();
-    std::pair<timeT, timeT> r = RosegardenDocument::currentDocument->getComposition().getBarRangeForTime(t0);
-    TimeDialog dialog(m_view, tr("Duration of empty range to insert"),
-                      &RosegardenDocument::currentDocument->getComposition(), t0, r.second - r.first, 1, false);
+    std::pair<timeT, timeT> r = RosegardenDocument::currentDocument->
+            getComposition().getBarRangeForTime(t0);
+
+    TimeDialog dialog(m_view,  // parent
+                      tr("Duration of empty range to insert"),  // title
+                      t0,  // startTime
+                      r.second - r.first,  // defaultDuration
+                      1,  // minimumDuration
+                      false);  // constrainToCompositionDuration
+
     if (dialog.exec() == QDialog::Accepted) {
         CommandHistory::getInstance()->addCommand
             (new InsertRangeCommand(&RosegardenDocument::currentDocument->getComposition(), t0, dialog.getTime()));
@@ -2704,7 +2711,6 @@ RosegardenMainWindow::slotRescaleSelection()
 
     RescaleDialog dialog(
             m_view,  // parent
-            &RosegardenDocument::currentDocument->getComposition(),  // composition
             startTime,  // startTime
             endTime - startTime,  // originalDuration
             Note(Note::Shortest).getDuration(),  // minimumDuration
@@ -3064,7 +3070,6 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
     TimeDialog dialog(
             m_view,  // parent
             title,
-            &RosegardenDocument::currentDocument->getComposition(),  // composition
             now,  // defaultTime
             true);  // constrainToCompositionDuration
 
@@ -3212,7 +3217,6 @@ RosegardenMainWindow::slotCreateAnacrusis()
     bool constrainToCompositionDuration = false;
     TimeDialog dialog(m_view,
                       tr("Anacrusis Amount"),
-                      &comp,
                       compOrigStart - defaultDuration,
                       defaultDuration,
                       minimumDuration,
@@ -3291,7 +3295,6 @@ RosegardenMainWindow::slotSetSegmentStartTimes()
     TimeDialog dialog(
             m_view,  // parent
             tr("Segment Start Time"),  // title
-            &RosegardenDocument::currentDocument->getComposition(),  // composition
             someTime,  // defaultTime
             false);  // constrainToCompositionDuration
 
@@ -3335,8 +3338,8 @@ RosegardenMainWindow::slotSetSegmentDurations()
         (*selection.begin())->getEndMarkerTime() -
         (*selection.begin())->getStartTime();
 
-    TimeDialog dialog(m_view, tr("Segment Duration"),
-                      &RosegardenDocument::currentDocument->getComposition(),
+    TimeDialog dialog(m_view,
+                      tr("Segment Duration"),
                       someTime,
                       someDuration,
                       Note(Note::Shortest).getDuration(),
@@ -6246,7 +6249,6 @@ RosegardenMainWindow::slotEditTransportTime(QWidget *parent)
     TimeDialog dialog(
             parent,
             tr("Move playback pointer to time"),  // title
-            &RosegardenDocument::currentDocument->getComposition(),  // composition
             RosegardenDocument::currentDocument->getComposition().getPosition(),  // defaultTime
             true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted) {

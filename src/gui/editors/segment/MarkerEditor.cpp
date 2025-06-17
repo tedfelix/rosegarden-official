@@ -459,7 +459,6 @@ MarkerEditor::slotEdit(QTreeWidgetItem *i, int)
         return ;
 
     MarkerModifyDialog dialog(this,
-                              &m_doc->getComposition(),
                               item->getRawTime(),
                               item->text(1),
                               item->text(2));

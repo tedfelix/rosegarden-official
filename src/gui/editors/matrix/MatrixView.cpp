@@ -1606,7 +1606,6 @@ void MatrixView::slotRescale()
 
     RescaleDialog dialog(
             this,  // parent
-            &RosegardenDocument::currentDocument->getComposition(),  // composition
             selection->getStartTime(),  // startTime
             selection->getEndTime() - selection->getStartTime(),  // originalDuration
             1,  // minimumDuration

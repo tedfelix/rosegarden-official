@@ -139,7 +139,6 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_timeWidget = new TimeWidget2(
                 tr("Time where signature takes effect"),  // title
                 this,  // parent
-                composition,
                 m_time,  // initialTime
                 true);  // constrainToCompositionDuration
         connect(m_timeWidget, &TimeWidget2::signalIsValid,
