@@ -191,11 +191,18 @@ TimeWidget2::init()
     labelWidget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
     layout->addWidget(labelWidget, row, 2);
 
+    // In duration mode, the time signature does not change, so we can do
+    // some initialization based on it.
+    const TimeSignature timeSig =
+            m_composition->getTimeSignatureAt(m_startTime);
+
     m_beatSpin = new QSpinBox(this);
-    if (m_isDuration)
+    if (m_isDuration) {
         m_beatSpin->setMinimum(0);
-    else
+        m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
+    } else {
         m_beatSpin->setMinimum(1);
+    }
     connect(m_beatSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_beatSpin, row, 3);
@@ -211,12 +218,22 @@ TimeWidget2::init()
     m_fractionSpin = new QSpinBox(this);
     // Always 0 to n-1.
     m_fractionSpin->setMinimum(0);
+    if (m_isDuration) {
+        m_fractionSpin->setMaximum(
+                timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
+    }
     connect(m_fractionSpin, (void(QSpinBox::*)(int))(&QSpinBox::valueChanged),
             this, &TimeWidget2::slotMeasureBeatOrFractionChanged);
     layout->addWidget(m_fractionSpin, row, 5);
 
     // Time Signature (e.g. 4/4 time)
     m_timeSig = new QLabel(this);
+    if (m_isDuration) {
+        // Time Signature
+        m_timeSig->setText(tr("(%1/%2 time)").
+                arg(timeSig.getNumerator()).
+                arg(timeSig.getDenominator()));
+    }
     layout->addWidget(m_timeSig, row, 6);
 
     ++row;
@@ -404,9 +421,6 @@ void TimeWidget2::updateMeasureBeat64()
         int remainder;
         m_composition->getMusicalTimeForDuration(
                 m_startTime, m_time, bars, beats, hemidemis, remainder);
-        // ??? Should we cache this when we init m_timeSig and m_tempo?
-        const TimeSignature timeSig =
-                m_composition->getTimeSignatureAt(m_startTime);
 
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
@@ -418,9 +432,6 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_beatSpin->blockSignals(true);
-        // ??? In duration mode, m_timeSig never changes.  We just need
-        //     to do this on init and leave it alone.
-        m_beatSpin->setMaximum(timeSig.getBeatsPerBar() - 1);
         m_beatSpin->setValue(beats);
         m_beatSpin->blockSignals(false);
 
@@ -428,19 +439,8 @@ void TimeWidget2::updateMeasureBeat64()
         // Have to block since QSpinBox::valueChanged() fires on
         // programmatic changes as well as user changes.
         m_fractionSpin->blockSignals(true);
-        // ??? In duration mode, m_timeSig never changes.  We just need
-        //     to do this on init and leave it alone.
-        m_fractionSpin->setMaximum(
-                timeSig.getBeatDuration() / Note(Note::Shortest).getDuration() - 1);
         m_fractionSpin->setValue(hemidemis);
         m_fractionSpin->blockSignals(false);
-
-        // Time Signature
-        // ??? In duration mode, m_timeSig never changes.  We just need
-        //     to do this on init and leave it alone.
-        m_timeSig->setText(tr("(%1/%2 time)").
-                arg(timeSig.getNumerator()).
-                arg(timeSig.getDenominator()));
 
     } else {  // Absolute time mode
 
