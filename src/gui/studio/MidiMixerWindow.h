@@ -132,6 +132,11 @@ private:
      * ??? Get rid of this.
      */
     void addTab(QWidget *tab, const QString &title);
+    /**
+     * ??? This should not take an Instrument *.  It should update the
+     *     widgets for all Instruments.
+     */
+    void updateWidgets(Instrument *);
 
     // QWidget override.
     /// Calls sendControllerRefresh() in response to window activation.
@@ -157,14 +162,8 @@ private:
     typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
     MidiStripVector m_midiStrips;
 
-    // Grab IPB controls and remove Volume.
-    ControlList getIPBForMidiMixer(MidiDevice *) const;
-
-    /**
-     * ??? This should not take an Instrument *.  It should update the
-     *     widgets for all Instruments.
-     */
-    void updateWidgets(Instrument *);
+    /// Get InstrumentParameterBox controllers and remove volume.
+    ControlList getIPBControlParameters(const MidiDevice *) const;
 
 };
 

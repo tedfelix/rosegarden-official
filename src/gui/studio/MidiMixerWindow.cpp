@@ -107,7 +107,6 @@ void
 MidiMixerWindow::setupTabs()
 {
     DeviceListConstIterator it;
-    MidiDevice *dev = nullptr;
     InstrumentList instruments;
     InstrumentList::const_iterator iIt;
     int faderCount = 0, deviceCount = 1;
@@ -123,165 +122,165 @@ MidiMixerWindow::setupTabs()
     QVBoxLayout *centralLayout = new QVBoxLayout;
     blackWidget->setLayout(centralLayout);
 
-    m_tabWidget = new QTabWidget;
+    m_tabWidget = new QTabWidget(this);
     centralLayout->addWidget(m_tabWidget);
 
     connect(m_tabWidget, &QTabWidget::currentChanged,
             this, &MidiMixerWindow::slotCurrentTabChanged);
     m_tabWidget->setTabPosition(QTabWidget::South);
 
-
+    // For each Device in the Studio...
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
-        dev = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice *dev = dynamic_cast<MidiDevice *>(*it);
+        if (!dev)
+            continue;
 
-        if (dev) {
-            // Get the control parameters that are on the IPB (and hence can
-            // be shown here too).
+        // Get the control parameters that are on the IPB (and hence can
+        // be shown here too).
+        //
+        ControlList controls = getIPBControlParameters(dev);
+
+        instruments = dev->getPresentationInstruments();
+
+        // Don't add a frame for empty devices
+        //
+        if (!instruments.size())
+            continue;
+
+        m_tabFrame = new QFrame(m_tabWidget);
+        m_tabFrame->setContentsMargins(10, 10, 10, 10);
+
+        // m_tabFrame->setContentsMargins(5, 5, 5, 5); ???
+        QGridLayout *mainLayout = new QGridLayout(m_tabFrame);
+
+        // MIDI Mixer label
+        QLabel *label = new QLabel("", m_tabFrame);
+        mainLayout->addWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
+
+        // control labels
+        for (size_t i = 0; i < controls.size(); ++i) {
+            label = new QLabel(QObject::tr(controls[i].getName().c_str()), m_tabFrame);
+            mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
+        }
+
+        // meter label
+        // (obsolete abandoned code deleted here)
+
+        // volume label
+        label = new QLabel(tr("Volume"), m_tabFrame);
+        mainLayout->addWidget(label, controls.size() + 2, 0,
+                              Qt::AlignCenter);
+
+        // instrument label
+        label = new QLabel(tr("Instrument"), m_tabFrame);
+        label->setFixedWidth(80); //!!! this should come from metrics
+        mainLayout->addWidget(label, controls.size() + 3, 0,
+                              Qt::AlignLeft);
+
+        int posCount = 1;
+        int firstInstrument = -1;
+
+        for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
+
+            // Add new fader struct
+            m_midiStrips.push_back(std::make_shared<MidiStrip>());
+
+            // Store the first ID
             //
-            ControlList controls = getIPBForMidiMixer(dev);
+            if (firstInstrument == -1)
+                firstInstrument = (*iIt)->getId();
 
-            instruments = dev->getPresentationInstruments();
 
-            // Don't add a frame for empty devices
+            // Add the controls
             //
-            if (!instruments.size())
-                continue;
-
-            m_tabFrame = new QFrame(m_tabWidget);
-            m_tabFrame->setContentsMargins(10, 10, 10, 10);
-
-            // m_tabFrame->setContentsMargins(5, 5, 5, 5); ???
-            QGridLayout *mainLayout = new QGridLayout(m_tabFrame);
-
-            // MIDI Mixer label
-            QLabel *label = new QLabel("", m_tabFrame);
-            mainLayout->addWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
-
-            // control labels
             for (size_t i = 0; i < controls.size(); ++i) {
-                label = new QLabel(QObject::tr(controls[i].getName().c_str()), m_tabFrame);
-                mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
-            }
+                QColor knobColour = QColor(Qt::white);
 
-            // meter label
-            // (obsolete abandoned code deleted here)
+                if (controls[i].getColourIndex() > 0) {
+                    QColor c =
+                        m_document->getComposition().getGeneralColourMap().
+                        getColour(controls[i].getColourIndex());
 
-            // volume label
-            label = new QLabel(tr("Volume"), m_tabFrame);
-            mainLayout->addWidget(label, controls.size() + 2, 0,
-                                  Qt::AlignCenter);
-
-            // instrument label
-            label = new QLabel(tr("Instrument"), m_tabFrame);
-            label->setFixedWidth(80); //!!! this should come from metrics
-            mainLayout->addWidget(label, controls.size() + 3, 0,
-                                  Qt::AlignLeft);
-
-            int posCount = 1;
-            int firstInstrument = -1;
-
-            for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
-
-                // Add new fader struct
-                m_midiStrips.push_back(std::make_shared<MidiStrip>());
-
-                // Store the first ID
-                //
-                if (firstInstrument == -1)
-                    firstInstrument = (*iIt)->getId();
-
-
-                // Add the controls
-                //
-                for (size_t i = 0; i < controls.size(); ++i) {
-                    QColor knobColour = QColor(Qt::white);
-
-                    if (controls[i].getColourIndex() > 0) {
-                        QColor c =
-                            m_document->getComposition().getGeneralColourMap().
-                            getColour(controls[i].getColourIndex());
-
-                        knobColour = QColor(c.red(),
-                                            c.green(), c.blue());
-                    }
-
-                    Rotary *controller =
-                        new Rotary(m_tabFrame,
-                                   controls[i].getMin(),
-                                   controls[i].getMax(),
-                                   1.0,
-                                   5.0,
-                                   controls[i].getDefault(),
-                                   20,
-                                   Rotary::NoTicks,
-                                   false,
-                                   controls[i].getDefault() == 64); //!!! hacky
-
-                    controller->setKnobColour(knobColour);
-
-                    connect(controller, &Rotary::valueChanged,
-                            this, &MidiMixerWindow::slotControllerChanged);
-
-                    mainLayout->addWidget(controller, i + 1, posCount,
-                                          Qt::AlignCenter);
-
-                    // Store the rotary
-                    m_midiStrips[faderCount]->m_controllerRotaries.push_back(
-                        std::pair<MidiByte, Rotary*>
-                        (controls[i].getControllerNumber(), controller));
+                    knobColour = QColor(c.red(),
+                                        c.green(), c.blue());
                 }
 
-                // VU meter
-                //
-                MidiMixerVUMeter *meter =
-                    new MidiMixerVUMeter(m_tabFrame,
-                                         VUMeter::FixedHeightVisiblePeakHold, 6, 30);
-                mainLayout->addWidget(meter, controls.size() + 1,
-                                      posCount, Qt::AlignCenter);
-                m_midiStrips[faderCount]->m_vuMeter = meter;
+                Rotary *controller =
+                    new Rotary(m_tabFrame,
+                               controls[i].getMin(),
+                               controls[i].getMax(),
+                               1.0,
+                               5.0,
+                               controls[i].getDefault(),
+                               20,
+                               Rotary::NoTicks,
+                               false,
+                               controls[i].getDefault() == 64); //!!! hacky
 
-                // Volume fader
-                //
-                Fader *fader =
-                    new Fader(0, 127, 100, 20, 80, m_tabFrame);
-                mainLayout->addWidget(fader, controls.size() + 2,
-                                      posCount, Qt::AlignCenter);
-                m_midiStrips[faderCount]->m_volumeFader = fader;
+                controller->setKnobColour(knobColour);
 
-                // Label
-                //
-                QLabel *idLabel = new QLabel(QString("%1").
-                                             arg((*iIt)->getId() - firstInstrument + 1),
-                                             m_tabFrame);
-                idLabel->setObjectName("idLabel");
+                connect(controller, &Rotary::valueChanged,
+                        this, &MidiMixerWindow::slotControllerChanged);
 
-                mainLayout->addWidget(idLabel, controls.size() + 3,
-                                      posCount, Qt::AlignCenter);
+                mainLayout->addWidget(controller, i + 1, posCount,
+                                      Qt::AlignCenter);
 
-                // store id in struct
-                m_midiStrips[faderCount]->m_id = (*iIt)->getId();
-
-                // Connect them up
-                //
-                connect(fader, &Fader::faderChanged,
-                        this, &MidiMixerWindow::slotFaderLevelChanged);
-
-                // Update all the faders and controllers
-                //
-                updateWidgets(*iIt);
-
-                // Increment counters
-                //
-                posCount++;
-                faderCount++;
+                // Store the rotary
+                m_midiStrips[faderCount]->m_controllerRotaries.push_back(
+                    std::pair<MidiByte, Rotary*>
+                    (controls[i].getControllerNumber(), controller));
             }
 
-            QString name = QString("%1 (%2)")
-                           .arg(QObject::tr(dev->getName().c_str()))
-                           .arg(deviceCount++);
+            // VU meter
+            //
+            MidiMixerVUMeter *meter =
+                new MidiMixerVUMeter(m_tabFrame,
+                                     VUMeter::FixedHeightVisiblePeakHold, 6, 30);
+            mainLayout->addWidget(meter, controls.size() + 1,
+                                  posCount, Qt::AlignCenter);
+            m_midiStrips[faderCount]->m_vuMeter = meter;
 
-            addTab(m_tabFrame, name);
+            // Volume fader
+            //
+            Fader *fader =
+                new Fader(0, 127, 100, 20, 80, m_tabFrame);
+            mainLayout->addWidget(fader, controls.size() + 2,
+                                  posCount, Qt::AlignCenter);
+            m_midiStrips[faderCount]->m_volumeFader = fader;
+
+            // Label
+            //
+            QLabel *idLabel = new QLabel(QString("%1").
+                                         arg((*iIt)->getId() - firstInstrument + 1),
+                                         m_tabFrame);
+            idLabel->setObjectName("idLabel");
+
+            mainLayout->addWidget(idLabel, controls.size() + 3,
+                                  posCount, Qt::AlignCenter);
+
+            // store id in struct
+            m_midiStrips[faderCount]->m_id = (*iIt)->getId();
+
+            // Connect them up
+            //
+            connect(fader, &Fader::faderChanged,
+                    this, &MidiMixerWindow::slotFaderLevelChanged);
+
+            // Update all the faders and controllers
+            //
+            updateWidgets(*iIt);
+
+            // Increment counters
+            //
+            posCount++;
+            faderCount++;
         }
+
+        QString name = QString("%1 (%2)")
+                       .arg(QObject::tr(dev->getName().c_str()))
+                       .arg(deviceCount++);
+
+        addTab(m_tabFrame, name);
     }
 }
 
@@ -468,7 +467,7 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
 
                 //RG_DEBUG << "STATIC CONTROLS SIZE = " << (*iIt)->getStaticControllers().size();
 
-                ControlList controls = getIPBForMidiMixer(dev);
+                ControlList controls = getIPBControlParameters(dev);
 
                 // Set all controllers for this Instrument
                 //
@@ -582,7 +581,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
 
         // Update the appropriate cc rotary.
 
-        ControlList controls = getIPBForMidiMixer(
+        ControlList controls = getIPBControlParameters(
                 dynamic_cast<MidiDevice *>(instrument->getDevice()));
 
         // For each controller
@@ -797,7 +796,7 @@ MidiMixerWindow::slotHelpAbout()
 
 // Code stolen From src/base/MidiDevice
 ControlList
-MidiMixerWindow::getIPBForMidiMixer(MidiDevice *dev) const
+MidiMixerWindow::getIPBControlParameters(const MidiDevice *dev) const
 {
     // ??? Instrument::getStaticControllers() might simplify all
     //     this quite a bit.  See RosegardenMainWindow::changeEvent().
