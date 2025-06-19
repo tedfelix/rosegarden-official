@@ -66,11 +66,6 @@ public:
     Studio();
     ~Studio() override;
 
-private:
-    Studio(const Studio &);
-    Studio& operator=(const Studio &);
-
-public:
     void addDevice(const std::string &name,
                    DeviceId id,
                    InstrumentId baseInstrumentId,
@@ -154,6 +149,8 @@ public:
     //
     DeviceList *getDevices()  { return &m_devices; }
     const DeviceList *getDevices() const  { return &m_devices; }
+    DeviceList &getDeviceList()  { return m_devices; }
+    const DeviceList &getDeviceList() const  { return m_devices; }
 
     /// Get an available Instrument on the first MIDI Device.
     /**
@@ -224,6 +221,9 @@ public:
     void removeObserver(StudioObserver *obs);
 
 private:
+
+    Studio(const Studio &) = delete;
+    Studio &operator=(const Studio &) = delete;
 
     DeviceList        m_devices;
     /// Returns nullptr if there are no MIDI out devices.

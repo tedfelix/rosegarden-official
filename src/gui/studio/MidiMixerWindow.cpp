@@ -32,30 +32,24 @@
 #include "base/MidiProgram.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
 #include "gui/widgets/VUMeter.h"
 #include "gui/general/IconLoader.h"
-#include "gui/general/ActionFileClient.h"
 #include "gui/dialogs/AboutDialog.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
 #include "sound/ExternalController.h"
 
-#include <QAction>
 #include <QColor>
 #include <QFrame>
-#include <QIcon>
+#include <QGridLayout>
 #include <QLabel>
 #include <QObject>
 #include <QString>
 #include <QTabWidget>
 #include <QWidget>
-#include <QLayout>
 #include <QDesktopServices>
-#include <QToolButton>
-#include <QToolBar>
 
 
 namespace Rosegarden
@@ -64,18 +58,18 @@ namespace Rosegarden
 
 MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                                  RosegardenDocument *document):
-    MixerWindow(parent, document),
-    m_tabFrame(nullptr)
+    MixerWindow(parent, document)
 {
     setWindowTitle(tr("MIDI Mixer"));
     setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
 
-    // Initial setup
-    //
+    // ??? Inline this?  I think once we pull out MidiStrip like AudioStrip,
+    //     that will make a lot of sense.
     setupTabs();
 
     createAction("file_close", &MidiMixerWindow::slotClose);
 
+    // ??? Connect all these directly to RMW like AudioMixerWindow does.
     createAction("play", &MidiMixerWindow::play);
     createAction("stop", &MidiMixerWindow::stop);
     createAction("playback_pointer_back_bar", &MidiMixerWindow::rewindPlayback);
@@ -101,86 +95,80 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                 &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
 
+    // ??? What about restoring window geometry?
+    // ??? Once that's in place, add to AudioMixerWindow2 as well.
 }
 
 void
 MidiMixerWindow::setupTabs()
 {
-    DeviceListConstIterator it;
-    InstrumentList instruments;
-    InstrumentList::const_iterator iIt;
-    int faderCount = 0, deviceCount = 1;
-
-    if (m_tabFrame)
-        delete m_tabFrame;
-
-    // Setup m_tabFrame
-    //
-
-    QWidget *blackWidget = new QWidget(this);
-    setCentralWidget(blackWidget);
-    QVBoxLayout *centralLayout = new QVBoxLayout;
-    blackWidget->setLayout(centralLayout);
-
+    // Tab widget
     m_tabWidget = new QTabWidget(this);
-    centralLayout->addWidget(m_tabWidget);
-
     connect(m_tabWidget, &QTabWidget::currentChanged,
             this, &MidiMixerWindow::slotCurrentTabChanged);
     m_tabWidget->setTabPosition(QTabWidget::South);
+    setCentralWidget(m_tabWidget);
+
+    // ??? This is done only once.  But the number of devices is dynamic and
+    //     can change during a run.  We need to monitor for changes to the
+    //     Studio and update this display to match.  AudioMixerWindow2 does
+    //     this.  See AudioMixerWindow2::updateWidgets().
+
+    int faderCount = 0;
+    int deviceCount = 1;
 
     // For each Device in the Studio...
-    for (it = m_studio->begin(); it != m_studio->end(); ++it) {
-        const MidiDevice *dev = dynamic_cast<MidiDevice *>(*it);
-        if (!dev)
+    for (const Device *device : m_studio->getDeviceList()) {
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
+        if (!midiDevice)
             continue;
 
         // Get the control parameters that are on the IPB (and hence can
         // be shown here too).
-        //
-        ControlList controls = getIPBControlParameters(dev);
+        ControlList controls = getIPBControlParameters(midiDevice);
 
-        instruments = dev->getPresentationInstruments();
-
+        InstrumentList instruments = midiDevice->getPresentationInstruments();
         // Don't add a frame for empty devices
-        //
         if (!instruments.size())
             continue;
 
         m_tabFrame = new QFrame(m_tabWidget);
         m_tabFrame->setContentsMargins(10, 10, 10, 10);
 
-        // m_tabFrame->setContentsMargins(5, 5, 5, 5); ???
-        QGridLayout *mainLayout = new QGridLayout(m_tabFrame);
+        QGridLayout *gridLayout = new QGridLayout(m_tabFrame);
 
-        // MIDI Mixer label
-        QLabel *label = new QLabel("", m_tabFrame);
-        mainLayout->addWidget(label, 0, 0, 0, 16, Qt::AlignCenter);
+        QLabel *label;
 
-        // control labels
-        for (size_t i = 0; i < controls.size(); ++i) {
-            label = new QLabel(QObject::tr(controls[i].getName().c_str()), m_tabFrame);
-            mainLayout->addWidget(label, i + 1, 0, Qt::AlignCenter);
+        // Controller labels
+        // ??? Does this make sense for input devices?
+        for (size_t controlIndex = 0;
+             controlIndex < controls.size();
+             ++controlIndex) {
+            label = new QLabel(
+                    QObject::tr(controls[controlIndex].getName().c_str()),
+                    m_tabFrame);
+            gridLayout->addWidget(label, controlIndex, 0, Qt::AlignRight);
         }
 
-        // meter label
-        // (obsolete abandoned code deleted here)
-
-        // volume label
+        // Volume label
         label = new QLabel(tr("Volume"), m_tabFrame);
-        mainLayout->addWidget(label, controls.size() + 2, 0,
-                              Qt::AlignCenter);
+        gridLayout->addWidget(label, controls.size() + 1, 0, Qt::AlignRight);
 
-        // instrument label
-        label = new QLabel(tr("Instrument"), m_tabFrame);
-        label->setFixedWidth(80); //!!! this should come from metrics
-        mainLayout->addWidget(label, controls.size() + 3, 0,
-                              Qt::AlignLeft);
+        // Instrument label
+        const QString instrument = tr("Instrument");
+        label = new QLabel(instrument, m_tabFrame);
+        label->setFixedWidth(fontMetrics().boundingRect(instrument).width() + 2);
+        gridLayout->addWidget(label, controls.size() + 2, 0, Qt::AlignRight);
 
-        int posCount = 1;
+        // Add a column spacer.
+        gridLayout->setColumnMinimumWidth(1, 10);
+
+        int col = 2;
         int firstInstrument = -1;
 
-        for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
+        for (InstrumentList::const_iterator instrumentIter = instruments.begin();
+             instrumentIter != instruments.end();
+             ++instrumentIter) {
 
             // Add new fader struct
             m_midiStrips.push_back(std::make_shared<MidiStrip>());
@@ -188,7 +176,7 @@ MidiMixerWindow::setupTabs()
             // Store the first ID
             //
             if (firstInstrument == -1)
-                firstInstrument = (*iIt)->getId();
+                firstInstrument = (*instrumentIter)->getId();
 
 
             // Add the controls
@@ -215,14 +203,14 @@ MidiMixerWindow::setupTabs()
                                20,
                                Rotary::NoTicks,
                                false,
-                               controls[i].getDefault() == 64); //!!! hacky
+                               controls[i].getDefault() == 64); // !!! hacky
 
                 controller->setKnobColour(knobColour);
 
                 connect(controller, &Rotary::valueChanged,
                         this, &MidiMixerWindow::slotControllerChanged);
 
-                mainLayout->addWidget(controller, i + 1, posCount,
+                gridLayout->addWidget(controller, i, col,
                                       Qt::AlignCenter);
 
                 // Store the rotary
@@ -236,30 +224,30 @@ MidiMixerWindow::setupTabs()
             MidiMixerVUMeter *meter =
                 new MidiMixerVUMeter(m_tabFrame,
                                      VUMeter::FixedHeightVisiblePeakHold, 6, 30);
-            mainLayout->addWidget(meter, controls.size() + 1,
-                                  posCount, Qt::AlignCenter);
+            gridLayout->addWidget(meter, controls.size(),
+                                  col, Qt::AlignCenter);
             m_midiStrips[faderCount]->m_vuMeter = meter;
 
             // Volume fader
             //
             Fader *fader =
                 new Fader(0, 127, 100, 20, 80, m_tabFrame);
-            mainLayout->addWidget(fader, controls.size() + 2,
-                                  posCount, Qt::AlignCenter);
+            gridLayout->addWidget(fader, controls.size() + 1,
+                                  col, Qt::AlignCenter);
             m_midiStrips[faderCount]->m_volumeFader = fader;
 
             // Label
             //
             QLabel *idLabel = new QLabel(QString("%1").
-                                         arg((*iIt)->getId() - firstInstrument + 1),
+                                         arg((*instrumentIter)->getId() - firstInstrument + 1),
                                          m_tabFrame);
             idLabel->setObjectName("idLabel");
 
-            mainLayout->addWidget(idLabel, controls.size() + 3,
-                                  posCount, Qt::AlignCenter);
+            gridLayout->addWidget(idLabel, controls.size() + 2,
+                                  col, Qt::AlignCenter);
 
             // store id in struct
-            m_midiStrips[faderCount]->m_id = (*iIt)->getId();
+            m_midiStrips[faderCount]->m_id = (*instrumentIter)->getId();
 
             // Connect them up
             //
@@ -268,16 +256,14 @@ MidiMixerWindow::setupTabs()
 
             // Update all the faders and controllers
             //
-            updateWidgets(*iIt);
+            updateWidgets(*instrumentIter);
 
-            // Increment counters
-            //
-            posCount++;
-            faderCount++;
+            ++col;
+            ++faderCount;
         }
 
         QString name = QString("%1 (%2)")
-                       .arg(QObject::tr(dev->getName().c_str()))
+                       .arg(QObject::tr(midiDevice->getName().c_str()))
                        .arg(deviceCount++);
 
         addTab(m_tabFrame, name);
