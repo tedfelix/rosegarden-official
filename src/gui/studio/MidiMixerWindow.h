@@ -21,11 +21,11 @@
 
 #include "MixerWindow.h"
 
-#include "base/MidiDevice.h"
+#include "base/Controllable.h"
 #include "gui/general/ActionFileClient.h"
-#include "sound/ExternalController.h"
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 class QWidget;
@@ -38,47 +38,40 @@ namespace Rosegarden
 {
 
 
-class Rotary;
-class RosegardenDocument;
-class MidiMixerVUMeter;
-class MappedEvent;
 class Fader;
-class InstrumentStaticSignals;
+class MappedEvent;
+class MidiDevice;
+class MidiMixerVUMeter;
+class RosegardenDocument;
+class Rotary;
 
 
+/// The MIDI Mixer.
 class MidiMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
+
     MidiMixerWindow(QWidget *parent, RosegardenDocument *document);
 
+    /// Called by RosegardenMainWindow::slotUpdateUI()
     /**
-     * Setup the tabs on the Mixer according to the Studio
-     */
-    void setupTabs();
-
-    /* 
-     * Update the VU meters
+     * ??? AudioMixerWindow2 has no such routine.  Why not?  Looks like
+     *     AudioStrip has its own timer.  Need to move in that direction.
      */
     void updateMeters();
+    /// Called by RosegardenMainWindow::slotUpdateMonitoring()
+    /**
+     * ??? AudioMixerWindow2 has no such routine.  Why not?  Looks like
+     *     AudioStrip has its own timer.  Need to move in that direction.
+     */
     void updateMonitorMeter();
 
-public slots:
-    void slotSynchronise(); // synchronise with updated studio
-
-    /// Handle events from the external controller port.
-    /**
-     * @see RosegardenMainViewWidget::slotExternalController()
-     * @see AudioMixerWindow2::slotExternalController()
-     */
-    void slotExternalController(const MappedEvent *event);
-
-    void slotCurrentTabChanged(int);
-    void slotHelpRequested();
-    void slotHelpAbout();
-
 signals:
+
+    // ??? Get rid of these and do what AudioMixerWindow does.  Connect the
+    //     actions directly to RMW.  See AudioMixerWindow2's ctor.
     void play();
     void stop();
     void fastForwardPlayback();
@@ -88,7 +81,18 @@ signals:
     void record();
     void panic();
 
-protected slots:
+public slots:
+
+    /// Used by DeviceManagerDialog to update Device names.
+    /**
+     * ??? rename: slotUpdateDeviceNames()?
+     * ??? Actually this routine is EMPTY!!!  Can we try the use case it
+     *     appears to be related to and see if there is still a problem?
+     */
+    void slotSynchronise();
+
+private slots:
+
     /// Handle InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);
 
@@ -96,9 +100,24 @@ protected slots:
     void slotFaderLevelChanged(float);
     void slotControllerChanged(float);
 
+    void slotCurrentTabChanged(int);
+
+    /// Handle events from the external controller port.
+    /**
+     * @see RosegardenMainViewWidget::slotExternalController()
+     * @see AudioMixerWindow2::slotExternalController()
+     */
+    void slotExternalController(const MappedEvent *event);
+
+    void slotHelpRequested();
+    void slotHelpAbout();
+
     void slotClose()  { close(); }
 
-protected:
+private:
+    /// Setup the tabs on the Mixer according to the Studio
+    void setupTabs();
+
     void changeEvent(QEvent *event) override;
 
     void addTab(QWidget *tab, const QString &title);
@@ -107,6 +126,7 @@ protected:
 
     QTabWidget *m_tabWidget;
 
+    // ??? rename: MidiStrip?  See AudioStrip.
     struct FaderStruct {
 
         FaderStruct():m_id(0), m_vuMeter(nullptr), m_volumeFader(nullptr) {}
@@ -126,7 +146,6 @@ protected:
     // Grab IPB controls and remove Volume.
     ControlList getIPBForMidiMixer(MidiDevice *) const;
 
-private:
     /**
      * ??? This should not take an Instrument *.  It should update the
      *     widgets for all Instruments.

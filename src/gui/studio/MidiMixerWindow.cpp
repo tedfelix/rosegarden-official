@@ -20,6 +20,8 @@
 
 #include "MidiMixerWindow.h"
 
+#include "MidiMixerVUMeter.h"
+
 #include "sound/Midi.h"  // For MIDI_CONTROLLER_VOLUME, etc...
 #include "misc/Debug.h"
 #include "misc/Strings.h"
@@ -37,10 +39,9 @@
 #include "gui/general/IconLoader.h"
 #include "gui/general/ActionFileClient.h"
 #include "gui/dialogs/AboutDialog.h"
-#include "MidiMixerVUMeter.h"
-#include "MixerWindow.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
+#include "sound/ExternalController.h"
 
 #include <QAction>
 #include <QColor>
@@ -66,6 +67,9 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
     MixerWindow(parent, document),
     m_tabFrame(nullptr)
 {
+    setWindowTitle(tr("MIDI Mixer"));
+    setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
+
     // Initial setup
     //
     setupTabs();
@@ -125,8 +129,6 @@ MidiMixerWindow::setupTabs()
     connect(m_tabWidget, &QTabWidget::currentChanged,
             this, &MidiMixerWindow::slotCurrentTabChanged);
     m_tabWidget->setTabPosition(QTabWidget::South);
-    setWindowTitle(tr("MIDI Mixer"));
-    setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
 
 
     for (it = m_studio->begin(); it != m_studio->end(); ++it) {
@@ -516,7 +518,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
     for (DeviceListConstIterator deviceIter = m_studio->begin();
          deviceIter != m_studio->end();
          ++deviceIter) {
-        MidiDevice *device = dynamic_cast<MidiDevice *>(*deviceIter);
+        const MidiDevice *device = dynamic_cast<const MidiDevice *>(*deviceIter);
 
         // If this isn't a MidiDevice, try the next.
         if (!device)
@@ -530,7 +532,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
              instrumentIter != instruments.end();
              ++instrumentIter) {
 
-            Instrument *currentInstrument = *instrumentIter;
+            const Instrument *currentInstrument = *instrumentIter;
 
             if (currentInstrument->getId() == instrument->getId()) {
                 found = true;
@@ -732,7 +734,7 @@ MidiMixerWindow::sendControllerRefresh()
     for (DeviceList::const_iterator dit = m_studio->begin();
             dit != m_studio->end(); ++dit) {
 
-        MidiDevice *dev = dynamic_cast<MidiDevice*>(*dit);
+        const MidiDevice *dev = dynamic_cast<const MidiDevice *>(*dit);
 
         RG_DEBUG << "device is " << (*dit)->getId() << ", dev " << dev;
 

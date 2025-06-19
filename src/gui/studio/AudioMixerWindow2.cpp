@@ -36,6 +36,7 @@
 #include <QDesktopServices>
 #include <QHBoxLayout>
 
+
 namespace Rosegarden
 {
 
@@ -173,7 +174,7 @@ AudioMixerWindow2::updateStripCounts()
     for (InstrumentList::iterator i = instruments.begin();
          i != instruments.end();
          ++i) {
-        Instrument *instrument = *i;
+        const Instrument *instrument = *i;
 
         // Not audio or softsynth, try the next.
         if (instrument->getType() != Instrument::Audio  &&

@@ -33,6 +33,12 @@ class Studio;
 class RosegardenDocument;
 
 
+/// Base class for MidiMixerWindow only.
+/**
+ * ??? Either move this into MidiMixerWindow or have AudioMixerWindow derive
+ *     from this as well.  There is little point in having a base class that is
+ *     only inherited by one class.
+ */
 class MixerWindow: public QMainWindow
 {
     Q_OBJECT
@@ -44,7 +50,7 @@ signals:
     void closing();
 
 protected slots:
-    void slotClose();
+    //void slotClose();
 
 protected:
     void closeEvent(QCloseEvent *) override;
@@ -54,6 +60,9 @@ protected:
      * This is called when a Mixer window (MIDI or Audio) is activated by
      * the user.  It allows the device connected to the "external controller"
      * port to stay in sync with whichever Mixer window is active.
+     *
+     * ??? This class is not inherited by AudioMixerWindow, so the above
+     *     comment is wrong for audio.
      */
     virtual void sendControllerRefresh() = 0;
 

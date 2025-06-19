@@ -48,11 +48,14 @@ MixerWindow::closeEvent(QCloseEvent *e)
     QMainWindow::closeEvent(e);
 }
 
+#if 0
 void
 MixerWindow::slotClose()
 {
     RG_DEBUG << "MixerWindow::slotClose()\n";
     close();
 }
+#endif
+
 
 }
