@@ -16,19 +16,19 @@
 */
 
 #define RG_MODULE_STRING "[MixerWindow]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MixerWindow.h"
 
-#include "misc/Debug.h"
-#include "base/MidiProgram.h"
-#include "base/Studio.h"
 #include "document/RosegardenDocument.h"
+//#include "misc/Debug.h"
 
 #include <QMainWindow>
-#include <QWidget>
+
 
 namespace Rosegarden
 {
+
 
 MixerWindow::MixerWindow(QWidget *parent,
                          RosegardenDocument *document) :
@@ -43,19 +43,10 @@ MixerWindow::MixerWindow(QWidget *parent,
 void
 MixerWindow::closeEvent(QCloseEvent *e)
 {
-    RG_DEBUG << "MixerWindow::closeEvent()\n";
+    //RG_DEBUG << "MixerWindow::closeEvent()\n";
     emit closing();
     QMainWindow::closeEvent(e);
 }
-
-#if 0
-void
-MixerWindow::slotClose()
-{
-    RG_DEBUG << "MixerWindow::slotClose()\n";
-    close();
-}
-#endif
 
 
 }

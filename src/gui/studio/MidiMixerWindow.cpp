@@ -183,7 +183,7 @@ MidiMixerWindow::setupTabs()
             for (iIt = instruments.begin(); iIt != instruments.end(); ++iIt) {
 
                 // Add new fader struct
-                m_faders.push_back(std::make_shared<FaderStruct>());
+                m_midiStrips.push_back(std::make_shared<MidiStrip>());
 
                 // Store the first ID
                 //
@@ -226,7 +226,7 @@ MidiMixerWindow::setupTabs()
                                           Qt::AlignCenter);
 
                     // Store the rotary
-                    m_faders[faderCount]->m_controllerRotaries.push_back(
+                    m_midiStrips[faderCount]->m_controllerRotaries.push_back(
                         std::pair<MidiByte, Rotary*>
                         (controls[i].getControllerNumber(), controller));
                 }
@@ -238,7 +238,7 @@ MidiMixerWindow::setupTabs()
                                          VUMeter::FixedHeightVisiblePeakHold, 6, 30);
                 mainLayout->addWidget(meter, controls.size() + 1,
                                       posCount, Qt::AlignCenter);
-                m_faders[faderCount]->m_vuMeter = meter;
+                m_midiStrips[faderCount]->m_vuMeter = meter;
 
                 // Volume fader
                 //
@@ -246,7 +246,7 @@ MidiMixerWindow::setupTabs()
                     new Fader(0, 127, 100, 20, 80, m_tabFrame);
                 mainLayout->addWidget(fader, controls.size() + 2,
                                       posCount, Qt::AlignCenter);
-                m_faders[faderCount]->m_volumeFader = fader;
+                m_midiStrips[faderCount]->m_volumeFader = fader;
 
                 // Label
                 //
@@ -259,7 +259,7 @@ MidiMixerWindow::setupTabs()
                                       posCount, Qt::AlignCenter);
 
                 // store id in struct
-                m_faders[faderCount]->m_id = (*iIt)->getId();
+                m_midiStrips[faderCount]->m_id = (*iIt)->getId();
 
                 // Connect them up
                 //
@@ -298,8 +298,8 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
     // For each fader
     // ??? Wouldn't QSignalMapper be better?
-    for (FaderVector::const_iterator it = m_faders.begin();
-            it != m_faders.end(); ++it) {
+    for (MidiStripVector::const_iterator it = m_midiStrips.begin();
+            it != m_midiStrips.end(); ++it) {
         if ((*it)->m_volumeFader == s) {
             Instrument *instrument = m_studio->
                                 getInstrumentById((*it)->m_id);
@@ -355,35 +355,35 @@ MidiMixerWindow::slotControllerChanged(float value)
 
     // For each fader
     // ??? Wouldn't QSignalMapper be better?
-    for (i = 0; i < m_faders.size(); ++i) {
-        for (j = 0; j < m_faders[i]->m_controllerRotaries.size(); ++j) {
-            if (m_faders[i]->m_controllerRotaries[j].second == s)
+    for (i = 0; i < m_midiStrips.size(); ++i) {
+        for (j = 0; j < m_midiStrips[i]->m_controllerRotaries.size(); ++j) {
+            if (m_midiStrips[i]->m_controllerRotaries[j].second == s)
                 break;
         }
 
         // break out on match
-        if (j != m_faders[i]->m_controllerRotaries.size())
+        if (j != m_midiStrips[i]->m_controllerRotaries.size())
             break;
     }
 
     // Don't do anything if we've not matched and got solid values
     // for i and j
     //
-    if (i == m_faders.size() || j == m_faders[i]->m_controllerRotaries.size())
+    if (i == m_midiStrips.size() || j == m_midiStrips[i]->m_controllerRotaries.size())
         return ;
 
     //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - found a controller"
     //<< endl;
 
     Instrument *instrument = m_studio->getInstrumentById(
-                            m_faders[i]->m_id);
+                            m_midiStrips[i]->m_id);
 
     if (instrument) {
 
         //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
         //<< "got instrument to change";
 
-        MidiByte cc = m_faders[i]->m_controllerRotaries[j].first;
+        MidiByte cc = m_midiStrips[i]->m_controllerRotaries[j].first;
 
         instrument->setControllerValue(cc, MidiByte(value));
         Instrument::emitControlChange(instrument, cc);
@@ -414,7 +414,7 @@ MidiMixerWindow::slotControllerChanged(float value)
                     // !!! really want some notification of whether we have any!
                     ExternalController::send(
                             instrument->getNaturalMidiChannel(),
-                            m_faders[i]->m_controllerRotaries[j].first,
+                            m_midiStrips[i]->m_controllerRotaries[j].first,
                             MidiByte(value));
                 }
             }
@@ -462,9 +462,9 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
                 // ??? Need to examine more closely and see if we can redesign
                 //     things to avoid this crash and remove the
                 //     blockSignals() calls around every call to setFader().
-                m_faders[count]->m_volumeFader->blockSignals(true);
-                m_faders[count]->m_volumeFader->setFader(float(volumeValue));
-                m_faders[count]->m_volumeFader->blockSignals(false);
+                m_midiStrips[count]->m_volumeFader->blockSignals(true);
+                m_midiStrips[count]->m_volumeFader->setFader(float(volumeValue));
+                m_midiStrips[count]->m_volumeFader->blockSignals(false);
 
                 //RG_DEBUG << "STATIC CONTROLS SIZE = " << (*iIt)->getStaticControllers().size();
 
@@ -491,7 +491,7 @@ MidiMixerWindow::updateWidgets(Instrument *instrument)
 
                     //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerNumber());
 
-                    m_faders[count]->m_controllerRotaries[i].second->setPosition(value);
+                    m_midiStrips[count]->m_controllerRotaries[i].second->setPosition(value);
                 }
             }
             count++;
@@ -550,7 +550,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
     if (!found)
         return;
 
-    if (stripCount >= m_faders.size())
+    if (stripCount >= m_midiStrips.size())
         return;
 
     // At this point, stripCount is the proper index for m_faders.
@@ -574,9 +574,9 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
         // ??? Need to examine more closely and see if we can redesign
         //     things to avoid this crash and remove the
         //     blockSignals() calls around every call to setFader().
-        m_faders[stripCount]->m_volumeFader->blockSignals(true);
-        m_faders[stripCount]->m_volumeFader->setFader(float(volumeValue));
-        m_faders[stripCount]->m_volumeFader->blockSignals(false);
+        m_midiStrips[stripCount]->m_volumeFader->blockSignals(true);
+        m_midiStrips[stripCount]->m_volumeFader->setFader(float(volumeValue));
+        m_midiStrips[stripCount]->m_volumeFader->blockSignals(false);
 
     } else {
 
@@ -598,7 +598,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
                 //
                 try {
                     MidiByte value = instrument->getControllerValue(cc);
-                    m_faders[stripCount]->m_controllerRotaries[i].second->
+                    m_midiStrips[stripCount]->m_controllerRotaries[i].second->
                             setPosition(value);
                 } catch (...) {
                     RG_WARNING << "slotControlChange(): WARNING: cc not found " << cc;
@@ -615,14 +615,14 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
 void
 MidiMixerWindow::updateMeters()
 {
-    for (size_t i = 0; i != m_faders.size(); ++i) {
+    for (size_t i = 0; i != m_midiStrips.size(); ++i) {
         LevelInfo info;
         if (!SequencerDataBlock::getInstance()->
-            getInstrumentLevelForMixer(m_faders[i]->m_id, info)) {
+            getInstrumentLevelForMixer(m_midiStrips[i]->m_id, info)) {
             continue;
         }
-        if (m_faders[i]->m_vuMeter) {
-            m_faders[i]->m_vuMeter->setLevel(double(info.level / 127.0));
+        if (m_midiStrips[i]->m_vuMeter) {
+            m_midiStrips[i]->m_vuMeter->setLevel(double(info.level / 127.0));
             RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level;
         } else {
             RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is nullptr!";
