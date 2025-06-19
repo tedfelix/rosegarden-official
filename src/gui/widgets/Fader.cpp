@@ -50,19 +50,21 @@ typedef std::pair<ColourPixmapRec, QSharedPointer<QPixmap> /*button*/ > PixmapRe
 typedef std::map<SizeRec, PixmapRec> PixmapCache;
 Q_GLOBAL_STATIC(PixmapCache, faderPixmapCache);
 
-Fader::Fader(AudioLevel::FaderType type,
-             int w, int h, QWidget *parent) :
-        QWidget(parent),
-        m_integral(false),
-        m_vertical(h > w),
-        m_min(0),
-        m_max(0),
-        m_default(0),
-        m_type(type),
-        m_clickMousePos( -1)
+Fader::Fader(const AudioLevel::FaderType type,
+             const int i_width,
+             const int i_height,
+             QWidget *parent) :
+    QWidget(parent),
+    m_integral(false),
+    m_vertical(i_height > i_width),
+    m_min(0),
+    m_max(0),
+    m_default(0),
+    m_type(type),
+    m_clickMousePos(-1)
 {
     //setBackgroundMode(Qt::NoBackground);
-    setFixedSize(w, h); // provisional
+    setFixedSize(i_width, i_height); // provisional
     calculateButtonPixmap();
     //    if (m_vertical) {
     //    setFixedSize(w, h + m_buttonPixmap->height() + 4);
@@ -87,18 +89,22 @@ Fader::Fader(AudioLevel::FaderType type,
     setFader(0.0);
 }
 
-Fader::Fader(int min, int max, int deflt,
-             int w, int h, QWidget *parent) :
-        QWidget(parent),
-        m_integral(true),
-        m_vertical(h > w),
-        m_min(min),
-        m_max(max),
-        m_default(deflt),
-        m_clickMousePos( -1)
+Fader::Fader(const int min,
+             const int max,
+             const int i_default,
+             const int i_width,
+             const int i_height,
+             QWidget *parent) :
+    QWidget(parent),
+    m_integral(true),
+    m_vertical(i_height > i_width),
+    m_min(min),
+    m_max(max),
+    m_default(i_default),
+    m_clickMousePos(-1)
 {
 //    setBackgroundMode(Qt::NoBackground);
-    setFixedSize(w, h); // provisional
+    setFixedSize(i_width, i_height); // provisional
     calculateButtonPixmap();
     //    if (m_vertical) {
     //    setFixedSize(w, h + m_buttonPixmap->height() + 4);
@@ -117,9 +123,10 @@ Fader::Fader(int min, int max, int deflt,
     m_outlineColour = QColor(palette().mid().color());
 
     calculateGroovePixmap();
-    setFader(deflt);
+    setFader(i_default);
 }
 
+#if 0
 Fader::Fader(int min, int max, int deflt,
              bool vertical, QWidget *parent) :
         QWidget(parent),
@@ -146,14 +153,12 @@ Fader::Fader(int min, int max, int deflt,
     calculateGroovePixmap();
     setFader(deflt);
 }
-
-Fader::~Fader()
-{}
+#endif
 
 void
-Fader::setOutlineColour(QColor c)
+Fader::setOutlineColour(const QColor &colour)
 {
-    m_outlineColour = c;
+    m_outlineColour = colour;
     calculateGroovePixmap();
 }
 

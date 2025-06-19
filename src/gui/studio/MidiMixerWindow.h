@@ -136,7 +136,7 @@ private:
      * ??? This should not take an Instrument *.  It should update the
      *     widgets for all Instruments.
      */
-    void updateWidgets(Instrument *);
+    void updateWidgets(const Instrument *);
 
     // QWidget override.
     /// Calls sendControllerRefresh() in response to window activation.

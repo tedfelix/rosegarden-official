@@ -164,90 +164,95 @@ MidiMixerWindow::setupTabs()
         gridLayout->setColumnMinimumWidth(1, 10);
 
         int col = 2;
-        int firstInstrument = -1;
+        InstrumentId firstInstrument = NoInstrument;
 
-        for (InstrumentList::const_iterator instrumentIter = instruments.begin();
-             instrumentIter != instruments.end();
-             ++instrumentIter) {
+        // For each Instrument in this MidiDevice...
+        for (const Instrument *instrument : instruments) {
 
             // Add new fader struct
             m_midiStrips.push_back(std::make_shared<MidiStrip>());
 
-            // Store the first ID
-            //
-            if (firstInstrument == -1)
-                firstInstrument = (*instrumentIter)->getId();
+            // Remember the first InstrumentId.
+            if (firstInstrument == NoInstrument)
+                firstInstrument = instrument->getId();
 
+            // For each controller...
+            for (size_t controllerIndex = 0;
+                 controllerIndex < controls.size();
+                 ++controllerIndex) {
 
-            // Add the controls
-            //
-            for (size_t i = 0; i < controls.size(); ++i) {
+                // ??? Is this really the right way to detect a controller that
+                //     is centered?  And how does this actually affect Rotary?
+                //     There are no comments on Rotary's ctor.
+                const bool centred = (controls[controllerIndex].getDefault() == 64);
+
+                Rotary *controller = new Rotary(
+                        m_tabFrame,  // parent
+                        controls[controllerIndex].getMin(),  // minimum
+                        controls[controllerIndex].getMax(),  // maximum
+                        1.0,  // step
+                        5.0,  // pageStep
+                        controls[controllerIndex].getDefault(),  // initialPosition
+                        20,  // size
+                        Rotary::NoTicks,  // ticks
+                        false,  // snapToTicks
+                        centred);
+
+                // Color
                 QColor knobColour = QColor(Qt::white);
-
-                if (controls[i].getColourIndex() > 0) {
-                    QColor c =
-                        m_document->getComposition().getGeneralColourMap().
-                        getColour(controls[i].getColourIndex());
-
-                    knobColour = QColor(c.red(),
-                                        c.green(), c.blue());
+                if (controls[controllerIndex].getColourIndex() > 0) {
+                    knobColour = m_document->getComposition().
+                            getGeneralColourMap().getColour(
+                                    controls[controllerIndex].getColourIndex());
                 }
-
-                Rotary *controller =
-                    new Rotary(m_tabFrame,
-                               controls[i].getMin(),
-                               controls[i].getMax(),
-                               1.0,
-                               5.0,
-                               controls[i].getDefault(),
-                               20,
-                               Rotary::NoTicks,
-                               false,
-                               controls[i].getDefault() == 64); // !!! hacky
-
                 controller->setKnobColour(knobColour);
 
                 connect(controller, &Rotary::valueChanged,
                         this, &MidiMixerWindow::slotControllerChanged);
 
-                gridLayout->addWidget(controller, i, col,
+                gridLayout->addWidget(controller, controllerIndex, col,
                                       Qt::AlignCenter);
 
                 // Store the rotary
                 m_midiStrips[faderCount]->m_controllerRotaries.push_back(
-                    std::pair<MidiByte, Rotary*>
-                    (controls[i].getControllerNumber(), controller));
+                        std::pair<MidiByte, Rotary *>(
+                                controls[controllerIndex].getControllerNumber(),
+                                controller));
             }
 
             // VU meter
-            //
-            MidiMixerVUMeter *meter =
-                new MidiMixerVUMeter(m_tabFrame,
-                                     VUMeter::FixedHeightVisiblePeakHold, 6, 30);
-            gridLayout->addWidget(meter, controls.size(),
-                                  col, Qt::AlignCenter);
+            MidiMixerVUMeter *meter = new MidiMixerVUMeter(
+                    m_tabFrame,  // parent
+                    VUMeter::FixedHeightVisiblePeakHold,  // type
+                    6,  // width
+                    30);  // height
+            gridLayout->addWidget(meter, controls.size(), col, Qt::AlignCenter);
             m_midiStrips[faderCount]->m_vuMeter = meter;
 
-            // Volume fader
-            //
-            Fader *fader =
-                new Fader(0, 127, 100, 20, 80, m_tabFrame);
-            gridLayout->addWidget(fader, controls.size() + 1,
-                                  col, Qt::AlignCenter);
+            // Volume
+            Fader *fader = new Fader(
+                    0,  // min
+                    127,  // max
+                    100,  // i_default
+                    20,  // i_width
+                    80,  // i_height
+                    m_tabFrame);  // parent
+            gridLayout->addWidget(
+                    fader, controls.size() + 1, col, Qt::AlignCenter);
             m_midiStrips[faderCount]->m_volumeFader = fader;
 
-            // Label
-            //
-            QLabel *idLabel = new QLabel(QString("%1").
-                                         arg((*instrumentIter)->getId() - firstInstrument + 1),
-                                         m_tabFrame);
-            idLabel->setObjectName("idLabel");
+            // Instrument number
+            const int instrumentNum = instrument->getId() - firstInstrument + 1;
+            QLabel *instrumentNumberLabel = new QLabel(
+                    QString("%1").arg(instrumentNum),
+                    m_tabFrame);
+            gridLayout->addWidget(
+                    instrumentNumberLabel,  // widget
+                    controls.size() + 2,  // row
+                    col,  // column
+                    Qt::AlignCenter);  // alignment
 
-            gridLayout->addWidget(idLabel, controls.size() + 2,
-                                  col, Qt::AlignCenter);
-
-            // store id in struct
-            m_midiStrips[faderCount]->m_id = (*instrumentIter)->getId();
+            m_midiStrips[faderCount]->m_id = instrument->getId();
 
             // Connect them up
             //
@@ -256,7 +261,7 @@ MidiMixerWindow::setupTabs()
 
             // Update all the faders and controllers
             //
-            updateWidgets(*instrumentIter);
+            updateWidgets(instrument);
 
             ++col;
             ++faderCount;
@@ -408,7 +413,7 @@ MidiMixerWindow::slotControllerChanged(float value)
 }
 
 void
-MidiMixerWindow::updateWidgets(Instrument *instrument)
+MidiMixerWindow::updateWidgets(const Instrument *instrument)
 {
     //RG_DEBUG << "updateWidgets(): Instrument ID = " << instrument->getId();
 

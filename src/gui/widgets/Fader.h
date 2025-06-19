@@ -19,10 +19,9 @@
 #define RG_FADER_H
 
 #include "base/AudioLevel.h"
+
 #include <QColor>
 #include <QWidget>
-#include <utility>
-
 
 class QWheelEvent;
 class QTimer;
@@ -44,26 +43,32 @@ public:
      * Construct a dB fader.  The fader calculates its orientation
      * based on the given dimensions.
      */
-    Fader(AudioLevel::FaderType,
-                    int w, int h, QWidget *parent);
+    Fader(AudioLevel::FaderType type,
+          int i_width,
+          int i_height,
+          QWidget *parent);
 
     /**
      * Construct a fader on an integral scale.  The fader calculates
      * its orientation based on the given dimensions.
      */
-    Fader(int min, int max, int deflt,
-                    int w, int h, QWidget *parent);
+    Fader(int min,
+          int max,
+          int i_default,
+          int i_width,
+          int i_height,
+          QWidget *parent);
 
+#if 0
     /**
      * Construct a fader on an integral scale, with a 1:1 ratio of
      * pixel positions and values.
      */
     Fader(int min, int max, int deflt,
                     bool vertical, QWidget *parent);
+#endif
 
-    ~Fader() override;
-
-    void setOutlineColour(QColor);
+    void setOutlineColour(const QColor &colour);
 
     // unused float getFaderLevel() const;
 
@@ -113,9 +118,6 @@ protected:
     QColor m_outlineColour;
 };
 
-
-// AudioVUMeter - a vertical audio meter.  Default is stereo.
-//
 
 }
 
