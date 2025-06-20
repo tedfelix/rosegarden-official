@@ -347,8 +347,7 @@ DataBlockFile::~DataBlockFile()
 {
     if (m_cleared) {
 //        std::cerr << "~DataBlockFile : removing " << m_fileName.toLatin1().data() << std::endl;
-        QFile::remove
-            (m_fileName);
+        QFile::remove(m_fileName);
     }
 
 }
@@ -531,8 +530,7 @@ void DataBlockRepository::clear()
 
     for (unsigned int i = 0; i < segmentsDir.count(); ++i) {
         QString segmentName = tmpPath + '/' + segmentsDir[i];
-        QFile::remove
-            (segmentName);
+        QFile::remove(segmentName);
     }
 }
 
