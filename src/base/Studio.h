@@ -147,8 +147,8 @@ public:
     //
     DeviceVector *getDevices()  { return &m_devices; }
     const DeviceVector *getDevices() const  { return &m_devices; }
-    DeviceVector &getDeviceList()  { return m_devices; }
-    const DeviceVector &getDeviceList() const  { return m_devices; }
+    DeviceVector &getDevicesRef()  { return m_devices; }
+    const DeviceVector &getDevicesRef() const  { return m_devices; }
 
     /// Get an available Instrument on the first MIDI Device.
     /**

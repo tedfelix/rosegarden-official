@@ -117,7 +117,7 @@ MidiMixerWindow::setupTabs()
     int deviceCount = 1;
 
     // For each Device in the Studio...
-    for (const Device *device : m_studio->getDeviceList()) {
+    for (const Device *device : m_studio->getDevicesRef()) {
         const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
         if (!midiDevice)
             continue;
@@ -300,7 +300,7 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 // For each Device...
                 // ??? We should keep a table of tab index to MidiDevice *.
                 //     Then all this becomes a one-liner.
-                for (const Device *device : m_studio->getDeviceList()) {
+                for (const Device *device : m_studio->getDevicesRef()) {
                     RG_DEBUG << "slotFaderLevelChanged: i = " << deviceTabIndex << ", tabIndex " << currentTabIndex;
                     const MidiDevice *midiDevice =
                             dynamic_cast<const MidiDevice *>(device);
@@ -397,7 +397,7 @@ MidiMixerWindow::slotControllerChanged(float value)
         //for (DeviceList::const_iterator deviceIter = m_studio->begin();
         //     deviceIter != m_studio->end();
         //     ++deviceIter) {
-        for (const Device *device : m_studio->getDeviceList()) {
+        for (const Device *device : m_studio->getDevicesRef()) {
             RG_DEBUG << "slotControllerChanged(): tabIndex = " << tabIndex << ", currentTabIndex " << currentTabIndex;
             const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
             if (!midiDevice)
@@ -427,47 +427,52 @@ MidiMixerWindow::slotControllerChanged(float value)
 }
 
 void
-MidiMixerWindow::updateWidgets(const Instrument *instrument)
+MidiMixerWindow::updateWidgets(const Instrument *i_instrument)
 {
     //RG_DEBUG << "updateWidgets(): Instrument ID = " << instrument->getId();
+
+    // ??? Feels like both of these loops could go away if we inline this
+    //     routine inside its only caller.  If we inline this carefully,
+    //     I suspect it ends up being only about ten lines of code.
+
+    const InstrumentId instrumentId = i_instrument->getId();
 
     size_t midiStripIndex = 0;
 
     // For each device in the Studio
-    for (DeviceVector::const_iterator deviceIter = m_studio->begin();
-         deviceIter != m_studio->end();
-         ++deviceIter) {
-        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(*deviceIter);
-
+    // ??? There is only one caller of this routine.  And they happen to
+    //     have the MidiDevice *, so there is no need for this Device search
+    //     loop.
+    for (const Device *device : m_studio->getDevicesRef()) {
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
         // If this isn't a MidiDevice, try the next.
         if (!midiDevice)
             continue;
 
         InstrumentVector instruments = midiDevice->getPresentationInstruments();
 
-        // For each Instrument in the Device
-        for (InstrumentVector::const_iterator iIt = instruments.begin();
-             iIt != instruments.end(); ++iIt) {
-            // Match and set
-            //
-            if ((*iIt)->getId() == instrument->getId()) {
-                // Set Volume fader
-                //
+        // For each Instrument in the Device...
+        // ??? If this is just to get the strip index, the caller already
+        //     has that and should send it in!!!
+        for (const Instrument *loopInstrument : instruments) {
 
+            // Is this the Instrument we are updating?
+            if (loopInstrument->getId() == instrumentId) {
+
+                // Volume fader
                 MidiByte volumeValue;
                 try {
-                    volumeValue = (*iIt)->
+                    volumeValue = loopInstrument->
                             getControllerValue(MIDI_CONTROLLER_VOLUME);
                 } catch (std::string& s) {
                     // This should never get called.
-                    volumeValue = (*iIt)->getVolume();
+                    volumeValue = loopInstrument->getVolume();
                 }
 
                 // setFader() emits a signal.  If we don't block it, we crash
                 // due to an endless loop.
-                // ??? Need to examine more closely and see if we can redesign
-                //     things to avoid this crash and remove the
-                //     blockSignals() calls around every call to setFader().
+                // ??? Can we make Fader::setFader() only emit a signal on a
+                //     user change?  Then blockSignals() would be unnecessary.
                 m_midiStrips[midiStripIndex]->m_volumeFader->blockSignals(true);
                 m_midiStrips[midiStripIndex]->m_volumeFader->setFader(float(volumeValue));
                 m_midiStrips[midiStripIndex]->m_volumeFader->blockSignals(false);
@@ -488,7 +493,7 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
                     // Instruments..
                     //
                     try {
-                        value = float((*iIt)->getControllerValue
+                        value = float(loopInstrument->getControllerValue
                                       (controls[i].getControllerNumber()));
                     } catch (const std::string &s) {
                         //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerNumber()) << " - \"" << s << "\"";
@@ -499,6 +504,8 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
 
                     m_midiStrips[midiStripIndex]->m_controllerRotaries[i].second->setPosition(value);
                 }
+
+                // ??? Aren't we done at this point.  Can't we break?
             }
             ++midiStripIndex;
         }
@@ -506,47 +513,38 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
 }
 
 void
-MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
+MidiMixerWindow::slotControlChange(
+        Instrument *instrument, const int controllerNumber)
 {
     if (!instrument)
         return;
 
-    // Find the appropriate strip.
+    // Find the appropriate strip index.
 
-    size_t stripCount = 0;
+    size_t stripIndex = 0;
     bool found = false;
 
     // ??? Performance: LINEAR SEARCH
     //     We've got to be able to do better.  A
-    //     std::map<InstrumentId, StripIndex> or similar should work well.
-    //     Or just stuff the strip index in each widget.
+    //     std::map<InstrumentId, StripIndex> or similar should be better.
 
     // For each Device in the Studio...
-    for (DeviceVector::const_iterator deviceIter = m_studio->begin();
-         deviceIter != m_studio->end();
-         ++deviceIter) {
-        const MidiDevice *device = dynamic_cast<const MidiDevice *>(*deviceIter);
-
+    for (const Device *device : m_studio->getDevicesRef()) {
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
         // If this isn't a MidiDevice, try the next.
-        if (!device)
+        if (!midiDevice)
             continue;
 
-        InstrumentVector instruments = device->getPresentationInstruments();
+        InstrumentVector instruments = midiDevice->getPresentationInstruments();
 
-        // For each Instrument in the Device
-        for (InstrumentVector::const_iterator instrumentIter =
-                    instruments.begin();
-             instrumentIter != instruments.end();
-             ++instrumentIter) {
-
-            const Instrument *currentInstrument = *instrumentIter;
-
+        // For each Instrument in the Device...
+        for (const Instrument *currentInstrument : instruments) {
             if (currentInstrument->getId() == instrument->getId()) {
                 found = true;
                 break;
             }
 
-            ++stripCount;
+            ++stripIndex;
         }
 
         if (found)
@@ -557,12 +555,12 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
     if (!found)
         return;
 
-    if (stripCount >= m_midiStrips.size())
+    if (stripIndex >= m_midiStrips.size())
         return;
 
-    // At this point, stripCount is the proper index for m_faders.
+    // At this point, stripIndex is the proper index for m_faders.
 
-    if (cc == MIDI_CONTROLLER_VOLUME) {
+    if (controllerNumber == MIDI_CONTROLLER_VOLUME) {
 
         // Update the volume fader.
 
@@ -578,12 +576,11 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
 
         // setFader() emits a signal.  If we don't block it, we crash
         // due to an endless loop.
-        // ??? Need to examine more closely and see if we can redesign
-        //     things to avoid this crash and remove the
-        //     blockSignals() calls around every call to setFader().
-        m_midiStrips[stripCount]->m_volumeFader->blockSignals(true);
-        m_midiStrips[stripCount]->m_volumeFader->setFader(float(volumeValue));
-        m_midiStrips[stripCount]->m_volumeFader->blockSignals(false);
+        // ??? Can we make Fader::setFader() only emit a signal on a
+        //     user change?  Then blockSignals() would be unnecessary.
+        m_midiStrips[stripIndex]->m_volumeFader->blockSignals(true);
+        m_midiStrips[stripIndex]->m_volumeFader->setFader(float(volumeValue));
+        m_midiStrips[stripIndex]->m_volumeFader->blockSignals(false);
 
     } else {
 
@@ -595,7 +592,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
         // For each controller
         for (size_t i = 0; i < controls.size(); ++i) {
             // If this is the one...
-            if (cc == controls[i].getControllerNumber()) {
+            if (controllerNumber == controls[i].getControllerNumber()) {
 
                 // The ControllerValues might not yet be set on
                 // the actual Instrument so don't always expect
@@ -604,11 +601,11 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
                 // Instruments..
                 //
                 try {
-                    MidiByte value = instrument->getControllerValue(cc);
-                    m_midiStrips[stripCount]->m_controllerRotaries[i].second->
+                    MidiByte value = instrument->getControllerValue(controllerNumber);
+                    m_midiStrips[stripIndex]->m_controllerRotaries[i].second->
                             setPosition(value);
                 } catch (...) {
-                    RG_WARNING << "slotControlChange(): WARNING: cc not found " << cc;
+                    RG_WARNING << "slotControlChange(): WARNING: cc not found " << controllerNumber;
                 }
 
                 break;
