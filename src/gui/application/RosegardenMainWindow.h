@@ -253,7 +253,29 @@ public:
 
     void toggleLoop();
 
-protected:
+    /// Open the document properties dialog on the Audio page.
+    void openAudioPathSettings();
+
+signals:
+
+    void startupStatusMessage(QString message);
+
+    /// emitted just before the document is changed
+    void documentAboutToChange();
+
+    /// Emitted when a new document is loaded.
+    void documentLoaded(RosegardenDocument *);
+
+    /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
+    void segmentsSelected(const SegmentSelection &);
+
+    /// emitted when a plugin dialog selects a plugin
+    void pluginSelected(InstrumentId, int, int);
+
+    /// emitted when a plugin dialog (un)bypasses a plugin
+    void pluginBypassed(InstrumentId, int, bool);
+
+private:
 
     /// Handle activation change.
     /**
@@ -480,29 +502,11 @@ protected:
      */
     void leaveActionState(QString stateName);
 
-signals:
-    void startupStatusMessage(QString message);
-
-    /// emitted just before the document is changed
-    void documentAboutToChange();
-
-    /// Emitted when a new document is loaded.
-    void documentLoaded(RosegardenDocument *);
-
-    /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
-    void segmentsSelected(const SegmentSelection &);
-
-    /// emitted when a plugin dialog selects a plugin
-    void pluginSelected(InstrumentId, int, int);
-
-    /// emitted when a plugin dialog (un)bypasses a plugin
-    void pluginBypassed(InstrumentId, int, bool);
-
 public slots:
 
-    /** Update the title bar to prepend a * to the document title when the
-     * document is modified. (I thought we already did this ages ago, but
-     * apparenty not.)
+    /**
+     * Update the title bar to prepend a * to the document title when the
+     * document is modified.
      */
     void slotUpdateTitle(bool modified = false);
 
@@ -514,109 +518,11 @@ public slots:
     void slotOpenDroppedURL(QString url);
 
     /**
-     * Open the document properties dialog on the Audio page
-     */
-    void slotOpenAudioPathSettings();
-
-    /**
-     * clears the document in the actual view to reuse it as the new
-     * document
-     */
-    void slotFileNew();
-
-    /**
-     * open a file and load it into the document
-     */
-    void slotFileOpen();
-
-    /**
-     * open a file dialog on the examples directory
-     */
-    void slotFileOpenExample();
-
-    /**
-     * open a file dialog on the templates directory
-     */
-    void slotFileOpenTemplate();
-
-    /**
-     * opens a file from the recent files menu (according to action name)
-     */
-    void slotFileOpenRecent();
-
-    /**
      * save a document
      */
     void slotFileSave();
 
-    /**
-     * save a document by a new filename; if asTemplate is true, the file will
-     * be saved read-only, to make it harder to overwrite by accident in the
-     * future
-     */
-    void slotFileSaveAs() { fileSaveAs(false); }
-    void slotFileSaveAsTemplate() { fileSaveAs(true); }
-
-    /**
-     * asks for saving if the file is modified, then closes the actual
-     * file and window
-     */
-    void slotFileClose();
-
-    /**
-     * Let the user select a Rosegarden Project file for import
-     */
-    void slotImportProject();
-
-    /**
-     * Let the user select a MIDI file for import
-     */
-    void slotImportMIDI();
-
-    /**
-     * Revert to last loaded file
-     */
-    void slotRevertToSaved();
-
-    /**
-     * Let the user select a Rosegarden 2.1 file for import
-     */
-    void slotImportRG21();
-
-    /**
-     * Select a Hydrogen drum machine file for import
-     */
-//    void slotImportHydrogen();
-
-    /**
-     * Let the user select a MusicXML file for import
-     */
-    void slotImportMusicXML();
-
-    /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMerge();
-
-    /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMergeMIDI();
-
-    /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMergeRG21();
-
-    /**
-     * Select a Hydrogen drum machine file for merge
-     */
-//    void slotMergeHydrogen();
-
-    /**
-     * Let the user select a MusicXML file for merge
-     */
-    void slotMergeMusicXML();
+    // ??? Need to evaluate the rest of these slots and move to private.
 
     /**
      * Let the user export a Rosegarden Project file
@@ -1676,8 +1582,10 @@ private:
 
 private slots:
 
+    /// ??? Rename: slotSetupRecentFilesMenu().
     void setupRecentFilesMenu();
 
+    /// ??? A "slot" named "signal"?  Fix this.
     void signalAction(int);
 
     // New routines to handle inputs and UI updates
@@ -1693,6 +1601,101 @@ private slots:
     void slotUnmuteAllTracks();
 
     void slotCommandExecuted();
+
+    /**
+     * clears the document in the actual view to reuse it as the new
+     * document
+     */
+    void slotFileNew();
+
+    /**
+     * open a file and load it into the document
+     */
+    void slotFileOpen();
+
+    /**
+     * open a file dialog on the examples directory
+     */
+    void slotFileOpenExample();
+
+    /**
+     * open a file dialog on the templates directory
+     */
+    void slotFileOpenTemplate();
+
+    /**
+     * opens a file from the recent files menu (according to action name)
+     */
+    void slotFileOpenRecent();
+
+    /**
+     * save a document by a new filename; if asTemplate is true, the file will
+     * be saved read-only, to make it harder to overwrite by accident in the
+     * future
+     */
+    void slotFileSaveAs() { fileSaveAs(false); }
+    void slotFileSaveAsTemplate() { fileSaveAs(true); }
+
+    /**
+     * asks for saving if the file is modified, then closes the actual
+     * file and window
+     */
+    void slotFileClose();
+
+    /**
+     * Let the user select a Rosegarden Project file for import
+     */
+    void slotImportProject();
+
+    /**
+     * Let the user select a MIDI file for import
+     */
+    void slotImportMIDI();
+
+    /**
+     * Revert to last loaded file
+     */
+    void slotRevertToSaved();
+
+    /**
+     * Let the user select a Rosegarden 2.1 file for import
+     */
+    void slotImportRG21();
+
+    /**
+     * Select a Hydrogen drum machine file for import
+     */
+//    void slotImportHydrogen();
+
+    /**
+     * Let the user select a MusicXML file for import
+     */
+    void slotImportMusicXML();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMerge();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeMIDI();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeRG21();
+
+    /**
+     * Select a Hydrogen drum machine file for merge
+     */
+//    void slotMergeHydrogen();
+
+    /**
+     * Let the user select a MusicXML file for merge
+     */
+    void slotMergeMusicXML();
 };
 
 

@@ -2950,7 +2950,7 @@ RosegardenDocument::checkAudioPath(Track *track)
                                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                                  QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
                                 ) == QMessageBox::Yes) {
-            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
+            RosegardenMainWindow::self()->openAudioPathSettings();
         }
     }
 }

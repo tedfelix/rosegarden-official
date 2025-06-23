@@ -2849,7 +2849,7 @@ RosegardenMainWindow::testAudioPath(const QString &operation)
                 QMessageBox::Yes | QMessageBox::Cancel,  // buttons
                 QMessageBox::Cancel) ==  // defaultButton
                         QMessageBox::Yes) {
-            slotOpenAudioPathSettings();
+            openAudioPathSettings();
         }
         return false;
     }
@@ -5737,7 +5737,7 @@ RosegardenMainWindow::slotRecord()
                                QMessageBox::Cancel) // default button
                 == QMessageBox::Yes)
             {
-                slotOpenAudioPathSettings();
+                openAudioPathSettings();
             }//end if
 
         getTransport()->MetronomeButton()->setChecked(false);
@@ -5792,7 +5792,7 @@ RosegardenMainWindow::slotToggleRecord()
                ) == QMessageBox::Yes
        ){
             //tr("Set audio file path")) == QMessageBox::Continue) {
-        slotOpenAudioPathSettings();
+        openAudioPathSettings();
         }
     } catch (const Exception &e) {
         QMessageBox::critical(this, tr("Rosegarden"),  strtoqstr(e.getMessage()));
@@ -6176,7 +6176,7 @@ RosegardenMainWindow::slotEditDocumentProperties()
 }
 
 void
-RosegardenMainWindow::slotOpenAudioPathSettings()
+RosegardenMainWindow::openAudioPathSettings()
 {
     RG_DEBUG << "slotOpenAudioPathSettings\n";
 
