@@ -41,11 +41,10 @@ class StudioObserver;
 
 
 typedef std::vector<Instrument *> InstrumentList;
-typedef std::vector<Device *> DeviceList;
 typedef std::vector<Buss *> BussList;
 typedef std::vector<RecordIn *> RecordInList;
-typedef std::vector<Device *>::iterator DeviceListIterator;
-typedef std::vector<Device *>::const_iterator DeviceListConstIterator;
+typedef std::vector<Device *> DeviceList;
+//typedef std::vector<Device *>::iterator DeviceListIterator;
 
 
 /// Holds Device objects.
@@ -169,8 +168,8 @@ public:
 
     // Const iterators
     //
-    DeviceListConstIterator begin() const { return m_devices.begin(); }
-    DeviceListConstIterator end() const { return m_devices.end(); }
+    DeviceList::const_iterator begin() const { return m_devices.begin(); }
+    DeviceList::const_iterator end() const { return m_devices.end(); }
 
     // Get a device by ID
     //

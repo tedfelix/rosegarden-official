@@ -114,7 +114,7 @@ RemapInstrumentDialog::populateCombo()
 
     if (m_deviceButton->isChecked()) {
         DeviceList *devices = studio->getDevices();
-        DeviceListIterator it;
+        DeviceList::iterator it;
         m_devices.clear();
 
         for (it = devices->begin(); it != devices->end(); it++) {

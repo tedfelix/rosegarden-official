@@ -367,7 +367,7 @@ ImportDeviceDialog::importFromRG(const QString& fileName)
         return true; // true because we successfully read the document
     }
 
-    for (DeviceListIterator it = list->begin(); it != list->end(); ++it) {
+    for (DeviceList::iterator it = list->begin(); it != list->end(); ++it) {
 
         MidiDevice *device = dynamic_cast<MidiDevice*>(*it);
 

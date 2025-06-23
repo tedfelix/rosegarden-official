@@ -377,10 +377,11 @@ MidiMixerWindow::slotControllerChanged(float value)
 
     //RG_DEBUG << "slotControllerChanged() - got instrument to change";
 
-    MidiByte cc = m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].first;
+    const MidiByte controllerNumber =
+            m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].first;
 
-    instrument->setControllerValue(cc, MidiByte(value));
-    Instrument::emitControlChange(instrument, cc);
+    instrument->setControllerValue(controllerNumber, MidiByte(value));
+    Instrument::emitControlChange(instrument, controllerNumber);
     m_document->setModified();
 
     if (ExternalController::self().isNative()  &&
@@ -388,28 +389,38 @@ MidiMixerWindow::slotControllerChanged(float value)
 
         // Send out the external controller port as well.
 
-        int tabIndex = m_tabWidget->currentIndex();
-        if (tabIndex < 0)
-            tabIndex = 0;
-        int k = 0;
-        for (DeviceList::const_iterator dit = m_studio->begin();
-             dit != m_studio->end(); ++dit) {
-            RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex;
-            if (!dynamic_cast<MidiDevice*>(*dit))
+        int currentTabIndex = m_tabWidget->currentIndex();
+        if (currentTabIndex < 0)
+            currentTabIndex = 0;
+        int tabIndex = 0;
+        // For each Device in the Studio...
+        //for (DeviceList::const_iterator deviceIter = m_studio->begin();
+        //     deviceIter != m_studio->end();
+        //     ++deviceIter) {
+        for (const Device *device : m_studio->getDeviceList()) {
+            RG_DEBUG << "slotControllerChanged(): tabIndex = " << tabIndex << ", currentTabIndex " << currentTabIndex;
+            const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
+            if (!midiDevice)
                 continue;
-            if (k != tabIndex) {
-                ++k;
+            // Not the current tab?  Try the next.
+            if (tabIndex != currentTabIndex) {
+                ++tabIndex;
                 continue;
             }
-            RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
-            if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
+
+            RG_DEBUG << "slotControllerChanged(): device id = " << instrument->getDevice()->getId() << ", visible device id " << midiDevice->getId();
+
+            // If this MidiDevice is the Instrument's...
+            if (midiDevice->getId() == instrument->getDevice()->getId()) {
+                RG_DEBUG << "slotControllerChanged(): sending external controller mapped event for channel " << instrument->getNaturalMidiChannel();
                 // send out to external controller port as well.
                 // !!! really want some notification of whether we have any!
                 ExternalController::send(
                         instrument->getNaturalMidiChannel(),
-                        m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].first,
+                        controllerNumber,
                         MidiByte(value));
+
+                break;
             }
         }
     }
@@ -420,17 +431,19 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
 {
     //RG_DEBUG << "updateWidgets(): Instrument ID = " << instrument->getId();
 
-    int count = 0;
+    size_t midiStripIndex = 0;
 
     // For each device in the Studio
-    for (DeviceListConstIterator it = m_studio->begin(); it != m_studio->end(); ++it) {
-        MidiDevice *dev = dynamic_cast<MidiDevice *>(*it);
+    for (DeviceList::const_iterator deviceIter = m_studio->begin();
+         deviceIter != m_studio->end();
+         ++deviceIter) {
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(*deviceIter);
 
         // If this isn't a MidiDevice, try the next.
-        if (!dev)
+        if (!midiDevice)
             continue;
 
-        InstrumentList instruments = dev->getPresentationInstruments();
+        InstrumentList instruments = midiDevice->getPresentationInstruments();
 
         // For each Instrument in the Device
         for (InstrumentList::const_iterator iIt = instruments.begin();
@@ -455,13 +468,13 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
                 // ??? Need to examine more closely and see if we can redesign
                 //     things to avoid this crash and remove the
                 //     blockSignals() calls around every call to setFader().
-                m_midiStrips[count]->m_volumeFader->blockSignals(true);
-                m_midiStrips[count]->m_volumeFader->setFader(float(volumeValue));
-                m_midiStrips[count]->m_volumeFader->blockSignals(false);
+                m_midiStrips[midiStripIndex]->m_volumeFader->blockSignals(true);
+                m_midiStrips[midiStripIndex]->m_volumeFader->setFader(float(volumeValue));
+                m_midiStrips[midiStripIndex]->m_volumeFader->blockSignals(false);
 
                 //RG_DEBUG << "STATIC CONTROLS SIZE = " << (*iIt)->getStaticControllers().size();
 
-                ControlList controls = getIPBControlParameters(dev);
+                ControlList controls = getIPBControlParameters(midiDevice);
 
                 // Set all controllers for this Instrument
                 //
@@ -484,10 +497,10 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
 
                     //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerNumber());
 
-                    m_midiStrips[count]->m_controllerRotaries[i].second->setPosition(value);
+                    m_midiStrips[midiStripIndex]->m_controllerRotaries[i].second->setPosition(value);
                 }
             }
-            count++;
+            ++midiStripIndex;
         }
     }
 }
@@ -506,9 +519,10 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
     // ??? Performance: LINEAR SEARCH
     //     We've got to be able to do better.  A
     //     std::map<InstrumentId, StripIndex> or similar should work well.
+    //     Or just stuff the strip index in each widget.
 
-    // For each device in the Studio
-    for (DeviceListConstIterator deviceIter = m_studio->begin();
+    // For each Device in the Studio...
+    for (DeviceList::const_iterator deviceIter = m_studio->begin();
          deviceIter != m_studio->end();
          ++deviceIter) {
         const MidiDevice *device = dynamic_cast<const MidiDevice *>(*deviceIter);

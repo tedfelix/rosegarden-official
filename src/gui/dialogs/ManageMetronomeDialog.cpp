@@ -91,7 +91,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     deviceBoxLayout->addWidget(m_metronomeDevice, 0, 1);
 
     DeviceList *devices = doc->getStudio().getDevices();
-    DeviceListConstIterator it;
+    DeviceList::const_iterator it;
 
     Studio &studio = m_doc->getStudio();
     DeviceId deviceId = studio.getMetronomeDevice();
@@ -249,7 +249,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     m_metronomeInstrument->clear();
 
     DeviceList *devices = m_doc->getStudio().getDevices();
-    DeviceListConstIterator it;
+    DeviceList::const_iterator it;
     int count = 0;
     Device *dev = nullptr;
 
@@ -377,7 +377,7 @@ ManageMetronomeDialog::slotApply()
     Studio &studio = m_doc->getStudio();
 
     DeviceList *devices = m_doc->getStudio().getDevices();
-    DeviceListConstIterator it;
+    DeviceList::const_iterator it;
     int count = 0;
     Device *dev = nullptr;
 
@@ -446,7 +446,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch";
 
     DeviceList *devices = m_doc->getStudio().getDevices();
-    DeviceListConstIterator it;
+    DeviceList::const_iterator it;
     int count = 0;
     Device *dev = nullptr;
 
