@@ -143,7 +143,6 @@ RosegardenDocument::RosegardenDocument(
     m_audioRecordLatency(0, 0),
     m_quickMarkerTime(-1),
     m_autoSavePeriod(0),
-    m_beingDestroyed(false),
     m_clearCommandHistory(clearCommandHistory),
     m_soundEnabled(enableSound)
 {
@@ -164,8 +163,6 @@ RosegardenDocument::RosegardenDocument(
 RosegardenDocument::~RosegardenDocument()
 {
     RG_DEBUG << "dtor";
-
-    m_beingDestroyed = true;
 
     m_audioPeaksThread.finish();
     m_audioPeaksThread.wait();
@@ -1268,7 +1265,7 @@ bool RosegardenDocument::saveDocumentActual(const QString &filename,
     for (Composition::iterator segmentIter = m_composition.begin();
          segmentIter != m_composition.end(); ++segmentIter) {
 
-        Segment *segment = *segmentIter;
+        const Segment *segment = *segmentIter;
 
         // Fix #1446 : Replace isLinked() with isTrulyLinked().
         // Maybe this fix will need to be removed some day if the
@@ -1311,7 +1308,7 @@ bool RosegardenDocument::saveDocumentActual(const QString &filename,
                               .arg((*ci)->getDefaultRetune())
                               .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
-        Segment *segment = (*ci)->getSegment();
+        const Segment *segment = (*ci)->getSegment();
         saveSegment(outStream, segment, triggerAtts);
     }
 
@@ -1353,9 +1350,9 @@ bool RosegardenDocument::saveDocumentActual(const QString &filename,
     return true;
 }
 
-bool RosegardenDocument::exportStudio(const QString& filename,
+bool RosegardenDocument::exportStudio(const QString &filename,
                                       QString &errMsg,
-                                      std::vector<DeviceId> devices)
+                                      const std::vector<DeviceId> &devices)
 {
     Profiler profiler("RosegardenDocument::exportStudio");
     RG_DEBUG << "RosegardenDocument::exportStudio(" << filename << ")";
@@ -1398,8 +1395,6 @@ void RosegardenDocument::saveSegment(QTextStream &outStream,
                                      const Segment *segment,
                                      const QString &additionalAttributes)
 {
-    QString time;
-
     outStream << QString("<%1 track=\"%2\" start=\"%3\" ")
     .arg(segment->getXmlElementName())
     .arg(segment->getTrack())
@@ -1640,9 +1635,10 @@ bool RosegardenDocument::isSoundEnabled() const
 }
 
 bool
-RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
-                           bool permanent,
-                           bool &cancelled)
+RosegardenDocument::xmlParse(const QString &fileContents,
+                             QString &errMsg,
+                             bool permanent,
+                             bool &cancelled)
 {
     //Profiler profiler("RosegardenDocument::xmlParse");
 
@@ -1810,9 +1806,9 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
     for (Composition::TrackIdSet::const_iterator i =
             recordTracks.begin(); i != recordTracks.end(); ++i) {
         TrackId tid = (*i);
-        Track *track = getComposition().getTrackById(tid);
+        const Track *track = getComposition().getTrackById(tid);
         if (track) {
-            Instrument *instrument =
+            const Instrument *instrument =
                 m_studio.getInstrumentById(track->getInstrument());
             if (instrument->getType() == Instrument::Midi ||
                     instrument->getType() == Instrument::SoftSynth) {
@@ -1924,7 +1920,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
                     // Adjust updateFrom for quantization.
 
-                    Event *oldEv = *rec_vec[0].m_segmentIterator;
+                    const Event *oldEv = *rec_vec[0].m_segmentIterator;
                     timeT eventAbsTime = oldEv->getAbsoluteTime();
 
                     // Make sure we quantize starting at the beginning of this
@@ -2173,7 +2169,7 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
     //
     // (All debate over whether this is the right way to go with this whole
     // issue is now officially settled, and no longer tentative.)
-    Composition *c = s->getComposition();
+    const Composition *c = s->getComposition();
     if (!c)
         return;
 
@@ -2296,7 +2292,7 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
             i != m_recordMIDISegments.end(); ++i) {
         Segment *recordMIDISegment = i->second;
         TrackId tid = recordMIDISegment->getTrack();
-        Track *track = getComposition().getTrackById(tid);
+        const Track *track = getComposition().getTrackById(tid);
         if (track) {
             //Instrument *instrument =
             //    m_studio.getInstrumentById(track->getInstrument());
@@ -2529,13 +2525,13 @@ RosegardenDocument::addRecordMIDISegment(TrackId tid)
     //
     std::string label = "";
 
-    Track *track = m_composition.getTrackById(tid);
+    const Track *track = m_composition.getTrackById(tid);
     if (!track) return;
 
     if (track->getPresetLabel() != "") {
         label = track->getPresetLabel();
     } else if (track->getLabel() == "") {
-        Instrument *instr =
+        const Instrument *instr =
             m_studio.getInstrumentById(track->getInstrument());
         if (instr) {
             label = m_studio.getSegmentName(instr->getId());
@@ -2581,7 +2577,7 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     // Find the right track
 
-    Track *recordTrack = nullptr;
+    const Track *recordTrack = nullptr;
 
     const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
@@ -2614,7 +2610,7 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     if (recordTrack->getLabel() == "") {
 
-        Instrument *instr =
+        const Instrument *instr =
             m_studio.getInstrumentById(recordTrack->getInstrument());
 
         if (instr) {
@@ -2661,7 +2657,7 @@ RosegardenDocument::updateRecordingAudioSegments()
                 tr.begin(); i != tr.end(); ++i) {
 
         TrackId tid = (*i);
-        Track *track = getComposition().getTrackById(tid);
+        const Track *track = getComposition().getTrackById(tid);
 
         if (track) {
 
@@ -2763,7 +2759,7 @@ RosegardenDocument::finalizeAudioFile(InstrumentId instrument)
         return;
     }
 
-    AudioFile *newAudioFile = m_audioFileManager.getAudioFile(
+    const AudioFile *newAudioFile = m_audioFileManager.getAudioFile(
             recordSegment->getAudioFileId());
     if (!newAudioFile) {
         RG_WARNING << "finalizeAudioFile() WARNING: No audio file found for instrument " << instrument << " (audio file id " << recordSegment->getAudioFileId() << ")";
@@ -2891,7 +2887,7 @@ RosegardenDocument::addOrphanedDerivedAudioFile(QString fileName)
 void
 RosegardenDocument::notifyAudioFileRemoval(AudioFileId id)
 {
-    AudioFile *file = nullptr;
+    const AudioFile *file = nullptr;
 
     if (m_audioFileManager.wasAudioFileRecentlyRecorded(id)) {
         file = m_audioFileManager.getAudioFile(id);
@@ -2934,7 +2930,7 @@ RosegardenDocument::checkAudioPath(Track *track)
     if (!track->isArmed())
         return;
 
-    Instrument *instrument =
+    const Instrument *instrument =
             getStudio().getInstrumentById(track->getInstrument());
 
     bool audio = (instrument  &&

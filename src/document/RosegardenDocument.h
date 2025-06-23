@@ -246,8 +246,8 @@ public:
      * empty, exports all devices.
      */
     bool exportStudio(const QString &filename,
-		      QString &errMsg,
-                      std::vector<DeviceId> devices =
+                      QString &errMsg,
+                      const std::vector<DeviceId> &devices =
                       std::vector<DeviceId>());
 
     /**
@@ -471,8 +471,6 @@ public:
      */
     QList<RosegardenMainViewWidget*>& getViewList() { return m_viewList; }
 
-    bool isBeingDestroyed() { return m_beingDestroyed; }
-
     static const unsigned int MinNbOfTracks; // 64
 
     /// Verify that the audio path exists and can be written to.
@@ -593,7 +591,8 @@ private:
      * @return false if parsing failed
      * @see RoseXmlHandler
      */
-    bool xmlParse(QString fileContents, QString &errMsg,
+    bool xmlParse(const QString &fileContents,
+                  QString &errMsg,
                   bool permanent,
                   bool &cancelled);
 
@@ -787,9 +786,6 @@ private:
      *  Autosave period for this document in seconds
      */
     int m_autoSavePeriod;
-
-    // Set to true when the dtor starts
-    bool m_beingDestroyed;
 
     /**
      * Tells this document whether it should clear the command history upon
