@@ -7739,10 +7739,10 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
 
         if (pl && pl->isGrouped()) {
 
-            InstrumentList il =
+            InstrumentVector il =
                 RosegardenDocument::currentDocument->getStudio().getAllInstruments();
 
-            for (InstrumentList::iterator i = il.begin();
+            for (InstrumentVector::iterator i = il.begin();
                     i != il.end(); ++i) {
 
                 for (AudioPluginVector::iterator pli =

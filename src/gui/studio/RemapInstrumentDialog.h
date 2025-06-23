@@ -74,7 +74,7 @@ protected:
     QComboBox           *m_toCombo;
 
     DeviceVector m_devices;
-    InstrumentList m_instruments;
+    InstrumentVector m_instruments;
 };
 
 

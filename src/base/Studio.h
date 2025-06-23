@@ -40,11 +40,10 @@ class Track;
 class StudioObserver;
 
 
-typedef std::vector<Instrument *> InstrumentList;
-typedef std::vector<Buss *> BussList;
-typedef std::vector<RecordIn *> RecordInList;
-typedef std::vector<Device *> DeviceList;
-//typedef std::vector<Device *>::iterator DeviceListIterator;
+typedef std::vector<Instrument *> InstrumentVector;
+typedef std::vector<Buss *> BussVector;
+typedef std::vector<RecordIn *> RecordInVector;
+typedef std::vector<Device *> DeviceVector;
 
 
 /// Holds Device objects.
@@ -78,8 +77,8 @@ public:
 
     // Return the combined instrument list from all devices
     //
-    InstrumentList getAllInstruments();
-    InstrumentList getPresentationInstruments() const;
+    InstrumentVector getAllInstruments();
+    InstrumentVector getPresentationInstruments() const;
 
     // Return an Instrument
     Instrument* getInstrumentById(InstrumentId id) const;
@@ -90,7 +89,7 @@ public:
     Instrument *getInstrumentFor(const Track *) const;
 
     // Return a Buss
-    BussList getBusses();
+    BussVector getBusses();
     Buss *getBussById(BussId id);
     void addBuss(Buss *buss);
     //void removeBuss(BussId id);
@@ -99,7 +98,7 @@ public:
     // Return an Instrument or a Buss
     PluginContainer *getContainerById(InstrumentId id);
 
-    RecordInList getRecordIns() { return m_recordIns; }
+    RecordInVector getRecordIns() { return m_recordIns; }
     RecordIn *getRecordIn(int number);
     void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
     void setRecordInCount(unsigned newRecordInCount);
@@ -146,10 +145,10 @@ public:
 
     // Return the device list
     //
-    DeviceList *getDevices()  { return &m_devices; }
-    const DeviceList *getDevices() const  { return &m_devices; }
-    DeviceList &getDeviceList()  { return m_devices; }
-    const DeviceList &getDeviceList() const  { return m_devices; }
+    DeviceVector *getDevices()  { return &m_devices; }
+    const DeviceVector *getDevices() const  { return &m_devices; }
+    DeviceVector &getDeviceList()  { return m_devices; }
+    const DeviceVector &getDeviceList() const  { return m_devices; }
 
     /// Get an available Instrument on the first MIDI Device.
     /**
@@ -168,8 +167,8 @@ public:
 
     // Const iterators
     //
-    DeviceList::const_iterator begin() const { return m_devices.begin(); }
-    DeviceList::const_iterator end() const { return m_devices.end(); }
+    DeviceVector::const_iterator begin() const { return m_devices.begin(); }
+    DeviceVector::const_iterator end() const { return m_devices.end(); }
 
     // Get a device by ID
     //
@@ -224,12 +223,12 @@ private:
     Studio(const Studio &) = delete;
     Studio &operator=(const Studio &) = delete;
 
-    DeviceList        m_devices;
+    DeviceVector        m_devices;
     /// Returns nullptr if there are no MIDI out devices.
     Device *getFirstMIDIOutDevice() const;
 
-    BussList          m_busses;
-    RecordInList      m_recordIns;
+    BussVector          m_busses;
+    RecordInVector      m_recordIns;
 
     int               m_audioInputs; // stereo pairs
 

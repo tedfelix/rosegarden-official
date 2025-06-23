@@ -126,7 +126,7 @@ MidiMixerWindow::setupTabs()
         // be shown here too).
         ControlList controls = getIPBControlParameters(midiDevice);
 
-        InstrumentList instruments = midiDevice->getPresentationInstruments();
+        InstrumentVector instruments = midiDevice->getPresentationInstruments();
         // Don't add a frame for empty devices
         if (!instruments.size())
             continue;
@@ -443,10 +443,10 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
         if (!midiDevice)
             continue;
 
-        InstrumentList instruments = midiDevice->getPresentationInstruments();
+        InstrumentVector instruments = midiDevice->getPresentationInstruments();
 
         // For each Instrument in the Device
-        for (InstrumentList::const_iterator iIt = instruments.begin();
+        for (InstrumentVector::const_iterator iIt = instruments.begin();
              iIt != instruments.end(); ++iIt) {
             // Match and set
             //
@@ -531,10 +531,10 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
         if (!device)
             continue;
 
-        InstrumentList instruments = device->getPresentationInstruments();
+        InstrumentVector instruments = device->getPresentationInstruments();
 
         // For each Instrument in the Device
-        for (InstrumentList::const_iterator instrumentIter =
+        for (InstrumentVector::const_iterator instrumentIter =
                     instruments.begin();
              instrumentIter != instruments.end();
              ++instrumentIter) {
@@ -679,9 +679,9 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
             continue;
         }
 
-        InstrumentList instruments = dev->getPresentationInstruments();
+        InstrumentVector instruments = dev->getPresentationInstruments();
 
-        for (InstrumentList::const_iterator iIt =
+        for (InstrumentVector::const_iterator iIt =
                     instruments.begin(); iIt != instruments.end(); ++iIt) {
 
             Instrument *instrument = *iIt;
@@ -757,7 +757,7 @@ MidiMixerWindow::sendControllerRefresh()
 
         // Found the MidiDevice for this tab.
 
-        InstrumentList instruments = dev->getPresentationInstruments();
+        InstrumentVector instruments = dev->getPresentationInstruments();
 
         RG_DEBUG << "device has" << instruments.size() << "presentation instruments," << dev->getAllInstruments().size() << " instruments";
 

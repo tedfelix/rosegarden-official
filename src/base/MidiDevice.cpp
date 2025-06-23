@@ -135,8 +135,8 @@ MidiDevice::MidiDevice(const MidiDevice &dev) :
 
     // Copy the instruments
     //
-    InstrumentList insList = dev.getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = dev.getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
     for (; iIt != insList.end(); ++iIt)
     {
         Instrument *newInst = new Instrument(**iIt);
@@ -188,8 +188,8 @@ MidiDevice::operator=(const MidiDevice &dev)
 
     // Copy the instruments
     //
-    InstrumentList insList = dev.getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = dev.getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
     for (; iIt != insList.end(); ++iIt)
     {
         Instrument *newInst = new Instrument(**iIt);
@@ -253,7 +253,7 @@ MidiDevice::generatePresentationList()
     //
     m_presentationInstrumentList.clear();
 
-    InstrumentList::iterator it;
+    InstrumentVector::iterator it;
     for (it = m_instruments.begin(); it != m_instruments.end(); ++it)
     {
         if ((*it)->getId() >= MidiInstrumentBase) {
@@ -268,7 +268,7 @@ MidiDevice::deviceToInstrControllerPush()
     // Copy the instruments
     //
 
-    InstrumentList::iterator iIt = m_instruments.begin();
+    InstrumentVector::iterator iIt = m_instruments.begin();
     for (; iIt != m_instruments.end(); ++iIt)
     {
         (*iIt)->clearStaticControllers();
@@ -310,8 +310,8 @@ void
 MidiDevice::clearControlList()
 {
     // Clear down instrument controllers first.
-    InstrumentList insList = getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
 
     for(; iIt != insList.end(); ++iIt) {
         (*iIt)->clearStaticControllers();
@@ -561,7 +561,7 @@ MidiDevice::toXmlString() const
     // and now bank information
     //
     BankList::const_iterator it;
-    InstrumentList::const_iterator iit;
+    InstrumentVector::const_iterator iit;
     ProgramList::const_iterator pt;
 
     for (it = m_bankList.begin(); it != m_bankList.end(); ++it)
@@ -630,13 +630,13 @@ MidiDevice::toXmlString() const
 
 // Only copy across non System instruments
 //
-InstrumentList
+InstrumentVector
 MidiDevice::getAllInstruments() const
 {
     return m_instruments;
 }
 
-InstrumentList
+InstrumentVector
 MidiDevice::getPresentationInstruments() const
 {
     return m_presentationInstrumentList;
@@ -867,8 +867,8 @@ void
 MidiDevice::replaceControlParameters(const ControlList &con)
 {
     // Clear down instrument controllers in preparation for replace.
-    InstrumentList insList = getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
 
     for(; iIt != insList.end(); ++iIt) {
         (*iIt)->clearStaticControllers();
@@ -891,10 +891,10 @@ void
 MidiDevice::
 conformInstrumentControllers(void)
 {
-    InstrumentList insList = getAllInstruments();
+    InstrumentVector insList = getAllInstruments();
 
     // Treat each instrument
-    for(InstrumentList::iterator iIt = insList.begin();
+    for(InstrumentVector::iterator iIt = insList.begin();
         iIt != insList.end();
         ++iIt) {
         // Get this instrument's static controllers.  As a seperate
@@ -995,8 +995,8 @@ MidiDevice::addControlToInstrument(const ControlParameter &con) const
 
     // Run through all of this devices instruments and add default controls and
     // values to them.
-    InstrumentList insList = getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
 
     for(; iIt != insList.end(); ++iIt) {
         MidiByte controllerNumber = con.getControllerNumber();
@@ -1009,9 +1009,9 @@ void
 MidiDevice::removeControlFromInstrument(
         const ControlParameter &controlParameter) const
 {
-    InstrumentList instrumentList = getAllInstruments();
+    InstrumentVector instrumentList = getAllInstruments();
 
-    for (InstrumentList::iterator instrumentIter = instrumentList.begin();
+    for (InstrumentVector::iterator instrumentIter = instrumentList.begin();
          instrumentIter != instrumentList.end();
          ++instrumentIter) {
         (*instrumentIter)->removeStaticController(

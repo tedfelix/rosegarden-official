@@ -57,8 +57,8 @@ SoftSynthDevice::SoftSynthDevice(const SoftSynthDevice &dev) :
 {
     // Copy the instruments
     //
-    InstrumentList insList = dev.getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = dev.getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
     for (; iIt != insList.end(); ++iIt)
         m_instruments.push_back(new Instrument(**iIt));
     if (dev.m_metronome) m_metronome = new MidiMetronome(*dev.m_metronome);
@@ -137,7 +137,7 @@ std::string
 SoftSynthDevice::toXmlString() const
 {
     std::stringstream ssiDevice;
-    InstrumentList::const_iterator iit;
+    InstrumentVector::const_iterator iit;
 
     ssiDevice << "    <device id=\""  << m_id
                 << "\" name=\""         << m_name

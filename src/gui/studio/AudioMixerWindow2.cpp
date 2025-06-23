@@ -167,11 +167,11 @@ AudioMixerWindow2::updateStripCounts()
 
     // Verify Input Strips
 
-    InstrumentList instruments = studio.getPresentationInstruments();
+    InstrumentVector instruments = studio.getPresentationInstruments();
     std::vector<InstrumentId> instrumentIds;
 
     // For each instrument
-    for (InstrumentList::iterator i = instruments.begin();
+    for (InstrumentVector::iterator i = instruments.begin();
          i != instruments.end();
          ++i) {
         const Instrument *instrument = *i;

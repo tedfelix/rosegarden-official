@@ -46,8 +46,8 @@ public:
     //
     std::string toXmlString() const override;
 
-    InstrumentList getAllInstruments() const override { return m_instruments; }
-    InstrumentList getPresentationInstruments() const override
+    InstrumentVector getAllInstruments() const override { return m_instruments; }
+    InstrumentVector getPresentationInstruments() const override
         { return m_instruments; }
 
 private:

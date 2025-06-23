@@ -1169,10 +1169,10 @@ SequenceManager::preparePlayback()
     //     make more sense?
 
     Studio &studio = m_doc->getStudio();
-    const InstrumentList list = studio.getAllInstruments();
+    const InstrumentVector list = studio.getAllInstruments();
 
     // Send the MappedInstruments full information to the Sequencer
-    InstrumentList::const_iterator it = list.begin();
+    InstrumentVector::const_iterator it = list.begin();
     for (; it != list.end(); ++it) {
         StudioControl::sendMappedInstrument(MappedInstrument(*it));
     }

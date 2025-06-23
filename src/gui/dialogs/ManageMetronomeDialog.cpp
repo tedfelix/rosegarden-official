@@ -268,8 +268,8 @@ ManageMetronomeDialog::populate(int deviceIndex)
     }
 
     // populate instrument list
-    InstrumentList list = dev->getPresentationInstruments();
-    InstrumentList::iterator iit;
+    InstrumentVector list = dev->getPresentationInstruments();
+    InstrumentVector::iterator iit;
 
     const MidiMetronome *metronome = getMetronome(dev);
 
@@ -405,7 +405,7 @@ ManageMetronomeDialog::slotApply()
     MidiMetronome metronome(*getMetronome(dev));
 
     // get instrument
-    InstrumentList list = dev->getPresentationInstruments();
+    InstrumentVector list = dev->getPresentationInstruments();
 
     Instrument *inst =
         list[m_metronomeInstrument->currentIndex()];
@@ -464,7 +464,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     const MidiMetronome *metronome = getMetronome(dev);
     if (metronome == nullptr) return;
 
-    InstrumentList list = dev->getPresentationInstruments();
+    InstrumentVector list = dev->getPresentationInstruments();
 
     Instrument *inst =
         list[m_metronomeInstrument->currentIndex()];

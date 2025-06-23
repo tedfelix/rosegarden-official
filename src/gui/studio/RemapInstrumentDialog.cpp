@@ -144,7 +144,7 @@ RemapInstrumentDialog::populateCombo()
         }
     } else {
         m_instruments = studio->getPresentationInstruments();
-        InstrumentList::iterator it = m_instruments.begin();
+        InstrumentVector::iterator it = m_instruments.begin();
 
         for (; it != m_instruments.end(); ++it) {
             m_fromCombo->addItem((*it)->getLocalizedPresentationName());

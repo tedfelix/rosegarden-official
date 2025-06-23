@@ -192,7 +192,7 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
     for (it = m_devices.begin(); it != m_devices.end(); it++) {
         ids.insert((*it)->getId());
         if ((*it)->getType() == Device::Midi) {
-            InstrumentList il = (*it)->getAllInstruments();
+            InstrumentVector il = (*it)->getAllInstruments();
             for (size_t i = 0; i < il.size(); ++i) {
                 if (il[i]->getId() > highestMidiInstrumentId) {
                     highestMidiInstrumentId = il[i]->getId();
@@ -213,10 +213,10 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
     return id;
 }
 
-InstrumentList
+InstrumentVector
 Studio::getAllInstruments()
 {
-    InstrumentList list;
+    InstrumentVector list;
 
     DeviceVector::iterator it;
 
@@ -225,7 +225,7 @@ Studio::getAllInstruments()
     for (it = m_devices.begin(); it != m_devices.end(); it++)
     {
         // get sub list
-        InstrumentList subList = (*it)->getAllInstruments();
+        InstrumentVector subList = (*it)->getAllInstruments();
 
         // concetenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -235,10 +235,10 @@ Studio::getAllInstruments()
 
 }
 
-InstrumentList
+InstrumentVector
 Studio::getPresentationInstruments() const
 {
-    InstrumentList list;
+    InstrumentVector list;
 
     // For each device...
     for (DeviceVector::const_iterator it = m_devices.begin();
@@ -253,7 +253,7 @@ Studio::getPresentationInstruments() const
         }
 
         // get sub list
-        InstrumentList subList = (*it)->getPresentationInstruments();
+        InstrumentVector subList = (*it)->getPresentationInstruments();
 
         // concatenate
         list.insert(list.end(), subList.begin(), subList.end());
@@ -270,9 +270,9 @@ Studio::getInstrumentById(InstrumentId id) const
          deviceIter != m_devices.end();
          ++deviceIter)
     {
-        InstrumentList list = (*deviceIter)->getAllInstruments();
+        InstrumentVector list = (*deviceIter)->getAllInstruments();
 
-        for (InstrumentList::const_iterator instrumentIter = list.begin();
+        for (InstrumentVector::const_iterator instrumentIter = list.begin();
              instrumentIter != list.end();
              ++instrumentIter) {
             if ((*instrumentIter)->getId() == id)
@@ -291,8 +291,8 @@ Instrument*
 Studio::getInstrumentFromList(int index)
 {
     std::vector<Device*>::iterator it;
-    InstrumentList list;
-    InstrumentList::iterator iit;
+    InstrumentVector list;
+    InstrumentVector::iterator iit;
     int count = 0;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
@@ -582,8 +582,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                                       bool percussion)
 {
     std::vector<Device*>::iterator it;
-    Rosegarden::InstrumentList::iterator iit;
-    Rosegarden::InstrumentList instList;
+    Rosegarden::InstrumentVector::iterator iit;
+    Rosegarden::InstrumentVector instList;
 
     // Instruments that we may return
     //
@@ -683,8 +683,8 @@ Studio::unassignAllInstruments()
 {
     AudioDevice *audioDevice;
     std::vector<Device*>::iterator it;
-    Rosegarden::InstrumentList::iterator iit;
-    Rosegarden::InstrumentList instList;
+    Rosegarden::InstrumentVector::iterator iit;
+    Rosegarden::InstrumentVector instList;
     int channel = 0;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
@@ -827,8 +827,8 @@ std::string
 Studio::getSegmentName(InstrumentId id)
 {
     std::vector<Device*>::iterator it;
-    Rosegarden::InstrumentList::iterator iit;
-    Rosegarden::InstrumentList instList;
+    Rosegarden::InstrumentVector::iterator iit;
+    Rosegarden::InstrumentVector instList;
 
     for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
@@ -918,7 +918,7 @@ Studio::getFirstMIDIInstrument() const
     if (!device)
         return SoftSynthInstrumentBase;
 
-    InstrumentList instruments = device->getPresentationInstruments();
+    InstrumentVector instruments = device->getPresentationInstruments();
 
     if (!instruments.empty()) {
         const Instrument *instrument = instruments[0];

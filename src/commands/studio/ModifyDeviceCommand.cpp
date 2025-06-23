@@ -120,7 +120,7 @@ ModifyDeviceCommand::execute()
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
-    InstrumentList instruments = midiDevice->getAllInstruments();
+    InstrumentVector instruments = midiDevice->getAllInstruments();
     for (size_t i = 0; i < instruments.size(); ++i) {
         // ??? Preserving just the programs isn't enough.  We need
         //     to preserve the rest of the Instrument as well.  However,
@@ -245,7 +245,7 @@ ModifyDeviceCommand::unexecute()
     if (m_changeVariation)
         midiDevice->setVariationType(m_oldVariationType);
 
-    InstrumentList instruments = midiDevice->getAllInstruments();
+    InstrumentVector instruments = midiDevice->getAllInstruments();
     for (size_t i = 0; i < instruments.size(); ++i) {
         instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
         instruments[i]->sendChannelSetup();

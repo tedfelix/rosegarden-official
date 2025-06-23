@@ -839,10 +839,10 @@ void RosegardenDocument::initialiseStudio()
         recordIns[i]->mappedId = mappedId;
     }
 
-    InstrumentList list = m_studio.getAllInstruments();
+    InstrumentVector list = m_studio.getAllInstruments();
 
     // For each instrument
-    for (InstrumentList::iterator it = list.begin();
+    for (InstrumentVector::iterator it = list.begin();
          it != list.end();
          ++it) {
         Instrument &instrument = **it;
@@ -2834,10 +2834,10 @@ RosegardenDocument::clearAllPlugins()
 {
     RG_DEBUG << "clearAllPlugins";
 
-    InstrumentList list = m_studio.getAllInstruments();
+    InstrumentVector list = m_studio.getAllInstruments();
     MappedEventList mC;
 
-    InstrumentList::iterator it = list.begin();
+    InstrumentVector::iterator it = list.begin();
     for (; it != list.end(); ++it) {
         if ((*it)->getType() == Instrument::Audio) {
             AudioPluginVector::iterator pIt = (*it)->beginPlugins();

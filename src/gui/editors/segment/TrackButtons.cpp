@@ -797,10 +797,10 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
 
     // Get the list
     Studio &studio = RosegardenDocument::currentDocument->getStudio();
-    InstrumentList list = studio.getPresentationInstruments();
+    InstrumentVector list = studio.getPresentationInstruments();
 
     // For each instrument
-    for (InstrumentList::iterator instrumentIter = list.begin();
+    for (InstrumentVector::iterator instrumentIter = list.begin();
          instrumentIter != list.end();
          ++instrumentIter) {
 
