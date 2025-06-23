@@ -568,8 +568,10 @@ RosegardenMainWindow::RosegardenMainWindow(
     m_updateUITimer->start(updateUITime);
     connect(m_inputTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotHandleInputs);
     m_inputTimer->start(20);
-    connect(m_autoSaveTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotAutoSave);
-    connect(m_cpuMeterTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateCPUMeter);
+    connect(m_autoSaveTimer, &QTimer::timeout,
+            this, &RosegardenMainWindow::slotAutoSave);
+    connect(m_cpuMeterTimer, &QTimer::timeout,
+            this, &RosegardenMainWindow::slotUpdateCPUMeter);
     m_cpuMeterTimer->start(1000);
 
     // Connect Typematic objects.
@@ -8249,9 +8251,10 @@ RosegardenMainWindow::slotAutoSave()
     if (m_lastAutoSaveTime.msecsTo(now) <= (int)m_autoSaveInterval)
         return;
 
-    RG_DEBUG << "slotAutoSave saving" << m_lastAutoSaveTime <<
-        m_autoSaveInterval << now;
-    RosegardenDocument::currentDocument->slotAutoSave();
+    RG_DEBUG << "slotAutoSave(): saving" << m_lastAutoSaveTime << m_autoSaveInterval << now;
+
+    RosegardenDocument::currentDocument->autoSave();
+
     m_lastAutoSaveTime = now;
 }
 

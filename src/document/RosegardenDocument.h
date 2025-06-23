@@ -238,6 +238,9 @@ public:
     /// Save under a new name.
     bool saveAs(const QString &newName, QString &errMsg);
 
+    /// Saves the document to a suitably-named backup file.
+    void autoSave();
+
     /**
      * exports all or part of the studio to a file.  If devices is
      * empty, exports all devices.
@@ -506,11 +509,6 @@ public slots:
     void slotDocumentModified();
     void slotDocumentRestored();
 
-    /**
-     * saves the document to a suitably-named backup file
-     */
-    void slotAutoSave();
-
     void slotSetPointerPosition(timeT);
 
     void slotDocColoursChanged();
@@ -600,13 +598,6 @@ private:
                   bool &cancelled);
 
     /**
-     * Set the "auto saved" status of the document
-     * Doc. modification sets it to false, autosaving
-     * sets it to true
-     */
-    void setAutoSaved(bool s) { m_autoSaved = s; }
-
-    /**
      * Returns whether the document should be auto-saved
      */
     bool isAutoSaved() const { return m_autoSaved; }
@@ -629,9 +620,9 @@ private:
     /**
      * Save one segment to the given text stream
      */
-    void saveSegment(QTextStream&, Segment*,
-                     long totalNbOfEvents, long &count,
-                     QString extraAttributes = QString());
+    void saveSegment(QTextStream &outStream,
+                     const Segment *segment,
+                     const QString &additionalAttributes);
 
     /// Identifies a specific event within a specific segment.
     /**
@@ -701,14 +692,9 @@ private:
      */
     QList<EditViewBase*> m_editViewList;
 
-    /**
-     * the modified flag of the current document
-     */
     bool m_modified;
 
-    /**
-     * the autosaved status of the current document
-     */
+    /// Whether an autosave has occurred.
     bool m_autoSaved;
 
     /**

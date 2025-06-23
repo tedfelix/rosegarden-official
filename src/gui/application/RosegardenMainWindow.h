@@ -1367,8 +1367,7 @@ public slots:
     /// Panic button pressed
     void slotPanic();
 
-    // Auto-save
-    //
+    /// Auto-save timer handler.
     void slotAutoSave();
 
     // Auto-save update interval changes

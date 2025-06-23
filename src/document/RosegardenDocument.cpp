@@ -337,18 +337,16 @@ QString RosegardenDocument::getAutoSaveFileName()
     return autoSaveFileName;
 }
 
-void RosegardenDocument::slotAutoSave()
+void RosegardenDocument::autoSave()
 {
-    //     RG_DEBUG << "RosegardenDocument::slotAutoSave()";
+    //RG_DEBUG << "slotAutoSave()";
 
     if (isAutoSaved() || !isModified())
         return ;
 
-    QString autoSaveFileName = getAutoSaveFileName();
+    const QString autoSaveFileName = getAutoSaveFileName();
 
-    RG_DEBUG << "RosegardenDocument::slotAutoSave() - doc modified - saving '"
-    << getAbsFilePath() << "' as"
-    << autoSaveFileName;
+    RG_DEBUG << "slotAutoSave() - doc modified - saving '" << getAbsFilePath() << "' as" << autoSaveFileName;
 
     QString errMsg;
 
@@ -1138,45 +1136,55 @@ int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
 // Older versions will issue helpful "plugin not found" messages.
 int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 10;
 
-bool RosegardenDocument::saveDocument(const QString& filename,
-                                    QString& errMsg,
-                                    bool autosave)
+bool RosegardenDocument::saveDocument(const QString &filename,
+                                      QString &errMsg,
+                                      bool autosave)
 {
     QFileInfo fileInfo(filename);
 
-    if (!fileInfo.exists()) { // safe to write directly
+    // If the file doesn't exist, just write to it directly.
+    if (!fileInfo.exists())
         return saveDocumentActual(filename, errMsg, autosave);
-    }
 
-    if (fileInfo.exists()  &&  !fileInfo.isWritable()) {
-        errMsg = tr("'%1' is read-only.  Please save to a different file.").arg(filename);
+    // File exists.  Handle overwriting...
+
+    // Read-only?
+    if (!fileInfo.isWritable()) {
+        errMsg = tr("'%1' is read-only.  Please save to a different file.").
+                arg(filename);
         return false;
     }
 
+    // We will write to a temporary file and then rename that over top of
+    // the existing file.  This will allow us to handle write errors without
+    // damaging the file we are writing over.
+
     QTemporaryFile temp(filename + ".");
-    //!!! was: KTempFile temp(filename + ".", "", 0644); // will be umask'd
 
     temp.setAutoRemove(false);
 
-    temp.open(); // This creates the file and opens it atomically
+    // Create the file and open it atomically.
+    temp.open();
 
-    if ( temp.error() ) {
-        errMsg = tr("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString());        //### removed .arg(strerror(status))
+    if (temp.error()) {
+        errMsg = tr("Could not create temporary file in directory of '%1': %2").
+                arg(filename).arg(temp.errorString());
         return false;
     }
 
-    QString tempFileName = temp.fileName(); // Must do this before temp.close()
+    // Must do this before temp.close().
+    QString tempFileName = temp.fileName();
 
     // The temporary file is now open: close it (without removing it)
     temp.close();
 
-    if( temp.error() ){
-        //status = temp.status();
-        errMsg = tr("Failure in temporary file handling for file '%1': %2")
-            .arg(tempFileName).arg(temp.errorString()); // .arg(strerror(status))
+    if (temp.error()) {
+        errMsg = tr("Failure in temporary file handling for file '%1': %2").
+                arg(tempFileName).arg(temp.errorString());
         return false;
     }
 
+    // Save to the temp file.
     bool success = saveDocumentActual(tempFileName, errMsg, autosave);
 
     if (!success) {
@@ -1185,10 +1193,14 @@ bool RosegardenDocument::saveDocument(const QString& filename,
     }
 
     QDir dir(QFileInfo(tempFileName).dir());
-    // According to  http://doc.trolltech.com/4.4/qdir.html#rename
+    // According to the QDir::rename() docs,
     // some systems fail, if renaming over an existing file.
     // Therefore, delete first the existing file.
-    if (dir.exists(filename)) dir.remove(filename);
+    // ??? But we already checked above and we know the file exists.  No
+    //     need to check.  Just do the remove().
+    if (dir.exists(filename))
+        dir.remove(filename);
+
     if (!dir.rename(tempFileName, filename)) {
         errMsg = tr("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename);
         return false;
@@ -1204,7 +1216,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
 {
     //Profiler profiler("RosegardenDocument::saveDocumentActual");
 
-    RG_DEBUG << "RosegardenDocument::saveDocumentActual(" << filename << ")";
+    RG_DEBUG << "saveDocumentActual(" << filename << ")";
 
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
@@ -1244,31 +1256,16 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     outStream << strtoqstr(getConfiguration().toXmlString())
               << "\n\n";
 
-    long totalEvents = 0;
-    for (Composition::iterator segitr = m_composition.begin();
-         segitr != m_composition.end(); ++segitr) {
-        totalEvents += (long)(*segitr)->size();
-    }
-
-    for (Composition::TriggerSegmentSet::iterator ci =
-             m_composition.getTriggerSegments().begin();
-         ci != m_composition.getTriggerSegments().end(); ++ci) {
-        totalEvents += (long)(*ci)->getSegment()->size();
-    }
-
     // output all elements
-    //
-    // Iterate on segments
-    long eventCount = 0;
 
     // Put a break in the file
-    //
     outStream << "\n\n";
 
-    for (Composition::iterator segitr = m_composition.begin();
-         segitr != m_composition.end(); ++segitr) {
+    // For each Segment in the Composition...
+    for (Composition::iterator segmentIter = m_composition.begin();
+         segmentIter != m_composition.end(); ++segmentIter) {
 
-        Segment *segment = *segitr;
+        Segment *segment = *segmentIter;
 
         // Fix #1446 : Replace isLinked() with isTrulyLinked().
         // Maybe this fix will need to be removed some day if the
@@ -1288,10 +1285,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
               .arg(segment->getLinkTransposeParams().m_transposeSegmentBack
                                                          ? "true" : "false");
 
-            saveSegment(outStream, segment, totalEvents,
-                                            eventCount, linkedSegAtts);
+            saveSegment(outStream, segment, linkedSegAtts);
         } else {
-            saveSegment(outStream, segment, totalEvents, eventCount);
+            saveSegment(outStream, segment, "");
         }
 
     }
@@ -1313,7 +1309,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
                               .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
         Segment *segment = (*ci)->getSegment();
-        saveSegment(outStream, segment, totalEvents, eventCount, triggerAtts);
+        saveSegment(outStream, segment, triggerAtts);
     }
 
     // Put a break in the file
@@ -1348,7 +1344,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         CommandHistory::getInstance()->documentSaved();
     }
 
-    setAutoSaved(true);
+    m_autoSaved = true;
 
     return true;
 }
@@ -1389,13 +1385,14 @@ bool RosegardenDocument::exportStudio(const QString& filename,
         return false;
     }
 
-    RG_DEBUG << "RosegardenDocument::exportStudio() finished";
+    RG_DEBUG << "exportStudio() finished";
+
     return true;
 }
 
-void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
-                                   long /*totalEvents*/, long &/*count*/,
-                                   QString extraAttributes)
+void RosegardenDocument::saveSegment(QTextStream &outStream,
+                                     const Segment *segment,
+                                     const QString &additionalAttributes)
 {
     QString time;
 
@@ -1404,8 +1401,8 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
     .arg(segment->getTrack())
     .arg(segment->getStartTime());
 
-    if (!extraAttributes.isEmpty())
-        outStream << extraAttributes << " ";
+    if (!additionalAttributes.isEmpty())
+        outStream << additionalAttributes << " ";
 
     outStream << "label=\"" <<
     strtoqstr(XmlExportable::encode(segment->getLabel()));
@@ -1534,10 +1531,6 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
             } else {
                 expectedTime = absTime + (*i)->getDuration();
             }
-
-//            if ((++count % 500 == 0) && progress) {
-//                progress->setValue(count * 100 / totalEvents);
-//            }
         }
 
         if (inChord) {
