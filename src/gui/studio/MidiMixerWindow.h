@@ -127,15 +127,6 @@ private:
 
     /// Setup the tabs on the Mixer according to the Studio
     void setupTabs();
-    /// QTabWidget::addTab() wrapper.
-    /**
-     * ??? Get rid of this.
-     */
-    void addTab(QWidget *tab, const QString &title);
-    /**
-     * ??? This should not take an Instrument *.  It should update the
-     *     widgets for all Instruments.
-     */
     void updateWidgets(const Instrument *);
 
     // QWidget override.

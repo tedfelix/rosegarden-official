@@ -114,7 +114,6 @@ MidiMixerWindow::setupTabs()
     //     Studio and update this display to match.  AudioMixerWindow2 does
     //     this.  See AudioMixerWindow2::updateWidgets().
 
-    int faderCount = 0;
     int deviceCount = 1;
 
     // For each Device in the Studio...
@@ -134,6 +133,11 @@ MidiMixerWindow::setupTabs()
 
         m_tabFrame = new QFrame(m_tabWidget);
         m_tabFrame->setContentsMargins(10, 10, 10, 10);
+        const QString name = QString("%1 (%2)").
+                arg(QObject::tr(midiDevice->getName().c_str())).
+                arg(deviceCount++);
+        // Add the tab to the QTabWidget.
+        m_tabWidget->addTab(m_tabFrame, name);
 
         QGridLayout *gridLayout = new QGridLayout(m_tabFrame);
 
@@ -163,18 +167,18 @@ MidiMixerWindow::setupTabs()
         // Add a column spacer.
         gridLayout->setColumnMinimumWidth(1, 10);
 
+        // Grid layout column.
         int col = 2;
-        InstrumentId firstInstrument = NoInstrument;
+
+        int stripNum = 1;
 
         // For each Instrument in this MidiDevice...
         for (const Instrument *instrument : instruments) {
 
-            // Add new fader struct
+            // Add a new MidiStrip.
             m_midiStrips.push_back(std::make_shared<MidiStrip>());
-
-            // Remember the first InstrumentId.
-            if (firstInstrument == NoInstrument)
-                firstInstrument = instrument->getId();
+            std::shared_ptr<MidiStrip> midiStrip = m_midiStrips.back();
+            midiStrip->m_id = instrument->getId();
 
             // For each controller...
             for (size_t controllerIndex = 0;
@@ -184,7 +188,8 @@ MidiMixerWindow::setupTabs()
                 // ??? Is this really the right way to detect a controller that
                 //     is centered?  And how does this actually affect Rotary?
                 //     There are no comments on Rotary's ctor.
-                const bool centred = (controls[controllerIndex].getDefault() == 64);
+                const bool centred =
+                        (controls[controllerIndex].getDefault() == 64);
 
                 Rotary *controller = new Rotary(
                         m_tabFrame,  // parent
@@ -210,11 +215,10 @@ MidiMixerWindow::setupTabs()
                 connect(controller, &Rotary::valueChanged,
                         this, &MidiMixerWindow::slotControllerChanged);
 
-                gridLayout->addWidget(controller, controllerIndex, col,
-                                      Qt::AlignCenter);
+                gridLayout->addWidget(
+                        controller, controllerIndex, col, Qt::AlignCenter);
 
-                // Store the rotary
-                m_midiStrips[faderCount]->m_controllerRotaries.push_back(
+                midiStrip->m_controllerRotaries.push_back(
                         std::pair<MidiByte, Rotary *>(
                                 controls[controllerIndex].getControllerNumber(),
                                 controller));
@@ -227,7 +231,7 @@ MidiMixerWindow::setupTabs()
                     6,  // width
                     30);  // height
             gridLayout->addWidget(meter, controls.size(), col, Qt::AlignCenter);
-            m_midiStrips[faderCount]->m_vuMeter = meter;
+            midiStrip->m_vuMeter = meter;
 
             // Volume
             Fader *fader = new Fader(
@@ -237,14 +241,15 @@ MidiMixerWindow::setupTabs()
                     20,  // i_width
                     80,  // i_height
                     m_tabFrame);  // parent
+            connect(fader, &Fader::faderChanged,
+                    this, &MidiMixerWindow::slotFaderLevelChanged);
             gridLayout->addWidget(
                     fader, controls.size() + 1, col, Qt::AlignCenter);
-            m_midiStrips[faderCount]->m_volumeFader = fader;
+            midiStrip->m_volumeFader = fader;
 
             // Instrument number
-            const int instrumentNum = instrument->getId() - firstInstrument + 1;
             QLabel *instrumentNumberLabel = new QLabel(
-                    QString("%1").arg(instrumentNum),
+                    QString("%1").arg(stripNum++),
                     m_tabFrame);
             gridLayout->addWidget(
                     instrumentNumberLabel,  // widget
@@ -252,87 +257,79 @@ MidiMixerWindow::setupTabs()
                     col,  // column
                     Qt::AlignCenter);  // alignment
 
-            m_midiStrips[faderCount]->m_id = instrument->getId();
-
-            // Connect them up
-            //
-            connect(fader, &Fader::faderChanged,
-                    this, &MidiMixerWindow::slotFaderLevelChanged);
-
-            // Update all the faders and controllers
-            //
+            // Update all the faders and controllers for this Instrument.
             updateWidgets(instrument);
 
             ++col;
-            ++faderCount;
         }
-
-        QString name = QString("%1 (%2)")
-                       .arg(QObject::tr(midiDevice->getName().c_str()))
-                       .arg(deviceCount++);
-
-        addTab(m_tabFrame, name);
     }
-}
-
-void
-MidiMixerWindow::addTab(QWidget *tab, const QString &title)
-{
-    m_tabWidget->addTab(tab, title);
 }
 
 void
 MidiMixerWindow::slotFaderLevelChanged(float value)
 {
-    const QObject *s = sender();
+    const QObject * const l_sender = sender();
 
-    // For each fader
-    // ??? Wouldn't QSignalMapper be better?
-    for (MidiStripVector::const_iterator it = m_midiStrips.begin();
-            it != m_midiStrips.end(); ++it) {
-        if ((*it)->m_volumeFader == s) {
-            Instrument *instrument = m_studio->
-                                getInstrumentById((*it)->m_id);
+    // For each MidiStrip...
+    // ??? Linear search.  Why not add the instrument ID to the fader
+    //     object as a QObject property?  That would eliminate this.
+    //     Look through AudioMixerWindow2 as well.
+    for (std::shared_ptr<const MidiStrip> midiStrip : m_midiStrips) {
+        // If this is the one that is changing...
+        if (midiStrip->m_volumeFader == l_sender) {
+            Instrument *instrument =
+                    m_studio->getInstrumentById(midiStrip->m_id);
+            if (!instrument)
+                return;
 
-            if (instrument) {
+            instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
+            Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
 
-                instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
-                Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
-                m_document->setModified();
+            m_document->setModified();
 
-                if (ExternalController::self().isNative()  &&
-                    instrument->hasFixedChannel())
-                {
-                    // Send out the external controller port as well.
+            // Have an external controller port?  Send it there as well.
+            if (ExternalController::self().isNative()  &&
+                instrument->hasFixedChannel())
+            {
+                int currentTabIndex = m_tabWidget->currentIndex();
+                if (currentTabIndex < 0)
+                    currentTabIndex = 0;
 
-                    //!!! really want some notification of whether we have any!
-                    int tabIndex = m_tabWidget->currentIndex();
-                    if (tabIndex < 0)
-                        tabIndex = 0;
-                    int i = 0;
-                    for (DeviceList::const_iterator dit = m_studio->begin();
-                         dit != m_studio->end(); ++dit) {
-                        RG_DEBUG << "slotFaderLevelChanged: i = " << i << ", tabIndex " << tabIndex;
-                        if (!dynamic_cast<MidiDevice*>(*dit))
-                            continue;
-                        if (i != tabIndex) {
-                            ++i;
-                            continue;
-                        }
-                        RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
-                        if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                            RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
+                int deviceTabIndex = 0;
 
-                            ExternalController::send(
-                                    instrument->getNaturalMidiChannel(),
-                                    MIDI_CONTROLLER_VOLUME, MidiByte(value));
-                        }
-                        break;
+                // For each Device...
+                // ??? We should keep a table of tab index to MidiDevice *.
+                //     Then all this becomes a one-liner.
+                for (const Device *device : m_studio->getDeviceList()) {
+                    RG_DEBUG << "slotFaderLevelChanged: i = " << deviceTabIndex << ", tabIndex " << currentTabIndex;
+                    const MidiDevice *midiDevice =
+                            dynamic_cast<const MidiDevice *>(device);
+                    if (!midiDevice)
+                        continue;
+
+                    if (deviceTabIndex != currentTabIndex) {
+                        ++deviceTabIndex;
+                        continue;
                     }
+
+                    RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << midiDevice->getId();
+
+                    // ??? Isn't this redundant?  We've already found the one
+                    //     the tab is referencing.  This should always be true.
+                    if (instrument->getDevice()->getId() == midiDevice->getId()) {
+                        RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
+
+                        ExternalController::send(
+                                instrument->getNaturalMidiChannel(),
+                                MIDI_CONTROLLER_VOLUME,
+                                MidiByte(value));
+                    }
+
+                    break;
                 }
             }
 
-            return ;
+            return;
         }
     }
 }
