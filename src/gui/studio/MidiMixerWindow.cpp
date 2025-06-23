@@ -337,73 +337,79 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 void
 MidiMixerWindow::slotControllerChanged(float value)
 {
-    const QObject *s = sender();
-    size_t i = 0, j = 0;
+    const QObject *l_sender = sender();
+    size_t midiStripIndex = 0;
+    size_t rotaryIndex = 0;
 
-    // For each fader
-    // ??? Wouldn't QSignalMapper be better?
-    for (i = 0; i < m_midiStrips.size(); ++i) {
-        for (j = 0; j < m_midiStrips[i]->m_controllerRotaries.size(); ++j) {
-            if (m_midiStrips[i]->m_controllerRotaries[j].second == s)
+    // For each MidiStrip...
+    // ??? We could avoid this search by storing the InstrumentId and
+    //     controller number in each Rotary.
+    for (midiStripIndex = 0;
+         midiStripIndex < m_midiStrips.size();
+         ++midiStripIndex) {
+        // For each Rotary...
+        for (rotaryIndex = 0;
+             rotaryIndex < m_midiStrips[midiStripIndex]->m_controllerRotaries.size();
+             ++rotaryIndex) {
+            // Found the Rotary?
+            if (m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].second == l_sender)
                 break;
         }
 
-        // break out on match
-        if (j != m_midiStrips[i]->m_controllerRotaries.size())
+        // Found the Rotary?
+        if (rotaryIndex != m_midiStrips[midiStripIndex]->m_controllerRotaries.size())
             break;
     }
 
-    // Don't do anything if we've not matched and got solid values
-    // for i and j
-    //
-    if (i == m_midiStrips.size() || j == m_midiStrips[i]->m_controllerRotaries.size())
-        return ;
+    // MIDI strip not found?  Bail.
+    if (midiStripIndex == m_midiStrips.size())
+        return;
+    // Rotary not found?  Bail.
+    if (rotaryIndex == m_midiStrips[midiStripIndex]->m_controllerRotaries.size())
+        return;
 
-    //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - found a controller"
-    //<< endl;
+    //RG_DEBUG << "slotControllerChanged - found a controller";
 
     Instrument *instrument = m_studio->getInstrumentById(
-                            m_midiStrips[i]->m_id);
+                            m_midiStrips[midiStripIndex]->m_id);
+    if (!instrument)
+        return;
 
-    if (instrument) {
+    //RG_DEBUG << "slotControllerChanged() - got instrument to change";
 
-        //RG_DEBUG << "MidiMixerWindow::slotControllerChanged - "
-        //<< "got instrument to change";
+    MidiByte cc = m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].first;
 
-        MidiByte cc = m_midiStrips[i]->m_controllerRotaries[j].first;
+    instrument->setControllerValue(cc, MidiByte(value));
+    Instrument::emitControlChange(instrument, cc);
+    m_document->setModified();
 
-        instrument->setControllerValue(cc, MidiByte(value));
-        Instrument::emitControlChange(instrument, cc);
-        m_document->setModified();
+    if (ExternalController::self().isNative()  &&
+        instrument->hasFixedChannel()) {
 
-        if (ExternalController::self().isNative()  &&
-            instrument->hasFixedChannel()) {
+        // Send out the external controller port as well.
 
-            // Send out the external controller port as well.
-
-            int tabIndex = m_tabWidget->currentIndex();
-            if (tabIndex < 0)
-                tabIndex = 0;
-            int k = 0;
-            for (DeviceList::const_iterator dit = m_studio->begin();
-                 dit != m_studio->end(); ++dit) {
-                RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex;
-                if (!dynamic_cast<MidiDevice*>(*dit))
-                    continue;
-                if (k != tabIndex) {
-                    ++k;
-                    continue;
-                }
-                RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
-                if (instrument->getDevice()->getId() == (*dit)->getId()) {
-                    RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
-                    // send out to external controller port as well.
-                    // !!! really want some notification of whether we have any!
-                    ExternalController::send(
-                            instrument->getNaturalMidiChannel(),
-                            m_midiStrips[i]->m_controllerRotaries[j].first,
-                            MidiByte(value));
-                }
+        int tabIndex = m_tabWidget->currentIndex();
+        if (tabIndex < 0)
+            tabIndex = 0;
+        int k = 0;
+        for (DeviceList::const_iterator dit = m_studio->begin();
+             dit != m_studio->end(); ++dit) {
+            RG_DEBUG << "slotControllerChanged: k = " << k << ", tabIndex " << tabIndex;
+            if (!dynamic_cast<MidiDevice*>(*dit))
+                continue;
+            if (k != tabIndex) {
+                ++k;
+                continue;
+            }
+            RG_DEBUG << "slotControllerChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << (*dit)->getId();
+            if (instrument->getDevice()->getId() == (*dit)->getId()) {
+                RG_DEBUG << "slotControllerChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
+                // send out to external controller port as well.
+                // !!! really want some notification of whether we have any!
+                ExternalController::send(
+                        instrument->getNaturalMidiChannel(),
+                        m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].first,
+                        MidiByte(value));
             }
         }
     }
