@@ -797,7 +797,7 @@ void RosegardenDocument::initialiseStudio()
     // All the softsynths, audio instruments, and busses.
     std::vector<PluginContainer *> pluginContainers;
 
-    BussList busses = m_studio.getBusses();
+    BussVector busses = m_studio.getBusses();
 
     // For each buss (first one is master)
     for (size_t i = 0; i < busses.size(); ++i) {
@@ -824,7 +824,7 @@ void RosegardenDocument::initialiseStudio()
         pluginContainers.push_back(busses[i]);
     }
 
-    RecordInList recordIns = m_studio.getRecordIns();
+    RecordInVector recordIns = m_studio.getRecordIns();
 
     // For each record in
     for (size_t i = 0; i < recordIns.size(); ++i) {

@@ -8161,7 +8161,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         // We actually only copy across MIDI play devices... for now
         std::vector<DeviceId> midiPlayDevices;
 
-        for (DeviceList::const_iterator i =
+        for (DeviceVector::const_iterator i =
                  oldStudio.begin(); i != oldStudio.end(); ++i) {
 
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
@@ -8173,7 +8173,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
         std::vector<DeviceId>::iterator di(midiPlayDevices.begin());
 
-        for (DeviceList::const_iterator i = newStudio.begin();
+        for (DeviceVector::const_iterator i = newStudio.begin();
              i != newStudio.end(); ++i) {
 
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);

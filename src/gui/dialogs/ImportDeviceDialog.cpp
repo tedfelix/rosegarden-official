@@ -362,12 +362,12 @@ ImportDeviceDialog::importFromRG(const QString& fileName)
     for (int i = 0; i < (int)m_devices.size(); ++i) delete m_devices[i];
     m_devices.clear();
 
-    DeviceList *list = fileDoc.getStudio().getDevices();
+    DeviceVector *list = fileDoc.getStudio().getDevices();
     if (list->size() == 0) {
         return true; // true because we successfully read the document
     }
 
-    for (DeviceList::iterator it = list->begin(); it != list->end(); ++it) {
+    for (DeviceVector::iterator it = list->begin(); it != list->end(); ++it) {
 
         MidiDevice *device = dynamic_cast<MidiDevice*>(*it);
 

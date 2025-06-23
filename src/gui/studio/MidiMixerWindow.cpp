@@ -434,7 +434,7 @@ MidiMixerWindow::updateWidgets(const Instrument *instrument)
     size_t midiStripIndex = 0;
 
     // For each device in the Studio
-    for (DeviceList::const_iterator deviceIter = m_studio->begin();
+    for (DeviceVector::const_iterator deviceIter = m_studio->begin();
          deviceIter != m_studio->end();
          ++deviceIter) {
         const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(*deviceIter);
@@ -522,7 +522,7 @@ MidiMixerWindow::slotControlChange(Instrument *instrument, int cc)
     //     Or just stuff the strip index in each widget.
 
     // For each Device in the Studio...
-    for (DeviceList::const_iterator deviceIter = m_studio->begin();
+    for (DeviceVector::const_iterator deviceIter = m_studio->begin();
          deviceIter != m_studio->end();
          ++deviceIter) {
         const MidiDevice *device = dynamic_cast<const MidiDevice *>(*deviceIter);
@@ -666,7 +666,7 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
 
     int i = 0;
 
-    for (DeviceList::const_iterator it = m_studio->begin();
+    for (DeviceVector::const_iterator it = m_studio->begin();
             it != m_studio->end(); ++it) {
 
         MidiDevice *dev =
@@ -738,7 +738,7 @@ MidiMixerWindow::sendControllerRefresh()
 
     int i = 0;
 
-    for (DeviceList::const_iterator dit = m_studio->begin();
+    for (DeviceVector::const_iterator dit = m_studio->begin();
             dit != m_studio->end(); ++dit) {
 
         const MidiDevice *dev = dynamic_cast<const MidiDevice *>(*dit);

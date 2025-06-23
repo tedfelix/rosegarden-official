@@ -113,8 +113,8 @@ RemapInstrumentDialog::populateCombo()
     Studio *studio = &m_doc->getStudio();
 
     if (m_deviceButton->isChecked()) {
-        DeviceList *devices = studio->getDevices();
-        DeviceList::iterator it;
+        DeviceVector *devices = studio->getDevices();
+        DeviceVector::iterator it;
         m_devices.clear();
 
         for (it = devices->begin(); it != devices->end(); it++) {

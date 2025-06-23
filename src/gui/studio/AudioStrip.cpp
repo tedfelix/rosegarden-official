@@ -327,7 +327,7 @@ void AudioStrip::updateWidgets()
     // Get the appropriate buss based on the ID.
     Buss *buss = nullptr;
     if (!isInput()) {
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
         buss = busses[m_id];
     }
 
@@ -387,7 +387,7 @@ void AudioStrip::updateWidgets()
                 studio.getInstrumentById(m_id));
     }
     if (isSubmaster()) {
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
         if (m_id < busses.size()) {
             pluginContainer =
                     dynamic_cast<const PluginContainer *>(busses[m_id]);
@@ -561,7 +561,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
     // If this is the master or a submaster Fader
     if (isSubmaster()  ||  isMaster()) {
 
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
 
         // If the buss ID is out of range, bail.
         if (m_id >= busses.size())
@@ -618,7 +618,7 @@ AudioStrip::slotPanChanged(float pan)
 
     if (isSubmaster()  ||  isMaster()) {
 
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
 
         if (m_id >= busses.size())
             return;

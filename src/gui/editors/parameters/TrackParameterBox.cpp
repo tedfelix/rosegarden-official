@@ -988,7 +988,7 @@ TrackParameterBox::getTrack()
 void
 TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 {
-    const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
+    const DeviceVector &deviceList = *(m_doc->getStudio().getDevices());
 
     // Generate local device name and ID lists to compare against the members.
 
@@ -1147,7 +1147,7 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
     // others.  Cache names and IDs and only reload if a real change is
     // detected.
 
-    const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
+    const DeviceVector &deviceList = *(m_doc->getStudio().getDevices());
 
     // Generate local recording device name and ID lists to compare against
     // the members.
