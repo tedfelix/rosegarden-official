@@ -135,7 +135,6 @@ RosegardenDocument::RosegardenDocument(
         const QString& path) :
     QObject(parent),
     m_modified(false),
-    m_autoSaved(false),
     m_lockFile(nullptr),
     m_audioFileManager(this),
     m_audioPeaksThread(&m_audioFileManager),
@@ -341,8 +340,12 @@ void RosegardenDocument::autoSave()
 {
     //RG_DEBUG << "slotAutoSave()";
 
-    if (isAutoSaved() || !isModified())
-        return ;
+    // Already done an auto-save?  Bail.
+    if (m_autoSaved)
+        return;
+    // No modifications?  Bail.
+    if (!isModified())
+        return;
 
     const QString autoSaveFileName = getAutoSaveFileName();
 
@@ -1210,9 +1213,9 @@ bool RosegardenDocument::saveDocument(const QString &filename,
 }
 
 
-bool RosegardenDocument::saveDocumentActual(const QString& filename,
-                                          QString& errMsg,
-                                          bool autosave)
+bool RosegardenDocument::saveDocumentActual(const QString &filename,
+                                            QString &errMsg,
+                                            bool autosave)
 {
     //Profiler profiler("RosegardenDocument::saveDocumentActual");
 
@@ -1344,6 +1347,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
         CommandHistory::getInstance()->documentSaved();
     }
 
+    // ??? This is set even if this isn't an auto-save.  The name is misleading.
     m_autoSaved = true;
 
     return true;

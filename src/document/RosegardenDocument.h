@@ -232,7 +232,7 @@ public:
      *
      * errMsg will be set to a user-readable error message if save fails
      */
-    bool saveDocument(const QString &filename, QString& errMsg,
+    bool saveDocument(const QString &filename, QString &errMsg,
                       bool autosave = false);
 
     /// Save under a new name.
@@ -598,11 +598,6 @@ private:
                   bool &cancelled);
 
     /**
-     * Returns whether the document should be auto-saved
-     */
-    bool isAutoSaved() const { return m_autoSaved; }
-
-    /**
      * Returns the name of the autosave file
      */
     QString getAutoSaveFileName();
@@ -694,8 +689,11 @@ private:
 
     bool m_modified;
 
-    /// Whether an autosave has occurred.
-    bool m_autoSaved;
+    /// Whether an autosave or a regular save has occurred.
+    /**
+     * This is used by autoSave() to avoid redundant auto-saves.
+     */
+    bool m_autoSaved{false};
 
     /**
      * the title of the current document
