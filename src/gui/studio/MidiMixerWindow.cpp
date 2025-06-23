@@ -518,8 +518,14 @@ MidiMixerWindow::slotControlChange(
 {
     if (!instrument)
         return;
+    if (!instrument->hasController(controllerNumber))
+        return;
 
-    // Find the appropriate strip index.
+    // ??? Why doesn't the signal already have this for us?
+    const MidiByte controllerValue = instrument->getControllerValue(
+            controllerNumber);
+
+    // Find the appropriate strip index given the InstrumentId.
 
     size_t stripIndex = 0;
     bool found = false;
@@ -558,58 +564,36 @@ MidiMixerWindow::slotControlChange(
     if (stripIndex >= m_midiStrips.size())
         return;
 
-    // At this point, stripIndex is the proper index for m_faders.
+    // Based on the controllerNumber, update the appropriate Fader or Rotary.
 
     if (controllerNumber == MIDI_CONTROLLER_VOLUME) {
 
-        // Update the volume fader.
-
-        MidiByte volumeValue;
-
-        try {
-            volumeValue = instrument->
-                    getControllerValue(MIDI_CONTROLLER_VOLUME);
-        } catch (...) {
-            // This should never get called.
-            volumeValue = instrument->getVolume();
-        }
+        // Update the volume Fader.
 
         // setFader() emits a signal.  If we don't block it, we crash
         // due to an endless loop.
         // ??? Can we make Fader::setFader() only emit a signal on a
         //     user change?  Then blockSignals() would be unnecessary.
         m_midiStrips[stripIndex]->m_volumeFader->blockSignals(true);
-        m_midiStrips[stripIndex]->m_volumeFader->setFader(float(volumeValue));
+        m_midiStrips[stripIndex]->m_volumeFader->setFader(controllerValue);
         m_midiStrips[stripIndex]->m_volumeFader->blockSignals(false);
 
     } else {
 
-        // Update the appropriate cc rotary.
+        // Update the appropriate Rotary.
 
-        ControlList controls = getIPBControlParameters(
+        const ControlList controls = getIPBControlParameters(
                 dynamic_cast<MidiDevice *>(instrument->getDevice()));
 
-        // For each controller
-        for (size_t i = 0; i < controls.size(); ++i) {
-            // If this is the one...
-            if (controllerNumber == controls[i].getControllerNumber()) {
-
-                // The ControllerValues might not yet be set on
-                // the actual Instrument so don't always expect
-                // to find one.  There might be a hole here for
-                // deleted Controllers to hang around on
-                // Instruments..
-                //
-                try {
-                    MidiByte value = instrument->getControllerValue(controllerNumber);
-                    m_midiStrips[stripIndex]->m_controllerRotaries[i].second->
-                            setPosition(value);
-                } catch (...) {
-                    RG_WARNING << "slotControlChange(): WARNING: cc not found " << controllerNumber;
-                }
-
+        // For each controller...
+        for (size_t controllerIndex = 0;
+             controllerIndex < controls.size();
+             ++controllerIndex) {
+            // If this is the one, set the rotary.
+            if (controllerNumber == controls[controllerIndex].getControllerNumber()) {
+                m_midiStrips[stripIndex]->m_controllerRotaries[controllerIndex].
+                        second->setPosition(controllerValue);
                 break;
-
             }
         }
 
@@ -619,25 +603,22 @@ MidiMixerWindow::slotControlChange(
 void
 MidiMixerWindow::updateMeters()
 {
-    for (size_t i = 0; i != m_midiStrips.size(); ++i) {
+    // For each strip...
+    for (size_t stripIndex = 0;
+         stripIndex != m_midiStrips.size();
+         ++stripIndex) {
         LevelInfo info;
-        if (!SequencerDataBlock::getInstance()->
-            getInstrumentLevelForMixer(m_midiStrips[i]->m_id, info)) {
+        if (!SequencerDataBlock::getInstance()->getInstrumentLevelForMixer(
+                m_midiStrips[stripIndex]->m_id, info)) {
             continue;
         }
-        if (m_midiStrips[i]->m_vuMeter) {
-            m_midiStrips[i]->m_vuMeter->setLevel(double(info.level / 127.0));
-            RG_DEBUG << "MidiMixerWindow::updateMeters - level  " << info.level;
+        if (m_midiStrips[stripIndex]->m_vuMeter) {
+            m_midiStrips[stripIndex]->m_vuMeter->setLevel(double(info.level / 127.0));
+            RG_DEBUG << "updateMeters() - level  " << info.level;
         } else {
-            RG_DEBUG << "MidiMixerWindow::updateMeters - m_vuMeter for m_faders[" << i << "] is nullptr!";
+            RG_DEBUG << "updateMeters() - m_vuMeter for m_faders[" << stripIndex << "] is nullptr!";
         }
     }
-}
-
-void
-MidiMixerWindow::updateMonitorMeter()
-{
-    // none here
 }
 
 void
@@ -650,49 +631,61 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
     activateWindow();
     raise();
 
-    // get channel number n from event
-    // get nth instrument on current tab
-
     if (event->getType() != MappedEvent::MidiController)
-        return ;
-    unsigned int channel = event->getRecordedChannel();
-    MidiByte controller = event->getData1();
-    MidiByte value = event->getData2();
+        return;
+
+    const unsigned int channel = event->getRecordedChannel();
+    const MidiByte controllerNumber = event->getData1();
+    const MidiByte value = event->getData2();
 
     int tabIndex = m_tabWidget->currentIndex();
 
-    int i = 0;
+    int loopTabIndex = 0;
 
-    for (DeviceVector::const_iterator it = m_studio->begin();
-            it != m_studio->end(); ++it) {
+    // For each Device in the Studio...
+    for (DeviceVector::const_iterator deviceIter = m_studio->begin();
+         deviceIter != m_studio->end();
+         ++deviceIter) {
 
-        MidiDevice *dev =
-            dynamic_cast<MidiDevice*>(*it);
-
-        if (!dev)
+        const MidiDevice *midiDevice =
+                dynamic_cast<const MidiDevice *>(*deviceIter);
+        if (!midiDevice)
             continue;
-        if (i != tabIndex) {
-            ++i;
+
+        if (loopTabIndex != tabIndex) {
+            ++loopTabIndex;
             continue;
         }
 
-        InstrumentVector instruments = dev->getPresentationInstruments();
+        // At this point, we've found the Device for the current tab.
 
-        for (InstrumentVector::const_iterator iIt =
-                    instruments.begin(); iIt != instruments.end(); ++iIt) {
+        const InstrumentVector instruments =
+                midiDevice->getPresentationInstruments();
 
-            Instrument *instrument = *iIt;
+        // For each Instrument in the Device...
+        for (InstrumentVector::const_iterator instrumentIter =
+                     instruments.begin();
+             instrumentIter != instruments.end();
+             ++instrumentIter) {
 
+            Instrument *instrument = *instrumentIter;
+
+            // Not the right one?  Try the next.
             if (instrument->getNaturalMidiChannel() != channel)
                 continue;
 
-            ControlList cl = dev->getControlParameters();
-            for (ControlList::const_iterator controlIter = cl.begin();
-                    controlIter != cl.end(); ++controlIter) {
-                if ((*controlIter).getControllerNumber() == controller) {
-                    RG_DEBUG << "slotExternalController(): Setting controller " << controller << " for instrument " << instrument->getId() << " to " << value;
-                    instrument->setControllerValue(controller, value);
-                    Instrument::emitControlChange(instrument, controller);
+            const ControlList controllerList =
+                    midiDevice->getControlParameters();
+
+            // For each Controller in the Instrument...
+            for (ControlList::const_iterator controlIter = controllerList.begin();
+                 controlIter != controllerList.end();
+                 ++controlIter) {
+                // If this is the right controller...
+                if ((*controlIter).getControllerNumber() == controllerNumber) {
+                    RG_DEBUG << "slotExternalController(): Setting controller " << controllerNumber << " for instrument " << instrument->getId() << " to " << value;
+                    instrument->setControllerValue(controllerNumber, value);
+                    Instrument::emitControlChange(instrument, controllerNumber);
                     m_document->setModified();
 
                     break;

@@ -4950,9 +4950,6 @@ RosegardenMainWindow::slotUpdateCPUMeter()
 void
 RosegardenMainWindow::slotUpdateMonitoring()
 {
-    if (m_midiMixer && m_midiMixer->isVisible())
-        m_midiMixer->updateMonitorMeter();
-
     m_view->updateMonitorMeters();
 }
 

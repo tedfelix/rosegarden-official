@@ -568,7 +568,7 @@ AudioMixerWindow2::slotExternalController(const MappedEvent *event)
 }
 
 void
-AudioMixerWindow2::slotControlChange(Instrument *instrument, int cc)
+AudioMixerWindow2::slotControlChange(Instrument *instrument, int controllerNumber)
 {
     InstrumentId instrumentId = instrument->getId();
 
@@ -577,7 +577,7 @@ AudioMixerWindow2::slotControlChange(Instrument *instrument, int cc)
     for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
         // If this is the one
         if (m_inputStrips[i]->getId() == instrumentId) {
-            m_inputStrips[i]->controlChange(cc);
+            m_inputStrips[i]->controlChange(controllerNumber);
             break;
         }
     }

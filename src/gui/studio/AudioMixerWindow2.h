@@ -86,7 +86,7 @@ private slots:
     void slotExternalController(const MappedEvent *event);
 
     /// Connected to InstrumentStaticSignals::controlChange().
-    void slotControlChange(Instrument *instrument, int cc);
+    void slotControlChange(Instrument *instrument, int controllerNumber);
 
 private:
     /// Central widget required for using a layout with QMainWindow.

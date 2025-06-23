@@ -61,12 +61,6 @@ public:
      *     AudioStrip has its own timer.  Need to move in that direction.
      */
     void updateMeters();
-    /// Called by RosegardenMainWindow::slotUpdateMonitoring()
-    /**
-     * ??? AudioMixerWindow2 has no such routine.  Why not?  Looks like
-     *     AudioStrip has its own timer.  Need to move in that direction.
-     */
-    void updateMonitorMeter();
 
 signals:
 
