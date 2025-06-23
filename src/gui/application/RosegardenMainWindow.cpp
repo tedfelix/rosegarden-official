@@ -267,6 +267,9 @@ RosegardenMainWindow *RosegardenMainWindow::m_myself = nullptr;
 
 namespace
 {
+    // Auto-save timer interval in msecs.  See also m_autoSaveInterval.
+    constexpr int autoSaveTimerInterval{1000};
+
     // Like QFileInfo::canonicalPath(), but returns the largest directory
     // path that actually exists.  E.g. if handed /a/b/c/d/e.txt and d does not
     // exist, this returns /a/b/c.
@@ -1316,7 +1319,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     m_lastAutoSaveTime = QTime::currentTime();
     m_autoSaveInterval =
         RosegardenDocument::currentDocument->getAutoSavePeriod() * 1000;
-    m_autoSaveTimer->start(1000);
+    m_autoSaveTimer->start(autoSaveTimerInterval);
 
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::devicesResyncd,
             this, &RosegardenMainWindow::slotDocumentDevicesResyncd);
@@ -1602,6 +1605,11 @@ RosegardenMainWindow::createDocumentFromRGFile(
 
         // If the auto-save file is more recent
         if (autoSaveFileInfo.lastModified() > fileInfo.lastModified()) {
+            // For help with debugging Bug #1725.  Remove once that is closed.
+            RG_WARNING << "createDocumentFromRGFile(): Performing recovery...";
+            RG_WARNING << "       File date/time: " << fileInfo.lastModified();
+            RG_WARNING << "  Auto-save date/time: " << autoSaveFileInfo.lastModified();
+
             // At this point the splash screen may still be there, hide it
             // before showing the messagebox.
             StartupLogo::hideIfStillThere();
@@ -1627,12 +1635,12 @@ RosegardenMainWindow::createDocumentFromRGFile(
     }
 
     // Create a new blank document
-    RosegardenDocument *newDoc =
-            new RosegardenDocument(this,
-                    m_pluginManager,
-                    true,  // skipAutoload
-                    clearHistory,  // clearCommandHistory
-                    m_useSequencer);  // enableSound
+    RosegardenDocument *newDoc = new RosegardenDocument(
+            this,  // parent
+            m_pluginManager,  // audioPluginManager
+            true,  // skipAutoload
+            clearHistory,  // clearCommandHistory
+            m_useSequencer);  // enableSound
 
     // Read the document from the file.
     bool readOk = newDoc->openDocument(
@@ -2143,8 +2151,17 @@ RosegardenMainWindow::slotFileSave()
     {
         SetWaitCursor setWaitCursor;
 
-        success = RosegardenDocument::currentDocument->
-                saveDocument(docFilePath, errMsg);
+        // An attempt to address Bug #1725.  Stop the auto-save timer to make
+        // sure no auto-saves sneak in while we are saving.
+        m_autoSaveTimer->stop();
+
+        success = RosegardenDocument::currentDocument->saveDocument(
+                docFilePath, errMsg);
+
+        // Restart the auto-save timer at the current time so that the next
+        // auto-save happens as far into the future as possible.
+        m_lastAutoSaveTime = QTime::currentTime();
+        m_autoSaveTimer->start(autoSaveTimerInterval);
     }
 
     if (!success) {
@@ -2260,8 +2277,18 @@ RosegardenMainWindow::fileSaveAs(bool asTemplate)
     SetWaitCursor waitCursor;
 
     QString errMsg;
+
+    // An attempt to address Bug #1725.  Stop the auto-save timer to
+    // make sure no auto-saves sneak in while we are saving.
+    m_autoSaveTimer->stop();
+
     const bool success =
             RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+
+    // Restart the auto-save timer at the current time so that the next
+    // auto-save happens as far into the future as possible.
+    m_lastAutoSaveTime = QTime::currentTime();
+    m_autoSaveTimer->start(autoSaveTimerInterval);
 
     // save template as read-only, even though this is largely pointless
     if (asTemplate) {
@@ -8261,19 +8288,10 @@ RosegardenMainWindow::slotAutoSave()
 void
 RosegardenMainWindow::slotUpdateAutoSaveInterval(unsigned int interval)
 {
-    RG_DEBUG << "slotUpdateAutoSaveInterval - "
-    << "changed interval to " << interval;
+    RG_DEBUG << "slotUpdateAutoSaveInterval - " << "changed interval to " << interval;
+
     m_autoSaveInterval = interval * 1000;
 }
-
-/* unused
-void
-RosegardenMainWindow::slotShowTip()
-{
-    RG_DEBUG << "slotShowTip";
-//    KTipDialog::showTip(this, locate("data", "rosegarden/tips"), true); //&&& showTip dialog deactivated.
-}
-*/
 
 void RosegardenMainWindow::slotShowToolHelp(const QString &s)
 {
@@ -8645,7 +8663,19 @@ bool RosegardenMainWindow::saveIfModified()
             //RG_DEBUG << "saveIfModified() : regular file";
 
             QString errMsg;
-            completed = RosegardenDocument::currentDocument->saveDocument(RosegardenDocument::currentDocument->getAbsFilePath(), errMsg);
+
+            // An attempt to address Bug #1725.  Stop the auto-save timer to
+            // make sure no auto-saves sneak in while we are saving.
+            m_autoSaveTimer->stop();
+
+            completed = RosegardenDocument::currentDocument->saveDocument(
+                    RosegardenDocument::currentDocument->getAbsFilePath(),
+                    errMsg);
+
+            // Restart the auto-save timer at the current time so that the next
+            // auto-save happens as far into the future as possible.
+            m_lastAutoSaveTime = QTime::currentTime();
+            m_autoSaveTimer->start(autoSaveTimerInterval);
 
             if (!completed) {
                 if (!errMsg.isEmpty()) {
