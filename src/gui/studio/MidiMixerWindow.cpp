@@ -295,20 +295,23 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
                 if (currentTabIndex < 0)
                     currentTabIndex = 0;
 
-                int deviceTabIndex = 0;
+                int loopTabIndex = 0;
 
                 // For each Device...
                 // ??? We should keep a table of tab index to MidiDevice *.
-                //     Then all this becomes a one-liner.
+                //     Then all this becomes a one-liner.  At the very least
+                //     factor this out into a routine to get started.  This
+                //     is done 3 or more times in this code.  Find MidiDevice
+                //     for the current tab.
                 for (const Device *device : m_studio->getDevicesRef()) {
-                    RG_DEBUG << "slotFaderLevelChanged: i = " << deviceTabIndex << ", tabIndex " << currentTabIndex;
+                    RG_DEBUG << "slotFaderLevelChanged: i = " << loopTabIndex << ", tabIndex " << currentTabIndex;
                     const MidiDevice *midiDevice =
                             dynamic_cast<const MidiDevice *>(device);
                     if (!midiDevice)
                         continue;
 
-                    if (deviceTabIndex != currentTabIndex) {
-                        ++deviceTabIndex;
+                    if (loopTabIndex != currentTabIndex) {
+                        ++loopTabIndex;
                         continue;
                     }
 
@@ -643,12 +646,9 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
     int loopTabIndex = 0;
 
     // For each Device in the Studio...
-    for (DeviceVector::const_iterator deviceIter = m_studio->begin();
-         deviceIter != m_studio->end();
-         ++deviceIter) {
+    for (const Device *device : m_studio->getDevicesRef()) {
 
-        const MidiDevice *midiDevice =
-                dynamic_cast<const MidiDevice *>(*deviceIter);
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
         if (!midiDevice)
             continue;
 
@@ -658,32 +658,35 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
         }
 
         // At this point, we've found the Device for the current tab.
+        // ??? Why not a std::vector<MidiDevice *> member variable?  Then this
+        //     device loop is unnecessary.
+
+        // Next we need the Instrument for a specific channel in the Device.
 
         const InstrumentVector instruments =
                 midiDevice->getPresentationInstruments();
 
         // For each Instrument in the Device...
-        for (InstrumentVector::const_iterator instrumentIter =
-                     instruments.begin();
-             instrumentIter != instruments.end();
-             ++instrumentIter) {
-
-            Instrument *instrument = *instrumentIter;
+        for (Instrument *instrument : instruments) {
 
             // Not the right one?  Try the next.
             if (instrument->getNaturalMidiChannel() != channel)
                 continue;
 
+            // Finally we need the specific controller on the Instrument.
+            // ??? WHY?  This doesn't appear to do anything other than filter
+            //     out controllers it cannot find in the MidiDevice.
+
             const ControlList controllerList =
                     midiDevice->getControlParameters();
 
             // For each Controller in the Instrument...
-            for (ControlList::const_iterator controlIter = controllerList.begin();
-                 controlIter != controllerList.end();
-                 ++controlIter) {
+            // ??? MidiDevice::getControlParameter() already does this.
+            for (const ControlParameter &controlParameter : controllerList) {
                 // If this is the right controller...
-                if ((*controlIter).getControllerNumber() == controllerNumber) {
+                if (controlParameter.getControllerNumber() == controllerNumber) {
                     RG_DEBUG << "slotExternalController(): Setting controller " << controllerNumber << " for instrument " << instrument->getId() << " to " << value;
+
                     instrument->setControllerValue(controllerNumber, value);
                     Instrument::emitControlChange(instrument, controllerNumber);
                     m_document->setModified();
@@ -691,6 +694,8 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
                     break;
                 }
             }
+
+            break;
         }
 
         break;
@@ -715,43 +720,36 @@ MidiMixerWindow::sendControllerRefresh()
     // sync with the "MIDI Mixer" window, send out MIDI volume and pan
     // messages to it.
 
-    // !!! Really want some notification of whether we have a device
-    //     connected to the "external controller" port!  Otherwise this
-    //     is a waste of time.  Is there a way in ALSA to ask if the port
-    //     is connected?
+    // ??? Would be nice if we could skip all this if nothing is actually
+    //     connected to the "external controller" port.
 
-    int tabIndex = m_tabWidget->currentIndex();
-    RG_DEBUG << "MidiMixerWindow::slotCurrentTabChanged: current is " << tabIndex;
+    const int currentTabIndex = m_tabWidget->currentIndex();
+    if (currentTabIndex < 0)
+        return;
 
-    if (tabIndex < 0)
-        return ;
+    int loopTabIndex = 0;
 
-    int i = 0;
+    // For each Device in the Studio...
+    for (const Device *device: m_studio->getDevicesRef()) {
 
-    for (DeviceVector::const_iterator dit = m_studio->begin();
-            dit != m_studio->end(); ++dit) {
-
-        const MidiDevice *dev = dynamic_cast<const MidiDevice *>(*dit);
-
-        RG_DEBUG << "device is " << (*dit)->getId() << ", dev " << dev;
-
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
         // Not a MIDI device?  Then try the next.
-        if (!dev)
+        if (!midiDevice)
             continue;
 
-        if (i != tabIndex) {
-            // Keep count of the MidiDevice's.
-            ++i;
+        // Not the MidiDevice for the current tab?  Try the next.
+        if (loopTabIndex != currentTabIndex) {
+            // Keep count of the MidiDevice objects.
+            ++loopTabIndex;
             continue;
         }
 
-        // Found the MidiDevice for this tab.
+        // Found the MidiDevice for the current tab.
 
-        InstrumentVector instruments = dev->getPresentationInstruments();
+        const InstrumentVector instruments =
+                midiDevice->getPresentationInstruments();
 
-        RG_DEBUG << "device has" << instruments.size() << "presentation instruments," << dev->getAllInstruments().size() << " instruments";
-
-        // For each Instrument
+        // For each Instrument...
         for (const Instrument *instrument : instruments) {
 
             // No fixed channel?  Try the next.
@@ -770,9 +768,15 @@ void
 MidiMixerWindow::slotSynchronise()
 {
     RG_DEBUG << "MidiMixer::slotSynchronise";
+
+    // This is connected to DeviceManagerDialog::deviceNamesChanged() but it
+    // does nothing.
+
+    // ??? We should probably connect to document changed and refresh
+    //     everything.  See what AudioMixerWindow does and follow its lead.
+
     //setupTabs();
 }
-
 
 void
 MidiMixerWindow::slotHelpRequested()
@@ -792,25 +796,25 @@ MidiMixerWindow::slotHelpAbout()
     new AboutDialog(this);
 }
 
-// Code stolen From src/base/MidiDevice
 ControlList
 MidiMixerWindow::getIPBControlParameters(const MidiDevice *dev) const
 {
     // ??? Instrument::getStaticControllers() might simplify all
     //     this quite a bit.  See RosegardenMainWindow::changeEvent().
 
-    ControlList controlList = dev->getIPBControlParameters();
-    ControlList retList;
+    const ControlList allControllers = dev->getIPBControlParameters();
+    ControlList controllersFiltered;
 
-    for (ControlList::const_iterator it = controlList.begin();
-         it != controlList.end(); ++it)
+    // For each controller...
+    for (const ControlParameter &controller : allControllers)
     {
-        if (it->getIPBPosition() != -1 &&
-            it->getControllerNumber() != MIDI_CONTROLLER_VOLUME)
-            retList.push_back(*it);
+        // If it is visible and not volume, add to filtered vector.
+        if (controller.getIPBPosition() != -1  &&
+            controller.getControllerNumber() != MIDI_CONTROLLER_VOLUME)
+            controllersFiltered.push_back(controller);
     }
 
-    return retList;
+    return controllersFiltered;
 }
 
 void
