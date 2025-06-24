@@ -7039,8 +7039,6 @@ RosegardenMainWindow::slotOpenAudioMixer()
     }
 
     m_audioMixerWindow2 = new AudioMixerWindow2(this);
-
-    return;
 }
 
 void
@@ -7050,35 +7048,10 @@ RosegardenMainWindow::slotOpenMidiMixer()
         m_midiMixer->show();
         m_midiMixer->raise();
         m_midiMixer->activateWindow();
-        return ;
+        return;
     }
 
-    m_midiMixer = new MidiMixerWindow(this, RosegardenDocument::currentDocument);
-
-    connect(m_midiMixer, &MixerWindow::closing,
-            this, &RosegardenMainWindow::slotMidiMixerClosed);
-
-    connect(this, &RosegardenMainWindow::documentAboutToChange,
-            m_midiMixer, &QWidget::close);
-
-    connect(m_midiMixer, &MidiMixerWindow::play,
-            this, &RosegardenMainWindow::slotPlay);
-    connect(m_midiMixer, &MidiMixerWindow::stop,
-            this, &RosegardenMainWindow::slotStop);
-    connect(m_midiMixer, &MidiMixerWindow::fastForwardPlayback,
-            this, &RosegardenMainWindow::slotFastforward);
-    connect(m_midiMixer, &MidiMixerWindow::rewindPlayback,
-            this, &RosegardenMainWindow::slotRewind);
-    connect(m_midiMixer, &MidiMixerWindow::fastForwardPlaybackToEnd,
-            this, &RosegardenMainWindow::slotFastForwardToEnd);
-    connect(m_midiMixer, &MidiMixerWindow::rewindPlaybackToBeginning,
-            this, &RosegardenMainWindow::slotRewindToBeginning);
-    connect(m_midiMixer, &MidiMixerWindow::record,
-            this, &RosegardenMainWindow::slotRecord);
-    connect(m_midiMixer, &MidiMixerWindow::panic,
-            this, &RosegardenMainWindow::slotPanic);
-
-    m_midiMixer->show();
+    m_midiMixer = new MidiMixerWindow(this);
 }
 
 void
@@ -7974,8 +7947,6 @@ RosegardenMainWindow::slotSynthPluginManagerClosed()
 void
 RosegardenMainWindow::slotMidiMixerClosed()
 {
-    RG_DEBUG << "slotMidiMixerClosed()\n";
-
     m_midiMixer = nullptr;
 }
 

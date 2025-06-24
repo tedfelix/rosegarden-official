@@ -37,6 +37,7 @@
 #include "gui/widgets/VUMeter.h"
 #include "gui/general/IconLoader.h"
 #include "gui/dialogs/AboutDialog.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "sound/MappedEvent.h"
 #include "sound/SequencerDataBlock.h"
 #include "sound/ExternalController.h"
@@ -56,9 +57,8 @@ namespace Rosegarden
 {
 
 
-MidiMixerWindow::MidiMixerWindow(QWidget *parent,
-                                 RosegardenDocument *document):
-    MixerWindow(parent, document)
+MidiMixerWindow::MidiMixerWindow(QWidget *parent) :
+    MixerWindow(parent, RosegardenDocument::currentDocument)
 {
     setWindowTitle(tr("MIDI Mixer"));
     setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
@@ -69,15 +69,23 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
 
     createAction("file_close", &MidiMixerWindow::slotClose);
 
-    // ??? Connect all these directly to RMW like AudioMixerWindow does.
-    createAction("play", &MidiMixerWindow::play);
-    createAction("stop", &MidiMixerWindow::stop);
-    createAction("playback_pointer_back_bar", &MidiMixerWindow::rewindPlayback);
-    createAction("playback_pointer_forward_bar", &MidiMixerWindow::fastForwardPlayback);
-    createAction("playback_pointer_start", &MidiMixerWindow::rewindPlaybackToBeginning);
-    createAction("playback_pointer_end", &MidiMixerWindow::fastForwardPlaybackToEnd);
-    createAction("record", &MidiMixerWindow::record);
-    createAction("panic", &MidiMixerWindow::panic);
+    createAction("play", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotPlay);
+    createAction("stop", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotStop);
+    createAction("playback_pointer_back_bar", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotRewind);
+    createAction("playback_pointer_forward_bar", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotFastforward);
+    createAction("playback_pointer_start", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotRewindToBeginning);
+    createAction("playback_pointer_end", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotFastForwardToEnd);
+    createAction("record", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotRecord);
+    createAction("panic", RosegardenMainWindow::self(),
+            &RosegardenMainWindow::slotPanic);
+
     createAction("midimix_help", &MidiMixerWindow::slotHelpRequested);
     createAction("help_about_app", &MidiMixerWindow::slotHelpAbout);
 
@@ -95,8 +103,20 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent,
                 &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
 
+    // Make sure we close if the document is changing.
+    connect(RosegardenMainWindow::self(),
+                    &RosegardenMainWindow::documentAboutToChange,
+            this, &QWidget::close);
+
+    // Let RMW know we are closing.
+    connect(this, &MixerWindow::closing,
+            RosegardenMainWindow::self(),
+                    &RosegardenMainWindow::slotMidiMixerClosed);
+
     // ??? What about restoring window geometry?
     // ??? Once that's in place, add to AudioMixerWindow2 as well.
+
+    show();
 }
 
 void
@@ -821,7 +841,7 @@ void
 MidiMixerWindow::changeEvent(QEvent *event)
 {
     // Let baseclass handle first.
-    QWidget::changeEvent(event);
+    MixerWindow::changeEvent(event);
 
     // We only care about this if the external controller port is
     // in Rosegarden native mode.
@@ -831,9 +851,11 @@ MidiMixerWindow::changeEvent(QEvent *event)
     // ??? Double updates seem to go out so we might want to be a little
     //     more picky about the event we react to.
 
+    // We only want to handle window activation.
     if (event->type() != QEvent::ActivationChange)
         return;
 
+    // If this is not an activation, bail.
     if (!isActiveWindow())
         return;
 

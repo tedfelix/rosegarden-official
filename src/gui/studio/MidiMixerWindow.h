@@ -53,7 +53,7 @@ class MidiMixerWindow : public MixerWindow, public ActionFileClient
 
 public:
 
-    MidiMixerWindow(QWidget *parent, RosegardenDocument *document);
+    MidiMixerWindow(QWidget *parent);
 
     /// Called by RosegardenMainWindow::slotUpdateUI()
     /**
@@ -61,19 +61,6 @@ public:
      *     AudioStrip has its own timer.  Need to move in that direction.
      */
     void updateMeters();
-
-signals:
-
-    // ??? Get rid of these and do what AudioMixerWindow does.  Connect the
-    //     actions directly to RMW.  See AudioMixerWindow2's ctor.
-    void play();
-    void stop();
-    void fastForwardPlayback();
-    void rewindPlayback();
-    void fastForwardPlaybackToEnd();
-    void rewindPlaybackToBeginning();
-    void record();
-    void panic();
 
 public slots:
 
@@ -135,11 +122,14 @@ private:
      */
     void sendControllerRefresh();
 
+    // ??? Need to move this out into its own class and move functionality
+    //     from here into this new class.  See AudioStrip.
     struct MidiStrip {
         InstrumentId m_id{0};
         MidiMixerVUMeter *m_vuMeter{nullptr};
         Fader *m_volumeFader{nullptr};
-        // ??? STRUCT!!!
+        // ??? NO std::pair!!!  Struct or maybe a map?  Do we need to search on
+        //     controllerNumber?
         std::vector<std::pair<MidiByte /*controllerNumber*/, Rotary *>>
                 m_controllerRotaries;
     };
