@@ -567,7 +567,8 @@ RosegardenMainWindow::RosegardenMainWindow(
     settings.endGroup();
 
     // Connect the various timers to their handlers.
-    connect(m_updateUITimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateUI);
+    connect(m_updateUITimer, &QTimer::timeout,
+            this, &RosegardenMainWindow::slotUpdateUI);
     m_updateUITimer->start(updateUITime);
     connect(m_inputTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotHandleInputs);
     m_inputTimer->start(20);
@@ -4876,7 +4877,6 @@ RosegardenMainWindow::slotUpdateUI()
 
 
     // Update the VU meters
-    if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
     if (m_view) m_view->updateMeters();
 }
 
@@ -7038,20 +7038,19 @@ RosegardenMainWindow::slotOpenAudioMixer()
         return;
     }
 
-    m_audioMixerWindow2 = new AudioMixerWindow2(this);
+    m_audioMixerWindow2 = new AudioMixerWindow2;
 }
 
 void
 RosegardenMainWindow::slotOpenMidiMixer()
 {
     if (m_midiMixer) {
-        m_midiMixer->show();
-        m_midiMixer->raise();
         m_midiMixer->activateWindow();
+        m_midiMixer->raise();
         return;
     }
 
-    m_midiMixer = new MidiMixerWindow(this);
+    m_midiMixer = new MidiMixerWindow;
 }
 
 void

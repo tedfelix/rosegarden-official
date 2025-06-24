@@ -28,6 +28,8 @@
 #include <utility>
 #include <vector>
 
+#include <QTimer>
+
 class QWidget;
 class QTabWidget;
 class QString;
@@ -53,22 +55,14 @@ class MidiMixerWindow : public MixerWindow, public ActionFileClient
 
 public:
 
-    MidiMixerWindow(QWidget *parent);
-
-    /// Called by RosegardenMainWindow::slotUpdateUI()
-    /**
-     * ??? AudioMixerWindow2 has no such routine.  Why not?  Looks like
-     *     AudioStrip has its own timer.  Need to move in that direction.
-     */
-    void updateMeters();
+    MidiMixerWindow();
 
 public slots:
 
     /// Used by DeviceManagerDialog to update Device names.
     /**
-     * ??? rename: slotUpdateDeviceNames()?
-     * ??? Actually this routine is EMPTY!!!  Can we try the use case it
-     *     appears to be related to and see if there is still a problem?
+     * ??? I think this is going away.  We need to handle document modified
+     *     and refresh like AMW2 does.  See AudioMixerWindow2::updateWidgets().
      */
     void slotSynchronise();
 
@@ -101,6 +95,11 @@ private slots:
     /// File > Close
     void slotClose()  { close(); }
 
+    /**
+     * ??? Move this to MidiStrip.
+     */
+    void updateMeters();
+
 private:
 
     QTabWidget *m_tabWidget;
@@ -122,16 +121,23 @@ private:
      */
     void sendControllerRefresh();
 
-    // ??? Need to move this out into its own class and move functionality
+    // ??? Need to move this out into its own header/cpp and move functionality
     //     from here into this new class.  See AudioStrip.
-    struct MidiStrip {
+    class MidiStrip
+    {
+    public:
         InstrumentId m_id{0};
         MidiMixerVUMeter *m_vuMeter{nullptr};
         Fader *m_volumeFader{nullptr};
-        // ??? NO std::pair!!!  Struct or maybe a map?  Do we need to search on
-        //     controllerNumber?
-        std::vector<std::pair<MidiByte /*controllerNumber*/, Rotary *>>
-                m_controllerRotaries;
+        // ??? We can get rid of this once we get IntrumentId and controller
+        //     number into the Rotary objects via QObject properties.  Then
+        //     all we need is the Rotary * here.
+        struct RotaryInfo
+        {
+            MidiByte controllerNumber{0};
+            Rotary *rotary{nullptr};
+        };
+        std::vector<RotaryInfo> m_controllerRotaries;
     };
 
     typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
@@ -139,6 +145,11 @@ private:
 
     /// Get InstrumentParameterBox controllers and remove volume.
     ControlList getIPBControlParameters(const MidiDevice *) const;
+
+    /**
+     * ??? Move this to MidiStrip.
+     */
+    QTimer m_timer;
 
 };
 

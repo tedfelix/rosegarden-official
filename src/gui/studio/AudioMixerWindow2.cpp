@@ -41,8 +41,8 @@ namespace Rosegarden
 {
 
 
-AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
-        QMainWindow(parent),
+AudioMixerWindow2::AudioMixerWindow2() :
+        QMainWindow(RosegardenMainWindow::self()),
         m_centralWidget(new QWidget),
         m_layout(new QHBoxLayout(m_centralWidget)),
         m_masterStrip(new AudioStrip(this, 0))

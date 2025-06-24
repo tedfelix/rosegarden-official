@@ -57,8 +57,9 @@ namespace Rosegarden
 {
 
 
-MidiMixerWindow::MidiMixerWindow(QWidget *parent) :
-    MixerWindow(parent, RosegardenDocument::currentDocument)
+MidiMixerWindow::MidiMixerWindow() :
+    MixerWindow(RosegardenMainWindow::self(),
+                RosegardenDocument::currentDocument)
 {
     setWindowTitle(tr("MIDI Mixer"));
     setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
@@ -112,6 +113,12 @@ MidiMixerWindow::MidiMixerWindow(QWidget *parent) :
     connect(this, &MixerWindow::closing,
             RosegardenMainWindow::self(),
                     &RosegardenMainWindow::slotMidiMixerClosed);
+
+    // Meter timer.
+    connect(&m_timer, &QTimer::timeout,
+            this, &MidiMixerWindow::updateMeters);
+    // 20fps should be responsive enough.
+    m_timer.start(50);
 
     // ??? What about restoring window geometry?
     // ??? Once that's in place, add to AudioMixerWindow2 as well.
@@ -238,10 +245,11 @@ MidiMixerWindow::setupTabs()
                 gridLayout->addWidget(
                         controller, controllerIndex, col, Qt::AlignCenter);
 
-                midiStrip->m_controllerRotaries.push_back(
-                        std::pair<MidiByte, Rotary *>(
-                                controls[controllerIndex].getControllerNumber(),
-                                controller));
+                MidiStrip::RotaryInfo rotaryInfo;
+                rotaryInfo.controllerNumber =
+                        controls[controllerIndex].getControllerNumber();
+                rotaryInfo.rotary = controller;
+                midiStrip->m_controllerRotaries.push_back(rotaryInfo);
             }
 
             // VU meter
@@ -375,7 +383,7 @@ MidiMixerWindow::slotControllerChanged(float value)
              rotaryIndex < m_midiStrips[midiStripIndex]->m_controllerRotaries.size();
              ++rotaryIndex) {
             // Found the Rotary?
-            if (m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].second == l_sender)
+            if (m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].rotary == l_sender)
                 break;
         }
 
@@ -400,8 +408,8 @@ MidiMixerWindow::slotControllerChanged(float value)
 
     //RG_DEBUG << "slotControllerChanged() - got instrument to change";
 
-    const MidiByte controllerNumber =
-            m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].first;
+    const MidiByte controllerNumber = m_midiStrips[midiStripIndex]->
+            m_controllerRotaries[rotaryIndex].controllerNumber;
 
     instrument->setControllerValue(controllerNumber, MidiByte(value));
     Instrument::emitControlChange(instrument, controllerNumber);
@@ -525,7 +533,8 @@ MidiMixerWindow::updateWidgets(const Instrument *i_instrument)
 
                     //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerNumber());
 
-                    m_midiStrips[midiStripIndex]->m_controllerRotaries[i].second->setPosition(value);
+                    m_midiStrips[midiStripIndex]->m_controllerRotaries[i].
+                            rotary->setPosition(value);
                 }
 
                 // ??? Aren't we done at this point.  Can't we break?
@@ -615,7 +624,7 @@ MidiMixerWindow::slotControlChange(
             // If this is the one, set the rotary.
             if (controllerNumber == controls[controllerIndex].getControllerNumber()) {
                 m_midiStrips[stripIndex]->m_controllerRotaries[controllerIndex].
-                        second->setPosition(controllerValue);
+                        rotary->setPosition(controllerValue);
                 break;
             }
         }
