@@ -92,6 +92,10 @@ public:
     void setActive(bool active);
     bool active() const;
 
+    // to maintain copy of map key
+    void setXKey(double x) { m_xKey = x; }
+    double xKey() const { return m_xKey; }
+
 protected:
 
     //--------------- Data members ---------------------------------
@@ -114,6 +118,10 @@ protected:
 
     static const unsigned int BorderThickness;
     static const unsigned int DefaultWidth;
+
+private:
+    // a true copy of the key in the ControlItemMap for efficient item- lookup
+    double m_xKey;
 };
 
 typedef std::multimap<double /* xStart */, QSharedPointer<ControlItem>>

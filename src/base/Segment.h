@@ -423,7 +423,7 @@ public:
      * Returns an iterator pointing to that specific element,
      * end() otherwise
      */
-    iterator findSingle(Event*);
+    iterator findSingle(const Event*) const;
 
     /**
      * Returns an iterator pointing to the first element starting at

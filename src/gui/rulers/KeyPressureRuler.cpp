@@ -24,6 +24,7 @@
 #include "base/ViewElement.h"
 #include "base/BaseProperties.h"
 #include "base/RulerScale.h"
+#include "base/SegmentPerformanceHelper.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/rulers/EventControlItem.h"
 
@@ -51,12 +52,18 @@ KeyPressureRuler::~KeyPressureRuler()
 void KeyPressureRuler::setElementSelection
 (const std::vector<ViewElement *> &elementList)
 {
+    if (! m_segment) return;
     RG_DEBUG << "setElementSelection" << elementList.size();
+    SegmentPerformanceHelper helper(*m_segment);
     m_notePitch = -1;
+    SegmentPerformanceHelper::IteratorVector ivec;
     for (const ViewElement *element : elementList) {
         RG_DEBUG << "setElementSelection check element" << element;
         const Event* event = element->event();
         if (event->isa(Note::EventType)) {
+            Segment::iterator it = m_segment->findSingle(event);
+            // ignore note tied to the chosen note
+            if (std::find(ivec.begin(), ivec.end(), it) != ivec.end()) continue;
             if (m_notePitch != -1) {
                 RG_DEBUG << "setElementSelection more than one note";
                 m_notePitch = -1;
@@ -64,9 +71,10 @@ void KeyPressureRuler::setElementSelection
                 m_noteDuration = -1;
                 break;
             }
-            m_notePitch = event->get<Int>(BaseProperties::PITCH);
             m_noteStart = event->getAbsoluteTime();
-            m_noteDuration = event->getDuration();
+            m_notePitch = event->get<Int>(BaseProperties::PITCH);
+            m_noteDuration = helper.getSoundingDuration(it);
+            ivec = helper.getTiedNotes(it);
             RG_DEBUG << "setElementSelection settin pitch" << m_notePitch;
         }
     }

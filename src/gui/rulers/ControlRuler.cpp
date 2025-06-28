@@ -160,12 +160,24 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
 
 ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
 {
-    // Basic loop through until I get the equal_range thing working properly
-    ControlItemMap::iterator it;
-    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        if (it->second == item) break;
+    double xstart = item->xKey();
+
+    std::pair<ControlItemMap::iterator, ControlItemMap::iterator>
+        range = m_controlItemMap.equal_range(xstart);
+
+    // now find in this range
+    if (range.first != m_controlItemMap.end()) {
+        for(ControlItemMap::iterator it = range.first;
+            it != range.second;
+            ++it) {
+            if (it->second == item) {
+                RG_DEBUG << "findControlItem equal_range1 found item";
+                return it;
+            }
+        }
     }
-    return it;
+
+    return m_controlItemMap.end();
 }
 
 void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
@@ -175,6 +187,7 @@ void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
     //RG_DEBUG << "addControlItem(): ControlItem added: " << hex << (long)item;
 
     // ControlItem may not have an assigned event but must have x position
+    item->setXKey(item->xStart());
     ControlItemMap::iterator it =
             m_controlItemMap.insert(
                     ControlItemMap::value_type(item->xStart(), item));
@@ -332,6 +345,7 @@ void ControlRuler::moveItem(ControlItem *item)
 
     removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
+    item2->setXKey(item2->xStart());
     it = m_controlItemMap.insert(
             ControlItemMap::value_type(item2->xStart(), item2));
     addCheckVisibleLimits(it);

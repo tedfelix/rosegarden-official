@@ -725,14 +725,15 @@ Segment::eraseSingle(Event* e)
 
 
 Segment::iterator
-Segment::findSingle(Event* e)
+Segment::findSingle(const Event* e) const
 {
+    Event* e1 = const_cast<Event*>(e);
     iterator res = end();
 
-    std::pair<iterator, iterator> interval = equal_range(e);
+    std::pair<iterator, iterator> interval = equal_range(e1);
 
     for (iterator i = interval.first; i != interval.second; ++i) {
-        if (*i == e) {
+        if (*i == e1) {
             res = i;
             break;
         }

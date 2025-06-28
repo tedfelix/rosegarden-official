@@ -103,7 +103,9 @@ SoftSynthDevice::checkControlList()
             { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
             { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
             { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
-            { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
+            { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" },
+            { "Channel Pressure", Rosegarden::ChannelPressure::EventType, "<none>", "0", "127", "1", "2", "-1" },
+            { "Key Pressure", Rosegarden::KeyPressure::EventType, "<none>", "0", "127", "1", "2", "-1" }
         };
 
 	for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {

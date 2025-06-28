@@ -41,7 +41,8 @@ ControlItem::ControlItem(ControlRuler *controlRuler,
     m_controlRuler(controlRuler),
 //    m_elementAdapter(elementAdapter),
     m_event(event),
-    m_active(true)
+    m_active(true),
+    m_xKey(-1)
 {
 }
 
