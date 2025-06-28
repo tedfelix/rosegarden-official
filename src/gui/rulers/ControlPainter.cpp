@@ -63,7 +63,11 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
     float xmin, xmax;
     ruler->getLimits(xmin, xmax);
     RG_DEBUG << "handleLeftButtonPress limits" << xmin << xmax;
-    if (e->x < xmin || e->x > xmax) return;
+    if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) { // using right
+        if (e->snappedXRight >= xmax) return;
+    } else { // using left
+        if (e->snappedXLeft < xmin) return;
+    }
     if (e->itemList.size()) {
         ControlItemVector::const_iterator it = e->itemList.begin();
         ruler->clearSelectedItems();

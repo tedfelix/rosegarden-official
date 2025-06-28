@@ -449,6 +449,8 @@ void ControlRuler::updateSegment()
                      m_controlItemMap.lower_bound(xItem);
                  otherItemIter != m_controlItemMap.end();
                  ++otherItemIter) {
+                // ignore inactive items
+                if (! otherItemIter->second->active()) continue;
                 // If this is the same as the item we are checking,
                 // try the next.
                 if (cItem == otherItemIter->second) {

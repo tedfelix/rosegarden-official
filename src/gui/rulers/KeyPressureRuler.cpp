@@ -158,7 +158,9 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
         float itemX = item->xStart();
         float itemY = item->y();
         painter.drawLine(mapXToWidget(lastX), mapYToWidget(lastY),
-                         mapXToWidget(itemX), mapYToWidget(itemY));
+                         mapXToWidget(itemX), mapYToWidget(lastY));
+        painter.drawLine(mapXToWidget(itemX), mapYToWidget(itemY),
+                         mapXToWidget(itemX), mapYToWidget(lastY));
         lastX = itemX;
         lastY = itemY;
     }

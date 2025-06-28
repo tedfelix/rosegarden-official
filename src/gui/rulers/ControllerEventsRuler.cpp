@@ -177,33 +177,36 @@ void ControllerEventsRuler::drawItems
     // can be drawn last - can't use m_selectedItems as this covers all selected, visible or not
     ControlItemVector selectedVector;
 
-    bool activeColours = true; // pen and brush initialy with active setting
-    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
-        //RG_DEBUG << "drawItems item active" << (*it)->active();
-        if (!(*it)->isSelected()) {
-            if ((*it)->active()) {
-                if (!activeColours) {
-                    pen.setColor(GUIPalette::getColour
-                                 (GUIPalette::MatrixElementBorder));
-                    brush.setColor(GUIPalette::getColour
-                                   (GUIPalette::ControlItem));
-                    painter.setBrush(brush);
-                    painter.setPen(pen);
-                    activeColours = true;
-                }
-            } else {
-                if (activeColours) {
-                    pen.setColor(GUIPalette::getColour
-                                 (GUIPalette::MatrixElementLightBorder));
-                    brush.setColor(Qt::white);
-                    painter.setBrush(brush);
-                    painter.setPen(pen);
-                    activeColours = false;
+    // draw the items in two passes - first inactive then active. This
+    // ensures that the active items are on top
+
+    for (int i=0; i<2; i++) {
+        if (i == 0) { // inactive
+            pen.setColor(GUIPalette::getColour
+                         (GUIPalette::MatrixElementLightBorder));
+            brush.setColor(Qt::white);
+            painter.setBrush(brush);
+            painter.setPen(pen);
+        } else { // active
+            pen.setColor(GUIPalette::getColour
+                         (GUIPalette::MatrixElementBorder));
+            brush.setColor(GUIPalette::getColour
+                           (GUIPalette::ControlItem));
+            painter.setBrush(brush);
+            painter.setPen(pen);
+        }
+        for (ControlItemList::iterator it = m_visibleItems.begin();
+             it != m_visibleItems.end();
+             ++it) {
+            //RG_DEBUG << "drawItems item active" << (*it)->active();
+            if ((i == 0 && !(*it)->active()) ||
+                (i == 1 && (*it)->active())) {
+                if (!(*it)->isSelected()) {
+                    painter.drawPolygon(mapItemToWidget(*it));
+                } else {
+                    selectedVector.push_back(*it);
                 }
             }
-            painter.drawPolygon(mapItemToWidget(*it));
-        } else {
-            selectedVector.push_back(*it);
         }
     }
 
