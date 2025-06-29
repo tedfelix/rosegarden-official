@@ -188,8 +188,9 @@ void KeyPressureRuler::getLimits(float& xmin, float& xmax)
         xmin = -1;
         xmax = -1;
     } else {
-        xmin = m_rulerScale->getXForTime(m_noteStart);
-        xmax = m_rulerScale->getXForTime(m_noteStart + m_noteDuration);
+        double xscale = getXScale();
+        xmin = m_rulerScale->getXForTime(m_noteStart) * xscale;
+        xmax = m_rulerScale->getXForTime(m_noteStart + m_noteDuration) * xscale;
     }
 }
 
