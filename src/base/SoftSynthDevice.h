@@ -30,7 +30,7 @@ class SoftSynthDevice : public Device, public Controllable
 {
 
 public:
-    SoftSynthDevice();
+    //SoftSynthDevice();
     SoftSynthDevice(DeviceId id, const std::string &name);
     ~SoftSynthDevice() override;
 
@@ -57,8 +57,8 @@ public:
 
 private:
     // Hide copy constructor and op=
-    SoftSynthDevice(const SoftSynthDevice &);
-    SoftSynthDevice &operator=(const SoftSynthDevice &);
+    SoftSynthDevice(const SoftSynthDevice &) = delete;
+    SoftSynthDevice &operator=(const SoftSynthDevice &) = delete;
 
     MidiMetronome *m_metronome;
     static ControlList m_controlList;

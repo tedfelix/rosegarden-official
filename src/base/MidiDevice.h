@@ -207,10 +207,6 @@ public:
     /// The CC has a knob on the MIPP.
     bool isVisibleControlParameter(MidiByte controlNumber) const;
 
-    // Generate some default controllers for the MidiDevice
-    //
-    void generateDefaultControllers();
-
     std::string toXmlString() const override;
 
     static bool isPercussionNumber(int channel)

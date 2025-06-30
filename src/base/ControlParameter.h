@@ -122,10 +122,16 @@ public:
     // True if "e" is this type of controller / pitchbend.
     bool matches(Event *e) const;
 
-    static const ControlParameter& getPitchBend();
-    static const ControlParameter& getExpression();
-    static const ControlParameter& getChannelPressure();
-    static const ControlParameter& getKeyPressure();
+    // Get default ControlParameter objects.
+    static const ControlParameter &getExpression();
+    static const ControlParameter &getPitchBend();
+    static const ControlParameter &getChannelPressure();
+    static const ControlParameter &getKeyPressure();
+    /// Get a list of all the usual default controllers.
+    /**
+     * Compatible with ControlList.
+     */
+    static const std::vector<ControlParameter> &getDefaultControllers();
 
 protected:
 

@@ -30,6 +30,7 @@ namespace Rosegarden
 ControlList
 SoftSynthDevice::m_controlList;
 
+#if 0
 SoftSynthDevice::SoftSynthDevice() :
     Device(0, "Default Soft Synth Device", Device::SoftSynth),
     m_metronome(nullptr)
@@ -37,11 +38,13 @@ SoftSynthDevice::SoftSynthDevice() :
     createInstruments();
     checkControlList();
 }
+#endif
 
 SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
     Device(id, name, Device::SoftSynth),
     m_metronome(nullptr)
 {
+    // ??? Inline both of these now that there is only one ctor.
     createInstruments();
     checkControlList();
 }
@@ -91,42 +94,11 @@ SoftSynthDevice::renameInstruments()
 void
 SoftSynthDevice::checkControlList()
 {
-    // Much as MidiDevice::generateDefaultControllers
-
-    if (m_controlList.empty()) {
-
-        // ??? This is done in three places: ControlParameter has get routines,
-        //     MidiDevice::generateDefaultControllers(), and here.  Search on
-        //     "PitchBend" to see them all.
-        //     We need a ControlParameter::getDefaultControllers()
-        //     that returns a ControlList.
-
-        static std::string controls[][9] = {
-            { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
-            { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
-            { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
-            { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
-            { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
-            { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
-            { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
-            { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" },
-            { "Channel Pressure", Rosegarden::ChannelPressure::EventType, "<none>", "0", "127", "0", "1", "2", "-1" },
-            { "Key Pressure", Rosegarden::KeyPressure::EventType, "<none>", "0", "127", "0", "1", "2", "-1" }
-        };
-
-        for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
-            Rosegarden::ControlParameter con(controls[i][0],
-                                             controls[i][1],
-                                             controls[i][2],
-                                             atoi(controls[i][3].c_str()),
-                                             atoi(controls[i][4].c_str()),
-                                             atoi(controls[i][5].c_str()),
-                                             Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
-                                             atoi(controls[i][7].c_str()),
-                                             atoi(controls[i][8].c_str()));
-            m_controlList.push_back(con);
-        }
-    }
+    m_controlList = ControlParameter::getDefaultControllers();
+    // Add on the aftertouch/pressure controllers since synth plugins do not
+    // support device files for some reason.
+    m_controlList.push_back(ControlParameter::getChannelPressure());
+    m_controlList.push_back(ControlParameter::getKeyPressure());
 }
 
 const ControlParameter *

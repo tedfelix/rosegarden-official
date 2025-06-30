@@ -233,5 +233,78 @@ ControlParameter::getKeyPressure()
     return keyPressure;
 }
 
+const std::vector<ControlParameter> &
+ControlParameter::getDefaultControllers()
+{
+    static std::vector<ControlParameter> controlList;
+
+    if (controlList.empty()) {
+        controlList.push_back(ControlParameter(
+                "Pan",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                64,
+                10,
+                2,
+                0));
+        controlList.push_back(ControlParameter(
+                "Chorus",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                93,
+                3,
+                1));
+        controlList.push_back(ControlParameter(
+                "Volume",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                100,
+                7,
+                1,
+                2));
+        controlList.push_back(ControlParameter(
+                "Reverb",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                91,
+                3,
+                3));
+        controlList.push_back(ControlParameter(
+                "Sustain",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                64,
+                4,
+                -1));
+        controlList.push_back(getExpression());
+        controlList.push_back(ControlParameter(
+                "Modulation",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                1,
+                4,
+                -1));
+        controlList.push_back(getPitchBend());
+    }
+
+    return controlList;
+}
+
 
 }
