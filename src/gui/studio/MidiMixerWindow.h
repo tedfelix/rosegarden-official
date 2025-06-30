@@ -103,7 +103,6 @@ private slots:
 private:
 
     QTabWidget *m_tabWidget;
-    QFrame *m_tabFrame;
 
     /// Setup the tabs on the Mixer according to the Studio
     void setupTabs();

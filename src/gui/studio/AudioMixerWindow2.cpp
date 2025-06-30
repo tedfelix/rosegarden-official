@@ -153,6 +153,12 @@ AudioMixerWindow2::AudioMixerWindow2() :
     updateWidgets();
 
     show();
+
+    // ??? Ideally, we need to allow resizing, scale the controls, and
+    //     store/restore the window size on close/open.
+    //     MMW needs this ability as well.
+    setFixedSize(geometry().size());
+
 }
 
 AudioMixerWindow2::~AudioMixerWindow2()

@@ -120,10 +120,13 @@ MidiMixerWindow::MidiMixerWindow() :
     // 20fps should be responsive enough.
     m_timer.start(50);
 
-    // ??? What about restoring window geometry?
-    // ??? Once that's in place, add to AudioMixerWindow2 as well.
-
     show();
+
+    // Lock the window size.
+    // ??? Ideally, we need to allow resizing, scale the controls, and
+    //     store/restore the window size on close/open.
+    //     AMW2 needs this ability as well.
+    setFixedSize(geometry().size());
 }
 
 void
@@ -149,6 +152,13 @@ MidiMixerWindow::setupTabs()
         if (!midiDevice)
             continue;
 
+        // ??? Does any of this make sense for input devices?  I tried playing
+        //     with the input device in the mixer and it appears to do nothing.
+        //     Maybe we need to do this everywhere:
+        //       if (midiDevice->isInput())
+        //           continue;
+        //     Or implement a getMidiPlaybackDevices().
+
         // Get the control parameters that are on the IPB (and hence can
         // be shown here too).
         ControlList controls = getIPBControlParameters(midiDevice);
@@ -158,36 +168,35 @@ MidiMixerWindow::setupTabs()
         if (!instruments.size())
             continue;
 
-        m_tabFrame = new QFrame(m_tabWidget);
-        m_tabFrame->setContentsMargins(10, 10, 10, 10);
+        QFrame *tabFrame = new QFrame(m_tabWidget);
+        tabFrame->setContentsMargins(10, 10, 10, 10);
         const QString name = QString("%1 (%2)").
                 arg(QObject::tr(midiDevice->getName().c_str())).
                 arg(deviceCount++);
         // Add the tab to the QTabWidget.
-        m_tabWidget->addTab(m_tabFrame, name);
+        m_tabWidget->addTab(tabFrame, name);
 
-        QGridLayout *gridLayout = new QGridLayout(m_tabFrame);
+        QGridLayout *gridLayout = new QGridLayout(tabFrame);
 
         QLabel *label;
 
         // Controller labels
-        // ??? Does this make sense for input devices?
         for (size_t controlIndex = 0;
              controlIndex < controls.size();
              ++controlIndex) {
             label = new QLabel(
                     QObject::tr(controls[controlIndex].getName().c_str()),
-                    m_tabFrame);
+                    tabFrame);
             gridLayout->addWidget(label, controlIndex, 0, Qt::AlignRight);
         }
 
         // Volume label
-        label = new QLabel(tr("Volume"), m_tabFrame);
+        label = new QLabel(tr("Volume"), tabFrame);
         gridLayout->addWidget(label, controls.size() + 1, 0, Qt::AlignRight);
 
         // Instrument label
         const QString instrument = tr("Instrument");
-        label = new QLabel(instrument, m_tabFrame);
+        label = new QLabel(instrument, tabFrame);
         label->setFixedWidth(fontMetrics().boundingRect(instrument).width() + 2);
         gridLayout->addWidget(label, controls.size() + 2, 0, Qt::AlignRight);
 
@@ -219,7 +228,7 @@ MidiMixerWindow::setupTabs()
                         (controls[controllerIndex].getDefault() == 64);
 
                 Rotary *controller = new Rotary(
-                        m_tabFrame,  // parent
+                        tabFrame,  // parent
                         controls[controllerIndex].getMin(),  // minimum
                         controls[controllerIndex].getMax(),  // maximum
                         1.0,  // step
@@ -254,7 +263,7 @@ MidiMixerWindow::setupTabs()
 
             // VU meter
             MidiMixerVUMeter *meter = new MidiMixerVUMeter(
-                    m_tabFrame,  // parent
+                    tabFrame,  // parent
                     VUMeter::FixedHeightVisiblePeakHold,  // type
                     6,  // width
                     30);  // height
@@ -268,7 +277,7 @@ MidiMixerWindow::setupTabs()
                     100,  // i_default
                     20,  // i_width
                     80,  // i_height
-                    m_tabFrame);  // parent
+                    tabFrame);  // parent
             connect(fader, &Fader::faderChanged,
                     this, &MidiMixerWindow::slotFaderLevelChanged);
             gridLayout->addWidget(
@@ -278,7 +287,7 @@ MidiMixerWindow::setupTabs()
             // Instrument number
             QLabel *instrumentNumberLabel = new QLabel(
                     QString("%1").arg(stripNum++),
-                    m_tabFrame);
+                    tabFrame);
             gridLayout->addWidget(
                     instrumentNumberLabel,  // widget
                     controls.size() + 2,  // row
