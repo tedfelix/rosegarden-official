@@ -95,6 +95,12 @@ SoftSynthDevice::checkControlList()
 
     if (m_controlList.empty()) {
 
+        // ??? This is done in three places: ControlParameter has get routines,
+        //     MidiDevice::generateDefaultControllers(), and here.  Search on
+        //     "PitchBend" to see them all.
+        //     We need a ControlParameter::getDefaultControllers()
+        //     that returns a ControlList.
+
         static std::string controls[][9] = {
             { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
             { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
@@ -104,23 +110,22 @@ SoftSynthDevice::checkControlList()
             { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
             { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
             { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" },
-            { "Channel Pressure", Rosegarden::ChannelPressure::EventType, "<none>", "0", "127", "1", "2", "-1" },
-            { "Key Pressure", Rosegarden::KeyPressure::EventType, "<none>", "0", "127", "1", "2", "-1" }
+            { "Channel Pressure", Rosegarden::ChannelPressure::EventType, "<none>", "0", "127", "0", "1", "2", "-1" },
+            { "Key Pressure", Rosegarden::KeyPressure::EventType, "<none>", "0", "127", "0", "1", "2", "-1" }
         };
 
-	for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
-
-	    Rosegarden::ControlParameter con(controls[i][0],
-					     controls[i][1],
-					     controls[i][2],
-					     atoi(controls[i][3].c_str()),
-					     atoi(controls[i][4].c_str()),
-					     atoi(controls[i][5].c_str()),
-					     Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
-					     atoi(controls[i][7].c_str()),
-					     atoi(controls[i][8].c_str()));
-	    m_controlList.push_back(con);
-	}
+        for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
+            Rosegarden::ControlParameter con(controls[i][0],
+                                             controls[i][1],
+                                             controls[i][2],
+                                             atoi(controls[i][3].c_str()),
+                                             atoi(controls[i][4].c_str()),
+                                             atoi(controls[i][5].c_str()),
+                                             Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
+                                             atoi(controls[i][7].c_str()),
+                                             atoi(controls[i][8].c_str()));
+            m_controlList.push_back(con);
+        }
     }
 }
 
