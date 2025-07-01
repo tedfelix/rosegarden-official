@@ -57,6 +57,33 @@ namespace Rosegarden
 {
 
 
+namespace
+{
+
+    typedef std::vector<MidiDevice *> MidiDeviceVector;
+
+    // ??? Studio member function candidate.
+    MidiDeviceVector getMidiOutputDevices(const Studio *studio)
+    {
+        MidiDeviceVector devices;
+
+        // For each Device in the Studio...
+        for (Device *device : studio->getDevicesRef()) {
+            MidiDevice *midiDevice =
+                    dynamic_cast<MidiDevice *>(device);
+            if (!midiDevice)
+                continue;
+            if (midiDevice->isInput())
+                continue;
+
+            devices.push_back(midiDevice);
+        }
+
+        return devices;
+    }
+
+}
+
 MidiMixerWindow::MidiMixerWindow() :
     MixerWindow(RosegardenMainWindow::self(),
                 RosegardenDocument::currentDocument)
@@ -144,21 +171,12 @@ MidiMixerWindow::setupTabs()
     //     Studio and update this display to match.  AudioMixerWindow2 does
     //     this.  See AudioMixerWindow2::updateWidgets().
 
+    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+
     int deviceCount = 1;
 
-    // For each Device in the Studio...
-    for (const Device *device : m_studio->getDevicesRef()) {
-        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
-        if (!midiDevice)
-            continue;
-
-        // ??? Does any of this make sense for input devices?  I tried playing
-        //     with the input device in the mixer and it appears to do nothing.
-        //     Maybe we need to do this everywhere:
-        //       if (midiDevice->isInput())
-        //           continue;
-        //     Or implement a getMidiPlaybackDevices().
-
+    // For each MidiDevice in the Studio...
+    for (const MidiDevice *midiDevice : devices) {
         // Get the control parameters that are on the IPB (and hence can
         // be shown here too).
         ControlList controls = getIPBControlParameters(midiDevice);
@@ -334,19 +352,16 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
                 int loopTabIndex = 0;
 
-                // For each Device...
+                const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+
+                // For each MidiDevice...
                 // ??? We should keep a table of tab index to MidiDevice *.
                 //     Then all this becomes a one-liner.  At the very least
                 //     factor this out into a routine to get started.  This
                 //     is done 3 or more times in this code.  Find MidiDevice
                 //     for the current tab.
-                for (const Device *device : m_studio->getDevicesRef()) {
+                for (const MidiDevice *midiDevice : devices) {
                     RG_DEBUG << "slotFaderLevelChanged: i = " << loopTabIndex << ", tabIndex " << currentTabIndex;
-                    const MidiDevice *midiDevice =
-                            dynamic_cast<const MidiDevice *>(device);
-                    if (!midiDevice)
-                        continue;
-
                     if (loopTabIndex != currentTabIndex) {
                         ++loopTabIndex;
                         continue;
@@ -433,15 +448,13 @@ MidiMixerWindow::slotControllerChanged(float value)
         if (currentTabIndex < 0)
             currentTabIndex = 0;
         int tabIndex = 0;
-        // For each Device in the Studio...
-        //for (DeviceList::const_iterator deviceIter = m_studio->begin();
-        //     deviceIter != m_studio->end();
-        //     ++deviceIter) {
-        for (const Device *device : m_studio->getDevicesRef()) {
+
+        const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+
+        // For each MidiDevice in the Studio...
+        for (const MidiDevice *midiDevice : devices) {
             RG_DEBUG << "slotControllerChanged(): tabIndex = " << tabIndex << ", currentTabIndex " << currentTabIndex;
-            const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
-            if (!midiDevice)
-                continue;
+
             // Not the current tab?  Try the next.
             if (tabIndex != currentTabIndex) {
                 ++tabIndex;
@@ -479,16 +492,13 @@ MidiMixerWindow::updateWidgets(const Instrument *i_instrument)
 
     size_t midiStripIndex = 0;
 
-    // For each device in the Studio
+    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+
+    // For each MidiDevice in the Studio...
     // ??? There is only one caller of this routine.  And they happen to
     //     have the MidiDevice *, so there is no need for this Device search
     //     loop.
-    for (const Device *device : m_studio->getDevicesRef()) {
-        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
-        // If this isn't a MidiDevice, try the next.
-        if (!midiDevice)
-            continue;
-
+    for (const MidiDevice *midiDevice : devices) {
         InstrumentVector instruments = midiDevice->getPresentationInstruments();
 
         // For each Instrument in the Device...
@@ -575,13 +585,10 @@ MidiMixerWindow::slotControlChange(
     //     We've got to be able to do better.  A
     //     std::map<InstrumentId, StripIndex> or similar should be better.
 
-    // For each Device in the Studio...
-    for (const Device *device : m_studio->getDevicesRef()) {
-        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
-        // If this isn't a MidiDevice, try the next.
-        if (!midiDevice)
-            continue;
+    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
+    // For each MidiDevice in the Studio...
+    for (const MidiDevice *midiDevice : devices) {
         InstrumentVector instruments = midiDevice->getPresentationInstruments();
 
         // For each Instrument in the Device...
@@ -683,12 +690,10 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
 
     int loopTabIndex = 0;
 
-    // For each Device in the Studio...
-    for (const Device *device : m_studio->getDevicesRef()) {
+    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
-        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
-        if (!midiDevice)
-            continue;
+    // For each MidiDevice in the Studio...
+    for (const MidiDevice *midiDevice : devices) {
 
         if (loopTabIndex != tabIndex) {
             ++loopTabIndex;
@@ -767,13 +772,10 @@ MidiMixerWindow::sendControllerRefresh()
 
     int loopTabIndex = 0;
 
-    // For each Device in the Studio...
-    for (const Device *device: m_studio->getDevicesRef()) {
+    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
-        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
-        // Not a MIDI device?  Then try the next.
-        if (!midiDevice)
-            continue;
+    // For each Device in the Studio...
+    for (const MidiDevice *midiDevice : devices) {
 
         // Not the MidiDevice for the current tab?  Try the next.
         if (loopTabIndex != currentTabIndex) {
