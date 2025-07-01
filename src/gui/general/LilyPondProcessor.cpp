@@ -26,7 +26,6 @@
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 
-#include <QDialog>
 #include <QProcess>
 #include <QGridLayout>
 #include <QPushButton>
@@ -46,66 +45,52 @@ LilyPondProcessor::LilyPondProcessor(
     QDialog(parent),
     m_mode(mode)
 {
-    // We have to split the combined filename (eg. "/tmp/rosegarden_tmp_T73123.ly"
-    // into a separate filename and directory component, to hack around a
-    // critical bug I couldn't resolve any other way.
-    int pos = filename.lastIndexOf("/");
-    m_filename = filename.mid(pos + 1, (filename.size() - pos - 1));
-    m_dir = QDir::tempPath(); // OK, we'll just be lazy and not parse it back out of the string
+    // Split the file path into directory and file name.
+    QFileInfo fileInfo(filename);
+    m_workingDirectory = fileInfo.dir().path();
+    m_filename = fileInfo.fileName();
 
-    // (I'm not sure why RG_DEBUG didn't work from in here.  Having to use
-    // iostream is mildly irritating, as QStrings have to be converted, but
-    // whatever, I'll figure that out later, or just leave well enough alone)
-    RG_DEBUG << "ctor:  mode: " << mode << " m_filename: " << m_filename.toStdString();
+    RG_DEBUG << "ctor:  mode: " << mode << " m_filename: " << m_filename;
 
     setModal(false);
-
     setWindowIcon(IconLoader::loadPixmap("window-lilypond"));
 
-    QGridLayout *layout = new QGridLayout;
-    this->setLayout(layout);
+    QString modeStr;
+    if (mode == Mode::Print)
+        modeStr = tr("Print");
+    else
+        modeStr = tr("Preview");
+    setWindowTitle(tr("Rosegarden - %1 with LilyPond...").arg(modeStr));
 
+    QGridLayout *layout = new QGridLayout(this);
+
+    // Icon
     QLabel *icon = new QLabel(this);
     icon->setPixmap(IconLoader::loadPixmap("rosegarden-lilypond"));
     layout->addWidget(icon, 0, 0);
 
-    QString modeStr;
-    switch (mode) {
-        case Mode::Preview:
-            modeStr = tr("Preview");
-            break;
-        case Mode::Print:
-            modeStr = tr("Print");
-            break;
-    }
-    setWindowTitle(tr("Rosegarden - %1 with LilyPond...").arg(modeStr));
-
+    // Message
     m_info = new QLabel(this);
     m_info->setWordWrap(true);
     layout->addWidget(m_info, 0, 1);
 
+    // Progress Bar
     m_progress = new ProgressBar(this);
     layout->addWidget(m_progress, 1, 1);
 
-    QPushButton *ok = new QPushButton(tr("Cancel"), this);
-    connect(ok, &QAbstractButton::clicked, this, &QDialog::reject);
-    layout->addWidget(ok, 3, 1); 
-
+    // Cancel
+    QPushButton *cancel = new QPushButton(tr("Cancel"), this);
+    connect(cancel, &QAbstractButton::clicked, this, &QDialog::reject);
+    layout->addWidget(cancel, 3, 1); 
    
     // Just run convert.ly without all the logic to figure out if it's needed or
     // not.  This is harmless, and adds little extra processing time if the
-    // conversion isn't required.  This is the first link in a spaghetti bowl
-    // chain of slots.  We either have to run all of this in a thread apart from
-    // the main GUI thread or use this spaghetti bowl chaining technique in
-    // order to avoid freezing the entire application while chewing on large
-    // processing jobs, as we really must wait for step A to finish before
-    // continuing to step B.  I have no experience with threads, so the
-    // spaghetti option is the most expedient, if less educational choice.
+    // conversion isn't required.
     runConvertLy();
 }
 
 void
-LilyPondProcessor::fail(const QString& error, const QString &details)
+LilyPondProcessor::fail(const QString &error, const QString &details)
 {
     delete m_process;
     m_process = nullptr;
@@ -136,7 +121,7 @@ LilyPondProcessor::runConvertLy()
 
     m_info->setText(tr("Running <b>convert-ly</b>..."));
     m_process = new QProcess;
-    m_process->setWorkingDirectory(m_dir);
+    m_process->setWorkingDirectory(m_workingDirectory);
     m_process->start("convert-ly", QStringList() << "-e" << m_filename);
     connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
                     &QProcess::finished,
@@ -150,6 +135,8 @@ LilyPondProcessor::runConvertLy()
     }
 
     m_progress->setValue(25);
+
+    // runLilyPond() will take over when convert-ly is done...
 }
 
 void
@@ -160,6 +147,7 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     if (exitCode == 0) {
         m_info->setText(tr("<b>convert-ly</b> finished..."));
         delete m_process;
+        m_process = nullptr;
     } else {
         fail(tr("<qt><p>Ran <b>convert-ly</b> successfully, but it terminated with errors.</p><p>Processing terminated due to fatal errors.</p></qt>"));
     }
@@ -167,14 +155,13 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     m_progress->setValue(50);
 
     m_process = new QProcess;
-    m_process->setWorkingDirectory(m_dir);
+    m_process->setWorkingDirectory(m_workingDirectory);
     m_info->setText(tr("Running <b>lilypond</b>..."));
     m_process->start("lilypond", QStringList() << "--pdf" << m_filename);
     connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
                     &QProcess::finished,
             this, &LilyPondProcessor::runFinalStage);
             
-
     if (m_process->waitForStarted()) {
         m_info->setText(tr("<b>lilypond</b> started..."));
     } else {
@@ -187,7 +174,7 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     // in real code
     m_progress->setMaximum(0);
 
-    // runFinalStage() will take over when the process ends...
+    // runFinalStage() will take over when lilypond is done...
 }
 
 void
@@ -283,8 +270,8 @@ LilyPondProcessor::print()
     m_process = new QProcess;
     connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
                     &QProcess::finished,
-            this, &LilyPondProcessor::finished2);
-    m_process->setWorkingDirectory(m_dir);
+            this, &LilyPondProcessor::finishedPrinting);
+    m_process->setWorkingDirectory(m_workingDirectory);
     m_process->start(program, QStringList() << pdfName);
     // If the process does not start...
     if (!m_process->waitForStarted()) {
@@ -294,11 +281,10 @@ LilyPondProcessor::print()
         fail(t);
     }
 
-    // Barber pole mode.
     m_progress->setMaximum(100);
     m_progress->setValue(100);
 
-    // Once the printing is done, finished2() will be called...
+    // finishedPrinting() will take over when the printing is done...
 }
 
 void
@@ -339,17 +325,15 @@ LilyPondProcessor::preview()
     }
 
     // This one uses QProcess::startDetached().
-    QProcess::startDetached(program, QStringList() << pdfName, m_dir);
+    QProcess::startDetached(program, QStringList() << pdfName, m_workingDirectory);
 
     // Dismiss the dialog.
     accept();
 }
 
 void
-LilyPondProcessor::finished2(int /*exitCode*/, QProcess::ExitStatus)
+LilyPondProcessor::finishedPrinting(int /*exitCode*/, QProcess::ExitStatus)
 {
-    RG_DEBUG << "finished2()";
-
     delete m_process;
     m_process = nullptr;
 
