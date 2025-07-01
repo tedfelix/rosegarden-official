@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationView]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "NotationView.h"
 
@@ -1723,25 +1723,21 @@ NotationView::slotPreviewLilyPond()
 QString
 NotationView::getLilyPondTmpFilename()
 {
-    QString mask = QString("%1/rosegarden_tmp_XXXXXX.ly").arg(QDir::tempPath());
-    RG_DEBUG << "NotationView::getLilyPondTmpName() - using tmp file: " << qstrtostr(mask);
+    QTemporaryFile file(QDir::tempPath() + "/rosegarden_tmp_XXXXXX.ly");
 
-    QTemporaryFile *file = new QTemporaryFile(mask);
-    file->setAutoRemove(true);
-    if (!file->open()) {
-        QMessageBox::warning(this, tr("Rosegarden"),
-                                       tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
-                                          "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
-                                       arg(QDir::tempPath()));
-        delete file;
-        return QString();
+    // Must call open() to generate the guaranteed unique file name.
+    if (!file.open()) {
+        QMessageBox::warning(
+                this,
+                tr("Rosegarden"),
+                tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+                   "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
+                           arg(QDir::tempPath()));
+        return "";
     }
-    QString filename = file->fileName(); // must call this before close()
-    file->close(); // we just want the filename
 
-    return filename;
+    return file.fileName();
 }
-
 
 void
 NotationView::slotLinearMode()
