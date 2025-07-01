@@ -69,8 +69,8 @@ public:
     // Return a new linked segment that corresponds in timing and
     // pitch to this triggered segment as invoked by trigger.
     // Returns nullptr if it can't make a meaningful linked segment.
-    Segment *makeLinkedSegment(Event *trigger, Segment *containing);
-    Segment* makeExpansion(Event *trigger,
+    Segment *makeLinkedSegment(const Event *trigger, Segment *containing);
+    Segment* makeExpansion(const Event *trigger,
                            Segment *containing,
                            Instrument *instrument) const;
     bool ExpandInto(Segment *target,

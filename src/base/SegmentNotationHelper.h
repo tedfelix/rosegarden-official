@@ -149,7 +149,7 @@ public:
      * Returns true if the iterator points at a note in a chord
      * e.g. if there are more notes at the same absolute time
      */
-    bool noteIsInChord(Event *note);
+    bool noteIsInChord(const Event *note);
 
     /**
      * Returns an iterator pointing to the note that this one is tied
@@ -530,7 +530,7 @@ public:
      * original one if a collapse happened, segment.end() if no
      * collapse or event not found
      */
-    Segment::iterator collapseNoteAggressively(Event *, timeT rangeEnd);
+    Segment::iterator collapseNoteAggressively(const Event *, timeT rangeEnd);
 
 
 

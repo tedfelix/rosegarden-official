@@ -332,7 +332,7 @@ SegmentNotationHelper::findContiguousPrevious(Segment::iterator el)
 
 
 bool
-SegmentNotationHelper::noteIsInChord(Event *note)
+SegmentNotationHelper::noteIsInChord(const Event *note)
 {
     Segment::iterator i = segment().findSingle(note);
     timeT t = note->getNotationAbsoluteTime();
@@ -2088,7 +2088,7 @@ SegmentNotationHelper::mergeContiguousRests(timeT startTime,
 
 
 Segment::iterator
-SegmentNotationHelper::collapseNoteAggressively(Event *note,
+SegmentNotationHelper::collapseNoteAggressively(const Event *note,
                                                 timeT rangeEnd)
 {
     Segment::iterator i = segment().findSingle(note);

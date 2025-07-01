@@ -36,7 +36,7 @@ class AddTimeSignatureAndNormalizeCommand : public MacroCommand
 public:
     AddTimeSignatureAndNormalizeCommand(Composition *composition,
                                         timeT time,
-                                        TimeSignature timeSig);
+                                        const TimeSignature& timeSig);
     ~AddTimeSignatureAndNormalizeCommand() override;
 };
 

@@ -308,7 +308,7 @@ getVelocityDiff(const Event *trigger) const
 // @author Tom Breton (Tehom)
 Segment *
 TriggerSegmentRec::makeLinkedSegment
-(Event *trigger, Segment *containing)
+(const Event *trigger, Segment *containing)
 {
     LinearTimeScale
         timeScale(this, containing->findSingle(trigger), containing,
@@ -364,7 +364,7 @@ TriggerSegmentRec::makeLinkedSegment
 // expansions and a controller cache.
 // @author Tom Breton (Tehom)
 Segment*
-TriggerSegmentRec::makeExpansion(Event *trigger,
+TriggerSegmentRec::makeExpansion(const Event *trigger,
                                  Segment *containing,
                                  Instrument */*instrument*/) const
 {

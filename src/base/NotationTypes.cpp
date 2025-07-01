@@ -558,7 +558,8 @@ Key::Key(int tonicPitch, bool isMinor)
 
 
 Key::Key(const Key &kc) :
-    m_name(kc.m_name)
+    m_name(kc.m_name),
+    m_accidentalHeights(nullptr)
 {
 }
 

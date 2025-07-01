@@ -41,13 +41,13 @@ using namespace BaseProperties;
 
 NoteInsertionCommand::NoteInsertionCommand(Segment &segment, timeT time,
                                            timeT endTime, Note note, int pitch,
-                                           Accidental accidental,
+                                           const Accidental& accidental,
                                            AutoBeamMode autoBeam,
                                            AutoTieBarlinesMode autoTieBarlines,
                                            MatrixMode matrixType,
                                            GraceMode grace,
                                            float targetSubordering,
-                                           NoteStyleName noteStyle,
+                                           const NoteStyleName& noteStyle,
                                            int velocity) :
         BasicCommand(tr("Insert Note"), segment,
                      getModificationStartTime(segment, time),

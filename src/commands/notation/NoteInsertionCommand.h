@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -66,25 +65,25 @@ public:
                          timeT endTime,
                          Note note,
                          int pitch,
-                         Accidental accidental,
+                         const Accidental& accidental,
                          AutoBeamMode autoBeam,
                          MatrixMode matrixType,
                          GraceMode grace,
                          float targetSubordering,
-                         NoteStyleName noteStyle);
+                         const NoteStyleName& noteStyle);
     NoteInsertionCommand(Segment &segment,
-                             timeT time,
-                             timeT endTime,
-                             Note note,
-                             int pitch,
-                             Accidental accidental,
-                             AutoBeamMode autoBeam,
-                             AutoTieBarlinesMode autoTieBarlines,
-                             MatrixMode matrixType,
-                             GraceMode grace,
-                             float targetSubordering,
-                             NoteStyleName noteStyle,
-                             int velocity = 0); // Zero for rest inserter
+                         timeT time,
+                         timeT endTime,
+                         Note note,
+                         int pitch,
+                         const Accidental& accidental,
+                         AutoBeamMode autoBeam,
+                         AutoTieBarlinesMode autoTieBarlines,
+                         MatrixMode matrixType,
+                         GraceMode grace,
+                         float targetSubordering,
+                         const NoteStyleName& noteStyle,
+                         int velocity = 0); // Zero for rest inserter
     ~NoteInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;
@@ -93,7 +92,7 @@ public:
 protected:
     void modifySegment() override;
 
-    timeT getModificationStartTime(Segment &, timeT);
+    static timeT getModificationStartTime(Segment &, timeT);
 
     timeT m_insertionTime;
     Note m_note;
