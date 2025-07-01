@@ -20,6 +20,8 @@
 #include "PreferenceInt.h"
 #include "PreferenceString.h"
 
+#include "gui/configuration/GeneralConfigurationPage.h"
+
 #include <QSettings>
 
 
@@ -300,6 +302,36 @@ void Preferences::setMatrixConstrainNotes(bool value)
 bool Preferences::getMatrixConstrainNotes()
 {
     return matrixConstrainNotes.get();
+}
+
+static PreferenceInt pdfViewer(
+        ExternalApplicationsConfigGroup,
+        "pdfviewer",
+        GeneralConfigurationPage::xdgOpen);
+
+void Preferences::setPDFViewer(int value)
+{
+    pdfViewer.set(value);
+}
+
+int Preferences::getPDFViewer()
+{
+    return pdfViewer.get();
+}
+
+static PreferenceInt filePrinter(
+        ExternalApplicationsConfigGroup,
+        "fileprinter",
+        GeneralConfigurationPage::Lpr);
+
+void Preferences::setFilePrinter(int value)
+{
+    filePrinter.set(value);
+}
+
+int Preferences::getFilePrinter()
+{
+    return filePrinter.get();
 }
 
 

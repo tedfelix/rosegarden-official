@@ -351,7 +351,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     QString status(tr("Unknown"));
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    SequenceManager *mgr = doc->getSequenceManager();
+    const SequenceManager *mgr = doc->getSequenceManager();
     if (mgr) {
         int driverStatus = mgr->getSoundDriverStatus() & (AUDIO_OK | MIDI_OK);
         switch (driverStatus) {
@@ -503,6 +503,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_trackLabelWidth->setCurrentIndex(
         settings.value("track_label_width", 2).toInt());
+    settings.endGroup();
     connect(m_trackLabelWidth, static_cast<void(QComboBox::*)(int)>(
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
@@ -559,9 +560,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_pdfViewer->addItem(tr("MuPDF"));
     m_pdfViewer->addItem(tr("ePDFView"));
     m_pdfViewer->addItem(tr("xdg-open (recommended)"));
-    settings.endGroup();
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", xdgOpen).toUInt());
+    m_pdfViewer->setCurrentIndex(Preferences::getPDFViewer());
     connect(m_pdfViewer, static_cast<void(QComboBox::*)(int)>(
             &QComboBox::activated),
         this, &GeneralConfigurationPage::slotModified);
@@ -583,7 +582,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_filePrinter->addItem(tr("HPLIP (HP Printers)"));
     // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
     // to Lpr instead.
-    m_filePrinter->setCurrentIndex(settings.value("fileprinter", Lpr).toUInt());
+    m_filePrinter->setCurrentIndex(Preferences::getFilePrinter());
     connect(m_filePrinter, static_cast<void(QComboBox::*)(int)>(
             &QComboBox::activated),
         this, &GeneralConfigurationPage::slotModified);
@@ -711,12 +710,8 @@ void GeneralConfigurationPage::apply()
 
     // External Applications tab
 
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-
-    settings.setValue("pdfviewer", m_pdfViewer->currentIndex());
-    settings.setValue("fileprinter", m_filePrinter->currentIndex());
-
-    settings.endGroup();
+    Preferences::setPDFViewer(m_pdfViewer->currentIndex());
+    Preferences::setFilePrinter(m_filePrinter->currentIndex());
 
     // Restart Warnings
 

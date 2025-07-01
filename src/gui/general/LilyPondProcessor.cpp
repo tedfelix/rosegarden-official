@@ -24,6 +24,7 @@
 
 #include "gui/widgets/ProgressBar.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 #include "misc/Debug.h"
 
 #include <QProcess>
@@ -241,31 +242,16 @@ LilyPondProcessor::print()
     const QString pdfName = m_filename.replace(".ly", ".pdf");
     m_info->setText(tr("Printing %1...").arg(pdfName));
 
-    // retrieve user preferences from QSettings
-    QSettings settings;
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-    unsigned filePrinterIndex = settings.value("fileprinter", 0).toUInt();
+    unsigned filePrinterIndex = Preferences::getFilePrinter();
 
-    QString program;
+    QString program{"lpr"};
 
-    // ??? std::vector
-    switch (filePrinterIndex) {
-        case 0:
-            program = "gtklp";
-            break;
-        case 1:
-            program = "lp";
-            break;
-        case 2:
-            program = "lpr";
-            break;
-        case 3:
-            program = "hp-print";
-            break;
-        default:
-            program = "lpr";
-            break;
-    }
+    // Must match combo box in settings.
+    // ??? Move to GeneralConfigurationPage near the FilePrinter enum.
+    static const std::vector<QString> printingApps =
+            { "gtklp", "lp", "lpr", "hp-print" };
+    if (filePrinterIndex < printingApps.size())
+        program = printingApps[filePrinterIndex];
 
     m_process = new QProcess;
     connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
@@ -293,36 +279,16 @@ LilyPondProcessor::preview()
     const QString pdfName = m_filename.replace(".ly", ".pdf");
     m_info->setText(tr("Previewing %1...").arg(pdfName));
 
-    // retrieve user preferences from QSettings
-    QSettings settings;
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-    unsigned pdfViewerIndex = settings.value("pdfviewer", 0).toUInt();
+    unsigned pdfViewerIndex = Preferences::getPDFViewer();
 
-    QString program;
+    QString program{"xdg-open"};
 
-    // ??? std::vector
-    switch (pdfViewerIndex) {
-        case 0:
-            program = "okular";
-            break;
-        case 1:
-            program = "evince";
-            break;
-        case 2:
-            program = "acroread";
-            break;
-        case 3:
-            program = "mupdf";
-            break;
-        case 4:
-            program = "epdfview";
-            break;
-        case 5:
-            program = "xdg-open";
-            break;
-        default:
-            program = "xdg-open";
-    }
+    // Must match combo box in settings.
+    // ??? Move to GeneralConfigurationPage near the PdfViewer enum.
+    static const std::vector<QString> previewApps =
+            {"okular", "evince", "acroread", "mupdf", "epdfview", "xdg-open" };
+    if (pdfViewerIndex < previewApps.size())
+        program = previewApps[pdfViewerIndex];
 
     // This one uses QProcess::startDetached().
     QProcess::startDetached(program, QStringList() << pdfName, m_workingDirectory);

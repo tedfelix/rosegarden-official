@@ -50,7 +50,7 @@ namespace Preferences
     ROSEGARDENPRIVATE_EXPORT int getTheme();
     ROSEGARDENPRIVATE_EXPORT bool getThorn();
 
-    void setMIDIPitchOctave(int value);
+    void setMIDIPitchOctave(int octave);
     int getMIDIPitchOctave();
 
     void setSendProgramChangesWhenLooping(bool value);
@@ -95,6 +95,15 @@ namespace Preferences
 
     void setShowNoteNames(bool value);
     bool getShowNoteNames();
+
+
+    // Combo Box index for PDF Viewer.
+    void setPDFViewer(int value);
+    int getPDFViewer();
+
+    // Combo Box index for File Printer.
+    void setFilePrinter(int value);
+    int getFilePrinter();
 
 
     // Experimental
