@@ -42,7 +42,7 @@ namespace Rosegarden
 
 
 LilyPondProcessor::LilyPondProcessor(
-        QWidget *parent, int mode, const QString &filename) :
+        QWidget *parent, Mode mode, const QString &filename) :
     QDialog(parent),
     m_mode(mode)
 {
@@ -71,8 +71,12 @@ LilyPondProcessor::LilyPondProcessor(
 
     QString modeStr;
     switch (mode) {
-        case LilyPondProcessor::Preview: modeStr = tr("Preview"); break;
-        case LilyPondProcessor::Print:   modeStr = tr("Print");   break;
+        case Mode::Preview:
+            modeStr = tr("Preview");
+            break;
+        case Mode::Print:
+            modeStr = tr("Print");
+            break;
     }
     setWindowTitle(tr("Rosegarden - %1 with LilyPond...").arg(modeStr));
 
@@ -191,11 +195,8 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
 {
     RG_DEBUG << "runFinalStage()";
 
-    if (exitCode == 0) {
-        m_info->setText(tr("<b>lilypond</b> finished..."));
-        delete m_process;
-    } else {
-
+    // If LilyPond failed...
+    if (exitCode != 0) {
         // read preferences from last export from QSettings to offer clues what
         // failed
         QSettings settings;
@@ -230,87 +231,122 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         return;
     }
 
-    QString pdfName = m_filename.replace(".ly", ".pdf");
+    // All's well.  LilyPond exited normally.
+
+    m_info->setText(tr("<b>lilypond</b> finished..."));
+
+    delete m_process;
+    m_process = nullptr;
+
+    if (m_mode == Mode::Print) {
+        print();
+    } else {
+        // just default to preview (I always use preview anyway, as I never
+        // trust the results for a direct print without previewing them first,
+        // and in fact the direct print option seems somewhat dubious to me)
+        preview();
+    }
+}
+
+void
+LilyPondProcessor::print()
+{
+    const QString pdfName = m_filename.replace(".ly", ".pdf");
+    m_info->setText(tr("Printing %1...").arg(pdfName));
 
     // retrieve user preferences from QSettings
     QSettings settings;
     settings.beginGroup(ExternalApplicationsConfigGroup);
-    int pdfViewerIndex = settings.value("pdfviewer", 0).toUInt();
-    int filePrinterIndex = settings.value("fileprinter", 0).toUInt();
-    settings.endGroup();
+    unsigned filePrinterIndex = settings.value("fileprinter", 0).toUInt();
 
-    QString pdfViewer, filePrinter;
+    QString program;
 
-    // assumes the PDF viewer is available in the PATH; no provision is made for
-    // the user to specify the location of any of these explicitly, and I'd like
-    // to avoid having to go to that length if at all possible, in order to
-    // reduce complexity both in code and on the user side of the configuration
-    // page (I guess arguably the configuration page shouldn't exist, and we
-    // should just try things sequentially until something works, but it gets
-    // into real headaches trying to guess what someone would prefer based on
-    // what desktop they're running, and anyway specifying explicitly avoids the
-    // reason why my copy of acroread is normally chmod -x so the script
-    // ancestor of this class wouldn't pick it up against my wishes)
-    switch (pdfViewerIndex) {
-        case 0: pdfViewer = "okular";   break;
-        case 1: pdfViewer = "evince";   break;
-        case 2: pdfViewer = "acroread"; break;
-        case 3: pdfViewer = "mupdf";    break;
-        case 4: pdfViewer = "epdfview"; break;
-        case 5: pdfViewer = "xdg-open"; break;
-        default: pdfViewer = "xdg-open";
-    }
-
+    // ??? std::vector
     switch (filePrinterIndex) {
-        case 0: filePrinter = "gtklp";    break;
-        case 1: filePrinter = "lp";      break;
-        case 2: filePrinter = "lpr";       break;
-        case 3: filePrinter = "hp-print"; break;
-        default: filePrinter = "lpr";     break;
+        case 0:
+            program = "gtklp";
+            break;
+        case 1:
+            program = "lp";
+            break;
+        case 2:
+            program = "lpr";
+            break;
+        case 3:
+            program = "hp-print";
+            break;
+        default:
+            program = "lpr";
+            break;
     }
-
-    // So why didn't I just manipulate finalProcessor in the first place?
-    // Because I just thought of that, but don't feel like refactoring all of
-    // this yet again.  Oh well.
-    QString finalProcessor;
 
     m_process = new QProcess;
     connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
                     &QProcess::finished,
             this, &LilyPondProcessor::finished2);
-
-    switch (m_mode) {
-        case LilyPondProcessor::Print:
-            m_info->setText(tr("Printing %1...").arg(pdfName));
-            finalProcessor = filePrinter;
-            break;
-
-        // just default to preview (I always use preview anyway, as I never
-        // trust the results for a direct print without previewing them first,
-        // and in fact the direct print option seems somewhat dubious to me)
-        case LilyPondProcessor::Preview:
-        default:
-            m_info->setText(tr("Previewing %1...").arg(pdfName));
-            finalProcessor = pdfViewer;
-    }
-
     m_process->setWorkingDirectory(m_dir);
-    m_process->start(finalProcessor, QStringList() << pdfName);
-    if (m_process->waitForStarted()) {
-        //QString t = QString(tr("<b>%1</b> started...").arg(finalProcessor));
-    } else {
-        QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Edit -> Preferences -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).arg(finalProcessor).arg(
-                (m_mode == LilyPondProcessor::Print ? tr("file printer") : tr("PDF viewer")));
+    m_process->start(program, QStringList() << pdfName);
+    // If the process does not start...
+    if (!m_process->waitForStarted()) {
+        QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Edit -> Preferences -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).
+                arg(program).
+                arg(tr("file printer"));
         puke(t);
     }
 
+    // Barber pole mode.
     m_progress->setMaximum(100);
     m_progress->setValue(100);
 
-    // Once the viewing/printing is done, finished2() will be called...
+    // Once the printing is done, finished2() will be called...
 }
 
-void LilyPondProcessor::finished2(int /*exitCode*/, QProcess::ExitStatus)
+void
+LilyPondProcessor::preview()
+{
+    const QString pdfName = m_filename.replace(".ly", ".pdf");
+    m_info->setText(tr("Previewing %1...").arg(pdfName));
+
+    // retrieve user preferences from QSettings
+    QSettings settings;
+    settings.beginGroup(ExternalApplicationsConfigGroup);
+    unsigned pdfViewerIndex = settings.value("pdfviewer", 0).toUInt();
+
+    QString program;
+
+    // ??? std::vector
+    switch (pdfViewerIndex) {
+        case 0:
+            program = "okular";
+            break;
+        case 1:
+            program = "evince";
+            break;
+        case 2:
+            program = "acroread";
+            break;
+        case 3:
+            program = "mupdf";
+            break;
+        case 4:
+            program = "epdfview";
+            break;
+        case 5:
+            program = "xdg-open";
+            break;
+        default:
+            program = "xdg-open";
+    }
+
+    // This one uses QProcess::startDetached().
+    QProcess::startDetached(program, QStringList() << pdfName, m_dir);
+
+    // Dismiss the dialog.
+    accept();
+}
+
+void
+LilyPondProcessor::finished2(int /*exitCode*/, QProcess::ExitStatus)
 {
     RG_DEBUG << "finished2()";
 

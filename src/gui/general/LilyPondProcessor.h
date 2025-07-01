@@ -68,21 +68,26 @@ public:
      * using QProcess::setWorkingDirectory() instead.  (This is pretty ugly, but
      * I'm stumped coming up with a cleaner solution, so damn the torpedoes.)
      */
-    static const int Preview   = 1;
-    static const int Print     = 2;
+    //static const int Preview   = 1;
+    //static const int Print     = 2;
+    enum class Mode { Preview, Print };
 
     LilyPondProcessor(QWidget *parent,
-                      int mode,
+                      Mode mode,
                       const QString &filename);
     ~LilyPondProcessor() override { };
 
 private:
-    int           m_mode;
+
+    Mode m_mode;
     QString       m_filename;
     QString       m_dir;
     ProgressBar  *m_progress;
     QLabel       *m_info;
     QProcess     *m_process;
+
+    void print();
+    void preview();
 
 private slots:
     /**
@@ -107,6 +112,9 @@ private slots:
     void runFinalStage(int exitCode, QProcess::ExitStatus);
 
     /// Clean up when everything is done.
+    /**
+     * ??? Rename: finishedPrinting()
+     */
     void finished2(int exitCode, QProcess::ExitStatus);
 };
 

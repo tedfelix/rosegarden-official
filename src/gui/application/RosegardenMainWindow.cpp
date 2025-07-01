@@ -5410,7 +5410,7 @@ RosegardenMainWindow::slotPrintLilyPond()
     }
 
     LilyPondProcessor *dialog = new LilyPondProcessor(
-            this, LilyPondProcessor::Print, filename);
+            this, LilyPondProcessor::Mode::Print, filename);
     dialog->exec();
 }
 
@@ -5427,7 +5427,7 @@ RosegardenMainWindow::slotPreviewLilyPond()
     }
 
     LilyPondProcessor *dialog = new LilyPondProcessor(
-            this, LilyPondProcessor::Preview, filename);
+            this, LilyPondProcessor::Mode::Preview, filename);
     dialog->exec();
 }
 

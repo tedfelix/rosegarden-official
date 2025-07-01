@@ -1697,7 +1697,8 @@ NotationView::slotPrintLilyPond()
         return ;
     }
 
-    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Print, filename);
+    LilyPondProcessor *dialog = new LilyPondProcessor(
+            this, LilyPondProcessor::Mode::Print, filename);
 
     dialog->exec();
 }
@@ -1715,7 +1716,8 @@ NotationView::slotPreviewLilyPond()
         return ;
     }
 
-    LilyPondProcessor *dialog = new LilyPondProcessor(this, LilyPondProcessor::Preview, filename);
+    LilyPondProcessor *dialog = new LilyPondProcessor(
+            this, LilyPondProcessor::Mode::Preview, filename);
 
     dialog->exec();
 }
