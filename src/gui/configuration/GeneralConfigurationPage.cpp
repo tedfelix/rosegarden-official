@@ -43,6 +43,36 @@ namespace Rosegarden
 {
 
 
+// Has to be a member so we can use tr().
+const GeneralConfigurationPage::PDFViewers
+    GeneralConfigurationPage::pdfViewers = {
+        { tr("Okular (KDE)"), "okular" },
+        { tr("Evince (GNOME)"), "evince" },
+        { tr("Adobe Acrobat Reader (non-free)"), "acroread" },
+        { tr("MuPDF"), "mupdf" },
+        { tr("ePDFView"), "epdfview" },
+        { tr("xdg-open (recommended)"), "xdg-open"}
+    };
+
+int GeneralConfigurationPage::getDefaultPDFViewer()
+{
+    return 5;  // xdg-open
+}
+
+// Has to be a member so we can use tr().
+const GeneralConfigurationPage::FilePrinters
+    GeneralConfigurationPage::filePrinters = {
+        { tr("Gtk-LP (GNOME)"), "gtklp" },
+        { tr("lp (no GUI)"), "lp" },
+        { tr("lpr (no GUI)"), "lpr" },
+        { tr("HPLIP (HP Printers)"), "hp-print" }
+    };
+
+int GeneralConfigurationPage::getDefaultFilePrinter()
+{
+    return 2;  // lpr
+}
+
 GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     TabbedConfigurationPage(parent)
 {
@@ -554,12 +584,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_pdfViewer = new QComboBox(frame);
     m_pdfViewer->setToolTip(tipText);
-    m_pdfViewer->addItem(tr("Okular (KDE)"));
-    m_pdfViewer->addItem(tr("Evince (GNOME)"));
-    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
-    m_pdfViewer->addItem(tr("MuPDF"));
-    m_pdfViewer->addItem(tr("ePDFView"));
-    m_pdfViewer->addItem(tr("xdg-open (recommended)"));
+    for (const PDFViewerInfo &info : pdfViewers) {
+        m_pdfViewer->addItem(info.name);
+    }
     m_pdfViewer->setCurrentIndex(Preferences::getPDFViewer());
     connect(m_pdfViewer, static_cast<void(QComboBox::*)(int)>(
             &QComboBox::activated),
@@ -576,12 +603,9 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_filePrinter = new QComboBox(frame);
     m_filePrinter->setToolTip(tipText);
-    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
-    m_filePrinter->addItem(tr("lp (no GUI)"));
-    m_filePrinter->addItem(tr("lpr (no GUI)"));
-    m_filePrinter->addItem(tr("HPLIP (HP Printers)"));
-    // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
-    // to Lpr instead.
+    for (const FilePrinterInfo &info : filePrinters) {
+        m_filePrinter->addItem(info.name);
+    }
     m_filePrinter->setCurrentIndex(Preferences::getFilePrinter());
     connect(m_filePrinter, static_cast<void(QComboBox::*)(int)>(
             &QComboBox::activated),

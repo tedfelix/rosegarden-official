@@ -57,23 +57,23 @@ public:
         Local
     };
 
-    enum PdfViewer
-    {
-        Okular,
-        Evince,
-        Acroread,
-        MuPDF,
-        ePDFView,
-        xdgOpen
+    // PDF Viewers
+    struct PDFViewerInfo {
+        QString name;
+        QString command;
     };
+    typedef std::vector<PDFViewerInfo> PDFViewers;
+    static const PDFViewers pdfViewers;
+    static int getDefaultPDFViewer();
 
-    enum FilePrinter
-    {
-        GtkLP,
-        Lp,
-        Lpr,
-        HPLIP
+    // File Printers
+    struct FilePrinterInfo {
+        QString name;
+        QString command;
     };
+    typedef std::vector<FilePrinterInfo> FilePrinters;
+    static const FilePrinters filePrinters;
+    static int getDefaultFilePrinter();
 
     enum MetronomeDuring
     {

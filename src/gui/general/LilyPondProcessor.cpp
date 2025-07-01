@@ -22,6 +22,7 @@
 
 #include "IconLoader.h"
 
+#include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/widgets/ProgressBar.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Preferences.h"
@@ -244,14 +245,11 @@ LilyPondProcessor::print()
 
     unsigned filePrinterIndex = Preferences::getFilePrinter();
 
-    QString program{"lpr"};
+    QString program{GeneralConfigurationPage::filePrinters[
+            GeneralConfigurationPage::getDefaultFilePrinter()].command};
 
-    // Must match combo box in settings.
-    // ??? Move to GeneralConfigurationPage near the FilePrinter enum.
-    static const std::vector<QString> printingApps =
-            { "gtklp", "lp", "lpr", "hp-print" };
-    if (filePrinterIndex < printingApps.size())
-        program = printingApps[filePrinterIndex];
+    if (filePrinterIndex < GeneralConfigurationPage::filePrinters.size())
+        program = GeneralConfigurationPage::filePrinters[filePrinterIndex].command;
 
     m_process = new QProcess;
     connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
@@ -281,14 +279,11 @@ LilyPondProcessor::preview()
 
     unsigned pdfViewerIndex = Preferences::getPDFViewer();
 
-    QString program{"xdg-open"};
+    QString program{GeneralConfigurationPage::pdfViewers[
+            GeneralConfigurationPage::getDefaultPDFViewer()].command};
 
-    // Must match combo box in settings.
-    // ??? Move to GeneralConfigurationPage near the PdfViewer enum.
-    static const std::vector<QString> previewApps =
-            {"okular", "evince", "acroread", "mupdf", "epdfview", "xdg-open" };
-    if (pdfViewerIndex < previewApps.size())
-        program = previewApps[pdfViewerIndex];
+    if (pdfViewerIndex < GeneralConfigurationPage::pdfViewers.size())
+        program = GeneralConfigurationPage::pdfViewers[pdfViewerIndex].command;
 
     // This one uses QProcess::startDetached().
     QProcess::startDetached(program, QStringList() << pdfName, m_workingDirectory);

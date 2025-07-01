@@ -307,7 +307,7 @@ bool Preferences::getMatrixConstrainNotes()
 static PreferenceInt pdfViewer(
         ExternalApplicationsConfigGroup,
         "pdfviewer",
-        GeneralConfigurationPage::xdgOpen);
+        GeneralConfigurationPage::getDefaultPDFViewer());
 
 void Preferences::setPDFViewer(int value)
 {
@@ -322,7 +322,7 @@ int Preferences::getPDFViewer()
 static PreferenceInt filePrinter(
         ExternalApplicationsConfigGroup,
         "fileprinter",
-        GeneralConfigurationPage::Lpr);
+        GeneralConfigurationPage::getDefaultFilePrinter());
 
 void Preferences::setFilePrinter(int value)
 {
