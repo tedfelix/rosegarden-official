@@ -1725,6 +1725,9 @@ NotationView::slotPreviewLilyPond()
 QString
 NotationView::getLilyPondTmpFilename()
 {
+    // ??? Can we combine with RosegardenMainView::getLilyPondTmpFilename()?
+    //     Maybe move them both to LilyPondProcess?
+
     QTemporaryFile file(QDir::tempPath() + "/rosegarden_tmp_XXXXXX.ly");
 
     // Must call open() to generate the guaranteed unique file name.

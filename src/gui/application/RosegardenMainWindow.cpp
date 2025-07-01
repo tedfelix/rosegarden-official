@@ -5434,21 +5434,23 @@ RosegardenMainWindow::slotPreviewLilyPond()
 QString
 RosegardenMainWindow::getLilyPondTmpFilename()
 {
-    QString mask = QString("%1/rosegarden_tmp_XXXXXX.ly").arg(QDir::tempPath());
-    RG_WARNING << "getLilyPondTmpName() - using tmp file: " << qstrtostr(mask);
+    // ??? Can we combine with NotationView::getLilyPondTmpFilename()?  Maybe
+    //     move them both to LilyPondProcess?
 
-    std::unique_ptr<QTemporaryFile> file{new QTemporaryFile(mask)};
-    file->setAutoRemove(true);
-    if (!file->open()) {
-        QMessageBox::warning(this, tr("Rosegarden"), tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
-                                          "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
-                                       arg(QDir::tempPath()));
-        return QString();
+    QTemporaryFile file(QDir::tempPath() + "/rosegarden_tmp_XXXXXX.ly");
+
+    // Must call open() to generate the guaranteed unique file name.
+    if (!file.open()) {
+        QMessageBox::warning(
+                this,
+                tr("Rosegarden"),
+                tr("<qt><p>Failed to open a temporary file for LilyPond export.</p>"
+                   "<p>This probably means you have run out of disk space on <pre>%1</pre></p></qt>").
+                           arg(QDir::tempPath()));
+        return "";
     }
-    QString filename = file->fileName(); // must call this before close()
-    file->close(); // we just want the filename
 
-    return filename;
+    return file.fileName();
 }
 
 bool

@@ -105,7 +105,7 @@ LilyPondProcessor::LilyPondProcessor(
 }
 
 void
-LilyPondProcessor::puke(const QString& error, const QString &details)
+LilyPondProcessor::fail(const QString& error, const QString &details)
 {
     delete m_process;
     m_process = nullptr;
@@ -121,7 +121,7 @@ LilyPondProcessor::puke(const QString& error, const QString &details)
     messageBox.setDetailedText(details);
     messageBox.exec();
 
-    // abort processing after a fatal error, so calls to puke() abort the whole
+    // abort processing after a fatal error, so calls to fail() abort the whole
     // process in its tracks
     reject();
 
@@ -146,7 +146,7 @@ LilyPondProcessor::runConvertLy()
     if (m_process->waitForStarted()) {
         m_info->setText(tr("<b>convert-ly</b> started..."));
     } else {
-        puke(tr("<qt><p>Could not run <b>convert-ly</b>!</p><p>Please install LilyPond and ensure that the \"convert-ly\" and \"lilypond\" commands are available on your path.  If you perform a <b>Run Command</b> (typically <b>Alt+F2</b>) and type \"convert-ly\" into the box, you should not get a \"command not found\" error.  If you can do that without getting an error, but still see this error message, please consult <a style=\"color:gold\" href=\"mailto:rosegarden-user@lists.sourceforge.net\">rosegarden-user@lists.sourceforge.net</a> for additional help.</p><p>Processing terminated due to fatal errors.</p></qt>"));
+        fail(tr("<qt><p>Could not run <b>convert-ly</b>!</p><p>Please install LilyPond and ensure that the \"convert-ly\" and \"lilypond\" commands are available on your path.  If you perform a <b>Run Command</b> (typically <b>Alt+F2</b>) and type \"convert-ly\" into the box, you should not get a \"command not found\" error.  If you can do that without getting an error, but still see this error message, please consult <a style=\"color:gold\" href=\"mailto:rosegarden-user@lists.sourceforge.net\">rosegarden-user@lists.sourceforge.net</a> for additional help.</p><p>Processing terminated due to fatal errors.</p></qt>"));
     }
 
     m_progress->setValue(25);
@@ -161,7 +161,7 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
         m_info->setText(tr("<b>convert-ly</b> finished..."));
         delete m_process;
     } else {
-        puke(tr("<qt><p>Ran <b>convert-ly</b> successfully, but it terminated with errors.</p><p>Processing terminated due to fatal errors.</p></qt>"));
+        fail(tr("<qt><p>Ran <b>convert-ly</b> successfully, but it terminated with errors.</p><p>Processing terminated due to fatal errors.</p></qt>"));
     }
 
     m_progress->setValue(50);
@@ -178,7 +178,7 @@ LilyPondProcessor::runLilyPond(int exitCode, QProcess::ExitStatus)
     if (m_process->waitForStarted()) {
         m_info->setText(tr("<b>lilypond</b> started..."));
     } else {
-        puke(tr("<qt><p>Could not run <b>lilypond</b>!</p><p>Please install LilyPond and ensure that the \"convert-ly\" and \"lilypond\" commands are available on your path.  If you perform a <b>Run Command</b> (typically <b>Alt+F2</b>) and type \"lilypond\" into the box, you should not get a \"command not found\" error.  If you can do that without getting an error, but still see this error message, please consult <a style=\"color:gold\" href=\"mailto:rosegarden-user@lists.sourceforge.net\">rosegarden-user@lists.sourceforge.net</a> for additional help.</p><p>Processing terminated due to fatal errors.</p></qt>"));
+        fail(tr("<qt><p>Could not run <b>lilypond</b>!</p><p>Please install LilyPond and ensure that the \"convert-ly\" and \"lilypond\" commands are available on your path.  If you perform a <b>Run Command</b> (typically <b>Alt+F2</b>) and type \"lilypond\" into the box, you should not get a \"command not found\" error.  If you can do that without getting an error, but still see this error message, please consult <a style=\"color:gold\" href=\"mailto:rosegarden-user@lists.sourceforge.net\">rosegarden-user@lists.sourceforge.net</a> for additional help.</p><p>Processing terminated due to fatal errors.</p></qt>"));
     }
 
     // go into Knight Rider mode when chewing on LilyPond, because it can take
@@ -208,25 +208,25 @@ LilyPondProcessor::runFinalStage(int exitCode, QProcess::ExitStatus)
         RG_DEBUG << "  finalStage: exportedBeams == " << (exportedBeams ? "true" : "false");
         RG_DEBUG << " exportedBrackets == " << (exportedBrackets ? "true" : "false");
 
-        QString vomitus = "<html>";
-        vomitus += tr("<p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p>");
+        QString message = "<html>";
+        message += tr("<p>Ran <b>lilypond</b> successfully, but it terminated with errors.</p>");
 
         if (exportedBeams) {
-            vomitus += tr("<p>You opted to export Rosegarden's beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden's) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosegarden.  Leaving the beaming up to LilyPond is probaby the best solution.</p>");
+            message += tr("<p>You opted to export Rosegarden's beaming, and LilyPond could not process the file.  It is likely that you performed certain actions in the course of editing your file that resulted in hidden beaming properties being attached to events where they did not belong, and this probably caused LilyPond to fail.  The recommended solution is to either leave beaming to LilyPond (whose automatic beaming is far better than Rosegarden's) and un-check this option, or to un-beam everything and then re-beam it all manually inside Rosegarden.  Leaving the beaming up to LilyPond is probaby the best solution.</p>");
         }
 
         if (exportedBrackets) {
-            vomitus += tr("<p>You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you've selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.</p>");
+            message += tr("<p>You opted to export staff group brackets, and LilyPond could not process the file.  Unfortunately, this useful feature can be very fragile.  Please go back and ensure that all the brackets you've selected make logical sense, paying particular attention to nesting.  Also, please check that if you are working with a subset of the total number of tracks, the brackets on that subset make sense together when taken out of the context of the whole.  If you have any doubts, please try turning off the export of staff group brackets to see whether LilyPond can then successfully render the result.</p>");
         }
 
-        vomitus += tr("<p>Processing terminated due to fatal errors.</p>");
+        message += tr("<p>Processing terminated due to fatal errors.</p>");
 
-        vomitus += "</html>";
+        message += "</html>";
 
         QTextCodec *codec = QTextCodec::codecForLocale();
-        puke(vomitus, codec->toUnicode(m_process->readAllStandardError()));
+        fail(message, codec->toUnicode(m_process->readAllStandardError()));
 
-        // puke doesn't actually work, so we have to return in order to avoid
+        // fail() doesn't actually work, so we have to return in order to avoid
         // further processing
         return;
     }
@@ -291,7 +291,7 @@ LilyPondProcessor::print()
         QString t = QString(tr("<qt><p>LilyPond processed the file successfully, but <b>%1</b> did not run!</p><p>Please configure a valid %2 under <b>Edit -> Preferences -> General -> External Applications</b> and try again.</p><p>Processing terminated due to fatal errors.</p></qt>")).
                 arg(program).
                 arg(tr("file printer"));
-        puke(t);
+        fail(t);
     }
 
     // Barber pole mode.

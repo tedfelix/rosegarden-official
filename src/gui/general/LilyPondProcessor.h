@@ -28,36 +28,21 @@
 namespace Rosegarden
 {
 
-/** Implement functionality equivalent to the old external
- *  rosegarden-lilypondview script.  The script used the external dcop and
- *  kdialog command line utlities to provide a user interface.  We'll do the
- *  user interface in real code, though we still have to use external helper
- *  applications to print, display a PDF, and of course it's all for naught
- *  without LilyPond itself being available.
- *
- *  I suppose we'll make the Conftest target just handle the "install some
- *  stuff" warnings inside itself, and I'll eliminate the redudant warnings
- *  elsewhere when I run across them.  We won't need a non-graphical mode for
- *  this, since it will always be running out of the GUI.  Other side benefits,
- *  this means it runs with the same stylesheet as the rest of Rosegarden super
- *  cheap.
- *
- *  \author D. Michael McIntyre
- */
 
+/// The small pop-up that appears when previewing or printing in notation.
+/**
+ * This dialog handles running LilyPond to generate a pdf of the score and then
+ * either a pdf viewer or a printing command like lpr on the generated pdf file.
+ */
 class LilyPondProcessor : public QDialog
 {
     Q_OBJECT
 
 public:
-    /** The old command line arguments are replaced with an int passed into the
-     * ctor, using the following named constants to replace them, and avoid a
-     * bunch of string parsing nonsense.  We no longer need a startup ConfTest
-     * target.  We'll do the conftest every time we run instead, and only
-     * complain if there is a problem.  We no longer need a version target,
-     * since the version is tied to Rosegarden itself.  That means we really
-     * only need a PDF preview mode and a direct print mode.
-     *
+
+    enum class Mode { Preview, Print };
+
+    /**
      * The filename parameter should be a temporary file set elsewhere and
      * passed in.  Unfortunately, there was a bit of a snag with that.  The
      * QProcess bits choke when start() is called with a filename that has an
@@ -68,14 +53,9 @@ public:
      * using QProcess::setWorkingDirectory() instead.  (This is pretty ugly, but
      * I'm stumped coming up with a cleaner solution, so damn the torpedoes.)
      */
-    //static const int Preview   = 1;
-    //static const int Print     = 2;
-    enum class Mode { Preview, Print };
-
     LilyPondProcessor(QWidget *parent,
                       Mode mode,
                       const QString &filename);
-    ~LilyPondProcessor() override { };
 
 private:
 
@@ -93,7 +73,7 @@ private slots:
     /**
      * Display an explanatory failure message and terminate processing
      */
-    void puke(const QString &error, const QString &details = QString());
+    void fail(const QString &error, const QString &details = QString());
 
     /**
      * Try to run convert-ly and call runLilyPond() if successful
