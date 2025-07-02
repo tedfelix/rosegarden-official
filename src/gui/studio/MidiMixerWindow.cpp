@@ -344,46 +344,14 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 
     m_document->setModified();
 
-    // Have an external controller port?  Send it there as well.
+    // Check whether we need to send the update out the external controller port.
+    // ??? Would also be nice to check if anything is actually connected.
     if (ExternalController::self().isNative()  &&
-        instrument->hasFixedChannel())
-    {
-        int currentTabIndex = m_tabWidget->currentIndex();
-        if (currentTabIndex < 0)
-            currentTabIndex = 0;
-
-        int loopTabIndex = 0;
-
-        const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
-
-        // For each MidiDevice...
-        // ??? We should keep a table of tab index to MidiDevice *.
-        //     Then all this becomes a one-liner.  At the very least
-        //     factor this out into a routine to get started.  This
-        //     is done 3 or more times in this code.  Find MidiDevice
-        //     for the current tab.
-        for (const MidiDevice *midiDevice : devices) {
-            RG_DEBUG << "slotFaderLevelChanged: i = " << loopTabIndex << ", tabIndex " << currentTabIndex;
-            if (loopTabIndex != currentTabIndex) {
-                ++loopTabIndex;
-                continue;
-            }
-
-            RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << midiDevice->getId();
-
-            // ??? Isn't this redundant?  We've already found the one
-            //     the tab is referencing.  This should always be true.
-            if (instrument->getDevice()->getId() == midiDevice->getId()) {
-                RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
-
-                ExternalController::send(
-                        instrument->getNaturalMidiChannel(),
-                        MIDI_CONTROLLER_VOLUME,
-                        MidiByte(value));
-            }
-
-            break;
-        }
+        instrument->hasFixedChannel()) {
+        ExternalController::send(
+                instrument->getNaturalMidiChannel(),
+                MIDI_CONTROLLER_VOLUME,
+                MidiByte(value));
     }
 }
 
@@ -408,40 +376,10 @@ MidiMixerWindow::slotControllerChanged(float value)
     // ??? Would also be nice to check if anything is actually connected.
     if (ExternalController::self().isNative()  &&
         instrument->hasFixedChannel()) {
-
-        // Send out the external controller port as well.
-
-        int currentTabIndex = m_tabWidget->currentIndex();
-        if (currentTabIndex < 0)
-            currentTabIndex = 0;
-        int tabIndex = 0;
-
-        const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
-
-        // For each MidiDevice in the Studio...
-        for (const MidiDevice *midiDevice : devices) {
-            RG_DEBUG << "slotControllerChanged(): tabIndex = " << tabIndex << ", currentTabIndex " << currentTabIndex;
-
-            // Not the current tab?  Try the next.
-            if (tabIndex != currentTabIndex) {
-                ++tabIndex;
-                continue;
-            }
-
-            RG_DEBUG << "slotControllerChanged(): device id = " << instrument->getDevice()->getId() << ", visible device id " << midiDevice->getId();
-
-            // If this MidiDevice is the Instrument's...
-            if (midiDevice->getId() == instrument->getDevice()->getId()) {
-                RG_DEBUG << "slotControllerChanged(): sending external controller mapped event for channel " << instrument->getNaturalMidiChannel();
-                // send out to external controller port as well.
-                ExternalController::send(
-                        instrument->getNaturalMidiChannel(),
-                        controllerNumber,
-                        MidiByte(value));
-
-                break;
-            }
-        }
+        ExternalController::send(
+                instrument->getNaturalMidiChannel(),
+                controllerNumber,
+                MidiByte(value));
     }
 }
 
