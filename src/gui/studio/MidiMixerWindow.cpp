@@ -57,6 +57,10 @@ namespace Rosegarden
 {
 
 
+// ??? Use QObject properties to eliminate loops in MMW.
+
+// ??? Use QObject properties to eliminate loops in AMW2.
+
 namespace
 {
 
@@ -239,13 +243,10 @@ MidiMixerWindow::setupTabs()
                  controllerIndex < controls.size();
                  ++controllerIndex) {
 
-                // ??? Is this really the right way to detect a controller that
-                //     is centered?  And how does this actually affect Rotary?
-                //     There are no comments on Rotary's ctor.
                 const bool centred =
                         (controls[controllerIndex].getDefault() == 64);
 
-                Rotary *controller = new Rotary(
+                Rotary *rotary = new Rotary(
                         tabFrame,  // parent
                         controls[controllerIndex].getMin(),  // minimum
                         controls[controllerIndex].getMax(),  // maximum
@@ -264,18 +265,22 @@ MidiMixerWindow::setupTabs()
                             getGeneralColourMap().getColour(
                                     controls[controllerIndex].getColourIndex());
                 }
-                controller->setKnobColour(knobColour);
+                rotary->setKnobColour(knobColour);
 
-                connect(controller, &Rotary::valueChanged,
+                rotary->setProperty("instrumentId", instrument->getId());
+                rotary->setProperty("controllerNumber",
+                        controls[controllerIndex].getControllerNumber());
+
+                connect(rotary, &Rotary::valueChanged,
                         this, &MidiMixerWindow::slotControllerChanged);
 
                 gridLayout->addWidget(
-                        controller, controllerIndex, col, Qt::AlignCenter);
+                        rotary, controllerIndex, col, Qt::AlignCenter);
 
                 MidiStrip::RotaryInfo rotaryInfo;
                 rotaryInfo.controllerNumber =
                         controls[controllerIndex].getControllerNumber();
-                rotaryInfo.rotary = controller;
+                rotaryInfo.rotary = rotary;
                 midiStrip->m_controllerRotaries.push_back(rotaryInfo);
             }
 
@@ -296,6 +301,7 @@ MidiMixerWindow::setupTabs()
                     20,  // i_width
                     80,  // i_height
                     tabFrame);  // parent
+            fader->setProperty("instrumentId", instrument->getId());
             connect(fader, &Fader::faderChanged,
                     this, &MidiMixerWindow::slotFaderLevelChanged);
             gridLayout->addWidget(
@@ -323,68 +329,60 @@ MidiMixerWindow::setupTabs()
 void
 MidiMixerWindow::slotFaderLevelChanged(float value)
 {
-    const QObject * const l_sender = sender();
+    const Fader * const fader = dynamic_cast<const Fader *>(sender());
+    if (!fader)
+        return;
 
-    // For each MidiStrip...
-    // ??? Linear search.  Why not add the instrument ID to the fader
-    //     object as a QObject property?  That would eliminate this.
-    //     Look through AudioMixerWindow2 as well.
-    for (std::shared_ptr<const MidiStrip> midiStrip : m_midiStrips) {
-        // If this is the one that is changing...
-        if (midiStrip->m_volumeFader == l_sender) {
-            Instrument *instrument =
-                    m_studio->getInstrumentById(midiStrip->m_id);
-            if (!instrument)
-                return;
+    const InstrumentId instrumentId = fader->property("instrumentId").toUInt();
 
-            instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
-            Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
+    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
+    if (!instrument)
+        return;
 
-            m_document->setModified();
+    instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
+    Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
 
-            // Have an external controller port?  Send it there as well.
-            if (ExternalController::self().isNative()  &&
-                instrument->hasFixedChannel())
-            {
-                int currentTabIndex = m_tabWidget->currentIndex();
-                if (currentTabIndex < 0)
-                    currentTabIndex = 0;
+    m_document->setModified();
 
-                int loopTabIndex = 0;
+    // Have an external controller port?  Send it there as well.
+    if (ExternalController::self().isNative()  &&
+        instrument->hasFixedChannel())
+    {
+        int currentTabIndex = m_tabWidget->currentIndex();
+        if (currentTabIndex < 0)
+            currentTabIndex = 0;
 
-                const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+        int loopTabIndex = 0;
 
-                // For each MidiDevice...
-                // ??? We should keep a table of tab index to MidiDevice *.
-                //     Then all this becomes a one-liner.  At the very least
-                //     factor this out into a routine to get started.  This
-                //     is done 3 or more times in this code.  Find MidiDevice
-                //     for the current tab.
-                for (const MidiDevice *midiDevice : devices) {
-                    RG_DEBUG << "slotFaderLevelChanged: i = " << loopTabIndex << ", tabIndex " << currentTabIndex;
-                    if (loopTabIndex != currentTabIndex) {
-                        ++loopTabIndex;
-                        continue;
-                    }
+        const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
-                    RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << midiDevice->getId();
-
-                    // ??? Isn't this redundant?  We've already found the one
-                    //     the tab is referencing.  This should always be true.
-                    if (instrument->getDevice()->getId() == midiDevice->getId()) {
-                        RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
-
-                        ExternalController::send(
-                                instrument->getNaturalMidiChannel(),
-                                MIDI_CONTROLLER_VOLUME,
-                                MidiByte(value));
-                    }
-
-                    break;
-                }
+        // For each MidiDevice...
+        // ??? We should keep a table of tab index to MidiDevice *.
+        //     Then all this becomes a one-liner.  At the very least
+        //     factor this out into a routine to get started.  This
+        //     is done 3 or more times in this code.  Find MidiDevice
+        //     for the current tab.
+        for (const MidiDevice *midiDevice : devices) {
+            RG_DEBUG << "slotFaderLevelChanged: i = " << loopTabIndex << ", tabIndex " << currentTabIndex;
+            if (loopTabIndex != currentTabIndex) {
+                ++loopTabIndex;
+                continue;
             }
 
-            return;
+            RG_DEBUG << "slotFaderLevelChanged: device id = " << instrument->getDevice()->getId() << ", visible device id " << midiDevice->getId();
+
+            // ??? Isn't this redundant?  We've already found the one
+            //     the tab is referencing.  This should always be true.
+            if (instrument->getDevice()->getId() == midiDevice->getId()) {
+                RG_DEBUG << "slotFaderLevelChanged: sending control device mapped event for channel " << instrument->getNaturalMidiChannel();
+
+                ExternalController::send(
+                        instrument->getNaturalMidiChannel(),
+                        MIDI_CONTROLLER_VOLUME,
+                        MidiByte(value));
+            }
+
+            break;
         }
     }
 }
@@ -392,53 +390,22 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
 void
 MidiMixerWindow::slotControllerChanged(float value)
 {
-    const QObject *l_sender = sender();
-    size_t midiStripIndex = 0;
-    size_t rotaryIndex = 0;
-
-    // For each MidiStrip...
-    // ??? We could avoid this search by storing the InstrumentId and
-    //     controller number in each Rotary.
-    for (midiStripIndex = 0;
-         midiStripIndex < m_midiStrips.size();
-         ++midiStripIndex) {
-        // For each Rotary...
-        for (rotaryIndex = 0;
-             rotaryIndex < m_midiStrips[midiStripIndex]->m_controllerRotaries.size();
-             ++rotaryIndex) {
-            // Found the Rotary?
-            if (m_midiStrips[midiStripIndex]->m_controllerRotaries[rotaryIndex].rotary == l_sender)
-                break;
-        }
-
-        // Found the Rotary?
-        if (rotaryIndex != m_midiStrips[midiStripIndex]->m_controllerRotaries.size())
-            break;
-    }
-
-    // MIDI strip not found?  Bail.
-    if (midiStripIndex == m_midiStrips.size())
-        return;
-    // Rotary not found?  Bail.
-    if (rotaryIndex == m_midiStrips[midiStripIndex]->m_controllerRotaries.size())
+    const Rotary *rotary = dynamic_cast<const Rotary *>(sender());
+    if (!rotary)
         return;
 
-    //RG_DEBUG << "slotControllerChanged - found a controller";
+    const InstrumentId instrumentId = rotary->property("instrumentId").toUInt();
+    const MidiByte controllerNumber = rotary->property("controllerNumber").toUInt();
 
-    Instrument *instrument = m_studio->getInstrumentById(
-                            m_midiStrips[midiStripIndex]->m_id);
-    if (!instrument)
-        return;
-
-    //RG_DEBUG << "slotControllerChanged() - got instrument to change";
-
-    const MidiByte controllerNumber = m_midiStrips[midiStripIndex]->
-            m_controllerRotaries[rotaryIndex].controllerNumber;
+    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
 
     instrument->setControllerValue(controllerNumber, MidiByte(value));
     Instrument::emitControlChange(instrument, controllerNumber);
+
     m_document->setModified();
 
+    // Check whether we need to send the update out the external controller port.
+    // ??? Would also be nice to check if anything is actually connected.
     if (ExternalController::self().isNative()  &&
         instrument->hasFixedChannel()) {
 
@@ -467,7 +434,6 @@ MidiMixerWindow::slotControllerChanged(float value)
             if (midiDevice->getId() == instrument->getDevice()->getId()) {
                 RG_DEBUG << "slotControllerChanged(): sending external controller mapped event for channel " << instrument->getNaturalMidiChannel();
                 // send out to external controller port as well.
-                // !!! really want some notification of whether we have any!
                 ExternalController::send(
                         instrument->getNaturalMidiChannel(),
                         controllerNumber,

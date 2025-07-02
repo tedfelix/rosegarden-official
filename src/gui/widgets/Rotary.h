@@ -45,6 +45,12 @@ public:
         StepTicks       // end points plus every step interval
     };
 
+    /**
+     * centred: When set to true, draws a red arc from the center to the
+     *          current position.
+     *          When set to false, draws a red arc from 0 to the current
+     *          position.
+     */
     Rotary(QWidget *parent,
            float minimum = 0.0,
            float maximum = 100.0,
