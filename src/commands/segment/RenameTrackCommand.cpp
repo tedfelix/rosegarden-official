@@ -31,8 +31,8 @@ namespace Rosegarden
 
 RenameTrackCommand::RenameTrackCommand(Composition *composition,
                                        TrackId trackId,
-                                       QString longName,
-                                       QString shortName) :
+                                       const QString& longName,
+                                       const QString& shortName) :
         NamedCommand(getGlobalName()),
         m_composition(composition),
         m_trackId(trackId),
@@ -42,7 +42,7 @@ RenameTrackCommand::RenameTrackCommand(Composition *composition,
     if (!m_composition)
         return;
 
-    Track *track = composition->getTrackById(m_trackId);
+    const Track *track = composition->getTrackById(m_trackId);
     if (!track) {
         RG_DEBUG << "RenameTrackCommand: Cannot find track with ID " << m_trackId;
         return;

@@ -44,8 +44,8 @@ namespace Rosegarden
 
 PasteToTriggerSegmentCommand::
 PasteToTriggerSegmentCommand(Composition *composition,
-                             Clipboard *clipboard,
-                             QString label,
+                             const Clipboard *clipboard,
+                             const QString& label,
                              int basePitch,
                              int baseVelocity) :
     NamedCommand(tr("Paste as New Triggered Segment")),
@@ -72,7 +72,7 @@ PasteToTriggerSegmentCommand::unexecute()
 
 PasteToTriggerSegmentWorker::PasteToTriggerSegmentWorker(Composition *composition,
         Clipboard *clipboard,
-        QString label,
+        const QString& label,
         int basePitch,
         int baseVelocity) :
         m_composition(composition),
@@ -90,7 +90,7 @@ PasteToTriggerSegmentWorker::PasteToTriggerSegmentWorker(Composition *compositio
 PasteToTriggerSegmentWorker::
 PasteToTriggerSegmentWorker(Composition *composition,
                             const EventSelection * selection,
-                            QString label,
+                            const QString& label,
                             int basePitch,
                             int baseVelocity) :
         m_composition(composition),
@@ -174,7 +174,7 @@ PasteToTriggerSegmentWorker::execute()
             m_segment->setLabel(qstrtostr(m_label));
         }
 
-        TriggerSegmentRec *rec =
+        const TriggerSegmentRec *rec =
             m_composition->addTriggerSegment(m_segment, m_basePitch, m_baseVelocity);
         if (rec)
             m_id = rec->getId();

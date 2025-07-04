@@ -41,8 +41,8 @@ class RenameTrackCommand : public NamedCommand
 public:
     RenameTrackCommand(Composition *composition,
                        TrackId trackId,
-                       QString longName,
-                       QString shortName);
+                       const QString& longName,
+                       const QString& shortName);
     ~RenameTrackCommand() override;
 
     static QString getGlobalName() { return tr("Rename Track"); }

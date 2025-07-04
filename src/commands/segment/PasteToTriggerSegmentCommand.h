@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -44,7 +43,7 @@ public:
        // OK to pass nullptr clipboard
        Clipboard *clipboard,
        // The label given to the ornament.
-       QString label,
+       const QString& label,
        int basePitch = -1,
        int baseVelocity = -1);
 
@@ -52,11 +51,14 @@ public:
       (Composition *composition,
        const EventSelection * selection,
        // The label given to the ornament.
-       QString label,
+       const QString& label,
        int basePitch = -1,
        int baseVelocity = -1);
 
     ~PasteToTriggerSegmentWorker();
+
+    PasteToTriggerSegmentWorker& operator=(const PasteToTriggerSegmentWorker&) =
+        delete;
 
     void execute();
     void unexecute();
@@ -95,8 +97,8 @@ class PasteToTriggerSegmentCommand : public NamedCommand
 public:
     /// If basePitch is -1, the first pitch in the selection will be used
     PasteToTriggerSegmentCommand(Composition *composition,
-                                 Clipboard *clipboard,
-                                 QString label,
+                                 const Clipboard *clipboard,
+                                 const QString& label,
                                  int basePitch = -1,
                                  int baseVelocity = -1);
     ~PasteToTriggerSegmentCommand() override;

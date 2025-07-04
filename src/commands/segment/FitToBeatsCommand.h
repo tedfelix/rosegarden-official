@@ -62,8 +62,9 @@ private:
                         SegmentMultiSet newSegments);
 
     static int getBeatRealTimes(Segment *s, vecRealTime &beatRealTimes);
-    static TempoChange getTempoChange(Composition &composition, int i);
-    static void getCurrentTempi(Composition &composition, TempoMap &Tempos);
+    static TempoChange getTempoChange(const Composition &composition, int i);
+    static void getCurrentTempi(const Composition &composition,
+                                TempoMap &Tempos);
 
     Composition *m_composition;
 

@@ -42,7 +42,7 @@ public:
                        Segment *segment,
                        timeT startTime,
                        TrackId track,
-                       bool CopyAsLink,
+                       bool copyAsLink,
                        CompositionModelImpl *compositionModel);
 
     ~CopySegmentCommand() override;

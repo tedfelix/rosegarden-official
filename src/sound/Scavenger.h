@@ -40,7 +40,7 @@ template <typename T>
 class Scavenger
 {
 public:
-    Scavenger(int sec = 2, int defaultObjectListSize = 200);
+    explicit Scavenger(int sec = 2, int defaultObjectListSize = 200);
     ~Scavenger();
 
     /**
