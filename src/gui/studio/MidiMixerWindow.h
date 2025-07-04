@@ -106,7 +106,6 @@ private:
 
     /// Setup the tabs on the Mixer according to the Studio
     void setupTabs();
-    void updateWidgets(const Instrument *i_instrument);
 
     // QWidget override.
     /// Calls sendControllerRefresh() in response to window activation.

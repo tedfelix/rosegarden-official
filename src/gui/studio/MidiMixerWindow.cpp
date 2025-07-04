@@ -243,6 +243,8 @@ MidiMixerWindow::setupTabs()
                  controllerIndex < controls.size();
                  ++controllerIndex) {
 
+                const MidiByte controllerNumber =
+                        controls[controllerIndex].getControllerNumber();
                 const bool centred =
                         (controls[controllerIndex].getDefault() == 64);
 
@@ -268,8 +270,16 @@ MidiMixerWindow::setupTabs()
                 rotary->setKnobColour(knobColour);
 
                 rotary->setProperty("instrumentId", instrument->getId());
-                rotary->setProperty("controllerNumber",
-                        controls[controllerIndex].getControllerNumber());
+                rotary->setProperty("controllerNumber", controllerNumber);
+
+                float value;
+                try {
+                    value = float(instrument->getControllerValue(
+                            controllerNumber));
+                } catch (const std::string &s) {
+                    continue;
+                }
+                rotary->setPosition(value);
 
                 connect(rotary, &Rotary::valueChanged,
                         this, &MidiMixerWindow::slotControllerChanged);
@@ -278,8 +288,7 @@ MidiMixerWindow::setupTabs()
                         rotary, controllerIndex, col, Qt::AlignCenter);
 
                 MidiStrip::RotaryInfo rotaryInfo;
-                rotaryInfo.controllerNumber =
-                        controls[controllerIndex].getControllerNumber();
+                rotaryInfo.controllerNumber = controllerNumber;
                 rotaryInfo.rotary = rotary;
                 midiStrip->m_controllerRotaries.push_back(rotaryInfo);
             }
@@ -302,6 +311,15 @@ MidiMixerWindow::setupTabs()
                     80,  // i_height
                     tabFrame);  // parent
             fader->setProperty("instrumentId", instrument->getId());
+            MidiByte volumeValue;
+            try {
+                volumeValue = instrument->
+                        getControllerValue(MIDI_CONTROLLER_VOLUME);
+            } catch (std::string& s) {
+                // This should never get called.
+                volumeValue = instrument->getVolume();
+            }
+            fader->setFader(float(volumeValue));
             connect(fader, &Fader::faderChanged,
                     this, &MidiMixerWindow::slotFaderLevelChanged);
             gridLayout->addWidget(
@@ -318,9 +336,6 @@ MidiMixerWindow::setupTabs()
                     col,  // column
                     Qt::AlignCenter);  // alignment
 
-            // Update all the faders and controllers for this Instrument.
-            updateWidgets(instrument);
-
             ++col;
         }
     }
@@ -333,6 +348,8 @@ MidiMixerWindow::slotFaderLevelChanged(float value)
     if (!fader)
         return;
 
+    // ??? Once we move all this to MidiStrip, we can store instrument ID
+    //     in MidiStrip as a member.
     const InstrumentId instrumentId = fader->property("instrumentId").toUInt();
 
     Instrument *instrument = m_studio->getInstrumentById(instrumentId);
@@ -362,6 +379,8 @@ MidiMixerWindow::slotControllerChanged(float value)
     if (!rotary)
         return;
 
+    // ??? Once we move all this to MidiStrip, we can store instrument ID
+    //     and controller number in MidiStrip as a member.
     const InstrumentId instrumentId = rotary->property("instrumentId").toUInt();
     const MidiByte controllerNumber = rotary->property("controllerNumber").toUInt();
 
@@ -380,90 +399,6 @@ MidiMixerWindow::slotControllerChanged(float value)
                 instrument->getNaturalMidiChannel(),
                 controllerNumber,
                 MidiByte(value));
-    }
-}
-
-void
-MidiMixerWindow::updateWidgets(const Instrument *i_instrument)
-{
-    //RG_DEBUG << "updateWidgets(): Instrument ID = " << instrument->getId();
-
-    // ??? Feels like both of these loops could go away if we inline this
-    //     routine inside its only caller.  If we inline this carefully,
-    //     I suspect it ends up being only about ten lines of code.
-
-    const InstrumentId instrumentId = i_instrument->getId();
-
-    size_t midiStripIndex = 0;
-
-    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
-
-    // For each MidiDevice in the Studio...
-    // ??? There is only one caller of this routine.  And they happen to
-    //     have the MidiDevice *, so there is no need for this Device search
-    //     loop.
-    for (const MidiDevice *midiDevice : devices) {
-        InstrumentVector instruments = midiDevice->getPresentationInstruments();
-
-        // For each Instrument in the Device...
-        // ??? If this is just to get the strip index, the caller already
-        //     has that and should send it in!!!
-        for (const Instrument *loopInstrument : instruments) {
-
-            // Is this the Instrument we are updating?
-            if (loopInstrument->getId() == instrumentId) {
-
-                // Volume fader
-                MidiByte volumeValue;
-                try {
-                    volumeValue = loopInstrument->
-                            getControllerValue(MIDI_CONTROLLER_VOLUME);
-                } catch (std::string& s) {
-                    // This should never get called.
-                    volumeValue = loopInstrument->getVolume();
-                }
-
-                // setFader() emits a signal.  If we don't block it, we crash
-                // due to an endless loop.
-                // ??? Can we make Fader::setFader() only emit a signal on a
-                //     user change?  Then blockSignals() would be unnecessary.
-                m_midiStrips[midiStripIndex]->m_volumeFader->blockSignals(true);
-                m_midiStrips[midiStripIndex]->m_volumeFader->setFader(float(volumeValue));
-                m_midiStrips[midiStripIndex]->m_volumeFader->blockSignals(false);
-
-                //RG_DEBUG << "STATIC CONTROLS SIZE = " << (*iIt)->getStaticControllers().size();
-
-                ControlList controls = getIPBControlParameters(midiDevice);
-
-                // Set all controllers for this Instrument
-                //
-                for (size_t i = 0; i < controls.size(); ++i) {
-                    float value = 0.0;
-
-                    // The ControllerValues might not yet be set on
-                    // the actual Instrument so don't always expect
-                    // to find one.  There might be a hole here for
-                    // deleted Controllers to hang around on
-                    // Instruments..
-                    //
-                    try {
-                        value = float(loopInstrument->getControllerValue
-                                      (controls[i].getControllerNumber()));
-                    } catch (const std::string &s) {
-                        //RG_DEBUG << "slotUpdateInstrument - can't match controller " << int(controls[i].getControllerNumber()) << " - \"" << s << "\"";
-                        continue;
-                    }
-
-                    //RG_DEBUG << "MidiMixerWindow::slotUpdateInstrument - MATCHED " << int(controls[i].getControllerNumber());
-
-                    m_midiStrips[midiStripIndex]->m_controllerRotaries[i].
-                            rotary->setPosition(value);
-                }
-
-                // ??? Aren't we done at this point.  Can't we break?
-            }
-            ++midiStripIndex;
-        }
     }
 }
 
