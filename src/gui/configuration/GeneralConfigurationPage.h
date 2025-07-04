@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -42,38 +42,38 @@ class GeneralConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    GeneralConfigurationPage(QWidget *parent);
+    explicit GeneralConfigurationPage(QWidget *parent);
 
     enum DoubleClickClient
     {
         NotationView,
         MatrixView,
-        EventView
+        EventListEditor
     };
 
     enum NoteNameStyle
-    { 
+    {
         American,
         Local
     };
 
-    enum PdfViewer
-    {
-        Okular,
-        Evince,
-        Acroread,
-        MuPDF,
-        ePDFView,
-        xdgOpen
+    // PDF Viewers
+    struct PDFViewerInfo {
+        QString name;
+        QString command;
     };
+    typedef std::vector<PDFViewerInfo> PDFViewers;
+    static const PDFViewers pdfViewers;
+    static int getDefaultPDFViewer();
 
-    enum FilePrinter
-    {
-        GtkLP,
-        Lp,
-        Lpr,
-        HPLIP
+    // File Printers
+    struct FilePrinterInfo {
+        QString name;
+        QString command;
     };
+    typedef std::vector<FilePrinterInfo> FilePrinters;
+    static const FilePrinters filePrinters;
+    static int getDefaultFilePrinter();
 
     enum MetronomeDuring
     {
@@ -106,14 +106,22 @@ private:
     QCheckBox *m_enableEditingDuringPlayback;
     QCheckBox *m_cleanRecentFilesList;
     QCheckBox *m_useJackTransport;
+    QCheckBox *m_jackStopAtAutoStop;
+    QCheckBox *m_stopPlaybackAtEnd;
+    QCheckBox *m_jumpToLoop;
+    QCheckBox *m_advancedLooping;
+    QCheckBox *m_autoChannels;
+    QCheckBox *m_lv2;
+    QCheckBox *m_dynamicDrag;
 
     // Presentation tab
-    QCheckBox *m_Thorn;
+    QComboBox *m_theme;
     QComboBox *m_nameStyle;
     QCheckBox *m_backgroundTextures;
     QCheckBox *m_notationBackgroundTextures;
     QCheckBox *m_longTitles;
     QComboBox *m_trackSize;
+    QComboBox *m_trackLabelWidth;
     QCheckBox *m_useNativeFileDialogs;
 
     // External Applications tab

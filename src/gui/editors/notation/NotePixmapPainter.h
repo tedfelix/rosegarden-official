@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,6 +33,7 @@ class NotePixmapPainter
 
 public:
     NotePixmapPainter() :
+        m_externalPainter(nullptr),
 	m_painter(&m_myPainter) { }
 
     void beginExternal(QPainter *painter) {
@@ -57,7 +58,7 @@ public:
             NOTATION_DEBUG << "WARNING: NotePixmapPainter::begin(): Painter already active";
             assert(!m_myPainter.isActive());
         }
-        
+
 	m_painter = &m_myPainter;
 	return m_painter->begin(device);
     }
@@ -81,7 +82,7 @@ public:
     void drawRect(int x, int y, int w, int h) {
 	m_painter->drawRect(x, y, w, h);
     }
-    
+
     void drawArc(int x, int y, int w, int h, int a, int alen) {
 	m_painter->drawArc(x, y, w, h, a, alen);
     }

@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -34,20 +34,20 @@ namespace Rosegarden
 
 RIFFAudioFile::RIFFAudioFile(unsigned int id,
                              const std::string &name,
-                             const QString &fileName):
-    AudioFile(id, name, fileName),
+                             const QString &absoluteFilePath):
+    AudioFile(id, name, absoluteFilePath),
     m_subFormat(PCM),
     m_bytesPerSecond(0),
     m_bytesPerFrame(0)
 {}
 
-RIFFAudioFile::RIFFAudioFile(const QString &fileName,
+RIFFAudioFile::RIFFAudioFile(const QString &absoluteFilePath,
                              unsigned int channels = 1,
                              unsigned int sampleRate = 48000,
                              unsigned int bytesPerSecond = 6000,
                              unsigned int bytesPerFrame = 2,
                              unsigned int bitsPerSample = 16):
-        AudioFile(0, "", fileName)
+        AudioFile(0, "", absoluteFilePath)
 {
     m_bitsPerSample = bitsPerSample;
     m_sampleRate = sampleRate;
@@ -60,7 +60,7 @@ RIFFAudioFile::RIFFAudioFile(const QString &fileName,
     else if (bitsPerSample == 32)
         m_subFormat = FLOAT;
     else
-        throw(BadSoundFileException(m_fileName, qstrtostr(tr("Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing"))));
+        throw(BadSoundFileException(m_absoluteFilePath, qstrtostr(tr("Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing"))));
 
 }
 
@@ -73,7 +73,7 @@ RIFFAudioFile::~RIFFAudioFile()
 void
 RIFFAudioFile::printStats()
 {
-    RG_DEBUG << "filename         : " << m_fileName << '\n'
+    RG_DEBUG << "filename         : " << m_absoluteFilePath << '\n'
     << "channels         : " << m_channels << '\n'
     << "sample rate      : " << m_sampleRate << '\n'
     << "bytes per second : " << m_bytesPerSecond << '\n'
@@ -171,7 +171,7 @@ RIFFAudioFile::scanTo(std::ifstream *file, const RealTime &time)
 
         // check we've got data chunk start
 	std::string chunkName;
-	int chunkLength = 0;
+        int chunkLength;
 
         while ((chunkName = getBytes(file, 4)) != "data") {
 	    if (file->eof()) {
@@ -324,7 +324,8 @@ RIFFAudioFile::getLength()
         headerLength += (16 + 8);
     }
 
-    if (!m_bytesPerFrame || !m_sampleRate) return RealTime::zeroTime;
+    if (!m_bytesPerFrame || !m_sampleRate)
+        return RealTime::zero();
 
     double frames = (m_fileSize - headerLength) / m_bytesPerFrame;
     double seconds = frames / ((double)m_sampleRate);
@@ -370,7 +371,7 @@ RIFFAudioFile::readFormatChunk()
         << "can't find RIFF identifier\n";
 #endif
 
-        throw(BadSoundFileException(m_fileName, qstrtostr(tr("Can't find RIFF identifier"))));
+        throw(BadSoundFileException(m_absoluteFilePath, qstrtostr(tr("Can't find RIFF identifier"))));
     }
 
     // Look for the WAV identifier
@@ -380,7 +381,7 @@ RIFFAudioFile::readFormatChunk()
         RG_WARNING << "Can't find WAV identifier\n";
 #endif
 
-        throw(BadSoundFileException(m_fileName, qstrtostr(tr("Can't find WAV identifier"))));
+        throw(BadSoundFileException(m_absoluteFilePath, qstrtostr(tr("Can't find WAV identifier"))));
     }
 
     // Look for the FORMAT identifier - note that this doesn't actually
@@ -393,7 +394,7 @@ RIFFAudioFile::readFormatChunk()
         RG_WARNING << "Can't find FORMAT identifier\n";
 #endif
 
-        throw(BadSoundFileException(m_fileName, qstrtostr(tr("Can't find FORMAT identifier"))));
+        throw(BadSoundFileException(m_absoluteFilePath, qstrtostr(tr("Can't find FORMAT identifier"))));
     }
 
     // Little endian conversion of length bytes into file length
@@ -443,7 +444,7 @@ RIFFAudioFile::readFormatChunk()
     } else if (subFormat == 0x03) {
         m_subFormat = FLOAT;
     } else {
-        throw(BadSoundFileException(m_fileName, qstrtostr(tr("Rosegarden currently only supports PCM or IEEE floating-point RIFF files"))));
+        throw(BadSoundFileException(m_absoluteFilePath, qstrtostr(tr("Rosegarden currently only supports PCM or IEEE floating-point RIFF files"))));
     }
 
     // We seem to have a good looking .WAV file - extract the
@@ -458,7 +459,7 @@ RIFFAudioFile::readFormatChunk()
         break;
 
     default: {
-            throw(BadSoundFileException(m_fileName, qstrtostr(tr("Unsupported number of channels"))));
+            throw(BadSoundFileException(m_absoluteFilePath, qstrtostr(tr("Unsupported number of channels"))));
         }
         break;
     }
@@ -593,20 +594,20 @@ RIFFAudioFile::identifySubType(const QString &filename)
 }
 
 float
-RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
+RIFFAudioFile::convertBytesToSample(const unsigned char *bytes) const
 {
     switch (getBitsPerSample()) {
 
     case 8: {
             // WAV stores 8-bit samples unsigned, other sizes signed.
-            return (float)(ubuf[0] - 128.0) / 128.0;
+            return (float)(bytes[0] - 128.0) / 128.0;
         }
 
     case 16: {
             // Two's complement little-endian 16-bit integer.
             // We convert endianness (if necessary) but assume 16-bit short.
-            unsigned char b2 = ubuf[0];
-            unsigned char b1 = ubuf[1];
+            unsigned char b2 = bytes[0];
+            unsigned char b1 = bytes[1];
             unsigned int bits = (b1 << 8) + b2;
             return (float)(short(bits)) / 32768.0;
         }
@@ -614,9 +615,9 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
     case 24: {
             // Two's complement little-endian 24-bit integer.
             // Again, convert endianness but assume 32-bit int.
-            unsigned char b3 = ubuf[0];
-            unsigned char b2 = ubuf[1];
-            unsigned char b1 = ubuf[2];
+            unsigned char b3 = bytes[0];
+            unsigned char b2 = bytes[1];
+            unsigned char b1 = bytes[2];
             // Rotate 8 bits too far in order to get the sign bit
             // in the right place; this gives us a 32-bit value,
             // hence the larger float divisor
@@ -626,7 +627,8 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
 
     case 32: {
             // IEEE floating point
-            return *(float *)ubuf;
+            // cppcheck-suppress invalidPointerCast
+            return *(float *)bytes;
         }
 
     default:
@@ -635,4 +637,3 @@ RIFFAudioFile::convertBytesToSample(const unsigned char *ubuf)
 }
 
 }
-

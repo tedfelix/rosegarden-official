@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,12 +18,12 @@
 #ifndef RG_TRANSPORTDIALOG_H
 #define RG_TRANSPORTDIALOG_H
 
-#include <QHash>
 #include <QColor>
 #include <QPixmap>
-#include <QtCore>
 #include <QDialog>
 #include <QSharedPointer>
+#include <QTimer>
+#include <QDateTime>
 
 #include "base/Composition.h" // for tempoT
 
@@ -43,30 +43,35 @@ class QWidget;
 class QTimer;
 class QPushButton;
 class QCloseEvent;
-class QShortcut;
-class QDialog;
+
 
 namespace Rosegarden
 {
 
+
+class RosegardenDocument;
 class TimeSignature;
 class RealTime;
 class MappedEvent;
 
 
-class TransportDialog : public QDialog
+class TransportDialog : public QDialog, public CompositionObserver
 {
     Q_OBJECT
+
 public:
-    TransportDialog(QWidget *parent = nullptr);
+
+    explicit TransportDialog(QWidget *parent = nullptr);
     ~TransportDialog() override;
 
-    enum TimeDisplayMode { RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
+    void init();
+
+    enum TimeDisplayMode {
+        RealMode, SMPTEMode, BarMode, BarMetronomeMode, FrameMode };
 
     std::string getCurrentModeAsString();
     TimeDisplayMode getCurrentMode() { return m_currentMode; }
     void setNewMode(const std::string& newModeAsString);
-    void setNewMode(const TimeDisplayMode& newMode);
     bool isShowingTimeToEnd();
     bool isExpanded();
 
@@ -77,17 +82,12 @@ public:
 
     void setTimeSignature(const TimeSignature &timeSig);
 
-    void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
-    void getSMPTEResolution(int &framesPerSecond, int &bitsPerFrame);
-
-    // Return the shortcut object
-    //
-    QShortcut* getShortcuts() { return m_shortcuts; }
+    // unused void setSMPTEResolution(int framesPerSecond, int bitsPerFrame);
+    // unused void getSMPTEResolution(int &framesPerSecond, int &bitsPerFrame);
 
     // RosegardenTransport member accessors
     QPushButton* MetronomeButton()   { return ui->MetronomeButton; }
     QPushButton* SoloButton()        { return ui->SoloButton; }
-    QPushButton* LoopButton()        { return ui->LoopButton; }
     QPushButton* PlayButton()        { return ui->PlayButton; }
     QPushButton* StopButton()        { return ui->StopButton; }
     QPushButton* FfwdButton()        { return ui->FfwdButton; }
@@ -116,15 +116,9 @@ public:
     /// Load geometry from .conf.
     void loadGeo();
 
-protected:
-    // QDialog override.
-    void closeEvent(QCloseEvent * e) override;
-
-    void computeSampleRate();
-    void cycleThroughModes();
-    void displayTime();
-
 public slots:
+
+    void slotDocumentLoaded(RosegardenDocument *doc);
 
     // These two slots are activated by QTimers
     //
@@ -137,8 +131,6 @@ public slots:
     void slotChangeTimeDisplay();
     void slotChangeToEnd();
 
-    void slotLoopButtonClicked();
-
     void slotPanelOpenButtonClicked();
     void slotPanelCloseButtonClicked();
 
@@ -146,16 +138,10 @@ public slots:
     void slotEditTimeSignature();
     void slotEditTime();
 
-    void setBackgroundColor(QColor color);
-    void slotResetBackground();
-
-    void slotSetStartLoopingPointAtMarkerPos();
-    void slotSetStopLoopingPointAtMarkerPos();
-
     // Connected to SequenceManager
     void slotTempoChanged(tempoT);
-    void slotMidiInLabel(const MappedEvent *event); // show incoming MIDI events on the Transport
-    void slotMidiOutLabel(const MappedEvent *event); // show outgoing  MIDI events on the Transport
+    void slotMidiInLabel(const MappedEvent *mE); // show incoming MIDI events on the Transport
+    void slotMidiOutLabel(const MappedEvent *mE); // show outgoing  MIDI events on the Transport
     void slotPlaying(bool checked);
     void slotRecording(bool checked);
     void slotMetronomeActivated(bool checked);
@@ -163,32 +149,57 @@ public slots:
 signals:
     void closed();
 
-    // Set and unset the loop at the RosegardenMainWindow
-    //
-    void setLoop();
-    void unsetLoop();
-    void setLoopStartTime();
-    void setLoopStopTime();
-
-    void editTempo(QWidget *);
     void editTimeSignature(QWidget *);
     void editTransportTime(QWidget *);
     //void scrollTempo(int);
     void panic();
 
+protected:
+
+    // QDialog overrides.
+    void keyPressEvent(QKeyEvent *keyEvent) override;
+    void closeEvent(QCloseEvent *closeEvent) override;
+
+private slots:
+
+    void computeSampleRate();
+    void cycleThroughModes();
+    void displayTime();
+
+    // Loop Widgets.
+    void slotLoopButtonClicked();
+    void slotSetStartLoopingPointAtMarkerPos();
+    void slotSetStopLoopingPointAtMarkerPos();
+    /// From RosegardenDocument.
+    void slotLoopChanged();
+
+    void slotMetronomeTimer();
+
 private:
+
     void loadPixmaps();
     void resetFonts();
     void resetFont(QWidget *);
     void initModeMap();
 
-    //--------------- Data members ---------------------------------
+    void setBackgroundColor(QColor color);
+    void resetBackground();
+
+    // composition observer
+    void timeSignatureChanged(const Composition *comp) override;
+    void tempoChanged(const Composition *comp) override;
 
     QSharedPointer<Ui_RosegardenTransport> ui;
 
-    QHash<int, QPixmap> m_lcdList;
-    QHash<int, QPixmap> m_lcdListDefault;
-    QPixmap m_lcdNegative;
+    // Digits 0-9 in blue vacuum fluorescent display (VFD) format.
+    // These are the default non-transparent versions of the digits for
+    // normal drawing.  Should draw faster than the transparent counterparts.
+    QPixmap m_digitsOpaque[10];
+    // Same digits, but with transparency (alpha) to use when the
+    // metronome is flashing.
+    QPixmap m_digitsTransparent[10];
+
+    QPixmap m_negativeSign;
 
     int m_lastTenHours;
     int m_lastUnitHours;
@@ -204,6 +215,7 @@ private:
     bool m_lastNegative;
     TimeDisplayMode m_lastMode;
     TimeDisplayMode m_currentMode;
+    void setNewMode(const TimeDisplayMode &newMode);
 
     int m_tenHours;
     int m_unitHours;
@@ -224,7 +236,6 @@ private:
 
     QTimer *m_midiInTimer;
     QTimer *m_midiOutTimer;
-    QTimer *m_clearMetronomeTimer;
 
     bool m_enableMIDILabels;
 
@@ -233,7 +244,6 @@ private:
 
     void updateTimeDisplay();
 
-    QShortcut *m_shortcuts;
     bool    m_isExpanded;
 
     bool m_isBackgroundSet;
@@ -241,10 +251,17 @@ private:
     int m_sampleRate;
 
     std::map<std::string, TimeDisplayMode> m_modeMap;
+
+    bool m_playing{};
+    bool m_recording{};
+
+    // High frequency timer used to flash the display
+    // on the beat.
+    QTimer m_metronomeTimer;
+    bool m_flashing{};
+    QDateTime m_metronomeTimeout;
+    void updateMetronomeTimer();
 };
-
- 
-
 
 
 }

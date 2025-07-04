@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlParameterEditDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlParameterEditDialog.h"
 
@@ -46,16 +47,16 @@
 namespace Rosegarden
 {
 
-ControlParameterEditDialog::ControlParameterEditDialog(
-    QWidget *parent,
-    ControlParameter *control,
-    RosegardenDocument *doc):
-        QDialog(parent),
-        m_doc(doc),
-        m_control(control)
-{
-    m_dialogControl = *control; // copy in the ControlParameter
 
+ControlParameterEditDialog::ControlParameterEditDialog(
+        QWidget *parent,
+        ControlParameter *control,
+        RosegardenDocument *doc) :
+    QDialog(parent),
+    m_doc(doc),
+    m_control(control),
+    m_dialogControl(*control) // copy in the ControlParameter
+{
     setModal(true);
     setWindowTitle(tr("Edit Controller"));
 
@@ -131,17 +132,17 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     connect(m_description, &QLineEdit::textChanged,
             this, &ControlParameterEditDialog::slotDescriptionChanged);
 
-    connect(m_controllerBox, SIGNAL(valueChanged(int)),
-            SLOT(slotControllerChanged(int)));
+    connect(m_controllerBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotControllerChanged);
 
-    connect(m_minBox, SIGNAL(valueChanged(int)),
-            SLOT(slotMinChanged(int)));
+    connect(m_minBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotMinChanged);
 
-    connect(m_maxBox, SIGNAL(valueChanged(int)),
-            SLOT(slotMaxChanged(int)));
+    connect(m_maxBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotMaxChanged);
 
-    connect(m_defaultBox, SIGNAL(valueChanged(int)),
-            SLOT(slotDefaultChanged(int)));
+    connect(m_defaultBox, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ControlParameterEditDialog::slotDefaultChanged);
 
     connect(m_colourCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
@@ -158,6 +159,9 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     m_controllerBox->setMinimum(0);
     m_controllerBox->setMaximum(127);
 
+    // ??? Really?  Since control changes can only do 0-127, this seems
+    //     very wrong.  At the very least we should limit to 0-8192 for
+    //     double-byte controllers like pitchbend.
     m_minBox->setMinimum(INT_MIN);
     m_minBox->setMaximum(INT_MAX);
 
@@ -170,10 +174,8 @@ ControlParameterEditDialog::ControlParameterEditDialog(
     // populate combos
     m_typeCombo->addItem(strtoqstr(Controller::EventType));
     m_typeCombo->addItem(strtoqstr(PitchBend::EventType));
-    /*
     m_typeCombo->addItem(strtoqstr(KeyPressure::EventType));
     m_typeCombo->addItem(strtoqstr(ChannelPressure::EventType));
-    */
 
     // Populate colour combo
     //
@@ -205,12 +207,10 @@ ControlParameterEditDialog::ControlParameterEditDialog(
         m_typeCombo->setCurrentIndex(0);
     else if (m_control->getType() == PitchBend::EventType)
         m_typeCombo->setCurrentIndex(1);
-    /*
     else if (m_control->getType() == KeyPressure::EventType)
         m_typeCombo->setCurrentIndex(2);
     else if (m_control->getType() == ChannelPressure::EventType)
         m_typeCombo->setCurrentIndex(3);
-        */
 
     populate();
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);

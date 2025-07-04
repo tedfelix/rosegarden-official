@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -22,7 +22,7 @@
     An audio file viewer and annotation editor.
     Centre for Digital Music, Queen Mary, University of London.
     This file copyright 2006 Chris Cannam and QMUL.
-    
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -70,10 +70,10 @@ public:
      * Return the number of samples that would need to be added via
      * putInput in order to provoke the time stretcher into doing some
      * time stretching and making more output samples available.
-     * This will be an estimate, if transient sharpening is on; the 
+     * This will be an estimate, if transient sharpening is on; the
      * caller may need to do the put/get/test cycle more than once.
      */
-    size_t getRequiredInputSamples() const;
+    // unused size_t getRequiredInputSamples() const;
 
     /**
      * Put (and possibly process) a given number of input samples.
@@ -97,7 +97,7 @@ public:
     /**
      * Change the time stretch ratio.
      */
-    void setRatio(float ratio);
+    // unused void setRatio(float ratio);
 
     /**
      * Get the hop size for input.
@@ -134,7 +134,7 @@ public:
      * This will be exact if transient sharpening is off, or approximate
      * if it is on.
      */
-    size_t getProcessingLatency() const;
+    // unused size_t getProcessingLatency() const;
 
 protected:
     /**
@@ -147,7 +147,7 @@ protected:
      * Examine m_freq[0..m_channels-1] and return whether a percussive
      * transient is found.
      */
-    bool isTransient(); 
+    bool isTransient();
 
     /**
      * Resynthesise from m_freq[channel] adding in to "out",
@@ -163,7 +163,7 @@ protected:
     void calculateParameters();
     void cleanup();
 
-    bool shouldSharpen() {
+    bool shouldSharpen() const {
         return m_sharpen && (m_ratio > 0.25);
     }
 
@@ -199,7 +199,7 @@ protected:
     fftwf_complex **m_freq;
     fftwf_plan *m_plan;
     fftwf_plan *m_iplan;
-    
+
     RingBuffer<float> **m_inbuf;
     RingBuffer<float> **m_outbuf;
     float **m_mashbuf;

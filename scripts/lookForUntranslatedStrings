@@ -1,0 +1,62 @@
+#!/usr/bin/perl
+
+# See ts-untrans for a python version of this.
+
+if (scalar @ARGV != 1) {
+    print "\n";
+    print "Show untranslated, but finished, strings in a .ts file.\n";
+    print "Syntax: lookForUntranslatedStrings my_file.ts\n";
+    print "\n";
+    exit;
+}
+
+# Sub to decode the HTML encoded characters
+sub uncrypt
+{
+    my $str = shift @_;
+    $str =~ s/&amp;/&/g;
+    $str =~ s/&lt;/</g;
+    $str =~ s/&gt;/>/g;
+    $str =~ s/&apos;/'/g;
+    $str =~ s/&quot;/"/g;
+    return $str;
+}
+
+my $msg;
+my @messages;
+my $betweenMessages = 1;
+open handle, $ARGV[0] or die "File \"$ARGV[0]\" can't be opened";
+
+# Read all the .ts "messages" and store them in @messages
+foreach my $line (<handle>) {
+    if ($betweenMessages) {
+        if ($line =~ /<message/) {
+            $msg = $line;
+            $betweenMessages = 0;
+        }
+    } else {
+        $msg .= $line;
+        if ($line =~ /<\/message>/) {
+            $betweenMessages = 1;
+            push @messages, $msg;
+        }
+    }
+}
+
+print "\nTotal number of strings = ", $#messages + 1, "\n\n";
+
+# Look for the empty translations and print the associated sources
+print "Finished but untranslated string(s):\n";
+my $num = 0;
+foreach $msg (@messages) {
+    if ($msg =~ /<translation><\/translation>/) {
+        if ($msg =~ /<source>(.*?)<\/source>/) {
+            my $src = $1;
+            print "(", ++$num, ") \"", uncrypt($src), "\"\n";
+        }
+    }
+}
+
+
+
+

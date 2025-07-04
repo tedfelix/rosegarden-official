@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
@@ -28,8 +28,11 @@
 // #include "PercussionMap.h"
 
 #include "base/BaseProperties.h"
+#include "base/Composition.h"
+#include "base/Pitch.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "misc/Debug.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 
 #include <QRegularExpression>
 
@@ -53,6 +56,8 @@ MusicXmlExportHelper::MusicXmlExportHelper(const std::string &name,
         m_view(view),
         m_partName(name),
         m_percussionTrack(percussion),
+        m_curVoice(0),
+        m_useOctaveShift(false),
         m_octaveType(octaveType),
         m_barResetType(barResetType)
 {
@@ -313,12 +318,9 @@ MusicXmlExportHelper::quantizePercussion()
             for (std::vector<Segment *>::iterator s = segments.begin();
                 s != segments.end(); ++s) {
                 for (Segment::iterator e = (*s)->begin(); e != (*s)->end(); ++e) {
-                    int pp;
                     if ((*e)->isa(Rosegarden::Note::EventType)) {
-                        pp = (*e)->get<Int>(BaseProperties::PITCH);
+                        int pp = (*e)->get<Int>(BaseProperties::PITCH);
                         if (pm.getVoice(pp) != tmpvoice) continue;
-                    } else if ((*e)->isa(Rosegarden::Note::EventRestType)) {
-                        continue;
                     } else {
                         continue;
                     }
@@ -371,8 +373,8 @@ MusicXmlExportHelper::emptyQuantizeQueue(PercussionMap &pm,
         int pp = (*v)->get<Int>(BaseProperties::PITCH);
         timeT t = (*v)->getNotationAbsoluteTime();
         Event *tmp = new Event(*(*v), t, duration);
-        tmp->set<Int>("MxmlPitch", pm.getPitch(pp));
-        tmp->set<String>("MxmlNoteHead", pm.getNoteHead(pp));
+        tmp->set<Int>(PropertyName("MxmlPitch"), pm.getPitch(pp));
+        tmp->set<String>(PropertyName("MxmlNoteHead"), pm.getNoteHead(pp));
         tmp->set<Bool>(NotationProperties::BEAM_ABOVE, stem);
         segment->insert(tmp);
         empty = false;
@@ -557,6 +559,7 @@ MusicXmlExportHelper::handleEvent(Segment *segment, Event &event)
 }
 
 void
+// cppcheck-suppress unusedFunction
 MusicXmlExportHelper::printSummary()
 {
     RG_DEBUG << "Part " << m_partName << " : m_staves = " << m_staves.size();
@@ -1078,8 +1081,8 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
         }
         if (m_percussionTrack) {
             Pitch pitch(event);
-            if (event.has("MxmlPitch")) {
-                pitch = Pitch(event.get<Int>("MxmlPitch"));
+            if (event.has(PropertyName("MxmlPitch"))) {
+                pitch = Pitch(event.get<Int>(PropertyName("MxmlPitch")));
             }
             tmpNote << "        <unpitched>\n";
             tmpNote << "          <display-step>" << pitch.getNoteName(Key())
@@ -1087,7 +1090,7 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
             tmpNote << "          <display-octave>" << pitch.getOctaveAccidental(-1)
                                                     << "</display-octave>\n";
             tmpNote << "        </unpitched>\n";
-            tmpNotehead << "        <notehead>" << event.get<String>("MxmlNoteHead")
+            tmpNotehead << "        <notehead>" << event.get<String>(PropertyName("MxmlNoteHead"))
                                                 << "</notehead>\n";
 
             if (duration > 0) {
@@ -1186,8 +1189,8 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
         tmpNote << "        <time-modification>\n";
         tmpNote << "          <actual-notes>" << m_actualNotes << "</actual-notes>\n";
         tmpNote << "          <normal-notes>" << m_normalNotes << "</normal-notes>\n";
-        long base = 0;
         if (event.has(BEAMED_GROUP_TUPLET_BASE)) {
+            long base = 0;
             event.get<Int>(BEAMED_GROUP_TUPLET_BASE, base);
             if (base != noteDuration) {
                 Note note = Note::getNearestNote(base);
@@ -1435,7 +1438,7 @@ MusicXmlExportHelper::flush(std::ostream &str)
 }
 
 std::string
-MusicXmlExportHelper::getNoteName(int noteType) const
+MusicXmlExportHelper::getNoteName(int noteType)
 {
     static const char *noteNames[] = {
         "64th", "32nd", "16th", "eighth", "quarter", "half", "whole", "breve"
@@ -1451,7 +1454,7 @@ MusicXmlExportHelper::getNoteName(int noteType) const
 }
 
 void
-MusicXmlExportHelper::queue(bool direction, timeT time, std::string str)
+MusicXmlExportHelper::queue(bool direction, timeT time, const std::string& str)
 {
     SimpleQueue sq;
     sq.direction = direction;

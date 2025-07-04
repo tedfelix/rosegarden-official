@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,10 +15,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CommandHistory]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CommandHistory.h"
 
 #include "Command.h"
+#include "gui/general/ActionData.h"
+#include "misc/Debug.h"
 
 #include <QRegularExpression>
 #include <QMenu>
@@ -28,8 +32,6 @@
 #include <QAction>
 
 #include <iostream>
-
-//#define DEBUG_COMMAND_HISTORY 1
 
 namespace Rosegarden
 {
@@ -46,34 +48,22 @@ CommandHistory::CommandHistory() :
     // All Edit > Undo menu items share this QAction object.
     m_undoAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
     m_undoAction->setObjectName("edit_undo");
-    m_undoAction->setShortcut(tr("Ctrl+Z"));
     m_undoAction->setStatusTip(tr("Undo the last editing operation"));
     connect(m_undoAction, &QAction::triggered, this, &CommandHistory::undo);
 
-    // Undo button for the main window toolbar.
-    m_undoMenuAction = new QAction(QIcon(":/icons/undo.png"), tr("&Undo"), this);
-    m_undoMenuAction->setObjectName("edit_toolbar_undo");
-    connect(m_undoMenuAction, &QAction::triggered, this, &CommandHistory::undo);
-    
     m_undoMenu = new QMenu(tr("&Undo"));
-    m_undoMenuAction->setMenu(m_undoMenu);
+    m_undoAction->setMenu(m_undoMenu);
     connect(m_undoMenu, &QMenu::triggered,
             this, &CommandHistory::undoActivated);
 
     // All Edit > Redo menu items share this QAction object.
     m_redoAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
     m_redoAction->setObjectName("edit_redo");
-    m_redoAction->setShortcut(tr("Ctrl+Shift+Z"));
     m_redoAction->setStatusTip(tr("Redo the last operation that was undone"));
     connect(m_redoAction, &QAction::triggered, this, &CommandHistory::redo);
-    
-    // Redo button for the main window toolbar.
-    m_redoMenuAction = new QAction(QIcon(":/icons/redo.png"), tr("Re&do"), this);
-    m_redoMenuAction->setObjectName("edit_toolbar_redo");
-    connect(m_redoMenuAction, &QAction::triggered, this, &CommandHistory::redo);
 
     m_redoMenu = new QMenu(tr("Re&do"));
-    m_redoMenuAction->setMenu(m_redoMenu);
+    m_redoAction->setMenu(m_redoMenu);
     connect(m_redoMenu, &QMenu::triggered,
             this, &CommandHistory::redoActivated);
 }
@@ -98,45 +88,18 @@ CommandHistory::getInstance()
 void
 CommandHistory::clear()
 {
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::clear()" << std::endl;
-#endif
     m_savedAt = -1;
     clearStack(m_undoStack);
     clearStack(m_redoStack);
     updateActions();
 }
 
-#if 0
 void
-CommandHistory::registerMenu(QMenu *menu)
-{
-    menu->addAction(m_undoAction);
-    menu->addAction(m_redoAction);
-}
-
-void
-CommandHistory::registerToolbar(QToolBar *toolbar)
-{
-    toolbar->addAction(m_undoMenuAction);
-    toolbar->addAction(m_redoMenuAction);
-}
-#endif
-
-void
-CommandHistory::addCommand(Command *command)
+CommandHistory::addCommand(Command *command, timeT startPointerPosition)
 {
     if (!command) return;
 
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::addCommand: " << command->getName().toLocal8Bit().data() << " at " << command << std::endl;
-#endif
-
-#ifdef DEBUG_COMMAND_HISTORY
-    if (!m_redoStack.empty()) {
-        std::cerr << "CommandHistory::clearing redo stack" << std::endl;
-    }
-#endif
+    RG_DEBUG << "addCommand(): " << command->getName().toLocal8Bit().data() << " at " << command << startPointerPosition;
 
     // We can't redo after adding a command
     clearStack(m_redoStack);
@@ -146,18 +109,26 @@ CommandHistory::addCommand(Command *command)
 
     emit aboutToExecuteCommand();
 
+    // If the caller of addCommand() provided a start pointer position,
+    // use it instead of the usual one.
+    // See the default argument value for startPointerPosition.
+    // See the comments on addCommand() in the header for details.
+    if (startPointerPosition > -1.0e9)
+        m_pointerPosition = startPointerPosition;
+
     CommandInfo commInfo;
     commInfo.command = command;
     commInfo.pointerPositionBefore = m_pointerPosition;
+    commInfo.pointerPositionAfter = m_pointerPosition;
     m_undoStack.push(commInfo);
     clipCommands();
-    
+
     // Execute the command
     command->execute();
 
     emit updateLinkedSegments(command);
     emit commandExecuted();
-    emit commandExecuted(command);
+    //emit commandExecuted2(command);
     emit commandExecutedInitially();
 
     updateActions();
@@ -170,9 +141,7 @@ CommandHistory::undo()
 {
     if (m_undoStack.empty()) return;
 
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::undo()" << std::endl;
-#endif
+    RG_DEBUG << "undo()";
 
     CommandInfo commInfo = m_undoStack.top();
     commInfo.command->unexecute();
@@ -196,15 +165,11 @@ CommandHistory::redo()
 {
     if (m_redoStack.empty()) return;
 
-#ifdef DEBUG_COMMAND_HISTORY
-    std::cerr << "CommandHistory::redo()" << std::endl;
-#endif
-
     CommandInfo commInfo = m_redoStack.top();
     commInfo.command->execute();
     emit updateLinkedSegments(commInfo.command);
     emit commandExecuted();
-    emit commandExecuted(commInfo.command);
+    //emit commandExecuted2(commInfo.command);
     m_pointerPosition = commInfo.pointerPositionAfter;
     emit commandRedone();
 
@@ -217,6 +182,7 @@ CommandHistory::redo()
     if ((int)m_undoStack.size() == m_savedAt) emit documentRestored();
 }
 
+/* unused
 void
 CommandHistory::setUndoLimit(int limit)
 {
@@ -225,7 +191,9 @@ CommandHistory::setUndoLimit(int limit)
         clipCommands();
     }
 }
+*/
 
+/* unused
 void
 CommandHistory::setRedoLimit(int limit)
 {
@@ -234,13 +202,16 @@ CommandHistory::setRedoLimit(int limit)
         clipCommands();
     }
 }
+*/
 
+/* unused
 void
 CommandHistory::setMenuLimit(int limit)
 {
     m_menuLimit = limit;
     updateActions();
 }
+*/
 
 void
 CommandHistory::documentSaved()
@@ -262,24 +233,19 @@ CommandHistory::clipCommands()
 void
 CommandHistory::clipStack(CommandStack &stack, int limit)
 {
-    int i;
-
     if ((int)stack.size() > limit) {
 
         CommandStack tempStack;
 
-        for (i = 0; i < limit; ++i) {
-#ifdef DEBUG_COMMAND_HISTORY
-            CommandInfo commInfo = stack.top();
-            std::cerr << "CommandHistory::clipStack: Saving recent command: " << commInfo.command->getName().toLocal8Bit().data() << " at " << command << std::endl;
-#endif
+        for (int i = 0; i < limit; ++i) {
+            RG_DEBUG << "clipStack(): Saving recent command: " << stack.top().command->getName().toLocal8Bit().data() << " at " << stack.top().command;
             tempStack.push(stack.top());
             stack.pop();
         }
 
         clearStack(stack);
 
-        for (i = 0; i < m_undoLimit; ++i) {
+        for (int i = 0; i < m_undoLimit; ++i) {
             stack.push(tempStack.top());
             tempStack.pop();
         }
@@ -292,9 +258,7 @@ CommandHistory::clearStack(CommandStack &stack)
     while (!stack.empty()) {
         CommandInfo commInfo = stack.top();
         // Not safe to call getName() on a command about to be deleted
-#ifdef DEBUG_COMMAND_HISTORY
-        std::cerr << "CommandHistory::clearStack: About to delete command " << command << std::endl;
-#endif
+        RG_DEBUG << "clearStack(): About to delete command " << commInfo.command;
         delete commInfo.command;
         stack.pop();
     }
@@ -344,9 +308,9 @@ CommandHistory::updateActions()
     for (int undo = 0; undo <= 1; ++undo) {
 
         QAction *action(undo ? m_undoAction : m_redoAction);
-        QAction *menuAction(undo ? m_undoMenuAction : m_redoMenuAction);
         QMenu *menu(undo ? m_undoMenu : m_redoMenu);
         CommandStack &stack(undo ? m_undoStack : m_redoStack);
+        QString actionName(undo ? "edit_undo" : "edit_redo");
 
         if (stack.empty()) {
 
@@ -355,10 +319,6 @@ CommandHistory::updateActions()
             action->setEnabled(false);
             action->setText(text);
             action->setToolTip(strippedText(text));
-
-            menuAction->setEnabled(false);
-            menuAction->setText(text);
-
         } else {
 
             QString commandName = stack.top().command->getName();
@@ -366,13 +326,24 @@ CommandHistory::updateActions()
 
             QString text = (undo ? tr("&Undo %1") : tr("Re&do %1"))
                 .arg(commandName);
+            ActionData* adata = ActionData::getInstance();
+            QString key = "rosegardenmainwindow.rc:";
+            key += actionName;
+            KeyList ksList = adata->getShortcuts(key);
+            QStringList kssl;
+            foreach(auto ks, ksList) {
+                kssl.append(ks.toString(QKeySequence::NativeText));
+            }
+            QString scString = kssl.join(", ");
+
+            if (kssl.size() > 0) {
+                // add the shortcuts to the tooltip
+                text = text + " (" + scString + ")";
+            }
 
             action->setEnabled(m_enableUndo);
             action->setText(text);
             action->setToolTip(strippedText(text));
-
-            menuAction->setEnabled(m_enableUndo);
-            menuAction->setText(text);
         }
 
         menu->clear();
@@ -424,7 +395,7 @@ CommandHistory::setPointerPositionForRedo(timeT pos)
     // executed. That means the relevant command is on the top of the
     // undo stack. The pointerPositionAfter value must be set for this
     // command.
- 
+
     if ((int)m_undoStack.size() == 0) return;
     CommandInfo& top = m_undoStack.top();
     top.pointerPositionAfter = pos;

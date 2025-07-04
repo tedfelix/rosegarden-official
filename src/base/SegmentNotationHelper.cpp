@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -19,6 +19,7 @@
 
 #include "SegmentNotationHelper.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "Quantizer.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
@@ -30,12 +31,15 @@
 #include <iterator>
 #include <list>
 
-//#define DEBUG_DECOUNTERPOINT
-
-namespace Rosegarden 
-{
 using std::string;
 using std::list;
+
+//#define DEBUG_DECOUNTERPOINT
+
+
+namespace Rosegarden
+{
+
 
 using namespace BaseProperties;
 
@@ -61,7 +65,7 @@ SegmentNotationHelper::notationQuantizer() {
 Segment::iterator
 SegmentNotationHelper::findNotationAbsoluteTime(timeT t)
 {
-    iterator i(segment().findTime(t));
+    Segment::iterator i(segment().findTime(t));
 
     // We don't know whether the notation absolute time t will appear
     // before or after the real absolute time t.  First scan backwards
@@ -80,6 +84,7 @@ SegmentNotationHelper::findNotationAbsoluteTime(timeT t)
     return i;
 }
 
+/* unused
 Segment::iterator
 SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
 {
@@ -98,6 +103,7 @@ SegmentNotationHelper::findNearestNotationAbsoluteTime(timeT t)
 
     return i;
 }
+*/
 
 void
 SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
@@ -162,18 +168,18 @@ SegmentNotationHelper::setNotationProperties(timeT startTime, timeT endTime)
 }
 
 timeT
-SegmentNotationHelper::getNotationEndTime(Event *e)
+SegmentNotationHelper::getNotationEndTime(const Event *e)
 {
     return e->getNotationAbsoluteTime() + e->getNotationDuration();
 }
 
 
 Segment::iterator
-SegmentNotationHelper::getNextAdjacentNote(iterator i,
+SegmentNotationHelper::getNextAdjacentNote(Segment::iterator i,
                                            bool matchPitch,
                                            bool allowOverlap)
 {
-    iterator j(i);
+    Segment::iterator j(i);
     if (!isBeforeEndMarker(i)) return i;
     if (!(*i)->isa(Note::EventType)) return end();
 
@@ -199,18 +205,22 @@ SegmentNotationHelper::getNextAdjacentNote(iterator i,
         bool isGrace = (*i)->has(IS_GRACE_NOTE) &&
             (*i)->get<Bool>(IS_GRACE_NOTE);
         RG_DEBUG << "getNextAdjacentNote isGrace" << isGrace;
-        if (isGrace && jStart < iEnd) return j;
+
+        // At this point we know jStart < iEnd.  There was a check for
+        // that here.  It is not needed.
+
+        if (isGrace) return j;
     }
 }
 
-   
+
 Segment::iterator
-SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
+SegmentNotationHelper::getPreviousAdjacentNote(Segment::iterator i,
                                                timeT rangeStart,
                                                bool matchPitch,
                                                bool allowOverlap)
-{ 
-    iterator j(i);
+{
+    Segment::iterator j(i);
     if (!isBeforeEndMarker(i)) return i;
     if (!(*i)->isa(Note::EventType)) return end();
 
@@ -240,11 +250,11 @@ SegmentNotationHelper::getPreviousAdjacentNote(iterator i,
 
 
 Segment::iterator
-SegmentNotationHelper::findContiguousNext(iterator el) 
+SegmentNotationHelper::findContiguousNext(Segment::iterator el)
 {
     std::string elType = (*el)->getType(),
         reject, accept;
-     
+
     if (elType == Note::EventType) {
         accept = Note::EventType;
         reject = Note::EventRestType;
@@ -258,8 +268,8 @@ SegmentNotationHelper::findContiguousNext(iterator el)
 
     bool success = false;
 
-    iterator i = ++el;
-    
+    Segment::iterator i = ++el;
+
     for(; isBeforeEndMarker(i); ++i) {
         std::string iType = (*i)->getType();
 
@@ -275,17 +285,17 @@ SegmentNotationHelper::findContiguousNext(iterator el)
 
     if (success) return i;
     else return end();
-    
+
 }
 
 Segment::iterator
-SegmentNotationHelper::findContiguousPrevious(iterator el)
+SegmentNotationHelper::findContiguousPrevious(Segment::iterator el)
 {
     if (el == begin()) return end();
 
     std::string elType = (*el)->getType(),
         reject, accept;
-     
+
     if (elType == Note::EventType) {
         accept = Note::EventType;
         reject = Note::EventRestType;
@@ -299,7 +309,7 @@ SegmentNotationHelper::findContiguousPrevious(iterator el)
 
     bool success = false;
 
-    iterator i = --el;
+    Segment::iterator i = --el;
 
     while (true) {
         std::string iType = (*i)->getType();
@@ -322,12 +332,12 @@ SegmentNotationHelper::findContiguousPrevious(iterator el)
 
 
 bool
-SegmentNotationHelper::noteIsInChord(Event *note)
+SegmentNotationHelper::noteIsInChord(const Event *note)
 {
-    iterator i = segment().findSingle(note);
+    Segment::iterator i = segment().findSingle(note);
     timeT t = note->getNotationAbsoluteTime();
-    
-    for (iterator j = i; j != end(); ++j) { // not isBeforeEndMarker, unnecessary here
+
+    for (Segment::iterator j = i; j != end(); ++j) { // not isBeforeEndMarker, unnecessary here
         if (j == i) continue;
         if ((*j)->isa(Note::EventType)) {
             timeT tj = (*j)->getNotationAbsoluteTime();
@@ -336,7 +346,7 @@ SegmentNotationHelper::noteIsInChord(Event *note)
         }
     }
 
-    for (iterator j = i; ; ) {
+    for (Segment::iterator j = i; ; ) {
         if (j == begin()) break;
         --j;
         if ((*j)->isa(Note::EventType)) {
@@ -364,7 +374,8 @@ SegmentNotationHelper::noteIsInChord(Event *note)
 
 //!!! This doesn't appear to be used any more and may well not work.
 // Ties are calculated in several different places, and it's odd that
-// we don't have a decent API for them 
+// we don't have a decent API for them
+/* unused
 Segment::iterator
 SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 {
@@ -396,7 +407,7 @@ SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
             (((*i)->getAbsoluteTime() + (*i)->getDuration()) != myTime)) {
             return end();
         }
-        
+
         if (!(*i)->get<Bool>(forwards ?
                              BaseProperties::TIED_BACKWARD :
                              BaseProperties::TIED_FORWARD, tied) || !tied) {
@@ -408,18 +419,18 @@ SegmentNotationHelper::getNoteTiedWith(Event *note, bool forwards)
 
     return end();
 }
-
+*/
 
 bool
 SegmentNotationHelper::collapseRestsIfValid(Event* e, bool& collapseForward)
 {
-    iterator elPos = segment().findSingle(e);
+    Segment::iterator elPos = segment().findSingle(e);
     if (elPos == end()) return false;
 
     timeT myDuration = (*elPos)->getNotationDuration();
 
     // findContiguousNext won't return an iterator beyond the end marker
-    iterator nextEvent = findContiguousNext(elPos),
+    Segment::iterator nextEvent = findContiguousNext(elPos),
          previousEvent = findContiguousPrevious(elPos);
 
     // Remark: findContiguousXXX is inadequate for notes, we would
@@ -463,7 +474,7 @@ SegmentNotationHelper::collapseRestsIfValid(Event* e, bool& collapseForward)
         insert(e1);
         return true;
     }
-    
+
     return false;
 }
 
@@ -482,16 +493,16 @@ SegmentNotationHelper::isSplitValid(timeT a, timeT b)
 }
 
 Segment::iterator
-SegmentNotationHelper::splitIntoTie(iterator &i, timeT baseDuration)
+SegmentNotationHelper::splitIntoTie(Segment::iterator &i, timeT baseDuration)
 {
     if (i == end()) return end();
-    iterator i2;
+    Segment::iterator i2;
     segment().getTimeSlice((*i)->getAbsoluteTime(), i, i2);
     return splitIntoTie(i, i2, baseDuration);
 }
 
 Segment::iterator
-SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
+SegmentNotationHelper::splitIntoTie(Segment::iterator &from, Segment::iterator to,
                                     timeT baseDuration)
 {
     // so long as we do the quantization checks for validity before
@@ -509,18 +520,18 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
     (*from)->get<Int>(BEAMED_GROUP_ID, firstGroupId);
 
     long nextGroupId = -1;
-    iterator ni(to);
+    Segment::iterator ni(to);
 
     if (segment().isBeforeEndMarker(ni) && segment().isBeforeEndMarker(++ni)) {
         (*ni)->get<Int>(BEAMED_GROUP_ID, nextGroupId);
     }
 
     list<Event *> toInsert;
-    list<iterator> toErase;
-          
+    list<Segment::iterator> toErase;
+
     // Split all the note and rest events in range [from, to[
     //
-    for (iterator i = from; i != to; ++i) {
+    for (Segment::iterator i = from; i != to; ++i) {
 
         if (!(*i)->isa(Note::EventType) &&
             !(*i)->isa(Note::EventRestType)) continue;
@@ -592,13 +603,13 @@ SegmentNotationHelper::splitIntoTie(iterator &from, iterator to,
     }
 
     // erase the old events
-    for (list<iterator>::iterator i = toErase.begin();
+    for (list<Segment::iterator>::iterator i = toErase.begin();
          i != toErase.end(); ++i) {
         segment().erase(*i);
     }
 
     from = end();
-    iterator last = end();
+    Segment::iterator last = end();
 
     // now insert the new events
     for (list<Event *>::iterator i = toInsert.begin();
@@ -617,20 +628,20 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 {
     bool viable;
 
-/*!!!
+/* !!!
     duration = basicQuantizer().quantizeDuration(duration);
 
     if (dots >= 0) {
         viable = (duration == Quantizer(Quantizer::RawEventData,
-                                        Quantizer::DefaultTarget,
+                                        Quantizer::DefaultTarget,  // "DefaultQ"
                                         Quantizer::NoteQuantize, 1, dots).
                   quantizeDuration(duration));
     } else {
         viable = (duration == notationQuantizer().quantizeDuration(duration));
     }
 */
-    
-    //!!! what to do about this?
+
+    // !!! what to do about this?
 
     timeT nearestDuration =
         Note::getNearestNote(duration, dots >= 0 ? dots : 2).getDuration();
@@ -643,9 +654,9 @@ SegmentNotationHelper::isViable(timeT duration, int dots)
 
 
 void
-SegmentNotationHelper::makeRestViable(iterator i)
+SegmentNotationHelper::makeRestViable(Segment::iterator i)
 {
-    timeT absTime = (*i)->getAbsoluteTime(); 
+    timeT absTime = (*i)->getAbsoluteTime();
     timeT duration = (*i)->getDuration();
     erase(i);
     segment().fillWithRests(absTime, absTime + duration);
@@ -653,7 +664,7 @@ SegmentNotationHelper::makeRestViable(iterator i)
 
 
 Event *
-SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
+SegmentNotationHelper::makeThisNoteViable(Segment::iterator noteItr, bool splitAtBars)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
@@ -725,7 +736,6 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
         return *noteItr;
     }
 
-    acc = (*i)->getNotationAbsoluteTime();
     Event *e = new Event(*(*i));
 
     bool lastTiedForward = false;
@@ -763,7 +773,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
             // is longer than the event duration.  The following check will
             // make sure the notation duration is truncated to the event
             // duration thus preventing the endless loop.
-            
+
             // Bug #1419
             //
             // The above referenced check obviously didn't work correctly.  The
@@ -788,18 +798,11 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
                     e->getAbsoluteTime(), e->getDuration());  // notation
             toInsert.push_back(e1);
             break;
-
-            // Add in the remaining time.
-            toInsert.push_back(e);
-            e = nullptr;
-            break;
         }
 
         toInsert.push_back(splits.first);
         delete e;
         e = splits.second;
-
-        acc += *dli;
 
         e->set<Bool>(TIED_BACKWARD, true);
     }
@@ -818,7 +821,7 @@ SegmentNotationHelper::makeThisNoteViable(iterator noteItr, bool splitAtBars)
 }
 
 void
-SegmentNotationHelper::makeNotesViable(iterator from, iterator to,
+SegmentNotationHelper::makeNotesViable(Segment::iterator from, Segment::iterator to,
                                        bool splitAtBars)
 {
 //  std::vector<Event *> toInsert;
@@ -855,7 +858,7 @@ SegmentNotationHelper::insertNote(timeT absoluteTime, Note note, int pitch,
     Event *e = new Event(Note::EventType, absoluteTime, note.getDuration());
     e->set<Int>(PITCH, pitch);
     e->set<String>(ACCIDENTAL, explicitAccidental);
-    iterator i = insertNote(e);
+    Segment::iterator i = insertNote(e);
     delete e;
     return i;
 }
@@ -867,7 +870,7 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
     RG_DEBUG << *modelEvent;
 
     timeT absoluteTime = modelEvent->getAbsoluteTime();
-    iterator i = segment().findNearestTime(absoluteTime);
+    Segment::iterator i = segment().findNearestTime(absoluteTime);
 
     RG_DEBUG << "absoluteTime" << absoluteTime;
 
@@ -884,7 +887,7 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
 
     timeT duration = modelEvent->getDuration();
 
-    iterator j = i;
+    Segment::iterator j = i;
     while (j != end()) {
         // ignore non note/rest
         bool noteOrRest = (*j)->isa(Note::EventType) ||
@@ -892,7 +895,7 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
         if (noteOrRest) {
             break;
         } else {
-            j++;
+            ++j;
         }
     }
     if (j != end() && (*j)->has(BEAMED_GROUP_TUPLET_BASE)) {
@@ -914,7 +917,7 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
 Segment::iterator
 SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 {
-    iterator i, j;
+    Segment::iterator i, j;
     segment().getTimeSlice(absoluteTime, i, j);
 
     //!!! Deal with end-of-bar issues!
@@ -940,21 +943,21 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
 // iterator (which will have been replaced)
 
 Segment::iterator
-SegmentNotationHelper::collapseRestsForInsert(iterator i,
+SegmentNotationHelper::collapseRestsForInsert(Segment::iterator firstRest,
                                               timeT desiredDuration)
 {
     // collapse at most once, then recurse
 
-    if (!segment().isBeforeEndMarker(i) ||
-        !(*i)->isa(Note::EventRestType)) return i;
+    if (!segment().isBeforeEndMarker(firstRest) ||
+        !(*firstRest)->isa(Note::EventRestType)) return firstRest;
 
-    timeT d = (*i)->getDuration();
-    iterator j = findContiguousNext(i); // won't return itr after end marker
-    if (d >= desiredDuration || j == end()) return i;
+    timeT d = (*firstRest)->getDuration();
+    Segment::iterator j = findContiguousNext(firstRest); // won't return itr after end marker
+    if (d >= desiredDuration || j == end()) return firstRest;
 
-    Event *e(new Event(**i, (*i)->getAbsoluteTime(), d + (*j)->getDuration()));
-    iterator ii(insert(e));
-    erase(i);
+    Event *e(new Event(**firstRest, (*firstRest)->getAbsoluteTime(), d + (*j)->getDuration()));
+    Segment::iterator ii(insert(e));
+    erase(firstRest);
     erase(j);
 
     return collapseRestsForInsert(ii, desiredDuration);
@@ -962,11 +965,11 @@ SegmentNotationHelper::collapseRestsForInsert(iterator i,
 
 
 Segment::iterator
-SegmentNotationHelper::insertSomething(iterator i, int duration,
+SegmentNotationHelper::insertSomething(Segment::iterator i, int duration,
                                        Event *modelEvent, bool tiedBack)
 {
     // Rules:
-    // 
+    //
     // 1. If we hit a bar line in the course of the intended inserted
     // note, we should split the note rather than make the bar the
     // wrong length.  (Not implemented yet)
@@ -978,7 +981,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
     // then we should insert the new note/rest literally and remove
     // rests as appropriate.  Rests should never prevent us from
     // inserting what the user asked for.
-    // 
+    //
     // 3. If there are notes in the way of an inserted note, however,
     // we split whenever "reasonable" and truncate our user's note if
     // not reasonable to split.  We can't always give users the Right
@@ -1036,7 +1039,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
         } else if ((*i)->isa(Note::EventRestType)) {
 
 //            RG_DEBUG << "Found rest, splitting";
-            iterator last = splitIntoTie(i, duration);
+            Segment::iterator last = splitIntoTie(i, duration);
 
             // Recover viability for the second half of any split rest
             // (we duck out of this if we find we're in a tupleted zone)
@@ -1061,7 +1064,7 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
         // of the segment
 
         if ((*i)->isa(Note::EventRestType)) {
-            iterator j;
+            Segment::iterator j;
             for (j = i; j != end(); ++j) {
                 if ((*j)->isa(Note::EventType)) break;
             }
@@ -1102,25 +1105,27 @@ SegmentNotationHelper::insertSomething(iterator i, int duration,
 }
 
 Segment::iterator
-SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
-                                             Event *modelEvent, bool tiedBack)
+SegmentNotationHelper::insertSingleSomething(Segment::iterator i,
+                                             int duration,
+                                             const Event *modelEvent,
+                                             bool tiedBack)
 {
-    timeT time;
+    timeT newEventTime;
     timeT notationTime;
     bool eraseI = false;
     timeT effectiveDuration(duration);
 
     if (i == end()) {
-        time = segment().getEndTime();
-        notationTime = time;
+        newEventTime = segment().getEndTime();
+        notationTime = newEventTime;
     } else {
-        time = (*i)->getAbsoluteTime();
+        newEventTime = (*i)->getAbsoluteTime();
         notationTime = (*i)->getNotationAbsoluteTime();
         if (modelEvent->isa(Note::EventRestType) ||
             (*i)->isa(Note::EventRestType)) eraseI = true;
     }
 
-    Event *e = new Event(*modelEvent, time, effectiveDuration,
+    Event *e = new Event(*modelEvent, newEventTime, effectiveDuration,
                          modelEvent->getSubOrdering(), notationTime);
 
     // If the model event already has group info, I guess we'd better use it!
@@ -1135,10 +1140,10 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
     if (eraseI) {
         // erase i and all subsequent events with the same type and
         // absolute time
-        timeT time((*i)->getAbsoluteTime());
+        const timeT timeToErase((*i)->getAbsoluteTime());
         std::string type((*i)->getType());
-        iterator j(i);
-        while (j != end() && (*j)->getAbsoluteTime() == time) {
+        Segment::iterator j(i);
+        while (j != end() && (*j)->getAbsoluteTime() == timeToErase) {
             ++j;
             if ((*i)->isa(type)) erase(i);
             i = j;
@@ -1149,7 +1154,7 @@ SegmentNotationHelper::insertSingleSomething(iterator i, int duration,
 }
 
 void
-SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
+SegmentNotationHelper::setInsertedNoteGroup(Event *e, Segment::iterator i)
 {
     // Formerly this was posited on the note being inserted between
     // two notes in the same group, but that's quite wrong-headed: we
@@ -1197,28 +1202,28 @@ SegmentNotationHelper::setInsertedNoteGroup(Event *e, iterator i)
 
 
 Segment::iterator
-SegmentNotationHelper::insertClef(timeT absoluteTime, Clef clef)
+SegmentNotationHelper::insertClef(timeT absoluteTime, const Clef& clef)
 {
     return insert(clef.getAsEvent(absoluteTime));
 }
 
 
 Segment::iterator
-SegmentNotationHelper::insertSymbol(timeT absoluteTime, Symbol symbol)
+SegmentNotationHelper::insertSymbol(timeT absoluteTime, const Symbol& symbol)
 {
     return insert(symbol.getAsEvent(absoluteTime));
 }
 
 
 Segment::iterator
-SegmentNotationHelper::insertKey(timeT absoluteTime, Key key)
+SegmentNotationHelper::insertKey(timeT absoluteTime, const Key& key)
 {
     return insert(key.getAsEvent(absoluteTime));
 }
 
 
 Segment::iterator
-SegmentNotationHelper::insertText(timeT absoluteTime, Text text)
+SegmentNotationHelper::insertText(timeT absoluteTime, const Text& text)
 {
     Segment::iterator i = insert(text.getAsEvent(absoluteTime));
 
@@ -1234,12 +1239,12 @@ SegmentNotationHelper::insertText(timeT absoluteTime, Text text)
 void
 SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 {
-    iterator i = segment().findSingle(e);
+    Segment::iterator i = segment().findSingle(e);
 
     if (i == end()) return;
 
     if ((*i)->has(TIED_BACKWARD) && (*i)->get<Bool>(TIED_BACKWARD)) {
-        iterator j = getPreviousAdjacentNote(i, segment().getStartTime(),
+        Segment::iterator j = getPreviousAdjacentNote(i, segment().getStartTime(),
                                              true, false);
         if (j != end()) {
             (*j)->unset(TIED_FORWARD); // don't even check if it has it set
@@ -1247,7 +1252,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     }
 
     if ((*i)->has(TIED_FORWARD) && (*i)->get<Bool>(TIED_FORWARD)) {
-        iterator j = getNextAdjacentNote(i, true, false);
+        Segment::iterator j = getNextAdjacentNote(i, true, false);
         if (j != end()) {
             (*j)->unset(TIED_BACKWARD); // don't even check if it has it set
         }
@@ -1261,7 +1266,7 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
     // another note starts before this one, overlaps it, but then also
     // ends before it does -- but I think we can live with that.
 
-    iterator j = i;
+    Segment::iterator j = i;
     timeT dur = (*i)->getGreaterDuration();
     timeT endTime = (*i)->getAbsoluteTime() + dur;
 
@@ -1305,11 +1310,10 @@ SegmentNotationHelper::deleteNote(Event *e, bool collapseRest)
 
     }else{
         int untupled = e->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
-        iterator begin, end;
+        Segment::iterator begin, end;
         int count = findBorderTuplet(i, begin, end);
         if (count>1){
             // insert rest instead of note
-            string type = (*i)->getType();
             int note_type = (*i)->get<Int>(NOTE_TYPE);
             insertRest((*i)->getAbsoluteTime(), Note(note_type,0));
         }else {
@@ -1357,21 +1361,21 @@ SegmentNotationHelper::deleteEvent(Event *e, bool collapseRest)
     else if (e->isa(Note::EventRestType)) res = deleteRest(e);
     else {
         // just plain delete
-        iterator i = segment().findSingle(e);
+        Segment::iterator i = segment().findSingle(e);
         if (i != end()) erase(i);
     }
 
-    return res;    
+    return res;
 }
 
 
 bool
-SegmentNotationHelper::hasEffectiveDuration(iterator i)
+SegmentNotationHelper::hasEffectiveDuration(Segment::iterator i)
 {
     bool hasDuration = ((*i)->getDuration() > 0);
 
     if ((*i)->isa(Note::EventType)) {
-        iterator i0(i);
+        Segment::iterator i0(i);
         if (++i0 != end() &&
             (*i0)->isa(Note::EventType) &&
             (*i0)->getNotationAbsoluteTime() ==
@@ -1380,20 +1384,20 @@ SegmentNotationHelper::hasEffectiveDuration(iterator i)
             hasDuration = false;
         }
     }
-    
+
     return hasDuration;
 }
 
 
 void
-SegmentNotationHelper::makeBeamedGroup(timeT from, timeT to, string type)
+SegmentNotationHelper::makeBeamedGroup(timeT from, timeT to, const string& type)
 {
     makeBeamedGroupAux(segment().findTime(from), segment().findTime(to),
                        type, false);
 }
 
 void
-SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
+SegmentNotationHelper::makeBeamedGroup(Segment::iterator from, Segment::iterator to, const string& type)
 {
     makeBeamedGroupAux
       ((from == end()) ? from : segment().findTime((*from)->getAbsoluteTime()),
@@ -1402,13 +1406,13 @@ SegmentNotationHelper::makeBeamedGroup(iterator from, iterator to, string type)
 }
 
 void
-SegmentNotationHelper::makeBeamedGroupExact(iterator from, iterator to, string type)
+SegmentNotationHelper::makeBeamedGroupExact(Segment::iterator from, Segment::iterator to, const string& type)
 {
     makeBeamedGroupAux(from, to, type, true);
 }
 
 void
-SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
+SegmentNotationHelper::makeBeamedGroupAux(Segment::iterator from, Segment::iterator to,
                                           string type, bool groupGraces)
 {
 //    RG_DEBUG << "SegmentNotationHelper::makeBeamedGroupAux: type " << type;
@@ -1417,7 +1421,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
     int groupId = segment().getNextId();
     bool beamedSomething = false;
 
-    for (iterator i = from; i != to; ++i) {
+    for (Segment::iterator i = from; i != to; ++i) {
 //        RG_DEBUG << "looking at " << (*i)->getType() << " at " << (*i)->getAbsoluteTime();
 
         // don't permit ourselves to change the type of an
@@ -1442,7 +1446,7 @@ SegmentNotationHelper::makeBeamedGroupAux(iterator from, iterator to,
             (*i)->getNotationDuration() >= Note(Note::Crotchet).getDuration()) {
 //            RG_DEBUG << "too long";
             if (!beamedSomething) continue;
-            iterator j = i;
+            Segment::iterator j = i;
             bool somethingLeft = false;
             while (++j != to) {
                 if ((*j)->getType() == Note::EventType &&
@@ -1470,12 +1474,12 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
     RG_DEBUG << "SegmentNotationHelper::makeTupletGroup: time " << t << ", unit "<< unit << ", params " << untupled << "/" << tupled << ", id " << groupId;
 
     list<Event *> toInsert;
-    list<iterator> toErase;
+    list<Segment::iterator> toErase;
     timeT notationTime = t;
     timeT fillWithRestsTo = t;
     bool haveStartNotationTime = false;
 
-    for (iterator i = segment().findTime(t); i != end(); ++i) {
+    for (Segment::iterator i = segment().findTime(t); i != end(); ++i) {
 
         // skip anything that is not a note or a rest
         bool noteOrRest = (*i)->isa(Note::EventType) ||
@@ -1525,8 +1529,8 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
         toErase.push_back(i);
         // At the end of a segment we may run out of events before the
         // tuplet is complete. So complete it here
-        iterator j = i;
-        j++;
+        Segment::iterator j = i;
+        ++j;
         if (j == end()) {
             // yes i is the last event
             timeT noteEnd = e->getAbsoluteTime() + e->getDuration();
@@ -1537,7 +1541,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
                 Event *el = new Event(**i, noteEnd, tupletEnd - noteEnd);
                 el->set<Int>(BEAMED_GROUP_ID, groupId);
                 el->set<String>(BEAMED_GROUP_TYPE, GROUP_TYPE_TUPLED);
-                
+
                 el->set<Int>(BEAMED_GROUP_TUPLET_BASE, unit);
                 el->set<Int>(BEAMED_GROUP_TUPLED_COUNT, tupled);
                 el->set<Int>(BEAMED_GROUP_UNTUPLED_COUNT, untupled);
@@ -1546,7 +1550,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
         }
     }
 
-    for (list<iterator>::iterator i = toErase.begin();
+    for (list<Segment::iterator>::iterator i = toErase.begin();
          i != toErase.end(); ++i) {
         segment().erase(*i);
     }
@@ -1564,7 +1568,7 @@ SegmentNotationHelper::makeTupletGroup(timeT t, int untupled, int tupled,
     }
 }
 
-    
+
 
 
 void
@@ -1574,7 +1578,7 @@ SegmentNotationHelper::unbeam(timeT from, timeT to)
 }
 
 void
-SegmentNotationHelper::unbeam(iterator from, iterator to)
+SegmentNotationHelper::unbeam(Segment::iterator from, Segment::iterator to)
 {
     unbeamAux
      ((from == end()) ? from : segment().findTime((*from)->getAbsoluteTime()),
@@ -1582,9 +1586,9 @@ SegmentNotationHelper::unbeam(iterator from, iterator to)
 }
 
 void
-SegmentNotationHelper::unbeamAux(iterator from, iterator to)
+SegmentNotationHelper::unbeamAux(Segment::iterator from, Segment::iterator to)
 {
-    for (iterator i = from; i != to; ++i) {
+    for (Segment::iterator i = from; i != to; ++i) {
         (*i)->unset(BEAMED_GROUP_ID);
         (*i)->unset(BEAMED_GROUP_TYPE);
         (*i)->clearNonPersistentProperties();
@@ -1597,11 +1601,11 @@ SegmentNotationHelper::unbeamAux(iterator from, iterator to)
 
   Auto-beaming code derived from X11 Rosegarden's ItemListAutoBeam
   and ItemListAutoBeamSub in editor/src/ItemList.c.
-  
+
 */
 
 void
-SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
+SegmentNotationHelper::autoBeam(timeT from, timeT to, const string& type)
 {
     /*
     RG_DEBUG << "autoBeam from " << from << " to " << to << " on segment start time " << segment().getStartTime() << ", end time " << segment().getEndTime() << ", end marker " << segment().getEndMarkerTime();
@@ -1611,7 +1615,9 @@ SegmentNotationHelper::autoBeam(timeT from, timeT to, string type)
 }
 
 void
-SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
+SegmentNotationHelper::autoBeam(Segment::iterator from,
+                                Segment::iterator to,
+                                const string& type)
 {
     // This can only manage whole bars at a time, and it will split
     // the from-to range out to encompass the whole bars in which they
@@ -1626,7 +1632,7 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
 
     unbeam(from, to);
 
-    Composition *comp = segment().getComposition();
+    const Composition *comp = segment().getComposition();
 
     // Get bar range for selection.  Since this is inclusive, we subtract 1 from
     // the "to" time to ensure we don't get an additional bar (bug #703).
@@ -1639,8 +1645,8 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
     for (int barNo = fromBar; barNo <= toBar; ++barNo) {
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo);
-        iterator barStart = segment().findTime(barRange.first);
-        iterator barEnd   = segment().findTime(barRange.second);
+        Segment::iterator barStart = segment().findTime(barRange.first);
+        Segment::iterator barEnd   = segment().findTime(barRange.second);
 
         // Make sure we're examining the notes defined to be within
         // the bar in notation terms rather than raw terms
@@ -1648,7 +1654,7 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
         while (barStart != segment().end() &&
                (*barStart)->getNotationAbsoluteTime() < barRange.first) ++barStart;
 
-        iterator scooter = barStart;
+        Segment::iterator scooter = barStart;
         if (barStart != segment().end()) {
             while (scooter != segment().begin()) {
                 --scooter;
@@ -1687,12 +1693,14 @@ SegmentNotationHelper::autoBeam(iterator from, iterator to, string type)
   which would be going around in the gunman's head as he trains a laser
   sight into your bedroom through the narrow gap in your curtains and
   dances the little red dot around nervously on your wall."
-  
+
 */
 
 void
-SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
-                                   TimeSignature tsig, string type)
+SegmentNotationHelper::autoBeamBar(Segment::iterator from,
+                                   Segment::iterator to,
+                                   const TimeSignature& tsig,
+                                   const string& type)
 {
     int num = tsig.getNumerator();
     int denom = tsig.getDenominator();
@@ -1701,7 +1709,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
     timeT minimum = 0;
 
     // If the denominator is 2 or 4, beam in twos (3/4, 6/2 etc).
-    
+
     if (denom == 2 || denom == 4) {
 
         if (num % 3) {
@@ -1732,17 +1740,17 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
 
 void
-SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
+SegmentNotationHelper::autoBeamBar(Segment::iterator from, Segment::iterator to,
                                    timeT average, timeT minimum,
-                                   timeT maximum, string type)
+                                   timeT maximum, const string& type)
 {
     timeT accumulator = 0;
     timeT crotchet    = Note(Note::Crotchet).getDuration();
     timeT semiquaver  = Note(Note::Semiquaver).getDuration();
 
-    iterator e = end();
+    Segment::iterator e = end();
 
-    for (iterator i = from; i != to && i != e; ++i) {
+    for (Segment::iterator i = from; i != to && i != e; ++i) {
 
         // only look at one note in each chord, and at rests
         if (!hasEffectiveDuration(i)) continue;
@@ -1762,7 +1770,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
             // I hope this is clear.
 
-            iterator k = end(); // best-so-far last item in group;
+            Segment::iterator k = end(); // best-so-far last item in group;
                                 // end() indicates that we've found nothing
 
             timeT tmin         = minimum;
@@ -1773,7 +1781,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
             int beamable       = 0;
             int longerThanDemi = 0;
 
-            for (iterator j = i; j != to; ++j) {
+            for (Segment::iterator j = i; j != to; ++j) {
 
                 if (!hasEffectiveDuration(j)) continue;
                 timeT jdur = (*j)->getNotationDuration();
@@ -1806,7 +1814,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
                 // happen unless we really are displaying completely
                 // unquantized data in which case anything goes.)
 
-                iterator jnext(j);
+                Segment::iterator jnext(j);
 
                 if ((count > maximum)
                     || (longerThanDemi > 4)
@@ -1818,7 +1826,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 
                     if (k != end() && beamable >= 2) {
 
-                        iterator knext(k);
+                        Segment::iterator knext(k);
                         ++knext;
 
                         makeBeamedGroup(i, knext, type);
@@ -1861,7 +1869,7 @@ SegmentNotationHelper::autoBeamBar(iterator from, iterator to,
 // based on X11 Rosegarden's GuessItemListClef in editor/src/MidiIn.c
 
 Clef
-SegmentNotationHelper::guessClef(iterator from, iterator to)
+SegmentNotationHelper::guessClef(Segment::iterator from, Segment::iterator to)
 {
     long totalHeight = 0;
     int noteCount = 0;
@@ -1870,7 +1878,7 @@ SegmentNotationHelper::guessClef(iterator from, iterator to)
     Clef clef;
     Key key;
 
-    for (iterator i = from; i != to; ++i) {
+    for (Segment::iterator i = from; i != to; ++i) {
         if ((*i)->isa(Note::EventType)) {
 //!!!            NotationDisplayPitch p((*i)->get<Int>(PITCH), clef, key);
             try {
@@ -1907,19 +1915,19 @@ bool
 SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
 {
     Event dummy("dummy", time, 0, MIN_SUBORDERING);
-    
+
     RG_DEBUG << "SegmentNotationHelper::removeRests(" << time
               << ", " << duration << ")";
 
-    iterator from = segment().lower_bound(&dummy);
+    Segment::iterator from = segment().lower_bound(&dummy);
 
     // ignore any number of zero-duration events at the start
     while (from != segment().end() &&
            (*from)->getAbsoluteTime() == time &&
            (*from)->getDuration() == 0) ++from;
     if (from == segment().end()) return false;
-    
-    iterator to = from;
+
+    Segment::iterator to = from;
 
     timeT eventTime = time;
     timeT finalTime = time + duration;
@@ -1949,8 +1957,8 @@ SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
     }
 
     bool checkLastRest = false;
-    iterator lastEvent = to;
-    
+    Segment::iterator lastEvent = to;
+
     if (eventTime < finalTime) {
         // shorten last event's duration, if possible
 
@@ -2000,24 +2008,24 @@ void
 SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
                                        Reorganizer reorganizer)
 {
-    iterator ia = segment().findTime(startTime);
-    iterator ib = segment().findTime(endTime);
-    
+    Segment::iterator ia = segment().findTime(startTime);
+    Segment::iterator ib = segment().findTime(endTime);
+
     if (ia == end()) return;
 
-    std::vector<iterator> erasable;
+    std::vector<Segment::iterator> erasable;
     std::vector<Event *> insertable;
 
 //    RG_DEBUG << "SegmentNotationHelper::reorganizeRests (" << startTime << ","
 //         << endTime << ")";
 
-    for (iterator i = ia; i != ib; ++i) {
+    for (Segment::iterator i = ia; i != ib; ++i) {
 
         if ((*i)->isa(Note::EventRestType)) {
 
             timeT startTime = (*i)->getAbsoluteTime();
             timeT duration = 0;
-            iterator j = i;
+            Segment::iterator j = i;
 
             for ( ; j != ib; ++j) {
 
@@ -2040,7 +2048,7 @@ SegmentNotationHelper::reorganizeRests(timeT startTime, timeT endTime,
         segment().insert(insertable[ii]);
 }
 
-
+/* unused
 void
 SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
                                                 timeT duration,
@@ -2066,7 +2074,7 @@ SegmentNotationHelper::normalizeContiguousRests(timeT startTime,
         acc += *i;
     }
 }
-
+*/
 
 void
 SegmentNotationHelper::mergeContiguousRests(timeT startTime,
@@ -2088,13 +2096,13 @@ SegmentNotationHelper::mergeContiguousRests(timeT startTime,
 
 
 Segment::iterator
-SegmentNotationHelper::collapseNoteAggressively(Event *note,
+SegmentNotationHelper::collapseNoteAggressively(const Event *note,
                                                 timeT rangeEnd)
 {
-    iterator i = segment().findSingle(note);
+    Segment::iterator i = segment().findSingle(note);
     if (i == end()) return end();
 
-    iterator j = getNextAdjacentNote(i, true, true);
+    Segment::iterator j = getNextAdjacentNote(i, true, true);
 
     if (j == end() || (*j)->getNotationAbsoluteTime() >= rangeEnd) return end();
     if ((*i)->maskedInTrigger() != (*j)->maskedInTrigger()) {
@@ -2103,7 +2111,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
         (*j)->set<Bool>(TIED_BACKWARD, true);
         return end();
     }
-    
+
     timeT iEnd = (*i)->getNotationAbsoluteTime() + (*i)->getNotationDuration();
     timeT jEnd = (*j)->getNotationAbsoluteTime() + (*j)->getNotationDuration();
 
@@ -2118,7 +2126,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
     // deselecting fro mthe selection set.
     (*i)->unset(TIED_BACKWARD);
     (*i)->unset(TIED_FORWARD);
-    
+
     (*j)->unset(TIED_BACKWARD);
     (*j)->unset(TIED_FORWARD);
 
@@ -2128,7 +2136,7 @@ SegmentNotationHelper::collapseNoteAggressively(Event *note,
 }
 
 std::pair<Event *, Event *>
-SegmentNotationHelper::splitPreservingPerformanceTimes(Event *e, timeT q1)
+SegmentNotationHelper::splitPreservingPerformanceTimes(const Event *e, timeT q1)
 {
     timeT ut = e->getAbsoluteTime();
     timeT ud = e->getDuration();
@@ -2291,8 +2299,8 @@ SegmentNotationHelper::deCounterpoint(timeT startTime, timeT endTime)
 void
 SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
 {
-    iterator from = segment().findTime(startTime);
-    iterator to = segment().findTime(endTime);
+    Segment::iterator from = segment().findTime(startTime);
+    Segment::iterator to = segment().findTime(endTime);
 
     timeT potentialStart = segment().getEndTime();
     long  groupId = -1;
@@ -2300,7 +2308,7 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
     int   count = 0;
     bool  thisLegato = false, prevLegato = false;
 
-    for (iterator i = from; i != to && segment().isBeforeEndMarker(i); ++i) {
+    for (Segment::iterator i = from; i != to && segment().isBeforeEndMarker(i); ++i) {
 
         timeT t = (*i)->getNotationAbsoluteTime();
 
@@ -2325,7 +2333,7 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
             Indication ind(Indication::Slur, t - potentialStart);
             segment().insert(ind.getAsEvent(potentialStart));
             if (legatoOnly) {
-                for (iterator j = segment().findTime(potentialStart); j != i; ++j) {
+                for (Segment::iterator j = segment().findTime(potentialStart); j != i; ++j) {
                     Marks::removeMark(**j, Marks::Tenuto);
                 }
             }
@@ -2343,7 +2351,7 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
         Indication ind(Indication::Slur, endTime - potentialStart);
         segment().insert(ind.getAsEvent(potentialStart));
         if (legatoOnly) {
-            for (iterator j = segment().findTime(potentialStart);
+            for (Segment::iterator j = segment().findTime(potentialStart);
                  segment().isBeforeEndMarker(j) && j != to; ++j) {
                 Marks::removeMark(**j, Marks::Tenuto);
             }
@@ -2364,7 +2372,7 @@ timeT SegmentNotationHelper::getTupletNoteDuration
     timeT tupletStart = tupletStartRatio * baseUnit;
     timeT approxNoteDuration = baseDuration * tupled / untupled;
     RG_DEBUG << "tuplet start:" << tupletStart;
-    double posInTupleD = ((double)(insertionTime - tupletStart) / 
+    double posInTupleD = ((double)(insertionTime - tupletStart) /
                           (double)approxNoteDuration);
     int posInTuple = (int)(posInTupleD + 0.5);
     int posNextInTuple = posInTuple + 1;
@@ -2379,9 +2387,134 @@ timeT SegmentNotationHelper::getTupletNoteDuration
     return trueDuration;
 }
 
-int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterator &end){
-    iterator beginB = segment().findTime(segment().getBarStartForTime((*it)->getAbsoluteTime()));
-    iterator endB = segment().findTime(segment().getBarEndForTime((*it)->getAbsoluteTime()));
+void SegmentNotationHelper::updateIndications(timeT startTime, timeT endTime)
+{
+    RG_DEBUG << "updateIndications" << startTime << endTime;
+
+    // Find slurs in range and add to slurMap.
+
+    typedef std::list<Event*> NoteList;
+    // Map of slurs to a list of notes covered by that slur.
+    typedef std::map<Event* /* slur */, NoteList /* notes */> SlurMap;
+    SlurMap slurMap;
+
+    // For each Event in the Segment, find the slurs and the notes that go
+    // with them.
+    for (Segment::iterator i = begin();
+         i != end() && segment().isBeforeEndMarker(i); ++i) {
+
+        if ((*i)->getNotationAbsoluteTime() > endTime) break;
+
+        // Indication Event
+        if ((*i)->isa(Indication::EventType)) {
+            RG_DEBUG << "updateIndications found indication";
+            const Indication ind(**i);
+
+            const timeT indicationStart = (*i)->getNotationAbsoluteTime();
+            const timeT indicationEnd = indicationStart + ind.getIndicationDuration();
+            if (indicationEnd < startTime) {
+                RG_DEBUG << "updateIndications ignore out of range indication";
+                continue;
+            }
+
+            // Make sure we get all the Notes in this Indication.
+            // ??? What if it isn't a slur?  We check that afterwards.  E.g.
+            //     what if it is a Crescendo?  That would trigger this extension.
+            //     It doesn't break anything.  It just might do a little more
+            //     work than necessary.  Recommend moving the slur type check
+            //     above this.  More for clarity than performance.
+            if (indicationEnd > endTime) endTime = indicationEnd;
+
+            std::string indType = ind.getIndicationType();
+            RG_DEBUG << "updateIndications found indication" << indType << indicationStart << indicationEnd;
+
+            // Not a slur?  Try the next Event.
+            if (indType != Indication::Slur &&
+                indType != Indication::PhrasingSlur) continue;
+
+            RG_DEBUG << "updateIndications checking (phrasing) slur";
+
+            // Add an entry to the slurMap without any notes.
+            slurMap[*i];
+        }
+
+        // Note Event.
+        if ((*i)->isa(Note::EventType)) {
+            // For each slur in the slurMap...
+            for (SlurMap::value_type& pair : slurMap) {
+                const Event* slurEvent = pair.first;
+                NoteList& noteList = pair.second;
+
+                const timeT slurStart = slurEvent->getNotationAbsoluteTime();
+                const timeT slurEnd = slurStart + slurEvent->getNotationDuration();
+                const timeT noteStart = (*i)->getNotationAbsoluteTime();
+                const timeT noteEnd = noteStart + (*i)->getNotationDuration();
+
+                RG_DEBUG << "updateIndications check note for slur" << noteStart << noteEnd << slurStart << slurEnd;
+
+                // If this note is contained in the slur...
+                if (noteStart >= slurStart && noteEnd <= slurEnd) {
+                    // Add the Note to this slurMap entry.
+                    noteList.push_back(*i);
+
+                    RG_DEBUG << "updateIndications add note to note list" << noteList.size() << &noteList;
+                }
+            }
+        }
+    }
+
+    // The slurMap now contains all (phrasing) slurs each with a list of notes.
+
+    // For each slur in the slurMap, remove or adjust as appropriate.
+    for (const SlurMap::value_type& pair : slurMap) {
+        Event* slurEvent = pair.first;
+        const NoteList& noteList = pair.second;
+
+        const timeT slurStart = slurEvent->getNotationAbsoluteTime();
+        const timeT slurEnd = slurStart + slurEvent->getNotationDuration();
+
+        RG_DEBUG << "updateIndications checking slur at" << slurStart << noteList.size() << &noteList;
+
+        if (noteList.size() <= 1) {
+            RG_DEBUG << "updateIndications remove unnecessary slur";
+            // A slur with 1 or 0 notes cannot exist - remove it
+            segment().eraseSingle(slurEvent);
+        } else {
+            // Compute the start and end times of the slur.
+            timeT notesStart = segment().getEndTime();
+            timeT notesEnd = 0;
+
+            // For each note within the slur, adjust the time range.
+            for (const Event *note : noteList) {
+                const timeT noteStart = (note)->getNotationAbsoluteTime();
+                const timeT noteEnd = noteStart + (note)->getNotationDuration();
+
+                if (noteStart < notesStart) notesStart = noteStart;
+                if (noteEnd > notesEnd) notesEnd = noteEnd;
+            }
+
+            RG_DEBUG << "updateIndications check slur length" << slurStart << slurEnd << notesStart << notesEnd;
+
+            // If slur does not match notes, replace it with one that does.
+            if (slurStart != notesStart || slurEnd != notesEnd) {
+                RG_DEBUG << "updateIndications adjust slur" << slurStart << slurEnd << "->" << notesStart << notesEnd;
+
+                const timeT duration = notesEnd - notesStart;
+                Event* newSlur = new Event(*slurEvent, notesStart, duration);
+
+                segment().insert(newSlur);
+                segment().eraseSingle(slurEvent);
+            }
+        }
+    }
+}
+
+int SegmentNotationHelper::findBorderTuplet(
+        Segment::iterator it, Segment::iterator &start, Segment::iterator &end)
+{
+    Segment::iterator beginB = segment().findTime(segment().getBarStartForTime((*it)->getAbsoluteTime()));
+    Segment::iterator endB = segment().findTime(segment().getBarEndForTime((*it)->getAbsoluteTime()));
+
     int maxcount = 0;
     int count = 0;
     int index = 0;
@@ -2427,4 +2560,3 @@ int SegmentNotationHelper::findBorderTuplet(iterator it, iterator &start, iterat
 }
 
 } // end of namespace
-

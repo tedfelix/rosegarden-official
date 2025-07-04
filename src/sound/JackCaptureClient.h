@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -48,10 +48,10 @@ public:
 
     // getting info
     bool getFrame( float *frame, size_t captureSize );
-    bool isConnected() {
+    bool isConnected() const {
         return m_isConnected;
     }
-    jack_nframes_t getSampleRate() {
+    jack_nframes_t getSampleRate() const {
         return m_jackSampleRate;
     }
 
@@ -59,7 +59,7 @@ protected:
     // basic setup + init
     void setFrameSize(int nextFrameSize);
     const char **getPorts();
-    const char* getCapturePortName();
+    // unused const char* getCapturePortName();
     void setupPorts(const char *portName, const char *captureClientName);
 
     // control processing

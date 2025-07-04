@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -22,7 +22,6 @@
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
 #include "gui/widgets/ProgressBar.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "base/NotationTypes.h"
 #include "base/Composition.h"
 
@@ -48,7 +47,7 @@ class CommandRegistry;
 class ControlRulerWidget;
 class ControlParameter;
 class TriggerSegmentRec;
- 
+
 class ROSEGARDENPRIVATE_EXPORT NotationView : public EditViewBase,
                         public SelectionManager
 {
@@ -58,8 +57,7 @@ public:
     typedef std::vector<Segment *> SegmentVector;
     typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
     NotationView(RosegardenDocument *doc,
-                    std::vector<Segment *> segments,
-                    QWidget *parent = nullptr);
+                 const std::vector<Segment *>& segments);
 
     ~NotationView() override;
 
@@ -67,19 +65,14 @@ public:
 
     Segment *getCurrentSegment() override;
     EventSelection *getSelection() const override;
-    void setSelection(EventSelection* s, bool preview = false) override;
+    void setSelection(EventSelection* selection, bool preview = false) override;
 
     virtual void initLayoutToolbar();
     void initRulersToolbar();
-    void initStatusBar() override;
+    void initStatusBar();
     timeT getInsertionTime(bool allowEndTime = false) const;
-    
-    bool hasSegment(Segment * seg) const;
 
-    /** This turns out to be cruft that is rather annoying to eliminate.  We
-     * don't use this for anything, and provide an empty implementation.
-     */
-    void updateViewCaption() override { }
+    bool hasSegment(Segment * seg) const;
 
     // Adopt a segment that doesn't live in Composition.
     void adoptSegment(Segment *s);
@@ -104,8 +97,14 @@ signals:
     void editTriggerSegment(int);
     void stepByStepTargetRequested(QObject *);
 
-protected:
-    void readOptions() override;
+public slots:
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
+
+    void slotStepByStepTargetRequested(QObject *);
 
 protected slots:
     /// Some change occurs and the whole scene have to be redrawn.
@@ -123,9 +122,9 @@ protected slots:
     /// Preview with LilyPond (via Okular or the like)
     void slotPreviewLilyPond();
 
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
     void slotEditCutAndClose();
     void slotEditGeneralPaste();
@@ -141,6 +140,7 @@ protected slots:
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
+    void slotEscapePressed();
     void slotEditSelectFromStart();
     void slotEditSelectToEnd();
     void slotEditSelectWholeStaff();
@@ -150,8 +150,6 @@ protected slots:
     void slotVelocityUp();
     void slotVelocityDown();
     void slotSetVelocities();
-    void slotEditCutControllers();
-    void slotEditCopyControllers();
     void slotSetControllers();
     void slotPlaceControllers();
 
@@ -159,7 +157,7 @@ protected slots:
     void slotSetSelectNoTiesTool();
 
     void slotSetEraseTool();
-    
+
     /**
      * Restore NoteRestInserter as the current tool and recall its
      * state information.
@@ -183,7 +181,7 @@ protected slots:
      * Switch between dotted and plain variations on the current note or rest
      * duration being inserted (by whatever means insertion is ocurring)
      */
-    void slotToggleDot(); 
+    void slotToggleDot();
 
     /**
      * Cycle through the dots from . to .. to _ back to ., relative to the point
@@ -224,6 +222,8 @@ protected slots:
     void slotContinuousPageMode();
     void slotMultiPageMode();
 
+    void slotHighlight();
+
     void slotShowHeadersGroup();
 
     void slotChangeFontFromAction();
@@ -245,7 +245,7 @@ protected slots:
     void slotMaskOrnament();
     void slotUnmaskOrnament();
     void slotUnadoptSegment();
-   
+
     void slotGroupSimpleTuplet();
     void slotGroupGeneralTuplet();
     void slotGroupTuplet(bool simple);
@@ -283,6 +283,8 @@ protected slots:
 
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
+    void slotToggleKeyPressureRuler();
+    void slotToggleChannelPressureRuler();
     void slotAddControlRuler(QAction*);
 
     void slotAddTempo();
@@ -304,19 +306,15 @@ protected slots:
     void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
 
-    void slotToggleTracking();
+    void slotScrollToFollow();
 
-    /// Note-on received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOnReceived(int pitch, int velocity);
-
-    /// Note-off received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOffReceived(int pitch, int velocity);
+    void slotLoop();
+    void slotLoopChanged();
 
     /// Note-on or note-off received asynchronously -- as above
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
     void slotToggleStepByStep();
-    void slotStepByStepTargetRequested(QObject *);
 
     /// YG: Only for debug
     void slotDebugDump();
@@ -362,7 +360,7 @@ protected slots:
      * Triggered by the editElement() signal emitted by NotationSelector and
      * relayed through NotationWidget.
      */
-    void slotEditElement(NotationStaff *, NotationElement *, bool advanced);
+    void slotEditElement(NotationStaff *, NotationElement *);
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
@@ -397,15 +395,17 @@ protected slots:
     // the checked options on the toolbar
     void slotInterpretActivate();
 
+    void slotRulerSelectionUpdate();
+
 private:
     friend class ::TestNotationViewSelection;
     /**
      * export a LilyPond file (used by slotPrintLilyPond and
      * slotPreviewLilyPond)
      */
-    bool exportLilyPondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(QString file, bool forPreview = false);
 
-    /** 
+    /**
      * Use QTemporaryFile to obtain a tmp filename that is guaranteed to be unique.
      */
     QString getLilyPondTmpFilename();
@@ -455,7 +455,7 @@ private:
      * to the getdocument() and the TimeSignature.
      */
      void initializeNoteRestInserter();
-     
+
     /**
      * Manage the setting of the accidental modes.
      * Function enforces exclusive state of buttons and triggers
@@ -479,8 +479,7 @@ private:
     void setCurrentNotePixmap(QPixmap);
     void setCurrentNotePixmapFrom(QAction *);
 
-    void conformRulerSelectionState();
-    void insertControllerSequence(const ControlParameter &cp);
+    void insertControllerSequence(const ControlParameter &controlParameter);
     bool isShowable(Event *e);
     void setWidgetSegments();
     void EditOrnamentInline(Event *trigger, Segment *containing);
@@ -489,6 +488,8 @@ private:
     void ForAllSelection(opOnEvent op);
     void setCurrentStaff(NotationStaff *staff);
 
+    void readOptions();
+
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:
     // !!! Duplicates m_doc in base class
@@ -496,7 +497,7 @@ protected:
 
     NotationWidget *m_notationWidget;
     EventSelection *getRulerSelection() const;
-    
+
 private:
     void extendSelectionHelper(bool forward, EventSelection *es, const std::vector<Event *> &eventVec, bool select);
 
@@ -538,14 +539,14 @@ private:
     std::vector<int>     m_availableFontSizes;
     std::vector<int>     m_availableSpacings;
 
-    // !!! Is m_segments ever different than m_segments in base class?
-    SegmentVector      m_segments;      // I do not own these
     // These Segments are not in Composition, they are dummies for
     // viewing a triggered segment's expansion.
     SegmentVector      m_adoptedSegments;    // I own these
 
     timeT m_oldPointerPosition;
     timeT m_cursorPosition;
+
+    timeT m_currentNoteDuration;
 };
 
 }

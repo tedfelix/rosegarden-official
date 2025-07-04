@@ -13,9 +13,9 @@
   <Action name="edit_event_list" text="Open in &amp;Event List Editor" icon="eventlist" shortcut="E" />
   <Action name="edit_pitch_tracker" text="Open in &amp;Pitch Tracker" icon="pitchtracker" shortcut="I" />
 <Separator/>
-  <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-  <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" />
-  <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
 <Separator/>
   <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
   <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />

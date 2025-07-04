@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,22 +19,24 @@
 #ifndef RG_TIMESIGNATUREDIALOG_H
 #define RG_TIMESIGNATUREDIALOG_H
 
-#include "base/NotationTypes.h"
+#include "base/TimeT.h"
+#include "base/TimeSignature.h"
+
 #include <QDialog>
 #include <QString>
-#include "base/Event.h"
-
 
 class QWidget;
 class QRadioButton;
 class QLabel;
+class QDialogButtonBox;
 class QCheckBox;
 
 
 namespace Rosegarden
 {
 
-class TimeWidget;
+
+class TimeWidget2;
 class Composition;
 
 
@@ -43,11 +45,12 @@ class TimeSignatureDialog : public QDialog
     Q_OBJECT
 
 public:
+
     TimeSignatureDialog(QWidget *parent,
                         Composition *composition,
                         timeT insertionTime,
-                        TimeSignature defaultSig =
-                            TimeSignature::DefaultTimeSignature,
+                        const TimeSignature& defaultSig =
+                            TimeSignature(4,4),
                         bool timeEditable = false,
                         QString explanatoryText = "");
 
@@ -57,6 +60,7 @@ public:
     bool shouldNormalizeRests() const;
 
 public slots:
+
     void slotNumUp();
     void slotNumDown();
     void slotDenomUp();
@@ -64,8 +68,11 @@ public slots:
     void slotUpdateCommonTimeButton();
     void slotHelpRequested();
 
-protected:
-    //--------------- Data members ---------------------------------
+private slots:
+
+    void slotIsValid(bool valid);
+
+private:
 
     Composition *m_composition;
     TimeSignature m_timeSignature;
@@ -83,7 +90,9 @@ protected:
     QRadioButton *m_asGivenButton;
     QRadioButton *m_startOfBarButton;
 
-    TimeWidget *m_timeEditor;
+    TimeWidget2 *m_timeWidget;
+
+    QDialogButtonBox *m_buttonBox;
 };
 
 

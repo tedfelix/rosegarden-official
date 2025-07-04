@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -12,9 +12,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MappedEvent]"
+
 #include "MappedEvent.h"
-#include "base/BaseProperties.h"
 #include "Midi.h"
+
+#include "base/BaseProperties.h"
+#include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h" // for Note::EventType
 #include "misc/Debug.h"
@@ -32,26 +36,8 @@
 namespace Rosegarden
 {
 
-MappedEvent::MappedEvent(InstrumentId id,
-                         const Event &e,
-                         const RealTime &eventTime,
-                         const RealTime &duration):
-        m_trackId((int)NoTrack),
-        m_instrument(id),
-        m_type(MidiNote),
-        m_data1(0),
-        m_data2(0),
-        m_eventTime(eventTime),
-        m_duration(duration),
-        m_audioStartMarker(0, 0),
-        m_dataBlockId(0),
-        m_runtimeSegmentId( -1),
-        m_autoFade(false),
-        m_fadeInTime(RealTime::zeroTime),
-        m_fadeOutTime(RealTime::zeroTime),
-        m_recordedChannel(0),
-        m_recordedDevice(0)
 
+MappedEvent::MappedEvent(const Event &e)
 {
     try {
 
@@ -62,6 +48,7 @@ MappedEvent::MappedEvent(InstrumentId id,
         // defaults set.
 
         if (e.isa(Note::EventType)) {
+            m_type = MidiNote;
             long v = MidiMaxValue;
             e.get<Int>(BaseProperties::VELOCITY, v);
             m_data2 = v;
@@ -74,6 +61,14 @@ MappedEvent::MappedEvent(InstrumentId id,
             m_type = MidiController;
             m_data1 = e.get<Int>(Controller::NUMBER);
             m_data2 = e.get<Int>(Controller::VALUE);
+        } else if (e.isa(RPN::EventType)) {
+            m_type = MidiRPN;
+            m_number = e.get<Int>(RPN::NUMBER);
+            m_value = e.get<Int>(RPN::VALUE);
+        } else if (e.isa(NRPN::EventType)) {
+            m_type = MidiNRPN;
+            m_number = e.get<Int>(NRPN::NUMBER);
+            m_value = e.get<Int>(NRPN::VALUE);
         } else if (e.isa(ProgramChange::EventType)) {
             m_type = MidiProgramChange;
             m_data1 = e.get<Int>(ProgramChange::PROGRAM);
@@ -98,18 +93,18 @@ MappedEvent::MappedEvent(InstrumentId id,
             // aren't to be output, so we make their MappedEvents invalid.
             // InternalSegmentMapper will then discard those.
             if (text.getTextType() == Text::Annotation || text.getTextType() == Text::LilyPondDirective) {
-                setType(InvalidMappedEvent);
+                m_type = InvalidMappedEvent;
             } else {
-                setType(MappedEvent::Text);
+                m_type = MappedEvent::Text;
 
                 MidiByte midiTextType =
                     (text.getTextType() == Text::Lyric) ?
                     MIDI_LYRIC :
                     MIDI_TEXT_EVENT;
                 setData1(midiTextType);
-                                
+
                 std::string metaMessage = text.getText();
-                addDataString(metaMessage);
+                setDataBlock(metaMessage);
             }
         } else if (e.isa(Key::EventType)) {
             const Rosegarden::Key key(e);
@@ -151,40 +146,14 @@ operator<(const MappedEvent &a, const MappedEvent &b)
     return a.getEventTime() < b.getEventTime();
 }
 
-MappedEvent&
-MappedEvent::operator=(const MappedEvent &mE)
-{
-    if (&mE == this)
-        return * this;
-
-    m_trackId = mE.getTrackId();
-    m_instrument = mE.getInstrument();
-    m_type = mE.getType();
-    m_data1 = mE.getData1();
-    m_data2 = mE.getData2();
-    m_eventTime = mE.getEventTime();
-    m_duration = mE.getDuration();
-    m_audioStartMarker = mE.getAudioStartMarker();
-    m_dataBlockId = mE.getDataBlockId();
-    m_runtimeSegmentId = mE.getRuntimeSegmentId();
-    m_autoFade = mE.isAutoFading();
-    m_fadeInTime = mE.getFadeInTime();
-    m_fadeOutTime = mE.getFadeOutTime();
-    m_recordedChannel = mE.getRecordedChannel();
-    m_recordedDevice = mE.getRecordedDevice();
-
-    return *this;
-}
-
 void
-MappedEvent::addDataString(const std::string& data)
+MappedEvent::setDataBlock(const std::string& rawData)
 {
     DataBlockRepository::getInstance()->
-        setDataBlockForEvent(this, data, true);
+        setDataBlockForEvent(this, rawData, true);
 }
 
-QDebug &
-operator<<(QDebug &dbg, const MappedEvent &mE)
+QDebug operator<<(QDebug dbg, const MappedEvent &mE)
 {
     dbg << "MappedEvent" << "\n";
 
@@ -230,6 +199,12 @@ operator<<(QDebug &dbg, const MappedEvent &mE)
         break;
     case MappedEvent::MidiSystemMessage:
         type = "MidiSystemMessage";
+        break;
+    case MappedEvent::MidiRPN:
+        type = "RPN";
+        break;
+    case MappedEvent::MidiNRPN:
+        type = "NRPN";
         break;
     case MappedEvent::Audio:
         type = "Audio";
@@ -317,19 +292,25 @@ operator<<(QDebug &dbg, const MappedEvent &mE)
     dbg << "  Fade Out Time:" << mE.m_fadeOutTime << "\n";
     dbg << "  Recorded Channel:" << mE.m_recordedChannel << "\n";
     dbg << "  Recorded Device:" << mE.m_recordedDevice << "\n";
+    dbg << "  Number:" << mE.m_number << "\n";
+    dbg << "  Value:" << mE.m_value << "\n";
 
     return dbg;
 }
 
 //--------------------------------------------------
 
+/// Actual data storage for DataBlockRepository.
+/**
+ * ??? Files?  Really?  Wouldn't memory make more sense and be a lot faster?
+ */
 class DataBlockFile
 {
 public:
-    DataBlockFile(DataBlockRepository::blockid id);
+    explicit DataBlockFile(DataBlockRepository::blockid id);
     ~DataBlockFile();
 
-    QString getFileName()
+    QString getFileName() const
     {
         return m_fileName;
     }
@@ -485,10 +466,12 @@ void DataBlockRepository::setDataBlockForEvent(MappedEvent* e,
     }
 }
 
+/* unused
 bool DataBlockRepository::hasDataBlock(DataBlockRepository::blockid id)
 {
     return DataBlockFile(id).exists();
 }
+*/
 
 DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::string& s)
 {
@@ -504,23 +487,26 @@ DataBlockRepository::blockid DataBlockRepository::registerDataBlock(const std::s
     return id;
 }
 
+/* unused
 void DataBlockRepository::unregisterDataBlock(DataBlockRepository::blockid id)
 {
     DataBlockFile dataBlockFile(id);
 
     dataBlockFile.clear();
 }
+*/
 
 void DataBlockRepository::registerDataBlockForEvent(const std::string& s, MappedEvent* e)
 {
     e->setDataBlockId(registerDataBlock(s));
 }
 
+/* unused
 void DataBlockRepository::unregisterDataBlockForEvent(MappedEvent* e)
 {
     unregisterDataBlock(e->getDataBlockId());
 }
-
+*/
 
 DataBlockRepository::DataBlockRepository()
 {}

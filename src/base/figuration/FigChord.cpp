@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -45,10 +45,10 @@ ChordFromCounterpoint::test(const Iterator &i)
 bool
 ChordFromCounterpoint::sample(const Iterator &i, bool goingForwards)
 {
-    Event *e = getAsEvent(i);
+    const Event *e = getAsEvent(i);
     timeT onTime    = e->getAbsoluteTime();
     timeT duration  = e->getDuration();
-    
+
     if (onTime + duration <= m_time) { return false; }
     if (onTime > m_time) { return false; }
     return GenericChord<Element, Container, singleStaff>::sample(i, goingForwards);
@@ -60,12 +60,12 @@ ChordFromCounterpoint::sample(const Iterator &i, bool goingForwards)
 // preceding notes to have.
 const timeT
 FigChord::
-m_preDuration = Note(Note::WholeNote).getDuration();
+m_myPreDuration = Note(Note::WholeNote).getDuration();
 
 NotationQuantizer * FigChord::m_nq = nullptr;
 
 const Quantizer *
-FigChord::getQuantizer()
+FigChord::getNotationQuantizer()
 {
   if (!m_nq) { m_nq = new NotationQuantizer; }
   return m_nq;
@@ -88,9 +88,9 @@ FindFigChords::
 operator++()
 {
     for (;m_iter != m_chordSource->end(); ++m_iter) {
-        Event *e = *m_iter;
+        const Event *e = *m_iter;
         // Events that are part of a previous chord don't imply a new
-        // chord. 
+        // chord.
         if (e->getAbsoluteTime() <= m_timePreviousChord)
             { continue; }
         // Non-notes don't imply a new chord.
@@ -98,8 +98,8 @@ operator++()
             { continue; }
 
         // OK, we have a new chord.
-        const timeT timeNow = e->getAbsoluteTime();
-        m_timePreviousChord = timeNow;
+        const timeT tNow = e->getAbsoluteTime();
+        m_timePreviousChord = tNow;
         break;
     }
     return *this;

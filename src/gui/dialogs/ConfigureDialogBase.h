@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -50,10 +50,13 @@ public:
 
     void setPageByIndex(int index);
 
+public slots:
+
+    virtual void slotCancelOrClose();
+
 protected slots:
     void accept() override;
     virtual void slotApply();
-    virtual void slotCancelOrClose();
     virtual void slotHelpRequested();
 
 public slots:
@@ -67,7 +70,7 @@ protected:
     ConfigurationPages m_configurationPages;
     
     QPushButton       *m_applyButton;
-    QDialogButtonBox  *m_dialogButtonBox;
+    //QDialogButtonBox  *m_dialogButtonBox;
     IconStackedWidget *m_iconWidget;    
 };
 

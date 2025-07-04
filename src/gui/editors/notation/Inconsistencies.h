@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,15 +13,10 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #ifndef RG_INCONSISTENCIES_H
 #define RG_INCONSISTENCIES_H
 
-#include <vector>
-#include <map>
-
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/Segment.h"
 #include "base/Composition.h"
 #include "base/Overlaps.h"
@@ -33,16 +28,22 @@
 #include <QString>
 #include <QCoreApplication>
 
+#include <vector>
+#include <map>
+
+
 namespace Rosegarden
 {
+
 
 template <class T>
 class Inconsistencies : public Overlaps<T>
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::Inconsistencies)
-public :
 
-    Inconsistencies(std::vector<Segment *> segments) : Overlaps<T>(segments) {}
+public:
+
+    explicit Inconsistencies(std::vector<Segment *> segments) : Overlaps<T>(segments) {}
 
     ~Inconsistencies() {}
 
@@ -54,8 +55,8 @@ public :
         typename std::map<timeT, OverlapRange<T> >::iterator it;
         if (this->getFirst(start, end, it)) {
             for (;;) {
-                timeT t1, t2;
                 if (!this->isConsistent(it)) {
+                    timeT t1, t2;
                     this->getTimeRange(it, t1, t2);
                     int bar1 = comp->getBarNumber(t1) + 1;
                     int bar2 = comp->getBarNumber(t2) + 1;
@@ -71,7 +72,7 @@ public :
                     const std::vector<Segment *> *s = this->getSegments(it);
                     std::vector<Segment *>::const_iterator sit;
                     for (sit = s->begin(); sit != s->end(); ++sit) {
-                        if (sit != s->begin()) str += QString("<br>");                            
+                        if (sit != s->begin()) str += QString("<br>");
                         T pr = Overlaps<T>::getPropertyAtTime(*sit, t1);
                         str+= segLine
                                   .arg(QString::fromStdString((*sit)->getLabel()))
@@ -84,13 +85,9 @@ public :
         }
     }
 
-protected :
+private:
 
     QString getTranslatedName(T property) const;
-
-
-private :
-    //--------------- Data members ---------------------------------
 
 };
 
@@ -133,4 +130,3 @@ Inconsistencies<int>::getTranslatedName(int transpose) const
 }
 
 #endif // RG_INCONSISTENCIES_H
-

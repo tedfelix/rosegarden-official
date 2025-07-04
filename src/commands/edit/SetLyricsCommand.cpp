@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,7 +35,9 @@ namespace Rosegarden
 
 using namespace BaseProperties;
 
-SetLyricsCommand::SetLyricsCommand(Segment *segment, int verse, QString newLyricData) :
+SetLyricsCommand::SetLyricsCommand(Segment *segment,
+                                   int verse,
+                                   const QString& newLyricData) :
         NamedCommand(getGlobalName()),
         m_segment(segment),
         m_verse(verse),
@@ -94,7 +96,7 @@ SetLyricsCommand::execute()
         m_newLyricData.split("/", QString::KeepEmptyParts); // empties ok
 #endif
 
-    Composition *comp = m_segment->getComposition();
+    const Composition *comp = m_segment->getComposition();
     int barNo = comp->getBarNumber(m_segment->getStartTime());
 
     QStringList::Iterator bsi = barStrings.begin();
@@ -103,7 +105,7 @@ SetLyricsCommand::execute()
 
         std::pair<timeT, timeT> barRange = comp->getBarRange(barNo++);
         QString syllables = *bsi;
-        syllables.replace(QRegularExpression("\\[\\d+\\] "), " ");
+        syllables.replace(QRegularExpression("\\[\\-?\\d+\\] "), " ");
         syllables.replace(QRegularExpression("\n"), " ");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         QStringList syllableList = syllables.split(" ", Qt::SkipEmptyParts); // no empties
@@ -192,9 +194,9 @@ SetLyricsCommand::unexecute()
 
     // Now restore the old ones and clear out the vector.
 
-    for (std::vector<Event *>::iterator i = m_oldLyricEvents.begin();
-            i != m_oldLyricEvents.end(); ++i) {
-        m_segment->insert(*i);
+    for (std::vector<Event *>::iterator i1 = m_oldLyricEvents.begin();
+            i1 != m_oldLyricEvents.end(); ++i1) {
+        m_segment->insert(*i1);
     }
 
     m_oldLyricEvents.clear();

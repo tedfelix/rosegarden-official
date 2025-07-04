@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionModelImpl]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionModelImpl.h"
 #include "SegmentOrderer.h"
@@ -353,9 +354,9 @@ void CompositionModelImpl::getSegmentRect(
         unsigned linkId = segment.getLinker()->getSegmentLinkerId();
         label += QString(" L{%1}").arg(linkId);
     }
-    if (! segment.getForNotation()) {
+    if (segment.getExcludeFromPrinting()) {
         // Add a marker for this
-        label += QString("   (xn)");
+        label += QString("   (xp)");
     }
     if (segment.isAudio()) {
         // Remove anything in parens and the filename suffix.
@@ -374,14 +375,14 @@ void CompositionModelImpl::getSegmentRect(
 
     // Reset remaining fields.
     segmentRect.selected = false;
-    segmentRect.brush = SegmentRect::DefaultBrushColor;
-    segmentRect.pen = SegmentRect::DefaultPenColor;
+    segmentRect.brush = SegmentRect::defaultBrushColor();
+    segmentRect.pen = SegmentRect::defaultPenColor();
 }
 
 void CompositionModelImpl::updateAllTrackHeights()
 {
     // For each track in the composition
-    for (Composition::trackcontainer::const_iterator i =
+    for (Composition::TrackMap::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {
@@ -807,9 +808,10 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
 
     QRect originalRect;
     getSegmentQRect(*segment, originalRect);
+    RG_DEBUG << "makeNotationPreviewRangeCS originalRect" << originalRect;
 
     int moveXOffset = 0;
-    if (m_changeType == ChangeMove)
+    if (m_changeType == ChangeMove || m_changeType == ChangeCopy)
         moveXOffset = basePoint.x() - originalRect.x();
 
     int left;
@@ -851,6 +853,7 @@ void CompositionModelImpl::makeNotationPreviewRangeCS(
     interval.segmentTop = basePoint.y();
     interval.moveXOffset = moveXOffset;
     interval.color = segment->getPreviewColour();
+    RG_DEBUG << "makeNotationPreviewRangeCS interval" << moveXOffset;
 
     ranges->push_back(interval);
 }
@@ -1335,11 +1338,16 @@ int CompositionModelImpl::getCompositionHeight()
     return m_grid.getYBinCoordinate(m_composition.getNbTracks());
 }
 
-CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
-        const QRect &rect)
+void CompositionModelImpl::updateChangeType(ChangeType changeType)
 {
-    int top = m_grid.getYBin(rect.y());
-    int bottom = m_grid.getYBin(rect.y() + rect.height());
+    m_changeType = changeType;
+}
+
+CompositionModelImpl::YCoordVector CompositionModelImpl::getTrackYCoords(
+        const QRect &clipRect)
+{
+    int top = m_grid.getYBin(clipRect.y());
+    int bottom = m_grid.getYBin(clipRect.y() + clipRect.height());
 
     // Make sure we have the latest track heights.
     updateAllTrackHeights();

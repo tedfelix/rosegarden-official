@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,11 +20,10 @@
 
 #include "base/Device.h"
 #include "base/MidiProgram.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "document/io/XMLHandler.h"
 
 #include <QString>
-#include <QtCore/QSharedPointer>
 #include <QPointer>
 #include <QProgressDialog>
 #include <QSharedPointer>
@@ -36,6 +35,7 @@
 
 namespace Rosegarden
 {
+
 
 class XmlStorableEvent;
 class XmlSubHandler;
@@ -58,7 +58,7 @@ class AudioFileManager;
  */
 class RoseXmlHandler : public QObject, public XMLHandler
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
 
     typedef enum
@@ -96,7 +96,7 @@ public:
                             const QString& localName,
                             const QString& qName) override;
 
-    bool characters(const QString& ch) override;
+    bool characters(const QString& chars) override;
 
     bool endDocument() override; // [rwb] - for tempo element catch
 
@@ -106,7 +106,9 @@ public:
     QString errorString() const override;
 
     bool hasActiveAudio() const { return m_hasActiveAudio; }
-    std::set<QString> &pluginsNotFound() { return m_pluginsNotFound; }
+
+    const std::set<QString> &pluginsNotFound() const
+            { return m_pluginsNotFound; }
 
     bool fatalError(int lineNumber, int columnNumber,
                     const QString& msg) override;
@@ -124,19 +126,19 @@ protected:
     void setSubHandler(XmlSubHandler* sh);
     XmlSubHandler* getSubHandler() { return m_subHandler; }
 
-    void addMIDIDevice(QString name, bool createAtSequencer, QString dir);  // dir = play|record
-    void setMIDIDeviceConnection(QString connection);
-    void setMIDIDeviceName(QString name);
-    void skipToNextPlayDevice();
-    InstrumentId mapToActualInstrument(InstrumentId id);
-
-    //--------------- Data members ---------------------------------
+    void addMIDIDevice(const QString& name,
+                       bool createAtSequencer,
+                       const QString& dir);  // dir = play|record
+    void setMIDIDeviceConnection(const QString &connection);
+    void setMIDIDeviceName(const QString &name);
+    // unused void skipToNextPlayDevice();
+    InstrumentId mapToActualInstrument(InstrumentId oldId);
 
     RosegardenDocument    *m_doc;
     Segment *m_currentSegment;
     XmlStorableEvent    *m_currentEvent;
     typedef std::map<int, SegmentLinker *> SegmentLinkerMap;
-    SegmentLinkerMap m_segmentLinkers; 
+    SegmentLinkerMap m_segmentLinkers;
 
     timeT m_currentTime;
     timeT m_chordDuration;
@@ -158,10 +160,13 @@ protected:
     bool m_foundTempo;
 
     QString m_errorString;
+
+    // Using a std::set to avoid a potentially very long list
+    // of duplicate missing plugins across tracks.
     std::set<QString> m_pluginsNotFound;
 
     RosegardenFileSection             m_section;
-    
+
     Device                           *m_device;
     DeviceId                          m_deviceRunningId;
     InstrumentId                      m_deviceInstrumentBase;
@@ -173,16 +178,10 @@ protected:
     MidiByte                          m_lsb;
     Instrument                       *m_instrument;
 
-    /// Whether a <controlchange> tag was found.  MIDI <instrument> only.
-    bool m_controlChangeEncountered;
-    /// Deprecated <volume> tag encountered.  MIDI <instrument> only.
-    bool m_volumeEncountered;
-    /// Value in the <volume> tag.  MIDI <instrument> only.
-    MidiByte m_volume;
-    /// Deprecated <pan> tag encountered.  MIDI <instrument> only.
-    bool m_panEncountered;
-    /// Value in the <pan> tag.  MIDI <instrument> only.
-    MidiByte m_pan;
+    /// We have a volume CC.  Ignore old-style <volume> tags.
+    bool m_haveVolumeCC;
+    /// We have a pan CC.  Ignore old-style <pan> tags.
+    bool m_havePanCC;
 
     Buss                             *m_buss;
     AudioPluginInstance              *m_plugin;
@@ -190,7 +189,6 @@ protected:
     ColourMap                        *m_colourMap;
     QSharedPointer<MidiKeyMapping> m_keyMapping;
     MidiKeyMapping::KeyNameMap        m_keyNameMap;
-    unsigned int                      m_pluginId;
     unsigned int                      m_totalElements;
     unsigned int                      m_elementsSoFar;
 
@@ -198,8 +196,14 @@ protected:
     bool                              m_deprecation;
     bool                              m_createDevices;
     bool                              m_haveControls;
-    bool                              m_skipAllAudio;
-    bool                              m_hasActiveAudio;
+
+    bool m_hasActiveAudio;
+
+    bool locateAudioFile(const QString& id,
+                         const QString& file,
+                         const QString& label);
+    /// Whether the audio skip warning has been issued.
+    bool m_audioSkipWarning;
 
     // In case we encounter an old solo attribute at the composition level,
     // hold onto it and use it to set the solo for the proper track.

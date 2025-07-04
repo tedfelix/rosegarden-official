@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file originally from Sonic Visualiser, copyright 2006 Chris
     Cannam.
@@ -29,10 +29,10 @@ namespace Rosegarden
 class DirectoryCreationFailed : virtual public std::exception
 {
 public:
-    DirectoryCreationFailed(QString directory) throw();
+    explicit DirectoryCreationFailed(QString directory) throw();
     ~DirectoryCreationFailed() throw() override;
     const char *what() const throw() override;
-    
+
 protected:
     QString m_directory;
 };
@@ -50,7 +50,7 @@ class TempDirectory
 {
 public:
     static TempDirectory *getInstance();
-    
+
     virtual ~TempDirectory();
 
     /**
@@ -60,7 +60,7 @@ public:
      */
     QString getPath();
 
-    /** 
+    /**
      * Create an immediate subdirectory of the root temporary
      * directory of the given name, if it doesn't already exist, and
      * return its path.  Throw DirectoryCreationFailed if the
@@ -76,9 +76,9 @@ public:
 protected:
     TempDirectory();
 
-    QString createTempDirectoryIn(QString inDir);
-    void cleanupDirectory(QString tmpDir);
-    void cleanupAbandonedDirectories(QString svDir);
+    QString createTempDirectoryIn(QString dir);
+    void cleanupDirectory(QString tmpdir);
+    void cleanupAbandonedDirectories(QString rgDir);
 
     QString m_tmpdir;
     QMutex m_mutex;

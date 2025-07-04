@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -65,7 +65,7 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
     layout->addWidget(m_segment, 0, 1);
 
     int n = 1;
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
         m_segment->addItem
@@ -91,11 +91,12 @@ TriggerSegmentDialog::TriggerSegmentDialog(QWidget *parent,
 
     setupFromConfig();
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &TriggerSegmentDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
 
@@ -133,7 +134,7 @@ TriggerSegmentDialog::getId() const
 {
     int ix = m_segment->currentIndex();
 
-    for (Composition::triggersegmentcontaineriterator i =
+    for (Composition::TriggerSegmentSet::iterator i =
                 m_composition->getTriggerSegments().begin();
             i != m_composition->getTriggerSegments().end(); ++i) {
 

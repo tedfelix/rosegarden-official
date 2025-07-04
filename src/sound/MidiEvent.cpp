@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -85,11 +85,8 @@ MidiEvent::MidiEvent(timeT time,
 {
 }
 
-QDebug &
-operator<<(QDebug &dbg, const MidiEvent &midiEvent)
+QDebug operator<<(QDebug dbg, const MidiEvent &midiEvent)
 {
-    timeT tempo;
-    int tonality;
     std::string sharpflat;
 
     if (midiEvent.m_metaEventCode) {
@@ -146,13 +143,15 @@ operator<<(QDebug &dbg, const MidiEvent &midiEvent)
             break;
 
         case MIDI_SET_TEMPO:
-            tempo =
-                ((timeT)(((MidiByte)midiEvent.m_metaMessage[0]) << 16)) +
-                ((timeT)(((MidiByte)midiEvent.m_metaMessage[1]) << 8)) +
-                (short)(MidiByte)midiEvent.m_metaMessage[2];
+            {
+                timeT tempo =
+                    ((timeT)(((MidiByte)midiEvent.m_metaMessage[0]) << 16)) +
+                    ((timeT)(((MidiByte)midiEvent.m_metaMessage[1]) << 8)) +
+                    (short)(MidiByte)midiEvent.m_metaMessage[2];
 
-            tempo = 60000000 / tempo;
-            dbg << "SET TEMPO:\t" << tempo;
+                tempo = 60000000 / tempo;
+                dbg << "SET TEMPO:\t" << tempo;
+            }
             break;
 
         case MIDI_SMPTE_OFFSET:
@@ -173,18 +172,19 @@ operator<<(QDebug &dbg, const MidiEvent &midiEvent)
             break;
 
         case MIDI_KEY_SIGNATURE:
-            tonality = (int)midiEvent.m_metaMessage[0];
+            {
+                int tonality = (int)midiEvent.m_metaMessage[0];
 
-            if (tonality < 0) {
-                sharpflat = std::to_string(-tonality) + " flat";
-            } else {
-                sharpflat = std::to_string(tonality);
-                sharpflat += " sharp";
+                if (tonality < 0) {
+                    sharpflat = std::to_string(-tonality) + " flat";
+                } else {
+                    sharpflat = std::to_string(tonality);
+                    sharpflat += " sharp";
+                }
+
+                dbg << "KEY SIGNATURE:\t" << sharpflat << " "
+                    << (((int)midiEvent.m_metaMessage[1]) == 0 ? "major" : "minor");
             }
-
-            dbg << "KEY SIGNATURE:\t" << sharpflat << " "
-                << (((int)midiEvent.m_metaMessage[1]) == 0 ? "major" : "minor");
-
             break;
 
         case MIDI_SEQUENCER_SPECIFIC:

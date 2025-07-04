@@ -3,17 +3,19 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[CheckButton]"
 
 #include "CheckButton.h"
 #include "gui/general/IconLoader.h"
@@ -37,7 +39,7 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
     setCheckable(true);
     setIcon(IconLoader::load(m_iconName));
 
-    if (m_wantsMemory) { 
+    if (m_wantsMemory) {
         RG_DEBUG << "CheckButton: recall for: " << iconName;
         // memory recall
         QSettings settings;
@@ -59,7 +61,7 @@ CheckButton::CheckButton(QString iconName, bool wantsMemory,  QWidget *parent) :
         setStyleSheet(localStyle);
     }
 
-    connect(this, SIGNAL(toggled(bool)), this, SLOT(toggle(bool)));
+    connect(this, &CheckButton::toggled, this, &CheckButton::toggle);
 
     // thinking out loud...
     // since I'm subclassing anyway, I might add the ability to make a master
@@ -87,4 +89,3 @@ CheckButton::toggle(bool state)
 
 
 }
-

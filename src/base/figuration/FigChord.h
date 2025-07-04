@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,8 +25,7 @@ namespace Rosegarden
 {
 
   class NotationQuantizer;
-  typedef long timeT;
-  
+
 /// Class to describe a chord whose notes might not start at the same
 /// time
 /// @class ChordFromCounterpoint
@@ -53,16 +52,16 @@ protected:
     // The longest duration we expect a preceding note to have.
     timeT    m_preDuration;
 };
-  
+
 class FigChord : public ChordFromCounterpoint
 {
 public:
   FigChord(Segment& s, Segment::iterator i) :
-    ChordFromCounterpoint(s, i, getQuantizer(), m_preDuration)
+    ChordFromCounterpoint(s, i, getNotationQuantizer(), m_myPreDuration)
     {}
-  static const Quantizer * getQuantizer();
+  static const Quantizer * getNotationQuantizer();
 private:
-  static const timeT m_preDuration;
+  static const timeT m_myPreDuration;
   static NotationQuantizer * m_nq;
 };
 
@@ -74,17 +73,17 @@ class FindFigChords
         m_iter(chordSource->findTime(startTime)),
         m_timePreviousChord(startTime)
         {}
-    
+
     FigChord * getChordNow(timeT timeLimit);
     FindFigChords &operator++();
-    timeT timeNow() { return m_timePreviousChord; }
-    
+    timeT timeNow() const { return m_timePreviousChord; }
+
  private:
     Segment *m_chordSource;
     Segment::iterator m_iter;
     timeT m_timePreviousChord;
 };
-    
+
 }
 
 #endif /* ifndef RG_FIGCHORD_H */

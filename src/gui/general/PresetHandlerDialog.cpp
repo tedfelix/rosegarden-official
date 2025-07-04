@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[PresetHandlerDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "PresetHandlerDialog.h"
 
@@ -119,16 +120,16 @@ PresetHandlerDialog::initDialog()
         QRadioButton *onlySelectedSegments = new
             QRadioButton(tr("Only selected segments"));
         scopeBoxLayout->addWidget(onlySelectedSegments);
-        m_convertAllSegments = new 
+        m_convertAllSegments = new
             QRadioButton(tr("All segments in this track"));
         scopeBoxLayout->addWidget(m_convertAllSegments);
         onlySelectedSegments->setChecked(true);
     }
     else {
-        QRadioButton *onlyNewSegments = new 
+        QRadioButton *onlyNewSegments = new
             QRadioButton(tr("Only for new segments"));
         scopeBoxLayout->addWidget(onlyNewSegments);
-        m_convertSegments = new 
+        m_convertSegments = new
             QRadioButton(tr("Convert existing segments"));
         scopeBoxLayout->addWidget(m_convertSegments);
         onlyNewSegments->setChecked(true);
@@ -159,20 +160,23 @@ PresetHandlerDialog::initDialog()
     else {
         m_convertSegments->setChecked(qStrToBool(settings.value("convert_segments", "0")));
     }
-    
+
     connect(m_categoryCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &PresetHandlerDialog::slotCategoryIndexChanged);
 
     settings.endGroup();
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
+            QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &PresetHandlerDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &PresetHandlerDialog::help);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &PresetHandlerDialog::help);
 }
 
 void
@@ -250,6 +254,7 @@ PresetHandlerDialog::getConvertAllSegments()
     }
 }
 
+/* unused
 bool
 PresetHandlerDialog::getConvertOnlySelectedSegments()
 {
@@ -260,6 +265,7 @@ PresetHandlerDialog::getConvertOnlySelectedSegments()
         return false;
     }
 }
+*/
 
 void
 PresetHandlerDialog::populateCategoryCombo()
@@ -273,7 +279,9 @@ PresetHandlerDialog::populateCategoryCombo()
         RG_DEBUG << "    adding category: " << (*i).getName();
 #endif
 
-        m_categoryCombo->addItem(QObject::tr((*i).getName().toStdString().c_str()));
+        m_categoryCombo->addItem(
+            QCoreApplication::translate("INSTRUMENT",
+                                        (*i).getName().toStdString().c_str()));
     }
 }
 
@@ -294,7 +302,9 @@ PresetHandlerDialog::slotCategoryIndexChanged(int index)
         RG_DEBUG << "    adding instrument: " << (*i).getName();
 #endif
 
-        m_instrumentCombo->addItem(QObject::tr((*i).getName().toStdString().c_str()));
+        m_instrumentCombo->addItem(
+            QCoreApplication::translate("INSTRUMENT",
+                                        (*i).getName().toStdString().c_str()));
     }
 
 }
@@ -319,7 +329,7 @@ PresetHandlerDialog::accept()
     }
 
     settings.endGroup();
-    
+
     QDialog::accept();
 }
 

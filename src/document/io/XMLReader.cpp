@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -63,7 +63,7 @@ bool XMLReader::parse(QFile& xmlFile)
 bool XMLReader::doParse(QXmlStreamReader& reader)
 {
     bool ok = true;
-    while (!reader.atEnd()) {
+    while (ok  &&  !reader.atEnd()) {
         QXmlStreamReader::TokenType token = reader.readNext();
         // Silence gcc compiler warnings due to the switches below not covering all cases, on purpose
 #pragma GCC diagnostic push

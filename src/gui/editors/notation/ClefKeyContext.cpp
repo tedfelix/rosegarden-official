@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-
+#define RG_MODULE_STRING "[ClefKeyContext]"
 
 #include "ClefKeyContext.h"
 #include "NotationScene.h"
@@ -183,18 +183,16 @@ ClefKeyContext::getKeyFromContext(TrackId track, timeT time)
 
 // Only for debug
 void
-ClefKeyContext::dumpClefContext()
+// cppcheck-suppress unusedFunction
+ClefKeyContext::dumpClefContext() const
 {
-    ClefMaps::iterator i;
-    ClefMap::iterator j;
-
     RG_DEBUG << "Begin of clef context dump =================";
 
-    for (i = m_clefMaps.begin(); i != m_clefMaps.end(); ++i) {
+    for (auto i = m_clefMaps.begin(); i != m_clefMaps.end(); ++i) {
         RG_DEBUG << "    Track = " << (*i).first;
         ClefMap *m = (*i).second;
 
-        for (j = m->begin(); j != m->end(); ++j) {
+        for (auto j = m->begin(); j != m->end(); ++j) {
             RG_DEBUG << "        Time = " << (*j).first
                       << " Clef = " << (*j).second.getClefType();
         }
@@ -205,18 +203,16 @@ ClefKeyContext::dumpClefContext()
 
 // Only for debug
 void
-ClefKeyContext::dumpKeyContext()
+// cppcheck-suppress unusedFunction
+ClefKeyContext::dumpKeyContext() const
 {
-    KeyMaps::iterator i;
-    KeyMap::iterator j;
-
     RG_DEBUG << "Begin of key context dump =================";
 
-    for (i = m_keyMaps.begin(); i != m_keyMaps.end(); ++i) {
+    for (auto i = m_keyMaps.begin(); i != m_keyMaps.end(); ++i) {
         RG_DEBUG << "    Track = " << (*i).first;
         KeyMap *m = (*i).second;
 
-        for (j = m->begin(); j != m->end(); ++j) {
+        for (auto j = m->begin(); j != m->end(); ++j) {
             RG_DEBUG << "        Time = " << (*j).first
                       << " Key = " << (*j).second.getName();
         }
@@ -275,5 +271,3 @@ ClefKeyContext::endMarkerTimeChanged(const Segment *, bool /*shorten*/)
 }
 
 }
-
-

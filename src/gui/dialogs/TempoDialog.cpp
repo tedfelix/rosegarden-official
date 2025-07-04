@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,22 +16,23 @@
 */
 
 #define RG_MODULE_STRING "[TempoDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TempoDialog.h"
+
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
 #include "base/RealTime.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
-#include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
 #include <QGroupBox>
 #include <QDoubleSpinBox>
 #include <QCheckBox>
-#include <QFrame>
 #include <QLabel>
 #include <QRadioButton>
 #include <QPushButton>
@@ -39,109 +40,110 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-#include <QLayout>
 #include <QUrl>
 #include <QDesktopServices>
-
 
 
 namespace Rosegarden
 {
 
+
 TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
                          bool timeEditable):
-        QDialog(parent),
-        m_doc(doc),
-        m_tempoTime(0)
+    QDialog(parent),
+    m_doc(doc)
 {
     setModal(true);
     setWindowTitle(tr("Insert Tempo Change"));
-    setObjectName("MinorDialog");
 
-    QWidget* vbox = dynamic_cast<QWidget*>(this);
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    vbox->setLayout(vboxLayout);
+    setLayout(vboxLayout);
 
-    // group box for tempo
-    QGroupBox *frame = new QGroupBox(tr("Tempo"), vbox);
-    frame->setContentsMargins(5, 5, 5, 5);
-    QGridLayout *layout = new QGridLayout;
-    layout->setSpacing(5);
-    vboxLayout->addWidget(frame);
+    // Tempo group box
+    QGroupBox *tempoGroupBox = new QGroupBox(tr("Tempo"), this);
+    tempoGroupBox->setContentsMargins(5, 5, 5, 5);
+    QGridLayout *tempoLayout = new QGridLayout;
+    tempoLayout->setSpacing(5);
+    tempoGroupBox->setLayout(tempoLayout);
+    vboxLayout->addWidget(tempoGroupBox);
 
-    // Set tempo
-    layout->addWidget(new QLabel(tr("New tempo:"), frame), 0, 1);
-    m_tempoValueSpinBox = new QDoubleSpinBox(frame);
+    // New tempo
+    tempoLayout->addWidget(new QLabel(tr("New tempo:"), tempoGroupBox), 0, 1);
+    m_tempoValueSpinBox = new QDoubleSpinBox(tempoGroupBox);
     m_tempoValueSpinBox->setDecimals(3);
     m_tempoValueSpinBox->setMaximum(1000);
     m_tempoValueSpinBox->setMinimum(1);
     m_tempoValueSpinBox->setSingleStep(1);
     m_tempoValueSpinBox->setValue(120); // will set properly below
-    layout->addWidget(m_tempoValueSpinBox, 0, 2);
+    connect(m_tempoValueSpinBox, (void(QDoubleSpinBox::*)(double))
+                    &QDoubleSpinBox::valueChanged,
+            this, &TempoDialog::slotTempoChanged);
+    tempoLayout->addWidget(m_tempoValueSpinBox, 0, 2);
 
-    connect(m_tempoValueSpinBox, SIGNAL(valueChanged(double)),
-            SLOT(slotTempoChanged(double)));
-
-    m_tempoTap= new QPushButton(tr("Tap"), frame);
-    layout->addWidget(m_tempoTap, 0, 3);
+    // Tap
+    m_tempoTap = new QPushButton(tr("Tap"), tempoGroupBox);
     connect(m_tempoTap, &QAbstractButton::clicked, this, &TempoDialog::slotTapClicked);
+    tempoLayout->addWidget(m_tempoTap, 0, 3);
 
+    // bpm
+    m_tempoBeatLabel = new QLabel(tempoGroupBox);
+    tempoLayout->addWidget(m_tempoBeatLabel, 0, 4);
 
-    m_tempoConstant = new QRadioButton(tr("Tempo is fixed until the following tempo change"), frame);
-    m_tempoRampToNext = new QRadioButton(tr("Tempo ramps to the following tempo"), frame);
-    m_tempoRampToTarget = new QRadioButton(tr("Tempo ramps to:"), frame);
+    m_tempoBeat = new QLabel(tempoGroupBox);
+    tempoLayout->addWidget(m_tempoBeat, 0, 5);
 
-    //    m_tempoTargetCheckBox = new QCheckBox(tr("Ramping to:"), frame);
-    m_tempoTargetSpinBox = new QDoubleSpinBox(frame);
+    m_tempoBeatsPerMinute = new QLabel(tempoGroupBox);
+    tempoLayout->addWidget(m_tempoBeatsPerMinute, 0, 6);
+
+    // Tempo is fixed...
+    m_tempoConstant = new QRadioButton(
+            tr("Tempo is fixed until the following tempo change"), tempoGroupBox);
+    connect(m_tempoConstant, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoConstantClicked);
+    tempoLayout->addWidget(m_tempoConstant, 1, 1, 1, 2);
+
+    // Tempo ramps to the following tempo
+    m_tempoRampToNext = new QRadioButton(
+            tr("Tempo ramps to the following tempo"), tempoGroupBox);
+    connect(m_tempoRampToNext, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoRampToNextClicked);
+    tempoLayout->addWidget(m_tempoRampToNext, 2, 1, 1, 2);
+
+    // Tempo ramps to:
+    // ??? This one is a bit confusing.  It ramps to the specified tempo, but
+    //     the ramp stops at the next tempo no matter what that tempo might be.
+    //     A tooltip might be helpful here.
+    m_tempoRampToTarget = new QRadioButton(tr("Tempo ramps to:"), tempoGroupBox);
+    connect(m_tempoRampToTarget, &QAbstractButton::clicked,
+            this, &TempoDialog::slotTempoRampToTargetClicked);
+    tempoLayout->addWidget(m_tempoRampToTarget, 3, 1);
+    m_tempoTargetSpinBox = new QDoubleSpinBox(tempoGroupBox);
     m_tempoTargetSpinBox->setDecimals(3);
     m_tempoTargetSpinBox->setMaximum(1000);
     m_tempoTargetSpinBox->setMinimum(1);
     m_tempoTargetSpinBox->setSingleStep(1);
     m_tempoTargetSpinBox->setValue(120);
-
-    //    layout->addWidget(m_tempoTargetCheckBox, 1, 0, 0+1, 1- 1, AlignRight);
-    //    layout->addWidget(m_tempoTargetSpinBox, 1, 2);
-
-    layout->addWidget(m_tempoConstant, 1, 1, 1, 2);
-    layout->addWidget(m_tempoRampToNext, 2, 1, 1, 2);
-    layout->addWidget(m_tempoRampToTarget, 3, 1);
-    layout->addWidget(m_tempoTargetSpinBox, 3, 2);
-
-    //    connect(m_tempoTargetCheckBox, SIGNAL(clicked()),
-    //            SLOT(slotTargetCheckBoxClicked()));
-    connect(m_tempoConstant, &QAbstractButton::clicked,
-            this, &TempoDialog::slotTempoConstantClicked);
-    connect(m_tempoRampToNext, &QAbstractButton::clicked,
-            this, &TempoDialog::slotTempoRampToNextClicked);
-    connect(m_tempoRampToTarget, &QAbstractButton::clicked,
-            this, &TempoDialog::slotTempoRampToTargetClicked);
-    connect(m_tempoTargetSpinBox, SIGNAL(valueChanged(double)),
-            SLOT(slotTargetChanged(double)));
-
-    m_tempoBeatLabel = new QLabel(frame);
-    layout->addWidget(m_tempoBeatLabel, 0, 4);
-
-    m_tempoBeat = new QLabel(frame);
-    layout->addWidget(m_tempoBeat, 0, 5);
-
-    m_tempoBeatsPerMinute = new QLabel(frame);
-    layout->addWidget(m_tempoBeatsPerMinute, 0, 6);
-
-    frame->setLayout(layout);
-
-    m_timeEditor = nullptr;
+    // ??? slotTargetChanged() is empty.
+    //connect(m_tempoTargetSpinBox, (void(QDoubleSpinBox::*)(double))
+    //             &QDoubleSpinBox::valueChanged,
+    //        this, &TempoDialog::slotTargetChanged);
+    tempoLayout->addWidget(m_tempoTargetSpinBox, 3, 2);
 
     if (timeEditable) {
 
-        m_timeEditor = new TimeWidget
-            (tr("Time of tempo change"),
-             vbox, &m_doc->getComposition(), 0, true);
-        vboxLayout->addWidget(m_timeEditor);
+        m_timeWidget = new TimeWidget2(
+                tr("Time of tempo change"),  // title
+                this,  // parent
+                0,  // initialTime
+                true);  // constrainToCompositionDuration
+        connect(m_timeWidget, &TimeWidget2::signalIsValid,
+                this, &TempoDialog::slotIsValid);
+        vboxLayout->addWidget(m_timeWidget);
 
     } else {
-    
+
         // group box for scope (area)
-        QGroupBox *scopeGroup = new QGroupBox(tr("Scope"), vbox);
+        QGroupBox *scopeGroup = new QGroupBox(tr("Scope"), this);
         vboxLayout->addWidget(scopeGroup);
 
         QVBoxLayout * scopeBoxLayout = new QVBoxLayout(scopeGroup);
@@ -150,9 +152,9 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
         QVBoxLayout * currentBoxLayout = scopeBoxLayout;
         QWidget * currentBox = scopeGroup;
-        
-        QLabel *child_15 = new QLabel(tr("The pointer is currently at "), currentBox);
-        currentBoxLayout->addWidget(child_15);
+
+        currentBoxLayout->addWidget(new QLabel(
+                tr("The pointer is currently at "), currentBox));
         m_tempoTimeLabel = new QLabel(currentBox);
         currentBoxLayout->addWidget(m_tempoTimeLabel);
         m_tempoBarLabel = new QLabel(currentBox);
@@ -168,38 +170,42 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
 
         QWidget * changeWhereBox = scopeGroup;
         QVBoxLayout * changeWhereBoxLayout = scopeBoxLayout;
-        
+
         spare = new QLabel("      ", changeWhereBox);
         changeWhereBoxLayout->addWidget(spare);
-        
+
         QWidget *changeWhereVBox = new QWidget(changeWhereBox);
         QVBoxLayout *changeWhereVBoxLayout = new QVBoxLayout;
         changeWhereBoxLayout->addWidget(changeWhereVBox);
         changeWhereBox->setLayout(changeWhereBoxLayout);
         changeWhereBoxLayout->setStretchFactor(changeWhereVBox, 20);
 
-        m_tempoChangeHere = new QRadioButton(tr("Apply this tempo from here onwards"), changeWhereVBox);
+        m_tempoChangeHere = new QRadioButton(
+                tr("Apply this tempo from here onwards"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeHere);
 
-        m_tempoChangeBefore = new QRadioButton(tr("Replace the last tempo change"), changeWhereVBox);
+        m_tempoChangeBefore = new QRadioButton(
+                tr("Replace the last tempo change"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeBefore);
         m_tempoChangeBeforeAt = new QLabel(changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeBeforeAt);
         m_tempoChangeBeforeAt->hide();
 
-        m_tempoChangeStartOfBar = new QRadioButton(tr("Apply this tempo from the start of this bar"), changeWhereVBox);
+        m_tempoChangeStartOfBar = new QRadioButton(
+                tr("Apply this tempo from the start of this bar"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeStartOfBar);
 
-        m_tempoChangeGlobal = new QRadioButton(tr("Apply this tempo to the whole composition"), changeWhereVBox);
+        m_tempoChangeGlobal = new QRadioButton(
+                tr("Apply this tempo to the whole composition"), changeWhereVBox);
         changeWhereVBoxLayout->addWidget(m_tempoChangeGlobal);
 
         QWidget *optionHBox = new QWidget(changeWhereVBox);
         changeWhereVBoxLayout->addWidget(optionHBox);
         changeWhereVBox->setLayout(changeWhereVBoxLayout);
         QHBoxLayout *optionHBoxLayout = new QHBoxLayout;
-        QLabel *child_6 = new QLabel("         ", optionHBox);
-        optionHBoxLayout->addWidget(child_6);
-        m_defaultBox = new QCheckBox(tr("Also make this the default tempo"), optionHBox);
+        optionHBoxLayout->addWidget(new QLabel("         ", optionHBox));
+        m_defaultBox = new QCheckBox(
+                tr("Also make this the default tempo"), optionHBox);
         optionHBoxLayout->addWidget(m_defaultBox);
         spare = new QLabel(optionHBox);
         optionHBoxLayout->addWidget(spare);
@@ -221,18 +227,17 @@ TempoDialog::TempoDialog(QWidget *parent, RosegardenDocument *doc,
         m_defaultBox->setEnabled(false);
     }
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
-    vboxLayout->addWidget(buttonBox);
-    
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TempoDialog::slotHelpRequested);
+    m_buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
+            QDialogButtonBox::Help);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &TempoDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(m_buttonBox, &QDialogButtonBox::helpRequested,
+            this, &TempoDialog::slotHelpRequested);
+    vboxLayout->addWidget(m_buttonBox);
 
-    populateTempo();    
+    populateTempo();
 }
-
-TempoDialog::~TempoDialog()
-{}
 
 void
 TempoDialog::setTempoPosition(timeT time)
@@ -284,8 +289,8 @@ TempoDialog::populateTempo()
 
     updateBeatLabels(comp.getTempoQpm(tempo));
 
-    if (m_timeEditor) {
-        m_timeEditor->slotSetTime(m_tempoTime);
+    if (m_timeWidget) {
+        m_timeWidget->setTime(m_tempoTime);
         return ;
     }
 
@@ -353,7 +358,7 @@ TempoDialog::populateTempo()
 }
 
 void
-TempoDialog::updateBeatLabels(double qpm)
+TempoDialog::updateBeatLabels(double newTempo)
 {
     Composition &comp = m_doc->getComposition();
 
@@ -379,7 +384,7 @@ TempoDialog::updateBeatLabels(double qpm)
 
         m_tempoBeatsPerMinute->setText
             (QString("= %1 ").arg
-             (int(qpm * Note(Note::Crotchet).getDuration() / beat)));
+             (int(newTempo * Note(Note::Crotchet).getDuration() / beat)));
         m_tempoBeatLabel->show();
         m_tempoBeat->show();
         m_tempoBeatsPerMinute->show();
@@ -392,11 +397,12 @@ TempoDialog::slotTempoChanged(double val)
     updateBeatLabels(val);
 }
 
+#if 0
 void
 TempoDialog::slotTargetChanged(double)
 {
-    //...
 }
+#endif
 
 void
 TempoDialog::slotTempoConstantClicked()
@@ -431,23 +437,26 @@ TempoDialog::slotActionChanged()
 void
 TempoDialog::accept()
 {
-    tempoT tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
-    RG_DEBUG << "Tempo is " << tempo;
+    m_tempo = Composition::getTempoForQpm(m_tempoValueSpinBox->value());
+    RG_DEBUG << "Tempo is " << m_tempo;
 
-    tempoT target = -1;
+    m_targetTempo = -1;
     if (m_tempoRampToNext->isChecked()) {
-        target = 0;
+        m_targetTempo = 0;
     } else if (m_tempoRampToTarget->isChecked()) {
-        target = Composition::getTempoForQpm(m_tempoTargetSpinBox->value());
+        m_targetTempo =
+                Composition::getTempoForQpm(m_tempoTargetSpinBox->value());
     }
 
-    RG_DEBUG << "Target is " << target;
+    RG_DEBUG << "Target is " << m_targetTempo;
 
-    if (m_timeEditor) {
+    if (m_timeWidget) {
 
-        emit changeTempo(m_timeEditor->getTime(),
-                         tempo,
-                         target,
+        m_tempoTime = m_timeWidget->getTime();
+
+        emit changeTempo(m_tempoTime,
+                         m_tempo,
+                         m_targetTempo,
                          AddTempo);
 
     } else {
@@ -466,8 +475,8 @@ TempoDialog::accept()
         }
 
         emit changeTempo(m_tempoTime,
-                         tempo,
-                         target,
+                         m_tempo,
+                         m_targetTempo,
                          action);
     }
 
@@ -503,7 +512,12 @@ TempoDialog::slotTapClicked()
     m_tapMinusOne = now;
 }
 
-
+void
+TempoDialog::slotIsValid(bool valid)
+{
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
+}
 
 void
 TempoDialog::slotHelpRequested()
@@ -516,5 +530,6 @@ TempoDialog::slotHelpRequested()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:tempoDialog-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
-}
 
+
+}

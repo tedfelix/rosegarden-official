@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,19 +20,21 @@
 #define RG_RAWNOTERULER_H
 
 #include "base/Segment.h"
+#include "base/TimeT.h"
+
 #include <QSize>
 #include <QWidget>
-#include <utility>
-#include <vector>
-#include "base/Event.h"
-
 
 class QPaintEvent;
 class QPainter;
 
+#include <utility>
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class RulerScale;
 class DefaultVelocityColour;
@@ -63,8 +65,8 @@ public:
     QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
-    
-    
+
+
 /** SegmentObserver methods : **/
 
 // Used to update the ruler when notes are moved around or deleted
@@ -78,8 +80,8 @@ public slots:
     void slotScrollHoriz(int x);
 
 protected:
-    void paintEvent(QPaintEvent*) override;
-    
+    void paintEvent(QPaintEvent *) override;
+
 private:
     int  m_height;
     int  m_currentXOffset;
@@ -91,8 +93,8 @@ private:
     struct EventTreeNode
     {
         typedef std::vector<EventTreeNode *> NodeList;
-        
-        EventTreeNode(Segment::iterator n) : node(n) { }
+
+        explicit EventTreeNode(Segment::iterator n) : node(n) { }
         ~EventTreeNode() {
             for (NodeList::iterator i = children.begin();
                  i != children.end(); ++i) {
@@ -101,8 +103,8 @@ private:
         }
 
         int getDepth();
-        int getChildrenAboveOrBelow(bool below = false, int pitch = -1);
-        
+        int getChildrenAboveOrBelow(bool below = false, int p = -1);
+
         Segment::iterator node;
         NodeList children;
     };

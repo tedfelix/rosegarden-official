@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,16 +19,18 @@
 #define RG_PROPERTYADJUSTER_H
 
 #include "ControlTool.h"
-//#include <QString>
-//#include "base/Event.h"
+
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-class Event;
+
 class ControlRuler;
 
+
+/// Adjusts velocity within the velocity ruler.
 class PropertyAdjuster : public ControlTool
 {
     Q_OBJECT
@@ -36,37 +38,30 @@ class PropertyAdjuster : public ControlTool
     friend class ControlToolBox;
 
 public:
+
     void handleLeftButtonPress(const ControlMouseEvent *) override;
     FollowMode handleMouseMove(const ControlMouseEvent *) override;
     void handleMouseRelease(const ControlMouseEvent *) override;
-
-    /**
-     * Respond to an event being deleted -- it may be the one the tool
-     * is remembering as the current event.
-     */
-//    virtual void handleEventRemoved(Event *event);
 
     void ready() override;
     void stow() override;
 
     static QString ToolName();
 
-signals:
-//    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
+private:
 
-protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
+    explicit PropertyAdjuster(ControlRuler *);
 
-protected:
-    PropertyAdjuster(ControlRuler *);
     void setCursor(const ControlMouseEvent *);
 
     void setBasicContextHelp();
 
-    float m_mouseStartY;
-    float m_mouseLastY;
+    //float m_mouseStartY;
+    float m_mouseLastY{0};
     bool m_canSelect;
+
 };
+
 
 }
 

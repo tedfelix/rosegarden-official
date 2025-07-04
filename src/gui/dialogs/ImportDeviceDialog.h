@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -57,7 +57,7 @@ public:
     bool shouldImportBanks() const;
     bool shouldImportKeyMappings() const;
     bool shouldImportControllers() const;
-    bool shouldOverwriteBanks() const; 
+    bool shouldOverwriteBanks() const;
     bool shouldRename() const;
 
     bool haveDevice() const;
@@ -75,9 +75,9 @@ public slots:
     void slotCancel();
 
 protected:
-    bool importFromRG(QString fileName);
-    bool importFromSF2(QString fileName);
-    bool importFromLSCP(QString filename);
+    bool importFromRG(const QString& fileName);
+    bool importFromSF2(const QString& fileName);
+    bool importFromLSCP(const QString& filename);
 
     QUrl               m_url;
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -28,7 +28,7 @@ namespace Rosegarden {
 
 RulerScale::RulerScale(Composition *c) :
     m_composition(c)
-{ 
+{
     // nothing
 }
 
@@ -79,7 +79,7 @@ RulerScale::getBarForX(double x) const
 
     int minBar = getFirstVisibleBar(),
 	maxBar = getLastVisibleBar();
-    
+
     while (maxBar > minBar) {
 	int middle = minBar + (maxBar - minBar) / 2;
 	if (x > getBarPosition(middle)) minBar = middle + 1;
@@ -134,11 +134,13 @@ RulerScale::getXForTime(timeT time) const
     }
 }
 
+/* unused
 timeT
 RulerScale::getDurationForWidth(double x, double width) const
 {
     return getTimeForX(x + width) - getTimeForX(x);
 }
+*/
 
 double
 RulerScale::getWidthForDuration(timeT startTime, timeT duration) const
@@ -269,7 +271,7 @@ SegmentsRulerScale::~SegmentsRulerScale()
 void
 SegmentsRulerScale::segmentDeleted(const Segment *s)
 {
-    m_segments.erase((Segment *)s);
+    m_segments.erase(const_cast<Segment*>(s));
 }
 
 int

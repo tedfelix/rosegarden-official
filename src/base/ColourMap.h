@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2003
         Mark Hymers         <markh@linuxfromscratch.org>
@@ -23,7 +23,7 @@
 #include <map>
 #include <string>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 
@@ -90,8 +90,8 @@ public:
     // launch the ColourConfigurationPage.
 
     /// Add a colour entry using the lowest available ID.
-    void addEntry(QColor colour, std::string name);
-    void modifyName(unsigned colourID, std::string name);
+    void addEntry(QColor colour, const std::string& name);
+    void modifyName(unsigned colourID, const std::string& name);
     void modifyColour(unsigned colourID, QColor colour);
     void deleteEntry(unsigned colourID);
 

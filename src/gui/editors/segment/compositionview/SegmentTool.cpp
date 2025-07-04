@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -47,12 +47,12 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
 
     // Set up the actions for the right-click context menu.  Note that
     // all of these end up simply delegating to RosegardenMainWindow.
-    createAction("edit_default", SLOT(slotEdit()));
-    createAction("edit_matrix", SLOT(slotEditInMatrix()));
-    createAction("edit_percussion_matrix", SLOT(slotEditInPercussionMatrix()));
-    createAction("edit_notation", SLOT(slotEditAsNotation()));
-    createAction("edit_event_list", SLOT(slotEditInEventList()));
-    createAction("edit_pitch_tracker", SLOT(slotEditInPitchTracker()));
+    createAction("edit_default", &SegmentTool::slotEdit);
+    createAction("edit_matrix", &SegmentTool::slotEditInMatrix);
+    createAction("edit_percussion_matrix", &SegmentTool::slotEditInPercussionMatrix);
+    createAction("edit_notation", &SegmentTool::slotEditAsNotation);
+    createAction("edit_event_list", &SegmentTool::slotEditInEventList);
+    createAction("edit_pitch_tracker", &SegmentTool::slotEditInPitchTracker);
     // Can we get some of the following connectionless mojo for some
     // of these others too?
     // The undo and redo actions are available globally through
@@ -64,21 +64,21 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
     // simplify the implementation of a shortcut manager.
     //createAction("edit_undo", ...);  // handled by CommandHistory
     //createAction("edit_redo", ...);  // handled by CommandHistory
-    createAction("edit_cut", SLOT(slotEditCut()));
-    createAction("edit_copy", SLOT(slotEditCopy()));
-    createAction("edit_paste", SLOT(slotEditPaste()));
-    createAction("delete", SLOT(slotDeleteSelectedSegments()));
-    createAction("join_segments", SLOT(slotJoinSegments()));
-    createAction("quantize_selection", SLOT(slotQuantizeSelection()));
-    createAction("repeat_quantize", SLOT(slotRepeatQuantizeSelection()));
-    createAction("relabel_segment", SLOT(slotRelabelSegments()));
-    createAction("transpose", SLOT(slotTransposeSegments()));
-    createAction("select", SLOT(slotPointerSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("split", SLOT(slotSplitSelected()));
+    createAction("edit_cut", &SegmentTool::slotEditCut);
+    createAction("edit_copy", &SegmentTool::slotEditCopy);
+    createAction("edit_paste", &SegmentTool::slotEditPaste);
+    createAction("delete", &SegmentTool::slotDeleteSelectedSegments);
+    createAction("join_segments", &SegmentTool::slotJoinSegments);
+    createAction("quantize_selection", &SegmentTool::slotQuantizeSelection);
+    createAction("repeat_quantize", &SegmentTool::slotRepeatQuantizeSelection);
+    createAction("relabel_segment", &SegmentTool::slotRelabelSegments);
+    createAction("transpose", &SegmentTool::slotTransposeSegments);
+    createAction("select", &SegmentTool::slotPointerSelected);
+    createAction("move", &SegmentTool::slotMoveSelected);
+    createAction("draw", &SegmentTool::slotDrawSelected);
+    createAction("erase", &SegmentTool::slotEraseSelected);
+    createAction("resize", &SegmentTool::slotResizeSelected);
+    createAction("split", &SegmentTool::slotSplitSelected);
 }
 
 SegmentTool::~SegmentTool()

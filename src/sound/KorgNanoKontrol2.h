@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2020 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2020-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -43,6 +43,7 @@ public:
     KorgNanoKontrol2();
 
     /// Call this after the device is connected to set it up.
+    // cppcheck-suppress functionStatic
     void init();
 
     /// Call when the document is modified to update the LEDs.
@@ -57,32 +58,33 @@ public:
 
 private:
     // Current 8-channel page.
-    unsigned m_page;
+    unsigned m_page{0};
 
-    void processFader(MidiByte controlNumber, MidiByte value);
-    void processKnob(MidiByte controlNumber, MidiByte value);
-    void processSolo(MidiByte controlNumber);
-    void processMute(MidiByte controlNumber);
-    void processRecord(MidiByte controlNumber);
+    void processFader(MidiByte controlNumber, MidiByte value) const;
+    void processKnob(MidiByte controlNumber, MidiByte value) const;
+    void processSolo(MidiByte controlNumber) const;
+    void processMute(MidiByte controlNumber) const;
+    void processRecord(MidiByte controlNumber) const;
 
-    void testLEDs(bool on);
+    static void testLEDs(bool on);
     void initLEDs();
-    bool m_firstRefresh;
+    bool m_firstRefresh{true};
     void refreshLEDs();
 
-    bool m_solo[8];
-    bool m_mute[8];
-    bool m_recordArmed[8];
+    bool m_solo[8]{false};
+    // If a track is muted, its LED is off.  Unmuted, its LED is on.
+    bool m_mute[8]{true};
+    bool m_recordArmed[8]{false};
 
-    bool m_play;
-    bool m_record;
-    bool m_stop;
+    bool m_play{false};
+    bool m_record{false};
+    bool m_stop{false};
     void setPlayRecordStopLEDs(bool play, bool record, bool stop);
 
-    bool m_rewind;
-    bool m_fastForward;
+    bool m_rewind{false};
+    bool m_fastForward{false};
 
-    bool m_cycle;
+    bool m_cycle{false};
 
 };
 

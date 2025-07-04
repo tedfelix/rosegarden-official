@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,46 +25,69 @@ namespace Rosegarden
 {
 
 Spline::PointList *
-
-Spline::calculate(const QPoint &s, const QPoint &f, const PointList &cp,
-                  QPoint &topLeft, QPoint &bottomRight)
+Spline::calculate(
+        const QPoint &start, const QPoint &finish,
+        const PointList &controlPoints,
+        QPoint &topLeft, QPoint &bottomRight)
 {
-    if (cp.size() < 2)
+    if (controlPoints.size() < 2)
         return nullptr;
 
-    size_t i;
-    PointList *acc = new PointList();
-    QPoint p(s);
+    PointList *pointAccumulator = new PointList();
+
+    // For very small requests, just return the start and finish points.
+    if (abs(start.x() - finish.x()) <= 1  &&
+        abs(start.y() - finish.y()) <= 1) {
+        topLeft = start;
+        bottomRight = finish;
+        if (topLeft.x() > bottomRight.x())
+            std::swap(topLeft.rx(), bottomRight.rx());
+        if (topLeft.y() > bottomRight.y())
+            std::swap(topLeft.ry(), bottomRight.ry());
+
+        pointAccumulator->push_back(start);
+        pointAccumulator->push_back(finish);
+        return pointAccumulator;
+    }
+
+    QPoint p(start);
 
     topLeft = bottomRight = QPoint(0, 0);
 
-    for (i = 1; i < cp.size(); ++i) {
+    size_t i;
 
-        QPoint c(cp[i - 1]);
+    for (i = 1; i < controlPoints.size(); ++i) {
 
-        int x = (c.x() + cp[i].x()) / 2;
-        int y = (c.y() + cp[i].y()) / 2;
+        QPoint c(controlPoints[i - 1]);
+
+        int x = (c.x() + controlPoints[i].x()) / 2;
+        int y = (c.y() + controlPoints[i].y()) / 2;
         QPoint n(x, y);
 
-        calculateSegment(acc, p, n, c, topLeft, bottomRight);
+        calculateSegment(pointAccumulator, p, n, c, topLeft, bottomRight);
 
         p = n;
     }
 
-    calculateSegment(acc, p, f, cp[i - 1], topLeft, bottomRight);
+    calculateSegment(
+            pointAccumulator,
+            p, finish,
+            controlPoints[i - 1],
+            topLeft, bottomRight);
 
-    return acc;
+    return pointAccumulator;
 }
 
 void
-Spline::calculateSegment(PointList *acc,
-                         const QPoint &s, const QPoint &f, const QPoint &c,
+Spline::calculateSegment(PointList *pointAccumulator,
+                         const QPoint &start, const QPoint &finish,
+                         const QPoint &c,
                          QPoint &topLeft, QPoint &bottomRight)
 {
     int x, y, n;
 
-    x = c.x() - s.x();
-    y = c.y() - s.y();
+    x = c.x() - start.x();
+    y = c.y() - start.y();
 
     if (x < 0)
         x = -x;
@@ -75,8 +98,8 @@ Spline::calculateSegment(PointList *acc,
     else
         n = y;
 
-    x = f.x() - c.x();
-    y = f.y() - c.y();
+    x = finish.x() - c.x();
+    y = finish.y() - c.y();
 
     if (x < 0)
         x = -x;
@@ -87,11 +110,13 @@ Spline::calculateSegment(PointList *acc,
     else
         n += y;
 
-    calculateSegmentSub(acc, s, f, c, n, topLeft, bottomRight);
+    calculateSegmentSub(
+            pointAccumulator,
+            start, finish, c, n, topLeft, bottomRight);
 }
 
 void
-Spline::calculateSegmentSub(PointList *acc,
+Spline::calculateSegmentSub(PointList *pointAccumulator,
                             const QPoint &s, const QPoint &f, const QPoint &c,
                             int n, QPoint &topLeft, QPoint &bottomRight)
 {
@@ -116,7 +141,7 @@ Spline::calculateSegmentSub(PointList *acc,
         if (y > bottomRight.y())
             bottomRight.setY(y);
 
-        acc->push_back(QPoint(x, y));
+        pointAccumulator->push_back(QPoint(x, y));
     }
 }
 

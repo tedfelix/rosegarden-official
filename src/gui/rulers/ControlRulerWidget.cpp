@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRulerWidget]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlRulerWidget.h"
 
@@ -23,6 +24,7 @@
 #include "ControlRulerTabBar.h"
 #include "ControllerEventsRuler.h"
 #include "PropertyControlRuler.h"
+#include "KeyPressureRuler.h"
 
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
@@ -34,13 +36,13 @@
 #include "base/MidiTypes.h"  // for PitchBend::EventType
 #include "base/PropertyName.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "base/Segment.h"
 #include "base/Selection.h"  // for EventSelection
 #include "base/parameterpattern/SelectionSituation.h"
 #include "base/SoftSynthDevice.h"
 #include "base/Studio.h"
 #include "base/Track.h"
+#include "base/SnapGrid.h"
 
 #include "misc/Debug.h"
 
@@ -59,7 +61,8 @@ ControlRulerWidget::ControlRulerWidget() :
     m_leftMargin(0),
     m_currentToolName(),
     m_pannedRect(),
-    m_selectedElements()
+    m_selectedElements(),
+    m_editorSnap(SnapGrid::NoSnap)
 {
     QVBoxLayout *layout = new QVBoxLayout;
     layout->setContentsMargins(0, 0, 0, 0);
@@ -82,10 +85,10 @@ ControlRulerWidget::ControlRulerWidget() :
     m_tabBar->setShape(QTabBar::RoundedSouth);
 
     layout->addWidget(m_tabBar);
-    
+
     connect(m_tabBar, &QTabBar::currentChanged,
             this, &ControlRulerWidget::tabChanged);
-    
+
     connect(m_tabBar, &ControlRulerTabBar::tabCloseRequest,
             this, &ControlRulerWidget::slotRemoveRuler);
 }
@@ -167,11 +170,11 @@ getControlParameter2(const Segment &segment, int ccNumber)
 
     // Get the ControlParameter for the ccNumber.
 
-    Controllable *controllable = device->getControllable();
+    const Controllable *controllable = device->getControllable();
     if (!controllable)
         return nullptr;
 
-    return controllable->getControlParameter(Controller::EventType, ccNumber);
+    return controllable->getControlParameterConst(Controller::EventType, ccNumber);
 }
 
 void
@@ -201,9 +204,15 @@ ControlRulerWidget::launchRulers()
         } else if (ruler.type == PitchBend::EventType) {
             RG_DEBUG << "launchInitialRulers(): Launching pitchbend ruler";
             addControlRuler(ControlParameter::getPitchBend());
+        } else if (ruler.type == ChannelPressure::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching channelpressure ruler";
+            addControlRuler(ControlParameter::getChannelPressure());
+        } else if (ruler.type == KeyPressure::EventType) {
+            RG_DEBUG << "launchInitialRulers(): Launching keypressure ruler";
+            addControlRuler(ControlParameter::getKeyPressure());
         } else if (ruler.type == BaseProperties::VELOCITY.getName()) {
             RG_DEBUG << "launchInitialRulers(): Launching velocity ruler";
-            addPropertyRuler(ruler.type);
+            addPropertyRuler(static_cast<PropertyName>(ruler.type));
         } else {
             RG_WARNING << "launchInitialRulers(): WARNING: Unexpected ruler in Segment.";
         }
@@ -264,46 +273,9 @@ ControlRulerWidget::togglePropertyRuler(const PropertyName &propertyName)
     addPropertyRuler(propertyName);
 }
 
-namespace
-{
-    bool hasPitchBend(Segment *segment)
-    {
-        RosegardenDocument *document = RosegardenDocument::currentDocument;
-
-        Track *track =
-                document->getComposition().getTrackById(segment->getTrack());
-
-        Instrument *instrument = document->getStudio().
-            getInstrumentById(track->getInstrument());
-
-        if (!instrument)
-            return false;
-
-        Controllable *controllable = instrument->getDevice()->getControllable();
-
-        if (!controllable)
-            return false;
-
-        // Check whether the device has a pitchbend controller
-        // ??? Why not use
-        //     Controllable::getControlParameter(type, controllerNumber)?
-        for (const ControlParameter &cp : controllable->getControlParameters()) {
-            if (cp.getType() == PitchBend::EventType)
-                return true;
-        }
-
-        return false;
-    }
-}
-
 void
 ControlRulerWidget::togglePitchBendRuler()
 {
-    // No pitch bend?  Bail.
-    // ??? Rude.  We should gray the menu item instead of this.
-    if (!hasPitchBend(&(m_viewSegment->getSegment())))
-        return;
-
     // Check whether we already have a pitchbend ruler
 
     // For each ruler...
@@ -327,6 +299,61 @@ ControlRulerWidget::togglePitchBendRuler()
     // We don't already have a pitchbend ruler, make one now.
     addControlRuler(ControlParameter::getPitchBend());
 }
+
+void
+ControlRulerWidget::toggleChannelPressureRuler()
+{
+    // Check whether we already have a channel pressure ruler
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(ruler);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler, remove it.
+        if (eventRuler->getControlParameter()->getType() ==
+            ChannelPressure::EventType)
+        {
+            removeRuler(ruler);
+            return;
+        }
+    }
+
+    // We don't already have a ruler, make one now.
+    addControlRuler(ControlParameter::getChannelPressure());
+}
+
+void
+ControlRulerWidget::toggleKeyPressureRuler()
+{
+    // Check whether we already have a key pressure ruler
+
+    // For each ruler...
+    for (ControlRuler *ruler : m_controlRulerList) {
+        ControllerEventsRuler *eventRuler =
+                dynamic_cast<ControllerEventsRuler*>(ruler);
+
+        // Not a ControllerEventsRuler?  Try the next one.
+        if (!eventRuler)
+            continue;
+
+        // If we already have a ruler, remove it.
+        if (eventRuler->getControlParameter()->getType() ==
+            KeyPressure::EventType)
+        {
+            removeRuler(ruler);
+            return;
+        }
+    }
+
+    // We don't already have a ruler, make one now.
+    addControlRuler(ControlParameter::getKeyPressure());
+}
+
 
 namespace
 {
@@ -403,8 +430,10 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
 
     // Add to tabs.
     // (Controller names, if translatable, come from AutoLoadStrings.cpp and are
-    // in the QObject context/namespace/whatever.)
-    const int index = m_tabBar->addTab(QObject::tr(name.toStdString().c_str()));
+    // in the MIDI_CONTROLLER translation context.)
+    const int index = m_tabBar->addTab(
+                        QCoreApplication::translate("MIDI_CONTROLLER",
+                                                    name.toStdString().c_str()));
     m_tabBar->setCurrentIndex(index);
 
     // Add to ruler list.
@@ -424,7 +453,6 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
              m_segmentRulerSets) {
         segmentRulerSet->insert(segmentRuler);
     }
-
 }
 
 void
@@ -434,8 +462,18 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     if (!m_viewSegment)
         return;
 
-    ControlRuler *controlRuler = new ControllerEventsRuler(
-            m_viewSegment, m_scale, this, &controlParameter);
+    ControlRuler* controlRuler;
+    if (controlParameter == ControlParameter::getKeyPressure()) {
+        KeyPressureRuler* keyPressureRuler =
+            new KeyPressureRuler
+            (m_viewSegment, m_scale, this, &controlParameter);
+        keyPressureRuler->setElementSelection(m_selectedElements);
+        controlRuler = keyPressureRuler;
+    } else {
+        controlRuler =
+            new ControllerEventsRuler
+            (m_viewSegment, m_scale, this, &controlParameter);
+    }
 
     controlRuler->setXOffset(m_leftMargin);
 
@@ -450,6 +488,9 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
 
+    connect(controlRuler, &ControlRuler::showContextHelp,
+            this,  &ControlRulerWidget::showContextHelp);
+
     addRuler(controlRuler, QString::fromStdString(controlParameter.getName()));
 
     // ??? This is required or else we crash.  But we already passed this in
@@ -457,6 +498,9 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     //     Preferably in the ctor call.  PropertyControlRuler appears to do
     //     this successfully.  See if we can follow its example.
     controlRuler->setViewSegment(m_viewSegment);
+
+    // and tell the ruler about the editor snap setting
+    controlRuler->setSnapFromEditor(m_editorSnap, false);
 }
 
 void
@@ -479,6 +523,9 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
     //     actually does nothing right now.
     connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);
+    // Forward.
+    connect(controlRuler, &ControlRuler::rulerSelectionUpdate,
+            this, &ControlRulerWidget::rulerSelectionUpdate);
 
     connect(controlRuler, &ControlRuler::showContextHelp,
             this,  &ControlRulerWidget::showContextHelp);
@@ -496,6 +543,9 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 
     addRuler(controlRuler, name);
 
+    // and tell the ruler about the editor snap setting
+    controlRuler->setSnapFromEditor(m_editorSnap, true);
+
     // Update selection drawing in matrix view.
     emit childRulerSelectionChanged();
 }
@@ -503,6 +553,7 @@ ControlRulerWidget::addPropertyRuler(const PropertyName &propertyName)
 void
 ControlRulerWidget::slotSetPannedRect(QRectF pannedRect)
 {
+    RG_DEBUG << "slotSetPannedRect" << pannedRect;
     m_pannedRect = pannedRect;
 
     // For each ruler, pass on the panned rect.
@@ -530,11 +581,13 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
             ViewElementList::iterator viewElementIter =
                     m_viewSegment->findEvent(event);
             // Add it to m_selectedElements.
-            m_selectedElements.push_back(*viewElementIter);
+            if (viewElementIter != m_viewSegment->getViewElementList()->end())
+                m_selectedElements.push_back(*viewElementIter);
         }
     }
 
     // Send new selection to all PropertyControlRulers.  IOW the velocity ruler.
+    // Also the KeyPressureRuler needs the element selection
     // For each ruler...
     for (ControlRuler *ruler : m_controlRulerList) {
         PropertyControlRuler *propertyRuler =
@@ -542,7 +595,14 @@ ControlRulerWidget::slotSelectionChanged(EventSelection *eventSelection)
         // Is this the velocity ruler?  Then pass on the selection.
         if (propertyRuler)
             propertyRuler->updateSelection(m_selectedElements);
+
+        KeyPressureRuler *keyPressureRuler =
+            dynamic_cast<KeyPressureRuler *>(ruler);
+        if (keyPressureRuler)
+            keyPressureRuler->setElementSelection(m_selectedElements);
     }
+
+    //
 }
 
 void
@@ -633,6 +693,21 @@ ControlRulerWidget::getActivePropertyRuler()
 {
     return dynamic_cast <PropertyControlRuler *>(
             m_stackedWidget->currentWidget());
+}
+
+void ControlRulerWidget::setSnapFromEditor(timeT snapSetting)
+{
+    RG_DEBUG << "set snap to" << snapSetting;
+    m_editorSnap = snapSetting;
+    // update rulers
+    for (auto ruler : m_controlRulerList) {
+        PropertyControlRuler *pcr =
+            dynamic_cast <PropertyControlRuler *>(ruler);
+        bool forceFromEditor = false;
+        // propery control ruler always takes the editor setting
+        if (pcr) forceFromEditor = true;
+        ruler->setSnapFromEditor(snapSetting, forceFromEditor);
+    }
 }
 
 bool

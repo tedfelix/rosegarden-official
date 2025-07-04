@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,14 +15,18 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[DiatonicPitchChooser]"
+#define RG_NO_DEBUG_PRINT
 
 #include "DiatonicPitchChooser.h"
 
-#include <iostream>
+#include "PitchDragLabel.h"
+
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
-#include "gui/general/MidiPitchLabel.h"
-#include "PitchDragLabel.h"
+#include "misc/Debug.h"
+//#include "gui/general/MidiPitchLabel.h"
+
 #include <QComboBox>
 #include <QGroupBox>
 #include <QLabel>
@@ -32,16 +36,18 @@
 #include <QHBoxLayout>
 #include <QVBoxLayout>
 
+
 namespace Rosegarden
 {
 
-DiatonicPitchChooser::DiatonicPitchChooser(QString title,
-                           QWidget *parent,
-                           int defaultNote,
-                           int defaultPitch,
-                           int defaultOctave) :
-        QGroupBox(title, parent),
-        m_defaultPitch(defaultPitch)
+
+DiatonicPitchChooser::DiatonicPitchChooser(const QString &title,
+                                           QWidget *parent,
+                                           int defaultNote,
+                                           int defaultPitch,
+                                           int defaultOctave) :
+    QGroupBox(title, parent),
+    m_defaultPitch(defaultPitch)
 {
     QVBoxLayout *layout = new QVBoxLayout;
 
@@ -107,30 +113,18 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &DiatonicPitchChooser::slotSetStep);
 
-    //connect(m_pitch, SIGNAL(valueChanged(int)),
-    //        this, SIGNAL(pitchChanged(int)));
-
-    //connect(m_pitch, SIGNAL(valueChanged(int)),
-    //        this, SIGNAL(preview(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
-            this, SLOT(slotSetNote(int,int,int)));
-
-    //connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
-    //        this, SLOT(slotSetPitch(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
-            this, SLOT(slotSetNote(int,int,int)));
-
-    //connect(m_pitchDragLabel, SIGNAL(pitchChanged(int)),
-    //        this, SIGNAL(pitchChanged(int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchDragged(int,int,int)),
-            this, SIGNAL(noteChanged(int,int,int)));
-
-    connect(m_pitchDragLabel, SIGNAL(pitchChanged(int,int,int)),
-            this, SIGNAL(noteChanged(int,int,int)));
-
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchDragged,
+            this, &DiatonicPitchChooser::slotSetNote);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchDragged,
+            this, &DiatonicPitchChooser::noteChanged);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchChanged,
+            this, &DiatonicPitchChooser::slotSetNote);
+    connect(m_pitchDragLabel, (void(PitchDragLabel::*)(int,int,int))
+                    &PitchDragLabel::pitchChanged,
+            this, &DiatonicPitchChooser::noteChanged);
     connect(m_pitchDragLabel, &PitchDragLabel::preview,
             this, &DiatonicPitchChooser::preview);
 
@@ -139,11 +133,11 @@ DiatonicPitchChooser::DiatonicPitchChooser(QString title,
 int
 DiatonicPitchChooser::getPitch() const
 {
-    return 12 * m_octave->currentIndex() + scale_Cmajor[m_step->currentIndex()] + 
+    return 12 * m_octave->currentIndex() + scale_Cmajor[m_step->currentIndex()] +
     	(m_accidental->currentIndex() - 2);
 }
 
-int 
+int
 DiatonicPitchChooser::getAccidental()
 {
     return m_accidental->currentIndex() - 2;
@@ -159,22 +153,23 @@ DiatonicPitchChooser::slotSetPitch(int pitch)
 
     int step = steps_Cmajor[pitch % 12];
     m_step->setCurrentIndex(step);
-    
+
     int pitchChange = (pitch % 12) - scale_Cmajor[step];
-    
+
     m_accidental->setCurrentIndex(pitchChange + 2);
 
     m_pitchLabel->setText(QString("%1").arg(pitch));
-    
+
     update();
 }
 
 void
 DiatonicPitchChooser::slotSetStep(int step)
 {
+    RG_DEBUG << "slotSetStep()";
+
     if (m_step->currentIndex() != step)
        m_step->setCurrentIndex(step);
-    std::cout << "slot_step called" << std::endl;
     setLabelsIfNeeded();
     update();
 }
@@ -219,11 +214,11 @@ DiatonicPitchChooser::slotSetNote(int pitch, int octave, int step)
 
     m_octave->setCurrentIndex(octave);
     m_step->setCurrentIndex(step);
-    
+
     int pitchOffset = pitch - (octave * 12 + scale_Cmajor[step]);
     m_accidental->setCurrentIndex(pitchOffset + 2);
 
-    //MidiPitchLabel pl(p);
+    //QString pl = MidiPitchLabel::pitchToString(pitch);
     m_pitchLabel->setText(QString("%1").arg(pitch));
     update();
 }

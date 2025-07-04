@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ class SoftSynthDevice : public Device, public Controllable
 {
 
 public:
-    SoftSynthDevice();
+    //SoftSynthDevice();
     SoftSynthDevice(DeviceId id, const std::string &name);
     ~SoftSynthDevice() override;
 
@@ -50,16 +50,15 @@ public:
     // implemented from Controllable interface
     //
     const ControlList &getControlParameters() const override { return m_controlList; }
-    const ControlParameter *getControlParameter(int index) const override;
-    const ControlParameter *getControlParameter(const std::string &type,
-                                                        MidiByte controllerNumber) const override;
+    const ControlParameter *getControlParameterConst(const std::string &type,
+                                                        MidiByte controllerValue) const override;
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 
 private:
     // Hide copy constructor and op=
-    SoftSynthDevice(const SoftSynthDevice &);
-    SoftSynthDevice &operator=(const SoftSynthDevice &);
+    SoftSynthDevice(const SoftSynthDevice &) = delete;
+    SoftSynthDevice &operator=(const SoftSynthDevice &) = delete;
 
     MidiMetronome *m_metronome;
     static ControlList m_controlList;

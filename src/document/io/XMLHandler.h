@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,7 +31,7 @@ namespace Rosegarden
  * introduced as preparation for QT6 in which the SAX classes are no
  * longer available.
  */
-    
+
 class ROSEGARDENPRIVATE_EXPORT XMLHandler
 {
  public:
@@ -43,7 +43,7 @@ class ROSEGARDENPRIVATE_EXPORT XMLHandler
                             const QString &localName,
                             const QString &qName);
     virtual QString errorString() const;
-    virtual void setDocumentLocator(void *locator); // tbd
+    // unused virtual void setDocumentLocator(void *locator); // tbd
     virtual bool startDocument();
     virtual bool startElement(const QString &namespaceURI,
                               const QString &localName,
@@ -52,7 +52,7 @@ class ROSEGARDENPRIVATE_EXPORT XMLHandler
     virtual bool fatalError(int lineNumber, int columnNumber,
                             const QString& msg);
 };
- 
+
 }
 
 #endif

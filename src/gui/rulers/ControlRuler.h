@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -23,6 +23,7 @@
 #include "gui/general/AutoScroller.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
+#include "gui/general/ActionFileClient.h"
 
 #include <QColor>
 #include <QPoint>
@@ -52,11 +53,12 @@ class EventSelection;
 class EditViewBase;
 class NotationStaff;
 class ViewSegment;
+class SnapGrid;
 
 /**
  * ControlRuler : base class for Control Rulers
  */
-class ControlRuler : public QWidget //, public ViewSegmentObserver
+class ControlRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
 
@@ -96,22 +98,22 @@ public:
     Segment* getSegment() { return m_segment; }
 
     void updateSegment();
-    
+
     virtual void notationLayoutUpdated(timeT,timeT);
 
     void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
     RulerScale* getRulerScale() { return m_rulerScale; }
-    
-    void setXOffset(int offset) { m_xOffset = offset; } 
+
+    void setXOffset(int offset) { m_xOffset = offset; }
 
     float valueToY(long val);
-    long yToValue(float height);
+    long yToValue(float y);
 
     double getXScale() const { return m_xScale; }
     double getYScale() const { return m_yScale; }
     float getXMax();
     float getXMin();
-    
+
     void clearSelectedItems();
     void addToSelection(QSharedPointer<ControlItem>);
     void removeFromSelection(QSharedPointer<ControlItem>);
@@ -131,8 +133,14 @@ public:
     // SegmentObserver interface
 //    virtual void viewSegmentDeleted(const ViewSegment *);
 
-    void flipForwards();
-    void flipBackwards();
+    // unused void flipForwards();
+    // unused void flipBackwards();
+
+    SnapGrid* getSnapGrid() const;
+
+    void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
+
+    virtual bool allowSimultaneousEvents() = 0;
 
 signals:
     void mousePress();
@@ -140,27 +148,24 @@ signals:
     void mouseRelease();
 
     /**
-     * Emitted whenever the ruler changes its selection, so the ruler owner can
-     * update its own selection to include the events selected on the ruler.
-     *
-     * See MatrixScene::slotRulerSelectionChanged().
-     *
-     * This allows the user to add CC events to the selection for copy/cut/paste.
-     * It is a bit confusing, however, since it doesn't affect the move tool.
-     *
-     * ??? This would be even more useful if the PropertyControlRuler (velocity
-     *     ruler) properly implemented selection.  That would then allow selecting
-     *     in the velocity ruler which would make it a lot easier to use.
+     * Eventually ends up calling MatrixView::slotUpdateMenuStates().
      */
     void rulerSelectionChanged(EventSelection *);
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
 
     void showContextHelp(const QString &);
 
 public slots:
 //    virtual void slotUpdateElementsHPos();
-    virtual void slotScrollHorizSmallSteps(int);
+    // unused virtual void slotScrollHorizSmallSteps(int);
     virtual void slotSetPannedRect(QRectF);
 //    virtual void slotSetScale(double);
+
+    void slotSnap();
 
 protected:
     void mousePressEvent(QMouseEvent*) override;
@@ -191,7 +196,7 @@ protected:
 
     // Stacking of the SegmentItems on the canvas
     //
-    std::pair<int, int> getZMinMax();
+    // unused std::pair<int, int> getZMinMax();
 
 //    virtual void init();
 //virtual void drawBackground() = 0;
@@ -202,32 +207,28 @@ protected:
     QRect mapRectToWidget(QRectF *);
     QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
-
-    QColor valueToColour(int max, int val);
-
+    // unused QColor valueToColour(int max, int val);
     void updateSelection();
-
-    void setMenuName(QString menuName) { m_menuName = menuName; }
-    void createMenu();
+    virtual void createRulerMenu();
 
     //--------------- Data members ---------------------------------
 
 //    EditViewBase*               m_parentEditView;
 //    QScrollBar*                 m_mainHorizontalScrollBar;
     RulerScale*     m_rulerScale;
-    EventSelection* m_eventSelection; //,*m_assignedEventSelection;
+    EventSelection *m_eventSelection{nullptr}; //,*m_assignedEventSelection;
 
 //    MatrixScene *m_scene;
 
-    ViewSegment *m_viewSegment;
-    NotationStaff *m_notationStaff;
-    Segment *m_segment;
+    ViewSegment *m_viewSegment{nullptr};
+    NotationStaff *m_notationStaff{nullptr};
+    Segment *m_segment{nullptr};
 
     // ??? MEMORY LEAK.
     //     This map stores pointers and never deletes them.
     //     Recommend switching to QSharedPointer.
     ControlItemMap m_controlItemMap;
-    
+
     // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
@@ -236,43 +237,47 @@ protected:
     ControlItemMap::iterator m_firstVisibleItem;
     ControlItemMap::iterator m_lastVisibleItem;
     ControlItemMap::iterator m_nextItemLeft;
-    
+
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
-    ControlItem *m_currentIndex;
+    ControlItem *m_currentIndex{nullptr};
 
-    ControlTool *m_currentTool;
+    ControlTool *m_currentTool{nullptr};
     ControlToolBox *m_toolBox;
     QString m_currentToolName;
 
     QRectF m_pannedRect;
-    double m_xScale;
-    double m_yScale;
+    double m_xScale{1};
+    double m_yScale{1};
 
-    long m_maxItemValue;
-    long m_minItemValue;
+    long m_maxItemValue{127};
+    long m_minItemValue{0};
 
-    double m_viewSegmentOffset;
-    
-    int m_xOffset;
+    double m_viewSegmentOffset{0};
 
-    double m_currentX;
+    int m_xOffset{0};
+
+    double m_currentX{0};
 
     QPoint m_lastEventPos;
-    bool m_itemMoved;
+    bool m_itemMoved{false};
 
-    bool m_selecting;
-    ControlSelector* m_selector;
-    QRectF* m_selectionRect;
+    bool m_selecting{false};
+    ControlSelector *m_selector{nullptr};
+    QRectF *m_selectionRect{nullptr};
 
-    QString m_menuName;
-    QMenu* 	m_menu;
+    QMenu *m_rulerMenu{nullptr};
+    SnapGrid *m_snapGrid;
+    QString m_snapName;
+    timeT m_snapTimeFromEditor;
 
-    //bool m_hposUpdatePending;
-
+    // ??? Rename: SelectionList
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
+
+ private:
+    void setSnapTimeFromActionName(const QString& actionName);
 };
 
 

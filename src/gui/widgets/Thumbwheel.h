@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file originally from Sonic Visualiser, copyright 2007 Queen
     Mary, University of London.
@@ -34,16 +34,16 @@ public:
     Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = nullptr);
     ~Thumbwheel() override;
 
-    int getMinimumValue() const;
-    int getMaximumValue() const;
+    // unused int getMinimumValue() const;
+    // unused int getMaximumValue() const;
     int getDefaultValue() const;
-    float getSpeed() const;
-    bool getTracking() const;
-    bool getShowScale() const;
+    // unused float getSpeed() const;
+    // unused bool getTracking() const;
+    // unused bool getShowScale() const;
     int getValue() const;
     void setBright(const bool v);
 
-    void setShowToolTip(bool show);
+    // unused void setShowToolTip(bool show);
 
     QSize sizeHint() const override;
 
@@ -59,14 +59,14 @@ public slots:
     void setDefaultValue(int deft);
     void setSpeed(float speed);
     void setTracking(bool tracking);
-    void setShowScale(bool show);
+    void setShowScale(bool showScale);
     void setValue(int value);
     void scroll(bool up);
     void resetToDefault();
 
 protected:
     void mousePressEvent(QMouseEvent *e) override;
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;

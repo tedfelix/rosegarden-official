@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -109,24 +109,23 @@ XmlStorableEvent::XmlStorableEvent(const QXmlStreamAttributes &attributes,
             // Check if boolean val
             QString valLowerCase(val.toLower());
             bool isNumeric;
-            int numVal;
 
             if (valLowerCase == "true" || valLowerCase == "false") {
 
-                set
-                    <Bool>(qstrtostr(attrName), valLowerCase == "true");
+                set<Bool>(static_cast<PropertyName>(qstrtostr(attrName)),
+                          valLowerCase == "true");
 
             } else {
 
                 // Not a bool, check if integer val
-                numVal = val.toInt(&isNumeric);
+                int numVal = val.toInt(&isNumeric);
                 if (isNumeric) {
-                    set
-                        <Int>(qstrtostr(attrName), numVal);
+                    set<Int>(static_cast<PropertyName>(qstrtostr(attrName)),
+                             numVal);
                 } else {
                     // not an int either, default to string
-                    set
-                        <String>(qstrtostr(attrName), qstrtostr(attrVal));
+                    set<String>(static_cast<PropertyName>(qstrtostr(attrName)),
+                                qstrtostr(attrVal));
                 }
             }
         }
@@ -168,13 +167,16 @@ XmlStorableEvent::setPropertyFromAttributes
             RG_DEBUG << "XmlStorableEvent::setProperty: multiple values found, ignoring all but the first";
             continue;
         } else if (attrName == "bool") {
-            set<Bool>(qstrtostr(name), attrVal.toLower() == "true", persistent);
+            set<Bool>(static_cast<PropertyName>(qstrtostr(name)),
+                      attrVal.toLower() == "true", persistent);
             have = true;
         } else if (attrName == "int") {
-            set<Int>(qstrtostr(name), attrVal.toInt(), persistent);
+            set<Int>(static_cast<PropertyName>(qstrtostr(name)),
+                     attrVal.toInt(), persistent);
             have = true;
         } else if (attrName == "string") {
-            set<String>(qstrtostr(name), qstrtostr(attrVal), persistent);
+            set<String>(static_cast<PropertyName>(qstrtostr(name)),
+                        qstrtostr(attrVal), persistent);
             have = true;
         } else {
             RG_DEBUG << "XmlStorableEvent::setProperty: unknown attribute name \"" << name << "\", ignoring";

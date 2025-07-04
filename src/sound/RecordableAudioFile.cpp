@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -90,7 +90,6 @@ RecordableAudioFile::write()
     }
 
     unsigned int channels = m_audioFile->getChannels();
-    unsigned char b1, b2;
 
     // We need the same amount of available data on every channel
     size_t s = 0;
@@ -110,7 +109,9 @@ RecordableAudioFile::write()
     size_t bufferReqd = channels * s;
     if (bufferReqd > bufferSize) {
 	if (buffer) {
+            // cppcheck-suppress memleakOnRealloc
 	    buffer = (sample_t *)realloc(buffer, bufferReqd * sizeof(sample_t));
+            // cppcheck-suppress memleakOnRealloc
 	    encodeBuffer = (char *)realloc(encodeBuffer, bufferReqd * 4);
 	} else {
 	    buffer = (sample_t *) malloc(bufferReqd * sizeof(sample_t));
@@ -130,8 +131,10 @@ RecordableAudioFile::write()
 	for (size_t i = 0; i < s; ++i) {
 	    for (unsigned int ch = 0; ch < channels; ++ch) {
 		float sample = buffer[i + ch * s];
-		b2 = (unsigned char)((long)(sample * 32767.0) & 0xff);
-		b1 = (unsigned char)((long)(sample * 32767.0) >> 8);
+		unsigned char b2 =
+                    (unsigned char)((long)(sample * 32767.0) & 0xff);
+		unsigned char b1 =
+                    (unsigned char)((long)(sample * 32767.0) >> 8);
 		encodeBuffer[index++] = b2;
 		encodeBuffer[index++] = b1;
 	    }
@@ -141,6 +144,7 @@ RecordableAudioFile::write()
 	for (size_t i = 0; i < s; ++i) {
 	    for (unsigned int ch = 0; ch < channels; ++ch) {
 		float sample = buffer[i + ch * s];
+                // cppcheck-suppress invalidPointerCast
 		*(float *)encodePointer = sample;
 		encodePointer += sizeof(float);
 	    }
@@ -155,4 +159,3 @@ RecordableAudioFile::write()
 }
 
 }
-

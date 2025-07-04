@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -51,7 +51,7 @@ public:
     virtual std::string getAlias() const = 0;
 
 protected:
-    PluginContainer(bool havePlugins);
+    explicit PluginContainer(bool havePlugins);
     virtual ~PluginContainer();
 
     AudioPluginVector m_audioPlugins;

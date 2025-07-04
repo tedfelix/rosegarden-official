@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -36,20 +36,26 @@ class QGridLayout;
 //class QFrame;
 class QGroupBox;
 class QCheckBox;
-class QShortcut;
 class QComboBox;
-
+class QLineEdit;
 
 namespace Rosegarden
 {
 
 class PluginControl;
 class PluginContainer;
-class AudioPluginOSCGUIManager;
+class AudioPluginGUIManager;
 class AudioPluginManager;
 class AudioPluginInstance;
 
 
+/// The "Audio Plugin" dialog.
+/**
+ * This dialog is used for both synth plugins and audio plugins.
+ * It can be accessed from the Instrument Parameters panel in the left
+ * column of the main window.  Pressing the synth or the audio plugin
+ * buttons launches this dialog.
+ */
 class AudioPluginDialog : public QDialog
 {
     Q_OBJECT
@@ -57,14 +63,12 @@ class AudioPluginDialog : public QDialog
 public:
     AudioPluginDialog(QWidget *parent,
                       QSharedPointer<AudioPluginManager> aPM,
-                      AudioPluginOSCGUIManager *aGM,
-                      PluginContainer *instrument,
+                      AudioPluginGUIManager *aGM,
+                      PluginContainer *pluginContainer,
                       int index);
     ~AudioPluginDialog() override;
 
     PluginContainer* getPluginContainer() const { return m_pluginContainer; }
-
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
     bool isSynth() { return m_index == int(Instrument::SYNTH_PLUGIN_POSITION); }
 
@@ -75,6 +79,8 @@ public:
     void guiExited() { m_guiShown = false; }
 
 public slots:
+    void slotSearchTextChanged(const QString& text);
+    void slotArchSelected(int);
     void slotCategorySelected(int);
     void slotPluginSelected(int index);
     void slotPluginPortChanged(float value);
@@ -86,6 +92,9 @@ public slots:
     void slotShowGUI();
     void slotHelpRequested();
 
+    void slotParameters();
+    void slotPresets();
+    virtual void slotEditConnections();
     virtual void slotEditor();
 
 signals:
@@ -112,12 +121,15 @@ protected:
     //--------------- Data members ---------------------------------
 
     QSharedPointer<AudioPluginManager> m_pluginManager;
-    AudioPluginOSCGUIManager *m_pluginGUIManager;
+    AudioPluginGUIManager *m_pluginGUIManager;
     PluginContainer     *m_pluginContainer;
     InstrumentId         m_containerId;
 
     QGroupBox           *m_pluginParamsBox;
+    QWidget             *m_pluginSearchBox;
+    QLineEdit           *m_pluginSearchText;
     QWidget             *m_pluginCategoryBox;
+    QComboBox           *m_pluginArchList;
     QComboBox           *m_pluginCategoryList;
     QLabel              *m_pluginLabel;
     QComboBox           *m_pluginList;
@@ -129,8 +141,11 @@ protected:
     QPushButton         *m_pasteButton;
     QPushButton         *m_defaultButton;
     QPushButton         *m_guiButton;
+    QPushButton         *m_paramsButton;
+    QPushButton         *m_presetButton;
+    QPushButton         *m_editConnectionsButton;
     QPushButton         *m_editorButton;
-    
+
     QLabel              *m_programLabel;
     QComboBox           *m_programCombo;
     std::vector<PluginControl*> m_pluginWidgets;
@@ -140,8 +155,7 @@ protected:
 
     bool                 m_generating;
     bool                 m_guiShown;
-
-    QShortcut              *m_shortcuts;
+    int                  m_selectdPluginNumber;
 
     void                 populatePluginCategoryList();
     void                 populatePluginList();

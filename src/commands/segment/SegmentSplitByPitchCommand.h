@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -51,7 +51,7 @@ public:
 	HighestTone,
 	ChordToneOfInitialPitch,
     };
-    
+
     SegmentSplitByPitchCommand(Segment *segment,
                                int splitPitch,
                                SplitStrategy splitStrategy,
@@ -68,7 +68,7 @@ public:
 private:
     int getSplitPitchAt(Segment::iterator i);
     int
-      getNewRangingSplitPitch(Segment::iterator i,
+      getNewRangingSplitPitch(Segment::iterator prevNote,
 			      int lastSplitPitch,
 			      std::vector<int>& c0p);
 

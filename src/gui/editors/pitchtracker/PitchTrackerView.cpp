@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -14,6 +14,8 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[PitchTrackerView]"
 
 #include "PitchTrackerView.h"
 #include "PitchGraphWidget.h"
@@ -61,9 +63,8 @@ namespace Rosegarden
   CONSTRUCTOR, DESTRUCTOR, AND INIT
  *************************************/
 PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
-                                   std::vector<Segment *> segments,
-                                   QWidget *parent) :
-        NotationView(doc, segments, parent),
+                                   const std::vector<Segment *>& segments) :
+        NotationView(doc, segments),
         m_doc(doc),
         m_jackCaptureClient(nullptr),
         m_jackConnected(false),
@@ -95,7 +96,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
                      ". This seems rather unlikely; will continue anyway. "
                      "(fingers crossed!)";
     }
-    
+
     // Find the current tuning index in use by the pitch tracker
     // The static method Tuning::getTunings() returns a pointer to a
     // std::vector of pointers to tunings. i.e.
@@ -103,19 +104,20 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     // The one we want is obtained be dereferencing the return value of
     // getTunings to obtain the std::vector, then indexing by the quantity
     // retreived above. So the following looks nasty, but that's C++ for you.
-    const std::vector<Accidentals::Tuning*> *availableTunings =
+    const std::vector<std::shared_ptr<Accidentals::Tuning>> *availableTunings =
         Accidentals::Tuning::getTunings();
-    
+
     if (availableTunings) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
         m_availableTunings =
-            QVector<Accidentals::Tuning*>(availableTunings->begin(),
-                                          availableTunings->end());
+            QVector<std::shared_ptr<Accidentals::Tuning>>(
+                    availableTunings->begin(),
+                    availableTunings->end());
 #else
         m_availableTunings =
-            QVector<Accidentals::Tuning*>::fromStdVector(*availableTunings);
+            QVector<std::shared_ptr<Accidentals::Tuning>>::fromStdVector(*availableTunings);
 #endif
-          
+
         if (tuning < 0 ||
             static_cast<unsigned int>(tuning) >= availableTunings->size()) {
             // Illegal index into available tunings (how??) -> use default.
@@ -126,7 +128,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
         m_tuning = nullptr;
         RG_WARNING << "WARNING: No available tunings!";
     }
-    
+
     m_pitchGraphWidget = new PitchGraphWidget(m_history);
     m_pitchGraphWidget->setTuning(m_tuning);
     // m_notationWidget is owned by our parent, NotationView
@@ -149,7 +151,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
                               "tracker clients are open."));
         return;
     }
-    
+
 #ifdef HAVE_LIBJACK
     int sampleRate = m_jackCaptureClient->getSampleRate();
 
@@ -158,9 +160,9 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     PitchDetector::Method pdMethod = (*PitchDetector::getMethods())[method];
     m_pitchDetector = new PitchDetector(m_framesize, m_stepsize, sampleRate);
     m_pitchDetector->setMethod(pdMethod);
-    
+
     setSegments(doc, segments);
-    
+
     setupActions(tuning, method);
 #else
     Q_UNUSED(method);
@@ -179,12 +181,12 @@ void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
 {
     // Add pitch-tracker-specific view menus
     QMenu *viewMenu = findMenu("View");
-        
+
     QMenu *tuningsMenu = new QMenu(tr("Tunings"), viewMenu);
     m_tuningsActionGroup = new QActionGroup(this);
-    
+
     {
-        QVectorIterator<Accidentals::Tuning*> it(m_availableTunings);    
+        QVectorIterator<std::shared_ptr<Accidentals::Tuning>> it(m_availableTunings);
         while (it.hasNext()) {
             QAction *tuning =
               new QAction(QString::fromStdString(it.next()->getName()),
@@ -194,14 +196,14 @@ void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
         }
         m_tuningsActionGroup->actions().at(initialTuning)->setChecked(true);
     }
-    
+
     connect(m_tuningsActionGroup, &QActionGroup::triggered,
             this, &PitchTrackerView::slotNewTuningFromAction);
- 
-    
+
+
     QMenu *methodsMenu = new QMenu(tr("Pitch estimate method"), viewMenu);
     m_methodsActionGroup = new QActionGroup(this);
-    
+
     {
         QVectorIterator<PitchDetector::Method> it(*PitchDetector::getMethods());
         while (it.hasNext()) {
@@ -211,10 +213,10 @@ void PitchTrackerView::setupActions(int initialTuning, int initialMethod)
         }
         m_methodsActionGroup->actions().at(initialMethod)->setChecked(true);
     }
-    
+
     connect(m_methodsActionGroup, &QActionGroup::triggered,
             this, &PitchTrackerView::slotNewPitchEstimationMethod);
-    
+
     viewMenu->addSeparator();
     viewMenu->addMenu(tuningsMenu);
     viewMenu->addMenu(methodsMenu);
@@ -241,16 +243,16 @@ PitchTrackerView::slotNewPitchEstimationMethod(QAction *a)
 
 void
 PitchTrackerView::setSegments(RosegardenDocument *document,
-                              std::vector<Segment *> /* segments */)
+                              const std::vector<Segment *>& /* segments */)
 {
     // m_document is owned by our parent, NotationView
     if (m_document) {
-        //disconnect(m_document, SIGNAL(pointerPositionChanged(timeT)),
-        //           this, SLOT(slotPointerPositionChanged(timeT)));
+        //disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
+        //           this, &PitchTrackerView::slotPointerPositionChanged);
     }
     m_document = document;
 
-    // update GUI 
+    // update GUI
 
     connect(m_document, &RosegardenDocument::pointerPositionChanged,
             this, &PitchTrackerView::slotUpdateValues);
@@ -262,7 +264,7 @@ PitchTrackerView::setSegments(RosegardenDocument *document,
 
     // Any other jumping around in the score will invalidate the pitch
     // graph, so let's just erase it and let it start again.
-     
+
     connect(this, &NotationView::stepBackward,
             this, &PitchTrackerView::slotPlaybackJump);
     connect(this, &NotationView::stepForward,
@@ -289,7 +291,7 @@ PitchTrackerView::slotPlaybackJump()
     m_transport_posn_change = true;
     RG_DEBUG << "PitchTrackerView: User changed playback posn\n";
 }
-    
+
 void
 PitchTrackerView::slotStartTracker()
 {
@@ -305,7 +307,7 @@ PitchTrackerView::slotStartTracker()
 #endif
         m_running = true;
 
-        NotationStaff *currentStaff = 
+        NotationStaff *currentStaff =
             m_notationWidget->getScene()->getCurrentStaff();
         if (!currentStaff) return;
 
@@ -346,7 +348,7 @@ PitchTrackerView::addNoteBoundary(double freq, RealTime time)
 // of the captured performance, so we maintain a QVector of score time
 // (time) as well as the real performance time (realTime). Only the
 // latter is used in the genertion of the pitch error graph, but the
-// former will be useful in associating the performance part of the 
+// former will be useful in associating the performance part of the
 // PML with the score part.
 void
 PitchTrackerView::addPitchTime(double freq, timeT time, RealTime realTime)
@@ -420,7 +422,7 @@ PitchTrackerView::slotUpdateValues(timeT time)
     }
 
     const RealTime rt = m_doc->getComposition().getElapsedRealTime(time);
-    
+
     // See whether the current note has changed since we last looked
     if (score_event_itr != m_notes_itr) {
         // if so, record the current note and issue record the note boundary
@@ -434,12 +436,12 @@ PitchTrackerView::slotUpdateValues(timeT time)
                 m_tuning->getFrequency(Pitch(*e));
             addNoteBoundary(noteFreq, rt);
         }
-    }   
-    
+    }
+
     // Record the actual pitch data. Easy case first
     if (e->isa(Note::EventRestType)) {
         addPitchTime(PitchDetector::NONE, time, rt);
- 
+
     } else if (e->isa(Note::EventType)) {
 #ifdef HAVE_LIBJACK
         if (m_jackCaptureClient->getFrame(m_pitchDetector->getInBuffer(),
@@ -455,4 +457,3 @@ PitchTrackerView::slotUpdateValues(timeT time)
     }
 }
 } // Rosegarden namespace
-

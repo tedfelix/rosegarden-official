@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -29,7 +29,7 @@ insertSorted(MappedInserterBase &exporter)
     // order we inserted them, important for NoteOffs.
     m_list.sort(merc);
     std::list<MappedEvent>::const_iterator i = m_list.begin();
-    if (i != m_list.end() && i->getEventTime() < RealTime::zeroTime) {
+    if (i != m_list.end() && i->getEventTime() < RealTime::zero()) {
         // Negative time if the composition starts before the bar 1
         RealTime timeOffset = - i->getEventTime();
         for(; i != m_list.end(); ++i) {

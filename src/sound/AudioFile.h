@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -41,7 +41,7 @@ typedef enum
 {
 
     UNKNOWN, /// not yet known
-    WAV,     /// RIFF (Resource Interchange File Format) wav file 
+    WAV,     /// RIFF (Resource Interchange File Format) wav file
     BWF,     /// RIFF Broadcast Wave File
     AIFF,    /// Audio Interchange File Format
     MP3
@@ -51,21 +51,21 @@ typedef enum
 class AudioFile : public SoundFile
 {
 public:
-    /// The "read" constructor - open a file
-    /// an assign a label and id to it.
-    ///
+    /// The "read" constructor.
     AudioFile(AudioFileId id,
               const std::string &label,
-              const QString &fileName);
+              const QString &absoluteFilePath);
 
+#if 0
     /// The "write" constructor - we only need to
     /// specify a file&label and some parameters and
     /// then write it out.
     ///
-    AudioFile(const QString &fileName,
+    AudioFile(const QString &absoluteFilePath,
               unsigned int channels,
               unsigned int sampleRate,
               unsigned int bitsPerSample);
+#endif
 
     ~AudioFile() override;
 
@@ -83,7 +83,7 @@ public:
 
     /// Used for waveform interpolation at a point
     ///
-    float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }
+    static float sinc(float value) { return sin(M_PI * value)/ M_PI * value; }
 
     /// Audio file identifier - set in constructor of file type
     ///
@@ -92,7 +92,7 @@ public:
     unsigned int getBitsPerSample() const { return m_bitsPerSample; }
     unsigned int getSampleRate() const { return m_sampleRate; }
     unsigned int getChannels() const { return m_channels; }
-    
+
     /// We must continue our main control abstract methods from SoundFile
     /// and add our own close() method that will add any relevant header
     /// information to an audio file that has been written and is now
@@ -110,7 +110,7 @@ public:
     /// less than zero.  Returns true if the scan time was valid and
     /// successful.  Need two interfaces because when playing we use an
     /// external file handle (one per playback instance - PlayableAudioFile)
-    /// 
+    ///
     virtual bool scanTo(const RealTime &time) = 0;
     virtual bool scanTo(std::ifstream *file, const RealTime &time) = 0;
 
@@ -175,7 +175,7 @@ public:
     /// from this file or another with the same format as it.  Place
     /// the results in the given float buffer.  Return true for
     /// success.  This function does crappy resampling if necessary.
-    /// 
+    ///
     virtual bool decode(const unsigned char *sourceData,
                         size_t sourceBytes,
                         size_t targetSampleRate,
@@ -185,7 +185,7 @@ public:
                         bool addToResultBuffers = false) = 0;
 
 protected:
-    
+
 
     AudioFileType  m_type;   /// AudioFile type
     AudioFileId    m_id;     /// AudioFile ID

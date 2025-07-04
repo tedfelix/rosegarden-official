@@ -3,14 +3,14 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2007-2009
-        Yves Guillemot      <yc.guillemot@wanadoo.fr> 
- 
+        Yves Guillemot      <yc.guillemot@wanadoo.fr>
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -77,10 +77,11 @@ HeadersGroup::
 void
 HeadersGroup::removeAllHeaders()
 {
-    TrackHeaderVector::iterator i;
-    for (i=m_headers.begin(); i!=m_headers.end(); ++i) {
-        disconnect(*i, SIGNAL(showToolTip(QString)),
-                   m_widget, SLOT(slotShowHeaderToolTip(QString)));
+    for (TrackHeaderVector::iterator i = m_headers.begin();
+         i != m_headers.end();
+         ++i) {
+        disconnect(*i, &StaffHeader::showToolTip,
+                   m_widget, &NotationWidget::slotShowHeaderToolTip);
         delete *i;
     }
     m_headers.erase(m_headers.begin(), m_headers.end());
@@ -101,13 +102,14 @@ HeadersGroup::addHeader(int trackId, int height, int ypos, double /* xcur */)
     m_headers.push_back(sh);
     m_usedHeight += height;
 
-    connect(sh, SIGNAL(showToolTip(QString)),
-            m_widget, SLOT(slotShowHeaderToolTip(QString)));
+    connect(sh, &StaffHeader::showToolTip,
+            m_widget, &NotationWidget::slotShowHeaderToolTip);
 
+    // Without Qt::QueuedConnection, headers may be deleted
+    // from themselves leading to crash
     connect(sh, &StaffHeader::staffModified,
-            m_widget, &NotationWidget::slotRegenerateHeaders, Qt::QueuedConnection);
-            // Without Qt::QueuedConnection, headers may be deleted
-            // from themselves leading to crash
+            m_widget, &NotationWidget::slotRegenerateHeaders,
+            Qt::QueuedConnection);
 }
 
 void
@@ -151,7 +153,7 @@ HeadersGroup::setTracks(NotationWidget *widget, NotationScene *scene)
 
 }
 
-
+/* unused
 void
 HeadersGroup::completeToHeight(int height)
 {
@@ -163,25 +165,26 @@ HeadersGroup::completeToHeight(int height)
         m_filler->setFixedHeight(height - m_usedHeight);
     }
 }
+*/
 
 void
 HeadersGroup::slotUpdateAllHeaders(int x, bool force)
 {
-    // Minimum header width 
-    /// TODO : use a real button width got from a real button
-    // 2 buttons (2 x 24) + 2 margins (2 x 4) + buttons spacing (4)
-    int headerMinWidth =  4 + 24 + 4 + 24 + 4;
-
-    // Maximum header width (may be overriden by clef and key width)
-    int headerMaxWidth = (m_widget->getNotationViewWidth() * 10) / 100;
-
     if ((x != m_lastX) || force) {
+        // Minimum header width
+        /// TODO : use a real button width got from a real button
+        // 2 buttons (2 x 24) + 2 margins (2 x 4) + buttons spacing (4)
+        int headerMinWidth =  4 + 24 + 4 + 24 + 4;
+
+        // Maximum header width (may be overriden by clef and key width)
+        int headerMaxWidth = (m_widget->getNotationViewWidth() * 10) / 100;
+
         m_lastX = x;
         TrackHeaderVector::iterator i;
         int neededWidth = 0;
 
         // Compute times of left and right of view
-        NotationHLayout *nhl = m_scene->getHLayout();
+        const NotationHLayout *nhl = m_scene->getHLayout();
         m_startOfView = nhl->getTimeForX(x);
         m_endOfView = nhl->getTimeForX(m_widget->getViewRightX());
 
@@ -261,4 +264,3 @@ HeadersGroup::minimumSizeHint() const
 }
 
 }
-

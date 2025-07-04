@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,9 +35,10 @@ namespace Rosegarden
 {
 class SegmentGroupInsertRangeCommand : public LinkedSegmentsCommand
 {
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentGroupInsertRangeCommand)
 public:
     typedef std::vector<Segment *> SegmentVec;
-    SegmentGroupInsertRangeCommand(SegmentVec originalSegments,
+    SegmentGroupInsertRangeCommand(const SegmentVec& originalSegments,
                              timeT splitTime, timeT duration,
                              Composition *composition) :
         LinkedSegmentsCommand(tr("Insert Range Helper"),
@@ -56,7 +57,7 @@ protected:
     Segment * splitRejoin(Segment *segment);
 
 private:
-    timeT getRangeDuration()
+    timeT getRangeDuration() const
     { return m_duration; }
 
     timeT m_splitTime;
@@ -78,7 +79,7 @@ splitRejoin(Segment *segment)
        SSSSSSS
     */
 
-    SegmentVec segmentsAC = 
+    SegmentVec segmentsAC =
         SegmentSplitCommand::getNewSegments(segment, m_splitTime, true);
     Segment *segmentA = segmentsAC[0];
     Segment *segmentC = segmentsAC[1];
@@ -105,13 +106,13 @@ splitRejoin(Segment *segment)
 
     */
 
-    // Join A and C.  
+    // Join A and C.
     SegmentVec toBeJoined;
     toBeJoined.reserve(2);
     toBeJoined.push_back(segmentA);
     toBeJoined.push_back(segmentC);
 
-    Segment * segmentFinal = 
+    Segment * segmentFinal =
         SegmentJoinCommand::makeSegment(toBeJoined);
 
     // A and C themselves will never be seen.
@@ -185,7 +186,7 @@ SegmentGroupInsertRangeCommand::calculateNewSegments()
         }
         newSegment->setEndMarkerTime(endMarkerTime);
         copyAuxProperties(oldSegment, newSegment);
-            
+
         m_newSegments.push_back(newSegment);
     }
 }
@@ -213,7 +214,7 @@ InsertRangeCommand::InsertRangeCommand(Composition *composition,
 }
 
 void
-InsertRangeCommand::    
+InsertRangeCommand::
 addInsertionCommands(MacroCommand *macroCommand,
                      Composition *composition,
                      timeT startTime, timeT duration)
@@ -254,7 +255,7 @@ addInsertionCommands(MacroCommand *macroCommand,
     // Some linked segments may be missed, eg if some members of the
     // group have their end-markers before the split.  This situation
     // is marginal enough that we don't try to handle it.
-    
+
     // Add commands to handle the linked groups, each as a unit.
     LinkedGroups::iterator i = linkedGroups.begin();
     while (i != linkedGroups.end()) {

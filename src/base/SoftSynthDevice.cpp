@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -30,6 +30,7 @@ namespace Rosegarden
 ControlList
 SoftSynthDevice::m_controlList;
 
+#if 0
 SoftSynthDevice::SoftSynthDevice() :
     Device(0, "Default Soft Synth Device", Device::SoftSynth),
     m_metronome(nullptr)
@@ -37,11 +38,13 @@ SoftSynthDevice::SoftSynthDevice() :
     createInstruments();
     checkControlList();
 }
+#endif
 
 SoftSynthDevice::SoftSynthDevice(DeviceId id, const std::string &name) :
     Device(id, name, Device::SoftSynth),
     m_metronome(nullptr)
 {
+    // ??? Inline both of these now that there is only one ctor.
     createInstruments();
     checkControlList();
 }
@@ -71,11 +74,11 @@ void
 SoftSynthDevice::createInstruments()
 {
     for (uint i = 0; i < SoftSynthInstrumentCount; ++i) {
-	Instrument *instrument = new Instrument
-	    (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", i, this);
-	addInstrument(instrument);
+        Instrument *instrument = new Instrument
+            (SoftSynthInstrumentBase + i, Instrument::SoftSynth, "", this);
+        SoftSynthDevice::addInstrument(instrument);
     }
-    renameInstruments();
+    SoftSynthDevice::renameInstruments();
 }
 
 void
@@ -86,52 +89,20 @@ SoftSynthDevice::renameInstruments()
             (QString("%1 #%2").arg(getName().c_str()).arg(i+1).toUtf8().data());
     }
 }
-    
+
 
 void
 SoftSynthDevice::checkControlList()
 {
-    // Much as MidiDevice::generateDefaultControllers
-
-    static std::string controls[][9] = {
-        { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
-        { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
-        { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
-        { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
-        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
-        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
-        { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
-        { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
-    };
-
-    if (m_controlList.empty()) {
-	
-	for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
-
-	    Rosegarden::ControlParameter con(controls[i][0],
-					     controls[i][1],
-					     controls[i][2],
-					     atoi(controls[i][3].c_str()),
-					     atoi(controls[i][4].c_str()),
-					     atoi(controls[i][5].c_str()),
-					     Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
-					     atoi(controls[i][7].c_str()),
-					     atoi(controls[i][8].c_str()));
-	    m_controlList.push_back(con);
-	}
-    }
+    m_controlList = ControlParameter::getDefaultControllers();
+    // Add on the aftertouch/pressure controllers since synth plugins do not
+    // support device files for some reason.
+    m_controlList.push_back(ControlParameter::getChannelPressure());
+    m_controlList.push_back(ControlParameter::getKeyPressure());
 }
 
 const ControlParameter *
-SoftSynthDevice::getControlParameter(int index) const
-{
-    if (index >= 0 && ((unsigned int)index) < ((unsigned int)m_controlList.size()))
-        return &m_controlList[index];
-    return nullptr;
-}
-
-const ControlParameter *
-SoftSynthDevice::getControlParameter(const std::string &type,
+SoftSynthDevice::getControlParameterConst(const std::string &type,
 				     Rosegarden::MidiByte controllerValue) const
 {
     ControlList::iterator it = m_controlList.begin();
@@ -142,9 +113,9 @@ SoftSynthDevice::getControlParameter(const std::string &type,
         {
             // Return matched on type for most events
             //
-            if (type != Rosegarden::Controller::EventType) 
+            if (type != Rosegarden::Controller::EventType)
                 return &*it;
-            
+
             // Also match controller value for Controller events
             //
             if (it->getControllerNumber() == controllerValue)
@@ -185,7 +156,7 @@ SoftSynthDevice::toXmlString() const
                    << "depth=\"" << (int)m_metronome->getDepth() << "\" "
                    << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
                    << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() << "\" "
-                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity() 
+                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity()
                    << "\"/>"
                    << std::endl << std::endl;
     }

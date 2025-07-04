@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,22 +19,27 @@
 
 #include "base/BaseProperties.h"
 #include "base/NotationTypes.h" // Just for Text
+#include "base/Event.h"
 #include "misc/Strings.h"
+
 #include <QString>
+
 
 namespace Rosegarden
 {
-   //SegmentID event types
+
+
+// SegmentID event types
 const std::string SegmentID::EventType = "segment ID";
 const int SegmentID::EventSubOrdering = -190;
-const PropertyName SegmentID::IDPropertyName = "ID";
-const PropertyName SegmentID::SubtypePropertyName = "Subtype";
+const PropertyName SegmentID::IDPropertyName("ID");
+const PropertyName SegmentID::SubtypePropertyName("Subtype");
 
 const std::string SegmentID::Uninvolved = "uninvolved";
 const std::string SegmentID::ChordSource = "chord source";
 const std::string SegmentID::FigurationSource = "figuration source";
 const std::string SegmentID::Target = "figuration target";
-  
+
 SegmentID::SegmentID(const Event &e) :
     m_ID(-1),
     m_type(Uninvolved)
@@ -48,7 +53,7 @@ SegmentID::SegmentID(const Event &e) :
     e.get<String>(SubtypePropertyName, m_type);
 }
 
-  SegmentID::SegmentID(const std::string type, int ID) :
+  SegmentID::SegmentID(const std::string& type, int ID) :
     m_ID(ID),
     m_type(type)
     {}
@@ -75,5 +80,3 @@ SegmentID::NotationString() const
 }
 
 }
-
-

@@ -1,10 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -14,244 +13,171 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[BasicQuantizer]"
+#define RG_NO_DEBUG_PRINT
+
 #include "BasicQuantizer.h"
+
 #include "base/BaseProperties.h"
-#include "base/NotationTypes.h"
-#include "Selection.h"
-#include "Composition.h"
-
-#include <iostream>
-#include <cmath>
-#include <cstdio> // for sprintf
-#include <ctime>
-
-using std::cout;
-using std::cerr;
-using std::endl;
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
 
-using namespace BaseProperties;
-
-const std::string Quantizer::RawEventData = "";
-const std::string Quantizer::DefaultTarget = "DefaultQ";
-const std::string Quantizer::GlobalSource = "GlobalQ";
-const std::string Quantizer::NotationPrefix = "Notation";
 
 BasicQuantizer::BasicQuantizer(timeT unit, bool doDurations,
-                               int swing, int iterate) :
+                               int swingPercent, int iteratePercent) :
     Quantizer(RawEventData),
     m_unit(unit),
     m_durations(doDurations),
-    m_swing(swing),
-    m_iterate(iterate)
+    m_swing(swingPercent),
+    m_iterate(iteratePercent)
 {
-    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
+    if (m_unit < 0)
+        m_unit = Note(Note::Shortest).getDuration();
 }
 
-BasicQuantizer::BasicQuantizer(std::string source, std::string target,
+BasicQuantizer::BasicQuantizer(const std::string& source,
+                               const std::string& target,
                                timeT unit, bool doDurations,
-                               int swing, int iterate) :
+                               int swingPercent, int iteratePercent) :
     Quantizer(source, target),
     m_unit(unit),
     m_durations(doDurations),
-    m_swing(swing),
-    m_iterate(iterate)
+    m_swing(swingPercent),
+    m_iterate(iteratePercent)
 {
-    if (m_unit < 0) m_unit = Note(Note::Shortest).getDuration();
-}
-
-BasicQuantizer::BasicQuantizer(const BasicQuantizer &q) :
-    Quantizer(q.m_target),
-    m_unit(q.m_unit),
-    m_durations(q.m_durations),
-    m_swing(q.m_swing),
-    m_iterate(q.m_iterate)
-{
-    // nothing else
-}
-
-BasicQuantizer::~BasicQuantizer()
-{
-    // nothing
+    if (m_unit < 0)
+        m_unit = Note(Note::Shortest).getDuration();
 }
 
 void
-BasicQuantizer::quantizeSingle(Segment *s, Segment::iterator i) const
+BasicQuantizer::quantizeSingle(
+        Segment *segment, Segment::iterator eventIter) const
 {
-    timeT d = getFromSource(*i, DurationValue);
+    Event *event = *eventIter;
 
-    if (d == 0 && (*i)->isa(Note::EventType)) {
-        s->erase(i);
+    const timeT originalDuration = getFromSource(event, DurationValue);
+
+    // Erase events that are zero duration or smaller than m_removeSmaller.
+    if (event->isa(Note::EventType)  &&
+        (originalDuration == 0  ||  originalDuration < m_removeSmaller)) {
+        segment->erase(eventIter);
         return;
     }
 
-    if (m_unit == 0) return;
+    // No quantization?  Bail.
+    if (m_unit == 0)
+        return;
 
-    timeT t = getFromSource(*i, AbsoluteTimeValue);
-    timeT d0(d), t0(t);
+    const timeT originalTime = getFromSource(event, AbsoluteTimeValue);
 
-    timeT barStart = s->getBarStartForTime(t);
+    timeT newTime(originalTime);
 
-    t -= barStart;
+    const timeT barStart = segment->getBarStartForTime(newTime);
 
-    int n = t / m_unit;
-    timeT low = n * m_unit;
-    timeT high = low + m_unit;
-    timeT swingOffset = (m_unit * m_swing) / 300;
+    // Adjust newTime to be relative to the bar.
+    newTime -= barStart;
 
-    if (high - t > t - low) {
-        t = low;
-    } else {
-        t = high;
-        ++n;
+    // Compute the quantization grid cell number for this note.
+    int cellNumber = newTime / m_unit;
+
+    // Compute cell start and end times.
+    const timeT startTime = cellNumber * m_unit;
+    const timeT endTime = startTime + m_unit;
+
+    // If the note is closer to the start of the cell.
+    // Same as (newTime < startTime + m_unit/2).
+    if (endTime - newTime > newTime - startTime) {
+        newTime = startTime;
+    } else {  // The note is closer to the end of the cell
+        newTime = endTime;
+        // Move to the next cell so we'll get the swing right.
+        ++cellNumber;
     }
 
-    if (n % 2 == 1) {
-        t += swingOffset;
-    }
-    
-    if (m_durations && d != 0) {
+    // "/ 300" is "* (1/3) * (1/100)"
+    // 1/3 is full swing offset
+    // 1/100 since m_swing is percent.
+    const timeT swingOffset = (m_unit * m_swing) / 300;
 
-        low = (d / m_unit) * m_unit;
-        high = low + m_unit;
+    // Swing every other cell.
+    if (cellNumber % 2 == 1)
+        newTime += swingOffset;
 
-        if (low > 0 && (high - d > d - low)) {
-            d = low;
+    timeT newDuration(originalDuration);
+
+    // If we are quantizing durations
+    if (m_durations  &&  newDuration != 0) {
+
+        const timeT durationLow = (newDuration / m_unit) * m_unit;
+        const timeT durationHigh = durationLow + m_unit;
+
+        if (durationLow > 0  &&
+            durationHigh - newDuration > newDuration - durationLow) {
+            newDuration = durationLow;
         } else {
-            d = high;
+            newDuration = durationHigh;
         }
 
-        int n1 = n + d / m_unit;
+        const int endCellNumber = cellNumber + newDuration / m_unit;
 
-        if (n % 2 == 0) { // start not swung
-            if (n1 % 2 == 0) { // end not swung
+        if (cellNumber % 2 == 0) { // start not swung
+            if (endCellNumber % 2 == 0) { // end not swung
                 // do nothing
             } else { // end swung
-                d += swingOffset;
+                newDuration += swingOffset;
             }
         } else { // start swung
-            if (n1 % 2 == 0) { // end not swung
-                d -= swingOffset;
+            if (endCellNumber % 2 == 0) { // end not swung
+                newDuration -= swingOffset;
             } else {
                 // do nothing
             }
         }
     }
 
-    t += barStart;
+    // Adjust newTime to be relative to the Composition.
+    newTime += barStart;
 
-    timeT t1(t), d1(d);
-    t = (t - t0) * m_iterate / 100 + t0;
-    d = (d - d0) * m_iterate / 100 + d0;
-
-    // if an iterative quantize results in something much closer than
-    // the shortest actual note resolution we have, just snap it
+    // If we are doing something other than full quantization...
     if (m_iterate != 100) {
-        timeT close = Note(Note::Shortest).getDuration()/2;
-        if (t >= t1 - close && t <= t1 + close) t = t1;
-        if (d >= d1 - close && d <= d1 + close) d = d1;
+        // Keep track of the fully quantized time/duration.
+        const timeT fullQTime(newTime);
+        const timeT fullQDuration(newDuration);
+
+        // Apply the partial (iterative) quantization.
+        newTime = (newTime - originalTime) * m_iterate / 100 + originalTime;
+        newDuration = (newDuration - originalDuration) * m_iterate / 100 +
+                originalDuration;
+
+        // if an iterative quantize results in something much closer than
+        // the shortest actual note resolution we have, just snap it
+        const timeT close = Note(Note::Shortest).getDuration() / 2;
+        if (newTime >= fullQTime - close  &&  newTime <= fullQTime + close)
+            newTime = fullQTime;
+        if (newDuration >= fullQDuration - close  &&
+            newDuration <= fullQDuration + close)
+            newDuration = fullQDuration;
     }
 
-    if (t0 != t || d0 != d) setToTarget(s, i, t, d);
-}
-
-
-std::vector<timeT>
-BasicQuantizer::getStandardQuantizations()
-{
-    checkStandardQuantizations();
-    return m_standardQuantizations;
-}
-
-void
-BasicQuantizer::checkStandardQuantizations()
-{
-    if (!m_standardQuantizations.empty())
-        return;
-
-    // For each note type from semibreve to hemidemisemiquaver
-    for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
-
-        // For quavers and smaller, offer the triplet variation
-        int i1 = (nt <= Note::Quaver ? 1 : 0);
-
-        // For the base note (0) and the triplet variation (1)
-        for (int i = 0; i <= i1; ++i) {
-
-            // Compute divisor, e.g. crotchet is 4, quaver is 8...
-            int divisor = (1 << (Note::Semibreve - nt));
-
-            // If we're doing the triplet variation, adjust the divisor
-            if (i)
-                divisor = divisor * 3 / 2;
-
-            // Compute the number of MIDI clocks.
-            timeT unit = Note(Note::Semibreve).getDuration() / divisor;
-
-            m_standardQuantizations.push_back(unit);
-        }
-    }
-}    
-
-timeT
-BasicQuantizer::getStandardQuantization(Segment *s)
-{
-    checkStandardQuantizations();
-    timeT unit = -1;
-
-    for (Segment::iterator i = s->begin(); s->isBeforeEndMarker(i); ++i) {
-
-        if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
-        timeT myUnit = getUnitFor(*i);
-        if (unit < 0 || myUnit < unit) unit = myUnit;
+    // Important: We have to do this prior to the call to setToTarget().
+    //            After setToTarget(), event is invalid.
+    if (m_removeArticulations) {
+        Marks::removeMark(*event, Marks::Tenuto);
+        Marks::removeMark(*event, Marks::Staccato);
     }
 
-    return unit;
-}
-
-timeT
-BasicQuantizer::getStandardQuantization(EventSelection *s)
-{
-    checkStandardQuantizations();
-    timeT unit = -1;
-
-    if (!s) return 0;
-
-    for (EventContainer::iterator i =
-             s->getSegmentEvents().begin();
-         i != s->getSegmentEvents().end(); ++i) {
-
-        if (!(*i)->isa(Rosegarden::Note::EventType)) continue;
-        timeT myUnit = getUnitFor(*i);
-        if (unit < 0 || myUnit < unit) unit = myUnit;
+    // If there was a change, adjust the event.
+    if (originalTime != newTime  ||  originalDuration != newDuration)
+    {
+        setToTarget(segment, eventIter, newTime, newDuration);
+        // The Event object and eventIter are rendered invalid by setToTarget().
+        // Make sure they don't get used inadvertently.
+        event = nullptr;
+        eventIter = segment->end();
     }
-
-    return unit;
 }
-
-timeT
-BasicQuantizer::getUnitFor(Event *e)
-{
-    timeT absTime = e->getAbsoluteTime();
-    timeT myQuantizeUnit = 0;
-    
-    // m_quantizations is in descending order of duration;
-    // stop when we reach one that divides into the note's time
-    
-    for (size_t i = 0; i < m_standardQuantizations.size(); ++i) {
-        if (absTime % m_standardQuantizations[i] == 0) {
-            myQuantizeUnit = m_standardQuantizations[i];
-            break;
-        }
-    }
-
-    return myQuantizeUnit;
-}
-
-std::vector<timeT>
-BasicQuantizer::m_standardQuantizations;
 
 
 }

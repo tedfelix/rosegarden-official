@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,8 +39,8 @@ class EraseCommand : public BasicCommand
 
 public:
     /// Allow for multiple selections.  E.g. matrix and CC ruler.
-    EraseCommand(EventSelection *selection1,
-                 EventSelection *selection2 = nullptr);
+    explicit EraseCommand(EventSelection *selection1,
+                          EventSelection *selection2 = nullptr);
     ~EraseCommand() override;
 
     /// Erase the events in segment that are in selection.
@@ -49,7 +49,7 @@ public:
      * were done, meaning key or clef deletions.
      */
     static bool eraseInSegment(EventSelection *selection);
-    
+
     timeT getRelayoutEndTime() override;
 
 protected:

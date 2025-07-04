@@ -3,15 +3,15 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This file is Copyright 2006
         Pedro Lopez-Cabanillas <plcl@users.sourceforge.net>
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -23,6 +23,7 @@
 
 #include "TrackParameterBox.h"
 
+#include "gui/editors/segment/TrackButtons.h"
 #include "base/AudioPluginInstance.h"
 #include "gui/general/ClefIndex.h"  // Clef enum
 #include "gui/widgets/CollapsingFrame.h"
@@ -39,9 +40,11 @@
 #include "base/InstrumentStaticSignals.h"
 #include "gui/widgets/LineEdit.h"
 #include "base/MidiDevice.h"
+#include "base/Pitch.h"
 #include "gui/dialogs/PitchPickerDialog.h"
 #include "sound/PluginIdentifier.h"
 #include "gui/general/PresetHandlerDialog.h"
+#include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -63,7 +66,6 @@
 #include <QMessageBox>
 #include <QPixmap>
 #include <QPushButton>
-#include <QSettings>
 #include <QString>
 #include <QWidget>
 
@@ -257,7 +259,7 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
 
     // Bracket type
     // Staff bracketing (export only at the moment, but using this for GUI
-    // rendering would be nice in the future!) //!!! 
+    // rendering would be nice in the future!) //!!!
     QLabel *bracketTypeLabel = new QLabel(tr("Bracket type:"), staffExportOptions);
     bracketTypeLabel->setFont(m_font);
     m_bracketType = new QComboBox(staffExportOptions);
@@ -465,6 +467,17 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
 
     m_doc = doc;
 
+    // ??? We never remove this observer.  Add a dtor.  Might need to consider
+    //     a virtual dtor.  Have this class's dtor call removeObserver().
+    //
+    //     If that works, do the same for the following:
+    //       - CompositionModelImpl
+    //       - TrackButtons
+    //       - NotationScene
+    //       - others?
+    //
+    //     Test by checking the output for
+    //       [Composition] dtor: WARNING: x observers still extant:
     m_doc->getComposition().addObserver(this);
 
     // Populate color combo from the document colors.
@@ -480,8 +493,8 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
     // Detect when the document colours are updated.
     // Document colors can never be updated.  See explanation in
     // slotDocColoursChanged().
-    //connect(m_doc, SIGNAL(docColoursChanged()),
-    //        this, SLOT(slotDocColoursChanged()));
+    //connect(m_doc, &RosegardenDocument::docColoursChanged,
+    //        this, &TrackParameterBox::slotDocColoursChanged);
 
     updateWidgets2();
 }
@@ -609,7 +622,9 @@ TrackParameterBox::slotArchiveChanged(bool checked)
     if (!track)
         return;
 
-    track->setArchived(checked);
+    track->setArchived(
+            checked,
+            true);  // refreshComp - Refresh m_recordTracks.
     m_doc->slotDocumentModified();
 
     // Notify observers
@@ -758,17 +773,17 @@ TrackParameterBox::slotColorChanged(int index)
         ColourMap newMap = m_doc->getComposition().getSegmentColourMap();
         QColor newColour;
         bool ok = false;
-        
+
         QString newName = InputDialog::getText(this,
                                                tr("New Color Name"),
                                                tr("Enter new name:"),
                                                LineEdit::Normal,
                                                tr("New"), &ok);
-        
+
         if ((ok == true) && (!newName.isEmpty())) {
 //             QColorDialog box(this, "", true);
 //             int result = box.getColor(newColour);
-            
+
             //QRgb QColorDialog::getRgba(0xffffffff, &ok, this);
             QColor newColor = QColorDialog::getColor(Qt::white, this);
 
@@ -1057,18 +1072,23 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
 
         instrumentIds.push_back(loopInstrument.getId());
 
-        QString instrumentName(QObject::tr(loopInstrument.getName().c_str()));
+        QString instrumentName(
+            QCoreApplication::translate("INSTRUMENT",
+                                        loopInstrument.getName().c_str()));
         QString programName(
-                QObject::tr(loopInstrument.getProgramName().c_str()));
+            QCoreApplication::translate("INSTRUMENT",
+                                        loopInstrument.getProgramName().c_str()));
 
         if (loopInstrument.getType() == Instrument::SoftSynth) {
 
-            instrumentName.replace(tr("Synth plugin"), "");
+            instrumentName.replace(
+                                QCoreApplication::translate("INSTRUMENT",
+                                                            "Synth plugin"), "");
 
             programName = "";
 
             AudioPluginInstance *plugin =
-                    instrument->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+                loopInstrument.getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin)
                 programName = strtoqstr(plugin->getDisplayName());
         }
@@ -1306,34 +1326,10 @@ TrackParameterBox::updateWidgets2()
             m_transpose->findText(QString("%1").arg(track->getTranspose())));
 
     // Pitch Lowest
-
-    QSettings settings;
-    settings.beginGroup(GeneralOptionsConfigGroup);
-    const int octaveBase = settings.value("midipitchoctave", -2).toInt() ;
-    settings.endGroup();
-
-    const bool includeOctave = false;
-
-    const Pitch lowest(track->getLowestPlayable(), Accidentals::NoAccidental);
-
-    // NOTE: this now uses a new, overloaded version of Pitch::getAsString()
-    // that explicitly works with the key of C major, and does not allow the
-    // calling code to specify how the accidentals should be written out.
-    //
-    // Separate the note letter from the octave to avoid undue burden on
-    // translators having to retranslate the same thing but for a number
-    // difference
-    QString tmp = QObject::tr(lowest.getAsString(includeOctave, octaveBase).c_str(), "note name");
-    tmp += tr(" %1").arg(lowest.getOctave(octaveBase));
-    m_lowest->setText(tmp);
+    m_lowest->setText(Pitch::toStringOctave(track->getLowestPlayable()));
 
     // Pitch Highest
-
-    const Pitch highest(track->getHighestPlayable(), Accidentals::NoAccidental);
-
-    tmp = QObject::tr(highest.getAsString(includeOctave, octaveBase).c_str(), "note name");
-    tmp += tr(" %1").arg(highest.getOctave(octaveBase));
-    m_highest->setText(tmp);
+    m_highest->setText(Pitch::toStringOctave(track->getHighestPlayable()));
 
     // Color
     // Note: We only update the combobox contents if there is an actual

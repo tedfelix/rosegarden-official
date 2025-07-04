@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,12 +18,10 @@
 #ifndef RG_ROSEGARDENMAINWINDOW_H
 #define RG_ROSEGARDENMAINWINDOW_H
 
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "base/MidiProgram.h"
-#include "gui/dialogs/TempoDialog.h"
 #include "gui/widgets/ZoomSlider.h"
 #include "gui/general/RecentFiles.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/Selection.h"
 #include "base/Typematic.h"
 #include "sound/AudioFile.h"
@@ -40,11 +38,7 @@
 #include <QToolBar>
 #include <QPointer>
 #include <QSharedPointer>
-
-#include <map>
-#include <set>
-
-#include <rosegardenprivate_export.h>
+#include <QTime>
 
 class QWidget;
 class QTimer;
@@ -52,21 +46,28 @@ class QTextCodec;
 class QShowEvent;
 class QObject;
 class QLabel;
-class QShortcut;
 class QTemporaryFile;
 class QProcess;
 class QAction;
+
+#include <map>
+#include <set>
+
+#include <rosegardenprivate_export.h>
 
 
 namespace Rosegarden
 {
 
+
+class RosegardenMainViewWidget;
 class TriggerSegmentManager;
 class TransportDialog;
 class TrackParameterBox;
-class TempoView;
+class TempoAndTimeSignatureEditor;
 class SynthPluginManagerDialog;
 class StartupTester;
+class StartupLogo;
 class SequenceManager;
 class SegmentParameterBox;
 class RosegardenParameterArea;
@@ -85,7 +86,7 @@ class ControlEditorDialog;
 class Composition;
 class Clipboard;
 class BankEditorDialog;
-class AudioPluginOSCGUIManager;
+class AudioPluginGUIManager;
 class AudioPluginManager;
 class AudioPluginDialog;
 class AudioMixerWindow2;
@@ -96,6 +97,7 @@ class TranzportClient;
 class WarningWidget;
 class DocumentConfigureDialog;
 class ConfigureDialog;
+
 
 /// The main Rosegarden application window.
 /**
@@ -125,25 +127,18 @@ class ROSEGARDENPRIVATE_EXPORT RosegardenMainWindow :
         public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
-    
+
     friend class RosegardenMainViewWidget;
 
 public:
 
-    /**
-     * constructor of RosegardenMainWindow, calls all init functions to
-     * create the application.
-     * \arg useSequencer : if true, the sequencer is launched
-     * @see initMenuBar initToolBar
-     */
-    RosegardenMainWindow(bool enableSound = true,
-                         QObject *startupStatusMessageReceiver = nullptr);
+    RosegardenMainWindow(bool enableSound, StartupLogo *startupLogo);
 
     ~RosegardenMainWindow() override;
 
     /// Global access to the single instance of this class.
     static RosegardenMainWindow *self() { return m_myself; }
-    
+
     RosegardenMainViewWidget *getView() { return m_view; }
 
     TransportDialog *getTransport();
@@ -159,39 +154,41 @@ public:
     };
 
     /// open a Rosegarden file
-    virtual void openFile(QString filePath) { openFile(filePath, ImportCheckType); }
+    void openFile(const QString& filePath) { openFile(filePath, ImportCheckType); }
 
     /// open a file, explicitly specifying its type
-    void openFile(QString filePath, ImportType type);
+    void openFile(const QString& filePath, ImportType type);
 
     /// decode and open a project file
-    void importProject(QString filePath);
+    void importProject(const QString& filePath);
 
     /// open a URL
-    virtual void openURL(QString url);
+    void openURL(const QString& url);
 
     /// merge a file with the existing document
-    virtual void mergeFile(QString filePath) { mergeFile(filePath, ImportCheckType); }
-    
-    /// merge a file, explicitly specifying its type
-    void mergeFile(QString filePath, ImportType type);
+    /*
+    void mergeFile(QString QStringList) { mergeFile(filePathList, ImportCheckType); }
+    */
 
-    void openURL(const QUrl &url);
+    /// merge a file, explicitly specifying its type, allow multiple files
+    void mergeFile(const QStringList &filePathList, ImportType type);
 
-    void exportMIDIFile(QString url);
+    bool openURL(const QUrl &url, bool replace);
+
+    bool exportMIDIFile(QString file);
 
     /// export a Csound scorefile
-    void exportCsoundFile(QString url);
+    bool exportCsoundFile(const QString &file);
 
-    void exportMupFile(QString url);
+    bool exportMupFile(const QString &file);
 
-    bool exportLilyPondFile(QString url, bool forPreview = false);
+    bool exportLilyPondFile(const QString &file, bool forPreview = false);
 
-    void exportMusicXmlFile(QString url);
+    bool exportMusicXmlFile(const QString &file);
 
     SequenceManager *getSequenceManager() { return m_seqManager; }
 
-    ProgressBar *getCPUBar() { return m_cpuBar; }
+    //ProgressBar *getCPUBar() { return m_cpuBar; }
 
     QPointer<DeviceManagerDialog> getDeviceManager()  { return m_deviceManager; }
 
@@ -238,7 +235,7 @@ public:
     void awaitDialogClearance() const;
 
     /// Return the plugin native GUI manager, if we have one
-    AudioPluginOSCGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
+    AudioPluginGUIManager *getPluginGUIManager()  { return m_pluginGUIManager; }
 
     /** Query the AudioFileManager to see if the audio path exists, is readable,
      * writable, etc., and offer to dump the user in the document properties
@@ -246,7 +243,7 @@ public:
      * the audio path for validity, and does not create anything if the audio
      * path does not exist.
      */
-    bool testAudioPath(QString op); // and open the dialog to set it if unset
+    bool testAudioPath(const QString &operation); // and open the dialog to set it if unset
 
     bool haveAudioImporter() const  { return m_haveAudioImporter; }
 
@@ -256,7 +253,29 @@ public:
 
     void toggleLoop();
 
-protected:
+    /// Open the document properties dialog on the Audio page.
+    void openAudioPathSettings();
+
+signals:
+
+    void startupStatusMessage(QString message);
+
+    /// emitted just before the document is changed
+    void documentAboutToChange();
+
+    /// Emitted when a new document is loaded.
+    void documentLoaded(RosegardenDocument *);
+
+    /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
+    void segmentsSelected(const SegmentSelection &);
+
+    /// emitted when a plugin dialog selects a plugin
+    void pluginSelected(InstrumentId, int, int);
+
+    /// emitted when a plugin dialog (un)bypasses a plugin
+    void pluginBypassed(InstrumentId, int, bool);
+
+private:
 
     /// Handle activation change.
     /**
@@ -284,7 +303,20 @@ protected:
      */
     void customEvent(QEvent *event) override;
 
-    RosegardenDocument *newDocument(bool skipAutoload = false);
+    /// Create a new RosegardenDocument.
+    /**
+     * \param permanent
+     *   - true: This document will become the currently loaded document.
+     *           Therefore it is allowed to make changes to the audio/MIDI
+     *           connections.
+     *   - false: This is a temporary document and is not allowed to make
+     *            changes to ALSA and any audio or MIDI connections.
+     *   - See RosegardenDocument::m_soundEnabled.
+     *
+     * If the path is not empty that file will be loaded but the document
+     * will still be considered "new" - no filename will be set
+     */
+    RosegardenDocument *newDocument(bool permanent, const QString& path = "");
 
     /**** File handling code that we don't want the outside world to use ****/
     /**/
@@ -295,27 +327,29 @@ protected:
      */
     RosegardenDocument *createDocument(
             QString filePath,
-            ImportType type,
+            ImportType importType,
             bool permanent,
-            bool lock,
+            bool revert,
             bool clearHistory);
-    
+
     /**
      * Create a document from RG file
      */
     RosegardenDocument *createDocumentFromRGFile(
-            const QString &filePath, bool permanent, bool lock,
+            const QString &filePath, bool permanent, bool revert,
             bool clearHistory);
 
     /**
      * Create document from MIDI file
      */
-    RosegardenDocument *createDocumentFromMIDIFile(QString filePath);
+    RosegardenDocument *createDocumentFromMIDIFile(
+            const QString &filePath,
+            bool permanent);
 
     /**
      * Create document from RG21 file
      */
-    RosegardenDocument *createDocumentFromRG21File(QString filePath);
+    RosegardenDocument *createDocumentFromRG21File(QString file);
 
     /**
      * Create document from Hydrogen drum machine file
@@ -325,7 +359,8 @@ protected:
     /**
      * Create document from MusicXML file
      */
-    RosegardenDocument *createDocumentFromMusicXMLFile(QString filePath);
+    RosegardenDocument *createDocumentFromMusicXMLFile(const QString& file,
+                                                       bool permanent);
 
     /**/
     /**/
@@ -384,7 +419,7 @@ protected:
      *
      * @see KTMainWindow#saveProperties
      */
-    virtual void saveGlobalProperties();
+    // unused void saveGlobalProperties();
 
     /**
      * reads the session config file and restores the application's
@@ -393,10 +428,10 @@ protected:
      *
      * @see KTMainWindow#readProperties
      */
-    //virtual void readGlobalProperties();
+    //void readGlobalProperties();
 ///////////////////////////////////////////////////////////////////////
 
-    QString getAudioFilePath();
+    // unused QString getAudioFilePath();
 
     /**
      * Show a sequencer error to the user.  This is for errors from
@@ -408,14 +443,14 @@ protected:
     /*
      * Return AudioManagerDialog
      */
-    AudioManagerDialog *getAudioManagerDialog() { return m_audioManagerDialog; }
+    //AudioManagerDialog *getAudioManagerDialog() { return m_audioManagerDialog; }
 
     /**
      * Ask the user for a file to save to, and check that it's
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString getValidWriteFileName(QString extension, QString label);
+    QString launchSaveAsDialog(QString filter, QString label);
 
     /**
      * Find any non-ASCII strings in a composition that has been
@@ -448,11 +483,11 @@ protected:
      * Open a file dialog pointing to directory, if target is empty, this opens
      * a generic file open dialog at the last location the user used
      */
-    void openFileDialogAt(QString target);
+    void openFileDialogAt(const QString &target);
 
     /**
      * Returns a suitable location for storing user data, typically
-     * ~/.local/share/ 
+     * ~/.local/share/
      */
     QString getDataLocation();
 
@@ -467,146 +502,27 @@ protected:
      */
     void leaveActionState(QString stateName);
 
-signals:
-    void startupStatusMessage(QString message);
-
-    /// emitted just before the document is changed
-    void documentAboutToChange();
-
-    /// Emitted when a new document is loaded.
-    void documentLoaded(RosegardenDocument *);
-
-    /// emitted when the set of selected segments changes (relayed from RosegardenMainViewWidget)
-    void segmentsSelected(const SegmentSelection &);
-
-    /// emitted when the composition state (selected track, solo, etc...) changes
-    void compositionStateUpdate();
-
-    /// emitted when a plugin dialog selects a plugin
-    void pluginSelected(InstrumentId, int, int);
-
-    /// emitted when a plugin dialog (un)bypasses a plugin
-    void pluginBypassed(InstrumentId, int, bool);
-
 public slots:
 
-    /** Update the title bar to prepend a * to the document title when the
-     * document is modified. (I thought we already did this ages ago, but
-     * apparenty not.)
+    /**
+     * Update the title bar to prepend a * to the document title when the
+     * document is modified.
      */
-    void slotUpdateTitle(bool m = false);
+    void slotUpdateTitle(bool modified = false);
 
     /**
      * open a URL - used for Dn'D
      *
      * @param url : a string containing a url (protocol://foo/bar/file.rg)
      */
-    virtual void slotOpenDroppedURL(QString url);
-
-    /**
-     * Open the document properties dialog on the Audio page
-     */
-    virtual void slotOpenAudioPathSettings();
-
-    /**
-     * clears the document in the actual view to reuse it as the new
-     * document
-     */
-    void slotFileNew();
-
-    /**
-     * open a file and load it into the document
-     */
-    void slotFileOpen();
-
-    /**
-     * open a file dialog on the examples directory
-     */
-    void slotFileOpenExample();
-
-    /**
-     * open a file dialog on the templates directory
-     */
-    void slotFileOpenTemplate();
-
-    /**
-     * opens a file from the recent files menu (according to action name)
-     */
-    void slotFileOpenRecent();
+    void slotOpenDroppedURL(QString url);
 
     /**
      * save a document
      */
     void slotFileSave();
 
-    /**
-     * save a document by a new filename; if asTemplate is true, the file will
-     * be saved read-only, to make it harder to overwrite by accident in the
-     * future
-     */
-    bool slotFileSaveAs(bool asTemplate = false);
-    void slotFileSaveAsTemplate() { slotFileSaveAs(true); }
-
-    /**
-     * asks for saving if the file is modified, then closes the actual
-     * file and window
-     */
-    void slotFileClose();
-
-    /**
-     * Let the user select a Rosegarden Project file for import
-     */
-    void slotImportProject();
-
-    /**
-     * Let the user select a MIDI file for import
-     */
-    void slotImportMIDI();
-
-    /**
-     * Revert to last loaded file
-     */
-    void slotRevertToSaved();
-
-    /**
-     * Let the user select a Rosegarden 2.1 file for import 
-     */
-    void slotImportRG21();
-
-    /**
-     * Select a Hydrogen drum machine file for import
-     */
-//    void slotImportHydrogen();
-
-    /**
-     * Let the user select a MusicXML file for import
-     */
-    void slotImportMusicXML();
-
-    /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMerge();
-
-    /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMergeMIDI();
-
-    /**
-     * Let the user select a MIDI file for merge
-     */
-    void slotMergeRG21();
-
-    /**
-     * Select a Hydrogen drum machine file for merge
-     */
-//    void slotMergeHydrogen();
-
-    /**
-     * Let the user select a MusicXML file for merge
-     */
-    void slotMergeMusicXML();
+    // ??? Need to evaluate the rest of these slots and move to private.
 
     /**
      * Let the user export a Rosegarden Project file
@@ -645,13 +561,18 @@ public slots:
     void slotExportMusicXml();
 
     /**
+     * Export (render) file to audio (only audio and synth plugins)
+     */
+    void slotExportWAV();
+
+    /**
      * closes all open windows by calling close() on each memberList
      * item until the list is empty, then quits the application.  If
      * queryClose() returns false because the user canceled the
      * saveModified() dialog, the closing breaks.
      */
     void slotQuit();
-    
+
     /**
      * put the marked text/object into the clipboard and remove * it
      * from the document
@@ -667,12 +588,12 @@ public slots:
      * paste the clipboard into the document
      */
     void slotEditPaste();
-    
+
     /**
      * paste the clipboard into the document, as linked segments
      */
-    void slotEditPasteAsLinks();
-    
+    // unused void slotEditPasteAsLinks();
+
     /**
      * Cut a time range (sections of segments, tempo, and time
      * signature events within that range).
@@ -689,12 +610,12 @@ public slots:
      * subsequent material along to make space.
      */
     void slotPasteRange();
-    
+
     /**
      * Delete a time range.
      */
     void slotDeleteRange();
-    
+
     /**
      * Insert a time range (asking the user for a duration).
      */
@@ -710,7 +631,7 @@ public slots:
      * Clear a time range of tempos
      */
     void slotEraseRangeTempos();
-    
+
     /**
      * select all segments on all tracks
      */
@@ -817,7 +738,7 @@ public slots:
      * Update existing figurations
      */
     void slotUpdateFigurations();
-    
+
     /**
      * Tempo to Segment length
      */
@@ -828,7 +749,7 @@ public slots:
      * toggle segment labels
      */
     void slotToggleSegmentLabels();
-    
+
     /**
      * open the default editor for each of the currently-selected segments
      */
@@ -896,16 +817,16 @@ public slots:
      * open a dialog for document properties
      */
     void slotEditDocumentProperties();
-    
+
     /**
      * Reset m_configDlg when the configuration dialog is closing.
      */
-    void slotResetConfigDlg(); 
-    
+    void slotResetConfigDlg();
+
     /**
      * Reset m_docConfigDlg when the document properties dialog is closing.
      */
-    void slotResetDocConfigDlg(); 
+    void slotResetDocConfigDlg();
 
     /**
      * Manage MIDI Devices
@@ -922,7 +843,7 @@ public slots:
      */
     void slotOpenAudioMixer();
     void slotOpenMidiMixer();
-    
+
     /**
      * Edit Banks/Programs
      */
@@ -987,7 +908,7 @@ public slots:
      * Send MIDI_RESET to all MIDI devices
      */
     void slotResetMidiNetwork();
-    
+
     /**
      * toggles the toolbar
      */
@@ -1028,6 +949,8 @@ public slots:
      */
     void slotToggleStatusBar();
 
+    void slotFullScreen();
+
     /**
      * changes the statusbar contents for the standard label
      * permanently, used to indicate current actions.
@@ -1060,12 +983,12 @@ public slots:
      * segment eraser tool is selected
      */
     void slotEraseSelected();
-    
+
     /**
      * segment draw tool is selected
      */
     void slotDrawSelected();
-    
+
     /**
      * segment move tool is selected
      */
@@ -1117,19 +1040,9 @@ public slots:
     /**
      * Set the pointer position and start playing (from LoopRuler)
      */
-    void slotSetPlayPosition(timeT position);
+    void slotSetPlayPosition(timeT time);
 
-    /**
-     * Set a loop
-     */
-    void slotSetLoop(timeT lhs, timeT rhs);
-
-
-    /**
-     * Update the transport with the bar, beat and unit times for
-     * a given timeT
-     */
-    void slotDisplayBarTime(timeT t);
+    void slotLoopChanged();
 
 
     /**
@@ -1139,14 +1052,17 @@ public slots:
     void slotStop();
     void slotRewind();
     void slotFastforward();
+    /// Record
     void slotRecord();
+    /// Punch-In Record
     void slotToggleRecord();
     void slotRewindToBeginning();
     void slotFastForwardToEnd();
     void slotJumpToTime(RealTime);
-    void slotStartAtTime(RealTime);
+    void slotStartAtTime(const RealTime&);
     void slotRefreshTimeDisplay();
-    void slotToggleTracking();
+    void slotLoop();
+    void slotScrollToFollow();
 
     /**
      * Called when the sequencer auxiliary process exits
@@ -1155,7 +1071,7 @@ public slots:
     //  current slotSequenceExited implementation doesn't use (or name!) this param
     void slotSequencerExited();
 
-    /// When the transport closes 
+    /// When the transport closes
     void slotCloseTransport();
 
     /**
@@ -1164,11 +1080,11 @@ public slots:
      * a 2nd main window
      */
     void slotDeleteTransport();
-    
+
     /**
      * Put the GUI into a given Tool edit mode
      */
-    void slotActivateTool(QString toolName);
+    void slotActivateTool(const QString& toolName);
 
     /**
      * Toggles either the play or record metronome according
@@ -1181,19 +1097,10 @@ public slots:
      */
     void slotToggleSolo(bool);
 
-    /**
-     * Set and unset the loop from the transport loop button with
-     * these slots.
+    /*
+     * Toggle solo mode from the menu
      */
-    void slotSetLoop();
-    void slotUnsetLoop();
-
-    /**
-     * Set and unset the loop start/end time from the transport loop start/stop buttons with
-     * these slots.
-     */
-    void slotSetLoopStart();
-    void slotSetLoopStop();
+    void slotToggleSoloCurrentTrack();
 
     /**
      * Toggle the track labels on the TrackEditor
@@ -1229,12 +1136,12 @@ public slots:
     /**
      * The parameters box was hidden
      */
-    void slotParameterAreaHidden();
+    // unused void slotParameterAreaHidden();
 
     /**
      * Display tip-of-day dialog on demand
      */
-    void slotShowTip();
+    // unused void slotShowTip();
 
     void slotSelectPreviousTrack();
     void slotSelectNextTrack();
@@ -1243,7 +1150,12 @@ public slots:
      * Toggle arm (record) current track
      */
     void slotToggleRecordCurrentTrack();
-    
+
+    /**
+     * Show the shortcut configure dialog
+     */
+    void slotConfigureShortcuts();
+
     /**
      * Show the configure dialog
      */
@@ -1252,7 +1164,7 @@ public slots:
     /**
      * Update the toolbars after edition
      */
-    void slotUpdateToolbars();
+    // unused void slotUpdateToolbars();
 
     /**
      * Zoom slider moved
@@ -1272,8 +1184,8 @@ public slots:
      */
     void slotDeleteMarker(int id,
                           timeT time,
-                          QString name,
-                          QString description);
+                          const QString& name,
+                          const QString& description);
 
     /**
      * Document modified
@@ -1285,7 +1197,7 @@ public slots:
      * This slot is here to be connected to RosegardenMainViewWidget's
      * stateChange signal.
      */
-    void slotStateChanged(QString, bool noReverse);
+    void slotStateChanged(const QString& s, bool noReverse);
 
     /**
      * A command has happened; check the clipboard in case we
@@ -1304,7 +1216,7 @@ public slots:
      * Stop current playback, close current document,
      * open specified document and play it.
      */
-    void slotPlayListPlay(QString url);
+    void slotPlayListPlay(const QString& url);
 
     void slotHelp();
 
@@ -1317,7 +1229,7 @@ public slots:
      * Surf to the bug reporting guidelines
      */
     void slotBugGuidelines();
-    
+
     /**
      * Call the Rosegaden about box.
      */
@@ -1356,12 +1268,12 @@ public slots:
     void slotTransposeSegments();
     void slotTransposeSemitones();
     void slotSwitchPreset();
-    
+    void slotInterpret();
+
     /// Panic button pressed
     void slotPanic();
 
-    // Auto-save
-    //
+    /// Auto-save timer handler.
     void slotAutoSave();
 
     // Auto-save update interval changes
@@ -1399,7 +1311,7 @@ public slots:
     void slotMarkerEditorClosed();
 
     /**
-     * when TempoView is being closed
+     * when TempoAndTimeSignatureEditor is being closed
      */
     void slotTempoViewClosed();
 
@@ -1424,31 +1336,31 @@ public slots:
      * raise an exising one.
      */
     void slotShowPluginDialog(QWidget *parent,
-                              InstrumentId instrument,
+                              InstrumentId instrumentId,
                               int index);
 
-    void slotPluginSelected(InstrumentId instrument,
+    void slotPluginSelected(InstrumentId instrumentId,
                             int index, int plugin);
 
     /**
      * An external GUI has requested a port change.
      */
-    void slotChangePluginPort(InstrumentId instrument,
-                              int index, int portIndex, float value);
+    void slotChangePluginPort(InstrumentId instrumentId,
+                              int pluginIndex, int portIndex, float value);
 
     /**
      * Our internal GUI has made a port change -- the
      * PluginPortInstance already contains the new value, but we need
      * to inform the sequencer and update external GUIs.
      */
-    void slotPluginPortChanged(InstrumentId instrument,
-                               int index, int portIndex);
+    void slotPluginPortChanged(InstrumentId instrumentId,
+                               int pluginIndex, int portIndex);
 
     /**
      * An external GUI has requested a program change.
      */
-    void slotChangePluginProgram(InstrumentId instrument,
-                                 int index, QString program);
+    void slotChangePluginProgram(InstrumentId instrumentId,
+                                 int pluginIndex, QString program);
 
     /**
      * Our internal GUI has made a program change -- the
@@ -1456,20 +1368,23 @@ public slots:
      * need to inform the sequencer, update external GUIs, and update
      * the port values for the new program.
      */
-    void slotPluginProgramChanged(InstrumentId instrument,
-                                  int index);
+    void slotPluginProgramChanged(InstrumentId instrumentId,
+                                  int pluginIndex);
 
     /**
      * An external GUI has requested a configure call.  (This can only
      * happen from an external GUI, we have no way to manage these
      * internally.)
      */
-    void slotChangePluginConfiguration(InstrumentId, int index,
-                                       bool global, QString key, QString value);
-    void slotPluginDialogDestroyed(InstrumentId instrument,
+    void slotChangePluginConfiguration(InstrumentId instrumentId,
+                                       int index,
+                                       bool global,
+                                       const QString &configKey,
+                                       const QString &configValue);
+    void slotPluginDialogDestroyed(InstrumentId instrumentId,
                                    int index);
     void slotPluginBypassed(InstrumentId,
-                            int index, bool bypassed);
+                            int pluginIndex, bool bypassed);
 
     void slotShowPluginGUI(InstrumentId, int index);
     void slotStopPluginGUI(InstrumentId, int index);
@@ -1478,21 +1393,21 @@ public slots:
     void slotDocumentDevicesResyncd();
 
     void slotTestStartupTester();
-    
+
     void slotDebugDump();
 
     void slotShowToolHelp(const QString &);
 
     void slotNewerVersionAvailable(QString);
-    
+
     void slotAddMarker2();
     void slotPreviousMarker();
     void slotNextMarker();
 
     void slotSetQuickMarker();
-    
-    void slotJumpToQuickMarker();    
-    
+
+    void slotJumpToQuickMarker();
+
     void slotDisplayWarning(int type,
                             QString text,
                             QString informativeText);
@@ -1503,8 +1418,8 @@ public slots:
     void slotCommandRedone();
     void slotUpdatePosition();
 
-protected slots:
-    void setupRecentFilesMenu();
+    /// Toggles mute state of the currently selected track.
+    void slotToggleMute();
 
 private:
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
@@ -1529,62 +1444,63 @@ private:
      */
     bool saveIfModified();
 
-    //--------------- Data members ---------------------------------
+    /**
+     * Update the transport with the bar, beat and unit times for
+     * a given timeT
+     */
+    void displayBarTime(timeT t);
 
-    bool m_actionsSetup;
+    /**
+     * Initialise singletons in the correct order
+     */
+    void initStaticObjects();
+
+    bool fileSaveAs(bool asTemplate);
+
+    bool m_actionsSetup{false};
 
     // Action States
-    bool m_notPlaying;
-    bool m_haveSelection;
-    bool m_haveRange;
+    bool m_notPlaying{true};
+    bool m_haveSelection{false};
+    bool m_haveRange{false};
     void updateActions();
 
-    RosegardenMainViewWidget *m_view;
+    RosegardenMainViewWidget *m_view{nullptr};
 
     /**
      *    Menus
      */
     RecentFiles m_recentFiles;
-    
-    SequencerThread *m_sequencerThread;
-    bool m_sequencerCheckedIn;
 
-#ifdef HAVE_LIBJACK
-    QProcess *m_jackProcess;
-#endif // HAVE_LIBJACK
+    SequencerThread *m_sequencerThread{nullptr};
+    bool m_sequencerCheckedIn{false};
 
     /// CPU meter in the main window status bar.
     /**
      * This is NOT a general-purpose progress indicator.  You want to use
      * QProgressDialog for that.
      */
-    ProgressBar *m_cpuBar;
-    
-    ZoomSlider<double> *m_zoomSlider;
-    QLabel             *m_zoomLabel;
+    ProgressBar *m_cpuBar{nullptr};
 
-    
-//    QLabel *m_statusBarLabel1;
+    ZoomSlider<double> *m_zoomSlider{nullptr};
+    QLabel *m_zoomLabel{nullptr};
+
+
     // SequenceManager
     //
-    SequenceManager *m_seqManager;
+    SequenceManager *m_seqManager{nullptr};
 
     // Transport dialog pointer
     //
-    TransportDialog *m_transport;
+    TransportDialog *m_transport{nullptr};
 
     // Dialogs which depend on the document
 
     // Audio file manager
     //
-    AudioManagerDialog *m_audioManagerDialog;
+    AudioManagerDialog *m_audioManagerDialog{nullptr};
 
-    bool m_originatingJump;
-
-    // Use these in conjunction with the loop button to
-    // remember where a loop was if we've ever set one.
-    timeT m_storedLoopStart;
-    timeT m_storedLoopEnd;
+    bool m_originatingJump{false};
 
     bool m_useSequencer;
 
@@ -1594,24 +1510,24 @@ private:
 
     Clipboard *m_clipboard;
 
-    SegmentParameterBox           *m_segmentParameterBox;
-    InstrumentParameterBox        *m_instrumentParameterBox;
-    TrackParameterBox             *m_trackParameterBox;
+    SegmentParameterBox *m_segmentParameterBox{nullptr};
+    InstrumentParameterBox *m_instrumentParameterBox{nullptr};
+    TrackParameterBox *m_trackParameterBox{nullptr};
 
-    PlayListDialog        *m_playList;
-    SynthPluginManagerDialog *m_synthManager;
+    PlayListDialog *m_playList{nullptr};
+    SynthPluginManagerDialog *m_synthManager{nullptr};
     QPointer<AudioMixerWindow2> m_audioMixerWindow2;
-    MidiMixerWindow       *m_midiMixer;
-    BankEditorDialog      *m_bankEditor;
-    MarkerEditor          *m_markerEditor;
-    TempoView             *m_tempoView;
-    TriggerSegmentManager *m_triggerSegmentManager;
-    ConfigureDialog       *m_configDlg;
-    DocumentConfigureDialog *m_docConfigDlg;
+    MidiMixerWindow *m_midiMixer{nullptr};
+    BankEditorDialog *m_bankEditor{nullptr};
+    MarkerEditor *m_markerEditor{nullptr};
+    TempoAndTimeSignatureEditor *m_tempoAndTimeSignatureEditor{nullptr};
+    TriggerSegmentManager *m_triggerSegmentManager{nullptr};
+    ConfigureDialog *m_configDlg{nullptr};
+    DocumentConfigureDialog *m_docConfigDlg{nullptr};
     std::set<ControlEditorDialog *> m_controlEditors;
     /// List of plugin dialogs to make sure we don't launch more than one.
     std::map<int, AudioPluginDialog*> m_pluginDialogs;
-    AudioPluginOSCGUIManager *m_pluginGUIManager;
+    AudioPluginGUIManager *m_pluginGUIManager{nullptr};
 
     static RosegardenMainWindow *m_myself;
 
@@ -1620,24 +1536,22 @@ private:
     QTimer *m_updateUITimer;
     QTimer *m_inputTimer;
 
-    EditTempoController *m_editTempoController;
+    StartupTester *m_startupTester{nullptr};
 
-    StartupTester *m_startupTester;
+    bool m_firstRun{false};
+    bool m_haveAudioImporter{false};
 
-    bool m_firstRun;
-    bool m_haveAudioImporter;
+    RosegardenParameterArea *m_parameterArea{nullptr};
 
-    RosegardenParameterArea *m_parameterArea;
-    
-#ifdef HAVE_LIRC        
-    LircClient *m_lircClient;
-    LircCommander *m_lircCommander;
-#endif     
-    TranzportClient *m_tranzport;
-        
+#ifdef HAVE_LIRC
+    LircClient *m_lircClient{nullptr};
+    LircCommander *m_lircCommander{nullptr};
+#endif
+    TranzportClient *m_tranzport{nullptr};
+
     QPointer<DeviceManagerDialog> m_deviceManager;
 
-    WarningWidget *m_warningWidget;
+    WarningWidget *m_warningWidget{nullptr};
 
     // Ladish lv1 support
     static int sigpipe[2];
@@ -1658,7 +1572,20 @@ private:
     /// For the fast-forward button on a keyboard controller.
     Typematic m_fastForwardTypematic;
 
+    // shortcuts for most recent file
+    QList<QKeySequence> m_mostRecentShortcuts;
+
+    unsigned m_autoSaveInterval{0};
+    QTime m_lastAutoSaveTime;
+
+    void doStop(bool autoStop);
+
 private slots:
+
+    /// ??? Rename: slotSetupRecentFilesMenu().
+    void setupRecentFilesMenu();
+
+    /// ??? A "slot" named "signal"?  Fix this.
     void signalAction(int);
 
     // New routines to handle inputs and UI updates
@@ -1670,11 +1597,105 @@ private slots:
      */
     void slotUpdateCPUMeter();
 
-    /// Toggles mute state of the currently selected track.
-    void slotToggleMute();
     void slotMuteAllTracks();
     void slotUnmuteAllTracks();
 
+    void slotCommandExecuted();
+
+    /**
+     * clears the document in the actual view to reuse it as the new
+     * document
+     */
+    void slotFileNew();
+
+    /**
+     * open a file and load it into the document
+     */
+    void slotFileOpen();
+
+    /**
+     * open a file dialog on the examples directory
+     */
+    void slotFileOpenExample();
+
+    /**
+     * open a file dialog on the templates directory
+     */
+    void slotFileOpenTemplate();
+
+    /**
+     * opens a file from the recent files menu (according to action name)
+     */
+    void slotFileOpenRecent();
+
+    /**
+     * save a document by a new filename; if asTemplate is true, the file will
+     * be saved read-only, to make it harder to overwrite by accident in the
+     * future
+     */
+    void slotFileSaveAs() { fileSaveAs(false); }
+    void slotFileSaveAsTemplate() { fileSaveAs(true); }
+
+    /**
+     * asks for saving if the file is modified, then closes the actual
+     * file and window
+     */
+    void slotFileClose();
+
+    /**
+     * Let the user select a Rosegarden Project file for import
+     */
+    void slotImportProject();
+
+    /**
+     * Let the user select a MIDI file for import
+     */
+    void slotImportMIDI();
+
+    /**
+     * Revert to last loaded file
+     */
+    void slotRevertToSaved();
+
+    /**
+     * Let the user select a Rosegarden 2.1 file for import
+     */
+    void slotImportRG21();
+
+    /**
+     * Select a Hydrogen drum machine file for import
+     */
+//    void slotImportHydrogen();
+
+    /**
+     * Let the user select a MusicXML file for import
+     */
+    void slotImportMusicXML();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMerge();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeMIDI();
+
+    /**
+     * Let the user select a MIDI file for merge
+     */
+    void slotMergeRG21();
+
+    /**
+     * Select a Hydrogen drum machine file for merge
+     */
+//    void slotMergeHydrogen();
+
+    /**
+     * Let the user select a MusicXML file for merge
+     */
+    void slotMergeMusicXML();
 };
 
 

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,15 +20,15 @@
 #define RG_CUTANDCLOSECOMMAND_H
 
 #include "document/Command.h"
+#include "base/TimeT.h"
+
 #include <QString>
-#include "base/Event.h"
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class EventSelection;
@@ -42,7 +42,7 @@ class CutAndCloseCommand : public MacroCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CutAndCloseCommand)
 
 public:
-    CutAndCloseCommand(EventSelection &selection,
+    CutAndCloseCommand(EventSelection *selection,
                        Clipboard *clipboard);
 
     static QString getGlobalName() { return tr("C&ut and Close"); }
@@ -57,7 +57,9 @@ protected:
             NamedCommand("Close"),
             m_segment(segment),
             m_gapEnd(fromTime),
-            m_gapStart(toTime) { }
+            m_gapStart(toTime),
+            m_staticEvents(0)
+        { }
 
         void execute() override;
         void unexecute() override;

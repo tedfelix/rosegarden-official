@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -38,6 +38,7 @@ void Equation::solve(Unknown u, int &y, double &m, int &x, int &c)
     }
 }
 
+/* unused
 void Equation::solveForYByEndPoints(Point a, Point b, double x, double &y)
 {
      double m, c, y1, x1;
@@ -48,7 +49,9 @@ void Equation::solveForYByEndPoints(Point a, Point b, double x, double &y)
      solve(C, y1, m, x1, c);
      solve(Y, y, m, x, c);
 }
+*/
 
+/* unused
 void Equation::solveForYByEndPoints(Point a, Point b, int x, int &y)
 {
      double m;
@@ -59,5 +62,6 @@ void Equation::solveForYByEndPoints(Point a, Point b, int x, int &y)
      solve(C, a.y, m, a.x, c);
      solve(Y, y, m, x, c);
 }
+*/
 
 }

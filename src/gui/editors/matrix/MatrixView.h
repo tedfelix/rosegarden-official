@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,25 +18,20 @@
 #ifndef RG_NEW_MATRIX_VIEW_H
 #define RG_NEW_MATRIX_VIEW_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/NotationTypes.h"
 
-#include "gui/general/ActionFileClient.h"
 #include "gui/general/SelectionManager.h"
 #include "gui/general/EditViewBase.h"
-#include "gui/widgets/DeferScrollArea.h"
-#include "gui/dialogs/TempoDialog.h"
 
-#include <QMainWindow>
+class QComboBox;
 
 #include <vector>
 
-class QWidget;
-class QLabel;
-class QComboBox;
 
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class MatrixWidget;
@@ -45,8 +40,8 @@ class CommandRegistry;
 class EventSelection;
 class SnapGrid;
 class Device;
-class ControlRulerWidget;
 class ControlParameter;
+
 
 /// Top-level window containing the matrix editor.
 /**
@@ -54,6 +49,8 @@ class ControlParameter;
  * of any functions carried out from menu and toolbar actions.  It
  * does not manage the editing tools (MatrixWidget does this) or the
  * selection state (MatrixScene does that).
+ *
+ * This class creates and owns the MatrixWidget instance (m_matrixWidget).
  */
 class MatrixView : public EditViewBase,
                    public SelectionManager
@@ -62,9 +59,8 @@ class MatrixView : public EditViewBase,
 
 public:
     MatrixView(RosegardenDocument *doc,
-		  std::vector<Segment *> segments,
-		  bool drumMode,
-		  QWidget *parent = nullptr);
+               const std::vector<Segment *>& segments,
+               bool drumMode);
 
     ~MatrixView() override;
 
@@ -84,8 +80,6 @@ public:
     EventSelection *getSelection() const override;
     EventSelection *getRulerSelection() const;
 
-    void updateViewCaption() override { }//!!!
-
     virtual timeT getInsertionTime() const;
 
 signals:
@@ -99,12 +93,17 @@ signals:
     void panic();
 
     void stepByStepTargetRequested(QObject *);
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // target value
-                     TempoDialog::TempoDialogAction); // tempo action
-    
+
     void noteInsertedFromKeyboard(Segment * segment, int pitch);
+
+public slots:
+    /// Note-on received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOnReceived(int pitch, int velocity);
+
+    /// Note-off received asynchronously -- consider step-by-step editing
+    void slotInsertableNoteOffReceived(int pitch, int velocity);
+
+    void slotStepByStepTargetRequested(QObject *);
 
 protected slots:
     /// Remove a segment from our list when it is deleted from the composition
@@ -123,13 +122,14 @@ protected slots:
     void slotSetVelocitiesToCurrent();
     void slotSetControllers();
     void slotPlaceControllers();
-    
+
     void slotTriggerSegment();
     void slotRemoveTriggers();
     void slotSelectAll();
     void slotPreviewSelection();
     void slotClearLoop();
     void slotClearSelection();
+    void slotEscapePressed();
     void slotFilterSelection();
     void slotEditAddKeySignature();
 
@@ -162,13 +162,16 @@ protected slots:
     void slotSetCurrentVelocity(int);
     void slotSetCurrentVelocityFromSelection();
 
-    void slotToggleTracking();
+    void slotScrollToFollow();
+    void slotLoop();
+    void slotLoopChanged();
 
     void slotUpdateMenuStates();
+    void slotRulerSelectionUpdate();
 
-    void slotEditCut() override;
-    void slotEditCopy() override;
-    void slotEditPaste() override;
+    void slotEditCut();
+    void slotEditCopy();
+    void slotEditPaste();
     void slotEditDelete();
 
     /// Show or hide rulers
@@ -177,8 +180,10 @@ protected slots:
 
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
+    void slotToggleKeyPressureRuler();
+    void slotToggleChannelPressureRuler();
     void slotAddControlRuler(QAction*);
-    
+
     /**
      * Call the Rosegaden about box.
      */
@@ -194,10 +199,10 @@ protected slots:
     void slotHighlight();
 
     void slotShowContextHelp(const QString &);
-        
+
     void slotAddTempo();
     void slotAddTimeSignature();
-    
+
     // rescale
     void slotHalveDurations();
     void slotDoubleDurations();
@@ -219,9 +224,9 @@ protected slots:
     // jog events
     void slotJogLeft();
     void slotJogRight();
-    
+
     void slotStepBackward();
-    void slotStepForward(bool force = false);
+    void slotStepForward()  { stepForward(false); }
 
     void slotExtendSelectionBackward();
     void slotExtendSelectionForward();
@@ -233,24 +238,18 @@ protected slots:
     /// keyboard insert
     void slotInsertNoteFromAction();
 
-    /// Note-on received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOnReceived(int pitch, int velocity);
-
-    /// Note-off received asynchronously -- consider step-by-step editing
-    void slotInsertableNoteOffReceived(int pitch, int velocity);
-
     /// Note-on or note-off received asynchronously -- as above
     void slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn);
 
     void slotPitchBendSequence();
     void slotControllerSequence();
-    
+
+    void slotConstrainedMove();
     void slotToggleStepByStep();
-    void slotStepByStepTargetRequested(QObject *);
 
     /** Update the window title.  If m is true (normally comes from a signal)
      * display a * at the extreme left of the title to indicate modified status
-     */ 
+     */
     void slotUpdateWindowTitle(bool m = false);
 
     void slotToggleChordMode();
@@ -260,22 +259,21 @@ protected slots:
     void slotToggleActionsToolBar();
     void slotToggleRulersToolBar();
     void slotToggleTransportToolBar();
-    
+
 protected:
     const SnapGrid *getSnapGrid() const;
-    void readOptions() override;
-    void insertControllerSequence(const ControlParameter &cp);
+    void insertControllerSequence(const ControlParameter &controlParameter);
 
 private:
     RosegardenDocument *m_document;
     MatrixWidget *m_matrixWidget;
-    CommandRegistry *m_commandRegistry;
+    QSharedPointer<CommandRegistry> m_commandRegistry;
 
     QComboBox *m_velocityCombo;
     QComboBox *m_quantizeCombo;
     QComboBox *m_snapGridCombo;
 
-    bool m_tracking;
+    bool m_scrollToFollow;
 
     std::vector<timeT> m_quantizations;
     std::vector<timeT> m_snapValues;
@@ -304,9 +302,14 @@ private:
      */
     Device *getCurrentDevice();
 
-    void initStatusBar() override;
+    void initStatusBar();
+
+    void readOptions();
+
+    void stepForward(bool force);
 
 };
+
 
 }
 

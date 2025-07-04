@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -59,19 +59,19 @@ public:
 
     virtual void draw(QPainter &painter);
 
-    virtual double xStart() { return m_xstart; }
-    virtual double xEnd() { return m_xend; }
+    virtual double xStart() const  { return m_xstart; }
+    virtual double xEnd() const  { return m_xend; }
 
-    virtual void handleMouseButtonPress(QMouseEvent *e);
-    virtual void handleMouseButtonRelease(QMouseEvent *e);
+    // unused virtual void handleMouseButtonPress(QMouseEvent *e);
+    // unused virtual void handleMouseButtonRelease(QMouseEvent *e);
     virtual void handleMouseMove(QMouseEvent *e, int deltaX, int deltaY);
-    virtual void handleMouseWheel(QWheelEvent *e);
+    // unused virtual void handleMouseWheel(QWheelEvent *e);
 
-    virtual void setSelected(bool yes);
+    virtual void setSelected(bool s);
     bool isSelected() { return m_selected; }
     //    virtual void setHighlighted(bool yes) { m_highlighted=yes; update(); }
     /// recompute height according to represented value prior to a canvas repaint
-    virtual void updateFromValue();
+    // unused virtual void updateFromValue();
 
     /// update value according to height after a user edit
     virtual void updateSegment();
@@ -89,8 +89,15 @@ public:
 
     virtual void reconfigure();
 
+    void setActive(bool active);
+    bool active() const;
+
+    // to maintain copy of map key
+    void setXKey(double x) { m_xKey = x; }
+    double xKey() const { return m_xKey; }
+
 protected:
-    
+
     //--------------- Data members ---------------------------------
 
     QColor m_colour;
@@ -107,8 +114,14 @@ protected:
     ControlRuler* m_controlRuler;
     Event* m_event;
 
+    bool m_active;
+
     static const unsigned int BorderThickness;
     static const unsigned int DefaultWidth;
+
+private:
+    // a true copy of the key in the ControlItemMap for efficient item- lookup
+    double m_xKey;
 };
 
 typedef std::multimap<double /* xStart */, QSharedPointer<ControlItem>>

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,7 +18,7 @@
 #ifndef RG_ROSEGARDENGUIVIEW_H
 #define RG_ROSEGARDENGUIVIEW_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/MidiProgram.h"
 #include "base/Selection.h"
 #include "base/Track.h"
@@ -28,17 +28,13 @@
 
 #include <QString>
 #include <QWidget>
-#include <QVBoxLayout>
 
-
-class QWidget;
 class QObject;
-class LevelInfo;
-class Command;
 
 
 namespace Rosegarden
 {
+
 
 class TrackParameterBox;
 class TrackEditor;
@@ -54,9 +50,10 @@ class PitchTrackerView;
 class MatrixView;
 class MappedEvent;
 class InstrumentParameterBox;
-class EventView;
+class EventListEditor;
 class Composition;
 class LevelInfo;
+
 
 /// Parent for the TrackEditor
 /**
@@ -114,7 +111,7 @@ public:
     void setZoomSize(double size);
 
     void initChordNameRuler();
-    
+
     bool haveSelection();
     SegmentSelection getSelection();
     void updateSelectedSegments();
@@ -127,18 +124,18 @@ public:
 public slots:
     void slotEditSegment(Segment*);
     void slotEditSegmentNotation(Segment*);
-    void slotEditSegmentsNotation(std::vector<Segment*>);
+    void slotEditSegmentsNotation(const std::vector<Segment*>&);
     void slotEditSegmentMatrix(Segment*);
-    void slotEditSegmentsMatrix(std::vector<Segment*>);
+    void slotEditSegmentsMatrix(const std::vector<Segment*>&);
     void slotEditSegmentPercussionMatrix(Segment*);
-    void slotEditSegmentsPercussionMatrix(std::vector<Segment*>);
+    void slotEditSegmentsPercussionMatrix(const std::vector<Segment*>&);
     void slotEditSegmentEventList(Segment*);
-    void slotEditSegmentsEventList(std::vector<Segment*>);
+    void slotEditSegmentsEventList(const std::vector<Segment*>&);
     void slotEditSegmentPitchTracker(Segment*);
-    void slotEditSegmentsPitchTracker(std::vector<Segment*>);
+    void slotEditSegmentsPitchTracker(const std::vector<Segment*>&);
     void slotEditTriggerSegment(int);
     void slotEditSegmentAudio(Segment*);
-    void slotSegmentAutoSplit(Segment*);
+    // unused void slotSegmentAutoSplit(Segment*);
     void slotEditRepeat(Segment*, timeT);
 
     /**
@@ -175,9 +172,9 @@ public slots:
 
     void slotDeleteTracks(std::vector<TrackId> tracks);
 
-    void slotAddAudioSegmentCurrentPosition(AudioFileId,
-                                            const RealTime &startTime,
-                                            const RealTime &endTime);
+    // unused void slotAddAudioSegmentCurrentPosition(AudioFileId,
+    //                                        const RealTime &startTime,
+    //                                        const RealTime &endTime);
 
     void slotAddAudioSegmentDefaultPosition(AudioFileId,
                                             const RealTime &startTime,
@@ -198,23 +195,18 @@ public slots:
      */
     void slotAddCommandToHistory(Command *command);
 
-    /**
-     * Change the Track Label
-     */
-//    void slotChangeTrackLabel(TrackId id, QString label);
-
     /// Set the record state for an instrument.
-    void slotSetRecord(InstrumentId, bool);
+    // unused void slotSetRecord(InstrumentId, bool);
 
     /// Set the solo state for an instrument.
-    void slotSetSolo(InstrumentId, bool);
+    // unused void slotSetSolo(InstrumentId, bool);
 
     /**
      * To indicate that we should track the recording segment (despite
      * no commands being issued on it)
      */
-    void slotUpdateRecordingSegment(Segment *segment,
-                                    timeT updatedFrom);
+    // unused void slotUpdateRecordingSegment(Segment *segment,
+    //                      timeT updatedFrom);
 
     /**
      * A manual fudgy way of creating a view update for certain
@@ -251,12 +243,6 @@ signals:
 
     void toggleSolo(bool);
 
-    /**
-     * Current used to dispatch things like track select changes, solo, etc...
-     * to edit views
-     */
-    void compositionStateUpdate();
-    
 
     /**
      * This signal is used to dispatch a notification for a request to
@@ -278,10 +264,10 @@ signals:
 
 private:
 
-    void createNotationView(std::vector<Segment *>);
-    void createMatrixView(std::vector<Segment *>, bool drumMode);
-    EventView *createEventView(std::vector<Segment *>);
-    PitchTrackerView *createPitchTrackerView(std::vector<Segment *>);
+    void createNotationView(const std::vector<Segment *>&);
+    void createMatrixView(const std::vector<Segment *>&, bool drumMode);
+    EventListEditor *createEventView(Segment *);
+    PitchTrackerView *createPitchTrackerView(const std::vector<Segment *>&);
 
     static bool hasNonAudioSegment(const SegmentSelection &segments);
 

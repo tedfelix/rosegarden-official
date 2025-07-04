@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -18,13 +18,13 @@
 #include "gui/application/TransportStatus.h"
 
 #include "sound/MappedEventList.h"
-#include "sound/MappedStudio.h"
+#include "sound/MappedStudio.h"  // MappedObjectIdList, etc...
 #include "sound/MappedBufMetaIterator.h"
 
 #include "base/MidiDevice.h"
 
 #include <QMutex>
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
 #include <QRecursiveMutex>
 #endif
 #include <QObject>
@@ -33,10 +33,13 @@
 #include <deque>
 
 
-namespace Rosegarden { 
+namespace Rosegarden {
+
 
 class MappedInstrument;
 class SoundDriver;
+class WAVExporter;
+
 
 /// MIDI and Audio recording and playback
 /**
@@ -64,7 +67,7 @@ public:
 
     /// Close the sequencer.
     void quit();
-    
+
     /// Play from a given time with given parameters.
     /**
      *  Based on RealTime timestamps.
@@ -72,7 +75,7 @@ public:
     bool play(const RealTime &time);
 
     /// Record from a given time with given parameters.
-    bool record(const RealTime &position, long recordMode);
+    bool record(const RealTime &time, long recordMode);
 
     /// Punch out from recording to playback
     /**
@@ -81,12 +84,14 @@ public:
     bool punchOut();
 
     /// Set a loop on the sequencer.
-    void setLoop(const RealTime &loopStart,
-                 const RealTime &loopEnd);
+    void setLoop(
+            const RealTime &loopStart,
+            const RealTime &loopEnd,
+            bool jumpToLoop);
 
     /// Set the sequencer to a given time.
-    void jumpTo(const RealTime &rt);
- 
+    void jumpTo(const RealTime &pos);
+
     /// Return the Sound system status (audio/MIDI)
     unsigned getSoundDriverStatus();
 
@@ -106,7 +111,7 @@ public:
     void clearAllAudioFiles();
 
     /// Stop the sequencer
-    void stop();
+    void stop(bool autoStop);
 
     /// Set a MappedInstrument at the Sequencer
     /**
@@ -116,7 +121,7 @@ public:
     void setMappedInstrument(int type, unsigned int id);
 
     /// Puts a mapped event on the m_asyncOutQueue
-    void processMappedEvent(MappedEvent mE);
+    void processMappedEvent(const MappedEvent &mE);
 
 
     // --- DEVICES ---
@@ -148,7 +153,7 @@ public:
     /**
      * Ignored if driver does not permit changing the number of devices
      */
-    void removeDevice(unsigned int id);
+    void removeDevice(unsigned int deviceId);
     /// Remove all of the devices (of types that can be added or removed).
     /**
      * Ignored if driver does not permit changing the number of devices
@@ -158,7 +163,7 @@ public:
     /**
      * Ignored if the driver does not permit this operation.
      */
-    void renameDevice(unsigned int id, QString name);
+    void renameDevice(unsigned int deviceId, QString name);
     /**
      * Return the number of permissible connections for a device of
      * the given type and direction (corresponding to MidiDevice::
@@ -262,7 +267,7 @@ public:
                                          const QString &property);
 
     /// Get a list of available plugins
-    std::vector<QString> getPluginInformation();
+    // unused std::vector<QString> getPluginInformation();
 
     /**
      * Nasty hack: program name/number mappings are one thing that
@@ -285,6 +290,8 @@ public:
     float getMappedPort(int pluginId,
                         unsigned long portId);
 
+    void savePluginState();
+
     /// Create a (transient, writeable) MappedObject
     int createMappedObject(int type);
 
@@ -293,7 +300,7 @@ public:
 
     /// Connect two objects
     void connectMappedObjects(int id1, int id2);
-    
+
     /// Disconnect two objects
     void disconnectMappedObjects(int id1, int id2);
 
@@ -342,6 +349,8 @@ public:
         TransportStartAtTime, // time arg required
         TransportStopAtTime // time arg required
     };
+    // For debug.  Do not remove.
+    static QString transportRequestToString(TransportRequest request);
 
     /// Called by RosegardenMainWindow::slotHandleInputs().
     /**
@@ -358,8 +367,8 @@ public:
 
     void setStatus(TransportStatus status)
             { m_transportStatus = status; }
-    TransportStatus getStatus() { return m_transportStatus; }
-   
+    TransportStatus getStatus() const  { return m_transportStatus; }
+
     /// Process the first chunk of Sequencer events
     /**
      * How does this differ from play() and record()?
@@ -415,10 +424,10 @@ public:
      *
      * Used by processAsynchronousEvents() and processRecordedMidi().
      */
-    void routeEvents(MappedEventList *mC, bool recording);
+    void routeEvents(MappedEventList *mappedEventList, bool recording);
 
     /// Are we looping?
-    bool isLooping() const { return !(m_loopStart == m_loopEnd); }
+    bool isLooping() const;
 
     /// Check for new external clients (ALSA sequencer or whatever).
     /**
@@ -428,6 +437,8 @@ public:
 
     /// Initialise the virtual studio at this end of the link.
     void initialiseStudio();
+
+    void installExporter(WAVExporter* wavExporter);
 
 
     // --------- Transport Interface --------
@@ -498,6 +509,7 @@ private:
 
     RealTime m_loopStart;
     RealTime m_loopEnd;
+    bool m_withinLoop = false;
 
     std::vector<MappedInstrument*> m_instruments;
 
@@ -510,7 +522,7 @@ private:
     MappedStudio *m_studio;
 
     // mmap segments
-    // 
+    //
     MappedBufMetaIterator m_metaIterator;
     RealTime m_lastStartTime;
 
@@ -528,6 +540,12 @@ private:
 
     typedef std::pair<TransportRequest, RealTime> TransportPair;
     std::deque<TransportPair> m_transportRequests;
+    /// Serial number used to detect completion of processing across threads.
+    /**
+     * ??? If someone calls one of the functions that returns a token (e.g.
+     *     transportChange()) before processing is complete, this serial number
+     *     will be out of sync.  That will cause false reporting of completion.
+     */
     TransportToken m_transportToken;
 
     /// UNUSED
@@ -536,8 +554,8 @@ private:
      * not have worked as it was commented out everywhere it was used.
      */
     bool m_isEndOfCompReached;
-    
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     QRecursiveMutex m_mutex;
 #else
     QMutex m_mutex;
@@ -547,5 +565,5 @@ private:
 };
 
 }
- 
+
 #endif // RG_ROSEGARDENSEQUENCER_H

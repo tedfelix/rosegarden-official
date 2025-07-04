@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -24,6 +24,7 @@
 #include "base/Event.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Quantizer.h"
 #include "gui/editors/notation/NotationChord.h"
 #include "gui/editors/notation/NotationElement.h"
@@ -60,7 +61,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
 
     /*
     RG_DEBUG << "NotationGroup: id is " << m_groupNo;
-    i = getInitialElement(); 
+    i = getInitialElement();
     while (i != getContainer().end()) {
         long gid = -1;
         (*i)->event()->get<Int>(BEAMED_GROUP_ID, gid);
@@ -73,7 +74,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
 
 NotationGroup::NotationGroup(NotationElementList &nel,
                              const Quantizer *q,
-                             const NotationProperties &p,
+                             const NotationProperties &properties,
                              const Clef &clef, const Key &key) :
         AbstractSet<NotationElement, NotationElementList>(nel, nel.end(), q),
         m_barRange(0, 0),
@@ -85,7 +86,7 @@ NotationGroup::NotationGroup(NotationElementList &nel,
         m_userSamples(true),
         m_groupNo( -1),
         m_type(Beamed),
-        m_properties(p)
+        m_properties(properties)
 {
     //...
 }
@@ -181,6 +182,7 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
 void
 NotationGroup::initialiseFinish() {}
 
+#if 0
 bool
 NotationGroup::contains(const NELIterator &i) const
 {
@@ -195,6 +197,7 @@ NotationGroup::contains(const NELIterator &i) const
         ++j;
     }
 }
+#endif
 
 int
 NotationGroup::height(const NELIterator &i) const
@@ -280,12 +283,12 @@ NotationGroup::applyStemProperties()
 
     /*!!!
         if ((*initialNote)->event()->has(STEM_UP) &&
-        (*initialNote)->event()->isPersistent<Bool>(STEM_UP)) {
+        (*initialNote)->event()->isPersistent(STEM_UP)) {
         aboveNotes = (*initialNote)->event()->get<Bool>(STEM_UP);
         }
-     
+
         if ((*initialNote)->event()->has(NotationProperties::BEAM_ABOVE) &&
-        (*initialNote)->event()->isPersistent<Bool>(NotationProperties::BEAM_ABOVE)) {
+        (*initialNote)->event()->isPersistent(NotationProperties::BEAM_ABOVE)) {
         aboveNotes = (*initialNote)->event()->get<Bool>
             (NotationProperties::BEAM_ABOVE);
         }
@@ -358,7 +361,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
     beam.gradient = 0;
     beam.necessary = false;
 
-    NELIterator 
+    NELIterator
         initialNote(getInitialNote()),
         finalNote(getFinalNote());
 
@@ -378,11 +381,11 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                           (NotationProperties::BEAM_ABOVE);
     }
 
-    timeT quaver = Note(Note::Quaver).getDuration();
+    timeT doubleDottedQuaver = Note(Note::Quaver, 2).getDuration();
 
     beam.necessary =
-        (*initialNote)->getViewDuration() <= quaver &&
-        (*finalNote)->getViewDuration() <= quaver;
+        (*initialNote)->getViewDuration() <= doubleDottedQuaver &&
+        (*finalNote)->getViewDuration() <= doubleDottedQuaver;
 
     beam.necessary = beam.necessary &&
         (((*finalNote)->getViewAbsoluteTime() >
@@ -578,7 +581,7 @@ NotationGroup::calculateBeam(NotationStaff &staff)
                    << "aboveNotes: " << beam.aboveNotes
                    << "shortestNoteType: " << shortestNoteType
                    << "necessary: " << beam.necessary;
-    */ 
+    */
     return beam;
 }
 
@@ -852,7 +855,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         finalNote(getFinalNote()),
         initialElement(getInitialElement()),
         finalElement(getFinalElement());
-    
+
     NELIterator initialNoteOrRest(initialElement);
     NotationElement* initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
 

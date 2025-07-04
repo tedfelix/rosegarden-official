@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -33,9 +33,9 @@ class WAVAudioFile : public RIFFAudioFile
 public:
     WAVAudioFile(const unsigned int &id,
                  const std::string &name,
-                 const QString &fileName);
+                 const QString &absoluteFilePath);
 
-    WAVAudioFile(const QString &fileName,
+    WAVAudioFile(const QString &absoluteFilePath,
                   unsigned int channels,
                   unsigned int sampleRate,
                   unsigned int bytesPerSecond,
@@ -74,7 +74,7 @@ public:
     // Peak file name
     //
     QString getPeakFilename() override
-        { return (m_fileName + ".pk"); }
+        { return (m_absoluteFilePath + ".pk"); }
 
 
 protected:

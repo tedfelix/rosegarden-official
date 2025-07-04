@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -23,6 +23,7 @@
 #include "base/NotationTypes.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
+#include "base/SegmentNotationHelper.h"
 #include "gui/editors/notation/NotationProperties.h"
 
 
@@ -34,13 +35,17 @@ EraseCommand::EraseCommand(
         EventSelection *selection1,
         EventSelection *selection2) :
     BasicCommand(tr("&Erase"),
-                 *selection1,  // assume both selections are in the same Segment
+                 selection1 ? *selection1 : *selection2,  // assume both selections are in the same Segment
                  true),  // bruteForceRedo
     m_selection1(selection1),
     m_selection2(selection2),
     m_relayoutEndTime(getEndTime())
 {
-    // nothing else
+    // empty selections can cause trouble in normalize rests
+    if (m_selection1  &&  m_selection1->getSegmentEvents().empty())
+        m_selection1 = nullptr;
+    if (m_selection2  &&  m_selection2->getSegmentEvents().empty())
+        m_selection2 = nullptr;
 }
 
 EraseCommand::~EraseCommand()
@@ -114,13 +119,13 @@ EraseCommand::eraseInSegment(EventSelection *selection)
                     minSubOrdering > indicationSubOrdering &&
                     maxDeltaGraceSubOrdering >= graceToAdjust) {
                     int incr = minSubOrdering - indicationSubOrdering;
-                    std::vector<Event *> toInsert, toErase;
+                    std::vector<Event *> toInsert, toErase1;
                     for (Segment::iterator k = h; k != j; ++k) {
                         if ((*k)->has(BaseProperties::IS_GRACE_NOTE) &&
                             (*k)->getSubOrdering() < indicationSubOrdering) {
                             // Subordering of the grace note is incremented to
                             // avoid (a rare) relevant decrement of that value.
-                            toErase.push_back(*k);
+                            toErase1.push_back(*k);
                             toInsert.push_back
                                 (new Event(**k,
                                            (*k)->getAbsoluteTime(),
@@ -130,8 +135,8 @@ EraseCommand::eraseInSegment(EventSelection *selection)
                                            (*k)->getNotationDuration()));
                         }
                     }
-                    for (std::vector<Event *>::iterator k = toErase.begin();
-                         k != toErase.end(); ++k) segment.eraseSingle(*k);
+                    for (std::vector<Event *>::iterator k = toErase1.begin();
+                         k != toErase1.end(); ++k) segment.eraseSingle(*k);
                     for (std::vector<Event *>::iterator k = toInsert.begin();
                          k != toInsert.end(); ++k) segment.insert(*k);
                 }
@@ -139,11 +144,11 @@ EraseCommand::eraseInSegment(EventSelection *selection)
                 Indication indication(**i);
                 if (indication.isOttavaType()) {
 
-                    for (Segment::iterator j = segment.findTime ((*i)->getAbsoluteTime());
-                         j != segment.findTime
+                    for (Segment::iterator j1 = segment.findTime ((*i)->getAbsoluteTime());
+                         j1 != segment.findTime
                              ((*i)->getAbsoluteTime() + indication.getIndicationDuration());
-                         ++j) {
-                        (*j)->unset(NotationProperties::OTTAVA_SHIFT);
+                         ++j1) {
+                        (*j1)->unset(NotationProperties::OTTAVA_SHIFT);
                     }
                 }
             } catch (...) {}
@@ -165,11 +170,14 @@ EraseCommand::eraseInSegment(EventSelection *selection)
     }
 
     segment.normalizeRests(selection->getStartTime(), selection->getEndTime());
+    SegmentNotationHelper(segment).updateIndications
+        (selection->getStartTime(), selection->getEndTime());
 
     return erasedLongEffectEvent;
 }
 
 timeT
+// cppcheck-suppress unusedFunction
 EraseCommand::getRelayoutEndTime()
 {
     return m_relayoutEndTime;

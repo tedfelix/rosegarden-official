@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -61,7 +61,7 @@ class DuplicateThingException { };
  *       will be used (note that which one this is may depend on
  *       static object construction ordering, so it's generally better
  *       if tags are unique to a builder).
- * 
+ *
  *     - You may also wish to typedef ThingFactory<A, P> to something
  *       like AFactory, for convenience.
  *
@@ -76,7 +76,7 @@ class DuplicateThingException { };
  *
  *  -- call AFactory::getInstance()->getURIs() to retrieve a list of
  *     all registered URIs for this factory.
- * 
+ *
  *  -- call AFactory::getInstance()->create(uri, parameters), where
  *     parameters is an object of type P, to construct a new object
  *     whose class is that associated with the URI uri.
@@ -109,18 +109,18 @@ public:
 	if (!m_instance) m_instance = new ThingFactory<Thing, Parameters>();
 	return m_instance;
     }
-    
+
     URISet getURIs() const {
 	QList<QUrl> keys = m_registry.keys();
 	URISet s;
 	for (int i = 0; i < keys.size(); ++i) s.insert(keys[i]);
 	return s;
     }
-    
+
     QStringList getTags() const {
         return m_tags.keys();
     }
-    
+
     QUrl getURIFor(QString tag) const {
         if (!m_tags.contains(tag)) {
             throw UnknownTagException();
@@ -135,7 +135,7 @@ public:
 	return m_registry[uri]->build(p);
     }
 
-    Thing *createFor(QString tag, Parameters p) const {
+    Thing *createFor(const QString& tag, Parameters p) const {
         return create(getURIFor(tag), p);
     }
 
@@ -145,7 +145,7 @@ public:
         }
 	m_registry[uri] = builder;
     }
-    
+
     void registerBuilder(QUrl uri, Builder *builder, QStringList tags) {
         if (m_registry.contains(uri)) {
             throw DuplicateThingException();
@@ -156,7 +156,7 @@ public:
             m_tags[tags[i]] = uri;
         }
     }
-    
+
 protected:
     static ThingFactory<Thing, Parameters> *m_instance;
     BuilderMap m_registry;
@@ -175,7 +175,7 @@ template <typename ConcreteThing, typename Thing, typename Parameters>
 class ConcreteThingBuilder : public AbstractThingBuilder<Thing, Parameters>
 {
 public:
-    ConcreteThingBuilder(QUrl uri) {
+    explicit ConcreteThingBuilder(QUrl uri) {
 	ThingFactory<Thing, Parameters>::getInstance()->registerBuilder(uri, this);
     }
     ConcreteThingBuilder(QUrl uri, QStringList tags) {

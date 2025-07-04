@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -29,7 +29,6 @@
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
 #include "EventControlItem.h"
-#include "ControlRuler.h"
 #include "ControllerEventsRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"
@@ -48,10 +47,10 @@ namespace Rosegarden
 ControlSelector::ControlSelector(ControlRuler *parent) :
     ControlMover(parent,"ControlSelector")
 {
-//    createAction("select", SLOT(slotSelectSelected()));
-//    createAction("draw", SLOT(slotDrawSelected()));
-//    createAction("erase", SLOT(slotEraseSelected()));
-//    createAction("resize", SLOT(slotResizeSelected()));
+//    createAction("select", &ControlSelector::slotSelectSelected);
+//    createAction("draw", &ControlSelector::slotDrawSelected);
+//    createAction("erase", &ControlSelector::slotEraseSelected);
+//    createAction("resize", &ControlSelector::slotResizeSelected);
 //
 //    createMenu();
 }
@@ -95,14 +94,15 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 
         // Add them if they're within the rectangle
         for (ControlItemMap::iterator it = itmin; it != itmax; ++it) {
-            if (pRectF->contains(it->second->boundingRect().center())) {
+            if (pRectF->contains(it->second->boundingRect().center()) &&
+                (*it).second->active()) {
                 m_addedItems.push_back(it->second);
                 it->second->setSelected(true);
             }
         }
 
     }
-    
+
     return ControlMover::handleMouseMove(e);
 }
 
@@ -129,4 +129,3 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
 QString ControlSelector::ToolName() { return "selector"; }
 
 }
-

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,11 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TimeDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TimeDialog.h"
 
-#include "base/Composition.h"
-#include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -32,11 +33,12 @@
 namespace Rosegarden
 {
 
-TimeDialog::TimeDialog(QWidget *parent, QString title,
-                       Composition *composition,
+
+TimeDialog::TimeDialog(QWidget *parent,
+                       QString title,
                        timeT defaultTime,
                        bool constrainToCompositionDuration) :
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(title);
@@ -46,58 +48,79 @@ TimeDialog::TimeDialog(QWidget *parent, QString title,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
 
-    m_timeWidget = new TimeWidget(title, vbox, composition,
-                defaultTime, true, constrainToCompositionDuration);
-    vboxLayout->addWidget(m_timeWidget);
+    m_timeWidget2 = new TimeWidget2(
+            title,
+            vbox,  // parent
+            defaultTime,  // initialTime
+            constrainToCompositionDuration);
+    connect(m_timeWidget2, &TimeWidget2::signalIsValid,
+            this, &TimeDialog::slotIsValid);
+    vboxLayout->addWidget(m_timeWidget2);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-
-    // Without a real slot to connect to, this is unused and misleads
-    // the user.
-    // QPushButton *resetButton =
-    // buttonBox->button(QDialogButtonBox::Reset);
-    // No such slot
-    // connect(resetButton, SIGNAL(clicked()),
-    //         m_timeWidget, SLOT(slotResetToDefault()));
+    m_buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Reset | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    const QPushButton *resetButton =
+            m_buttonBox->button(QDialogButtonBox::Reset);
+    connect(resetButton, &QPushButton::clicked,
+            m_timeWidget2, &TimeWidget2::slotResetToDefault);
+    vboxLayout->addWidget(m_buttonBox);
 }
 
-TimeDialog::TimeDialog(QWidget *parent, QString title,
-                       Composition *composition,
+TimeDialog::TimeDialog(QWidget *parent,
+                       QString title,
                        timeT startTime,
                        timeT defaultDuration,
                        timeT minimumDuration,
                        bool constrainToCompositionDuration) :
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(title);
     setObjectName("MinorDialog");
 
-    QWidget *vbox = new QWidget(this);
-    QVBoxLayout *vboxLayout = new QVBoxLayout;
-    setLayout(vboxLayout);
+    QVBoxLayout *vboxLayout = new QVBoxLayout(this);
 
-    m_timeWidget = new TimeWidget(title, vbox, composition, startTime,
-                defaultDuration, minimumDuration, true, 
-                constrainToCompositionDuration);
-    vboxLayout->addWidget(m_timeWidget);
+    m_timeWidget2 = new TimeWidget2(
+            title,
+            this,  // parent
+            startTime,
+            defaultDuration,  // initialDuration
+            minimumDuration,
+            constrainToCompositionDuration);
+    connect(m_timeWidget2, &TimeWidget2::signalIsValid,
+            this, &TimeDialog::slotIsValid);
+    vboxLayout->addWidget(m_timeWidget2);
 
-    // No such slot
-    // connect(this, SIGNAL(ResetClicked()),
-    //         m_timeWidget, SLOT(slotResetToDefault()));
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Reset | QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    vboxLayout->addWidget(buttonBox);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    m_buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Reset | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel);
+    connect(m_buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    const QPushButton *resetButton =
+            m_buttonBox->button(QDialogButtonBox::Reset);
+    connect(resetButton, &QPushButton::clicked,
+            m_timeWidget2, &TimeWidget2::slotResetToDefault);
+    vboxLayout->addWidget(m_buttonBox);
 }
 
 timeT
 TimeDialog::getTime() const
 {
-    return m_timeWidget->getTime();
+    if (!m_timeWidget2)
+        return 0;
+
+    return m_timeWidget2->getTime();
 }
+
+void
+TimeDialog::slotIsValid(bool valid)
+{
+    QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setEnabled(valid);
+}
+
 
 }

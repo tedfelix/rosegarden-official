@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -24,9 +24,6 @@
 #include <sstream>
 
 namespace Rosegarden {
-
-// Static
-const RealTime RealTime::zeroTime(0,0);
 
 RealTime::RealTime(int s, int n) :
     sec(s),
@@ -71,7 +68,7 @@ RealTime::fromTimeval(const struct timeval &tv)
 
 std::ostream &operator<<(std::ostream &out, const RealTime &rt)
 {
-    if (rt < RealTime::zeroTime) {
+    if (rt < RealTime::zero()) {
         out << "-";
     } else {
         out << " ";
@@ -107,7 +104,7 @@ RealTime::toString(bool align) const
     
     std::string s = out.str();
 
-    if (!align && *this >= RealTime::zeroTime) {
+    if (!align && *this >= RealTime::zero()) {
         // remove leading " "
         s = s.substr(1, s.length() - 1);
     }
@@ -119,7 +116,8 @@ RealTime::toString(bool align) const
 std::string
 RealTime::toText(bool fixedDp) const
 {
-    if (*this < RealTime::zeroTime) return "-" + (-*this).toText();
+    if (*this < RealTime::zero())
+        return "-" + (-*this).toText();
 
     std::stringstream out;
 
@@ -196,7 +194,8 @@ RealTime::operator/(const RealTime &r) const
 long
 RealTime::realTime2Frame(const RealTime &time, unsigned int sampleRate)
 {
-    if (time < zeroTime) return -realTime2Frame(-time, sampleRate);
+    if (time < zero())
+        return -realTime2Frame(-time, sampleRate);
     double s = time.sec + double(time.nsec + 1) / 1000000000.0;
     return long(s * sampleRate);
 }
@@ -213,7 +212,7 @@ RealTime::frame2RealTime(long frame, unsigned int sampleRate)
     return rt;
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::RealTime &t)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Rosegarden::RealTime &t)
 {
     dbg << t.toString();
     return dbg;

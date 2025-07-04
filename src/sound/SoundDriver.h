@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -38,6 +38,8 @@
 namespace Rosegarden
 {
 
+class PlayableData;
+class WAVExporter;
 
 // Current recording status - whether we're monitoring anything
 // or recording.
@@ -75,7 +77,7 @@ class MappedStudio;
 class SoundDriver
 {
 public:
-    SoundDriver(MappedStudio *studio, const QString &name);
+    SoundDriver(MappedStudio *studio, const QString &versionInfo);
     virtual ~SoundDriver();
 
 
@@ -96,7 +98,7 @@ public:
         { return false; }
     virtual void removeDevice(DeviceId) { }
     virtual void removeAllDevices() { }
-    virtual void renameDevice(DeviceId, QString) { }
+    virtual void renameDevice(DeviceId, const QString&) { }
 
     /// Poll for new clients (for new Devices/Instruments)
     virtual void checkForNewClients()  { }
@@ -109,10 +111,10 @@ public:
     virtual QString getConnection(DeviceId) { return ""; }
     virtual void setConnection(
             DeviceId /* deviceId */,
-            QString /* idealConnection */) { }
+            const QString& /* idealConnection */) { }
     virtual void setPlausibleConnection(
             DeviceId deviceId,
-            QString idealConnection,
+            const QString& idealConnection,
             bool /* recordDevice */)
                     { setConnection(deviceId, idealConnection); }
     virtual void connectSomething() { }
@@ -127,7 +129,7 @@ public:
 
     virtual void initialisePlayback(const RealTime & /*position*/)  { }
     void setMappedInstrument(MappedInstrument *mI);
-    virtual void stopPlayback()  { }
+    virtual void stopPlayback(bool)  { }
     virtual bool record(
             RecordStatus /*recordStatus*/,
             const std::vector<InstrumentId> & /*armedInstruments*/,
@@ -216,18 +218,18 @@ public:
 
     // Latencies
     //
-    virtual RealTime getAudioPlayLatency() { return RealTime::zeroTime; }
-    virtual RealTime getAudioRecordLatency() { return RealTime::zeroTime; }
-    virtual RealTime getInstrumentPlayLatency(InstrumentId) { return RealTime::zeroTime; }
-    virtual RealTime getMaximumPlayLatency() { return RealTime::zeroTime; }
+    virtual RealTime getAudioPlayLatency() { return RealTime::zero(); }
+    virtual RealTime getAudioRecordLatency() { return RealTime::zero(); }
+    virtual RealTime getInstrumentPlayLatency(InstrumentId) { return RealTime::zero(); }
+    virtual RealTime getMaximumPlayLatency() { return RealTime::zero(); }
 
     // Buffer sizes
     //
-    RealTime getAudioMixBufferLength() { return m_audioMixBufferLength; }
-    RealTime getAudioReadBufferLength() { return m_audioReadBufferLength; }
-    RealTime getAudioWriteBufferLength() { return m_audioWriteBufferLength; }
+    RealTime getAudioMixBufferLength() const { return m_audioMixBufferLength; }
+    RealTime getAudioReadBufferLength() const { return m_audioReadBufferLength; }
+    RealTime getAudioWriteBufferLength() const { return m_audioWriteBufferLength; }
 
-    bool getLowLatencyMode() const  { return true; }
+    static bool getLowLatencyMode() { return true; }
 
     virtual void getAudioInstrumentNumbers(InstrumentId &base, int &count)
         { base = 0; count = 0; }
@@ -281,7 +283,7 @@ public:
                                                    int /*position*/,
                                                    QString /*name*/)
         { return 0; }
-    
+
     virtual void setPluginInstanceProgram(InstrumentId /*id*/,
                                           int /*position*/,
                                           QString /*program*/)  { }
@@ -290,6 +292,10 @@ public:
                                     int /*position*/,
                                     QString /*key*/,
                                     QString /*value*/)  { return QString(); }
+
+    virtual void savePluginState() { }
+
+    virtual void getPluginPlayableAudio(std::vector<PlayableData*>& ) { }
 
     // Plugin management -- SoundDrivers should maintain a plugin
     // scavenger which the audio process code can use for defunct
@@ -320,12 +326,15 @@ public:
     unsigned int getDevices();
 */
 
+    // install the manager for rendering the composition to an audio file
+    virtual void installExporter(WAVExporter*) { }
+
 protected:
 
     // *** General ***
 
-    /// Driver name for the audit log.
-    QString m_name;
+    /// Traditionally used to dump version info to the audit log.
+    QString m_versionInfo;
 
     SoundDriverStatus m_driverStatus;
 
@@ -375,6 +384,11 @@ protected:
 
     /// Sequencer-side representation of the audio portion of the Studio.
     MappedStudio *m_studio;
+
+private:
+
+    SoundDriver(const SoundDriver &) = delete;
+    SoundDriver &operator=(const SoundDriver &) = delete;
 
 };
 

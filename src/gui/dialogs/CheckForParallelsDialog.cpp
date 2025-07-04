@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -30,6 +30,9 @@
 #include "base/BaseProperties.h"
 #include "gui/widgets/FileDialog.h"
 #include "misc/ConfigGroups.h"
+#include "gui/editors/notation/NotationView.h"
+#include "gui/editors/notation/NotationScene.h"
+#include "gui/editors/notation/NotationStaff.h"
 
 
 #include <QDialog>
@@ -55,8 +58,11 @@ namespace Rosegarden
 
 //bool CheckForParallelsDialog::checkForUnisons = false;
 
-CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocument *doc, NotationScene *ns, Composition *comp) :
-        QDialog(p)
+CheckForParallelsDialog::CheckForParallelsDialog(NotationView *parent,
+                                                 RosegardenDocument *doc,
+                                                 NotationScene *ns,
+                                                 Composition *comp) :
+    QDialog(parent)
 {
     setWindowTitle(tr("Check for Parallels"));
 
@@ -64,7 +70,7 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *p, RosegardenDocu
     composition = comp;
     notationScene = ns;
 
-    notationView = p;
+    notationView = parent;
 
     // the text browser to print display the parallels in text format
 
@@ -320,7 +326,7 @@ CheckForParallelsDialog::writeTransition(std::vector<Transition>::iterator it)
 
     composition->getMusicalTimeForAbsoluteTime((*it).time, bar, beat, fraction, remainder);
 
-    text += ", " + tr("bar") + tr(" ") + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction);
+    text += ", " + tr("bar") + " " + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction);
     qDebug() << text;
 }
 
@@ -404,9 +410,7 @@ CheckForParallelsDialog::startCheck()
     Segment::iterator currentNote;
     Segment::iterator currentPredecessor;
 
-    TrackId tId;
     Track *currentTrack;
-    int currentTrackPosition;
     QString currentTrackLabel;
 
     NotationStaff *currentStaff = nullptr;
@@ -449,10 +453,10 @@ CheckForParallelsDialog::startCheck()
 
         ia = segment[i]->begin();
 
-        tId = segment[i]->getTrack();
+        TrackId tId = segment[i]->getTrack();
 
         currentTrack = composition->getTrackById(tId);
-        currentTrackPosition = currentTrack->getPosition();
+        int currentTrackPosition = currentTrack->getPosition();
         currentTrackLabel = QString::fromUtf8(currentTrack->getLabel().c_str());;
 
         currentPredecessor = segment[i]->end(); // this is used as flag for "we don't have a predecessor"
@@ -508,7 +512,7 @@ CheckForParallelsDialog::startCheck()
 
                         text = tr("found multiple notes for") + " " + makeTrackString(currentTrackPosition, currentTrackLabel);
 
-                        text += ", " + tr("bar") + tr(" ") + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction) + "\n";
+                        text += ", " + tr("bar") + " " + QString("%1").arg(bar) + ", " + tr("beat") + " " + QString("%1").arg(beat) + ", " + tr("fraction") + " " + QString("%1").arg(fraction) + "\n";
 
                         text += "    stopped checking for parallels in the current segment.\n\n";
 
@@ -763,18 +767,16 @@ CheckForParallelsDialog::hasParallels(std::vector<Transition> &tSet, std::vector
 
     for (unsigned int i=0; i<tSet.size(); ++i) {
         for (unsigned int j=i+1; j<tSet.size(); ++j) {
-            std::string s;
-
             // interval at end of transition
 
-            int pitch1End = QString::fromUtf8((*(tSet[i].note))->getAsString("pitch").c_str()).toInt();
-            int pitch2End = QString::fromUtf8((*(tSet[j].note))->getAsString("pitch").c_str()).toInt();
+            int pitch1End = QString::fromUtf8((*(tSet[i].note))->getAsString(BaseProperties::PITCH).c_str()).toInt();
+            int pitch2End = QString::fromUtf8((*(tSet[j].note))->getAsString(BaseProperties::PITCH).c_str()).toInt();
 
             // pitch2End shall be the upper voice
             // we need this later when testing for hidden parallels
 
-            int pitch1Begin = QString::fromUtf8((*(tSet[i].predecessor))->getAsString("pitch").c_str()).toInt();
-            int pitch2Begin = QString::fromUtf8((*(tSet[j].predecessor))->getAsString("pitch").c_str()).toInt();
+            int pitch1Begin = QString::fromUtf8((*(tSet[i].predecessor))->getAsString(BaseProperties::PITCH).c_str()).toInt();
+            int pitch2Begin = QString::fromUtf8((*(tSet[j].predecessor))->getAsString(BaseProperties::PITCH).c_str()).toInt();
 
             if (pitch1End>pitch2End) {
 
@@ -913,4 +915,3 @@ CheckForParallelsDialog::addText(QString text)
 
 
 }
-

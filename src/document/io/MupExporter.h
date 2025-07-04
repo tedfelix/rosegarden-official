@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,19 +20,20 @@
 #define RG_MUPEXPORTER_H
 
 #include "base/Track.h"
+#include "base/TimeT.h"
+#include "base/NotationTypes.h"
+
+#include <fstream>
 #include <map>
 #include <string>
 #include <utility>
-#include "base/Event.h"
-#include "base/NotationTypes.h"
-#include <fstream>
-
 
 class QObject;
 
 
 namespace Rosegarden
 {
+
 
 class TimeSignature;
 class Segment;
@@ -43,7 +44,6 @@ class Composition;
 /**
  * Mup file export
  */
-
 class MupExporter
 {
 public:
@@ -53,19 +53,19 @@ public:
     bool write();
 
 protected:
-    timeT writeBar(std::ofstream &, 
-                               Composition *,
-                               Segment *,
-                               timeT, timeT,
-                               TimeSignature &,
-                               TrackId);
+    timeT writeBar(std::ofstream &,
+                   Composition *,
+                   Segment *,
+                   timeT, timeT,
+                   TimeSignature &,
+                   TrackId);
     void writeClefAndKey(std::ofstream &, TrackId trackNo);
-    void writeInventedRests(std::ofstream &,
+    static void writeInventedRests(std::ofstream &,
                             TimeSignature &timeSig,
                             timeT offset,
                             timeT duration);
     void writePitch(std::ofstream &, TrackId, Event *event);
-    void writeDuration(std::ofstream &, timeT duration);
+    static void writeDuration(std::ofstream &, timeT duration);
 
     typedef std::pair<Clef, Rosegarden::Key> ClefKeyPair;
     typedef std::map<TrackId, ClefKeyPair> ClefKeyMap;

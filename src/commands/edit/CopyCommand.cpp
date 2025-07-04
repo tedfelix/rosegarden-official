@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,15 +32,15 @@
 namespace Rosegarden
 {
 
-CopyCommand::CopyCommand(EventSelection &selection,
+CopyCommand::CopyCommand(EventSelection *selection,
                          Clipboard *clipboard) :
         NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)
 {
     m_sourceClipboard = new Clipboard;
     m_savedClipboard = nullptr;
-    std::string label = selection.getSegment().getLabel();
-    m_sourceClipboard->newSegment(&selection)->setLabel(
+    std::string label = selection->getSegment().getLabel();
+    m_sourceClipboard->newSegment(selection)->setLabel(
             appendLabel(label, qstrtostr(tr("(excerpt)"))));
 }
 
@@ -53,14 +53,6 @@ CopyCommand::CopyCommand(
     m_targetClipboard(clipboard),
     m_savedClipboard(nullptr)
 {
-    RG_DEBUG << "ctor 3";
-    RG_DEBUG << "  selection1:" << selection1;
-    if (selection1)
-        RG_DEBUG << "  selection1 size:" << selection1->getAddedEvents();
-    RG_DEBUG << "  selection2:" << selection2;
-    if (selection2)
-        RG_DEBUG << "  selection2 size:" << selection2->getAddedEvents();
-
     if (!selection1  &&  !selection2)
         return;
 

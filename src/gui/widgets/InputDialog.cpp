@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -39,7 +39,7 @@ InputDialog::InputDialog(const QString &title, const QString &label,
     QVBoxLayout *vboxLayout = new QVBoxLayout(this);
 
     QLabel *t = new QLabel(QString("<qt><h3>%1</h3></qt>").arg(title));
-    vboxLayout->addWidget(t);    
+    vboxLayout->addWidget(t);
 
     // add the passed label to our layout
 /*    QLabel *lbl = new QLabel(label, this);
@@ -84,9 +84,13 @@ InputDialog::~InputDialog()
 
 
 QString
-InputDialog::getText(QWidget *parent, const QString &title, const QString &label,
-                     LineEdit::EchoMode mode, const QString &text,
-                     bool *ok, Qt::WindowFlags f)
+InputDialog::getText(QWidget *parent,
+                     const QString &title,
+                     const QString &label,
+                     LineEdit::EchoMode mode,
+                     const QString &text,
+                     bool *ok,
+                     Qt::WindowFlags f)
 {
     LineEdit *le = new LineEdit;
     le->setText(text);
@@ -97,7 +101,7 @@ InputDialog::getText(QWidget *parent, const QString &title, const QString &label
     InputDialog dlg(title, label, parent, le, f);
 
     QString result;
-    bool accepted = (dlg.exec() == QDialog::Accepted);
+    const bool accepted = (dlg.exec() == QDialog::Accepted);
     if (ok)
         *ok = accepted;
     if (accepted)
@@ -107,4 +111,3 @@ InputDialog::getText(QWidget *parent, const QString &title, const QString &label
 }
 
 }
-

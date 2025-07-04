@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -79,10 +79,10 @@ Panner::setScene(QGraphicsScene *s)
 }
 
 void
-Panner::slotSetPannedRect(QRectF rect) 
+Panner::slotSetPannedRect(QRectF rect)
 {
     RG_DEBUG << "Panner::slotSetPannedRect(" << rect << ")";
-    
+
     m_pannedRect = rect;
     viewport()->update();
 }
@@ -217,7 +217,7 @@ Panner::drawItems(QPainter *painter, int numItems,
     painter->drawPixmap(0, 0, m_cache);
     painter->restore();
 }
- 
+
 void
 Panner::mousePressEvent(QMouseEvent *e)
 {
@@ -250,12 +250,13 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     QPointF delta = mp - cp;
     const QRectF sceneRect = scene()->sceneRect();
     QRectF nr = m_clickedRect;
+    double edge = 10.0;
 
     // If we are going right
     if (delta.x() > 0.0) {
         // If we are going past the right edge, don't.
-        if (nr.right() + delta.x() > sceneRect.right()) {
-            double dx = sceneRect.right() - nr.right();
+        if (nr.right() + delta.x() > sceneRect.right() + edge) {
+            double dx = sceneRect.right() - nr.right() + edge;
             if (dx < 0.0) dx = 0.0;
             delta.setX(dx);
         }
@@ -264,8 +265,8 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     // If we are going left
     if (delta.x() < 0.0) {
         // If we are going past the left edge, don't.
-        if (nr.left() + delta.x() < sceneRect.left()) {
-            double dx = sceneRect.left() - nr.left();
+        if (nr.left() + delta.x() < sceneRect.left() - edge) {
+            double dx = sceneRect.left() - nr.left() - edge;
             if (dx > 0.0) dx = 0.0;
             delta.setX(dx);
         }
@@ -274,8 +275,8 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     // If we are going down
     if (delta.y() > 0.0) {
         // If we are going past the bottom edge, don't.
-        if (nr.bottom() + delta.y() > sceneRect.bottom()) {
-            double dy = sceneRect.bottom() - nr.bottom();
+        if (nr.bottom() + delta.y() > sceneRect.bottom() + edge) {
+            double dy = sceneRect.bottom() - nr.bottom() + edge;
             if (dy < 0.0) dy = 0.0;
             delta.setY(dy);
         }
@@ -284,15 +285,16 @@ Panner::mouseMoveEvent(QMouseEvent *e)
     // If we are going up
     if (delta.y() < 0.0) {
         // If we are going past the top edge, don't.
-        if (nr.top() + delta.y() < sceneRect.top()) {
-            double dy = sceneRect.top() - nr.top();
+        if (nr.top() + delta.y() < sceneRect.top() - edge) {
+            double dy = sceneRect.top() - nr.top() - edge;
             if (dy > 0.0) dy = 0.0;
             delta.setY(dy);
         }
     }
-        
+
     nr.translate(delta);
     slotSetPannedRect(nr);
+    RG_DEBUG << "mouseMoveEvent prc" << m_pannedRect;
     emit pannedRectChanged(m_pannedRect);
     viewport()->update();
 }

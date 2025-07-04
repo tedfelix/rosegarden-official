@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -43,7 +43,7 @@ public:
      *
      * This function is slow.
      */
-    static QBitmap generateMask(const QPixmap &map, const QRgb &rgb);
+    // unused static QBitmap generateMask(const QPixmap &map, const QRgb &rgb);
 
     /**
      * Generate a heuristic mask for the given pixmap.  Unlike
@@ -57,7 +57,7 @@ public:
      *
      * This function is slow.
      */
-    static QBitmap generateMask(const QPixmap &map);
+    // unused static QBitmap generateMask(const QPixmap &map);
 
     /**
      * Colour a greyscale pixmap with the given hue.
@@ -75,16 +75,16 @@ public:
     /**
      * Make a pixmap grey, or otherwise reduce its intensity.
      */
-    static QPixmap shadePixmap(const QPixmap &map);
+    // unused static QPixmap shadePixmap(const QPixmap &map);
 
     /// Return a QPixmap that is a mirror image of map (including mask)
     static QPixmap flipVertical(const QPixmap &map);
 
     /// Return a QPixmap that is a mirror image of map (including mask)
-    static QPixmap flipHorizontal(const QPixmap &map);
+    // unused static QPixmap flipHorizontal(const QPixmap &map);
 
     /// Return left and right parts of the QPixmap
-    static std::pair<QPixmap, QPixmap> splitPixmap(const QPixmap &original, int x);
+    static std::pair<QPixmap, QPixmap> splitPixmap(const QPixmap &pixmap, int x);
 
     /**
      * Using QPainter::drawPixmap to draw one pixmap on another does
@@ -95,10 +95,11 @@ public:
      *
      * Note that the source pixmap _must_ have a mask.
      */
+    /* unused
     static void drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
-                                 int x, int y,
-                                 const QPixmap &source);
-
+                                 int x0, int y0,
+                                 const QPixmap &src);
+    */
     static const int SaturationNotSpecified = -1;
 };
 

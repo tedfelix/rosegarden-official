@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,11 +29,11 @@ namespace Rosegarden
 {
 
 DeleteTracksCommand::DeleteTracksCommand(Composition *composition,
-        std::vector<TrackId> tracks):
-        NamedCommand(getGlobalName()),
-        m_composition(composition),
-        m_tracks(tracks),
-        m_detached(false)
+                                         const std::vector<TrackId>& tracks):
+    NamedCommand(getGlobalName()),
+    m_composition(composition),
+    m_tracks(tracks),
+    m_detached(false)
 {}
 
 DeleteTracksCommand::~DeleteTracksCommand()
@@ -104,14 +104,14 @@ void DeleteTracksCommand::execute()
 
     // Adjust the track position numbers to remove any gaps.
 
-    Composition::trackcontainer &tracks = m_composition->getTracks();
+    Composition::TrackMap &tracks = m_composition->getTracks();
 
     // For each deleted track
     for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin();
          oldTrackIter != m_oldTracks.end();
          ++oldTrackIter) {
         // For each track left in the composition
-        for (Composition::trackiterator compTrackIter = tracks.begin();
+        for (Composition::TrackMap::iterator compTrackIter = tracks.begin();
              compTrackIter != tracks.end();
              ++compTrackIter) {
             // If the composition track was after the deleted track
@@ -137,23 +137,23 @@ void DeleteTracksCommand::unexecute()
     std::vector<TrackId> trackIds;
 
     // Alias for readability.
-    Composition::trackcontainer &tracks = m_composition->getTracks();
+    Composition::TrackMap &tracks = m_composition->getTracks();
 
-    // For each track we need to add back in 
-    for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin(); 
-         oldTrackIter != m_oldTracks.end(); 
+    // For each track we need to add back in
+    for (std::vector<Track*>::iterator oldTrackIter = m_oldTracks.begin();
+         oldTrackIter != m_oldTracks.end();
          ++oldTrackIter) {
 
         // From the back we shift the track positions in the composition
         // to allow the new (old) track some space to come back in.
 
-        Composition::trackiterator compTrackIter = tracks.end();
+        Composition::TrackMap::iterator compTrackIter = tracks.end();
         while (true) {
             --compTrackIter;
 
             // If the composition track's position is after or the same as
             // the position of the track we are adding
-            if ((*compTrackIter).second->getPosition() >= 
+            if ((*compTrackIter).second->getPosition() >=
                     (*oldTrackIter)->getPosition()) {
                 // Increment the composition track's position to make room
                 int newPosition = (*compTrackIter).second->getPosition() + 1;
@@ -181,4 +181,3 @@ void DeleteTracksCommand::unexecute()
 }
 
 }
-

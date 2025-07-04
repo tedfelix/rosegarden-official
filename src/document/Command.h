@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -34,10 +34,14 @@ public:
     Command() : m_updateLinks(true) { }
     virtual ~Command() { }
 
+    // commands should not be copied
+    Command(const Command&) = delete;
+    Command& operator=(const Command&) = delete;
+
     virtual void execute() = 0;
     virtual void unexecute() = 0;
     virtual QString getName() const = 0;
-    
+
     bool getUpdateLinks() const { return m_updateLinks; }
     void setUpdateLinks(bool update) { m_updateLinks = update; }
 
@@ -48,7 +52,7 @@ private:
 class ROSEGARDENPRIVATE_EXPORT NamedCommand : public Command
 {
 public:
-    NamedCommand(QString name) : m_name(name) { }
+    explicit NamedCommand(const QString& name) : m_name(name) { }
     ~NamedCommand() override { }
 
     QString getName() const override { return m_name; }
@@ -61,19 +65,19 @@ protected:
 class ROSEGARDENPRIVATE_EXPORT MacroCommand : public Command
 {
 public:
-    MacroCommand(QString name);
+    explicit MacroCommand(QString name);
     ~MacroCommand() override;
 
     virtual void addCommand(Command *command);
-    virtual void deleteCommand(Command *command);
-    virtual bool haveCommands() const;
+    // unused virtual void deleteCommand(Command *command);
+    virtual bool hasCommands() const;
 
     void execute() override;
     void unexecute() override;
 
     QString getName() const override;
     virtual void setName(QString name);
-    
+
     virtual const std::vector<Command *>& getCommands() { return m_commands; }
 
 protected:
@@ -89,7 +93,7 @@ class ROSEGARDENPRIVATE_EXPORT BundleCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(BundleCommand)
 public:
-    BundleCommand(QString name);
+    explicit BundleCommand(QString name);
     ~BundleCommand() override;
 
     QString getName() const override;

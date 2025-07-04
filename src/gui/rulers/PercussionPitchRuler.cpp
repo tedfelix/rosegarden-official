@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -23,8 +23,7 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "base/MidiProgram.h"
-#include "gui/editors/matrix/MatrixView.h"
-#include "gui/general/MidiPitchLabel.h"
+#include "base/Pitch.h"
 #include "PitchRuler.h"
 #include <QColor>
 #include <QEvent>
@@ -45,15 +44,17 @@ PercussionPitchRuler::PercussionPitchRuler(QWidget *parent,
     m_mapping(mapping),
     m_lineSpacing(lineSpacing),
     m_mouseDown(false),
+    m_selecting(false),
     m_highlightPitch(-1),
     m_lastHighlightPitch( -1)
 {
-    m_font = new QFont();
+    m_font.reset(new QFont);
     m_font->setPixelSize(9);
-    m_fontMetrics = new QFontMetrics(*m_font);
+    m_fontMetrics.reset(new QFontMetrics(*m_font));
+
     //: Note to the translators: Don't translate literally.
     //: This string is never displayed but defines the largest width of the
-    //: text (pitch and intrument name) in the percussion ruler.
+    //: text (pitch and instrument name) in the percussion ruler.
     m_width =
         m_fontMetrics->boundingRect(tr("  A#2   Acoustic Bass Drum  ")).width();
 
@@ -95,12 +96,12 @@ void PercussionPitchRuler::paintEvent(QPaintEvent*)
 
     for (int i = 0; i < extent; ++i) {
 
-        MidiPitchLabel label(minPitch + i);
+        QString label = Pitch::toStringOctave(minPitch + i);
         std::string key = m_mapping->getMapForKeyName(minPitch + i);
         //RG_DEBUG << "PercussionPitchRuler::paintEvent()" << i << ": " << label.getQString() << ": " << key;
 
         int yi = (extent - i - 1) * (m_lineSpacing + 1) + offset;
-        paint.drawText(2, yi, label.getQString());
+        paint.drawText(2, yi, label);
 
         if (i != m_highlightPitch) {
             // Draw an unhighlighted note

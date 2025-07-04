@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -81,9 +81,9 @@ get__String(Event *e, const PropertyName &name, std::string &ref)
 }
 
 extern bool
-isPersistent__Bool(Event *e, const PropertyName &name)
+isPersistent__Bool(const Event *e, const PropertyName &name)
 {
-    return e->isPersistent<Bool>(name);
+    return e->isPersistent(name);
 }
 
 extern void
@@ -99,4 +99,3 @@ setMaybe__String(Event *e, const PropertyName &name, const std::string &value)
 }
 
 }
-

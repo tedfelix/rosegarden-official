@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@ namespace
     class Deleter
     {
     public:
-        Deleter(char *p) : m_p(p)  { }
+        explicit Deleter(char *p) : m_p(p)  { }
         ~Deleter()
         {
             std::free(m_p);
@@ -57,7 +57,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
     if (bufsiz < len * 2 + 10) {
         bufsiz = len * 2 + 10;
-        buffer = (char *)std::realloc(buffer, bufsiz);
+        buffer = static_cast<char *>(std::realloc(buffer, bufsiz));
     }
 
     // Escape any xml special characters, and also make sure we have
@@ -92,7 +92,8 @@ std::string XmlExportable::encode(const std::string &s0)
                 if (length == 0 || mblen == length) {
                     if (bufsiz < buflen + mblen + 1) {
                         bufsiz = 2 * buflen + mblen + 1;
-                        buffer = (char *)std::realloc(buffer, bufsiz);
+                        buffer =
+                            static_cast<char *>(std::realloc(buffer, bufsiz));
                     }
                     std::memcpy(buffer + buflen, multibyte, mblen);
                     buflen += mblen;
@@ -116,7 +117,7 @@ std::string XmlExportable::encode(const std::string &s0)
 
                 if (bufsiz < buflen + 10) {
                     bufsiz = 2 * buflen + 10;
-                    buffer = (char *)std::realloc(buffer, bufsiz);
+                    buffer = static_cast<char *>(std::realloc(buffer, bufsiz));
                 }
 
                 switch (c) {
@@ -199,7 +200,7 @@ std::string XmlExportable::encode(const std::string &s0)
         if (length == 0 || mblen == length) {
             if (bufsiz < buflen + mblen + 1) {
                 bufsiz = 2 * buflen + mblen + 1;
-                buffer = (char *)std::realloc(buffer, bufsiz);
+                buffer = static_cast<char *>(std::realloc(buffer, bufsiz));
             }
             std::memcpy(buffer + buflen, multibyte, mblen);
             buflen += mblen;
@@ -211,7 +212,6 @@ std::string XmlExportable::encode(const std::string &s0)
                     << mblen << " octet"
                     << (mblen != 1 ? "s" : "")
                     << ", expected " << length << ")";
-                warned = true;
             }
             // and drop the character
         }

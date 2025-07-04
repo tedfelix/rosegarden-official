@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -30,9 +30,9 @@ public:
     virtual ~Controllable() {}
     
     virtual const ControlList &getControlParameters() const = 0;
-    virtual const ControlParameter *getControlParameter(int index) const = 0;
-    virtual const ControlParameter *getControlParameter(const std::string &type,
-                                                        MidiByte controllerNumber) const = 0;
+    virtual const ControlParameter *getControlParameterConst(
+            const std::string &type,
+            MidiByte controllerNumber) const = 0;
 
 protected:
     Controllable() { }

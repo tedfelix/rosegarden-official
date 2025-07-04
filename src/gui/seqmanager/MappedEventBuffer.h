@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -65,9 +65,9 @@ class RosegardenDocument;
  */
 class MappedEventBuffer
 {
-   
+
 public:
-    MappedEventBuffer(RosegardenDocument *);
+    explicit MappedEventBuffer(RosegardenDocument *);
     virtual ~MappedEventBuffer();
 
     /// Two-phase initialization.
@@ -238,7 +238,7 @@ protected:
      *
      * @see getStartEnd()
      */
-    void setStartEnd(RealTime &start, RealTime &end) {
+    void setStartEnd(const RealTime &start, const RealTime &end) {
         m_start = start;
         m_end   = end;
     }

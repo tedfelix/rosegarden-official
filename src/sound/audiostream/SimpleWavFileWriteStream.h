@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -30,26 +30,26 @@
 
 namespace Rosegarden
 {
-    
+
 class ROSEGARDENPRIVATE_EXPORT SimpleWavFileWriteStream : public AudioWriteStream
 {
 public:
-    SimpleWavFileWriteStream(Target target);
+    explicit SimpleWavFileWriteStream(Target target);
     virtual ~SimpleWavFileWriteStream();
-    
+
     static void initStaticObjects();
 
-    virtual QString getError() const { return m_error; }
+    virtual QString getError() const override { return m_error; }
 
-    virtual bool putInterleavedFrames(size_t count, float *frames);
-    
+    virtual bool putInterleavedFrames(size_t count, float *frames) override;
+
 protected:
     int m_bitDepth;
     QString m_error;
     std::ofstream *m_file;
 
     void writeFormatChunk();
-    std::string int2le(unsigned int value, unsigned int length);
+    static std::string int2le(unsigned int value, unsigned int length);
     void putBytes(std::string);
     void putBytes(const unsigned char *, size_t);
 };

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -51,6 +51,7 @@ class CountdownDialog;
 class CompositionMapper;
 class AudioManagerDialog;
 class MappedBufMetaIterator;
+class WAVExporter;
 
 
 /**
@@ -123,8 +124,14 @@ public:
      */
     static void reinitialiseSequencerStudio();
 
-    /// Send JACK and MMC transport control statuses
-    static void sendTransportControlStatuses();
+    /// Send preferences to various parts of the system using events.
+    /**
+     * Sends MappedEvent objects via StudioControl::sendMappedEvent().
+     *
+     * I assume this is being done for multithreading reasons.  Maybe the
+     * Event queue is thread safe?
+     */
+    static void sendPreferences();
 
     /// Align Instrument lists before playback starts.
     void preparePlayback();
@@ -136,13 +143,11 @@ public:
     /// Start or pause playback.
     void play();
     /// Stop playback.
-    void stop();
+    void stop(bool autoStop = false);
     /// Start recording.
     void record(bool countIn);
 
     void jumpTo(const RealTime &time);
-
-    void setLoop(const timeT &lhs, const timeT &rhs);
 
     void setTransportStatus(TransportStatus status)
             { m_transportStatus = status; }
@@ -191,7 +196,7 @@ public:
      *     make the connections even more direct.
      */
     void processAsynchronousMidi(const MappedEventList &mC,
-                                 AudioManagerDialog *aMD);
+                                 AudioManagerDialog *audioManagerDialog);
 
     /// Send all note offs and resets to MIDI devices.
     /**
@@ -263,6 +268,9 @@ public:
     /// Get sample rate from RosegardenSequencer.
     int getSampleRate() const;
 
+    /// set file for export of composition at next play
+    void setExportWavFile(const QString& fileName);
+
 public slots:
 
     /**
@@ -280,6 +288,10 @@ public slots:
     void fastforward();
     void rewindToBeginning();
     void fastForwardToEnd();
+
+    void slotLoopChanged();
+
+    void slotExportUpdate();
 
 signals:
     /// A program change was received.
@@ -340,7 +352,7 @@ private slots:
     /// For the (unused) CountdownDialog.  See m_countdownDialog.
     void slotCountdownTimerTimeout();
 
-    // Activated by timer to allow a message to be reported to 
+    // Activated by timer to allow a message to be reported to
     // the user - we use this mechanism so that the user isn't
     // bombarded with dialogs in the event of lots of failures.
     // See m_reportTimer.
@@ -352,7 +364,7 @@ private slots:
      *     Inline into only caller.  It's only two lines of code.
      */
     void slotScheduledCompositionMapperReset();
-    
+
 private:
     /// Cache to avoid lock?
     /**
@@ -437,15 +449,12 @@ private:
 
     // *** Async MIDI
 
-    /// When handling an async MappedEvent::WarningImpreciseTimer.
-    bool shouldWarnForImpreciseTimer();
-
     /// Prevents showing an overrun warning more than once.
     bool m_shownOverrunWarning;
 
     /// Just to make sure we don't bother the user too often
-    QTimer *m_reportTimer;
-    bool m_canReport;
+    //QTimer *m_reportTimer;
+    //bool m_canReport;
 
     // *** Misc
 
@@ -481,9 +490,10 @@ private:
 
     /// Used by setTempo() to detect tempo changes.
     tempoT m_tempo;
+
+    WAVExporter* m_wavExporter;
+    QTimer *m_exportTimer;
 };
-
-
 
 
 }

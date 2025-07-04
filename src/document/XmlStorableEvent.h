@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,11 +20,14 @@
 #define RG_XMLSTORABLEEVENT_H
 
 #include "base/Event.h"
+#include "base/TimeT.h"
 
 class QXmlStreamAttributes;
 
+
 namespace Rosegarden
 {
+
 
 /**
  * An Event which can generate an XML representation of itself,
@@ -42,18 +45,19 @@ public:
      * attributes include absoluteTime or timeOffset, update the given
      * absoluteTime reference accordingly.
      */
-    XmlStorableEvent(const QXmlStreamAttributes& atts,
+    XmlStorableEvent(const QXmlStreamAttributes& attributes,
                      timeT &absoluteTime);
 
     /**
      * Construct an XmlStorableEvent from the specified Event.
      */
-    XmlStorableEvent(Event&);
+    explicit XmlStorableEvent(Event&);
 
     /**
      * Set a property from the XML attributes \a atts
      */
-    void setPropertyFromAttributes(const QXmlStreamAttributes& atts,
+    // cppcheck-suppress functionStatic
+    void setPropertyFromAttributes(const QXmlStreamAttributes& attributes,
                                    bool persistent);
 };
 

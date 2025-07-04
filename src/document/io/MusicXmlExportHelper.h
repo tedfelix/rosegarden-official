@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
@@ -31,24 +31,26 @@
 #include "base/NotationTypes.h"
 #include "base/Track.h"
 #include "base/Segment.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 
-// MusicXML supports only 6 slurs at thesame time is a single part.
+// MusicXML supports only 6 slurs at the same time is a single part.
 #define MAXSLURS 6
 
 
 class QObject;
 
+
 namespace Rosegarden
 {
 
+
+class RosegardenMainViewWidget;
 class Key;
 class Clef;
+class TimeSignature;
+
 
 typedef std::vector<TrackId> TrackVector;
 
-/**
- */
 
 class MusicXmlExportHelper
 {
@@ -78,8 +80,9 @@ public:
      */
     class StaffInfo {
     public:
-        StaffInfo(TrackId id=0) :
-                trackId(id)
+        explicit StaffInfo(TrackId id=0) :
+             trackId(id),
+             accTable()
         {
             voice = 0;
             time = 0;
@@ -119,17 +122,17 @@ public:
     /**
      * Returns the part name.
      */
-    std::string getPartName() {return m_partName;}
+    std::string getPartName() const {return m_partName;}
 
     /**
      * Returns true if the part is a multi staff part.
      */
-    bool isMultiStave() {return m_staves.size() > 1;}
+    bool isMultiStave() const {return m_staves.size() > 1;}
 
     /**
      * Returns the number of staves in the part.
      */
-    int getStaffCount() {return m_staves.size();}
+    int getStaffCount() const {return m_staves.size();}
 
     /**
      * Returns the number of active voices at give time.
@@ -258,12 +261,12 @@ protected:
     /**
      * Converts the Rosegarden notetype to MusicXML notenames.
      */
-    std::string getNoteName(int noteType) const;
+    static std::string getNoteName(int noteType);
 
     /**
      * Queue and retrieve delayed events.
      */
-    void queue(bool direction, timeT time, std::string str);
+    void queue(bool direction, timeT time, const std::string& str);
     std::string retrieve(bool direction, timeT time);
 
     /**

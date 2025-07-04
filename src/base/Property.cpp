@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 #include <cstdlib>
 #include <string>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 using std::string;
 
@@ -27,10 +27,10 @@ string
 PropertyDefn<Int>::typeName()
 {
     return "Int";
-}    
+}
 
 PropertyDefn<Int>::basic_type
-PropertyDefn<Int>::parse(string s)
+PropertyDefn<Int>::parse(const string& s)
 {
     return atoi(s.c_str());
 }
@@ -46,10 +46,10 @@ string
 PropertyDefn<String>::typeName()
 {
     return "String";
-}    
+}
 
 PropertyDefn<String>::basic_type
-PropertyDefn<String>::parse(string s)
+PropertyDefn<String>::parse(const string& s)
 {
     return s;
 }
@@ -64,10 +64,10 @@ string
 PropertyDefn<Bool>::typeName()
 {
     return "Bool";
-}    
+}
 
 PropertyDefn<Bool>::basic_type
-PropertyDefn<Bool>::parse(string s)
+PropertyDefn<Bool>::parse(const string& s)
 {
     return s == "true";
 }
@@ -82,10 +82,10 @@ string
 PropertyDefn<RealTimeT>::typeName()
 {
     return "RealTimeT";
-}    
+}
 
 PropertyDefn<RealTimeT>::basic_type
-PropertyDefn<RealTimeT>::parse(string s)
+PropertyDefn<RealTimeT>::parse(const string& s)
 {
     string sec = s.substr(0, s.find('/')),
           nsec = s.substr(s.find('/') + 1);
@@ -131,6 +131,5 @@ PropertyStore<RealTimeT>::getStorageSize() const
 {
     return sizeof(*this);
 }
- 
-}
 
+}

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -57,32 +57,26 @@ class ChannelInterval
     friend class ChannelManager;
 
     friend bool operator<(const ChannelInterval &lhs, const ChannelInterval &rhs);
-    friend QDebug &operator<<(QDebug &, const ChannelInterval &);
+    // unused friend QDebug operator<<(QDebug, const ChannelInterval &);
 
 public:
 
     // Construct an invalid channelinterval
     ChannelInterval() :
         m_channel(-1),
-        m_start(RealTime::zeroTime),
-        m_end(RealTime::zeroTime),
         m_instrumentBefore(nullptr),
-        m_instrumentAfter(nullptr),
-        m_marginBefore(RealTime::zeroTime),
-        m_marginAfter(RealTime::zeroTime)
+        m_instrumentAfter(nullptr)
         { }
-    
+
     // Construct a dummy channelinterval used in searching.
-    ChannelInterval(RealTime t) :
+    explicit ChannelInterval(RealTime t) :
         m_channel(-1),
         m_start(t),
         m_end(m_latestTime),
         m_instrumentBefore(nullptr),
-        m_instrumentAfter(nullptr),
-        m_marginBefore(RealTime::zeroTime),
-        m_marginAfter(RealTime::zeroTime)
+        m_instrumentAfter(nullptr)
         { }
-    
+
     ChannelInterval(ChannelId channel, RealTime start, RealTime end,
                     Instrument *instrumentBefore,
                     Instrument *instrumentAfter,
@@ -121,6 +115,7 @@ public:
         { return m_channel >= 0; }
 
 #if defined NDEBUG
+    // cppcheck-suppress functionStatic
     void assertSane() const {}
 #else
     void assertSane() const;
@@ -129,7 +124,7 @@ public:
 private:
     void setChannelId(ChannelId channel)
         { m_channel = channel; };
-    
+
     ChannelId   m_channel;
     RealTime    m_start;
     RealTime    m_end;

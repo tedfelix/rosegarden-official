@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -53,11 +53,6 @@ signals:
      *               &InstrumentStaticSignals::controlChange,
      *           this,  // or whomever
      *           &CLASSNAME::slotControlChange);
-     *
-     *   // Qt4 style (discouraged, runtime checking only)
-     *   connect(Instrument::getStaticSignals().data(),
-     *               SIGNAL(controlChange(Instrument *, int)),
-     *           SLOT(slotControlChange(Instrument *, int)));
      *
      * Emit this if you change the value for a control change for
      * an Instrument.  This will trigger an update of relevant portions

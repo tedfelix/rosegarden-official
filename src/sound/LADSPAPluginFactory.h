@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -36,23 +36,25 @@ public:
 
     void discoverPlugins() override;
 
-    const std::vector<QString> &getPluginIdentifiers() const override;
+    //const std::vector<QString> &getPluginIdentifiers() const override;
 
-    void enumeratePlugins(MappedObjectPropertyList &list) override;
+    void enumeratePlugins(std::vector<QString> &list) override;
 
     void populatePluginSlot(QString identifier, MappedPluginSlot &slot) override;
 
-    RunnablePluginInstance *instantiatePlugin(QString identifier,
-                                                      int instrumentId,
-                                                      int position,
-                                                      unsigned int sampleRate,
-                                                      unsigned int blockSize,
-                                                      unsigned int channels) override;
+    RunnablePluginInstance *instantiatePlugin
+        (QString identifier,
+         int instrumentId,
+         int position,
+         unsigned int sampleRate,
+         unsigned int blockSize,
+         unsigned int channels,
+         AudioInstrumentMixer* amixer) override;
 
-    MappedObjectValue getPortMinimum(const LADSPA_Descriptor *, int port);
-    MappedObjectValue getPortMaximum(const LADSPA_Descriptor *, int port);
+    static MappedObjectValue getPortMinimum(const LADSPA_Descriptor *, int port);
+    static MappedObjectValue getPortMaximum(const LADSPA_Descriptor *, int port);
     MappedObjectValue getPortDefault(const LADSPA_Descriptor *, int port);
-    int getPortDisplayHint(const LADSPA_Descriptor *, int port);
+    static int getPortDisplayHint(const LADSPA_Descriptor *, int port);
 
 protected:
     LADSPAPluginFactory();
@@ -74,6 +76,7 @@ protected:
     void unloadLibrary(QString soName);
     void unloadUnusedLibraries();
 
+    // E.g. "dssi:/usr/lib/dssi/hexter.so:hexter"
     std::vector<QString> m_identifiers;
 
     std::map<unsigned long, QString> m_taxonomy;
@@ -89,4 +92,3 @@ protected:
 }
 
 #endif
-

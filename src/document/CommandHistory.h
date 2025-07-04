@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,7 +32,7 @@ class QTimer;
 
 #include "base/TimeT.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class Command;
@@ -71,27 +71,34 @@ public:
 
     /// Add a command to the command history.
     /**
-     * The command will be executed before being added
+     * The command will be executed before being added.
+     *
+     * Normally the pointer position for undo is the actual pointer position
+     * when addCommand is called. Unfortunately for some commands (record)
+     * the recording is done first and then addCommand() is called
+     * so the actual pointer position is not correct for undo. The
+     * startPointerPosition parameter allows the caller to override
+     * this position.
      */
-    void addCommand(Command *command);
-    
+    void addCommand(Command *command, timeT startPointerPosition = -1.0e10);
+
     /// Return the maximum number of items in the undo history.
     int getUndoLimit() const { return m_undoLimit; }
 
     /// Set the maximum number of items in the undo history.
-    void setUndoLimit(int limit);
+    // unused void setUndoLimit(int limit);
 
     /// Return the maximum number of items in the redo history.
     int getRedoLimit() const { return m_redoLimit; }
 
     /// Set the maximum number of items in the redo history.
-    void setRedoLimit(int limit);
-    
+    // unused void setRedoLimit(int limit);
+
     /// Return the maximum number of items visible in undo and redo menus.
     int getMenuLimit() const { return m_menuLimit; }
 
     /// Set the maximum number of items in the menus.
-    void setMenuLimit(int limit);
+    // unused void setMenuLimit(int limit);
 
     /// Enable/Disable undo (during playback).
     void enableUndo(bool enable);
@@ -120,7 +127,7 @@ public slots:
 protected slots:
     void undoActivated(QAction *);
     void redoActivated(QAction *);
-    
+
 signals:
     /**
      * Emitted just before commandExecuted() so that linked segments can
@@ -139,8 +146,10 @@ signals:
      * Emitted whenever a command has just been executed, whether by
      * addCommand or redo.  Note that this is not emitted by undo,
      * which emits commandUnexecuted(Command *) instead.
+     *
+     * ??? Appears to be unused.
      */
-    void commandExecuted(Command *);
+    //void commandExecuted2(Command *);
 
     /**
      * Emitted whenever a command has just been unexecuted, whether by
@@ -184,10 +193,6 @@ protected:
     QAction *m_undoAction;
     /// Edit > Redo on all menus.
     QAction *m_redoAction;
-    /// RosegardenMainWindow toolbar undo.
-    QAction *m_undoMenuAction;
-    /// RosegardenMainWindow toolbar redo.
-    QAction *m_redoMenuAction;
 
     QMenu *m_undoMenu;
     QMenu *m_redoMenu;
@@ -220,7 +225,7 @@ protected:
 
     // pointer position
     timeT m_pointerPosition;
-    
+
 };
 
 }

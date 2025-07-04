@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotePixmapFactory]"
 #define RG_NO_DEBUG_PRINT 1
 
 #ifdef __GNUG__
@@ -29,7 +30,9 @@
 #include "misc/ConfigGroups.h"
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Profiler.h"
+#include "base/TimeSignature.h"
 #include "gui/editors/guitar/Fingering.h"
 #include "gui/editors/guitar/FingeringBox.h"
 #include "gui/editors/guitar/NoteSymbols.h"
@@ -41,7 +44,6 @@
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/StartupLogo.h"
 #include "NotationStrings.h"
-#include "NotationView.h"
 #include "NoteCharacter.h"
 #include "NoteCharacterNames.h"
 #include "NoteFontFactory.h"
@@ -87,7 +89,7 @@ const char* const NotePixmapFactory::defaultSerifFontFamily = "Bitstream Vera Se
 const char* const NotePixmapFactory::defaultSansSerifFontFamily = "Bitstream Vera Sans";
 const char* const NotePixmapFactory::defaultTimeSigFontFamily = "Bitstream Vera Serif";
 
-NotePixmapFactory::NotePixmapFactory(QString fontName, int size, int graceSize) :
+NotePixmapFactory::NotePixmapFactory(const QString& fontName, int size, int graceSize) :
     m_selected(false),
     m_shaded(false),
     m_haveGrace(graceSize != NO_GRACE_SIZE),
@@ -122,6 +124,7 @@ NotePixmapFactory::NotePixmapFactory(QString fontName, int size, int graceSize) 
 NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_selected(false),
     m_shaded(false),
+    m_haveGrace(false),
     m_graceSize(npf.m_graceSize),
     m_tupletCountFont(npf.m_tupletCountFont),
     m_tupletCountFontMetrics(m_tupletCountFont),
@@ -156,6 +159,7 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
     if (&npf != this) {
         m_selected = npf.m_selected;
         m_shaded = npf.m_shaded;
+        m_haveGrace = npf.m_haveGrace;
         m_timeSigFont = npf.m_timeSigFont;
         m_timeSigFontMetrics = QFontMetrics(m_timeSigFont);
         m_bigTimeSigFont = npf.m_bigTimeSigFont;
@@ -174,6 +178,11 @@ NotePixmapFactory::operator=(const NotePixmapFactory &npf)
         m_trackHeaderFontMetrics = QFontMetrics(m_trackHeaderFont);
         m_trackHeaderBoldFont = npf.m_trackHeaderBoldFont;
         m_trackHeaderBoldFontMetrics = QFontMetrics(m_trackHeaderBoldFont);
+        m_generatedPixmap = nullptr;
+        m_generatedWidth = -1;
+        m_generatedHeight = -1;
+        m_inPrinterMethod = false;
+        m_p = nullptr;
         init(npf.m_font->getName(), npf.m_font->getSize());
         m_textFontCache.clear();
     }
@@ -382,6 +391,7 @@ NotePixmapFactory::makeNotePixmapItem(const NotePixmapParameters &params)
     return makeItem(hotspot);
 }
 
+/* unused
 void
 NotePixmapFactory::drawNote(const NotePixmapParameters &params,
                             QPainter &painter, int x, int y)
@@ -392,6 +402,7 @@ NotePixmapFactory::drawNote(const NotePixmapParameters &params,
     drawNoteAux(params, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::calculateNoteDimensions(const NotePixmapParameters &params)
@@ -739,13 +750,12 @@ NotePixmapFactory::getStemLength(const NotePixmapParameters &params) const
         stemLength += getLineSpacing() * (flagCount - 2);
     }
 
-    int width = 0, height = 0;
-
     if (flagCount > 0) {
 
         if (!stemUp)
             stemLength += nbh / 2;
 
+        int width = 0, height = 0;
         if (m_font->getDimensions(m_style->getFlagCharName(flagCount),
                                   width, height)) {
 
@@ -843,10 +853,10 @@ NotePixmapFactory::drawAccidental(const NotePixmapParameters &params)
 
     Accidental a = params.m_accidental;
     bool cautionary = params.m_cautionary;
-        
+
     // use the full font for this unless a grace size was supplied in ctor
     NoteFont *font = (m_haveGrace ? m_graceFont : m_font);
-    
+
     NoteCharacter ac;
     if (params.m_forceColor) {
         ac = getCharacter
@@ -1378,7 +1388,7 @@ NotePixmapFactory::drawFlags(int flagCount,
                                     PlainColour,
                                     !params.m_stemGoesUp);
         }
-        
+
         foundOne = flagCount > 1 ? foundOne : false;
 
 
@@ -1453,7 +1463,7 @@ NotePixmapFactory::drawStem(const NotePixmapParameters &params,
 
     if (params.m_forceColor) {
         m_p->painter().restore();
-    } 
+    }
 }
 
 void
@@ -1793,6 +1803,7 @@ NotePixmapFactory::makeRest(const NotePixmapParameters &params)
     return canvasMap;
 }
 
+/* unused
 void
 NotePixmapFactory::drawRest(const NotePixmapParameters &params,
                             QPainter &painter, int x, int y)
@@ -1803,6 +1814,7 @@ NotePixmapFactory::drawRest(const NotePixmapParameters &params,
     drawRestAux(params, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
@@ -2192,7 +2204,7 @@ NotePixmapFactory::makeClefDisplayPixmap(const Clef &clef,
     QColor lines;
     switch (colourType) {
     case PlainColourLight:
-        lines = Qt::white;    
+        lines = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2260,7 +2272,7 @@ NotePixmapFactory::makeKeyDisplayPixmap(const Key &key, const Clef &clef,
 
     switch (colourType) {
     case PlainColourLight:
-        kuller = Qt::white;    
+        kuller = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2371,7 +2383,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
     int lw = getLineSpacing();
-    int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
+    int width = getClefWidth(Clef(Clef::Bass)) + 10 * getNoteBodyWidth();
 
     int h = pitch.getHeightOnStaff(clef, useSharps);
     params.setStemGoesUp(rules.isStemUp(h));
@@ -2394,7 +2406,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     switch (colourType) {
     case PlainColourLight:
-        kuller = Qt::white;    
+        kuller = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2434,7 +2446,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     m_p->painter().setBrush(kuller);
 
     int x =
-        getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
+        getClefWidth(Clef(Clef::Bass)) + 5 * getNoteBodyWidth() -
         getAccidentalWidth(accidental);
     int y = yoffset + ((8 - h) * lw) / 2 + noteItem->offset().y();
     m_p->drawPixmap(x, y, noteItem->pixmap());
@@ -2472,7 +2484,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
     QGraphicsPixmapItem *clefItem = makeClef(clef, colourType);
 
     int lw = getLineSpacing();
-    int width = getClefWidth(Clef::Bass) + 10 * getNoteBodyWidth();
+    int width = getClefWidth(Clef(Clef::Bass)) + 10 * getNoteBodyWidth();
 
     int h = pitch.getHeightOnStaff
         (clef,
@@ -2497,7 +2509,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
     switch (colourType) {
     case PlainColourLight:
-        kuller = Qt::white;    
+        kuller = Qt::white;
         break;
     case ConflictColour:
     case HighlightedColour:
@@ -2552,7 +2564,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 
 
     int x =
-        getClefWidth(Clef::Bass) + 5 * getNoteBodyWidth() -
+        getClefWidth(Clef(Clef::Bass)) + 5 * getNoteBodyWidth() -
         getAccidentalWidth(accidental);
     int y = yoffset + ((8 - h) * lw) / 2 + noteItem->offset().y();
     m_p->drawPixmap(x, y, noteItem->pixmap());
@@ -2584,6 +2596,7 @@ NotePixmapFactory::makeHairpin(int length, bool isCrescendo)
     return makeItem(QPoint(0, m_generatedHeight / 2));
 }
 
+/* unused
 void
 NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
                                QPainter &painter, int x, int y)
@@ -2593,6 +2606,7 @@ NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
     drawHairpinAux(length, isCrescendo, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
@@ -2687,6 +2701,7 @@ NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
     }
 }
 
+/* unused
 void
 NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
                             QPainter &painter, int x, int y)
@@ -2699,6 +2714,7 @@ NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
     drawSlurAux(length, dy, above, false, false, phrasing, hotspot, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
@@ -2734,6 +2750,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
         noteLengths = 1;
 
     my = int(0 - nbh * sqrt(noteLengths) / 2);
+    // ??? I assume "flat" style means a "tie" without slope?
     if (flat) my = my * 2 / 3;
     else if (phrasing) my = my * 3 / 4;
     if (!above) my = -my;
@@ -2886,6 +2903,7 @@ NotePixmapFactory::makeOttava(int length, int octavesUp)
     return makeItem(QPoint(0, m_generatedHeight - 1));
 }
 
+/* not used
 void
 NotePixmapFactory::drawOttava(int length, int octavesUp,
                               QPainter &painter, int x, int y)
@@ -2895,6 +2913,7 @@ NotePixmapFactory::drawOttava(int length, int octavesUp,
     drawOttavaAux(length, octavesUp, &painter, x, y);
     m_inPrinterMethod = false;
 }
+*/
 
 void
 NotePixmapFactory::drawOttavaAux(int length, int octavesUp,
@@ -3012,8 +3031,8 @@ NotePixmapFactory::drawTrillLineAux(int length, QPainter *painter, int x, int y)
     // increment x so we start drawing after the tr; 3 is an arbitrary figure
     // that seems about right, but I'm only testing with one font at one size
     x += character.getWidth() + gap;
-    
- 
+
+
     // make a character for the /\/\/\/ bit, and keep drawing it at spaced
     // increments until one glyph width just before running out of space, to
     // avoid clipping the last glyph
@@ -3237,17 +3256,17 @@ NotePixmapFactory::makeTimeSig(const TimeSignature& sig)
     }
 }
 
-int NotePixmapFactory::getTimeSigWidth(const TimeSignature &sig) const
+int NotePixmapFactory::getTimeSigWidth(const TimeSignature &timesig) const
 {
-    if (sig.isCommon()) {
+    if (timesig.isCommon()) {
 
         QRect r(m_bigTimeSigFontMetrics.boundingRect("c"));
         return r.width() + 2;
 
     } else {
 
-        int numerator = sig.getNumerator(),
-            denominator = sig.getDenominator();
+        int numerator = timesig.getNumerator(),
+            denominator = timesig.getDenominator();
 
         QString numS, denomS;
 
@@ -3317,7 +3336,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
         serif = false;
         tiny = true;
     }
-    
+
     QSettings settings;
     //@@@ JAS Check here first for errors.  Added .beginGroup()
     settings.beginGroup( NotationViewConfigGroup );
@@ -3353,7 +3372,7 @@ NotePixmapFactory::getTextFont(const Text &text) const
 
     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: requested size " << size
      		   << " for type " << type;
-    
+
     NOTATION_DEBUG << "NotePixmapFactory::getTextFont: returning font '"
                    << textFont.toString() << "' for type " << type.c_str()
                    << " text : " << text.getText().c_str();
@@ -3407,7 +3426,7 @@ NotePixmapFactory::makeGuitarChord(const Guitar::Fingering &fingering,
         m_p->painter().setPen(QColor(Qt::black));
         m_p->painter().setBrush(QColor(Qt::black));
     }
-    
+
     Guitar::NoteSymbols ns(Guitar::Fingering::DEFAULT_NB_STRINGS, FingeringBox::DEFAULT_NB_DISPLAYED_FRETS);
     Guitar::NoteSymbols::drawFingeringPixmap(fingering, ns, &(m_p->painter()));
 
@@ -3558,7 +3577,7 @@ NotePixmapFactory::createPixmap(int width, int height)
 }
 
 QGraphicsPixmapItem *
-NotePixmapFactory::makeItem(QPoint hotspot)
+NotePixmapFactory::makeItem(const QPoint &hotspot)
 {
 //    NOTATION_DEBUG << "NotePixmapFactory::makeItem(" << hotspot << ")";
 
@@ -3643,7 +3662,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
     switch (type) {
 
     case PlainColour:
-        return font->getCharacter(name, ch, charType, inverted);
+        return font->getCharacter(name, ch, inverted);
 
     case QuantizedColour:
         return font->getCharacterColoured
@@ -3686,7 +3705,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
             (name,
              h,
              v,
-             ch, charType, inverted, s);  
+             ch, charType, inverted, s);
 
     case ConflictColour:
         red.getHsv(&h, &s, &v);
@@ -3705,7 +3724,7 @@ NotePixmapFactory::getCharacter(CharName name, NoteCharacter &ch,
              ch, charType, inverted, s);
     }
 
-    return font->getCharacter(name, ch, charType, inverted);
+    return font->getCharacter(name, ch, inverted);
 }
 
 NoteCharacter
@@ -3771,7 +3790,8 @@ int NotePixmapFactory::getLineSpacing() const
 }
 
 int NotePixmapFactory::getAccidentalWidth(const Accidental &a,
-                                          int shift, bool extraShift) const
+                                          int shift,
+                                          bool extraShift) const
 {
     if (a == Accidentals::NoAccidental)
         return 0;
@@ -3790,10 +3810,12 @@ int NotePixmapFactory::getAccidentalWidth(const Accidental &a,
     return w;
 }
 
+/* unused
 int NotePixmapFactory::getAccidentalHeight(const Accidental &a) const
 {
     return m_font->getHeight(m_style->getAccidentalCharName(a));
 }
+*/
 
 int NotePixmapFactory::getStemLength() const
 {
@@ -3836,7 +3858,7 @@ int NotePixmapFactory::getDotWidth() const
 
 int NotePixmapFactory::getClefWidth(const Clef &clef) const
 {
-    return m_font->getWidth(m_style->getClefCharName(clef.getClefType()));
+    return m_font->getWidth(m_style->getClefCharName(Clef(clef.getClefType())));
 }
 
 int NotePixmapFactory::getBarMargin() const

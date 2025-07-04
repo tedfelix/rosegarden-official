@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ManageMetronomeDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ManageMetronomeDialog.h"
 #include "misc/Debug.h"
@@ -52,16 +53,16 @@
 #include <QPushButton>
 
 
-
 namespace Rosegarden
 {
 
+
 ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
-        RosegardenDocument *doc) :
-        QDialog(parent),
-        m_doc(doc),
-        m_buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok | 
-                                         QDialogButtonBox::Close))
+                                             RosegardenDocument *doc) :
+    QDialog(parent),
+    m_doc(doc),
+    m_buttonBox(new QDialogButtonBox(QDialogButtonBox::Ok |
+                                     QDialogButtonBox::Close))
 {
     setModal(true);
     setWindowTitle(tr("Metronome"));
@@ -149,7 +150,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomeBarVely->setToolTip(tr("<qt>Controls how forcefully the bar division notes will be struck.  (These are typically the loudest of all.)</qt>"));
     m_metronomeBarVely->setMinimum(0);
     m_metronomeBarVely->setMaximum(127);
-    connect(m_metronomeBarVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeBarVely, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ManageMetronomeDialog::slotSetModified);
     beatBoxLayout->addWidget(m_metronomeBarVely, 1, 1);
 
     beatBoxLayout->addWidget(new QLabel(tr("Beat velocity"), beatBox), 2, 0);
@@ -157,7 +159,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomeBeatVely->setToolTip(tr("<qt>Controls how forcefully the beat division notes will be struck.  (These are typically more quiet than beat division notes.)</qt>"));
     m_metronomeBeatVely->setMinimum(0);
     m_metronomeBeatVely->setMaximum(127);
-    connect(m_metronomeBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeBeatVely, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ManageMetronomeDialog::slotSetModified);
     beatBoxLayout->addWidget(m_metronomeBeatVely, 2, 1);
 
     beatBoxLayout->addWidget(new QLabel(tr("Sub-beat velocity"), beatBox), 3, 0);
@@ -165,7 +168,8 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomeSubBeatVely->setToolTip(tr("<qt>Controls how forcefully the sub-beat division notes will be struck.  (These are typically the most quiet of all, and are not heard unless you are working in compound time.)</qt>"));
     m_metronomeSubBeatVely->setMinimum(0);
     m_metronomeSubBeatVely->setMaximum(127);
-    connect(m_metronomeSubBeatVely, SIGNAL(valueChanged(int)), this, SLOT(slotSetModified()));
+    connect(m_metronomeSubBeatVely, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &ManageMetronomeDialog::slotSetModified);
     beatBoxLayout->addWidget(m_metronomeSubBeatVely, 3, 1);
     beatBox->setLayout(beatBoxLayout);
 
@@ -180,8 +184,10 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     m_metronomePitch = new PitchChooser(tr("Pitch"), vbox , 60);
     m_metronomePitch->setToolTip(tr("<qt>It is typical to use a percussion instrument for the metronome, so the pitch normally controls which sort of drum will sound for each tick.  You may configure a different pitch for each of the bar, beat, and sub-beat ticks.</qt>"));
     vboxLayout->addWidget(m_metronomePitch);
-    connect(m_metronomePitch, &PitchChooser::pitchChanged, this, &ManageMetronomeDialog::slotPitchChanged);
-    connect(m_metronomePitch, &PitchChooser::preview, this, &ManageMetronomeDialog::slotPreviewPitch);
+    connect(m_metronomePitch, &PitchChooser::pitchChanged,
+            this, &ManageMetronomeDialog::slotPitchChanged);
+    connect(m_metronomePitch, &PitchChooser::preview,
+            this, &ManageMetronomeDialog::slotPreviewPitch);
 
     m_metronomePitchSelector = new QComboBox();
     m_metronomePitchSelector->addItem(tr("for Bar"));
@@ -199,8 +205,10 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     enableBoxLayout->addWidget(m_playEnabled);
     m_recordEnabled = new QCheckBox(tr("Recording"), enableBox);
     enableBoxLayout->addWidget(m_recordEnabled);
-    connect(m_playEnabled, &QAbstractButton::clicked, this, &ManageMetronomeDialog::slotSetModified);
-    connect(m_recordEnabled, &QAbstractButton::clicked, this, &ManageMetronomeDialog::slotSetModified);
+    connect(m_playEnabled, &QAbstractButton::clicked,
+            this, &ManageMetronomeDialog::slotSetModified);
+    connect(m_recordEnabled, &QAbstractButton::clicked,
+            this, &ManageMetronomeDialog::slotSetModified);
     enableBox->setLayout(enableBoxLayout);
 
     vbox->setLayout(vboxLayout);
@@ -219,7 +227,9 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
 
     metagrid->addWidget(m_buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
-    connect(m_buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+
+    connect(m_buttonBox, &QDialogButtonBox::accepted,
+            this, &ManageMetronomeDialog::accept);
     connect(m_buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 
     setModified(false);
@@ -288,13 +298,16 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
             QString iname(QObject::tr((*iit)->getName().c_str()));
             QString ipname((*iit)->getLocalizedPresentationName());
-            QString programName(QObject::tr((*iit)->getProgramName().c_str()));
+            QString programName(
+                QCoreApplication::translate("INSTRUMENT",
+                                            (*iit)->getProgramName().c_str()));
 
             QString text;
 
             if ((*iit)->getType() == Instrument::SoftSynth) {
 
-                iname.replace(QObject::tr("Synth plugin "), "");
+                iname.replace(QCoreApplication::translate("INSTRUMENT",
+                                                          "Synth plugin "), "");
                 programName = "";
 
                 AudioPluginInstance *plugin = (*iit)->getPlugin

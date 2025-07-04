@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -24,7 +24,6 @@
 #include "misc/ConfigGroups.h"
 #include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/dialogs/ShowSequencerStatusDialog.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -43,6 +42,36 @@
 namespace Rosegarden
 {
 
+
+// Has to be a member so we can use tr().
+const GeneralConfigurationPage::PDFViewers
+    GeneralConfigurationPage::pdfViewers = {
+        { tr("Okular (KDE)"), "okular" },
+        { tr("Evince (GNOME)"), "evince" },
+        { tr("Adobe Acrobat Reader (non-free)"), "acroread" },
+        { tr("MuPDF"), "mupdf" },
+        { tr("ePDFView"), "epdfview" },
+        { tr("xdg-open (recommended)"), "xdg-open"}
+    };
+
+int GeneralConfigurationPage::getDefaultPDFViewer()
+{
+    return 5;  // xdg-open
+}
+
+// Has to be a member so we can use tr().
+const GeneralConfigurationPage::FilePrinters
+    GeneralConfigurationPage::filePrinters = {
+        { tr("Gtk-LP (GNOME)"), "gtklp" },
+        { tr("lp (no GUI)"), "lp" },
+        { tr("lpr (no GUI)"), "lpr" },
+        { tr("HPLIP (HP Printers)"), "hp-print" }
+    };
+
+int GeneralConfigurationPage::getDefaultFilePrinter()
+{
+    return 2;  // lpr
+}
 
 GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     TabbedConfigurationPage(parent)
@@ -93,7 +122,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_countIn->setMinimum(0);
     m_countIn->setMaximum(10);
     m_countIn->setValue(settings.value("countinbars", 0).toUInt());
-    connect(m_countIn, SIGNAL(valueChanged(int)), this, SLOT(slotModified()));
+    connect(m_countIn, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_countIn, row, 1, 1, 2);
 
     ++row;
@@ -241,12 +271,104 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             settings.value("jacktransport", false).toBool());
     connect(m_useJackTransport, &QCheckBox::stateChanged,
             this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_useJackTransport, row, 1, row- row+1, 2);
+    layout->addWidget(m_useJackTransport, row, 1, 1, 2);
 
     ++row;
 
     settings.endGroup();
+
+    // JACK stop at auto stop
+    label = new QLabel(tr("JACK stop at auto stop"), frame);
+    layout->addWidget(label, row, 0);
+    tipText = tr(
+            "<qt><p>Unchecking this will allow the JACK transport to roll past "
+            "the end of the Rosegarden composition.  This will lead to the "
+            "JACK transport being out of sync with Rosegarden's transport and "
+            "could cause unexpected starting and stopping of the transport."
+            "</p></qt>");
+    label->setToolTip(tipText);
+    m_jackStopAtAutoStop = new QCheckBox(frame);
+    m_jackStopAtAutoStop->setToolTip(tipText);
+    m_jackStopAtAutoStop->setChecked(Preferences::getJACKStopAtAutoStop());
+    connect(m_jackStopAtAutoStop, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_jackStopAtAutoStop, row, 1, 1, 2);
+
+    ++row;
+
 #endif
+
+    layout->addWidget(new QLabel(tr("Stop playback at end of last segment"),
+                                 frame), row, 0);
+    m_stopPlaybackAtEnd = new QCheckBox(frame);
+    m_stopPlaybackAtEnd->setChecked(Preferences::getStopAtSegmentEnd());
+    connect(m_stopPlaybackAtEnd, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_stopPlaybackAtEnd, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Jump to loop"),
+                                 frame), row, 0);
+    m_jumpToLoop = new QCheckBox(frame);
+    m_jumpToLoop->setChecked(Preferences::getJumpToLoop());
+    connect(m_jumpToLoop, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_jumpToLoop, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Advanced Looping"),
+                                 frame), row, 0);
+    m_advancedLooping = new QCheckBox(frame);
+    m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
+    connect(m_advancedLooping, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_advancedLooping, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("Auto Channels (experimental)"),
+                                 frame), row, 0);
+    m_autoChannels = new QCheckBox(frame);
+    m_autoChannels->setChecked(Preferences::getAutoChannels());
+    connect(m_autoChannels, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_autoChannels, row, 1, 1, 2);
+
+    ++row;
+
+    layout->addWidget(new QLabel(tr("LV2 Plugin Support"),
+                                 frame), row, 0);
+    m_lv2 = new QCheckBox(frame);
+    m_lv2->setChecked(Preferences::getLV2());
+    connect(m_lv2, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_lv2, row, 1, 1, 2);
+
+    ++row;
+
+    label = new QLabel(tr("Drag with dynamic modifiers (main/matrix)"), frame);
+    tipText = tr(
+            "<qt><p>If set, the CTRL and ALT keys can be pressed or released "
+            "while a drag is in progress to change copy/move behavior.  "
+            "This applies to the main window and the matrix editor.</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+    m_dynamicDrag = new QCheckBox(frame);
+    m_dynamicDrag->setToolTip(tipText);
+    m_dynamicDrag->setChecked(Preferences::getDynamicDrag());
+    connect(m_dynamicDrag, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_dynamicDrag, row, 1, 1, 2);
+
+    ++row;
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
@@ -259,7 +381,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     QString status(tr("Unknown"));
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    SequenceManager *mgr = doc->getSequenceManager();
+    const SequenceManager *mgr = doc->getSequenceManager();
     if (mgr) {
         int driverStatus = mgr->getSoundDriverStatus() & (AUDIO_OK | MIDI_OK);
         switch (driverStatus) {
@@ -302,17 +424,18 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     row = 0;
 
     // Dark mode (Thorn style)
-    label = new QLabel(tr("Dark mode (Thorn style)"), frame);
-    tipText = tr("<qt>When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.</qt>");
-    label->setToolTip(tipText);
+    label = new QLabel(tr("Theme"), frame);
     layout->addWidget(label, row, 0);
 
-    m_Thorn = new QCheckBox;
-    m_Thorn->setToolTip(tipText);
-    m_Thorn->setChecked(settings.value("use_thorn_style", true).toBool());
-    connect(m_Thorn, &QCheckBox::stateChanged,
+    m_theme = new QComboBox(frame);
+    m_theme->addItem(tr("Native (Light)"));
+    m_theme->addItem(tr("Classic (Medium)"));
+    m_theme->addItem(tr("Dark"));
+    m_theme->setCurrentIndex(Preferences::getTheme());
+    connect(m_theme, static_cast<void(QComboBox::*)(int)>(
+                &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_Thorn, row, 1, 1, 3);
+    layout->addWidget(m_theme, row, 1, 1, 3);
 
     ++row;
 
@@ -326,8 +449,8 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_nameStyle->setCurrentIndex(
             settings.value("notenamestyle", Local).toUInt());
     connect(m_nameStyle, static_cast<void(QComboBox::*)(int)>(
-            &QComboBox::activated),
-        this, &GeneralConfigurationPage::slotModified);
+                &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_nameStyle, row, 1, 1, 3);
 
     ++row;
@@ -375,16 +498,46 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     // Track size
     layout->addWidget(new QLabel(tr("Track size"), frame), row, 0);
 
+    // The actual values are defined in ./editors/segment/TrackEditor.cpp
     m_trackSize = new QComboBox(frame);
     m_trackSize->addItem(tr("Small"));
     m_trackSize->addItem(tr("Medium"));
     m_trackSize->addItem(tr("Large"));
+    m_trackSize->addItem(tr("Extra Large"));
+
     m_trackSize->setCurrentIndex(
             settings.value("track_size", 0).toInt());
     connect(m_trackSize, static_cast<void(QComboBox::*)(int)>(
                     &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
+    tipText = tr(
+            "<qt><p>Select the track size factor. Larger sizes are useful on "
+            "HDPI displays.</p></qt>");
+    m_trackSize->setToolTip(tipText);
     layout->addWidget(m_trackSize, row, 1, 1, 3);
+
+    ++row;
+
+    // Track label width (after buttons, i.e. just the text)
+    label = new QLabel(tr("Track Label width"), frame);
+    tipText = tr(
+            "<qt><p>Select the width of track labels. This is the text "
+            "after the mute, record and solo buttons</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+
+    m_trackLabelWidth = new QComboBox(frame);
+    m_trackLabelWidth->addItem(tr("Narrow"));
+    m_trackLabelWidth->addItem(tr("Medium"));
+    m_trackLabelWidth->addItem(tr("Wide"));
+
+    m_trackLabelWidth->setCurrentIndex(
+        settings.value("track_label_width", 2).toInt());
+    settings.endGroup();
+    connect(m_trackLabelWidth, static_cast<void(QComboBox::*)(int)>(
+                    &QComboBox::activated),
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_trackLabelWidth, row, 1, 1, 3);
 
     ++row;
 
@@ -431,15 +584,10 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_pdfViewer = new QComboBox(frame);
     m_pdfViewer->setToolTip(tipText);
-    m_pdfViewer->addItem(tr("Okular (KDE 4.x)"));
-    m_pdfViewer->addItem(tr("Evince (GNOME)"));
-    m_pdfViewer->addItem(tr("Adobe Acrobat Reader (non-free)"));
-    m_pdfViewer->addItem(tr("MuPDF"));
-    m_pdfViewer->addItem(tr("ePDFView"));
-    m_pdfViewer->addItem(tr("xdg-open (recommended)"));
-    settings.endGroup();
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-    m_pdfViewer->setCurrentIndex(settings.value("pdfviewer", xdgOpen).toUInt());
+    for (const PDFViewerInfo &info : pdfViewers) {
+        m_pdfViewer->addItem(info.name);
+    }
+    m_pdfViewer->setCurrentIndex(Preferences::getPDFViewer());
     connect(m_pdfViewer, static_cast<void(QComboBox::*)(int)>(
             &QComboBox::activated),
         this, &GeneralConfigurationPage::slotModified);
@@ -455,13 +603,10 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_filePrinter = new QComboBox(frame);
     m_filePrinter->setToolTip(tipText);
-    m_filePrinter->addItem(tr("Gtk-LP (GNOME)"));
-    m_filePrinter->addItem(tr("lp (no GUI)"));
-    m_filePrinter->addItem(tr("lpr (no GUI)"));
-    m_filePrinter->addItem(tr("HPLIP (HP Printers)"));
-    // now that I'm actually on KDE 4.2, I see no more KPrinter.  I'll default
-    // to Lpr instead.
-    m_filePrinter->setCurrentIndex(settings.value("fileprinter", Lpr).toUInt());
+    for (const FilePrinterInfo &info : filePrinters) {
+        m_filePrinter->addItem(info.name);
+    }
+    m_filePrinter->setCurrentIndex(Preferences::getFilePrinter());
     connect(m_filePrinter, static_cast<void(QComboBox::*)(int)>(
             &QComboBox::activated),
         this, &GeneralConfigurationPage::slotModified);
@@ -533,23 +678,33 @@ void GeneralConfigurationPage::apply()
 
     settings.setValue("jacktransport", jackTransport);
 
-    MappedEvent mEjackValue(MidiInstrumentBase,  // InstrumentId
-                            MappedEvent::SystemJackTransport,
-                            MidiByte(jackValue));
+    MappedEvent mEjackValue;
+    mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
+    mEjackValue.setType(MappedEvent::SystemJackTransport);
+    mEjackValue.setData1(MidiByte(jackValue));
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();
+
+    Preferences::setJACKStopAtAutoStop(m_jackStopAtAutoStop->isChecked());
+
 #endif // HAVE_LIBJACK
+
+
+    Preferences::setStopAtSegmentEnd(m_stopPlaybackAtEnd->isChecked());
+    Preferences::setJumpToLoop(m_jumpToLoop->isChecked());
+    Preferences::setAdvancedLooping(m_advancedLooping->isChecked());
+    Preferences::setAutoChannels(m_autoChannels->isChecked());
+    Preferences::setLV2(m_lv2->isChecked());
+    Preferences::setDynamicDrag(m_dynamicDrag->isChecked());
 
     // Presentation tab
 
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    const bool thornChanged =
-            (settings.value("use_thorn_style", true).toBool() !=
-             m_Thorn->isChecked());
-    //RG_DEBUG << "apply(): NB. use_thorn_style = " << settings.value("use_thorn_style", true).toBool() << ", m_Thorn->isChecked() = " << m_Thorn->isChecked();
-    settings.setValue("use_thorn_style", m_Thorn->isChecked());
+    const bool themeChanged =
+            (Preferences::getTheme() != m_theme->currentIndex());
+    Preferences::setTheme(m_theme->currentIndex());
     settings.setValue("notenamestyle", m_nameStyle->currentIndex());
     const bool mainTextureChanged =
             (settings.value("backgroundtextures", true).toBool() !=
@@ -568,18 +723,19 @@ void GeneralConfigurationPage::apply()
             (settings.value("track_size", 0).toInt() !=
              m_trackSize->currentIndex());
     settings.setValue("track_size", m_trackSize->currentIndex());
+
+    const bool trackLabelWidthChanged =
+             (settings.value("track_label_width", 2).toInt() !=
+              m_trackLabelWidth->currentIndex());
+    settings.setValue("track_label_width", m_trackLabelWidth->currentIndex());
     settings.endGroup();
 
     Preferences::setUseNativeFileDialogs(m_useNativeFileDialogs->isChecked());
 
     // External Applications tab
 
-    settings.beginGroup(ExternalApplicationsConfigGroup);
-
-    settings.setValue("pdfviewer", m_pdfViewer->currentIndex());
-    settings.setValue("fileprinter", m_filePrinter->currentIndex());
-
-    settings.endGroup();
+    Preferences::setPDFViewer(m_pdfViewer->currentIndex());
+    Preferences::setFilePrinter(m_filePrinter->currentIndex());
 
     // Restart Warnings
 
@@ -588,7 +744,7 @@ void GeneralConfigurationPage::apply()
                 tr("Changes to the textured background in the main window will not take effect until you restart Rosegarden."));
     }
 
-    if (thornChanged) {
+    if (themeChanged) {
         QMessageBox::information(this, tr("Rosegarden"),
                 tr("You must restart Rosegarden for the presentation change to take effect."));
     }
@@ -597,6 +753,12 @@ void GeneralConfigurationPage::apply()
         QMessageBox::information(this, tr("Rosegarden"),
                 tr("You must restart Rosegarden or open a file for the track size change to take effect."));
     }
+
+    if (trackLabelWidthChanged) {
+        QMessageBox::information(this, tr("Rosegarden"),
+                tr("You must restart Rosegarden or open a file for the track label width change to take effect."));
+    }
+
 }
 
 

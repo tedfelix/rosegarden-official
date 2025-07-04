@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,11 +20,10 @@
 #define RG_KEYSIGNATUREDIALOG_H
 
 #include "base/NotationTypes.h"
-#include <string>
+
 #include <QDialog>
 #include <QString>
-#include <QCheckBox>
-
+//#include <QCheckBox>
 
 class QWidget;
 class QRadioButton;
@@ -32,13 +31,20 @@ class QLabel;
 class QComboBox;
 class QCheckBox;
 
+#include <string>
+
 
 namespace Rosegarden
 {
 
+
 class NotePixmapFactory;
 
 
+/// The "Key Change" dialog.
+/**
+ * Launch from the Notation Editor's menu: Segment > Add Key Change...
+ */
 class KeySignatureDialog : public QDialog
 {
     Q_OBJECT
@@ -52,8 +58,8 @@ public:
 
     KeySignatureDialog(QWidget *parent,
                        NotePixmapFactory *npf,
-                       Clef clef,
-                       Rosegarden::Key defaultKey =
+                       const Clef& clef,
+                       const Rosegarden::Key& defaultKey =
                        Rosegarden::Key::DefaultKey,
                        bool showApplyToAll = true,
                        bool showConversionOptions = true,
@@ -63,7 +69,7 @@ public:
     ::Rosegarden::Key getKey() const;
 
     bool shouldApplyToAll() const;
-    bool shouldBeTransposed() const; 
+    bool shouldBeTransposed() const;
     ConversionType getConversionType() const;
     bool shouldIgnorePercussion() const;
 

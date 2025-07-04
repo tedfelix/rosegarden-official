@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -46,7 +46,7 @@ void TempoSegmentMapper::fillBuffer()
             // check if we have now passed zero.  Since we will write
             // time zero's tempo in any case, our test here excludes
             // time zero.
-            if (eventTime > RealTime::zeroTime) {
+            if (eventTime > RealTime::zero()) {
                 // ...write time zero's tempo....
                 mapTempoAtZero(comp);
                 // ...which we won't do again.
@@ -77,7 +77,7 @@ mapTempoAtZero(Composition& comp)
         ramping = false;
     }
     tempoT initialTempo = comp.getTempoAtTime(0);
-    mapATempo(RealTime::zeroTime, initialTempo, ramping);
+    mapATempo(RealTime::zero(), initialTempo, ramping);
 }
 
 void
@@ -92,7 +92,7 @@ mapATempo(RealTime eventTime, tempoT tempo, bool ramping)
     // e.g. tempo1 + tempo2).  These events are not actually used
     // on the sequencer side yet, so this may change to something
     // nicer at some point.  MidiInserter however uses it.
-    e.setInstrument(tempo);
+    e.setInstrumentId(tempo);
 
     // data1 holds whether we are ramping.  This is only used by the
     // MIDI exporter and it doesn't need to know where we're ramping

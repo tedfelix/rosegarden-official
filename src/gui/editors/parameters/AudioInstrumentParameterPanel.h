@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -36,18 +36,19 @@ class QColor;
 namespace Rosegarden
 {
 
+
 class RosegardenDocument;
 class Instrument;
 class InstrumentStaticSignals;
-class InstrumentAliasButton;
 class AudioFaderBox;
 
 
 class AudioInstrumentParameterPanel : public InstrumentParameterPanel
 {
     Q_OBJECT
+
 public:
-    AudioInstrumentParameterPanel(QWidget* parent);
+    explicit AudioInstrumentParameterPanel(QWidget* parent);
 
     virtual void setupForInstrument(Instrument*);
 
@@ -63,8 +64,8 @@ public:
 
     // Set the button colour
     //
-    void setButtonColour(int pluginIndex, bool bypassState, 
-                         const QColor &color);
+    void setButtonColour(int pluginIndex, bool bypassState,
+                         const QColor &colour);
 
 public slots:
     // From AudioFaderBox
@@ -78,20 +79,16 @@ public slots:
     void slotSetPan(float pan);
 
     // From RosegardenMainWindow.
-    void slotPluginSelected(InstrumentId id, int index, int plugin);
-    void slotPluginBypassed(InstrumentId id, int pluginIndex, bool bp);
+    void slotPluginSelected(InstrumentId instrumentId, int index, int plugin);
+    void slotPluginBypassed(InstrumentId instrumentId, int pluginIndex, bool bp);
 
     void slotSynthButtonClicked();
     /// Editor button.
     void slotSynthGUIButtonClicked();
 
-protected:
-    //--------------- Data members ---------------------------------
-
-    AudioFaderBox *m_audioFader;
-
 private slots:
-    void slotAliasChanged();
+
+    void slotLabelClicked();
 
     /// Called when a new document is loaded.
     void slotDocumentLoaded(RosegardenDocument *);
@@ -100,14 +97,14 @@ private slots:
 
     /// Connected to InstrumentStaticSignals::controlChange().
     void slotControlChange(Instrument *instrument, int cc);
+
 private:
 
-    // This is the tiny button in the upper left that allows the user
-    // to change the name of the audio instrument.
-    InstrumentAliasButton *m_aliasButton;
+    AudioFaderBox *m_audioFader;
 
-    QPixmap                                      m_monoPixmap;
-    QPixmap                                      m_stereoPixmap;
+    QPixmap m_monoPixmap;
+    QPixmap m_stereoPixmap;
+
 };
 
 

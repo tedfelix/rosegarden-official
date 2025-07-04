@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -79,6 +79,8 @@ public:
     //     up with duplicate rulers.  Need to fix this.
     void addControlRuler(const ControlParameter &);
     void togglePitchBendRuler();
+    void toggleChannelPressureRuler();
+    void toggleKeyPressureRuler();
     void togglePropertyRuler(const PropertyName &);
 
     /**
@@ -108,12 +110,14 @@ public:
     /// Returns Velocity ruler if currently shown else return 0
     PropertyControlRuler *getActivePropertyRuler();
 
+    void setSnapFromEditor(timeT snapSetting);
+
 public slots:
 
     /// Connected to ControlRulerTabBar::tabCloseRequest().
     void slotRemoveRuler(int);
     /// Connected to the Matrix Panned and Panner.
-    void slotSetPannedRect(QRectF pr);
+    void slotSetPannedRect(QRectF pannedRect);
     /// MatrixScene and NotationScene call this when the current Segment changes.
     void slotSetCurrentViewSegment(ViewSegment *);
     /// Update the velocity ruler selection to match the segment selection.
@@ -140,6 +144,11 @@ signals:
 
     /// See ControlRuler::rulerSelectionChanged() for details.
     void childRulerSelectionChanged();
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
 
     void showContextHelp(const QString &);
 
@@ -193,6 +202,9 @@ private:
 
     /// Selection for the property (velocity) ruler only.
     std::vector<ViewElement *> m_selectedElements;
+
+    /// the snap setting from the editor
+    timeT m_editorSnap;
 
 private slots:
     void tabChanged(int index);

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -18,22 +18,22 @@
 
 #include "SegmentNotationHelper.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class SegmentMatrixHelper : protected SegmentNotationHelper
 {
 public:
-    SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
+    explicit SegmentMatrixHelper(Segment &t) : SegmentNotationHelper(t) { }
 
-    iterator insertNote(Event *);
+    Segment::iterator matrixInsertNote(Event *);
 
     /**
      * Returns true if event is colliding another note in percussion
      * matrix (ie event is a note and has the same start time and the
      * same pitch as another note).
      */
-    bool isDrumColliding(Event *);
+    // unused bool isDrumColliding(Event *);
 
     using SegmentHelper::segment;
     using SegmentNotationHelper::deleteEvent;

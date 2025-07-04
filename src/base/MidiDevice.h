@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,23 +16,27 @@
 #ifndef RG_MIDIDEVICE_H
 #define RG_MIDIDEVICE_H
 
-#include <string>
-#include <vector>
-
 #include "Device.h"
+#include "Controllable.h"
 #include "Instrument.h"
 #include "MidiMetronome.h"
 #include "MidiProgram.h"
-#include "ControlParameter.h"
-#include "Controllable.h"
+
+#include <string>
+#include <vector>
+
 
 namespace Rosegarden
 {
 
+
+class AllocateChannels;
+class ControlParameter;
+
+
 typedef std::vector<std::string> StringList;
 typedef std::vector<MidiByte> MidiByteList;
 
-class AllocateChannels;
 
 class MidiDevice : public Device, public Controllable
 {
@@ -64,7 +68,7 @@ public:
     //           const std::string &label,
     //           DeviceDirection dir);
 
-    AllocateChannels *getAllocator() override;
+    AllocateChannels *getAllocator() const override;
 
     // Instrument must be on heap; I take ownership of it
     void addInstrument(Instrument*) override;
@@ -72,7 +76,7 @@ public:
     void setMetronome(const MidiMetronome &);
     const MidiMetronome* getMetronome() const { return m_metronome; }
 
-    void addProgram(const MidiProgram &program);
+    void addProgram(const MidiProgram &prog);
     void addBank(const MidiBank &bank);
     void addKeyMapping(const MidiKeyMapping &mapping); // I own the result!
 
@@ -83,10 +87,13 @@ public:
 
     const BankList &getBanks() const { return m_bankList; }
     BankList getBanks(bool percussion) const;
-    BankList getBanksByMSB(bool percussion, MidiByte msb) const; 
+    BankList getBanksByMSB(bool percussion, MidiByte msb) const;
     BankList getBanksByLSB(bool percussion, MidiByte lsb) const;
     const MidiBank *getBankByName(const std::string &) const;
-    
+    // unused std::string getBankName(const MidiBank &bank) const;
+    // Generate an unused "new bank" name.
+    std::string makeNewBankName() const;
+
     MidiByteList getDistinctMSBs(bool percussion, int lsb = -1) const;
     MidiByteList getDistinctLSBs(bool percussion, int msb = -1) const;
 
@@ -98,20 +105,24 @@ public:
     const KeyMappingList &getKeyMappings() const { return m_keyMappingList; }
     const MidiKeyMapping *getKeyMappingByName(const std::string &) const;
     const MidiKeyMapping *getKeyMappingForProgram(const MidiProgram &program) const;
-    void setKeyMappingForProgram(const MidiProgram &program, std::string mapping);
+    std::string makeNewKeyMappingName() const;
 
-    std::string getBankName(const MidiBank &bank) const;
     std::string getProgramName(const MidiProgram &program) const;
 
-    void replaceBankList(const BankList &bank);
-    void replaceProgramList(const ProgramList &program);
-    void replaceKeyMappingList(const KeyMappingList &mappings);
+    void replaceBankList(const BankList &bankList);
+    void replaceProgramList(const ProgramList &programList);
+    void replaceKeyMappingList(const KeyMappingList &keyMappingList);
 
-    void mergeBankList(const BankList &bank);
-    void mergeProgramList(const ProgramList &program);
-    void mergeKeyMappingList(const KeyMappingList &mappings);
+    void mergeBankList(const BankList &bankList);
+    void mergeProgramList(const ProgramList &programList);
+    void mergeKeyMappingList(const KeyMappingList &keyMappingList);
 
+    /// Includes special Instrument below MidiInstrumentBase.
     InstrumentList getAllInstruments() const override;
+    /// Omit special system Instruments below MidiInstrumentBase.
+    /**
+     * See generatePresentationList().
+     */
     InstrumentList getPresentationInstruments() const override;
 
     // Retrieve Librarian details
@@ -127,7 +138,7 @@ public:
         { m_librarian = std::pair<std::string, std::string>(name, email); }
 
     DeviceDirection getDirection() const { return m_direction; }
-    void setDirection(DeviceDirection dir) { m_direction = dir; }
+    void setDirection(DeviceDirection dir) { m_direction = dir; notifyDeviceModified(); }
     bool isOutput() const  override { return (m_direction == Play); }
     bool isInput() const  override { return (m_direction == Record); }
 
@@ -138,7 +149,7 @@ public:
     };
 
     VariationType getVariationType() const { return m_variationType; }
-    void setVariationType(VariationType v) { m_variationType = v; }
+    void setVariationType(VariationType v) { m_variationType = v; notifyDeviceModified(); }
 
     // Controllers - for mapping Controller names to values for use in
     // the InstrumentParameterBoxes (IPBs) and Control rulers.
@@ -158,10 +169,11 @@ public:
 
     // Access ControlParameters (read/write)
     //
-    virtual ControlParameter *getControlParameter(int index);
-    const ControlParameter *getControlParameter(int index) const override;
-    virtual ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber);
-    const ControlParameter *getControlParameter(const std::string &type, MidiByte controllerNumber) const override;
+    ControlParameter *getControlParameter(int index);
+    ControlParameter *getControlParameter(
+            const std::string &type, MidiByte controllerNumber);
+    const ControlParameter *getControlParameterConst(
+            const std::string &type, MidiByte controllerNumber) const override;
 
     // Modify ControlParameters
     //
@@ -179,10 +191,11 @@ public:
     // our ControlParameter list.
     //
     bool isUniqueControlParameter(const ControlParameter &con) const;
-    
+
     const ControlParameter *
-        findControlParameter(std::string type, MidiByte conNumber) const;
-    
+        findControlParameter(const std::string& type,
+                             MidiByte controllerNumber) const;
+
     /// The CC or other controller has a knob on the MIPP.
     /**
      * ??? Only CCs can have knobs.  It's misleading to allow a complete
@@ -190,13 +203,9 @@ public:
      *     move it to private as it is only called internally (like most
      *     of the routines in this class).
      */
-    bool isVisibleControlParameter(const ControlParameter &con) const;
+    static bool isVisibleControlParameter(const ControlParameter &con);
     /// The CC has a knob on the MIPP.
     bool isVisibleControlParameter(MidiByte controlNumber) const;
-
-    // Generate some default controllers for the MidiDevice
-    //
-    void generateDefaultControllers();
 
     std::string toXmlString() const override;
 
@@ -204,13 +213,10 @@ public:
     { return channel == 9; }
 
     /// See m_userConnection.
-    void setUserConnection(std::string connection)
-            { m_userConnection = connection; }
+    void setUserConnection(const std::string& connection)
+            { m_userConnection = connection; notifyDeviceModified(); }
     std::string getUserConnection() const
             { return m_userConnection; }
-    /// See m_currentConnection.
-    void setCurrentConnection(std::string connection)
-            { m_currentConnection = connection; }
 
 protected:
     void createInstruments(InstrumentId);
@@ -222,14 +228,14 @@ protected:
     // Push the default IPB controllers to the device's Instruments.
     //
     void deviceToInstrControllerPush();
-    
+
     // Add a new control to all of the device's Instruments.
     //
-    void addControlToInstrument(const ControlParameter &con);
+    void addControlToInstrument(const ControlParameter &con) const;
 
     // Remove a control from all of the device's Instruments.
     //
-    void removeControlFromInstrument(const ControlParameter &con);
+    void removeControlFromInstrument(const ControlParameter &controlParameter) const;
 
     /// The connection the user has asked for.
     /**
@@ -238,14 +244,6 @@ protected:
      */
     std::string m_userConnection;
 
-    /// The connection that was actually made.
-    /**
-     * Since the necessary ALSA device might not exist (e.g. it isn't
-     * plugged in), this might be very different from m_userConnection.
-     * This is not stored in the .rg file.
-     */
-    std::string m_currentConnection;
-
     ProgramList    m_programList;
     BankList       m_bankList;
     ControlList    m_controlList;
@@ -253,14 +251,14 @@ protected:
     // ??? This should be easy to change to an object which would simplify
     //     copying of MidiDevice.
     MidiMetronome *m_metronome;
-    
+
     // used when we're presenting the instruments
     InstrumentList  m_presentationInstrumentList;
 
     // Is this device Play or Record?
     //
-    DeviceDirection m_direction; 
-    
+    DeviceDirection m_direction;
+
     // Should we present LSB or MSB of bank info as a Variation number?
     //
     VariationType m_variationType;
@@ -274,7 +272,8 @@ protected:
     AllocateChannels  *m_allocator;
 
 private:
-    //MidiDevice &operator=(const MidiDevice &);
+    // not used
+    MidiDevice &operator=(const MidiDevice &);
 };
 
 }

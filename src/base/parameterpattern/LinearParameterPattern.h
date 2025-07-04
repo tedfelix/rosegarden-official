@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -28,6 +28,7 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class LinearParameterPattern : public ParameterPattern
 {
+ protected:
     QString getText(QString propertyName) const override;
 
     // Make as many sliders as we need.  EventParameterDialog will
@@ -41,12 +42,12 @@ class LinearParameterPattern : public ParameterPattern
                            Result *result) const override;
     virtual double getValueDelta(double valueChange, double timeRatio)
         const;
-    
+
 protected:
     bool m_isDiminuendo;
 
 public:
-    LinearParameterPattern(bool isDiminuendo) :
+    explicit LinearParameterPattern(bool isDiminuendo) :
         m_isDiminuendo(isDiminuendo)
     {};
     static LinearParameterPattern crescendo;

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,9 +27,9 @@ namespace Rosegarden {
 class BigArrowButton : public QPushButton
 {
 public:
-    BigArrowButton(Qt::ArrowType arrow = Qt::RightArrow) :
-                       QPushButton()
-    { 
+    explicit BigArrowButton(Qt::ArrowType arrow = Qt::RightArrow) :
+    QPushButton()
+    {
         QIcon icon;
         const char *fileName;
 
@@ -60,14 +60,14 @@ public:
         }
     }
 
-    ~BigArrowButton() override { } 
+    ~BigArrowButton() override { }
 
     QSize sizeHint() const override {
         return QSize(20, 20);
     }
 };
 
-	
+
 }
 
 #endif /*BIGARROWBUTTON_H_*/

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -18,14 +18,15 @@
 #define RG_SEGMENT_NOTATION_HELPER_H
 
 #include "base/Segment.h"
+#include "base/TimeSignature.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class ROSEGARDENPRIVATE_EXPORT SegmentNotationHelper : protected SegmentHelper
 {
 public:
-    SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }
+    explicit SegmentNotationHelper(Segment &t) : SegmentHelper(t) { }
     ~SegmentNotationHelper() override;
 
     using SegmentHelper::segment;
@@ -36,11 +37,11 @@ public:
      * on the whole segment.
      */
     void setNotationProperties(timeT startTime = 0, timeT endTime = 0);
-    
+
     /**
      * Return the notation absolute time plus the notation duration.
      */
-    timeT getNotationEndTime(Event *e);
+    static timeT getNotationEndTime(const Event *e);
 
     /**
      * Return an iterator pointing at the first event in the segment
@@ -50,7 +51,7 @@ public:
      * completeness, but in most cases if you're about to call them
      * you should ask yourself why.)
      */
-    iterator findNotationAbsoluteTime(timeT t);
+    Segment::iterator findNotationAbsoluteTime(timeT t);
 
     /**
      * Return an iterator pointing at the last event in the segment
@@ -60,24 +61,25 @@ public:
      * completeness, but in most cases if you're about to call them
      * you should ask yourself why.)
      */
-    iterator findNearestNotationAbsoluteTime(timeT t);
+    // unused iterator findNearestNotationAbsoluteTime(timeT t);
 
-    
+
     /**
      * Looks for another note immediately following the one pointed to
      * by the given iterator, and (if matchPitch is true) of the same
      * pitch, and returns an iterator pointing to that note.  Returns
      * end() if there is no such note.
-     * 
+     *
      * The notes are considered "adjacent" if the quantized start
      * time of one matches the quantized end time of the other, unless
      * allowOverlap is true in which case overlapping notes are also
      * considered adjacent so long as one does not completely enclose
      * the other.
      */
-    iterator getNextAdjacentNote(iterator i,
-                                 bool matchPitch = true,
-                                 bool allowOverlap = true);
+    Segment::iterator getNextAdjacentNote(
+            Segment::iterator i,
+            bool matchPitch = true,
+            bool allowOverlap = true);
 
 
     /**
@@ -91,17 +93,18 @@ public:
      * will be considered.  (This method has no other way to know when
      * to stop scanning; potentially the very first note in the segment
      * could turn out to be adjacent to the very last one.)
-     * 
+     *
      * The notes are considered "adjacent" if the quantized start
      * time of one matches the quantized end time of the other, unless
      * allowOverlap is true in which case overlapping notes are also
      * considered adjacent so long as one does not completely enclose
      * the other.
      */
-    iterator getPreviousAdjacentNote(iterator i,
-                                     timeT rangeStart = 0,
-                                     bool matchPitch = true,
-                                     bool allowOverlap = true);
+    Segment::iterator getPreviousAdjacentNote(
+            Segment::iterator i,
+            timeT rangeStart = 0,
+            bool matchPitch = true,
+            bool allowOverlap = true);
 
 
     /**
@@ -118,10 +121,10 @@ public:
      * both in the same chord) or anything else.  "Contiguous" refers
      * only to their locations in the segment's event container,
      * which normally means what you expect for rests but not notes.
-     * 
+     *
      * See also SegmentNotationHelper::getNextAdjacentNote.
      */
-    iterator findContiguousNext(iterator);
+    Segment::iterator findContiguousNext(Segment::iterator);
 
     /**
      * Returns an iterator pointing to the previous contiguous element
@@ -137,16 +140,16 @@ public:
      * both in the same chord) or anything else.  "Contiguous" refers
      * only to their locations in the segment's event container,
      * which normally means what you expect for rests but not notes.
-     * 
+     *
      * See also SegmentNotationHelper::getPreviousAdjacentNote.
      */
-    iterator findContiguousPrevious(iterator);
+    Segment::iterator findContiguousPrevious(Segment::iterator);
 
     /**
      * Returns true if the iterator points at a note in a chord
      * e.g. if there are more notes at the same absolute time
      */
-    bool noteIsInChord(Event *note);
+    bool noteIsInChord(const Event *note);
 
     /**
      * Returns an iterator pointing to the note that this one is tied
@@ -156,7 +159,7 @@ public:
      * Untested and probably marked-for-expiry -- prefer
      * SegmentPerformanceHelper::getTiedNotes
      */
-    iterator getNoteTiedWith(Event *note, bool goForwards);
+    // unused iterator getNoteTiedWith(Event *note, bool forwards);
 
 
     /**
@@ -166,16 +169,16 @@ public:
      *
      * You should pass note-quantized durations into this method
      */
-    bool isSplitValid(timeT a, timeT b);
+    static bool isSplitValid(timeT a, timeT b);
 
 
     /**
-     * Splits events in the [from, to[ interval into 
+     * Splits events in the [from, to[ interval into
      * tied events of duration baseDuration + events of duration R,
      * with R being equal to the events' initial duration minus baseDuration
      *
      * The events in [from, to[ must all be at the same absolute time
-     * 
+     *
      * Does not check "reasonableness" of expansion first
      *
      * Events may be notes or rests (rests will obviously not be tied)
@@ -184,7 +187,8 @@ public:
      * modifies from to point at the first split event (the original
      * iterator would have been invalidated).
      */
-    iterator splitIntoTie(iterator &from, iterator to, timeT baseDuration);
+    Segment::iterator splitIntoTie(
+            Segment::iterator &from, Segment::iterator to, timeT baseDuration);
 
 
     /**
@@ -201,7 +205,7 @@ public:
      * modifies i to point at the first split event (the original
      * iterator would have been invalidated).
      */
-    iterator splitIntoTie(iterator &i, timeT baseDuration);
+    Segment::iterator splitIntoTie(Segment::iterator &i, timeT baseDuration);
 
 
     /**
@@ -211,7 +215,7 @@ public:
      *
      * You should pass note-quantized durations into this method
      */
-    bool isCollapseValid(timeT a, timeT b);
+    static bool isCollapseValid(timeT a, timeT b);
 
     /**
      * If possible, collapses the rest event with the following or
@@ -233,8 +237,11 @@ public:
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    iterator insertNote(timeT absoluteTime, Note note, int pitch,
-                        Accidental explicitAccidental);
+    Segment::iterator insertNote(
+            timeT absoluteTime,
+            Note note,
+            int pitch,
+            Accidental explicitAccidental);
 
     /**
      * Inserts a note, doing all the clever split/merge stuff as
@@ -250,52 +257,52 @@ public:
      * model event will be copied but not itself used; the caller
      * continues to own it and should release it after return.
      */
-    iterator insertNote(Event *modelEvent);
+    Segment::iterator insertNote(Event *modelEvent);
 
     /**
      * Inserts a rest, doing all the clever split/merge stuff as
-     * appropriate.  Requires segment to be in a composition.  
+     * appropriate.  Requires segment to be in a composition.
      * Returns iterator pointing to last event inserted (there
      * may be more than one, as rest may have had to be split)
      *
      * This method will only work correctly if there is a note or
      * rest event already starting at absoluteTime.
      */
-    iterator insertRest(timeT absoluteTime, Note note);
+    Segment::iterator insertRest(timeT absoluteTime, Note note);
 
     /**
      * Insert a clef.
      * Returns iterator pointing to clef.
      */
-    iterator insertClef(timeT absoluteTime, Clef clef);
+    Segment::iterator insertClef(timeT absoluteTime, const Clef& clef);
 
     /**
      * Insert a symbol.
      * Returns iterator pointing to symbol.
      */
-    iterator insertSymbol(timeT absoluteTime, Symbol symbol);
+    Segment::iterator insertSymbol(timeT absoluteTime, const Symbol& symbol);
 
     /**
      * Insert a key.
      * Returns iterator pointing to key.
      */
-    iterator insertKey(timeT absoluteTime, Key key);
+    Segment::iterator insertKey(timeT absoluteTime, const Key& key);
 
     /**
      * Insert a text event.
      * Returns iterator pointing to text event.
      */
-    iterator insertText(timeT absoluteTime, Text text);
+    Segment::iterator insertText(timeT absoluteTime, const Text& text);
 
     /**
      * Deletes a note, doing all the clever split/merge stuff as
-     * appropriate.  Requires segment to be in a composition.  
+     * appropriate.  Requires segment to be in a composition.
      */
     void deleteNote(Event *e, bool collapseRest = false);
 
     /**
      * Deletes a rest, doing all the clever split/merge stuff as
-     * appropriate.  Requires segment to be in a composition.  
+     * appropriate.  Requires segment to be in a composition.
      *
      * @return whether the rest could be deleted -- a rest can only
      * be deleted if there's a suitable rest next to it to merge it
@@ -325,7 +332,7 @@ public:
      * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    bool isViable(Event *e, int dots = -1) {
+    static bool isViable(const Event *e, int dots = -1) {
         return isViable(e->getDuration(), dots);
     }
 
@@ -340,15 +347,15 @@ public:
      * will be acceptable.  The default is whatever the segment's
      * quantizer considers acceptable (probably either 1 or 2 dots).
      */
-    bool isViable(timeT duration, int dots = -1);
+    static bool isViable(timeT duration, int dots = -1);
 
-    
+
     /**
      * Given an iterator pointing to a rest, split that rest up
      * according to the durations returned by TimeSignature's
-     * getDurationListForInterval     
+     * getDurationListForInterval
      */
-    void makeRestViable(iterator i);
+    void makeRestViable(Segment::iterator i);
 
     /**
      * Split a note or rest up into tied notes or shorter rests of
@@ -362,7 +369,7 @@ public:
      * Returns the original *noteItr Event if no split and tie occurs
      * or returns the first new event inserted if split and tie occurs
      */
-    Event * makeThisNoteViable(iterator noteItr, bool splitAtBars = true);
+    Event * makeThisNoteViable(Segment::iterator noteItr, bool splitAtBars = true);
 
     /**
      * Split notes and rests up into tied notes or shorter rests of
@@ -371,7 +378,7 @@ public:
      * optionally splits notes and rests at barlines -- this is
      * actually the most common user-visible use of this function.
      */
-    void makeNotesViable(iterator i, iterator j, bool splitAtBars = true);
+    void makeNotesViable(Segment::iterator from, Segment::iterator to, bool splitAtBars = true);
 
 
     /**
@@ -390,7 +397,7 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.  Use makeTupletGroup instead.
      */
-    void makeBeamedGroup(timeT from, timeT to, std::string type);
+    void makeBeamedGroup(timeT from, timeT to, const std::string& type);
 
     /**
      * Give all events between the start of the timeslice containing
@@ -401,7 +408,9 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.  Use makeTupletGroup instead.
      */
-    void makeBeamedGroup(iterator from, iterator to, std::string type);
+    void makeBeamedGroup(Segment::iterator from,
+                         Segment::iterator to,
+                         const std::string& type);
 
     /**
      * Give all events between from and to the same new group id and
@@ -415,13 +424,15 @@ public:
      * in the group already have the other tuplet properties or you
      * intend to add those yourself.
      */
-    void makeBeamedGroupExact(iterator from, iterator to, std::string type);
+    void makeBeamedGroupExact(Segment::iterator from,
+                              Segment::iterator to,
+                              const std::string& type);
 
 
     /**
      * Make a beamed group of tuplet type, whose tuplet properties are
      * specified as "(untupled-count) notes of duration (unit) played
-     * in the time of (tupled-count)".  For example, a quaver triplet 
+     * in the time of (tupled-count)".  For example, a quaver triplet
      * group could be specified with untupled = 3, tupled = 2, unit =
      * (the duration of a quaver).
      *
@@ -441,7 +452,7 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(timeT from, timeT to, std::string type);
+    void autoBeam(timeT from, timeT to, const std::string& type);
 
     /**
      * Divide the notes between the start of the bar containing
@@ -449,7 +460,9 @@ public:
      * beamed groups and give each group the right group properties
      * using makeBeamedGroup.  Requires segment to be in a composition.
      */
-    void autoBeam(iterator from, iterator to, std::string type);
+    void autoBeam(Segment::iterator from,
+                  Segment::iterator to,
+                  const std::string& type);
 
 
     /**
@@ -464,13 +477,13 @@ public:
      * start of the timeslice containing from and the start of the
      * timeslice containing to
      */
-    void unbeam(iterator from, iterator to);
+    void unbeam(Segment::iterator from, Segment::iterator to);
 
     /**
      * Guess which clef a section of music is supposed to be in,
      * ignoring any clef events actually found in the section.
      */
-    Clef guessClef(iterator from, iterator to);
+    static Clef guessClef(Segment::iterator from, Segment::iterator to);
 
 
     /**
@@ -493,7 +506,7 @@ public:
      * duration and the return value appropriately.
      *
      * (Used for Event pasting.)
-     */ 
+     */
     bool removeRests(timeT time, timeT &duration, bool testOnly = false);
 
 
@@ -517,11 +530,11 @@ public:
      * original one if a collapse happened, segment.end() if no
      * collapse or event not found
      */
-    iterator collapseNoteAggressively(Event *, timeT rangeEnd);
+    Segment::iterator collapseNoteAggressively(const Event *, timeT rangeEnd);
 
 
-    
-    std::pair<Event *, Event *> splitPreservingPerformanceTimes(Event *e,
+
+    std::pair<Event *, Event *> splitPreservingPerformanceTimes(const Event *e,
                                                                 timeT q1);
 
     /**
@@ -545,7 +558,15 @@ public:
                                 timeT insertionTime,
                                 int tupled,
                                 int untupled);
-    
+
+    /// Remove and adjust slurs as needed for a time range.
+    /**
+     * ??? This routine really just deals in slurs.  Would a better name be
+     *     updateSlurs()?
+     *
+     */
+    void updateIndications(timeT startTime, timeT endTime);
+
 protected:
     const Quantizer &basicQuantizer();
     const Quantizer &notationQuantizer();
@@ -561,37 +582,45 @@ protected:
      * Returns position at which the collapse ended (i.e. the first
      * uncollapsed event)
      */
-    iterator collapseRestsForInsert(iterator firstRest, timeT desiredDuration);
+    Segment::iterator collapseRestsForInsert(Segment::iterator firstRest, timeT desiredDuration);
 
 
     /// for use by insertNote and insertRest
-    iterator insertSomething(iterator position, int duration,
+    Segment::iterator insertSomething(Segment::iterator i, int duration,
                              Event *modelEvent, bool tiedBack);
 
     /// for use by insertSomething
-    iterator insertSingleSomething(iterator position, int duration,
-                                   Event *modelEvent, bool tiedBack);
+    Segment::iterator insertSingleSomething(Segment::iterator i,
+                                            int duration,
+                                            const Event *modelEvent,
+                                            bool tiedBack);
 
     /// for use by insertSingleSomething
-    void setInsertedNoteGroup(Event *e, iterator i);
+    void setInsertedNoteGroup(Event *e, Segment::iterator i);
 
     /// for use by makeBeamedGroup
-    void makeBeamedGroupAux(iterator from, iterator to, std::string type,
+    void makeBeamedGroupAux(Segment::iterator from, Segment::iterator to, std::string type,
 			    bool groupGraces);
 
     /// for use by unbeam
-    void unbeamAux(iterator from, iterator to);
+    static void unbeamAux(Segment::iterator from, Segment::iterator to);
 
     /// for use by autoBeam
 
-    void autoBeamBar(iterator from, iterator to, TimeSignature timesig,
-                     std::string type);
+    void autoBeamBar(Segment::iterator from,
+                     Segment::iterator to,
+                     const TimeSignature& tsig,
+                     const std::string& type);
 
-    void autoBeamBar(iterator from, iterator to, timeT average,
-                     timeT minimum, timeT maximum, std::string type);
+    void autoBeamBar(Segment::iterator from,
+                     Segment::iterator to,
+                     timeT average,
+                     timeT minimum,
+                     timeT maximum,
+                     const std::string& type);
 
     /// used by autoBeamAux (duplicate of private method in Segment)
-    bool hasEffectiveDuration(iterator i);
+    bool hasEffectiveDuration(Segment::iterator i);
 
     typedef void (SegmentNotationHelper::*Reorganizer)(timeT, timeT,
                                                        std::vector<Event *>&);
@@ -599,13 +628,14 @@ protected:
     void reorganizeRests(timeT, timeT, Reorganizer);
 
     /// for use by normalizeRests
-    void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
+    // unused void normalizeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
     /// for use by collapseRestsAggressively
+    // cppcheck-suppress functionStatic
     void mergeContiguousRests(timeT, timeT, std::vector<Event *>&);
 
     /// find border of tupled
-    int findBorderTuplet(iterator, iterator &start, iterator &end);
+    int findBorderTuplet(Segment::iterator, Segment::iterator &start, Segment::iterator &end);
 };
 
 }

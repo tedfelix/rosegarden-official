@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,27 +18,27 @@
 #ifndef RG_NOTERESTINSERTER_H
 #define RG_NOTERESTINSERTER_H
 
-#include "base/Event.h"
-#include "base/NotationTypes.h"
 #include "NotationTool.h"
 #include "NotationElement.h"
 #include "NoteStyle.h"
-#include "NotationMouseEvent.h"
+
+#include "base/NotationTypes.h"  // for Note
+
 #include <QString>
+
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class Segment;
 class NotationWidget;
 class NotationStaff;
 class Event;
+class NotationMouseEvent;
 
 
-/**
- * This tool will insert notes or rests on mouse click events
- */
+/// This tool will insert notes or rests on mouse click events.
 class NoteRestInserter : public NotationTool
 {
     Q_OBJECT
@@ -46,18 +46,18 @@ class NoteRestInserter : public NotationTool
     friend class NotationToolBox;
 
 public:
-    ~NoteRestInserter() override;
+    ~NoteRestInserter() override  { }
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
-    
+
     void handleMidButtonPress(const NotationMouseEvent *) override;
 
     FollowMode handleMouseMove(const NotationMouseEvent *) override;
 
     void handleMouseRelease(const NotationMouseEvent *) override;
-    
+
     void handleWheelTurned(int , const NotationMouseEvent *) override;
-    
+
     bool needsWheelEvents() override { return m_quickEdit; }
 
     void ready() override;
@@ -72,13 +72,13 @@ public:
     void insertNote(Segment &segment,
                     timeT insertionTime,
                     int pitch,
-                    Accidental accidental,
+                    const Accidental& accidental,
                     int velocity,
                     bool suppressPreview = false);
-    
+
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     static QString ToolName();
@@ -100,24 +100,26 @@ public:
      */
     void showMenu() override;
 
-public slots:
+    /// Set the accidental for the notes which will be inserted
+    void setAccidental(const Accidental &accidental, bool follow);
+
     /// Set the type of note (quaver, breve...) which will be inserted
-    void slotSetNote(Note::Type nt);
+    void setNote(Note::Type nt);
 
     /// Set the number of dots the inserted note will have
-    void slotSetDots(unsigned int dots);
- 
-    /// Set the accidental for the notes which will be inserted
-    void slotSetAccidental(Accidental, bool follow);
+    void setDots(unsigned int dots);
 
-protected:
-    NoteRestInserter(NotationWidget *);
+private:
 
-    NoteRestInserter(QString rcFileName, QString menuName, NotationWidget *);
+    explicit NoteRestInserter(NotationWidget *);
+
+    NoteRestInserter(const QString& rcFileName,
+                     const QString& menuName,
+                     NotationWidget *);
 
     timeT getOffsetWithinRest(NotationStaff *,
                               const NotationElementList::iterator&,
-                              double &canvasX);
+                              double &sceneX);
 
     int getOttavaShift(Segment &segment, timeT time);
 
@@ -132,13 +134,14 @@ protected:
                                            bool play);
     virtual void showPreview(bool play);
     virtual void clearPreview();
-    
+
     void setCursorShape();
     Accidental getAccidentalFromModifierKeys(Qt::KeyboardModifiers modifiers);
-    
+
     void synchronizeWheel();
 
-protected slots:
+private slots:
+
     // RMB menu slots
     void slotToggleDot();
     void slotToggleAutoBeam();
@@ -148,11 +151,10 @@ protected slots:
     void slotRestsSelected();
     void slotNotesSelected();
 
-protected:
-    //--------------- Data members ---------------------------------
+private:
 
-    Note::Type m_noteType;
-    unsigned int m_noteDots;
+    Note::Type m_noteType{Note::Quaver};
+    unsigned int m_noteDots{0};
     bool m_autoBeam;
     bool m_autoTieBarlines;
     bool m_matrixInsertType;
@@ -163,7 +165,7 @@ protected:
     AccidentalTable::OctaveType m_octaveType;     // Cautionary accidental mode
     AccidentalTable::BarResetType m_barResetType; // Cautionary accidental mode
 
-    bool m_leftButtonDown;
+    bool m_leftButtonDown{false};
     bool m_clickHappened;
     timeT m_clickTime;
     int m_clickSubordering;
@@ -174,15 +176,20 @@ protected:
     double m_clickInsertX;
     float m_targetSubordering;
 
-    Accidental m_accidental;
-    Accidental m_lastAccidental;
-    bool m_followAccidental;
-    bool m_isaRestInserter;
-    
-    int m_wheelIndex;              // Index of current duration
-    bool m_processingWheelTurned;  // Use by synchronizeWheel()
+    Accidental m_accidental{Accidentals::NoAccidental};
+    Accidental m_lastAccidental{Accidentals::NoAccidental};
+    bool m_followAccidental{false};
+    bool m_isaRestInserter{false};
 
-    bool m_ready;                  // True when the tool is ready
+    /// Index of current duration
+    int m_wheelIndex{0};
+    /// Used by synchronizeWheel()
+    bool m_processingWheelTurned{false};
+
+    /// True when the tool is ready
+    bool m_ready{false};
+
+    NotationStaff *m_previousPreviewStaff;
 
 // Obsolete ?
 //    static const char* m_actionsAccidental[][4];

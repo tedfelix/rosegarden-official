@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -58,7 +58,6 @@ ReconnectDeviceCommand::execute()
 
     // Update the MidiDevice
     midiDevice->setUserConnection(m_newConnection);
-    midiDevice->setCurrentConnection(m_newConnection);
     midiDevice->sendChannelSetups();
 
     //RG_DEBUG << "execute(): reconnected device " << m_deviceId << " to " << m_newConnection;
@@ -84,7 +83,6 @@ ReconnectDeviceCommand::unexecute()
 
     // Update the MidiDevice
     midiDevice->setUserConnection(m_oldUserConnection);
-    midiDevice->setCurrentConnection(m_oldConnection);
     midiDevice->sendChannelSetups();
 
     //RG_DEBUG << "unexecute(): reconnected device " << m_deviceId << " to " << m_oldConnection;

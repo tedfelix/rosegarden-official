@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -10,6 +10,9 @@
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
+
+    This code is adapted from version 4.2 of the DE libraries
+    Copyright (C) 2000 Ronny Standtke <Ronny.Standtke@gmx.de>
 */
 
 #include "SqueezedLabel.h"
@@ -30,43 +33,47 @@ namespace Rosegarden
 {
 
 
-/* This code is adapted from version 4.2 of the DE libraries
-   Copyright (C) 2000 Ronny Standtke <Ronny.Standtke@gmx.de>
-*/
-
 class SqueezedLabelPrivate
 {
 public:
-
-    void k_copyFullText()
+    SqueezedLabelPrivate() :
+        elideMode(Qt::ElideMiddle),
+        allowToolTip(false)
     {
-        QMimeData* data = new QMimeData;
-        data->setText(fullText);
-        QApplication::clipboard()->setMimeData(data);
     }
 
     QString fullText;
     Qt::TextElideMode elideMode;
+    // Set to true to let the client set the tooltip.
+    bool allowToolTip;
+
+public slots:
+
+    void k_copyFullText()
+    {
+        QMimeData *data = new QMimeData;
+        data->setText(fullText);
+        QApplication::clipboard()->setMimeData(data);
+    }
+
 };
 
-SqueezedLabel::SqueezedLabel(const QString &text , QWidget *parent)
-        : QLabel (parent),
-          d(new SqueezedLabelPrivate)
+SqueezedLabel::SqueezedLabel(const QString &text, QWidget *parent) :
+    QLabel(parent),
+    d(new SqueezedLabelPrivate)
 {
     setObjectName("SQUEEZED");
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
     d->fullText = text;
-    d->elideMode = Qt::ElideMiddle;
     squeezeTextToLabel();
 }
 
-SqueezedLabel::SqueezedLabel(QWidget *parent)
-        : QLabel (parent),
-          d(new SqueezedLabelPrivate)
+SqueezedLabel::SqueezedLabel(QWidget *parent) :
+    QLabel(parent),
+    d(new SqueezedLabelPrivate)
 {
     setObjectName("SQUEEZED");
     setSizePolicy(QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed));
-    d->elideMode = Qt::ElideMiddle;
 }
 
 SqueezedLabel::~SqueezedLabel()
@@ -90,16 +97,21 @@ QSize SqueezedLabel::sizeHint() const
 {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     QScreen* screen = this->screen();
-    int dw = screen->availableGeometry().width();
+    const int displayWidth = screen->availableGeometry().width();
 #else
-    int dw = QApplication::desktop()->availableGeometry(QPoint(0, 0)).width();
+    const int displayWidth = QApplication::desktop()->availableGeometry(QPoint(0, 0)).width();
 #endif
-    int maxWidth = dw * 3 / 4;
+    // 3/4 of the display width.
+    const int maxWidth = displayWidth * 3 / 4;
+
     QFontMetrics fm(fontMetrics());
-    int textWidth = fm.boundingRect(d->fullText).width();
-    if (textWidth > maxWidth) {
+
+    // ??? This has problems with "Pan".  It returns 18, but Pan needs more.
+    //     Adding 1 here fixes "Pan".
+    int textWidth = fm.boundingRect(d->fullText).width() + 1;
+    if (textWidth > maxWidth)
         textWidth = maxWidth;
-    }
+
     return QSize(textWidth, QLabel::sizeHint().height());
 }
 
@@ -131,10 +143,12 @@ void SqueezedLabel::squeezeTextToLabel() {
 
     if (squeezed) {
         QLabel::setText(squeezedLines.join("\n"));
-        setToolTip(d->fullText);
+        if (!d->allowToolTip)
+            setToolTip(d->fullText);
     } else {
         QLabel::setText(d->fullText);
-        setToolTip(QString());
+        if (!d->allowToolTip)
+            setToolTip(QString());
     }
 }
 
@@ -146,15 +160,24 @@ void SqueezedLabel::setAlignment(Qt::Alignment alignment)
     d->fullText = tmpFull;
 }
 
+/* unused
 Qt::TextElideMode SqueezedLabel::textElideMode() const
 {
     return d->elideMode;
 }
+*/
 
+/* unused
 void SqueezedLabel::setTextElideMode(Qt::TextElideMode mode)
 {
     d->elideMode = mode;
     squeezeTextToLabel();
+}
+*/
+
+void SqueezedLabel::allowToolTip()
+{
+    d->allowToolTip = true;
 }
 
 void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
@@ -175,7 +198,16 @@ void SqueezedLabel::contextMenuEvent(QContextMenuEvent* ev)
     if (showCustomPopup) {
         QMenu menu(this);
 
-        QAction* act = new QAction(tr("&Copy Full Text"), this);
+        QAction *act = new QAction(tr("&Copy Full Text"), this);
+        // ??? Not sure how to get rid of this SIGNAL() and SLOT().
+        //     k_copyFullText() uses Q_PRIVATE_SLOT().  I suspect that bigger
+        //     picture we do not care about the pop-up menu that allows us
+        //     to copy the complete text.  We can probably just remove that
+        //     and then this goes away as well.  Yeah, everywhere we use this,
+        //     right-click doesn't even work so there is no way to get this
+        //     context menu.
+        //     QLabel requires setTextInteractionFlags() to be called to
+        //     enable selection behavior.  We NEVER call that anywhere in rg.
         connect(act, SIGNAL(triggered()), this, SLOT(k_copyFullText()));
         menu.addAction(act);
 

@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -30,19 +30,19 @@
 namespace Rosegarden {
 
 
-Quantizer::Quantizer(std::string source,
-                     std::string target) :
+Quantizer::Quantizer(const std::string& source,
+                     const std::string& target) :
     m_source(source), m_target(target)
 {
     makePropertyNames();
 }
 
 
-Quantizer::Quantizer(std::string target) :
+Quantizer::Quantizer(const std::string& target) :
     m_target(target)
 {
     if (target == RawEventData) {
-        m_source = GlobalSource;
+        m_source = "GlobalQ";
     } else {
         m_source = RawEventData;
     }
@@ -135,7 +135,7 @@ Quantizer::quantize(EventSelection *selection)
     insertNewEvents(&segment);
 }
 
-
+/* unused
 void
 Quantizer::fixQuantizedValues(Segment *s,
                               Segment::iterator from,
@@ -157,10 +157,10 @@ Quantizer::fixQuantizedValues(Segment *s,
         s->erase(from);
         m_toInsert.push_back(e);
     }
-    
+
     insertNewEvents(s);
 }
-
+*/
 
 timeT
 Quantizer::getQuantizedDuration(const Event *e) const
@@ -190,17 +190,21 @@ Quantizer::getQuantizedAbsoluteTime(const Event *e) const
     }
 }
 
+/* unused
 timeT
 Quantizer::getUnquantizedAbsoluteTime(Event *e) const
 {
     return getFromSource(e, AbsoluteTimeValue);
 }
+*/
 
+/* unused
 timeT
 Quantizer::getUnquantizedDuration(Event *e) const
 {
     return getFromSource(e, DurationValue);
 }
+*/
 
 void
 Quantizer::quantizeRange(Segment *s,
@@ -223,7 +227,7 @@ Quantizer::quantizeRange(Segment *s,
         quantizeSingle(s, from);
     }
 }
-    
+
 void
 Quantizer::unquantize(Segment *s,
                       Segment::iterator from,
@@ -232,9 +236,13 @@ Quantizer::unquantize(Segment *s,
     Q_ASSERT(m_toInsert.size() == 0);
 
     for (Segment::iterator nextFrom = from; from != to; from = nextFrom) {
+        // Similar to "Increment Before Use".  Prevents problems when
+        // setToTarget() deletes Events from the Segment.
         ++nextFrom;
 
         if (m_target == RawEventData || m_target == NotationPrefix) {
+            // Important: This deletes Events from the Segment and invalidates
+            //            the iterator.  Increment Before Use required.
             setToTarget(s, from,
                         getFromSource(*from, AbsoluteTimeValue),
                         getFromSource(*from, DurationValue));
@@ -243,39 +251,53 @@ Quantizer::unquantize(Segment *s,
             removeTargetProperties(*from);
         }
     }
-    
+
     insertNewEvents(s);
 }
 
 void
 Quantizer::unquantize(EventSelection *selection) const
 {
-    Q_ASSERT(m_toInsert.size() == 0);
+    if (!m_toInsert.empty())
+        return;
 
-    Segment *s = &selection->getSegment();
+    Segment *segment = &selection->getSegment();
 
-    Rosegarden::EventContainer::iterator it
-        = selection->getSegmentEvents().begin();
-
-    for (; it != selection->getSegmentEvents().end(); ++it) {
+    for (EventContainer::iterator selectionEventIter =
+             selection->getSegmentEvents().begin();
+         selectionEventIter != selection->getSegmentEvents().end();
+         /* Increment Before Use. */) {
+        EventContainer::iterator eventIterNext = selectionEventIter;
+        // Increment Before Use.
+        ++eventIterNext;
 
         if (m_target == RawEventData || m_target == NotationPrefix) {
 
-            Segment::iterator from = s->findSingle(*it);
-            Segment::iterator to = s->findSingle(*it);
-            setToTarget(s, from,
-                        getFromSource(*from, AbsoluteTimeValue),
-                        getFromSource(*to, DurationValue));
+            Segment::iterator segmentEventIter =
+                    segment->findSingle(*selectionEventIter);
+            if (segmentEventIter == segment->end())
+                continue;
+
+            const timeT absoluteTime =
+                    getFromSource(*segmentEventIter, AbsoluteTimeValue);
+            const timeT duration =
+                    getFromSource(*segmentEventIter, DurationValue);
+
+            // Important: This can delete an Event from the Segment.  That
+            //            will delete the Event from the selection which will
+            //            invalidate eventIter.  Increment Before Use must be
+            //            used to prevent crashes.
+            setToTarget(segment, segmentEventIter, absoluteTime, duration);
 
         } else {
-            removeTargetProperties(*it);
+            removeTargetProperties(*selectionEventIter);
         }
+
+        selectionEventIter = eventIterNext;
     }
-    
+
     insertNewEvents(&selection->getSegment());
 }
-
-
 
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const
@@ -294,7 +316,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
         if (v == AbsoluteTimeValue) return e->getNotationAbsoluteTime();
         else return e->getNotationDuration();
 
-    } else {
+    } else {  // "GlobalQ"
 
         // We need to write the source from the target if the
         // source doesn't exist (and the target does)
@@ -340,23 +362,33 @@ Quantizer::getFromTarget(Event *e, ValueType v) const
 }
 
 void
-Quantizer::setToTarget(Segment *s, Segment::iterator i,
+Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
                        timeT absTime, timeT duration) const
 {
     Profiler profiler("Quantizer::setToTarget");
 
     //RG_DEBUG << "setToTarget(): target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")";
 
-    timeT st = 0, sd = 0;
-    bool haveSt = false, haveSd = false;
-    if (m_source != RawEventData && m_target == RawEventData) {
-        haveSt = (*i)->get<Int>(m_sourceProperties[AbsoluteTimeValue], st);
-        haveSd = (*i)->get<Int>(m_sourceProperties[DurationValue],     sd);
+    timeT sourceTime = 0;
+    bool haveSourceTime = false;
+    timeT sourceDuration = 0;
+    bool haveSourceDuration = false;
+
+    if (m_source != RawEventData  &&  m_target == RawEventData) {
+        haveSourceTime = (*segmentIter)->get<Int>(
+                m_sourceProperties[AbsoluteTimeValue], sourceTime);
+        haveSourceDuration = (*segmentIter)->get<Int>(
+                m_sourceProperties[DurationValue], sourceDuration);
     }
-    
-    Event *e;
+
+    Event *newEvent;
+
     if (m_target == RawEventData) {
-        e = new Event(**i, absTime, duration);
+        // Have to create a new event to make sure the Segment
+        // container is properly sorted.  Simply modifying the
+        // absolute time would wreak havoc.  Unless we had a sort
+        // routine we could call after modification.
+        newEvent = new Event(**segmentIter, absTime, duration);
     } else if (m_target == NotationPrefix) {
         // Setting the notation absolute time on an event without
         // recreating it would be dodgy, just as setting the absolute
@@ -367,37 +399,44 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 #ifdef DEBUG_NOTATION_QUANTIZER
         RG_DEBUG << "setToTarget(): setting " << absTime << " to notation absolute time and " << duration << " to notation duration";
 #endif
-        e = new Event(**i, (*i)->getAbsoluteTime(), (*i)->getDuration(),
-                      (*i)->getSubOrdering(), absTime, duration);
+        newEvent = new Event(
+                **segmentIter,  // e
+                (*segmentIter)->getAbsoluteTime(),  // absoluteTime
+                (*segmentIter)->getDuration(),  // duration
+                (*segmentIter)->getSubOrdering(),  // subOrdering
+                absTime,  // notationAbsoluteTime
+                duration);  // notationDuration
     } else {
-        e = *i;
-        e->clearNonPersistentProperties();
+        newEvent = *segmentIter;
+        newEvent->clearNonPersistentProperties();
     }
 
     if (m_target == NotationPrefix) {
-        timeT normalizeStart = std::min(absTime, (*i)->getAbsoluteTime());
+        timeT normalizeStart = std::min(absTime, (*segmentIter)->getAbsoluteTime());
         timeT normalizeEnd = std::max(absTime + duration,
-                                      (*i)->getAbsoluteTime() +
-                                      (*i)->getDuration()) + 1;
+                                      (*segmentIter)->getAbsoluteTime() +
+                                      (*segmentIter)->getDuration()) + 1;
 
         if (m_normalizeRegion.first != m_normalizeRegion.second) {
             normalizeStart = std::min(normalizeStart, m_normalizeRegion.first);
             normalizeEnd = std::max(normalizeEnd, m_normalizeRegion.second);
         }
 
-        m_normalizeRegion = std::pair<timeT, timeT>
-            (normalizeStart, normalizeEnd);
+        m_normalizeRegion =
+                std::pair<timeT, timeT>(normalizeStart, normalizeEnd);
     }
-    
-    if (haveSt) e->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue],st);
-    if (haveSd) e->setMaybe<Int>(m_sourceProperties[DurationValue],    sd);
-    
+
+    if (haveSourceTime)
+        newEvent->setMaybe<Int>(m_sourceProperties[AbsoluteTimeValue], sourceTime);
+    if (haveSourceDuration)
+        newEvent->setMaybe<Int>(m_sourceProperties[DurationValue], sourceDuration);
+
     if (m_target != RawEventData && m_target != NotationPrefix) {
-        e->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
-        e->setMaybe<Int>(m_targetProperties[DurationValue], duration);
+        newEvent->setMaybe<Int>(m_targetProperties[AbsoluteTimeValue], absTime);
+        newEvent->setMaybe<Int>(m_targetProperties[DurationValue], duration);
     } else {
-        s->erase(i);
-        m_toInsert.push_back(e);
+        segment->erase(segmentIter);
+        m_toInsert.push_back(newEvent);
     }
 
 #ifdef DEBUG_NOTATION_QUANTIZER
@@ -405,6 +444,7 @@ Quantizer::setToTarget(Segment *s, Segment::iterator i,
 #endif
 }
 
+/* unused
 void
 Quantizer::removeProperties(Event *e) const
 {
@@ -418,6 +458,7 @@ Quantizer::removeProperties(Event *e) const
         e->unset(m_targetProperties[DurationValue]);
     }
 }
+*/
 
 void
 Quantizer::removeTargetProperties(Event *e) const
@@ -519,6 +560,41 @@ Quantizer::insertNewEvents(Segment *s) const
 #endif
 
     m_toInsert.clear();
+}
+
+const std::vector<timeT> &
+Quantizer::getQuantizations()
+{
+    static std::vector<timeT> standardQuantizations;
+
+    // If cache is empty, fill it.
+    if (standardQuantizations.empty())
+    {
+        // For each note type from semibreve to hemidemisemiquaver
+        for (Note::Type nt = Note::Semibreve; nt >= Note::Shortest; --nt) {
+
+            // For quavers and smaller, offer the triplet variation
+            const int variations = (nt <= Note::Quaver ? 1 : 0);
+
+            // For the base note (0) and the triplet variation (1)
+            for (int i = 0; i <= variations; ++i) {
+
+                // Compute divisor, e.g. crotchet is 4, quaver is 8...
+                int divisor = (1 << (Note::Semibreve - nt));
+
+                // If we're doing the triplet variation, adjust the divisor
+                if (i)
+                    divisor = divisor * 3 / 2;
+
+                // Compute the number of MIDI clocks.
+                const timeT unit = Note(Note::Semibreve).getDuration() / divisor;
+
+                standardQuantizations.push_back(unit);
+            }
+        }
+    }
+
+    return standardQuantizations;
 }
 
 

@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -22,6 +22,7 @@
 #include "MidiDeviceTreeWidgetItem.h"
 #include "MidiBankTreeWidgetItem.h"
 #include "base/Device.h"
+#include "base/MidiDevice.h"
 
 #include <QString>
 #include <QTreeWidget>
@@ -32,12 +33,12 @@
 namespace Rosegarden
 {
 
-MidiKeyMapTreeWidgetItem::MidiKeyMapTreeWidgetItem(DeviceId deviceId,
+MidiKeyMapTreeWidgetItem::MidiKeyMapTreeWidgetItem(MidiDevice* device,
         QTreeWidgetItem* parent,
         QString name)
-        : MidiDeviceTreeWidgetItem(deviceId, parent, name),
-        m_name(name)
+        : MidiDeviceTreeWidgetItem(device, parent, name)
 {
+    m_name = name;
     setFlags(flags() | Qt::ItemIsEditable);  //qt4
 }
 

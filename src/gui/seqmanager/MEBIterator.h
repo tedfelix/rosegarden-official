@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,7 +33,7 @@ namespace Rosegarden {
 class MEBIterator
 {
 public:
-    MEBIterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
+    explicit MEBIterator(QSharedPointer<MappedEventBuffer> mappedEventBuffer);
 
     /// Go back to the beginning of the MappedEventBuffer
     void reset()  { m_index = 0; }
@@ -46,17 +46,6 @@ public:
 
     void moveTo(const RealTime &time);
 
-    /// Dereference operator
-    /**
-     * Allows an expression like (*i) to give access to the element an
-     * iterator points to.
-     *
-     * Returns a default constructed MappedEvent if atEnd().
-     *
-     * @see peek()
-     */
-    MappedEvent operator*();
-
     /// Dereference function
     /**
      * Returns a pointer to the MappedEvent the iterator is currently
@@ -64,10 +53,12 @@ public:
      *
      * Returns 0 if atEnd().
      *
-     * Callers should lock getLock() with QReadLocker for as long
-     * as they are holding the pointer.
+     * Callers should lock the iterator by using QReadLocker on the return
+     * from getLock() for as long as they are using the pointer.
      *
-     * @see operator*()
+     *   QReadLocker locker(iter->getLock());
+     *
+     * @see getLock()
      */
     MappedEvent *peek() const;
 
@@ -84,10 +75,10 @@ public:
      *
      * ??? Only one caller.  Inline?
      */
-    void doInsert(MappedInserterBase &inserter, MappedEvent &evt);
+    void doInsert(MappedInserterBase &inserter, MappedEvent &event);
 
     /// Access to the MappedEventBuffer the MEBIterator is connected to.
-    QSharedPointer<MappedEventBuffer> getMappedEventBuffer()
+    QSharedPointer<MappedEventBuffer> getMappedEventBuffer() const
             { return m_mappedEventBuffer; }
 
     /**
@@ -191,7 +182,7 @@ private:
     /**
      * Either the current event's time or the time the loop starts,
      * whichever is greater.  Used for calculating the correct
-     * controllers
+     * control changes.
      */
     RealTime m_currentTime;
 };

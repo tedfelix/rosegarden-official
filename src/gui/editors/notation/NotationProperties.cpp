@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -24,15 +24,15 @@
 namespace Rosegarden
 {
 
-const PropertyName NotationProperties::NOTE_STYLE         = "NoteStyle";
-const PropertyName NotationProperties::HEIGHT_ON_STAFF = "HeightOnStaff";
-const PropertyName NotationProperties::BEAMED         = "Beamed";
-const PropertyName NotationProperties::BEAM_ABOVE         = "BeamAbove";
-const PropertyName NotationProperties::SLASHES        = "Slashes";
-const PropertyName NotationProperties::STEM_UP        = "NoteStemUp";
-const PropertyName NotationProperties::USE_CAUTIONARY_ACCIDENTAL = "UseCautionaryAccidental";
-const PropertyName NotationProperties::OTTAVA_SHIFT       = "OttavaShift";
-const PropertyName NotationProperties::SLUR_ABOVE         = "SlurAbove";
+const PropertyName NotationProperties::NOTE_STYLE("NoteStyle");
+const PropertyName NotationProperties::HEIGHT_ON_STAFF("HeightOnStaff");
+const PropertyName NotationProperties::BEAMED("Beamed");
+const PropertyName NotationProperties::BEAM_ABOVE("BeamAbove");
+const PropertyName NotationProperties::SLASHES("Slashes");
+const PropertyName NotationProperties::STEM_UP("NoteStemUp");
+const PropertyName NotationProperties::USE_CAUTIONARY_ACCIDENTAL("UseCautionaryAccidental");
+const PropertyName NotationProperties::OTTAVA_SHIFT("OttavaShift");
+const PropertyName NotationProperties::SLUR_ABOVE("SlurAbove");
 
 NotationProperties::NotationProperties(const std::string &prefix) :
 

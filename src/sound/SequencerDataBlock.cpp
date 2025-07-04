@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -13,12 +13,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SequencerDataBlock]"
+
 #include "SequencerDataBlock.h"
 #include "MappedEventList.h"
 
 #include "misc/Debug.h"
 
-//#include <QThread>
 #include <QMutexLocker>
 
 namespace Rosegarden
@@ -59,7 +60,7 @@ SequencerDataBlock::getVisual(MappedEvent &ev)
     //     worth worrying about.
 
     // Copy the event to the caller.
-    ev = *((MappedEvent *) & m_visualEvent);
+    ev = *reinterpret_cast<MappedEvent *>(&m_visualEvent);
 
     // Remember where we were for next time.
     m_getVisualIndex = thisEventIndex;
@@ -75,7 +76,7 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 
     if (ev) {
         // Save the visual event
-        *((MappedEvent *)&m_visualEvent) = *ev;
+        *reinterpret_cast<MappedEvent *>(&m_visualEvent) = *ev;
 
         // Indicate that it has changed and it is safe to read now.
         ++m_setVisualIndex;
@@ -92,7 +93,7 @@ SequencerDataBlock::getRecordedEvents(MappedEventList &mC)
     // changes it while we are working.
     int stopIndex = m_recordEventIndex;
 
-    MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
+    MappedEvent *recordBuffer = reinterpret_cast<MappedEvent *>(m_recordBuffer);
 
     // While there are events in the record buffer, copy each event to
     // the user's list.
@@ -114,7 +115,7 @@ SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
     // while the other thread is using it.
     int index = m_recordEventIndex;
 
-    MappedEvent *recordBuffer = (MappedEvent *)m_recordBuffer;
+    MappedEvent *recordBuffer = reinterpret_cast<MappedEvent *>(m_recordBuffer);
 
     // Copy each incoming event into the ring buffer.
     for (MappedEventList::iterator i = mC->begin(); i != mC->end(); ++i) {
@@ -127,8 +128,6 @@ SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
 
     // Once the buffer is in a consistent state, move the record index
     // so that the other thread will read the new events.
-    // ??? Is this guaranteed to be atomic and therefore thread safe?
-    //     I believe so, and that's why this has always worked.
     m_recordEventIndex = index;
 }
 
@@ -292,23 +291,25 @@ SequencerDataBlock::setInstrumentRecordLevel(InstrumentId id, const LevelInfo &i
     ++m_recordLevelUpdateIndices[index];
 }
 
+/* unused
 void
-SequencerDataBlock::setTrackLevel(TrackId id, const LevelInfo &info)
+SequencerDataBlock::setTrackLevel(TrackId track, const LevelInfo &info)
 {
     setInstrumentLevel
-	(ControlBlock::getInstance()->getInstrumentForTrack(id), info);
+	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
+*/
 
+/* unused
 bool
-SequencerDataBlock::getTrackLevel(TrackId id, LevelInfo &info) const
+SequencerDataBlock::getTrackLevel(TrackId track, LevelInfo &info) const
 {
     info.level = info.levelRight = 0;
 
     return getInstrumentLevel
-	(ControlBlock::getInstance()->getInstrumentForTrack(id), info);
-
-    return false;
+	(ControlBlock::getInstance()->getInstrumentForTrack(track), info);
 }
+*/
 
 bool
 SequencerDataBlock::getSubmasterLevel(int submaster, LevelInfo &info) const
@@ -378,7 +379,7 @@ SequencerDataBlock::clearTemporaries()
     m_setVisualIndex = 0;
     m_getVisualIndex = 0;
     m_haveVisualEvent = false;
-    *((MappedEvent *)&m_visualEvent) = MappedEvent();
+    *reinterpret_cast<MappedEvent *>(&m_visualEvent) = MappedEvent();
 
     m_recordEventIndex = 0;
     m_readIndex = 0;
@@ -401,5 +402,6 @@ SequencerDataBlock::clearTemporaries()
     m_masterLevel.level = 0;
     m_masterLevel.levelRight = 0;
 }
+
 
 }

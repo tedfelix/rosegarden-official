@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -62,6 +62,13 @@ SegmentTransposeCommand::SegmentTransposeCommand(
 
 SegmentTransposeCommand::~SegmentTransposeCommand()
 {
+    // Clean up any selections we own.
+    // ??? Since these are only needed for the first execute() we should
+    //     delete them then instead of waiting for the dtor.
+    for (const EventSelection *selection : m_selections) {
+        delete selection;
+    }
+    m_selections.clear();
 }
 
 void 
@@ -74,11 +81,15 @@ SegmentTransposeCommand::processSegment(
 {
     MacroCommand *macroCommand = this;
 
-    // ??? MEMORY LEAK (confirmed)
+    // ??? MEMORY LEAK (confirmed) (should be fixed)
     //     TransposeCommand holds on to a pointer.
     //     Need to make TransposeCommand take a QSharedPointer.
+    //     Or this class needs to own this pointer and delete in
+    //     its dtor.
+    //     m_selections should fix this.
     EventSelection *wholeSegment = new EventSelection(
             segment, segment.getStartTime(), segment.getEndMarkerTime());
+    m_selections.push_back(wholeSegment);
 
     // Transpose the notes.
     macroCommand->addCommand(new TransposeCommand(

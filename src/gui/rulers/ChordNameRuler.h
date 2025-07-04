@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,20 +20,22 @@
 #define RG_CHORDNAMERULER_H
 
 #include "base/PropertyName.h"
-#include <map>
+#include "base/TimeT.h"
+
 #include <QFont>
 #include <QFontMetrics>
 #include <QSize>
 #include <QWidget>
-#include <vector>
-#include "base/Event.h"
-
 
 class QPaintEvent;
+
+#include <map>
+#include <vector>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 class Segment;
@@ -126,6 +128,8 @@ private:
 
     const PropertyName TEXT_FORMAL_X;
     const PropertyName TEXT_ACTUAL_X;
+    
+    bool m_firstTime;  // Used to force a first call to recalculate()
 };
 
 

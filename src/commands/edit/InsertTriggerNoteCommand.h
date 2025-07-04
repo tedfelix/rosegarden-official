@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -23,14 +23,15 @@
 #include "base/TriggerSegment.h"
 #include "document/BasicCommand.h"
 #include "gui/editors/notation/NoteStyle.h"
-#include <string>
-#include "base/Event.h"
 
 #include <QCoreApplication>
+
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -42,14 +43,14 @@ class InsertTriggerNoteCommand : public BasicCommand
 public:
     InsertTriggerNoteCommand(Segment &,
                              timeT time,
-			     timeT duration,
+                             timeT duration,
                              int pitch,
                              int velocity,
-                             NoteStyleName noteStyle,
+                             const NoteStyleName& noteStyle,
                              TriggerSegmentId id,
                              bool retune,
-                             std::string timeAdjust,
-                             Mark mark);
+                             const std::string& timeAdjust,
+                             const Mark& mark);
     ~InsertTriggerNoteCommand() override;
 
 protected:

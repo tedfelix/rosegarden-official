@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -26,7 +26,10 @@ namespace Rosegarden
 {
 
 class PluginFactory;
-        
+class PlayableData;
+
+typedef float sample_t;
+
 /**
  * RunnablePluginInstance is a very trivial interface that an audio
  * process can use to refer to an instance of a plugin without needing
@@ -42,8 +45,6 @@ class PluginFactory;
 class RunnablePluginInstance
 {
 public:
-    typedef float sample_t;
-
     virtual ~RunnablePluginInstance();
 
     virtual bool isOK() const = 0;
@@ -56,7 +57,7 @@ public:
      * waiting.  Other plugins can ignore it.
      */
     virtual void run(const RealTime &blockStartTime) = 0;
-    
+
     virtual size_t getBufferSize() = 0;
 
     virtual size_t getAudioInputCount() = 0;
@@ -74,7 +75,16 @@ public:
     virtual void setPortValue(unsigned int port, float value) = 0;
     virtual float getPortValue(unsigned int port) = 0;
 
-    virtual QString configure(QString /* key */, QString /* value */) { return QString(); }
+    virtual QString configure(const QString& /* key */,
+                              const QString& /* value */) { return QString(); }
+
+    // default implementation does nothing
+    virtual void savePluginState() { }
+
+    virtual void getPluginPlayableAudio
+        (std::vector<PlayableData*>& /* playable */) { }
+
+    virtual void removeAudioSource(int /* portIndex */) { }
 
     virtual void sendEvent(const RealTime & /* eventTime */,
                            const void * /* event */) { }
@@ -89,10 +99,13 @@ public:
     virtual void discardEvents() { }
     virtual void setIdealChannelCount(size_t channels) = 0; // must also silence(); may also re-instantiate
 
+    // default implementation does nothing
+    virtual void audioProcessingDone() { }
+
     void setFactory(PluginFactory *f) { m_factory = f; } // ew
 
 protected:
-    RunnablePluginInstance(PluginFactory *factory, QString identifier) :
+    RunnablePluginInstance(PluginFactory *factory, const QString& identifier) :
         m_factory(factory), m_identifier(identifier) { }
 
     PluginFactory *m_factory;

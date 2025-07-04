@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,7 +19,6 @@
 #define RG_EVENTQUANTIZECOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
 
 #include <QObject>
 #include <QPointer>
@@ -30,6 +29,7 @@ class QProgressDialog;
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Quantizer;
@@ -47,55 +47,68 @@ public:
         QUANTIZE_NOTATION_ONLY      /// Notation only always
     };
 
-    /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
-                         Quantizer *);
-    
-    /// Quantizer must be on heap (EventQuantizeCommand dtor will delete)
-    EventQuantizeCommand(EventSelection &selection,
-                         Quantizer *);
+                         std::shared_ptr<Quantizer> quantizer);
 
-    /// Constructs own quantizer based on QSettings data in given group
+    EventQuantizeCommand(EventSelection &selection,
+                         std::shared_ptr<Quantizer> quantizer);
+
+    /// Constructs own Quantizer based on QSettings data in given group
+    /**
+     * ??? Quantization parameters should not be passed from the UI to this
+     *     command via QSettings/.conf file.  We need a more direct approach
+     *     like a parameters struct.  QSettings should be used for UI
+     *     persistence only.
+     */
     EventQuantizeCommand(Segment &segment,
                          timeT startTime,
                          timeT endTime,
-                         QString settingsGroup,
+                         const QString &settingsGroup,
                          QuantizeScope scope);
-    
-    /// Constructs own quantizer based on QSettings data in given group
+
+    /// Constructs own Quantizer based on QSettings data in given group
+    /**
+     * ??? Quantization parameters should not be passed from the UI to this
+     *     command via QSettings/.conf file.  We need a more direct approach
+     *     like a parameters struct.  QSettings should be used for UI
+     *     persistence only.
+     */
     EventQuantizeCommand(EventSelection &selection,
-                         QString settingsGroup,
+                         const QString &settingsGroup,
                          QuantizeScope scope);
 
     ~EventQuantizeCommand() override;
-    
-    static QString getGlobalName(Quantizer *quantizer = nullptr);
+
+    static QString getGlobalName(
+            std::shared_ptr<Quantizer> quantizer = std::shared_ptr<Quantizer>());
 
     void setProgressDialog(QPointer<QProgressDialog> progressDialog)
             { m_progressDialog = progressDialog; }
-    void setProgressTotal(int total, int perCall) { m_progressTotal = total;
-                                                    m_progressPerCall = perCall; };
+    void setProgressTotal(int total, int perCall)
+    {
+        m_progressTotal = total;
+        m_progressPerCall = perCall;
+    }
 
 protected:
+
     void modifySegment() override;
 
 private:
-    Quantizer *m_quantizer; // I own this
-    EventSelection *m_selection;
+
+    EventSelection *m_selection{nullptr};
     QString m_settingsGroup;
+    std::shared_ptr<Quantizer> m_quantizer;
+    void makeQuantizer(const QString &settingsGroup, QuantizeScope);
 
     QPointer<QProgressDialog> m_progressDialog;
-    int m_progressTotal;
-    int m_progressPerCall;
+    int m_progressTotal{0};
+    int m_progressPerCall{0};
 
-    /// Sets to m_quantizer as well as returning value
-    Quantizer *makeQuantizer(QString, QuantizeScope);
 };
 
-// Collapse equal-pitch notes into one event
-//
 
 }
 

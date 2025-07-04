@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::Notation" version="1500">
+<kpartgui name="Rosegarden::Notation" version="1501">
 
 <MenuBar>
   <Menu name="file" append="new_merge">
@@ -15,9 +15,9 @@
 
   <Menu name="edit">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -28,20 +28,21 @@
     <Action name="general_paste" text="Pa&amp;ste..." shortcut="Alt+Shift+V" />
     <Action name="delete" text="De&amp;lete" shortcut="Delete" />
   <Separator/>
-    <Action name="move_events_up_staff" 
+    <Action name="move_events_up_staff"
             text="&amp;Move to Staff Above" />
-    <Action name="general_move_events_up_staff" 
+    <Action name="general_move_events_up_staff"
             text="&amp;Move to Staff Above..." />
-    <Action name="move_events_down_staff" 
+    <Action name="move_events_down_staff"
             text="Move to Staff &amp;Below" />
-    <Action name="general_move_events_down_staff" 
+    <Action name="general_move_events_down_staff"
             text="Move to Staff &amp;Below..." />
   <Separator/>
     <Action name="select_from_start" text="Select from Sta&amp;rt" />
     <Action name="select_to_end" text="Select to &amp;End" />
     <Action name="select_whole_staff" text="Select Whole St&amp;aff" shortcut="Ctrl+A" />
-    <Action name="clear_selection" text="Clear Select&amp;ion" shortcut="Escape" />
+    <Action name="clear_selection" text="Clear Select&amp;ion" />
 <!--    <Action name="search_select" text="Search and Selec&amp;t" icon="search" shortcut="Ctrl+K" /> -->
+    <Action name="reset_selection" text="&amp;Reset Selection" shortcut="Escape"/>
     <Action name="filter_selection" text="&amp;Filter Selection" icon="filter" shortcut="Ctrl+F" />
     <Action name="select_evenly_spaced_notes" text="&amp;Guess Beats" />
   <Separator/>
@@ -83,6 +84,13 @@
       <Action name="multi_page_mode" text="&amp;Multiple Page Layout" icon="multi-page-mode" checked="false" group="score_layout" />
     </Menu>
   <Separator/>
+    <Menu name="highlighting">
+      <text>Highlight Active Segment</text>
+      <Action name="highlight_none" text="&amp;None" checked="false" group="highlight_group" />
+      <Action name="highlight_within_track" text="Within &amp;Track" checked="false" group="highlight_group" />
+      <Action name="highlight" text="Across &amp;All Tracks" checked="false" group="highlight_group" />
+    </Menu>
+  <Separator/>
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->
@@ -111,6 +119,8 @@
         <Separator/>
       <Action name="toggle_velocity_ruler" text="Show &amp;Velocity Ruler" icon="ruler-velocity" checked="false" />
       <Action name="toggle_pitchbend_ruler" text="Show Pitch &amp;Bend Ruler" icon="ruler-pitch" checked="false" />
+      <Action name="toggle_keypressure_ruler" text="Show Key Pressure Ruler" icon="ruler-key-pressure" checked="false" />
+      <Action name="toggle_channelpressure_ruler" text="Show Channel Pressure Ruler" icon="ruler-channel-pressure" checked="false" />
       <Action name="add_control_ruler" text="Add &amp;Control Ruler" icon="ruler-controller" checked="false" />
     </Menu>
   <Separator append="show_merge" />
@@ -204,14 +214,14 @@
       <Action name="show_ornament_expansion" text="&amp;Show Expansion of Ornament" />
       <Action name="mask_ornament" text="Skip This Part of Ornament (&amp;Mask Tied Note)" />
       <Action name="unmask_ornament" text="Don't Skip This Part (&amp;Unmask Tied Note)" />
-      
+
       <!-- JAS No text in menus for 'ornament_actionmenu' action name. -->
       <Action name="ornament_actionmenu" />
     </Menu>
   <Separator/>
     <Menu name="Fingering">
       <text>&amp;Fingerings</text>
-      <Action name="remove_fingering_marks" text="&amp;Remove Fingerings" /> 
+      <Action name="remove_fingering_marks" text="&amp;Remove Fingerings" />
     <Separator/>
       <Action name="add_fingering_0" text="Add Fingering &amp;0 (Thumb)" shortcut="Alt+0" />
       <Action name="add_fingering_1" text="Add Fingering &amp;1" shortcut="Alt+1" />
@@ -416,8 +426,6 @@
   </Menu>
   <Menu name="controllers">
     <text>Co&amp;ntrollers</text>
-    <Action name="cut_controllers" text="Cut Controller Events (&amp;X)" />
-    <Action name="copy_controllers" text="&amp;Copy Controller Events" />
     <Action name="set_controllers" text="&amp;Set Controller Values" />
     <Action name="place_controllers" text="&amp;Place a Controller for Each Note" />
     <Action name="expression_sequence" text="Insert &amp;Expression Controller Sequence..." />
@@ -439,18 +447,19 @@
       <Action name="cursor_next_segment" text="Ne&amp;xt Segment" shortcut="Alt+PgDown" />
     <Separator/>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
-      <Action name="play" text="&amp;Play" icon="transport-play" tooltip="Play" /> 
-      <Action name="stop" text="&amp;Stop" icon="transport-stop" tooltip="Stop" /> 
-      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" tooltip="Step Back (Left)" shortcut="Left" />
-      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" tooltip="Step Forward (Right)"  shortcut="Right" />
-      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="Ctrl+Left" />
-      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="Ctrl+Right" /> 
-      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" tooltip="Rewind to Beginning" icon="transport-rewind-end" />
-      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" tooltip="Fast Forward to End" icon="transport-ffwd-end" />
+      <Action name="play" text="&amp;Play" icon="transport-play" />
+      <Action name="stop" text="&amp;Stop" icon="transport-stop" />
+      <Action name="cursor_back" text="Step &amp;Back" icon="step-back" shortcut="Left" />
+      <Action name="cursor_forward" text="Step &amp;Forward" icon="step-forward" shortcut="Right" />
+      <Action name="playback_pointer_back_bar" text="Re&amp;wind" icon="transport-rewind" shortcut="PgUp, Ctrl+Left" />
+      <Action name="playback_pointer_forward_bar" text="&amp;Fast Forward" icon="transport-ffwd" shortcut="PgDown, Ctrl+Right" />
+      <Action name="playback_pointer_start" text="Rewind to &amp;Beginning" icon="transport-rewind-end" shortcut="Home" />
+      <Action name="playback_pointer_end" text="Fast Forward to &amp;End" icon="transport-ffwd-end" shortcut="End" />
       <Action name="jump_to_quick_marker" text="&amp;Jump to Quick Marker" shortcut="Ctrl+M" />
+      <Action name="loop" text="L&amp;oop" icon="button-loop-3" checked="false" shortcut="Ctrl+L" />
       <Action name="toggle_solo" text="S&amp;olo" tooltip="Solo the Active Track" icon="transport-solo" checked="false" />
-      <Action name="toggle_tracking" text="Scro&amp;ll to Follow Playback" tooltip="Scroll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
-      <Action name="panic" text="P&amp;anic" icon="transport-panic" tooltip="Panic! (Ctrl+Alt+P)" shortcut="Alt+Ctrl+P" />
+      <Action name="scroll_to_follow" text="Scro&amp;ll to Follow Playback" icon="transport-tracking" shortcut="Pause" checked="true" />
+      <Action name="panic" text="P&amp;anic" icon="transport-panic" shortcut="Alt+Ctrl+P" />
   </Menu>
 
   <Menu name="Tools">
@@ -491,14 +500,14 @@
     <Menu noMerge="1" name="DurationTools">
       <text>&amp;Durations</text>
             <!-- Reference names, but with _ instead of - -->
-      <Action name="duration_breve" text="&amp;Double Whole Note" icon="breve" shortcut="5" checked="false" group="duration_shortcut" />
-      <Action name="duration_semibreve" text="&amp;Whole Note" icon="semibreve" shortcut="1" checked="false" group="duration_shortcut" />
-      <Action name="duration_minim" text="&amp;Half Note" icon="minim" shortcut="2" checked="false" group="duration_shortcut" />
-      <Action name="duration_crotchet" text="&amp;Quarter Note" icon="crotchet" shortcut="4" checked="false" group="duration_shortcut" />
-      <Action name="duration_quaver" text="&amp;Eighth Note" icon="quaver" shortcut="8" checked="false" group="duration_shortcut" />
-      <Action name="duration_semiquaver" text="&amp;Sixteenth note" icon="semiquaver" shortcut="6" checked="false" group="duration_shortcut" />
-      <Action name="duration_demisemi" text="&amp;Thirty-Second Note" icon="demisemi" shortcut="3" checked="false" group="duration_shortcut" />
-      <Action name="duration_hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" shortcut="0" checked="false" group="duration_shortcut" />
+      <Action name="duration_breve" text="&amp;Double Whole Note" icon="breve" checked="false" group="duration_shortcut" />
+      <Action name="duration_semibreve" text="&amp;Whole Note" icon="semibreve" checked="false" group="duration_shortcut" />
+      <Action name="duration_minim" text="&amp;Half Note" icon="minim" checked="false" group="duration_shortcut" />
+      <Action name="duration_crotchet" text="&amp;Quarter Note" icon="crotchet" checked="false" group="duration_shortcut" />
+      <Action name="duration_quaver" text="&amp;Eighth Note" icon="quaver" checked="false" group="duration_shortcut" />
+      <Action name="duration_semiquaver" text="&amp;Sixteenth note" icon="semiquaver" checked="false" group="duration_shortcut" />
+      <Action name="duration_demisemi" text="&amp;Thirty-Second Note" icon="demisemi" checked="false" group="duration_shortcut" />
+      <Action name="duration_hemidemisemi" text="Sixty-&amp;Fourth Note" icon="hemidemisemi" checked="false" group="duration_shortcut" />
     <Separator/>
       <Action name="duration_dotted_semibreve" text="D&amp;otted Whole Note" icon="dotted-semibreve" checked="false" group="duration_shortcut" />
       <Action name="duration_dotted_minim" text="Dotted Ha&amp;lf Note" icon="dotted-minim" checked="false" group="duration_shortcut" />
@@ -636,7 +645,7 @@
     <Separator/>
     <Action name="edit_undo"/>
     <Action name="edit_redo"/>
-</ToolBar>    
+</ToolBar>
 
 <ToolBar name="Tools Toolbar">
   <text>Tools Toolbar</text>
@@ -663,7 +672,8 @@
   <Action name="playback_pointer_end" />
   <Action name="stop" />
   <Action name="toggle_solo" />
-  <Action name="toggle_tracking" />
+  <Action name="loop" />
+  <Action name="scroll_to_follow" />
   <Action name="panic" />
 </ToolBar>
 
@@ -675,14 +685,14 @@
   <Action name="switch_dots_off" />
 <Separator/>
   <!-- Reference names, but with _ instead of - -->
-  <Action name="breve" icon="breve" checked="false" group="duration_toolbar" tooltip="Double Whole Note (5)" />
-  <Action name="semibreve" icon="semibreve" checked="false" group="duration_toolbar" tooltip="Whole Note (1)" />
-  <Action name="minim" icon="minim" checked="false" group="duration_toolbar" tooltip="Half Note (2)" />
-  <Action name="crotchet" icon="crotchet" checked="true" group="duration_toolbar" tooltip="Quarter Note (4)" />
-  <Action name="quaver" icon="quaver" checked="false" group="duration_toolbar" tooltip="Eighth Note (8)" />
-  <Action name="semiquaver" icon="semiquaver" checked="false" group="duration_toolbar" tooltip="Sixteenth Note (6)" />
-  <Action name="demisemi" icon="demisemi" checked="false" group="duration_toolbar" tooltip="Thirty-Second Note (3)" />
-  <Action name="hemidemisemi" icon="hemidemisemi" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Note (0)" />
+  <Action name="breve" icon="breve" shortcut="5" checked="false" group="duration_toolbar" tooltip="Double Whole Note" />
+  <Action name="semibreve" icon="semibreve" shortcut="1" checked="false" group="duration_toolbar" tooltip="Whole Note" />
+  <Action name="minim" icon="minim" shortcut="2" checked="false" group="duration_toolbar" tooltip="Half Note" />
+  <Action name="crotchet" icon="crotchet" shortcut="4" checked="true" group="duration_toolbar" tooltip="Quarter Note" />
+  <Action name="quaver" icon="quaver" shortcut="8" checked="false" group="duration_toolbar" tooltip="Eighth Note" />
+  <Action name="semiquaver" icon="semiquaver" shortcut="6" checked="false" group="duration_toolbar" tooltip="Sixteenth Note" />
+  <Action name="demisemi" icon="demisemi" shortcut="3" checked="false" group="duration_toolbar" tooltip="Thirty-Second Note" />
+  <Action name="hemidemisemi" icon="hemidemisemi" shortcut="0" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Note" />
   <!-- was Dotted Notes Toolbar -->
   <Action name="dotted_breve" icon="dotted-breve" checked="false" group="duration_toolbar" tooltip="Dotted Double Whole Note" />
   <Action name="dotted_semibreve" icon="dotted-semibreve" checked="false" group="duration_toolbar" tooltip="Dotted Whole Note" />
@@ -692,14 +702,14 @@
   <Action name="dotted_semiquaver" icon="dotted-semiquaver" checked="false" group="duration_toolbar" tooltip="Dotted Sixteenth Note" />
   <Action name="dotted_demisemi" icon="dotted-demisemi" checked="false" group="duration_toolbar" tooltip="Dotted Thirty-Second Note" />
   <!-- was Rests Toolbar -->
-  <Action name="rest_breve" icon="rest-breve" checked="false" group="duration_toolbar" tooltip="Double Whole Rest (5)" />
-  <Action name="rest_semibreve" icon="rest-semibreve" checked="false" group="duration_toolbar" tooltip="Whole Rest (1)" />
-  <Action name="rest_minim" icon="rest-minim" checked="false" group="duration_toolbar" tooltip="Half Rest (2)" />
-  <Action name="rest_crotchet" icon="rest-crotchet" checked="false" group="duration_toolbar" tooltip="Quarter Rest (4)" />
-  <Action name="rest_quaver" icon="rest-quaver" checked="false" group="duration_toolbar" tooltip="Eighth Rest (8)" />
-  <Action name="rest_semiquaver" icon="rest-semiquaver" checked="false" group="duration_toolbar" tooltip="Sixteenth Rest (6)" />
-  <Action name="rest_demisemi" icon="rest-demisemi" checked="false" group="duration_toolbar" tooltip="Thirty-Second Rest (3)" />
-  <Action name="rest_hemidemisemi" icon="rest-hemidemisemi" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Rest (0)" />
+  <Action name="rest_breve" icon="rest-breve" shortcut="5" checked="false" group="duration_toolbar" tooltip="Double Whole Rest" />
+  <Action name="rest_semibreve" icon="rest-semibreve" shortcut="1" checked="false" group="duration_toolbar" tooltip="Whole Rest" />
+  <Action name="rest_minim" icon="rest-minim" shortcut="2" checked="false" group="duration_toolbar" tooltip="Half Rest" />
+  <Action name="rest_crotchet" icon="rest-crotchet" shortcut="4" checked="false" group="duration_toolbar" tooltip="Quarter Rest" />
+  <Action name="rest_quaver" icon="rest-quaver" shortcut="8" checked="false" group="duration_toolbar" tooltip="Eighth Rest" />
+  <Action name="rest_semiquaver" icon="rest-semiquaver" shortcut="6" checked="false" group="duration_toolbar" tooltip="Sixteenth Rest" />
+  <Action name="rest_demisemi" icon="rest-demisemi" shortcut="3" checked="false" group="duration_toolbar" tooltip="Thirty-Second Rest" />
+  <Action name="rest_hemidemisemi" icon="rest-hemidemisemi" shortcut="0" checked="false" group="duration_toolbar" tooltip="Sixty-Fourth Rest" />
   <!-- was Dotted Rests Toolbar -->
   <Action name="rest_dotted_breve" icon="dotted-rest-breve" checked="false" group="duration_toolbar" tooltip="Dotted Double Whole Rest" />
   <Action name="rest_dotted_semibreve" icon="dotted-rest-semibreve" checked="false" group="duration_toolbar" tooltip="Dotted Whole Rest" />
@@ -739,7 +749,7 @@
   <text>Symbols Toolbar</text>
   <Action name="add_segno" />
   <Action name="add_coda" />
-  <Action name="add_breath" /> 
+  <Action name="add_breath" />
 </ToolBar>
 
 <ToolBar name="Marks Toolbar" newline="true" hidden="false" position="right">
@@ -833,11 +843,8 @@
   </enable>
 </State>
 
-<State name="have_selection">
+<State name="have_notation_selection">
   <enable>
-    <Action name="edit_cut"/>
-    <Action name="edit_copy"/>
-    <Action name="delete"/>
     <Action name="cut_and_close"/>
     <Action name="debug_dump"/>
     <Action name="preview_selection"/>
@@ -869,13 +876,21 @@
   </enable>
 </State>
 
+<State name="have_selection">
+  <enable>
+    <Action name="edit_cut"/>
+    <Action name="edit_copy"/>
+    <Action name="delete"/>
+  </enable>
+</State>
+
 <State name="have_rests_in_selection">
   <enable>
     <Action name="note_style_actionmenu"/>
     <Action name="remove_marks"/>
     <Action name="add_pause"/>
     <Action name="add_text_mark"/>
-    <Action name="normalize_rests"/> 
+    <Action name="normalize_rests"/>
     <Action name="collapse_rests_aggressively"/>
     <Action name="expression_sequence"/>
     <Action name="pitch_bend_sequence"/>
@@ -1022,16 +1037,12 @@
 
 <State name="have_controller_selection">
   <enable>
-    <Action name="cut_controllers"/>
-    <Action name="copy_controllers"/>
     <Action name="set_controllers"/>
   </enable>
 </State>
 
 <State name="have_control_ruler">
   <enable>
-    <Action name="cut_controllers" />
-    <Action name="copy_controllers" />
     <Action name="set_controllers" />
     <Action name="place_controllers" />
   </enable>

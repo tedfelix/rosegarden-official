@@ -1,19 +1,13 @@
-# CMake version required. This must be the very first line, because it sets default policies affecting everything else
-cmake_minimum_required(VERSION 3.1)
+# CMake version required. This must be the very first line, because it sets
+# default policies affecting everything else.
+cmake_minimum_required(VERSION 3.5)
 
 # Project name
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "22.06")
-set(ROSEGARDEN_CODENAME "Distant Drums")
-#set(ROSEGARDEN_CODENAME "Enchantress")
-#set(ROSEGARDEN_CODENAME "Flutterbye")
-#set(ROSEGARDEN_CODENAME "Grace Note")
-#set(ROSEGARDEN_CODENAME "Hermosa")
-#set(ROSEGARDEN_CODENAME "Incredible")
-#set(ROSEGARDEN_CODENAME "Joyfulness")
-#set(ROSEGARDEN_CODENAME "Keepsake")
+set(ROSEGARDEN_VERSION "25.12")
+set(ROSEGARDEN_CODENAME "Keepsake")
 #set(ROSEGARDEN_CODENAME "Let Freedom Ring")
 #set(ROSEGARDEN_CODENAME "Mountain Music")
 #set(ROSEGARDEN_CODENAME "Night Owl")
@@ -29,6 +23,32 @@ set(ROSEGARDEN_CODENAME "Distant Drums")
 #set(ROSEGARDEN_CODENAME "Xenophon")
 #set(ROSEGARDEN_CODENAME "Yellow Brick Road")
 #set(ROSEGARDEN_CODENAME "Zaïd")
+#set(ROSEGARDEN_CODENAME "Amadeus")
+#set(ROSEGARDEN_CODENAME "Blue Moon")
+#set(ROSEGARDEN_CODENAME "Cabaret")
+#set(ROSEGARDEN_CODENAME "Duet")
+#set(ROSEGARDEN_CODENAME "Etude")
+#set(ROSEGARDEN_CODENAME "Foxtrot")
+#set(ROSEGARDEN_CODENAME "Gloire du Midi")
+#set(ROSEGARDEN_CODENAME "Harmonie")
+#set(ROSEGARDEN_CODENAME "Intermezzo")
+#set(ROSEGARDEN_CODENAME "Jazz")
+#set(ROSEGARDEN_CODENAME "Koto")
+#set(ROSEGARDEN_CODENAME "Lyric")
+#set(ROSEGARDEN_CODENAME "Mozart")
+#set(ROSEGARDEN_CODENAME "Nocturne")
+#set(ROSEGARDEN_CODENAME "Operetta")
+#set(ROSEGARDEN_CODENAME "Piccolo")
+#set(ROSEGARDEN_CODENAME "Quintet")
+#set(ROSEGARDEN_CODENAME "Rumba")
+#set(ROSEGARDEN_CODENAME "Symphony")
+#set(ROSEGARDEN_CODENAME "Tenor")
+#set(ROSEGARDEN_CODENAME "Unforgettable")
+#set(ROSEGARDEN_CODENAME "Violina")
+#set(ROSEGARDEN_CODENAME "Wind Chimes")
+#set(ROSEGARDEN_CODENAME "Xanadu")
+#set(ROSEGARDEN_CODENAME "Yodel")
+#set(ROSEGARDEN_CODENAME "Ziggy Stardust")
 
 # Make the build type default to "Release"
 if(NOT CMAKE_BUILD_TYPE)
@@ -77,7 +97,7 @@ add_definitions(-DUNSTABLE) # this is changed to STABLE by the release script
 
 # Compiler flags
 
-set(CMAKE_CXX_STANDARD 11) # Enable C++11
+set(CMAKE_CXX_STANDARD 14) # Enable C++14
 
 if(CMAKE_COMPILER_IS_GNUCXX)
    if(CMAKE_SYSTEM_NAME MATCHES Linux OR CMAKE_SYSTEM_NAME STREQUAL GNU)
@@ -106,25 +126,25 @@ option(USE_QT6 "Compile with Qt6." OFF)
 if (USE_QT6)
   # Qt6 is required.
   find_package(Qt6 "6.0.0" REQUIRED COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets Xml Network PrintSupport Test Core5Compat)
-  
+
   set(QT_QTCORE_LIBRARY Qt6::Core)
   set(QT_QTCORE5COMPAT_LIBRARY Qt6::Core5Compat)
   set(QT_QTGUI_LIBRARY Qt6::Widgets Qt6::PrintSupport)
   set(QT_QTXML_LIBRARY Qt6::Xml)
   set(QT_QTNETWORK_LIBRARY Qt6::Network)
   set(QT_QTTEST_LIBRARY Qt6::Test)
-  
+
   set(QT_RCC_EXECUTABLE Qt::rcc)
 else()
   # Qt5 is required.
   find_package(Qt5 "5.1.0" REQUIRED COMPONENTS Core Gui Widgets Xml Network PrintSupport Test)
-  
+
   set(QT_QTCORE_LIBRARY Qt5::Core)
   set(QT_QTGUI_LIBRARY Qt5::Widgets Qt5::PrintSupport)
   set(QT_QTXML_LIBRARY Qt5::Xml)
   set(QT_QTNETWORK_LIBRARY Qt5::Network)
   set(QT_QTTEST_LIBRARY Qt5::Test)
-  
+
   set(QT_RCC_EXECUTABLE ${Qt5Core_RCC_EXECUTABLE})
 endif()
 
@@ -166,7 +186,12 @@ pkg_check_modules(SAMPLERATE REQUIRED samplerate>=0.1.2)
 pkg_check_modules(SNDFILE sndfile>=1.0.16)
 add_feature_info(SNDFILE SNDFILE_FOUND "Better support for WAV files")
 
-pkg_check_modules(JACK jack)
+pkg_check_modules(PC_JACK jack)
+# Use find_library to turn it into a full path
+find_library(JACK_LIBRARIES NAMES ${PC_JACK_LIBRARIES} jack PATHS ${PC_JACK_LIBRARY_DIRS})
+if(JACK_LIBRARIES)
+    set(JACK_FOUND TRUE)
+endif()
 if(JACK_FOUND)
     add_feature_info(JACK JACK_FOUND "Library for accessing the JACK server (http://jackaudio.org).")
 else()
@@ -189,6 +214,18 @@ if(NOT DISABLE_LIRC)
 endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
+# lilv for lv2 plugins
+pkg_check_modules(LILV lilv-0)
+if(NOT LILV_INCLUDE_DIRS)
+  message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
+endif()
+
+pkg_check_modules(LV2 lv2)
+if(LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
+  set(LILV_FOUND TRUE)
+endif()
+add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
+
 # --------------------------------------------------------
 
 # Print out a summary of what was found and what is missing
@@ -207,6 +244,21 @@ else()
     set(ROSEGARDENPRIVATE_STATIC_BUILD TRUE) # for generating rosegardenprivate-export.h
     message(STATUS "Not building unit tests, using a static library for rosegarden")
 endif()
+
+#########################
+# target for cppcheck
+
+set(CPPCHECK_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cppcheck.out)
+
+# dummy_file will never exist so "make cppcheck" always runs cppcheck
+
+#add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
+#  COMMAND cppcheck -I${CMAKE_CURRENT_SOURCE_DIR}/src --force --enable=all --inconclusive --std=c++14 --library=qt --inline-suppr --quiet --suppress=missingInclude --suppress=missingIncludeSystem ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
+add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
+  COMMAND $(CMAKE_SOURCE_DIR)/scripts/cppcheck-rg $(CMAKE_SOURCE_DIR)/src >& ${CPPCHECK_OUTPUT})
+
+add_custom_target(cppcheck DEPENDS ${CPPCHECK_OUTPUT} dummy_file)
+#########################
 
 
 # --------------------------------------------------------

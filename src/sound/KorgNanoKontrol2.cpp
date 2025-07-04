@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2020 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2020-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -35,15 +35,7 @@ namespace Rosegarden
 {
 
 
-KorgNanoKontrol2::KorgNanoKontrol2() :
-    m_page(0),
-    m_firstRefresh(true),
-    m_play(false),
-    m_record(false),
-    m_stop(false),
-    m_rewind(false),
-    m_fastForward(false),
-    m_cycle(false)
+KorgNanoKontrol2::KorgNanoKontrol2()
 {
 }
 
@@ -90,8 +82,8 @@ void KorgNanoKontrol2::init()
         // Ask user if it is ok to reconfigure the device.
         QMessageBox::StandardButton reply = QMessageBox::warning(
                 0,
-                tr("Rosegarden"),
-                tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
+                QObject::tr("Rosegarden"),
+                QObject::tr("The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you've made with the nanoKONTROL2 editor.  Reconfigure?"),
                 QMessageBox::Yes | QMessageBox::No,
                 QMessageBox::Yes);
 
@@ -157,6 +149,9 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
     // Not a CC?  Bail.
     if (event->getType() != MappedEvent::MidiController)
         return;
+
+    // ??? See RosegardenMainWindow::customEvent().  That would be a
+    //     more generic, albeit slower (message queue), way to do this.
 
     const MidiByte controlNumber = event->getData1();
     const MidiByte value = event->getData2();
@@ -318,7 +313,7 @@ void KorgNanoKontrol2::processEvent(const MappedEvent *event)
 
 }
 
-void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)
+void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value) const
 {
     const int trackNumber = controlNumber + m_page*8;
 
@@ -356,7 +351,7 @@ void KorgNanoKontrol2::processFader(MidiByte controlNumber, MidiByte value)
     doc->setModified();
 }
 
-void KorgNanoKontrol2::processKnob(MidiByte controlNumber, MidiByte value)
+void KorgNanoKontrol2::processKnob(MidiByte controlNumber, MidiByte value) const
 {
     const int trackNumber = controlNumber - 16 + m_page*8;
 
@@ -393,7 +388,7 @@ void KorgNanoKontrol2::processKnob(MidiByte controlNumber, MidiByte value)
     doc->setModified();
 }
 
-void KorgNanoKontrol2::processSolo(MidiByte controlNumber)
+void KorgNanoKontrol2::processSolo(MidiByte controlNumber) const
 {
     const int trackNumber = controlNumber - 32 + m_page*8;
 
@@ -411,7 +406,7 @@ void KorgNanoKontrol2::processSolo(MidiByte controlNumber)
     doc->slotDocumentModified();
 }
 
-void KorgNanoKontrol2::processMute(MidiByte controlNumber)
+void KorgNanoKontrol2::processMute(MidiByte controlNumber) const
 {
     const int trackNumber = controlNumber - 48 + m_page*8;
 
@@ -429,7 +424,7 @@ void KorgNanoKontrol2::processMute(MidiByte controlNumber)
     doc->slotDocumentModified();
 }
 
-void KorgNanoKontrol2::processRecord(MidiByte controlNumber)
+void KorgNanoKontrol2::processRecord(MidiByte controlNumber) const
 {
     const int trackNumber = controlNumber - 64 + m_page*8;
 
@@ -613,7 +608,8 @@ void KorgNanoKontrol2::refreshLEDs()
     }
 
     // Cycle
-    const bool cycle = doc->getComposition().isLooping();
+    const bool cycle =
+            (doc->getComposition().getLoopMode() == Composition::LoopOn);
     // If there was a change...
     if (cycle != m_cycle) {
         ExternalController::send(

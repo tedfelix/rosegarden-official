@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,7 +31,6 @@ namespace Rosegarden
   class ChordSegmentMap;
   class FigurationSourceMap;
   class MacroCommand;
-  typedef long timeT;
 
 // @class SegmentFigData
 // Data about a segment, for figuration purposes.
@@ -54,17 +53,17 @@ public:
     m_needsTag(needsTag),
     m_id(id)
   {}
-  SegmentFigData(Segment* s);
+  explicit SegmentFigData(Segment* s);
 
   void addTagIfNeeded(Segment *s, MacroCommand* command);
-  int getID() { return m_id; }
-  bool needsTag() { return m_needsTag; }
-  SegTypes getType() { return m_type; }
+  int getID() const { return m_id; }
+  bool needsTag() const { return m_needsTag; }
+  SegTypes getType() const { return m_type; }
   void convertType(SegTypes type) {
     m_type = type;
     m_needsTag = true;
   }
-  bool isa(SegTypes type) { return m_type == type; }
+  bool isa(SegTypes type) const { return m_type == type; }
 
   static int getUnusedSegmentID() {
     ++m_maxID;
@@ -82,14 +81,14 @@ public:
   // Try to expand the figuration wrt these parameters.
   // @return The time at the end of the expansion.  If no expansion
   // was done, return startTime.
-  static timeT expand(SourcedFiguration& figuration,
+  static timeT expand(SourcedFiguration& sourcedFiguration,
                       ChordSegment chordSource,
                       Segment*    target,
                       timeT       startTime);
 
   static void updateComposition(MacroCommand* command);
   static bool eventShouldPass(Event *e);
-    
+
 private:
   SegTypes      m_type;
   bool          m_needsTag;

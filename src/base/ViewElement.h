@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -17,20 +17,28 @@
 #ifndef RG_VIEWELEMENT_H
 #define RG_VIEWELEMENT_H
 
-
 #include "Event.h"
+#include "TimeT.h"
 
 #include <set>
-#include <list>
+#include <string>
+#include <iostream>
 
-namespace Rosegarden 
+
+namespace Rosegarden
 {
 
+
+class Event;
+
+
+/// An event (note, rest) on an editor (notation, matrix).
 /**
  * The abstract base for classes which represent an Event as an
  * on-screen graphic item (a note, a rectangle on a piano roll).
+ *
+ * "EventView" is probably a better name.
  */
-
 class ViewElement
 {
     friend class ViewElementList;
@@ -80,11 +88,11 @@ public:
     friend bool operator<(const ViewElement&, const ViewElement&);
 
 protected:
-    ViewElement(Event *);
+    explicit ViewElement(Event *);
 
     double m_layoutX;
     double m_layoutY;
-    
+
     Event *m_event;
 };
 
@@ -125,17 +133,17 @@ public:
     iterator findSingle(ViewElement *);
 
     const_iterator findSingle(ViewElement *e) const {
-        return const_iterator(((const ViewElementList *)this)->findSingle(e));
+        return const_iterator(findSingle(e));
     }
 
     /**
      * Returns first iterator pointing at or after the given time,
      * end() if time is beyond the end of the list
-     */ 
+     */
     iterator findTime(timeT time);
 
     const_iterator findTime(timeT time) const {
-        return const_iterator(((const ViewElementList *)this)->findTime(time));
+        return const_iterator(findTime(time));
     }
 
     /**
@@ -145,7 +153,7 @@ public:
     iterator findNearestTime(timeT time);
 
     const_iterator findNearestTime(timeT time) const {
-        return const_iterator(((const ViewElementList *)this)->findNearestTime(time));
+        return const_iterator(findNearestTime(time));
     }
 };
 
@@ -153,4 +161,3 @@ public:
 
 
 #endif
-

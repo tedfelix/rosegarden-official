@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -47,8 +47,8 @@ class Composition;
 class RG21Loader
 {
 public:
-    RG21Loader(Studio *);
-    
+    explicit RG21Loader(Studio *);
+
     /**
      * Load and parse the RG2.1 file \a fileName, and write it into the
      * given Composition (clearing the existing segment data first).
@@ -103,9 +103,9 @@ private:
     void setGroupProperties(Event *);
 
     long convertRG21Pitch(long rg21pitch, int noteModifier);
-    timeT convertRG21Duration(QStringList::Iterator&);
+    static timeT convertRG21Duration(QStringList::Iterator&);
     typedef std::vector<std::string> StringVector;
-    StringVector convertRG21ChordMods(int chordMod);
+    static StringVector convertRG21ChordMods(int chordMod);
 
     bool readNextLine();
 

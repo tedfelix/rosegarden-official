@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,13 +20,16 @@
 #define RG_SEGMENTTRANSPOSECOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
 #include "base/Selection.h"
-#include "document/CommandHistory.h"
+
 #include <QCoreApplication>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -42,7 +45,7 @@ public:
     SegmentTransposeCommand(SegmentSelection selection,
         bool changeKey, int steps, int semitones, bool transposeSegmentBack);
 
-    ~SegmentTransposeCommand() override;
+    virtual ~SegmentTransposeCommand() override;
 
     static QString getGlobalName(int semitones = 0) {
         switch (semitones) {
@@ -50,9 +53,15 @@ public:
         }
     }
 
-protected:
-    void processSegment(Segment &segment, bool changeKey, int steps, int semitones, bool transposeSegmentBack);
+private:
+
+    void processSegment(Segment &segment, bool changeKey, int steps,
+            int semitones, bool transposeSegmentBack);
+
+    std::vector<EventSelection *> m_selections;
+
 };
+
 
 }
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -40,13 +40,13 @@ namespace Rosegarden
 class SelectionSituation
 {
 public:
-    SelectionSituation(std::string eventType,
+    SelectionSituation(const std::string& eventType,
                        EventSelection *selection,
                        int currentFlatValue = -1);
 
     QString getPropertyNameQString() const;
 
-    bool isSuitable(Event *e) const  { return e->isa(m_eventType); }
+    bool isSuitable(const Event *e) const  { return e->isa(m_eventType); }
 
     /// The min and max value for the selected events.
     std::pair<int,int> getMinMax() const;

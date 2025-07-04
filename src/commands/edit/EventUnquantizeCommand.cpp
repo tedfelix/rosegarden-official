@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -22,61 +22,38 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
-#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 EventUnquantizeCommand::EventUnquantizeCommand(Segment &segment,
         timeT startTime,
         timeT endTime,
-        Quantizer *quantizer) :
-        BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
-                     true),  // bruteForceRedo
-        m_quantizer(quantizer),
-        m_selection(nullptr)
+        std::shared_ptr<Quantizer> quantizer) :
+    BasicCommand(tr("Unquantize Events"), segment, startTime, endTime,
+                 true),  // bruteForceRedo
+    m_selection(nullptr),
+    m_quantizer(quantizer)
 {
-    // nothing else
 }
 
 EventUnquantizeCommand::EventUnquantizeCommand(
-    EventSelection &selection,
-    Quantizer *quantizer) :
-        BasicCommand(tr("Unquantize Events"),
-                     selection.getSegment(),
-                     selection.getStartTime(),
-                     selection.getEndTime(),
-                     true),  // bruteForceRedo
-        m_quantizer(quantizer),
-        m_selection(&selection)
+        EventSelection &selection,
+        std::shared_ptr<Quantizer> quantizer) :
+    BasicCommand(tr("Unquantize Events"),
+                 selection.getSegment(),
+                 selection.getStartTime(),
+                 selection.getEndTime(),
+                 true),  // bruteForceRedo
+    m_selection(&selection),
+    m_quantizer(quantizer)
 {
-    // nothing else
 }
 
 EventUnquantizeCommand::~EventUnquantizeCommand()
 {
-    delete m_quantizer;
-}
-
-QString
-EventUnquantizeCommand::getGlobalName(Quantizer *)
-{
-    /*!!!
-        if (quantizer) {
-    	switch (quantizer->getType()) {
-    	case Quantizer::PositionQuantize:
-    	    return tr("Position &Quantize");
-    	case Quantizer::UnitQuantize:
-    	    return tr("Unit &Quantize");
-    	case Quantizer::NoteQuantize:
-    	    return tr("Note &Quantize");
-    	case Quantizer::LegatoQuantize:
-    	    return tr("Smoothing &Quantize");
-    	}
-        }
-    */ 
-    return tr("&Quantize...");
 }
 
 void

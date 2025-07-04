@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -38,12 +38,12 @@ public:
     MappedDevice();
     MappedDevice(DeviceId id,
                  Device::DeviceType type,
-                 std::string name,
-                 std::string connection = "");
+                 const std::string& name,
+                 const std::string& connection = "");
 
     MappedDevice(const MappedDevice &mD);
     ~MappedDevice();
- 
+
     // Clear down
     //
     void clear();
@@ -51,9 +51,9 @@ public:
     MappedDevice& operator+(const MappedDevice &mD);
     MappedDevice& operator=(const MappedDevice &mD);
 
-    friend QDataStream& operator>>(QDataStream &dS, MappedDevice *mD);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedDevice *mD);
     friend QDataStream& operator<<(QDataStream &dS, MappedDevice *mD);
-    friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedDevice &mD);
     friend QDataStream& operator<<(QDataStream &dS, const MappedDevice &mD);
 
     std::string getName() const { return m_name; }
@@ -66,11 +66,11 @@ public:
     void setType(Device::DeviceType type) { m_type = type; }
 
     std::string getConnection() const { return m_connection; }
-    void setConnection(std::string connection) { m_connection = connection; }
+    void setConnection(const std::string& connection) { m_connection = connection; }
 
     MidiDevice::DeviceDirection getDirection() const { return m_direction; }
     void setDirection(MidiDevice::DeviceDirection direction) { m_direction = direction; }
-    
+
     bool isRecording() const { return m_recording; }
     void setRecording(bool recording) { m_recording = recording; }
 
@@ -101,4 +101,3 @@ typedef std::vector<MappedInstrument*>::iterator
 }
 
 #endif // RG_MAPPEDDEVICE_H
-

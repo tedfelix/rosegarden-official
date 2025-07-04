@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,8 +16,11 @@
 */
 
 #define RG_MODULE_STRING "[TempoRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TempoRuler.h"
+
+#include "TempoColour.h"
 
 #include "misc/Debug.h"
 #include "base/Composition.h"
@@ -31,7 +34,6 @@
 #include "gui/general/GUIPalette.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/widgets/TextFloat.h"
-#include "TempoColour.h"
 
 #include <QColor>
 #include <QCursor>
@@ -54,41 +56,24 @@
 #include <QMouseEvent>
 
 
-
 namespace Rosegarden
 {
+
 
 TempoRuler::TempoRuler(RulerScale *rulerScale,
                        RosegardenDocument *doc,
                        int height,
                        bool small,
                        bool Thorn) :
-        QWidget(nullptr),
-        m_height(height),
-        m_currentXOffset(0),
-        m_width( -1),
-        m_small(small),
-        m_illuminate( -1),
-        m_illuminatePoint(false),
-        m_illuminateTarget(false),
-        m_refreshLinesOnly(false),
-        m_dragVert(false),
-        m_dragTarget(false),
-        m_dragHoriz(false),
-        m_dragStartY(0),
-        m_dragStartX(0),
-        m_dragFine(false),
-        m_clickX(0),
-        m_dragStartTempo( -1),
-        m_dragStartTarget( -1),
-        m_dragOriginalTempo( -1),
-        m_dragOriginalTarget( -1),
-        m_composition(&doc->getComposition()),
-        m_rulerScale(rulerScale),
-        m_menu(nullptr),
-        m_editTempoController(EditTempoController::self()),
-        m_fontMetrics(m_boldFont),
-        m_Thorn(Thorn)
+    QWidget(nullptr),
+    m_height(height),
+    m_small(small),
+    m_composition(&doc->getComposition()),
+    m_rulerScale(rulerScale),
+    m_menu(nullptr),
+    m_editTempoController(EditTempoController::self()),
+    m_fontMetrics(m_boldFont),
+    m_Thorn(Thorn)
 {
     m_font.setPixelSize(m_height / 3);
     m_boldFont.setPixelSize(m_height * 2 / 5);
@@ -97,24 +82,21 @@ TempoRuler::TempoRuler(RulerScale *rulerScale,
 
     m_editTempoController->setDocument(doc); // in case self() just created it
 
-    QObject::connect
-    (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-     this, SLOT(update()));
+    QObject::connect(
+            CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, static_cast<void(TempoRuler::*)()>(&TempoRuler::update));
 
-    createAction("insert_tempo_here", SLOT(slotInsertTempoHere()));
-    createAction("insert_tempo_at_pointer", SLOT(slotInsertTempoAtPointer()));
-    createAction("delete_tempo", SLOT(slotDeleteTempoChange()));
-    createAction("ramp_to_next", SLOT(slotRampToNext()));
-    createAction("unramp", SLOT(slotUnramp()));
-    createAction("edit_tempo", SLOT(slotEditTempo()));
-    createAction("edit_time_signature", SLOT(slotEditTimeSignature()));
-    createAction("edit_tempos", SLOT(slotEditTempos()));
+    createAction("insert_tempo_here", &TempoRuler::slotInsertTempoHere);
+    createAction("insert_tempo_at_pointer",
+                 &TempoRuler::slotInsertTempoAtPointer);
+    createAction("delete_tempo", &TempoRuler::slotDeleteTempoChange);
+    createAction("ramp_to_next", &TempoRuler::slotRampToNext);
+    createAction("unramp", &TempoRuler::slotUnramp);
+    createAction("edit_tempo", &TempoRuler::slotEditTempo);
+    createAction("edit_time_signature", &TempoRuler::slotEditTimeSignature);
+    createAction("edit_tempos", &TempoRuler::slotEditTempos);
 
     setMouseTracking(false);
-}
-
-TempoRuler::~TempoRuler()
-{
 }
 
 void
@@ -372,26 +354,12 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
 
         m_illuminate = tcn;
         m_illuminatePoint = false;
-        m_illuminateTarget = false;
-        //!!!    m_refreshLinesOnly = true;
-
         //!!! merge this test with the one in mousePressEvent as
         //isCloseToStart or equiv, and likewise for close to end
 
         int px = m_rulerScale->getXForTime(tc.first) + m_currentXOffset;
         if (x >= px && x < px + 5) {
             m_illuminatePoint = true;
-        } else {
-            timeT nt = m_composition->getEndMarker();
-            if (tcn < m_composition->getTempoChangeCount() - 1) {
-                nt = m_composition->getTempoChange(tcn + 1).first;
-            }
-            int nx = m_rulerScale->getXForTime(nt) + m_currentXOffset;
-            if (x > px + 5 && x > nx - 5) {
-                m_illuminateTarget = true;
-            }
-
-            //        std::cerr << "nt = " << nt << ", nx = " << nx << ", x = " << x << ", m_illuminateTarget = " << m_illuminateTarget << std::endl;
         }
 
         showTextFloat(tc.second, tr.first ? tr.second : -1,
@@ -423,7 +391,6 @@ TempoRuler::leaveEvent(QEvent *)
         setMouseTracking(false);
         m_illuminate = -1;
         m_illuminatePoint = false;
-        //!!!    m_refreshLinesOnly = true;
         TextFloat::getTextFloat()->hide();
 
         update();
@@ -445,31 +412,13 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
 
     if (time >= 0) {
 
+        // ??? This is always false.
         if (showTime) {
-            int bar, beat, fraction, remainder;
-            m_composition->getMusicalTimeForAbsoluteTime
-            (time, bar, beat, fraction, remainder);
-            RealTime rt = m_composition->getElapsedRealTime(time);
-           
-            // bars in user space start at 1, not 0
-            bar++;
-
-            // blargh -- duplicated with TempoView::makeTimeString
-            timeText = QString("%1%2%3-%4%5-%6%7-%8%9")
-                       .arg(bar / 100)
-                       .arg((bar % 100) / 10)
-                       .arg(bar % 10)
-                       .arg(beat / 10)
-                       .arg(beat % 10)
-                       .arg(fraction / 10)
-                       .arg(fraction % 10)
-                       .arg(remainder / 10)
-                       .arg(remainder % 10);
-
-            timeText = QString("%1\n%2")
-                       .arg(timeText)
-                       //        .arg(rt.toString().c_str());
-                       .arg(rt.toText(true).c_str());
+            timeText = m_composition->makeTimeString(
+                    time, Composition::TimeMode::MusicalTime);
+            timeText += "\n";
+            timeText += m_composition->makeTimeString(
+                    time, Composition::TimeMode::RealTime);
         }
 
         TimeSignature sig =
@@ -560,6 +509,7 @@ TempoRuler::getYForTempo(tempoT tempo)
     return y;
 }
 
+/* unused
 tempoT
 TempoRuler::getTempoForY(int y)
 {
@@ -577,6 +527,7 @@ TempoRuler::getTempoForY(int y)
 
     return tempo;
 }
+*/
 
 void
 TempoRuler::paintEvent(QPaintEvent* e)
@@ -593,9 +544,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // nothing in this part of the ruler that means anything anyway.  If we're
     // using Thorn, use a nice dark gray that just contrasts with the black
     // horizontal line here
-    QColor kuller(0x40, 0x40, 0x40);
-    if (!m_Thorn) kuller = palette().window().color();
-    m_buffer.fill(kuller);
+    QColor backgroundColor(0x40, 0x40, 0x40);
+    if (!m_Thorn) backgroundColor = palette().window().color();
+    m_buffer.fill(backgroundColor);
 
     QPainter paint(&m_buffer);
     paint.setPen(GUIPalette::getColour
@@ -604,9 +555,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
     paint.setClipRegion(e->region());
     paint.setClipRect(clipRect);
 
-    timeT from = m_rulerScale->getTimeForX
+    const timeT from = m_rulerScale->getTimeForX
                  (clipRect.x() - m_currentXOffset - 100);
-    timeT to = m_rulerScale->getTimeForX
+    const timeT to = m_rulerScale->getTimeForX
                (clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("019");
@@ -615,13 +566,12 @@ TempoRuler::paintEvent(QPaintEvent* e)
     // bmp text aligns better in temporuler now - is this font dependent?
     int textY = fontHeight - 3;
 
-    double prevEndX = -1000.0;
-    double prevTempo = 0.0;
-    long prevBpm = 0;
+    // Assemble a map of timePoints.
 
-    typedef std::map<timeT, int> TimePoints;
-    int tempoChangeHere = 1;
-    int timeSigChangeHere = 2;
+    typedef std::map<timeT, int /*changeMask*/> TimePoints;
+    // changeMask values.
+    constexpr int tempoChangeHere = 1;
+    constexpr int timeSigChangeHere = 2;
     TimePoints timePoints;
 
     for (int tempoNo = m_composition->getTempoChangeNumberAt(from);
@@ -648,20 +598,25 @@ TempoRuler::paintEvent(QPaintEvent* e)
         }
     }
 
-    int lastx = 0, lasty = 0, lastx1 = 0;
+    // Draw the points, lines, and colored backgrounds.
+
+    // Keep track of whether we actually have any points.
     bool haveSome = false;
     //    tempoT minTempo = m_composition->getMinTempo();
     //    tempoT maxTempo = m_composition->getMaxTempo();
-    bool illuminate = false;
 
-    if (m_illuminate >= 0) {
-        int tcn = m_composition->getTempoChangeNumberAt(from);
-        illuminate = (m_illuminate == tcn);
-    }
+    //if (m_illuminate >= 0) {
+    //    int tcn = m_composition->getTempoChangeNumberAt(from);
+    //  illuminate = (m_illuminate == tcn);
+    //}
+
+    RG_DEBUG << "paintEvent" << from << to;
 
     for (TimePoints::iterator i = timePoints.begin(); ; ++i) {
 
-        timeT t0, t1;
+        // Compute the time of the previous point (t0).
+
+        timeT t0;
 
         if (i == timePoints.begin()) {
             t0 = from;
@@ -670,6 +625,10 @@ TempoRuler::paintEvent(QPaintEvent* e)
             --j;
             t0 = j->first;
         }
+
+        // Compute the time of the current point (t1).
+
+        timeT t1;
 
         if (i == timePoints.end()) {
             t1 = to;
@@ -680,13 +639,13 @@ TempoRuler::paintEvent(QPaintEvent* e)
         if (t1 <= t0)
             t1 = to;
 
-        int tcn = m_composition->getTempoChangeNumberAt(t0);
-        tempoT tempo = m_composition->getTempoAtTime(t0);
+        const int tcn = m_composition->getTempoChangeNumberAt(t0);
+        bool illuminate = (m_illuminate == tcn);
+        const tempoT tempo0 = m_composition->getTempoAtTime(t0);
+        const tempoT tempo1 = m_composition->getTempoAtTime(t1 - 1);
 
-        std::pair<bool, tempoT> ramping(false, tempo);
-        if (tcn > 0 && tcn < m_composition->getTempoChangeCount() + 1) {
-            ramping = m_composition->getTempoRamping(tcn - 1, true);
-        }
+        RG_DEBUG << "time point" << t0 << t1 << tempo0 << tempo1 <<
+            tcn << m_illuminate;
 
         double x0, x1;
         x0 = m_rulerScale->getXForTime(t0) + m_currentXOffset;
@@ -697,57 +656,32 @@ TempoRuler::paintEvent(QPaintEvent* e)
                        paletteBackgroundColor());
             }
         */
-        QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
+        QColor colour =
+            TempoColour::getColour(m_composition->getTempoQpm(tempo0));
         paint.setPen(colour);
         paint.setBrush(colour);
 
-        if (!m_refreshLinesOnly) {
-            //         RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1;
-            paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
-        }
+        RG_DEBUG << "TempoRuler: draw rect from " << x0 << " to " << x1;
+        paint.drawRect(int(x0), 0, int(x1 - x0) + 1, height());
 
-        int y = getYForTempo(tempo);
-        /*!!!
-            int drawh = height() - 4;
-            int y = drawh / 2;
-            if (maxTempo > minTempo) {
-                y = drawh -
-                int((double(tempo - minTempo) / double(maxTempo - minTempo))
-                    * drawh + 0.5);
-            }
-        */
+        int y = getYForTempo(tempo0);
         y += 2;
 
+        // If we've determined that we have points, draw them.
         if (haveSome) {
 
             int x = int(x0) + 1;
-            int ry = lasty;
+            int ry = y;
 
-            bool illuminateLine = (illuminate &&
-                                   !m_illuminatePoint && !m_illuminateTarget);
+            bool illuminateLine = (illuminate && !m_illuminatePoint);
 
             paint.setPen(illuminateLine ? QColor(Qt::white) : QColor(Qt::black));
 
-            if (ramping.first) {
-                ry = getYForTempo(ramping.second);
-                ry += 2;
-                /*!!!
-                        ry = drawh -
-                            int((double(ramping.second - minTempo) /
-                             double(maxTempo - minTempo))
-                            * drawh + 0.5);
-                */
-            }
+            ry = getYForTempo(tempo1);
+            ry += 2;
+            RG_DEBUG << "drawLine1" << x0 + 1 << y << x1 - 1 << ry;
+            paint.drawLine(x0 + 1, y, x1 - 1, ry);
 
-            paint.drawLine(lastx + 1, lasty, x - 2, ry);
-
-            if (!illuminateLine && illuminate && m_illuminateTarget) {
-                if (x > lastx) {
-                    paint.setPen(QColor(Qt::white));
-                    paint.drawLine(x - 6, ry - ((ry - lasty) * 6) / (x - lastx),
-                                   x - 2, ry);
-                }
-            }
 
             if (m_illuminate >= 0) {
                 illuminate = (m_illuminate == tcn);
@@ -762,27 +696,20 @@ TempoRuler::paintEvent(QPaintEvent* e)
             paint.drawPoint(x, y);
         }
 
-        lastx = int(x0) + 1;
-        lastx1 = int(x1) + 1;
-        lasty = y;
+        // We want to go through this loop at least once.  Check for end here.
         if (i == timePoints.end())
             break;
+
+        // We have more than zero points to plot.  Go ahead and start
+        // plotting them.
         haveSome = true;
     }
 
-    if (lastx1 < e->rect().x() + e->rect().width()) {
-        /*!!!
-            paint.fillRect(lastx1, 0,
-                       e->rect().x() + e->rect().width() - lastx1, height(),
-                       paletteBackgroundColor());
-        */
-    }
-
-    if (haveSome) {
-        bool illuminateLine = (illuminate && !m_illuminatePoint);
-        paint.setPen(illuminateLine ? QColor(Qt::white) : QColor(Qt::black));
-        paint.drawLine(lastx + 1, lasty, width(), lasty);
-    } else if (!m_refreshLinesOnly) {
+    // If there were no points to draw, just fill the ruler with the
+    // appropriate tempo color.
+    // ??? Seems like the code above would have already done this.  Is this
+    //     really necessary?
+    if (!haveSome) {
         tempoT tempo = m_composition->getTempoAtTime(from);
         QColor colour = TempoColour::getColour(m_composition->getTempoQpm(tempo));
         paint.setPen(colour);
@@ -790,9 +717,15 @@ TempoRuler::paintEvent(QPaintEvent* e)
         paint.drawRect(e->rect());
     }
 
+    // Draw the labels.
+
     paint.setPen(QColor(Qt::black));
     paint.setBrush(QColor(Qt::black));
     paint.drawLine(0, 0, width(), 0);
+
+    double prevEndX = -1000.0;
+    double prevTempo = 0.0;
+    long prevBpm = 0;
 
     for (TimePoints::iterator i = timePoints.begin();
             i != timePoints.end(); ++i) {
@@ -800,14 +733,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
         timeT time = i->first;
         double x = m_rulerScale->getXForTime(time) + m_currentXOffset;
 
-        /*
-            paint.drawLine(static_cast<int>(x),
-                       height() - (height()/4),
-                       static_cast<int>(x),
-                       height());
-        */
-
-        if ((i->second & timeSigChangeHere) && !m_refreshLinesOnly) {
+        if ((i->second & timeSigChangeHere)) {
 
             TimeSignature sig =
                 m_composition->getTimeSignatureAt(time);
@@ -820,7 +746,7 @@ TempoRuler::paintEvent(QPaintEvent* e)
             paint.drawText(static_cast<int>(x) + 2, m_height - 2, str);
         }
 
-        if ((i->second & tempoChangeHere) && !m_refreshLinesOnly) {
+        if ((i->second & tempoChangeHere)) {
 
             double tempo = m_composition->getTempoQpm(m_composition->getTempoAtTime(time));
             long bpm = long(tempo);
@@ -846,9 +772,9 @@ TempoRuler::paintEvent(QPaintEvent* e)
             prevBpm = bpm;
 
             QRect bounds = m_fontMetrics.boundingRect(tempoString);
-            
+
             x += 3; // bmp text aligns better in temporuler now - is this font dependent?
-            
+
             paint.setFont(m_font);
             if (time > 0)
                 x -= bounds.width() / 2;
@@ -870,8 +796,6 @@ TempoRuler::paintEvent(QPaintEvent* e)
                        clipRect.width(), clipRect.height());
 
     dbpaint.end();
-
-    m_refreshLinesOnly = false;
 }
 
 void
@@ -950,7 +874,7 @@ void
 TempoRuler::slotEditTempo()
 {
     const timeT atTime = m_rulerScale->getTimeForX(m_clickX - m_currentXOffset);
-    m_editTempoController->editTempo(this, atTime);
+    m_editTempoController->editTempo(this, atTime, false);
 }
 
 void

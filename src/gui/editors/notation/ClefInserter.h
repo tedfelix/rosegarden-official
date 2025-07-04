@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,7 +20,6 @@
 
 #include "base/NotationTypes.h"
 #include "NotationTool.h"
-#include "base/Event.h"
 
 #include <QString>
 
@@ -28,8 +27,10 @@
 namespace Rosegarden
 {
 
-class ViewElement;
+
+class NotationMouseEvent;
 class NotationWidget;
+
 
 /**
  * This tool will insert clefs on mouse click events
@@ -37,7 +38,7 @@ class NotationWidget;
 class ClefInserter : public NotationTool
 {
     Q_OBJECT
-    
+
     friend class NotationToolBox;
 
 public:
@@ -45,11 +46,6 @@ public:
 
     void handleLeftButtonPress(const NotationMouseEvent *) override;
 
-
-
-    /**
-     * Useful to get the tool name from a NotationTool object
-     */ 
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -57,7 +53,7 @@ public:
     static QString ToolName();
 
 public slots:
-    void slotSetClef(Clef clefType);
+    void slotSetClef(const Clef &clefType);
 
 protected slots:
     void slotNotesSelected();
@@ -65,9 +61,10 @@ protected slots:
     void slotSelectSelected();
 
 protected:
-    ClefInserter(NotationWidget *);
+    explicit ClefInserter(NotationWidget *);
     Clef m_clef;
 };
+
 
 }
 

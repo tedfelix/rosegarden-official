@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,15 +19,17 @@
 #ifndef RG_TEXTINSERTIONCOMMAND_H
 #define RG_TEXTINSERTIONCOMMAND_H
 
-#include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include "base/Event.h"
+#include "base/NotationTypes.h"
+#include "base/Selection.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Event;
@@ -40,7 +42,7 @@ class TextInsertionCommand : public BasicCommand
 public:
     TextInsertionCommand(Segment &segment,
                          timeT time,
-                         Text text);
+                         const Text& text);
     ~TextInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;

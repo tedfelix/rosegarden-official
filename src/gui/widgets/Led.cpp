@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is based on KLed from the KDE libraries
     Copyright (C) 1998 Jörg Habenicht (j.habenicht@europemail.com)
@@ -24,6 +24,7 @@
 
 #include "Led.h"
 
+#include "misc/Preferences.h"
 #include "misc/Debug.h"
 
 #include <QPainter>
@@ -152,15 +153,18 @@ Led::draw(QPainter &painter)
     tmpPainter.drawPoint(pos, pos);
 
 
-    // *** Draw the round sunken frame around the LED.
+    // *** Draw the round sunken frame (bezel) around the LED.
 
     // ### shouldn't this value be smaller for smaller LEDs?
     // Given that there's no way to get an LED any size other than 16x16,
     // it makes no difference.
     pen.setWidth(2 * scale);
 
-    // Set the initial color value to white.
+    // Set the initial color value.
     QColor frameColor = Qt::white;
+    if (Preferences::getTheme() == Preferences::DarkTheme)
+        frameColor = Qt::gray;
+
     // Start drawing the shadow border at -45 degrees (-45*16 = -720).
     const int angle = -720;
 

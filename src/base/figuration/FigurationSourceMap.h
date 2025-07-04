@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,6 +18,8 @@
 #ifndef RG_FIGURATIONSOURCEMAP_H
 #define RG_FIGURATIONSOURCEMAP_H
 
+#include "base/TimeT.h"
+
 #include <vector>
 #include <map>
 #include <set>
@@ -31,7 +33,6 @@ namespace Rosegarden
   class FigChord;
   class NotationQuantizer;
   class RelativeEvent;
-  typedef long timeT;
 
 
   typedef std::vector<RelativeEvent *> RelativeEventVec;
@@ -42,9 +43,9 @@ namespace Rosegarden
 class Figuration
 {
 public:
-  timeT        getEndTime(timeT startTime)
+  timeT        getEndTime(timeT startTime) const
   { return startTime + m_duration; }
-  
+
   RelativeEventVec m_events;
   timeT            m_duration;
   // Parameter count
@@ -70,7 +71,7 @@ public:
   static FigurationVector getFigurations(Segment *s);
   static UnsolvedNote getPossibleRelations(Event *e,
 					   const FigChord *parameterChord,
-					   const Key key,
+					   const Key& key,
 					   timeT startTime);
 
   static Figuration *findMatch(FigurationVector& figVector,
@@ -88,7 +89,7 @@ public:
       trivialContainer.insert(e);
       return trivialContainer;
   };
-  
+
 };
 typedef FigurationSourceMap::value_type SourcedFiguration;
 }

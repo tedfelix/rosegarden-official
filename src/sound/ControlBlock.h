@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include "base/MidiProgram.h"  // InstrumentId, MidiFilter
 #include "base/Track.h"  // TrackId
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 class RosegardenDocument;
@@ -42,7 +42,7 @@ struct InstrumentAndChannel
     int channel;
 };
 
-struct TrackInfo 
+struct TrackInfo
 {
 public:
     /// This should be the ctor.
@@ -165,7 +165,7 @@ public:
     void updateTrackData(Track *);
 
     void setInstrumentForTrack(TrackId trackId, InstrumentId);
-    InstrumentId getInstrumentForTrack(TrackId trackId) const;
+    // unused InstrumentId getInstrumentForTrack(TrackId trackId) const;
     bool isInstrumentUnused(InstrumentId instrumentId) const;
 
     void setTrackArmed(TrackId trackId, bool armed);
@@ -212,7 +212,7 @@ public:
 
     void setRecordFilter(MidiFilter filter) { m_recordFilter = filter; }
     MidiFilter getRecordFilter() const { return m_recordFilter; }
-    
+
     /// Get the output instrument and channel for an incoming event.
     InstrumentAndChannel getInstAndChanForEvent(
             bool recording, DeviceId deviceId, char channel);
@@ -220,7 +220,7 @@ public:
     void vacateThruChannel(int channel);
     void instrumentChangedProgram(InstrumentId instrumentId);
     void instrumentChangedFixity(InstrumentId instrumentId);
-    
+
 private:
     // Singleton.  Use getInstance().
     ControlBlock();

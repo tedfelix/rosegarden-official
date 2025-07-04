@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,8 +16,16 @@
 */
 
 #define RG_MODULE_STRING "[MatrixPainter]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MatrixPainter.h"
+
+#include "MatrixElement.h"
+#include "MatrixViewSegment.h"
+#include "MatrixTool.h"
+#include "MatrixWidget.h"
+#include "MatrixScene.h"
+#include "MatrixMouseEvent.h"
 
 #include "base/BaseProperties.h"
 #include "base/Event.h"
@@ -29,32 +37,30 @@
 #include "commands/matrix/MatrixEraseCommand.h"
 #include "commands/matrix/MatrixPercussionInsertionCommand.h"
 #include "document/CommandHistory.h"
-#include "MatrixElement.h"
-#include "MatrixViewSegment.h"
-#include "MatrixTool.h"
-#include "MatrixWidget.h"
-#include "MatrixScene.h"
-#include "MatrixMouseEvent.h"
-
 #include "misc/Debug.h"
 
-#include <Qt>
 
 namespace Rosegarden
 {
 
-MatrixPainter::MatrixPainter(MatrixWidget *widget) : 
+
+MatrixPainter::MatrixPainter(MatrixWidget *widget) :
     MatrixTool("matrixpainter.rc", "MatrixPainter", widget),
-    m_clickTime(0),
-    m_currentElement(nullptr),
-    m_currentViewSegment(nullptr)
+    m_previewElement(nullptr)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
+    createAction("select", &MatrixPainter::slotSelectSelected);
+    createAction("resize", &MatrixPainter::slotResizeSelected);
+    createAction("erase", &MatrixPainter::slotEraseSelected);
+    createAction("move", &MatrixPainter::slotMoveSelected);
 
     createMenu();
+    m_previewEvent = new Event(Note::EventType, 0);
+}
+
+MatrixPainter::~MatrixPainter()
+{
+    delete m_previewElement;
+    delete m_previewEvent;
 }
 
 void MatrixPainter::handleEventRemoved(Event * /*event*/)
@@ -105,27 +111,28 @@ void MatrixPainter::handleMouseDoubleClick(const MatrixMouseEvent *e){
         m_currentElement = nullptr;
         return;
     }
-    
+
     /*
     // Grid needed for the event duration rounding
-    
+
     int velocity = m_widget->getCurrentVelocity();
-    
+
     RG_DEBUG << "handleMouseDoubleClick(): velocity = " << velocity;
-    
+
     m_clickTime = e->snappedLeftTime;
-    
+
     Event *ev = new Event(Note::EventType, e->snappedLeftTime, e->snapUnit);
     ev->set<Int>(BaseProperties::PITCH, e->pitch);
     ev->set<Int>(BaseProperties::VELOCITY, velocity);
-    
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode());
-    
+
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(),
+                                         m_scene->getCurrentSegment());
+
     // preview
     m_scene->playNote(m_currentViewSegment->getSegment(), e->pitch, velocity);
     */
-        
-    
+
+
 }// end handleMouseDoubleClick()
 
 
@@ -133,12 +140,17 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     RG_DEBUG << "handleLeftButtonPress(): pitch = " << e->pitch << ", time : " << e->time;
 
+    // no preview as long as the button is pressed
+    clearPreview();
+
     m_currentViewSegment = e->viewSegment;
     if (!m_currentViewSegment) return;
 
+    const Segment *eventSegment = nullptr;
+    if (e->element) eventSegment = e->element->getSegment();
+
     // Don't create an overlapping event on the same note on the same channel
-    if (e->element) {
-        RG_DEBUG << "handleLeftButtonPress(): overlap with another matrix element";
+    if (e->element && eventSegment == m_scene->getCurrentSegment()) {
         // In percussion matrix, we delete the existing event rather
         // than just ignoring it -- this is reasonable as the event
         // has no meaningful duration, so we can just toggle it on and
@@ -150,6 +162,11 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
                                            e->element->event());
                 CommandHistory::getInstance()->addCommand(command);
             }
+        }
+        else {
+            RG_DEBUG << "handleLeftButtonPress(): Will not create note at "
+                        "same pitch and time as existing note in active "
+                        "segment.";
         }
         delete m_currentElement;
         m_currentElement = nullptr;
@@ -177,7 +194,9 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     RG_DEBUG << "handleLeftButtonPress(): I'm working from segment \"" << m_currentViewSegment->getSegment().getLabel() << "\"" << "  clicked pitch: " << e->pitch << " adjusted pitch: " << adjustedPitch;
 
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(),
+                                         pitchOffset,
+                                         m_scene->getCurrentSegment());
 
     // preview
     m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
@@ -186,8 +205,11 @@ void MatrixPainter::handleLeftButtonPress(const MatrixMouseEvent *e)
 FollowMode
 MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
 {
-    // sanity check
-    if (!m_currentElement) return NO_FOLLOW;
+    if (!m_currentElement) {
+        // show preview
+        showPreview(e);
+        return NO_FOLLOW;
+    }
 
     if (getSnapGrid()->getSnapSetting() != SnapGrid::NoSnap) {
         setContextHelp(tr("Hold Shift to avoid snapping to beat grid"));
@@ -229,7 +251,10 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
     delete m_currentElement;
     delete oldEv;
 
-    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(), pitchOffset);
+    // const Segment *segment = e->element ? e->element->getSegment() : nullptr;
+    m_currentElement = new MatrixElement(m_scene, ev, m_widget->isDrumMode(),
+                                         pitchOffset,
+                                         m_scene->getCurrentSegment());
 
     if (preview) {
         m_scene->playNote(m_currentViewSegment->getSegment(), adjustedPitch, velocity);
@@ -240,10 +265,13 @@ MatrixPainter::handleMouseMove(const MatrixMouseEvent *e)
 
 void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
 {
+    showPreview(e);
+
     // This can happen in case of screen/window capture -
     // we only get a mouse release, the window snapshot tool
     // got the mouse down
-    if (!m_currentElement) return;
+    if (!m_currentElement)
+        return;
 
     timeT time = m_clickTime;
     timeT endTime = e->snappedRightTime;
@@ -277,13 +305,13 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
                                        time,
                                        endTime,
                                        m_currentElement->event());
-        
+
         CommandHistory::getInstance()->addCommand(command);
-        
+
         Event* ev = m_currentElement->event();
         delete m_currentElement;
         delete ev;
-        
+
         ev = command->getLastInsertedEvent();
         if (ev) {
             m_scene->setSingleSelectedEvent
@@ -299,42 +327,15 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
 
 void MatrixPainter::ready()
 {
-//    connect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//            this, SLOT(slotMatrixScrolled(int, int)));
-
-    if (m_widget) m_widget->setCanvasCursor(Qt::CrossCursor);
+    if (m_widget)
+        m_widget->setCanvasCursor(Qt::CrossCursor);
 
     setBasicContextHelp();
 }
 
 void MatrixPainter::stow()
 {
-//    disconnect(m_parentView->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-//               this, SLOT(slotMatrixScrolled(int, int)));
-}
-
-void MatrixPainter::slotMatrixScrolled(int /* newX */, int /* newY */)
-{
-    // newX = newY = 42;
-/*!!!
-    if (!m_currentElement)
-        return ;
-
-    QPoint newP1(newX, newY), oldP1(m_parentView->getCanvasView()->contentsX(),
-                                    m_parentView->getCanvasView()->contentsY());
-
-    QPoint offset = newP1 - oldP1;
-
-    offset = m_widget->inverseMapPoint(offset);
-
-    QPoint p(m_currentElement->getCanvasX() + m_currentElement->getWidth(), m_currentElement->getCanvasY());
-    p += offset;
-
-    timeT newTime = getSnapGrid()->snapX(p.x());
-    int newPitch = m_currentViewSegment->getHeightAtCanvasCoords(p.x(), p.y());
-
-    handleMouseMove(newTime, newPitch, 0);
-*/
+    clearPreview();
 }
 
 void MatrixPainter::setBasicContextHelp()
@@ -343,10 +344,30 @@ void MatrixPainter::setBasicContextHelp()
         setContextHelp(tr("Click and drag to draw a note; Shift to avoid snapping to grid"));
     } else {
         setContextHelp(tr("Click and drag to draw a note"));
-    }        
+    }
 }
 
-QString MatrixPainter::ToolName() { return "painter"; }
+void MatrixPainter::showPreview(const MatrixMouseEvent *e)
+{
+    if (! m_previewElement) {
+        m_previewElement = new MatrixElement(m_scene,
+                                             m_previewEvent,
+                                             m_widget->isDrumMode(),
+                                             0,
+                                             nullptr,
+                                             true);
+    }
 
+    m_previewEvent->set<Int>(BaseProperties::PITCH, e->pitch);
+    m_previewElement->reconfigure(e->snappedLeftTime, e->snapUnit);
 }
 
+void MatrixPainter::clearPreview()
+{
+    if (m_previewElement) {
+        delete m_previewElement;
+        m_previewElement = nullptr;
+    }
+}
+
+}

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,13 +18,15 @@
 #ifndef RG_RULER_SCALE_H
 #define RG_RULER_SCALE_H
 
-#include "Event.h"
 #include "base/Segment.h"
 #include "Selection.h"
 
+
 namespace Rosegarden {
 
+
 class Composition;
+
 
 /**
  * RulerScale is a base for classes that may be queried in order to
@@ -43,14 +45,13 @@ class Composition;
  * the subclass maintains spacing proportional to time within a
  * bar, but which may not be an efficient implementation for any
  * given subclass.
- * 
+ *
  * (Potential to-do: At the moment all our RulerScales are used in
  * contexts where spacing proportional to time within a bar is the
  * only interpretation that makes sense, so this is okay.  In
  * theory though we should probably subclass out these "default"
  * implementations into an intermediate abstract class.)
  */
-
 class RulerScale
 {
 public:
@@ -102,7 +103,7 @@ public:
      * Return the duration corresponding to the given delta-x
      * starting at the given x-coord.
      */
-    virtual timeT getDurationForWidth(double x, double width) const;
+    // unused virtual timeT getDurationForWidth(double x, double width) const;
 
     /**
      * Return the width corresponding to the given duration
@@ -116,7 +117,7 @@ public:
     virtual double getTotalWidth() const;
 
 protected:
-    RulerScale(Composition *c);
+    explicit RulerScale(Composition *c);
     Composition *m_composition;
 };
 
@@ -135,7 +136,7 @@ public:
      * 10 means that one pixel equals 10 time units.)
      */
     SimpleRulerScale(Composition *composition,
-                     double origin, double unitsPerPixel);
+                     double origin, double ratio);
     ~SimpleRulerScale() override;
 
     double getOrigin() const { return m_origin; }
@@ -174,7 +175,7 @@ public:
      * in the given composition.
      */
     SegmentsRulerScale(Composition *composition, SegmentSelection segments,
-                       double origin, double unitsPerPixel);
+                       double origin, double ratio);
     ~SegmentsRulerScale() override;
 
     double getOrigin() const { return m_origin; }
@@ -201,7 +202,7 @@ private:
     SegmentsRulerScale(const SimpleRulerScale &ruler);
     SegmentsRulerScale &operator=(const SimpleRulerScale &ruler);
 };
-    
+
 
 /**
  * ZoomableRulerScale uses one RulerScale to provide another one that
@@ -219,7 +220,7 @@ public:
      * does not delete it, and does not get any notification if it is
      * deleted).
      */
-    ZoomableRulerScale(const RulerScale *reference);
+    explicit ZoomableRulerScale(const RulerScale *reference);
     ~ZoomableRulerScale() override;
 
     double getBarPosition(int n) const override;
@@ -228,7 +229,9 @@ public:
     int getBarForX(double x) const override;
     timeT getTimeForX(double x) const override;
     double getXForTime(timeT time) const override;
+    // cppcheck-suppress uselessOverride
     int getFirstVisibleBar() const override;
+    // cppcheck-suppress uselessOverride
     int getLastVisibleBar() const override;
 
     void setXZoomFactor(double f) { m_xfactor = f; }
@@ -245,7 +248,7 @@ protected:
 private:
     ZoomableRulerScale(const ZoomableRulerScale &ruler);
     ZoomableRulerScale &operator=(const ZoomableRulerScale &ruler);
-};    
+};
 
 
 }

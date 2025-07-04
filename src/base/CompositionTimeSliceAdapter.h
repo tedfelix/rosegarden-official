@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This file is Copyright 2002
@@ -56,9 +56,9 @@ public:
      * given section in time of the given composition.  If begin and
      * end are equal, the whole composition will be used.
      */
-    CompositionTimeSliceAdapter(Composition* c,
-                                timeT begin = 0,
-                                timeT end = 0);
+    explicit CompositionTimeSliceAdapter(Composition* c,
+                                         timeT begin = 0,
+                                         timeT end = 0);
 
     /**
      * Construct a CompositionTimeSliceAdapter that operates on the
@@ -97,7 +97,7 @@ public:
         friend class CompositionTimeSliceAdapter;
 
     public:
-        iterator(const CompositionTimeSliceAdapter *a = nullptr) :
+        explicit iterator(const CompositionTimeSliceAdapter *a = nullptr) :
             m_a(a), m_curEvent(nullptr), m_curTrack(-1), m_needFill(true) { }
         iterator(const iterator &);
         iterator &operator=(const iterator &);
@@ -121,7 +121,7 @@ public:
         int     m_curTrack;
         bool    m_needFill;
 
-        static bool strictLessThan(Event *, Event *);
+        static bool strictLessThan(const Event *, const Event *);
     };
 
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,6 +30,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Profiler.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
@@ -54,6 +55,7 @@
 #include "gui/general/PixmapFunctions.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 
 #include <QApplication>
@@ -167,6 +169,11 @@ NotationStaff::insertTimeSignature(double layoutX,
     getScene()->addItem(item);
     item->setPos(sigCoords.first, (double)sigCoords.second);
     item->show();
+    if (m_highlight) {
+        item->setOpacity(1.0);
+    } else {
+        item->setOpacity(NONHIGHLIGHTOPACITY);
+    }
     m_timeSigs.insert(item);
 }
 
@@ -226,6 +233,11 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
+        if (m_highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
         m_repeatedClefsAndKeys.insert(item);
 
         dx += item->boundingRect().width() +
@@ -243,6 +255,11 @@ NotationStaff::insertRepeatedClefAndKey(double layoutX, int barNo)
         getScene()->addItem(item);
         item->setPos(coords.first, coords.second);
         item->show();
+        if (m_highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
         m_repeatedClefsAndKeys.insert(item);
 
         dx += item->boundingRect().width();
@@ -418,32 +435,13 @@ QString
 NotationStaff::getNoteNameAtSceneCoords(double x, int y,
         Accidental) const
 {
-    //!!! We have one version of this translate note name stuff in
-    // MidiPitchLabel, another one in TrackParameterBox, and now this one.
-    //
-    // This needs to be refactored one day to avoid all the frigged up hackery,
-    // and just have one unified way of making these strings, used everywhere.
-    // I think putting the tr() nonsense in base/ probably makes sense for
-    // this, and just have a Pitch method that returns a pre-translated string.
-    //
-    // But not just now.  I'll slap a couple of pieces of duct tape on it for
-    // now, and we'll worry about bigger issues.
-
     Clef clef;
     ::Rosegarden::Key key;
     getClefAndKeyAtSceneCoords(x, y, clef, key);
 
-    QSettings settings;
-    settings.beginGroup( GeneralOptionsConfigGroup );
-
-    int baseOctave = settings.value("midipitchoctave", -2).toInt() ;
-    settings.endGroup();
+    const int baseOctave = Preferences::getMIDIPitchOctave();
 
     Pitch p(getHeightAtSceneCoords(x, y), clef, key);
-
-    // This duplicates a lot of code in Pitch::getAsString and elsewhere, but
-    // I'm not taking time out to gather all of this up and merge it together
-    // into something nice and clean we could just call here.
 
     // get the note letter name in the key (eg. A)
     std::string s;
@@ -471,8 +469,15 @@ NotationStaff::getNoteNameAtSceneCoords(double x, int y,
 void
 NotationStaff::renderElements(timeT from, timeT to)
 {
+    RG_DEBUG << "renderElements time" << from << to;
     NotationElementList::iterator i = getViewElementList()->findTime(from);
     NotationElementList::iterator j = getViewElementList()->findTime(to);
+    if (i != getViewElementList()->end() &&
+        j != getViewElementList()->end()) {
+        RG_DEBUG << "renderElements time" <<
+            *((*i)->event()) <<
+            *((*j)->event());
+    }
     renderElements(i, j);
 }
 
@@ -487,6 +492,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         (to != getViewElementList()->end() ? (*to)->getViewAbsoluteTime() :
          getSegment().getEndMarkerTime());
     timeT startTime = (from != to ? (*from)->getViewAbsoluteTime() : endTime);
+
+    RG_DEBUG << "renderElements iter" << startTime << endTime;
 
     Clef currentClef = getSegment().getClefAtTime(startTime);
     // Since the redundant clefs and keys may be hide, the current key may
@@ -504,8 +511,8 @@ NotationStaff::renderElements(NotationElementList::iterator from,
         ++nextIt;
 
         bool selected = isSelected(it);
-        //      RG_DEBUG << "Rendering at " << (*it)->getAbsoluteTime()
-        //                           << " (selected = " << selected << ")";
+        RG_DEBUG << "Rendering at " << (*it)->event()->getAbsoluteTime()
+                 << " (selected = " << selected << ")";
 
         renderSingleElement(it, currentClef, currentKey, selected);
     }
@@ -795,6 +802,8 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
     static NotePixmapParameters restParams(Note::Crotchet, 0);
 
     NotationElement* elt = static_cast<NotationElement*>(*vli);
+    // set the highlight status of the element
+    elt->setHighlight(m_highlight);
 
     bool invisible = false;
     if (elt->event()->get
@@ -958,7 +967,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 // nothing here either
 
-            } else if (m_distributeVerses && 
+            } else if (m_distributeVerses &&
                        elt->event()->has(Text::TextTypePropertyName) &&
                        elt->event()->get<String>(Text::TextTypePropertyName) ==
                        Text::Lyric &&
@@ -1589,6 +1598,8 @@ bool
 NotationStaff::isSelected(NotationElementList::iterator it)
 {
     const EventSelection *selection = m_notationScene->getSelection();
+    RG_DEBUG << "isSelected selection:" << selection << "event:" <<
+        (*it)->event();
     return selection && selection->contains((*it)->event());
 }
 
@@ -1645,25 +1656,7 @@ NotationStaff::clearPreviewNote()
 bool
 NotationStaff::wrapEvent(Event *e)
 {
-    bool wrap = true;
-
-    /*!!! always wrap unknowns, just don't necessarily render them?
-
-        if (!m_showUnknowns) {
-        std::string etype = e->getType();
-        if (etype != Note::EventType &&
-            etype != Note::EventRestType &&
-            etype != Clef::EventType &&
-            etype != Key::EventType &&
-            etype != Indication::EventType &&
-            etype != Text::EventType) {
-            wrap = false;
-        }
-        }
-    */
-
-    if (wrap) wrap = ViewSegment::wrapEvent(e);
-
+    bool wrap = ViewSegment::wrapEvent(e);
     return wrap;
 }
 
@@ -1732,6 +1725,7 @@ NotationStaff::regenerate(timeT from, timeT to, bool secondary)
 
 }
 
+/* unused
 void
 NotationStaff::checkAndCompleteClefsAndKeys(int bar)
 {
@@ -1749,7 +1743,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
         if ((*it)->event()->isa(Clef::EventType)) {
 
             // Clef found
-            Clef clef = *(*it)->event();
+            Clef clef = Clef(*(*it)->event());
 
             // Is this clef already in m_clefChanges list ?
             int xClef = int((*it)->getLayoutX());
@@ -1769,7 +1763,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
 
         } else if ((*it)->event()->isa(::Rosegarden::Key::EventType)) {
 
-            ::Rosegarden::Key key = *(*it)->event();
+            ::Rosegarden::Key key(*(*it)->event());
 
             // Is this key already in m_keyChanges list ?
             int xKey = int((*it)->getLayoutX());
@@ -1789,6 +1783,7 @@ NotationStaff::checkAndCompleteClefsAndKeys(int bar)
         }
     }
 }
+*/
 
 StaffLayout::BarStyle
 NotationStaff::getBarStyle(int barNo) const
@@ -1861,7 +1856,7 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
     ::Rosegarden::Key cancelKey;
     Clef clef;
 
-    for (Segment::const_iterator i = s.findTime(barStart);
+    for (Segment::const_iterator i = s.findTimeConst(barStart);
          s.isBeforeEndMarker(i) && ((*i)->getNotationAbsoluteTime() == barStart);
          ++i) {
 
@@ -1915,7 +1910,7 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 
             try {
                 clef = Clef(**i);
- 
+
                 // Is the clef hide because redundant ?
                 if (m_hideRedundance &&
                     m_notationScene->isEventRedundant(const_cast<Event *>(*i),
@@ -1963,14 +1958,14 @@ NotationStaff::getBarInset(int barNo, bool isFirstBarInRow) const
 Rosegarden::ViewElement *
 NotationStaff::makeViewElement(Rosegarden::Event* e)
 {
-    return new NotationElement(e);
+    return new NotationElement(e, &getSegment());
 }
 
 bool
-NotationStaff::includesTime(timeT t)
+NotationStaff::includesTime(timeT t) const
 {
     Composition *composition = getSegment().getComposition();
-    
+
     // In order to find the correct starting and ending bar of the
     // segment, make infinitesimal shifts (+1 and -1) towards its
     // center.
@@ -1996,6 +1991,43 @@ timeT NotationStaff::getEndTime() const
     Composition *composition = getSegment().getComposition();
     return composition->getBarEndForTime
         (getSegment().getEndMarkerTime() - 1);
+}
+
+void NotationStaff::setHighlight(bool highlight)
+{
+    if (highlight == m_highlight) return;
+    RG_DEBUG << "set staff highlight" << highlight << m_segment.getLabel();
+    m_highlight = highlight;
+    NotationElementList *elems = getViewElementList();
+
+    for(NotationElementList::iterator it = elems->begin();
+        it != elems->end();
+        ++it) {
+        NotationElement *el = static_cast<NotationElement*>(*it);
+        el->setHighlight(highlight);
+    }
+    for(ItemSet::iterator i = m_timeSigs.begin();
+        i != m_timeSigs.end();
+        ++i) {
+        QGraphicsItem* item = (*i);
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+    for(ItemSet::iterator i = m_repeatedClefsAndKeys.begin();
+        i != m_repeatedClefsAndKeys.end();
+        ++i) {
+        QGraphicsItem* item = (*i);
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+    // and pass on to the StaffLayout
+    StaffLayout::setHighlight(highlight);
 }
 
 }

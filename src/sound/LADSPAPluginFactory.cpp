@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -24,6 +24,7 @@
 
 #include <dlfcn.h>
 #include <QDir>
+#include <QRegularExpression>
 #include <cmath>
 
 #include "base/AudioPluginInstance.h"
@@ -32,6 +33,7 @@
 #include "PluginIdentifier.h"
 
 #include <lrdf.h>
+#include <iostream>
 
 
 namespace Rosegarden
@@ -52,14 +54,16 @@ LADSPAPluginFactory::~LADSPAPluginFactory()
     unloadUnusedLibraries();
 }
 
+#if 0
 const std::vector<QString> &
 LADSPAPluginFactory::getPluginIdentifiers() const
 {
     return m_identifiers;
 }
+#endif
 
 void
-LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
+LADSPAPluginFactory::enumeratePlugins(std::vector<QString> &list)
 {
     for (std::vector<QString>::iterator i = m_identifiers.begin();
             i != m_identifiers.end(); ++i) {
@@ -73,7 +77,15 @@ LADSPAPluginFactory::enumeratePlugins(MappedObjectPropertyList &list)
 
 //        std::cerr << "Enumerating plugin identifier " << *i << std::endl;
 
+        // This list of strings is ordered in such a way that
+        // AudioPluginManager::Enumerator::run() can consume it.
+        // See LV2PluginFactory::enumeratePlugins()
+        // and DSSIPluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
+
         list.push_back(*i);
+        // arch
+        list.push_back(QString("%1").arg(static_cast<int>(PluginArch::LADSPA)));
         list.push_back(descriptor->Name);
         list.push_back(QString("%1").arg(descriptor->UniqueID));
         list.push_back(descriptor->Label);
@@ -400,11 +412,12 @@ LADSPAPluginFactory::getPortDisplayHint(const LADSPA_Descriptor *descriptor, int
 
 RunnablePluginInstance *
 LADSPAPluginFactory::instantiatePlugin(QString identifier,
-                                       int instrument,
+                                       int instrumentId,
                                        int position,
                                        unsigned int sampleRate,
                                        unsigned int blockSize,
-                                       unsigned int channels)
+                                       unsigned int channels,
+                                       AudioInstrumentMixer*)
 {
     const LADSPA_Descriptor *descriptor = getLADSPADescriptor(identifier);
 
@@ -412,8 +425,8 @@ LADSPAPluginFactory::instantiatePlugin(QString identifier,
 
         LADSPAPluginInstance *instance =
             new LADSPAPluginInstance
-            (this, instrument, identifier, position, sampleRate, blockSize, channels,
-             descriptor);
+            (this, instrumentId, identifier, position, sampleRate,
+             blockSize, channels, descriptor);
 
         m_instances.insert(instance);
 
@@ -432,8 +445,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
         return ;
     }
 
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     m_instances.erase(m_instances.find(instance));
 
@@ -442,8 +455,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
     for (std::set
                 <RunnablePluginInstance *>::iterator ii = m_instances.begin();
                 ii != m_instances.end(); ++ii) {
-            QString itype, isoname, ilabel;
-            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+        QString itype, isoname, ilabel, iarch;
+        PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel, iarch);
             if (isoname == soname) {
                 //std::cerr << "LADSPAPluginFactory::releasePlugin: dll " << soname << " is still in use for plugin " << ilabel << std::endl;
                 stillInUse = true;
@@ -460,8 +473,8 @@ LADSPAPluginFactory::releasePlugin(RunnablePluginInstance *instance,
 const LADSPA_Descriptor *
 LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 {
-    QString type, soname, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soname, label);
+    QString type, soname, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soname, label, arch);
 
     if (m_libraryHandles.find(soname) == m_libraryHandles.end()) {
         loadLibrary(soname);
@@ -498,14 +511,22 @@ LADSPAPluginFactory::getLADSPADescriptor(QString identifier)
 void
 LADSPAPluginFactory::loadLibrary(QString soName)
 {
-    RG_DEBUG << "loadLibrary(" << soName << ")";
+    // Dump the name to help with debugging crashing plugins.  This is forced
+    // to std::cerr and flushed (std::endl) to make sure it is the last thing
+    // we see before a plugin crashes or causes ASan to stop the run.
+    std::cerr << "LADSPAPluginFactory::loadLibrary(): " << soName << std::endl;
 
     QByteArray bso = soName.toLocal8Bit();
+    // ??? This is one place where we might crash when a plugin misbehaves
+    //     at startup.  See bug #1474.
     void *libraryHandle = dlopen(bso.data(), RTLD_NOW);
     if (!libraryHandle) {
         RG_WARNING << "loadLibrary() failed for" << soName << "-" << dlerror();
         return;
     }
+
+    // If you don't see this, a plugin crashed on load.
+    std::cerr << "  " << soName << " plugin loaded successfully" << std::endl;
 
     m_libraryHandles[soName] = libraryHandle;
 }
@@ -535,8 +556,8 @@ LADSPAPluginFactory::unloadUnusedLibraries()
                     <RunnablePluginInstance *>::iterator ii = m_instances.begin();
                     ii != m_instances.end(); ++ii) {
 
-                QString itype, isoname, ilabel;
-                PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel);
+            QString itype, isoname, ilabel, iarch;
+            PluginIdentifier::parseIdentifier((*ii)->getIdentifier(), itype, isoname, ilabel, iarch);
                 if (isoname == i->first) {
                     stillInUse = true;
                     break;
@@ -615,16 +636,19 @@ LADSPAPluginFactory::getLRDFPath(QString &baseUri)
 void
 LADSPAPluginFactory::discoverPlugins()
 {
-    RG_DEBUG << "discoverPlugins() begin...";
+    //RG_DEBUG << "discoverPlugins() begin...";
 
     std::vector<QString> pathList = getPluginPath();
 
+//#if !defined NDEBUG
+#if 0
     RG_DEBUG << "discoverPlugins() Paths:";
     for (std::vector<QString>::iterator i = pathList.begin();
          i != pathList.end();
          ++i) {
         RG_DEBUG << "  " << *i;
     }
+#endif
 
     // Initialise liblrdf and read the description files
     //
@@ -652,13 +676,31 @@ LADSPAPluginFactory::discoverPlugins()
 
     generateFallbackCategories();
 
+    // Plugin Blacklist.  To avoid loading all plugins:
+    //   $ ROSEGARDEN_PLUGIN_BLACKLIST=".*" ./rosegarden
+    // To avoid loading just some (e.g. ones with matrix or pitch in their
+    // names):
+    //   $ ROSEGARDEN_PLUGIN_BLACKLIST="matrix|pitch" ./rosegarden
+    // default "^$" matches nothing
+    QString blacklist =
+        qEnvironmentVariable("ROSEGARDEN_PLUGIN_BLACKLIST", "^$");
+    QRegularExpression blRE(blacklist);
+    // For each plugin path
     for (std::vector<QString>::iterator i = pathList.begin();
             i != pathList.end(); ++i) {
 
         QDir pluginDir(*i, "*.so");
 
+        // For each *.so file in the directory
         for (unsigned int j = 0; j < pluginDir.count(); ++j) {
-            discoverPlugin(QString("%1/%2").arg(*i).arg(pluginDir[j]));
+            QString pluginName = QString("%1/%2").arg(*i).arg(pluginDir[j]);
+            QRegularExpressionMatch match = blRE.match(pluginName);
+            if (match.hasMatch()) {
+                RG_WARNING << "discoverPlugins() WARNING:" << pluginName <<
+                    "ignored due to plugin blacklist";
+                continue;
+            }
+            discoverPlugin(pluginName);
         }
     }
 
@@ -666,12 +708,17 @@ LADSPAPluginFactory::discoverPlugins()
     //
     lrdf_cleanup();
 
-    RG_DEBUG << "discoverPlugins() end...";
+    //RG_DEBUG << "discoverPlugins() end...";
 }
 
 void
 LADSPAPluginFactory::discoverPlugin(const QString &soName)
 {
+    // Dump the name to help with debugging crashing plugins.  This is forced
+    // to std::cerr and flushed (std::endl) to make sure it is the last thing
+    // we see before a plugin crashes or causes ASan to stop the run.
+    std::cerr << "LADSPAPluginFactory::discoverPlugin(): " << soName << std::endl;
+
     QByteArray bso = soName.toLocal8Bit();
     void *libraryHandle = dlopen(bso.data(), RTLD_LAZY);
 
@@ -713,9 +760,8 @@ LADSPAPluginFactory::discoverPlugin(const QString &soName)
         //         << ", label is " << descriptor->Label;
 
         def_uri = lrdf_get_default_uri(descriptor->UniqueID);
-        if (def_uri) {
+        if (def_uri)
             defs = lrdf_get_setting_values(def_uri);
-        }
 
         int controlPortNumber = 1;
 
@@ -737,6 +783,8 @@ LADSPAPluginFactory::discoverPlugin(const QString &soName)
                 ++controlPortNumber;
             }
         }
+
+        lrdf_free_setting_values(defs);
 
         QString identifier = PluginIdentifier::createIdentifier
                              ("ladspa", soName, descriptor->Label);

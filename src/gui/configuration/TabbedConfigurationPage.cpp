@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,7 +18,6 @@
 #include "TabbedConfigurationPage.h"
 
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
 #include <QTabWidget>

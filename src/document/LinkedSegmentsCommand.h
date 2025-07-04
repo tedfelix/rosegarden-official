@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,7 +37,7 @@ struct CompareForLinkedGroupSameTime
         if(a->getLinker() < b->getLinker()) { return true; }
         if(a->getLinker() > b->getLinker()) { return false; }
         return a->getStartTime() < b->getStartTime();
-    }        
+    }
 };
 
 typedef std::multiset<Segment *,CompareForLinkedGroupSameTime>
@@ -60,8 +60,8 @@ protected:
     void unexecuteAttachDetach();
     // Copy auxilliary properties of source segment to target: track,
     // repeatingness, delay.  Does not include any segment-time properties.
-    void copyAuxProperties(Segment *source, Segment *target);
-    
+    static void copyAuxProperties(Segment *source, Segment *target);
+
     // The original segments, in a linked group that all start at the
     // same time or a singleton.
     SegmentVec m_originalSegments;
@@ -73,7 +73,7 @@ protected:
  private:
     bool m_detached;
 };
- 
+
 }
 
 #endif /* ifndef RG_LINKEDSEGMENTSCOMMAND_H */

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,38 +15,34 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MusicXMLImportHelper]"
+#define RG_NO_DEBUG_PRINT
+
 #include "MusicXMLImportHelper.h"
+
 #include "base/Event.h"
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
 #include "base/Composition.h"
-#include "base/Studio.h"
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
-#include "base/NotationTypes.h"
-#include "gui/editors/notation/NotationProperties.h"
-#include "base/StaffExportTypes.h"
+#include "base/NotationTypes.h"  // for Clef
+#include "base/StaffExportTypes.h"  // for Brackets
 #include "base/Segment.h"
+#include "base/Studio.h"
 #include "base/Track.h"
+#include "document/RosegardenDocument.h"
+
 #include <QString>
 
+
 namespace Rosegarden
-
 {
 
-using namespace BaseProperties;
 
-MusicXMLImportHelper::MusicXMLImportHelper(Composition *composition) :
-    m_composition(composition)
+MusicXMLImportHelper::MusicXMLImportHelper(RosegardenDocument *doc) :
+    m_document(doc)
 {
-    m_tracks.clear();
-    m_segments.clear();
-    m_mainVoice.clear();
-    m_curTime = 0;
     setStaff("1");
-
-    m_divisions = 960;
 }
 
 MusicXMLImportHelper::~MusicXMLImportHelper()
@@ -58,24 +54,38 @@ bool
 MusicXMLImportHelper::setStaff(const QString &staff)
 {
     RG_DEBUG << "setStaff(" << staff << ")";
+
+    Composition &composition = m_document->getComposition();
+
     if (m_tracks.find(staff) == m_tracks.end()) {
         // No such track, create a new one.
-        TrackId id = m_composition->getNewTrackId();
+        TrackId id = composition.getNewTrackId();
         int pos = id;
         if (!m_tracks.empty()) {
             pos = m_tracks["1"]->getPosition() + m_tracks.size();
-            Composition::trackcontainer tracks = m_composition->getTracks();
-            for (Composition::trackiterator t = tracks.begin(); t != tracks.end(); t++) {
+            Composition::TrackMap tracks = composition.getTracks();
+            for (Composition::TrackMap::iterator t = tracks.begin(); t != tracks.end(); t++) {
                 if (((*t).second)->getPosition() >= pos) {
                     ((*t).second)->setPosition(((*t).second)->getPosition()+1);
                 }
             }
         }
-        Track *track = new Track(id, MidiInstrumentBase, pos);
-        m_composition->addTrack(track);
-        if (m_tracks.find("1") != m_tracks.end()) {
-            track->setInstrument(m_tracks["1"]->getInstrument());
-        }
+
+        // ??? I think this is the right approach.  In all cases, this will
+        //     just find the first MIDI instrument in the autoload.  The
+        //     problem occurs during merge.  If there are no MIDI devices
+        //     in the target (current) document, the merge process doesn't
+        //     fall back on the first soft synth.  We end up with garbage
+        //     which is easy for the user to fix.
+        const Studio *studio = &m_document->getStudio();
+
+        // Go with the first MIDI instrument we can find.  Otherwise we
+        // might return channel 10 (drums) on a GM device.  Leave it up to
+        // the user to reassign instruments as needed.
+        const InstrumentId instrumentID = studio->getFirstMIDIInstrument();
+        Track *track = new Track(id, instrumentID, pos);
+        composition.addTrack(track);
+
         m_tracks[staff] = track;
     }
     m_staff = staff;
@@ -108,8 +118,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         SegmentMap::iterator s = m_segments.find(m_staff+"/");
         if (s != m_segments.end()) {
             m_segments[m_staff+"/"+m_mainVoice[m_staff]] = (*s).second;
-            QString label = "MusicXML, id="+m_staff+"/"+m_mainVoice[m_staff];
-            (*s).second->setLabel(label.toStdString());
+            (*s).second->setLabel(m_label.toStdString());
             m_segments.erase(s);
         }
         m_voice = m_mainVoice[m_staff];
@@ -126,9 +135,8 @@ MusicXMLImportHelper::setVoice(const QString &voice)
         }
         if (createSegment) {
             Segment *segment = new Segment(Segment::Internal, m_curTime);
-            QString label = "MusicXML, id="+m_staff+"/"+tmpVoice;
-            segment->setLabel(label.toStdString());
-            m_composition->addSegment(segment);
+            segment->setLabel(m_label.toStdString());
+            m_document->getComposition().addSegment(segment);
             segment->setTrack(m_tracks[m_staff]->getId());
             m_segments[m_staff+"/"+tmpVoice] = segment;
         }
@@ -140,6 +148,7 @@ MusicXMLImportHelper::setVoice(const QString &voice)
 bool
 MusicXMLImportHelper::setLabel(const QString &label)
 {
+    m_label = label;
     for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
         ((*i).second)->setLabel(label.toStdString());
     }
@@ -169,7 +178,7 @@ MusicXMLImportHelper::insertKey(const Key &key, int number)
 bool
 MusicXMLImportHelper::insertTimeSignature(const TimeSignature &ts)
 {
-    m_composition->addTimeSignature(m_curTime, ts);
+    m_document->getComposition().addTimeSignature(m_curTime, ts);
     return true;
 }
 
@@ -192,7 +201,8 @@ MusicXMLImportHelper::insertClef(const Clef &clef, int number)
 bool
 MusicXMLImportHelper::insert(Event *event)
 {
-    if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
+    if (event->has(BaseProperties::IS_GRACE_NOTE)  &&
+        event->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
         Segment *segment = m_segments[m_staff+"/"+m_voice];
         Segment::iterator start, end;
         segment->getTimeSlice(m_curTime, start, end);
@@ -228,8 +238,8 @@ MusicXMLImportHelper::moveCurTimeBack(timeT time)
 }
 
 bool
-MusicXMLImportHelper::startIndication(const std::string name, int number,
-                                      const std::string endName)
+MusicXMLImportHelper::startIndication(const std::string& name, int number,
+                                      const std::string& endName)
 {
     m_indications.push_back(IndicationStart(m_staff, m_voice, name, m_curTime, number, endName));
     RG_DEBUG << m_curTime << " : startIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
@@ -238,7 +248,7 @@ MusicXMLImportHelper::startIndication(const std::string name, int number,
 }
 
 bool
-MusicXMLImportHelper::endIndication(const std::string name, int number, timeT extend)
+MusicXMLImportHelper::endIndication(const std::string& name, int number, timeT extent)
 {
     // Look in m_indications for an entry with a matching staff/voice/name/number.
     // However, it is possible an entry is created before the main voice for staff
@@ -259,9 +269,9 @@ MusicXMLImportHelper::endIndication(const std::string name, int number, timeT ex
         }
     }
     RG_DEBUG << m_curTime << " : endIndication(" << m_staff << ", " << m_voice << ", " << name << ", " << number
-          << ", " << extend << ") -> " << found;
+          << ", " << extent << ") -> " << found;
     if (found) {
-        Indication indication((*i).m_name, m_curTime - (*i).m_time + extend);
+        Indication indication((*i).m_name, m_curTime - (*i).m_time + extent);
         m_segments[m_staff+"/"+m_voice]->insert(indication.getAsEvent((*i).m_time));
         m_indications.erase(i);
     }
@@ -334,5 +344,6 @@ MusicXMLImportHelper::setBracketType(int bracket)
         }
     }
 }
+
 
 }

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[FingeringBox]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FingeringBox.h"
 #include "Fingering.h"
@@ -23,14 +25,16 @@
 
 #include <QMouseEvent>
 
+
 namespace Rosegarden
 {
 
+
 FingeringBox::FingeringBox(
         unsigned int nbFrets,
-        unsigned int nbStrings, 
-        bool editable, 
-        QWidget *parent, 
+        unsigned int nbStrings,
+        bool editable,
+        QWidget *parent,
         bool big
     )
     : QFrame(parent),
@@ -43,7 +47,7 @@ FingeringBox::FingeringBox(
     m_noteSymbols(m_nbStrings, m_nbFretsDisplayed),
     m_big(big)
 {
-    init();    
+    init();
 }
 
 FingeringBox::FingeringBox(bool editable, QWidget *parent, bool big)
@@ -62,14 +66,14 @@ void
 FingeringBox::init()
 {
     setFixedSize(IMG_WIDTH, IMG_HEIGHT);
-   
+
     QPalette pal = palette();
     pal.setColor(QPalette::Window, Qt::white);
     setPalette(pal);
     setAutoFillBackground(true);
 
     if (m_editable)
-        setMouseTracking(true);    
+        setMouseTracking(true);
 }
 
 void
@@ -84,7 +88,7 @@ void
 FingeringBox::drawContents(QPainter* p)
 {
     RG_DEBUG << "FingeringBox::drawContents()";
-    
+
     // For all strings on guitar
     //   check state of string
     //     If pressed display note
@@ -92,7 +96,7 @@ FingeringBox::drawContents(QPainter* p)
     // For all bars
     //   display bar
     // Horizontal separator line
-    
+
     p->begin(this);
 
     // turn on antialiasing for the X and O symbols,  which makes a spectacular
@@ -100,13 +104,13 @@ FingeringBox::drawContents(QPainter* p)
     p->setRenderHint(QPainter::Antialiasing);
 
     unsigned int stringNb = 0;
-    
+
     // draw notes
     //
     for (Guitar::Fingering::const_iterator pos = m_fingering.begin();
          pos != m_fingering.end();
          ++pos, ++stringNb) {
-                
+
         switch (*pos) {
         case Guitar::Fingering::OPEN:
 //                NOTATION_DEBUG << "Fingering::drawContents - drawing Open symbol on string " << stringNb;
@@ -133,7 +137,7 @@ FingeringBox::drawContents(QPainter* p)
     m_noteSymbols.drawStrings(p);
 
     // TODO: detect barres and draw them in a special way ?
-    
+
     // draw transient note (visual feedback for mouse move)
     //
     if (testAttribute(Qt::WA_UnderMouse) &&
@@ -142,7 +146,7 @@ FingeringBox::drawContents(QPainter* p)
         p->setBrush(QColor(0, 0x10, 0xFF, 0x10));
         m_noteSymbols.drawNoteSymbol(m_big, p, m_transientStringNb, m_transientFretNb - (m_startFret - 1), true);
     }
-    
+
     // DEBUG
 //    p->save();
 //    p->setPen(QColor(Qt::red));
@@ -171,7 +175,7 @@ FingeringBox::getStringNumber(const QPoint& pos)
 
     if(result.first){
         stringNum = result.second;
-//        RG_DEBUG << "FingeringBox::getStringNumber : res = " << stringNum; 
+//        RG_DEBUG << "FingeringBox::getStringNumber : res = " << stringNum;
     }
 
     return stringNum;
@@ -190,7 +194,7 @@ FingeringBox::getFretNumber(const QPoint& pos)
 
         if(result.first) {
             fretNum = result.second + (m_startFret - 1);
-//            RG_DEBUG << "FingeringBox::getFretNumber : res = " << fretNum << " startFret = " << m_startFret; 
+//            RG_DEBUG << "FingeringBox::getFretNumber : res = " << fretNum << " startFret = " << m_startFret;
         } else {
 //            RG_DEBUG << "FingeringBox::getFretNumber : no res\n";
         }
@@ -204,7 +208,7 @@ FingeringBox::mousePressEvent(QMouseEvent *event)
 {
     if (!m_editable)
         return;
-        
+
     if((event->button() == Qt::LeftButton) && m_editable) {
 
         // Find string position
@@ -238,9 +242,9 @@ FingeringBox::processMouseRelease(unsigned int release_string_num,
             if(m_press_fret_num < (m_startFret + m_nbFretsDisplayed)) {
 
                 unsigned int aVal = m_press_fret_num;
-                
+
                 if(m_press_fret_num == 0) {
-                    
+
                     int stringStatus = m_fingering.getStringStatus(m_press_string_num);
 
                     if (stringStatus == Guitar::Fingering::OPEN)
@@ -249,9 +253,9 @@ FingeringBox::processMouseRelease(unsigned int release_string_num,
                         aVal = Guitar::Fingering::OPEN;
 
                 }
-                
+
                 m_fingering.setStringStatus(m_press_string_num, aVal);
-                
+
                 update();
             }
         }
@@ -276,10 +280,10 @@ FingeringBox::mouseMoveEvent( QMouseEvent *event )
 {
     if (!m_editable)
         return;
-        
+
     unsigned int transientStringNb = getStringNumber(event->pos());
     unsigned int transientFretNb   = getFretNumber(event->pos());
-        
+
     if (transientStringNb != m_transientStringNb ||
         transientFretNb != m_transientFretNb) {
 
@@ -291,19 +295,19 @@ FingeringBox::mouseMoveEvent( QMouseEvent *event )
         QRect r2 = m_noteSymbols.getTransientNoteSymbolRect(size(),
                                                             m_transientStringNb,
                                                             m_transientFretNb - (m_startFret - 1));
-    
+
         m_r1 = r1;
         m_r2 = r2;
-        
+
 //    RG_DEBUG << "Fingering::updateTransientPos r1 = " << r1 << " - r2 = " << r2;
-     
+
 //        QRect updateRect = r1 | r2;
 //        update(updateRect);
 
         update();
-            
-    }    
-    
+
+    }
+
 }
 
 void

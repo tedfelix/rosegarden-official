@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -30,7 +30,9 @@
 #include "JackDriver.h"
 #endif
 
-#include <alsa/asoundlib.h> // ALSA
+// Forward declares from alsa/asoundlib.h
+typedef struct snd_seq_event snd_seq_event_t;
+typedef struct _snd_seq snd_seq_t;
 
 #include <QMutex>
 #include <QSharedPointer>
@@ -48,7 +50,7 @@ namespace Rosegarden
 class AlsaDriver : public SoundDriver
 {
 public:
-    AlsaDriver(MappedStudio *studio);
+    explicit AlsaDriver(MappedStudio *studio);
     ~AlsaDriver() override;
 
     // shutdown everything that's currently open
@@ -57,7 +59,7 @@ public:
     bool initialise() override;
 
     void initialisePlayback(const RealTime &position) override;
-    void stopPlayback() override;
+    void stopPlayback(bool autoStop) override;
     void punchOut() override;
     void resetPlayback(const RealTime &oldPosition, const RealTime &position) override;
     void allNotesOff();
@@ -74,7 +76,7 @@ public:
      * in the GUI thread.
      */
     bool getMappedEventList(MappedEventList &mappedEventList) override;
-    
+
     bool record(RecordStatus recordStatus,
                 const std::vector<InstrumentId> &armedInstruments,
                 const std::vector<QString> &audioFileNames) override;
@@ -95,7 +97,7 @@ public:
      * RosegardenSequencer::routeEvents() also uses this for async events
      * and recorded MIDI thru.
      */
-    void processEventsOut(const MappedEventList &mC) override;
+    void processEventsOut(const MappedEventList &rgEventList) override;
 
     /// Send both MIDI and audio events out, queued
     /**
@@ -128,12 +130,13 @@ public:
 
     // Set up queue, client and port
     bool initialiseMidi();
+    // cppcheck-suppress functionStatic
     void initialiseAudio();
 
     // Some stuff to help us debug this
     //
     void getSystemInfo();
-    void showQueueStatus(int queue);
+    // unused void showQueueStatus(int queue);
 
     // Process pending
     //
@@ -143,14 +146,14 @@ public:
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getAudioPlayLatency();
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
     RealTime getAudioRecordLatency() override {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getAudioRecordLatency();
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
     RealTime getInstrumentPlayLatency(InstrumentId id) override {
@@ -159,16 +162,16 @@ public:
 #else
         Q_UNUSED(id);
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
 
     RealTime getMaximumPlayLatency() override {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) return m_jackDriver->getMaximumPlayLatency();
 #endif
-        return RealTime::zeroTime;
+        return RealTime::zero();
     }
-        
+
 
     // Plugin instance management
     //
@@ -194,9 +197,9 @@ public:
     }
 
     void setPluginInstancePortValue(InstrumentId id,
-                                            int position,
-                                            unsigned long portNumber,
-                                            float value) override {
+                                    int position,
+                                    unsigned long portNumber,
+                                    float value) override {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->setPluginInstancePortValue(id, position, portNumber, value);
 #else
@@ -281,7 +284,7 @@ public:
 #endif
         return 0;
     }
-    
+
     void setPluginInstanceProgram(InstrumentId id,
                                           int position,
                                           QString program) override {
@@ -307,6 +310,19 @@ public:
         Q_UNUSED(value);
 #endif
         return QString();
+    }
+
+    void savePluginState() override {
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->savePluginState();
+#endif
+    }
+
+    void getPluginPlayableAudio(std::vector<PlayableData*>& playable) override
+    {
+#ifdef HAVE_LIBJACK
+        if (m_jackDriver) m_jackDriver->getPluginPlayableAudio(playable);
+#endif
     }
 
     void setAudioBussLevels(int bussId,
@@ -336,6 +352,8 @@ public:
     void claimUnwantedPlugin(void *plugin) override;
     void scavengePlugins() override;
 
+    void installExporter(WAVExporter* wavExporter) override;
+
     /// Update Ports and Connections
     /**
      * Updates m_alsaPorts and m_devicePortMap to match the ports and
@@ -353,7 +371,7 @@ public:
 
     // Create and send an MMC command
     //
-    void sendMMC(MidiByte deviceId,
+    void sendMMC(MidiByte deviceArg,
                  MidiByte instruction,
                  bool isCommand,
                  const std::string &data);
@@ -361,7 +379,7 @@ public:
     // Check whether the given event is an MMC command we need to act on
     // (and if so act on it)
     //
-    bool testForMMCSysex(const snd_seq_event_t *event);
+    bool testForMMCSysex(const snd_seq_event_t *event) const;
 
     // Create and enqueue a batch of MTC quarter-frame events
     //
@@ -405,24 +423,25 @@ public:
     //void unsetRecordDevices();
 
     bool addDevice(Device::DeviceType type,
-                           DeviceId id,
+                           DeviceId deviceId,
                            InstrumentId baseInstrumentId,
                            MidiDevice::DeviceDirection direction) override;
     void removeDevice(DeviceId id) override;
     void removeAllDevices() override;
-    void renameDevice(DeviceId id, QString name) override;
+    void renameDevice(DeviceId id, const QString& name) override;
 
     // Get available connections per device
-    // 
+    //
     unsigned int getConnections(Device::DeviceType type,
                                         MidiDevice::DeviceDirection direction) override;
     QString getConnection(Device::DeviceType type,
                                   MidiDevice::DeviceDirection direction,
                                   unsigned int connectionNo) override;
     QString getConnection(DeviceId id) override;
-    void setConnection(DeviceId deviceId, QString connection) override;
+    void setConnection(DeviceId deviceId,
+                       const QString& connection) override;
     void setPlausibleConnection(DeviceId deviceId,
-                                QString idealConnection,
+                                const QString& idealConnection,
                                 bool recordDevice = false) override;
     void connectSomething() override;
 
@@ -430,7 +449,7 @@ public:
     QString getTimer(unsigned int) override;
     QString getCurrentTimer() override;
     void setCurrentTimer(QString) override;
- 
+
     void getAudioInstrumentNumbers(InstrumentId &audioInstrumentBase,
                                            int &audioInstrumentCount) override {
         audioInstrumentBase = AudioInstrumentBase;
@@ -440,7 +459,7 @@ public:
         audioInstrumentCount = 0;
 #endif
     }
- 
+
     void getSoftSynthInstrumentNumbers(InstrumentId &ssInstrumentBase,
                                                int &ssInstrumentCount) override {
         ssInstrumentBase = SoftSynthInstrumentBase;
@@ -450,6 +469,7 @@ public:
     QString getStatusLog() override;
 
     // To be called regularly from JACK driver when idle
+    // cppcheck-suppress functionConst
     void checkTimerSync(size_t frames);
 
     void runTasks() override;
@@ -461,7 +481,7 @@ public:
 protected:
     void clearDevices();
 
-    ClientPortPair getFirstDestination(bool duplex);
+    // unused ClientPortPair getFirstDestination(bool duplex);
     ClientPortPair getPairForMappedInstrument(InstrumentId id);
     int getOutputPortForMappedInstrument(InstrumentId id);
 
@@ -493,7 +513,7 @@ protected:
     void generateFixedInstruments();
 
     virtual void generateTimerList();
-    virtual std::string getAutoTimer(bool &wantTimerChecks);
+    QString getAutoTimer(bool &wantTimerChecks);
 
     void addInstrumentsForDevice(MappedDevice *device, InstrumentId base);
     MappedDevice *createMidiDevice(DeviceId deviceId,
@@ -501,13 +521,13 @@ protected:
 
     /// Send MIDI out via ALSA.
     /**
-     * For unqueued (immediate) send, specify RealTime::zeroTime for
+     * For unqueued (immediate) send, specify RealTime::zero() for
      * sliceStart and sliceEnd.  Otherwise events will be queued for
      * future send at appropriate times.
      *
      * Used by processEventsOut() to send MIDI out via ALSA.
      */
-    void processMidiOut(const MappedEventList &mC,
+    void processMidiOut(const MappedEventList &rgEventList,
                         const RealTime &sliceStart,
                         const RealTime &sliceEnd);
 
@@ -521,15 +541,19 @@ protected:
     virtual void processAudioQueue(bool /* now */) { }
 
 private:
+
+    AlsaDriver(const AlsaDriver &) = delete;
+    AlsaDriver &operator=(const AlsaDriver &) = delete;
+
     RealTime getAlsaTime();
 
     // Locally convenient to control our devices
     //
     void sendDeviceController(DeviceId device,
-                              MidiByte byte1,
-                              MidiByte byte2);
-                              
-    int checkAlsaError(int rc, const char *message);
+                              MidiByte controller,
+                              MidiByte value);
+
+    static int checkAlsaError(int rc, const char *message);
 
     /// The ALSA ports.
     AlsaPortVector m_alsaPorts;
@@ -546,7 +570,7 @@ private:
     int m_client;
 
     int                          m_inputPort;
-    
+
     typedef std::map<DeviceId, int /* portNumber */> DeviceIntMap;
     // ??? The ports that are created for each output device in the
     //     Composition/Studio?
@@ -604,12 +628,12 @@ private:
     typedef std::map<unsigned int,
                      std::pair<MappedEvent *, std::string> > DeviceEventMap;
     DeviceEventMap             *m_pendSysExcMap;
-    
+
     /**
      * Clear all accumulated incompete System Exclusive messages.
      */
     void clearPendSysExcMap();
-    
+
 #ifdef HAVE_LIBJACK
     JackDriver *m_jackDriver;
 #endif
@@ -637,16 +661,18 @@ private:
      * ??? rename: m_connectionMap
      */
     DevicePortMap m_devicePortMap;
-    void setConnectionToDevice(MappedDevice &device, QString connection);
-    void setConnectionToDevice(MappedDevice &device, QString connection,
+    void setConnectionToDevice(MappedDevice &device,
+                               const QString& connection);
+    void setConnectionToDevice(MappedDevice &device,
+                               const QString& connection,
                                const ClientPortPair &pair);
     /// Return whether the client/port is in m_devicePortMap.
-    bool portInUse(int client, int port) const;
+    //bool portInUse(int client, int port) const;
     /// Is the given deviceId within m_devicePortMap connected?
     bool isConnected(DeviceId deviceId) const;
 
-    std::string getPortName(ClientPortPair port);
-    ClientPortPair getPortByName(std::string name);
+    std::string getPortName(ClientPortPair port) const;
+    ClientPortPair getPortByName(const std::string& name);
 
     struct AlsaTimerInfo {
         int clas;
@@ -654,11 +680,11 @@ private:
         int card;
         int device;
         int subdevice;
-        std::string name;
-        long resolution;
+        QString name;
+        long resolution;  // usecs
     };
     std::vector<AlsaTimerInfo> m_timers;
-    QString m_currentTimer;
+    QString m_currentTimerName;
 
     /// A time ordered set of pending MIDI NoteOffEvent objects.
     /**
@@ -693,9 +719,11 @@ private:
     void cropRecentNoteOffs(const RealTime &t); // remove old note offs
     void weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
 			    InstrumentId instrument); // on subsequent note on
+    // Delete and erase all.
+    void clearRecentNoteOffs();
 
     bool m_queueRunning;
-    
+
     /// An ALSA client or port event was received.
     /**
      * checkForNewClients() will handle.
@@ -703,16 +731,16 @@ private:
     bool m_portCheckNeeded;
 
     enum { NeedNoJackStart, NeedJackReposition, NeedJackStart } m_needJackStart;
-    
+
     bool m_doTimerChecks;
     bool m_firstTimerCheck;
     double m_timerRatio;
     bool m_timerRatioCalculated;
 
-    std::string getAlsaVersion();
-    std::string getKernelVersionString();
-    void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
-    bool versionIsAtLeast(std::string vstr, int major, int minor, int subminor);
+    static std::string getAlsaVersion();
+    static std::string getKernelVersionString();
+    static void extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix);
+    static bool versionIsAtLeast(const std::string& vstr, int major, int minor, int subminor);
 
     QMutex m_mutex;
 
@@ -727,6 +755,7 @@ private:
      *
      * @see m_returnComposition
      */
+    // cppcheck-suppress unusedPrivateFunction
     void insertMappedEventForReturn(MappedEvent *mE);
 
     /// Holds events to be returned by getMappedEventList().
@@ -776,7 +805,7 @@ private:
     /**
      * Returns true if handled and the CC can be discarded.
      */
-    bool handleTransportCCs(unsigned controlNumber, int value);
+    bool handleTransportCCs(unsigned controlNumber, int value) const;
 
     /// Whether we are sending MIDI Clocks (transport master).
     /**
@@ -791,6 +820,7 @@ private:
     /**
      * Either by instrument and audio file id or by audio segment id.
      */
+    // cppcheck-suppress unusedPrivateFunction
     void cancelAudioFile(const MappedEvent *mE);
 
     void clearAudioQueue();
@@ -799,6 +829,11 @@ private:
     TransportSyncStatus m_mmcStatus;
     TransportSyncStatus m_mtcStatus;
 
+    void sendEvent(
+            bool isSoftSynth,
+            InstrumentId instrumentID,
+            snd_seq_event_t &alsaEvent,
+            bool now);
 };
 
 

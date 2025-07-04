@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -36,13 +36,12 @@ namespace Rosegarden
 class BeatsBarsDialog : public QDialog
 {
     Q_OBJECT
-        
+
 public:
-    BeatsBarsDialog();
-    BeatsBarsDialog(QWidget *parent);
+    explicit BeatsBarsDialog(QWidget *parent);
 
     int getQuantity() { return m_spinBox->value(); }
-    int getMode()     { return m_comboBox->currentIndex();   } 
+    int getMode()     { return m_comboBox->currentIndex();   }
 
 protected:
     QSpinBox  *m_spinBox;

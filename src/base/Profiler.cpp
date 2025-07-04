@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,27 +15,30 @@
     COPYING included with this distribution for more information.
 */
 
-#include <iostream>
+#define RG_MODULE_STRING "[Profiler]"
+
 #include "Profiler.h"
 
-#include <vector>
+// Rosegarden
+#include "misc/Debug.h"
+
+// C++
 #include <algorithm>
 #include <set>
-#include <map>
 
-#include <stdio.h>
+// C
+#include <math.h>
 
-using std::cerr;
-using std::endl;
 
 namespace Rosegarden {
+
 
 Profiles* Profiles::m_instance = nullptr;
 
 Profiles* Profiles::getInstance()
 {
     if (!m_instance) m_instance = new Profiles();
-    
+
     return m_instance;
 }
 
@@ -56,7 +59,7 @@ void Profiles::accumulate(
 #endif
 )
 {
-#ifndef NO_TIMING    
+#ifndef NO_TIMING
     ProfilePair &pair(m_profiles[id]);
     ++pair.first;
     pair.second.first += time;
@@ -80,9 +83,10 @@ void Profiles::dump() const
 {
 #ifndef NO_TIMING
 
-    fprintf(stderr, "Profiling points:\n");
-
-    fprintf(stderr, "\nBy name:\n");
+    qDebug("----------------------------------------------------");
+    qDebug("Profiling points:");
+    qDebug(" ");
+    qDebug("By name:");
 
     typedef std::set<const char *, std::less<std::string> > StringSet;
 
@@ -101,30 +105,29 @@ void Profiles::dump() const
 
         const ProfilePair &pp(j->second);
 
-        fprintf(stderr, "%s(%d):\n", *i, pp.first);
+        qDebug("%s(%d):", *i, pp.first);
 
-        fprintf(stderr, "\tCPU:  \t%.9g ms/call \t[%d ms total]\n",
-                (((double)pp.second.first * 1000.0 /
-		  (double)pp.first) / CLOCKS_PER_SEC),
-                int((pp.second.first * 1000.0) / CLOCKS_PER_SEC));
+        qDebug("    CPU:    %.9f ms/call  (%ld ms total)",
+                (((double)pp.second.first * 1000.0 / (double)pp.first) / CLOCKS_PER_SEC),
+                lround((pp.second.first * 1000.0) / CLOCKS_PER_SEC));
 
-        fprintf(stderr, "\tReal: \t%s ms      \t[%s ms total]\n",
-                ((pp.second.second / pp.first) * 1000).toString().c_str(),
+        qDebug("    Real:   %s ms  (%s ms total)",
+                (pp.second.second / pp.first * 1000).toString().c_str(),
                 (pp.second.second * 1000).toString().c_str());
 
         WorstCallMap::const_iterator k = m_worstCalls.find(*i);
         if (k == m_worstCalls.end()) continue;
-        
+
         const TimePair &wc(k->second);
 
-        fprintf(stderr, "\tWorst:\t%s ms/call \t[%d ms CPU]\n",
+        qDebug("    Worst:  %s ms/call  (%d ms CPU)",
                 (wc.second * 1000).toString().c_str(),
                 int((wc.first * 1000.0) / CLOCKS_PER_SEC));
     }
 
     typedef std::multimap<RealTime, const char *> TimeRMap;
     typedef std::multimap<int, const char *> IntRMap;
-    
+
     TimeRMap totmap, avgmap, worstmap;
     IntRMap ncallmap;
 
@@ -142,51 +145,65 @@ void Profiles::dump() const
                                              i->first));
     }
 
+    // By Total
+    qDebug(" ");
+    qDebug("By total:");
 
-    fprintf(stderr, "\nBy total:\n");
     for (TimeRMap::const_iterator i = totmap.end(); i != totmap.begin(); ) {
         --i;
-        fprintf(stderr, "%-40s  %s ms\n", i->second,
+        qDebug("    %-40s  %s ms",
+                i->second,
                 (i->first * 1000).toString().c_str());
     }
 
-    fprintf(stderr, "\nBy average:\n");
+    // By Average
+    qDebug(" ");
+    qDebug("By average:");
+
     for (TimeRMap::const_iterator i = avgmap.end(); i != avgmap.begin(); ) {
         --i;
-        fprintf(stderr, "%-40s  %s ms\n", i->second,
+        qDebug("    %-40s  %s ms",
+                i->second,
                 (i->first * 1000).toString().c_str());
     }
 
-    fprintf(stderr, "\nBy worst case:\n");
+    // By Worst Case
+    qDebug(" ");
+    qDebug("By worst case:");
+
     for (TimeRMap::const_iterator i = worstmap.end(); i != worstmap.begin(); ) {
         --i;
-        fprintf(stderr, "%-40s  %s ms\n", i->second,
+        qDebug("    %-40s  %s ms",
+                i->second,
                 (i->first * 1000).toString().c_str());
     }
 
-    fprintf(stderr, "\nBy number of calls:\n");
+    // By Number of Calls
+    qDebug(" ");
+    qDebug("By number of calls:");
+
     for (IntRMap::const_iterator i = ncallmap.end(); i != ncallmap.begin(); ) {
         --i;
-        fprintf(stderr, "%-40s  %d\n", i->second, i->first);
+        qDebug("    %-40s  %d", i->second, i->first);
     }
 
 #endif
 }
 
-#ifndef NO_TIMING    
+#ifndef NO_TIMING
 
-Profiler::Profiler(const char* c, bool showOnDestruct) :
-    m_c(c),
+Profiler::Profiler(const char* name, bool showOnDestruct) :
+    m_c(name),
+    m_startCPU(clock()),
     m_showOnDestruct(showOnDestruct),
     m_ended(false)
 {
-    m_startCPU = clock();
-
     struct timeval tv;
     (void)gettimeofday(&tv, nullptr);
     m_startTime = RealTime::fromTimeval(tv);
 }
 
+#if 0
 void
 Profiler::update() const
 {
@@ -196,14 +213,16 @@ Profiler::update() const
     (void)gettimeofday(&tv, nullptr);
     RealTime elapsedTime = RealTime::fromTimeval(tv) - m_startTime;
 
-    cerr << "Profiler : id = " << m_c
-	 << " - elapsed so far = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
-	 << "ms CPU, " << elapsedTime << " real" << endl;
-}    
+    RG_DEBUG << "update() : id = " << m_c
+        << " - elapsed so far = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
+        << "ms CPU, " << elapsedTime << " real";
+}
+#endif
 
 Profiler::~Profiler()
 {
-    if (!m_ended) end();
+    if (!m_ended)
+        end();
 }
 
 void
@@ -218,14 +237,13 @@ Profiler::end()
     Profiles::getInstance()->accumulate(m_c, elapsedCPU, elapsedTime);
 
     if (m_showOnDestruct)
-        cerr << "Profiler : id = " << m_c
+        RG_DEBUG << "end() : id = " << m_c
              << " - elapsed = " << ((elapsedCPU * 1000) / CLOCKS_PER_SEC)
-	     << "ms CPU, " << elapsedTime << " real" << endl;
+             << "ms CPU, " << elapsedTime << " real";
 
     m_ended = true;
 }
- 
+
 #endif
 
 }
-

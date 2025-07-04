@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -78,7 +78,7 @@ protected:
     ProgressBar        *m_progress;
     QLabel             *m_info;
     QProcess           *m_process;
-    
+
     /// The backend script has to be accessed from multiple locations
     QFile               m_script;
 
@@ -112,7 +112,8 @@ protected:
      * \p fileToModify  the .rg file we need to work on
      * \p newPath       the new path component we need to switch in
      */
-    QStringList getPluginFilesAndRewriteXML(const QString fileToModify, const QString newPath);
+    QStringList getPluginFilesAndRewriteXML(const QString& fileToModify,
+                                            const QString& newPath);
 
     // to avoid troubles, check that flac is available. It is fast and could
     // possibly avoid troubles.

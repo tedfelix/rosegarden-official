@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -54,7 +54,7 @@ class MIDIInstrumentParameterPanel : public InstrumentParameterPanel
 
 public:
 
-    MIDIInstrumentParameterPanel(QWidget *parent);
+    explicit MIDIInstrumentParameterPanel(QWidget *parent);
 
 public slots:
 
@@ -114,7 +114,7 @@ private slots:
     void slotSelectChannel(int index);
 
     /// Handle a rotary change (m_rotaryMapper mapped())
-    void slotControllerChanged(int index);
+    void slotControllerChanged(int controllerNumber);
 
 private:
 

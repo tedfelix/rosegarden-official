@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,9 +29,6 @@
 #include "base/Composition.h"
 #include "base/Studio.h"
 #include "document/RosegardenDocument.h"
-#include "gui/editors/notation/NotationStaff.h"
-#include "gui/editors/notation/NotationScene.h"
-#include "gui/editors/notation/NotationView.h"
 
 #include <QTextBrowser>
 #include <QDialog>
@@ -63,6 +60,11 @@
 
 namespace Rosegarden
 {
+
+
+class NotationView;
+class NotationScene;
+class NotationStaff;
 
 
 class CheckForParallelsDialog : public QDialog
@@ -133,7 +135,7 @@ public:
     // compare function for sorting the transitionList
     static bool sortByTime(const Transition &t1, const Transition &t2) { return t1.time < t2.time; }
 
-    CheckForParallelsDialog(NotationView *parent, RosegardenDocument *document, NotationScene *ns, Composition *comp);
+    CheckForParallelsDialog(NotationView *parent, RosegardenDocument *doc, NotationScene *ns, Composition *comp);
 
 protected slots:
     void startCheck();
@@ -153,7 +155,8 @@ private:
     void checkParallels(std::vector<Transition> &tSet);
 
     // returns true if the transition set has parallels
-    bool hasParallels(std::vector<Transition> &tSet, std::vector<Parallel> &p);
+    bool hasParallels(std::vector<Transition> &tSet,
+                      std::vector<Parallel> &parVec);
 
     // fill the fields of a parallel with exception of type
     void populateParallel(Transition t1, Transition t2, Parallel &p);
@@ -166,7 +169,7 @@ private:
     void updateSegments();
 
     // write out the transition list (for debug purposes)
-    void writeTransitionList(std::vector<Transition> transitionList);
+    void writeTransitionList(std::vector<Transition> list);
 
     // write a single transition
     void writeTransition(std::vector<Transition>::iterator it);

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,13 +19,13 @@
 #define RG_BANKEDITORDIALOG_H
 
 #include "base/Device.h"
-#include "base/MidiProgram.h"
+#include "base/MidiDevice.h"
+#include "base/Studio.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
 
-#include <map>
-#include <string>
+#include <set>
 #include <utility>
 
 
@@ -39,166 +39,203 @@ class QCheckBox;
 class QTreeWidget;
 class QComboBox;
 class QFrame;
+class QStackedLayout;
 
 
 namespace Rosegarden
 {
 
+
 class Command;
-class Studio;
 class RosegardenDocument;
 class MidiProgramsEditor;
 class MidiKeyMappingEditor;
 class MidiDeviceTreeWidgetItem;
 class MidiDevice;
+class ModifyDeviceCommand;
+class MidiBankTreeWidgetItem;
+class MidiKeyMapTreeWidgetItem;
 
 
-class BankEditorDialog : public QMainWindow, public ActionFileClient
+/// Manage MIDI Banks and Programs dialog
+class BankEditorDialog : public QMainWindow, public ActionFileClient,
+                         public StudioObserver, public DeviceObserver
 {
     Q_OBJECT
 
 public:
+
     BankEditorDialog(QWidget *parent,
                      RosegardenDocument *doc,
-                     DeviceId defaultDevice =
-                     Device::NO_DEVICE);
-
+                     DeviceId defaultDevice);
     ~BankEditorDialog() override;
 
-    // Initialize the devices/banks and programs - the whole lot
-    //
-    void initDialog();
-
-    std::pair<int, int> getFirstFreeBank(QTreeWidgetItem*);
-
-    void addCommandToHistory(Command *command);
+    ModifyDeviceCommand *makeCommand(const QString &commandName);
 
     void setCurrentDevice(DeviceId device);
 
-    // Get a MidiDevice from an index number
-    //
-    MidiDevice* getMidiDevice(DeviceId);
-    MidiDevice* getMidiDevice(QTreeWidgetItem*);
-    MidiDevice* getCurrentMidiDevice();
-    BankList&   getBankList()     { return m_bankList; }
-    ProgramList&getProgramList()  { return m_programList; }
+    // StudioObserver interface
+    virtual void deviceAdded(Device* device) override;
+    virtual void deviceRemoved(Device* device) override;
 
-    Studio *getStudio() { return m_studio; }
-
-    // Set the listview to select a certain device - used after adding
-    // or deleting banks.
-    //
-    void selectDeviceItem(MidiDevice *device);
-
-    // Select a device/bank combination
-    //
-    void selectDeviceBankItem(DeviceId device, int bank);
+    // DeviceObserver interface
+    virtual void deviceModified(Device* device) override;
 
 public slots:
-    void slotPopulateDeviceEditors(QTreeWidgetItem*, QTreeWidgetItem*);//int column);
 
-    void slotApply();
-    void slotReset();
+    /// Librarian Edit button.  Called by NameSetEditor.
+    void slotEditLibrarian();
+    /// Close button or when the document is about to change.
+    void slotFileClose();
 
-    void slotUpdate();
+signals:
 
+    /// Called by closeEvent().  Connected to RMW::slotBankEditorClosed().
+    void closing();
+
+    /**
+     * RosegardenMainWindow::slotEditBanks() connects this to:
+     *   - RosegardenMainViewWidget::slotSynchroniseWithComposition()
+     *   - DeviceManagerDialog::slotResyncDevicesReceived()
+     *   - TrackParameterBox::devicesChanged()
+     * This makes sure all the names on the UI are correct.
+     */
+    void deviceNamesChanged();
+
+private slots:
+
+    /// Tree item double-click to edit name.
+    void slotEdit(QTreeWidgetItem *item, int column);
+    /// Handles name changes in the tree.
+    void slotItemChanged(QTreeWidgetItem *item, int column);
+
+    /// Show and update the program editor or the key map editor.
+    /**
+     * Used to make sure the right portion of the dialog shows the proper
+     * editor and contents when a different item is selected in the tree.
+     *
+     * See updateEditor().
+     */
+    void slotUpdateEditor(
+            QTreeWidgetItem *currentItem, QTreeWidgetItem *previousItem);
+
+    // Button Handlers
     void slotAddBank();
     void slotAddKeyMapping();
     void slotDelete();
     void slotDeleteAll();
-
     void slotImport();
     void slotExport();
+    void slotCopy();
+    void slotPaste();
 
-    void slotModifyDeviceOrBankName(QTreeWidgetItem*, int);
-
-    void slotFileClose();
-
-    void slotEdit(QTreeWidgetItem *item, int);
-    void slotEditCopy();
-    void slotEditPaste();
-
+    /// "Show Variation list based on" check box handler.
     void slotVariationToggled();
-    void slotVariationChanged(int);
+    /// "Show Variation list based on" combo box handler.
+    void slotVariationChanged(int index);
+
+    /// Help > Help
     void slotHelpRequested();
+    /// Help > About Rosegarden
     void slotHelpAbout();
 
-signals:
-    void closing();
-    void deviceNamesChanged();
-
 protected:
-    void closeEvent(QCloseEvent*) override;
 
-    void resetProgramList();
-    void setProgramList(MidiDevice *device);
+    /// QWidget override.  Emits the closing() signal.
+    void closeEvent(QCloseEvent *) override;
+
+private:
+
+    RosegardenDocument *m_doc;
+    Studio *m_studio;
+
+    // Widgets
+
+    QTreeWidget *m_treeWidget;
+    /// Add Banks and Key Maps to the tree for a MidiDevice.
+    void populateDeviceItem(QTreeWidgetItem *deviceItem,
+                            MidiDevice *midiDevice);
+    /// Checks type of item and calls item->parent().
+    MidiDeviceTreeWidgetItem *getParentDeviceItem(QTreeWidgetItem *item);
+    /// Select a device in the tree.  Used after adding or importing banks.
+    void selectDeviceItem(MidiDevice *device);
+    /// Select a bank or key map item by name under deviceItem.
+    void selectItem(MidiDeviceTreeWidgetItem *deviceItem, const QString &name);
+
+    QWidget *m_rightSide;
+    QStackedLayout *m_rightSideLayout;
+
+    MidiProgramsEditor *m_programEditor;
+    MidiKeyMappingEditor *m_keyMappingEditor;
+
+    // Options
+    QGroupBox *m_optionBox;
+    // Show Variation list based on
+    QCheckBox *m_variationCheckBox;
+    // Show Variation list based on
+    QComboBox *m_variationCombo;
+    // Cache to detect changes.
+    MidiDevice::VariationType m_variationType;
+
+    QPushButton *m_closeButton;
+
+    /// Show and update the program editor or the key map editor.
+    /**
+     * One or the other appear on the right side of the dialog.
+     */
+    void updateEditor(QTreeWidgetItem *item);
+
+    /// Create actions and menus.
+    void setupActions();
 
     void updateDialog();
 
-    void populateDeviceItem(QTreeWidgetItem* deviceItem,
-                            MidiDevice* midiDevice);
+    // Clipboard
+    enum class ItemType {NONE, DEVICE, BANK, KEYMAP};
+    struct Clipboard
+    {
+        ItemType itemType{ItemType::NONE};
+        DeviceId deviceId{Device::NO_DEVICE};
+        int bank{-1};
+        QString keymapName;
+    };
+    Clipboard m_clipboard;
+    void pasteBankOverBank(const MidiBankTreeWidgetItem *bankItem);
+    void pasteKeyMapOverKeyMap(const MidiKeyMapTreeWidgetItem *keyItem);
+    void pasteBankIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem);
+    void pasteKeyMapIntoDevice(const MidiDeviceTreeWidgetItem *deviceItem);
 
-    void updateDeviceItem(MidiDeviceTreeWidgetItem* deviceItem);
 
-    bool deviceItemHasBank(MidiDeviceTreeWidgetItem* deviceItem, int bankNb);
+    /// Get first free bank to avoid conflicts.
+    static void getFirstFreeBank(MidiDevice *device,
+                                 MidiByte &o_msb,
+                                 MidiByte &o_lsb);
 
-    void clearItemChildren(QTreeWidgetItem* deviceItem);
+    /// Handle bank name conflicts by adding "_1".
+    static QString makeUniqueBankName(const QString &name,
+                               const BankList &banks);
+    /// Handle key map name conflicts by adding "_1".
+    static QString makeUniqueKeyMapName(const QString &name,
+                                 const KeyMappingList &keyMaps);
 
-    MidiDeviceTreeWidgetItem* getParentDeviceItem(QTreeWidgetItem*);
-    void keepBankListForNextPopulate() { m_keepBankList = true; }
+    /// Identify Tracks using a bank to avoid deleting banks that are in use.
+    bool tracksUsingBank(const MidiBank &bank, const MidiDevice &device);
 
-    void populateDeviceEditors(QTreeWidgetItem*);
+    // Device Observer Management
+    std::set<Device *> m_observedDevices;
+    void observeDevice(Device *device);
+    void unobserveDevice(Device *device);
 
-    void setupActions();
+    // Studio Observer Management
+    bool m_observingStudio;
 
-    //--------------- Data members ---------------------------------
-    Studio                 *m_studio;
-    RosegardenDocument     *m_doc;
-
-    MidiProgramsEditor      *m_programEditor;
-    MidiKeyMappingEditor    *m_keyMappingEditor;
-    QTreeWidget             *m_treeWidget;
-
-    QGroupBox               *m_optionBox;
-    QCheckBox               *m_variationToggle;
-    QComboBox               *m_variationCombo;
-
-    QPushButton             *m_closeButton;
-    QPushButton             *m_resetButton;
-    QPushButton             *m_applyButton;
-
-    QPushButton             *m_addBank;
-    QPushButton             *m_addKeyMapping;
-    QPushButton             *m_delete;
-    QPushButton             *m_deleteAll;
-
-    QPushButton             *m_importBanks;
-    QPushButton             *m_exportBanks;
-
-    QPushButton             *m_copyPrograms;
-    QPushButton             *m_pastePrograms;
-    std::pair<DeviceId, int> m_copyBank;
-
-    std::map<DeviceId,
-             std::string>    m_deviceNameMap;
-    BankList                 m_bankList;
-    ProgramList              m_programList;
-    ProgramList              m_oldProgramList;
-
-    bool                     m_keepBankList;
-    bool                     m_deleteAllReally;
-
-    DeviceId                 m_lastDevice;
-    MidiBank                 m_lastBank;
-
-    bool                     m_updateDeviceList;
-
-    QFrame                  *m_rightSide;
+    /// Tells updateDialog() which item to select.
+    /**
+     * Used by slotModifyDeviceOrBankName() to let updateDialog() know which
+     * item to select.  We want the item that was just renamed to be selected.
+     */
+    QString m_selectionName;
 };
-
-// ----------------------- RemapInstrumentDialog ------------------------
-//
-//
 
 
 }

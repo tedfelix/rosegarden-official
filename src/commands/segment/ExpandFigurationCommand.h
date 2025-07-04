@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,33 +27,32 @@
 namespace Rosegarden
 {
   class Composition;
-  typedef long timeT;
 
- 
+
 // @class ExpandFigurationCommand
-// @remarks Implements the command "Expand block chords to figurations".  
+// @remarks Implements the command "Expand block chords to figurations".
 // @author Tom Breton (Tehom)
 class ExpandFigurationCommand : public MacroCommand
 {
-  Q_DECLARE_TR_FUNCTIONS(Rosegarden::ExpandFigurationCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::ExpandFigurationCommand);
 
-public:
-  ExpandFigurationCommand(SegmentSelection selection);
+ public:
+    explicit ExpandFigurationCommand(SegmentSelection selection);
 
-  ~ExpandFigurationCommand() override;
+    ~ExpandFigurationCommand() override;
 
-  static QString getGlobalName() 
-  { return tr("Expand Block Chords to Figurations"); }
+    static QString getGlobalName()
+    { return tr("Expand Block Chords to Figurations"); }
 
-private:
-    
-  void initialise(SegmentSelection selection);
-  timeT rawStartTimeToExact(timeT raw);
+ private:
 
-  Composition                   *m_composition;
-  // The new segments we make.
-  SegmentMultiSet                m_newSegments;
-  bool                           m_executed;
+    void initialise(SegmentSelection selection);
+    timeT rawStartTimeToExact(timeT raw) const;
+
+    Composition                   *m_composition;
+    // The new segments we make.
+    SegmentMultiSet                m_newSegments;
+    bool                           m_executed;
 };
 
 }

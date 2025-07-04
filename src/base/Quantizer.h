@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -65,9 +65,11 @@ public:
      * quantize.  In this case, but no other, unquantize will
      * still work afterwards.)
      */
+    /* unused
     void fixQuantizedValues(Segment *,
                             Segment::iterator from,
                             Segment::iterator to) const;
+    */
 
     /**
      * Return the quantized duration of the event if it has been
@@ -88,14 +90,14 @@ public:
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    virtual timeT getUnquantizedAbsoluteTime(Event *e) const;
+    // unused virtual timeT getUnquantizedAbsoluteTime(Event *e) const;
 
     /**
      * Return the unquantized absolute time of the event --
      * the absolute time that would be restored by a call to
      * unquantize.
      */
-    virtual timeT getUnquantizedDuration(Event *e) const;
+    // unused virtual timeT getUnquantizedDuration(Event *e) const;
 
     /**
      * Unquantize all events in the given range, for this
@@ -110,21 +112,39 @@ public:
      */
     void unquantize(EventSelection *) const;
 
-    static const std::string RawEventData;
-    static const std::string DefaultTarget;
-    static const std::string GlobalSource;
-    static const std::string NotationPrefix;
+    // Data sources and targets (m_source and m_target).
+
+    // ??? At one time these may have been Event property name prefixes, but
+    //     now notation time and duration are actual fields in Event.  These
+    //     are now more like enum values that are used to control the behavior
+    //     of Quantizer:
+    //
+    //       enum DataType {
+    //           RawEventData,  // MIDI/Performance
+    //           Notation,  // Notation
+    //           GlobalQ };  // Used internally as a source.
+
+    // MIDI/Performance time and duration.
+    static constexpr const char *RawEventData = "";
+    // Notation time and duration.
+    static constexpr const char *NotationPrefix = "Notation";
+
+    /// In descending duration order.
+    /**
+     * ??? Move this up to Quantizer.
+     */
+    static const std::vector<timeT> &getQuantizations();
 
 protected:
     /**
      * \arg source, target : Description of where to find the
      * times to be quantized, and where to put the quantized results.
-     * 
+     *
      * These may be strings, specifying a prefix for the names
      * of properties to contain the timings, or may be the special
      * value RawEventData in which case the event's absolute time
      * and duration will be used instead of properties.
-     * 
+     *
      * If source specifies a property prefix for properties that are
      * found not to exist, they will be pre-filled from the original
      * timings in the target values before being quantized and then
@@ -132,7 +152,7 @@ protected:
      * directly into the Event's absolute time and duration without
      * losing the original values, because they are backed up
      * automatically into the source properties.)
-     * 
+     *
      * Note that because it's impossible to modify the duration or
      * absolute time of an event after construction, if target is
      * RawEventData the quantizer must re-construct each event in
@@ -166,15 +186,16 @@ protected:
      *   values will be read from the event's absolute time and
      *   duration, quantized, and written back to these values.
      */
-    Quantizer(std::string source, std::string target);
+    Quantizer(const std::string& source, const std::string& target);
 
     /**
      * If only target is supplied, source is deduced appropriately
      * as GlobalSource if target == RawEventData and RawEventData
      * otherwise.
      */
-    Quantizer(std::string target);
+    explicit Quantizer(const std::string& target);
 
+    /// Quantize a single Event.
     /**
      * To implement a subclass of Quantizer, you should
      * override either quantizeSingle (if your quantizer is simple
@@ -183,7 +204,7 @@ protected:
      * simply calls quantizeSingle on each non-rest event in turn.
      * The default implementation of quantizeSingle, as you see,
      * does nothing.
-     * 
+     *
      * Note that implementations of these methods should call
      * getFromSource and setToTarget to get and set the unquantized
      * and quantized data; they should not query the event properties
@@ -218,24 +239,31 @@ protected:
     PropertyName m_sourceProperties[2];
     PropertyName m_targetProperties[2];
 
-public: // should be protected, but gcc-2.95 doesn't like allowing NotationQuantizer::m_impl to access them
+protected:
+    /// Get the requested property for the Event from the source.
+    /**
+     * This has the side-effect of copying the property from target
+     * to source if the source doesn't have the property, but the
+     * target does.
+     */
     timeT getFromSource(Event *, ValueType) const;
     timeT getFromTarget(Event *, ValueType) const;
-    void setToTarget(Segment *, Segment::iterator, timeT t, timeT d) const;
+    void setToTarget(Segment *segment, Segment::iterator segmentIter,
+                     timeT absTime, timeT duration) const;
     mutable std::vector<Event *> m_toInsert;
 
-protected:
-    void removeProperties(Event *) const;
+    // unused void removeProperties(Event *) const;
     void removeTargetProperties(Event *) const;
     void makePropertyNames();
 
     void insertNewEvents(Segment *) const;
 
-private: // not provided
+private:
+    // Hide copy ctor and op=
+    // ??? Actually these are perfectly copyable.  There is no need to do this.
     Quantizer(const Quantizer &);
     Quantizer &operator=(const Quantizer &);
-    bool operator==(const Quantizer &) const;
-    bool operator!=(const Quantizer & c) const;
+
 };
 
 

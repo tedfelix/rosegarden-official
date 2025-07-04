@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -12,7 +12,6 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
-
 
 #ifndef RG_PEAKFILEMANAGER_H
 #define RG_PEAKFILEMANAGER_H
@@ -31,10 +30,12 @@ class QProgressDialog;
 namespace Rosegarden
 {
 
+
 class AudioFile;
-class PeakFile;
 class RealTime;
 
+
+/// A repository of PeakFile objects.
 /**
  * Accepts an AudioFIle and turns the sample data into peak data for
  * storage in a peak file or a BWF format peak chunk.
@@ -43,32 +44,8 @@ class PeakFileManager : public QObject
 {
     Q_OBJECT
 public:
-    PeakFileManager();
-    ~PeakFileManager() override;
-    
-    class BadPeakFileException : public Exception
-    {
-    public:
-        BadPeakFileException(QString path) :
-            Exception(QObject::tr("Bad peak file ") + path), m_path(path) { }
-        BadPeakFileException(QString path, QString file, int line) :
-            Exception(QObject::tr("Bad peak file ") + path, file, line), m_path(path) { }
-        BadPeakFileException(const SoundFile::BadSoundFileException &e) :
-            Exception(QObject::tr("Bad peak file (malformed audio?) ") + e.getPath()), m_path(e.getPath()) { }
+    PeakFileManager()  { }
 
-        ~BadPeakFileException() throw() override { }
-
-        QString getPath() const { return m_path; }
-
-    private:
-        QString m_path;
-    };
-
-private:
-    PeakFileManager(const PeakFileManager &pFM);
-    PeakFileManager& operator=(const PeakFileManager &);
-
-public:
     /**
      * Check that a given audio file has a valid and up to date
      * peak file or peak chunk.
@@ -101,22 +78,44 @@ public:
     /// Removes peak file from PeakFileManager - doesn't affect audioFile
     bool removeAudioFile(AudioFile *audioFile);
 
+    /// Deletes the .pk file from the filesystem.
+    /**
+     * This also removes the PeakFile from m_peakFiles.  You will need to
+     * call generatePeaks() to get the PeakFile back.
+     */
+    void deletePeakFile(AudioFile *audioFile);
+
     void clear();
-                    
-    std::vector<SplitPointPair> 
+
+    std::vector<SplitPointPair>
         getSplitPoints(AudioFile *audioFile,
                        const RealTime &startTime,
                        const RealTime &endTime,
                        int threshold,
                        const RealTime &minTime);
 
-    std::vector<PeakFile *>::const_iterator begin() const
-                { return m_peakFiles.begin(); }
+    class BadPeakFileException : public Exception
+    {
+    public:
+        explicit BadPeakFileException(const QString& path) :
+            Exception(QObject::tr("Bad peak file ") + path), m_path(path) { }
+        BadPeakFileException(const QString& path, const QString& file, int line) :
+            Exception(QObject::tr("Bad peak file ") + path, file, line), m_path(path) { }
+        explicit BadPeakFileException(const SoundFile::BadSoundFileException &e) :
+            Exception(QObject::tr("Bad peak file (malformed audio?) ") + e.getPath()), m_path(e.getPath()) { }
 
-    std::vector<PeakFile *>::const_iterator end() const
-                { return m_peakFiles.end(); }
+        ~BadPeakFileException() throw() override { }
 
-protected:
+        QString getPath() const { return m_path; }
+
+    private:
+        QString m_path;
+    };
+
+private:
+    PeakFileManager(const PeakFileManager &pFM);
+    PeakFileManager& operator=(const PeakFileManager &);
+
     /// Insert PeakFile based on AudioFile if it doesn't already exist.
     bool insertAudioFile(AudioFile *audioFile);
     /// Auto-inserts PeakFile into manager if it doesn't already exist.
@@ -129,6 +128,5 @@ protected:
 
 
 }
-
 
 #endif // RG_PEAKFILEMANAGER_H

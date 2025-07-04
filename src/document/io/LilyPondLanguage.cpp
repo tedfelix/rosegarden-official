@@ -1,7 +1,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2011 Daren Beattie <dtbeattie@gmail.com>
 
@@ -75,7 +75,7 @@ LilyPondLanguage::create(unsigned int language) {
 
 const std::string
 LilyPondLanguage::getLilyNote(
-        const char noteName, const Accidental accidental
+        const char noteName, const Accidental& accidental
         ) const {
     std::string lilyNoteName = getLilyNoteName(noteName);
     std::string lilyNote = applyAccidental(lilyNoteName, accidental);
@@ -127,7 +127,7 @@ LilyPondArabic::getImportStatement() const {
 
 const std::string
 LilyPondArabic::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 
@@ -161,7 +161,7 @@ LilyPondVlaams::getImportStatement() const {
 
 const std::string
 LilyPondVlaams::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 
@@ -187,7 +187,7 @@ LilyPondEspanol::getImportStatement() const {
 
 const std::string
 LilyPondEspanol::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 
@@ -241,7 +241,7 @@ LilyPondDeutsch::getLilyNoteName(const char noteName) const {
 
 const std::string
 LilyPondDeutsch::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 
@@ -292,7 +292,7 @@ LilyPondNederlands::getLilyNoteName(const char noteName) const {
 
 const std::string
 LilyPondNederlands::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 
@@ -334,7 +334,7 @@ LilyPondSvenska::getImportStatement() const {
 
 const std::string
 LilyPondSvenska::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 
@@ -392,7 +392,7 @@ LilyPondEnglish::getLilyNoteName(const char noteName) const {
 
 const std::string
 LilyPondEnglish::applyAccidental(
-        const std::string lilyNoteName, const Accidental accidental
+        const std::string& lilyNoteName, const Accidental& accidental
         ) const {
     std::string lilyNote = lilyNoteName;
 

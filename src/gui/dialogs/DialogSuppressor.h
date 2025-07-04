@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -24,22 +24,22 @@
 
 namespace Rosegarden
 {
-	
+
 class DialogSuppressor
 {
 public:
-    static bool shouldSuppress(QDialog *, QString settingsKey);
-    static bool isSuppressed(QString settingsKey);
+    // unused static bool shouldSuppress(QDialog *, QString settingsKey);
+    // unused static bool isSuppressed(QString settingsKey);
 };
-  
+
 class SuppressionTarget : public QObject
 {
     Q_OBJECT
 public:
-    SuppressionTarget(QString key) : m_key(key) { }
+    explicit SuppressionTarget(const QString& key) : m_key(key) { }
 
 public slots:
-    void slotSuppressionToggled(bool);
+    // unused void slotSuppressionToggled(bool);
 
 private:
     QString m_key;

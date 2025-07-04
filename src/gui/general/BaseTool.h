@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,12 +32,12 @@ namespace Rosegarden
 /**
  * BaseTool : base tool class, just handles RMB menu creation and
  * handling by a BaseToolBox
- * 
+ *
  */
 class BaseTool : public QObject
 {
     Q_OBJECT
-    
+
     friend class BaseToolBox;
 
 public:
@@ -66,7 +66,7 @@ public:
     /**
      * Retrieve current status-line type help for the tool, if any
      */
-    virtual QString getCurrentContextHelp() const;
+    // unused virtual QString getCurrentContextHelp() const;
 
 signals:
     void showContextHelp(QString);

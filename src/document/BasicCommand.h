@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,7 +21,6 @@
 
 #include "base/Segment.h"
 #include "document/Command.h"
-#include "base/Event.h"
 #include "misc/Debug.h"
 
 #include <memory>  // for shared_ptr
@@ -89,7 +88,7 @@ protected:
      * events to modify, in which case it won't work when
      * replayed for redo because the pointers may no longer be
      * valid.  In which case, BasicCommand will implement redo
-     * much like undo, and will only call your modifySegment 
+     * much like undo, and will only call your modifySegment
      * the very first time the command object is executed.
      *
      * It is always safe to pass bruteForceRedoRequired true,
@@ -127,8 +126,8 @@ protected:
     Segment &getSegment();
 
     /// Thes methods are deprecated
-    timeT getStartTime() { return m_startTime; }
-    timeT getEndTime() { return m_endTime; }
+    timeT getStartTime() const { return m_startTime; }
+    timeT getEndTime() const { return m_endTime; }
 
     // This method is not used. Classes should not override it
     virtual timeT getRelayoutEndTime();
@@ -162,9 +161,9 @@ private:
     timeT m_startTime;
     timeT m_endTime;
     /// Calculate start time for m_startTime.  [DEPRECATED]
-    timeT calculateStartTime(timeT given, Segment &segment);
+    static timeT calculateStartTime(timeT given, Segment &segment);
     /// Calculate end time for m_endTime.  [DEPRECATED]
-    timeT calculateEndTime(timeT given, Segment &segment);
+    static timeT calculateEndTime(timeT given, Segment &segment);
 
     /// Start time of Events which were modified by modifySegment().
     /**

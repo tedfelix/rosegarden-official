@@ -52,7 +52,7 @@ public:
 class CommandFailed : public Exception
 {
 public:
-    CommandFailed(std::string message) : Exception(message) { }
+    explicit CommandFailed(const std::string& message) : Exception(message) { }
 };
 
 class AbstractCommandBuilder
@@ -115,7 +115,7 @@ class CommandRegistry : public QObject
 public:
     ~CommandRegistry() override;
 
-    void registerCommand(QString actionName,
+    void registerCommand(const QString& actionName,
                          AbstractCommandBuilder *builder) {
         addAction(actionName);
         m_builders[actionName] = builder;
@@ -129,14 +129,14 @@ protected:
 
     typedef std::map<QString, AbstractCommandBuilder *> ActionBuilderMap;
     ActionBuilderMap m_builders;
-	
+
     virtual void addAction(QString actionName) = 0;
     virtual void invokeCommand(QString actionName) = 0;
 
 private:
     CommandRegistry(const CommandRegistry &);
     CommandRegistry &operator=(const CommandRegistry &);
-    
+
 };
 
 class CommandArgumentQuerier
@@ -152,5 +152,3 @@ protected:
 }
 
 #endif
-
-

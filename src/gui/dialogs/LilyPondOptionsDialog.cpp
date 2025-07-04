@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -85,8 +85,8 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     m_headersPage = new HeadersConfigurationPage(this, m_doc);
     tabWidget->addTab(m_headersPage, tr("Headers"));
-    
-    
+
+
     //
     // LilyPond export: Basic options
     //
@@ -127,11 +127,15 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     m_lilyLanguage = new QComboBox(frameBasic);
     m_lilyLanguage->setToolTip(tr("<qt>Set the LilyPond version you have installed. If you have a newer version of LilyPond, choose the highest version Rosegarden supports.</qt>"));
 
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.6")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.8")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.10")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.12")));
-    m_lilyLanguage->addItem(tr("LilyPond %1").arg(tr("2.14")));
+    // I don't know why the version number was formerly translated.
+    // It doesn't seem very useful, so I remove the tr() calls.
+    // If nevertheless it's really needed, it can probably be reintroduced
+    // when initializing LilyPond_Version_Names[] at the beginning of
+    // LilyPondExporter.h
+    for (int i = LILYPOND_VERSION_TOO_OLD + 1;
+             i < LILYPOND_VERSION_TOO_NEW; i++) {
+        m_lilyLanguage->addItem(tr("LilyPond %1").arg(LilyPond_Version_Names[i]));
+    }
     layoutBasic->addWidget(m_lilyLanguage, 1, 1);
 
     layoutBasic->addWidget(new QLabel(
@@ -227,7 +231,11 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
     layoutNotation->addWidget(m_lilyExportStaffGroup, 3, 0, 1, 2);
     m_lilyExportStaffGroup->setToolTip(tr("<qt>Track staff brackets are found in the <b>Track Parameters</b> box, and may be used to group staffs in various ways</qt>"));
 
-    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_2_10);
+    // Currently, the same code is used whatever the LilyPond version is. So the
+    // LilyPond version is set to its minimal value LILYPOND_VERSION_TOO_OLD + 1.
+    // The following LilyVersionAwareCheckBox is only kept to not forget it.
+    // The next time it will be needed, it probably will be with another checkbox.
+    m_useShortNames = new LilyVersionAwareCheckBox(tr("Print short staff names"), frameNotation, LILYPOND_VERSION_TOO_OLD + 1);
     m_useShortNames->setToolTip(tr("<qt>Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher</qt>"));
     layoutNotation->addWidget(m_useShortNames, 4, 0, 1, 2);
 
@@ -318,22 +326,25 @@ LilyPondOptionsDialog::LilyPondOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply | QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Apply | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metaGridLayout->addWidget(buttonBox, 1, 0);
     metaGridLayout->setRowStretch(0, 10);
 
     setLayout(metaGridLayout);
 
-    connect(m_lilyLanguage,
-                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+    connect(m_lilyLanguage, (void(QComboBox::*)(int))&QComboBox::activated,
             m_useShortNames, &LilyVersionAwareCheckBox::slotCheckVersion);
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &LilyPondOptionsDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &LilyPondOptionsDialog::help);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &LilyPondOptionsDialog::help);
 
     populateDefaultValues();
-    
-    // Initally enable or disable m_useShortNames according to inital setting of m_lilyLanguage
+
+    // Enable or disable m_useShortNames based on m_lilyLanguage.
     m_useShortNames->checkVersion(m_lilyLanguage->currentIndex());
 
     resize(minimumSizeHint());
@@ -350,7 +361,7 @@ LilyPondOptionsDialog::help()
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:manual-lilypondoptions-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
-    
+
 
 void
 LilyPondOptionsDialog::populateDefaultValues()
@@ -358,7 +369,8 @@ LilyPondOptionsDialog::populateDefaultValues()
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
 
-    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage", 0).toUInt());
+    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage",
+        LILYPOND_VERSION_DEFAULT - LILYPOND_VERSION_TOO_OLD + 1).toUInt());
     // See also setDefaultLilyPondVersion below
     int defaultPaperSize = 1; // A4
     if (QLocale::system().country() == QLocale::UnitedStates) {
@@ -447,7 +459,7 @@ LilyPondOptionsDialog::slotApply()
 
     m_headersPage->apply();
 }
- 
+
 void
 LilyPondOptionsDialog::accept()
 {
@@ -455,6 +467,7 @@ LilyPondOptionsDialog::accept()
     QDialog::accept();
 }
 
+/* unused
 void
 LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 {
@@ -490,5 +503,6 @@ LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
 
     settings.endGroup();
 }
+*/
 
 }

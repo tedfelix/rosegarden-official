@@ -1,18 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2021 Rosegarden development team -->
+<!-- Copyright 2018-2025 Rosegarden development team -->
 <component type="desktop">
-    <id>com.rosegardenmusic.rosegarden.desktop</id>
+    <id>com.rosegardenmusic.rosegarden</id>
+    <provides>
+      <id>com.rosegardenmusic.rosegarden.desktop</id>
+      <!--
+           ic01: Interface Class 0x01: AUDIO
+           isc03: Interface Sub Class 0x03: MIDISTREAMING
+           See "Universal Serial Bus Device Class Definition for Audio
+           Devices" at usb.org.
+      -->
+      <modalias>usb:*ic01isc03ip*</modalias>
+    </provides>
+    <launchable type="desktop-id">com.rosegardenmusic.rosegarden.desktop</launchable>
     <name>Rosegarden</name>
     <name xml:lang="fr">Rosegarden</name>
-    <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
     <summary>MIDI and Audio Sequencer and Notation Editor</summary>
-    <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
+    <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
     <summary xml:lang="de">MIDI- und Audio-Sequencer und Notensatzprogramm</summary>
+    <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
+    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
     <metadata_license>CC0</metadata_license>
     <project_license>GPL-2.0+</project_license>
     <content_rating type="oars-1.1" />
-    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
     <developer_name>Rosegarden development team</developer_name>
+    <developer id="com.rosegardenmusic">
+      <name>Rosegarden Development Team</name>
+    </developer>
     <update_contact>ted@tedfelix.com</update_contact>
     <!-- It's likely that this translation tag will not work.  We keep
          our translation files inside the binary.  We don't install them
@@ -20,6 +34,10 @@
          apps do.  Is there another way to specify a list of languages? -->
     <translation type="qt">rosegarden</translation>
     <url type="homepage">https://www.rosegardenmusic.com/</url>
+    <url type="bugtracker">https://sourceforge.net/p/rosegarden/bugs/</url>
+    <url type="contact">https://sourceforge.net/p/rosegarden/mailman/</url>
+    <url type="translate">https://www.rosegardenmusic.com/wiki/translator:add_or_update_translation</url>
+    <url type="contribute">https://www.rosegardenmusic.com/support/</url>
     <description>
         <p>
             Rosegarden is a general-purpose music composition and editing environment that offers a mixture of features inspired by MIDI sequencers, score editors, and DAWs.  Rosegarden offers a variety of extensions that work in conjunction with LilyPond to produce beautiful scores that often require little or no manual editing, and it generally does a good job of rendering human MIDI performances as legible notation.
@@ -40,20 +58,283 @@
         <category>Midi</category>
         <category>Sequencer</category>
     </categories>
-    <!-- This is not allowed according to appstream-util validate. -->
-    <!-- <icon type="stock">rosegarden</icon> -->
-    <mimetypes>
-        <mimetype>audio/x-rosegarden-composition</mimetype>
-        <mimetype>audio/x-rosegarden-device</mimetype>
-        <mimetype>audio/x-rosegarden-project</mimetype>
-        <mimetype>audio/x-rosegarden-template</mimetype>
-        <mimetype>audio/x-wav</mimetype>
-        <mimetype>audio/midi</mimetype>
-        <mimetype>audio/ogg</mimetype>
-        <mimetype>audio/mp3</mimetype>
-        <mimetype>audio/x-flac</mimetype>
-    </mimetypes>
+
     <releases>
+
+      <release type="stable" version="25.06" date="2025-06-04">
+        <url>https://rosegardenmusic.com/wiki/dev:25.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Lilypond: Fix the missing dot in property paths (LilyPond > 2.22).  [3957c97969]</li>
+            <li>LV2: Add port sampleRate feature.  [03d35cad0a]</li>
+            <li>Fixed Import Studio does not create new devices.  Bug #1709.  [4460f3521b]</li>
+            <li>Notation: Improve wording of highlight menu items.  Bug #1708.  [fdc4a3553c]</li>
+            <li>Event Viewer: Fix editor closes when editing triggered segments.  [baeb7bad81]</li>
+            <li>Fix crash when deleting a triggered segment that was being edited with the notation or matrix editors.  [c9cafc8ad8]</li>
+            <li>Fix wrong matrix editor window closed during segment split.  Bug #1699.  [80d3e70642]</li>
+            <li>Handle unsaved untitled autosave.  Bug #1700.  [cef44d35e3]</li>
+            <li>Matrix: Fix notes not sounding across a drag select.  Bug #1697.  [31ec6ed535]</li>
+            <li>Fix file dialogs forget paths.  Feature Request #518.  [5588528e46]</li>
+            <li>Fix crash when deleting a repeating segment opened in notation.  Bug #1711.  [119e4672d9]</li>
+            <li>Fix crash on Manage MIDI Devices window close.  Debian #1091859.  [64943ed3d8]</li>
+            <li>Fix crash on new document with bank editor open.  Bug #1712.  [f68d7dbcd6]</li>
+            <li>Fix missing time resolution warning.  [6cbef7a786]</li>
+            <li>Instrument Parameters: Fix "Pan" control label cut off on the right.  [8a78c11ae2]</li>
+            <li>Fix UI locks up when hitting "Record".  Bug #1713.  [e8d16c4792]</li>
+            <li>Fix lyric editor with anacrusis [-1] problem.  Bug #1715.  [82045d5ca4]</li>
+            <li>Fix LV2 plugin JC303 not working.  Bug #1714.  [b341fd1ce3]</li>
+            <li>Add JACK stop at auto stop preference.  Bug #1693.  [c86d9ca6a7]</li>
+            <li>Tempo And Time Signature Editor: Fix tempo time change leftovers.  Bug #1718.  [017bdd1b60]</li>
+            <li>Fix potential crash when fast-forwarding or rewinding through a large composition while it is playing.  Bug #1717.  [01ddaca815]</li>
+            <li>Fix RG handling of jumping JACK transport.  Bug #1721.  [dc2062d42e]</li>
+            <li>LilyPond: Fix deprecation warnings while processing RG output.  Bug #1675.  [39bef99be1]</li>
+            <li>Matrix: Fix Add Tempo Change... not working.  [b9a781ee9c]</li>
+            <li>Fix record input connections not happening.  [38d50e757f]</li>
+            <li>Fix "toggle repeat" not handling mixed state in undo.  Bug #1722.  [1128116d13]</li>
+            <li>Fix transport dialog time/bars not updating on Tempo and Time Signature changes prior to the pointer position.  [66401b64fc]</li>
+            <li>EventFilterDialog: Fix invalid read with "shortest" duration.  [8068e139ba]</li>
+            <li>Fix LilyPond doesn't draw the repeat double bar when there are alternative endings.  Bug #1676.  [2e4b03092a]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Add an extra large track size in presentation preferences.  Feature Request #524.  [76247e4efd]</li>
+            <li>Add track label width to presentation preferences.  Feature Request #525.  [a401a663d4]</li>
+            <li>EditView: Add "Edit Triggered Segment" feature.  [287a3765e1]</li>
+            <li>Add "Drag with dynamic modifiers (main window)" preference.  [561db23422]</li>
+            <li>Constrained selection move in matrix editor.  Feature Request #298.  [4dfb643cf5]</li>
+            <li>Add preference for dynamic drag.  Bug #1699.  [561db23422]</li>
+            <li>Add "remove all from panel" command to the Manage Controllers dialog Edit menu.  Feature Request #526.  [68a2373fd4]</li>
+            <li>RPN and NRPN editing has been added to the Event List Editor.  Feature Request #467.  [bc567b76b3]  [0a43462bdb]</li>
+            <li>MIDI Export: Add RPN and NRPN support.  Feature Request #467.  [f02f6bf8fb]</li>
+            <li>Event List Editor: Add filtering All On/Off button.  [42f8635286]</li>
+            <li>LV2: Graduate out of beta.  Enable by default.  [90fccdab0a]</li>
+          </ul>
+        </description>
+      </release>
+
+      <release type="stable" version="24.12" date="2024-12-04">
+        <url>https://rosegardenmusic.com/wiki/dev:24.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>LV2: Fix link problem with no gtk2.  [2e168f0d]</li>
+            <li>LV2: Add lv2 check for GUI library ok.  [9cb306b3]</li>
+            <li>Manage MIDI Banks and Programs dialog now allows the same bank MSB/LSB to be used for percussion and non-percussion banks on the same device.  Bug #1692.</li>
+            <li>Fix wrong ports being assigned on file load.  Bug #1687.  [663099cc]</li>
+            <li>Fix autoscroll and highlighting behavior with multiple segments on a track.  Bug #1672.</li>
+            <li>Fix missing scroll bar on Instrument Parameters Bank dropdown.  Bug #1695.  [295a2f7a]</li>
+            <li>Fix "turn repeats into copies" misses last segment.  Bug #1696.  [afcf2f0e]</li>
+            <li>Fix shortcut order ignored.  Bug #1702.  [b1272a6d]</li>
+            <li>Fix unexpected cursor position when moving from note to note on a bar with a clef or time signature.  Bug #1704.  [215b9d27]</li>
+            <li>Fix unexpected translation of bank and program names.  Bug #1705.  [6dbd6bcd]</li>
+            <li>Fix unexpected Save As... directory.  Feature #522.  [15db9d10]</li>
+            <li>Fix broken tempo line in tempo ruler after adding a time signature change.  Bug #1706.  [6a7ef89e]</li>
+            <li>Fix "Modify MIDI Filters" dialog does not mark document as changed.  Bug #1707.  [4e505977]</li>
+            <li>Fix LV2 sfizz plugin support.  [8fce0614]</li>
+            <li>Fix group box formatting issue in native/light theme.  Bug #1678.  [d2df6376]</li>
+            <li>LV2: Fix crashes and locking related to atom buffers.  [95b09722] [be37b31e]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Make MIDI File Division value configurable for Export.  GH #9.  [991e4839]</li>
+            <li>WAV export of audio and soft synth tracks.  File > Export > Export WAV File...  [5b4d109e]</li>
+            <li>Apply interpretations to more than one segment.  Segment > Interpret...  Feature #517.  [b8a243a5]</li>
+          </ul>
+        </description>
+      </release>
+
+      <release type="stable" version="24.06" date="2024-06-05">
+        <url>https://rosegardenmusic.com/wiki/dev:24.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>txt2rgd.py: Fix MSB/LSB bug.  [d501a6f3]</li>
+            <li>Fix instrument selection for Ctrl+T (add track), file import and merge.  Bug #1670.</li>
+            <li>Disallow deletion of devices that are in use by tracks.  Bug #1670.</li>
+            <li>Use track names for segment names on MusicXML import.  Bug #1673.  [d477398d]</li>
+            <li>Fix misplaced TimeWidget title in "Native (Light)" theme.  Bug #1678.  [2b63faba]</li>
+            <li>Fix an .rg parsing error related to softsynths.  [a8547260]</li>
+            <li>Fix unobtainable segment presets and other preset issues.  Bug #1684.  [da32cccc]</li>
+            <li>Fix audio time stretching erasing all audio data in release build.  Bug #1680.  [79d672b1]</li>
+            <li>Fix submaster port count changing when changing the number of audio input ports.  Bug #1685.  [1ac61ff6]</li>
+            <li>Fix window focus problem when creating MIDI Devices.  Bug #1686.  [7baaffde]</li>
+            <li>Fix track instrument reset when editing banks.  Bug #1688.  [d83d883b] [eab9b9a3]</li>
+            <li>Fix buffer overflow in notation editor.  Bug #1689.  [dd4549b0]</li>
+            <li>Fix examples pointing to various audio paths causing unwanted directories to be created.  Bug #1668.  [26b26e6e]</li>
+            <li>Fix slow refresh of note names in matrix.  Bug #1626.  [de035bfe]</li>
+            <li>Fix notation not selecting current segment notes on launch.  Bug #1672.  [ae27b0c6]</li>
+            <li>Fix UnusedAudioSelectionDialog column widths.  Feature #520.  [5d198075]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Experimental LV2 plugin support.  Feature request #462.  Enable via Edit > Preferences > LV2 Plugin Support.</li>
+          </ul>
+        </description>
+      </release>
+
+      <release type="stable" version="23.12" date="2023-12-06">
+        <url>https://rosegardenmusic.com/wiki/dev:23.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Make punch-in also start recording.  [f7b3aa72]</li>
+            <li>Fix broken metronome flash in the transport.  [975ffe9d]</li>
+            <li>Fix solo affects archived tracks.  [bad41f2f]</li>
+            <li>Fix data loss when recording with loop on.  [79889151]</li>
+            <li>Prevent archived tracks from recording.  [82a43608]</li>
+            <li>Fix arm status lost on save when archived.  [5d85e8bd]</li>
+            <li>Fix armed+archive recording after load.  [ab8eba6d]</li>
+            <li>Unarm archived Tracks when enforcing the arm rule: only one Track can be armed per Instrument.  [7bcc351c]</li>
+            <li>Skip archived tracks when routing.  [21e45666]</li>
+            <li>Fix refresh artifacts on the Matrix piano keyboard.  Bug #1656.  [5cf37ed5]</li>
+            <li>Fix error when rosegarden creates submaster outs.  Bug #1658.  [c89ab3b0]</li>
+            <li>Fixed potential race conditions with audio files.  [1e8d4064]</li>
+            <li>Fix segment relabel dialog not showing original label.  Bug #1660.  [3fbc6975]</li>
+            <li>Fixed events with data1 == 121 being dropped.  Bug #1663.  [df93bd90]</li>
+            <li>Fixed potential race conditions in the sequencer.  [6c7a6a0e]</li>
+            <li>Fix removing the first note of a slurred group creates an unreachable rest.  Bug #1662.  [fb214928]</li>
+            <li>Fix cannot beam a group beginning or ending with a dotted eighth note.  Bug #1666.  [eb0e6d75]</li>
+            <li>Fix segment parameter box displaying translation of the label.  Bug #1667.  [89a4f18f]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Improved sub-beat highlighting in the Matrix editor.  Feature request #516. [d83b5715]</li>
+            <li>Matrix editor preview note when hovering.  Feature request #516. [d83b5715]</li>
+            <li>Add metronome and solo toggles to main menu.  [acf3c266]</li>
+            <li>Add MMC RECORD STROBE support.  [9953f1f2]</li>
+            <li>Add a preference to include ALSA port numbers when making connections.  [06b0c44a]</li>
+            <li>Use regexp for plugin blacklist.  [ec230e46] [028930e5]</li>
+            <li>Updated yoshimi.rgd.  [b8a99b83]</li>
+          </ul>
+        </description>
+      </release>
+
+      <release type="stable" version="23.06" date="2023-06-07">
+        <url>https://rosegardenmusic.com/wiki/dev:23.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fix crash related to static initialization order.  Bug #1647.  Release as 22.12.1.  [3e34166]</li>
+            <li>Fix bug #1047, beaming groups erroneous after merging notes.  [83f1dca, 2709e76]</li>
+            <li>Fix offset selection rectangle in Notation.  Bug #1444.  [fc08c3e]</li>
+            <li>Fix time column widths in the Event Editor so that they don't need resizing on every launch.  [aed705b]</li>
+            <li>Event filter dialog improvements and fixes.  [c5e3c6a]</li>
+            <li>Fix broken retrograde commands.  Bug #1648.  [84faef1]</li>
+            <li>Lilypond: Fix volta/alternatives and lyrics.  Bug #1649.  [6e5ba2d]</li>
+            <li>Lilypond: Fix vertical alignment of verses.  Bug #1650.  [b42cbff]</li>
+            <li>Lilypond: Fix the printing of supplementary verses.  [46c7d3d]</li>
+            <li>Lilypond: Fix multiple lyrics verses with repetition.  [50266c5]</li>
+            <li>Lilypond: Fix the removing of an underscore at the end of a bar of lyrics.  [62feb9b]</li>
+            <li>Lilypond: Fix printing of verses is now working when voltas are unfolded.  [2eae089]</li>
+            <li>Lilypond: Fix bar number of verses in exported LilyPond files.  [94c0e55]</li>
+            <li>Fix timer preference coming up empty for selections after "HR timer".  [08748a6]</li>
+            <li>Fix paste problems in notation editor.  Bug #1651.  [457f3de]</li>
+            <li>Fix the LilyPond exporter autotest and update the baseline.  [768a657]</li>
+            <li>Fix crash in LilyPond exporter.  Bug #1640.  [a49712d]</li>
+            <li>Fix potential crash in the grid quantizer.  [4bdefd9]</li>
+            <li>Fix quantizer crash.  Bug #1654.  [56ca66c, a8e669d]</li>
+            <li>LilyPond: Fix a small bug related to numbers in the lyrics.  [10fa781]</li>
+            <li>LilyPond: Fix for lyrics containing some special characters.  [e8c6988]</li>
+            <li>LilyPond: Fix the rendering of dash and underscore.  [fc7eecd]</li>
+            <li>Fix missing parameter patterns in the Set Event Velocities dialog.  [b76c392]</li>
+            <li>Matrix: Fix deleting too many notes with ruler present.  Bug #1655.  [993e6f3]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>File > Merge dialogs now allow merging of multiple files.  Feature request #513.  [5f43b70]</li>
+            <li>View > Full Screen (F11) added to main window.  [a09103c]</li>
+            <li>Removed LEDs from archived tracks to make archived tracks easier to identify.  [a5f4131]</li>
+            <li>Edit > Preferences > General > Presentation.  Three UI themes are now offered: Native (Light), Classic (Medium), and Dark.  Feature request #498.  [994c2b1, et al.]</li>
+            <li>Matrix and Notation now offer snap to grid in the control rulers.  Feature request #509 [349fff9, et al.]</li>
+            <li>Add Ctrl+L shortcut for loop toggle.  Feature request #398.  [a5e8414]</li>
+            <li>Add new LilyPond versions.  [6c7f0ef]</li>
+            <li>Add "Remove notes smaller than X" field to grid quantizer.  Feature request #515.  [87c9a0c]</li>
+            <li>Add "Remove articulations" to grid quantizer.  Feature request #515.  [a69a4fd]</li>
+          </ul>
+        </description>
+      </release>
+
+      <release type="stable" version="22.12" date="2022-12-07">
+        <url>https://rosegardenmusic.com/wiki/dev:22.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fix a crash when deleting segments that are visible in notation.  [e67b14a]</li>
+            <li>Hide the experimental Channel Fixed/Auto widgets behind a preference.  To re-enable: Edit > Preferences > General > Auto Channels (experimental).  [eda6701]</li>
+            <li>Fix the Base Velocity dialog in the Event Editor which was missing Ok/Cancel buttons.  [aa3218e]</li>
+            <li>Fix lilypond syntax error when exporting lyrics.  Bug #1639.  [1702b0f]</li>
+            <li>Fix restore of keyboard in the shortcut editor.  Feature request #511.  [44ce000]</li>
+            <li>Fix "out of processor power" dialog always coming up on some systems.  Feature request #496.  [adab9c3]</li>
+            <li>Fix MIDI file merge disconnects connections.  Bug #1645.  [fe70e17]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+
+          <ul>
+            <li>Advanced Looping rewrite including indicators in the Loop Ruler.  Enable via the preferences.  Edit > Preferences > General > Advanced Looping (beta).</li>
+            <li>Jump to loop feature.  Edit > Preferences > General > Jump to loop.  [69350eb]</li>
+            <li>Loop buttons added to the main, matrix, and notation toolbars.  [833ea5f]</li>
+            <li>Ask "Replace or Merge?" on file drop.  Feature request #510.  [071e2a8]</li>
+          </ul>
+        </description>
+      </release>
+
+      <release type="stable" version="22.06" date="2022-06-08">
+        <url>https://rosegardenmusic.com/wiki/dev:22.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Improve Cut/Copy/Delete behavior in both the matrix and the notation editors.  Bug #1601.</li>
+            <li>"Scroll to Follow Playback" now remembers its last setting.  Bug #1606.</li>
+            <li>Fixed a problem in notation with note selection and the blue indication.  Bug #1496.</li>
+            <li>Fixed volume and pan issues with older .rg files.  [51647cc]</li>
+            <li>Changed "For Notation" to "Exclude from Printing" in the Segment Parameters.</li>
+            <li>Fix confusing relative values in the "Insert Controller Sequence" dialog for volume and expression.  [14ff99a]</li>
+            <li>When changing the audio file path, the user is asked whether they want to move the audio files to the new location.  [71a62e6]</li>
+            <li>Fix stuck green preview note when switching modes.  Bug #1614.</li>
+            <li>Fix modified flag (*) not cleared when saving in notation.  Bug #1617.</li>
+            <li>Fix RG stopping JACK transport when it shouldn't.  Bug #1051.</li>
+            <li>Fixed toolbar mode buttons not reflecting current state when Esc is pressed.  Bug #1615.  [f651345]</li>
+            <li>Notation: Fix green preview only available in one staff.  Bug #1619.</li>
+            <li>Fixed issues when building with Qt6.  Feature Request #490.</li>
+            <li>Fixed bad rendering of note heads at small font sizes.  Bug #1484.</li>
+            <li>Fixed an endless loop in notation.  [7d734f7]</li>
+            <li>Improved management of audio file paths.  Bug #1283.  Feature Requests #494 and #495.</li>
+            <li>Simplify editing of audio instrument label in audio parameters panel.</li>
+            <li>Fixed display bugs in matrix editor.  Bug #1622.  [b4425d7]</li>
+            <li>Fix collapse notes in matrix.  Bug #1575.  [521ad4e]</li>
+            <li>Fix scrollbar issues in main window combo boxes.  Feature Request #502.  [abdf22b]</li>
+            <li>Fix deletes in the tempo/time signature editor.  Bug #1628.  [d55eea5]</li>
+            <li>Fix problems editing multiple segments in matrix.  Bug #1624.  [8c1c6bc]</li>
+            <li>Notation: fix crash when segment is deleted.  Bug #1260.  [cf0a28d]</li>
+            <li>Notation: fix crash when undoing an Add Layer.  Bug #1260.  [7a1b6bf]</li>
+            <li>Notation: fix note move issue.  Bug #1629.  [ba70dcf]</li>
+            <li>Fix lilypond export sometimes ignores time signature.  Bug #1620.  [b7b16df]</li>
+            <li>Fix hairpins not always exported to LilyPond.  Bug #1620.  [f57cbd9]</li>
+            <li>Fix missing "StartupWMClass" in .desktop file.  Bug #1635.  [d3f5298]</li>
+            <li>Fix chord ruler.  Bug #1633.  [2b2fbf7]</li>
+            <li>Fix Event Filter dialog clearing selection on first launch.  [52c2f90]</li>
+            <li>Fix lilypond common/cut time signatures.  Bug #1637.  [1c83f8b]</li>
+            <li>Fix a crash when unquantizing using the quantize combo box on the editors.  [329ab46]</li>
+            <li>Fix a crash when resizing segments.  Bug #1638.  [cdec668]</li>
+            <li>Fix a refresh issue when using the toolbar undo button.  [2a01178]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+
+          <ul>
+            <li>Stop playback at end of last segment.  (Preference.)</li>
+            <li>Advanced Looping.  (Experimental preference.)  Bug #1605.</li>
+            <li>Keyboard shortcut editor.  Feature Request #412.</li>
+          </ul>
+        </description>
+      </release>
 
       <release type="stable" version="21.12" date="2021-12-08">
         <url>https://rosegardenmusic.com/wiki/dev:21.12</url>
@@ -76,6 +357,7 @@
           </ul>
 
           <p>This version adds the following new features:</p>
+
           <ul>
             <li>Add "Use native file dialogs" preference.  [b9da2db] [a1dcc44] [6765fa9]</li>
             <li>Add Device and Instrument fields to Add Tracks dialog.  [9dc1183]-[3900ea7]</li>
@@ -118,9 +400,10 @@
             <li>Fixed a crash in the notation lyric editor.  Bug #1598.  [5f52c7c2]</li>
             <li>Fix incorrect position of chord names in lilypond.  Bug #1524.  [04fc5dd6]</li>
             <li>Fix missing chord names in lilypond.  [c35e0fb7]</li>
-
           </ul>
+
           <p>This version adds the following new features:</p>
+
           <ul>
             <li>Clean Recent Files List in the preferences removes files that aren't present on the filesystem from the recent files list.  [b616d42c7]</li>
             <li>Preferences: Add send BS/PC/CCs while looping.  [0d2d3a28c]</li>

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,15 +13,19 @@
     COPYING included with this distribution for more information.
 */
 
-#include <sstream>
-#include <cstdio>
-
 #include "ControlParameter.h"
+
+#include "base/Event.h"
 #include "base/MidiTypes.h"
 #include "gui/rulers/ControllerEventAdapter.h"
 
+#include <sstream>
+#include <cstdio>
+
+
 namespace Rosegarden
 {
+
 
 ControlParameter::ControlParameter():
     m_name("<unnamed>"),
@@ -73,7 +77,7 @@ ControlParameter::ControlParameter(const ControlParameter &control):
 {
 }
 
-ControlParameter& 
+ControlParameter&
 ControlParameter::operator=(const ControlParameter &control)
 {
     m_name = control.getName();
@@ -97,6 +101,7 @@ bool ControlParameter::operator==(const ControlParameter &control) const
         m_max == control.getMax();
 }
 
+/* unused
 bool operator<(const ControlParameter &a, const ControlParameter &b)
 {
     if (a.m_type != b.m_type)
@@ -106,11 +111,11 @@ bool operator<(const ControlParameter &a, const ControlParameter &b)
     else
 	return false;
 }
-
+*/
 
 std::string
 ControlParameter::toXmlString() const
-{ 
+{
     std::stringstream control;
 
     control << "            <control name=\"" << encode(m_name)
@@ -131,12 +136,11 @@ ControlParameter::toXmlString() const
 // Return a new event setting our controller to VALUE at TIME
 // @author Tom Breton (Tehom)
 Event *
-ControlParameter::
-newEvent(timeT time, int value) const
+ControlParameter::newEvent(timeT time, int value) const
 {
     Event *event = new Event (getType(), time);
     ControllerEventAdapter(event).setValue(value);
-    
+
     if (getType() == Controller::EventType) {
         event->set<Int>(Controller::NUMBER, m_controllerNumber);
     }
@@ -146,42 +150,161 @@ newEvent(timeT time, int value) const
 // Return whether "e" is this type of controller / pitchbend.
 // @author Tom Breton (Tehom)
 bool
-ControlParameter::
-matches(Event *e) const
+ControlParameter::matches(Event *e) const
 {
-    return 
+    return
         e->isa(m_type) &&
         ((m_type != Controller::EventType) ||
          (e->has(Controller::NUMBER) &&
           e->get <Int>(Controller::NUMBER) == m_controllerNumber));
 }
 
-    
+
 // These exists to support calling PitchBendSequenceDialog because
 // some calls to PitchBendSequenceDialog always pitchbend or
 // expression rather than getting a ControlParameter from a ruler or
 // device.  This can't be just a static member of ControlParameter, in
 // order to prevent the "static initialization order fiasco".
-const ControlParameter&
-ControlParameter::
-getPitchBend()
+const ControlParameter &
+ControlParameter::getPitchBend()
 {
-    static const ControlParameter
-        pitchBend(
-                  "PitchBend", Rosegarden::PitchBend::EventType, "<none>", 
-                  0, 16383, 8192, MidiByte(1), 4, -1);
+    static const ControlParameter pitchBend(
+            "PitchBend",  // name
+            Rosegarden::PitchBend::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            16383,  // max
+            8192,  // def
+            MidiByte(1),  // controllerNumber  ??? ignored?
+            4,  // colour
+            -1);  // ipbPosition
+
     return pitchBend;
 }
 
-const ControlParameter&
-ControlParameter::
-getExpression()
+const ControlParameter &
+ControlParameter::getExpression()
 {
-    static const ControlParameter
-        expression(
-                  "Expression", Rosegarden::Controller::EventType,
-                  "<none>", 0, 127, 100, MidiByte(11), 2, -1);
+    static const ControlParameter expression(
+            "Expression",  // name
+            Rosegarden::Controller::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            127,  // max
+            127,  // def
+            MidiByte(11),  // controllerNumber
+            2,  // colour
+            -1);  // ipbPosition
+
     return expression;
 }
-    
+
+const ControlParameter &
+ControlParameter::getChannelPressure()
+{
+    static const ControlParameter channelPressure(
+            "Channel Pressure",  // name
+            Rosegarden::ChannelPressure::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            127,  // max
+            0,  // def
+            MidiByte(1),  // controllerNumber  ??? ignored?
+            2,  // colour
+            -1);  // ipbPosition
+
+    return channelPressure;
+}
+
+const ControlParameter &
+ControlParameter::getKeyPressure()
+{
+    static const ControlParameter keyPressure(
+            "Key Pressure",  // name
+            Rosegarden::KeyPressure::EventType,  // type
+            "<none>",  // description
+            0,  // min
+            127,  // max
+            0,  // def
+            MidiByte(1),  // controllerNumber  ??? ignored?
+            2,  // colour
+            -1);  // ipbPosition
+
+    return keyPressure;
+}
+
+const std::vector<ControlParameter> &
+ControlParameter::getDefaultControllers()
+{
+    static std::vector<ControlParameter> controlList;
+
+    if (controlList.empty()) {
+        controlList.push_back(ControlParameter(
+                "Pan",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                64,
+                10,
+                2,
+                0));
+        controlList.push_back(ControlParameter(
+                "Chorus",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                93,
+                3,
+                1));
+        controlList.push_back(ControlParameter(
+                "Volume",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                100,
+                7,
+                1,
+                2));
+        controlList.push_back(ControlParameter(
+                "Reverb",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                91,
+                3,
+                3));
+        controlList.push_back(ControlParameter(
+                "Sustain",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                64,
+                4,
+                -1));
+        controlList.push_back(getExpression());
+        controlList.push_back(ControlParameter(
+                "Modulation",
+                Controller::EventType,
+                "<none>",
+                0,
+                127,
+                0,
+                1,
+                4,
+                -1));
+        controlList.push_back(getPitchBend());
+    }
+
+    return controlList;
+}
+
+
 }

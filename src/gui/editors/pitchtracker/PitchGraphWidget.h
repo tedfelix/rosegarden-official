@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,18 +18,18 @@
 #ifndef RG_PITCH_GRAPH_WIDGET_H
 #define RG_PITCH_GRAPH_WIDGET_H
 
-#include "PitchHistory.h"
-
-#include "base/Event.h"
-
 #include <QWidget>
-#include <QList>
 
-namespace Rosegarden {
+#include <memory>
+
+
+namespace Rosegarden
+{
+
 
 namespace Accidentals { class Tuning; }
+class PitchHistory;
 
-struct RealTime;
 
 /**
  * \addtogroup Codicil
@@ -51,7 +51,7 @@ public:
     PitchGraphWidget(PitchHistory &history, QWidget *parent = nullptr);
     ~PitchGraphWidget() override;
 
-    void setTuning(Accidentals::Tuning* tuning);
+    void setTuning(const std::shared_ptr<Accidentals::Tuning>& tuning);
 
 protected:
     void paintEvent(QPaintEvent *event) override;
@@ -59,14 +59,14 @@ protected:
     unsigned int    m_graphHeight;  // Height of graph (in cents)
     unsigned int    m_graphWidth;   // Width of graph (in milliseconds)
     bool            m_ignoreOctave; // Whether to ignore octave errors
-    
-    Accidentals::Tuning* m_tuning;  // Tuning in use in this widget
-    PitchHistory&   m_history;      // structure of data to plot
+
+    std::shared_ptr<Accidentals::Tuning> m_tuning;  // Tuning in use in this widget
+    PitchHistory &m_history;      // structure of data to plot
 };
 
-} // End namespace Rosegarden
+
+}
 
 /**\@}*/
 
 #endif
-

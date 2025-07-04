@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -47,11 +47,11 @@ constexpr TrackId NoTrack = 0xDEADBEEF;
 class ROSEGARDENPRIVATE_EXPORT Track : public XmlExportable
 {
 public:
-    Track(TrackId id,
-          InstrumentId instrument = 0,
-          int position = 0,
-          const std::string &label = "",
-          bool muted = false);
+    explicit Track(TrackId id,
+                   InstrumentId instrument = 0,
+                   int position = 0,
+                   const std::string &label = "",
+                   bool muted = false);
     ~Track() override  { }
 
     // Accessors/Mutators
@@ -61,7 +61,15 @@ public:
     void setMuted(bool muted)  { m_muted = muted; }
     bool isMuted() const { return m_muted; }
 
-    void setArchived(bool archived)  { m_archived = archived; }
+    /// Set the Track to be archived.
+    /**
+     * @param[in] refreshComp Whether to refresh Composition::m_recordTracks.
+     *   Refreshing m_recordTracks would wreak havoc on .rg file read, so
+     *   RoseXmlHandler should set it to false.  The UI (TrackParameterBox)
+     *   should set it to true so that the list will always be in sync if the
+     *   user archives or unarchives a track.
+     */
+    void setArchived(bool archived, bool refreshComp);
     bool isArchived() const { return m_archived; }
 
     void setSolo(bool solo)  { m_solo = solo; }
@@ -110,21 +118,27 @@ public:
 
     int getHighestPlayable() const  { return m_highestPlayable; }
     void setHighestPlayable(int pitch) { m_highestPlayable = pitch; }
-    
+
     int getLowestPlayable() const  { return m_lowestPlayable; }
     void setLowestPlayable(int pitch) { m_lowestPlayable = pitch; }
 
     // Controls size of exported staff in LilyPond
     int getStaffSize() const  { return m_staffSize; }
     void setStaffSize(int index) { m_staffSize = index; }
-    
+
     // Staff bracketing in LilyPond
     int getStaffBracket() const  { return m_staffBracket; }
     void setStaffBracket(int index) { m_staffBracket = index; }
-    
-    bool isArmed() const { return m_armed; }
-    /// This routine should only be called by Composition::setTrackRecording().
+
+    /// Returns false for archived Track objects.
+    bool isArmed() const;
+    /// Without consideration of archived.  Use for writing .rg files.
+    bool isReallyArmed() const  { return m_armed; }
+    /// Arm or disarm the Track.
     /**
+     * This routine should only be called by Composition::setTrackRecording()
+     * and RoseXmlHandler::startElement().
+     *
      * Composition maintains a list of tracks that are recording.  Calling
      * this routine directly will bypass that.
      */

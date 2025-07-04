@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -14,6 +14,11 @@
 */
 
 #pragma once
+
+#include <QString>
+
+// Need this to be seen within main.cpp.
+#include <rosegardenprivate_export.h>
 
 namespace Rosegarden
 {
@@ -37,6 +42,17 @@ namespace Rosegarden
  */
 namespace Preferences
 {
+    // Theme
+    constexpr int NativeTheme = 0;  // Thorn off.
+    constexpr int ClassicTheme = 1;  // Thorn on.
+    constexpr int DarkTheme = 2;  // Thorn on.
+    ROSEGARDENPRIVATE_EXPORT void setTheme(int value);
+    ROSEGARDENPRIVATE_EXPORT int getTheme();
+    ROSEGARDENPRIVATE_EXPORT bool getThorn();
+
+    void setMIDIPitchOctave(int octave);
+    int getMIDIPitchOctave();
+
     void setSendProgramChangesWhenLooping(bool value);
     bool getSendProgramChangesWhenLooping();
 
@@ -47,6 +63,72 @@ namespace Preferences
 
     void setUseNativeFileDialogs(bool value);
     bool getUseNativeFileDialogs();
+
+    void setStopAtSegmentEnd(bool value);
+    bool getStopAtSegmentEnd();
+
+    void setJumpToLoop(bool value);
+    bool getJumpToLoop();
+
+    void setAdvancedLooping(bool value);
+    bool getAdvancedLooping();
+
+    void setJACKStopAtAutoStop(bool value);
+    bool getJACKStopAtAutoStop();
+
+    // AudioFileLocationDialog settings
+
+    void setAudioFileLocationDlgDontShow(bool value);
+    bool getAudioFileLocationDlgDontShow();
+
+    // See AudioFileLocationDialog::Location enum.
+    void setDefaultAudioLocation(int location);
+    int getDefaultAudioLocation();
+
+    void setCustomAudioLocation(const QString &location);
+    QString getCustomAudioLocation();
+
+
+    // Enable/Disable CPU load checks.
+    void setJACKLoadCheck(bool value);
+    bool getJACKLoadCheck();
+
+    void setShowNoteNames(bool value);
+    bool getShowNoteNames();
+
+
+    // Combo Box index for PDF Viewer.
+    void setPDFViewer(int value);
+    int getPDFViewer();
+
+    // Combo Box index for File Printer.
+    void setFilePrinter(int value);
+    int getFilePrinter();
+
+
+    // Experimental
+
+    bool getBug1623();
+
+    // Enable/disable LV2 plugin discovery.
+    void setLV2(bool value);
+    bool getLV2();
+
+    void setDynamicDrag(bool value);
+    bool getDynamicDrag();
+
+    void setAutoChannels(bool value);
+    bool getAutoChannels();
+
+    void setIncludeAlsaPortNumbersWhenMatching(bool value);
+    bool getIncludeAlsaPortNumbersWhenMatching();
+
+    void setSMFExportPPQN(int value);
+    int getSMFExportPPQN();
+
+    // matrix editor note constraint
+    void setMatrixConstrainNotes(bool value);
+    bool getMatrixConstrainNotes();
 
 }
 

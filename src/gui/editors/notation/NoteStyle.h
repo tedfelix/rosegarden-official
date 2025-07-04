@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -73,15 +73,15 @@ public:
     typedef std::pair<CharName, bool> CharNameRec; // bool is "inverted"
     CharNameRec getNoteHeadCharName(Note::Type);
 
-    CharName getRestCharName(Note::Type, bool restOutsideStave);
-    CharName getPartialFlagCharName(bool final);
-    CharName getFlagCharName(int flagCount);
-    CharName getAccidentalCharName(const Accidental &);
-    CharName getMarkCharName(const Mark &);
-    CharName getClefCharName(const Clef &);
-    CharName getSymbolCharName(const Symbol &);
-    CharName getTimeSignatureDigitName(int digit);
-    CharName getSomeCharName(QString thing);
+    static CharName getRestCharName(Note::Type, bool restOutsideStave);
+    static CharName getPartialFlagCharName(bool final);
+    static CharName getFlagCharName(int flagCount);
+    static CharName getAccidentalCharName(const Accidental &);
+    static CharName getMarkCharName(const Mark &);
+    static CharName getClefCharName(const Clef &);
+    static CharName getSymbolCharName(const Symbol &);
+    static CharName getTimeSignatureDigitName(int digit);
+    // unused static CharName getSomeCharName(QString qthing);
 
     void setBaseStyle (NoteStyleName name);
     void setShape     (Note::Type, NoteHeadShape);
@@ -110,7 +110,8 @@ protected:
             filled(true), stem(true), flags(0), slashes(0),
             hfix(Normal), vfix(Middle) { }
 
-        NoteDescription(NoteHeadShape i_shape, CharName i_charName,
+        NoteDescription(const NoteHeadShape& i_shape,
+                        const CharName& i_charName,
                         bool i_filled, bool i_stem, int i_flags, int i_slashes,
                         HFixPoint i_hfix, VFixPoint i_vfix) :
             shape(i_shape), charName(i_charName),
@@ -124,10 +125,10 @@ protected:
     QSharedPointer<NoteStyle> m_baseStyle;
     NoteStyleName m_name;
 
-    void checkDescription(Note::Type type);
+    void checkDescription(Note::Type noteType);
 
 protected: // for use by NoteStyleFileReader
-    NoteStyle(NoteStyleName name) : m_name(name) { }
+    explicit NoteStyle(const NoteStyleName& name) : m_name(name) { }
     friend class NoteStyleFileReader;
 };
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,11 +39,11 @@ class FingeringBox;
 class GuitarChordSelectorDialog : public QDialog
 {
      Q_OBJECT
-    
+
     enum { COMPLEXITY_BEGINNER, COMPLEXITY_COMMON, COMPLEXITY_ALL };
-    
+
 public:
-    GuitarChordSelectorDialog(QWidget *parent=nullptr);
+    explicit GuitarChordSelectorDialog(QWidget *parent=nullptr);
 
     void init();
 
@@ -51,32 +51,23 @@ public:
 
     void setChord(const Guitar::Chord&);
 
-protected slots:
+private slots:
+
     void slotRootHighlighted(int);
     void slotChordExtHighlighted(int);
 
-    /** Overloaded function to allow activation both through int-based and
-     * QListWidgetItem*-based signals.  This version takes an int in the form of
-     * a row coordinate, and obtains the correct QListWidgetItem* to pass into
-     * the version below, which does the real work.
-     */
-    void slotFingeringHighlighted(int);
-
-    /** Overloaded function to allow activation both through int-based and
-     * QListWidgetItem*-based signals.  This version takes a QListWidgetItem*
-     * and does real work accordingly.
-     */
-    void slotFingeringHighlighted(QListWidgetItem*);
+    void slotFingeringRow(int row);
+    void slotFingeringItem(QListWidgetItem *);
 
     void slotComplexityChanged(int);
-    
+
     void slotNewFingering();
     void slotDeleteFingering();
     void slotEditFingering();
 
     void accept() override;
 
-protected:
+private:
 
     void parseChordFile(const QString& chordFileName);
     void populateFingerings(const Guitar::ChordMap::chordarray&, const Guitar::Fingering& refFingering=Guitar::Fingering(0));
@@ -84,16 +75,16 @@ protected:
 
     /// set enabled state of edit/delete buttons
     void setEditionEnabled(bool);
-    
+
     void populate();
     void clear();
     void refresh();
-    
+
     bool saveUserChordMap();
     int evaluateChordComplexity(const QString& ext);
-    
+
     QPixmap getFingeringPixmap(const Guitar::Fingering& fingering) const;
-         
+
     /// Unbundle chords.xml then return a path to its location in userspace.
     //
     // User edits will be saved to the user's local, writeable copy of
@@ -109,7 +100,7 @@ protected:
 
     /// current selected chord
     Guitar::Chord m_chord;
-    
+
     // Chord data
     QListWidget* m_rootNotesList;
     QListWidget* m_chordExtList;
@@ -119,13 +110,13 @@ protected:
     QComboBox*   m_chordComplexityCombo;
     QPushButton* m_newFingeringButton;
     QPushButton* m_deleteFingeringButton;
-    QPushButton* m_editFingeringButton;    
+    QPushButton* m_editFingeringButton;
 
     static const unsigned int FINGERING_PIXMAP_HEIGHT = 75;
     static const unsigned int FINGERING_PIXMAP_WIDTH = 75;
     static const unsigned int FINGERING_PIXMAP_H_MARGIN = 5;
     static const unsigned int FINGERING_PIXMAP_W_MARGIN = 5;
-    
+
 };
 
 }

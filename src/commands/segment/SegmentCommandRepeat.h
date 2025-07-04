@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -46,29 +46,9 @@ public:
     void unexecute() override;
 
 protected:
-    bool m_repeatState;
+  bool m_newRepeatState;
+  std::vector<bool> m_oldRepeatState;
 };
-
-// Disabled until we find a better solution
-//
-// As it is, command creation happens on every change of the text
-// value of the combo box
-//
-//
-// class SegmentCommandChangeTransposeValue : public SegmentCommand
-// {
-// public:
-//     SegmentCommandChangeTransposeValue(const std::vector<Segment*>&,
-//                                        int transposeValue);
-
-//     virtual void execute();
-//     virtual void unexecute();
-
-// protected:
-//     int m_transposeValue;
-//     std::vector<int> m_savedValues;
-// };
-
 
 
 }

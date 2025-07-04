@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is based on code from KGhostView, Copyright 1997-2002
         Markkhu Hihnala     <mah@ee.oulu.fi>
@@ -45,17 +45,17 @@ public:
     enum SizeMode { FixWidth, FixHeight };
 
     ScrollBox(QWidget *parent = nullptr,
-              SizeMode mode = FixWidth,
+              SizeMode sizeMode = FixWidth,
               const char *name = nullptr);
 
 public slots:
     void setPageSize(const QSize&);
-    void setViewSize(const QSize&);
+    // unused void setViewSize(const QSize&);
     void setViewPos(const QPoint&);
     void setViewPos(int x, int y) { setViewPos(QPoint(x, y)); }
-    void setViewX(int x);
-    void setViewY(int y);
-    void setThumbnail(QPixmap img);
+    // unused void setViewX(int x);
+    // unused void setViewY(int y);
+    // unused void setThumbnail(QPixmap img);
 
 signals:
     void valueChanged(const QPoint&);

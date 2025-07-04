@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -23,6 +23,7 @@
 #include "misc/Strings.h"  // qstrtostr() etc...
 #include "base/ColourMap.h"
 //#include "base/NotationTypes.h"
+#include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
 #include "base/RealTime.h"
 #include "base/Segment.h"
@@ -32,7 +33,7 @@
 #include "commands/segment/SegmentCommandRepeat.h"
 #include "commands/segment/SegmentLabelCommand.h"
 #include "commands/segment/SegmentLinkTransposeCommand.h"
-#include "commands/segment/SegmentForNotationCommand.h"
+#include "commands/segment/SegmentExcludeFromPrintingCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
 #include "gui/dialogs/IntervalDialog.h"
@@ -53,7 +54,6 @@
 #include <QColor>
 #include <QColorDialog>
 #include <QComboBox>
-#include <QFontMetrics>
 #include <QGridLayout>
 #include <QLabel>
 #include <QMessageBox>
@@ -85,7 +85,7 @@ namespace {
 
 SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     RosegardenParameterBox(tr("Segment Parameters"), parent),
-    m_standardQuantizations(BasicQuantizer::getStandardQuantizations())
+    m_standardQuantizations(Quantizer::getQuantizations())
 {
     setObjectName("Segment Parameter Box");
 
@@ -240,21 +240,15 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
 
     // slotNewDocument() will finish the initialization.
 
-    // * For Notation
+    // * Exclude from Printing
 
-    // ??? Should this be "for printing"?  That would be clearer.
-    //     Users seem to like "Exclude from Printing" which will require
-    //     reversing the logic and placing the label to the right.
-    QLabel *forNotationLabel = new QLabel(tr("For Notation"), this);
-    forNotationLabel->setFont(m_font);
-    QString toolTip = tr("<qt><p>Include this segment when printing (LilyPond).</p></qt>");
-    forNotationLabel->setToolTip(toolTip);
-
-    m_forNotation = new TristateCheckBox(this);
-    m_forNotation->setFont(m_font);
-    m_forNotation->setToolTip(toolTip);
-    connect(m_forNotation, &QCheckBox::clicked,
-            this, &SegmentParameterBox::slotForNotationClicked);
+    m_excludeFromPrinting =
+            new TristateCheckBox(tr("Exclude from Printing"), this);
+    m_excludeFromPrinting->setFont(m_font);
+    m_excludeFromPrinting->setToolTip(
+            tr("<qt><p>Exclude this segment from printing (LilyPond).</p></qt>"));
+    connect(m_excludeFromPrinting, &QCheckBox::clicked,
+            this, &SegmentParameterBox::slotExcludeFromPrintingClicked);
 
     // * Linked segment parameters (hidden)
 
@@ -321,9 +315,8 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     // Row 3: Color
     gridLayout->addWidget(colourLabel, 3, 0);
     gridLayout->addWidget(m_color, 3, 1, 1, 5);
-    // Row 4: ForNotation
-    gridLayout->addWidget(forNotationLabel, 4, 0);
-    gridLayout->addWidget(m_forNotation, 4, 1, 1, 5);
+    // Row 4: Exclude from Printing
+    gridLayout->addWidget(m_excludeFromPrinting, 4, 1, 1, 5);
     // Row 5: Linked segment parameters
     gridLayout->addWidget(linkedSegmentParametersFrame, 5, 0, 1, 5);
 
@@ -369,7 +362,7 @@ SegmentParameterBox::updateLabel()
     m_label->setEnabled(true);
 
     SegmentSelection::const_iterator i = segmentSelection.begin();
-    QString labelText = QObject::tr((*i)->getLabel().c_str());
+    QString labelText = (*i)->getLabel().c_str();
 
     // Just one?  Set and bail.
     if (segmentSelection.size() == 1) {
@@ -592,15 +585,15 @@ namespace
 }
 
 void
-SegmentParameterBox::setDelay(long t)
+SegmentParameterBox::setDelay(long delayValue)
 {
     // Note duration delay (timeT/ppq: 1/4, 1/8, etc...)
-    if (t >= 0) {
+    if (delayValue >= 0) {
         timeT error = 0;
 
         QString label =
                 NotationStrings::makeNoteMenuLabel(
-                        t,  // duration
+                        delayValue,  // duration
                         true,  // brief
                         error);  // errorReturn
         m_delay->setCurrentIndex(m_delay->findText(label));
@@ -609,7 +602,7 @@ SegmentParameterBox::setDelay(long t)
     }
 
     // Millisecond delay (10ms, 20ms, etc...)
-    m_delay->setCurrentIndex(m_delay->findText(tr("%1 ms").arg(-t)));
+    m_delay->setCurrentIndex(m_delay->findText(tr("%1 ms").arg(-delayValue)));
 }
 
 void
@@ -710,46 +703,45 @@ SegmentParameterBox::updateColor()
 }
 
 void
-SegmentParameterBox::updateForNotation()
+SegmentParameterBox::updateExcludeFromPrinting()
 {
     SegmentSelection segmentSelection = getSelectedSegments();
-    
+
     // No Segments selected?  Disable/uncheck.
     if (segmentSelection.empty()) {
-        m_forNotation->setEnabled(false);
-        m_forNotation->setCheckState(Qt::Unchecked);
+        m_excludeFromPrinting->setEnabled(false);
+        m_excludeFromPrinting->setCheckState(Qt::Unchecked);
         return;
     }
 
     // One or more Segments selected
-    m_forNotation->setEnabled(true);
+    m_excludeFromPrinting->setEnabled(true);
 
-    SegmentSelection::const_iterator i = segmentSelection.begin();
     // Just one?  Set and bail.
     if (segmentSelection.size() == 1) {
-        m_forNotation->setCheckState(
-                (*i)->getForNotation() ? Qt::Checked : Qt::Unchecked);
+        const Segment *firstSegment = *segmentSelection.begin();
+        m_excludeFromPrinting->setCheckState(
+                firstSegment->getExcludeFromPrinting() ?
+                        Qt::Checked : Qt::Unchecked);
         return;
     }
 
     // More than one Segment selected.
 
-    std::size_t forNotationCount = 0;
+    std::size_t excludeFromPrintingCount = 0;
 
-    // For each Segment, count the forNotation ones
-    for (/* Starting with the first... */;
-         i != segmentSelection.end();
-         ++i) {
-        if ((*i)->getForNotation())
-            ++forNotationCount;
+    // For each Segment, count those that are excluded from printing.
+    for (const Segment *segment : segmentSelection) {
+        if (segment->getExcludeFromPrinting())
+            ++excludeFromPrintingCount;
     }
 
-    if (forNotationCount == 0)  // none
-        m_forNotation->setCheckState(Qt::Unchecked);
-    else if (forNotationCount == segmentSelection.size())  // all
-        m_forNotation->setCheckState(Qt::Checked);
+    if (excludeFromPrintingCount == 0)  // none
+        m_excludeFromPrinting->setCheckState(Qt::Unchecked);
+    else if (excludeFromPrintingCount == segmentSelection.size())  // all
+        m_excludeFromPrinting->setCheckState(Qt::Checked);
     else  // some
-        m_forNotation->setCheckState(Qt::PartiallyChecked);
+        m_excludeFromPrinting->setCheckState(Qt::PartiallyChecked);
 }
 
 void
@@ -761,7 +753,7 @@ SegmentParameterBox::updateWidgets()
     updateQuantize();
     updateDelay();
     updateColor();
-    updateForNotation();
+    updateExcludeFromPrinting();
 }
 
 void
@@ -920,7 +912,7 @@ SegmentParameterBox::setSegmentDelay(long delayValue)
              it != segmentSelection.end();
              ++it) {
             (*it)->setDelay(delayValue);
-            (*it)->setRealTimeDelay(RealTime::zeroTime);
+            (*it)->setRealTimeDelay(RealTime::zero());
         }
 
     } else {  // Negative msecs
@@ -1037,16 +1029,16 @@ SegmentParameterBox::slotDocColoursChanged()
 }
 
 void
-SegmentParameterBox::slotForNotationClicked(bool checked)
+SegmentParameterBox::slotExcludeFromPrintingClicked(bool checked)
 {
     SegmentSelection segmentSelection = getSelectedSegments();
-    
+
     // No selected Segments?  Bail.
     if (segmentSelection.empty())
         return;
-    
+
     CommandHistory::getInstance()->addCommand(
-            new SegmentForNotationCommand(segmentSelection, checked));
+            new SegmentExcludeFromPrintingCommand(segmentSelection, checked));
 }
 
 void
@@ -1073,20 +1065,20 @@ SegmentParameterBox::slotChangeLinkTranspose()
             }
         }
     }
-    
+
     if (foundTransposedLinks) {
-        QMessageBox::critical(this, tr("Rosegarden"), 
+        QMessageBox::critical(this, tr("Rosegarden"),
                 tr("Existing transpositions on selected linked segments must be removed\nbefore new transposition can be applied."),
                 QMessageBox::Ok);
         return;
     }
-        
+
     if (linkedSegs.empty())
         return;
-    
+
     IntervalDialog intervalDialog(this, true, true);
     int ok = intervalDialog.exec();
-    
+
     if (!ok)
         return;
 
@@ -1121,7 +1113,7 @@ SegmentParameterBox::slotResetLinkTranspose()
     if (linkedSegs.empty())
         return;
 
-    int reset = QMessageBox::question(this, tr("Rosegarden"), 
+    int reset = QMessageBox::question(this, tr("Rosegarden"),
                    tr("Remove transposition on selected linked segments?"));
 
     if (reset == QMessageBox::No)

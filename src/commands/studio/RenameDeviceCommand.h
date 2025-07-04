@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -41,11 +41,11 @@ class RenameDeviceCommand : public NamedCommand
 public:
     RenameDeviceCommand(Studio *studio,
                         DeviceId deviceId,
-                        std::string name) :
+                        const std::string& name) :
         NamedCommand(getGlobalName()),
         m_studio(studio),
         m_deviceId(deviceId),
-        m_name(name) { }
+        m_deviceName(name) { }
 
     static QString getGlobalName() { return tr("Rename Device"); }
 
@@ -55,8 +55,8 @@ public:
 protected:
     Studio *m_studio;
     DeviceId m_deviceId;
-    std::string m_name;
-    std::string m_oldName;
+    std::string m_deviceName;
+    std::string m_oldDeviceName;
 };
 
 

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,11 +19,14 @@
 #ifndef RG_STANDARDRULER_H
 #define RG_STANDARDRULER_H
 
+#include "base/TimeT.h"
+
 #include <QWidget>
-#include "base/Event.h"
+
 
 namespace Rosegarden
 {
+
 
 class RulerScale;
 class RosegardenDocument;
@@ -32,6 +35,7 @@ class MarkerRuler;
 class SnapGrid;
 
 
+/// The standard ruler is a combination of the MarkerRuler and LoopRuler.
 class StandardRuler : public QWidget
 {
     Q_OBJECT
@@ -41,11 +45,11 @@ public:
                   RulerScale *rulerScale,
                   bool invert = false, // draw upside-down
                   bool isForMainWindow = false,
-                  QWidget* parent = nullptr);
+                  QWidget *parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
 
-    LoopRuler* getLoopRuler() { return m_loopRuler; }
+    LoopRuler *getLoopRuler() { return m_loopRuler; }
 
     /**
      * Make connections from the LoopRuler to the document's
@@ -71,22 +75,18 @@ signals:
     /// reflected from the loop ruler
     void dragPointerToPosition(timeT);
 
-    /// reflected from the loop ruler
-    void dragLoopToPosition(timeT);
-
 private:
     //--------------- Data members ---------------------------------
     bool m_invert;
     bool m_isForMainWindow;
     int m_currentXOffset;
 
-    RosegardenDocument       *m_doc;
+    RosegardenDocument *m_doc;
     RulerScale *m_rulerScale;
 
     MarkerRuler *m_markerRuler;
     LoopRuler *m_loopRuler;
 };
-
 
 
 }

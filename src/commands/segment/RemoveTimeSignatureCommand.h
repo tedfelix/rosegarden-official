@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,18 +19,17 @@
 #ifndef RG_REMOVETIMESIGNATURECOMMAND_H
 #define RG_REMOVETIMESIGNATURECOMMAND_H
 
-#include "base/NotationTypes.h"
+#include "base/TimeSignature.h"
+#include "base/TimeT.h"
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
+
 #include <QCoreApplication>
-
-
-class Remove;
+#include <QString>
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 
@@ -48,20 +47,20 @@ public:
         m_oldTime(0),
         m_oldTimeSignature() { }
 
-    ~RemoveTimeSignatureCommand() override {}
+    ~RemoveTimeSignatureCommand() override  { }
 
-    static QString getGlobalName() { return tr("Remove &Time Signature Change..."); }
+    static QString getGlobalName()
+            { return tr("Remove &Time Signature Change..."); }
 
     void execute() override;
     void unexecute() override;
 
 private:
-    Composition  *m_composition;
-    int                       m_timeSigIndex;
-    timeT         m_oldTime;
+    Composition *m_composition;
+    int m_timeSigIndex;
+    timeT m_oldTime;
     TimeSignature m_oldTimeSignature;
 };    
-
 
 
 }

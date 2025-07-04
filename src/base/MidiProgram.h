@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -41,32 +41,54 @@ class MidiBank
 {
 public:
     MidiBank();
-    MidiBank(bool percussion, MidiByte msb, MidiByte lsb, std::string name = "");
+    MidiBank(bool percussion, MidiByte msb, MidiByte lsb,
+             const std::string& name = "");
 
     bool                isPercussion() const;
     MidiByte            getMSB() const;
     MidiByte            getLSB() const;
 
-    void                setName(std::string name);
+    void                setName(const std::string& name);
     std::string         getName() const;
 
     /// A full comparison of all fields.
     /**
-     * This probably isn't what you want.  See partialCompare().
+     * MIDIInstrumentParameterPanel::updateBankComboBox() uses this to
+     * detect changes that might require a repopulation of the bank combobox.
+     *
+     * See MidiBank::compareKey().
      */
     bool operator==(const MidiBank &rhs) const;
     bool operator!=(const MidiBank &rhs) const  { return !operator==(rhs); }
-    /// Compare all fields except name.
+    /// Compare Percussion:MSB:LSB.
     /**
      * Since MidiProgram stores a partial MidiBank object (without name),
      * a partial comparison such as this is frequently needed.
+     *
      */
-    bool partialCompare(const MidiBank &rhs) const;
+    bool compareKey(const MidiBank &rhs) const;
+
+    // Only compares percussion, msb, and lsb.
+    // Most useful for sorting and searching.
+    // This is specifically NOT operator<() because it does not compare
+    // all fields.
+    bool lessKey(const MidiBank &rhs) const
+    {
+        if (m_percussion == rhs.m_percussion) {
+            if (m_msb == rhs.m_msb)
+                return (m_lsb < rhs.m_lsb);
+            return (m_msb < rhs.m_msb);
+        }
+        return (m_percussion < rhs.m_percussion);
+    }
 
 private:
+    // Key fields.
     bool m_percussion;
     MidiByte m_msb;
     MidiByte m_lsb;
+
+    // Data fields.
     std::string m_name;
 };
 
@@ -76,8 +98,9 @@ class MidiProgram
 {
 public:
     MidiProgram();
-    MidiProgram(const MidiBank &bank, MidiByte program, std::string name = "",
-                std::string keyMapping = "");
+    MidiProgram(const MidiBank &bank, MidiByte program,
+                const std::string& name = "",
+                const std::string& keyMapping = "");
 
     const MidiBank&     getBank() const;
     MidiByte            getProgram() const;
@@ -85,7 +108,7 @@ public:
     const std::string  &getKeyMapping() const;
 
     void                setName(const std::string &name);
-    void                setKeyMapping(const std::string &name);
+    void                setKeyMapping(const std::string &keyMapping);
 
     // Only compares m_bank and m_program.  Does not compare m_name or
     // m_keyMapping.
@@ -94,13 +117,30 @@ public:
     // m_keyMapping.
     bool partialCompareWithName(const MidiProgram &rhs) const;
 
+    // This only compares bank and program.
+    // Most useful for sorting and searching.
+    // Currently this is only used by MidiProgramsEditor for sorting.
+    bool lessKey(const MidiProgram &rhs) const
+    {
+        if (m_bank.compareKey(rhs.m_bank))
+            return (m_program < rhs.m_program);
+        return m_bank.lessKey(rhs.m_bank);
+    }
+
 private:
+    // Key fields.
     MidiBank m_bank;
     MidiByte m_program;
+
+    // Data fields.
     std::string m_name;
     std::string m_keyMapping;
 };
 
+// ??? std::vector?  This means all throughout rg we have to do linear
+//     searches.  Wouldn't a std::set<> indexed by Percussion:MSB:LSB:PC
+//     make a *lot* more sense in the long run?  Should reduce CPU usage
+//     and complexity significantly.
 typedef std::vector<MidiProgram> ProgramList;
 
 inline bool
@@ -118,13 +158,17 @@ partialCompareWithName(const ProgramList &lhs, const ProgramList &rhs)
     return true;
 }
 
+/**
+ * ??? "Key Mapping" is all throughout the code and the UI.  "Key Map" would
+ *     be simpler.  It's a lot of work to change, though.
+ */
 class MidiKeyMapping
 {
 public:
     typedef std::map<MidiByte, std::string> KeyNameMap;
 
     MidiKeyMapping();
-    MidiKeyMapping(const std::string &name);
+    explicit MidiKeyMapping(const std::string &name);
     MidiKeyMapping(const std::string &name, const KeyNameMap &map);
 
     bool operator==(const MidiKeyMapping &m) const;
@@ -136,7 +180,7 @@ public:
     KeyNameMap          &getMap() { return m_map; }
     std::string          getMapForKeyName(MidiByte pitch) const;
     void                 setMap(const KeyNameMap &map) { m_map = map; }
-    
+
     /**
      * Return 0 if the supplied argument is the lowest pitch in the
      * mapping, 1 if it is the second-lowest, etc.  Return -1 if it
@@ -161,6 +205,7 @@ public:
      * Add blank pitches to the key mapping to have it extends from at most
      * minpitch to maxpitch.
      */
+    // cppcheck-suppress functionConst
     void                 extend(int minPitch = 0, int maxpitch = 127);
 
 
@@ -181,4 +226,3 @@ typedef unsigned int MidiFilter;
 }
 
 #endif
-

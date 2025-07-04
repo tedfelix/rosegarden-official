@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,6 +18,7 @@
 #include "TransposeCommand.h"
 
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Selection.h"
 #include "base/BaseProperties.h"
 
@@ -48,9 +49,10 @@ TransposeCommand::modifySegment()
                 if (newPitch.getPerformancePitch() > 127) newPitch = Pitch(127);
                 if (newPitch.getPerformancePitch() < 0) newPitch = Pitch(0);
 
-                Event * newNoteEvent = newPitch.getAsNoteEvent(0, 0);
+                Event *newNoteEvent = newPitch.getAsNoteEvent(0, 0);
                 Accidental newAccidental;
                 newNoteEvent->get<String>(BaseProperties::ACCIDENTAL, newAccidental);
+                delete newNoteEvent;
 
                 (*i)->set<Int>(BaseProperties::PITCH, newPitch.getPerformancePitch());
                 (*i)->set<String>(BaseProperties::ACCIDENTAL, newAccidental);

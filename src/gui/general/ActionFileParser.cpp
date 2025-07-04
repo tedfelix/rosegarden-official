@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,8 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ActionFileParser]"
-
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "ActionFileParser.h"
 
@@ -28,6 +27,7 @@
 #include <QFileInfo>
 #include <QMainWindow>
 #include <QMenuBar>
+#include <QRegularExpression>
 
 #include "IconLoader.h"
 #include "ResourceFinder.h"
@@ -36,11 +36,11 @@
 #include "base/Profiler.h"
 #include "document/CommandHistory.h"
 #include "document/io/XMLReader.h"
-
+#include "gui/general/ActionData.h"
 
 namespace Rosegarden
 {
-   
+
 ActionFileParser::ActionFileParser(QObject *actionOwner) :
     m_actionOwner(actionOwner),
     m_inMenuBar(false),
@@ -97,16 +97,16 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
     QString name = qName.toLower();
 
     if (name == "menubar") {
-        
+
         m_inMenuBar = true;
-        
+
     } else if (name == "menu") {
 
         QString menuName = atts.value("name").toString();
         if (menuName == "") {
             RG_WARNING << "WARNING: startElement(" << m_currentFile << "): No menu name provided in menu element";
         }
-        
+
         if (m_inEnable) {
             enableMenuInState(m_currentState, menuName);
         } else if (m_inDisable) {
@@ -176,13 +176,13 @@ ActionFileParser::startElement(const QString& /* namespaceURI */,
         //!!! return values
         if (text != "") setActionText(actionName, text);
         if (icon != "") setActionIcon(actionName, icon);
-        if (shortcut != "") setActionShortcut(actionName, shortcut,
-            shortcutContext.toLower() == "application");
+        setActionShortcut(actionName, shortcut,
+                          shortcutContext.toLower() == "application");
         if (tooltip != "") setActionToolTip(actionName, tooltip);
         if (group != "") setActionGroup(actionName, group);
         if (checked != "") setActionChecked(actionName,
             checked.toLower() == "true");
-        
+
         // this can appear in menu, toolbar, state/enable, state/disable,
         // state/visible, state/invisible
 
@@ -255,9 +255,9 @@ ActionFileParser::endElement(const QString& /* namespaceURI */,
     QString name = qName.toLower();
 
     if (name == "menubar") {
-        
+
         m_inMenuBar = false;
-        
+
     } else if (name == "menu") {
 
         m_currentMenus.pop_back();
@@ -279,26 +279,26 @@ ActionFileParser::endElement(const QString& /* namespaceURI */,
         }
 
     } else if (name == "state") {
-        
+
         m_currentState = "";
 
     } else if (name == "enable") {
-        
+
         m_inEnable = false;
 
     } else if (name == "disable") {
-        
+
         m_inDisable = false;
 
     } else if (name == "visible") {
-        
+
         m_inVisible = false;
 
     } else if (name == "invisible") {
-        
+
         m_inInvisible = false;
     }
-        
+
     return true;
 }
 
@@ -423,10 +423,10 @@ ActionFileParser::translate(QString text,
     // These translations are extracted from data/ui/*.rc files via
     // scripts/extract*.pl and pulled into the QObject translation context in
     // one great lump.
-    
+
     if (!disambiguation.isEmpty()) return QObject::tr(text.toStdString().c_str(), disambiguation.toStdString().c_str());
     else return QObject::tr(text.toStdString().c_str());
-}                                       
+}
 
 bool
 ActionFileParser::setActionText(QString actionName, QString text)
@@ -456,23 +456,41 @@ ActionFileParser::setActionIcon(QString actionName, QString icon)
 bool
 ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext)
 {
-    if (actionName == "" || shortcut == "") return false;
+    if (actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
+
+    // special case for undo/redo - only take the data from
+    // rosegardenmainwindow
+    QString basefile = m_currentFile;
+    basefile.remove(QRegularExpression("^.*/"));
+    if (actionName == "edit_undo" || actionName == "edit_redo") {
+        if (basefile != "rosegardenmainwindow.rc")
+            {
+                RG_DEBUG << "setActionShortcut ignoring" << actionName <<
+                    "in file" << m_currentFile;
+                return true;
+            }
+        }
 
     /*
      * Enable one or multiple shortcuts.  Only the first shortcut, which is
      * considered as the primary one, will be shown in the menus.
      */
-    QStringList shortcuts = shortcut.split(", ");
+    // Do not use the shortcut here - if there are user defined
+    // shortcuts get all from ActionData
+    ActionData* adata = ActionData::getInstance();
+    QString key = basefile + ":" + actionName;
+    KeyList shortcuts = adata->getShortcuts(key);
     QList<QKeySequence> shortcutList;
-    for (int i = 0; i < shortcuts.size(); i++) {
-
-        // Keyboard shortcuts require the disambiguation "keyboard shortcut"
-        // and this must match scripts/extract_menu_tr_strings.pl
-        shortcutList.append(translate(shortcuts.at(i), "keyboard shortcut"));
+    foreach(auto ks, shortcuts) {
+        shortcutList.append(ks);
     }
+    RG_DEBUG << "setActionShortcut default shortcut for" << actionName <<
+        "key:" << key <<
+        "is" << shortcut << "setting shortcuts" << shortcutList;
+
     action->setShortcuts(shortcutList);
 
     /*
@@ -488,12 +506,13 @@ ActionFileParser::setActionShortcut(QString actionName, QString shortcut, bool i
 bool
 ActionFileParser::setActionToolTip(QString actionName, QString tooltip)
 {
+    RG_DEBUG << "setActionToolTip" << actionName << tooltip;
     if (actionName == "") return false;
     QAction *action = findAction(actionName);
     if (!action) action = findStandardAction(actionName);
     if (!action) return false;
-    action->setToolTip(tooltip);
-    m_tooltipSet.insert(action);
+    // do not set the ttoltip here - it will be set in addActionToToolbar
+    m_tooltipMap[actionName] = tooltip;
     return true;
 }
 
@@ -629,32 +648,42 @@ ActionFileParser::addActionToToolbar(QString toolbarName, QString actionName)
     if (!toolbar) return false;
     toolbar->addAction(action);
 
-    // duration toolbar tooltips:
-    // no text() toolTip() in English like "Double Whole Note (5)"
-    if (!action->toolTip().isEmpty() && action->text().isEmpty()) {
-        QString m(action->toolTip());
-        QString tip = QObject::tr("%1").arg(QObject::tr(m.toStdString().c_str()));
-        action->setToolTip(tip);
-        //RG_DEBUG << "setting tip: " << tip;
-        // transport toolbar tooltips:
-        // text() translated, toolTip() in English
-    } else if (strippedText(action->text()) != action->toolTip()) {
-        QString m(action->toolTip());
-        QString tip = QObject::tr("%1").arg(QObject::tr(m.toStdString().c_str()));
-        action->setToolTip(tip);
-        //RG_DEBUG << "setting tip: " << tip;
-    } else if (action->shortcut() != QKeySequence()) {
-        // Avoid setting an automatic tooltip if an explicit one has
-        // been provided via setActionToolTip earlier.  We need to
-        // remember this ourselves, as action->toolTip() will return a
-        // Qt-generated automatic default if we haven't set it
-        if (m_tooltipSet.find(action) == m_tooltipSet.end()) {
-            QString tooltip = QObject::tr("%1 (%2)")
-                .arg(strippedText(action->text()))
-                .arg(action->shortcut().toString());
-            action->setToolTip(tooltip);
-        }
+    // special case for undo/redo. The tooltip is generated in
+    // CommandHistory so do not set the tooltip here for those two
+    // actions
+    if (actionName == "edit_undo" || actionName == "edit_redo") {
+        RG_DEBUG << "not setting tooltip for" << actionName;
+        return true;
     }
+
+    QString toolTipText;
+    if (m_tooltipMap.find(actionName) != m_tooltipMap.end()) {
+        QString tt = m_tooltipMap[actionName];
+        toolTipText = QObject::tr(tt.toStdString().c_str());
+        RG_DEBUG << "setting manual tooltip" << actionName << toolTipText;
+    } else if (! action->text().isEmpty()) {
+        QString tt = strippedText(action->text());
+        toolTipText = QObject::tr(tt.toStdString().c_str());
+        RG_DEBUG << "setting automatic tooltip" << actionName << toolTipText;
+    }
+
+    if (toolTipText == "") {
+        RG_DEBUG << "no tooltip for" << actionName;
+    }
+
+    QList<QKeySequence> shortcuts = action->shortcuts();
+    QStringList kssl;
+    foreach(auto ks, shortcuts) {
+        kssl.append(ks.toString(QKeySequence::NativeText));
+    }
+    QString scString = kssl.join(", ");
+
+    if (kssl.size() > 0) {
+        // add the shortcuts to the tooltip
+        toolTipText = toolTipText + " (" + scString + ")";
+    }
+
+    action->setToolTip(toolTipText);
     return true;
 }
 
@@ -779,7 +808,7 @@ ActionFileParser::setVisible(QAction *a, bool e)
 void
 ActionFileParser::enterActionState(QString stateName)
 {
-    Profiler p("ActionFileParser::enterActionState");
+    //Profiler p("ActionFileParser::enterActionState");
     for (ActionSet::iterator i = m_stateInvisibleMap[stateName].begin();
          i != m_stateInvisibleMap[stateName].end(); ++i) {
         setVisible(*i, false);
@@ -801,7 +830,7 @@ ActionFileParser::enterActionState(QString stateName)
 void
 ActionFileParser::leaveActionState(QString stateName)
 {
-    Profiler p("ActionFileParser::leaveActionState");
+    //Profiler p("ActionFileParser::leaveActionState");
     for (ActionSet::iterator i = m_stateEnableMap[stateName].begin();
          i != m_stateEnableMap[stateName].end(); ++i) {
         setEnabled(*i, false);
@@ -850,7 +879,7 @@ ActionFileParser::slotObjectDestroyed()
 
 ActionFileMenuWrapper::ActionFileMenuWrapper(QMenu *menu, QObject *parent) :
     QObject(parent),
-    m_menu(menu) 
+    m_menu(menu)
 {
     setObjectName(menu->objectName());
 }

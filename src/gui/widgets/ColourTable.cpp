@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,11 +37,11 @@
 namespace Rosegarden
 {
 
-ColourTable::ColourTable
-(QWidget *parent, ColourMap &input, ColourList &list)
-    : QTableWidget(1, 2, parent )    //, "RColourTable")
+
+ColourTable::ColourTable(QWidget *parent, ColourMap &input, ColourList &list) :
+    QTableWidget(1, 2, parent )    //, "RColourTable")
 {
-    this->setObjectName( "RColourTable" );
+    setObjectName( "RColourTable" );
     
     //### JAS Deactivated next line 
     //&&& setSorting(FALSE);
@@ -58,9 +58,10 @@ ColourTable::ColourTable
     setHorizontalHeaderLabels( QStringList() << tr("Name") << tr("Color") );
     
     populate_table(input, list);
-    connect(this, SIGNAL(doubleClicked(int, int, int, const QPoint&)),
-            SLOT(slotEditEntry(int, int)));
 
+    // ??? Need to fix this if we want this to work.
+    //connect(this, &ColourTable::doubleClicked,
+    //        this, &ColourTable::slotEditEntry);
 }
 
 void

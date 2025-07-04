@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,13 +21,11 @@
 
 #include "gui/widgets/FileDialog.h"
 #include "misc/Debug.h"
-#include <QDialog>
+
 #include <QDialogButtonBox>
 #include <QFileInfo>
 #include <QLabel>
-#include <QString>
 #include <QWidget>
-#include <QHBoxLayout>
 #include <QGridLayout>
 #include <QPushButton>
 
@@ -35,94 +33,89 @@
 namespace Rosegarden
 {
 
+
 FileLocateDialog::FileLocateDialog(QWidget *parent,
                                    const QString &file,
                                    const QString &path):
     QDialog(parent),
-    m_file(file),
-    m_path(path)
+    m_result(Cancel),
+    m_path(path),
+    m_fileName(file)
 {
-    if (m_path == "") {
-        m_path = QDir::currentPath();
-    }
-
-    setModal(true);
     setWindowTitle(tr("Locate audio file"));
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QWidget *w = new QWidget(this);
-    QHBoxLayout *wLayout = new QHBoxLayout;
-    metagrid->addWidget(w, 0, 0);
+    setModal(true);
+    setContentsMargins(10, 10, 10, 10);
 
-    QString label =
-        tr("Can't find file \"%1\".\n"
-             "Would you like to try and locate this file or skip it?")
-             .arg(m_file);
+    QGridLayout *gridLayout = new QGridLayout;
+    setLayout(gridLayout);
 
-    QLabel *labelW = new QLabel(label, w);
-    wLayout->addWidget(labelW);
-    labelW->setAlignment(Qt::AlignCenter);
-    labelW->setMinimumHeight(60);
-    w->setLayout(wLayout);
+    int row = 0;
+
+    QLabel *label = new QLabel(
+            tr("<p>Could not find audio file:</p><p>&nbsp;&nbsp;%1</p><p>at expected audio file location:</p><p>&nbsp;&nbsp;%2</p><p>You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.</p><p>Which would you like to do?</p>").
+                    arg(m_fileName).
+                    arg(m_path));
+
+    gridLayout->addWidget(label, row, 0);
+    gridLayout->setRowStretch(row, 10);
+
+    ++row;
+
+    // Spacer
+    gridLayout->setRowMinimumHeight(row, 20);
+
+    ++row;
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox;
 
-    QPushButton *user1 = new QPushButton(tr("&Skip"));
-    buttonBox->addButton(user1, QDialogButtonBox::ActionRole);
-    connect(user1, &QAbstractButton::clicked, this, &FileLocateDialog::slotUser1);
+    QPushButton *locate = new QPushButton(tr("&Locate Missing File"));
+    locate->setProperty("Action", static_cast<int>(Locate));
+    buttonBox->addButton(locate, QDialogButtonBox::ActionRole);
 
-    QPushButton *user2 = new QPushButton(tr("Skip &All"));
-    buttonBox->addButton(user2, QDialogButtonBox::ActionRole);
-    connect(user2, &QAbstractButton::clicked, this, &FileLocateDialog::slotUser2);
+    QPushButton *skip = new QPushButton(tr("&Skip This Audio File"));
+    skip->setProperty("Action", static_cast<int>(Skip));
+    buttonBox->addButton(skip, QDialogButtonBox::ActionRole);
 
-    QPushButton *user3 = new QPushButton(tr("&Locate"));
-    buttonBox->addButton(user3, QDialogButtonBox::ActionRole);
-    connect(user3, &QAbstractButton::clicked, this, &FileLocateDialog::slotUser3);
+    QPushButton *cancel = new QPushButton(tr("&Cancel File Open"));
+    cancel->setProperty("Action", static_cast<int>(Cancel));
+    buttonBox->addButton(cancel, QDialogButtonBox::ActionRole);
 
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
-    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::clicked,
+            this, &FileLocateDialog::slotButtonClicked);
+
+    gridLayout->addWidget(buttonBox, row, 0);
 }
 
 void
-FileLocateDialog::slotUser3()
+FileLocateDialog::slotButtonClicked(QAbstractButton *button)
 {
-    if (!m_file.isEmpty()) {
-        m_file = FileDialog::getOpenFileName
-            (this,
-             tr("Select an Audio File"),
-             m_path,
-             tr("Requested file") + QString(" (%1)").arg(QFileInfo(m_file).fileName()) + ";;" +
-             tr("WAV files") + " (*.wav *.WAV)" + ";;" +
-             tr("All files") + " (*)");
+    m_result = static_cast<Result>(button->property("Action").toInt());
 
-        RG_DEBUG << "FileLocateDialog::slotUser3() : m_file = " << m_file;
+    if (m_result == Locate) {
+        // ??? We really just need a directory.  Is there a directory open
+        //     dialog that would show the files to help confirm we are in
+        //     the right place?
+        m_fileName = FileDialog::getOpenFileName(
+                this,  // parent
+                tr("Select an Audio File"),  // caption
+                m_path,  // dir
+                tr("Requested file") +
+                    QString(" (%1)").arg(QFileInfo(m_fileName).fileName()) +
+                    ";;" +
+                tr("WAV files") + " (*.wav *.WAV)" + ";;" +
+                tr("All files") + " (*)");  // filter
 
-        if (m_file.isEmpty()) {
-            RG_DEBUG << "FileLocateDialog::slotUser3() : reject\n";
-            reject();
-        } else {
-            QFileInfo fileInfo(m_file);
+        if (!m_fileName.isEmpty()) {
+            QFileInfo fileInfo(m_fileName);
             m_path = fileInfo.path();
-            accept();
         }
-
-    } else {
-        reject();
     }
+
+    // Always accept.  The buttons are all actions.  There isn't really a
+    // concept of "reject" at this level.  Call getResult() to find out which
+    // button was pressed.
+    accept();
 }
 
-void
-FileLocateDialog::slotUser1()
-{
-    reject();
-}
-
-void
-FileLocateDialog::slotUser2()
-{
-    done( -1);
-}
 
 }

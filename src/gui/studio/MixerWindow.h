@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,15 +20,11 @@
 
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 
 #include <QMainWindow>
 
-
 class QWidget;
 class QCloseEvent;
-class QShortcut;
-
 
 namespace Rosegarden
 {
@@ -43,7 +39,6 @@ class MixerWindow: public QMainWindow
 
 public:
     MixerWindow(QWidget *parent, RosegardenDocument *document);
-    QShortcut* getShortcuts() { return m_shortcuts; }
 
 signals:
     void closing();
@@ -65,9 +60,6 @@ protected:
     RosegardenDocument *m_document;
     Studio *m_studio;
     InstrumentId m_currentId;
-
-    QShortcut *m_shortcuts;
-
 };
 
 

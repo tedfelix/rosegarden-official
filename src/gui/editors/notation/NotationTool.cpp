@@ -3,17 +3,19 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[NotationTool]"
 
 #include "NotationTool.h"
 #include "misc/Debug.h"
@@ -28,7 +30,7 @@
 namespace Rosegarden
 {
 
-NotationTool::NotationTool(QString rcFileName, QString menuName,
+NotationTool::NotationTool(const QString& rcFileName, const QString& menuName,
                            NotationWidget *widget) :
     BaseTool(menuName, widget),
     m_widget(widget),
@@ -39,7 +41,8 @@ NotationTool::NotationTool(QString rcFileName, QString menuName,
 
 NotationTool::NotationTool(NotationWidget *widget) :
     BaseTool("", widget),
-    m_widget(widget)
+    m_widget(widget),
+    m_scene(nullptr)
 {
 }
 
@@ -68,7 +71,7 @@ void
 NotationTool::handleMidButtonPress(const NotationMouseEvent *) { }
 
 void
-NotationTool::handleRightButtonPress(const NotationMouseEvent *) 
+NotationTool::handleRightButtonPress(const NotationMouseEvent *)
 {
     showMenu();
 }
@@ -137,8 +140,6 @@ NotationTool::createMenu()
     }
 
     m_menu = menu;
-}    
-
 }
 
-
+}

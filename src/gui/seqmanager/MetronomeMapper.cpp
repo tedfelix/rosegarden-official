@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -196,8 +196,7 @@ void MetronomeMapper::fillBuffer()
         MappedEvent e;
 
         if (tick->second == MidiTimingClockTick) {
-            e = MappedEvent(0,  // Instrument ID is irrelevant
-                            MappedEvent::MidiSystemMessage);
+            e.setType(MappedEvent::MidiSystemMessage);
             e.setData1(MIDI_TIMING_CLOCK);
             e.setEventTime(eventTime);
         } else {
@@ -222,13 +221,13 @@ void MetronomeMapper::fillBuffer()
                 RG_WARNING << "fillBuffer(): Unexpected tick type";
             }
 
-            e = MappedEvent(m_metronome->getInstrument(),
-                            MappedEvent::MidiNoteOneShot,
-                            pitch,
-                            velocity,
-                            eventTime,
-                            tickDuration,
-                            RealTime::zeroTime);  // audioStartMarker
+            e = MappedEvent();
+            e.setInstrumentId(m_metronome->getInstrument());
+            e.setType(MappedEvent::MidiNoteOneShot);
+            e.setData1(pitch);
+            e.setData2(velocity);
+            e.setEventTime(eventTime);
+            e.setDuration(tickDuration);
         }
 
         // Add the event to the buffer.
@@ -259,9 +258,10 @@ MetronomeMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
     if (!m_instrument)
         return;
 
+    ControllerAndPBList cList(m_instrument->getStaticControllers());
     m_channelManager.insertEvent(
             NoTrack,  // trackId
-            m_instrument->getStaticControllers(),
+            cList,
             start,
             evt,
             firstOutput,
@@ -279,10 +279,11 @@ makeReady(MappedInserterBase &inserter, RealTime time)
     if (ControlBlock::getInstance()->isMetronomeMuted())
         return;
 
+    ControllerAndPBList cList(m_instrument->getStaticControllers());
     m_channelManager.makeReady(
             NoTrack,  // trackId
             time,
-            m_instrument->getStaticControllers(),
+            cList,
             inserter);
 
     QSettings settings;
@@ -297,10 +298,10 @@ makeReady(MappedInserterBase &inserter, RealTime time)
 
 bool
 MetronomeMapper::
-shouldPlay(MappedEvent *evt, RealTime sliceStart)
+shouldPlay(MappedEvent *evt, RealTime startTime)
 {
     // If it's finished, don't play it.
-    if (evt->EndedBefore(sliceStart))
+    if (evt->EndedBefore(startTime))
         return false;
 
     // If it's a MIDI Timing Clock, always play it.

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -65,8 +65,8 @@ ControlToolBox::createTool(QString toolName)
 
 //    if (m_scene) {
 //        tool->setScene(m_scene);
-//        connect(m_scene, SIGNAL(eventRemoved(Event *)),
-//                tool, SLOT(handleEventRemoved(Event *)));
+//        connect(m_scene, &Scene::eventRemoved(Event *),
+//                tool, &ControlTool::handleEventRemoved(Event *));
 //    }
 
     return tool;

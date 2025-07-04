@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -68,7 +68,8 @@ RespellCommand::getGlobalName(RespellType type)
 }
 
 RespellCommand::RespellType
-RespellCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+RespellCommand::getArgument(const QString& actionName,
+                            CommandArgumentQuerier &)
 {
     RespellType type;
     type.type = RespellType::Set;
@@ -98,47 +99,34 @@ RespellCommand::getArgument(QString actionName, CommandArgumentQuerier &)
 void
 RespellCommand::registerCommand(CommandRegistry *r)
 {
-    RespellType type;
-    type.type = RespellType::Set;
-
-    type.accidental = Accidentals::DoubleFlat;
     r->registerCommand
         ("respell_doubleflat",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Accidentals::Flat;
     r->registerCommand
         ("respell_flat",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Accidentals::Natural;
     r->registerCommand
         ("respell_natural",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Accidentals::Sharp;
     r->registerCommand
         ("respell_sharp",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Accidentals::DoubleSharp;
     r->registerCommand
         ("respell_doublesharp",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
 
-    type.accidental = Accidentals::Natural;
-    
-    type.type = RespellType::Up;
     r->registerCommand
         ("respell_up",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
-    
-    type.type = RespellType::Down;
+
     r->registerCommand
         ("respell_down",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());
-    
-    type.type = RespellType::Restore;
+
     r->registerCommand
         ("respell_restore",
          new ArgumentAndSelectionCommandBuilder<RespellCommand>());

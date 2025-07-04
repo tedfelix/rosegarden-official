@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -34,7 +34,17 @@ namespace Rosegarden
 class MidiDevice;
 class BankEditorDialog;
 
-
+/// Key map name editor on the right side of the BankEditorDialog.
+/**
+ * ??? This displays the key map entry numbers 1-based so these
+ *     are always off by one from the MIDI note number.  Need
+ *     to change NameSetEditor to offer the ability to display
+ *     0-based index numbers to the user just for key maps.
+ *     For Program Changes, 1-based is ok since that's the way
+ *     the user sees them.  Would there be any value to having
+ *     NameSetEditor show note names and octaves instead of
+ *     MIDI note numbers?
+ */
 class MidiKeyMappingEditor : public NameSetEditor
 {
     Q_OBJECT
@@ -43,18 +53,18 @@ public:
     MidiKeyMappingEditor(BankEditorDialog *bankEditor,
                          QWidget *parent);
 
-    void clearAll();
+    void clearAll() override;
     void populate(QTreeWidgetItem *);
     MidiKeyMapping &getMapping() { return m_mapping; }
     void reset();
 
 public slots:
     void slotNameChanged(const QString &) override;
+    void slotEditingFinished() override;
     void slotKeyMapButtonPressed() override;
 
 protected:
     virtual QWidget *makeAdditionalWidget(QWidget *parent);
-    void blockAllSignals(bool block);
 
     //--------------- Data members ---------------------------------
 

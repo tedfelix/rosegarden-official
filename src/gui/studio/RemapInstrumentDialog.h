@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,11 +31,20 @@ class QComboBox;
 namespace Rosegarden
 {
 
-class Command;
 
+class Command;
 class RosegardenDocument;
 
 
+/// The "Remap Instrument assignments..." dialog.
+/**
+ * From the main window: Tracks > Remap Instruments...
+ *
+ * This lets the user quickly change either the Device or Instrument on a
+ * number of tracks at the same time.  E.g. if you want to change all
+ * tracks using the General MIDI device to instead use Soft Synths, this
+ * dialog can do that.
+ */
 class RemapInstrumentDialog : public QDialog
 {
     Q_OBJECT

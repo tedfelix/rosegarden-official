@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -44,7 +44,7 @@ namespace Rosegarden
 
 ClefDialog::ClefDialog(QWidget *parent,
                        NotePixmapFactory *npf,
-                       Clef defaultClef,
+                       const Clef& defaultClef,
                        bool showConversionOptions) :
         QDialog(parent),
         m_notePixmapFactory(npf),
@@ -136,9 +136,9 @@ ClefDialog::ClefDialog(QWidget *parent,
         // happen to want to ressurect it, although this seems unlikely.)
         //
         //m_transposeButton = new QRadioButton(tr("Maintain current positions on the staff"));
-        
+
         QSettings settings;
-        settings.beginGroup("Clef_Dialog");        	
+        settings.beginGroup("Clef_Dialog");
         m_changeOctaveButton->setChecked(settings.value("change_octave", true).toBool());
         m_noConversionButton->setChecked(settings.value("transpose", false).toBool());
         settings.endGroup();
@@ -150,21 +150,25 @@ ClefDialog::ClefDialog(QWidget *parent,
     }
 
     // hook up the up/down left/right buttons
-    QObject::connect(clefUp, &QAbstractButton::clicked, this, &ClefDialog::slotClefUp);
-    QObject::connect(clefDown, &QAbstractButton::clicked, this, &ClefDialog::slotClefDown);
-    QObject::connect(m_octaveUp, &QAbstractButton::clicked, this, &ClefDialog::slotOctaveUp);
-    QObject::connect(m_octaveDown, &QAbstractButton::clicked, this, &ClefDialog::slotOctaveDown);
+    connect(clefUp, &QAbstractButton::clicked, this, &ClefDialog::slotClefUp);
+    connect(clefDown, &QAbstractButton::clicked,
+            this, &ClefDialog::slotClefDown);
+    connect(m_octaveUp, &QAbstractButton::clicked,
+            this, &ClefDialog::slotOctaveUp);
+    connect(m_octaveDown, &QAbstractButton::clicked,
+            this, &ClefDialog::slotOctaveDown);
 
     redrawClefPixmap();
 
     // the strip of standard buttons at the bottom, sans the help button,
     // because I'm pretty much the one who would ever make context sensitive
     // help work, and I think there's little chance of ever doing that.
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
 
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &ClefDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &ClefDialog::reject);
 }
 
 Clef
@@ -279,7 +283,7 @@ ClefDialog::redrawClefPixmap()
 }
 
 QString
-ClefDialog::translatedClefName(Clef clef)
+ClefDialog::translatedClefName(const Clef& clef)
 {
     QString name;
     int octave = clef.getOctaveOffset();
@@ -334,8 +338,8 @@ ClefDialog::accept()
 {
     QSettings settings;
     settings.beginGroup("Clef_Dialog");
-    settings.setValue("change_octave", m_changeOctaveButton->isChecked());    
-    settings.setValue("transpose", m_noConversionButton->isChecked());    
+    settings.setValue("change_octave", m_changeOctaveButton->isChecked());
+    settings.setValue("transpose", m_noConversionButton->isChecked());
     settings.endGroup();
     QDialog::accept();
 }

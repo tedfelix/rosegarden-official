@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -81,17 +81,6 @@ MEBIterator::moveTo(const RealTime &time)
 
     // Since we moved, we need to send a channel setup again.
     m_ready = false;
-}
-
-MappedEvent
-MEBIterator::operator*()
-{
-    const MappedEvent *e = peek();
-
-    if (e)
-        return *e;
-    else
-        return MappedEvent();
 }
 
 MappedEvent *

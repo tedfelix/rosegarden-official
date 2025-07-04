@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,27 +19,30 @@
 #define RG_TEXTEVENTDIALOG_H
 
 #include "base/NotationTypes.h"
-#include "gui/widgets/LineEdit.h"
 
-#include <string>
 #include <QDialog>
 #include <QString>
+
+#include <string>
 #include <vector>
 
 
 class QWidget;
-class LineEdit;
 class QLabel;
 class QComboBox;
 class QSpinBox;
 class QStackedWidget;
 
+
 namespace Rosegarden
 {
 
+
+class LineEdit;
 class NotePixmapFactory;
 
 
+/// "Text" dialog accessed via the text tool in notation.
 class TextEventDialog : public QDialog
 {
     Q_OBJECT
@@ -47,12 +50,13 @@ class TextEventDialog : public QDialog
 public:
     TextEventDialog(QWidget *parent,
                     NotePixmapFactory *npf,
-                    Text defaultText,
+                    const Text &defaultText,
                     int maxLength = -1); // for Qt default
 
     Text getText() const;
 
-public slots:
+private slots:
+
     void slotTextChanged(const QString &);
     void slotTypeChanged(const QString &);
 
@@ -70,22 +74,20 @@ public slots:
     void slotTempoShortcutChanged(const QString &);
     void slotLocalTempoShortcutChanged(const QString &);
 
-    //
-    // special LilyPond directives, initial phase, as cheap text events; will
-    // eventually move out of Text, and out of this dialog into
-    // some other less cheesy interface (or maybe not, four years later, oh
-    // well)
-    //
+    /**
+     * special LilyPond directives, initial phase, as cheap text events; will
+     * eventually move out of Text, and out of this dialog into
+     * some other less cheesy interface (or maybe not, four years later, oh
+     * well)
+     */
     void slotLilyPondDirectiveChanged(const QString &);
 
     void slotUpdateSize(int);
 
-protected:
+private:
 
     std::string getTextType() const;
     std::string getTextString() const;
-
-    //--------------- Data members ---------------------------------
 
     LineEdit *m_text;
     QComboBox *m_typeCombo;

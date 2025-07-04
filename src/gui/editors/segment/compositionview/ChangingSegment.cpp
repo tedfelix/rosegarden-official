@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -48,7 +48,7 @@ QRect ChangingSegment::rect() const
     return res;
 }
 
-timeT ChangingSegment::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos)
+timeT ChangingSegment::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos) const
 {
     timeT startTime = m_segment.getStartTime();
     timeT repeatInterval = m_segment.getEndMarkerTime() - startTime;
@@ -99,14 +99,14 @@ void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
     }
 }
 
-timeT ChangingSegment::getEndTime(const SnapGrid &grid)
+timeT ChangingSegment::getEndTime(const SnapGrid &grid) const
 {
     QRect itemRect = rect();
 
     return std::max(grid.snapX(itemRect.x() + itemRect.width()), 0L);
 }
 
-int ChangingSegment::getTrackPos(const SnapGrid &grid)
+int ChangingSegment::getTrackPos(const SnapGrid &grid) const
 {
     return grid.getYBin(rect().y());
 }

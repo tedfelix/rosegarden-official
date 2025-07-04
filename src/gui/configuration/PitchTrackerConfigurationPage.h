@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,14 +18,15 @@
 #ifndef RG_PITCHTRACKERCONFIGURATIONPAGE_H
 #define RG_PITCHTRACKERCONFIGURATIONPAGE_H
 
-#include <string>
-#include <vector>
 #include "TabbedConfigurationPage.h"
+#include "sound/Tuning.h"
+
 #include <QString>
 #include <QStringList>
 #include <QErrorMessage>
 
-#include "sound/Tuning.h"
+#include <string>
+#include <vector>
 
 class QWidget;
 class QPushButton;
@@ -51,7 +52,7 @@ public:
     static const int defaultGraphHeight;    /**< Max excursion in cents */
     static const bool defaultIgnore8ve;     /**< Ignore octave errors */
 
-    PitchTrackerConfigurationPage(QWidget *parent = nullptr);
+    explicit PitchTrackerConfigurationPage(QWidget *parent = nullptr);
 
     void apply() override;
 
@@ -84,10 +85,10 @@ protected:
     QCheckBox    *m_ignore8ve;       /**< Ignore 8ve in pitch comparison? */
     QSpinBox     *m_graphWidth;      /**< Width of graph in milliseconds */
     QSpinBox     *m_graphHeight;     /**< Height of graph in cents */
-    std::vector<Accidentals::Tuning *> *m_tunings; /**< Available tunings */
-    
+    std::vector<std::shared_ptr<Accidentals::Tuning>> *m_tunings; /**< Available tunings */
+
     QErrorMessage m_noTuningsAlert;  /**< Alert missing tunings file */
-    
+
 };
 
 

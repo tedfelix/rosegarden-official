@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,20 +19,21 @@
 #ifndef RG_NOTATIONVLAYOUT_H
 #define RG_NOTATIONVLAYOUT_H
 
-#include "base/LayoutEngine.h"
-#include <map>
-#include <vector>
-#include "base/Event.h"
-
 #include "NotationElement.h"
 
+#include "base/LayoutEngine.h"
+#include "base/TimeT.h"
 
-class SlurList;
+//class SlurList;
 class QObject;
+
+#include <map>
+#include <vector>
 
 
 namespace Rosegarden
 {
+
 
 class ViewSegment;
 class Quantizer;
@@ -40,21 +41,20 @@ class Composition;
 class NotePixmapFactory;
 class NotationStaff;
 class NotationProperties;
-class Composition;
 
 
 /// Vertical notation layout
 /**
  * computes the Y coordinate of notation elements
  */
-class NotationVLayout : public VerticalLayoutEngine,
-                        public QObject  // For tr().  Can probably be cleaned up.
+class NotationVLayout : public QObject,  // For tr().  Can probably be cleaned up.
+                        public VerticalLayoutEngine
 {
-    //Q_OBJECT
+    Q_OBJECT
 public:
     NotationVLayout(Composition *c, NotePixmapFactory *npf,
                     const NotationProperties &properties,
-                    QObject* parent);
+                    QObject *parent);
 
     ~NotationVLayout() override;
 
@@ -90,8 +90,6 @@ private:
 
     typedef std::vector<NotationElementList::iterator> SlurList;
     typedef std::map<ViewSegment *, SlurList> SlurListMap;
-
-    //--------------- Data members ---------------------------------
 
     SlurListMap m_slurs;
     SlurList &getSlurList(ViewSegment &);

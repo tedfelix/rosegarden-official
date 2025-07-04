@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -53,7 +53,8 @@ static void osc_error(int num, const char *msg, const char *path)
 static int osc_message_handler(const char *path, const char *types, lo_arg **argv,
                                int argc, lo_message, void *user_data)
 {
-    AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)user_data;
+    AudioPluginOSCGUIManager *manager =
+        static_cast<AudioPluginOSCGUIManager *>(user_data);
 
     InstrumentId instrument;
     int position;
@@ -125,8 +126,7 @@ AudioPluginOSCGUIManager::checkOSCThread()
 bool
 AudioPluginOSCGUIManager::hasGUI(InstrumentId instrument, int position)
 {
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) return false;
 
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
@@ -155,8 +155,7 @@ AudioPluginOSCGUIManager::startGUI(InstrumentId instrument, int position)
     }
 
     // check the label
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) {
         RG_WARNING << "startGUI(): no such instrument or buss as " << instrument;
         return;
@@ -239,8 +238,7 @@ AudioPluginOSCGUIManager::updateProgram(InstrumentId instrument, int position)
         m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) return;
 
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
@@ -268,8 +266,7 @@ AudioPluginOSCGUIManager::updatePort(InstrumentId instrument, int position,
         m_guis[instrument].find(position) == m_guis[instrument].end())
         return ;
 
-    PluginContainer *container = nullptr;
-    container = m_studio->getContainerById(instrument);
+    PluginContainer *container = m_studio->getContainerById(instrument);
     if (!container) return;
 
     AudioPluginInstance *pluginInstance = container->getPlugin(position);
@@ -316,8 +313,8 @@ AudioPluginOSCGUIManager::getOSCUrl(InstrumentId instrument, int position,
     //   osc.udp://localhost:54343/plugin/dssi/<instrument>/<position>/<label>
     // where <position> will be "synth" for synth plugins
 
-    QString type, soName, label;
-    PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    QString type, soName, label, arch;
+    PluginIdentifier::parseIdentifier(identifier, type, soName, label, arch);
 
     QString baseUrl = lo_server_thread_get_url(m_serverThread);
     if (!baseUrl.endsWith("/"))
@@ -395,8 +392,8 @@ AudioPluginOSCGUIManager::parseOSCPath(QString path, InstrumentId &instrument,
     }
 
     QString identifier = strtoqstr(pluginInstance->getIdentifier());
-    QString iType, iSoName, iLabel;
-    PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel);
+    QString iType, iSoName, iLabel, arch;
+    PluginIdentifier::parseIdentifier(identifier, iType, iSoName, iLabel, arch);
     if (iLabel != label) {
         RG_WARNING << "parseOSCPath(): wrong label for plugin at position " << position << " for instrument " << instrument << " in path " << path << " (actual label is " << iLabel << ")";
         return false;
@@ -427,7 +424,8 @@ AudioPluginOSCGUIManager::getFriendlyName(InstrumentId instrument, int position,
 void
 AudioPluginOSCGUIManager::timerCallback(void *data)
 {
-    AudioPluginOSCGUIManager *manager = (AudioPluginOSCGUIManager *)data;
+    AudioPluginOSCGUIManager *manager =
+        static_cast<AudioPluginOSCGUIManager *>(data);
     manager->dispatch();
 }
 
@@ -665,4 +663,3 @@ done:
 }
 
 }
-

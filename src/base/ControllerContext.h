@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,17 +18,22 @@
 #ifndef RG_CONTROLLERCONTEXT_H
 #define RG_CONTROLLERCONTEXT_H
 
-#include <base/Event.h>
+#include "base/TimeT.h"
+
 #include <map>
+#include <string>
+
 
 namespace Rosegarden
 {
-  class ControllerContext;
-  class ControllerContextMap;
-  class ControllerSearch;
-  class ControlParameter;
-  class Instrument;
-  class Segment;
+
+
+class ControllerContextMap;
+class ControlParameter;
+class Event;
+class Instrument;
+class Segment;
+
 
 // @class ControllerSearchValue A (possibly intermediate) value in a
 // parameter search, including what time it was found at.
@@ -45,12 +50,12 @@ class ControllerSearchValue
  ControllerSearchValue() :
     m_value(0),
         m_when(0)
-            {};    
-    int value() { return m_value; }
-    int time()  { return m_when; }
+            {};
+    int value() const { return m_value; }
+    int time() const { return m_when; }
  private:
     // Type is long so that ControllerEventAdapter can work.
-    long              m_value; 
+    long              m_value;
     timeT             m_when;
 };
 
@@ -62,13 +67,15 @@ class ControllerSearch
  public:
     typedef ControllerSearchValue::Maybe Maybe;
 
-    ControllerSearch(const std::string eventType,
+    ControllerSearch(const std::string& eventType,
                      int controllerId);
-    
+
     // Search Segments A and B for the latest controller value.  B may
-    // be nullptr but A must exist. 
+    // be nullptr but A must exist.
     Maybe
-        doubleSearch(Segment *a, Segment *b, timeT noLaterThan) const;
+        doubleSearch(const Segment *a,
+                     const Segment *b,
+                     timeT noLaterThan) const;
 
  private:
     Maybe
@@ -84,7 +91,7 @@ class ControllerSearch
 // @class ControllerContextMap A cache of controller values, one per
 // controller and one for pitchbend.
 // @author Tom Breton (Tehom)
-struct ControllerContextMap 
+struct ControllerContextMap
 {
     typedef ControllerSearchValue::Maybe Maybe;
     typedef std::map< int, ControllerSearchValue>  Cache;
@@ -94,32 +101,33 @@ struct ControllerContextMap
     m_PitchBendLatestValue(Maybe(false,ControllerSearchValue()))
     {};
 
-    void makeControlValueAbsolute(Instrument *instrument, Segment *a,
-                                  Segment *b, Event *e, timeT at);
+    void makeControlValueAbsolute(const Instrument *instrument,
+                                  const Segment *a,
+                                  const Segment *b, Event *e, timeT at);
 
     // Return the respective controller value at searchTime.  Segment
     // A is primary and governs timing and repitition.  Segment
     // B, if non-nullptr, will be searched too.  In any case the latest event
     // takes priority.  Defaults from Instrument will be used if
-    // neccessary. 
-    int getControllerValue(Instrument *instrument,
-                           Segment *a, Segment *b, 
-                           timeT searchTime, const std::string eventType,
+    // neccessary.
+    int getControllerValue(const Instrument *instrument,
+                           const Segment *a, const Segment *b,
+                           timeT searchTime, const std::string& eventType,
                            int controllerId);
 
     void storeLatestValue(Event *e);
     void clear();
 
  private:
-    int makeAbsolute(const ControlParameter * controlParameter,
-                     int value) const;
-    const ControlParameter
-    *getControlParameter(Instrument *instrument,
-                         const std::string eventType,
+    static int makeAbsolute(const ControlParameter * controlParameter,
+                     int value);
+    static const ControlParameter
+    *getControlParameter(const Instrument *instrument,
+                         const std::string& eventType,
                          const int controllerId);
     static int
-    getStaticValue(Instrument *instrument,
-                   const std::string eventType, int controllerId);
+    getStaticValue(const Instrument *instrument,
+                   const std::string& eventType, int controllerId);
 
     Cache             m_latestValues;
     Maybe             m_PitchBendLatestValue;

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2002
         Hans Kieserman      <hkieserman@mail.com>
@@ -30,6 +30,7 @@
 #include "misc/Debug.h"
 #include "base/StaffExportTypes.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/RosegardenMainViewWidget.h"
 
 #include "rosegarden-version.h"
 
@@ -48,7 +49,7 @@ using namespace BaseProperties;
 MusicXmlExporter::MidiInstrument::
 MidiInstrument(Instrument * instrument, int pitch) :
     channel(instrument->hasFixedChannel() ?
-            (int(instrument->getNaturalChannel()) + 1) :
+            (int(instrument->getNaturalMidiChannel()) + 1) :
             -1),
     program(int(instrument->getProgramChange()) + 1),
     unpitched(pitch)
@@ -56,7 +57,7 @@ MidiInstrument(Instrument * instrument, int pitch) :
 
 MusicXmlExporter::MusicXmlExporter(RosegardenMainWindow *parent,
                                    RosegardenDocument *doc,
-                                   std::string fileName) :
+                                   const std::string& fileName) :
         m_doc(doc),
         m_fileName(fileName)
 {
@@ -187,34 +188,36 @@ MusicXmlExporter::writeHeader(std::ostream &str)
     Configuration metadata = m_composition->getMetadata();
 
     //! NOTE Is the usage of work/movement/credits correct???
-    if (metadata.has("title")) {
+    if (metadata.has(CompositionMetadataKeys::Title)) {
         str << "  <work>" << std::endl;
-        str << "    <work-title>" << XmlExportable::encode(metadata.get<String>("title"))
+        str << "    <work-title>"
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Title))
             << "</work-title>" << std::endl;
         str << "  </work>" << std::endl;
     }
 
-    if (metadata.has("subtitle")) {
+    if (metadata.has(CompositionMetadataKeys::Subtitle)) {
         str << "  <movement-title>"
-            << "    " << XmlExportable::encode(metadata.get<String>("subtitle"))
+            << "    "
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Subtitle))
             << "  </movement-title>" << std::endl;
     }
 
     str << "  <identification>" << std::endl;
 
-    if (metadata.has("composer")) {
+    if (metadata.has(CompositionMetadataKeys::Composer)) {
         str << "    <creator type=\"composer\">"
-            << XmlExportable::encode(metadata.get<String>("composer"))
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Composer))
             << "</creator>" << std::endl;
     }
-    if (metadata.has("poet")) {
+    if (metadata.has(CompositionMetadataKeys::Poet)) {
         str << "    <creator type=\"lyricist\">"
-            << XmlExportable::encode(metadata.get<String>("poet"))
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Poet))
             << "</creator>" << std::endl;
     }
-    if (metadata.has("arranger")) {
+    if (metadata.has(CompositionMetadataKeys::Arranger)) {
         str << "    <creator type=\"arranger\">"
-            << XmlExportable::encode(metadata.get<String>("arranger"))
+            << XmlExportable::encode(metadata.get<String>(CompositionMetadataKeys::Arranger))
             << "</creator>" << std::endl;
     }
     if (m_composition->getCopyrightNote() != "") {
@@ -234,16 +237,16 @@ MusicXmlExporter::writeHeader(std::ostream &str)
 
 MusicXmlExportHelper*
 MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
-                                   bool &exporting, bool &retValue)
+                                   bool &exporting, bool &inMultiStaffGroup)
 {
     TrackVector tracks;
     std::string name;
     Track *track = nullptr;
     Track *curTrack = nullptr;
-    bool inMultiStaffGroup = false;
+    bool inMultiStaffGroup2 = false;
     InstrumentId instrument = 0;
     bool found = false;
-    retValue = false;
+    inMultiStaffGroup = false;
     exporting = false;
 
     // For each track
@@ -252,17 +255,17 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
         qApp->processEvents();
 
         if (trackPos == curTrackPos) curTrack = track;
-        if (!inMultiStaffGroup) {
+        if (!inMultiStaffGroup2) {
             if (((m_multiStave == MULTI_STAVE_CURLY) &&
                         (track->getStaffBracket() == Brackets::CurlyOn)) ||
                 ((m_multiStave == MULTI_STAVE_CURLY_SQUARE) &&
                         ((track->getStaffBracket() == Brackets::CurlyOn) ||
                          (track->getStaffBracket() == Brackets::CurlySquareOn)))) {
-                inMultiStaffGroup = true;
+                inMultiStaffGroup2 = true;
                 instrument = track->getInstrument();
             }
         }
-        if (inMultiStaffGroup) {
+        if (inMultiStaffGroup2) {
             if (instrument == track->getInstrument()) {
                 if (exportTrack(track)) {
                     tracks.push_back(track->getId());
@@ -272,9 +275,9 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
                             std::stringstream id;
                             id << "P" << curTrack->getId();
                             name = id.str();
-                            retValue = false;
+                           inMultiStaffGroup = false;
                         } else
-                            retValue = true;
+                            inMultiStaffGroup = true;
                     }
                 }
             }
@@ -283,7 +286,7 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
                 ((m_multiStave == MULTI_STAVE_CURLY_SQUARE) &&
                         ((track->getStaffBracket() == Brackets::CurlyOff) ||
                          (track->getStaffBracket() == Brackets::CurlySquareOff)))) {
-                inMultiStaffGroup = false;
+                inMultiStaffGroup2 = false;
                 if (found) {
                     exporting = exportTrack(curTrack);
                     return new MusicXmlExportHelper(name, tracks, isPercussionTrack(track),
@@ -297,13 +300,13 @@ MusicXmlExporter::initalisePart(timeT compositionEndTime, int curTrackPos,
             }
         }
     }
-    retValue = true;
+    inMultiStaffGroup = true;
     if ((exporting = exportTrack(curTrack))) {
         std::stringstream id;
         id << "P" << curTrack->getId();
         name = id.str();
         tracks.push_back(curTrack->getId());
-        retValue = false;
+        inMultiStaffGroup = false;
     }
     return new MusicXmlExportHelper(name, tracks, isPercussionTrack(curTrack),
                             m_exportSelection == EXPORT_SELECTED_SEGMENTS,
@@ -525,9 +528,9 @@ MusicXmlExporter::write()
             compositionEndTime = (*i)->getEndMarkerTime();
         }
     }
-    bool pickup = compositionStartTime < 0;
 
     if (m_mxmlDTDType == DTD_PARTWISE) {
+        bool pickup = compositionStartTime < 0;
         // XML header information
         str << "<?xml version=\"1.0\"?>" << std::endl;
         str << "<!DOCTYPE score-partwise PUBLIC \"-//Recordare//DTD MusicXML " << version

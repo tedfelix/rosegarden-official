@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ typedef unsigned int BussId;
 class Buss : public XmlExportable, public PluginContainer
 {
 public:
-    Buss(BussId id);
+    explicit Buss(BussId id);
 
     void setId(BussId id) { m_id = id; }
     BussId getId() const override { return m_id; }

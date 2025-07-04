@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ Exception::Exception(const char *message, const char *file, int line) :
 #endif
 }
 
-Exception::Exception(std::string message) :
+Exception::Exception(const std::string& message) :
     m_message(message)
 {
 #ifndef NDEBUG
@@ -49,7 +49,9 @@ Exception::Exception(std::string message) :
 #endif
 }
 
-Exception::Exception(std::string message, std::string file, int line) :
+Exception::Exception(const std::string& message,
+                     const std::string& file,
+                     int line) :
     m_message(message)
 {
     // Fix compiler warning.
@@ -61,7 +63,7 @@ Exception::Exception(std::string message, std::string file, int line) :
 #endif
 }
 
-Exception::Exception(QString message) :
+Exception::Exception(const QString& message) :
     m_message(message.toUtf8().data())
 {
 #ifndef NDEBUG
@@ -70,7 +72,7 @@ Exception::Exception(QString message) :
 #endif
 }
 
-Exception::Exception(QString message, QString file, int line) :
+Exception::Exception(const QString& message, QString file, int line) :
     m_message(message.toUtf8().data())
 {
     // Fix compiler warning.

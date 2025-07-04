@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,51 +19,54 @@
 #define RG_CHORD_H
 
 #include "Fingering.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "misc/Debug.h"
 
 #include <QString>
 
 #include <rosegardenprivate_export.h>
 
+
 namespace Rosegarden
 {
 
+
 class Event;
+
 
 namespace Guitar
 {
-    
+
 class Chord
 {
     friend bool operator<(const Chord&, const Chord&);
-    
+
 public:
     static const std::string EventType;
     static const short EventSubOrdering;
 
     Chord();
-    Chord(const QString& root, const QString& ext = QString());
-    Chord(const Event&);
+    explicit Chord(const QString& root, const QString& ext = QString());
+    explicit Chord(const Event&);
 
     Event* getAsEvent(timeT absoluteTime) const;
-        
+
     bool isEmpty() const   { return m_root.isEmpty(); }
     //@@@ bool operator!() const { return !m_root; }
-    
+
     bool isUserChord() const { return m_isUserChord; }
     void setUserChord(bool c) { m_isUserChord = c; }
-     
+
     QString getRoot() const { return m_root; }
-    void setRoot(QString r) { m_root = r; } 
+    void setRoot(const QString& r) { m_root = r; }
 
     QString getExt() const { return m_ext; }
-    void setExt(QString r) { m_ext = r.isEmpty() ? QString() : r; } 
-    
-    bool hasAltBass() const;
+    void setExt(QString r) { m_ext = r.isEmpty() ? QString() : r; }
+
+    // unused bool hasAltBass() const;
 
     Fingering getFingering() const { return m_fingering; }
-    void setFingering(Fingering f) { m_fingering = f; }
+    void setFingering(const Fingering& f) { m_fingering = f; }
 
     struct ChordCmp
     {
@@ -79,17 +82,18 @@ protected:
 
     QString m_root;
     QString m_ext;
-    
+
     Fingering m_fingering;
-    
+
     bool m_isUserChord;
 };
 
-bool operator<(const Chord&, const Chord&);    
+bool operator<(const Chord&, const Chord&);
 
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Guitar::Chord &);
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const Rosegarden::Guitar::Chord &);
+
 
 }
 

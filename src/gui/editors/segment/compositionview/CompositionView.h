@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -63,7 +63,7 @@ class SegmentRect;
  * class works together with CompositionModelImpl to provide the composition
  * user interface (the segment canvas).
  */
-class CompositionView : public RosegardenScrollView 
+class CompositionView : public RosegardenScrollView
 {
     Q_OBJECT
 public:
@@ -214,6 +214,8 @@ public:
     void drawSplitLine(int x, int y);
     /// See drawSplitLine().
     void hideSplitLine();
+
+    void setModeText(const QString& modeText);
 
 public slots:
 
@@ -463,7 +465,7 @@ private:
 
     /// Draw the track dividers.
     void drawTrackDividers(QPainter *segmentsLayerPainter, const QRect &clipRect);
-    const QColor m_trackDividerColor;
+    QColor m_trackDividerColor;
 
     /// Draw a rectangle on the given painter.
     /**
@@ -611,6 +613,9 @@ private:
 
     /// Performance testing.
     bool m_enableDrawing;
+    QString m_modeText;
+    bool m_modeTextChanged;
+    int m_modeTextWidth;
 };
 
 

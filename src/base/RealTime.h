@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -24,7 +24,7 @@
 
 struct timeval;
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 constexpr int nanoSecondsPerSecond = 1000000000;
@@ -42,13 +42,18 @@ constexpr int nanoSecondsPerSecond = 1000000000;
  */
 struct ROSEGARDENPRIVATE_EXPORT RealTime
 {
-    RealTime() : sec(0), nsec(0)  { }
+    RealTime()  { }
     RealTime(int s, int n);
 
-    int sec;
-    int nsec;
+    int sec{0};
+    int nsec{0};
 
-    static const RealTime zeroTime;
+    // Delayed construction to fix static init order fiasco.
+    static const RealTime &zero()
+    {
+        static RealTime zero(0,0);
+        return zero;
+    }
 
     // Conversions
 
@@ -64,7 +69,7 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
     static RealTime fromTimeval(const struct timeval &);
 
     // Convenience functions for handling sample frames
-    static long realTime2Frame(const RealTime &r, unsigned int sampleRate);
+    static long realTime2Frame(const RealTime &time, unsigned int sampleRate);
     static RealTime frame2RealTime(long frame, unsigned int sampleRate);
 
     /// Return "HH:MM:SS.mmm" string to the nearest millisecond.
@@ -112,10 +117,10 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 
     bool operator==(const RealTime &r) const
             { return (sec == r.sec  &&  nsec == r.nsec); }
- 
+
     bool operator!=(const RealTime &r) const
             { return !(r == *this); }
- 
+
     bool operator>=(const RealTime &r) const
     {
         if (sec == r.sec)
@@ -137,7 +142,7 @@ struct ROSEGARDENPRIVATE_EXPORT RealTime
 // I/O
 std::ostream &operator<<(std::ostream &out, const RealTime &rt);
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::RealTime &);
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const Rosegarden::RealTime &);
 
 QTextStream& operator<<(QTextStream& out, const RealTime &rt);
 

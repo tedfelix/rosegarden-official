@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -29,13 +29,14 @@ namespace Rosegarden
 {
 
 
+// cppcheck-suppress noConstructor
 class SelectionPropertyCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SelectionPropertyCommand)
 
 public:
-
-    SelectionPropertyCommand(ParameterPattern::Result result);
+    // cppcheck-suppress noConstructor
+    explicit SelectionPropertyCommand(const ParameterPattern::Result& result);
 
     void modifySegment() override;
 

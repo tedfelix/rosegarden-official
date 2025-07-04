@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -18,73 +18,59 @@
 
 #include "Quantizer.h"
 
+
 namespace Rosegarden {
+
 
 /// The "Grid quantizer"
 class BasicQuantizer : public Quantizer
 {
 public:
-    // The default unit is the shortest note type.  A unit of
-    // zero means do no quantization (rather pointlessly).
-    BasicQuantizer(timeT unit = -1, bool doDurations = false,
-                   int swingPercent = 0, int iteratePercent = 100);
-    BasicQuantizer(std::string source, std::string target,
-                   timeT unit = -1, bool doDurations = false,
-                   int swingPercent = 0, int iteratePercent = 100);
-    BasicQuantizer(const BasicQuantizer &);
-    ~BasicQuantizer() override;
+    // unit == -1 => Note::Shortest
+    // unit == 0 => No quantization, call setUnit() to change.
+    explicit BasicQuantizer(timeT unit = -1, bool doDurations = false,
+                            int swingPercent = 0, int iteratePercent = 100);
+    BasicQuantizer(const std::string& source,
+                   const std::string& target,
+                   timeT unit, bool doDurations,
+                   int swingPercent, int iteratePercent);
+    ~BasicQuantizer() override  { }
 
-    void setUnit(timeT unit) { m_unit = unit; }
-    timeT getUnit() const { return m_unit; }
+    void setUnit(timeT unit)  { m_unit = unit; }
+    timeT getUnit() const  { return m_unit; }
 
-    void setDoDurations(bool doDurations) { m_durations = doDurations; }
-    bool getDoDurations() const { return m_durations; }
+    void setRemoveSmaller(timeT unit)  { m_removeSmaller = unit; }
+    void setRemoveArticulations(bool remove)  { m_removeArticulations = remove; }
 
-    void setSwing(int percent) { m_swing = percent; }
-    int getSwing() const { return m_swing; }
-
-    void setIterative(int percent) { m_iterate = percent; }
-    int getIterative() const { return m_iterate; }
-    
-    /**
-     * Return the standard quantization units in descending order of
-     * unit duration
-     */
-    static std::vector<timeT> getStandardQuantizations();
-
-    /**
-     * Study the given segment; if all the events in it have times
-     * that match one or more of the standard quantizations, return
-     * the longest standard quantization unit to match.  Otherwise
-     * return 0.
-     */
-    static timeT getStandardQuantization(Segment *);
-
-    /**
-     * Study the given selection; if all the events in it have times
-     * that match one or more of the standard quantizations, return
-     * the longest standard quantization unit to match.  Otherwise
-     * return 0.
-     */
-    static timeT getStandardQuantization(EventSelection *);
+    bool getDoDurations() const  { return m_durations; }
 
 protected:
-    void quantizeSingle(Segment *,
-                                Segment::iterator) const override;
+    /// Quantize a single Event.
+    void quantizeSingle(Segment *segment,
+                        Segment::iterator eventIter) const override;
 
 private:
-    BasicQuantizer &operator=(const BasicQuantizer &); // not provided
+    // Hide copy ctor and op=
+    // ??? Actually these are perfectly copyable.  There is no need to do this.
+    BasicQuantizer(const BasicQuantizer &);
+    BasicQuantizer &operator=(const BasicQuantizer &);
 
+    // Quantization unit (e.g. 1/8 notes).  0 => No quantization.
     timeT m_unit;
+    // Also quantize durations.
     bool m_durations;
+    // Swing percentage.
     int m_swing;
+    // Iterative (partial) quantization percentage.
     int m_iterate;
 
-    static std::vector<timeT> m_standardQuantizations;
-    static void checkStandardQuantizations();
-    static timeT getUnitFor(Event *);
+    timeT m_removeSmaller{0};
+    bool m_removeArticulations{false};
+
 };
 
+
 }
+
 
 #endif

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,15 +18,16 @@
 #ifndef RG_SEGMENTINSERTCOMMAND_H
 #define RG_SEGMENTINSERTCOMMAND_H
 
+#include "base/TimeT.h"
 #include "base/Track.h"
 #include "document/Command.h"
-#include "base/Event.h"
 
 #include <QCoreApplication>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 class Segment;
@@ -55,14 +56,13 @@ public:
     
 private:
     Composition *m_composition;
-    Studio      *m_studio;
-    Segment     *m_segment;
-    int                      m_track;
-    timeT        m_startTime;
-    timeT        m_endTime;
+    Studio *m_studio;
+    Segment *m_segment;
+    int m_track;
+    timeT m_startTime;
+    timeT m_endTime;
     bool m_detached;
 };
-
 
 
 }

@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -205,7 +205,7 @@ DSSIPluginInstance::init()
 size_t
 DSSIPluginInstance::getLatency()
 {
-#ifdef DEBUG_DSSI 
+#ifdef DEBUG_DSSI
     //    std::cerr << "DSSIPluginInstance::getLatency(): m_latencyPort " << m_latencyPort << ", m_run " << m_run << std::endl;
 #endif
 
@@ -216,7 +216,7 @@ DSSIPluginInstance::getLatency()
                     m_inputBuffers[i][j] = 0.f;
                 }
             }
-            run(RealTime::zeroTime);
+            run(RealTime::zero());
 	}
 #ifdef DEBUG_DSSI
 
@@ -386,13 +386,13 @@ DSSIPluginInstance::~DSSIPluginInstance()
 void
 DSSIPluginInstance::instantiate(unsigned long sampleRate)
 {
+    if (!m_descriptor)
+        return ;
+
 #ifdef DEBUG_DSSI
     std::cout << "DSSIPluginInstance::instantiate - plugin unique id = "
     << m_descriptor->LADSPA_Plugin->UniqueID << std::endl;
 #endif
-
-    if (!m_descriptor)
-        return ;
 
     const LADSPA_Descriptor *descriptor = m_descriptor->LADSPA_Plugin;
 
@@ -655,7 +655,6 @@ DSSIPluginInstance::connectPorts()
 #endif
 
     Q_ASSERT(sizeof(LADSPA_Data) == sizeof(float));
-    Q_ASSERT(sizeof(sample_t) == sizeof(float));
 
     size_t inbuf = 0, outbuf = 0;
 
@@ -716,18 +715,19 @@ DSSIPluginInstance::setPortValue(unsigned int portNumber, float value)
 }
 
 void
-DSSIPluginInstance::setPortValueFromController(unsigned int port, int cv)
+DSSIPluginInstance::setPortValueFromController(unsigned int portNumber,
+                                               int controlValue)
 {
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::setPortValueFromController(" << port << ") to " << cv << std::endl;
+    std::cerr << "DSSIPluginInstance::setPortValueFromController(" << portNumber << ") to " << controlValue << std::endl;
 #endif
 
     const LADSPA_Descriptor *p = m_descriptor->LADSPA_Plugin;
-    LADSPA_PortRangeHintDescriptor d = p->PortRangeHints[port].HintDescriptor;
-    LADSPA_Data lb = p->PortRangeHints[port].LowerBound;
-    LADSPA_Data ub = p->PortRangeHints[port].UpperBound;
+    LADSPA_PortRangeHintDescriptor d = p->PortRangeHints[portNumber].HintDescriptor;
+    LADSPA_Data lb = p->PortRangeHints[portNumber].LowerBound;
+    LADSPA_Data ub = p->PortRangeHints[portNumber].UpperBound;
 
-    float value = (float)cv;
+    float value = (float)controlValue;
 
     if (!LADSPA_IS_HINT_BOUNDED_BELOW(d)) {
         if (!LADSPA_IS_HINT_BOUNDED_ABOVE(d)) {
@@ -747,7 +747,7 @@ DSSIPluginInstance::setPortValueFromController(unsigned int port, int cv)
         }
     }
 
-    setPortValue(port, value);
+    setPortValue(portNumber, value);
 }
 
 float
@@ -767,15 +767,17 @@ DSSIPluginInstance::getPortValue(unsigned int portNumber)
 }
 
 QString
-DSSIPluginInstance::configure(QString key,
-                              QString value)
+DSSIPluginInstance::configure(const QString& key,
+                              const QString& value)
 {
     if (!m_descriptor || !m_descriptor->configure)
         return QString();
 
-    if (key == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
+    QString myKey = key;
+
+    if (myKey == PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY) {
 #ifdef DSSI_PROJECT_DIRECTORY_KEY
-        key = DSSI_PROJECT_DIRECTORY_KEY;
+        myKey = DSSI_PROJECT_DIRECTORY_KEY;
 #else
 
         return QString();
@@ -785,11 +787,11 @@ DSSIPluginInstance::configure(QString key,
 
 
 #ifdef DEBUG_DSSI
-    std::cerr << "DSSIPluginInstance::configure(" << key << "," << value << ")" << std::endl;
+    std::cerr << "DSSIPluginInstance::configure(" << myKey << "," << value << ")" << std::endl;
 #endif
 
     char *message = m_descriptor->configure
-	(m_instanceHandle, key.toLocal8Bit().data(), value.toLocal8Bit().data());
+	(m_instanceHandle, myKey.toLocal8Bit().data(), value.toLocal8Bit().data());
 
     m_programCacheValid = false;
 
@@ -799,7 +801,7 @@ DSSIPluginInstance::configure(QString key,
     // as project directory
 #ifdef DSSI_RESERVED_CONFIGURE_PREFIX
 
-    if (key.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
+    if (myKey.startsWith(DSSI_RESERVED_CONFIGURE_PREFIX)) {
         return qm;
     }
 #endif
@@ -809,7 +811,7 @@ DSSIPluginInstance::configure(QString key,
             qm = QString(m_descriptor->LADSPA_Plugin->Label) + ": ";
         }
         qm = qm + QString(message);
-        
+
 	free(message);
     }
 
@@ -818,21 +820,23 @@ DSSIPluginInstance::configure(QString key,
 
 void
 DSSIPluginInstance::sendEvent(const RealTime &eventTime,
-                              const void *e)
+                              const void *event)
 {
-    snd_seq_event_t *event = (snd_seq_event_t *)e;
+    snd_seq_event_t *seqEvent = (snd_seq_event_t *)event;
 #ifdef DEBUG_DSSI_PROCESS
 
     std::cerr << "DSSIPluginInstance::sendEvent at " << eventTime << std::endl;
 #endif
 
-    snd_seq_event_t ev(*event);
+    snd_seq_event_t ev(*seqEvent);
 
     ev.time.time.tv_sec = eventTime.sec;
     ev.time.time.tv_nsec = eventTime.nsec;
 
-    // DSSI doesn't use MIDI channels, it uses run_multiple_synths instead.
-    ev.data.note.channel = 0;
+#ifdef DEBUG_DSSI_PROCESS
+    std::cerr << "DSSIPluginInstance::sendEvent: type channel " <<
+        (int)ev.type << " " << (int)ev.data.note.channel << std::endl;
+#endif
 
     m_eventBuffer.write(&ev, 1);
 }
@@ -875,6 +879,8 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     int evCount = 0;
     unsigned int evDeferred = 0;
 
+    if (!m_descriptor) return;
+
     bool needLock = false;
     if (m_descriptor->select_program)
         needLock = true;
@@ -893,7 +899,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
         goto done;
     }
 
-    if (!m_descriptor || !m_descriptor->run_synth) {
+    if (!m_descriptor->run_synth) {
         m_eventBuffer.skip(m_eventBuffer.getReadSpace());
         if (m_descriptor->LADSPA_Plugin->run) {
             m_descriptor->LADSPA_Plugin->run(m_instanceHandle, m_blockSize);
@@ -1003,7 +1009,7 @@ DSSIPluginInstance::run(const RealTime &blockTime)
     m_descriptor->run_synth(m_instanceHandle, m_blockSize,
                             localEventBuffer, evCount);
 
-#ifdef DEBUG_DSSI_PROCESS 
+#ifdef DEBUG_DSSI_PROCESS
     //    for (int i = 0; i < m_blockSize; ++i) {
     //	std::cout << m_outputBuffers[0][i] << " ";
     //	if (i % 8 == 0) std::cout << std::endl;
@@ -1091,11 +1097,14 @@ DSSIPluginInstance::runGrouped(const RealTime &blockTime)
 
     size_t index = 0;
     unsigned long *counts = (unsigned long *)
-                            alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
+        // cppcheck-suppress allocaCalled
+        alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
     unsigned long *evDeferred = (unsigned long *)
-                                alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
+        // cppcheck-suppress allocaCalled
+        alloca(m_groupLocalEventBufferCount * sizeof(unsigned long));
     LADSPA_Handle *instances = (LADSPA_Handle *)
-                               alloca(m_groupLocalEventBufferCount * sizeof(LADSPA_Handle));
+        // cppcheck-suppress allocaCalled
+        alloca(m_groupLocalEventBufferCount * sizeof(LADSPA_Handle));
 
     for (PluginSet::iterator i = s.begin(); i != s.end(); ++i) {
 
@@ -1237,5 +1246,3 @@ DSSIPluginInstance::cleanup()
 
 
 }
-
-

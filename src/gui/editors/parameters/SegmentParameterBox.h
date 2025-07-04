@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -57,7 +57,7 @@ class SegmentParameterBox : public RosegardenParameterBox
     Q_OBJECT
 
 public:
-    SegmentParameterBox(QWidget *parent);
+    explicit SegmentParameterBox(QWidget *parent);
 
     /// Segment > Toggle Repeat
     void toggleRepeat();
@@ -84,7 +84,7 @@ private slots:
     void slotColourChanged(int);
     void slotDocColoursChanged();
 
-    void slotForNotationClicked(bool checked);
+    void slotExcludeFromPrintingClicked(bool checked);
 
     void slotChangeLinkTranspose();
     void slotResetLinkTranspose();
@@ -133,8 +133,8 @@ private:
     ColorCombo *m_color;
     void updateColor();
 
-    TristateCheckBox *m_forNotation;
-    void updateForNotation();
+    TristateCheckBox *m_excludeFromPrinting;
+    void updateExcludeFromPrinting();
 
 };
 

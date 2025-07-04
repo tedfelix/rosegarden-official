@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -31,6 +31,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <utility>
 #include <vector>
 #include <iterator>
 #include <cstdio>
@@ -83,14 +84,12 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     m_snapGridSize(-1),
     m_viewFeatures(0),
     m_autoFade(false),
-    m_fadeInTime(Rosegarden::RealTime::zeroTime),
-    m_fadeOutTime(Rosegarden::RealTime::zeroTime),
     m_segmentLinker(nullptr),
     m_isTmp(0),
     m_participation(normal),
     m_verseCount(-1),   // -1 => computation needed
     m_verse(0),
-    m_forNotation(true)
+    m_excludeFromPrinting(false)
 {
     RG_DEBUG << "ctor" << this;
 }
@@ -142,7 +141,7 @@ Segment::Segment(const Segment &segment):
     m_participation(segment.m_participation),
     m_verseCount(-1),   // -1 => computation needed
     m_verse(0),   // Needs a global recomputation on the whole composition
-    m_forNotation(segment.m_forNotation)
+    m_excludeFromPrinting(segment.m_excludeFromPrinting)
 {
     RG_DEBUG << "cctor" << this;
     for (const_iterator it = segment.begin();
@@ -170,7 +169,7 @@ Segment::~Segment()
     if (!m_observers.empty()) {
         RG_WARNING << "dtor: Warning: " << m_observers.size() << " observers still extant";
         RG_WARNING << "Observers are:";
-        for (ObserverSet::const_iterator i = m_observers.begin();
+        for (ObserverList::const_iterator i = m_observers.begin();
              i != m_observers.end(); ++i) {
             RG_WARNING << " " << (void *)(*i) << " [" << typeid(**i).name() << "]";
         }
@@ -215,18 +214,12 @@ Segment::getRealSegment() const {
 }
 
 void
-Segment::setForNotation(bool f, bool all) {
-    if (m_segmentLinker && all) {
-        // If the segment is linked, set the flag for each segment
-        m_segmentLinker->setForNotation(f);
-    } else {
-        m_forNotation = f;
-    }
-}
-
-bool
-Segment::getForNotation() const {
-    return m_forNotation;
+Segment::setExcludeFromPrinting(bool exclude, bool linkedSegmentsAlso)
+{
+    if (m_segmentLinker  &&  linkedSegmentsAlso)
+        m_segmentLinker->setExcludeFromPrinting(exclude);
+    else
+        m_excludeFromPrinting = exclude;
 }
 
 void
@@ -260,7 +253,7 @@ bool
 Segment::isTrulyLinked() const {
     // If there is no SegmentLinker the segment is not linked
     if (!m_segmentLinker) return false;
-    
+
     // If segment is a temporary one or is out of composition return false
     // That's arbitrary, but this method is designed to be used from
     // segments which are inside the composition.
@@ -298,7 +291,7 @@ bool
 Segment::isLinkedTo(Segment * seg) const {
     if (!m_segmentLinker) return false;
 
-    SegmentLinker * otherSegmentLinker = seg->getLinker();
+    const SegmentLinker * otherSegmentLinker = seg->getLinker();
     if (!otherSegmentLinker) return false;
 
     return m_segmentLinker == otherSegmentLinker;
@@ -312,22 +305,22 @@ Segment::isPlainlyLinkedTo(Segment * seg) const {
 }
 
 void
-Segment::setTrack(TrackId id)
+Segment::setTrack(TrackId trackId)
 {
     if (m_participation != normal) {
-        m_trackId = id;
+        m_trackId = trackId;
         return;
     }
-    
+
     Composition *c = m_composition;
     if (c) c->weakDetachSegment(this); // sets m_composition to 0
     TrackId oldTrackId = m_trackId;
-    m_trackId = id;
+    m_trackId = trackId;
     if (c) {
         c->weakAddSegment(this);
         c->updateRefreshStatuses();
         c->distributeVerses();
-        c->notifySegmentTrackChanged(this, oldTrackId, id);
+        c->notifySegmentTrackChanged(this, oldTrackId, trackId);
     }
 }
 
@@ -409,7 +402,7 @@ Segment::setStartTime(timeT t)
 
     /** This is effectively calling Segment::erase on each event after
         copyMoving it.  Segment::erase did the following:
-        
+
         1. base::erase
 	2. Delete the event
 	3. Kept m_startTime up to date
@@ -438,7 +431,7 @@ Segment::setStartTime(timeT t)
     base::clear();
 
     if (m_clefKeyList) { m_clefKeyList->clear(); }
-    
+
     m_endTime = previousEndTime + dt;
     if (m_endMarkerTime) *m_endMarkerTime += dt;
 
@@ -467,7 +460,7 @@ Segment::setStartTime(timeT t)
     }
 
     // Handle updates and notifications just once.
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->allEventsChanged(this);
     }
@@ -545,7 +538,7 @@ Segment::iterator
 Segment::getEndMarker() const
 {
     if (m_endMarkerTime) {
-        return findTime(*m_endMarkerTime);
+        return findTimeConst(*m_endMarkerTime);
     } else {
         return end();
     }
@@ -651,7 +644,7 @@ Segment::erase(iterator pos)
     Event *e = *pos;
 
     Q_CHECK_PTR(e);
-    
+
     timeT t0 = e->getAbsoluteTime();
     timeT t1 = t0 + e->getGreaterDuration();
 
@@ -662,7 +655,7 @@ Segment::erase(iterator pos)
 
     if (t0 == m_startTime && begin() != end()) {
         timeT startTime = (*begin())->getAbsoluteTime();
-        
+
         // Don't send any notification if startTime doesn't change.
         if (startTime != m_startTime) {
             if (m_composition) m_composition->setSegmentStartTime(this, startTime);
@@ -679,8 +672,8 @@ Segment::erase(iterator pos)
 void
 Segment::erase(iterator from, iterator to)
 {
-    timeT startTime = 0, endTime = m_endTime;
-    if (from != end()) startTime = (*from)->getAbsoluteTime();
+    timeT startTimeOuter = 0, endTime = m_endTime;
+    if (from != end()) startTimeOuter = (*from)->getAbsoluteTime();
     if (to != end()) endTime = (*to)->getAbsoluteTime() + (*to)->getGreaterDuration();
 
     // Not very efficient, but without an observer event for
@@ -701,10 +694,10 @@ Segment::erase(iterator from, iterator to)
         i = j;
     }
 
-    if (startTime == m_startTime && begin() != end()) {
-        timeT startTime = (*begin())->getAbsoluteTime();
-        if (m_composition) m_composition->setSegmentStartTime(this, startTime);
-        else m_startTime = startTime;
+    if (startTimeOuter == m_startTime  &&  begin() != end()) {
+        const timeT startTimeInner = (*begin())->getAbsoluteTime();
+        if (m_composition) m_composition->setSegmentStartTime(this, startTimeInner);
+        else m_startTime = startTimeInner;
         notifyStartChanged(m_startTime);
     }
 
@@ -712,7 +705,7 @@ Segment::erase(iterator from, iterator to)
         updateEndTime();
     }
 
-    updateRefreshStatuses(startTime, endTime);
+    updateRefreshStatuses(startTimeOuter, endTime);
 }
 
 
@@ -732,14 +725,15 @@ Segment::eraseSingle(Event* e)
 
 
 Segment::iterator
-Segment::findSingle(Event* e)
+Segment::findSingle(const Event* e) const
 {
+    Event* e1 = const_cast<Event*>(e);
     iterator res = end();
 
-    std::pair<iterator, iterator> interval = equal_range(e);
+    std::pair<iterator, iterator> interval = equal_range(e1);
 
     for (iterator i = interval.first; i != interval.second; ++i) {
-        if (*i == e) {
+        if (*i == e1) {
             res = i;
             break;
         }
@@ -749,18 +743,10 @@ Segment::findSingle(Event* e)
 
 
 Segment::iterator
-Segment::findTime(timeT t)
+Segment::findNearestTime(timeT time)
 {
-    Event dummy("dummy", t, 0, MIN_SUBORDERING);
-    return lower_bound(&dummy);
-}
-
-
-Segment::iterator
-Segment::findNearestTime(timeT t)
-{
-    iterator i = findTime(t);
-    if (i == end() || (*i)->getAbsoluteTime() > t) {
+    iterator i = findTime(time);
+    if (i == end() || (*i)->getAbsoluteTime() > time) {
         if (i == begin()) return end();
         else --i;
     }
@@ -859,7 +845,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     // the start and end times, consider separately each of the sections
     // they divide the range up into.
 
-    Composition *composition = getComposition();
+    const Composition *composition = getComposition();
     if (composition) {
         int timeSigNo = composition->getTimeSignatureNumberAt(startTime);
         if (timeSigNo < composition->getTimeSignatureCount() - 1) {
@@ -1063,8 +1049,6 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
                        (lastNoteEnds, endTime - lastNoteEnds));
     }
 
-    timeT duration;
-
     // For each gap, fill it in with rests.
     for (size_t gi = 0; gi < gaps.size(); ++gi) {
 
@@ -1073,7 +1057,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 #endif
 
         startTime = gaps[gi].first;
-        duration = gaps[gi].second;
+        timeT duration = gaps[gi].second;
 
         if (duration >= Note(Note::Shortest).getDuration()) {
             fillWithRests(startTime, startTime + duration);
@@ -1161,7 +1145,8 @@ Segment::setDelay(timeT delay)
     m_delay = delay;
     if (m_composition) {
         // don't updateRefreshStatuses() - affects playback only
-        m_composition->notifySegmentEventsTimingChanged(this, delay, RealTime::zeroTime);
+        m_composition->notifySegmentEventsTimingChanged(
+                this, delay, RealTime::zero());
     }
 }
 
@@ -1450,12 +1435,12 @@ Segment::getRepeatEndTime() const
 
     if (m_repeating && m_composition) {
         timeT endTime = m_composition->getEndMarker();
-        
+
         for (Composition::iterator i(m_composition->begin());
              i != m_composition->end(); ++i) {
-          
+
             if ((*i)->getTrack() != getTrack()) continue;
-            
+
             timeT t1 = (*i)->getStartTime();
             timeT t2 = (*i)->getEndMarkerTime();
 
@@ -1493,7 +1478,7 @@ Segment::notifyAdd(Event *e) const
     Profiler profiler("Segment::notifyAdd()");
     checkInsertAsClefKey(e);
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->eventAdded(this, e);
     }
@@ -1516,7 +1501,7 @@ Segment::notifyRemove(Event *e) const
         }
     }
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->eventRemoved(this, e);
     }
@@ -1526,7 +1511,7 @@ Segment::notifyRemove(Event *e) const
 void
 Segment::notifyAppearanceChange() const
 {
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->appearanceChanged(this);
     }
@@ -1538,7 +1523,7 @@ Segment::notifyStartChanged(timeT newTime)
     Profiler profiler("Segment::notifyStartChanged()");
     if (m_notifyResizeLocked) return;
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->startChanged(this, newTime);
     }
@@ -1556,7 +1541,7 @@ Segment::notifyEndMarkerChange(bool shorten)
 
     if (m_notifyResizeLocked) return;
 
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->endMarkerTimeChanged(this, shorten);
     }
@@ -1569,7 +1554,7 @@ Segment::notifyEndMarkerChange(bool shorten)
 void
 Segment::notifyTransposeChange()
 {
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->transposeChanged(this, m_transpose);
     }
@@ -1579,7 +1564,7 @@ Segment::notifyTransposeChange()
 void
 Segment::notifySourceDeletion() const
 {
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
          i != m_observers.end(); ++i) {
         (*i)->segmentDeleted(this);
     }
@@ -1604,10 +1589,10 @@ Segment::unlockResizeNotifications()
         if (*m_memoEndMarkerTime > *m_endMarkerTime) shorten = true;
         else if (*m_memoEndMarkerTime == *m_endMarkerTime) return;
     }
-    
+
     // What if m_memoEndMarkerTime=0 and m_endMarkerTime!=0 (or the
     // opposite) ?   Is such a case possible ?
-    
+
     if (m_memoEndMarkerTime) delete m_memoEndMarkerTime;
     m_memoEndMarkerTime = nullptr;
     notifyEndMarkerChange(shorten);
@@ -1688,6 +1673,38 @@ Segment::countVerses()
     }
 }
 
+int
+Segment::lyricsPositionsCount()
+{
+    bool firstNote = true;
+    timeT lastTime = getStartTime();
+
+    // How many lyrics syllables the segment can carry ?
+    // We have to count the notes.
+
+    int count = 0;
+    for (Segment::iterator i = begin(); isBeforeEndMarker(i); ++i) {
+
+        // Only look at notes
+        if (!(*i)->isa(Note::EventType)) continue;
+
+//   Don't do this : LilyPond counts tied notes
+//         // When notes are tied, only look at the first one
+//         if ((*i)->has(BaseProperties::TIED_BACKWARD) &&
+//             (*i)->get<Bool>(BaseProperties::TIED_BACKWARD)) continue;
+
+        // A chord is seen as one note only
+        timeT myTime = (*i)->getNotationAbsoluteTime();
+        if ((myTime > lastTime) || firstNote) {
+            count++;
+            lastTime = myTime;
+            firstNote = false;
+        }
+    }
+
+    return count;
+}
+
 SegmentMultiSet&
 Segment::
 getCompositionSegments()
@@ -1738,11 +1755,11 @@ void
 Segment::dumpObservers()
 {
     RG_DEBUG << "Observers of segment " << this << " are:";
-     for (ObserverSet::const_iterator i = m_observers.begin();
+     for (ObserverList::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
         RG_DEBUG << "  " << (*i);
     }
-    for (ObserverSet::const_iterator i = m_observers.begin();
+    for (ObserverList::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
         Segment *seg = dynamic_cast<Segment *>(*i);
         if (seg)
@@ -1754,7 +1771,7 @@ Segment::dumpObservers()
     }
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Segment &t)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Rosegarden::Segment &t)
 {
 //    dbg << "Segment for instrument " << t.getTrack()
 //        << " starting at " << t.getStartTime() << '\n';

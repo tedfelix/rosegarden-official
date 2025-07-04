@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,7 +19,6 @@
 #include "OpenOrCloseRangeCommand.h"
 
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -165,12 +164,17 @@ OpenOrCloseRangeCommand::execute()
         // If the paste point is prior to the loop range
         if (m_beginTime <= m_loopBegin) {
             // Shift the loop range right.
-            doc->setLoop(m_loopBegin + offset, m_loopEnd + offset);
+            m_composition->setLoopStart(m_loopBegin + offset);
+            m_composition->setLoopEnd(m_loopEnd + offset);
+            emit doc->loopChanged();
+
         } else if (m_beginTime < m_loopEnd) {
             // The paste point is within the loop range
             
             // Just shift the end point to expand the loop range
-            doc->setLoop(m_loopBegin, m_loopEnd + offset);
+            m_composition->setLoopStart(m_loopBegin);
+            m_composition->setLoopEnd(m_loopEnd + offset);
+            emit doc->loopChanged();
         } else {
             // The paste point is after the loop range, so leave it alone.
         }
@@ -204,7 +208,10 @@ OpenOrCloseRangeCommand::unexecute()
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
 
     // Put back the loop range
-    doc->setLoop(m_loopBegin, m_loopEnd);
+    m_composition->setLoopStart(m_loopBegin);
+    m_composition->setLoopEnd(m_loopEnd);
+    emit doc->loopChanged();
+
     m_hasExecuted = false;
 }
 

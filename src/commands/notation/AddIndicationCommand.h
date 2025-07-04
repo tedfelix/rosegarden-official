@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,15 +20,17 @@
 #define RG_ADDINDICATIONCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include <string>
-#include <QString>
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
+#include <QString>
+
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class EventSelection;
 class Event;
@@ -40,7 +42,8 @@ class AddIndicationCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddIndicationCommand)
 
 public:
-    AddIndicationCommand(std::string indicationType,
+
+    AddIndicationCommand(const std::string& indicationType,
                          EventSelection &selection);
     ~AddIndicationCommand() override;
 
@@ -58,7 +61,7 @@ public:
     }
 
     static QString getGlobalName(std::string indicationType);
-    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+    static std::string getArgument(const QString& actionName, CommandArgumentQuerier &);
 
     static void registerCommand(CommandRegistry *r);
 
@@ -70,7 +73,7 @@ protected:
     timeT m_indicationDuration;
     Event *m_lastInsertedEvent;
 };
-    
+
 
 
 }

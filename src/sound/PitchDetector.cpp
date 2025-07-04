@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -48,11 +48,11 @@ PitchDetector::MethodVector::MethodVector() {
     append( PARTIAL );
 }
 
-PitchDetector::PitchDetector( int fs, int ss, int sr ) {
+PitchDetector::PitchDetector( int frameSize, int stepSize, int sampleRate ) {
 
-    m_frameSize = fs;
-    m_stepSize = ss;
-    m_sampleRate = sr;
+    m_frameSize = frameSize;
+    m_stepSize = stepSize;
+    m_sampleRate = sampleRate;
 
     m_frame = (float *)malloc( sizeof(float) * (m_frameSize+m_stepSize) );
 
@@ -387,20 +387,27 @@ double PitchDetector::partial() {
 
 }
 
+/* unused
 int PitchDetector::getFrameSize() const {
     return m_frameSize;
 }
+*/
 
 void PitchDetector::setFrameSize(int nextFrameSize) {
     m_frameSize = nextFrameSize;
 }
 
+/* unused
 int PitchDetector::getStepSize() const {
     return m_stepSize;
 }
+*/
+
+/* unused
 void PitchDetector::setStepSize(int nextStepSize) {
     m_stepSize = nextStepSize;
 }
+*/
 
 int PitchDetector::getBufferSize() const {
     return m_frameSize + m_stepSize;

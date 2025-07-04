@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,20 +21,20 @@
 
 #include "base/NotationTypes.h"
 #include "document/BasicCommand.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
+#include "base/TimeT.h"
 #include "misc/Strings.h"
 
-
-class Add;
+#include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
+
 class Segment;
 class Event;
+
 
 //!!! Note, the shouldIgnorePercussion parameter probably shouldn't have been
 // added to the individual KeyInsertionCommand in the first place, but I haven't
@@ -53,14 +53,14 @@ class KeyInsertionCommand : public BasicCommand
 public:
     KeyInsertionCommand(Segment &segment,
                         timeT time,
-                        Key key,
+                        const Key& key,
                         bool shouldConvert,
                         bool shouldTranspose,
                         bool shouldTransposeKey,
 			bool shouldIgnorePercussion);
     ~KeyInsertionCommand() override;
 
-    static QString getGlobalName(Key *key = nullptr) {
+    static QString getGlobalName(const Key *key = nullptr) {
         if (key) {
             return tr("Change to &Key %1...").arg(strtoqstr(key->getName()));
         } else {

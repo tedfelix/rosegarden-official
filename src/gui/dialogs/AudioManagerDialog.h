@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -35,7 +35,6 @@ class QTreeWidgetItem;
 class QLabel;
 class QDropEvent;
 class QCloseEvent;
-class QShortcut;
 class QUrl;
 
 //class KURL;
@@ -85,10 +84,6 @@ public:
     //
     void setAudioSubsystemStatus(bool ok);
 
-    // Return the shortcut object
-    //
-    QShortcut* getShortcuts() { return m_shortcuts; }
-
     // Add a new file to the audio file manager
     //
     bool addAudioFile(const QString &filePath);
@@ -97,7 +92,7 @@ public:
 public slots:
     void slotAdd();
     void slotPlayPreview();
-    void slotRename();
+    // unused void slotRename();
     void slotInsert();
     void slotRemove();
     void slotRemoveAll();
@@ -106,9 +101,9 @@ public slots:
     void slotExportAudio();
     void slotHelpRequested();
     void slotHelpAbout();
-	
+
 	//void slotItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
-	
+
     // get selection
 	void slotSelectionChanged();
 //	void slotSelectionChanged(QTreeWidgetItem *);
@@ -136,7 +131,7 @@ public slots:
     /**
      * Cancel the currently playing audio file
      */
-    void slotCancelPlayingAudioFile();
+    // unused void slotCancelPlayingAudioFile();
 
     void slotClose();
 
@@ -189,8 +184,6 @@ protected:
     AudioListView *m_fileList;
     WarningGroupBox    *m_wrongSampleRates;
     RosegardenDocument *m_doc;
-
-    QShortcut           *m_shortcuts;
 
     AudioFileId  m_playingAudioFile;
     AudioPlayingDialog      *m_audioPlayingDialog;

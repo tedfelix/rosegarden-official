@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -20,8 +20,6 @@
 
 // ALSA
 #include <alsa/asoundlib.h>
-#include <alsa/seq_event.h>
-#include <alsa/version.h>
 
 #include "MappedInstrument.h"
 #include "Midi.h"
@@ -59,7 +57,7 @@ AlsaPortDescription::AlsaPortDescription(Instrument::InstrumentType type,
 
 bool
 AlsaPortCmp::operator()(QSharedPointer<AlsaPortDescription> a1,
-                        QSharedPointer<AlsaPortDescription> a2)
+                        QSharedPointer<AlsaPortDescription> a2) const
 {
     // Ordering for ALSA ports in the list:
     //

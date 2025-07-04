@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
  
     This program is free software; you can redistribute it and/or
@@ -19,6 +19,7 @@
 
 #include <vector>
 
+#include <QFile>
 #include <QProgressDialog>
 
 #include "AudioFile.h"
@@ -26,17 +27,10 @@
 #include "PeakFile.h"
 #include "misc/Debug.h"
 
+
 namespace Rosegarden
 {
 
-
-PeakFileManager::PeakFileManager()
-{
-}
-
-PeakFileManager::~PeakFileManager()
-{
-}
 
 bool
 PeakFileManager::insertAudioFile(AudioFile *audioFile)
@@ -72,6 +66,20 @@ PeakFileManager::removeAudioFile(AudioFile *audioFile)
     }
 
     return false;
+}
+
+void
+PeakFileManager::deletePeakFile(AudioFile *audioFile)
+{
+    if (audioFile->getType() == WAV) {
+        PeakFile *peakFile = getPeakFile(audioFile);
+        if (!peakFile)
+            return;
+
+        peakFile->close();
+        QFile::remove(peakFile->getAbsoluteFilePath());
+        removeAudioFile(audioFile);
+    }
 }
 
 PeakFile *
@@ -143,7 +151,7 @@ void
 PeakFileManager::generatePeaks(AudioFile *audioFile)
 {
 #ifdef DEBUG_PEAKFILEMANAGER
-    RG_DEBUG << "generatePeaks() - generating peaks for \"" << audioFile->getFilename() << "\"";
+    RG_DEBUG << "generatePeaks() - generating peaks for \"" << audioFile->getAbsoluteFilePath() << "\"";
 #endif
 
     if (audioFile->getType() == WAV) {
@@ -154,15 +162,15 @@ PeakFileManager::generatePeaks(AudioFile *audioFile)
         // Just write out a peak file
         //
         if (currentPeakFile->write() == false) {
-            RG_WARNING << "generatePeaks() - Can't write peak file for " << audioFile->getFilename() << " - no preview generated";
+            RG_WARNING << "generatePeaks() - Can't write peak file for " << audioFile->getAbsoluteFilePath() << " - no preview generated";
             throw BadPeakFileException(
-                    audioFile->getFilename(), __FILE__, __LINE__);
+                    audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
         }
 
         // If we were cancelled, don't leave a partial peak file lying
         // around.
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
-            QFile file(currentPeakFile->getFilename());
+            QFile file(currentPeakFile->getAbsoluteFilePath());
             file.remove();
             return;
         }

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -17,11 +17,6 @@
 #ifndef RG_SEGMENT_H
 #define RG_SEGMENT_H
 
-#include <set>
-#include <list>
-#include <string>
-#include <memory>
-
 #include "Track.h"
 #include "Event.h"
 #include "base/NotationTypes.h"
@@ -33,8 +28,23 @@
 #include <QColor>
 #include <QSharedPointer>
 
+#include <set>
+#include <list>
+#include <string>
+#include <memory>
+
+
 namespace Rosegarden
 {
+
+
+class SegmentObserver;
+class Quantizer;
+class BasicQuantizer;
+class Composition;
+class SegmentLinker;
+class BasicCommand;
+
 
 /// A refresh flag with a time range.
 class SegmentRefreshStatus : public RefreshStatus
@@ -51,13 +61,6 @@ protected:
     timeT m_from;
     timeT m_to;
 };
-
-class SegmentObserver;
-class Quantizer;
-class BasicQuantizer;
-class Composition;
-class SegmentLinker;
-class BasicCommand;
 
 /// Container of Events.
 /**
@@ -117,8 +120,8 @@ public:
     /**
      * Construct a Segment of a given type with a given formal starting time.
      */
-    Segment(SegmentType segmentType = Internal,
-            timeT startTime = 0);
+    explicit Segment(SegmentType segmentType = Internal,
+                     timeT startTime = 0);
 
     /**
      * Virtual copy constructor interface, in case this is actually a linked segment
@@ -420,20 +423,21 @@ public:
      * Returns an iterator pointing to that specific element,
      * end() otherwise
      */
-    iterator findSingle(Event*);
-
-    const_iterator findSingle(Event *e) const {
-        return const_iterator(((Segment *)this)->findSingle(e));
-    }
+    iterator findSingle(const Event*) const;
 
     /**
      * Returns an iterator pointing to the first element starting at
      * or beyond the given absolute time
      */
-    iterator findTime(timeT time);
+    iterator findTime(timeT time)
+    {
+        Event temp("temp", time, 0, MIN_SUBORDERING);
+        return lower_bound(&temp);
+    }
 
-    const_iterator findTime(timeT time) const {
-        return const_iterator(((Segment *)this)->findTime(time));
+    const_iterator findTimeConst(timeT time) const {
+        Event temp("temp", time, 0, MIN_SUBORDERING);
+        return lower_bound(&temp);
     }
 
     /**
@@ -443,15 +447,11 @@ public:
      */
     iterator findNearestTime(timeT time);
 
-    const_iterator findNearestTime(timeT time) const {
-        return const_iterator(((Segment *)this)->findNearestTime(time));
-    }
-
 
     //////
     //
     // ADVANCED, ESOTERIC, or PLAIN STUPID MANIPULATION
-    
+
     /**
      * Returns the range [start, end[ of events which are at absoluteTime
      */
@@ -572,7 +572,7 @@ public:
     * default clef and/or key signature as needed.
     */
     void enforceBeginWithClefAndKey();
-    
+
     /**
      * Stop sending move or resize notifications to the observers.
      * (May be useful to avoid sending lot of unnecessary resize notifications
@@ -581,15 +581,15 @@ public:
      * Should be used with caution!
      */
     void lockResizeNotifications();
-    
+
     /**
      * Revert lockResizeNotifications() effect. If segment has been move
      * or resized, send one, and only one, notification to the observers.
      * Should only be called after lockResizeNotifications() has been called.
      * Nested lock/unlock calls are not allowed currently.
-     */ 
-    void unlockResizeNotifications();    
-    
+     */
+    void unlockResizeNotifications();
+
     /**
      * YG: This one is only for debug
      */
@@ -660,6 +660,11 @@ public:
      * a notation editor)
      */
     void setVerse (int verse) { m_verse = verse; }
+
+    /**
+     * Return how many syllables of lyrics the segment can carry.
+     */
+    int lyricsPositionsCount();
 
 
 
@@ -776,7 +781,7 @@ public:
 
     // Get the segments in the current composition.
     static SegmentMultiSet& getCompositionSegments();
-    
+
     void  addObserver(SegmentObserver *obs);
     void removeObserver(SegmentObserver *obs);
 
@@ -802,7 +807,7 @@ public:
 
    /**
     * Return true if the segment is connected to a SegmentLinker.
-    * This doesn't always mean that the segment is really linked : 
+    * This doesn't always mean that the segment is really linked :
     *    - The segment may be the only one referenced by the SegmentLinker.
     *      (Probably this should not be, but nevertheless is not impossible.)
     *    - The segment is a repeating one opened in the notation editor.
@@ -815,7 +820,7 @@ public:
      * Return true if the segment is link to at least one other segment
      * which is not a temporary one nor being outside ofthe composition
      * (i.e. deleted).
-     */ 
+     */
     bool isTrulyLinked() const;
 
     /**
@@ -823,18 +828,18 @@ public:
      * local change (as transpositon...).
      * This method is intended to help exporting linked segments as repeat with
      * volta in LilyPond.
-     */ 
+     */
     bool isPlainlyLinked() const;
 
     /**
      * Return true if the given segment is linked to this.
-     */ 
+     */
     bool isLinkedTo(Segment *) const;
 
     /**
      * Return true if the given segment is a plain link linked to the current
      * object which is equally a plain link
-     */ 
+     */
     bool isPlainlyLinkedTo(Segment *) const;
 
     SegmentLinker * getLinker() const { return m_segmentLinker; }
@@ -875,7 +880,7 @@ public:
      * that it is temporary or read-only.
      **/
     void setGreyOut();
-    
+
     /**
      * Set the current segment as the reference of the linked segment group and
      * return true.
@@ -896,18 +901,16 @@ public:
      * May return 0 if segment is linked but no reference is defined.
      */
     const Segment * getRealSegment() const;
-    
-    /**
-     * Set the flag f for using this segment in notation.
-     * If all is false, the flag is not set for the linked segments.
-     * The default is to set the flag for each of the linked segments.
-     */
-    void setForNotation(bool f, bool all = true);
 
+    /// Exclude from printing (lilypond).
     /**
-     * Get the flag for using this segment in notation
+     * linkedSegmentsAlso parameter is provided to prevent recursion when
+     * setting the linked segments.  See
+     * SegmentLinker::setExcludeFromPrinting().
      */
-    bool getForNotation() const;
+    void setExcludeFromPrinting(bool exclude, bool linkedSegmentsAlso = true);
+    /// Exclude from printing (lilypond).
+    bool getExcludeFromPrinting() const  { return m_excludeFromPrinting; }
 
     /// Mark a Segment
     /**
@@ -937,7 +940,7 @@ private:
      * Used by getVerseCount().
      */
     void countVerses();
-    
+
     Composition *m_composition; // owns me, if it exists
 
     timeT  m_startTime;
@@ -987,8 +990,8 @@ private:
 
 private: // stuff to support SegmentObservers
 
-    typedef std::list<SegmentObserver *> ObserverSet;
-    ObserverSet m_observers;
+    typedef std::list<SegmentObserver *> ObserverList;
+    ObserverList m_observers;
 
     void notifyAdd(Event *) const;
     void notifyRemove(Event *) const;
@@ -997,17 +1000,20 @@ private: // stuff to support SegmentObservers
     void notifyEndMarkerChange(bool shorten);
     void notifyTransposeChange();
     void notifySourceDeletion() const;
-    
+
     bool m_notifyResizeLocked;
     timeT m_memoStart;
     timeT *m_memoEndMarkerTime;
 
 signals:
+
     void contentsChanged(timeT start, timeT end);
- public:
+
+public:
+
     void signalChanged(timeT start, timeT end)
     { emit contentsChanged(start,end); }
-    
+
 private:
 
     // assignment operator not provided
@@ -1046,11 +1052,11 @@ private:
     int m_verseCount;  // -1 means not computed still
     int m_verse;       // Used to distribute lyrics among repeated segments
 
-    bool m_forNotation;
+    bool m_excludeFromPrinting;
 
 };
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &, const Rosegarden::Segment &);
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug, const Rosegarden::Segment &);
 
 // Make it a global name.
 typedef Segment::SegmentMultiSet SegmentMultiSet;
@@ -1097,9 +1103,19 @@ public:
     virtual void transposeChanged(const Segment *, int /*transpose*/) { }
 
     /**
-     * Called from the segment dtor
+     * Called from the segment dtor.
      * All observers must implement this and call removeObserver() to
      * remove themselves as observers.
+     *
+     * ??? But this is a const pointer, so we cannot call removeObserver().
+     *     It's optional.  Most don't.  And you'll still get the extant
+     *     observers warning even if you do.
+     *
+     * ??? This doesn't appear to be used very much.  And it's a pure virtual
+     *     which is annoying.
+     *
+     * This seems very specialized and unreliable.  Consider using
+     * CompositionObserver::segmentRemoved() instead of this.
      */
     virtual void segmentDeleted(const Segment *) = 0;
 };
@@ -1108,10 +1124,8 @@ public:
 class ROSEGARDENPRIVATE_EXPORT SegmentHelper
 {
 protected:
-    SegmentHelper(Segment &t) : m_segment(t) { }
+    explicit SegmentHelper(Segment &t) : m_segment(t) { }
     virtual ~SegmentHelper();
-
-    typedef Segment::iterator iterator;
 
     Segment &segment() { return m_segment; }
 

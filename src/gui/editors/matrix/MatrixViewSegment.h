@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,18 +39,20 @@ public:
     void endMarkerTimeChanged(const Segment *segment, bool shorten) override;
 
     SegmentRefreshStatus &getRefreshStatus() const;
-    void resetRefreshStatus();
+    // unused void resetRefreshStatus();
 
     void updateElements(timeT from, timeT to);
 
     void updateAll();
+
+    MatrixScene* getMatrixScene() const { return m_scene; }
 
 protected:
 //!!!    const MidiKeyMapping *getKeyMapping() const;
 
     /**
      * Override from ViewSegment
-     * Wrap only notes 
+     * Wrap only notes
      */
     bool wrapEvent(Event*) override;
 

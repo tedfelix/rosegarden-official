@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -40,14 +40,10 @@ class SqueezedLabelPrivate;
  *
  * @author Ronny Standtke <Ronny.Standtke@gmx.de>
  */
-
-/*
- * QLabel
- */
 class SqueezedLabel : public QLabel
 {
     Q_OBJECT
-    Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
+    //Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
 
 public:
     /**
@@ -68,13 +64,20 @@ public:
     /**
     *  Returns the text elide mode.
     */
-    Qt::TextElideMode textElideMode() const;
+    // unused Qt::TextElideMode textElideMode() const;
 
     /**
     * Sets the text elide mode.
     * @param mode The text elide mode.
     */
-    void setTextElideMode(Qt::TextElideMode mode);
+    // unused void setTextElideMode(Qt::TextElideMode mode);
+
+    /// Do not hijack the tool tip.  Let the client have control.
+    void allowToolTip();
+
+signals:
+    void clicked();
+    void doubleClicked();
 
 public Q_SLOTS:
     /**
@@ -109,6 +112,13 @@ protected:
     * \reimp
     */
     void contextMenuEvent(QContextMenuEvent*) override;
+
+    void mouseReleaseEvent(QMouseEvent * /*e*/) override
+        { emit clicked(); }
+
+    void mouseDoubleClickEvent(QMouseEvent * /*e*/) override
+        { emit doubleClicked(); }
+
     /**
     * does the dirty work
     */

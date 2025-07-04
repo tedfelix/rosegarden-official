@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,16 +16,20 @@
 #ifndef RG_CONTROLPARAMETER_H
 #define RG_CONTROLPARAMETER_H
 
+#include "TimeT.h"
+#include "XmlExportable.h"
+#include "MidiProgram.h"  // for MidiByte
+
 #include <string>
 
-#include "base/Event.h"
-#include "XmlExportable.h"
-#include "MidiProgram.h"
 
 namespace Rosegarden
 {
+
+
 class Event;
-    
+
+
 class ControlParameter : public XmlExportable
 {
 public:
@@ -38,7 +42,7 @@ public:
                      int def = 0,
                      MidiByte controllerNumber = 0,
                      unsigned int colour = 0,
-                     int ipbPositon = -1);
+                     int ipbPosition = -1);
 
     // ??? UGH!  Get rid of this!!!  There is no dtor here, and XmlExportable
     //     has no dtor.  Implementation is bitwise.  This can *just go away*!
@@ -51,20 +55,20 @@ public:
     bool operator==(const ControlParameter &control) const;
 
     // ??? Appears to be unused.  Confirm and remove.
-    friend bool operator<(const ControlParameter &a, const ControlParameter &b);
+    // unused friend bool operator<(const ControlParameter &a, const ControlParameter &b);
 
     // ControlParameter comparison on IPB position
     //
     struct ControlPositionCmp
     {
-        bool operator()(ControlParameter *c1,
-                        ControlParameter *c2)
+        bool operator()(const ControlParameter *c1,
+                        const ControlParameter *c2) const
         {
             return (c1->getIPBPosition() < c2->getIPBPosition());
         }
 
         bool operator()(const ControlParameter &c1,
-                        const ControlParameter &c2)
+                        const ControlParameter &c2) const
         {
             return (c1.getIPBPosition() < c2.getIPBPosition());
         }
@@ -117,36 +121,44 @@ public:
     Event *newEvent(timeT time, int value) const;
     // True if "e" is this type of controller / pitchbend.
     bool matches(Event *e) const;
-    
-    static const ControlParameter& getPitchBend();
-    static const ControlParameter& getExpression();
+
+    // Get default ControlParameter objects.
+    static const ControlParameter &getExpression();
+    static const ControlParameter &getPitchBend();
+    static const ControlParameter &getChannelPressure();
+    static const ControlParameter &getKeyPressure();
+    /// Get a list of all the usual default controllers.
+    /**
+     * Compatible with ControlList.
+     */
+    static const std::vector<ControlParameter> &getDefaultControllers();
 
 protected:
 
     // ControlParameter name as it's displayed (eg "Velocity" or "Controller")
-    std::string    m_name;
+    std::string m_name;
 
     // The type of event this controller controls (eg "controller" or
-    // "pitchbend"); 
-    std::string    m_type;
+    // "pitchbend");
+    std::string m_type;
 
     // Descriptive name for this control parameter, or "<none>".
-    std::string    m_description;
+    std::string m_description;
 
-    int            m_min;
-    int            m_max;
-    int            m_default;
+    int m_min;
+    int m_max;
+    int m_default;
 
     /// Controller (CC) number.  E.g. 7 for volume, 10 for pan.
-    MidiByte       m_controllerNumber;
+    MidiByte m_controllerNumber;
 
-    unsigned int   m_colourIndex;
+    unsigned int m_colourIndex;
 
     /// Position of the knob on the MIPP.  -1 == <not showing>
     int m_ipbPosition;
 
-
 };
+
 
 }
 

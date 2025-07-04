@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -41,7 +41,8 @@ MatrixPercussionInsertionCommand::MatrixPercussionInsertionCommand(Segment &segm
                      getEffectiveStartTime(segment, time, *event),
                      getEndTime(segment, time, *event)),
         m_event(nullptr),
-        m_time(time)
+        m_time(time),
+        m_lastInsertedEvent(0)
 {
     timeT endTime = getEndTime(segment, time, *event);
     m_event = new Event(*event, time, endTime - time);
@@ -97,7 +98,7 @@ void MatrixPercussionInsertionCommand::modifySegment()
 
     SegmentMatrixHelper helper(s);
     m_lastInsertedEvent = new Event(*m_event);
-    helper.insertNote(m_lastInsertedEvent);
+    helper.matrixInsertNote(m_lastInsertedEvent);
 }
 
 timeT
@@ -162,7 +163,7 @@ MatrixPercussionInsertionCommand::getEndTime(
     const int pitch = event.get<Int>(PITCH);
 
     // For each Event in the Segment from time to the end of the Segment
-    for (Segment::iterator i = segment.findTime(time);
+    for (Segment::iterator i = segment.findTimeConst(time);
          segment.isBeforeEndMarker(i);
          ++i) {
 

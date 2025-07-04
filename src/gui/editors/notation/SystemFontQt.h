@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,7 +27,7 @@ namespace Rosegarden {
 class SystemFontQt : public SystemFont
 {
 public:
-    SystemFontQt(QFont &font) : m_font(font) { }
+    explicit SystemFontQt(QFont &font) : m_font(font) { }
     ~SystemFontQt() override { }
 
     QPixmap renderChar(CharName charName, int glyph, int code,

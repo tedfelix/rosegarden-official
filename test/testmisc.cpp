@@ -33,12 +33,12 @@ void TestMisc::testEvent() try
     qDebug() << "Testing Event...";
 
     Event e("note", 0);
-    static const PropertyName DURATION_PROPERTY = "duration";
+    static const PropertyName DURATION_PROPERTY("duration");
     e.set<Int>(DURATION_PROPERTY, 20);
     QCOMPARE(e.get<Int>(DURATION_PROPERTY), 20l);
 
-    static const PropertyName SOME_BOOL_PROPERTY = "someBoolProp";
-    static const PropertyName SOME_STRING_PROPERTY = "someStringProp";
+    static const PropertyName SOME_BOOL_PROPERTY("someBoolProp");
+    static const PropertyName SOME_STRING_PROPERTY("someStringProp");
     e.set<Bool>(SOME_BOOL_PROPERTY, true);
     e.set<String>(SOME_STRING_PROPERTY, "foobar");
 
@@ -59,7 +59,7 @@ void TestMisc::testEvent() try
 
     QVERIFY(!e.get<String>(DURATION_PROPERTY, s));
 
-    static const PropertyName NONEXISTENT_PROPERTY = "nonexistentprop";
+    static const PropertyName NONEXISTENT_PROPERTY("nonexistentprop");
 
     thrown = false;
 
@@ -81,14 +81,14 @@ void TestMisc::testEvent() try
     QVERIFY(e.get<Int>(DURATION_PROPERTY, duration));
     QCOMPARE(duration, 30l);
 
-    static const PropertyName ANNOTATION_PROPERTY = "annotation";
+    static const PropertyName ANNOTATION_PROPERTY("annotation");
     e.set<String>(ANNOTATION_PROPERTY, "This is my house");
     QVERIFY(e.get<String>(ANNOTATION_PROPERTY, s));
     QCOMPARE(s.c_str(), "This is my house");
 
     qDebug() << "Testing persistence & setMaybe...";
 
-    static const PropertyName SOME_INT_PROPERTY = "someIntProp";
+    static const PropertyName SOME_INT_PROPERTY("someIntProp");
     e.setMaybe<Int>(SOME_INT_PROPERTY, 1);
     QCOMPARE(e.get<Int>(SOME_INT_PROPERTY), 1l);
 
@@ -101,18 +101,7 @@ void TestMisc::testEvent() try
     QCOMPARE(e.get<Int>(SOME_INT_PROPERTY), 4l);
 
     qDebug() << "Testing debug dump : ";
-    // ??? Will not compile.
-    // testmisc.cpp:113:11: error: cannot bind non-const lvalue reference of
-    //                             type ‘QDebug&’ to an rvalue of type ‘QDebug’
-    //     Sure enough, this doesn't work either:
-    //         QDebug &qd = qDebug();
-    //     But why does this work in the app?  What is different there?
-    //qDebug() << e;
-    //QDebug(QtDebugMsg) << e;
-    // This works fine, of course.  It's the temporaries that it doesn't
-    // like.  But they are ok in the app.  Hmmm.
-    QDebug qd(QtDebugMsg);
-    qd << e;
+    qDebug() << e;
     qDebug() << "dump finished";
 
 } catch(...) {
@@ -387,7 +376,7 @@ void TestMisc::testNotationTypes() {
     SegmentPerformanceHelper ph(t);
 
     Event *ev = new Event("note", 0, 384);
-    ev->set<Int>("pitch", 60);
+    ev->set<Int>(PropertyName("pitch"), 60);
     t.insert(ev);
 
     Segment::iterator sb(t.begin());

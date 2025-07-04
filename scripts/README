@@ -1,37 +1,43 @@
-
 Miscellaneous scripts in this directory:
 
 convert-feta-xpm.sh, make-xpm-transparent.pl - parts of the process of
-creating pixmaps from Lilypond feta fonts, used for the feta-pixmaps
-notation font -- of limited use
+        creating pixmaps from Lilypond feta fonts, used for the feta-pixmaps
+        notation font -- of limited use
 
 convert-muse-idf.pl - convert a MusE instrument definition file (.idf)
-to a Rosegarden device description file (.rgd) -- output is likely to
-need some massaging
+        to a Rosegarden device description file (.rgd) -- output is likely to
+        need some massaging
 
-count_LOCs - count lines of C++ code inc comments
+count_LOCs - Count lines of C++ code inc comments.  (A tool like "cloc"
+        will do a more comprehensive job.  This just uses wc.)
+
+dehumanize - convert F#3 and such to MIDI pitches by crude brute force
 
 find-todo.pl - find comments containing "!!!" todo marker
 
 find_ctor_usage - find calls to a given class's constructor
 
 ins2rgd.pl - Scott Doty's script for converting Sonar instrument
-definition (.ins) files to Rosegarden device description (.rgd) files.
-See http://ponzo.net/Rosegarden/ .
+        definition (.ins) files to Rosegarden device description (.rgd) files.
+        See http://ponzo.net/Rosegarden/ .
 
 ly2ps - run Lilypond and view the results in a PS viewer
+
+lookForUntranslatedStrings - Show translated strings with an empty translation
+        in a .ts file.  See ts-untrans.
+
+preset-xmlify - convert the preset.conf human editable text file to XML
+
+presets-tag-check - count the A and P to make sure they all match up
 
 rgedit, rgview - edit or view .rg files as XML (in-place-ish)
 
 seqscavenger.rb - get rid of old sequencer processes, core files etc
 
 sf2rg.py - extract SoundFont bank/program information and convert it
-to Rosegarden device description (.rgd) format
+        to Rosegarden device description (.rgd) format
 
 simple-makefile - a Makefile that doesn't use automake
 
-preset-xmlify - convert the preset.conf human editable text file to XML
-
-dehumanize - convert F#3 and such to MIDI pitches by crude brute force
-
-presets-tag-check - count the A and P to make sure they all match up
+ts-untrans - Show translated strings with an empty translation in a .ts file.
+        See lookForUntranslatedStrings.

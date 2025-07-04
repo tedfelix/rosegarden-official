@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -45,14 +45,14 @@ public:
      * based on the given dimensions.
      */
     Fader(AudioLevel::FaderType,
-                    int width, int height, QWidget *parent);
+                    int w, int h, QWidget *parent);
 
     /**
      * Construct a fader on an integral scale.  The fader calculates
      * its orientation based on the given dimensions.
      */
     Fader(int min, int max, int deflt,
-                    int width, int height, QWidget *parent);
+                    int w, int h, QWidget *parent);
 
     /**
      * Construct a fader on an integral scale, with a 1:1 ratio of
@@ -65,7 +65,7 @@ public:
 
     void setOutlineColour(QColor);
 
-    float getFaderLevel() const;
+    // unused float getFaderLevel() const;
 
 public slots:
     void setFader(float value);

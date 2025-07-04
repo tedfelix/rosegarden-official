@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,6 +20,8 @@
 
 #include "misc/Debug.h"
 #include "gui/dialogs/TrackLabelDialog.h"
+#include "misc/Preferences.h"
+#include "misc/ConfigGroups.h"
 
 #include <QFont>
 #include <QFrame>
@@ -27,9 +29,55 @@
 #include <QTimer>
 #include <QWidget>
 #include <QMouseEvent>
+#include <QSettings>
+
+
+namespace
+{
+    // Colors
+
+    QColor getNormalTextColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(Qt::white);
+        else
+            return QColor(Qt::black);
+    }
+
+    QColor getSelectedBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(128+64, 128+64, 128+64);
+        else
+            return QColor(0xAA, 0xAA, 0xAA);
+    }
+
+    QColor getSelectedTextColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(Qt::black);
+        else
+            return QColor(Qt::white);
+    }
+
+    QColor getArchiveTextColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(128+32,128+32,128+32);
+        else
+            return QColor(Qt::black);
+    }
+
+}
+
 
 namespace Rosegarden
 {
+
 
 TrackLabel::TrackLabel(TrackId id,
                        int position,
@@ -43,12 +91,37 @@ TrackLabel::TrackLabel(TrackId id,
 {
     setObjectName("TrackLabel");
 
+    // Compute Label Width
+
     QFont font;
     font.setPixelSize(trackHeight * 85 / 100);
     setFont(font);
 
     QFontMetrics fontMetrics(font);
-    setFixedWidth(fontMetrics.boundingRect("XXXXXXXXXXXXXXXXXX").width());
+
+    // set the label width depending on the setting in Settings > Presentation
+    QSettings settings;
+    settings.beginGroup(GeneralOptionsConfigGroup);
+    // Default to "2" for legacy wide.
+    const int trackLabelWidth = settings.value("track_label_width", 2).toInt();
+    // Write it back out so we can find it.
+    settings.setValue("track_label_width", trackLabelWidth);
+
+    int labelWidth{18};
+    if (trackLabelWidth == 0)       // Narrow: 8 char
+        labelWidth = 8;
+    else if (trackLabelWidth == 1)  // Medium: 12 char
+        labelWidth = 12;
+    else if (trackLabelWidth == 2)  // Wide: 18
+        labelWidth = 18;
+
+    QString labelWidthString;
+    // We use all "X" because the font is proportional and "X" is usually one
+    // of the wider characters in a proportional font.
+    labelWidthString.fill('X', labelWidth);
+
+    setFixedWidth(fontMetrics.boundingRect(labelWidthString).width());
+    
     setFixedHeight(trackHeight);
 
     setFrameShape(QFrame::NoFrame);
@@ -91,6 +164,27 @@ TrackLabel::updateLabel()
 }
 
 void
+TrackLabel::updatePalette()
+{
+    QPalette pal = palette();
+
+    if (m_selected) {
+        setAutoFillBackground(true);
+        pal.setColor(QPalette::Window, getSelectedBackgroundColor());
+        pal.setColor(QPalette::WindowText, getSelectedTextColor());
+    } else {
+        // Let the parent color show through.
+        setAutoFillBackground(false);
+        if (m_archived)
+            pal.setColor(QPalette::WindowText, getArchiveTextColor());
+        else
+            pal.setColor(QPalette::WindowText, getNormalTextColor());
+    }
+
+    setPalette(pal);
+}
+
+void
 TrackLabel::setSelected(bool selected)
 {
     // No change?  Bail.
@@ -99,16 +193,19 @@ TrackLabel::setSelected(bool selected)
 
     m_selected = selected;
 
-    QPalette pal = palette();
-    if (m_selected) {
-        setAutoFillBackground(true);
-        pal.setColor(QPalette::Window, QColor(0xAA, 0xAA, 0xAA));
-        pal.setColor(QPalette::WindowText, Qt::white);
-    } else {
-        setAutoFillBackground(false);
-        pal.setColor(QPalette::WindowText, Qt::black);
-    }
-    setPalette(pal);
+    updatePalette();
+}
+
+void
+TrackLabel::setArchived(bool archived)
+{
+    // No change?  Bail.
+    if (archived == m_archived)
+        return;
+
+    m_archived = archived;
+
+    updatePalette();
 }
 
 void

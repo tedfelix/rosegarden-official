@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,6 +13,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginInstance]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "base/AudioPluginInstance.h"
 
@@ -33,16 +34,16 @@ namespace Rosegarden
 //
 
 PluginPort::PluginPort(int number,
-                       std::string name,
+                       const std::string& name,
                        PluginPort::PortType type,
-                       PluginPort::PortDisplayHint hint,
+                       PluginPort::PortDisplayHint displayHint,
                        PortData lowerBound,
                        PortData upperBound,
-		       PortData defaultValue):
+                       PortData defaultValue):
     m_number(number),
     m_name(name),
     m_type(type),
-    m_displayHint(hint),
+    m_displayHint(displayHint),
     m_lowerBound(lowerBound),
     m_upperBound(upperBound),
     m_default(defaultValue)
@@ -52,6 +53,7 @@ PluginPort::PluginPort(int number,
 AudioPluginInstance::AudioPluginInstance(unsigned int position):
     m_mappedId(-1),
     m_identifier(""),
+    m_arch(PluginArch::DSSI),
     m_position(position),
     m_assigned(false),
     m_bypass(false),
@@ -59,46 +61,64 @@ AudioPluginInstance::AudioPluginInstance(unsigned int position):
 {
 }
 
-AudioPluginInstance::AudioPluginInstance(std::string identifier,
+#if 0
+AudioPluginInstance::AudioPluginInstance(const std::string& identifier,
                                          unsigned int position):
                 m_mappedId(-1),
                 m_identifier(identifier),
                 m_position(position),
-                m_assigned(true)
+                m_assigned(true),
+                m_bypass(false)
 {
 }
+#endif
 
-std::string 
+AudioPluginInstance::~AudioPluginInstance()
+{
+    clearPorts();
+}
+
+std::string
 AudioPluginInstance::toXmlString() const
 {
-
+    // ??? rename: stream
     std::stringstream plugin;
 
-    if (m_assigned == false)
-    {
+    if (!m_assigned) {
+        // ??? Isn't this just ""?
         return plugin.str();
     }
-    
+
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
-	plugin << "            <synth ";
+        plugin << "            <synth";
     } else {
-	plugin << "            <plugin"
-	       << " position=\""
-	       << m_position
-	       << "\" ";
+        plugin << "            <plugin"
+               << " position=\""
+               << m_position
+               << "\"";
     }
 
-    plugin << "identifier=\""
-	   << encode(m_identifier)
-           << "\" bypassed=\"";
+    if (m_arch == PluginArch::LV2) {
+        // Format something 23.12 will interpret into a helpful error message.
+        plugin << " identifier=\"" << "lv2:lv2_not_supported:" << encode(m_label) << "\"";
+    } else {
+        plugin << " identifier=\"" << encode(m_identifier) << "\"";
+    }
 
+    // New for 24.06+
+    if (m_arch == PluginArch::LV2)
+        plugin << " lv2uri=\"" << encode(m_identifier) << "\"";
+
+    plugin << " label=\"" << encode(m_label) << "\"";
+
+    plugin << " bypassed=\"";
     if (m_bypass)
         plugin << "true\" ";
     else
         plugin << "false\" ";
 
     if (m_program != "") {
-	plugin << "program=\"" << encode(m_program) << "\"";
+        plugin << "program=\"" << encode(m_program) << "\"";
     }
 
     plugin << ">" << std::endl;
@@ -115,15 +135,15 @@ AudioPluginInstance::toXmlString() const
     }
 
     for (ConfigMap::const_iterator i = m_config.begin(); i != m_config.end(); ++i) {
-	plugin << "                <configure key=\""
-	       << encode(i->first) << "\" value=\""
-	       << encode(i->second) << "\"/>" << std::endl;
+        plugin << "                <configure key=\""
+               << encode(i->first) << "\" value=\""
+               << encode(i->second) << "\"/>" << std::endl;
     }
 
     if (m_position == Instrument::SYNTH_PLUGIN_POSITION) {
-	plugin << "            </synth>";
+        plugin << "            </synth>";
     } else {
-	plugin << "            </plugin>";
+        plugin << "            </plugin>";
     }
 
     plugin << std::endl;
@@ -138,7 +158,7 @@ AudioPluginInstance::addPort(int number, PortData value)
     m_ports.push_back(new PluginPortInstance(number, value));
 }
 
-
+/* unused
 bool
 AudioPluginInstance::removePort(int number)
 {
@@ -156,9 +176,9 @@ AudioPluginInstance::removePort(int number)
 
     return false;
 }
+*/
 
-
-PluginPortInstance* 
+PluginPortInstance*
 AudioPluginInstance::getPort(int number)
 {
     PortInstanceIterator it = m_ports.begin();
@@ -182,7 +202,7 @@ AudioPluginInstance::clearPorts()
 }
 
 std::string
-AudioPluginInstance::getConfigurationValue(std::string k) const
+AudioPluginInstance::getConfigurationValue(const std::string& k) const
 {
     ConfigMap::const_iterator i = m_config.find(k);
     if (i != m_config.end()) return i->second;
@@ -190,18 +210,19 @@ AudioPluginInstance::getConfigurationValue(std::string k) const
 }
 
 void
-AudioPluginInstance::setProgram(std::string program)
+AudioPluginInstance::setProgram(const std::string& program)
 {
     m_program = program;
-    
+
     PortInstanceIterator it = m_ports.begin();
     for (; it != m_ports.end(); ++it) {
-	(*it)->changedSinceProgramChange = false;
+        (*it)->changedSinceProgramChange = false;
     }
 }
-	
+
 void
-AudioPluginInstance::setConfigurationValue(std::string k, std::string v)
+AudioPluginInstance::setConfigurationValue(const std::string& k,
+                                           const std::string& v)
 {
     m_config[k] = v;
 }
@@ -212,29 +233,29 @@ AudioPluginInstance::getDistinctiveConfigurationText() const
     std::string base = getConfigurationValue("load");
 
     if (base == "") {
-	for (ConfigMap::const_iterator i = m_config.begin();
-	     i != m_config.end(); ++i) {
+        for (ConfigMap::const_iterator i = m_config.begin();
+             i != m_config.end(); ++i) {
 
-	    if (!strncmp(i->first.c_str(),
-			 "__ROSEGARDEN__",
-			 strlen("__ROSEGARDEN__"))) continue;
+            if (!strncmp(i->first.c_str(),
+                         "__ROSEGARDEN__",
+                         strlen("__ROSEGARDEN__"))) continue;
 
-	    if (i->second != "" && i->second[0] == '/') {
-		base = i->second;
-		break;
-	    } else if (base != "") {
-		base = i->second;
-	    }
-	}
+            if (i->second != "" && i->second[0] == '/') {
+                base = i->second;
+                break;
+            } else if (base != "") {
+                base = i->second;
+            }
+        }
     }
 
     if (base == "") return "";
-    
+
     std::string::size_type s = base.rfind('/');
     if (s < base.length() - 1) base = base.substr(s + 1);
 
     std::string::size_type d = base.rfind('.');
-    if (d < base.length() - 1 && d > 0) base = base.substr(0, d);
+    if (d < base.length() - 1 && d > 0) base.resize(d);
 
     return base;
 }
@@ -244,26 +265,29 @@ AudioPluginInstance::getDisplayName() const
 {
     QString displayName = strtoqstr(getProgram());
 
+    // the comment below applies to dssi plugins but not to LV2
+    // plugins. The label is now set externally. For dssi plugins this
+    // is exactly the string from the identifier so no change - but it
+    // now works for LV2!
+
     // The identifier contains the name of the soft synth in the "label"
     // part.
-    QString identifier = strtoqstr(getIdentifier());
+    //QString identifier = strtoqstr(getIdentifier());
 
-    if (identifier != "") {
-        QString type, soName, label;
-        PluginIdentifier::parseIdentifier(identifier, type, soName, label);
+    if (displayName == "")
+        displayName = strtoqstr(getDistinctiveConfigurationText());
 
-        if (displayName == "")
-            displayName = strtoqstr(getDistinctiveConfigurationText());
-
-        if (displayName != "")
-            displayName = label + ": " + displayName;
-        else
-            displayName = label;
-    }
+    if (displayName != "")
+        displayName = strtoqstr(m_label) + ": " + displayName;
+    else
+        displayName = strtoqstr(m_label);
 
     return qstrtostr(displayName);
 }
 
-
+void AudioPluginInstance::setLabel(const std::string& label)
+{
+    m_label = label;
 }
 
+}

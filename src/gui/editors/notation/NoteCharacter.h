@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -32,7 +32,7 @@ namespace Rosegarden
 class NoteCharacterDrawRep : public QPolygon
 {
 public:
-    NoteCharacterDrawRep(int size = 0) : QPolygon(size) { }
+    explicit NoteCharacterDrawRep(int size = 0) : QPolygon(size) { }
 };
 
 
@@ -54,11 +54,13 @@ public:
     NoteCharacter();
     NoteCharacter(const NoteCharacter &);
     NoteCharacter &operator=(const NoteCharacter &);
+    NoteCharacter(QPixmap pixmap, QPoint hotspot);
+
     ~NoteCharacter();
 
     int getWidth() const;
     int getHeight() const;
-    
+
     QPixmap getPixmap() const;
     QPoint getHotspot() const;
     QGraphicsPixmapItem *makeItem() const;
@@ -66,14 +68,10 @@ public:
     void draw(QPainter *painter, int x, int y) const;
 
 private:
-    friend class NoteFont;
-    NoteCharacter(QPixmap pixmap, QPoint hotspot, NoteCharacterDrawRep *rep);
-
     QPoint m_hotspot;
-    QPixmap m_pixmap; 
-    NoteCharacterDrawRep *m_rep; // I don't own this, it's a reference to a static in the NoteFont
+    QPixmap m_pixmap;
 };
-    
+
 
 
 }

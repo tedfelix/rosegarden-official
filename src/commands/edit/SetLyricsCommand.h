@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,9 +39,9 @@ class SetLyricsCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SetLyricsCommand)
 
 public:
-    SetLyricsCommand(Segment *segment, int verse, QString newLyricData);
+    SetLyricsCommand(Segment *segment, int verse, const QString& newLyricData);
     ~SetLyricsCommand() override;
-    
+
     static QString getGlobalName() { return tr("Edit L&yrics"); }
 
     void execute() override;

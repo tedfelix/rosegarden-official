@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -43,7 +43,7 @@ public:
         BasicCommand(getGlobalName(up), selection, true),
         m_selection(&selection), m_up(up) { }
 
-    static bool getArgument(QString actionName, CommandArgumentQuerier &);
+    static bool getArgument(const QString& actionName, CommandArgumentQuerier &);
     static void registerCommand(CommandRegistry *r);
 
 protected:

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,7 +25,6 @@
 #include "MatrixWidget.h"
 #include "MatrixElement.h"
 
-#include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
@@ -68,14 +67,14 @@ MatrixScene::MatrixScene() :
     m_selection(nullptr),
     m_highlightType(HT_BlackKeys)
 {
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotCommandExecuted()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &MatrixScene::slotCommandExecuted);
 }
 
 MatrixScene::~MatrixScene()
 {
     RG_DEBUG << "MatrixScene::~MatrixScene() - start";
-    
+
     if (m_document) {
         if (!isCompositionDeleted()) { // implemented in CompositionObserver
             m_document->getComposition().removeObserver(this);
@@ -102,7 +101,7 @@ namespace
         {
         }
 
-        bool operator()(const Segment *lhs, const Segment *rhs)
+        bool operator()(const Segment *lhs, const Segment *rhs) const
         {
             // ??? Could also sort by Segment name and Segment start time.
             const int lPos =
@@ -157,7 +156,7 @@ MatrixScene::setSegments(RosegardenDocument *document,
     // We should show diamonds instead of bars whenever we are in
     // "drum mode" (i.e. whenever we were invoked using the percussion
     // matrix menu option instead of the normal matrix one).
-    
+
     // The question of whether to show the key names instead of the
     // piano keyboard is a separate one, handled in MatrixWidget, and
     // it depends solely on whether a key mapping exists for the
@@ -165,15 +164,15 @@ MatrixScene::setSegments(RosegardenDocument *document,
     // matrix or not).
 
     // Nevertheless, if the key names are shown, we need a little more space
-    // between horizontal lines. That's why m_resolution depends from 
+    // between horizontal lines. That's why m_resolution depends from
     // keyMapping.
 
-    // But since several segments may be edited in the same matrix, we 
+    // But since several segments may be edited in the same matrix, we
     // have to deal with simultaneous display of segments using piano keyboard
     // and segments using key mapping.
     // Key mapping may be displayed with piano keyboard resolution (even if
     // space is a bit short for the text) but the opposite is not possible.
-    // So the only (easy) way I found is to use the resolution fitting with 
+    // So the only (easy) way I found is to use the resolution fitting with
     // piano keyboard when at least one segment needs it.
 
     bool drumMode = false;
@@ -223,7 +222,7 @@ Segment *
 MatrixScene::getCurrentSegment()
 {
     if (m_segments.empty()) return nullptr;
-    if (m_currentSegmentIndex >= int(m_segments.size())) {
+    if (m_currentSegmentIndex >= m_segments.size()) {
         m_currentSegmentIndex = int(m_segments.size()) - 1;
     }
     return m_segments[m_currentSegmentIndex];
@@ -270,7 +269,15 @@ MatrixScene::getCurrentViewSegment()
         return nullptr;
 
     // ??? Why doesn't this use m_currentSegmentIndex?
-    return m_viewSegments[0];
+    // return m_viewSegments[0];
+
+    // It should. Otherwise these callers work incorrectly
+    //      MatrixView::slotExtendSelectionBackward(bool)
+    //      MatrixView::slotExtendSelectionForward(bool)
+    //      MatrixWidget::slotKeyPressed(unsigned, bool)
+    //      MatrixWidget::slotKeySelected(unsigned, bool)
+    //      MatrixWidget::slotKeyReleased(unsigned, bool)
+    return m_viewSegments[m_currentSegmentIndex];
 }
 
 bool
@@ -314,30 +321,30 @@ MatrixScene::recreateLines()
     double endPos = m_scale->getXForTime(end);
 
     // Draw horizontal lines
-    int i = 0; 	   	 
-    while (i < 127) { 	 
-         int y = (i + 1) * (m_resolution + 1); 	 
-         QGraphicsLineItem *line; 	 
-         if (i < (int)m_horizontals.size()) { 	 
-             line = m_horizontals[i]; 	 
-         } else { 	 
-             line = new QGraphicsLineItem; 	 
-             line->setZValue(-9); 	 
-             line->setPen(QPen(GUIPalette::getColour 	 
-                               (GUIPalette::MatrixHorizontalLine), pw)); 	 
-             addItem(line); 	 
-             m_horizontals.push_back(line); 	 
-         } 	 
-         line->setLine(startPos, y, endPos, y); 	 
-         line->show(); 	 
-         ++i; 	 
-     } 	 
+    int i = 0;
+    while (i < 127) {
+         int y = (i + 1) * (m_resolution + 1);
+         QGraphicsLineItem *line;
+         if (i < (int)m_horizontals.size()) {
+             line = m_horizontals[i];
+         } else {
+             line = new QGraphicsLineItem;
+             line->setZValue(MatrixElement::HORIZONTAL_LINE_Z);
+             line->setPen(QPen(GUIPalette::getColour
+                               (GUIPalette::MatrixHorizontalLine), pw));
+             addItem(line);
+             m_horizontals.push_back(line);
+         }
+         line->setLine(startPos, y, endPos, y);
+         line->show();
+         ++i;
+     }
 
 
      // Hide the other lines, if there are any.  Just a double check.
-     while (i < (int)m_horizontals.size()) { 	 
-         m_horizontals[i]->hide(); 	 
-         ++i; 	 
+     while (i < (int)m_horizontals.size()) {
+         m_horizontals[i]->hide();
+         ++i;
     }
 
     setSceneRect(QRectF(startPos, 0, endPos - startPos, 128 * (m_resolution + 1)));
@@ -370,6 +377,9 @@ MatrixScene::recreateLines()
             gridLines = timeSig.getBeatsPerBar();
         }
 
+        double beatLines = timeSig.getBeatsPerBar();
+        double dxbeats = width / beatLines;
+
         double dx = width / gridLines;
         double x = x0;
 
@@ -380,7 +390,7 @@ MatrixScene::recreateLines()
                 x += dx;
                 continue;
             }
-            
+
             // Exit if we have passed the end of last segment end time.
             if (x > endPos) {
                 break;
@@ -400,12 +410,21 @@ MatrixScene::recreateLines()
               // index 0 is the bar line
                 line->setPen(QPen(GUIPalette::getColour(GUIPalette::MatrixBarLine), pw));
             } else {
-                line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
+                // check if we are on a a beat
+                double br = x / dxbeats;
+                int ibr = br + 0.5;
+                double delta = br - ibr;
+                if (fabs(delta) > 1.0e-6) {
+                    line->setPen(QPen(GUIPalette::getColour(GUIPalette::SubBeatLine), pw));
+                } else {
+                    line->setPen(QPen(GUIPalette::getColour(GUIPalette::BeatLine), pw));
+                }
             }
 
-            line->setZValue(index > 0 ? -10 : -8);
+            line->setZValue(index > 0 ? MatrixElement::VERTICAL_BEAT_LINE_Z
+                                      : MatrixElement::VERTICAL_BAR_LINE_Z);
             line->setLine(x, 0, x, 128 * (m_resolution + 1));
-            
+
             line->show();
             x += dx;
             ++i;
@@ -419,9 +438,11 @@ MatrixScene::recreateLines()
     }
 
     recreatePitchHighlights();
-    
-    // Force update so all vertical lines are drawn correctly
-    update();
+
+    // Force update so all vertical lines are drawn correctly.
+    // ??? Works fine without.  Seems like update() isn't needed in this
+    //     class.  In fact it might be harmful.
+    //update();
 }
 
 void
@@ -432,11 +453,11 @@ MatrixScene::recreateTriadHighlights()
 
     timeT k0 = segment->getClippedStartTime();
     timeT k1 = segment->getClippedStartTime();
-    
+
     int i = 0;
-    
+
     while (k0 < segment->getEndMarkerTime()) {
-        
+
         Rosegarden::Key key = segment->getKeyAtTime(k0);
 
         // offset the highlights according to how far this key's tonic pitch is
@@ -489,7 +510,7 @@ MatrixScene::recreateTriadHighlights()
                     rect = m_highlights[i];
                 } else {
                     rect = new QGraphicsRectItem;
-                    rect->setZValue(-11);
+                    rect->setZValue(MatrixElement::HIGHLIGHT_Z);
                     rect->setPen(Qt::NoPen);
                     addItem(rect);
                     m_highlights.push_back(rect);
@@ -521,21 +542,21 @@ MatrixScene::recreateTriadHighlights()
         ++i;
     }
 }
- 
+
 void
 MatrixScene::recreateBlackkeyHighlights()
 {
     Segment *segment = getCurrentSegment();
     if (!segment) return;
-    
+
     timeT k0 = segment->getClippedStartTime();
     timeT k1 = segment->getEndMarkerTime();
-    
+
     int i = 0;
-    
+
     double x0 = m_scale->getXForTime(k0);
     double x1 = m_scale->getXForTime(k1);
-    
+
     int bkcount = 5;
     int bksteps[bkcount];
     bksteps[0] = 1;
@@ -544,35 +565,35 @@ MatrixScene::recreateBlackkeyHighlights()
     bksteps[3] = 8;
     bksteps[4] = 10;
     for (int j = 0; j < bkcount; ++j) {
-        
+
         int pitch = bksteps[j];
         while (pitch < 128) {
-            
+
             QGraphicsRectItem *rect;
-            
+
             if (i < (int)m_highlights.size()) {
                 rect = m_highlights[i];
             } else {
                 rect = new QGraphicsRectItem;
-                rect->setZValue(-11);
+                rect->setZValue(MatrixElement::HIGHLIGHT_Z);
                 rect->setPen(Qt::NoPen);
                 addItem(rect);
                 m_highlights.push_back(rect);
             }
-            
+
             rect->setBrush(GUIPalette::getColour
                            (GUIPalette::MatrixPitchHighlight));
-            
+
             rect->setRect(0, 0, x1 - x0, m_resolution + 1);
             rect->setPos(x0, (127 - pitch) * (m_resolution + 1));
             rect->show();
-            
+
             pitch += 12;
-            
+
             ++i;
         }
     }
-    
+
     while (i < (int)m_highlights.size()) {
         m_highlights[i]->hide();
         ++i;
@@ -621,7 +642,7 @@ MatrixScene::recreatePitchHighlights()
         }
         m_highlightType = HT_BlackKeys;
     }
-    
+
     recreateTriadHighlights();
 
 }
@@ -644,10 +665,10 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
     mme.element = nullptr;
 
     QList<QGraphicsItem *> l = items(e->scenePos());
-//    MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
+//   MATRIX_DEBUG << "Found " << l.size() << " items at " << e->scenePos();
     for (int i = 0; i < l.size(); ++i) {
         MatrixElement *element = MatrixElement::getMatrixElement(l[i]);
-        if (element) {
+        if (element && ! element->isPreview()) {
             // items are in z-order from top, so this is most salient
             mme.element = element;
             break;
@@ -751,7 +772,11 @@ MatrixScene::checkUpdate()
         SegmentRefreshStatus &rs = m_viewSegments[i]->getRefreshStatus();
 
         if (rs.needsRefresh()) {
+            // Refresh the required range.
+            // Note that updateElements() does not handle deleted
+            // ViewElements.  See MatrixViewSegment::eventRemoved().
             m_viewSegments[i]->updateElements(rs.from(), rs.to());
+
             if (!updateSelectionElementStatus && m_selection) {
                 updateSelectionElementStatus =
                     (m_viewSegments[i]->getSegment() == m_selection->getSegment());
@@ -789,7 +814,7 @@ MatrixScene::segmentRemoved(const Composition *, Segment *removedSegment)
 
     // If we're about to remove the one they are looking at and
     // there is another to switch to...
-    if (removedSegmentIndex == m_currentSegmentIndex  &&
+    if (removedSegmentIndex == static_cast<int>(m_currentSegmentIndex) &&
         m_segments.size() > 1) {
 
         // Switch to another Segment.
@@ -814,7 +839,7 @@ MatrixScene::segmentRemoved(const Composition *, Segment *removedSegment)
     m_segments.erase(m_segments.cbegin() + removedSegmentIndex);
 
     // Adjust m_currentSegmentIndex
-    if (m_currentSegmentIndex > removedSegmentIndex)
+    if (static_cast<int>(m_currentSegmentIndex) > removedSegmentIndex)
         --m_currentSegmentIndex;
 
     // No more Segments?
@@ -833,11 +858,21 @@ MatrixScene::handleEventAdded(Event *e)
 void
 MatrixScene::handleEventRemoved(Event *e)
 {
-    if (m_selection && m_selection->contains(e)) m_selection->removeEvent(e);
-    if (e->getType() == Rosegarden::Key::EventType) {
-        recreatePitchHighlights();
-    }
-    update();
+    if (m_selection && m_selection->contains(e))
+        m_selection->removeEvent(e);
+
+    // we can not use e here (already deleted) but if it was a
+    // Rosegarden::Key::EventType we must recreatePitchHighlights
+
+    recreatePitchHighlights();
+
+    // ??? Oddly, this causes refresh failures that leave deleted notes
+    //     up on the display (only when doing toolbar undo!?).  Removing
+    //     it seems to result in solid and correct updates in all cases.
+    //     Why?!  See discussion on mailing list early June 2022.
+    //update();
+
+    // Notify MatrixToolBox.
     emit eventRemoved(e);
 }
 
@@ -865,6 +900,8 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 
     if (m_selection) {
         setSelectionElementStatus(m_selection, true);
+        // ??? But we are going to do this at the end of this routine.
+        //     Is this needed?  Notation only does this at the end.
         emit QGraphicsScene::selectionChanged();
         emit selectionChangedES(m_selection);
     }
@@ -876,33 +913,23 @@ MatrixScene::setSelection(EventSelection *s, bool preview)
 }
 
 void
-MatrixScene::slotRulerSelectionChanged(EventSelection *rulerSelection)
-{
-    if (m_selection) {
-        // ??? We only add.  We never delete.  This will get out of sync.
-        if (rulerSelection)
-            m_selection->addFromSelection(rulerSelection);
-    }
-}
-
-void
-MatrixScene::setSingleSelectedEvent(MatrixViewSegment *vs,
+MatrixScene::setSingleSelectedEvent(MatrixViewSegment *viewSegment,
                                     MatrixElement *e,
                                     bool preview)
 {
-    if (!vs || !e) return;
-    EventSelection *s = new EventSelection(vs->getSegment());
+    if (!viewSegment || !e) return;
+    EventSelection *s = new EventSelection(viewSegment->getSegment());
     s->addEvent(e->event());
     setSelection(s, preview);
 }
 
 void
-MatrixScene::setSingleSelectedEvent(Segment *seg,
+MatrixScene::setSingleSelectedEvent(Segment *segment,
                                     Event *e,
                                     bool preview)
 {
-    if (!seg || !e) return;
-    EventSelection *s = new EventSelection(*seg);
+    if (!segment || !e) return;
+    EventSelection *s = new EventSelection(*segment);
     s->addEvent(e);
     setSelection(s, preview);
 }
@@ -987,7 +1014,7 @@ void
 MatrixScene::updateCurrentSegment()
 {
     MATRIX_DEBUG << "MatrixScene::updateCurrentSegment: current is " << m_currentSegmentIndex;
-    for (int i = 0; i < (int)m_viewSegments.size(); ++i) {
+    for (unsigned i = 0; i < m_viewSegments.size(); ++i) {
         bool current = (i == m_currentSegmentIndex);
         ViewElementList *vel = m_viewSegments[i]->getViewElementList();
         for (ViewElementList::const_iterator j = vel->begin();
@@ -1021,6 +1048,7 @@ MatrixScene::setSnap(timeT t)
     recreateLines();
 }
 
+/* unused
 bool
 MatrixScene::constrainToSegmentArea(QPointF &scenePos)
 {
@@ -1053,9 +1081,10 @@ MatrixScene::constrainToSegmentArea(QPointF &scenePos)
 
     return ok;
 }
+*/
 
 void
-MatrixScene::playNote(Segment &segment, int pitch, int velocity)
+MatrixScene::playNote(const Segment &segment, int pitch, int velocity)
 {
 //    std::cout << "Scene is playing a note of pitch: " << pitch
 //              << " + " <<  segment.getTranspose();
@@ -1093,6 +1122,30 @@ MatrixScene::updateAll()
         (*i)->updateAll();
     }
     recreatePitchHighlights();
+    updateCurrentSegment();
+}
+
+void
+MatrixScene::setExtraPreviewEvents(const EventWithSegmentMap& events)
+{
+    RG_DEBUG << "setExtraPreviewEvents" << events.size();
+    for (auto pair : events) {
+        const Event* e = pair.first;
+        const Segment* segment = pair.second;
+        if (m_additionalPreviewEvents.find(e) !=
+            m_additionalPreviewEvents.end()) continue; // already previewed
+
+        long pitch;
+        if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+            long velocity = -1;
+            (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                playNote(*segment, pitch, velocity);
+            }
+        }
+    }
+    m_additionalPreviewEvents = events;
 }
 
 int

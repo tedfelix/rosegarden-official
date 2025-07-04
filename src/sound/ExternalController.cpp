@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2020 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2020-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -192,10 +192,10 @@ void ExternalController::send(
     if (!isEnabled())
         return;
 
-    MappedEvent event(NoInstrument,  // instrumentId is ignored
-                      MappedEvent::MidiController,
-                      controlNumber,
-                      MidiByte(value));
+    MappedEvent event;
+    event.setType(MappedEvent::MidiController);
+    event.setData1(controlNumber);
+    event.setData2(value);
     event.setRecordedChannel(channel);
     event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
 
@@ -206,7 +206,7 @@ void ExternalController::sendAllCCs(
         const Instrument *instrument, MidiByte channel)
 {
     if (channel == MidiMaxValue)
-        channel = instrument->getNaturalChannel();
+        channel = instrument->getNaturalMidiChannel();
 
     send(channel,
          MIDI_CONTROLLER_VOLUME,
@@ -244,6 +244,7 @@ void ExternalController::sendAllCCs(
     }
 }
 
+/* unused
 void ExternalController::sendSysExHex(const QString &hexString)
 {
     // Not enabled?  Bail.
@@ -263,7 +264,9 @@ void ExternalController::sendSysExHex(const QString &hexString)
 
     sendSysExRaw(rawString);
 }
+*/
 
+/* unused
 void
 ExternalController::sendSysExRaw(const std::string &rawString)
 {
@@ -277,13 +280,15 @@ ExternalController::sendSysExRaw(const std::string &rawString)
                       MappedEvent::MidiSystemMessage,
                       MIDI_SYSTEM_EXCLUSIVE);
     event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
-    event.addDataString(rawString);
+    event.setDataBlock(rawString);
 
     // Send it out.
 
     RosegardenSequencer::getInstance()->processMappedEvent(event);
 }
+*/
 
+// cppcheck-suppress unusedFunction
 bool ExternalController::getSysEx(std::string & /*rawString*/)
 {
 #if 0

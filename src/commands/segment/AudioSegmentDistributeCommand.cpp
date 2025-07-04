@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -71,10 +71,6 @@ AudioSegmentDistributeCommand::~AudioSegmentDistributeCommand()
 void
 AudioSegmentDistributeCommand::execute()
 {
-    // Store the insert times in a local vector
-    //
-    std::vector<timeT> insertTimes;
-
     bool addNew = m_newSegments.size() == 0 ? true : false;
 
     for (SegmentSelection::iterator i = m_selection.begin();
@@ -97,7 +93,7 @@ AudioSegmentDistributeCommand::execute()
                         if (m_audioFile) {
                             segment->setAudioFileId(m_audioFile->getId());
                             segment->setAudioStartTime(
-                                RealTime::zeroTime);
+                                RealTime::zero());
                             segment->setAudioEndTime(
                                 m_audioFile->getLength());
                         } else // or an audio Segment

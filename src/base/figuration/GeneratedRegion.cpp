@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,9 +16,13 @@
 */
 
 #include "GeneratedRegion.h"
+
 #include "base/BaseProperties.h"
+#include "base/Event.h"
 #include "misc/Strings.h"
+
 #include <QString>
+
 
 namespace Rosegarden
 {
@@ -26,8 +30,8 @@ namespace Rosegarden
 
 const std::string GeneratedRegion::EventType = "generated region";
 const int GeneratedRegion::EventSubOrdering = -180;
-const PropertyName GeneratedRegion::ChordPropertyName = "chord source ID";
-const PropertyName GeneratedRegion::FigurationPropertyName = "figuration source ID";
+const PropertyName GeneratedRegion::ChordPropertyName("chord source ID");
+const PropertyName GeneratedRegion::FigurationPropertyName("figuration source ID");
 
 GeneratedRegion::GeneratedRegion(const Event &e) :
     m_chordSourceID(-1),
@@ -59,9 +63,8 @@ GeneratedRegion::getAsEvent(timeT absoluteTime) const
 }
 
 const std::string
-GeneratedRegion::NotationString() const
+GeneratedRegion::NotationString()
 {
     return std::string("G");
 }
 }
-

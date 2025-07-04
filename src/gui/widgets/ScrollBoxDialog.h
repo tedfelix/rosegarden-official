@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -39,14 +39,14 @@ class ScrollBoxDialog : public QDialog
 
 public:
     ScrollBoxDialog(QWidget *parent = nullptr,
-                    ScrollBox::SizeMode mode = ScrollBox::FixWidth,
+                    ScrollBox::SizeMode sizeMode = ScrollBox::FixWidth,
                     const char *name = nullptr);
 //                    WFlags flags = 0);
     ~ScrollBoxDialog() override;
 
     ScrollBox *scrollbox() { return m_scrollbox; }
     void setPageSize(const QSize&);
-    
+
 protected:
     void closeEvent(QCloseEvent * e) override;
 

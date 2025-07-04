@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,49 +19,65 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixElement.h"
+
 #include "MatrixScene.h"
 #include "misc/Debug.h"
 #include "base/RulerScale.h"
-#include "misc/ConfigGroups.h"
+#include "base/Event.h"
+#include "base/NotationTypes.h"
+#include "base/Pitch.h"
+#include "base/BaseProperties.h"
+#include "gui/general/GUIPalette.h"
+#include "gui/rulers/DefaultVelocityColour.h"
+#include "misc/Preferences.h"
 
 #include <QGraphicsRectItem>
 #include <QGraphicsPolygonItem>
 #include <QBrush>
 #include <QColor>
-#include <QSettings>
-
-#include "base/Event.h"
-#include "base/NotationTypes.h"
-#include "base/BaseProperties.h"
-#include "gui/general/GUIPalette.h"
-#include "gui/rulers/DefaultVelocityColour.h"
-#include "gui/general/MidiPitchLabel.h"
 
 
 namespace Rosegarden
 {
 
+
 static const int MatrixElementData = 2;
 
 MatrixElement::MatrixElement(MatrixScene *scene, Event *event,
-                             bool drum, long pitchOffset) :
+                             bool drum, long pitchOffset,
+                             const Segment *segment,
+                             bool isPreview) :
     ViewElement(event),
     m_scene(scene),
     m_drum(drum),
     m_current(true),
     m_item(nullptr),
     m_textItem(nullptr),
-    m_pitchOffset(pitchOffset)
+    m_pitchOffset(pitchOffset),
+    m_segment(segment),
+    m_isPreview(isPreview)
 {
+    RG_DEBUG << "MatrixElement()";
+    if (segment && scene && segment != scene->getCurrentSegment()) {
+        m_current = false;
+    }
     reconfigure();
 }
 
 MatrixElement::~MatrixElement()
 {
     RG_DEBUG << "deleting item:" << m_item << this;
+
+    // Remove the item from the scene.
+    // ??? Qt documentation indicates that it is faster to remove the
+    //     item and then delete it.  We should do that.
     delete m_item;
+
     if (m_textItem) {
         RG_DEBUG << "deleting text item:" << m_textItem << this;
+        // Remove the item from the scene.
+        // ??? Qt documentation indicates that it is faster to remove the
+        //     item and then delete it.  We should do that.
         delete m_textItem;
     }
 }
@@ -105,6 +121,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch)
 void
 MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 {
+    RG_DEBUG << "reconfigure" << time << duration <<
+        pitch << velocity << m_current;
+
     const RulerScale *scale = m_scene->getRulerScale();
     int resolution = m_scene->getYResolution();
 
@@ -130,7 +149,20 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
     } else {
         colour = DefaultVelocityColour::getInstance()->getColour(velocity);
     }
-    colour.setAlpha(160);
+    if (!m_current) {
+        colour = QColor(200, 200, 200);
+    }
+
+    if (m_isPreview) {
+        //colour = GUIPalette::PreviewColor;
+        // Lorenzo prefers a lighter green.
+        colour = QColor(0xc8, 0xff, 0xc8);
+    }
+
+    // Turned off because adds little or no information to user (another
+    // segment's notes are underneath?) and generally just confusingly
+    // changes velocity color of notes.
+    // colour.setAlpha(160);
 
     double fres(resolution);
 
@@ -139,6 +171,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         QGraphicsPolygonItem *item = dynamic_cast<QGraphicsPolygonItem *>(m_item);
         if (!item) {
             RG_DEBUG << "reconfigure drum deleting item:" << m_item << this;
+            // Remove the item from the scene.
+            // ??? Qt documentation indicates that it is faster to remove the
+            //     item and then delete it.  We should do that.
             delete m_item;
             item = new QGraphicsPolygonItem;
             RG_DEBUG << "reconfigure drum created item:" << m_item << this;
@@ -159,6 +194,9 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         QGraphicsRectItem *item = dynamic_cast<QGraphicsRectItem *>(m_item);
         if (!item) {
             RG_DEBUG << "reconfigure deleting item:" << m_item << this;
+            // Remove the item from the scene.
+            // ??? Qt documentation indicates that it is faster to remove the
+            //     item and then delete it.  We should do that.
             delete m_item;
             item = new QGraphicsRectItem;
             m_item = item;
@@ -176,14 +214,14 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
             (QPen(GUIPalette::getColour(GUIPalette::MatrixElementBorder), 0));
         item->setBrush(QBrush(colour, brushPattern));
 
-        QSettings settings;
-        settings.beginGroup(MatrixViewConfigGroup);
-        bool showName = settings.value("show_note_names", false).toBool();
-        settings.endGroup();
+        const bool showName = Preferences::getShowNoteNames();
 
         if (m_textItem) {
-            if (! showName) {
+            if (!showName) {
                 RG_DEBUG << "reconfigure deleting text item:" << m_textItem << this;
+                // Remove the item from the scene.
+                // ??? Qt documentation indicates that it is faster to remove the
+                //     item and then delete it.  We should do that.
                 delete m_textItem;
                 m_textItem = nullptr;
             }
@@ -196,7 +234,15 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
         }
 
         if (m_textItem) {
-            QString noteName = MidiPitchLabel(pitch).getQString();
+            // text above note, see constants in .h file
+            if (m_isPreview) {
+                m_textItem->setZValue(PREVIEW_NOTE_TEXT_Z);
+            } else {
+                m_textItem->setZValue(m_current ? ACTIVE_SEGMENT_TEXT_Z
+                                      : NORMAL_SEGMENT_TEXT_Z);
+                m_textItem->setBrush(GUIPalette::getColour(GUIPalette::MatrixElementBorder));
+            }
+            QString noteName = Pitch::toStringOctave(pitch);
             m_textItem->setText(noteName);
             QFont font;
             font.setPixelSize(8);
@@ -219,6 +265,14 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
 
     double pitchy = (127 - pitch - m_pitchOffset) * (resolution + 1);
     m_item->setPos(x0, pitchy);
+    // See constants in .h file
+
+    if (m_isPreview) {
+        m_item->setZValue(PREVIEW_NOTE_Z);
+    } else {
+        m_item->setZValue(m_current ? ACTIVE_SEGMENT_NOTE_Z
+                          : NORMAL_SEGMENT_NOTE_Z);
+    }
 
     if (m_textItem) {
             m_textItem->setPos(x0 + 1, pitchy - 1);
@@ -237,6 +291,7 @@ MatrixElement::isNote() const
 void
 MatrixElement::setSelected(bool selected)
 {
+    RG_DEBUG << "setSelected" << event()->getAbsoluteTime() << selected;
     QAbstractGraphicsShapeItem *item =
         dynamic_cast<QAbstractGraphicsShapeItem *>(m_item);
     if (!item) return;
@@ -255,6 +310,9 @@ MatrixElement::setSelected(bool selected)
 void
 MatrixElement::setCurrent(bool current)
 {
+    if (m_isPreview) return;
+    RG_DEBUG << "setCurrent" << event()->getAbsoluteTime() <<
+        current << m_current;
     if (m_current == current) return;
 
     QAbstractGraphicsShapeItem *item =
@@ -262,21 +320,27 @@ MatrixElement::setCurrent(bool current)
     if (!item) return;
 
     QColor colour;
-    
+
     if (!current) {
         colour = QColor(200, 200, 200);
     } else {
         if (event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
             colour = Qt::gray;
         } else {
-            long velocity = 100;
+            long velocity = m_velocity;  // was 100 -- why?
             event()->get<Int>(BaseProperties::VELOCITY, velocity);
             colour = DefaultVelocityColour::getInstance()->getColour(velocity);
         }
     }
 
     item->setBrush(colour);
-    item->setZValue(current ? 1 : 0);
+
+    // See constants in .h file
+    m_item->setZValue(current ? ACTIVE_SEGMENT_NOTE_Z : NORMAL_SEGMENT_NOTE_Z);
+    if (m_textItem) {
+        m_textItem->setZValue(current ? ACTIVE_SEGMENT_TEXT_Z
+                                      : NORMAL_SEGMENT_TEXT_Z);
+    }
 
     if (current) {
         item->setPen
@@ -294,8 +358,12 @@ MatrixElement::getMatrixElement(QGraphicsItem *item)
 {
     QVariant v = item->data(MatrixElementData);
     if (v.isNull()) return nullptr;
-    return (MatrixElement *)v.value<void *>();
+    return static_cast<MatrixElement *>(v.value<void *>());
 }
 
+bool MatrixElement::isPreview() const
+{
+    return m_isPreview;
+}
 
 }

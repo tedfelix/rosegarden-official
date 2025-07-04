@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -27,7 +27,7 @@ class AudioWriteStream;
 class AudioWriteStreamFactory
 {
 public:
-    static AudioWriteStream *createWriteStream(QString fileName,
+    static AudioWriteStream *createWriteStream(QString audioFileName,
                                                size_t channelCount,
                                                size_t sampleRate);
 };

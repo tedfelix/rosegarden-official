@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,29 +19,33 @@
 #define RG_FITTOBEATSCOMMAND_H
 
 #include "document/Command.h"
-#include "base/Event.h"
-#include "base/Composition.h"
+#include "base/TimeT.h"
+#include "base/Composition.h"  // for tempoT
+#include "base/Segment.h"  // for SegmentMultiSet
+
 #include <QCoreApplication>
 #include <QString>
+
 #include <map>
 
 
 namespace Rosegarden
 {
 
+
 // @class FitToBeatsCommand
-// @remarks Implements the command "Fit Existing Beats to Beat Segment".  
+// @remarks Implements the command "Fit Existing Beats to Beat Segment".
 // @author Tom Breton (Tehom)
 class FitToBeatsCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FitToBeatsCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::FitToBeatsCommand);
 
 public:
-    FitToBeatsCommand(Segment *grooveSegment);
+    explicit FitToBeatsCommand(Segment *grooveSegment);
 
     ~FitToBeatsCommand() override;
 
-    static QString getGlobalName() 
+    static QString getGlobalName()
         { return tr("Fit Existing Beats to Beat Segment"); }
 
     void execute() override;
@@ -51,18 +55,15 @@ private:
     typedef std::map<timeT, tempoT> TempoMap;
     typedef std::pair<timeT, tempoT> TempoChange;
     typedef std::vector<RealTime> vecRealTime;
-    
+
     void initialise(Segment *s);
     void changeAllTempi(TempoMap newTempi);
     void changeSegments(SegmentMultiSet oldSegments,
                         SegmentMultiSet newSegments);
 
-    static int
-        getBeatRealTimes(Segment *s, vecRealTime &beatRealTimes);
-    static TempoChange
-        getTempoChange(Composition &composition, int i);
-    static void
-        getCurrentTempi(Composition &composition, TempoMap &Tempos);
+    static int getBeatRealTimes(Segment *s, vecRealTime &beatRealTimes);
+    static TempoChange getTempoChange(Composition &composition, int i);
+    static void getCurrentTempi(Composition &composition, TempoMap &Tempos);
 
     Composition *m_composition;
 
@@ -72,8 +73,9 @@ private:
     // with a timeT.  Could just use a TempoChange.
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
-    bool                              m_executed;
+    bool m_executed;
 };
+
 
 }
 

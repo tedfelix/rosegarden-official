@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlEditorDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlEditorDialog.h"
 
@@ -90,7 +91,7 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
            .arg(deviceName)
            .arg(device), mainFrame);
     new QLabel("", mainFrame);
-    
+
     QStringList sl;
     sl  << tr("Name  ")
         << tr("Type  ")
@@ -101,13 +102,13 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
         << tr("Default value  ")
         << tr("Color  ")
         << tr("Position on instrument panel");
-    
+
     m_treeWidget = new QTreeWidget(mainFrame);
     m_treeWidget->setHeaderLabels(sl);
     m_treeWidget->setSortingEnabled(true);
-    
+
     mainFrameLayout->addWidget(m_treeWidget);
-    
+
     QFrame *btnBox = new QFrame(mainFrame);
     mainFrameLayout->addWidget(btnBox);
     mainFrame->setLayout(mainFrameLayout);
@@ -148,8 +149,10 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
 
     setupActions();
 
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotUpdate()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(ControlEditorDialog::*)()>(
+                    &ControlEditorDialog::slotUpdate));
 
     connect(m_treeWidget, &QTreeWidget::itemDoubleClicked,
             this, &ControlEditorDialog::slotEdit);
@@ -157,11 +160,11 @@ ControlEditorDialog::ControlEditorDialog(QWidget *parent,
     // Highlight all columns - enable extended selection mode
     //
     m_treeWidget->setAllColumnsShowFocus(true);
-    
+
     m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 
     initDialog();
-    
+
     // Set the top item in the list, if able.
     if (m_treeWidget->topLevelItemCount()) {
         m_treeWidget->setCurrentItem(m_treeWidget->topLevelItem(0));
@@ -176,8 +179,8 @@ ControlEditorDialog::~ControlEditorDialog()
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     RG_DEBUG << "[geometry] storing window geometry for ControlEditorDialog";
-    settings.setValue("Control_Editor_Dialog_Geometry", this->saveGeometry());
-    settings.setValue("Control_Editor_Dialog_State", this->saveState());
+    settings.setValue("Control_Editor_Dialog_Geometry", saveGeometry());
+    settings.setValue("Control_Editor_Dialog_State", saveState());
     settings.endGroup();
 }
 
@@ -191,8 +194,8 @@ ControlEditorDialog::initDialog()
     RG_DEBUG << "[geometry] ControlEditorDialog - Restoring saved geometry...";
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
-    this->restoreGeometry(settings.value("Control_Editor_Dialog_Geometry").toByteArray());
-    this->restoreState(settings.value("Control_Editor_Dialog_State").toByteArray());
+    restoreGeometry(settings.value("Control_Editor_Dialog_Geometry").toByteArray());
+    restoreState(settings.value("Control_Editor_Dialog_State").toByteArray());
     settings.endGroup();
 }
 
@@ -216,7 +219,7 @@ ControlEditorDialog::slotUpdate(bool added)
     if (lastItem) {
         lastControllerId = lastItem->getId();
     }
-    
+
     m_treeWidget->clear();
 
     for (; it != md->endControllers(); ++it) {
@@ -236,7 +239,9 @@ ControlEditorDialog::slotUpdate(bool added)
             QString::asprintf("%d (0x%x)", it->getControllerNumber(),
                       it->getControllerNumber());
 
-        if (it->getType() == PitchBend::EventType) {
+        if (it->getType() == PitchBend::EventType ||
+            it->getType() == KeyPressure::EventType ||
+            it->getType() == ChannelPressure::EventType) {
             item = new ControlParameterItem(
                                             i++,
                                             m_treeWidget,
@@ -249,7 +254,7 @@ ControlEditorDialog::slotUpdate(bool added)
                                                 << QString("%1").arg(it->getMax())
                                                 << QString("%1").arg(it->getDefault())
                                                 << colour
-                                                << position 
+                                                << position
                                           );
         } else {
             item = new ControlParameterItem(
@@ -278,7 +283,7 @@ ControlEditorDialog::slotUpdate(bool added)
         QPixmap colourPixmap(16, 16);
         QColor c = comp.getGeneralColourMap().getColour(it->getColourIndex());
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
-        
+
         item->setIcon(7, QIcon(colourPixmap));
 
         m_treeWidget->addTopLevelItem(item);
@@ -292,7 +297,7 @@ ControlEditorDialog::slotUpdate(bool added)
     } else {
         m_treeWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
     }
-    
+
     // This logic is kind of frigged up, and may be too fragile.  It assumes
     // that if you added an item, the last thing iterated through will be that
     // new item, so the value of the variable item will be the last thing
@@ -366,11 +371,15 @@ ControlEditorDialog::slotClose()
 void
 ControlEditorDialog::setupActions()
 {
-    createAction("file_close", SLOT(slotClose()));
+    createAction("file_close", &ControlEditorDialog::slotClose);
     m_closeButton->setText(tr("Close"));
-    connect(m_closeButton, &QAbstractButton::released, this, &ControlEditorDialog::slotClose);
-    createAction("control_help", SLOT(slotHelpRequested()));
-    createAction("help_about_app", SLOT(slotHelpAbout()));
+    connect(m_closeButton, &QAbstractButton::released,
+            this, &ControlEditorDialog::slotClose);
+
+    createAction("remove_all_from_ip",
+                 &ControlEditorDialog::slotRemoveAllFromInstrumentPanel);
+    createAction("control_help", &ControlEditorDialog::slotHelpRequested);
+    createAction("help_about_app", &ControlEditorDialog::slotHelpAbout);
 
     createMenusAndToolbars("controleditor.rc");
 }
@@ -385,10 +394,7 @@ ControlEditorDialog::addCommandToHistory(Command *command)
 void
 ControlEditorDialog::setModified(bool modified)
 {
-    RG_DEBUG << "ControlEditorDialog::setModified(" << modified << ")";
-
-    if (modified) {}
-    else {}
+    RG_DEBUG << "setModified(" << modified << ")";
 
     m_modified = modified;
 }
@@ -405,9 +411,10 @@ ControlEditorDialog::slotEdit(QTreeWidgetItem *i, int)
         dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
 
     if (item && md) {
-        ControlParameterEditDialog dialog
-        (this,
-         md->getControlParameter(item->getId()), m_doc);
+        ControlParameterEditDialog dialog(
+                this,  // parent
+                md->getControlParameter(item->getId()),  // control
+                m_doc);  // doc
 
         if (dialog.exec() == QDialog::Accepted) {
             ModifyControlParameterCommand *command =
@@ -445,4 +452,50 @@ ControlEditorDialog::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+void ControlEditorDialog::slotRemoveAllFromInstrumentPanel()
+{
+    MacroCommand *macroCommand =
+            new MacroCommand("Remove All Controllers From Instrument Panel");
+
+    MidiDevice *md = dynamic_cast<MidiDevice *>(m_studio->getDevice(m_device));
+    if (!md)
+        return;
+
+    const ControlList &controlList = md->getControlParameters();
+
+    // for each controller
+    for (size_t controllerIndex = 0;
+         controllerIndex < controlList.size();
+         ++controllerIndex) {
+
+        // If the controller is already not showing, try the next.
+        if (controlList[controllerIndex].getIPBPosition() == -1)
+            continue;
+
+        // Controller is showing.  Remove it.
+
+        // Make a copy to modify.
+        ControlParameter controlParameter = controlList[controllerIndex];
+        controlParameter.setIPBPosition(-1);
+
+        // Create a ModifyControlParameterCommand with ippos set to -1.
+        ModifyControlParameterCommand *command =
+                new ModifyControlParameterCommand(m_studio,  // studio
+                                                  m_device,  // device
+                                                  controlParameter,  // control
+                                                  controllerIndex);  // id
+
+        // Add the command to the macro command.
+        macroCommand->addCommand(command);
+    }
+
+    // If the macro command has more than 0 entries, send it off.
+    if (macroCommand->hasCommands())
+        addCommandToHistory(macroCommand);
+    else
+        delete macroCommand;
+}
+
+
 }

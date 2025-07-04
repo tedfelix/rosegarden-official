@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,26 +16,33 @@
 */
 
 #define RG_MODULE_STRING "[TransportDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TransportDialog.h"
+
 #include "base/Composition.h"
+#include "base/Configuration.h"  // DocumentConfiguration
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/RealTime.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ThornStyle.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
-#include "gui/application/RosegardenApplication.h"
-#include "gui/general/MidiPitchLabel.h"
+#include "gui/general/EditTempoController.h"
 #include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/Label.h"
 #include "sound/MappedEvent.h"
 #include "misc/ConfigGroups.h"
+#include "document/RosegardenDocument.h"
+#include "base/Composition.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "misc/Preferences.h"
 
 #include <QSettings>
-#include <QShortcut>
 #include <QColor>
 #include <QByteArray>
 #include <QDataStream>
@@ -96,11 +103,9 @@ TransportDialog::TransportDialog(QWidget *parent):
     m_bitsPerFrame(80),
     m_midiInTimer(nullptr),
     m_midiOutTimer(nullptr),
-    m_clearMetronomeTimer(nullptr),
     m_enableMIDILabels(true),
     //m_panelOpen(),
     //m_panelClosed(),
-    m_shortcuts(nullptr),
     m_isExpanded(true),
     m_isBackgroundSet(false),
     m_sampleRate(0)
@@ -116,7 +121,7 @@ TransportDialog::TransportDialog(QWidget *parent):
     QFrame *frame = new QFrame(this);
 
     ui->setupUi(frame);
-	
+
     resetFonts();
 
     initModeMap();
@@ -136,17 +141,6 @@ TransportDialog::TransportDialog(QWidget *parent):
     ui->PlayButton->setCheckable(true);
     ui->RecordButton->setCheckable(true);
 
-// Disable the loop button if JACK transport enabled, because this
-// causes a nasty race condition, and it just seems our loops are not JACK compatible
-// #1240039 - DMM
-//    QSettings settings ; // was: mainWindow->config()
-//    settings.beginGroup(SequencerOptionsConfigGroup);
-//    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
-//    {
-//        ui->LoopButton->setEnabled(false);
-//    }
-//      settings.endGroup();
-
     // fix and hold the size of the dialog
     //
 //!!! this probably won't work -- need sizeHint() after widget is realised
@@ -158,16 +152,12 @@ TransportDialog::TransportDialog(QWidget *parent):
     // Create Midi label timers
     m_midiInTimer = new QTimer(this);
     m_midiOutTimer = new QTimer(this);
-    m_clearMetronomeTimer = new QTimer(this);
 
     connect(m_midiInTimer, &QTimer::timeout,
             this, &TransportDialog::slotClearMidiInLabel);
 
     connect(m_midiOutTimer, &QTimer::timeout,
             this, &TransportDialog::slotClearMidiOutLabel);
-
-    connect(m_clearMetronomeTimer, &QTimer::timeout,
-            this, &TransportDialog::slotResetBackground);
 
     ui->TimeDisplayLabel->hide();
     ui->ToEndLabel->hide();
@@ -178,24 +168,28 @@ TransportDialog::TransportDialog(QWidget *parent):
     connect(ui->ToEndButton, &QAbstractButton::clicked,
             this, &TransportDialog::slotChangeToEnd);
 
-    connect(ui->LoopButton, &QAbstractButton::clicked,
-            this, &TransportDialog::slotLoopButtonClicked);
-
     connect(ui->PanelOpenButton, &QAbstractButton::clicked,
             this, &TransportDialog::slotPanelOpenButtonClicked);
 
     connect(ui->PanelCloseButton, &QAbstractButton::clicked,
             this, &TransportDialog::slotPanelCloseButtonClicked);
 
-    connect(ui->PanicButton, &QAbstractButton::clicked, this, &TransportDialog::panic);
+    connect(ui->PanicButton, &QAbstractButton::clicked,
+            this, &TransportDialog::panic);
 /*
     const QPixmap *p = ui->PanelOpenButton->pixmap();
     if (p) m_panelOpen = *p;
     p = ui->PanelCloseButton->pixmap();
     if (p) m_panelClosed = *p;
 */
-    connect(ui->SetStartLPButton, &QAbstractButton::clicked, this, &TransportDialog::slotSetStartLoopingPointAtMarkerPos);
-    connect(ui->SetStopLPButton, &QAbstractButton::clicked, this, &TransportDialog::slotSetStopLoopingPointAtMarkerPos);
+
+    // Loop widgets.
+    connect(ui->LoopButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotLoopButtonClicked);
+    connect(ui->SetStartLPButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotSetStartLoopingPointAtMarkerPos);
+    connect(ui->SetStopLPButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotSetStopLoopingPointAtMarkerPos);
 
     // clear labels
     //
@@ -283,15 +277,21 @@ TransportDialog::TransportDialog(QWidget *parent):
     connect(ui->ThousandthsPixmap, &Label::doubleClicked,
             this, &TransportDialog::slotEditTime);
 
-    // shortcut object
-    //
-    m_shortcuts = new QShortcut(this);
-
     // Note: For Thorn style, ThornStyle sets the transport's background
     //       to dark gray.  See AppEventFilter::polishWidget() in
     //       ThornStyle.cpp.
 
     loadGeo();
+
+    connect(RosegardenMainWindow::self(),
+                &RosegardenMainWindow::documentLoaded,
+            this, &TransportDialog::slotDocumentLoaded);
+
+    // Metronome
+    connect(&m_metronomeTimer, &QTimer::timeout,
+            this, &TransportDialog::slotMetronomeTimer);
+    // No improvement.
+    //m_metronomeTimer.setTimerType(Qt::PreciseTimer);
 
     // Performance Testing
 
@@ -314,6 +314,42 @@ TransportDialog::~TransportDialog()
     // saved if we are hidden.
     if (isVisible())
         saveGeo();
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+    Composition &comp = doc->getComposition();
+    comp.removeObserver(this);
+}
+
+void TransportDialog::init()
+{
+    RG_DEBUG << "init";
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+
+    Composition &comp = doc->getComposition();
+    RG_DEBUG << "add observer";
+    comp.addObserver(this);
+    RG_DEBUG << "observer added";
+
+    setEnabled(true);
+
+    setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+
+    // bring the transport to the front
+    raise();
+
+    // set the play metronome button
+    MetronomeButton()->setChecked(comp.usePlayMetronome());
+
+    // set the transport mode found in the configuration
+    const std::string transportMode =
+            doc->getConfiguration().get<String>(
+                    DocumentConfiguration::TransportMode);
+    setNewMode(transportMode);
+
 }
 
 std::string
@@ -330,7 +366,7 @@ TransportDialog::getCurrentModeAsString()
     }
 
     // we shouldn't get here unless the map is not well-configured
-    RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode " 
+    RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode "
              << m_currentMode << " to string.";
     throw Exception("could not map current mode to string.");
 }
@@ -348,21 +384,28 @@ TransportDialog::initModeMap()
 void
 TransportDialog::loadPixmaps()
 {
-    m_lcdList.clear();
-    m_lcdListDefault.clear();
+    // For each digit 0-9...
+    for (int i = 0; i <= 9; ++i) {
+        // Load the transparent pixmap.
+        m_digitsTransparent[i] =
+                IconLoader::loadPixmap(QString("led-%1").arg(i));
 
-    for (int i = 0; i < 10; i++) {
-        m_lcdList[i] = IconLoader::loadPixmap(QString("led-%1").arg(i));
-        QImage im(m_lcdList[i].size(), QImage::Format_RGB32);
-        im.fill(0);
-        QPainter p(&im);
-        p.drawPixmap(0, 0, m_lcdList[i]);
-        m_lcdListDefault[i] = QPixmap::fromImage(im);
+        // Make the opaque version.  This should be a little
+        // faster to draw since it avoids alpha math.
+        QImage opaqueImage(m_digitsTransparent[i].size(), QImage::Format_RGB32);
+        // Fill with black.
+        opaqueImage.fill(0);
+        // Create a QPainter so that we can draw the pixmap on the image.
+        QPainter opaquePainter(&opaqueImage);
+        // Draw the digit pixmap onto the image.
+        opaquePainter.drawPixmap(0, 0, m_digitsTransparent[i]);
+        // Copy to the opaque pixmap array.
+        m_digitsOpaque[i] = QPixmap::fromImage(opaqueImage);
     }
 
     // Load the "negative" sign pixmap
     //
-    m_lcdNegative = IconLoader::loadPixmap("led--");
+    m_negativeSign = IconLoader::loadPixmap("led--");
 }
 
 void
@@ -390,14 +433,17 @@ TransportDialog::resetFont(QWidget *w)
     w->setFont(font);
 }
 
+/* unused
 void
-TransportDialog::setSMPTEResolution(int framesPerSecond,
+ransportDialog::setSMPTEResolution(int framesPerSecond,
                                     int bitsPerFrame)
 {
     m_framesPerSecond = framesPerSecond;
     m_bitsPerFrame = bitsPerFrame;
 }
+*/
 
+/* unused
 void
 TransportDialog::getSMPTEResolution(int &framesPerSecond,
                                     int &bitsPerFrame)
@@ -405,6 +451,7 @@ TransportDialog::getSMPTEResolution(int &framesPerSecond,
     framesPerSecond = m_framesPerSecond;
     bitsPerFrame = m_bitsPerFrame;
 }
+*/
 
 void
 TransportDialog::computeSampleRate()
@@ -442,6 +489,16 @@ TransportDialog::cycleThroughModes()
         m_currentMode = RealMode;
         break;
     }
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+
+    // Save the new TimeDisplayMode in the DocumentConfiguration.
+    doc->getConfiguration().set<String>(
+            DocumentConfiguration::TransportMode, getCurrentModeAsString());
+    doc->slotDocumentModified();
+
 }
 
 void
@@ -449,31 +506,25 @@ TransportDialog::displayTime()
 {
     switch (m_currentMode) {
     case RealMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->hide();
         break;
 
     case SMPTEMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText("SMPTE"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case BarMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText("BAR"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case BarMetronomeMode:
-        m_clearMetronomeTimer->setSingleShot(false);
-        m_clearMetronomeTimer->start(1700);
         ui->TimeDisplayLabel->setText("MET"); // DO NOT i18n
         ui->TimeDisplayLabel->show();
         break;
 
     case FrameMode:
-        m_clearMetronomeTimer->stop();
         ui->TimeDisplayLabel->setText(QString("%1").arg(m_sampleRate));
         ui->TimeDisplayLabel->show();
         break;
@@ -484,7 +535,7 @@ void
 TransportDialog::setNewMode(const std::string& newModeAsString)
 {
     TimeDisplayMode newMode = RealMode; // default value if not found
-    
+
     std::map<std::string, TimeDisplayMode>::iterator iter =
         m_modeMap.find(newModeAsString);
 
@@ -502,9 +553,9 @@ void
 TransportDialog::setNewMode(const TimeDisplayMode& newMode)
 {
     computeSampleRate();
-    
+
     m_currentMode = newMode;
-    
+
     displayTime();
 }
 
@@ -513,9 +564,11 @@ void
 TransportDialog::slotChangeTimeDisplay()
 {
     computeSampleRate();
-    
+
     cycleThroughModes();
-    
+
+    updateMetronomeTimer();
+
     displayTime();
 }
 
@@ -540,7 +593,7 @@ TransportDialog::displayRealTime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != RealMode) {
         ui->HourColonPixmap->show();
@@ -552,10 +605,10 @@ TransportDialog::displayRealTime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -588,7 +641,7 @@ TransportDialog::displayFrameTime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != FrameMode) {
         ui->HourColonPixmap->hide();
@@ -600,10 +653,10 @@ TransportDialog::displayFrameTime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -645,7 +698,7 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
 {
     RealTime st = rt;
 
-    slotResetBackground();
+    resetBackground();
 
     if (m_lastMode != SMPTEMode) {
         ui->HourColonPixmap->show();
@@ -657,10 +710,10 @@ TransportDialog::displaySMPTETime(const RealTime &rt)
 
     // If time is negative then reverse the time and set the minus flag
     //
-    if (st < RealTime::zeroTime) {
-        st = RealTime::zeroTime - st;
+    if (st < RealTime::zero()) {
+        st = RealTime::zero() - st;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -709,7 +762,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
     if (bar < 0) {
         bar = -bar;
         if (!m_lastNegative) {
-            ui->NegativePixmap->setPixmap(m_lcdNegative);
+            ui->NegativePixmap->setPixmap(m_negativeSign);
             m_lastNegative = true;
         }
     } else // don't show the flag
@@ -720,15 +773,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
-    if (m_currentMode == BarMetronomeMode && unit < 2) {
-        if (beat == 1) {
-            setBackgroundColor(Qt::red);
-        } else {
-            setBackgroundColor(Qt::cyan);
-        }
-    } else {
-        slotResetBackground();
-    }
+    // Break bar/beat/unit into digits.
 
     m_tenThousandths = ( unit ) % 10;
     m_thousandths = ( unit / 10 ) % 10;
@@ -768,6 +813,7 @@ TransportDialog::displayBarTime(int bar, int beat, int unit)
         }
     }
 
+    // Update the digits on the display.
     updateTimeDisplay();
 }
 
@@ -777,12 +823,15 @@ TransportDialog::updateTimeDisplay()
 
 #define UPDATE(NEW,OLD,WIDGET)                                     \
     if (NEW != OLD) {                                              \
-        if (NEW < 0) {                                             \
+        if (NEW < 0  ||  NEW > 9) {                                \
             ui->WIDGET->clear();                          \
         } else if (!m_isBackgroundSet) {                           \
-            ui->WIDGET->setPixmap(m_lcdListDefault[NEW]); \
+            /* Metronome is *not* flashing, use the opaque versions. */  \
+            /* ??? Seeing the opaque bitmap during flash on occasion.  */  \
+            ui->WIDGET->setPixmap(m_digitsOpaque[NEW]);  \
         } else {                                                   \
-            ui->WIDGET->setPixmap(m_lcdList[NEW]);        \
+            /* Metronome *is* flashing, use the transparent versions. */  \
+            ui->WIDGET->setPixmap(m_digitsTransparent[NEW]);  \
         }                                                          \
         OLD = NEW;                                                 \
     }
@@ -832,10 +881,9 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
         if (mE->getVelocity() == 0)
             return ;
 
-        MidiPitchLabel mPL(mE->getPitch());
-        ui->InDisplay->setText
-            (mPL.getQString() +
-             QString("  %1").arg(mE->getVelocity()));
+        ui->InDisplay->setText(
+                Pitch::toStringOctave(mE->getPitch()) +
+                QString("  %1").arg(mE->getVelocity()));
     }
     break;
 
@@ -860,7 +908,15 @@ TransportDialog::slotMidiInLabel(const MappedEvent *mE)
         ui->InDisplay->setText(tr("SYS MESSAGE"));
         break;
 
-        // Pacify compiler warnings about missed cases.
+    case MappedEvent::MidiRPN:
+        ui->InDisplay->setText(tr("RPN"));
+        break;
+
+    case MappedEvent::MidiNRPN:
+        ui->InDisplay->setText(tr("NRPN"));
+        break;
+
+    // Pacify compiler warnings about missed cases.
     case MappedEvent::InvalidMappedEvent:
     case MappedEvent::Audio:
     case MappedEvent::AudioCancel:
@@ -905,7 +961,7 @@ TransportDialog::slotClearMidiInLabel()
     ui->InDisplay->setText(tr("NO EVENTS"));
 
     // also, just to be sure:
-    slotResetBackground();
+    resetBackground();
 }
 
 void
@@ -921,10 +977,9 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
     case MappedEvent::MidiNote:
     case MappedEvent::MidiNoteOneShot:
     {
-        MidiPitchLabel mPL(mE->getPitch());
-        ui->OutDisplay->setText
-            (mPL.getQString() +
-             QString("  %1").arg(mE->getVelocity()));
+        ui->OutDisplay->setText(
+                Pitch::toStringOctave(mE->getPitch()) +
+                QString("  %1").arg(mE->getVelocity()));
     }
     break;
 
@@ -949,7 +1004,15 @@ TransportDialog::slotMidiOutLabel(const MappedEvent *mE)
         ui->OutDisplay->setText(tr("SYS MESSAGE"));
         break;
 
-        // Pacify compiler warnings about missed cases.
+    case MappedEvent::MidiRPN:
+        ui->OutDisplay->setText(tr("RPN"));
+        break;
+
+    case MappedEvent::MidiNRPN:
+        ui->OutDisplay->setText(tr("NRPN"));
+        break;
+
+    // Pacify compiler warnings about missed cases.
     case MappedEvent::InvalidMappedEvent:
     case MappedEvent::Audio:
     case MappedEvent::AudioCancel:
@@ -995,7 +1058,7 @@ TransportDialog::slotClearMidiOutLabel()
 }
 
 void
-TransportDialog::closeEvent(QCloseEvent * /*e*/)
+TransportDialog::closeEvent(QCloseEvent * /*closeEvent*/)
 {
     emit closed();
 
@@ -1008,36 +1071,73 @@ TransportDialog::closeEvent(QCloseEvent * /*e*/)
 void
 TransportDialog::slotLoopButtonClicked()
 {
-    // disable if JACK transport has been set #1240039 - DMM
-    //    QSettings settings;
-    //    settings.beginGroup( SequencerOptionsConfigGroup );
-    // 
-    //    if ( qStrToBool( settings.value("jacktransport", "false" ) ) )
-    //    {
-    //    //!!! - this will fail silently
-    //    ui->LoopButton->setEnabled(false);
-    //    ui->LoopButton->setOn(false);
-    //        return;
-    //    }
-    //    settings.endGroup();
-
-    if (ui->LoopButton->isChecked()) {
-        emit setLoop();
-    } else {
-        emit unsetLoop();
-    }
+    RosegardenDocument::currentDocument->loopButton(
+            ui->LoopButton->isChecked());
 }
 
 void
 TransportDialog::slotSetStartLoopingPointAtMarkerPos()
 {
-    emit setLoopStartTime();
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    Composition &composition = document->getComposition();
+
+    const timeT loopStart = composition.getPosition();
+    timeT loopEnd = composition.getLoopEnd();
+
+    // Turn a backwards loop into an empty loop.
+    if (loopStart > loopEnd)
+        loopEnd = loopStart;
+
+    if (loopStart != loopEnd)
+        composition.setLoopMode(Composition::LoopOn);
+    else
+        composition.setLoopMode(Composition::LoopOff);
+
+    composition.setLoopStart(loopStart);
+    composition.setLoopEnd(loopEnd);
+
+    emit document->loopChanged();
 }
 
 void
 TransportDialog::slotSetStopLoopingPointAtMarkerPos()
 {
-    emit setLoopStopTime();
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    Composition &composition = document->getComposition();
+
+    timeT loopStart = composition.getLoopStart();
+    const timeT loopEnd = composition.getPosition();
+
+    // Turn a backwards loop into an empty loop.
+    if (loopEnd < loopStart)
+        loopStart = loopEnd;
+
+    if (loopStart != loopEnd)
+        composition.setLoopMode(Composition::LoopOn);
+    else
+        composition.setLoopMode(Composition::LoopOff);
+
+    composition.setLoopStart(loopStart);
+    composition.setLoopEnd(loopEnd);
+
+    emit document->loopChanged();
+}
+
+void
+TransportDialog::slotLoopChanged()
+{
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    Composition &composition = document->getComposition();
+
+    ui->LoopButton->setChecked(
+            (composition.getLoopMode() != Composition::LoopOff));
+}
+
+void
+TransportDialog::slotDocumentLoaded(RosegardenDocument *doc)
+{
+    connect(doc, &RosegardenDocument::loopChanged,
+            this, &TransportDialog::slotLoopChanged);
 }
 
 void TransportDialog::slotTempoChanged(tempoT tempo)
@@ -1050,11 +1150,23 @@ void TransportDialog::slotTempoChanged(tempoT tempo)
 void TransportDialog::slotPlaying(bool checked)
 {
     ui->PlayButton->setChecked(checked);
+
+    // If it changed...
+    if (checked != m_playing) {
+        m_playing = checked;
+        updateMetronomeTimer();
+    }
 }
 
 void TransportDialog::slotRecording(bool checked)
 {
     ui->RecordButton->setChecked(checked);
+
+    // If it changed...
+    if (checked != m_recording) {
+        m_recording = checked;
+        updateMetronomeTimer();
+    }
 }
 
 void TransportDialog::slotMetronomeActivated(bool checked)
@@ -1117,7 +1229,13 @@ TransportDialog::isExpanded()
 void
 TransportDialog::slotEditTempo()
 {
-    emit editTempo(this);
+    const timeT atTime =
+            RosegardenDocument::currentDocument->getComposition().getPosition();
+
+    EditTempoController::self()->editTempo(
+            this,  // parent
+            atTime,  // atTime
+            false);  // timeEditable
 }
 
 void
@@ -1143,7 +1261,7 @@ TransportDialog::setBackgroundColor(QColor color)
 }
 
 void
-TransportDialog::slotResetBackground()
+TransportDialog::resetBackground()
 {
     if (m_isBackgroundSet) {
         setBackgroundColor(Qt::black);
@@ -1163,6 +1281,144 @@ void TransportDialog::loadGeo()
     QSettings settings;
     settings.beginGroup(WindowGeometryConfigGroup);
     restoreGeometry(settings.value("Transport_Geometry").toByteArray());
+}
+
+void TransportDialog::slotMetronomeTimer()
+{
+    // This routine is time-critical.  Keep it short and do as
+    // little work as possible.
+
+    // ??? This is still pretty unreliable.  Either the timer isn't
+    //     very reliable or the display updates aren't.  We could
+    //     collect a list of the arrival times in a circular
+    //     queue and then analyze the deltas.  That would give us an
+    //     idea how good the timer is.
+
+    // If we are flashing
+    if (m_flashing) {
+        // If we have timed out
+        if (QDateTime::currentDateTime() > m_metronomeTimeout) {
+            // Clear the flash.
+            // ??? Inline and make less CPU-intensive?
+            resetBackground();
+
+            // No improvement.
+            //repaint();
+            //qApp->processEvents();
+
+            // Indicate not flashing.
+            m_flashing = false;
+
+            // If we are neither playing nor recording, stop the timer.
+            // Otherwise the flash will be stuck if we stop when it is
+            // flashing.
+            if (!(m_playing  ||  m_recording))
+                m_metronomeTimer.stop();
+        }
+        return;
+    }
+
+    // Get the playback time.
+    // SequencerDataBlock appears to be the right place for very
+    // precise time.
+    const RealTime position =
+            SequencerDataBlock::getInstance()->getPositionPointer();
+    const Composition &comp =
+            RosegardenDocument::currentDocument->getComposition();
+    // Convert RealTime to timeT (sequencer ticks).
+    timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
+    int bar;
+    int beat;
+    int fraction;
+    int remainder;
+    comp.getMusicalTimeForAbsoluteTime(elapsedTime, bar, beat, fraction, remainder);
+
+    // If we are on the beat.
+    if (fraction == 0) {
+        // Flash
+        if (beat == 1) {
+            // ??? Inline and make less CPU-intensive?
+            setBackgroundColor(Qt::red);
+            //setBackgroundColor(QColor(255,0,0));
+        } else {
+            // ??? Inline and make less CPU-intensive?
+            setBackgroundColor(Qt::cyan);
+            //setBackgroundColor(QColor(0,255,255));
+        }
+
+        // No improvement.
+        //repaint();
+        //qApp->processEvents();
+
+        // Compute the timeout.
+        m_metronomeTimeout = QDateTime::currentDateTime().addMSecs(90);
+
+        // Indicate flashing.
+        m_flashing = true;
+
+        return;
+    }
+}
+
+void TransportDialog::updateMetronomeTimer()
+{
+    // Start/Stop metronome timer as needed.
+    if (m_currentMode == BarMetronomeMode  &&  (m_playing  ||  m_recording)) {
+        m_metronomeTimer.start(10);
+        return;
+    }
+
+    // We need to stop the timer.
+
+    // If we aren't flashing, we can just go ahead and stop the timer.
+    if (!m_flashing) {
+        m_metronomeTimer.stop();
+    }
+
+    // If we are flashing, we need to let slotMetronomeTimer() clear the flash
+    // for us and stop the timer.
+}
+
+void TransportDialog::keyPressEvent(QKeyEvent *keyEvent)
+{
+    if (!keyEvent)
+        return;
+
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    if (!rmw) {
+        QDialog::keyPressEvent(keyEvent);
+        return;
+    }
+
+    const int key = keyEvent->key();
+
+    if (key == Qt::Key_PageUp)
+        rmw->slotRewind();
+    else if (key == Qt::Key_PageDown)
+        rmw->slotFastforward();
+    else if (key == Qt::Key_Home)
+        rmw->slotRewindToBeginning();
+    else if (key == Qt::Key_End)
+        rmw->slotFastForwardToEnd();
+
+    QDialog::keyPressEvent(keyEvent);
+}
+
+// Composition Observer
+void TransportDialog::timeSignatureChanged(const Composition *comp)
+{
+    RG_DEBUG << "timeSignatureChanged";
+    // reset pointer position to recalculate display
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    rmw->slotSetPointerPosition(comp->getPosition());
+}
+
+void TransportDialog::tempoChanged(const Composition *comp)
+{
+    RG_DEBUG << "tempoChanged";
+    // reset pointer position to recalculate display
+    RosegardenMainWindow *rmw = RosegardenMainWindow::self();
+    rmw->slotSetPointerPosition(comp->getPosition());
 }
 
 

@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,6 +20,7 @@
 #define RG_QUANTIZEDIALOG_H
 
 #include <QDialog>
+#include <memory>
 
 class QWidget;
 
@@ -31,6 +32,7 @@ class Quantizer;
 class QuantizeParameters;
 
 
+/// The "Quantize" dialog.
 class QuantizeDialog : public QDialog
 {
     Q_OBJECT
@@ -38,8 +40,8 @@ class QuantizeDialog : public QDialog
 public:
     QuantizeDialog(QWidget *parent, bool inNotation = false);
 
-    /// Returned quantizer object is on heap -- caller must delete
-    Quantizer *getQuantizer() const;
+    /// Returns a Quantizer configured to the user's specifications.
+    std::shared_ptr<Quantizer> getQuantizer() const;
 
 public slots:
     // QDialog override.

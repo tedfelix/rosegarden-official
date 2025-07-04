@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,6 +21,7 @@
 #include <QMap>
 #include <QObject>
 #include <set>
+#include <map>
 
 class QAction;
 class QActionGroup;
@@ -44,9 +45,9 @@ class ActionFileParser : public QObject, public XMLHandler
     Q_OBJECT
 
 public:
-    ActionFileParser(QObject *actionOwner);
+    explicit ActionFileParser(QObject *actionOwner);
     ~ActionFileParser() override;
-    
+
     bool load(QString actionRcFile);
 
     /// Enable/disable and show/hide actions based on the new state.
@@ -64,7 +65,7 @@ private:
     bool setActionIcon(QString actionName, QString icon);
     bool setActionShortcut(QString actionName, QString shortcut, bool isApplicationContext);
     bool setActionToolTip(QString actionName, QString tooltip);
-    bool setActionGroup(QString actionName, QString group);
+    bool setActionGroup(QString actionName, QString groupName);
     bool setActionChecked(QString actionName, bool);
 
     bool setMenuText(QString name, QString text);
@@ -72,7 +73,7 @@ private:
     bool addMenuToMenubar(QString menuName);
     bool addActionToMenu(QString menuName, QString actionName);
     bool addSeparatorToMenu(QString menuName);
-    
+
     bool setToolbarText(QString name, QString text);
     bool addActionToToolbar(QString toolbarName, QString actionName);
     bool addSeparatorToToolbar(QString toolbarName);
@@ -103,11 +104,11 @@ private:
 
     QString findRcFile(QString name);
 
-    QAction *findAction(QString name);
-    QAction *findStandardAction(QString name);
-    QActionGroup *findGroup(QString name);
-    QMenu *findMenu(QString name);
-    QToolBar *findToolbar(QString name, Position position);
+    QAction *findAction(QString actionName);
+    QAction *findStandardAction(QString actionName);
+    QActionGroup *findGroup(QString groupName);
+    QMenu *findMenu(QString menuName);
+    QToolBar *findToolbar(QString toolbarName, Position position);
 
     typedef std::set<QAction *> ActionSet;
     typedef QMap<QString, ActionSet> StateMap;
@@ -130,7 +131,7 @@ private:
      */
     void setVisible(QAction *, bool);
 
-    ActionSet m_tooltipSet;
+    std::map<QString, QString> m_tooltipMap;
 
     QObject *m_actionOwner;
     bool m_inMenuBar;

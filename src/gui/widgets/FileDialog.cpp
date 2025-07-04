@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[FileDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FileDialog.h"
 
@@ -106,6 +107,10 @@ FileDialog::getOpenFileName(QWidget *parent,
 
     FileDialog dialog(parent, caption, dir, filter, options);
 
+    // ??? We probably should do this.  Otherwise the user can
+    //     specify whatever they want.
+    //dialog.setFileMode(QFileDialog::ExistingFile);
+
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)
         dialog.selectNameFilter(*selectedFilter);
@@ -137,6 +142,9 @@ FileDialog::getOpenFileNames(QWidget *parent,
     }
 
     FileDialog dialog(parent, caption, dir, filter, options);
+
+    // Make sure multi-select is enabled.
+    dialog.setFileMode(QFileDialog::ExistingFiles);
 
     // (code borrowed straight out of Qt 4.5.0 Copyright 2009 Nokia)
     if (selectedFilter)

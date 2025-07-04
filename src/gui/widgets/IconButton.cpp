@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -36,7 +36,7 @@ IconButton::IconButton(QWidget* parent, const QPixmap& icon, const QString & nam
     // Store the icon and name, these will be rendered in the paint event
     m_pixmap = icon;
     m_labelText = name;
-    
+
     // Get size of label
     m_font.setPixelSize(12);
     m_font.setBold(true);
@@ -59,7 +59,7 @@ void IconButton::paintEvent(QPaintEvent* /* event */)
     }
 
     paint.drawPixmap((width()-m_pixmap.width())/2,(height()-m_pixmap.height()-m_labelSize.height())/2,m_pixmap);
-   
+
     //@@@ even uglier, we don't even name the constant for the selection
     // foreground color
     //
@@ -69,8 +69,9 @@ void IconButton::paintEvent(QPaintEvent* /* event */)
     paint.drawText((width()-m_labelSize.width())/2, height()-m_margin, m_labelText);
 }
 
+/* unused
 void IconButton::setCheckedColor(QColor color)
 {
     m_checkedColor = color;
 }
-
+*/

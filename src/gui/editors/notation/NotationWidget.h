@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -74,7 +74,7 @@ public:
     // 2-stage deletion.
     void clearAll();
 
-    void setSegments(RosegardenDocument *document, 
+    void setSegments(RosegardenDocument *document,
                      std::vector<Segment *> segments);
 
     void scrollToTopLeft();
@@ -85,7 +85,7 @@ public:
         { return m_controlRulerWidget; }
 
     EventSelection *getSelection() const override;
-    void setSelection(EventSelection* s, bool preview) override;
+    void setSelection(EventSelection* selection, bool preview) override;
     EventSelection *getRulerSelection() const;
 
     timeT getInsertionTime(bool allowEndTime = false) const;
@@ -102,7 +102,7 @@ public:
     unsigned int getUntupledCount() const { return  m_untupledCount;}
     void setGraceMode(bool state = true) { m_graceMode = state; }
 
-    bool getPlayTracking() const { return m_playTracking; }
+    //bool getPlayTracking() const { return m_scrollToFollow; }
 
     NotationToolBox *getToolBox() { return m_toolBox; }
     NotationTool *getCurrentTool() const;
@@ -123,7 +123,7 @@ public:
     double getViewLeftX();
     double getViewRightX();
     int getNotationViewWidth();
-    double getNotationSceneHeight();
+    // unused double getNotationSceneHeight();
 
     void suspendLayoutUpdates();
     void resumeLayoutUpdates();
@@ -141,14 +141,20 @@ public:
 
     void updateSegmentChangerBackground();
     void updatePointerPosition(bool moveView = false);
-    
+
     void dispatchMousePress(const NotationMouseEvent *);
     void dispatchMouseRelease(const NotationMouseEvent *);
     void dispatchMouseMove(const NotationMouseEvent *);
     void dispatchMouseDoubleClick(const NotationMouseEvent *);
     void dispatchWheelTurned(int, const NotationMouseEvent *);
-    
-    //  Valid or inhibit scrolling to kept the cursor in the view
+
+    /// Temporarily disable/enable follow mode.
+    /**
+     * Used only by NotationSelector::slotMoveInsertionCursor() to turn off
+     * follow mode temporarily.
+     *
+     * See m_scrollToFollow.
+     */
     void setScroll(bool scroll) { m_noScroll = !scroll; }
 
 signals:
@@ -157,6 +163,16 @@ signals:
     void hoveredOverNoteChanged(QString);
     void headersVisibilityChanged(bool);
     void showContextHelp(const QString &);
+    /// Forwarded from ControlRulerWidget::childRulerSelectionChanged().
+    /*
+     * Connected to NotationView::slotUpdateMenuStates().
+     */
+    void rulerSelectionChanged();
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
 
 public slots:
     void slotSetTool(QString name);
@@ -167,28 +183,35 @@ public slots:
     void slotSetNoteInserter();
     void slotSetRestInserter();
     void slotSetInsertedNote(Note::Type type, int dots);
-    void slotSetAccidental(Accidental accidental, bool follow);
+    // ??? Never used as a slot.  Move to public and rename.
+    void slotSetAccidental(const Accidental &accidental, bool follow);
     void slotSetClefInserter();
-    void slotSetInsertedClef(Clef type);
+    // ??? Never used as a slot.  Move to public and rename.
+    void slotSetInsertedClef(const Clef &type);
     void slotSetTextInserter();
     void slotSetGuitarChordInserter();
     void slotSetLinearMode();
     void slotSetContinuousPageMode();
     void slotSetMultiPageMode();
-    void slotSetFontName(QString);
+    // ??? Never used as a slot.  Move to public and rename.
+    void slotSetFontName(const QString &name);
     void slotSetFontSize(int);
-    void slotSetPlayTracking(bool);
-    void slotTogglePlayTracking();
+    void slotScrollToFollow();
     void slotSetSymbolInserter();
     void slotSetInsertedSymbol(Symbol type);
 
     void slotToggleVelocityRuler();
     void slotTogglePitchbendRuler();
+    void slotToggleKeyPressureRuler();
+    void slotToggleChannelPressureRuler();
     void slotAddControlRuler(QAction*);
 
     void slotRegenerateHeaders();
 
+    void slotShowHeaderToolTip(QString toolTipText);
+
 private:
+    void setScrollToFollow(bool);
     void showEvent(QShowEvent * event) override;
     void hideOrShowRulers();
     bool linearMode() const;   // Return true when notation page layout is linear
@@ -236,7 +259,6 @@ private slots:
     void slotSyncPannerZoomOut();
 
     void slotGenerateHeaders();
-    void slotShowHeaderToolTip(QString toolTipText);
     void slotHeadersResized(int width);
     void slotAdjustHeadersHorizontalPos(bool last);
     void slotAdjustHeadersVerticalPos(QRectF r);
@@ -254,11 +276,12 @@ private slots:
 
 signals :
     void adjustNeeded(bool last);
-    void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void editElement(NotationStaff *, NotationElement *);
     void currentSegmentPrior();
     void currentSegmentNext();
 
 private:
+
     RosegardenDocument *m_document; // I do not own this
     Panned *m_view; // I own this
     Panner *m_hpanner; // I own this
@@ -266,7 +289,9 @@ private:
     int m_leftGutter;
     NotationToolBox *m_toolBox;
     NotationTool *m_currentTool;
-    bool m_playTracking;
+
+    /// Follow mode.
+    bool m_scrollToFollow;
 
     double m_hZoomFactor;
     double m_vZoomFactor;
@@ -344,8 +369,9 @@ private:
     QTimer *m_resizeTimer;
 
     bool m_updatesSuspended;
-    
-    bool m_noScroll;    // If true, don't scroll to keep the cursor in the view
+
+    /// Used to temporarily disable follow mode.  See setScroll().
+    bool m_noScroll;
 
     void locatePanner(bool vertical);
 
@@ -388,5 +414,3 @@ private slots:
 }
 
 #endif
-
-    

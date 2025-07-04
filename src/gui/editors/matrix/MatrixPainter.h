@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,26 +19,30 @@
 #define RG_MATRIXPAINTER_H
 
 #include "MatrixTool.h"
+#include "base/TimeT.h"
+
 #include <QString>
-#include "base/Event.h"
 
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class MatrixViewSegment;
 class MatrixElement;
 class Event;
 
 
+// cppcheck-suppress noConstructor
 class MatrixPainter : public MatrixTool
 {
     Q_OBJECT
 
-    friend class MatrixToolBox;
-
 public:
+
+    explicit MatrixPainter(MatrixWidget *);
+    ~MatrixPainter();
+
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     void handleMouseDoubleClick(const MatrixMouseEvent *) override;
     void handleMidButtonPress(const MatrixMouseEvent *) override;
@@ -48,26 +52,30 @@ public:
     void ready() override;
     void stow() override;
 
-    static QString ToolName();
+    static QString ToolName()  { return "painter"; }
+
+    void clearPreview();
 
 public slots:
+
     /**
      * Respond to an event being deleted -- it may be the one the tool
      * is remembering as the current event.
      */
     void handleEventRemoved(Event *event) override;
 
-protected slots:
-    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
-
-protected:
-    MatrixPainter(MatrixWidget *);
+private:
 
     void setBasicContextHelp();
 
-    timeT m_clickTime;
-    MatrixElement *m_currentElement;
-    MatrixViewSegment *m_currentViewSegment;
+    timeT m_clickTime{0};
+    MatrixElement *m_currentElement{nullptr};
+    MatrixViewSegment *m_currentViewSegment{nullptr};
+
+    Event *m_previewEvent;
+    MatrixElement *m_previewElement{nullptr};
+    void showPreview(const MatrixMouseEvent *e);
+
 };
 
 

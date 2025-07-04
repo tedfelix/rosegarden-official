@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -91,6 +91,8 @@ public:
     int getCurrentStaffNumber() { return m_currentStaff; }
     NotationStaff *getCurrentStaff();
     void setCurrentStaff(NotationStaff *);
+    /// Set current staff to the staff nearest time t.
+    void setCurrentStaff(timeT t);
 
     NotationStaff *getStaffAbove(timeT t);
     NotationStaff *getStaffBelow(timeT t);
@@ -101,6 +103,9 @@ public:
 
     NotationStaff *getStaffForSceneCoords(double x, int y) const;
 
+    // ??? The UI uses the term "Active" for this.  Evaluate each "current"
+    //     in here and see if it needs to be changed to "active" to match the
+    //     UI.  This one seems like it needs it.
     Segment *getCurrentSegment();
 
     bool segmentsContainNotes() const;
@@ -113,7 +118,8 @@ public:
     NotePixmapFactory *getNotePixmapFactory() { return m_notePixmapFactory; }
 
     EventSelection *getSelection() const override { return m_selection; }
-    void setSelection(EventSelection* s, bool preview) override;
+    /// Takes ownership of the selection.
+    void setSelection(EventSelection *selection, bool preview) override;
 
     timeT getInsertionTime(bool allowEndTime = false) const;
 
@@ -137,7 +143,7 @@ public:
     void setPageMode(StaffLayout::PageMode mode);
 
     QString getFontName() const;
-    void setFontName(QString);
+    void setFontName(const QString&);
 
     int getFontSize() const;
     void setFontSize(int);
@@ -145,7 +151,7 @@ public:
     int getHSpacing() const;
     void setHSpacing(int);
 
-    int getLeftGutter() const;
+    // unused int getLeftGutter() const;
     void setLeftGutter(int);
 
     const RulerScale *getRulerScale() const;
@@ -170,11 +176,11 @@ public:
                         );
 
     /// Remove any visible preview note
-    void clearPreviewNote(NotationStaff *);
+    void clearPreviewNote();
 
-    void playNote(Segment &segment, int pitch, int velocity = -1);
+    void playNote(const Segment &segment, int pitch, int velocity = -1);
 
-    bool constrainToSegmentArea(QPointF &scenePos);
+    // unused bool constrainToSegmentArea(QPointF &scenePos);
 
     // more dubious:
     void handleEventRemoved(Event *);
@@ -194,8 +200,9 @@ public:
     bool isEventRedundant(Clef &clef, timeT time, Segment &seg) const;
     bool isEventRedundant(Key &key, timeT time, Segment &seg) const;
 
-    /// Return the segments about to be deleted if any
-    std::vector<Segment *> * getSegmentsDeleted() { return &m_segmentsDeleted; }
+    /// Return the segments about to be deleted if any.
+    const std::vector<Segment *> *getSegmentsDeleted()
+            { return &m_segmentsDeleted; }
 
     /// Return true if all segments in scene are about to be deleted
     /// (Editor needs to be closed)
@@ -205,7 +212,7 @@ public:
      * Return true if another staff inside the scene than the given one
      * exists near the given time.
      */
-    bool isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t);
+    // unused bool isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t);
 
    /**
     * Update the refresh status off all segments on the given track and
@@ -218,17 +225,30 @@ public:
 
     void updatePageSize();
 
+    void setHighlightMode(const QString& highlightMode);
+
     /// YG: Only for debug
     void dumpVectors();
     void dumpBarDataMap();
+
+    // extra preview events
+    typedef std::map<const Event*, const Segment*> EventWithSegmentMap;
+    void setExtraPreviewEvents(const EventWithSegmentMap& events);
 
 signals:
     void sceneNeedsRebuilding();
 
     void eventRemoved(Event *);
 
-    //void selectionChanged(); // defined in QGraphicsScene
-    void selectionChanged(EventSelection *);
+    /// Emitted when the user changes the selection.
+    /**
+     * NotationWidget::setSegments() connects this to
+     * ControlRulerWidget::slotSelectionChanged().
+     *
+     * This is used to keep the velocity ruler in sync with the selected
+     * events.
+     */
+    void selectionChangedES(EventSelection *);
 
     void layoutUpdated(timeT,timeT);
     void staffsPositionned();
@@ -254,9 +274,7 @@ signals:
     void hoveredOverAbsoluteTimeChanged(unsigned int time);
 
 public slots:
-    void slotMouseLeavesView(); 
-
-protected slots:
+    void slotMouseLeavesView();
     void slotCommandExecuted();
 
 protected:
@@ -299,7 +317,7 @@ private:
 
     std::vector<Segment *> m_externalSegments; // I do not own these
     std::vector<Segment *> m_clones; // I own these
-    std::vector<Segment *> m_segments; // The concatenation of m_clones 
+    std::vector<Segment *> m_segments; // The concatenation of m_clones
                                        // and m_externalSegments
     std::vector<NotationStaff *> m_staffs; // I own these
 
@@ -348,7 +366,7 @@ private:
     void checkUpdate();
     void positionStaffs();
     void layoutAll();
-    void layout(NotationStaff *singleStaff, timeT start, timeT end);
+    void layout(NotationStaff *singleStaff, timeT startTime, timeT endTime);
 
     NotationStaff *setSelectionElementStatus(EventSelection *, bool set);
     void previewSelection(EventSelection *, EventSelection *oldSelection);
@@ -368,10 +386,14 @@ private:
     bool m_editRepeated;   // Direct edition of repeated segments is allowed
     bool m_haveInittedCurrentStaff;
 
-    NotationStaff * m_previewNoteStaff;  // Remember where the preview note was
+    NotationStaff *m_previewNoteStaff;  // Remember where the preview note was
 
     // Remember current labels of tracks
     std::map<int, std::string> m_trackLabels;
+
+    QString m_highlightMode;
+
+    EventWithSegmentMap m_additionalPreviewEvents;
 };
 
 }

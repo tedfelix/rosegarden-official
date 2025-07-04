@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -40,14 +40,15 @@ class AddFingeringMarkCommand : public BasicCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AddFingeringMarkCommand)
 
 public:
-    AddFingeringMarkCommand(std::string fingering,
+    AddFingeringMarkCommand(const std::string& fingering,
                             EventSelection &selection) :
         BasicCommand(getGlobalName(fingering), selection, true),
         m_selection(&selection),
         m_fingering(fingering)
     { }
 
-    static std::string getArgument(QString actionName, CommandArgumentQuerier &);
+    static std::string getArgument(const QString& actionName,
+                                   CommandArgumentQuerier &);
 
     static void registerCommand(CommandRegistry *r);
 
@@ -55,8 +56,8 @@ protected:
     void modifySegment() override;
 
 private:
-    static QString getGlobalName(std::string fingering = "");
-    static QString getActionName(std::string fingering = "");
+    static QString getGlobalName(const std::string& fingering = "");
+    static QString getActionName(const std::string& fingering = "");
     static std::vector<std::string> getStandardFingerings();
 
     EventSelection *m_selection;// only used on 1st execute (cf bruteForceRedo)

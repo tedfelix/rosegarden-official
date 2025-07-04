@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -28,6 +28,7 @@
 #include "base/ViewElement.h"
 #include "base/ViewSegment.h"
 #include "gui/editors/notation/BarLineItem.h"
+#include "gui/editors/notation/NotationElement.h"
 #include "gui/general/GUIPalette.h"
 #include "misc/Debug.h"
 
@@ -72,7 +73,7 @@ StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
-    m_current(false)
+    m_highlight(true)
 {
 }
 
@@ -97,7 +98,7 @@ StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
-    m_current(false)
+    m_highlight(true)
 {
 }
 
@@ -123,7 +124,7 @@ StaffLayout::StaffLayout(QGraphicsScene *scene, ViewSegment *viewSegment,
     m_connectingLineLength(0),
     m_startLayoutX(0),
     m_endLayoutX(0),
-    m_current(false)
+    m_highlight(true)
 {
 }
 
@@ -170,9 +171,9 @@ StaffLayout::setRowSpacing(int rowSpacing)
 }
 
 void
-StaffLayout::setConnectingLineLength(int connectingLineLength)
+StaffLayout::setConnectingLineLength(int length)
 {
-    m_connectingLineLength = connectingLineLength;
+    m_connectingLineLength = length;
 }
 
 int
@@ -225,11 +226,13 @@ StaffLayout::setTitleHeight(int titleHeight)
     m_titleHeight = titleHeight;
 }
 
+/* unused
 int
 StaffLayout::getTitleHeight() const
 {
     return m_titleHeight;
 }
+*/
 
 double
 StaffLayout::getTotalWidth() const
@@ -275,10 +278,8 @@ StaffLayout::getHeightOfRow() const
 }
 
 bool
-StaffLayout::containsSceneCoords(double x, int y) const
+StaffLayout::containsSceneCoords(double sceneX, int sceneY) const
 {
-//    std::cerr << "StaffLayout::containsSceneCoords(" << x << "," << y << ")" << std::endl;
-
     switch (m_pageMode) {
 
     case ContinuousPageMode:
@@ -286,8 +287,8 @@ StaffLayout::containsSceneCoords(double x, int y) const
         for (int row = getRowForLayoutX(m_startLayoutX);
              row <= getRowForLayoutX(m_endLayoutX); ++row) {
 
-            if (y >= getSceneYForTopOfStaff(row) &&
-                y  < getSceneYForTopOfStaff(row) + getHeightOfRow()) {
+            if (sceneY >= getSceneYForTopOfStaff(row) &&
+                sceneY  < getSceneYForTopOfStaff(row) + getHeightOfRow()) {
                 return true;
             }
         }
@@ -299,10 +300,10 @@ StaffLayout::containsSceneCoords(double x, int y) const
         for (int row = getRowForLayoutX(m_startLayoutX);
              row <= getRowForLayoutX(m_endLayoutX); ++row) {
 
-            if (y >= getSceneYForTopOfStaff(row) &&
-                y  < getSceneYForTopOfStaff(row) + getHeightOfRow() &&
-                x >= getSceneXForLeftOfRow(row) &&
-                x <= getSceneXForRightOfRow(row)) {
+            if (sceneY >= getSceneYForTopOfStaff(row) &&
+                sceneY  < getSceneYForTopOfStaff(row) + getHeightOfRow() &&
+                sceneX >= getSceneXForLeftOfRow(row) &&
+                sceneX <= getSceneXForRightOfRow(row)) {
                 return true;
             }
         }
@@ -312,17 +313,17 @@ StaffLayout::containsSceneCoords(double x, int y) const
     case LinearMode:
     default:
 
-        return (y >= getSceneYForTopOfStaff() &&
-                y < getSceneYForTopOfStaff() + getHeightOfRow());
+        return (sceneY >= getSceneYForTopOfStaff() &&
+                sceneY < getSceneYForTopOfStaff() + getHeightOfRow());
     }
 }
 
 int
-StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
+StaffLayout::getSceneYForHeight(int height, double baseX, int baseY) const
 {
     int y;
 
-    //    RG_DEBUG << "getSceneYForHeight(" << h << "," << baseY
+    //    RG_DEBUG << "getSceneYForHeight(" << height << "," << baseY
     //             << ")" << endl;
 
     if (baseX < 0)
@@ -334,16 +335,16 @@ StaffLayout::getSceneYForHeight(int h, double baseX, int baseY) const
         y = getSceneYForTopLine();
     }
 
-    y += getLayoutYForHeight(h);
+    y += getLayoutYForHeight(height);
 
     return y;
 }
 
 int
-StaffLayout::getLayoutYForHeight(int h) const
+StaffLayout::getLayoutYForHeight(int height) const
 {
-    int y = ((getTopLineHeight() - h) * getLineSpacing()) / getHeightPerLine();
-    if (h < getTopLineHeight() && (h % getHeightPerLine() != 0))
+    int y = ((getTopLineHeight() - height) * getLineSpacing()) / getHeightPerLine();
+    if (height < getTopLineHeight() && (height % getHeightPerLine() != 0))
         ++y;
 
     return y;
@@ -355,7 +356,7 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
     RG_DEBUG << "getWeightedHeightAtSceneCoords: originalHeight: "
                    << originalHeight << " non-weighted height: "
                    << getHeightAtSceneCoords(x, y);
-    
+
     // return the non-weighted height if it already matches (ie. the user
     // clicked pretty close to the center of the note head)
     int nonWeightedHeight = getHeightAtSceneCoords(x, y);
@@ -364,19 +365,22 @@ StaffLayout::getWeightedHeightAtSceneCoords(int originalHeight, double x, int y)
 
     // if no match, calculate an approximate height
     int row = getRowForSceneCoords(x, y);
-    int approximateHeight = (y - getSceneYForTopLine(row)) * getHeightPerLine() / getLineSpacing();
-    approximateHeight = getTopLineHeight() - approximateHeight;
+    RG_DEBUG << "approximateHeight" << y << getSceneYForTopLine(row) <<
+        getHeightPerLine() << getLineSpacing();
+    double approximateHeight = ((double)y - (double)getSceneYForTopLine(row)) *
+        (double)getHeightPerLine() / (double)getLineSpacing();
+    approximateHeight = (double)getTopLineHeight() - approximateHeight;
 
     RG_DEBUG << "approximateHeight: " << approximateHeight
                    << " originalHeight: " << originalHeight;
 
-    int difference = approximateHeight - originalHeight;
-    if (difference < 0) difference *= -1;
+    double difference = approximateHeight - originalHeight;
+    if (difference < 0.0) difference *= -1.0;
 
     // the approximate height is very coarse, so let's try using it as a rough
     // measure of how far the new height differs from the original, and return
     // the original if it's inside the range of "close enough"
-    if (difference > 1) return nonWeightedHeight;
+    if (difference > 1.0) return nonWeightedHeight;
     else return originalHeight;
 }
 
@@ -737,6 +741,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
                                         barThickness, getLineSpacing(),
                                         (int)inset, style);
 
+    if (m_highlight) {
+        line->setOpacity(1.0);
+    } else {
+        line->setOpacity(NONHIGHLIGHTOPACITY);
+    }
     m_scene->addItem(line);
     line->setPos(int(x), y);
 
@@ -795,6 +804,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
         barNoText->setFont(font);
         barNoText->setPos(x, y - metrics.height() - m_resolution * 2);
         barNoText->setZValue( -1);
+        if (m_highlight) {
+            barNoText->setOpacity(1.0);
+        } else {
+            barNoText->setOpacity(NONHIGHLIGHTOPACITY);
+        }
         m_scene->addItem(barNoText);
         if (hidden)
             barNoText->hide();
@@ -832,6 +846,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
 
             rect->setPen(GUIPalette::getColour(GUIPalette::BeatLine));
             rect->setBrush(GUIPalette::getColour(GUIPalette::BeatLine));
+            if (m_highlight) {
+                rect->setOpacity(1.0);
+            } else {
+                rect->setOpacity(NONHIGHLIGHTOPACITY);
+            }
 
             // Reset to SubBeatLine colour if we're not a beat line - avoid div by zero!
             //
@@ -852,6 +871,11 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
 
         rect = new QGraphicsRectItem
                (0, 0, barThickness, m_connectingLineLength);
+        if (m_highlight) {
+            rect->setOpacity(1.0);
+        } else {
+            rect->setOpacity(NONHIGHLIGHTOPACITY);
+        }
         m_scene->addItem(rect);
 
         rect->setPos(x + .5, y + .5);
@@ -875,11 +899,13 @@ StaffLayout::compareBars(const BarLineItem *barLine1, const BarLineItem *barLine
     return (barLine1->getLayoutX() < barLine2->getLayoutX());
 }
 
+/* unused
 bool
 StaffLayout::compareBarToLayoutX(const BarLineItem *barLine1, int x)
 {
     return (barLine1->getLayoutX() < x);
 }
+*/
 
 void
 StaffLayout::deleteTimeSignatures()
@@ -978,12 +1004,12 @@ StaffLayout::clearStaffLineRow(int row)
 }
 
 void
-StaffLayout::resizeStaffLineRow(int row, double x, double length)
+StaffLayout::resizeStaffLineRow(int row, double offset, double length)
 {
     //Profiler profiler("StaffLayout::resizeStaffLineRow");
 
     //    RG_DEBUG << "StaffLayout::resizeStaffLineRow: row "
-    //       << row << ", x " << x << ", length "
+    //       << row << ", offset " << offset << ", length "
     //       << length << endl;
 
 
@@ -1013,7 +1039,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
     /*!!! No longer really good enough. But we could potentially use the
       bar positions to sort this out
-     
+
         if (m_pageMode && row > 0 && offset == 0.0) {
             offset = (double)m_npf->getBarMargin() / 2;
             length -= offset;
@@ -1030,7 +1056,12 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         int barThickness = m_resolution / 12 + 1;
         y = getSceneYForTopLine(row);
         QGraphicsRectItem *line = new QGraphicsRectItem
-            (int(x + length) + .5, y + .5, barThickness, m_connectingLineLength);
+            (int(offset + length) + .5, y + .5, barThickness, m_connectingLineLength);
+        if (m_highlight) {
+            line->setOpacity(1.0);
+        } else {
+            line->setOpacity(NONHIGHLIGHTOPACITY);
+        }
         m_scene->addItem(line);
         line->setPen(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
         line->setBrush(GUIPalette::getColour(GUIPalette::StaffConnectingTerminatingLine));
@@ -1052,7 +1083,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 
         y = getSceneYForHeight
             (getBottomLineHeight() + getHeightPerLine() * h,
-             x, getSceneYForTopLine(row));
+             offset, getSceneYForTopLine(row));
 
         if (elementsInSpaces()) {
             y -= getLineSpacing() / 2 + 1;
@@ -1063,7 +1094,7 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
         //                           << "," << y << ")" << endl;
 
         if (m_lineThickness > 1) {
-        
+
             QGraphicsRectItem *line = dynamic_cast<QGraphicsRectItem *>
                 (m_staffLines[row][lineIndex]);
 
@@ -1072,14 +1103,20 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
                 m_staffLines[row][lineIndex] = line = new QGraphicsRectItem;
                 line->setPen(QPen(lineColour, 0));
                 line->setBrush(lineColour);
+                if (m_highlight) {
+                    line->setOpacity(1.0);
+                } else {
+                    line->setOpacity(NONHIGHLIGHTOPACITY);
+                }
                 m_scene->addItem(line);
             }
 
-            line->setRect(int(x) + .5, y + .5, int(length), m_lineThickness);
+            line->setRect(int(offset) + .5, y + .5,
+                          int(length), m_lineThickness);
             line->show();
 
         } else {
-        
+
             QGraphicsLineItem *line = dynamic_cast<QGraphicsLineItem *>
                 (m_staffLines[row][lineIndex]);
 
@@ -1087,10 +1124,16 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
                 delete m_staffLines[row][lineIndex];
                 m_staffLines[row][lineIndex] = line = new QGraphicsLineItem;
                 line->setPen(QPen(lineColour, 0));
+                if (m_highlight) {
+                    line->setOpacity(1.0);
+                } else {
+                    line->setOpacity(NONHIGHLIGHTOPACITY);
+                }
                 m_scene->addItem(line);
             }
 
-            line->setLine(int(x) + .5, y + .5, int(x + length) + .5, y + .5);
+            line->setLine(int(offset) + .5, y + .5,
+                          int(offset + length) + .5, y + .5);
             line->show();
         }
 
@@ -1105,9 +1148,77 @@ StaffLayout::resizeStaffLineRow(int row, double x, double length)
 }
 
 void
-StaffLayout::setCurrent(bool current)
+StaffLayout::setHighlight(bool highlight)
 {
-    m_current = current;
+    if (highlight == m_highlight) return;
+    RG_DEBUG << "setHighlight" << highlight;
+    m_highlight = highlight;
+    // update all graphical elements
+    for (int i = 0; i < (int)m_staffLines.size(); ++i) {
+        for (int h = 0; h < (int)m_staffLines[i].size(); ++h) {
+            QGraphicsItem* item = m_staffLines[i][h];
+            if (! item) continue;
+            if (highlight) {
+                item->setOpacity(1.0);
+            } else {
+                item->setOpacity(NONHIGHLIGHTOPACITY);
+            }
+        }
+    }
+
+    for(int i=0; i<(int)m_staffConnectingLines.size(); ++i) {
+        QGraphicsItem* item = m_staffConnectingLines[i];
+        if (! item) continue;
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+
+    for (LineRecList::iterator i = m_beatLines.begin();
+         i != m_beatLines.end(); ++i) {
+        QGraphicsItem* item = i->second;
+        if (! item) continue;
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+
+    for (LineRecList::iterator i = m_barConnectingLines.begin();
+         i != m_barConnectingLines.end(); ++i) {
+        QGraphicsItem* item = i->second;
+        if (! item) continue;
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+
+    for(int i=0; i<(int)m_barNumbers.size(); ++i) {
+        QGraphicsItem* item = m_barNumbers[i];
+        if (! item) continue;
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+
+    for (BarLineList::const_iterator i = m_barLines.begin();
+         i != m_barLines.end(); ++i) {
+        BarLineItem *item = *i;
+        if (! item) continue;
+        if (highlight) {
+            item->setOpacity(1.0);
+        } else {
+            item->setOpacity(NONHIGHLIGHTOPACITY);
+        }
+    }
+
 }
 
 void
@@ -1118,6 +1229,7 @@ StaffLayout::renderElements(ViewElementList::iterator,
     // of positionElements
 }
 
+/* unused
 QRectF
 StaffLayout::getSceneArea()
 {
@@ -1140,7 +1252,7 @@ StaffLayout::getSceneArea()
             right = getSceneXForLayoutX(m_endLayoutX);
         }
 
-        top = getSceneYForTopOfStaff(firstRow);        
+        top = getSceneYForTopOfStaff(firstRow);
         bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
 
         break;
@@ -1153,7 +1265,7 @@ StaffLayout::getSceneArea()
         if (lastRow == firstRow) {
             left = getSceneXForLayoutX(m_startLayoutX);
             right = getSceneXForLayoutX(m_endLayoutX);
-            top = getSceneYForTopOfStaff(firstRow);        
+            top = getSceneYForTopOfStaff(firstRow);
             bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
         } else {
 
@@ -1168,7 +1280,7 @@ StaffLayout::getSceneArea()
                 bottom = getSceneYForTopOfStaff(lastRow) + getHeightOfRow();
             } else {
 
-              /// TODO : Two special cases should be processed here 
+              /// TODO : Two special cases should be processed here
               ///          1 - Only one row on the first page
               ///          2 - Only one row on the last page
 
@@ -1185,7 +1297,7 @@ StaffLayout::getSceneArea()
 
     case LinearMode:
     default:
-      
+
         left = m_startLayoutX;
         right = m_endLayoutX;
         top = getSceneYForTopOfStaff();
@@ -1194,5 +1306,5 @@ StaffLayout::getSceneArea()
 
     return QRectF(left, top, right - left, bottom - top);
 }
-
+*/
 }

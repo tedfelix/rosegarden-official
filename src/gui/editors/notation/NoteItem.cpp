@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,6 +25,17 @@
 
 namespace Rosegarden
 {
+
+NoteItemDimensions::NoteItemDimensions() :
+    noteBodyWidth(0),
+    noteBodyHeight(0),
+    left(0),
+    right(0),
+    above(0),
+    below(),
+    borderX(0),
+    borderY(0)
+{}
 
 NoteItem::NoteItem(const NotePixmapParameters &params,
                    QSharedPointer<NoteStyle> style,
@@ -72,11 +83,14 @@ NoteItem::paint(QPainter *painter,
 //    NOTATION_DEBUG << "note: transform " << t << " differs from last transform " << m_lastTransform << ", or is not a small transform";
 
     bool tiny = (t.m11() < 0.15 || t.m22() < 0.15);
-    if (!tiny) {
-        QRectF rect = boundingRect();
-        QRectF target = t.mapRect(rect);
-        tiny = (target.width() < 10 && target.height() < 10);
-    }
+
+    // bug 1484 - the following 5 lines are now commented out
+
+    //if (!tiny) {
+    //    QRectF rect = boundingRect();
+    //    QRectF target = t.mapRect(rect);
+    //    tiny = (target.width() < 10 && target.height() < 10);
+    //}
 
     DrawMode mode;
     if (tiny) {
@@ -138,7 +152,6 @@ NoteItem::makePixmap() const
 
     return pixmap;
 }
-    
+
 
 }
-

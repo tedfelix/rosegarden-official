@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -31,8 +31,8 @@ MappedDevice::MappedDevice():
 
 MappedDevice::MappedDevice(DeviceId id,
                            Device::DeviceType type,
-                           std::string name,
-                           std::string connection):
+                           const std::string& name,
+                           const std::string& connection):
     std::vector<MappedInstrument*>(),
     m_id(id),
     m_type(type),
@@ -100,7 +100,7 @@ MappedDevice::operator=(const MappedDevice &mD)
     return *this;
 }
 
-
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedDevice *mD)
 {
@@ -142,8 +142,9 @@ operator>>(QDataStream &dS, MappedDevice *mD)
 
     return dS;
 }
+*/
 
-
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedDevice &mD)
 {
@@ -186,6 +187,7 @@ operator>>(QDataStream &dS, MappedDevice &mD)
 
     return dS;
 }
+*/
 
 QDataStream&
 operator<<(QDataStream &dS, MappedDevice *mD)
@@ -236,4 +238,3 @@ operator<<(QDataStream &dS, const MappedDevice &mD)
 }
 
 }
-

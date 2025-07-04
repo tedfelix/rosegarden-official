@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -41,7 +41,7 @@ struct ControllerAndPBList
         m_pitchbend(0)
     { }
 
-    ControllerAndPBList(const StaticControllers &controllers) :
+    explicit ControllerAndPBList(const StaticControllers &controllers) :
         m_controllers(controllers),
         m_havePitchbend(false),
         m_pitchbend(0)
@@ -96,7 +96,7 @@ class ChannelManager : public QObject
     Q_OBJECT
 
 public:
-    ChannelManager(Instrument *instrument);
+    explicit ChannelManager(Instrument *instrument);
     ~ChannelManager() override  { freeChannelInterval(); }
 
     /// Set the instrument we are playing on, releasing any old one.
@@ -124,8 +124,8 @@ public:
     {
         m_start = ChannelInterval::m_earliestTime;
         m_end = ChannelInterval::m_latestTime;
-        m_startMargin = RealTime::zeroTime;
-        m_endMargin = RealTime::zeroTime;
+        m_startMargin = RealTime::zero();
+        m_endMargin = RealTime::zero();
     }
 
     // *** Channel Interval Allocation

@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -18,7 +18,7 @@
 // SoundFile is an abstract base class defining behaviour for both
 // MidiFiles and AudioFiles.  The getBytes routine is buffered into
 // suitably sized chunks to prevent excessive file reads.
-// 
+//
 //
 
 #include <fstream>
@@ -39,17 +39,17 @@ class SoundFile
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SoundFile)
 
 public:
-    SoundFile(const QString &fileName);
+    explicit SoundFile(const QString &absoluteFilePath);
     virtual ~SoundFile();
 
     class BadSoundFileException : public Exception
     {
     public:
-        BadSoundFileException(QString path) :
+        explicit BadSoundFileException(const QString& path) :
             Exception(QObject::tr("Bad sound file ") + path), m_path(path) { }
-        BadSoundFileException(QString path, std::string message) :
+        BadSoundFileException(const QString& path, const std::string& message) :
             Exception(QObject::tr("Bad sound file ") + path + ": " + strtoqstr(message)), m_path(path) { }
-        BadSoundFileException(QString path, QString file, int line) :
+        BadSoundFileException(const QString& path, const QString& file, int line) :
             Exception(QObject::tr("Bad sound file ") + path, file, line), m_path(path) { }
 
         ~BadSoundFileException() throw() override { }
@@ -65,19 +65,23 @@ public:
     virtual bool write() = 0;
     virtual void close() = 0;
 
-    QString getShortFilename() const;
-    QString getFilename() const { return m_fileName; }
-    void setFilename(const QString &fileName) { m_fileName = fileName; }
+    /// E.g. take1.wav
+    QString getFileName() const;
+    /// E.g. /home/ted/Documents/project1/audio/take1.wav
+    QString getAbsoluteFilePath() const { return m_absoluteFilePath; }
+    void setAbsoluteFilePath(const QString &absoluteFilePath) { m_absoluteFilePath = absoluteFilePath; }
 
     // Useful methods that operate on our file data
     //
-    int getIntegerFromLittleEndian(const std::string &s);
-    std::string getLittleEndianFromInteger(unsigned int value,
-                                           unsigned int length);
+    static int getIntegerFromLittleEndian(const std::string &s);
+    static std::string getLittleEndianFromInteger(unsigned int value,
+                                                  unsigned int length);
 
-    int getIntegerFromBigEndian(const std::string &s);
-    std::string getBigEndianFromInteger(unsigned int value,
-                                        unsigned int length);
+    // unused static int getIntegerFromBigEndian(const std::string &s);
+    /* unused
+    static std::string getBigEndianFromInteger(unsigned int value,
+                                               unsigned int length);
+    */
 
     // Buffered read - allow this to be public
     //
@@ -91,11 +95,11 @@ public:
 
     // check EOF status
     //
-    bool isEof() const 
+    bool isEof() const
         { if (m_inFile) return m_inFile->eof(); else return true; }
 
 protected:
-    QString m_fileName;
+    QString m_absoluteFilePath;
 
     // get some bytes from an input stream - unbuffered as we can
     // modify the file stream
@@ -103,13 +107,13 @@ protected:
 
     // Get n bytes from an input stream and write them into buffer.
     // Return the actual number of bytes read.
-    size_t getBytes(std::ifstream *file, char *buffer, size_t n);
+    static size_t getBytes(std::ifstream *file, char *buffer, size_t n);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const std::string outputString);
+    static void putBytes(std::ofstream *file, const std::string& outputString);
 
     // write some bytes to an output stream
-    void putBytes(std::ofstream *file, const char *buffer, size_t n);
+    static void putBytes(std::ofstream *file, const char *buffer, size_t n);
 
     // Read buffering - define chunk size and buffer file reading
     //
@@ -119,7 +123,7 @@ protected:
 
     std::ifstream *m_inFile;
     std::ofstream *m_outFile;
-    
+
     bool           m_loseBuffer; // do we need to dump the read buffer
                                  // and re-fill it?
 
@@ -131,5 +135,3 @@ protected:
 
 
 #endif // RG_SOUNDFILE_H
-
-

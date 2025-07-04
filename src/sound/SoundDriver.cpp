@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -34,8 +34,8 @@ namespace Rosegarden
 {
 
 
-SoundDriver::SoundDriver(MappedStudio *studio, const QString &name) :
-        m_name(name),
+SoundDriver::SoundDriver(MappedStudio *studio, const QString &versionInfo) :
+        m_versionInfo(versionInfo),
         m_driverStatus(NO_DRIVER),
         m_playStartPosition(0, 0),
         m_playing(false),
@@ -52,16 +52,18 @@ SoundDriver::SoundDriver(MappedStudio *studio, const QString &name) :
 SoundDriver::~SoundDriver()
 {
     RG_DEBUG << "SoundDriver::~SoundDriver (exiting)";
+
     delete m_audioQueue;
+    clearAudioFiles();
 }
 
 void
-SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
+SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
 {
     AudioPlayQueue *newQueue = new AudioPlayQueue();
 
-    for (std::vector<MappedEvent>::const_iterator i = events.begin();
-            i != events.end(); ++i) {
+    for (std::vector<MappedEvent>::const_iterator i = audioEvents.begin();
+            i != audioEvents.end(); ++i) {
 
         // Check for existence of file - if the sequencer has died
         // and been restarted then we're not always loaded up with
@@ -69,15 +71,15 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
         // we could make this just get the gui to reload our files
         // when (or before) this fails.
         //
-        AudioFile *audioFile = getAudioFile(i->getAudioID());
+        AudioFile *audioFile = getAudioFile(i->getAudioFileID());
 
         if (audioFile) {
             MappedAudioFader *fader =
                 dynamic_cast<MappedAudioFader*>
-                (m_studio->getAudioFader(i->getInstrument()));
+                (m_studio->getAudioFader(i->getInstrumentId()));
 
             if (!fader) {
-                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrument();
+                RG_DEBUG << "WARNING: SoundDriver::initialiseAudioQueue: no fader for audio instrument " << i->getInstrumentId();
                 continue;
             }
 
@@ -97,7 +99,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
             PlayableAudioFile *paf = nullptr;
 
             try {
-                paf = new PlayableAudioFile(i->getInstrument(),
+                paf = new PlayableAudioFile(i->getInstrumentId(),
                                             audioFile,
                                             i->getEventTime(),
                                             i->getAudioStartMarker(),
@@ -136,11 +138,18 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &events)
             newQueue->addScheduled(paf);
         } else {
             RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
-            << "can't find audio file reference for id " << i->getAudioID();
+            << "can't find audio file reference for id " << i->getAudioFileID();
 
             RG_DEBUG << "SoundDriver::initialiseAudioQueue - "
             << "try reloading the current Rosegarden file";
         }
+    }
+
+    // any plugin audio sources
+    std::vector<PlayableData*> pluginPlayable;
+    getPluginPlayableAudio(pluginPlayable);
+    for (PlayableData* pd : pluginPlayable) {
+        newQueue->addScheduled(pd);
     }
 
     RG_DEBUG << "SoundDriver::initialiseAudioQueue -- new queue has "
@@ -254,7 +263,7 @@ SoundDriver::removeAudioFile(unsigned int id)
     for (it = m_audioFiles.begin(); it != m_audioFiles.end(); ++it) {
         if ((*it)->getId() == id) {
             RG_DEBUG << "Sequencer::removeAudioFile() = \"" <<
-                (*it)->getFilename() << "\"";
+                (*it)->getAbsoluteFilePath() << "\"";
 
             delete (*it);
             m_audioFiles.erase(it);
@@ -302,4 +311,3 @@ SoundDriver::sleep(const RealTime &rt)
 
 
 }
-

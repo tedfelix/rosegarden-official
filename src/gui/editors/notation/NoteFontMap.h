@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -42,7 +42,7 @@ class NoteFontMap : public XMLHandler
 public:
     typedef Exception MappingFileReadFailed;
 
-    NoteFontMap(QString name); // load and parse the XML mapping file
+    explicit NoteFontMap(QString name); // load and parse the XML mapping file
     ~NoteFontMap() override;
 
     /**
@@ -68,7 +68,7 @@ public:
     bool getBeamThickness(int size, unsigned int &thickness) const;
     bool getStemLength(int size, unsigned int &length) const;
     bool getFlagSpacing(int size, unsigned int &spacing) const;
-    
+
     bool hasInversion(int size, CharName charName) const;
 
     bool getSrc(int size, CharName charName, QString &src) const;
@@ -88,7 +88,7 @@ public:
 
     bool startElement
     (const QString& namespaceURI, const QString& localName,
-     const QString& qName, const QXmlStreamAttributes& atts) override;
+     const QString& qName, const QXmlStreamAttributes& attributes) override;
 
     bool characters(const QString &) override;
 
@@ -116,7 +116,7 @@ private:
         void setFontId(int id) { m_fontId = id; }
         int  getFontId() const { return m_fontId; }
 
-        void setSrc(QString src) { m_src = src; }
+        void setSrc(const QString& src) { m_src = src; }
         QString getSrc() const { return m_src; }
 
         void setCode(int code) { m_code = code; }
@@ -125,7 +125,7 @@ private:
         void setGlyph(int glyph) { m_glyph = glyph; }
         int  getGlyph() const { return m_glyph; }
 
-        void setInversionSrc(QString inversion) { m_inversionSrc = inversion; }
+        void setInversionSrc(const QString& inversion) { m_inversionSrc = inversion; }
         QString getInversionSrc() const { return m_inversionSrc; }
 
         void setInversionCode(int code) { m_inversionCode = code; }
@@ -160,7 +160,7 @@ private:
     public:
         HotspotData() : m_scaled(-1.0, -1.0) { }
         ~HotspotData() { }
-        
+
         void addHotspot(int size, int x, int y) {
             m_data[size] = Point(x, y);
         }
@@ -258,8 +258,8 @@ private:
                 return true;
             }
             return false;
-        }       
-       
+        }
+
     private:
         int m_stemThickness;
         int m_beamThickness;

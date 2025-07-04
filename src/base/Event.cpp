@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,24 +13,29 @@
     COPYING included with this distribution for more information.
 */
 
+#include "Event.h"
+#include "XmlExportable.h"
+#include "MidiTypes.h"
+#include "NotationTypes.h"
+#include "BaseProperties.h"
+
+#include "misc/Debug.h"
+#include "base/figuration/GeneratedRegion.h"
+#include "base/figuration/SegmentID.h"
+#include "gui/editors/guitar/Chord.h"
+
+#include <sstream>
 #include <cstdio>
 #include <cctype>
 #include <iostream>
-#include "Event.h"
-#include "XmlExportable.h"
-#include "NotationTypes.h"
-#include "BaseProperties.h"
-#include "misc/Debug.h"
 
-#include <sstream>
-
-namespace Rosegarden 
+namespace Rosegarden
 {
 using std::string;
 using std::ostream;
 
-PropertyName Event::EventData::NotationTime = "!notationtime";
-PropertyName Event::EventData::NotationDuration = "!notationduration";
+const PropertyName Event::NotationTime("!notationtime");
+const PropertyName Event::NotationDuration("!notationduration");
 
 
 Event::EventData::EventData(const std::string &type, timeT absoluteTime,
@@ -95,7 +100,7 @@ Event::EventData::getNotationDuration() const
 }
 
 timeT
-Event::getGreaterDuration()
+Event::getGreaterDuration() const
 {
     if (isa(Note::EventType)) {
         return std::max(getDuration(), getNotationDuration());
@@ -166,7 +171,7 @@ Event::unset(const PropertyName &name)
         map->erase(i);
     }
 }
-    
+
 
 PropertyType
 Event::getPropertyType(const PropertyName &name) const
@@ -180,7 +185,7 @@ Event::getPropertyType(const PropertyName &name) const
         throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
-      
+
 
 string
 Event::getPropertyTypeAsString(const PropertyName &name) const
@@ -194,7 +199,7 @@ Event::getPropertyTypeAsString(const PropertyName &name) const
         throw NoData(name.getName(), __FILE__, __LINE__);
     }
 }
-   
+
 
 string
 Event::getAsString(const PropertyName &name) const
@@ -215,7 +220,7 @@ Event::toXmlString(timeT expectedTime) const
     std::stringstream out;
 
     out << "<event";
-    
+
     if (getType().length() != 0) {
         out << " type=\"" << getType() << "\"";
     }
@@ -224,14 +229,14 @@ Event::toXmlString(timeT expectedTime) const
     // constructors is problematic since -1 durations are used in recording
     // and many events are indeed 0 duration events.
     timeT duration = getDuration();
-    
+
     if (isa(Note::EventType) &&
         duration < 1 &&
         !has(BaseProperties::IS_GRACE_NOTE)) {
 
         duration = 1;
     }
-    
+
     if (duration != 0) {
         out << " duration=\"" << duration << "\"";
     }
@@ -288,7 +293,7 @@ Event::toXmlString(timeT expectedTime) const
             << XmlExportable::encode(getAsString(*i))
             << "\"/>";
     }
-  
+
     out << "</event>";
 
     return out.str();
@@ -336,7 +341,7 @@ bool
 Event::maskedInTrigger() const
 {
     using namespace BaseProperties;
-    
+
     if (!has(TRIGGER_EXPAND)) { return false; }
     return !get<Bool>(TRIGGER_EXPAND);
 }
@@ -417,6 +422,53 @@ Event::isCopyOf(const Event &e) const
     return false;
 }
 
+int Event::getSubOrdering(const std::string& eventType)
+{
+    // Missing:
+    // - TimeSignature (private, -150)
+
+    if (eventType == Note::EventType) {
+        return 0;  // Should be Note::EventSubOrdering but there is none.
+    } else if (eventType == Note::EventRestType) {
+        return Note::EventRestSubOrdering;
+    } else if (eventType == ProgramChange::EventType) {
+        return ProgramChange::EventSubOrdering;
+    } else if (eventType == Controller::EventType) {
+        return Controller::EventSubOrdering;
+    } else if (eventType == PitchBend::EventType) {
+        return PitchBend::EventSubOrdering;
+    } else if (eventType == ChannelPressure::EventType) {
+        return ChannelPressure::EventSubOrdering;
+    } else if (eventType == KeyPressure::EventType) {
+        return KeyPressure::EventSubOrdering;
+    } else if (eventType == RPN::EventType) {
+        return RPN::EventSubOrdering;
+    } else if (eventType == NRPN::EventType) {
+        return NRPN::EventSubOrdering;
+    } else if (eventType == Indication::EventType) {
+        return Indication::EventSubOrdering;
+    } else if (eventType == Clef::EventType) {
+        return Clef::EventSubOrdering;
+    } else if (eventType == Key::EventType) {
+        return Key::EventSubOrdering;
+    } else if (eventType == Text::EventType) {
+        return Text::EventSubOrdering;
+    } else if (eventType == SystemExclusive::EventType) {
+        return SystemExclusive::EventSubOrdering;
+    } else if (eventType == GeneratedRegion::EventType) {
+        return GeneratedRegion::EventSubOrdering;
+    } else if (eventType == SegmentID::EventType) {
+        return SegmentID::EventSubOrdering;
+    } else if (eventType == Symbol::EventType) {
+        return Symbol::EventSubOrdering;
+    } else if (eventType == Guitar::Chord::EventType) {
+        return Guitar::Chord::EventSubOrdering;
+    }
+
+    return 0;
+}
+
+
 bool
 operator<(const Event &a, const Event &b)
 {
@@ -426,7 +478,7 @@ operator<(const Event &a, const Event &b)
     else return a.getSubOrdering() < b.getSubOrdering();
 }
 
-QDebug &operator<<(QDebug &dbg, const Event &event)
+QDebug operator<<(QDebug dbg, const Event &event)
 {
     dbg << "Event type :" << event.m_data->m_type << "\n";
     dbg << "  Absolute Time :" << event.m_data->m_absoluteTime << "\n";
@@ -438,7 +490,7 @@ QDebug &operator<<(QDebug &dbg, const Event &event)
         for (const PropertyMap::value_type &property :
                  *(event.m_data->m_properties)) {
             dbg << "    " << property.first.getName() << "[" <<
-                   property.first.getValue() << "] :" << *(property.second) <<
+                   property.first.getId() << "] :" << *(property.second) <<
                    "\n";
         }
     }
@@ -448,7 +500,7 @@ QDebug &operator<<(QDebug &dbg, const Event &event)
         for (const PropertyMap::value_type &property :
                  *(event.m_nonPersistentProperties)) {
             dbg << "    " << property.first.getName() << "[" <<
-                   property.first.getValue() << "] :" << *(property.second) <<
+                   property.first.getId() << "] :" << *(property.second) <<
                    "\n";
         }
     }

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -46,7 +46,7 @@ class AudioStrip : public QWidget
     Q_OBJECT
 
 public:
-    AudioStrip(QWidget *parent, InstrumentId i_id = NoInstrument);
+    AudioStrip(QWidget *parent, InstrumentId id = NoInstrument);
     ~AudioStrip() override;
 
     void setId(InstrumentId id);

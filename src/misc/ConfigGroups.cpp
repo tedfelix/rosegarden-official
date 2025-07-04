@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -15,14 +15,17 @@
 
 #include "ConfigGroups.h"
 
-namespace Rosegarden 
+namespace Rosegarden
 {
+
     //
     // QSettings group names
     //
+    // Note: Use const char * instead of QString to avoid static
+    //       init order fiasco.
     const char* const GeneralOptionsConfigGroup = "General_Options";
     const char* const LatencyOptionsConfigGroup = "Latency_Options";
-    const QString SequencerOptionsConfigGroup = "Sequencer_Options";
+    const char* const SequencerOptionsConfigGroup = "Sequencer_Options";
     const char* const NotationViewConfigGroup = "Notation_Options";
     const char* const PitchTrackerConfigGroup = "Pitch_Tracker_Options";
     const char* const AudioManagerDialogConfigGroup = "AudioManagerDialog";
@@ -32,14 +35,12 @@ namespace Rosegarden
     const char* const ControlEditorConfigGroup = "Control_Editor";
     const char* const DeviceManagerConfigGroup = "Device_Manager";
     const char* const EventFilterDialogConfigGroup = "EventFilter_Dialog";
-    const char* const EventViewLayoutConfigGroupName = "EventList_Layout";
     const char* const EventViewConfigGroup = "EventList_Options";
     const char* const MarkerEditorConfigGroup = "Marker_Editor";
     const char* const MatrixViewConfigGroup = "Matrix_Options";
     const char* const PlayListConfigGroup = "Playlist";
     const char* const MainWindowConfigGroup = "Main_Window";
     const char* const TransportDialogConfigGroup = "Transport_Controls";
-    const char* const TempoViewLayoutConfigGroupName = "TempoView_Layout";
     const char* const TempoViewConfigGroup = "TempoView_Options";
     const char* const TriggerManagerConfigGroup = "Trigger_Editor";
     const char* const EditViewConfigGroup = "Edit_View";
@@ -60,6 +61,10 @@ namespace Rosegarden
     const char* const GridQuantizeConfigGroup = "Grid_Quantize_Parameters_Memory";
     const char* const NotationQuantizeConfigGroup = "Notation_Quantize_Parameters_Memory";
     const char* const TextEventDialogConfigGroup = "TextEvent_Dialog";
-    const QString RecentFilesConfigGroup = "RecentFiles";
+    const char* const RecentFilesConfigGroup = "RecentFiles";
+    const char* const UserShortcutsConfigGroup = "UserShortcuts";
+    const char* const ShortcutKeyboardConfigGroup = "ShortcutKeyboard";
+    const char* const ControlRulerConfigGroup = "Control_Ruler";
+    const char* const ExperimentalConfigGroup = "Experimental";
 
 }

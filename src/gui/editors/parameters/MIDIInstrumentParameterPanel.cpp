@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,8 +16,6 @@
 */
 
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
-
-// Disable RG_DEBUG output.  Must be defined prior to including Debug.h.
 // Warnings are currently done with std::cerr to make sure they appear
 // even in a release build.
 #define RG_NO_DEBUG_PRINT
@@ -32,6 +30,7 @@
 #include "gui/widgets/Rotary.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "base/Composition.h"
 #include "base/ControlParameter.h"
 #include "base/Instrument.h"
@@ -39,6 +38,7 @@
 #include "base/MidiDevice.h"
 #include "base/MidiProgram.h"
 
+#include <QAbstractItemView>
 #include <QComboBox>
 #include <QCheckBox>
 #include <QColor>
@@ -79,7 +79,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // Compute a width for the labels that will prevent them from becoming
     // so large that they make a mess out of the layout.
     const int labelWidth =
-        metrics.boundingRect("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").width();
+        metrics.boundingRect("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX").width();
 
     // Widgets
 
@@ -124,7 +124,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     // them at a time.
     const int maxVisibleItems = 20;
     // Ensure the comboboxes are all at least this wide (in characters).
-    const int minimumContentsLength = 25;
+    const int minimumContentsLength = 20;
 
     // Bank ComboBox
     m_bankComboBox = new QComboBox;
@@ -132,6 +132,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_bankComboBox->setMaxVisibleItems(maxVisibleItems);
     m_bankComboBox->setMinimumContentsLength(minimumContentsLength);
+    m_bankComboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(m_bankComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectBank);
@@ -154,6 +155,7 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_programComboBox->setMaxVisibleItems(maxVisibleItems);
     m_programComboBox->setMinimumContentsLength(minimumContentsLength);
+    m_programComboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(m_programComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectProgram);
@@ -199,12 +201,17 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectChannel);
 
+    if (!Preferences::getAutoChannels()) {
+        channelLabel->setVisible(false);
+        m_channelValue->setVisible(false);
+    }
+
     // Receive External Label
     QLabel *receiveExternalLabel = new QLabel(tr("Receive external"), this);
     receiveExternalLabel->setFont(f);
     QString receiveExternalTip = tr("<qt>Use program changes from an external source to manipulate these controls (only valid for the currently-active track) [Shift + P]</qt>");
     receiveExternalLabel->setToolTip(receiveExternalTip);
-    
+
     // Receive External CheckBox
     m_receiveExternalCheckBox = new QCheckBox;
     m_receiveExternalCheckBox->setFont(f);
@@ -223,52 +230,60 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
 
     // Rotary Mapper
     m_rotaryMapper = new QSignalMapper(this);
-    connect(m_rotaryMapper, SIGNAL(mapped(int)),
-            SLOT(slotControllerChanged(int)));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    connect(m_rotaryMapper, &QSignalMapper::mappedInt,
+            this, &MIDIInstrumentParameterPanel::slotControllerChanged);
+#else
+    connect(m_rotaryMapper, (void(QSignalMapper::*)(int))&QSignalMapper::mapped,
+            this, &MIDIInstrumentParameterPanel::slotControllerChanged);
+#endif
 
     // Layout
 
     QGridLayout *mainGrid = new QGridLayout(this);
     mainGrid->setContentsMargins(0, 0, 0, 0);
     mainGrid->setSpacing(3);
+    // Stretch the last column so that the controls are compressed horizontally.
     mainGrid->setColumnStretch(2, 1);
 
-    mainGrid->addWidget(m_instrumentLabel, 0, 0, 1, 4, Qt::AlignCenter);
+    int iRow = 0;
 
-    mainGrid->addWidget(m_connectionLabel, 1, 0, 1, 4, Qt::AlignCenter);
+    mainGrid->addWidget(m_instrumentLabel, iRow++, 0, 1, 3, Qt::AlignCenter);
 
-    mainGrid->addItem(new QSpacerItem(1, 5), 2, 0, 1, 4);
+    mainGrid->addWidget(m_connectionLabel, iRow++, 0, 1, 3, Qt::AlignCenter);
 
-    mainGrid->addWidget(percussionLabel, 3, 0, 1, 2, Qt::AlignLeft);
-    mainGrid->addWidget(m_percussionCheckBox, 3, 3, Qt::AlignLeft);
+    mainGrid->addItem(new QSpacerItem(1, 5), iRow++, 0, 1, 3);
 
-    mainGrid->addWidget(m_bankLabel, 4, 0, Qt::AlignLeft);
-    mainGrid->addWidget(m_bankCheckBox, 4, 1, Qt::AlignRight);
-    mainGrid->addWidget(m_bankComboBox, 4, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(percussionLabel, iRow, 0);
+    mainGrid->addWidget(m_percussionCheckBox, iRow++, 1);
 
-    mainGrid->addWidget(m_programLabel, 5, 0, Qt::AlignLeft);
-    mainGrid->addWidget(m_programCheckBox, 5, 1, Qt::AlignRight);
-    mainGrid->addWidget(m_programComboBox, 5, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_bankLabel, iRow, 0);
+    mainGrid->addWidget(m_bankCheckBox, iRow, 1);
+    mainGrid->addWidget(m_bankComboBox, iRow++, 2);
 
-    mainGrid->addWidget(m_variationLabel, 6, 0);
-    mainGrid->addWidget(m_variationCheckBox, 6, 1);
-    mainGrid->addWidget(m_variationComboBox, 6, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_programLabel, iRow, 0);
+    mainGrid->addWidget(m_programCheckBox, iRow, 1);
+    mainGrid->addWidget(m_programComboBox, iRow++, 2);
 
-    mainGrid->addWidget(channelLabel, 7, 0, Qt::AlignLeft);
-    mainGrid->addWidget(m_channelValue, 7, 2, 1, 2, Qt::AlignRight);
+    mainGrid->addWidget(m_variationLabel, iRow, 0);
+    mainGrid->addWidget(m_variationCheckBox, iRow, 1);
+    mainGrid->addWidget(m_variationComboBox, iRow++, 2);
 
-    mainGrid->addWidget(m_receiveExternalCheckBox, 8, 3, Qt::AlignLeft);
-    mainGrid->addWidget(receiveExternalLabel, 8, 0, 1, 3, Qt::AlignLeft);
+    mainGrid->addWidget(channelLabel, iRow, 0);
+    mainGrid->addWidget(m_channelValue, iRow++, 2);
 
-    mainGrid->addItem(new QSpacerItem(1, 5), 9, 0, 1, 4);
+    mainGrid->addWidget(receiveExternalLabel, iRow, 0);
+    mainGrid->addWidget(m_receiveExternalCheckBox, iRow++, 1);
+
+    mainGrid->addItem(new QSpacerItem(1, 5), iRow++, 0, 1, 3);
 
     // Add the rotary frame to the main grid layout.
-    mainGrid->addWidget(m_rotaryFrame, 10, 0, 1, 4, Qt::AlignHCenter);
+    mainGrid->addWidget(m_rotaryFrame, iRow++, 0, 1, 3, Qt::AlignHCenter);
 
-    mainGrid->addItem(new QSpacerItem(1, 1), 11, 0, 1, 4);
-    // Let the last row take up the rest of the space.  This keeps
+    mainGrid->addItem(new QSpacerItem(1, 1), iRow++, 0, 1, 3);
+    // Let the last spacer row take up the rest of the space.  This keeps
     // the widgets above compact vertically.
-    mainGrid->setRowStretch(11, 1);
+    mainGrid->setRowStretch(iRow-1, 1);
 
     setLayout(mainGrid);
 
@@ -324,7 +339,7 @@ MIDIInstrumentParameterPanel::updateWidgets()
 
     // Percussion
     m_percussionCheckBox->setChecked(getSelectedInstrument()->isPercussion());
-    
+
     // Bank
     m_bankCheckBox->setChecked(getSelectedInstrument()->sendsBankSelect());
     updateBankComboBox();
@@ -427,7 +442,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
-            rotaryIter->label->setText(QObject::tr(it->getName().c_str()));
+            rotaryIter->label->setText(
+                QCoreApplication::translate("MIDI_CONTROLLER",
+                                            it->getName().c_str()));
 
             // Next Rotary widget
             ++rotaryIter;
@@ -464,8 +481,13 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
 
             // Add a label
 
-            SqueezedLabel *label = new SqueezedLabel(QObject::tr(it->getName().c_str()), hbox);
+            SqueezedLabel *label = new SqueezedLabel(
+                QCoreApplication::translate("MIDI_CONTROLLER",
+                                            it->getName().c_str()), hbox);
+
+            // ??? This has no effect on the font.
             label->setFont(font());
+
             hboxLayout->addWidget(label);
 
             RG_DEBUG << "setupControllers(): Adding new widget at " << (count / 2) << "," << (count % 2);
@@ -482,8 +504,9 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             m_rotaries.push_back(ri);
 
             // Connect for changes to the Rotary by the user.
-            connect(rotary, SIGNAL(valueChanged(float)),
-                    m_rotaryMapper, SLOT(map()));
+            connect(rotary, &Rotary::valueChanged,
+                    m_rotaryMapper, (void(QSignalMapper::*)())
+                            &QSignalMapper::map);
 
             rotaryIter = m_rotaries.end();
         }
@@ -551,7 +574,8 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
         // Find the selected bank in the MIDI Device's bank list.
         for (unsigned int i = 0; i < banks.size(); ++i) {
-            if (getSelectedInstrument()->getProgram().getBank().partialCompare(banks[i])) {
+            if (getSelectedInstrument()->getProgram().getBank().compareKey(
+                        banks[i])) {
                 currentBank = i;
                 break;
             }
@@ -624,7 +648,9 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
         m_bankComboBox->clear();
         for (BankList::const_iterator i = m_banks.begin();
                 i != m_banks.end(); ++i) {
-            m_bankComboBox->addItem(QObject::tr(i->getName().c_str()));
+            m_bankComboBox->addItem(
+                            QCoreApplication::translate("INSTRUMENT",
+                                                        i->getName().c_str()));
         }
     }
 
@@ -717,9 +743,12 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
         // Copy from m_programs to m_programComboBox.
         m_programComboBox->clear();
         for (unsigned i = 0; i < m_programs.size(); ++i) {
-            m_programComboBox->addItem(QObject::tr("%1. %2")
-                                       .arg(m_programs[i].getProgram() + 1)
-                                       .arg(QObject::tr(m_programs[i].getName().c_str())));
+
+            m_programComboBox->addItem(
+                        QObject::tr("%1. %2")
+                        .arg(m_programs[i].getProgram() + 1)
+                        .arg(QCoreApplication::translate("INSTRUMENT",
+                                                 m_programs[i].getName().c_str())));
         }
     }
 
@@ -848,9 +877,11 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
             MidiBank bank = m_variations[i].getBank();
             MidiByte variationBank = useMSB ? bank.getMSB() : bank.getLSB();
 
-            m_variationComboBox->addItem(QObject::tr("%1. %2")
-                                         .arg(variationBank)
-                                         .arg(QObject::tr(programName.c_str())));
+            m_variationComboBox->addItem(
+                                QObject::tr("%1. %2")
+                                .arg(variationBank)
+                                .arg(QCoreApplication::translate("INSTRUMENT",
+                                                            programName.c_str())));
         }
     }
 

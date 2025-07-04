@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2008 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,14 +20,13 @@
 
 #include "MatrixTool.h"
 
-#include "base/Event.h"
-
 #include <QString>
+
 
 namespace Rosegarden
 {
 
-class ViewElement;
+
 class MatrixViewSegment;
 class MatrixElement;
 class Event;
@@ -60,7 +59,7 @@ protected:
     int m_velocityDelta;
     int m_screenPixelsScale; // Amount of screen pixels used for scale +-127 1:1 scale ratio
     double m_velocityScale;
-    MatrixVelocity(MatrixWidget *);
+    explicit MatrixVelocity(MatrixWidget *);
 
     void setBasicContextHelp();
 

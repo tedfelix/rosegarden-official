@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,7 +20,7 @@
 #define RG_MATRIXPERCUSSIONINSERTIONCOMMAND_H
 
 #include "document/BasicCommand.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
@@ -44,13 +44,13 @@ public:
     ~MatrixPercussionInsertionCommand() override;
 
     Event *getLastInsertedEvent() { return m_lastInsertedEvent; }
-    
+
 protected:
     void modifySegment() override;
 
     timeT getEffectiveStartTime(Segment &segment,
-                                            timeT startTime,
-                                            Event &event);
+                                timeT time,
+                                Event &event);
 
     /// Compute the end time for a percussion event.
     /**
@@ -60,11 +60,12 @@ protected:
      * where it would show each note as if it were a 64th?
      */
     timeT getEndTime(const Segment &segment,
-                     timeT endTime,
+                     timeT time,
                      const Event &event);
 
     Event *m_event;
     timeT m_time;
+    // cppcheck-suppress unsafeClassCanLeak
     Event *m_lastInsertedEvent; // an alias for another event
 };
 

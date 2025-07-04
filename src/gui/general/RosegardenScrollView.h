@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -58,7 +58,7 @@ class RosegardenScrollView : public QAbstractScrollArea
 
 public:
 
-    RosegardenScrollView(QWidget *parent);
+    explicit RosegardenScrollView(QWidget *parent);
 
     /// Connect the bottom StandardRuler.
     /**
@@ -127,7 +127,7 @@ protected:
     /**
      * Q3ScrollView compatible function.
      */
-    void resizeContents(int width, int height);
+    void resizeContents(int w, int h);
     /// Width of the contents area.
     int contentsWidth()  { return m_contentsWidth; }
     /// Height of the contents area.
@@ -153,7 +153,7 @@ private:
     /**
      * Q3ScrollView compatible function.
      */
-    void updateContents(int x, int y, int width, int height);
+    void updateContents(int x, int y, int w, int h);
 
     /// Adjust the scrollbars' max and page step.
     void updateScrollBars();

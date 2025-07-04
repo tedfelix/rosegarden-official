@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,9 +20,19 @@
 
 namespace Rosegarden
 {
-    // Time in internal units (pulses).  Timebase is 960ppq.
+
+    // Time in MIDI ticks (aka pulses as in ppqn, pulses per quarter note).
+    // ??? rename: MidiTicks
     typedef long timeT;
-    constexpr timeT timebase = 960;
+
+    // Looks like there are various 960's scattered throughout the system.
+    // But 960ppq appears to be the standard for Rosegarden notation anyway.
+    // The sequencer deals in RealTime (nanosecond resolution) but is limited
+    // by the timer resolution.  See AlsaDriver::setCurrentTimer().
+    // 480 is usually used for MIDI file export but can be changed.  See
+    // Preferences::getSMFExportPPQN().
+    constexpr timeT timebase = 960;  // PPQ, PPQN, TPQN
+
 }
 
 #endif

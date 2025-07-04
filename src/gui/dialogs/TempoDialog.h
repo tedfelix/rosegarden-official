@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,30 +19,34 @@
 #ifndef RG_TEMPODIALOG_H
 #define RG_TEMPODIALOG_H
 
+#include "base/Composition.h"  // for tempoT
+
 #include <QDialog>
 #include <QTime>
-#include "base/Composition.h" // for tempoT (TODO: should move to a small header like basetypes.h)
-#include "base/Event.h" // for timeT (TODO: same)
 
-class QWidget;
-class QString;
-class QRadioButton;
-class QLabel;
 class QCheckBox;
+class QDialogButtonBox;
 class QDoubleSpinBox;
+class QLabel;
 class QPushButton;
+class QRadioButton;
+class QWidget;
+
 
 namespace Rosegarden
 {
 
-class TimeWidget;
+
+class TimeWidget2;
 class RosegardenDocument;
 
 
 class TempoDialog : public QDialog
 {
     Q_OBJECT
+
 public:
+
     enum TempoDialogAction {
         AddTempo,
         ReplaceTempo,
@@ -52,66 +56,97 @@ public:
     };
 
     TempoDialog(QWidget *parent, RosegardenDocument *doc,
-                bool timeEditable = false);
-    ~TempoDialog() override;
+                bool timeEditable);
 
-    // Set the position at which we're checking the tempo
-    //
+    /// Set the position at which we're checking the tempo.
     void setTempoPosition(timeT time);
 
-public slots:
+    // For those who would prefer to avoid the changeTempo() signal overhead.
+    timeT getTime() const  { return m_tempoTime; }
+    tempoT getTempo() const  { return m_tempo; }
+    tempoT getTargetTempo() const  { return m_targetTempo; }
+
+signals:
+
+    /// Results are returned via this signal.
+    /**
+     * Or use the getters above.
+     */
+    void changeTempo(timeT time,
+                     tempoT tempo,
+                     tempoT target,
+                     TempoDialog::TempoDialogAction action);
+
+private slots:
+
     void accept() override;
+
     void slotActionChanged();
     void slotTempoChanged(double);
     void slotTempoConstantClicked();
     void slotTempoRampToNextClicked();
     void slotTempoRampToTargetClicked();
-    void slotTargetChanged(double);
+    //void slotTargetChanged(double);
     void slotTapClicked();
     void slotHelpRequested();
 
-signals:
-    // Return results in this signal
-    //
-    void changeTempo(timeT,  // tempo change time
-                     tempoT,  // tempo value
-                     tempoT,  // target tempo value
-                     TempoDialog::TempoDialogAction); // tempo action
+    void slotIsValid(bool valid);
 
-protected:
-    void populateTempo();
+private:
+
+    RosegardenDocument *m_doc;
+
+    timeT m_tempoTime{0};
+
+    // Widgets
+
+    // Tempo Group
+
+    QDoubleSpinBox *m_tempoValueSpinBox;
+    QPushButton *m_tempoTap;
+    QTime m_tapMinusTwo;
+    QTime m_tapMinusOne;
+    QLabel *m_tempoBeatLabel;
+    QLabel *m_tempoBeat;
+    QLabel *m_tempoBeatsPerMinute;
     void updateBeatLabels(double newTempo);
 
-    //--------------- Data members ---------------------------------
+    QRadioButton *m_tempoConstant;
+    QRadioButton *m_tempoRampToNext;
+    QRadioButton *m_tempoRampToTarget;
+    QDoubleSpinBox *m_tempoTargetSpinBox;
 
-    RosegardenDocument     *m_doc;
-    timeT                 m_tempoTime;
-    QDoubleSpinBox       *m_tempoValueSpinBox;
-    QPushButton          *m_tempoTap;
-    QTime                 m_tapMinusTwo;
-    QTime                 m_tapMinusOne;
+    // Time of Tempo Change Group
 
-    QRadioButton         *m_tempoConstant;
-    QRadioButton         *m_tempoRampToNext;
-    QRadioButton         *m_tempoRampToTarget;
-    QDoubleSpinBox       *m_tempoTargetSpinBox; 
+    TimeWidget2 *m_timeWidget{nullptr};
 
-    QLabel               *m_tempoBeatLabel;
-    QLabel               *m_tempoBeat;
-    QLabel               *m_tempoBeatsPerMinute;
+    // Scope Group
 
-    TimeWidget           *m_timeEditor;
-
-    QLabel               *m_tempoTimeLabel;
-    QLabel               *m_tempoBarLabel;
-    QLabel               *m_tempoStatusLabel;
+    QLabel *m_tempoTimeLabel;  // x.y s
+    QLabel *m_tempoBarLabel;  // "at the start of ..." or "in the middle of ..."
+    QLabel *m_tempoStatusLabel;  // "there are no..." status message
     
-    QRadioButton         *m_tempoChangeHere;
-    QRadioButton         *m_tempoChangeBefore;
-    QLabel               *m_tempoChangeBeforeAt;
-    QRadioButton         *m_tempoChangeStartOfBar;
-    QRadioButton         *m_tempoChangeGlobal;
-    QCheckBox            *m_defaultBox;
+    // Apply this tempo from here onwards
+    QRadioButton *m_tempoChangeHere;
+    // Replace the last tempo change
+    QRadioButton *m_tempoChangeBefore;
+    QLabel *m_tempoChangeBeforeAt;
+    // Apply this tempo from the start of this bar
+    QRadioButton *m_tempoChangeStartOfBar;
+    // Apply this tempo to the whole composition
+    QRadioButton *m_tempoChangeGlobal;
+    // Also make this the default tempo
+    QCheckBox *m_defaultBox;
+
+    QDialogButtonBox *m_buttonBox;
+
+    void populateTempo();
+
+
+    // User input is stored here on accept().
+    tempoT m_tempo{0};
+    tempoT m_targetTempo{-1};
+
 };
 
 

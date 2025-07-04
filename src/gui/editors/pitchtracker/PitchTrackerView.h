@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -54,12 +54,11 @@ class PitchTrackerView : public NotationView
 public:
     // basic Rosegarden infrastructure
     PitchTrackerView(RosegardenDocument *doc,
-                     std::vector<Segment *> segments,
-                     QWidget *parent = nullptr);
+                     const std::vector<Segment *> &segments);
     ~PitchTrackerView() override;
 
     void setSegments(RosegardenDocument *document,
-                     std::vector<Segment *> segments);
+                     const std::vector<Segment *> &segments);
 
     bool getJackConnected() {
         return m_jackConnected;
@@ -102,24 +101,24 @@ protected:
     // notes in the Composition/Document -- what note should we be singing?
     ViewElementList            *m_notes;
     ViewElementList::iterator   m_notes_itr;
-    
+
     // Choice of defined tunings
-    QVector<Accidentals::Tuning*> m_availableTunings;
+    QVector<std::shared_ptr<Accidentals::Tuning>> m_availableTunings;
     QActionGroup               *m_tuningsActionGroup;
     // ...and of DSP method
     QActionGroup               *m_methodsActionGroup;
-    
+
     // Tuning standard in use by this View
-    Accidentals::Tuning        *m_tuning;
-    
+    std::shared_ptr<Accidentals::Tuning> m_tuning;
+
 private:
     // Used to resync note iterator after user ff/rwind
     bool                        m_transport_posn_change;
-    
-    // Lists of detected and target frequencies 
+
+    // Lists of detected and target frequencies
     // These lists are maintained here and used by the Widget
     PitchHistory                m_history;
-    
+
     // Override setupActions in NotationView so we can have
     // additional menu entries and so on.
     // Mark the initial tuning and method menu selections.
@@ -132,4 +131,3 @@ private:
 /**\@}*/
 
 #endif
-

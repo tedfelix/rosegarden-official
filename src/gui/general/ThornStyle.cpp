@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -381,7 +381,7 @@ int ThornStyle::styleHint(QStyle::StyleHint hint, const QStyleOption *option, co
         // QGroupBox::title { color: #FFFFFF; }
         // QGroupBox::title:!enabled { color: #000000; }
         // but it was etched; plain black is unreadable, so let's use another color now
-        return option->state & State_Enabled ? qRgb(0xFF, 0xFF, 0xFF) : qRgb(0xAA, 0xAA, 0xAA);
+        return (option->state & State_Enabled) ? qRgb(0xFF, 0xFF, 0xFF) : qRgb(0xAA, 0xAA, 0xAA);
     case SH_DialogButtonBox_ButtonsHaveIcons:
         return 0;
     case SH_DockWidget_ButtonsHaveFrame:
@@ -426,12 +426,25 @@ int ThornStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opti
         // QMenuBar::item { spacing: 3px; padding: 1px 4px; }
         return 4;
     case PM_ScrollBarExtent: {
-        QWidget *parent = widget ? widget->parentWidget() : nullptr;
-        QWidget *combo = parent ? parent->parentWidget() : nullptr;
+#if 0
+        // ??? This attempt at identifying combo boxes and using a narrower
+        //     scroll bar fails in every case.  We never get 12.
+
+        RG_DEBUG << "PM_ScrollBarExtent";
+        // If this is a scrollbar in a combo, I'm assuming the parent is
+        // the list?
+        QWidget *list = widget ? widget->parentWidget() : nullptr;
+        // If this is a scrollbar in a combo, the parent of the list should
+        // be the combobox.  But this never succeeds.
+        QWidget *combo = list ? list->parentWidget() : nullptr;
         if (qobject_cast<QComboBox *>(combo)) {
+            RG_DEBUG << "  Parent's parent is combobox";
+            RG_DEBUG << "  Going with 12";
             // QComboBox QAbstractItemView QScrollBar:vertical { width: 12px; }
             return 12;
         }
+        RG_DEBUG << "  Going with 16";
+#endif
         // QScrollBar:horizontal { height: 16px; }
         // QScrollBar:vertical { width: 16px; }
         return 16;
@@ -442,7 +455,14 @@ int ThornStyle::pixelMetric(QStyle::PixelMetric metric, const QStyleOption *opti
     case PM_ToolBarFrameWidth:
         return 0;
     case PM_DefaultFrameWidth:
-        return 2;
+        {
+            QString name = widget->objectName();
+            if (name == "MatrixPanned") {
+                // the matrix editor wants 0 margin
+                return 0;
+            }
+            return 2;
+        }
     case PM_SpinBoxFrameWidth:
         return 2;
     case PM_DockWidgetTitleBarButtonMargin:
@@ -490,7 +510,7 @@ void ThornStyle::drawPrimitive(QStyle::PrimitiveElement element, const QStyleOpt
     case PE_IndicatorToolBarHandle: {
         // top or bottom: image: url(:/pixmaps/style/htoolbar-separator.png);
         // left or right: image: url(:pixmaps/style/vtoolbar-separator.png);
-        QPixmap pixmap = option->state & State_Horizontal ? m_horizontalToolbarSeparatorPixmap : m_verticalToolbarSeparatorPixmap;
+        QPixmap pixmap = (option->state & State_Horizontal) ? m_horizontalToolbarSeparatorPixmap : m_verticalToolbarSeparatorPixmap;
         const QRect rect = alignedRect(Qt::LayoutDirectionAuto, Qt::AlignCenter, option->rect.size(), option->rect);
         painter->drawPixmap(rect, pixmap);
         return;

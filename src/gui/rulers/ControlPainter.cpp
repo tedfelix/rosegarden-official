@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlPainter]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ControlPainter.h"
 
 #include "base/BaseProperties.h"
@@ -25,7 +28,6 @@
 #include "base/ViewElement.h"
 #include "document/CommandHistory.h"
 #include "ControlItem.h"
-#include "ControlRuler.h"
 #include "ControllerEventsRuler.h"
 #include "ControlTool.h"
 #include "ControlMouseEvent.h"
@@ -42,7 +44,7 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
     // Bug #1452 "Control ruler hand cursor is obnoxious"
     //
     // After attempting to puzzle through the cursor switching logic and work
-    // out better logic or a more suitable alternative than Qt::OpenHandCursor, 
+    // out better logic or a more suitable alternative than Qt::OpenHandCursor,
     // I concluded that using the cross in all cases feels just fine in
     // practice.  I decided to just set them the same and leave the switching
     // logic in place, because it doesn't seem worth the effort to rip it all
@@ -56,8 +58,18 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
 void
 ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 {
+    ControllerEventsRuler *ruler =
+        static_cast <ControllerEventsRuler*> (m_ruler);
+    float xmin, xmax;
+    ruler->getLimits(xmin, xmax);
+    RG_DEBUG << "handleLeftButtonPress limits" << xmin << xmax << e->x <<
+        e->snappedXLeft << e->snappedXRight;
+    if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) { // using right
+        if (e->snappedXRight < xmin || e->snappedXRight >= xmax) return;
+    } else { // using left
+        if (e->snappedXLeft < xmin || e->snappedXLeft >= xmax) return;
+    }
     if (e->itemList.size()) {
-        ControllerEventsRuler *ruler = static_cast <ControllerEventsRuler*> (m_ruler);
         ControlItemVector::const_iterator it = e->itemList.begin();
         ruler->clearSelectedItems();
         ruler->addToSelection(*it);
@@ -74,7 +86,11 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             double xscale = m_ruler->getXScale();
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
-            float x = e->x;
+            // get the closest of snappedXLeft and snappedXRight
+            float x = e->snappedXLeft;
+            if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) {
+                x = e->snappedXRight;
+            }
 
             if (x < xmin) {
                 x = xmin;
@@ -113,28 +129,36 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             m_controlLineOrigin.second = e->y;
         }
     }
- 
+
 }
 
 FollowMode
 ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 {
+    emit showContextHelp(tr("Click to set a value. Right click for grid options"));
     ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
 
     if (ruler) {
         if (e->modifiers & Qt::ShiftModifier) {
 
+            // snap line
+            // get the closest of snappedXLeft and snappedXRight
+            float x = e->snappedXLeft;
+            if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) {
+                x = e->snappedXRight;
+            }
+
             if (m_controlLineOrigin.first != -1 && m_controlLineOrigin.second != -1) {
                 ruler->drawRubberBand(m_controlLineOrigin.first,
                                       m_controlLineOrigin.second,
-                                      e->x,
+                                      x,
                                       e->y);
             }
         } else {
             ruler->stopRubberBand();
         }
     }
-    
+
     // not sure what any of this is about; had to match the return type used
     // elsewhere, and have made no investigation into what any of it means
     return NO_FOLLOW;
@@ -142,4 +166,3 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
 
 QString ControlPainter::ToolName() { return "painter"; }
 }
-

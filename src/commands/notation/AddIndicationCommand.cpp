@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -72,7 +72,7 @@ void
 AddIndicationCommand::registerCommand(CommandRegistry *r)
 {
     std::vector<std::string> standardIndications = getStandardIndications();
-    
+
     for (size_t i = 0; i < standardIndications.size(); ++i) {
         r->registerCommand
             (actionNames[i],
@@ -81,17 +81,17 @@ AddIndicationCommand::registerCommand(CommandRegistry *r)
 }
 
 std::string
-AddIndicationCommand::getArgument(QString actionName, CommandArgumentQuerier &)
+AddIndicationCommand::getArgument(const QString& actionName, CommandArgumentQuerier &)
 {
     std::vector<std::string> standardIndications = getStandardIndications();
-    
+
     for (size_t i = 0; i < standardIndications.size(); ++i) {
         if (actionName == actionNames[i]) return standardIndications[i];
     }
     throw CommandCancelled();
 }
 
-AddIndicationCommand::AddIndicationCommand(std::string indicationType,
+AddIndicationCommand::AddIndicationCommand(const std::string& indicationType,
                                            EventSelection &selection) :
     BasicCommand(getGlobalName(indicationType),
                  selection.getSegment(),
@@ -219,20 +219,23 @@ AddIndicationCommand::modifySegment()
     e = new Event(Indication::EventType, m_indicationStart, m_indicationDuration,
                   actualSubordering);
     e->set<String>(Indication::IndicationTypePropertyName, m_indicationType);
-    e->set<Int>("indicationduration", m_indicationDuration);
+    e->set<Int>(PropertyName("indicationduration"), m_indicationDuration);
     helper.segment().insert(e);
     m_lastInsertedEvent = e;
 
     if (indication.isOttavaType()) {
-        for (Segment::iterator i = getSegment().findTime(getStartTime());
-             i != getSegment().findTime(getStartTime() + m_indicationDuration);
-             ++i) {
-            if ((*i)->isa(Note::EventType)) {
-                (*i)->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT,
-                                    indication.getOttavaShift());
+        for (Segment::iterator i1 = getSegment().findTime(getStartTime());
+             i1 != getSegment().findTime(getStartTime() + m_indicationDuration);
+             ++i1) {
+            if ((*i1)->isa(Note::EventType)) {
+                (*i1)->setMaybe<Int>(NotationProperties::OTTAVA_SHIFT,
+                                     indication.getOttavaShift());
             }
         }
     }
+    // check that the new indication is OK
+    helper.updateIndications(m_indicationStart,
+                             m_indicationStart + m_indicationDuration);
 }
 
 QString

@@ -1,0 +1,62 @@
+#!/bin/bash
+
+# make-ts-new-contexts
+
+# Set NOOBSOLETE to 1 to drop obsolete translations:
+#   $ NOOBSOLETE=1 scripts/make-ts
+
+# This script works exactly as scripts/make-ts but, in addition,
+# store a list of the translations created with a new context in
+# the file "data/new_contexts.txt".
+# This list will be used by scripts/tweak-ts/fix-ts.raku to restore
+# the preexisting translations.
+
+# This script is supposed to be used only once.
+
+PERL=perl
+
+# Get strings from presets.xml
+$PERL scripts/extract_instrument_tr_strings.pl \
+            -info=data/new_contexts_1.txt data/presets/presets.xml \
+            > data/InstrumentStrings.cpp
+
+# Get strings from the .rc files.
+$PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc >data/QMenuStrings.cpp
+
+# Get strings from autoload.rg
+gunzip -c data/autoload/autoload.rg > data/autoload/autoload.xml
+$PERL scripts/extract_autoload_tr_strings.pl \
+            -info=data/new_contexts_2.txt data/autoload/autoload.xml \
+            > data/AutoloadStrings.cpp
+rm -f data/autoload/autoload.xml
+
+# Merge the new contexts info files
+cat data/new_contexts_1.txt data/new_contexts_2.txt > data/new_contexts.txt
+rm -f data/new_contexts_1.txt data/new_contexts_2.txt
+
+mkdir -p data/locale
+
+# Get a list of the .ts files.
+TRANSLATIONS=`ls data/locale/*.ts | grep -v rosegarden.ts`
+
+if [ "$NOOBSOLETE" == "1" ]; then
+    NOOBSOPT="-noobsolete"
+fi
+
+LUPDATE=lupdate
+if type $LUPDATE 2>/dev/null
+then
+    echo found $LUPDATE
+else
+    LUPDATE=lupdate-qt5
+    echo found $LUPDATE
+fi
+
+# Update the .ts files.
+$LUPDATE $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` \
+        data/QMenuStrings.cpp data/InstrumentStrings.cpp \
+        data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts \
+        $TRANSLATIONS $@
+
+# Display statistics.
+scripts/ts-stats

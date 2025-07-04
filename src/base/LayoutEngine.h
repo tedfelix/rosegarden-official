@@ -2,7 +2,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,7 +33,7 @@ class TimeSignature;
  */
 class LayoutEngine
 {
-public: 
+public:
     LayoutEngine() { }
     virtual ~LayoutEngine() { }
 
@@ -47,7 +47,7 @@ public:
      * internal data stores associated with that segment and updating
      * any layout-related properties in the events on the segment's
      * segment.
-     * 
+     *
      * If full == true, a complete rescan of the entire composition is
      * in progress and the segment is known to be contained completely
      * within the start to end time range (which may extend beyond the
@@ -64,7 +64,7 @@ public:
      * scanning more than one segment.  This may mean doing most of
      * the layout (likely for horizontal layout) or nothing at all
      * (likely for vertical layout).
-     * 
+     *
      * If full == true, a complete relayout of the entire composition
      * is in progress and the segment is known to be contained
      * completely within the start to end time range (which may extend
@@ -75,10 +75,6 @@ public:
                               timeT endTime,
                               bool full) = 0;
 
-    unsigned int getStatus() const { return m_status; }
-
-protected:
-    unsigned int m_status;
 };
 
 
@@ -86,7 +82,8 @@ class HorizontalLayoutEngine : public LayoutEngine,
 				public RulerScale
 {
 public:
-    HorizontalLayoutEngine(Composition *c) : LayoutEngine(), RulerScale(c) { }
+    explicit HorizontalLayoutEngine(Composition *c) :
+    LayoutEngine(), RulerScale(c) { }
     ~HorizontalLayoutEngine() override { }
 
     /**

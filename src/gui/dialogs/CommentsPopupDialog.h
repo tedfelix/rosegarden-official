@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,6 +25,7 @@ namespace Rosegarden
 {
 
 class RosegardenDocument;
+class RosegardenMainWindow;
 
 /**
  * This class create a pop up dialog which displays notes about the current
@@ -39,7 +40,7 @@ class CommentsPopupDialog : public QDialog
     Q_OBJECT
 
 public:
-    CommentsPopupDialog(RosegardenDocument *doc, QWidget *parent = nullptr);
+    CommentsPopupDialog(RosegardenDocument *doc, RosegardenMainWindow *parent);
     
 public slots:
     void slotCheckChanged(int state);

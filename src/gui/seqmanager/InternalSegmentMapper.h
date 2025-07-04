@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,7 +31,7 @@ namespace Rosegarden
 class TriggerSegmentRec;
 class Composition;
 class RealTime;
- 
+
 /// Converts (maps) Event objects into MappedEvent objects for a Segment
 /**
  * @author Tom Breton (Tehom)
@@ -112,7 +112,7 @@ private:
     // filter noteoffs so it can't be.
     typedef std::multiset<Noteoff, NoteoffCmp> NoteoffContainer;
 
-    int addSize(int size, Segment *);
+    int addSize(int size, Segment *) const;
 
     Instrument *getInstrument() const
         { return m_channelManager.getInstrument(); }
@@ -123,7 +123,7 @@ private:
     bool haveEarlierNoteoff(timeT t);
     RealTime toRealTime(Composition &comp, timeT t);
     int getControllerValue(timeT searchTime,
-                           const std::string eventType,
+                           const std::string& eventType,
                            int controllerId);
 
     /** Data members **/
@@ -136,7 +136,7 @@ private:
      * Logic in "fillBuffer" turns it into repeats as needed.
      */
     Segment *m_triggeredEvents;
-    
+
     ControllerContextMap m_controllerCache;
 
     /// Queue of noteoffs.

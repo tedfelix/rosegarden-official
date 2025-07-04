@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -28,18 +28,20 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 class AlternatingParameterPattern : public ParameterPattern
 {
+ protected:
     QString getText(QString propertyName) const override;
 
 
     // Make as many sliders as we need.  EventParameterDialog will
     // truncate or pad as needed.
-    SliderSpecVector
-        getSliderSpec(const SelectionSituation *situation) const override;
+    //cppcheck-suppress functionStatic
+    SliderSpecVector getSliderSpec
+        (const SelectionSituation *situation) const override;
 
     // Set the properties of events from begin to end.
-    void
-        setEventProperties(iterator begin, iterator end,
-                           Result *result) const override;
+    //cppcheck-suppress functionStatic
+    void setEventProperties(iterator begin, iterator end,
+                            Result *result) const override;
 public:
     static AlternatingParameterPattern single;
 };

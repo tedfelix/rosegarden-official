@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,15 +16,16 @@
 #ifndef RG_SEQUENCERDATABLOCK_H
 #define RG_SEQUENCERDATABLOCK_H
 
-#include "ControlBlock.h"
 #include "base/RealTime.h"
 #include "MappedEvent.h"
 
 #include <QMutex>
 
+
 namespace Rosegarden
 {
-        
+
+
 /**
  * ONLY PUT PLAIN DATA HERE - NO POINTERS EVER
  * (and this struct mustn't have a constructor)
@@ -38,12 +39,14 @@ struct LevelInfo
     int levelRight; // if stereo audio
 };
 
+
 class MappedEventList;
 
 
 #define SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS 512 // can't be a symbol
 #define SEQUENCER_DATABLOCK_MAX_NB_SUBMASTERS   64 // can't be a symbol
 #define SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE 1024 // MIDI events
+
 
 /// Holds MIDI data going from RosegardenSequencer to RosegardenMainWindow
 /**
@@ -100,7 +103,7 @@ public:
         m_positionSec = rt.sec;
         m_positionNsec = rt.nsec;
     }
-    
+
     /// Get the MIDI OUT event to show on the transport during playback.
     bool getVisual(MappedEvent &ev);
     /// Set the MIDI OUT event to show on the transport during playback.
@@ -117,11 +120,11 @@ public:
      */
     int getRecordedEvents(MappedEventList &);
 
-    bool getTrackLevel(TrackId track, LevelInfo &) const;
-    void setTrackLevel(TrackId track, const LevelInfo &);
+    // unused bool getTrackLevel(TrackId track, LevelInfo &) const;
+    // unused void setTrackLevel(TrackId track, const LevelInfo &);
 
     // Two of these to rather hamfistedly get around the fact
-    // we need to fetch this value twice - once from IPB, 
+    // we need to fetch this value twice - once from IPB,
     // and again for the Mixer.
     //
     bool getInstrumentLevel(InstrumentId id, LevelInfo &) const;
@@ -143,7 +146,7 @@ public:
     // Reset this class on (for example) GUI restart
     // rename: reset()
     void clearTemporaries();
-    
+
 protected:
     SequencerDataBlock();
 
@@ -159,8 +162,13 @@ protected:
     int m_getVisualIndex;
     bool m_haveVisualEvent;
     /// MIDI OUT event for display on the transport during playback.
-    char m_visualEvent[sizeof(MappedEvent)];
-    
+    /**
+     * ??? This is a character buffer because this used to be shared memory.
+     *     Now that it isn't, we should be able to make this a MappedEvent
+     *     object.
+     */
+    char m_visualEvent[sizeof(MappedEvent)]{};
+
     /// Index of the next available position in m_recordBuffer.
     /**
      * volatile is needed here (and probably other places) since this is used
@@ -205,6 +213,7 @@ protected:
     int m_masterLevelUpdateIndex;
     LevelInfo m_masterLevel;
 };
+
 
 }
 

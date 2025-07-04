@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[PropertyControlRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include <QMouseEvent>
 #include "PropertyControlRuler.h"
@@ -36,7 +37,6 @@
 #include "base/ViewElement.h"
 #include "commands/edit/SelectionPropertyCommand.h"
 #include "document/CommandHistory.h"
-#include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/TextFloat.h"
 
@@ -51,14 +51,13 @@ namespace Rosegarden
 {
 
 
-PropertyControlRuler::PropertyControlRuler(PropertyName propertyName,
+PropertyControlRuler::PropertyControlRuler(const PropertyName& propertyName,
                                            ViewSegment *viewSegment,
                                            RulerScale *rulerScale,
                                            QWidget *parent) :
     ControlRuler(viewSegment, rulerScale, parent),
     m_propertyName(propertyName)
 {
-    setMenuName("property_ruler_menu");
     setViewSegment(viewSegment);
 }
 
@@ -74,7 +73,7 @@ void PropertyControlRuler::update()
 //    for (ControlItemList::iterator it = m_visibleItems.begin(); it != m_visibleItems.end(); ++it) {
 //        tmplist.push_back(*it);
 //    }
-    
+
 //    for (ControlItemList::iterator it = tmplist.begin(); it != tmplist.end(); ++it) {
 //        if (!(*it)->isSelected()) {
 //            (*it)->update();
@@ -83,7 +82,7 @@ void PropertyControlRuler::update()
 //    }
 
 //    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-//        (*it)->update();        
+//        (*it)->update();
 //        RG_DEBUG << "update(): ControlItem updated: " << hex << (long)(*it);
 //    }
 
@@ -216,14 +215,14 @@ void PropertyControlRuler::init()
 
     ViewElementList *viewElementList = m_viewSegment->getViewElementList();
     if (!viewElementList) return;
-    
+
     for (ViewElementList::iterator it = viewElementList->begin(); it != viewElementList->end(); ++it) {
 //        if (MatrixElement *el = dynamic_cast<MatrixElement*>(*it)) {
         if ((*it)->event()->isa(Note::EventType))
             addControlItem2(*it);
 //        }
     }
-    
+
 
     RG_DEBUG << "init() - Segment size: " << m_segment->size();
 
@@ -268,14 +267,16 @@ void PropertyControlRuler::updateSelection(
     update();
 }
 
+/* unused
 void PropertyControlRuler::updateSelectedItems()
 {
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
         (*it)->update();
     }
-    
+
     update();
 }
+*/
 
 //void PropertyControlRuler::slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime)
 //{
@@ -291,6 +292,7 @@ void PropertyControlRuler::setTool(const QString & /* name */)
     // ??? Since there's only exactly one tool, why even select it.
     //     Make it the only one and always selected.
 
+    // Get the PropertyAdjuster tool.
     ControlTool *tool =
             dynamic_cast<ControlTool *>(m_toolBox->getTool("adjuster"));
     if (!tool)
@@ -301,6 +303,11 @@ void PropertyControlRuler::setTool(const QString & /* name */)
 
     m_currentTool = tool;
     m_currentTool->ready();
+}
+
+bool PropertyControlRuler::allowSimultaneousEvents()
+{
+    return true;
 }
 
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
@@ -446,9 +453,11 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     ControlRuler::contextMenuEvent(e);
 }
 
+/* unused
 void
 PropertyControlRuler::selectAllProperties()
 {
 }
+*/
 
 }

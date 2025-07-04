@@ -1,10 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
-
-
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -14,22 +12,23 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_SEGMENT_PERFORMANCE_HELPER_H
-#define RG_SEGMENT_PERFORMANCE_HELPER_H
+#ifndef RG_SEGMENTPERFORMANCEHELPER_H
+#define RG_SEGMENTPERFORMANCEHELPER_H
 
 #include "base/Segment.h"
-#include "Composition.h" // for RealTime
 
-namespace Rosegarden 
+
+namespace Rosegarden
 {
+
 
 class ROSEGARDENPRIVATE_EXPORT SegmentPerformanceHelper : protected SegmentHelper
 {
 public:
-    SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
-    ~SegmentPerformanceHelper() override;
+    explicit SegmentPerformanceHelper(Segment &t) : SegmentHelper(t) { }
+    ~SegmentPerformanceHelper() override  { }
 
-    typedef std::vector<iterator> iteratorcontainer;
+    typedef std::vector<Segment::iterator> IteratorVector;
 
     /**
      * Returns a sequence of iterators pointing to the note events
@@ -38,7 +37,53 @@ public:
      * in the sequence.  If the given event is tied but is not the
      * first in the tied chain, the returned sequence will be empty.
      */
-    iteratorcontainer getTiedNotes(iterator i);
+    IteratorVector getTiedNotes(Segment::iterator i);
+
+    /**
+     * Returns the absolute time of the note event pointed to by i.
+     */
+    timeT getSoundingAbsoluteTime(Segment::iterator i);
+
+    /**
+     * Returns the duration of the note event pointed to by i, taking
+     * into account any ties the note may have etc.
+     *
+     * If the note is the first of two or more tied notes, this will
+     * return the accumulated duration of the whole series of notes
+     * it's tied to.
+     *
+     * If the note is in a tied series but is not the first, this will
+     * return zero, because the note's duration is presumed to have
+     * been accounted for by a previous call to this method when
+     * examining the first note in the tied series.
+     *
+     * If the note is not tied, or if i does not point to a note
+     * event, this will just return the duration of the event at i.
+     *
+     * This method may return an incorrect duration for any note
+     * event that is tied but lacks a pitch property.  This is
+     * expected behaviour; don't create tied notes without pitches.
+     */
+    timeT getSoundingDuration(Segment::iterator i);
+
+    /**
+     * Returns the absolute time of the event pointed to by i,
+     * in microseconds elapsed since the start of the Composition.
+     * This method exploits the Composition's getElapsedRealTime
+     * method to take into account any tempo changes that appear
+     * in the section of the composition preceding i.
+     */
+    // unused RealTime getRealAbsoluteTime(iterator i);
+
+    /**
+     * Returns the duration of the note event pointed to by i,
+     * in microseconds.  This takes into account the tempo in
+     * force at i's position within the composition, as well as
+     * any tempo changes occurring during the event at i.
+     */
+    // unused RealTime getRealSoundingDuration(iterator i);
+
+private:
 
     /**
      * Returns two sequences of iterators pointing to the note events
@@ -48,72 +93,29 @@ public:
      * returned in the graceNotes sequence, and the host note
      * iterators in hostNotes.  isHostNote is set to true if the
      * given event is a host note, false otherwise.
-     * 
+     *
      * If the given event is not a grace note, is a grace note with no
      * host note, or is a potential host note without any grace notes,
      * the sequences will both be empty and the function will return
      * false.
      */
-    bool getGraceAndHostNotes(iterator i,
-			      iteratorcontainer &graceNotes,
-			      iteratorcontainer &hostNotes,
-			      bool &isHostNote);
-
-    /**
-     * Returns the absolute time of the note event pointed to by i.
-     */
-    timeT getSoundingAbsoluteTime(iterator i);
-
-    /**
-     * Returns the duration of the note event pointed to by i, taking
-     * into account any ties the note may have etc.
-     * 
-     * If the note is the first of two or more tied notes, this will
-     * return the accumulated duration of the whole series of notes
-     * it's tied to.
-     * 
-     * If the note is in a tied series but is not the first, this will
-     * return zero, because the note's duration is presumed to have
-     * been accounted for by a previous call to this method when
-     * examining the first note in the tied series.
-     * 
-     * If the note is not tied, or if i does not point to a note
-     * event, this will just return the duration of the event at i.
-     *
-     * This method may return an incorrect duration for any note
-     * event that is tied but lacks a pitch property.  This is
-     * expected behaviour; don't create tied notes without pitches.
-     */
-    timeT getSoundingDuration(iterator i);
-
-    /**
-     * Returns the absolute time of the event pointed to by i,
-     * in microseconds elapsed since the start of the Composition.
-     * This method exploits the Composition's getElapsedRealTime
-     * method to take into account any tempo changes that appear
-     * in the section of the composition preceding i.
-     */
-    RealTime getRealAbsoluteTime(iterator i);
-
-    /**
-     * Returns the duration of the note event pointed to by i,
-     * in microseconds.  This takes into account the tempo in
-     * force at i's position within the composition, as well as
-     * any tempo changes occurring during the event at i.
-     */
-    RealTime getRealSoundingDuration(iterator i);
+    bool getGraceAndHostNotes(Segment::iterator i,
+                  IteratorVector &graceNotes,
+                  IteratorVector &hostNotes,
+                  bool &isHostNote);
 
     /**
      * Return a sounding duration (estimated) and start time for the
-     * note event pointed to by i.  If host is true, i is expected to
-     * be the "host" note for one or more grace notes; if host is
-     * false, i is expected to point to a grace note.  If the relevant
-     * expectation is not met, this function returns false.  Otherwise
-     * the sounding time and duration are returned through t and d and
-     * the function returns true.
+     * note event pointed to by i.
+     *
+     * Returns the sounding time in t and the sounding duration in d.
+     * Returns false on error.
      */
-    bool getGraceNoteTimeAndDuration(bool host, iterator i, timeT &t, timeT &d);
+    bool getGraceNoteTimeAndDuration(Segment::iterator eventIter,
+                                     timeT &t,
+                                     timeT &d);
 };
+
 
 }
 

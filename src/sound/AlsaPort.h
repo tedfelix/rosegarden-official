@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -23,7 +23,7 @@
 #define RG_ALSAPORT_H
 
 #ifdef HAVE_ALSA
-#include <alsa/asoundlib.h> // ALSA
+
 
 namespace Rosegarden
 {
@@ -83,11 +83,11 @@ public:
     unsigned int               m_capability;
     PortDirection              m_direction; // or can deduce from capability
 
-    bool isReadable()  { return m_direction == ReadOnly ||
-                                m_direction == Duplex; }
+    bool isReadable() const { return m_direction == ReadOnly ||
+                                     m_direction == Duplex; }
 
-    bool isWriteable() { return m_direction == WriteOnly ||
-                                m_direction == Duplex; }
+    bool isWriteable() const { return m_direction == WriteOnly ||
+                                      m_direction == Duplex; }
 
 };
 
@@ -95,7 +95,7 @@ public:
 struct AlsaPortCmp
 {
     bool operator()(QSharedPointer<AlsaPortDescription> a1,
-                    QSharedPointer<AlsaPortDescription> a2);
+                    QSharedPointer<AlsaPortDescription> a2) const;
 };
 
 
@@ -104,4 +104,3 @@ struct AlsaPortCmp
 #endif // HAVE_ALSA
 
 #endif // RG_ALSAPORT_H
-

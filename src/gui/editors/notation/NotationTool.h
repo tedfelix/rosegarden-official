@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -98,12 +98,14 @@ protected:
      * \a rcFileName : the name of the XML rc file
      * \a menuName : the name of the menu defined in the rc file
      */
-    NotationTool(QString rcFileName, QString menuName, NotationWidget *);
+    NotationTool(const QString& rcFileName,
+                 const QString& menuName,
+                 NotationWidget *);
 
     /**
      * Create a new NotationTool without a menu
      */
-    NotationTool(NotationWidget *);
+    explicit NotationTool(NotationWidget *);
 
     void createMenu() override;
     bool hasMenu() override { return m_menuName != ""; }

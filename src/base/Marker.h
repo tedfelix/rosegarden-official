@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,23 +16,25 @@
 #ifndef RG_MARKER_H
 #define RG_MARKER_H
 
-#include <string>
-
-#include "Event.h"
+#include "TimeT.h"
 #include "XmlExportable.h"
 
-// A Marker is a user defined point in a Composition that can be
-// used to define looping points - jump to, make notes at etc.
-//
-// Not to be confused with Composition or Segment start and 
-// end markers.  Which they probably could be quite easily.
-// I probably should've thought the name through a bit better
-// really..
-//
+#include <string>
+
 
 namespace Rosegarden
 {
 
+
+/**
+ * A Marker is a user defined point in a Composition that can be
+ * used to define looping points - jump to, make notes at etc.
+ *
+ * Not to be confused with Composition or Segment start and
+ * end markers.  Which they probably could be quite easily.
+ * I probably should've thought the name through a bit better
+ * really..
+ */
 class Marker : public XmlExportable
 {
 public:
@@ -63,16 +65,17 @@ public:
 
 protected:
 
-	int      m_id;
-    timeT    m_time;
-    std::string          m_name;
-    std::string          m_description;
+	int m_id;
+    timeT m_time;
+    std::string m_name;
+    std::string m_description;
 
 private:
 	static int nextSeqVal() { return ++m_sequence; } // assume there won't be concurrency problem
 	static int m_sequence;
 };
 
+
 }
 
-#endif // RG_MARKER_H
+#endif

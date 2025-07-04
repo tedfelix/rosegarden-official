@@ -31,6 +31,7 @@ private Q_SLOTS:
 
 void TestRealTime::test()
 {
+    // These come out in the test output with "QDEBUG" on the front.
     //qDebug() << "Testing!\n";
 
     RealTime rt;
@@ -38,7 +39,7 @@ void TestRealTime::test()
     QCOMPARE(rt.sec, 0);
     QCOMPARE(rt.nsec, 0);
     QCOMPARE(rt.toSeconds(), 0.0);
-    QCOMPARE(rt, RealTime::zeroTime);
+    QCOMPARE(rt, RealTime::zero());
     QCOMPARE(rt.usec(), 0);
     QCOMPARE(rt.msec(), 0);
 

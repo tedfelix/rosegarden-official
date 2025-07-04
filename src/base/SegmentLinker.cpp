@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2010 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -59,16 +59,16 @@ SegmentLinker::LinkedSegmentParamsList::iterator
 SegmentLinker::findParamsItrForSegment(Segment *s)
 {
     LinkedSegmentParamsList::iterator itr;
-    for(itr = m_linkedSegmentParamsList.begin(); 
+    for(itr = m_linkedSegmentParamsList.begin();
         itr!= m_linkedSegmentParamsList.end(); ++itr) {
         if(itr->m_linkedSegment == s) {
             break;
         }
     }
-    
+
     return itr;
 }
-    
+
 void
 SegmentLinker::addLinkedSegment(Segment *s)
 {
@@ -100,7 +100,7 @@ SegmentLinker::createLinkedSegment(Segment *s)
         linker->addLinkedSegment(s);
         linker->addLinkedSegment(linkedSeg);
     }
-    
+
     return linkedSeg;
 }
 
@@ -109,18 +109,18 @@ SegmentLinker::handleImpliedCMajor(Segment *s)
 {
     //need to handle implied C Major in segments without a key change event
     //at the start of them
-    
+
     //rather than keep having to write "handle implied C Major key in segments
     //with no key change event at segment start" code, i'm just going to stick
     //a null-op C Major key at the start (if no key already exists there)
 
     bool foundKey = false;
-    
+
     timeT segFrom = s->getStartTime();
     timeT segTo = segFrom + 1;
     Segment::const_iterator itrFrom = s->findTime(segFrom);
     Segment::const_iterator itrTo = s->findTime(segTo);
-    
+
     for(Segment::const_iterator itr = itrFrom; itr != itrTo; ++itr) {
         if ((*itr)->isa(Rosegarden::Key::EventType)) {
             foundKey = true;
@@ -139,12 +139,12 @@ SegmentLinker::handleImpliedCMajor(Segment *s)
 SegmentLinker::unlinkSegment(Segment *s)
 {
     bool retVal = false;
-    
+
     if (s->isLinked()) {
         retVal = true;
         SegmentLinker* linker = s->getLinker();
         linker->removeLinkedSegment(s);
-    
+
         //in the case that the linker has no more linked segments, delete the
         //segment linker
         if (linker->getNumberOfLinkedSegments() == 0)
@@ -152,29 +152,29 @@ SegmentLinker::unlinkSegment(Segment *s)
             delete linker;
         }
     }
-    
+
     return retVal;
 }
 
-void 
+void
 SegmentLinker::slotUpdateLinkedSegments(Command *command)
 {
     //only the first segment with an invalidated refresh region will be
     //processed. If there are others, their changes will be ignored.
     bool linkedSegmentsUpdated = false;
-    
+
     LinkedSegmentParamsList::iterator itr;
-    for(itr = m_linkedSegmentParamsList.begin(); 
+    for(itr = m_linkedSegmentParamsList.begin();
         itr!= m_linkedSegmentParamsList.end(); ++itr) {
 
         LinkedSegmentParams &linkedSegParams = *itr;
         Segment *linkedSeg = linkedSegParams.m_linkedSegment;
         uint refreshStatusId = linkedSegParams.m_refreshStatusId;
         SegmentRefreshStatus &rs = linkedSeg->getRefreshStatus(refreshStatusId);
-        
+
         //have we already done an update?
         if (!linkedSegmentsUpdated) {
-                
+
             if (command->getUpdateLinks() && rs.needsRefresh()) {
                 linkedSegmentChanged(linkedSeg,rs.from(),rs.to());
                 linkedSegmentsUpdated = true;
@@ -188,36 +188,37 @@ SegmentLinker::slotUpdateLinkedSegments(Command *command)
 }
 
 void
-SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from, 
+SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
                                                 const timeT to)
 {
     //go through the other linked segments which aren't s, and copy the events
     //in the range [from,to] to them, accounting for time and pitch shifts
 
-    const timeT sourceSegStartTime = s->getStartTime(); 
+    const timeT sourceSegStartTime = s->getStartTime();
     const timeT refFrom = from - sourceSegStartTime;
     const timeT refTo = to - sourceSegStartTime;
 
     // Used to memorize a possible change in lyrics
     bool lyricsChanged = false;
 
-    LinkedSegmentParamsList::iterator itr;
-    for(itr = m_linkedSegmentParamsList.begin(); 
-        itr!= m_linkedSegmentParamsList.end(); ++itr) {
-        
-        LinkedSegmentParams &linkedSegParams = *itr;
+    for (LinkedSegmentParamsList::iterator linkedSegmentParamIter =
+                 m_linkedSegmentParamsList.begin();
+         linkedSegmentParamIter != m_linkedSegmentParamsList.end();
+         ++linkedSegmentParamIter) {
+
+        LinkedSegmentParams &linkedSegParams = *linkedSegmentParamIter;
         Segment *linkedSegToUpdate = linkedSegParams.m_linkedSegment;
         uint refreshStatusId = linkedSegParams.m_refreshStatusId;
-        SegmentRefreshStatus &rs = 
+        SegmentRefreshStatus &rs =
                         linkedSegToUpdate->getRefreshStatus(refreshStatusId);
-    
+
         if(s == linkedSegToUpdate) {
             continue;
         }
-        
+
         // Don't send unnecessary resize notifications to observers
         linkedSegToUpdate->lockResizeNotifications();
-        
+
         timeT segStartTime = linkedSegToUpdate->getStartTime();
         timeT segFrom = segStartTime + refFrom;
         timeT segTo = segStartTime + refTo;
@@ -225,13 +226,14 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
         Segment::iterator itrTo = linkedSegToUpdate->findTime(segTo);
         lyricsChanged = eraseNonIgnored(linkedSegToUpdate,
                                         itrFrom, itrTo, lyricsChanged);
-        
+
         //now go through s from 'from' to 'to', inserting the equivalent
         //event in linkedSegToUpdate
-        for(Segment::const_iterator itr = s->findTime(from);
-                                    itr != s->findTime(to); ++itr) {
-            const Event *e = *itr;
-        
+        for (Segment::const_iterator eventIter = s->findTime(from);
+             eventIter != s->findTime(to);
+             ++eventIter) {
+            const Event *e = *eventIter;
+
             timeT eventT = (e->getAbsoluteTime() - sourceSegStartTime)
                            + segStartTime;
 
@@ -243,12 +245,12 @@ SegmentLinker::linkedSegmentChanged(Segment *s, const timeT from,
                                     s->getLinkTransposeParams().m_semitones;
             int steps = linkedSegToUpdate->getLinkTransposeParams().m_steps -
                                         s->getLinkTransposeParams().m_steps;
-        
+
             lyricsChanged = insertMappedEvent(linkedSegToUpdate, e, eventT,
                                               eventNotationT, semitones, steps,
                                               lyricsChanged);
         }
-        
+
         // Fix verses count if lyrics have been modified
         if (lyricsChanged) linkedSegToUpdate->invalidateVerseCount();
 
@@ -268,7 +270,7 @@ SegmentLinker::insertMappedEvent(Segment *seg,
     bool lyricInserted = lyricsAlreadyInserted;
 
     bool ignore;
-    if (e->get<Bool>(BaseProperties::LINKED_SEGMENT_IGNORE_UPDATE, ignore) 
+    if (e->get<Bool>(BaseProperties::LINKED_SEGMENT_IGNORE_UPDATE, ignore)
         && ignore) {
         return lyricInserted;
     }
@@ -291,16 +293,16 @@ SegmentLinker::insertMappedEvent(Segment *seg,
                 refSegEvent->set<Int>(BaseProperties::PITCH, newPitch);
             }
         } else if (e->isa(Rosegarden::Key::EventType)) {
-            Rosegarden::Key trKey = (Rosegarden::Key (*e)).transpose(semitones, 
+            Rosegarden::Key trKey = (Rosegarden::Key (*e)).transpose(semitones,
                                                                          steps);
-            delete refSegEvent; 
+            delete refSegEvent;
             refSegEvent = nullptr;
             SegmentNotationHelper helper(*seg);
             helper.insertKey(t,trKey);
             needsInsertion = false;
         }
     }
-    
+
     if (needsInsertion) {
 
         if (! lyricInserted) {
@@ -320,7 +322,7 @@ SegmentLinker::insertMappedEvent(Segment *seg,
 }
 
 bool
-SegmentLinker::eraseNonIgnored(Segment *s, Segment::const_iterator itrFrom, 
+SegmentLinker::eraseNonIgnored(Segment *s, Segment::const_iterator itrFrom,
                                            Segment::const_iterator itrTo,
                                            bool lyricsAlreadyErased)
 {
@@ -351,53 +353,53 @@ SegmentLinker::eraseNonIgnored(Segment *s, Segment::const_iterator itrFrom,
         }
     }
     return lyricErased;
-} 
+}
 
 void
 SegmentLinker::clearRefreshStatuses()
 {
     LinkedSegmentParamsList::iterator itr;
-    for (itr = m_linkedSegmentParamsList.begin(); 
+    for (itr = m_linkedSegmentParamsList.begin();
         itr!= m_linkedSegmentParamsList.end(); ++itr) {
-        
+
         LinkedSegmentParams &linkedSegParams = *itr;
         Segment *linkedSegToUpdate = linkedSegParams.m_linkedSegment;
         uint refreshStatusId = linkedSegParams.m_refreshStatusId;
-        SegmentRefreshStatus &rs = 
+        SegmentRefreshStatus &rs =
                         linkedSegToUpdate->getRefreshStatus(refreshStatusId);
         rs.setNeedsRefresh(false);
     }
 }
 
-void 
+void
 SegmentLinker::refreshSegment(Segment *seg)
 {
     timeT startTime = seg->getStartTime();
     eraseNonIgnored(seg, seg->begin(), seg->end(), true);
     // Last parameter set to true to avoid an useless search for lyrics
-    
+
     //find another segment
     Segment *sourceSeg = nullptr;
     Segment *tempClone = nullptr;
-    
+
     LinkedSegmentParamsList::iterator itr;
-    for (itr = m_linkedSegmentParamsList.begin(); 
+    for (itr = m_linkedSegmentParamsList.begin();
         itr!= m_linkedSegmentParamsList.end(); ++itr) {
-        
-        LinkedSegmentParams &linkedSegParams = *itr;
+
+        const LinkedSegmentParams &linkedSegParams = *itr;
         Segment *other = linkedSegParams.m_linkedSegment;
         if (other != seg) {
             sourceSeg = other;
             break;
         }
     }
-    
+
     if (!sourceSeg) {
         //make a temporary clone
         tempClone = createLinkedSegment(seg);
         sourceSeg = tempClone;
     }
-        
+
     timeT sourceSegStartTime = sourceSeg->getStartTime();
     Segment::const_iterator segitr;
     for(segitr=sourceSeg->begin(); segitr!=sourceSeg->end(); ++segitr) {
@@ -414,7 +416,7 @@ SegmentLinker::refreshSegment(Segment *seg)
                           true);
         // Last parameter set to true to avoid an useless search for lyrics
     }
-    
+
     if (tempClone) {
         delete tempClone;
     }
@@ -449,23 +451,23 @@ SegmentLinker::getNumberOfOutOfCompSegments() const
     return count;
 }
 
-SegmentLinker::LinkedSegmentParams::LinkedSegmentParams(Segment *s) : 
+SegmentLinker::LinkedSegmentParams::LinkedSegmentParams(Segment *s) :
     m_linkedSegment(s),
     m_refreshStatusId(s->getNewRefreshStatusId())
 {
-    
+
 }
 
 void
-SegmentLinker::setForNotation(bool f)
+SegmentLinker::setExcludeFromPrinting(bool exclude)
 {
     for (LinkedSegmentParamsList::iterator i = m_linkedSegmentParamsList.begin();
             i != m_linkedSegmentParamsList.end(); ++i) {
-        i->m_linkedSegment->setForNotation(f, false);
-        // Calling setForNotation here with all=true (which is the default)
-        // leads to an infinite recursion.
+        // Calling setExcludeFromPrinting() here with linkedSegmentsAlso == true
+        // (which is the default) leads to infinite recursion.
+        i->m_linkedSegment->setExcludeFromPrinting(exclude, false);
     }
 }
 
-}
 
+}

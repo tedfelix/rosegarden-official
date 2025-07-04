@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -60,7 +60,7 @@ RealTime
 InternalSegmentMapper::
 toRealTime(Composition &comp, timeT t)
 {
-    return 
+    return
         comp.getElapsedRealTime(t) + m_segment->getRealTimeDelay();
 }
 
@@ -97,9 +97,9 @@ void InternalSegmentMapper::fillBuffer()
         << "with repeat count"
         << repeatCount;
 #endif
-    
+
     // Clear out stuff from before.
-    m_triggeredEvents->clear(); 
+    m_triggeredEvents->clear();
     m_controllerCache.clear();
     m_noteOffs = NoteoffContainer();
 
@@ -114,7 +114,7 @@ void InternalSegmentMapper::fillBuffer()
         // on.  Eg, on the second time thru we play everything one
         // segment duration later and so forth.
         timeT timeForRepeats = repeatNo * segmentDuration;
-        
+
         for (Segment::iterator j = m_segment->begin();
              m_segment->isBeforeEndMarker(j) ||
                  (implied != m_triggeredEvents->end());
@@ -130,7 +130,7 @@ void InternalSegmentMapper::fillBuffer()
             if (m_segment->isBeforeEndMarker(j)) {
                 bestBaseTime = (*j)->getAbsoluteTime();
             }
-            
+
             // k is a pointer to the note iterator we will actually
             // use.  Initialize it to the default of the segment's
             // own.
@@ -156,7 +156,7 @@ void InternalSegmentMapper::fillBuffer()
 
             // We handle nested ornament expansion elsewhere, so
             // trigger events won't be found in implied.
-            if (!usingImplied) { 
+            if (!usingImplied) {
 
                 long triggerId = -1;
                 (**k)->get<Int>(BaseProperties::TRIGGER_SEGMENT_ID, triggerId);
@@ -196,9 +196,9 @@ void InternalSegmentMapper::fillBuffer()
                             reserve(spaceNeeded);
                         }
                     }
-                        
+
                     // whatever happens, we don't want to write this one
-                    ++j; 
+                    ++j;
 
                     // Since we're no longer sure what the next event
                     // is, restart the loop.
@@ -238,11 +238,10 @@ void InternalSegmentMapper::fillBuffer()
                     try {
                         // Create mapped event and put it in buffer.
                         // The instrument will be set later by
-                        // ChannelManager, so we set it to zero here.
-                        MappedEvent e(0,
-                                      ***k,  // three stars! what an accolade
-                                      eventTime,
-                                      duration);
+                        // ChannelManager, so we do not set it here.
+                        MappedEvent e(***k);
+                        e.setEventTime(eventTime);
+                        e.setDuration(duration);
 
                         // Somewhat hacky: The MappedEvent ctor makes
                         // events that needn't be inserted invalid.
@@ -253,20 +252,26 @@ void InternalSegmentMapper::fillBuffer()
                                 (**k)->isa(PitchBend::EventType)) {
                                 m_controllerCache.storeLatestValue((**k));
                             }
-                            
+
                             if ((**k)->isa(Note::EventType)) {
                                 if (m_segment->getTranspose() != 0) {
-                                    e.setPitch(e.getPitch() +
-                                               m_segment->getTranspose());
+                                    int pitch = e.getPitch() +
+                                            m_segment->getTranspose();
+                                    // Limit to [0, 127].
+                                    if (pitch < 0)
+                                        pitch = 0;
+                                    if (pitch > 127)
+                                        pitch = 127;
+                                    e.setPitch(pitch);
                                 }
                                 if (e.getType() != MappedEvent::MidiNoteOneShot) {
                                     enqueueNoteoff(playTime + playDuration,
                                                    e.getPitch());
                                 }
                             }
-                            mapAnEvent(&e); 
+                            mapAnEvent(&e);
                         } else {}
-                        
+
                     } catch (...) {
 #ifdef DEBUG_INTERNAL_SEGMENT_MAPPER
                         RG_DEBUG << "fillBuffer() - caught exception while trying to create MappedEvent";
@@ -295,16 +300,16 @@ void InternalSegmentMapper::fillBuffer()
 
         // Fix for bug #1378.  Start slightly before the first note so
         // that program etc is sent then.  We'll allow it to be before
-        // zeroTime, since MappedBufMetaIterator can handle early
+        // zeroTimeF(), since MappedBufMetaIterator can handle early
         // start-times.
         static const RealTime preparationTime = RealTime::fromSeconds(0.5);
         minRealTime = minRealTime - preparationTime;
     } else {
-        minRealTime = maxRealTime = RealTime::zeroTime;
+        minRealTime = maxRealTime = RealTime::zero();
     }
 
     m_channelManager.setRequiredInterval(minRealTime, maxRealTime,
-                                         RealTime::zeroTime, RealTime(1,0));
+                                         RealTime::zero(), RealTime(1,0));
 
     // If the track is making sound
     if (!ControlBlock::getInstance()->isTrackMuted(track->getId())  &&
@@ -369,7 +374,9 @@ popInsertNoteoff(int trackid, Composition &comp)
     // A noteoff looks like a note with velocity = 0.
     // Our noteoffs already have performance pitch, so
     // don't add segment's transpose.
-    MappedEvent event(0, MappedEvent::MidiNote, pitch, 0);
+    MappedEvent event;
+    event.setType(MappedEvent::MidiNote);
+    event.setData1(pitch);
     event.setEventTime(toRealTime(comp, internalTime));
     event.setTrackId(trackid);
     mapAnEvent(&event);
@@ -379,7 +386,7 @@ popInsertNoteoff(int trackid, Composition &comp)
 }
 
 int
-InternalSegmentMapper::addSize(int size, Segment *s)
+InternalSegmentMapper::addSize(int size, Segment *s) const
 {
     int repeatCount = getSegmentRepeatCount();
     // Double the size because we may get a noteoff for every noteon
@@ -393,7 +400,7 @@ InternalSegmentMapper::calculateSize()
     return addSize(0, m_segment);
 }
 
-// Make the channel ready to be played on.  
+// Make the channel ready to be played on.
 void
 InternalSegmentMapper::
 makeReady(MappedInserterBase &inserter, RealTime time)
@@ -425,21 +432,21 @@ InternalSegmentMapper::insertChannelSetup(MappedInserterBase &inserter)
     m_channelManager.setInstrument(instrument);
     m_channelManager.insertChannelSetup(
             m_segment->getTrack(),
-            RealTime::zeroTime,
+            RealTime::zero(),
             true,  // sendBSPC
-            getControllers(instrument, RealTime::zeroTime),
+            getControllers(instrument, RealTime::zero()),
             inserter);
 }
 
 void
 InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
-                               RealTime start, bool dirtyIter)
+                               RealTime start, bool firstOutput)
 {
     Instrument *instrument = m_doc->getInstrument(m_segment);
     if (!instrument)
         return;
 
-    if (dirtyIter)
+    if (firstOutput)
         m_channelManager.setInstrument(instrument);
 
     m_channelManager.insertEvent(
@@ -447,13 +454,13 @@ InternalSegmentMapper::doInsert(MappedInserterBase &inserter, MappedEvent &evt,
             getControllers(instrument, start),
             start,
             evt,
-            dirtyIter,  // firstOutput
+            firstOutput,
             inserter);
 }
 
 int
 InternalSegmentMapper::
-getControllerValue(timeT searchTime, const std::string eventType,
+getControllerValue(timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
     return
@@ -464,7 +471,7 @@ getControllerValue(timeT searchTime, const std::string eventType,
 
 bool
 InternalSegmentMapper::
-shouldPlay(MappedEvent *evt, RealTime sliceStart)
+shouldPlay(MappedEvent *evt, RealTime startTime)
 {
     // #1048388:
     // Ensure sysex heeds mute status, but ensure clocks etc still get
@@ -472,14 +479,14 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     if (evt->getType() == MappedEvent::MidiSystemMessage &&
         evt->getData1() != MIDI_SYSTEM_EXCLUSIVE)
         { return true; }
-    
+
     // Otherwise if it's muted it doesn't play.
     if (mutedEtc()) { return false; }
 
     // Otherwise it should play if it's not already all done sounding.
     // The timeslice logic will have already excluded events that
     // start too late.
-    return !evt->EndedBefore(sliceStart);
+    return !evt->EndedBefore(startTime);
 }
 
 ControllerAndPBList

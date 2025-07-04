@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,53 +20,54 @@
 #define RG_MARKERMODIFYDIALOG_H
 
 #include "base/Marker.h"
-#include "gui/widgets/TimeWidget.h"
+#include "gui/widgets/TimeWidget2.h"
 #include "gui/widgets/LineEdit.h"
 
 #include <QDialog>
 #include <QString>
 
+class QDialogButtonBox;
+
 
 namespace Rosegarden
 {
-
-class TimeWidget;
-class RosegardenDocument;
-class Composition;
 
 
 class MarkerModifyDialog : public QDialog
 {
     Q_OBJECT
+
 public:
     MarkerModifyDialog(QWidget *parent,
-                       Composition *composition,
                        int time,
-                       const QString &name,
-                       const QString &des);
+                       const QString &text,
+                       const QString &comment);
 
     MarkerModifyDialog(QWidget *parent,
-                       Composition *composition,
                        Marker *marker);
 
-    QString getName() const { return m_nameEdit->text(); }
-    QString getDescription() const { return m_desEdit->text(); }
-    int getTime() const { return m_timeEdit->getTime(); }
-    int getOriginalTime() const { return m_originalTime; }
+    QString getText() const  { return m_text->text(); }
+    QString getComment() const  { return m_comment->text(); }
+    int getTime() const  { return m_timeWidget->getTime(); }
+    int getOriginalTime() const  { return m_originalTime; }
 
-protected:
-    void initialise(Composition *composition,
-                    int time,
-                    const QString &name,
-                    const QString &des);
+private slots:
 
-    RosegardenDocument *m_doc;
+    void slotIsValid(bool valid);
 
-    TimeWidget         *m_timeEdit;
-    LineEdit           *m_nameEdit;
-    LineEdit           *m_desEdit;
+private:
 
-    int                m_originalTime;
+    void initialise(int time,
+                    const QString &text,
+                    const QString &comment);
+
+    TimeWidget2 *m_timeWidget;
+    LineEdit *m_text;
+    LineEdit *m_comment;
+
+    QDialogButtonBox *m_buttonBox;
+
+    int m_originalTime;
 };
 
 

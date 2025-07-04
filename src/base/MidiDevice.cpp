@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -22,18 +22,22 @@
 #include "base/Instrument.h"
 #include "base/MidiTypes.h"
 #include "misc/Debug.h"
+#include "misc/Strings.h"
 
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include <set>
-
+#include <string>
 #include <sstream>
 
+#include <QCoreApplication>
 #include <QString>
+
 
 namespace Rosegarden
 {
+
 
 #if 0
 MidiDevice::MidiDevice():
@@ -65,9 +69,10 @@ MidiDevice::MidiDevice(DeviceId id,
     m_librarian(std::pair<std::string, std::string>("<none>", "<none>")),
     m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
+    //RG_DEBUG << "create midi device" << name << dir;
     createInstruments(ibase);
     generatePresentationList();
-    generateDefaultControllers();
+    m_controlList = ControlParameter::getDefaultControllers();
     deviceToInstrControllerPush();
 
     // create a default Metronome
@@ -96,8 +101,8 @@ MidiDevice::MidiDevice(DeviceId id,
     for(; cIt != dev.m_controlList.end(); ++cIt) {
         addControlParameter(*cIt, true);
     }
-    
-    
+
+
     // Create and assign a metronome if required
     //
     if (dev.getMetronome()) {
@@ -208,7 +213,7 @@ MidiDevice::~MidiDevice()
 }
 
 AllocateChannels *
-MidiDevice::getAllocator()
+MidiDevice::getAllocator() const
 { return m_allocator; }
 
 void
@@ -216,14 +221,15 @@ MidiDevice::createInstruments(InstrumentId base)
 {
     for (int i = 0; i < 16; ++i) {
         Instrument *instrument = new Instrument
-            (base + i, Instrument::Midi, "", i, this);
+            (base + i, Instrument::Midi, "", this);
+        instrument->setNaturalMidiChannel(i);
         instrument->setFixedChannel();
         // ??? Since we don't have a connection yet, this makes
         //     little sense.
         //instrument->sendChannelSetup();
-        addInstrument(instrument);
+        MidiDevice::addInstrument(instrument);
     }
-    renameInstruments();
+    MidiDevice::renameInstruments();
 }
 
 void
@@ -237,6 +243,7 @@ MidiDevice::renameInstruments()
              .arg(isPercussionNumber(i) ? "[D]" : "")
              .toUtf8().data());
     }
+    notifyDeviceModified();
 }
 
 void
@@ -252,37 +259,6 @@ MidiDevice::generatePresentationList()
         if ((*it)->getId() >= MidiInstrumentBase) {
             m_presentationInstrumentList.push_back(*it);
         }
-    }
-}
-
-void
-MidiDevice::generateDefaultControllers()
-{
-    m_controlList.clear();
-
-    static std::string controls[][9] = {
-        { "Pan", Rosegarden::Controller::EventType, "<none>", "0", "127", "64", "10", "2", "0" },
-        { "Chorus", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "93", "3", "1" },
-        { "Volume", Rosegarden::Controller::EventType, "<none>", "0", "127", "100", "7", "1", "2" },
-        { "Reverb", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "91", "3", "3" },
-        { "Sustain", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "64", "4", "-1" },
-        { "Expression", Rosegarden::Controller::EventType, "<none>", "0", "127", "127", "11", "2", "-1" },
-        { "Modulation", Rosegarden::Controller::EventType, "<none>", "0", "127", "0", "1", "4", "-1" },
-        { "PitchBend", Rosegarden::PitchBend::EventType, "<none>", "0", "16383", "8192", "1", "4", "-1" }
-    };
-
-    for (size_t i = 0; i < sizeof(controls) / sizeof(controls[0]); ++i) {
-
-        Rosegarden::ControlParameter con(controls[i][0],
-                                         controls[i][1],
-                                         controls[i][2],
-                                         atoi(controls[i][3].c_str()),
-                                         atoi(controls[i][4].c_str()),
-                                         atoi(controls[i][5].c_str()),
-                                         Rosegarden::MidiByte(atoi(controls[i][6].c_str())),
-                                         atoi(controls[i][7].c_str()),
-                                         atoi(controls[i][8].c_str()));
-        addControlParameter(con, false);
     }
 }
 
@@ -305,7 +281,7 @@ MidiDevice::deviceToInstrControllerPush()
                 int defaultValue = cIt->getDefault();
                 (*iIt)->setControllerValue(controllerValue, defaultValue);
             }
-        }        
+        }
     }
 }
 
@@ -313,18 +289,21 @@ void
 MidiDevice::clearBankList()
 {
     m_bankList.clear();
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::clearProgramList()
 {
     m_programList.clear();
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::clearKeyMappingList()
 {
     m_keyMappingList.clear();
+    notifyDeviceModified();
 }
 
 void
@@ -339,6 +318,7 @@ MidiDevice::clearControlList()
     }
 
     m_controlList.clear();
+    notifyDeviceModified();
 }
 
 void
@@ -351,12 +331,14 @@ MidiDevice::addProgram(const MidiProgram &prog)
     }
 
     m_programList.push_back(prog);
+    notifyDeviceModified();
 }
 
-void 
+void
 MidiDevice::addBank(const MidiBank &bank)
 {
     m_bankList.push_back(bank);
+    notifyDeviceModified();
 }
 
 void
@@ -364,6 +346,7 @@ MidiDevice::setMetronome(const MidiMetronome &metronome)
 {
     delete m_metronome;
     m_metronome = new MidiMetronome(metronome);
+    notifyDeviceModified();
 }
 
 BankList
@@ -462,7 +445,7 @@ MidiDevice::getPrograms(const MidiBank &bank) const
 
     for (ProgramList::const_iterator it = m_programList.begin();
          it != m_programList.end(); ++it) {
-        if (it->getBank().partialCompare(bank)) programs.push_back(*it);
+        if (it->getBank().compareKey(bank)) programs.push_back(*it);
     }
 
     return programs;
@@ -491,21 +474,24 @@ MidiDevice::getPrograms0thVariation(bool percussion, const MidiBank &bank) const
     return ProgramList();
 }
 
+/* unused
 std::string
 MidiDevice::getBankName(const MidiBank &bank) const
 {
     for (BankList::const_iterator it = m_bankList.begin();
          it != m_bankList.end(); ++it) {
-        if ((*it).partialCompare(bank)) return it->getName();
+        if ((*it).compareKey(bank)) return it->getName();
     }
     return "";
 }
+*/
 
 void
 MidiDevice::addKeyMapping(const MidiKeyMapping &mapping)
 {
     //!!! handle dup names
     m_keyMappingList.push_back(mapping);
+    notifyDeviceModified();
 }
 
 const MidiKeyMapping *
@@ -534,26 +520,12 @@ MidiDevice::getKeyMappingForProgram(const MidiProgram &program) const
     return nullptr;
 }
 
-void
-MidiDevice::setKeyMappingForProgram(const MidiProgram &program,
-                                    std::string mapping)
-{
-    ProgramList::iterator it;
-
-    for (it = m_programList.begin(); it != m_programList.end(); ++it) {
-        if (it->partialCompare(program)) {
-            it->setKeyMapping(mapping);
-        }
-    }
-}
-    
-
 std::string
 MidiDevice::toXmlString() const
 {
     std::stringstream midiDevice;
 
-    midiDevice << "    <device id=\""  << m_id 
+    midiDevice << "    <device id=\""  << m_id
                << "\" name=\""         << encode(m_name)
                << "\" direction=\""    << (m_direction == Play ?
                                            "play" : "record")
@@ -581,7 +553,7 @@ MidiDevice::toXmlString() const
                    << "depth=\"" << (int)m_metronome->getDepth() << "\" "
                    << "barvelocity=\"" << (int)m_metronome->getBarVelocity() << "\" "
                    << "beatvelocity=\"" << (int)m_metronome->getBeatVelocity() << "\" "
-                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity() 
+                   << "subbeatvelocity=\"" << (int)m_metronome->getSubBeatVelocity()
                    << "\"/>"
                    << std::endl << std::endl;
     }
@@ -605,13 +577,13 @@ MidiDevice::toXmlString() const
         //
         for (pt = m_programList.begin(); pt != m_programList.end(); ++pt)
         {
-            if (pt->getBank().partialCompare(*it))
+            if (pt->getBank().compareKey(*it))
             {
                 midiDevice << "            <program "
                            << "id=\"" << (int)pt->getProgram() << "\" "
                            << "name=\"" << encode(pt->getName()) << "\" ";
                 if (!pt->getKeyMapping().empty()) {
-                    midiDevice << "keymapping=\"" 
+                    midiDevice << "keymapping=\""
                                << encode(pt->getKeyMapping()) << "\" ";
                 }
                 midiDevice << "/>" << std::endl;
@@ -621,7 +593,7 @@ MidiDevice::toXmlString() const
         midiDevice << "        </bank>" << std::endl << std::endl;
     }
 
-    // Now controllers (before Instruments, which can depend on 
+    // Now controllers (before Instruments, which can depend on
     // Controller colours)
     //
     midiDevice << "        <controls>" << std::endl;
@@ -664,8 +636,6 @@ MidiDevice::getAllInstruments() const
     return m_instruments;
 }
 
-// Omitting special system Instruments
-//
 InstrumentList
 MidiDevice::getPresentationInstruments() const
 {
@@ -691,9 +661,10 @@ MidiDevice::addInstrument(Instrument *instrument)
             }
         }
     }
-    
+
     m_instruments.push_back(instrument);
     generatePresentationList();
+    notifyDeviceModified();
 }
 
 std::string
@@ -713,18 +684,21 @@ void
 MidiDevice::replaceBankList(const BankList &bankList)
 {
     m_bankList = bankList;
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::replaceProgramList(const ProgramList &programList)
 {
     m_programList = programList;
+    notifyDeviceModified();
 }
 
 void
 MidiDevice::replaceKeyMappingList(const KeyMappingList &keyMappingList)
 {
     m_keyMappingList = keyMappingList;
+    notifyDeviceModified();
 }
 
 
@@ -736,12 +710,12 @@ MidiDevice::mergeBankList(const BankList &bankList)
     BankList::const_iterator it;
     BankList::iterator oIt;
     bool clash = false;
-    
+
     for (it = bankList.begin(); it != bankList.end(); ++it)
     {
         for (oIt = m_bankList.begin(); oIt != m_bankList.end(); ++oIt)
         {
-            if ((*it).partialCompare(*oIt))
+            if ((*it).compareKey(*oIt))
             {
                 clash = true;
                 break;
@@ -753,7 +727,7 @@ MidiDevice::mergeBankList(const BankList &bankList)
         else
             clash = false;
     }
-
+    notifyDeviceModified();
 }
 
 void
@@ -779,6 +753,7 @@ MidiDevice::mergeProgramList(const ProgramList &programList)
         else
             clash = false;
     }
+    notifyDeviceModified();
 }
 
 void
@@ -804,6 +779,7 @@ MidiDevice::mergeKeyMappingList(const KeyMappingList &keyMappingList)
         else
             clash = false;
     }
+    notifyDeviceModified();
 }
 
 void
@@ -816,6 +792,7 @@ MidiDevice::addControlParameter(const ControlParameter &con,
             addControlToInstrument(con);
         }
     }
+    notifyDeviceModified();
 }
 
 // Add controller CON at INDEX, shifting further controllers one
@@ -850,6 +827,7 @@ MidiDevice::addControlParameter(const ControlParameter &con, int index,
 
     // Assign the ControlList we just made.
     m_controlList = controls;
+    notifyDeviceModified();
 }
 
 
@@ -863,23 +841,25 @@ MidiDevice::removeControlParameter(int index)
     {
         if (index == i)
         {
-            removeControlFromInstrument(*it);   
+            removeControlFromInstrument(*it);
             m_controlList.erase(it);
             return true;
         }
         i++;
     }
 
+    notifyDeviceModified();
     return false;
 }
 
 bool
 MidiDevice::modifyControlParameter(const ControlParameter &con, int index)
 {
-    if (index < 0 || index > (int)m_controlList.size()) return false;
+    if (index < 0 || index >= (int)m_controlList.size()) return false;
     removeControlFromInstrument(m_controlList[index]);
     m_controlList[index] = con;
     addControlToInstrument(con);
+    notifyDeviceModified();
     return true;
 }
 
@@ -896,12 +876,13 @@ MidiDevice::replaceControlParameters(const ControlList &con)
 
     // Clear the Device control list
     m_controlList.clear();
-    
-    // Now add the controllers to the device,    
+
+    // Now add the controllers to the device,
     ControlList::const_iterator cIt = con.begin();
     for(; cIt != con.end(); ++cIt) {
         addControlParameter(*cIt, true);
     }
+    notifyDeviceModified();
 }
 
 #if 0
@@ -918,7 +899,7 @@ conformInstrumentControllers(void)
         ++iIt) {
         // Get this instrument's static controllers.  As a seperate
         // copy, so it's not munged when we erase controllers.
-        StaticControllers staticControllers = 
+        StaticControllers staticControllers =
             (*iIt)->getStaticControllers();
 
         for (StaticControllers::iterator it = staticControllers.begin();
@@ -939,7 +920,7 @@ conformInstrumentControllers(void)
                 // so set it to the new default.
                 MidiByte value = con->getDefault();
                 (*iIt)->setControllerValue(controllerNumber, value);
-            } 
+            }
         }
     }
 }
@@ -952,7 +933,7 @@ conformInstrumentControllers(void)
 // Controllers (Control type)
 //
 //
-bool 
+bool
 MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
 {
     return
@@ -961,7 +942,7 @@ MidiDevice::isUniqueControlParameter(const ControlParameter &con) const
 
 const ControlParameter *
 MidiDevice::
-findControlParameter(std::string type, MidiByte controllerNumber) const
+findControlParameter(const std::string& type, MidiByte controllerNumber) const
 {
     ControlList::const_iterator it = m_controlList.begin();
 
@@ -978,8 +959,8 @@ findControlParameter(std::string type, MidiByte controllerNumber) const
     return nullptr;
 }
 
-bool 
-MidiDevice::isVisibleControlParameter(const ControlParameter &con) const
+bool
+MidiDevice::isVisibleControlParameter(const ControlParameter &con)
 {
     // ??? Inline this and get rid of it.  It is a one-liner that is only
     //     used internally.
@@ -1006,7 +987,7 @@ MidiDevice::isVisibleControlParameter(MidiByte controlNumber) const
 }
 
 void
-MidiDevice::addControlToInstrument(const ControlParameter &con)
+MidiDevice::addControlToInstrument(const ControlParameter &con) const
 {
     if (!isVisibleControlParameter(con)) {
         return;
@@ -1021,12 +1002,12 @@ MidiDevice::addControlToInstrument(const ControlParameter &con)
         MidiByte controllerNumber = con.getControllerNumber();
         MidiByte controllerValue = con.getDefault();
         (*iIt)->setControllerValue(controllerNumber, controllerValue);
-    }    
+    }
 }
 
 void
 MidiDevice::removeControlFromInstrument(
-        const ControlParameter &controlParameter)
+        const ControlParameter &controlParameter) const
 {
     InstrumentList instrumentList = getAllInstruments();
 
@@ -1046,7 +1027,7 @@ MidiDevice::getIPBControlParameters() const
     for (ControlList::const_iterator it = m_controlList.begin();
          it != m_controlList.end(); ++it)
     {
-        if (it->getIPBPosition() != -1 && 
+        if (it->getIPBPosition() != -1 &&
             it->getControllerNumber() != MIDI_CONTROLLER_VOLUME)
             retList.push_back(*it);
     }
@@ -1063,14 +1044,9 @@ MidiDevice::getControlParameter(int index)
     return nullptr;
 }
 
-const ControlParameter *
-MidiDevice::getControlParameter(int index) const
-{
-    return ((MidiDevice *)this)->getControlParameter(index);
-}
-
 ControlParameter *
-MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue)
+MidiDevice::getControlParameter(
+        const std::string &type, Rosegarden::MidiByte controllerNumber)
 {
     ControlList::iterator it = m_controlList.begin();
 
@@ -1080,12 +1056,12 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
         {
             // Return matched on type for most events
             //
-            if (type != Rosegarden::Controller::EventType) 
+            if (type != Rosegarden::Controller::EventType)
                 return &*it;
-            
+
             // Also match controller value for Controller events
             //
-            if (it->getControllerNumber() == controllerValue)
+            if (it->getControllerNumber() == controllerNumber)
                 return  &*it;
         }
     }
@@ -1094,10 +1070,54 @@ MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte co
 }
 
 const ControlParameter *
-MidiDevice::getControlParameter(const std::string &type, Rosegarden::MidiByte controllerValue) const
+MidiDevice::getControlParameterConst(
+        const std::string &type, Rosegarden::MidiByte controllerNumber) const
 {
-    return ((MidiDevice *)this)->getControlParameter(type, controllerValue);
+    // Cast away const to allow reuse of the non-const version.
+    return const_cast<MidiDevice *>(this)->
+            getControlParameter(type, controllerNumber);
 }
 
+std::string
+MidiDevice::makeNewBankName() const
+{
+    // Generate an unused "new bank" name.
+    std::string name;
+    for (size_t i = 1; i <= m_bankList.size() + 1; ++i) {
+        if (i == 1)
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new bank>"));
+        else
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new bank %1>").arg(i));
+        // No such bank?  Then we have our name.
+        if (getBankByName(name) == nullptr)
+            break;
+    }
+
+    return name;
 }
 
+std::string
+MidiDevice::makeNewKeyMappingName() const
+{
+    // Generate an unused "new mapping" name.
+    std::string name;
+    for (size_t i = 1; i <= m_keyMappingList.size() + 1; ++i) {
+        if (i == 1)
+            name = qstrtostr(QCoreApplication::translate("INSTRUMENT",
+                                                         "<new mapping>"));
+        else
+            name = qstrtostr(
+                        QCoreApplication::translate("INSTRUMENT",
+                                                    "<new mapping %1>").arg(i));
+        // No such key map?  Then we have our name.
+        if (getKeyMappingByName(name) == nullptr)
+            break;
+    }
+
+    return name;
+}
+
+
+}

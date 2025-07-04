@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2006-2009
 	D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
@@ -63,7 +63,7 @@ public:
 
     /** Return a \c CategoriesContainer that comprises a list of the categories
      * discovered in the XML file */
-    CategoriesContainer  getCategories() { return m_categories; }
+    CategoriesContainer  getCategories() const { return m_categories; }
     //CategoryElement getCategoryByIndex(int index) { return m_categories [index]; }
 
     // Xml handler methods:
@@ -71,7 +71,7 @@ public:
     bool startElement (const QString& namespaceURI,
                        const QString& localName,
                        const QString& qName,
-                       const QXmlStreamAttributes& atts) override;
+                       const QXmlStreamAttributes& attributes) override;
 
     /** Handle fatal parsing errors */
     bool fatalError(int lineNumber, int columnNumber,

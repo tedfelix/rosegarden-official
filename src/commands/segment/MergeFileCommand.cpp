@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -46,6 +46,8 @@ MergeFileCommand::MergeFileCommand(RosegardenDocument *srcDoc,
     m_mergeAtEnd(mergeAtEnd),
     m_mergeTimesAndTempos(mergeTimesAndTempos),
     m_compositionExpanded(false),
+    m_oldCompositionEnd(0),
+    m_newCompositionEnd(0),
     m_undone(false)
 {
 
@@ -65,36 +67,9 @@ MergeFileCommand::~MergeFileCommand()
     }
 }
 
-// Find the first MIDI Device's first Instrument ID.
-// ??? Specialized, but a candidate for promotion to Studio.
-InstrumentId getFirstMidiInstrumentId(const Studio &destStudio)
-{
-    const DeviceList *deviceList = destStudio.getDevices();
-
-    // For each Device in the Studio
-    for (const Device *device : *deviceList) {
-        // if this is not a MIDI device, try the next.
-        if (device->getType() != Device::Midi)
-            continue;
-        // Skip input devices.
-        if (device->isInput())
-            continue;
-
-        // Get the Device's Instruments.
-        InstrumentList instruments = device->getPresentationInstruments();
-        if (instruments.empty())
-            return MidiInstrumentBase;
-
-        // Return the Device's first Instrument ID
-        return instruments[0]->getId();
-    }
-
-    return MidiInstrumentBase;
-}
-
 // Copy the type from the srcTrack to the destTrack.
-void copyType(const Studio &srcStudio, const Track *srcTrack,
-              const Studio &destStudio, Track *destTrack)
+static void copyType(const Studio &srcStudio, const Track *srcTrack,
+                     const Studio &destStudio, Track *destTrack)
 {
     const Instrument *instrument = srcStudio.getInstrumentFor(srcTrack);
     if (!instrument)
@@ -122,7 +97,7 @@ void copyType(const Studio &srcStudio, const Track *srcTrack,
             // ??? It would be nice to be smarter and somehow detect the
             //     same Devices between the two files and preserve the
             //     channel/bank/program info.
-            destTrack->setInstrument(getFirstMidiInstrumentId(destStudio));
+            destTrack->setInstrument(destStudio.getFirstMIDIInstrument());
             break;
         }
     }

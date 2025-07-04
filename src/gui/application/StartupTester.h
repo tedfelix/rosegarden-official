@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -45,7 +45,7 @@ public:
 
     // If you call one of these methods before the startup test has
     // completed in the background, then it will block.
-    bool haveAudioFileImporter(QStringList *missingApplications);
+    // unused bool haveAudioFileImporter(QStringList *missingApplications);
 
 signals:
     void newerVersionAvailable(QString);

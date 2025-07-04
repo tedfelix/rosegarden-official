@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Portions of this file Copyright 2003
         Mark Hymers         <markh@linuxfromscratch.org>
@@ -33,9 +33,11 @@ class ColourList;
 namespace Rosegarden
 {
 
+
 class ColourMap;
 
 
+/// UNUSED.  Its one client (ColourConfigurationPage) is unused.
 class ColourTable : public QTableWidget
 {
     Q_OBJECT

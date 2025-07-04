@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -80,8 +80,8 @@ public:
      *   non-metronome events remaining, but this was never used.
      */
     void fetchEvents(MappedInserterBase &inserter,
-                     const RealTime &start,
-                     const RealTime &end);
+                     const RealTime &startTime,
+                     const RealTime &endTime);
 
     /// Re-seek to current time on the iterator for this segment.
     /**
@@ -120,8 +120,8 @@ private:
      * impossible).
     */
     void fetchEventsNoncompeting(MappedInserterBase &inserter,
-                                 const RealTime &start,
-                                 const RealTime &end);
+                                 const RealTime &startTime,
+                                 const RealTime &endTime);
 
 };
 

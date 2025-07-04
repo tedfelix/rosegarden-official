@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -108,20 +108,20 @@ Configuration::operator=(const Configuration &conf)
 
 namespace CompositionMetadataKeys
 {
-    const PropertyName Copyright = "copyright";
-    const PropertyName Composer = "composer";
-    const PropertyName Title = "title";
-    const PropertyName Subtitle = "subtitle";
-    const PropertyName Arranger = "arranger";
+    const PropertyName Copyright("copyright");
+    const PropertyName Composer("composer");
+    const PropertyName Title("title");
+    const PropertyName Subtitle("subtitle");
+    const PropertyName Arranger("arranger");
     // The following are recognized only by LilyPond output
-    const PropertyName Dedication = "dedication";
-    const PropertyName Subsubtitle = "subsubtitle";
-    const PropertyName Poet = "poet";
-    const PropertyName Meter = "meter";
-    const PropertyName Opus = "opus";
-    const PropertyName Instrument = "instrument";
-    const PropertyName Piece = "piece";
-    const PropertyName Tagline = "tagline";
+    const PropertyName Dedication("dedication");
+    const PropertyName Subsubtitle("subsubtitle");
+    const PropertyName Poet("poet");
+    const PropertyName Meter("meter");
+    const PropertyName Opus("opus");
+    const PropertyName Instrument("instrument");
+    const PropertyName Piece("piece");
+    const PropertyName Tagline("tagline");
 
     // The tab order of the edit fields in HeadersConfigurationPage
     // is defined by the creation order of the edit fields.
@@ -148,9 +148,9 @@ namespace CompositionMetadataKeys
 
 
 // Keep these in lower case
-const PropertyName DocumentConfiguration::SequencerOptions      = "sequenceroptions";
-const PropertyName DocumentConfiguration::ZoomLevel             = "zoomlevel";
-const PropertyName DocumentConfiguration::TransportMode         = "transportmode";
+const PropertyName DocumentConfiguration::SequencerOptions("sequenceroptions");
+const PropertyName DocumentConfiguration::ZoomLevel("zoomlevel");
+const PropertyName DocumentConfiguration::TransportMode("transportmode");
 
 
 DocumentConfiguration::DocumentConfiguration()

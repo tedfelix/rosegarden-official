@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -64,6 +64,15 @@ public slots:
      */
     virtual void slotNameChanged(const QString &) = 0;
 
+    /// Handler for edit completion in any of the line edit widgets.
+    /**
+     * Connected to LineEdit::editingFinished() for all line edits.
+     *
+     * This is virtual because NameSetEditor does the connect and wants
+     * the derived version.
+     */
+    virtual void slotEditingFinished() = 0;
+
     /// Handler for presses of any of the key map buttons.
     /**
      * Connected to QToolButton::clicked() for all key map buttons.
@@ -81,10 +90,12 @@ public slots:
 
 protected:
     NameSetEditor(BankEditorDialog *bankEditor,
-                  QString title,  // Gets overridden by the bank/map name.
+                  const QString& title,  // Gets overridden by the bank/map name.
                   QWidget *parent,
                   bool showKeyMapButtons = false);
 
+    // ??? Key mappings are only used by one deriver (MidiProgramsEditor).
+    //     Push this down to there.
     QToolButton *getKeyMapButton(int n) { return m_keyMapButtons[n]; }
     const QToolButton *getKeyMapButton(int n) const { return m_keyMapButtons[n]; }
 
@@ -111,7 +122,8 @@ protected:
     QLabel *m_librarianEmail;
 
     std::vector<LineEdit *> m_names;
-    QStringList m_completions;
+
+    virtual void clearAll();
 
 private:
     QPushButton *m_numberingBaseButton;

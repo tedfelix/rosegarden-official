@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,30 +18,31 @@
 #ifndef RG_MARKEREDITORVIEWITEM_H
 #define RG_MARKEREDITORVIEWITEM_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 
-#include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QStringList>
 
+class QTreeWidget;
 
 
-namespace Rosegarden {
+namespace Rosegarden
+{
 
 
 class MarkerEditorViewItem : public QTreeWidgetItem
 {
 public:
-	MarkerEditorViewItem(QTreeWidget * parent, int id,
-						 QStringList strlist
-						):
+	MarkerEditorViewItem(QTreeWidget *parent, int id, QStringList strlist):
         QTreeWidgetItem(parent, strlist),
-	m_rawTime(0), m_fake(false), m_id(id) { ; }
+        m_id(id)
+	{
+	}
 
     virtual int compare(QTreeWidgetItem * i, int col, bool ascending) const;
 
-    void setRawTime(Rosegarden::timeT rawTime) { m_rawTime = rawTime; }
-    Rosegarden::timeT getRawTime() const { return m_rawTime; }
+    void setRawTime(timeT rawTime) { m_rawTime = rawTime; }
+    timeT getRawTime() const { return m_rawTime; }
 
     void setFake(bool fake) { m_fake = fake; }
     bool isFake() const { return m_fake; }
@@ -49,8 +50,8 @@ public:
     int getID() const { return m_id; }
     
 protected:
-    Rosegarden::timeT m_rawTime;
-    bool m_fake;
+    timeT m_rawTime{0};
+    bool m_fake{false};
     int m_id;
 };
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,37 +16,73 @@
 */
 
 #define RG_MODULE_STRING "[MusicXMLXMLHandler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MusicXMLImportHelper.h"
+
 #include "MusicXMLXMLHandler.h"
+
 #include "base/Event.h"
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "base/Composition.h"
-#include "base/Studio.h"
 #include "base/Instrument.h"
 #include "base/MidiProgram.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "gui/editors/notation/NotationProperties.h"
 #include "base/StaffExportTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
+#include "base/TimeSignature.h"
 
 #include <QString>
 #include <QtGlobal>
 
-namespace Rosegarden
 
+namespace Rosegarden
 {
+
 
 using namespace BaseProperties;
 
 
-MusicXMLXMLHandler::MusicXMLXMLHandler(Composition *composition, Studio *studio):
-        m_composition(composition),
-        m_studio(studio),
-        m_errormessage("")
+MusicXMLXMLHandler::MusicXMLXMLHandler(RosegardenDocument *doc) :
+        m_document(doc),
+        m_errormessage(""),
+        m_number(0),
+        m_isGrace(false),
+        m_hasGraceNotes(false),
+        m_chord(false),
+        m_step(0),
+        m_octave(0),
+        m_type(0),
+        m_dots(0),
+        m_tupletcount(0),
+        m_untupletcount(0),
+        m_currentState(NoData),
+        m_inDynamics(false),
+        m_directionStart(NotActive),
+        m_brace(0),
+        m_bracket(0),
+        m_groupId(0),
+        m_tupletGroup(0),
+        m_beamGroup(0),
+        m_event(0),
+        m_duration(0),
+        m_verse(0),
+        m_multiSyllabic(false),
+        m_beats(0),
+        m_beattype(0),
+        m_common(false),
+        m_fifths(0),
+        m_major(false),
+        m_chromatic(0),
+        m_octavechange(0),
+        m_line(0),
+        m_clefoctavechange(0),
+        m_midiChannel(0),
+        m_midiProgram(0)
 {}
 
 MusicXMLXMLHandler::~MusicXMLXMLHandler()
@@ -326,7 +362,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // no action required here
     } else if (m_currentElement == "score-part") {
         ret = getAttributeString(atts, "id", m_partId);
-        m_parts[m_partId] = new MusicXMLImportHelper(m_composition);
+        m_parts[m_partId] = new MusicXMLImportHelper(m_document);
         if (m_brace > 0) {
             m_parts[m_partId]->setBracketType(Brackets::CurlyOn);
             m_brace = -m_brace;
@@ -363,7 +399,7 @@ MusicXMLXMLHandler::startPartList(const QString& qName,
         // production code.
         //Q_ASSERT(0);
     }
-    
+
     return ret;
 }
 
@@ -762,7 +798,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
         // Note: Rosegarden does not currently do anything with the
         //       .5 values other than storing them so the handling logic
         //       here just stops the import failing.
-        
+
         float alter;
         if (!checkFloat(m_currentElement, alter))
             return false;
@@ -817,7 +853,7 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
             m_errormessage = QString("Bad value \"%1\" for <alter>")
                                 .arg(m_characters);
             return false;
-            
+
         }
     } else if (m_currentElement == "octave") {
         if (!checkInteger(m_currentElement, m_octave))

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -18,6 +18,7 @@
 #include "PluginContainer.h"
 
 #include "base/AudioPluginInstance.h"
+#include "misc/Debug.h"
 
 namespace Rosegarden
 {
@@ -72,7 +73,7 @@ PluginContainer::clearPlugins()
     m_audioPlugins.erase(m_audioPlugins.begin(), m_audioPlugins.end());
 }
 
-void 
+void
 PluginContainer::emptyPlugins()
 {
     AudioPluginVector::iterator it = m_audioPlugins.begin();

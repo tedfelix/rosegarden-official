@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2020 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2020-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -117,9 +117,9 @@ public:
             const Instrument *instrument, MidiByte channel = MidiMaxValue);
 
     /// Send SysEx from hex string.  DO NOT include F0/F7.
-    static void sendSysExHex(const QString &hexString);
+    // unused static void sendSysExHex(const QString &hexString);
     /// Send SysEx from raw string.  DO NOT include F0/F7.
-    static void sendSysExRaw(const std::string &rawString);
+    // unused static void sendSysExRaw(const std::string &rawString);
     /// Blocking with timeout.  Returns false if timed out.
     bool getSysEx(std::string &rawString);
 

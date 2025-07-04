@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -35,7 +35,8 @@ namespace Rosegarden
 // @author Tom Breton (Tehom)
 ChannelInterval
 FreeChannels::
-allocateChannelInterval(RealTime startTime, RealTime endTime,
+allocateChannelInterval(RealTime startTime,
+                        RealTime endTime,
                         Instrument *instrument,
                         RealTime marginBefore,
                         RealTime marginAfter)
@@ -45,18 +46,17 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
     // Scoring just minimizes wasted space by choosing the smallest
     // piece that fits.
 
-    // Initialize (leastOverflow, leastDuration) to longer than any
-    // interval can be.
-    RealTime leastDuration = ChannelInterval::m_afterLatestTime;
-    // leastDuration's overflow bit.  See comments on thisOverflow and
-    // thisDuration.
-    bool leastOverflow = true;
-    
     // Scan segments backwards from the last one beginning at time
     // `startTime'
     if (!empty()) {
-                    RG_DEBUG
-                        << "Scanning for existing ChannelInterval";
+        RG_DEBUG << "Scanning for existing ChannelInterval";
+
+        // Initialize (leastOverflow, leastDuration) to longer than any
+        // interval can be.
+        RealTime leastDuration = ChannelInterval::m_afterLatestTime;
+        // leastDuration's overflow bit.  See comments on thisOverflow and
+        // thisDuration.
+        bool leastOverflow = true;
 
         ChannelInterval dummy(startTime);
         for (reverse_iterator i(upper_bound(dummy));
@@ -117,13 +117,13 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
             // leastOverflow) and treat it as the most significant
             // bit.
             RealTime thisDuration = cs.m_end - cs.m_start;
-            bool thisOverflow = (thisDuration < RealTime::zeroTime);
+            bool thisOverflow = (thisDuration < RealTime::zero());
 
             RG_DEBUG << "Found a candidate that takes"
                      << (thisOverflow ? "the maximum plus" : "only")
                      << thisDuration;
 
-            if ((thisOverflow < leastOverflow) ||
+            if (((! thisOverflow && leastOverflow)) ||
                 ((thisOverflow == leastOverflow) &&
                  (thisDuration < leastDuration))) {
 
@@ -146,7 +146,7 @@ allocateChannelInterval(RealTime startTime, RealTime endTime,
         RG_DEBUG << "  FreeChannels::allocateChannelInterval() giving up.  FAIL";
         // If we found nothing usable, return an unplayable dummy
         // channel
-        return ChannelInterval(); 
+        return ChannelInterval();
     }
 }
 
@@ -190,8 +190,8 @@ freeChannelInterval(ChannelInterval &old)
     // Figure out the actual endpoints.
     const ChannelInterval &ciBefore =
         (prevIterator == end()) ? old : *prevIterator;
-    
-    const ChannelInterval &ciAfter = 
+
+    const ChannelInterval &ciAfter =
         (nextIterator == end()) ? old : *nextIterator;
 
     const ChannelInterval
@@ -199,7 +199,7 @@ freeChannelInterval(ChannelInterval &old)
                            ciBefore.m_start,             ciAfter.m_end,
                            ciBefore.m_instrumentBefore,  ciAfter.m_instrumentAfter,
                            ciBefore.m_marginBefore,      ciAfter.m_marginAfter);
-    
+
     // Physically remove the adjacent intervals that we are merging
     // with.
     if (prevIterator != end()) { erase(prevIterator); }
@@ -209,7 +209,7 @@ freeChannelInterval(ChannelInterval &old)
 
     // Add a channelsegment incorporating the whole contiguous time.
     insert(newChannelInterval);
-    
+
     old.clearChannelId();
 }
 
@@ -249,11 +249,11 @@ allocateChannelIntervalFrom(iterator i, RealTime start, RealTime end,
                                  instrument,  cs.m_instrumentAfter,
                                  marginAfter, cs.m_marginAfter));
   } else {}
- 
+
   return ChannelInterval(cs.getChannelId(),
                          start, end,
                          nullptr, nullptr,
-                         RealTime::zeroTime, RealTime::zeroTime);
+                         RealTime::zero(), RealTime::zero());
 }
 
 // Add a channel that may be allocated from.  It is caller's
@@ -268,12 +268,12 @@ addChannel(ChannelId channelNb)
                            ChannelInterval::m_beforeEarliestTime,
                            ChannelInterval::m_afterLatestTime,
                            nullptr, nullptr,
-                           RealTime::zeroTime, RealTime::zeroTime));
+                           RealTime::zero(), RealTime::zero()));
 }
 
 // Remove channel from being allocated.  It is caller's
 // responsibility to deal with objects currently holding channel
-// intervals. 
+// intervals.
 // @author Tom Breton (Tehom)
 void
 FreeChannels::
@@ -329,7 +329,7 @@ FreeChannels::dump()
 // This is a stub in case we ever want AllocateChannels to set up
 // differently for different devices.
 const ChannelSetup ChannelSetup::MIDI = ChannelSetup();
-    
+
     /*** AllocateChannels definitions ***/
 
 // Whether a channelId denotes a percussion channel
@@ -345,7 +345,7 @@ isPercussion(ChannelId channel)
 // @author Tom Breton (Tehom)
 bool
 AllocateChannels::
-isPercussion(ChannelInterval &ci)
+isPercussion(const ChannelInterval &ci)
 {
     return isPercussion(ci.getChannelId());
 }
@@ -386,13 +386,13 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         << (instrument.isPercussion() ? "percussion" : "non-percussion")
         << instrument.getName() << instrument.getId()
         << "on bank"
-        << (int)instrument.getMSB() << ":" << (int)instrument.getLSB() 
+        << (int)instrument.getMSB() << ":" << (int)instrument.getLSB()
         << "channel "
         << ci.getChannelId();
     // If we already have a channel but it's the wrong type or it
     // changed instrument, always free it.
     if (ci.validChannel() &&
-        ((changedInstrument && (end != ChannelInterval::m_latestTime)) || 
+        ((changedInstrument && (end != ChannelInterval::m_latestTime)) ||
          (instrument.isPercussion() != (isPercussion(ci)))))
         { freeChannelInterval(ci); }
 
@@ -400,13 +400,13 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         // For single channel, this implicitly frees+reallocates
         ci = ChannelInterval(getPercussionChannel(), start, end,
                              nullptr, nullptr,
-                             RealTime::zeroTime, RealTime::zeroTime);
+                             RealTime::zero(), RealTime::zero());
     } else {
         m_freeChannels.reallocateToFit(ci, start, end,
                                        &instrument,
                                        marginBefore, marginAfter);
     }
-    
+
     RG_DEBUG
         << "Now channel "
         << ci.getChannelId();
@@ -447,7 +447,7 @@ reserveFixedChannel(ChannelId channel)
         // already found the channel in m_thruChannels and we know
         // it's not going into m_freeChannels.
         m_thruChannels.erase(i);
-        
+
         // Kick ControlBlock off this channel.  It will allocate
         // another.
         ControlBlock::getInstance()->vacateThruChannel(channel);
@@ -456,7 +456,7 @@ reserveFixedChannel(ChannelId channel)
 
 ChannelId
 AllocateChannels::
-reallocateThruChannel(Instrument& instrument, ChannelId channel)
+reallocateThruChannel(const Instrument& instrument, ChannelId channel)
 {
     // If we already have a valid channel and it has the right
     // percussion-ness, we're done.
@@ -477,10 +477,10 @@ reallocateThruChannel(Instrument& instrument, ChannelId channel)
 // @author Tom Breton (Tehom)
 ChannelId
 AllocateChannels::
-allocateThruChannel(Instrument& instrument)
+allocateThruChannel(const Instrument& instrument)
 {
     if (instrument.isPercussion()) { return getPercussionChannel(); }
-    
+
     // Quick and dirty: assume ChannelSetup::MIDI.  We inspect
     // channels highest-first because they tend to be used
     // lowest-first and we'd prefer not to collide.
@@ -513,14 +513,14 @@ releaseReservedChannel(ChannelId channel, FixedChannelSet& channelSet)
     if (channel < 0) { return; }
     // Releasing the percussion channel does nothing.
     if (isPercussion(channel)) { return; }
-    
+
     FixedChannelSet::iterator i = channelSet.find(channel);
 
     if (i == channelSet.end()) { return; }
     RG_DEBUG
         << "AllocateChannels: releaseFixedChannel releasing"
         << (int) channel;
-    
+
     // Remove from reserved channels.
     channelSet.erase(i);
 
@@ -544,7 +544,7 @@ reserveChannel(ChannelId channel, FixedChannelSet& channelSet)
             << (int) channel;
         m_freeChannels.removeChannel(channel);
     }
-    // Record that this channel is reserved.  
+    // Record that this channel is reserved.
     channelSet.insert(channel);
 
     // Kick ChannelManagers off the channel.  They'll get a new
@@ -553,4 +553,3 @@ reserveChannel(ChannelId channel, FixedChannelSet& channelSet)
 }
 
 }
-

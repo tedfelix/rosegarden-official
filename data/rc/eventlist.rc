@@ -1,6 +1,6 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
-<kpartgui name="Rosegarden::EventList" version="1230">
+<kpartgui name="Rosegarden::EventListEditor" version="1230">
 
 <MenuBar>
 
@@ -12,14 +12,13 @@
 
   <Menu name="edit" append="new_merge">
     <text>&amp;Edit</text>
-    <!-- JAS 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
-    <Action name="edit_undo" text="&amp;Nothing to undo" icon="undo" shortcut="Ctrl+Z" />
-    <Action name="edit_redo" text="N&amp;othing to redo" icon="redo" shortcut="Ctrl+Shift+Z" />
+    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+    <Action name="edit_undo"/>
+    <Action name="edit_redo"/>
   <Separator/>
     <Action name="insert" text="&amp;Insert Event" icon="event-insert" shortcut="I" />
     <Action name="delete" text="&amp;Delete Event" icon="event-delete" shortcut="Delete" />
     <Action name="edit_simple" text="&amp;Edit Event" icon="event-edit" shortcut="E" />
-    <Action name="edit_advanced" text="&amp;Advanced Event Editor" icon="event-edit-advanced" />
   <Separator/>
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
@@ -69,7 +68,6 @@
   <Action name="insert"/>
   <Action name="delete"/>
   <Action name="edit_simple"/>
-  <Action name="edit_advanced"/>
 </ToolBar>
 
 <ToolBar name="Time Toolbar">
@@ -79,5 +77,20 @@
   <Action name="time_raw"/>
 </ToolBar>
 
-</kpartgui>
+<State name="have_selection">
+  <enable>
+    <Action name="edit_simple" />
+    <Action name="edit_cut" />
+    <Action name="edit_copy" />
+    <Action name="delete" />
+    <Action name="clear_selection" />
+  </enable>
+</State>
 
+<State name="have_clipboard">
+  <enable>
+    <Action name="edit_paste"/>
+  </enable>
+</State>
+
+</kpartgui>

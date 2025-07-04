@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,8 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenDocument]"
-
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenDocument.h"
 
@@ -63,6 +62,9 @@
 #include "gui/dialogs/UnusedAudioSelectionDialog.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "gui/editors/segment/TrackLabel.h"
+// !!! DO NOT REMOVE THIS!
+//     qDeleteAll() needs this in order to do its work correctly.
+//     Without EditViewBase.h, we crash on close whenever an editor is up.
 #include "gui/general/EditViewBase.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ResourceFinder.h"
@@ -71,6 +73,7 @@
 #include "gui/studio/AudioPluginManager.h"
 #include "gui/studio/StudioControl.h"
 #include "gui/general/AutoSaveFinder.h"
+#include "gui/studio/AudioPluginGUIManager.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
@@ -90,6 +93,7 @@
 #include "document/Command.h"
 #include "document/io/XMLReader.h"
 #include "misc/ConfigGroups.h"
+#include "misc/Preferences.h"
 
 #include "rosegarden-version.h"
 
@@ -124,26 +128,26 @@ RosegardenDocument *RosegardenDocument::currentDocument{};
 
 RosegardenDocument::RosegardenDocument(
         QObject *parent,
-        QSharedPointer<AudioPluginManager> pluginManager,
+        QSharedPointer<AudioPluginManager> audioPluginManager,
         bool skipAutoload,
         bool clearCommandHistory,
-        bool enableSound) :
+        bool enableSound,
+        const QString& path) :
     QObject(parent),
     m_modified(false),
-    m_autoSaved(false),
     m_lockFile(nullptr),
+    m_audioFileManager(this),
     m_audioPeaksThread(&m_audioFileManager),
     m_seqManager(nullptr),
-    m_pluginManager(pluginManager),
+    m_pluginManager(audioPluginManager),
     m_audioRecordLatency(0, 0),
     m_quickMarkerTime(-1),
     m_autoSavePeriod(0),
-    m_beingDestroyed(false),
     m_clearCommandHistory(clearCommandHistory),
     m_soundEnabled(enableSound)
 {
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotDocumentModified()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &RosegardenDocument::slotDocumentModified);
 
     connect(CommandHistory::getInstance(), &CommandHistory::documentRestored,
             this, &RosegardenDocument::slotDocumentRestored);
@@ -153,14 +157,12 @@ RosegardenDocument::RosegardenDocument(
         performAutoload();
 
     // now set it up as a "new document"
-    newDocument();
+    newDocument(path);
 }
 
 RosegardenDocument::~RosegardenDocument()
 {
     RG_DEBUG << "dtor";
-
-    m_beingDestroyed = true;
 
     m_audioPeaksThread.finish();
     m_audioPeaksThread.wait();
@@ -183,7 +185,7 @@ RosegardenDocument::getAutoSavePeriod() const
 
     unsigned int ret;
     ret = settings.value("autosaveinterval", 60).toUInt();
-    
+
     settings.endGroup();        // corresponding to: settings.beginGroup( GeneralOptionsConfigGroup );
     return ret;
 }
@@ -193,10 +195,12 @@ void RosegardenDocument::attachView(RosegardenMainViewWidget *view)
     m_viewList.append(view);
 }
 
+/* unused
 void RosegardenDocument::detachView(RosegardenMainViewWidget *view)
 {
     m_viewList.removeOne(view);
 }
+*/
 
 void RosegardenDocument::attachEditView(EditViewBase *view)
 {
@@ -282,6 +286,8 @@ void RosegardenDocument::slotDocumentModified()
     m_modified = true;
     m_autoSaved = false;
 
+    m_composition.invalidateDurationCache();
+
     emit documentModified(true);
 }
 
@@ -299,7 +305,7 @@ void
 RosegardenDocument::setQuickMarker()
 {
     RG_DEBUG << "RosegardenDocument::setQuickMarker";
-    
+
     m_quickMarkerTime = getComposition().getPosition();
 }
 
@@ -315,9 +321,6 @@ RosegardenDocument::jumpToQuickMarker()
 QString RosegardenDocument::getAutoSaveFileName()
 {
     QString filename = getAbsFilePath();
-    if (filename.isEmpty())
-        filename = QDir::currentPath() + "/" + getTitle();
-
     //!!! NB this should _not_ use the new TempDirectory class -- that
     //!!! is for files that are more temporary than this.  Its files
     //!!! are cleaned up after a crash, the next time RG is started,
@@ -330,18 +333,20 @@ QString RosegardenDocument::getAutoSaveFileName()
     return autoSaveFileName;
 }
 
-void RosegardenDocument::slotAutoSave()
+void RosegardenDocument::autoSave()
 {
-    //     RG_DEBUG << "RosegardenDocument::slotAutoSave()";
+    //RG_DEBUG << "slotAutoSave()";
 
-    if (isAutoSaved() || !isModified())
-        return ;
+    // Already done an auto-save?  Bail.
+    if (m_autoSaved)
+        return;
+    // No modifications?  Bail.
+    if (!isModified())
+        return;
 
-    QString autoSaveFileName = getAutoSaveFileName();
+    const QString autoSaveFileName = getAutoSaveFileName();
 
-    RG_DEBUG << "RosegardenDocument::slotAutoSave() - doc modified - saving '"
-    << getAbsFilePath() << "' as"
-    << autoSaveFileName;
+    RG_DEBUG << "slotAutoSave() - doc modified - saving '" << getAbsFilePath() << "' as" << autoSaveFileName;
 
     QString errMsg;
 
@@ -365,16 +370,16 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
         // All audio files recorded or derived in this session are
         // about to become orphans
 
-        for (std::vector<AudioFile *>::const_iterator i =
-                    m_audioFileManager.begin();
-                i != m_audioFileManager.end(); ++i) {
+        for (AudioFileVector::const_iterator i =
+                    m_audioFileManager.cbegin();
+                i != m_audioFileManager.cend(); ++i) {
 
             if (m_audioFileManager.wasAudioFileRecentlyRecorded((*i)->getId())) {
-                recordedOrphans.push_back((*i)->getFilename());
+                recordedOrphans.push_back((*i)->getAbsoluteFilePath());
             }
 
             if (m_audioFileManager.wasAudioFileRecentlyDerived((*i)->getId())) {
-                derivedOrphans.push_back((*i)->getFilename());
+                derivedOrphans.push_back((*i)->getAbsoluteFilePath());
             }
         }
     }
@@ -390,10 +395,10 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         bool stillHave = false;
 
-        for (std::vector<AudioFile *>::const_iterator j =
-                 m_audioFileManager.begin();
-                j != m_audioFileManager.end(); ++j) {
-            if ((*j)->getFilename() == *i) {
+        for (AudioFileVector::const_iterator j =
+                 m_audioFileManager.cbegin();
+                j != m_audioFileManager.cend(); ++j) {
+            if ((*j)->getAbsoluteFilePath() == *i) {
                 stillHave = true;
                 break;
             }
@@ -412,10 +417,10 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
 
         bool stillHave = false;
 
-        for (std::vector<AudioFile *>::const_iterator j =
-                 m_audioFileManager.begin();
-                j != m_audioFileManager.end(); ++j) {
-            if ((*j)->getFilename() == *i) {
+        for (AudioFileVector::const_iterator j =
+                 m_audioFileManager.cbegin();
+                j != m_audioFileManager.cend(); ++j) {
+            if ((*j)->getAbsoluteFilePath() == *i) {
                 stillHave = true;
                 break;
             }
@@ -500,9 +505,13 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     return true;
 }
 
-void RosegardenDocument::newDocument()
+void RosegardenDocument::newDocument(const QString& path)
 {
     m_modified = false;
+    if (path != "") {
+        openDocument(path);
+        m_modified = true;
+    }
     setAbsFilePath(QString());
     setTitle(tr("Untitled"));
     if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
@@ -520,11 +529,11 @@ void RosegardenDocument::performAutoload()
         return ;
     }
 
-    bool permanent = true;
-    bool squelchProgressDialog = true;
-    // Don't lock the autoload.rg file.
-    bool enableLock = false;
-    openDocument(autoloadFile, permanent, squelchProgressDialog, enableLock);
+    openDocument(
+            autoloadFile,  // filename
+            m_soundEnabled,  // permanent
+            true,  // squelchProgressDialog
+            false);  // enableLock
 }
 
 bool RosegardenDocument::openDocument(const QString &filename,
@@ -603,7 +612,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
 
     // Unzip
     bool okay = GzipFile::readFromFile(filename, fileContents);
-    
+
     QString errMsg;
     bool cancelled = false;
 
@@ -620,7 +629,7 @@ bool RosegardenDocument::openDocument(const QString &filename,
     if (!okay) {
         StartupLogo::hideIfStillThere();
 
-        QString msg(tr("Error when parsing file '%1': \"%2\"")
+        QString msg(tr("Error when parsing file '%1':<br />\"%2\"")
                      .arg(filename)
                      .arg(errMsg));
         QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
@@ -692,7 +701,7 @@ void RosegardenDocument::sendChannelSetups(bool reset)
     std::set<InstrumentId> instrumentsSeen;
 
     // For each track in the composition, send the channel setup
-    for (Composition::trackcontainer::const_iterator i =
+    for (Composition::TrackMap::const_iterator i =
              m_composition.getTracks().begin();
          i != m_composition.getTracks().end();
          ++i) {
@@ -735,10 +744,10 @@ void RosegardenDocument::sendChannelSetups(bool reset)
             //     then send the channel setups?  Some hardware might need
             //     time to respond to a reset.
 
-            const MappedEvent mappedEvent(
-                    instrumentId,
-                    MappedEvent::MidiSystemMessage,
-                    MIDI_SYSTEM_RESET);
+            MappedEvent mappedEvent;
+            mappedEvent.setInstrumentId(instrumentId);
+            mappedEvent.setType(MappedEvent::MidiSystemMessage);
+            mappedEvent.setData1(MIDI_SYSTEM_RESET);
 
             StudioControl::sendMappedEvent(mappedEvent);
 
@@ -769,6 +778,9 @@ void RosegardenDocument::initialiseStudio()
     //Profiler profiler("initialiseStudio", true);
 
     RG_DEBUG << "initialiseStudio() begin...";
+
+    // stop any running guis
+    RosegardenMainWindow::self()->getPluginGUIManager()->stopAllGUIs();
 
     // Destroy all the mapped objects in the studio.
     RosegardenSequencer::getInstance()->clearStudio();
@@ -863,7 +875,7 @@ void RosegardenDocument::initialiseStudio()
             // Channels
             ids.push_back(mappedId);
             properties.push_back(MappedAudioFader::Channels);
-            values.push_back(static_cast<MappedObjectValue>(instrument.getAudioChannels()));
+            values.push_back(static_cast<MappedObjectValue>(instrument.getNumAudioChannels()));
 
             // Pan
             ids.push_back(mappedId);
@@ -971,7 +983,7 @@ void RosegardenDocument::initialiseStudio()
 
             plugin.setConfigurationValue(
                     qstrtostr(PluginIdentifier::RESERVED_PROJECT_DIRECTORY_KEY),
-                    qstrtostr(getAudioFileManager().getAudioPath()));
+                    qstrtostr(getAudioFileManager().getAbsoluteAudioPath()));
 
             // Set opaque string configuration data (e.g. for DSSI plugin)
 
@@ -1062,15 +1074,19 @@ void RosegardenDocument::initialiseStudio()
     if (submasterOuts)
         ports |= MappedEvent::SubmasterOuts;
 
-    MappedEvent mEports(
-            MidiInstrumentBase, MappedEvent::SystemAudioPorts, ports);
+    MappedEvent mEports;
+    mEports.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEports.setType(MappedEvent::SystemAudioPorts);
+    mEports.setData1(ports);
     StudioControl::sendMappedEvent(mEports);
 
     // Send System Audio File Format Event
 
-    MappedEvent mEff(MidiInstrumentBase,
-                     MappedEvent::SystemAudioFileFormat,
-                     audioFileFormat);
+    MappedEvent mEff;
+    mEff.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mEff.setType(MappedEvent::SystemAudioFileFormat);
+    mEff.setData1(audioFileFormat);
+
     StudioControl::sendMappedEvent(mEff);
 }
 
@@ -1115,47 +1131,60 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 //
 int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
 int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 7;
+// Version 10 introduces LV2 plugins and provides values that
+// older versions will interpret as plugins that weren't found.
+// Older versions will issue helpful "plugin not found" messages.
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 10;
 
-bool RosegardenDocument::saveDocument(const QString& filename,
-                                    QString& errMsg,
-                                    bool autosave)
+bool RosegardenDocument::saveDocument(const QString &filename,
+                                      QString &errMsg,
+                                      bool autosave)
 {
     QFileInfo fileInfo(filename);
 
-    if (!fileInfo.exists()) { // safe to write directly
+    // If the file doesn't exist, just write to it directly.
+    if (!fileInfo.exists())
         return saveDocumentActual(filename, errMsg, autosave);
-    }
 
-    if (fileInfo.exists()  &&  !fileInfo.isWritable()) {
-        errMsg = tr("'%1' is read-only.  Please save to a different file.").arg(filename);
+    // File exists.  Handle overwriting...
+
+    // Read-only?
+    if (!fileInfo.isWritable()) {
+        errMsg = tr("'%1' is read-only.  Please save to a different file.").
+                arg(filename);
         return false;
     }
 
+    // We will write to a temporary file and then rename that over top of
+    // the existing file.  This will allow us to handle write errors without
+    // damaging the file we are writing over.
+
     QTemporaryFile temp(filename + ".");
-    //!!! was: KTempFile temp(filename + ".", "", 0644); // will be umask'd
 
     temp.setAutoRemove(false);
 
-    temp.open(); // This creates the file and opens it atomically
+    // Create the file and open it atomically.
+    temp.open();
 
-    if ( temp.error() ) {
-        errMsg = tr("Could not create temporary file in directory of '%1': %2").arg(filename).arg(temp.errorString());        //### removed .arg(strerror(status))
+    if (temp.error()) {
+        errMsg = tr("Could not create temporary file in directory of '%1': %2").
+                arg(filename).arg(temp.errorString());
         return false;
     }
 
-    QString tempFileName = temp.fileName(); // Must do this before temp.close()
+    // Must do this before temp.close().
+    QString tempFileName = temp.fileName();
 
     // The temporary file is now open: close it (without removing it)
     temp.close();
 
-    if( temp.error() ){
-        //status = temp.status();
-        errMsg = tr("Failure in temporary file handling for file '%1': %2")
-            .arg(tempFileName).arg(temp.errorString()); // .arg(strerror(status))
+    if (temp.error()) {
+        errMsg = tr("Failure in temporary file handling for file '%1': %2").
+                arg(tempFileName).arg(temp.errorString());
         return false;
     }
 
+    // Save to the temp file.
     bool success = saveDocumentActual(tempFileName, errMsg, autosave);
 
     if (!success) {
@@ -1164,10 +1193,14 @@ bool RosegardenDocument::saveDocument(const QString& filename,
     }
 
     QDir dir(QFileInfo(tempFileName).dir());
-    // According to  http://doc.trolltech.com/4.4/qdir.html#rename
+    // According to the QDir::rename() docs,
     // some systems fail, if renaming over an existing file.
     // Therefore, delete first the existing file.
-    if (dir.exists(filename)) dir.remove(filename);
+    // ??? But we already checked above and we know the file exists.  No
+    //     need to check.  Just do the remove().
+    if (dir.exists(filename))
+        dir.remove(filename);
+
     if (!dir.rename(tempFileName, filename)) {
         errMsg = tr("Failed to rename temporary output file '%1' to desired output file '%2'").arg(tempFileName).arg(filename);
         return false;
@@ -1177,13 +1210,13 @@ bool RosegardenDocument::saveDocument(const QString& filename,
 }
 
 
-bool RosegardenDocument::saveDocumentActual(const QString& filename,
-                                          QString& errMsg,
-                                          bool autosave)
+bool RosegardenDocument::saveDocumentActual(const QString &filename,
+                                            QString &errMsg,
+                                            bool autosave)
 {
     //Profiler profiler("RosegardenDocument::saveDocumentActual");
 
-    RG_DEBUG << "RosegardenDocument::saveDocumentActual(" << filename << ")";
+    RG_DEBUG << "saveDocumentActual(" << filename << ")";
 
     QString outText;
     QTextStream outStream(&outText, QIODevice::WriteOnly);
@@ -1208,6 +1241,9 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     m_studio.resyncDeviceConnections();
 
+    // tell plugins to save state
+    RosegardenSequencer::getInstance()->savePluginState();
+
     // Send out Composition (this includes Tracks, Instruments, Tempo
     // and Time Signature changes and any other sub-objects)
     //
@@ -1220,31 +1256,16 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     outStream << strtoqstr(getConfiguration().toXmlString())
               << "\n\n";
 
-    long totalEvents = 0;
-    for (Composition::iterator segitr = m_composition.begin();
-         segitr != m_composition.end(); ++segitr) {
-        totalEvents += (long)(*segitr)->size();
-    }
-
-    for (Composition::triggersegmentcontaineriterator ci =
-             m_composition.getTriggerSegments().begin();
-         ci != m_composition.getTriggerSegments().end(); ++ci) {
-        totalEvents += (long)(*ci)->getSegment()->size();
-    }
-
     // output all elements
-    //
-    // Iterate on segments
-    long eventCount = 0;
 
     // Put a break in the file
-    //
     outStream << "\n\n";
 
-    for (Composition::iterator segitr = m_composition.begin();
-         segitr != m_composition.end(); ++segitr) {
+    // For each Segment in the Composition...
+    for (Composition::iterator segmentIter = m_composition.begin();
+         segmentIter != m_composition.end(); ++segmentIter) {
 
-        Segment *segment = *segitr;
+        const Segment *segment = *segmentIter;
 
         // Fix #1446 : Replace isLinked() with isTrulyLinked().
         // Maybe this fix will need to be removed some day if the
@@ -1257,17 +1278,16 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
             attsString += QString("linkertransposesegmentback=\"%5\" ");
             QString linkedSegAtts = QString(attsString)
               .arg(segment->getLinker()->getSegmentLinkerId())
-              .arg(segment->getLinkTransposeParams().m_changeKey ? "true" : 
+              .arg(segment->getLinkTransposeParams().m_changeKey ? "true" :
                                                                    "false")
               .arg(segment->getLinkTransposeParams().m_steps)
               .arg(segment->getLinkTransposeParams().m_semitones)
               .arg(segment->getLinkTransposeParams().m_transposeSegmentBack
                                                          ? "true" : "false");
 
-            saveSegment(outStream, segment, totalEvents,
-                                            eventCount, linkedSegAtts);
+            saveSegment(outStream, segment, linkedSegAtts);
         } else {
-            saveSegment(outStream, segment, totalEvents, eventCount);
+            saveSegment(outStream, segment, "");
         }
 
     }
@@ -1276,7 +1296,7 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     //
     outStream << "\n\n";
 
-    for (Composition::triggersegmentcontaineriterator ci =
+    for (Composition::TriggerSegmentSet::iterator ci =
                 m_composition.getTriggerSegments().begin();
             ci != m_composition.getTriggerSegments().end(); ++ci) {
 
@@ -1288,8 +1308,8 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
                               .arg((*ci)->getDefaultRetune())
                               .arg(strtoqstr((*ci)->getDefaultTimeAdjust()));
 
-        Segment *segment = (*ci)->getSegment();
-        saveSegment(outStream, segment, totalEvents, eventCount, triggerAtts);
+        const Segment *segment = (*ci)->getSegment();
+        saveSegment(outStream, segment, triggerAtts);
     }
 
     // Put a break in the file
@@ -1319,19 +1339,20 @@ bool RosegardenDocument::saveDocumentActual(const QString& filename,
     RG_DEBUG << "RosegardenDocument::saveDocument() finished";
 
     if (!autosave) {
-        emit documentModified(false);
         m_modified = false;
+        emit documentModified(false);
         CommandHistory::getInstance()->documentSaved();
     }
 
-    setAutoSaved(true);
+    // ??? This is set even if this isn't an auto-save.  The name is misleading.
+    m_autoSaved = true;
 
     return true;
 }
 
-bool RosegardenDocument::exportStudio(const QString& filename,
+bool RosegardenDocument::exportStudio(const QString &filename,
                                       QString &errMsg,
-                                      std::vector<DeviceId> devices)
+                                      const std::vector<DeviceId> &devices)
 {
     Profiler profiler("RosegardenDocument::exportStudio");
     RG_DEBUG << "RosegardenDocument::exportStudio(" << filename << ")";
@@ -1365,23 +1386,22 @@ bool RosegardenDocument::exportStudio(const QString& filename,
         return false;
     }
 
-    RG_DEBUG << "RosegardenDocument::exportStudio() finished";
+    RG_DEBUG << "exportStudio() finished";
+
     return true;
 }
 
-void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
-                                   long /*totalEvents*/, long &/*count*/,
-                                   QString extraAttributes)
+void RosegardenDocument::saveSegment(QTextStream &outStream,
+                                     const Segment *segment,
+                                     const QString &additionalAttributes)
 {
-    QString time;
-
     outStream << QString("<%1 track=\"%2\" start=\"%3\" ")
     .arg(segment->getXmlElementName())
     .arg(segment->getTrack())
     .arg(segment->getStartTime());
 
-    if (!extraAttributes.isEmpty())
-        outStream << extraAttributes << " ";
+    if (!additionalAttributes.isEmpty())
+        outStream << additionalAttributes << " ";
 
     outStream << "label=\"" <<
     strtoqstr(XmlExportable::encode(segment->getLabel()));
@@ -1398,7 +1418,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         outStream << "\" delay=\"" << segment->getDelay();
     }
 
-    if (segment->getRealTimeDelay() != RealTime::zeroTime) {
+    if (segment->getRealTimeDelay() != RealTime::zero()) {
         outStream << "\" rtdelaysec=\"" << segment->getRealTimeDelay().sec
         << "\" rtdelaynsec=\"" << segment->getRealTimeDelay().nsec;
     }
@@ -1415,8 +1435,11 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
         outStream << "\" viewfeatures=\"" << segment->getViewFeatures();
     }
 
-    if (segment->getForNotation() != true) {
+    if (segment->getExcludeFromPrinting()) {
+        // For compatibility with older versions of rg.
         outStream << "\" fornotation=\"" << "false";
+        // New value to match UI.
+        outStream << "\" excludefromprinting=\"" << "true";
     }
 
     const timeT *endMarker = segment->getRawEndMarkerTime();
@@ -1438,7 +1461,7 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
                       << "\" stretch=\""
                       << segment->getStretchRatio();
         }
-        
+
         outStream << "\">\n";
 
         // convert out - should do this as XmlExportable really
@@ -1507,10 +1530,6 @@ void RosegardenDocument::saveSegment(QTextStream& outStream, Segment *segment,
             } else {
                 expectedTime = absTime + (*i)->getDuration();
             }
-
-//            if ((++count % 500 == 0) && progress) {
-//                progress->setValue(count * 100 / totalEvents);
-//            }
         }
 
         if (inChord) {
@@ -1616,9 +1635,10 @@ bool RosegardenDocument::isSoundEnabled() const
 }
 
 bool
-RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
-                           bool permanent,
-                           bool &cancelled)
+RosegardenDocument::xmlParse(const QString &fileContents,
+                             QString &errMsg,
+                             bool permanent,
+                             bool &cancelled)
 {
     //Profiler profiler("RosegardenDocument::xmlParse");
 
@@ -1682,7 +1702,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
             }
 
         } else {
-           
+
             bool shownWarning = false;
 
             int sr = 0;
@@ -1702,7 +1722,7 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                     break;
                 }
             }
-                
+
             if (sr != 0 &&
                 handler.hasActiveAudio() &&
                 ((er != 0 && er != sr) ||
@@ -1715,18 +1735,16 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
 
                 shownWarning = true;
- 
+
             } else if (sr != 0 && mixed) {
-                    
+
                 StartupLogo::hideIfStillThere();
-                
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr),
-                                         tr("Inconsistent sample rates"),
-                                         "file-load-inconsistent-samplerates");
-                    
+
+                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr));
+
                 shownWarning = true;
             }
- 
+
             if (m_pluginManager && !handler.pluginsNotFound().empty()) {
 
                 // We only warn if a plugin manager is present, so as
@@ -1736,33 +1754,29 @@ RosegardenDocument::xmlParse(QString fileContents, QString &errMsg,
 
                 QString msg(tr("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
 
-                for (std::set<QString>::iterator i = handler.pluginsNotFound().begin();
-                     i != handler.pluginsNotFound().end(); ++i) {
-                    QString ident = *i;
-                    QString type, soName, label;
-                    PluginIdentifier::parseIdentifier(ident, type, soName, label);
-                    QString pluginFileName = QFileInfo(soName).fileName();
-                    msg += tr("<li>%1 (from %2)</li>").arg(label).arg(pluginFileName);
+                // For each plugin that wasn't found...
+                for (const QString &ident : handler.pluginsNotFound()) {
+                    msg += QString("<li>%1</li>").arg(ident);
                 }
                 msg += "</ul>";
-                
+
                 StartupLogo::hideIfStillThere();
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
                 shownWarning = true;
-                
+
             }
 
             if (handler.isDeprecated() && !shownWarning) {
-                
+
                 QString msg(tr("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
                 slotDocumentModified(); // so file can be re-saved immediately
-                
+
                 StartupLogo::hideIfStillThere();
                 QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
             }
 
         }
-        
+
         getComposition().resetLinkedSegmentRefreshStatuses();
     }
 
@@ -1783,18 +1797,18 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
     //Track *midiRecordTrack = 0;
 
-    const Composition::recordtrackcontainer &recordTracks =
+    const Composition::TrackIdSet &recordTracks =
         getComposition().getRecordTracks();
 
     bool haveMIDIRecordTrack = false;
 
     // For each recording track
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
             recordTracks.begin(); i != recordTracks.end(); ++i) {
         TrackId tid = (*i);
-        Track *track = getComposition().getTrackById(tid);
+        const Track *track = getComposition().getTrackById(tid);
         if (track) {
-            Instrument *instrument =
+            const Instrument *instrument =
                 m_studio.getInstrumentById(track->getInstrument());
             if (instrument->getType() == Instrument::Midi ||
                     instrument->getType() == Instrument::SoftSynth) {
@@ -1870,7 +1884,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             // If this is a note on event.
             // (In AlsaDriver::getMappedEventList() we set the duration to
             // -1 seconds to indicate a note-on event.)
-            if ((*i)->getDuration() < RealTime::zeroTime) {
+            if ((*i)->getDuration() < RealTime::zero()) {
 
                 //printf("Note On  ch %2d | ptch %3d | vel %3d\n", channel, pitch, (*i)->getVelocity());
                 //RG_DEBUG << "RD::iRM Note On cpv:" << channel << "/" << pitch << "/" << (*i)->getVelocity();
@@ -1906,7 +1920,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 
                     // Adjust updateFrom for quantization.
 
-                    Event *oldEv = *rec_vec[0].m_segmentIterator;
+                    const Event *oldEv = *rec_vec[0].m_segmentIterator;
                     timeT eventAbsTime = oldEv->getAbsoluteTime();
 
                     // Make sure we quantize starting at the beginning of this
@@ -1979,6 +1993,14 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
             // Ignore other SystemMessage events for the moment
             //
 
+            break;
+
+        case MappedEvent::MidiRPN:
+            // ??? Need to implement once the caller is able to generate these.
+            break;
+
+        case MappedEvent::MidiNRPN:
+            // ??? Need to implement once the caller is able to generate these.
             break;
 
         case MappedEvent::MidiNoteOneShot:
@@ -2101,73 +2123,87 @@ RosegardenDocument::updateRecordingMIDISegment()
 
 //    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment: have record MIDI segment";
 
+    // The adjusted note on events for copying to m_noteOnEvents.
     NoteOnMap tweakedNoteOnEvents;
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-         mi != m_noteOnEvents.end(); ++mi)
-        for (ChanMap::iterator cm = mi->second.begin();
-             cm != mi->second.end(); ++cm)
-            for (PitchMap::iterator pm = cm->second.begin();
-                 pm != cm->second.end(); ++pm) {
+
+    for (NoteOnMap::iterator deviceIter = m_noteOnEvents.begin();
+         deviceIter != m_noteOnEvents.end(); ++deviceIter) {
+        for (ChanMap::iterator channelIter = deviceIter->second.begin();
+             channelIter != deviceIter->second.end(); ++channelIter) {
+            for (PitchMap::iterator pitchIter = channelIter->second.begin();
+                 pitchIter != channelIter->second.end(); ++pitchIter) {
 
                 // anything in the note-on map should be tweaked so as to end
                 // at the recording pointer
-                NoteOnRecSet rec_vec = pm->second;
+                NoteOnRecSet rec_vec = pitchIter->second;
                 if (rec_vec.size() > 0) {
-                    tweakedNoteOnEvents[mi->first][cm->first][pm->first] =
-                        *adjustEndTimes(rec_vec, m_composition.getPosition());
+                    NoteOnRecSet *newRecordSet =
+                            adjustEndTimes(rec_vec, m_composition.getPosition());
+                    // Copy to tweakedNoteOnEvents.
+                    tweakedNoteOnEvents
+                        [deviceIter->first]
+                        [channelIter->first]
+                        [pitchIter->first] = *newRecordSet;
+                    delete newRecordSet;
                 }
             }
+        }
+    }
+
     m_noteOnEvents = tweakedNoteOnEvents;
 }
 
 void
 RosegardenDocument::transposeRecordedSegment(Segment *s)
 {
-        // get a selection of all the events in the segment, since we apparently
-        // can't just iterate through a segment's events without one.  (?)
-        EventSelection *selectedWholeSegment = new EventSelection(
+    // get a selection of all the events in the segment, since we apparently
+    // can't just iterate through a segment's events without one.  (?)
+    std::unique_ptr<EventSelection> selectedWholeSegment(new EventSelection(
             *s,
             s->getStartTime(),
-            s->getEndMarkerTime());
+            s->getEndMarkerTime()));
 
-         // Say we've got a recorded segment destined for a Bb trumpet track.
-         // It will have transpose of -2, and we want to move the notation +2 to
-         // compensate, so the user hears the same thing she just recorded
-         //
-         // (All debate over whether this is the right way to go with this whole
-         // issue is now officially settled, and no longer tentative.)
-         Composition *c = s->getComposition();
-         if (c) {
-             Track *t = c->getTrackById(s->getTrack());
-             if (t) {
-                 // pull transpose from the destination track
-                 int semitones = t->getTranspose();
+    // Say we've got a recorded segment destined for a Bb trumpet track.
+    // It will have transpose of -2, and we want to move the notation +2 to
+    // compensate, so the user hears the same thing she just recorded
+    //
+    // (All debate over whether this is the right way to go with this whole
+    // issue is now officially settled, and no longer tentative.)
+    const Composition *c = s->getComposition();
+    if (!c)
+        return;
 
-                 for (EventContainer::iterator i =
-                      selectedWholeSegment->getSegmentEvents().begin();
-                     i != selectedWholeSegment->getSegmentEvents().end(); ++i) {
-                     
-                     if ((*i)->isa(Note::EventType)) {
-                         if (semitones != 0) {
-                            if (!(*i)->has(PITCH)) {
-                                std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment: Note has no pitch!  Andy says \"Oh noes!!!  ZOMFG!!!\"" << std::endl;
-                            } else {
-                                int pitch = (*i)->get<Int>(PITCH) - semitones;
-                                std::cerr << "pitch = " << pitch
-                                          << " after transpose = "
-                                          << semitones << " (for track "
-                                          << s->getTrack() << ")" << std::endl;
-                                (*i)->set<Int>(PITCH, pitch);
-                            }
-                        }
-                    }
-                 }
-             }
+    const Track *t = c->getTrackById(s->getTrack());
+    if (!t)
+        return;
+
+    // pull transpose from the destination track
+    const int semitones = t->getTranspose();
+    if (!semitones)
+        return;
+
+    // For each recorded Event...
+    for (Event *event : selectedWholeSegment->getSegmentEvents()) {
+
+        // Not a note?  Try the next.
+        if (!event->isa(Note::EventType))
+            continue;
+
+        // No pitch?  Warn the user.
+        if (!event->has(PITCH)) {
+            std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment(): Note has no pitch!" << std::endl;
+            continue;
         }
-} 
+
+        const int pitch = event->get<Int>(PITCH) - semitones;
+        //std::cerr << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")" << std::endl;
+        event->set<Int>(PITCH, pitch);
+
+    }
+}
 
 RosegardenDocument::NoteOnRecSet *
-RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
+RosegardenDocument::adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
     Profiler profiler("RosegardenDocument::adjustEndTimes()");
@@ -2176,15 +2212,25 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
     NoteOnRecSet *new_vector = new NoteOnRecSet();
 
     // For each note-on event
-    for (NoteOnRecSet::const_iterator i = rec_vec.begin(); i != rec_vec.end(); ++i) {
+    for (NoteOnRecSet::const_iterator i = rec_vec.begin();
+         i != rec_vec.end();
+         ++i) {
+
         // ??? All this removing and re-inserting of Events from the Segment
         //     seems like a serious waste.  Can't we just modify the Event
         //     in place?  Otherwise we are doing all of this:
+        //
         //        1. Segment::erase() notifications.
         //        2. Segment::insert() notifications.
         //        3. Event delete and new.
+        //
+        //     That causes a lot of churning throughout the UI.  The
+        //     reason we cannot modify Event objects in place is because
+        //     they live in a sorted list within Segment.  If we modify
+        //     their start time, they are now in the wrong place in the
+        //     sorted list.
 
-        Event *oldEvent = *(i->m_segmentIterator);
+        const Event *oldEvent = *(i->m_segmentIterator);
 
         timeT newDuration = endTime - oldEvent->getAbsoluteTime();
 
@@ -2194,8 +2240,6 @@ RosegardenDocument::adjustEndTimes(NoteOnRecSet& rec_vec, timeT endTime)
 
         // Make a new copy of the event in the segment and modify the
         // duration as needed.
-        // ??? Can't we modify the Event in place in the Segment?
-        //     No.  All setters are protected.  Events are read-only.
         Event *newEvent = new Event(
                 *oldEvent,  // reference Event object
                 oldEvent->getAbsoluteTime(),  // absoluteTime (preserved)
@@ -2248,7 +2292,7 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
             i != m_recordMIDISegments.end(); ++i) {
         Segment *recordMIDISegment = i->second;
         TrackId tid = recordMIDISegment->getTrack();
-        Track *track = getComposition().getTrackById(tid);
+        const Track *track = getComposition().getTrackById(tid);
         if (track) {
             //Instrument *instrument =
             //    m_studio.getInstrumentById(track->getInstrument());
@@ -2341,7 +2385,7 @@ RosegardenDocument::stopRecordingMidi()
     // the start of an otherwise empty count-in
 
     timeT meaningfulBarStart = c.getBarStartForTime(earliestMeaning);
-    
+
     for (RecordingSegmentMap::iterator i = m_recordMIDISegments.begin();
          i != m_recordMIDISegments.end();
          ++i) {
@@ -2358,19 +2402,19 @@ RosegardenDocument::stopRecordingMidi()
         }
     }
 
-    for (NoteOnMap::iterator mi = m_noteOnEvents.begin();
-         mi != m_noteOnEvents.end(); ++mi) {
+    for (NoteOnMap::iterator deviceIter = m_noteOnEvents.begin();
+         deviceIter != m_noteOnEvents.end(); ++deviceIter) {
 
-        for (ChanMap::iterator cm = mi->second.begin();
-             cm != mi->second.end(); ++cm) {
+        for (ChanMap::iterator channelIter = deviceIter->second.begin();
+             channelIter != deviceIter->second.end(); ++channelIter) {
 
-            for (PitchMap::iterator pm = cm->second.begin();
-                 pm != cm->second.end(); ++pm) {
+            for (PitchMap::iterator pitchIter = channelIter->second.begin();
+                 pitchIter != channelIter->second.end(); ++pitchIter) {
 
                 // anything remaining in the note-on map should be
                 // made to end at the end of the segment
 
-                NoteOnRecSet rec_vec = pm->second;
+                NoteOnRecSet rec_vec = pitchIter->second;
 
                 if (rec_vec.size() > 0) {
                     // Adjust the end times of the note-on events for
@@ -2425,7 +2469,8 @@ RosegardenDocument::stopRecordingMidi()
         // different over in the new Qt4 branch; to facilitate porting.
         transposeRecordedSegment(s);
 
-        CommandHistory::getInstance()->addCommand(command);
+        CommandHistory::getInstance()->addCommand(command,
+                                                  m_pointerBeforeRecord);
     }
 
     emit stoppedMIDIRecording();
@@ -2444,15 +2489,15 @@ RosegardenDocument::prepareAudio()
     //
     RosegardenSequencer::getInstance()->clearAllAudioFiles();
 
-    for (AudioFileManagerIterator it = m_audioFileManager.begin();
-         it != m_audioFileManager.end(); it++) {
+    for (AudioFileVector::const_iterator it = m_audioFileManager.cbegin();
+         it != m_audioFileManager.cend(); ++it) {
 
         bool result = RosegardenSequencer::getInstance()->
-            addAudioFile((*it)->getFilename(),
+            addAudioFile((*it)->getAbsoluteFilePath(),
                          (*it)->getId());
         if (!result) {
             RG_DEBUG << "prepareAudio() - failed to add file \""
-                     << (*it)->getFilename() << "\"";
+                     << (*it)->getAbsoluteFilePath() << "\"";
         }
     }
 }
@@ -2462,14 +2507,6 @@ RosegardenDocument::slotSetPointerPosition(timeT t)
 {
     m_composition.setPosition(t);
     emit pointerPositionChanged(t);
-}
-
-void
-RosegardenDocument::setLoop(timeT t0, timeT t1)
-{
-    m_composition.setLoopStart(t0);
-    m_composition.setLoopEnd(t1);
-    emit loopChanged(t0, t1);
 }
 
 void
@@ -2488,19 +2525,19 @@ RosegardenDocument::addRecordMIDISegment(TrackId tid)
     //
     std::string label = "";
 
-    Track *track = m_composition.getTrackById(tid);
-    if (track) {
-        if (track->getPresetLabel() != "") {
-            label = track->getPresetLabel();
-        } else if (track->getLabel() == "") {
-            Instrument *instr =
-                m_studio.getInstrumentById(track->getInstrument());
-            if (instr) {
-                label = m_studio.getSegmentName(instr->getId());
-            }
-        } else {
-            label = track->getLabel();
+    const Track *track = m_composition.getTrackById(tid);
+    if (!track) return;
+
+    if (track->getPresetLabel() != "") {
+        label = track->getPresetLabel();
+    } else if (track->getLabel() == "") {
+        const Instrument *instr =
+            m_studio.getInstrumentById(track->getInstrument());
+        if (instr) {
+            label = m_studio.getSegmentName(instr->getId());
         }
+    } else {
+        label = track->getLabel();
     }
 
     recordMIDISegment->setLabel(appendLabel(label,
@@ -2520,12 +2557,11 @@ RosegardenDocument::addRecordMIDISegment(TrackId tid)
 
     m_recordMIDISegments[track->getInstrument()] = recordMIDISegment;
 
-    RosegardenMainViewWidget *w;
     int lenx = m_viewList.count();
     int i = 0;
     //for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
     for( i=0; i<lenx; i++ ){
-        w = m_viewList.value( i );
+        RosegardenMainViewWidget *w = m_viewList.value( i );
         w->getTrackEditor()->getTrackButtons()->slotUpdateTracks();
     }
 
@@ -2541,12 +2577,12 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     // Find the right track
 
-    Track *recordTrack = nullptr;
+    const Track *recordTrack = nullptr;
 
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
         Track *track = getComposition().getTrackById(tid);
@@ -2566,25 +2602,23 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 
     recordSegment->setTrack(recordTrack->getId());
     recordSegment->setStartTime(m_recordStartTime);
-    recordSegment->setAudioStartTime(RealTime::zeroTime);
+    recordSegment->setAudioStartTime(RealTime::zero());
 
     // Set an appropriate segment label
     //
     std::string label = "";
 
-    if (recordTrack) {
-        if (recordTrack->getLabel() == "") {
+    if (recordTrack->getLabel() == "") {
 
-            Instrument *instr =
-                m_studio.getInstrumentById(recordTrack->getInstrument());
+        const Instrument *instr =
+            m_studio.getInstrumentById(recordTrack->getInstrument());
 
-            if (instr) {
-                label = instr->getName();
-            }
-
-        } else {
-            label = recordTrack->getLabel();
+        if (instr) {
+            label = instr->getName();
         }
+
+    } else {
+        label = recordTrack->getLabel();
     }
 
     recordSegment->setLabel(appendLabel(label, qstrtostr(RosegardenDocument::tr("(recorded)"))));
@@ -2602,12 +2636,11 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
     RG_DEBUG << "RosegardenDocument::addRecordAudioSegment: adding record segment for instrument " << iid << " on track " << recordTrack->getId();
     m_recordAudioSegments[iid] = recordSegment;
 
-    RosegardenMainViewWidget *w;
     int lenx = m_viewList.count();
     int i = 0;
     //for (w = m_viewList.first(); w != 0; w = m_viewList.next()) {
     for( i=0; i<lenx; i++ ){
-        w = m_viewList.value( i );
+        RosegardenMainViewWidget *w = m_viewList.value( i );
         w->getTrackEditor()->getTrackButtons()->slotUpdateTracks();
     }
 
@@ -2617,14 +2650,14 @@ RosegardenDocument::addRecordAudioSegment(InstrumentId iid,
 void
 RosegardenDocument::updateRecordingAudioSegments()
 {
-    const Composition::recordtrackcontainer &tr =
+    const Composition::TrackIdSet &tr =
         getComposition().getRecordTracks();
 
-    for (Composition::recordtrackcontainer::const_iterator i =
+    for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
 
         TrackId tid = (*i);
-        Track *track = getComposition().getTrackById(tid);
+        const Track *track = getComposition().getTrackById(tid);
 
         if (track) {
 
@@ -2678,34 +2711,34 @@ RosegardenDocument::stopRecordingAudio()
         //
         /*!!!
           No.  I don't like this.
-         
+
           The record latency doesn't always exist -- for example, if recording
           from a synth plugin there is no record latency, and we have no way
           here to distinguish.
-         
+
           The record latency is a total latency figure that actually includes
           some play latency, and we compensate for that again on playback (see
           bug #1378766).
-         
+
           The timeT conversion of record latency is approximate in frames,
           giving potential phase error.
-         
+
           Cutting this out won't break any existing files, as the latency
           compensation there is already encoded into the file.
-         
+
             RealTime adjustedStartTime =
                 m_composition.getElapsedRealTime(recordSegment->getStartTime()) -
                 m_audioRecordLatency;
-         
+
             timeT shiftedStartTime =
                 m_composition.getElapsedTimeForRealTime(adjustedStartTime);
-         
+
             RG_DEBUG << "RosegardenDocument::stopRecordingAudio - "
                          << "shifted recorded audio segment by "
                          <<  recordSegment->getStartTime() - shiftedStartTime
                  << " clicks (from " << recordSegment->getStartTime()
                  << " to " << shiftedStartTime << ")";
-         
+
             recordSegment->setStartTime(shiftedStartTime);
         */
     }
@@ -2715,21 +2748,21 @@ RosegardenDocument::stopRecordingAudio()
 }
 
 void
-RosegardenDocument::finalizeAudioFile(InstrumentId iid)
+RosegardenDocument::finalizeAudioFile(InstrumentId instrument)
 {
-    RG_DEBUG << "finalizeAudioFile(" << iid << ")";
+    RG_DEBUG << "finalizeAudioFile(" << instrument << ")";
 
-    Segment *recordSegment = m_recordAudioSegments[iid];
+    Segment *recordSegment = m_recordAudioSegments[instrument];
 
     if (!recordSegment) {
         RG_WARNING << "finalizeAudioFile() WARNING: Failed to find segment";
         return;
     }
 
-    AudioFile *newAudioFile = m_audioFileManager.getAudioFile(
+    const AudioFile *newAudioFile = m_audioFileManager.getAudioFile(
             recordSegment->getAudioFileId());
     if (!newAudioFile) {
-        RG_WARNING << "finalizeAudioFile() WARNING: No audio file found for instrument " << iid << " (audio file id " << recordSegment->getAudioFileId() << ")";
+        RG_WARNING << "finalizeAudioFile() WARNING: No audio file found for instrument " << instrument << " (audio file id " << recordSegment->getAudioFileId() << ")";
         return;
     }
 
@@ -2762,19 +2795,19 @@ RosegardenDocument::finalizeAudioFile(InstrumentId iid)
     if (!recordSegment->getComposition())
         getComposition().addSegment(recordSegment);
 
-    CommandHistory::getInstance()->addCommand(
-            new SegmentRecordCommand(recordSegment));
+    CommandHistory::getInstance()->addCommand
+        (new SegmentRecordCommand(recordSegment), m_pointerBeforeRecord);
 
     // update views
     slotUpdateAllViews(nullptr);
 
     // Add the file to the sequencer
     RosegardenSequencer::getInstance()->addAudioFile(
-            newAudioFile->getFilename(),
+            newAudioFile->getAbsoluteFilePath(),
             newAudioFile->getId());
 
     // clear down
-    m_recordAudioSegments.erase(iid);
+    m_recordAudioSegments.erase(instrument);
     emit audioFileFinalized(recordSegment);
 }
 
@@ -2809,7 +2842,7 @@ RosegardenDocument::clearAllPlugins()
         if ((*it)->getType() == Instrument::Audio) {
             AudioPluginVector::iterator pIt = (*it)->beginPlugins();
 
-            for (; pIt != (*it)->endPlugins(); pIt++) {
+            for (; pIt != (*it)->endPlugins(); ++pIt) {
                 if ((*pIt)->getMappedId() != -1) {
                     if (StudioControl::
                         destroyStudioObject((*pIt)->getMappedId()) == false) {
@@ -2854,17 +2887,17 @@ RosegardenDocument::addOrphanedDerivedAudioFile(QString fileName)
 void
 RosegardenDocument::notifyAudioFileRemoval(AudioFileId id)
 {
-    AudioFile *file = nullptr;
+    const AudioFile *file = nullptr;
 
     if (m_audioFileManager.wasAudioFileRecentlyRecorded(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedRecordedAudioFile( file->getFilename() );
+        if (file) addOrphanedRecordedAudioFile( file->getAbsoluteFilePath() );
         return;
     }
 
     if (m_audioFileManager.wasAudioFileRecentlyDerived(id)) {
         file = m_audioFileManager.getAudioFile(id);
-        if (file) addOrphanedDerivedAudioFile( file->getFilename() );
+        if (file) addOrphanedDerivedAudioFile( file->getAbsoluteFilePath() );
         return;
     }
 }
@@ -2897,7 +2930,7 @@ RosegardenDocument::checkAudioPath(Track *track)
     if (!track->isArmed())
         return;
 
-    Instrument *instrument =
+    const Instrument *instrument =
             getStudio().getInstrumentById(track->getInstrument());
 
     bool audio = (instrument  &&
@@ -2917,7 +2950,7 @@ RosegardenDocument::checkAudioPath(Track *track)
                                  tr("The audio file path does not exist or is not writable.\nPlease set the audio file path to a valid directory in Document Properties before recording audio.\nWould you like to set it now?"),
                                  QMessageBox::Yes | QMessageBox::Cancel, QMessageBox::Cancel
                                 ) == QMessageBox::Yes) {
-            RosegardenMainWindow::self()->slotOpenAudioPathSettings();
+            RosegardenMainWindow::self()->openAudioPathSettings();
         }
     }
 }
@@ -3011,5 +3044,32 @@ void RosegardenDocument::release()
     delete m_lockFile;
     m_lockFile = nullptr;
 }
+
+void
+RosegardenDocument::loopButton(bool checked)
+{
+    const bool loop = (m_composition.getLoopStart() != m_composition.getLoopEnd());
+
+    if (Preferences::getAdvancedLooping()) {
+        // Menu item checked?
+        if (checked) {
+            if (loop)
+                m_composition.setLoopMode(Composition::LoopOn);
+            else
+                m_composition.setLoopMode(Composition::LoopAll);
+        } else {  // Button unpressed, turn looping off.
+            m_composition.setLoopMode(Composition::LoopOff);
+        }
+    } else {
+        // If a loop range is set, and the menu item is checked...
+        if (loop  &&  checked)
+            m_composition.setLoopMode(Composition::LoopOn);
+        else
+            m_composition.setLoopMode(Composition::LoopOff);
+    }
+
+    emit loopChanged();
+}
+
 
 }

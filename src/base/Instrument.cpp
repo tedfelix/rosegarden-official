@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -45,12 +45,11 @@ Instrument::Instrument(InstrumentId id,
     m_name(name),
     m_alias(""),
     m_type(it),
-    m_channel(0),
+    m_midiChannel(0),
     //m_input_channel(-1),
     m_transpose(MidiMidValue),
     m_pan(MidiMidValue),
     m_volume(100),
-    m_fixed(false),
     m_level(0.0),
     m_recordLevel(0.0),
     m_device(device),
@@ -63,84 +62,21 @@ Instrument::Instrument(InstrumentId id,
 {
     Q_ASSERT(m_id >= AudioInstrumentBase);//!DEVPUSH
 
-    if (it == Audio || it == SoftSynth)
-    {
-        // In an audio instrument we use the m_channel attribute to
-        // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 2 (stereo).
-        //
-        m_channel = 2;
-
-        m_pan = 100; // audio pan ranges from -100 to 100 but
-                     // we store within an unsigned char as 
-                     // 0 to 200. 
+    if (it == Audio) {
+        m_numAudioChannels = 2; // default stereo
     }
-
+    if (it == Midi) {
+        m_numAudioChannels = 0; // unused
+    }
     if (it == SoftSynth) {
-        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
+        m_numAudioChannels = 2; // default stereo
     }
-}
 
-Instrument::Instrument(InstrumentId id,
-                       InstrumentType it,
-                       const std::string &name,
-                       MidiByte channel,
-                       Device *device):
-    PluginContainer(it == Audio || it == SoftSynth),
-    m_id(id),
-    m_name(name),
-    m_alias(""),
-    m_type(it),
-    m_channel(channel),
-    //m_input_channel(-1),
-    m_transpose(MidiMidValue),
-    m_pan(MidiMidValue),
-    m_volume(100),
-    m_fixed(true),  // Always fixed channel for audio/softsynth.
-    m_level(0.0),
-    m_recordLevel(0.0),
-    m_device(device),
-    m_sendBankSelect(false),
-    m_sendProgramChange(false),
-    m_mappedId(0),
-    m_audioInput(1000),
-    m_audioInputChannel(0),
-    m_audioOutput(0)
-{
-    Q_ASSERT(m_id >= AudioInstrumentBase);//!DEVPUSH
-
-    // Add a number of plugin place holders (unassigned)
-    //
     if (it == Audio || it == SoftSynth)
     {
-        // In an audio instrument we use the m_channel attribute to
-        // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 2 (stereo).
-        //
-        m_channel = 2;
-
         m_pan = 100; // audio pan ranges from -100 to 100 but
-                     // we store within an unsigned char as 
-
-    } else {
-/*
- *
- * Let's try getting rid of this default behavior, and replacing it with a
- * change to the factory autoload instead, because this just doesn't work out
- * very well, and it's fiddly trying to sort the overall behavior into something
- * less quirky (dmm)
- *
-        // Also defined in Midi.h but we don't use that - not here
-        // in the clean inner sanctum.
-        //
-        const MidiByte MIDI_PERCUSSION_CHANNEL = 9;
-        const MidiByte MIDI_EXTENDED_PERCUSSION_CHANNEL = 10;
-
-        if (m_channel == MIDI_PERCUSSION_CHANNEL ||
-            m_channel == MIDI_EXTENDED_PERCUSSION_CHANNEL) {
-            setPercussion(true);
-        }
-*/
+                     // we store within an unsigned char as
+                     // 0 to 200.
     }
 
     if (it == SoftSynth) {
@@ -156,8 +92,7 @@ Instrument::Instrument(const Instrument &ins):
     m_name(ins.getName()),
     m_alias(ins.getAlias()),
     m_type(ins.getType()),
-    m_channel(ins.getNaturalChannel()),
-    //m_input_channel(ins.getMidiInputChannel()),
+    m_midiChannel(ins.getNaturalMidiChannel()),
     m_program(ins.getProgram()),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
@@ -171,65 +106,23 @@ Instrument::Instrument(const Instrument &ins):
     m_mappedId(ins.getMappedId()),
     m_audioInput(ins.m_audioInput),
     m_audioInputChannel(ins.m_audioInputChannel),
-    m_audioOutput(ins.m_audioOutput)
+    m_numAudioChannels(ins.m_numAudioChannels),
+    m_audioOutput(ins.m_audioOutput),
+    m_staticControllers(ins.m_staticControllers)
 {
-    if (ins.getType() == Audio || ins.getType() == SoftSynth)
-    {
-        // In an audio instrument we use the m_channel attribute to
-        // hold the number of audio channels this Instrument uses -
-        // not the MIDI channel number.  Default is 2 (stereo).
-        //
-        m_channel = 2;
-    }
+    // Classes derived from QObject can not use the default copy constructor
+    // so we need to define it here if we want to make copies.
+    // ??? Ugh.  I'm not surprised.  QObjects can't safely copy themselves.
+    //     Of course that means a copy ctor in a QObject-derived class is
+    //     rather dubious.  This leads me to recommend that we get rid
+    //     of this copy ctor (since it can't actually be one) and implement
+    //     a "partialCopy()" routine that does the same thing.  That would
+    //     be safer and easier to understand.
 
-    if (ins.getType() == SoftSynth) {
-        addPlugin(new AudioPluginInstance(SYNTH_PLUGIN_POSITION));
-    }
-    
-    // ??? How is this different from std::vector's copy ctor?
-    //     Remove this and do the copy above.
-    StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
-    for (; cIt != ins.m_staticControllers.end(); ++cIt) {
-        m_staticControllers.push_back(*cIt);
-    }
+    // ??? Another issue is the PluginContainer baseclass.  It has a non-trivial
+    //     dtor that deletes pointers.  This forces a copy ctor implementation
+    //     (rule of three/five/zero).
 }
-
-#if 0
-// ??? Never used.  See comments in header for more.
-Instrument &
-Instrument::operator=(const Instrument &ins)
-{
-    if (&ins == this) return *this;
-
-    m_id = ins.getId();
-    m_name = ins.getName();
-    m_alias = ins.getAlias();
-    m_type = ins.getType();
-    m_channel = ins.getNaturalChannel();
-    //m_input_channel = ins.getMidiInputChannel();
-    m_program = ins.getProgram();
-    m_transpose = ins.getMidiTranspose();
-    m_pan = ins.getPan();
-    m_volume = ins.getVolume();
-    m_fixed  = false;  // ??? This is not an assignment operator.  It's a partialCopy().
-    m_level = ins.getLevel();
-    m_recordLevel = ins.getRecordLevel();
-    m_device = ins.getDevice();
-    m_sendBankSelect = ins.sendsBankSelect();
-    m_sendProgramChange = ins.sendsProgramChange();
-    m_mappedId = ins.getMappedId();
-    m_audioInput = ins.m_audioInput;
-    m_audioInputChannel = ins.m_audioInputChannel;
-    m_audioOutput = ins.m_audioOutput;
-
-    StaticControllers::const_iterator cIt = ins.m_staticControllers.begin();
-    for (; cIt != ins.m_staticControllers.end(); ++cIt) {
-        m_staticControllers.push_back(*cIt);
-    }
-
-    return *this;
-}
-#endif
 
 Instrument::~Instrument()
 {
@@ -259,9 +152,12 @@ Instrument::getLocalizedPresentationName() const
 
     // translate the left piece (we'll leave the #1..#n as an untranslatable
     // Rosegarden-specific concept unless people are really bothered by it)
-    return QString("%1 %2").arg(QObject::tr(inameL.toLocal8Bit())).arg(inameR);
+    return QString("%1 %2")
+            .arg(QCoreApplication::translate("INSTRUMENT", inameL.toLocal8Bit()))
+            .arg(inameR);
 }
 
+/* unused
 unsigned int
 Instrument::getPresentationNumber() const
 {
@@ -275,6 +171,7 @@ Instrument::getPresentationNumber() const
     if (number.length() > 2) number = number.left(2);
     return number.toUInt();
 }
+*/
 
 std::string
 Instrument::getAlias() const
@@ -296,7 +193,7 @@ Instrument::sendChannelSetup()
     //RG_DEBUG << "sendChannelSetup(): channel" << m_channel;
 
     if (hasFixedChannel()) {
-        StudioControl::sendChannelSetup(this, m_channel);
+        StudioControl::sendChannelSetup(this, m_midiChannel);
     }
 }
 
@@ -312,7 +209,7 @@ setProgram(const MidiProgram &program)
 bool
 Instrument::isProgramValid() const
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md)
         return false;
 
@@ -327,7 +224,7 @@ Instrument::isProgramValid() const
          oBankIter != validBanks.end();
          ++oBankIter)
     {
-        if (oBankIter->partialCompare(m_program.getBank())) {
+        if (oBankIter->compareKey(m_program.getBank())) {
             bankValid = true;
             break;
         }
@@ -372,7 +269,7 @@ Instrument::sendsProgramChange() const
         //RG_DEBUG << "sendsProgramChange() percussion Instrument...";
         //RG_DEBUG << "  channel:" << getNaturalChannel();
 
-        MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
+        const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(m_device);
         if (!midiDevice)
             return false;
 
@@ -425,7 +322,7 @@ Instrument::getLSB() const
 void
 Instrument::pickFirstProgram(bool percussion)
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
     if (!md)
         return;
 
@@ -505,13 +402,29 @@ Instrument::toXmlString() const
     if (m_id < AudioInstrumentBase)
     {
         return instrument.str();
-    } 
+    }
 
     instrument << "        <instrument id=\"" << m_id;
-    instrument << "\" channel=\"" << (int)m_channel;
-    instrument << "\" fixed=\""   << (m_fixed ? "true" : "false");
-    instrument << "\" type=\"";
 
+    // channel
+    instrument << "\" channel=\"";
+    // The channel attribute is the midi channel for midi instruments.
+    // See also RoseXmlHandler
+    if (m_type == Midi) {
+        instrument << static_cast<int>(m_midiChannel);
+    } else {  // audio and softsynth
+        // Historically, this is the number of channels for audio
+        // and softsynth.  Keep this for compatibility with 23.12 and prior.
+        // ??? If we need the MIDI channel for softsynths, then we need a
+        //     new attribute, "midichannel".
+        instrument << static_cast<int>(m_numAudioChannels);
+    }
+
+    // fixed
+    instrument << "\" fixed=\""   << (m_fixed ? "true" : "false");
+
+    // type
+    instrument << "\" type=\"";
     if (m_type == Midi)
     {
         instrument << "midi\">" << std::endl;
@@ -526,7 +439,7 @@ Instrument::toXmlString() const
                    << (int)getProgramChange() << "\" send=\""
                    << (m_sendProgramChange ? "true" : "false") << "\"/>"
                    << std::endl;
-    
+
         for (StaticControllers::const_iterator it = m_staticControllers.begin();
              it != m_staticControllers.end(); ++it)
         {
@@ -575,7 +488,7 @@ Instrument::toXmlString() const
             instrument << (*it)->toXmlString();
         }
     }
-        
+
     instrument << "        </instrument>" << std::endl
                << std::endl;
 
@@ -605,7 +518,7 @@ void
 Instrument::sendController(MidiByte controller, MidiByte value)
 {
     if (hasFixedChannel())
-        StudioControl::sendController(this, m_channel, controller, value);
+        StudioControl::sendController(this, m_midiChannel, controller, value);
 }
 
 void
@@ -641,6 +554,7 @@ Instrument::setControllerValue(MidiByte controller, MidiByte value)
 bool
 Instrument::hasController(MidiByte controlNumber) const
 {
+    // cppcheck-suppress useStlAlgorithm
     for (const StaticControllers::value_type &pair : m_staticControllers) {
         if (pair.first == controlNumber)
             return true;
@@ -693,10 +607,10 @@ Instrument::getKeyMapping() const
     }
 
     return nullptr;
-}    
+}
 
 // Set a fixed channel.  For MIDI instruments, conform allocator
-// accordingly. 
+// accordingly.
 void
 Instrument::
 setFixedChannel()
@@ -705,7 +619,7 @@ setFixedChannel()
 
     AllocateChannels *allocator = getDevice()->getAllocator();
     if (allocator) {
-        allocator->reserveFixedChannel(m_channel);
+        allocator->reserveFixedChannel(m_midiChannel);
         m_fixed = true;
         emit channelBecomesFixed();
         ControlBlock::getInstance()->instrumentChangedFixity(getId());
@@ -713,16 +627,16 @@ setFixedChannel()
 }
 
 // Release this instrument's fixed channel, if any.
-// @author Tom Breton (Tehom) 
+// @author Tom Breton (Tehom)
 void
 Instrument::
 releaseFixedChannel()
 {
     if (!m_fixed) { return; }
-    
+
     AllocateChannels *allocator = getDevice()->getAllocator();
     if (allocator) {
-        allocator->releaseFixedChannel(m_channel);
+        allocator->releaseFixedChannel(m_midiChannel);
     }
 
     m_fixed = false;
@@ -779,4 +693,3 @@ MidiByte Instrument::getPanCC() const
 
 
 }
-

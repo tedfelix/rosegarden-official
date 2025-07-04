@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,12 +19,13 @@
 #define RG_MATRIXRESIZER_H
 
 #include "MatrixTool.h"
+
 #include <QString>
-#include "base/Event.h"
 
 
 namespace Rosegarden
 {
+
 
 class ViewElement;
 class MatrixViewSegment;
@@ -36,9 +37,10 @@ class MatrixResizer : public MatrixTool
 {
     Q_OBJECT
 
-    friend class MatrixToolBox;
-
 public:
+
+    MatrixResizer(MatrixWidget *);
+
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     FollowMode handleMouseMove(const MatrixMouseEvent *) override;
     void handleMouseRelease(const MatrixMouseEvent *) override;
@@ -50,15 +52,11 @@ public:
     void handleEventRemoved(Event *event) override;
 
     void ready() override;
-    void stow() override;
+    void stow() override  { }
 
-    static QString ToolName();
+    static QString ToolName()  { return "resizer"; }
 
-protected slots:
-//!!!    void slotMatrixScrolled(int x, int y);
-
-protected:
-    MatrixResizer(MatrixWidget *);
+private:
 
     void setBasicContextHelp();
 
@@ -67,6 +65,7 @@ protected:
     Event *m_event;
     MatrixViewSegment *m_currentViewSegment;
 };
+
 
 }
 

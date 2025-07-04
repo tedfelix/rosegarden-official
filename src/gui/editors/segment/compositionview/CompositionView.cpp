@@ -1,13 +1,13 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A MIDI and audio sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A MIDI and audio sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   Other copyrights also apply to some parts of this work.  Please
   see the AUTHORS file and individual file headers for details.
- 
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionView]"
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionView.h"
 
@@ -39,7 +40,8 @@
 #include "SegmentSelector.h"
 #include "SegmentToolBox.h"
 #include "sound/Midi.h"
-
+#include "gui/general/ThornStyle.h"
+#include "misc/Preferences.h"
 
 #include <QBrush>
 #include <QColor>
@@ -68,6 +70,15 @@ namespace Rosegarden
 {
 
 
+static QColor getPointerColor()
+{
+    if (Rosegarden::Preferences::getTheme() ==
+            Rosegarden::Preferences::DarkTheme)
+        return QColor(0x87, 0xcd, 0xee);
+    else
+        return QColor(Qt::darkBlue);
+}
+
 CompositionView::CompositionView(RosegardenDocument *doc,
                                  CompositionModelImpl *model,
                                  QWidget *parent) :
@@ -77,7 +88,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_lastContentsY(0),
     m_segmentsRefresh(0, 0, viewport()->width(), viewport()->height()),
     //m_backgroundPixmap(),
-    m_trackDividerColor(GUIPalette::getColour(GUIPalette::TrackDivider)),
+    //m_trackDividerColor(),
     m_showPreviews(false),
     m_showSegmentLabels(true),
     m_segmentsLayer(viewport()->width(), viewport()->height()),
@@ -91,7 +102,7 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     //m_textFloatText(),
     //m_textFloatPos(),
     m_pointerPos(0),
-    m_pointerPen(GUIPalette::getColour(GUIPalette::Pointer), 4),
+    m_pointerPen(getPointerColor(), 4),
     //m_newSegmentRect(),
     //m_newSegmentColor(),
     //m_splitLinePos(),
@@ -105,7 +116,9 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     m_currentTool(nullptr),
     //m_toolContextHelp(),
     m_contextHelpShown(false),
-    m_enableDrawing(true)
+    m_enableDrawing(true),
+    m_modeTextChanged(false),
+    m_modeTextWidth(0)
 {
     if (!doc)
         return;
@@ -127,7 +140,10 @@ CompositionView::CompositionView(RosegardenDocument *doc,
             QString(GeneralOptionsConfigGroup) + "/backgroundtextures",
             "true").toBool()) {
 
-        m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
+        if (Preferences::getTheme() == Preferences::DarkTheme)
+            m_backgroundPixmap = IconLoader::loadPixmap("bg-paper-black");
+        else
+            m_backgroundPixmap = IconLoader::loadPixmap("bg-segmentcanvas");
     }
 
     slotUpdateSize();
@@ -137,10 +153,12 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     connect(m_toolBox, &BaseToolBox::showContextHelp,
             this, &CompositionView::slotToolHelpChanged);
 
-    connect(m_model, SIGNAL(needUpdate()),
-            this, SLOT(slotUpdateAll()));
-    connect(m_model, SIGNAL(needUpdate(const QRect&)),
-            this, SLOT(slotAllNeedRefresh(const QRect&)));
+    connect(m_model, (void(CompositionModelImpl::*)())
+                    &CompositionModelImpl::needUpdate,
+            this, &CompositionView::slotUpdateAll);
+    connect(m_model, (void(CompositionModelImpl::*)(const QRect &))
+                    &CompositionModelImpl::needUpdate,
+            this, &CompositionView::slotAllNeedRefresh);
     connect(m_model, &CompositionModelImpl::needArtifactsUpdate,
             this, &CompositionView::slotUpdateArtifacts);
     connect(m_model, &CompositionModelImpl::needSizeUpdate,
@@ -187,6 +205,12 @@ CompositionView::CompositionView(RosegardenDocument *doc,
     // The various tools expect this.
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
+
+    if (Preferences::getTheme() == Preferences::DarkTheme)
+        m_trackDividerColor.setRgb(48, 48, 48);
+    else
+        m_trackDividerColor = GUIPalette::getColour(GUIPalette::TrackDivider);
+
 
     // *** Debugging
 
@@ -312,6 +336,15 @@ void CompositionView::hideSplitLine()
     viewport()->update();
 }
 
+void CompositionView::setModeText(const QString& modeText)
+{
+    if (modeText == m_modeText) return;
+    RG_DEBUG << "setModeText" << modeText;
+    m_modeText = modeText;
+    m_modeTextChanged = true;
+    updateAll();
+}
+
 void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
 {
     // Pass it up to RosegardenScrollView.
@@ -420,13 +453,13 @@ void CompositionView::slotRefreshColourCache()
 void CompositionView::slotNewMIDIRecordingSegment(Segment *s)
 {
     m_model->addRecordingItem(ChangingSegmentPtr(
-            new ChangingSegment(*s, QRect())));
+            new ChangingSegment(*s, SegmentRect())));
 }
 
 void CompositionView::slotNewAudioRecordingSegment(Segment *s)
 {
     m_model->addRecordingItem(ChangingSegmentPtr(
-            new ChangingSegment(*s, QRect())));
+            new ChangingSegment(*s, SegmentRect())));
 }
 
 void CompositionView::slotStoppedRecording()
@@ -612,7 +645,10 @@ void CompositionView::drawSegments(const QRect &clipRect)
         segmentsLayerPainter.drawTiledPixmap(
                 clipRect, m_backgroundPixmap, offset);
     } else {
-        segmentsLayerPainter.eraseRect(clipRect);
+        if (Preferences::getTheme() == Preferences::DarkTheme)
+            segmentsLayerPainter.fillRect(clipRect, Qt::black);
+        else
+            segmentsLayerPainter.eraseRect(clipRect);
     }
 
     // *** Draw the track dividers
@@ -739,9 +775,7 @@ void CompositionView::drawArtifacts()
     // Switch to contents coords.
     viewportPainter.translate(-contentsX(), -contentsY());
 
-    //
-    // Playback Pointer
-    //
+    // Draw the Playback Position Pointer.
     viewportPainter.setPen(m_pointerPen);
     viewportPainter.drawLine(m_pointerPos, 0, m_pointerPos, contentsHeight() - 1);
 
@@ -765,6 +799,15 @@ void CompositionView::drawArtifacts()
         viewportPainter.drawLine(m_guideX, 0, m_guideX, contentsHeight() - 1);
         // Horizontal Guide
         viewportPainter.drawLine(0, m_guideY, contentsWidth() - 1, m_guideY);
+        if (m_modeTextChanged) {
+            // get the new width
+            QFontMetrics fm(viewportPainter.font());
+            m_modeTextWidth = fm.horizontalAdvance(m_modeText);
+            m_modeTextChanged = false;
+        }
+        viewportPainter.drawText(m_guideX - m_modeTextWidth - 5,
+                                 m_guideY - 5,
+                                 m_modeText);
     }
 
     //
@@ -1054,48 +1097,48 @@ void CompositionView::drawCompRectLabel(
     painter->restore();
 }
 
-void CompositionView::drawRect(QPainter *p, const QRect &clipRect,
-        const QRect &r, bool isSelected, int intersectLvl)
+void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
+        const QRect &rect, bool isSelected, int intersectLvl)
 {
     // If the rect isn't in the clip rect, bail.
-    if (!r.intersects(clipRect))
+    if (!rect.intersects(clipRect))
         return;
 
-    p->save();
+    painter->save();
 
     // Since we do partial updates when scrolling, make sure we don't
     // obliterate the previews.
-    p->setClipRect(clipRect);
+    painter->setClipRect(clipRect);
 
     // For a selected segment, go with a darker fill.
     if (isSelected) {
-        QColor fillColor = p->brush().color().darker(200);
-        p->setBrush(QBrush(fillColor));
+        QColor fillColor = painter->brush().color().darker(200);
+        painter->setBrush(QBrush(fillColor));
     }
 
     // For intersecting segments, go with a darker fill.
     if (intersectLvl > 0) {
-        QColor fillColor = p->brush().color().darker(intersectLvl * 105);
-        p->setBrush(QBrush(fillColor));
+        QColor fillColor = painter->brush().color().darker(intersectLvl * 105);
+        painter->setBrush(QBrush(fillColor));
     }
 
-    QRect rect = r;
+    QRect rect2 = rect;
     // Shrink height by 1 to accommodate the dividers.
     // Shrink width by 1 so that adjacent segment borders don't overlap.
     // ??? Why isn't the SegmentRect already adjusted like this?
-    rect.adjust(0, 0, -1, -1);
+    rect2.adjust(0, 0, -1, -1);
 
-    p->drawRect(rect);
+    painter->drawRect(rect2);
 
-    p->restore();
+    painter->restore();
 }
 
 // Functor to just compare the SegmentRect's QRect's.
 class CompareSegmentRects
 {
 public:
-    CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
-    bool operator()(const SegmentRect &sr)
+    explicit CompareSegmentRects(const SegmentRect &sr) : r(sr.rect) { }
+    bool operator()(const SegmentRect &sr) const
             { return (sr.rect == r); }
 private:
     QRect r;
@@ -1234,13 +1277,13 @@ void CompositionView::drawIntersections(
 #endif
 }
 
-void CompositionView::drawTextFloat(QPainter *p)
+void CompositionView::drawTextFloat(QPainter *painter)
 {
     if (!m_model)
         return;
 
     // Find out how big of a rect we need for the text.
-    QRect boundingRect = p->boundingRect(
+    QRect boundingRect = painter->boundingRect(
             QRect(),  // we want the "required" rectangle
             0,        // we want the "required" rectangle
             m_textFloatText);
@@ -1259,14 +1302,14 @@ void CompositionView::drawTextFloat(QPainter *p)
 
     boundingRect.moveTopLeft(pos);
 
-    p->save();
+    painter->save();
 
-    p->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
-    p->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
-    p->drawRect(boundingRect);
-    p->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
+    painter->setPen(CompositionColourCache::getInstance()->RotaryFloatForeground);
+    painter->setBrush(CompositionColourCache::getInstance()->RotaryFloatBackground);
+    painter->drawRect(boundingRect);
+    painter->drawText(boundingRect, Qt::AlignCenter, m_textFloatText);
 
-    p->restore();
+    painter->restore();
 }
 
 bool CompositionView::event(QEvent *e)
@@ -1411,7 +1454,7 @@ void CompositionView::keyReleaseEvent(QKeyEvent *e)
         return;
 
     // Delegate to the current tool.
-    m_currentTool->keyPressEvent(e);
+    m_currentTool->keyReleaseEvent(e);
 }
 
 void CompositionView::drawPointer(int pos)

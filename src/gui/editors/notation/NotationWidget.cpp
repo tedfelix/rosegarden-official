@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -97,7 +97,7 @@ NotationWidget::NotationWidget() :
     m_scene(nullptr),
     m_leftGutter(20),
     m_currentTool(nullptr),
-    m_playTracking(true),
+    m_scrollToFollow(true),
     m_hZoomFactor(1.0),
     m_vZoomFactor(1.0),
     m_referenceScale(nullptr),
@@ -136,7 +136,7 @@ NotationWidget::NotationWidget() :
     m_resizeTimer->setSingleShot(true);
     connect(m_resizeTimer, &QTimer::timeout,
             this, &NotationWidget::slotResizeTimerDone);
-    
+
     m_layout = new QGridLayout;
     setLayout(m_layout);
 
@@ -152,10 +152,9 @@ NotationWidget::NotationWidget() :
                            QPainter::TextAntialiasing |
                            QPainter::SmoothPixmapTransform);
 
-    bool texture = false;
     QSettings settings;
     settings.beginGroup(NotationViewConfigGroup);
-    texture = settings.value("backgroundtextures", true).toBool();
+    bool texture = settings.value("backgroundtextures", true).toBool();
     settings.endGroup();
 
     QBrush bg = (texture ?
@@ -435,22 +434,13 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::sceneNeedsRebuilding,
             this, &NotationWidget::sceneNeedsRebuilding, Qt::QueuedConnection);
 
-    // To fix this, create a new slot called slotCurrentStaffChanged() and
-    // have it call slotUpdatePointerPosition(true).
-    //connect(m_scene, SIGNAL(currentStaffChanged()),
-    //        this, SLOT(slotUpdatePointerPosition(true)));
-
-    // There is a Panner::updateScene(), but it's not a slot.
-    //connect(m_scene, SIGNAL(selectionChanged()),
-    //        m_view, SLOT(updateScene()));
-
     m_view->setScene(m_scene);
 
     m_toolBox->setScene(m_scene);
 
     m_hpanner->setScene(m_scene);
     m_hpanner->fitInView(m_scene->sceneRect(), Qt::KeepAspectRatio);
-    
+
     connect(m_view, &Panned::mouseLeaves,
             m_scene, &NotationScene::slotMouseLeavesView);
 
@@ -479,8 +469,15 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::layoutUpdated,
             m_controlRulerWidget, &ControlRulerWidget::slotUpdateRulers);
 
-    connect(m_scene, &NotationScene::selectionChanged,
+    connect(m_scene, &NotationScene::selectionChangedES,
             m_controlRulerWidget, &ControlRulerWidget::slotSelectionChanged);
+
+    // Forward for NotationView
+    connect(m_controlRulerWidget, &ControlRulerWidget::childRulerSelectionChanged,
+            this, &NotationWidget::rulerSelectionChanged);
+    // Forward
+    connect(m_controlRulerWidget, &ControlRulerWidget::rulerSelectionUpdate,
+            this, &NotationWidget::rulerSelectionUpdate);
 
     connect(m_scene, &NotationScene::currentViewSegmentChanged,
             m_controlRulerWidget, &ControlRulerWidget::slotSetCurrentViewSegment);
@@ -583,7 +580,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
             this, &NotationWidget::slotUpdateSegmentChangerBackground);
 
     hideOrShowRulers();
-    
+
     // If setSegments() is called on an already existing NotationWidget,
     // NotationScene and Rulers need the same zoom factor and horizontal
     // position.
@@ -604,7 +601,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &NotationScene::currentStaffChanged,
             this, &NotationWidget::slotStaffChanged);
 
-    m_playTracking = m_document->getComposition().getEditorFollowPlayback();
+    m_scrollToFollow = m_document->getComposition().getEditorFollowPlayback();
 }
 
 void
@@ -631,7 +628,7 @@ void
 NotationWidget::slotGenerateHeaders()
 {
     if (!linearMode()) return;  // Staff headers don't exist out of linear mode
-    
+
     m_headersNeedRegeneration = false;
 
     if (m_headersGroup) disconnect(m_headersGroup, &HeadersGroup::headersResized,
@@ -663,9 +660,9 @@ NotationWidget::slotGenerateHeaders()
 }
 
 void
-NotationWidget::setCanvasCursor(QCursor c)
+NotationWidget::setCanvasCursor(QCursor cursor)
 {
-    if (m_view) m_view->viewport()->setCursor(c);
+    if (m_view) m_view->viewport()->setCursor(cursor);
 }
 
 Segment *
@@ -683,10 +680,10 @@ NotationWidget::segmentsContainNotes() const
 }
 
 void
-NotationWidget::locatePanner(bool tall)
+NotationWidget::locatePanner(bool vertical)
 {
     m_layout->removeWidget(m_panner);
-    if (tall) {
+    if (vertical) {
         m_panner->setMaximumHeight(QWIDGETSIZE_MAX);
         m_hpanner->setMaximumHeight(QWIDGETSIZE_MAX);
         m_panner->setMaximumWidth(80);
@@ -754,9 +751,10 @@ NotationWidget::slotSetMultiPageMode()
 }
 
 void
-NotationWidget::slotSetFontName(QString name)
+NotationWidget::slotSetFontName(const QString &name)
 {
-    if (m_scene) m_scene->setFontName(name);
+    if (m_scene)
+        m_scene->setFontName(name);
 
     // Note: See slotSetFontSize, if standard rulers and position do not refresh
 }
@@ -838,23 +836,24 @@ NotationWidget::slotSetRestInserter()
 void
 NotationWidget::slotSetInsertedNote(Note::Type type, int dots)
 {
-    NoteRestInserter *ni = dynamic_cast<NoteRestInserter *>(m_currentTool);
-    if (ni) {
+    NoteRestInserter *noteRestInserter =
+            dynamic_cast<NoteRestInserter *>(m_currentTool);
+    if (noteRestInserter) {
 
-        ni->slotSetNote(type);
-        ni->slotSetDots(dots);
+        noteRestInserter->setNote(type);
+        noteRestInserter->setDots(dots);
         return;
     }
 }
 
 void
-NotationWidget::slotSetAccidental(Accidental accidental, bool follow)
+NotationWidget::slotSetAccidental(const Accidental &accidental, bool follow)
 {
     // You don't have to be in note insertion mode to change the accidental
-    NoteRestInserter *ni = dynamic_cast<NoteRestInserter *>
+    NoteRestInserter *noteRestInserter = dynamic_cast<NoteRestInserter *>
         (m_toolBox->getTool(NoteRestInserter::ToolName()));
-    if (ni) {
-        ni->slotSetAccidental(accidental, follow);
+    if (noteRestInserter) {
+        noteRestInserter->setAccidental(accidental, follow);
         return;
     }
 }
@@ -866,10 +865,11 @@ NotationWidget::slotSetClefInserter()
 }
 
 void
-NotationWidget::slotSetInsertedClef(Clef type)
+NotationWidget::slotSetInsertedClef(const Clef &type)
 {
     ClefInserter *ci = dynamic_cast<ClefInserter *>(m_currentTool);
-    if (ci) ci->slotSetClef(type);
+    if (ci)
+        ci->slotSetClef(type);
 }
 
 void
@@ -885,19 +885,19 @@ NotationWidget::slotSetGuitarChordInserter()
 }
 
 void
-NotationWidget::slotSetPlayTracking(bool tracking)
+NotationWidget::setScrollToFollow(bool scrollToFollow)
 {
-    m_document->getComposition().setEditorFollowPlayback(tracking);
-    m_playTracking = tracking;
-    if (m_playTracking) {
+    m_document->getComposition().setEditorFollowPlayback(scrollToFollow);
+    m_scrollToFollow = scrollToFollow;
+    if (m_scrollToFollow) {
         m_view->ensurePositionPointerInView(true);
     }
 }
 
 void
-NotationWidget::slotTogglePlayTracking()
+NotationWidget::slotScrollToFollow()
 {
-    slotSetPlayTracking(!m_playTracking);
+    setScrollToFollow(!m_scrollToFollow);
 }
 
 void
@@ -919,14 +919,24 @@ NotationWidget::updatePointer(timeT t)
 
     SequenceManager *seqMgr = m_document->getSequenceManager();
 
-    bool rolling =
+    const bool rolling =
             (seqMgr  &&
              (seqMgr->getTransportStatus() == PLAYING  ||
               seqMgr->getTransportStatus() == RECORDING));
 
     //RG_DEBUG << "updatePointer(" << t << "): rolling = " << rolling;
 
-    NotationScene::CursorCoordinates cursorPos =
+    // Avoid jumping around when stop is pressed.
+    // Bug #1672.
+    // ??? Unfortunately, this also breaks the current segment wheel.
+    //     Maybe we should only do it on stop?
+    //if (!rolling)
+    //    m_scene->setCurrentStaff(t);
+
+    // This limits the cursor to within the current staff.  That can
+    // cause the notation view to jump unexpectedly.
+    // Bug #1672.
+    const NotationScene::CursorCoordinates cursorPos =
             m_scene->getCursorCoordinates(t);
 
     // While rolling, display a playback position pointer that stretches
@@ -937,7 +947,6 @@ NotationWidget::updatePointer(timeT t)
 
     // p will also contain sensible Y (although not 100% sensible yet)
     double pointerX = p.x1();
-    double pointerY = std::min(p.y1(), p.y2());
     double pointerHeight = fabs(p.dy());
 
     double sceneXMin = m_scene->sceneRect().left();
@@ -949,6 +958,7 @@ NotationWidget::updatePointer(timeT t)
         m_view->hidePositionPointer();
         m_hpanner->slotHidePositionPointer();
     } else {
+        double pointerY = std::min(p.y1(), p.y2());
         m_view->showPositionPointer(QPointF(pointerX, pointerY),
                                     pointerHeight);
         m_hpanner->slotShowPositionPointer(QPointF(pointerX, pointerY),
@@ -961,8 +971,8 @@ NotationWidget::slotPointerPositionChanged(timeT t)
 {
     updatePointer(t);
 
-    if (m_playTracking && !m_noScroll)
-        m_view->ensurePositionPointerInView(true);  // page  
+    if (m_scrollToFollow && !m_noScroll)
+        m_view->ensurePositionPointerInView(true);  // page
 }
 
 void
@@ -1273,11 +1283,13 @@ NotationWidget::getNotationViewWidth()
     return m_view->width();
 }
 
+/* unused
 double
 NotationWidget::getNotationSceneHeight()
 {
     return m_scene->height();
 }
+*/
 
 void
 NotationWidget::slotHScroll()
@@ -1454,6 +1466,7 @@ NotationWidget::setPointerPosition(timeT t)
     // Fixes problem with sustaining notes while adding notes with
     // the pencil tool.  Also avoids moving playback position in
     // playback mode, allowing editing of a loop in real-time.
+    // ??? A flag in RMW would be faster.  E.g. RMW::m_enableSetPointerPosition.
     disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
                RosegardenMainWindow::self(),
                &RosegardenMainWindow::slotSetPointerPosition);
@@ -1655,6 +1668,18 @@ NotationWidget::slotTogglePitchbendRuler()
 }
 
 void
+NotationWidget::slotToggleKeyPressureRuler()
+{
+    m_controlRulerWidget->toggleKeyPressureRuler();
+}
+
+void
+NotationWidget::slotToggleChannelPressureRuler()
+{
+    m_controlRulerWidget->toggleChannelPressureRuler();
+}
+
+void
 NotationWidget::slotAddControlRuler(QAction *action)
 {
     QString name = action->text();
@@ -1684,7 +1709,6 @@ NotationWidget::slotAddControlRuler(QAction *action)
 
     const ControlList &list = c->getControlParameters();
 
-    QString itemStr;
 //  int i = 0;
 
     for (ControlList::const_iterator it = list.begin();
@@ -1697,11 +1721,13 @@ NotationWidget::slotAddControlRuler(QAction *action)
         const QString hexValue =
             QString::asprintf("(0x%x)", it->getControllerNumber());
 
-        // strings extracted from data files must be QObject::tr()
-        QString itemStr = QObject::tr("%1 Controller %2 %3")
-                                     .arg(QObject::tr(it->getName().c_str()))
-                                     .arg(it->getControllerNumber())
-                                     .arg(hexValue);
+            // strings extracted from data files and related to MIDI
+            // controller are in MIDI_CONTROLLER translation context
+            QString itemStr = tr("%1 Controller %2 %3")
+                            .arg(QCoreApplication::translate("MIDI_CONTROLLER",
+                                                            it->getName().c_str()))
+                            .arg(it->getControllerNumber())
+                            .arg(hexValue);
 
         if (name != itemStr) continue;
 
@@ -1789,7 +1815,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     QString trackLabel = QString::fromStdString(track->getLabel());
     if (trackLabel == "")
         trackLabel = tr("<untitled>");
-    
+
     // set up some tooltips...  I don't like this much, and it wants some kind
     // of dedicated float thing eventually, but let's not go nuts on a
     // last-minute feature
@@ -1805,7 +1831,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
         arg(track->getPosition() + 1).
         arg(trackLabel).
         arg(QString::fromStdString(segment->getLabel()));
-    
+
     m_segmentLabel->setText(segmentText);
 
     // Segment label colors
@@ -1877,4 +1903,3 @@ NotationWidget::slotZoomOut()
 
 
 }
-

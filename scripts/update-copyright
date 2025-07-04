@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Update copyright on rosegarden source files.
+
+# Be sure to run this in the src directory.  Otherwise it might
+# do some strange things.
+
+readonly year=$(date +%Y)
+
+find . -type f -print0 | xargs -0 \
+    sed -i '/Copyright .* Rosegarden development team/s/\([0-9]\{4\}\)-[0-9]\{4\}/\1-'$year'/'
+
+# Recommend running this afterwards:
+
+#git commit -a --author="Copyright Bot <copyright@rosegardenmusic.com>" -m "Update copyright"
+

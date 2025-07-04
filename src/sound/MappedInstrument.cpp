@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -23,6 +23,7 @@ MappedInstrument::MappedInstrument():
         m_type(Instrument::Midi),
         m_id(0),
         m_name(std::string("")),
+        m_device(0),
         m_audioChannels(0)
 {}
 
@@ -32,6 +33,7 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
         m_type(type),
         m_id(id),
         m_name(std::string("")),
+        m_device(0),
         m_audioChannels(0)
 {}
 
@@ -47,22 +49,23 @@ MappedInstrument::MappedInstrument(Instrument::InstrumentType type,
         m_audioChannels(0)
 {}
 
-MappedInstrument::MappedInstrument(const Instrument &instr):
-        m_type(instr.getType()),
-        m_id(instr.getId()),
-        m_name(instr.getName()),
-        m_device((instr.getDevice())->getId()),
-        m_audioChannels(instr.getAudioChannels())
+MappedInstrument::MappedInstrument(const Instrument &instrument):
+        m_type(instrument.getType()),
+        m_id(instrument.getId()),
+        m_name(instrument.getName()),
+        m_device((instrument.getDevice())->getId()),
+        m_audioChannels(instrument.getNumAudioChannels())
 {}
 
-MappedInstrument::MappedInstrument(Instrument *instr):
-        m_type(instr->getType()),
-        m_id(instr->getId()),
-        m_name(instr->getName()),
-        m_device(instr->getDevice()->getId()),
-        m_audioChannels(instr->getAudioChannels())
+MappedInstrument::MappedInstrument(Instrument *instrument):
+        m_type(instrument->getType()),
+        m_id(instrument->getId()),
+        m_name(instrument->getName()),
+        m_device(instrument->getDevice()->getId()),
+        m_audioChannels(instrument->getNumAudioChannels())
 {}
 
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedInstrument *mI)
 {
@@ -84,7 +87,9 @@ operator>>(QDataStream &dS, MappedInstrument *mI)
 
     return dS;
 }
+*/
 
+/* unused
 QDataStream&
 operator>>(QDataStream &dS, MappedInstrument &mI)
 {
@@ -106,6 +111,7 @@ operator>>(QDataStream &dS, MappedInstrument &mI)
 
     return dS;
 }
+*/
 
 QDataStream&
 operator<<(QDataStream &dS, MappedInstrument *mI)
@@ -137,4 +143,3 @@ operator<<(QDataStream &dS, const MappedInstrument &mI)
 }
 
 }
-

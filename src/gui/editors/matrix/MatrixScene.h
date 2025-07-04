@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -42,6 +42,9 @@ class ZoomableRulerScale;
 class SnapGrid;
 
 /**
+ * An instance of this is created and owned by MatrixWidget.  See
+ * MatrixWidget::m_scene.
+ *
  * Specialised graphics scene for matrix elements.  The note blocks and
  * horizontal and vertical grid lines are all represented by graphics items
  * owned by this scene.  This scene also owns the MatrixViewSegment classes
@@ -83,7 +86,8 @@ public:
     void setMatrixWidget(MatrixWidget *w) { m_widget = w; };
     MatrixWidget *getMatrixWidget() { return m_widget; };
 
-    void setSegments(RosegardenDocument *doc, std::vector<Segment *> segments);
+    void setSegments(RosegardenDocument *document,
+                     std::vector<Segment *> segments);
 
     void handleEventAdded(Event *);
     void handleEventRemoved(Event *);
@@ -119,9 +123,9 @@ public:
 
     void setSnap(timeT);
 
-    bool constrainToSegmentArea(QPointF &scenePos);
+    // unused bool constrainToSegmentArea(QPointF &scenePos);
 
-    void playNote(Segment &segment, int pitch, int velocity = -1);
+    void playNote(const Segment &segment, int pitch, int velocity = -1);
 
     // SegmentObserver method forwarded from MatrixViewSegment
     void segmentEndMarkerTimeChanged(const Segment *s, bool shorten);
@@ -133,6 +137,10 @@ public:
 
     /// update all ViewSegments
     void updateAll();
+
+    // extra preview events
+    typedef std::map<const Event*, const Segment*> EventWithSegmentMap;
+    void setExtraPreviewEvents(const EventWithSegmentMap& events);
 
 signals:
     void mousePressed(const MatrixMouseEvent *e);
@@ -156,9 +164,6 @@ signals:
 
     void segmentDeleted(Segment *);
     void sceneDeleted(); // all segments have been removed
-
-public slots:
-    void slotRulerSelectionChanged(EventSelection *s);
 
 protected slots:
     void slotCommandExecuted();
@@ -186,7 +191,7 @@ private:
     /**
      * An index into both m_segments and m_viewSegments.
      */
-    int m_currentSegmentIndex;
+    unsigned m_currentSegmentIndex;
 
     RulerScale *m_scale; // I own this (it maps between time and scene x)
     ZoomableRulerScale *m_referenceScale; // I own this (it refers to m_scale
@@ -205,6 +210,8 @@ private:
     std::vector<QGraphicsLineItem *> m_horizontals;
     std::vector<QGraphicsLineItem *> m_verticals;
     std::vector<QGraphicsRectItem *> m_highlights;
+
+    EventWithSegmentMap m_additionalPreviewEvents;
 
     void setupMouseEvent(QGraphicsSceneMouseEvent *, MatrixMouseEvent &) const;
     void recreateLines();

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,29 +18,28 @@
 #ifndef RG_MUSICXMLXMLHANDLER_H
 #define RG_MUSICXMLXMLHANDLER_H
 
-#include "MusicXMLImportHelper.h"
-#include "MusicXMLLoader.h"
+#include "XMLHandler.h"
+
 #include "base/MidiProgram.h"
-#include "base/Studio.h"
-#include "base/Event.h"
-#include "base/Track.h"
+#include "base/TimeT.h"
 #include "base/NotationTypes.h"
-#include "misc/Version.h"
-#include "document/io/XMLHandler.h"
 
 #include <QCoreApplication>
 #include <QString>
 
+#include <map>
 #include <string>
-#include <vector>
-#include <queue>
 
 
 namespace Rosegarden
 {
 
+
+class Event;
+class MusicXMLImportHelper;
+class RosegardenDocument;
 class Segment;
-class Composition;
+class Track;
 
 
 class MusicXMLXMLHandler : public XMLHandler
@@ -76,7 +75,7 @@ public:
         Stop
     } TypeStatus;
 
-    MusicXMLXMLHandler(Composition *comp, Studio *studio);
+    explicit MusicXMLXMLHandler(RosegardenDocument *doc);
     ~MusicXMLXMLHandler() override;
 
     /**
@@ -95,7 +94,7 @@ public:
                             const QString& localName,
                             const QString& qName) override;
 
-    bool characters(const QString& ch) override;
+    bool characters(const QString& chars) override;
 
     bool endDocument () override;
 private:
@@ -103,11 +102,11 @@ private:
      * startElement() and endElement() call the functions below for
      * processing based on m_currentState
      */
-    
+
     bool startHeader(const QString& qName, const QXmlStreamAttributes& atts);
     bool endHeader(const QString& qName);
     bool startPartList(const QString& qName, const QXmlStreamAttributes& atts);
-    bool endPartList(const QString& qNames);
+    bool endPartList(const QString& qName);
     bool startMusicData(const QString& qName, const QXmlStreamAttributes& atts);
     bool endMusicData(const QString& qName);
     bool startNoteData(const QString& qName, const QXmlStreamAttributes& atts);
@@ -130,10 +129,10 @@ private:
     void ignoreElement();
     bool checkInteger(const QString &element, int &value);
     bool checkFloat(const QString &element, float &value);
-    void cerrInfo(const QString &message);
-    void cerrWarning(const QString &message);
-    void cerrError(const QString &message);
-    void cerrElementNotSupported(const QString &element);
+    static void cerrInfo(const QString &message);
+    static void cerrWarning(const QString &message);
+    static void cerrError(const QString &message);
+    static void cerrElementNotSupported(const QString &element);
     bool getAttributeString(const QXmlStreamAttributes& atts, const QString &name,
                             QString &value, bool required=true, const QString &defValue="");
     bool getAttributeInteger(const QXmlStreamAttributes& atts, const QString &name,
@@ -155,8 +154,7 @@ protected:
     typedef std::map<QString, int> IntegerMap;
     typedef std::map<QString, QueuedEvent> EventMap2;
 
-    Composition     *m_composition;
-    Studio          *m_studio;
+    RosegardenDocument *m_document;
 
     QString         m_errormessage;
 
@@ -224,8 +222,6 @@ protected:
     int             m_beats;
     int             m_beattype;
     bool            m_common;
-
-    bool            m_isgrace;
 
     // Key
     int             m_fifths;

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file originally from Sonic Visualiser, copyright 2007 Queen
     Mary, University of London.
@@ -35,22 +35,19 @@
 
 //#define DEBUG_FILE_SOURCE 1
 
+
 namespace Rosegarden {
 
-int
-FileSource::m_count = 0;
 
-QMutex
-FileSource::m_fileCreationMutex;
+int FileSource::m_count = 0;
 
-FileSource::RemoteRefCountMap
-FileSource::m_refCountMap;
+QMutex FileSource::m_fileCreationMutex;
 
-FileSource::RemoteLocalMap
-FileSource::m_remoteLocalMap;
+FileSource::RemoteRefCountMap FileSource::m_refCountMap;
 
-QMutex
-FileSource::m_mapMutex;
+FileSource::RemoteLocalMap FileSource::m_remoteLocalMap;
+
+QMutex FileSource::m_mapMutex;
 
 #ifdef DEBUG_FILE_SOURCE
 static int extantCount = 0;
@@ -96,7 +93,7 @@ FileSource::FileSource(QString fileOrUrl,
     if (m_url.toString() == "") {
         m_url = QUrl(fileOrUrl, QUrl::TolerantMode);
     }
- 
+
 #ifdef DEBUG_FILE_SOURCE
     std::cerr << "FileSource::FileSource(" << fileOrUrl << "): url <" << m_url.toString() << ">" << std::endl;
     incCount(m_url.toString());
@@ -280,7 +277,7 @@ FileSource::init()
 #endif
         QString resourceFile = m_url.toString();
         resourceFile.replace(QRegularExpression("^qrc:"), ":");
-        
+
         if (!QFileInfo(resourceFile).exists()) {
 #ifdef DEBUG_FILE_SOURCE
             std::cerr << "FileSource::init: Resource file of this name does not exist, switching to non-resource URL" << std::endl;
@@ -333,7 +330,6 @@ FileSource::init()
                 // Again, QUrl may have been mistreating us --
                 // e.g. dropping a part that looks like query data
                 m_localFilename = m_rawFileOrUrl;
-                literal = true;
                 if (!QFileInfo(m_localFilename).exists()) {
                     m_lastStatus = 404;
                 }
@@ -373,7 +369,7 @@ FileSource::init()
         QFile resourceFile(resourceFileName);
         resourceFile.open(QFile::ReadOnly);
         QByteArray ba(resourceFile.readAll());
-        
+
 #ifdef DEBUG_FILE_SOURCE
         std::cerr << "Copying " << ba.size() << " bytes from resource file to cache file" << std::endl;
 #endif
@@ -416,7 +412,7 @@ FileSource::init()
     }
 
     if (m_ok) {
-        
+
         QMutexLocker locker(&m_mapMutex);
 
         if (m_refCountMap[m_url] > 0) {
@@ -444,9 +440,10 @@ FileSource::init()
 //        if (m_progress && !m_done) {
 //            m_progress->setLabelText
 //                (tr("Downloading %1...").arg(m_url.toString()));
-//            connect(m_progress, SIGNAL(canceled()), this, SLOT(cancelled()));
-//            connect(this, SIGNAL(progress(int)),
-//                    m_progress, SLOT(setValue(int)));
+//            connect(m_progress, &QProgressDialog::canceled,
+//                    this, &FileSource::cancelled);
+//            connect(this, &FileSource::progress,
+//                    m_progress, &QProgressDialog::setValue);
 //        }
     }
 }
@@ -458,7 +455,7 @@ FileSource::initRemote()
 
     QNetworkRequest req;
     req.setUrl(m_url);
-    
+
     if (m_preferredContentType != "") {
 #ifdef DEBUG_FILE_SOURCE
         std::cerr << "FileSource: indicating preferred content type of \""
@@ -480,8 +477,14 @@ FileSource::initRemote()
 
     connect(m_reply, &QIODevice::readyRead,
             this, &FileSource::readyRead);
-    connect(m_reply, SIGNAL(error(QNetworkReply::NetworkError)),
-            this, SLOT(replyFailed(QNetworkReply::NetworkError)));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    connect(m_reply, &QNetworkReply::errorOccurred,
+            this, &FileSource::replyFailed);
+#else
+    connect(m_reply, (void(QNetworkReply::*)(QNetworkReply::NetworkError))
+                    &QNetworkReply::error,
+            this, &FileSource::replyFailed);
+#endif
     connect(m_reply, &QNetworkReply::finished,
             this, &FileSource::replyFinished);
     connect(m_reply, &QNetworkReply::metaDataChanged,
@@ -589,11 +592,13 @@ FileSource::waitForData()
     }
 }
 
+/* unused
 void
 FileSource::setLeaveLocalFile(bool leave)
 {
     m_leaveLocalFile = leave;
 }
+*/
 
 bool
 FileSource::isOK() const
@@ -619,11 +624,13 @@ FileSource::isRemote() const
     return m_remote;
 }
 
+/* unused
 QString
 FileSource::getLocation() const
 {
     return m_url.toString();
 }
+*/
 
 QString
 FileSource::getLocalFilename() const
@@ -631,18 +638,23 @@ FileSource::getLocalFilename() const
     return m_localFilename;
 }
 
+/* unused
 QString
 FileSource::getBasename() const
 {
     return QFileInfo(m_localFilename).fileName();
 }
+*/
 
+/* unused
 QString
 FileSource::getContentType() const
 {
     return m_contentType;
 }
+*/
 
+/* unused
 QString
 FileSource::getExtension() const
 {
@@ -652,12 +664,15 @@ FileSource::getExtension() const
         return QFileInfo(m_url.toLocalFile()).suffix().toLower();
     }
 }
+*/
 
+/* unused
 QString
 FileSource::getErrorString() const
 {
     return m_errorString;
 }
+*/
 
 void
 FileSource::readyRead()
@@ -741,6 +756,7 @@ FileSource::downloadProgress(qint64 done, qint64 total)
     emit progress(percent);
 }
 
+#if 0
 void
 FileSource::cancelled()
 {
@@ -750,6 +766,7 @@ FileSource::cancelled()
     m_ok = false;
     m_errorString = tr("Download cancelled");
 }
+#endif
 
 void
 FileSource::replyFinished()
@@ -969,11 +986,9 @@ FileSource::createCacheFile()
               << m_url.toString() << " -> local filename "
               << filepath << std::endl;
 #endif
-    
+
     m_localFilename = filepath;
     return false;
 }
 
 }
-
-

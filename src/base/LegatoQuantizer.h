@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -22,14 +22,17 @@ namespace Rosegarden {
 
 class BasicQuantizer;
 
+// cppcheck-suppress copyCtorAndEqOperator
 class LegatoQuantizer : public Quantizer
 {
 public:
     // The default unit is the shortest note type.  A unit of
     // zero means do no quantization -- unlike for BasicQuantizer
     // this does have a purpose, as it still does the legato step
-    LegatoQuantizer(timeT unit = -1);
-    LegatoQuantizer(std::string source, std::string target, timeT unit = -1);
+    explicit LegatoQuantizer(timeT unit = -1);
+    LegatoQuantizer(const std::string& source,
+                    const std::string& target,
+                    timeT unit = -1);
     LegatoQuantizer(const LegatoQuantizer &);
     ~LegatoQuantizer() override;
 
@@ -56,4 +59,3 @@ private:
 }
 
 #endif
-

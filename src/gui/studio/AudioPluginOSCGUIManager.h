@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,8 +20,8 @@
 #define RG_AUDIOPLUGINOSCGUIMANAGER_H
 
 #include "base/MidiProgram.h"
+#include "base/Instrument.h"
 #include "sound/RingBuffer.h"
-#include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
 #include <QCoreApplication>
@@ -32,6 +32,7 @@
 
 namespace Rosegarden
 {
+
 
 class TimerCallbackAssistant;
 class Studio;
@@ -45,23 +46,23 @@ class AudioPluginOSCGUIManager
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::AudioPluginOSCGUIManager)
 
 public:
-    AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow);
+    explicit AudioPluginOSCGUIManager(RosegardenMainWindow *mainWindow);
     virtual ~AudioPluginOSCGUIManager();
 
     void setStudio(Studio *studio) { m_studio = studio; }
 
-    bool hasGUI(InstrumentId id, int position);
-    void startGUI(InstrumentId id, int position);
-    void showGUI(InstrumentId id, int position);
-    void stopGUI(InstrumentId id, int position);
+    bool hasGUI(InstrumentId instrument, int position);
+    void startGUI(InstrumentId instrument, int position);
+    void showGUI(InstrumentId instrument, int position);
+    void stopGUI(InstrumentId instrument, int position);
     void stopAllGUIs();
 
     void postMessage(OSCMessage *message); // I take over ownership of message
     void dispatch();
 
-    void updateProgram(InstrumentId id, int position);
-    void updatePort(InstrumentId id, int position, int port);
-    void updateConfiguration(InstrumentId id, int position,
+    void updateProgram(InstrumentId instrument, int position);
+    void updatePort(InstrumentId instrument, int position, int port);
+    void updateConfiguration(InstrumentId instrument, int position,
                              QString key);
 
     QString getOSCUrl(InstrumentId instrument, int position,
@@ -96,4 +97,3 @@ protected:
 }
 
 #endif
-

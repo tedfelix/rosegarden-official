@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,18 +20,21 @@
 
 #include "base/Exception.h"
 #include "base/ViewElement.h"
-#include <vector>
-#include "base/Event.h"
-
+#include "base/TimeT.h"
 
 class QGraphicsItem;
-class ItemList;
+
+#include <vector>
+
+#define NONHIGHLIGHTOPACITY 0.3
 
 
 namespace Rosegarden
 {
 
+
 class Event;
+class Segment;
 
 
 /**
@@ -47,13 +50,13 @@ class NotationElement : public ViewElement
 {
 public:
     typedef Exception NoGraphicsItem;
-    
+
     /**
      * Create a new NotationElement encapsulating the Event in
      * parameter.  NotationElement does not take ownership of the
      * event itself.
      */
-    NotationElement(Event *event);
+    explicit NotationElement(Event *event, Segment *segment);
 
     /**
      * Only destroy the graphical representation of the Event, not the
@@ -84,7 +87,7 @@ public:
      * by NotationHLayout and set to this class using
      * setLayoutAirspace
      */
-    void getLayoutAirspace(double &x, double &width) {
+    void getLayoutAirspace(double &x, double &width) const {
         x = m_airX;
         width = m_airWidth;
     }
@@ -133,7 +136,7 @@ public:
      * Add an extra scene item associated with this element, for
      * example where an element has been split across two or more
      * staff rows.
-     * 
+     *
      * The element will take ownership of these scene items and
      * delete them when it deletes the main scene item.
      */
@@ -156,7 +159,7 @@ public:
      * element will probably not need to regenerate its item as
      * well, even if other indications suggest otherwise.
      */
-    bool isRecentlyRegenerated() { return m_recentlyRegenerated; }
+    bool isRecentlyRegenerated() const { return m_recentlyRegenerated; }
 
     bool isSelected();
     void setSelected(bool selected);
@@ -168,7 +171,7 @@ public:
      * Only a returned true is meaningful (when 2 notes are colliding, the
      * first element returns false and the second one returns true).
      */
-    bool isColliding() { return m_isColliding; }
+    bool isColliding() const { return m_isColliding; }
 
     void setIsColliding(bool value) { m_isColliding = value; }
 
@@ -176,6 +179,10 @@ public:
     QGraphicsItem *getItem() { return m_item; }
 
     static NotationElement *getNotationElement(QGraphicsItem *);
+
+    void setHighlight(bool highlight);
+
+    Segment* getSegment() { return m_segment; }
 
 protected:
     double m_airX;
@@ -190,10 +197,18 @@ protected:
 
     typedef std::vector<QGraphicsItem *> ItemList;
     ItemList *m_extraItems;
+
+ private:
+
+    // Remove copy ctor and op=.
+    NotationElement(const NotationElement &) = delete;
+    NotationElement &operator=(const NotationElement &) = delete;
+
+    bool m_highlight;
+    Segment *m_segment;
 };
 
 typedef ViewElementList NotationElementList;
-
 
 
 }

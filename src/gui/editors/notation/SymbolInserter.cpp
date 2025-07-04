@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -17,28 +17,29 @@
 
 #include "SymbolInserter.h"
 
-#include "commands/notation/SymbolInsertionCommand.h"
-
 #include "NotationTool.h"
 #include "NotationWidget.h"
 #include "NotationElement.h"
 #include "NotationStaff.h"
 #include "NotationScene.h"
 #include "NotationMouseEvent.h"
+
+#include "commands/notation/SymbolInsertionCommand.h"
+#include "document/CommandHistory.h"
 #include "gui/widgets/Panned.h"
 
-#include "document/CommandHistory.h"
 
 namespace Rosegarden
 {
+
 
 SymbolInserter::SymbolInserter(NotationWidget *widget) :
     NotationTool("symbolinserter.rc", "SymbolInserter", widget),
     m_symbol(Symbol::Segno)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("notes", SLOT(slotNotesSelected()));
+    createAction("select", &SymbolInserter::slotSelectSelected);
+    createAction("erase", &SymbolInserter::slotEraseSelected);
+    createAction("notes", &SymbolInserter::slotNotesSelected);
 }
 
 void
@@ -70,7 +71,7 @@ SymbolInserter::ready()
 }
 
 void
-SymbolInserter::slotSetSymbol(Symbol symbolType)
+SymbolInserter::slotSetSymbol(const Symbol& symbolType)
 {
     m_symbol = symbolType;
 }
@@ -96,6 +97,3 @@ SymbolInserter::handleLeftButtonPress(const NotationMouseEvent *e)
 QString SymbolInserter::ToolName() { return "symbolinserter"; }
 
 }
-
-
-

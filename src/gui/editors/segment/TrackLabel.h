@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -124,6 +124,8 @@ public:
      */
     bool isSelected() const { return m_selected; }
 
+    void setArchived(bool archived);
+
     /// The Track ID from Track::getId().  See getId(), setPosition()
     void setId(TrackId id) { m_id = id; }
     /// See setId(), getPosition()
@@ -149,7 +151,7 @@ signals:
     /**
      * Connected to TrackButtons::slotRenameTrack().
      */
-    void renameTrack(QString longLabel, QString shortLabel, TrackId trackId);
+    void renameTrack(const QString &longLabel, const QString &shortLabel, TrackId trackId);
 
     /// Sent on right-click to launch the instrument popup menu.
     /**
@@ -184,7 +186,10 @@ private:
     /// Position on the UI.
     int                  m_position;
 
-    bool                 m_selected;
+    bool m_selected;
+    bool m_archived = false;
+    void updatePalette();
+
 
     /// Timer to support the "left-click and hold" behavior.
     /**

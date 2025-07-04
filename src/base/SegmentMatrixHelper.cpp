@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -19,7 +19,7 @@
 namespace Rosegarden
 {
 
-Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
+Segment::iterator SegmentMatrixHelper::matrixInsertNote(Event* e)
 {
     Segment::iterator i = segment().insert(e);
     segment().normalizeRests(e->getAbsoluteTime(),
@@ -27,6 +27,7 @@ Segment::iterator SegmentMatrixHelper::insertNote(Event* e)
     return i;
 }
 
+/* unused
 bool
 SegmentMatrixHelper::isDrumColliding(Event* e)
 {
@@ -46,5 +47,6 @@ SegmentMatrixHelper::isDrumColliding(Event* e)
     }
     return false;
 }
+*/
 
 }

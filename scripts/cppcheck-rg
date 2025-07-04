@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# To filter on a specific problem:
+#   scripts/cppcheck-rg 2>&1 | grep noCopyConstructor
+# On a specific file:
+#   scripts/cppcheck-rg 2>&1 | grep SoundDriver
+
+# We can add "-j `nproc`" and this will run *really* fast, however the
+# unusedFunction check is not supported with -j so I've left it out.
+
+SRC=$1
+
+if [ -z "$SRC" ]
+then
+    SRC=src
+fi
+
+SRCPATH=`realpath $SRC`
+
+cppcheck --language=c++ --std=c++14 --library=qt.cfg --quiet \
+         --enable=all --inconclusive \
+         --inline-suppr --suppress=useStlAlgorithm \
+         --suppress=missingInclude --suppress=missingIncludeSystem \
+         --suppress=stlFindInsert \
+         -DHAVE_ALSA -DHAVE_LIBJACK -DHAVE_LIBSNDFILE -DHAVE_LILV -DHAVE_GTK2 \
+         -DHAVE_LIRC \
+         -I$SRCPATH \
+         $SRCPATH

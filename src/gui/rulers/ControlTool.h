@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -34,7 +34,9 @@ class ControlTool : public BaseTool
     Q_OBJECT
 
 public:
-    ControlTool(QString rcFileName, QString menuName, ControlRuler *ruler);
+    ControlTool(QString rcFileName,
+                const QString& menuName,
+                ControlRuler *ruler);
     ~ControlTool() override {};
 //    virtual int operator()(double x, int val) = 0;
     virtual void handleLeftButtonPress(const ControlMouseEvent *) {}

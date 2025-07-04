@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -76,7 +76,7 @@ private:
                      Indication *> IndicationMap;
     IndicationMap m_indications;
 
-    void guessDirections();
+    static void guessDirections();
     void applyTextDynamics();
     void applyHairpins();
     void stressBeats();
@@ -84,9 +84,9 @@ private:
 
     // test if the event is within an indication of the given type, return
     // an iterator pointing to that indication if so
-    IndicationMap::iterator findEnclosingIndication(Event *,
-                                                    std::string type);
-    int getVelocityForDynamic(std::string dynamic);
+    IndicationMap::iterator findEnclosingIndication(const Event *,
+                                                    const std::string& type);
+    static int getVelocityForDynamic(const std::string& dynamic);
 };
 
 

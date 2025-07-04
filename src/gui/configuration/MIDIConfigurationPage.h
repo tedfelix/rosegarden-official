@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -42,7 +42,7 @@ class MIDIConfigurationPage : public TabbedConfigurationPage
     Q_OBJECT
 
 public:
-    MIDIConfigurationPage(QWidget *parent);
+    explicit MIDIConfigurationPage(QWidget *parent);
 
     void apply() override;
 
@@ -66,6 +66,7 @@ private:
 
     QCheckBox *m_useDefaultStudio;
     QCheckBox *m_externalControllerPort;
+    QCheckBox *m_includeAlsaPortNumbersWhenMatching;
     QComboBox *m_controllerType;
     QCheckBox *m_allowResetAllControllers;
     QCheckBox *m_sendProgramChangesWhenLooping;
@@ -88,6 +89,8 @@ private:
     QComboBox *m_midiMachineControlMode;
     QComboBox *m_midiTimeCodeMode;
     QCheckBox *m_autoConnectSyncOut;
+
+    QSpinBox *m_ppqnSmfExport;
 
     void updateWidgets();
 

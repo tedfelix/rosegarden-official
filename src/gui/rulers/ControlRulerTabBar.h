@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,11 +19,18 @@
 #define RG_CONTROLRULERTABBAR_H
 
 #include <QTabBar>
-#include <QString>
+
+class QString;
+
 
 namespace Rosegarden
 {
 
+
+/// Adds close buttons to QTabBar.  Used by the control rulers.
+/**
+ * ??? rename: TabBar (this is a generic QTabBar with close buttons)
+ */
 class ControlRulerTabBar : public QTabBar
 {
     Q_OBJECT
@@ -33,7 +40,6 @@ public:
     virtual int addTab(const QString &text);
     void paintEvent(QPaintEvent *) override;
     void mousePressEvent(QMouseEvent *) override;
-//    virtual void handleLeftButtonPress(const ControlMouseEvent *);
 
 signals:
     void tabCloseRequest(int);
@@ -43,9 +49,12 @@ protected slots:
 protected:
     void tabLayoutChange() override;
     QPixmap m_closeIcon;
-    std::vector <QRect*> m_closeButtons;
-    static const int hMargin = 5;
+
+    typedef std::vector<std::shared_ptr<QRect>> CloseButtonVector;
+    CloseButtonVector m_closeButtons;
+
 };
+
 
 }
 

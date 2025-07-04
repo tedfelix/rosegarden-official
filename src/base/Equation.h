@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -36,8 +36,8 @@ public:
     static void solve(Unknown u, double &y, double &m, double &x, double &c);
     static void solve(Unknown u, int &y, double &m, int &x, int &c);
 
-    static void solveForYByEndPoints(Point a, Point b, double x, double &y);
-    static void solveForYByEndPoints(Point a, Point b, int x, int &y);
+    // unused static void solveForYByEndPoints(Point a, Point b, double x, double &y);
+    // unused static void solveForYByEndPoints(Point a, Point b, int x, int &y);
 };
 
 }

@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NoteStyle]"
 
 #include "NoteStyle.h"
 
@@ -417,6 +418,7 @@ NoteStyle::getTimeSignatureDigitName(int digit)
     }
 }
 
+/* unused
 CharName
 NoteStyle::getSomeCharName(QString qthing)
 {
@@ -441,6 +443,7 @@ NoteStyle::getSomeCharName(QString qthing)
 
     return NoteCharacterNames::UNKNOWN;
 }
+*/
 
 void
 NoteStyle::setBaseStyle(NoteStyleName name)
@@ -466,11 +469,11 @@ NoteStyle::setBaseStyle(NoteStyleName name)
 }
 
 void
-NoteStyle::checkDescription(Note::Type note)
+NoteStyle::checkDescription(Note::Type noteType)
 {
-    if (m_baseStyle && (m_notes.find(note) == m_notes.end())) {
-        m_baseStyle->checkDescription(note);
-        m_notes[note] = m_baseStyle->m_notes[note];
+    if (m_baseStyle && (m_notes.find(noteType) == m_notes.end())) {
+        m_baseStyle->checkDescription(noteType);
+        m_notes[noteType] = m_baseStyle->m_notes[noteType];
     }
 }
 

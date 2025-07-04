@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,22 +13,19 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #ifndef RG_OVERLAPS_H
 #define RG_OVERLAPS_H
+
+#include "Segment.h"
+#include "OverlapRange.h"
 
 #include <vector>
 #include <map>
 
-#include "Event.h"
-#include "Segment.h"
-#include "OverlapRange.h"
-
-
 
 namespace Rosegarden
 {
+
 
 /**
  * This class aims to pack in an unique object the list of notation
@@ -41,14 +38,13 @@ namespace Rosegarden
  * The template parameter may be Clef, Key or int (the last one to find out
  * transposition inconsistencies)
  */
-
 template <class T>
 class Overlaps : public std::map<timeT, OverlapRange<T> >
 {
 
 public :
 
-    Overlaps(
+    explicit Overlaps(
              std::vector<Segment *> segments
 )
 {
@@ -116,7 +112,7 @@ public :
         if (!getFirst(t1, t2, i)) return true;
         if (! isConsistent(i)) return false;
         while (getNext(t2, i)) {
-            if (! isConsistent(i)) return false; 
+            if (! isConsistent(i)) return false;
         }
         return true;
     }
@@ -163,7 +159,7 @@ public :
         if (it == this->end()) return false;
 
         typename std::map<timeT, OverlapRange<T> >::iterator next = it;
-        next++;
+        ++next;
         if (next == this->end()) return false;
 
         if (it->first > t2) return false;
@@ -175,7 +171,7 @@ public :
                       timeT &t1, timeT &t2)
     {
         t1 = it->first;
-        it++;
+        ++it;
         t2 = it->first;
     }
 
@@ -209,9 +205,9 @@ private :
 
 template <>
 inline Clef
-Overlaps<Clef>::getPropertyAtTime(Segment *seg, timeT time) const
+Overlaps<Clef>::getPropertyAtTime(Segment *segment, timeT time) const
 {
-    return  seg->getClefAtTime(time);
+    return  segment->getClefAtTime(time);
 }
 
 template <>
@@ -257,4 +253,3 @@ Overlaps<int>::getNextPropertyTime(Segment *, timeT time, timeT &nextTime) const
 
 
 #endif // RG_OVERLAPS_H
-

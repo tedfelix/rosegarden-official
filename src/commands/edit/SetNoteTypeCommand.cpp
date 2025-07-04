@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -35,12 +35,12 @@ SetNoteTypeCommand::modifySegment()
     EventVec toErase;
     EventVec toInsert;
 
-    EventContainer::iterator i;
     timeT endTime = getEndTime();
     SegmentNotationHelper segmentNotationHelper(m_selection->getSegment());
 
-    for (i = m_selection->getSegmentEvents().begin();
-            i != m_selection->getSegmentEvents().end(); ++i) {
+    for (EventContainer::iterator i = m_selection->getSegmentEvents().begin();
+         i != m_selection->getSegmentEvents().end();
+         ++i) {
 
         if ((*i)->isa(Note::EventType)) {
             toErase.push_back(*i);
@@ -67,13 +67,13 @@ SetNoteTypeCommand::modifySegment()
         }
     }
 
-    for (EventVec::iterator i = toErase.begin(); i != toErase.end(); ++i) {
-        m_selection->getSegment().eraseSingle(*i);
+    for (EventVec::iterator i1 = toErase.begin(); i1 != toErase.end(); ++i1) {
+        m_selection->getSegment().eraseSingle(*i1);
     }
 
-    for (EventVec::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
+    for (EventVec::iterator i1 = toInsert.begin(); i1 != toInsert.end(); ++i1) {
         Segment::iterator note =
-            m_selection->getSegment().insert(*i);
+            m_selection->getSegment().insert(*i1);
         // segmentNotationHelper sometimes erases the event and makes
         // new ones.  actualEvent is always the first event timewise,
         // though it may be followed by tied notes.

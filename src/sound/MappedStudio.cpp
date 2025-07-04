@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -64,6 +64,7 @@ static inline void releaseLock(const char *file, int line)
 //
 // ** Copyright (C) 1992-2000 Trolltech AS.  All rights reserved.
 //
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
 {
     v.clear();
@@ -77,6 +78,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectIdList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
 {
@@ -87,6 +89,7 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectIdList& v)
     return s;
 }
 
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
 {
     v.clear();
@@ -100,6 +103,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
 {
@@ -110,6 +114,7 @@ QDataStream& operator<<(QDataStream& s, const MappedObjectPropertyList& v)
     return s;
 }
 
+/* unused
 QDataStream& operator>>(QDataStream& s, MappedObjectValueList& v)
 {
     v.clear();
@@ -123,6 +128,7 @@ QDataStream& operator>>(QDataStream& s, MappedObjectValueList& v)
     }
     return s;
 }
+*/
 
 QDataStream& operator<<(QDataStream& s, const MappedObjectValueList& v)
 {
@@ -165,15 +171,12 @@ const MappedObjectProperty MappedPluginSlot::Copyright = "copyright";
 const MappedObjectProperty MappedPluginSlot::Category = "category";
 const MappedObjectProperty MappedPluginSlot::PortCount = "portcount";
 const MappedObjectProperty MappedPluginSlot::Ports = "ports";
-const MappedObjectProperty MappedPluginSlot::Instrument = "instrument";
-const MappedObjectProperty MappedPluginSlot::Position = "position";
 const MappedObjectProperty MappedPluginSlot::Bypassed = "bypassed";
 const MappedObjectProperty MappedPluginSlot::Programs = "programs";
 const MappedObjectProperty MappedPluginSlot::Program = "program";
 const MappedObjectProperty MappedPluginSlot::Configuration = "configuration";
 
 const MappedObjectProperty MappedPluginPort::PortNumber = "portnumber";
-const MappedObjectProperty MappedPluginPort::Name = "name";
 const MappedObjectProperty MappedPluginPort::Minimum = "minimum";
 const MappedObjectProperty MappedPluginPort::Maximum = "maximum";
 const MappedObjectProperty MappedPluginPort::Default = "default";
@@ -208,6 +211,7 @@ MappedObject::removeChild(MappedObject *object)
 
 // Return all child ids
 //
+/* unused
 MappedObjectPropertyList
 MappedObject::getChildren()
 {
@@ -218,10 +222,11 @@ MappedObject::getChildren()
 
     return list;
 }
-
+*/
 
 // Return all child ids of a certain type
 //
+ /* unused
 MappedObjectPropertyList
 MappedObject::getChildren(MappedObjectType type)
 {
@@ -234,6 +239,7 @@ MappedObject::getChildren(MappedObjectType type)
 
     return list;
 }
+*/
 
 void
 MappedObject::destroyChildren()
@@ -293,7 +299,8 @@ MappedStudio::MappedStudio() :
                      "MappedStudio",
                      Studio,
                      0),
-        m_runningObjectId(1)
+        m_runningObjectId(1),
+        m_soundDriver(nullptr)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);
@@ -654,6 +661,7 @@ MappedStudio::getObjectById(MappedObjectId id)
     return rv;
 }
 
+/* unused
 MappedObject*
 MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
 {
@@ -669,6 +677,7 @@ MappedStudio::getObjectByIdAndType(MappedObjectId id, MappedObjectType type)
     RELEASE_LOCK;
     return rv;
 }
+*/
 
 MappedObject*
 MappedStudio::getFirst(MappedObjectType type)
@@ -788,6 +797,7 @@ MappedConnectableObject::MappedConnectableObject(MappedObject *parent,
 MappedConnectableObject::~MappedConnectableObject()
 {}
 
+/* unused
 void
 MappedConnectableObject::setConnections(ConnectionDirection dir,
                                         MappedObjectValueList conns)
@@ -797,6 +807,7 @@ MappedConnectableObject::setConnections(ConnectionDirection dir,
     else
         m_connectionsOut = conns;
 }
+*/
 
 void
 MappedConnectableObject::addConnection(ConnectionDirection dir,
@@ -830,7 +841,7 @@ MappedConnectableObject::removeConnection(ConnectionDirection dir,
 }
 
 MappedObjectValueList
-MappedConnectableObject::getConnections(ConnectionDirection dir)
+MappedConnectableObject::getConnections(ConnectionDirection dir) const
 {
     if (dir == In)
         return m_connectionsIn;
@@ -1191,7 +1202,11 @@ MappedAudioInput::setProperty(const MappedObjectProperty &property,
 
 
 MappedPluginSlot::MappedPluginSlot(MappedObject *parent, MappedObjectId id) :
-        MappedObject(parent, "MappedPluginSlot", PluginSlot, id)
+    MappedObject(parent, "MappedPluginSlot", PluginSlot, id),
+    m_portCount(0),
+    m_instrument(0),
+    m_position(0),
+    m_bypassed(false)
 {
 #ifdef DEBUG_MAPPEDSTUDIO
     std::cerr << "MappedPluginSlot::MappedPluginSlot: id = " << id << std::endl;
@@ -1285,6 +1300,7 @@ MappedPluginSlot::getProperty(const MappedObjectProperty &property,
     return true;
 }
 
+/* unused
 bool
 MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
@@ -1292,7 +1308,7 @@ MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
     if (property == Identifier) {
         value = m_identifier;
     } else if (property == PluginName) {
-        value = m_name;
+        value = m_pluginName;
     } else if (property == Label) {
         value = m_label;
     } else if (property == Author) {
@@ -1320,6 +1336,7 @@ MappedPluginSlot::getStringProperty(const MappedObjectProperty &property,
     }
     return true;
 }
+*/
 
 QString
 MappedPluginSlot::getProgram(int bank, int program)
@@ -1429,7 +1446,7 @@ MappedPluginSlot::setStringProperty(const MappedObjectProperty &property,
         m_configuration.clear();
 
     } else if (property == PluginName) {
-        m_name = value;
+        m_pluginName = value;
     } else if (property == Label) {
         m_label = value;
     } else if (property == Author) {
@@ -1472,6 +1489,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
             dynamic_cast<MappedStudio*>(getParent());
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
+             // cppcheck-suppress StlMissingComparison
                 i != values.end(); ++i) {
 
             QString key = *i;
@@ -1500,6 +1518,7 @@ MappedPluginSlot::setPropertyList(const MappedObjectProperty &property,
         m_configuration.clear();
 
         for (MappedObjectPropertyList::const_iterator i = values.begin();
+             // cppcheck-suppress StlMissingComparison
              i != values.end(); ++i) {
 
             QString key = *i;
@@ -1551,7 +1570,9 @@ MappedPluginSlot::getPort(unsigned long portNumber)
 
 
 MappedPluginPort::MappedPluginPort(MappedObject *parent, MappedObjectId id) :
-        MappedObject(parent, "MappedPluginPort", PluginPort, id)
+    MappedObject(parent, "MappedPluginPort", PluginPort, id),
+    m_portNumber(0),
+    m_displayHint(PluginPort::NoHint)
 {}
 
 MappedPluginPort::~MappedPluginPort()
@@ -1605,12 +1626,13 @@ MappedPluginPort::getProperty(const MappedObjectProperty &property,
     return true;
 }
 
+/* unused
 bool
 MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
                                     QString &value)
 {
     if (property == Name) {
-        value = m_name;
+        value = m_portName;
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1622,6 +1644,7 @@ MappedPluginPort::getStringProperty(const MappedObjectProperty &property,
     }
     return true;
 }
+*/
 
 void
 MappedPluginPort::setValue(MappedObjectValue value)
@@ -1640,7 +1663,8 @@ MappedPluginPort::setValue(MappedObjectValue value)
             if (drv) {
                 drv->setPluginInstancePortValue(slot->getInstrument(),
                                                 slot->getPosition(),
-                                                m_portNumber, value);
+                                                m_portNumber,
+                                                value);
             }
         }
     }
@@ -1703,7 +1727,7 @@ MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
                                     QString value)
 {
     if (property == Name) {
-        m_name = value;
+        m_portName = value;
     } else {
 
 #ifdef DEBUG_MAPPEDSTUDIO
@@ -1716,6 +1740,3 @@ MappedPluginPort::setStringProperty(const MappedObjectProperty &property,
 
 
 }
-
-
-

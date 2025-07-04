@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -24,6 +24,7 @@
 #include "base/LayoutEngine.h"
 #include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
+#include "base/Pitch.h"
 #include "base/Profiler.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
@@ -113,6 +114,7 @@ NotationHLayout::getAvailableSpacings()
     return m_availableSpacings;
 }
 
+/* unused
 std::vector<int>
 NotationHLayout::getAvailableProportions()
 {
@@ -126,6 +128,7 @@ NotationHLayout::getAvailableProportions()
     }
     return m_availableProportions;
 }
+*/
 
 NotationHLayout::BarDataList &
 NotationHLayout::getBarData(ViewSegment &staff)
@@ -139,14 +142,15 @@ NotationHLayout::getBarData(ViewSegment &staff)
 }
 
 const NotationHLayout::BarDataList &
-NotationHLayout::getBarData(ViewSegment &staff) const
+NotationHLayout::getBarDataConst(ViewSegment &staff) const
 {
-    return ((NotationHLayout *)this)->getBarData(staff);
+    // trick to call the non const method here
+    return const_cast<NotationHLayout *>(this)->getBarData(staff);
 }
 
 NotationElementList::iterator
 NotationHLayout::getStartOfQuantizedSlice(NotationElementList *notes,
-                                          timeT t) const
+                                          timeT t)
 {
     NotationElementList::iterator i = notes->findTime(t);
     NotationElementList::iterator j(i);
@@ -376,7 +380,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                     ottavaShift = 0;
                 }
             }
-            
+
             // Clefs and key signatures must always be memorized here (even
             // when they are invisible) as the way other elements are displayed
             // may depend from them.
@@ -439,7 +443,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                 // the only text events of interest are lyrics, which
                 // contribute to a fixed area following the next chord
 
-                if (isLyric && (!m_distributeVerses || (m_distributeVerses && verseOk))) {
+                if (isLyric && (!m_distributeVerses || verseOk)) {
                     lyricWidth = std::max
                         (lyricWidth, float(npf->getTextWidth(Text(*el->event()))));
                     RG_DEBUG << "Setting lyric width to " << lyricWidth
@@ -531,7 +535,7 @@ NotationHLayout::setBarBasicData(ViewSegment &staff,
                                  int barNo,
                                  NotationElementList::iterator start,
                                  bool correct,
-                                 TimeSignature timeSig,
+                                 const TimeSignature& timeSig,
                                  bool newTimeSig,
                                  timeT segDelay,
                                  TrackId trackId
@@ -1475,7 +1479,6 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
 
         RG_DEBUG << "have " << chunks.size() << " chunks, reconciledWidth " << bdi->second.sizeData.reconciledWidth << ", idealWidth " << bdi->second.sizeData.idealWidth << ", ratio " << reconcileRatio;
 
-        double delta = 0;
         float sigx = 0.f;
 
         for (NotationElementList::iterator it = from;
@@ -1483,7 +1486,7 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
              ++it) {
 
             NotationElement *el = static_cast<NotationElement*>(*it);
-            delta = 0;
+            float delta = 0;
             float fixed = 0;
 
             if (el->event()->isa(Note::EventType)) {
@@ -1567,10 +1570,10 @@ NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
 
             RG_DEBUG << "layout(): setting element's x to " << x << " (was " << el->getLayoutX() << ")";
 
-            double displacedX = 0.0;
             long dxRaw = 0;
             el->event()->get<Int>(DISPLACED_X, dxRaw);
-            displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
+            double displacedX =
+                double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
             el->setLayoutX(x + displacedX);
             el->setLayoutAirspace(x, int(delta));
@@ -1716,6 +1719,7 @@ NotationHLayout::sampleGroupElement(ViewSegment &staff,
     }
 }
 
+/* unused
 timeT
 NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationElementList::iterator &i)
@@ -1737,7 +1741,9 @@ NotationHLayout::getSpacingDuration(ViewSegment &staff,
         return (*j)->getViewAbsoluteTime() - (*i)->getViewAbsoluteTime();
     }
 }
+*/
 
+/* unused
 timeT
 NotationHLayout::getSpacingDuration(ViewSegment &staff,
                                     const NotationChord &chord)
@@ -1759,6 +1765,7 @@ NotationHLayout::getSpacingDuration(ViewSegment &staff,
 
     return d;
 }
+*/
 
 void
 NotationHLayout::positionChord(ViewSegment &staff,
@@ -1796,10 +1803,9 @@ NotationHLayout::positionChord(ViewSegment &staff,
 
         NotationElement *elt = static_cast<NotationElement*>(*citr);
 
-        double displacedX = 0.0;
         long dxRaw = 0;
         elt->event()->get<Int>(DISPLACED_X, dxRaw);
-        displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
+        double displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
         elt->setLayoutX(baseX + displacedX);
         elt->setLayoutAirspace(baseX, delta);
@@ -1958,6 +1964,7 @@ NotationHLayout::getLayoutWidth(ViewElement &ve,
 
             w += m_npf->getKeyWidth(key, cancelKey);
 
+            // cppcheck-suppress duplicateBranch
         } else if (e.event()->isa(Indication::EventType) ||
                    e.event()->isa(Text::EventType)) {
 
@@ -2028,7 +2035,7 @@ NotationHLayout::getFirstVisibleBar() const
 int
 NotationHLayout::getFirstVisibleBarOnViewSegment(ViewSegment &staff) const
 {
-    const BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarDataConst(staff));
 
     int bar = 0;
     if (bdl.begin() != bdl.end()) bar = bdl.begin()->first;
@@ -2061,7 +2068,7 @@ NotationHLayout::getLastVisibleBar() const
 int
 NotationHLayout::getLastVisibleBarOnViewSegment(ViewSegment &staff) const
 {
-    const BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarDataConst(staff));
     int bar = 0;
 
     if (bdl.begin() != bdl.end()) {
@@ -2075,11 +2082,11 @@ NotationHLayout::getLastVisibleBarOnViewSegment(ViewSegment &staff) const
 }
 
 double
-NotationHLayout::getBarPosition(int bar) const
+NotationHLayout::getBarPosition(int barNo) const
 {
     double position = 0.0;
 
-    BarPositionList::const_iterator i = m_barPositions.find(bar);
+    BarPositionList::const_iterator i = m_barPositions.find(barNo);
 
     if (i != m_barPositions.end()) {
 
@@ -2089,12 +2096,12 @@ NotationHLayout::getBarPosition(int bar) const
 
         i = m_barPositions.begin();
         if (i != m_barPositions.end()) {
-            if (bar < i->first)
+            if (barNo < i->first)
                 position = i->second;
             else {
                 i = m_barPositions.end();
                 --i;
-                if (bar > i->first)
+                if (barNo > i->first)
                     position = i->second;
             }
         }
@@ -2106,12 +2113,12 @@ NotationHLayout::getBarPosition(int bar) const
 }
 
 bool
-NotationHLayout::isBarCorrectOnViewSegment(ViewSegment &staff, int i) const
+NotationHLayout::isBarCorrectOnViewSegment(ViewSegment &staff, int barNo) const
 {
-    const BarDataList &bdl(getBarData(staff));
-    ++i;
+    const BarDataList &bdl(getBarDataConst(staff));
+    ++barNo;
 
-    BarDataList::const_iterator bdli(bdl.find(i));
+    BarDataList::const_iterator bdli(bdl.find(barNo));
     if (bdli != bdl.end()) return bdli->second.basicData.correct;
     else return true;
 }
@@ -2121,7 +2128,7 @@ bool NotationHLayout::getTimeSignaturePosition(ViewSegment &staff,
                                                TimeSignature &timeSig,
                                                double &timeSigX) const
 {
-    const BarDataList &bdl(getBarData(staff));
+    const BarDataList &bdl(getBarDataConst(staff));
 
     BarDataList::const_iterator bdli(bdl.find(barNo));
     if (bdli != bdl.end()) {
@@ -2139,9 +2146,9 @@ NotationHLayout::getTimeForX(double x) const
 }
 
 double
-NotationHLayout::getXForTime(timeT t) const
+NotationHLayout::getXForTime(timeT time) const
 {
-    return RulerScale::getXForTime(t);
+    return RulerScale::getXForTime(time);
 }
 
 double
@@ -2211,7 +2218,7 @@ std::vector<int> NotationHLayout::m_availableProportions;
 
 /// YG: Only for debug
 void
-NotationHLayout::BarData::dump(std::string indent)
+NotationHLayout::BarData::dump(const std::string& indent)
 {
     RG_DEBUG << indent
              << "basic(start=<x>"

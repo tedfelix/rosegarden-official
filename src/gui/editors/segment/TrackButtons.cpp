@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -23,6 +23,7 @@
 #include "TrackVUMeter.h"
 
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "base/AudioPluginInstance.h"
 #include "base/Composition.h"
@@ -36,7 +37,6 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
-#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -47,31 +47,72 @@
 #include "sequencer/RosegardenSequencer.h"
 
 #include <QApplication>
-#include <QLayout>
-#include <QMessageBox>
+#include <QVBoxLayout>
 #include <QCursor>
 #include <QFrame>
 #include <QIcon>
-#include <QLabel>
-#include <QObject>
 #include <QPixmap>
 #include <QMenu>
 #include <QSignalMapper>
 #include <QString>
-#include <QTimer>
-#include <QWidget>
-#include <QStackedWidget>
-#include <QToolTip>
 
 
 namespace
 {
-// Constants
-constexpr int borderGap = 1;
-constexpr int buttonGap = 8;
-constexpr int vuSpacing = 2;
-constexpr int minWidth = 200;
+    // Constants
+    constexpr int borderGap = 1;
+    constexpr int buttonGap = 8;
+    constexpr int vuSpacing = 2;
+    constexpr int minWidth = 200;
+
+    // Colors
+
+    // Parent background color.  This is the area where there are no
+    // buttons.
+    QColor getBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(32, 32, 32);
+        else
+            return QColor(0xDD, 0xDD, 0xDD);
+    }
+
+    // Normal button background color.
+    // This is the color of a button that is in normal state as opposed to
+    // Archive.
+    QColor getButtonBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(64, 64, 64);
+        else
+            return QColor(0xDD, 0xDD, 0xDD);
+    }
+
+    // Archive button background color.
+    QColor getArchiveButtonBackgroundColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(Qt::black);
+        else
+            return QColor(0x88, 0x88, 0x88);
+    }
+
+    // Color for the numbers to the left.  The label text color is
+    // handled in TrackLabel::updatePalette().
+    QColor getTextColor()
+    {
+        if (Rosegarden::Preferences::getTheme() ==
+                Rosegarden::Preferences::DarkTheme)
+            return QColor(Qt::white);
+        else
+            return QColor(Qt::black);
+    }
+
 }
+
 
 namespace Rosegarden
 {
@@ -96,8 +137,8 @@ TrackButtons::TrackButtons(int trackCellHeight,
     setFrameStyle(Plain);
 
     QPalette pal = palette();
-    pal.setColor(backgroundRole(), QColor(0xDD, 0xDD, 0xDD));
-    pal.setColor(foregroundRole(), Qt::black);
+    pal.setColor(backgroundRole(), getBackgroundColor());
+    pal.setColor(foregroundRole(), getTextColor());
     setPalette(pal);
 
     // when we create the widget, what are we looking at?
@@ -117,21 +158,30 @@ TrackButtons::TrackButtons(int trackCellHeight,
 
     m_layout->addStretch(20);
 
-    connect(m_recordSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleRecord(int)));
-
-    connect(m_muteSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleMute(int)));
-
-    connect(m_soloSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotToggleSolo(int)));
-
     // connect signal mappers
-    connect(m_instListSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotInstrumentMenu(int)));
-
-    connect(m_clickedSigMapper, SIGNAL(mapped(int)),
-            this, SLOT(slotTrackSelected(int)));
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
+    connect(m_recordSigMapper, &QSignalMapper::mappedInt,
+            this, &TrackButtons::slotToggleRecord);
+    connect(m_muteSigMapper, &QSignalMapper::mappedInt,
+            this, &TrackButtons::slotToggleMute);
+    connect(m_soloSigMapper, &QSignalMapper::mappedInt,
+            this, &TrackButtons::slotToggleSolo);
+    connect(m_instListSigMapper, &QSignalMapper::mappedInt,
+            this, &TrackButtons::slotInstrumentMenu);
+    connect(m_clickedSigMapper, &QSignalMapper::mappedInt,
+            this, &TrackButtons::slotTrackSelected);
+#else
+    connect(m_recordSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotToggleRecord);
+    connect(m_muteSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotToggleMute);
+    connect(m_soloSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotToggleSolo);
+    connect(m_instListSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotInstrumentMenu);
+    connect(m_clickedSigMapper, static_cast<void(QSignalMapper::*)(int)>(&QSignalMapper::mapped),
+            this, &TrackButtons::slotTrackSelected);
+#endif
 
     // We have to force the height for the moment
     //
@@ -139,13 +189,6 @@ TrackButtons::TrackButtons(int trackCellHeight,
 
     // We never remove the observer so we should be ok here.
     RosegardenDocument::currentDocument->getComposition().addObserver(this);
-
-    // We do not care about RWM::documentLoaded() because if a new
-    // document is being loaded, we are going away.  A new TrackButtons
-    // instance is created for each new document.
-    //connect(RosegardenMainWindow::self(),
-    //            &RosegardenMainWindow::documentLoaded,
-    //        this, &TrackButtons::slotDocumentLoaded);
 }
 
 TrackButtons::~TrackButtons()
@@ -167,51 +210,66 @@ TrackButtons::updateUI(Track *track)
     if (pos < 0  ||  pos >= m_tracks)
         return;
 
+    RosegardenDocument *document = RosegardenDocument::currentDocument;
+    if (!document)
+        return;
 
-    // *** Archive Background
+
+    // *** Button Colors
 
     QFrame *hbox = m_trackHBoxes.at(pos);
+    QPalette palette = hbox->palette();
     if (track->isArchived()) {
-        // Go with the dark gray background.
-        QPalette palette = hbox->palette();
-        palette.setColor(hbox->backgroundRole(), QColor(0x88, 0x88, 0x88));
-        hbox->setPalette(palette);
+        palette.setColor(hbox->backgroundRole(),
+                         getArchiveButtonBackgroundColor());
     } else {
-        // Go with the parent's background color.
-        QColor parentBackground = palette().color(backgroundRole());
-        QPalette palette = hbox->palette();
-        palette.setColor(hbox->backgroundRole(), parentBackground);
-        hbox->setPalette(palette);
+        palette.setColor(hbox->backgroundRole(), getButtonBackgroundColor());
     }
+
+    hbox->setPalette(palette);
 
 
     // *** Mute LED
 
-    if (track->isMuted()) {
+    if (track->isMuted())
         m_muteLeds[pos]->off();
-    } else {
+    else
         m_muteLeds[pos]->on();
-    }
+
+    if (track->isArchived())
+        m_muteLeds[pos]->hide();
+    else
+        m_muteLeds[pos]->show();
 
 
     // *** Record LED
 
     Instrument *ins =
-            RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
+            document->getStudio().getInstrumentById(track->getInstrument());
     m_recordLeds[pos]->setColor(getRecordLedColour(ins));
 
     // Note: setRecord() used to be used to do this.  But that would
     //       set the track in the composition to record as well as setting
     //       the button on the UI.  This seems better and works fine.
     bool recording =
-            RosegardenDocument::currentDocument->getComposition().isTrackRecording(track->getId());
+            document->getComposition().isTrackRecording(track->getId());
     setRecordButton(pos, recording);
+
+    if (track->isArchived())
+        m_recordLeds[pos]->hide();
+    else
+        m_recordLeds[pos]->show();
 
 
     // *** Solo LED
 
     // ??? An Led::setState(bool) would be handy.
     m_soloLeds[pos]->setState(track->isSolo() ? Led::On : Led::Off);
+
+    if (track->isArchived())
+        m_soloLeds[pos]->hide();
+    else
+        m_soloLeds[pos]->show();
 
 
     // *** Track Label
@@ -242,7 +300,8 @@ TrackButtons::updateUI(Track *track)
     label->updateLabel();
 
     label->setSelected(
-            track->getId() == RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
+            track->getId() == document->getComposition().getSelectedTrack());
+    label->setArchived(track->isArchived());
 
 }
 
@@ -292,7 +351,8 @@ TrackButtons::initInstrumentNames(Instrument *ins, TrackLabel *label)
 
         if (ins->sendsProgramChange()) {
             label->setProgramChangeName(
-                    QObject::tr(ins->getProgramName().c_str()));
+                    QCoreApplication::translate("INSTRUMENT",
+                                                ins->getProgramName().c_str()));
         } else {
             label->setProgramChangeName("");
         }
@@ -319,18 +379,18 @@ TrackButtons::populateButtons()
 }
 
 void
-TrackButtons::slotToggleMute(int pos)
+TrackButtons::slotToggleMute(int position)
 {
     //RG_DEBUG << "TrackButtons::slotToggleMute( position =" << pos << ")";
 
     if (!RosegardenDocument::currentDocument)
         return;
 
-    if (pos < 0  ||  pos >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Track *track = comp.getTrackByPosition(pos);
+    Track *track = comp.getTrackByPosition(position);
 
     if (!track)
         return;
@@ -358,18 +418,18 @@ void TrackButtons::toggleSolo()
 }
 
 void
-TrackButtons::slotToggleSolo(int pos)
+TrackButtons::slotToggleSolo(int position)
 {
-    //RG_DEBUG << "slotToggleSolo( position =" << pos << ")";
+    //RG_DEBUG << "slotToggleSolo( position =" << position << ")";
 
     if (!RosegardenDocument::currentDocument)
         return;
 
-    if (pos < 0  ||  pos >= m_tracks)
+    if (position < 0  ||  position >= m_tracks)
         return;
 
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Track *track = comp.getTrackByPosition(pos);
+    Track *track = comp.getTrackByPosition(position);
 
     if (!track)
         return;
@@ -384,7 +444,7 @@ TrackButtons::slotToggleSolo(int pos)
         // For each track
         for (int i = 0; i < m_tracks; ++i) {
             // Except the one that is being toggled.
-            if (i == pos)
+            if (i == position)
                 continue;
 
             Track *track2 = comp.getTrackByPosition(i);
@@ -605,7 +665,8 @@ TrackButtons::getHighlightedTracks()
 #endif
 
 void
-TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId)
+TrackButtons::slotRenameTrack(
+        const QString &longLabel, const QString &shortLabel, TrackId trackId)
 {
     if (!RosegardenDocument::currentDocument) return;
 
@@ -613,7 +674,7 @@ TrackButtons::slotRenameTrack(QString longLabel, QString shortLabel, TrackId tra
 
     if (!track) return;
 
-    TrackLabel *label = m_trackLabels[track->getPosition()];
+    const TrackLabel *label = m_trackLabels[track->getPosition()];
 
     // If neither label is changing, skip it
     if (label->getTrackName() == longLabel &&
@@ -709,7 +770,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
                    connectedSelectedPixmap, unconnectedSelectedPixmap;
 
     static bool havePixmaps = false;
-        
+
     if (!havePixmaps) {
 
         connectedPixmap = IconLoader::loadPixmap("connected");
@@ -739,13 +800,15 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
     InstrumentList list = studio.getPresentationInstruments();
 
     // For each instrument
-    for (InstrumentList::iterator it = list.begin(); it != list.end(); ++it) {
+    for (InstrumentList::iterator instrumentIter = list.begin();
+         instrumentIter != list.end();
+         ++instrumentIter) {
 
-        if (!(*it)) continue; // sanity check
+        if (!(*instrumentIter)) continue; // sanity check
 
         // get the Localized instrument name, with the string hackery performed
         // in Instrument
-        QString iname((*it)->getLocalizedPresentationName());
+        QString iname((*instrumentIter)->getLocalizedPresentationName());
 
         // translate the program name
         //
@@ -755,25 +818,27 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         // to coax tr() into behaving nicely.  I decided to change it as little
         // as possible to get it to compile, and not refactor this down to the
         // simplest way to call tr() on a C string.
-        QString programName(strtoqstr((*it)->getProgramName()));
-        programName = QObject::tr(programName.toStdString().c_str());
+        QString programName(strtoqstr((*instrumentIter)->getProgramName()));
+        programName = QCoreApplication::translate(
+                                            "INSTRUMENT",
+                                            programName.toStdString().c_str());
 
-        Device *device = (*it)->getDevice();
+        Device *device = (*instrumentIter)->getDevice();
         DeviceId devId = device->getId();
         bool connectedIcon = false;
 
         // Determine the proper program name and whether it is connected
 
-        if ((*it)->getType() == Instrument::SoftSynth) {
+        if ((*instrumentIter)->getType() == Instrument::SoftSynth) {
             programName = "";
             AudioPluginInstance *plugin =
-                    (*it)->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
+                    (*instrumentIter)->getPlugin(Instrument::SYNTH_PLUGIN_POSITION);
             if (plugin) {
                 // we don't translate any plugin program names or other texts
                 programName = strtoqstr(plugin->getDisplayName());
                 connectedIcon = (plugin->getIdentifier() != "");
             }
-        } else if ((*it)->getType() == Instrument::Audio) {
+        } else if ((*instrumentIter)->getType() == Instrument::Audio) {
             connectedIcon = true;
         } else {
             QString conn = RosegardenSequencer::getInstance()->
@@ -785,7 +850,7 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
         bool instrUsedByMe = false;
         bool instrUsedByAnyone = false;
 
-        if (thisTrackInstr && thisTrackInstr->getId() == (*it)->getId()) {
+        if (thisTrackInstr && thisTrackInstr->getId() == (*instrumentIter)->getId()) {
             instrUsedByMe = true;
             instrUsedByAnyone = true;
         }
@@ -801,18 +866,20 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             if (instrUsedByMe)
                 deviceUsedByAnyone = true;
             else {
-                for (Composition::trackcontainer::iterator tit =
+                // For each Track...
+                for (Composition::TrackMap::iterator trackIter =
                          comp.getTracks().begin();
-                     tit != comp.getTracks().end(); ++tit) {
+                     trackIter != comp.getTracks().end();
+                     ++trackIter) {
 
-                    if (tit->second->getInstrument() == (*it)->getId()) {
+                    if (trackIter->second->getInstrument() == (*instrumentIter)->getId()) {
                         instrUsedByAnyone = true;
                         deviceUsedByAnyone = true;
                         break;
                     }
 
                     Instrument *instr =
-                        studio.getInstrumentById(tit->second->getInstrument());
+                        studio.getInstrumentById(trackIter->second->getInstrument());
                     if (instr && (instr->getDevice()->getId() == devId)) {
                         deviceUsedByAnyone = true;
                     }
@@ -834,7 +901,9 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             //subMenu->menuAction()->setIconVisibleInMenu(true);
 
             // Menu title
-            QString deviceName = QObject::tr(device->getName().c_str());
+            QString deviceName = QCoreApplication::translate(
+                                                    "INSTRUMENT",
+                                                    device->getName().c_str());
             subMenu->setTitle(deviceName);
 
             // QObject name
@@ -844,20 +913,21 @@ TrackButtons::populateInstrumentPopup(Instrument *thisTrackInstr, QMenu* instrum
             instrumentPopup->addMenu(subMenu);
 
             // Connect the submenu to slotInstrumentSelected()
-            connect(subMenu, SIGNAL(triggered(QAction*)),
-                    this, SLOT(slotInstrumentSelected(QAction*)));
+            connect(subMenu, &QMenu::triggered,
+                    this, static_cast<void(TrackButtons::*)(QAction *)>(
+                            &TrackButtons::slotInstrumentSelected));
 
             currentSubMenu = subMenu;
 
         } else if (!instrUsedByMe) {
 
             // Search the tracks to see if anyone else is using this
-            // instrument
-            for (Composition::trackcontainer::iterator tit =
+            // instrument.
+            for (Composition::TrackMap::const_iterator trackIter =
                      comp.getTracks().begin();
-                 tit != comp.getTracks().end(); ++tit) {
-
-                if (tit->second->getInstrument() == (*it)->getId()) {
+                 trackIter != comp.getTracks().end();
+                 ++trackIter) {
+                if (trackIter->second->getInstrument() == (*instrumentIter)->getId()) {
                     instrUsedByAnyone = true;
                     break;
                 }
@@ -1107,10 +1177,31 @@ TrackButtons::makeButton(Track *track)
     trackHBox->setFrameShape(QFrame::StyledPanel);
     trackHBox->setFrameShadow(QFrame::Raised);
 
+    // Colors
+    if (Preferences::getTheme() == Preferences::DarkTheme) {
+        QPalette palette = trackHBox->palette();
+        // This sets the inner highlight.
+        // ??? Sometimes the inner and outer highlights get mixed up.
+        //     Not sure why.  But don't expect this to do what you ask.
+        palette.setColor(QPalette::Button, QColor(128,128,128));
+        // This sets the outer highlight.
+        // ??? Sometimes the inner and outer highlights get mixed up.
+        //     Not sure why.  But don't expect this to do what you ask.
+        //     Also an even more outer highlight can appear.  It's bizarre.
+        //     For 128 and 64 it added a 32 highlight.
+        palette.setColor(QPalette::Light, QColor(64,64,64));
+        // This sets the inner lowlight.
+        palette.setColor(QPalette::Dark, QColor(16,16,16));
+        // This sets the outer lowlight.
+        palette.setColor(QPalette::Shadow, Qt::black);
+        trackHBox->setPalette(palette);
+    }
+
     // We will be changing the background color, so turn on auto-fill.
     trackHBox->setAutoFillBackground(true);
 
     // Insert a little gap
+    // ??? Use margins?
     hblayout->addSpacing(vuSpacing);
 
 
@@ -1140,8 +1231,8 @@ TrackButtons::makeButton(Track *track)
     mute->setToolTip(tr("Mute track"));
     hblayout->addWidget(mute);
 
-    connect(mute, SIGNAL(stateChanged(bool)),
-            m_muteSigMapper, SLOT(map()));
+    connect(mute, &LedButton::stateChanged,
+            m_muteSigMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     m_muteSigMapper->setMapping(mute, track->getPosition());
 
     m_muteLeds.push_back(mute);
@@ -1158,8 +1249,8 @@ TrackButtons::makeButton(Track *track)
     record->setToolTip(tr("Record on this track"));
     hblayout->addWidget(record);
 
-    connect(record, SIGNAL(stateChanged(bool)),
-            m_recordSigMapper, SLOT(map()));
+    connect(record, &LedButton::stateChanged,
+            m_recordSigMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     m_recordSigMapper->setMapping(record, track->getPosition());
 
     m_recordLeds.push_back(record);
@@ -1174,8 +1265,8 @@ TrackButtons::makeButton(Track *track)
     solo->setToolTip(tr("Solo track"));
     hblayout->addWidget(solo);
 
-    connect(solo, SIGNAL(stateChanged(bool)),
-            m_soloSigMapper, SLOT(map()));
+    connect(solo, &LedButton::stateChanged,
+            m_soloSigMapper, (void(QSignalMapper::*)())&QSignalMapper::map);
     m_soloSigMapper->setMapping(solo, track->getPosition());
 
     m_soloLeds.push_back(solo);
@@ -1190,7 +1281,7 @@ TrackButtons::makeButton(Track *track)
             track->getPosition(),
             m_trackCellHeight - buttonGap,
             trackHBox);
-    hblayout->addWidget(trackLabel);
+    hblayout->addWidget(trackLabel, 10);
 
     hblayout->addSpacing(vuSpacing);
 
@@ -1205,10 +1296,16 @@ TrackButtons::makeButton(Track *track)
     // Connect it
     setButtonMapping(trackLabel, trackId);
 
-    connect(trackLabel, SIGNAL(changeToInstrumentList()),
-            m_instListSigMapper, SLOT(map()));
-    connect(trackLabel, SIGNAL(clicked()),
-            m_clickedSigMapper, SLOT(map()));
+    connect(trackLabel, &TrackLabel::changeToInstrumentList,
+            m_instListSigMapper, static_cast<void(QSignalMapper::*)()>(
+                    &QSignalMapper::map));
+    connect(trackLabel, &TrackLabel::clicked,
+            m_clickedSigMapper, static_cast<void(QSignalMapper::*)()>(
+                    &QSignalMapper::map));
+
+
+    // Squash it down to its smallest width.
+    trackHBox->setFixedWidth(hblayout->minimumSize().width());
 
 
     return trackHBox;
@@ -1313,10 +1410,19 @@ TrackButtons::slotTrackSelected(int trackId)
 void
 TrackButtons::slotDocumentModified(bool)
 {
+    // ??? This isn't connected to any signal and is never called.
+    //     See the "TrackButtons Notification Project" page on the wiki:
+    //     https://www.rosegardenmusic.com/wiki/dev:tnp
+
+    // ??? See bug #1625 which requires this.
+
+    // ??? See bug #1623 whose experimental solution in MatrixWidget
+    //     is affected by this.
+
     // Full and immediate update.
-    // ??? Note that updates probably happen elsewhere.  This will result
-    //     in duplicate updates.  All other updates should be removed and
-    //     this should be the only update.
+    // ??? While we are transitioning to this approach, there will likely
+    //     be duplicate updates.  Eventually, all other updates should be
+    //     removed and this should be the only update that occurs.
     slotUpdateTracks();
 }
 

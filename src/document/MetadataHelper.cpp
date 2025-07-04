@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -142,7 +142,7 @@ MetadataHelper::getComments()
                 if (currentLine == 0) {
                     // Line 0 is the time stamp
                     comments[it0->first].timeStamp =
-                        strtoqstr(metadata.get<String>(qstrtostr(key)));
+                        strtoqstr(metadata.get<String>(static_cast<PropertyName>(qstrtostr(key))));
                     continue;
                 }
                 lastLine++;
@@ -151,7 +151,7 @@ MetadataHelper::getComments()
                     lines << "";
                 }
                 // Insert currentLine
-                lines << strtoqstr(metadata.get<String>(qstrtostr(key)));
+                lines << strtoqstr(metadata.get<String>(static_cast<PropertyName>(qstrtostr(key))));
                 lastLine = currentLine;
             }
         }
@@ -175,7 +175,7 @@ MetadataHelper::setComments(CommentsMap comments)
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
         if ((key == commentsPopup()) || !key.startsWith(commentsKeyBase())) {
-            notComments[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
+            notComments[key] = strtoqstr(metadata.get<String>(static_cast<PropertyName>(qstrtostr(key))));
         }
     }
 
@@ -187,7 +187,7 @@ MetadataHelper::setComments(CommentsMap comments)
             it != notComments.end(); ++it) {
         QString key = it->first;;
         QString value = it->second;
-        metadata.set<String>(qstrtostr(key), qstrtostr(value));
+        metadata.set<String>(static_cast<PropertyName>(qstrtostr(key)), qstrtostr(value));
     }
 
     // Add the comments lines
@@ -209,14 +209,14 @@ MetadataHelper::setComments(CommentsMap comments)
             QString value = *it;
             if (!value.isEmpty()) {
                 QString key = lineKey(page, n);
-                metadata.set<String>(qstrtostr(key), qstrtostr(value));
+                metadata.set<String>(static_cast<PropertyName>(qstrtostr(key)), qstrtostr(value));
                 textExists = true;
             }
         }
         // Add the time stamp if any and if there is some text
         if (textExists && !timeStamp.isEmpty()) {
             QString key = lineKey(page, 0);   // Time stamp is stored as line 0
-            metadata.set<String>(qstrtostr(key), qstrtostr(timeStamp));
+            metadata.set<String>(static_cast<PropertyName>(qstrtostr(key)), qstrtostr(timeStamp));
         }
     }
 
@@ -243,12 +243,12 @@ MetadataHelper::getHeaders()
             continue;
 
         // This should never happen.  See r14693.
-        if (!metadata.has(qstrtostr(key))) {
+        if (!metadata.has(static_cast<PropertyName>(static_cast<PropertyName>(qstrtostr(key))))) {
             RG_WARNING << "getHeaders() WARNING: Key " << key << "not found";
             continue;
         }
 
-        data[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
+        data[key] = strtoqstr(metadata.get<String>(static_cast<PropertyName>(qstrtostr(key))));
     }
 
     return data;
@@ -269,7 +269,7 @@ MetadataHelper::setHeaders(HeadersMap data)
             it = metadata.begin(); it != metadata.end(); ++it) {
         QString key = strtoqstr(it->first);
         if (key.startsWith(commentsKeyBase())) {
-            comments[key] = strtoqstr(metadata.get<String>(qstrtostr(key)));
+            comments[key] = strtoqstr(metadata.get<String>(static_cast<PropertyName>(qstrtostr(key))));
         }
     }
 
@@ -282,7 +282,7 @@ MetadataHelper::setHeaders(HeadersMap data)
         QString key = it->first;
         QString value = it->second;
         if (!value.isEmpty()) {
-            metadata.set<String>(qstrtostr(key), qstrtostr(value));
+            metadata.set<String>(static_cast<PropertyName>(qstrtostr(key)), qstrtostr(value));
         }
     }
 
@@ -291,7 +291,7 @@ MetadataHelper::setHeaders(HeadersMap data)
             it != comments.end(); ++it) {
         QString key = it->first;;
         QString value = it->second;
-        metadata.set<String>(qstrtostr(key), qstrtostr(value));
+        metadata.set<String>(static_cast<PropertyName>(qstrtostr(key)), qstrtostr(value));
     }
 
     if (metadata != origmetadata) {
@@ -305,7 +305,7 @@ MetadataHelper::setPopupWanted(bool enabled)
     Configuration &metadata = (&m_doc->getComposition())->getMetadata();
     const Configuration origmetadata = metadata;
 
-    metadata.set<String>(qstrtostr(commentsPopup()), enabled ? "true" : "false");
+    metadata.set<String>(static_cast<PropertyName>(qstrtostr(commentsPopup())), enabled ? "true" : "false");
 
     if (metadata != origmetadata) {
         m_doc->slotDocumentModified();

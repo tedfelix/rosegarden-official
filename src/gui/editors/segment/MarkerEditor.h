@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,13 +20,11 @@
 #define RG_MARKEREDITOR_H
 
 #include "gui/general/ActionFileClient.h"
+#include "base/TimeT.h"
 
 #include <QMainWindow>
 #include <QString>
 #include <QModelIndex>
-
-#include "base/Event.h"
-
 
 class QWidget;
 class QPushButton;
@@ -34,7 +32,6 @@ class QTreeWidget;
 class QTreeWidgetItem;
 class QLabel;
 class QCloseEvent;
-class QShortcut;
 
 
 namespace Rosegarden
@@ -51,16 +48,17 @@ class MarkerEditor : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
+
     MarkerEditor(QWidget *parent,
-                       RosegardenDocument *doc);
+                 RosegardenDocument *doc);
     ~MarkerEditor() override;
 
     void initDialog();
 
     void addCommandToHistory(Command *command);
 
-    void setModified(bool value);
-    void checkModified();
+    void setModified(bool modified);
+    // unused void checkModified();
 
     // reset the document
     void setDocument(RosegardenDocument *doc);
@@ -68,9 +66,13 @@ public:
     // update pointer position
     void updatePosition();
 
-    QShortcut* getShortcuts() { return m_shortcuts; }
+signals:
 
-public slots:
+    void closing();
+    void jumpToMarker(timeT);
+
+private slots:
+
     void slotUpdate();
 
     void slotAdd();
@@ -79,7 +81,7 @@ public slots:
     void slotClose();
     void slotEdit(QTreeWidgetItem *, int);
 
-    void slotItemClicked(QTreeWidgetItem *, int);   // item,column
+    void slotItemClicked(QTreeWidgetItem *item, int column);
 
     void slotMusicalTime();
     void slotRealTime();
@@ -87,35 +89,29 @@ public slots:
     void slotHelpRequested();
     void slotHelpAbout();
 
-signals:
-    void closing();
-    void jumpToMarker(timeT);
+private:
 
-protected:
     void closeEvent(QCloseEvent *) override;
 
     void setupActions();
-    QString makeTimeString(timeT time, int timeMode);
 
-    //--------------- Data members ---------------------------------
-    RosegardenDocument        *m_doc;
+    RosegardenDocument *m_doc;
 
-    QLabel                  *m_absoluteTime;
-    QLabel                  *m_realTime;
-    QLabel                  *m_barTime;
+    QLabel *m_absoluteTime;
+    QLabel *m_realTime;
+    QLabel *m_barTime;
 
-    QPushButton             *m_closeButton;
+    QPushButton *m_closeButton;
 
+    QPushButton *m_addButton;
+    QPushButton *m_deleteButton;
+    QPushButton *m_deleteAllButton;
 
-    QPushButton             *m_addButton;
-    QPushButton             *m_deleteButton;
-    QPushButton             *m_deleteAllButton;
+    // ??? QTreeWidget seems like overkill.  We never have sub items.
+    //     QTableWidget seems like a better choice.
+    QTreeWidget *m_treeWidget;
 
-    QTreeWidget               *m_listView;
-
-    bool                     m_modified;
-
-    QShortcut *m_shortcuts;
+    bool m_modified{false};
 };
 
 

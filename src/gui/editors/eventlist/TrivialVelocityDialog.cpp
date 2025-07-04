@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -24,37 +24,40 @@
 #include <QDialogButtonBox>
 
 namespace Rosegarden {
- 
-TrivialVelocityDialog::TrivialVelocityDialog(QWidget *parent, QString label, int deft) :
-        QDialog(parent)
-    {
-        setModal(true);
+
+TrivialVelocityDialog::TrivialVelocityDialog(
+        QWidget *parent, QString label, int velocity) :
+    QDialog(parent)
+{
+    setModal(true);
     setWindowTitle(label);
 
-    //QGridLayout *
-	m_metagrid = new QGridLayout;
+    m_metagrid = new QGridLayout;
     setLayout(m_metagrid);
     QWidget *hbox = new QWidget(this);
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     m_metagrid->addWidget(hbox, 0, 0);
 
-        QLabel *child_3 = new QLabel(label, hbox );
-        hboxLayout->addWidget(child_3);
-        m_spin = new QSpinBox( hbox );
-        hboxLayout->addWidget(m_spin);
-        hbox->setLayout(hboxLayout);
-        m_spin->setValue(deft);
-    } 
+    QLabel *child_3 = new QLabel(label, hbox );
+    hboxLayout->addWidget(child_3);
+    m_spin = new QSpinBox( hbox );
+    m_spin->setMaximum(127);
+    hboxLayout->addWidget(m_spin);
+    hbox->setLayout(hboxLayout);
+    m_spin->setValue(velocity);
 
-int
-TrivialVelocityDialog::getVelocity()
-{
-    return m_spin->value();
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    QDialogButtonBox *buttonBox =
+        new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     m_metagrid->addWidget(buttonBox, 1, 0);
     m_metagrid->setRowStretch(0, 10);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 }
-       
+
+int
+TrivialVelocityDialog::getVelocity()
+{
+    return m_spin->value();
+}
+
 }

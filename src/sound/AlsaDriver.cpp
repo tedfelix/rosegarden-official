@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
-  See the AUTHORS file for more details.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -18,7 +18,7 @@
 #endif
 
 #define RG_MODULE_STRING "[AlsaDriver]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "misc/Debug.h"
 #include <cstdlib>
@@ -31,9 +31,6 @@
 
 // ALSA
 #include <alsa/asoundlib.h>
-#include <alsa/seq_event.h>
-#include <alsa/version.h>
-#include <alsa/seq.h>
 
 #include "AlsaDriver.h"
 #include "AlsaPort.h"
@@ -53,18 +50,20 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/QEvents.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "misc/Preferences.h"
 
 #include <QCoreApplication>
 #include <QMutex>
 #include <QSettings>
 #include <QTime>
 
-#include <pthread.h>
+//#include <pthread.h>
 #include <math.h>
 #include <unistd.h>
 
 
-// #define DEBUG_ALSA 1
+//#define DEBUG_ALSA 1
+//#define DEBUG_ALSA_TIMER
 // #define DEBUG_PROCESS_MIDI_OUT 1
 //#define DEBUG_PROCESS_SOFT_SYNTH_OUT 1
 //#define MTC_DEBUG 1
@@ -122,13 +121,12 @@ namespace {
 
 AlsaDriver::AlsaDriver(MappedStudio *studio):
     SoundDriver(studio,
-                QString("[ALSA library version ") +
+                QString("ALSA library version ") +
                 SND_LIB_VERSION_STR +
-                ", module version " +
+                "\nALSA module version " +
                 strtoqstr(getAlsaVersion()) +
-                ", kernel version " +
-                strtoqstr(getKernelVersionString()) +
-                "]"),
+                "\nKernel version " +
+                strtoqstr(getKernelVersionString())),
     m_startPlayback(false),
     m_midiHandle(nullptr),
     m_client( -1),
@@ -146,6 +144,15 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
     m_loopStartTime(0, 0),
     m_loopEndTime(0, 0),
     m_eat_mtc(0),
+    m_mtcFrames(0),
+    m_mtcSeconds(0),
+    m_mtcMinutes(0),
+    m_mtcHours(0),
+    m_mtcSMPTEType(0),
+    m_mtcFirstTime(0),
+    m_mtcSigmaE(0),
+    m_mtcSigmaC(0),
+    m_mtcSkew(0),
     m_looping(false),
     m_haveShutdown(false)
 #ifdef HAVE_LIBJACK
@@ -166,8 +173,9 @@ AlsaDriver::AlsaDriver(MappedStudio *studio):
 {
     // Create a log that the user can easily see through the preferences
     // even in a release build.
-    AUDIT << "Rosegarden " << VERSION << " - AlsaDriver " << m_name << '\n';
-    RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_name;
+    AUDIT << "Rosegarden " << VERSION << '\n';
+    AUDIT << m_versionInfo << '\n';
+    RG_DEBUG << "ctor: Rosegarden " << VERSION << " - AlsaDriver " << m_versionInfo;
 
     m_pendSysExcMap = new DeviceEventMap();
 
@@ -197,8 +205,9 @@ AlsaDriver::~AlsaDriver()
 
     // Flush incomplete system exclusive events and delete the map.
     clearPendSysExcMap();
-
     delete m_pendSysExcMap;
+
+    clearRecentNoteOffs();
 }
 
 int
@@ -210,7 +219,7 @@ AlsaDriver::checkAlsaError(int rc, const char *
 {
 #ifdef DEBUG_ALSA
     if (rc < 0) {
-        RG_WARNING << "AlsaDriver::"
+        RG_WARNING //<< "AlsaDriver::"
                    << message
                    << ": " << rc
                    << " (" << snd_strerror(rc) << ")";
@@ -291,10 +300,11 @@ AlsaDriver::getSystemInfo()
     m_maxPorts = snd_seq_system_info_get_ports(sysinfo);
 }
 
+/* unused
 void
 AlsaDriver::showQueueStatus(int queue)
 {
-    int err, idx, min, max;
+    int idx, min, max;
     snd_seq_queue_status_t *status;
 
     snd_seq_queue_status_alloca(&status);
@@ -302,6 +312,7 @@ AlsaDriver::showQueueStatus(int queue)
     max = queue < 0 ? m_maxQueues : queue + 1;
 
     for (idx = min; idx < max; ++idx) {
+        int err;
         if ((err = snd_seq_get_queue_status(m_midiHandle, idx, status)) < 0) {
 
             if (err == -ENOENT)
@@ -323,7 +334,7 @@ AlsaDriver::showQueueStatus(int queue)
     }
 
 }
-
+*/
 
 void
 AlsaDriver::generateTimerList()
@@ -339,7 +350,6 @@ AlsaDriver::generateTimerList()
     snd_timer_info_alloca(&timerInfo);
 
     snd_timer_query_t *timerQuery;
-    char timerName[64];
 
     m_timers.clear();
 
@@ -373,11 +383,15 @@ AlsaDriver::generateTimerList()
 
             //RG_DEBUG << "generateTimerList(): got timer: class " << info.clas;
 
-            sprintf(timerName, "hw:CLASS=%i,SCLASS=%i,CARD=%i,DEV=%i,SUBDEV=%i",
-                    info.clas, info.sclas, info.card, info.device, info.subdevice);
+            QString timerName2 = QString("hw:CLASS=%1,SCLASS=%2,CARD=%3,DEV=%4,SUBDEV=%5").
+                    arg(info.clas).
+                    arg(info.sclas).
+                    arg(info.card).
+                    arg(info.device).
+                    arg(info.subdevice);
 
-            if (snd_timer_open(&timerHandle, timerName, SND_TIMER_OPEN_NONBLOCK) < 0) {
-                RG_WARNING << "generateTimerList(): Failed to open timer: " << timerName;
+            if (snd_timer_open(&timerHandle, timerName2.toUtf8(), SND_TIMER_OPEN_NONBLOCK) < 0) {
+                RG_WARNING << "generateTimerList(): Failed to open timer: " << timerName2;
                 continue;
             }
 
@@ -398,8 +412,8 @@ AlsaDriver::generateTimerList()
 }
 
 
-std::string
-AlsaDriver::getAutoTimer(bool &wantTimerChecks)
+QString
+AlsaDriver::getAutoTimer(bool &o_wantTimerChecks)
 {
     // Look for the apparent best-choice timer.
 
@@ -444,52 +458,71 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // a warning.
 
     bool pcmTimerAccepted = false;
-    wantTimerChecks = false; // for most options
 
-    bool rtcCouldBeOK = false;
+    // Assume no JACK so no drift correction.
+    o_wantTimerChecks = false;
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-        wantTimerChecks = true;
+        o_wantTimerChecks = true;
         pcmTimerAccepted = true;
     }
 #endif
 
-    // look for a high frequency system timer
+    // Look for a high frequency (>=750Hz) system timer.
+    // If we find one, return it.
 
-    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-         i != m_timers.end(); ++i) {
-        if (i->sclas != SND_TIMER_SCLASS_NONE)
+    const AlsaTimerInfo *systemTimer{nullptr};
+
+    // For each timer...
+    for (std::vector<AlsaTimerInfo>::const_iterator timerIter =
+                 m_timers.begin();
+         timerIter != m_timers.end();
+         ++timerIter) {
+        // Skip any with a slave class.
+        if (timerIter->sclas != SND_TIMER_SCLASS_NONE)
             continue;
-        if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-            if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                long hz = 1000000000 / i->resolution;
-                if (hz >= 750) {
-                    return i->name;
-                }
-            }
+        if (timerIter->clas == SND_TIMER_CLASS_GLOBAL) {
+            // System timer?
+            if (timerIter->device == SND_TIMER_GLOBAL_SYSTEM)
+                systemTimer = &*timerIter;
         }
     }
+
+    if (systemTimer) {
+        long freq{0};
+        if (systemTimer->resolution != 0)
+            freq = 1000000000 / systemTimer->resolution;
+        // Probably 1000Hz?  Take it.
+        if (freq >= 750)
+            return systemTimer->name;
+    }
+
+    // At this point we know the system timer has a freq less than
+    // 750Hz and is therefore unacceptable.
 
     // Look for the system RTC timer if available.  This has been
     // known to hang some real-time kernels, but reports suggest that
     // recent kernels are OK.  Avoid if the kernel is older than
     // 2.6.20 or the ALSA driver is older than 1.0.14.
 
-    if (versionIsAtLeast(getAlsaVersion(),
-                         1, 0, 14) &&
-        versionIsAtLeast(getKernelVersionString(),
-                         2, 6, 20)) {
+    // With newer kernels, SND_TIMER_GLOBAL_RTC no longer exists.
 
-        rtcCouldBeOK = true;
+    // Note that this is not the infamous "HR timer" (SND_TIMER_GLOBAL_HRTIMER)
+    // which always locks up the system.  See MIDIConfigurationPage which
+    // removes it from its list.
 
-        for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-             i != m_timers.end(); ++i) {
-            if (i->sclas != SND_TIMER_SCLASS_NONE) continue;
-            if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-                if (i->device == SND_TIMER_GLOBAL_RTC) {
-                    return i->name;
-                }
+    if (versionIsAtLeast(getAlsaVersion(), 1, 0, 14)  &&
+        versionIsAtLeast(getKernelVersionString(), 2, 6, 20)) {
+        for (std::vector<AlsaTimerInfo>::iterator timerIter = m_timers.begin();
+             timerIter != m_timers.end(); ++timerIter) {
+            // Skip any that have a slave class.
+            if (timerIter->sclas != SND_TIMER_SCLASS_NONE)
+                continue;
+            if (timerIter->clas == SND_TIMER_CLASS_GLOBAL) {
+                // Found the RTC timer?  Return it.
+                if (timerIter->device == SND_TIMER_GLOBAL_RTC)
+                    return timerIter->name;
             }
         }
     }
@@ -497,54 +530,47 @@ AlsaDriver::getAutoTimer(bool &wantTimerChecks)
     // look for the first PCM playback timer; that's all we know about
     // for now (until JACK becomes able to tell us which PCM it's on)
 
-    if (pcmTimerAccepted) {
+    // Note that PCM timers are pretty slow.  I see "172Hz" on my machine.
+    // This must be a frame timer and not a sample timer.  So typically,
+    // this test will fail since it will never find anything better than
+    // 750Hz.
 
-        for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-             i != m_timers.end(); ++i) {
-            if (i->sclas != SND_TIMER_SCLASS_NONE)
+    // cppcheck-suppress knownConditionTrueFalse
+    if (pcmTimerAccepted) {
+        for (std::vector<AlsaTimerInfo>::iterator timerIter = m_timers.begin();
+             timerIter != m_timers.end(); ++timerIter) {
+            if (timerIter->sclas != SND_TIMER_SCLASS_NONE)
                 continue;
-            if (i->clas == SND_TIMER_CLASS_PCM) {
-                if (i->resolution != 0) {
-                    long hz = 1000000000 / i->resolution;
-                    if (hz >= 750) {
-                        wantTimerChecks = false; // pointless with PCM timer
-                        return i->name;
+            if (timerIter->clas == SND_TIMER_CLASS_PCM) {
+                if (timerIter->resolution != 0) {
+                    long freq{0};
+                    if (timerIter->resolution != 0)
+                        freq = 1000000000 / timerIter->resolution;
+                    if (freq >= 750) {
+                        o_wantTimerChecks = false; // pointless with PCM timer
+                        return timerIter->name;
                     } else {
-                        AUDIT << "PCM timer: inadequate resolution " << i->resolution << '\n';
-                        RG_DEBUG << "getAutoTimer(): PCM timer: inadequate resolution " << i->resolution;
+                        AUDIT << "    PCM timer: \"" << timerIter->name << "\" inadequate resolution: " << freq << "Hz\n";
+                        RG_DEBUG << "getAutoTimer(): PCM timer:" << timerIter->name << "inadequate resolution:" << freq << "Hz";
                     }
                 }
             }
         }
     }
 
-    // next look for slow, unpopular 100Hz (2.4) or 250Hz (2.6) system timer
+    // Couldn't find anything with a frequency above 750Hz.
 
-    for (std::vector<AlsaTimerInfo>::iterator i = m_timers.begin();
-         i != m_timers.end(); ++i) {
-        if (i->sclas != SND_TIMER_SCLASS_NONE)
-            continue;
-        if (i->clas == SND_TIMER_CLASS_GLOBAL) {
-            if (i->device == SND_TIMER_GLOBAL_SYSTEM) {
-                AUDIT << "Using low-resolution system timer, sending a warning" << '\n';
-                RG_DEBUG << "getAutoTimer(): Using low-resolution system timer, sending a warning";
-                if (rtcCouldBeOK) {
-                    reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
-                } else {
-                    reportFailure(MappedEvent::WarningImpreciseTimer);
-                }
-                return i->name;
-            }
-        }
-    }
+    // Fall back on the system timer if available.
+    if (systemTimer)
+        return systemTimer->name;
 
-    // falling back to something that almost certainly won't work,
-    // if for any reason all of the above failed
+    // Fall back on the first timer if there is one.
+    if (!m_timers.empty())
+        return m_timers.begin()->name;
 
-    return m_timers.begin()->name;
+    // No hope.
+    return "";
 }
-
-
 
 void
 AlsaDriver::generatePortList()
@@ -553,7 +579,6 @@ AlsaDriver::generatePortList()
 
     snd_seq_client_info_t *cinfo;
     snd_seq_port_info_t *pinfo;
-    int client;
     unsigned int writeCap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
     unsigned int readCap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
 
@@ -569,7 +594,7 @@ AlsaDriver::generatePortList()
     // for sorting and then device creation.
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0) {
-        client = snd_seq_client_info_get_client(cinfo);
+        int client = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
         snd_seq_port_info_set_client(pinfo, client);
         snd_seq_port_info_set_port(pinfo, -1);
@@ -594,7 +619,7 @@ AlsaDriver::generatePortList()
                       << client << ","
                       << port << " - ("
                       << snd_seq_client_info_get_name(cinfo) << ", "
-                      << snd_seq_port_info_get_name(pinfo) << ")";
+                      << snd_seq_port_info_get_name(pinfo) << ")\n";
                 RG_DEBUG << "    "
                       << client << ","
                       << port << " - ("
@@ -607,15 +632,15 @@ AlsaDriver::generatePortList()
                     ((capability & SND_SEQ_PORT_CAP_WRITE) &&
                      (capability & SND_SEQ_PORT_CAP_READ))) {
                     direction = Duplex;
-                    AUDIT << "\t\t\t(DUPLEX)";
+                    AUDIT << "\t(DUPLEX)";
                     RG_DEBUG << "        (DUPLEX)";
                 } else if (capability & SND_SEQ_PORT_CAP_WRITE) {
                     direction = WriteOnly;
-                    AUDIT << "\t\t(WRITE ONLY)";
+                    AUDIT << "\t(WRITE ONLY)";
                     RG_DEBUG << "        (WRITE ONLY)";
                 } else {
                     direction = ReadOnly;
-                    AUDIT << "\t\t(READ ONLY)";
+                    AUDIT << "\t(READ ONLY)";
                     RG_DEBUG << "        (READ ONLY)";
                 }
 
@@ -717,7 +742,9 @@ AlsaDriver::generateFixedInstruments()
 
     for (int i = 0; i < count; ++i) {
         sprintf(number, " #%d", i + 1);
-        std::string name = QObject::tr("Synth plugin").toStdString() + std::string(number);
+        std::string name =
+            QCoreApplication::translate("INSTRUMENT", "Synth plugin")
+                                            .toStdString() + std::string(number);
         instr = new MappedInstrument(Instrument::SoftSynth,
                                      i,
                                      first + i,
@@ -754,14 +781,15 @@ AlsaDriver::generateFixedInstruments()
 
     for (int i = 0; i < count; ++i) {
         sprintf(number, " #%d", i + 1);
-        audioName = QObject::tr("Audio").toStdString() + std::string(number);
+        audioName = QCoreApplication::translate("INSTRUMENT", "Audio")
+                                            .toStdString() + std::string(number);
         instr = new MappedInstrument(Instrument::Audio,
                                      i,
                                      first + i,
                                      audioName,
                                      audioDeviceId);
         m_instruments.push_back(instr);
-    
+
         // Create a fader with a matching id - this is the starting
         // point for all audio faders.
         //
@@ -782,27 +810,24 @@ MappedDevice *
 AlsaDriver::createMidiDevice(DeviceId deviceId,
                              MidiDevice::DeviceDirection reqDirection)
 {
-    std::string connectionName = "";
     const char *deviceName = "unnamed";
 
     if (reqDirection == MidiDevice::Play) {
 
-        QString portName = QString("out %1 - %2")
-            .arg(m_outputPorts.size() + 1)
-            .arg(deviceName);
+        const QString portName = QString("out %1 - %2").
+                arg(m_outputPorts.size() + 1).
+                arg(deviceName);
 
-        int outputPort = checkAlsaError(snd_seq_create_simple_port
-                                        (m_midiHandle,
-                                         portName.toLocal8Bit(),
-                                         SND_SEQ_PORT_CAP_READ |
-                                         SND_SEQ_PORT_CAP_SUBS_READ,
-                                         SND_SEQ_PORT_TYPE_APPLICATION |
-                                         SND_SEQ_PORT_TYPE_SOFTWARE |
-                                         SND_SEQ_PORT_TYPE_MIDI_GENERIC),
-                                        "createMidiDevice - can't create output port");
+        const int outputPort = checkAlsaError(
+                snd_seq_create_simple_port(
+                        m_midiHandle,  // seq
+                        portName.toLocal8Bit(),  // name
+                        SND_SEQ_PORT_CAP_READ | SND_SEQ_PORT_CAP_SUBS_READ,  // caps
+                        SND_SEQ_PORT_TYPE_APPLICATION | SND_SEQ_PORT_TYPE_SOFTWARE |
+                            SND_SEQ_PORT_TYPE_MIDI_GENERIC),  // type
+                "createMidiDevice - can't create output port");
 
         if (outputPort >= 0) {
-
             RG_DEBUG << "createMidiDevice(): CREATED OUTPUT PORT " << outputPort << ":" << portName << " for device " << deviceId;
 
             m_outputPorts[deviceId] = outputPort;
@@ -811,9 +836,9 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
 
     MappedDevice *device = new MappedDevice(deviceId,
                                             Device::Midi,
-                                            deviceName,
-                                            connectionName);
+                                            deviceName);
     device->setDirection(reqDirection);
+
     return device;
 }
 
@@ -941,7 +966,7 @@ AlsaDriver::removeAllDevices()
 }
 
 void
-AlsaDriver::renameDevice(DeviceId id, QString name)
+AlsaDriver::renameDevice(DeviceId id, const QString& name)
 {
     DeviceIntMap::iterator i = m_outputPorts.find(id);
     if (i == m_outputPorts.end()) {
@@ -975,7 +1000,7 @@ AlsaDriver::renameDevice(DeviceId id, QString name)
 }
 
 ClientPortPair
-AlsaDriver::getPortByName(std::string name)
+AlsaDriver::getPortByName(const std::string& name)
 {
     AUDIT << "AlsaDriver::getPortByName(\"" << name << "\")\n";
     RG_DEBUG << "getPortByName(" << name << ")";
@@ -997,7 +1022,7 @@ AlsaDriver::getPortByName(std::string name)
 }
 
 std::string
-AlsaDriver::getPortName(ClientPortPair port)
+AlsaDriver::getPortName(ClientPortPair port) const
 {
     for (size_t i = 0; i < m_alsaPorts.size(); ++i) {
         if (m_alsaPorts[i]->m_client == port.client &&
@@ -1058,7 +1083,8 @@ AlsaDriver::getConnection(DeviceId id)
 }
 
 void
-AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
+AlsaDriver::setConnectionToDevice(MappedDevice &device,
+                                  const QString& connection)
 {
     ClientPortPair pair( -1, -1);
     if (connection != "") {
@@ -1068,11 +1094,14 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection)
 }
 
 void
-AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
+AlsaDriver::setConnectionToDevice(MappedDevice &device,
+                                  const QString& connection,
                                   const ClientPortPair &pair)
 {
 #ifdef DEBUG_ALSA
-    RG_DEBUG << "setConnectionToDevice(): connection " << connection;
+    RG_DEBUG << "setConnectionToDevice()";
+    RG_DEBUG << "  name: " << device.getName();
+    RG_DEBUG << "  connection: " << connection;
 #endif
 
     if (device.getDirection() == MidiDevice::Record) {
@@ -1144,12 +1173,12 @@ AlsaDriver::setConnectionToDevice(MappedDevice &device, QString connection,
 }
 
 void
-AlsaDriver::setConnection(DeviceId id, QString connection)
+AlsaDriver::setConnection(DeviceId deviceId, const QString& connection)
 {
     ClientPortPair port(getPortByName(qstrtostr(connection)));
 
 #ifdef DEBUG_ALSA
-    RG_DEBUG << "setConnection(" << id << "," << connection << ")";
+    RG_DEBUG << "setConnection(" << deviceId << "," << connection << ")";
 #endif
 
     if ((connection == "") || (port.client != -1 && port.port != -1)) {
@@ -1162,7 +1191,7 @@ AlsaDriver::setConnection(DeviceId id, QString connection)
         }
 #endif
 
-        MappedDevice *device = findDevice(id);
+        MappedDevice *device = findDevice(deviceId);
         if (device)
             setConnectionToDevice(*device, connection, port);
 
@@ -1289,7 +1318,9 @@ AlsaDriver::setFirstConnection(DeviceId deviceId, bool recordDevice)
 
 void
 AlsaDriver::setPlausibleConnection(
-        DeviceId deviceId, QString idealConnection, bool recordDevice)
+        DeviceId deviceId,
+        const QString& idealConnection,
+        bool recordDevice)
 {
     // ??? Proposed simplified version that searches for the best fit and
     //     connects to it.
@@ -1313,6 +1344,8 @@ AlsaDriver::setPlausibleConnection(
     QString name;
     parsePortName(idealConnection, clientNumber, portNumber, name);
 
+    bool includeAlsaPortNumbers = Preferences::getIncludeAlsaPortNumbersWhenMatching();
+
     // For each ALSA port...
     for (QSharedPointer<AlsaPortDescription> currentPort : m_alsaPorts) {
         AUDIT << "AlsaDriver::setPlausibleConnection(): Checking \"" << currentPort->m_name << "\"\n";
@@ -1333,12 +1366,28 @@ AlsaDriver::setPlausibleConnection(
 
         // If we're looking for a playback device and this one is already
         // connected, skip.
-        if (!recordDevice  &&
-            portInUse(currentPort->m_client, currentPort->m_port))
-            continue;
+        // ??? But this doesn't differentiate play/record!
+        // ??? But then this means that we can't have multiple devices
+        //     connected to one port.  Why is this here?  Is it in case
+        //     there are mismatches and something needs to be connected?
+        //     Note that we check this again below which is confusing.
+        //if (!recordDevice  &&
+        //    portInUse(currentPort->m_client, currentPort->m_port))
+        //    continue;
+
+        // If the matching should include the full ALSA port, then we will
+        // select the first exact match that is encountered.
+        QString currentConnectionFull = strtoqstr(currentPort->m_name);
+        if (includeAlsaPortNumbers && currentConnectionFull == idealConnection) {
+            AUDIT << "  Port Number Match\n";
+            RG_DEBUG << "  Port Number Match\n";
+
+            bestPort = currentPort;
+            break;
+        }
 
         // Strip client:port from the front of the name.
-        QString currentName = removeClientPort(strtoqstr(currentPort->m_name));
+        QString currentName = removeClientPort(currentConnectionFull);
 
         int score = 25 - levenshtein_distance(
                 qstrtostr(currentName).size(),
@@ -1355,8 +1404,9 @@ AlsaDriver::setPlausibleConnection(
             score += 25;
 
         // Not connected to anything: +25
-        if (!portInUse(currentPort->m_client, currentPort->m_port))
-            score += 25;
+        // ??? But this doesn't differentiate play/record!
+        //if (!portInUse(currentPort->m_client, currentPort->m_port))
+        //    score += 25;
 
         AUDIT << "  Final score: " << score << "\n";
         RG_DEBUG << "  Final score:" << score;
@@ -1503,7 +1553,7 @@ AlsaDriver::checkTimerSync(size_t frames)
 
     if (alsaDiff > RealTime(10, 0)) {
 
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
         if (!m_playing) {
             RG_DEBUG << "checkTimerSync(): ALSA:" << startAlsaTime << "\t->" << nowAlsaTime << "\nJACK: " << startJackFrames << "\t\t-> " << nowJackFrames;
             RG_DEBUG << "checkTimerSync(): ALSA diff:  " << alsaDiff << "\nJACK diff:  " << jackDiff;
@@ -1513,7 +1563,7 @@ AlsaDriver::checkTimerSync(size_t frames)
         double ratio = (jackDiff - alsaDiff) / alsaDiff;
 
         if (fabs(ratio) > 0.1) {
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
             if (!m_playing) {
                 RG_DEBUG << "checkTimerSync(): Ignoring excessive ratio " << ratio << ", hoping for a more likely result next time";
             }
@@ -1521,8 +1571,8 @@ AlsaDriver::checkTimerSync(size_t frames)
 
         } else if (fabs(ratio) > 0.000001) {
 
-#ifdef DEBUG_ALSA
-            if (alsaDiff > RealTime::zeroTime && jackDiff > RealTime::zeroTime) {
+#ifdef DEBUG_ALSA_TIMER
+            if (alsaDiff > RealTime::zero() && jackDiff > RealTime::zero()) {
                 if (!m_playing) {
                     if (jackDiff < alsaDiff) {
                         RG_DEBUG << "checkTimerSync(): <<<< ALSA timer is faster by " << 100.0 * ((alsaDiff - jackDiff) / alsaDiff) << "% (1/" << int(1.0 / ratio) << ")";
@@ -1555,17 +1605,17 @@ AlsaDriver::getTimer(unsigned int n)
     if (n == 0)
         return AUTO_TIMER_NAME;
     else
-        return strtoqstr(m_timers[n -1].name);
+        return m_timers[n -1].name;
 }
 
 QString
 AlsaDriver::getCurrentTimer()
 {
-    return m_currentTimer;
+    return m_currentTimerName;
 }
 
 void
-AlsaDriver::setCurrentTimer(QString timer)
+AlsaDriver::setCurrentTimer(QString timerName)
 {
     QSettings settings;
     bool skip = settings.value("ALSA/SkipSetCurrentTimer", false).toBool();
@@ -1575,19 +1625,19 @@ AlsaDriver::setCurrentTimer(QString timer)
         return;
 
     // No change?  Bail.
-    if (timer == m_currentTimer)
+    if (timerName == m_currentTimerName)
         return;
 
-    m_currentTimer = timer;
-    settings.setValue(SequencerOptionsConfigGroup + "/" + "timer",
-                      m_currentTimer);
+    m_currentTimerName = timerName;
+    settings.setValue(QString(SequencerOptionsConfigGroup) + "/" + "timer",
+                      m_currentTimerName);
 
-    RG_DEBUG << "setCurrentTimer(" << timer << ")";
+    AUDIT << "\n";
+    AUDIT << "AlsaDriver::setCurrentTimer(\"" << timerName << "\")\n";
+    RG_DEBUG << "setCurrentTimer(" << timerName << ")";
 
-    std::string name(qstrtostr(timer));
-
-    if (name == AUTO_TIMER_NAME) {
-        name = getAutoTimer(m_doTimerChecks);
+    if (timerName == AUTO_TIMER_NAME) {
+        timerName = getAutoTimer(m_doTimerChecks);
     } else {
         m_doTimerChecks = false;
     }
@@ -1609,17 +1659,17 @@ AlsaDriver::setCurrentTimer(QString timer)
     checkAlsaError(snd_seq_control_queue(m_midiHandle, m_queue, SND_SEQ_EVENT_SETPOS_TIME,
                                          0, &event), "setCurrentTimer(): control queue");
     checkAlsaError(snd_seq_drain_output(m_midiHandle), "setCurrentTimer(): draining output to control queue");
-    m_alsaPlayStartTime = RealTime::zeroTime;
+    m_alsaPlayStartTime = RealTime::zero();
 
+    // Find the timer by name.
     for (size_t i = 0; i < m_timers.size(); ++i) {
-        if (m_timers[i].name == name) {
+        if (m_timers[i].name == timerName) {
 
-            snd_seq_queue_timer_t *timer;
+            snd_seq_queue_timer_t *queueTimer;
+            snd_seq_queue_timer_alloca(&queueTimer);
+            snd_seq_get_queue_timer(m_midiHandle, m_queue, queueTimer);
+
             snd_timer_id_t *timerid;
-
-            snd_seq_queue_timer_alloca(&timer);
-            snd_seq_get_queue_timer(m_midiHandle, m_queue, timer);
-
             snd_timer_id_alloca(&timerid);
             snd_timer_id_set_class(timerid, m_timers[i].clas);
             snd_timer_id_set_sclass(timerid, m_timers[i].sclas);
@@ -1627,24 +1677,26 @@ AlsaDriver::setCurrentTimer(QString timer)
             snd_timer_id_set_device(timerid, m_timers[i].device);
             snd_timer_id_set_subdevice(timerid, m_timers[i].subdevice);
 
-            snd_seq_queue_timer_set_id(timer, timerid);
-            snd_seq_set_queue_timer(m_midiHandle, m_queue, timer);
+            snd_seq_queue_timer_set_id(queueTimer, timerid);
+            checkAlsaError(snd_seq_set_queue_timer(m_midiHandle, m_queue, queueTimer), "snd_seq_set_queue_timer() failed");
+
+            long freq{0};
+            if (m_timers[i].resolution != 0)
+                freq = 1000000000 / m_timers[i].resolution;
+
+            AUDIT << "    Current timer set to \"" << timerName << "\" at " << freq << "Hz\n";
+            RG_DEBUG << "setCurrentTimer(): Current timer set to" << timerName << "at " << freq << "Hz";
 
             if (m_doTimerChecks) {
-                AUDIT << "    Current timer set to \"" << name << "\" with timer checks\n";
-                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\" with timer checks";
-            } else {
-                AUDIT << "    Current timer set to \"" << name << "\"\n";
-                RG_DEBUG << "setCurrentTimer(): Current timer set to \"" << name << "\"";
+                AUDIT << "    Timer checks enabled (JACK Available).\n";
+                RG_DEBUG << "setCurrentTimer(): Timer checks enabled (JACK available).";
             }
 
-            if (m_timers[i].clas == SND_TIMER_CLASS_GLOBAL &&
-                m_timers[i].device == SND_TIMER_GLOBAL_SYSTEM) {
-                long hz = 1000000000 / m_timers[i].resolution;
-                if (hz < 900) {
-                    AUDIT << "    WARNING: using system timer with only " << hz << "Hz resolution!\n";
-                    RG_WARNING << "setCurrentTimer(): WARNING: using system timer with only " << hz << "Hz resolution!";
-                }
+            if (freq < 750) {
+                AUDIT << "    WARNING: \"" << timerName << "\" has only " << freq << "Hz resolution!\n";
+                RG_WARNING << "setCurrentTimer(): WARNING:" << timerName << "has only " << freq << "Hz resolution!";
+                // Indicate problem in status bar.
+                reportFailure(MappedEvent::WarningImpreciseTimerTryRTC);
             }
 
             break;
@@ -1666,10 +1718,8 @@ AlsaDriver::setCurrentTimer(QString timer)
 bool
 AlsaDriver::initialise()
 {
-    bool result = true;
-
     initialiseAudio();
-    result = initialiseMidi();
+    bool result = initialiseMidi();
 
     return result;
 }
@@ -1749,7 +1799,7 @@ AlsaDriver::initialiseMidi()
     // Set the client name.  Note that we depend on knowing this name
     // elsewhere, e.g. in setPlausibleConnection below.  If it is ever
     // changed, we may have to check for other occurrences
-    // 
+    //
     snd_seq_set_client_name(m_midiHandle, "rosegarden");
 
     if ((m_client = snd_seq_client_id(m_midiHandle)) < 0) {
@@ -1883,7 +1933,7 @@ AlsaDriver::initialiseMidi()
 
     QSettings settings;
     const QString timer = settings.value(
-            SequencerOptionsConfigGroup + "/" + "timer",
+            QString(SequencerOptionsConfigGroup) + "/" + "timer",
             AUTO_TIMER_NAME).toString();
 
     setCurrentTimer(timer);
@@ -1914,6 +1964,7 @@ void
 AlsaDriver::initialiseAudio()
 {
 #ifdef HAVE_LIBJACK
+    if (m_jackDriver) delete m_jackDriver;
     m_jackDriver = new JackDriver(this);
 
     if (m_jackDriver->isOK()) {
@@ -1952,7 +2003,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 #endif
 
     // now that we restart the queue at each play, the origin is always zero
-    m_alsaPlayStartTime = RealTime::zeroTime;
+    m_alsaPlayStartTime = RealTime::zero();
     m_playStartPosition = position;
 
     m_startPlayback = true;
@@ -2007,7 +2058,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
         //     beat.  Hold down Ctrl while positioning the playback
         //     position pointer.
 
-        if (m_playStartPosition == RealTime::zeroTime)
+        if (m_playStartPosition == RealTime::zero())
             sendSystemDirect(SND_SEQ_EVENT_START, nullptr);
         else
             sendSystemDirect(SND_SEQ_EVENT_CONTINUE, nullptr);
@@ -2040,12 +2091,11 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 
     // Erase recent noteoffs.  There shouldn't be any, but let's be
     // extra careful.
-    m_recentNoteOffs.clear();
+    clearRecentNoteOffs();
 }
 
-
 void
-AlsaDriver::stopPlayback()
+AlsaDriver::stopPlayback(bool autoStop)
 {
 #ifdef DEBUG_ALSA
     RG_DEBUG << "stopPlayback() begin...";
@@ -2066,7 +2116,16 @@ AlsaDriver::stopPlayback()
 
 #ifdef HAVE_LIBJACK
     if (m_jackDriver) {
-        m_jackDriver->stopTransport();
+        // Normally we want to send out a JACK stop even when the stop is
+        // initiated by rg at the end of the composition (auto stop).
+        // The user can disable this via the preferences and JACK will
+        // continue to roll past the end of the rg composition, but this will
+        // introduce some strange behavior since JACK transport will be out of
+        // sync with the rg transport.
+        // See Bug #1693 for details.
+        if (Preferences::getJACKStopAtAutoStop()  ||  !autoStop)
+            m_jackDriver->stopTransport();
+
         m_needJackStart = NeedNoJackStart;
     }
 #endif
@@ -2137,11 +2196,10 @@ AlsaDriver::punchOut()
                     // so use audio id slot to pass back instrument id
                     // and handle accordingly in gui
                     try {
-                        MappedEvent *mE =
-                            new MappedEvent(id,
-                                            MappedEvent::AudioGeneratePreview,
-                                            id % 256,
-                                            id / 256);
+                        MappedEvent *mE = new MappedEvent;
+                        mE->setInstrumentId(id);
+                        mE->setType(MappedEvent::AudioGeneratePreview);
+                        mE->setAudioFileID(id);
 
                         // send completion event
                         insertMappedEventForReturn(mE);
@@ -2219,7 +2277,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
          i != m_noteOffQueue.end(); ++i) {
 
         // if we're fast forwarding then we bring the note off closer
-        if (jump >= RealTime::zeroTime) {
+        if (jump >= RealTime::zero()) {
 
             RealTime endTime = formerStartPosition + (*i)->realTime;
 
@@ -2237,7 +2295,7 @@ AlsaDriver::resetPlayback(const RealTime &oldPosition, const RealTime &position)
 #ifdef DEBUG_PROCESS_MIDI_OUT
                 RG_DEBUG << "resetPlayback(): Rewind by " << jump << ": setting note off to zero";
 #endif
-                (*i)->realTime = RealTime::zeroTime;
+                (*i)->realTime = RealTime::zero();
             }
     }
 
@@ -2328,27 +2386,31 @@ AlsaDriver::pushRecentNoteOffs()
     RG_DEBUG << "pushRecentNoteOffs(): have " << m_recentNoteOffs.size() << " in queue";
 #endif
 
+    // Move all to m_noteOffQueue.
     for (NoteOffQueue::iterator i = m_recentNoteOffs.begin();
          i != m_recentNoteOffs.end(); ++i) {
-        (*i)->realTime = RealTime::zeroTime;
+        (*i)->realTime = RealTime::zero();
         m_noteOffQueue.insert(*i);
     }
 
     m_recentNoteOffs.clear();
 }
 
-// Remove recent noteoffs that are before time t
+// Remove m_recentNoteOffs that are before time t
 void
 AlsaDriver::cropRecentNoteOffs(const RealTime &t)
 {
     while (!m_recentNoteOffs.empty()) {
-        NoteOffEvent *ev = *m_recentNoteOffs.begin();
+        NoteOffQueue::const_iterator noteOffIter = m_recentNoteOffs.begin();
+        const NoteOffEvent *noteOff = *noteOffIter;
 #ifdef DEBUG_PROCESS_MIDI_OUT
-        RG_DEBUG << "cropRecentNoteOffs(): " << ev->getRealTime() << " vs " << t;
+        RG_DEBUG << "cropRecentNoteOffs(): " << noteOff->getRealTime() << " vs " << t;
 #endif
-        if (ev->realTime >= t) break;
-        delete ev;
-        m_recentNoteOffs.erase(m_recentNoteOffs.begin());
+        if (noteOff->realTime >= t)
+            break;
+
+        delete noteOff;
+        m_recentNoteOffs.erase(noteOffIter);
     }
 }
 
@@ -2369,6 +2431,14 @@ AlsaDriver::weedRecentNoteOffs(unsigned int pitch, MidiByte channel,
             break;
         }
     }
+}
+
+void AlsaDriver::clearRecentNoteOffs()
+{
+    for (NoteOffEvent *noteOff : m_recentNoteOffs) {
+        delete noteOff;
+    }
+    m_recentNoteOffs.clear();
 }
 
 void
@@ -2447,10 +2517,14 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
     RG_DEBUG << "processNotesOff(" << time << "): alsaTime = " << alsaTime << ", now = " << now;
 #endif
 
-    // For each note-off event in the note-off queue
-    while (m_noteOffQueue.begin() != m_noteOffQueue.end()) {
-
-        NoteOffEvent *noteOff = *m_noteOffQueue.begin();
+    // For each note-off event in the note-off queue.
+    while (!m_noteOffQueue.empty()) {
+        // Use the begin() element since we will be deleting from the
+        // container and an iterator will become invalid after erase().
+        // Actually, erase() returns the next element.  We could do it
+        // that way.  Or increment before use.  So many options.
+        NoteOffQueue::iterator noteOffIter = m_noteOffQueue.begin();
+        NoteOffEvent *noteOff = *noteOffIter;
 
         if (noteOff->realTime > time) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
@@ -2464,9 +2538,11 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
 #endif
 
         RealTime offTime = noteOff->realTime;
-        if (offTime < RealTime::zeroTime) offTime = RealTime::zeroTime;
+        if (offTime < RealTime::zero())
+            offTime = RealTime::zero();
         bool scheduled = (offTime > alsaTime) && !now;
-        if (!scheduled) offTime = RealTime::zeroTime;
+        if (!scheduled)
+            offTime = RealTime::zero();
 
         snd_seq_real_time_t alsaOffTime = { (unsigned int)offTime.sec,
                                             (unsigned int)offTime.nsec };
@@ -2488,7 +2564,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
             if (src < 0) {
                 RG_WARNING << "processNotesOff(): WARNING: Note off has no output port (instr = " << noteOff->instrumentId << ")";
                 delete noteOff;
-                m_noteOffQueue.erase(m_noteOffQueue.begin());
+                m_noteOffQueue.erase(noteOffIter);
                 continue;
             }
 
@@ -2516,7 +2592,7 @@ AlsaDriver::processNotesOff(const RealTime &time, bool now, bool everything)
         } else {
             delete noteOff;
         }
-        m_noteOffQueue.erase(m_noteOffQueue.begin());
+        m_noteOffQueue.erase(noteOffIter);
     }
 
     // We don't flush the queue here, as this is called nested from
@@ -2574,8 +2650,11 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
     while (failureReportReadIndex != failureReportWriteIndex) {
         MappedEvent::FailureCode code = failureReports[failureReportReadIndex];
         //RG_DEBUG << "getMappedEventList(): failure code: " << code;
-        MappedEvent *mE = new MappedEvent
-            (0, MappedEvent::SystemFailure, code, 0);
+
+        MappedEvent *mE = new MappedEvent;
+        mE->setType(MappedEvent::SystemFailure);
+        mE->setData1(code);
+
         m_returnComposition.insert(mE);
         failureReportReadIndex =
             (failureReportReadIndex + 1) % FAILURE_REPORT_COUNT;
@@ -2680,7 +2759,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 // We shake out the two NOTE Ons after we've recorded
                 // them.
                 //
-                mappedEventList.insert(new MappedEvent(mE));
+                mappedEventList.insert(new MappedEvent(*mE));
                 m_noteOnMap[deviceId].insert(std::pair<unsigned int, MappedEvent*>(chanNoteKey, mE));
 
                 break;
@@ -2718,7 +2797,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 #endif
 
                 // Fix zero duration record bug.
-                if (duration <= RealTime::zeroTime) {
+                if (duration <= RealTime::zero()) {
                     duration = RealTime::fromMilliseconds(1);
 
                     // ??? It seems odd that we only set the event time for
@@ -2859,12 +2938,12 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 if ((MidiByte)(data[1]) == MIDI_SYSEX_RT) {
                     RG_DEBUG << "getMappedEventList(): REALTIME SYSEX";
                     for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
-                        printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
+                        printf("B %u = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                     }
                 } else {
                     RG_DEBUG << "getMappedEventList(): NON-REALTIME SYSEX";
                     for (unsigned int ii = 0; ii < event->data.ext.len; ++ii) {
-                        printf("B %d = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
+                        printf("B %u = %02x\n", ii, ((char*)(event->data.ext.ptr))[ii]);
                     }
                 }
 #endif
@@ -2873,11 +2952,11 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 // Pedro Lopez-Cabanillas aseqmm code that we need to pool
                 // alsa system exclusive messages since they may be broken
                 // across several ALSA messages.
-            
+
                 // Unfortunately, pooling these messages get very complicated
                 // since it creates many corner cases during this realtime
                 // activity that may involve possible bad data transmissions.
-            
+
                 bool beginNewMessage = false;
                 if (data.length() > 0) {
                     // Check if at start of MIDI message
@@ -2887,7 +2966,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     }
                 }
 
-                std::string sysExcData; 
+                std::string sysExcData;
                 MappedEvent *sysExcEvent = nullptr;
 
                 // Check to see if there are any pending System Exclusive Messages
@@ -2895,23 +2974,23 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                     // Check our map to see if we have a pending operations for
                     // the current deviceId.
                     DeviceEventMap::iterator pendIt = m_pendSysExcMap->find(deviceId);
-                
+
                     if (pendIt != m_pendSysExcMap->end()) {
                         sysExcEvent = pendIt->second.first;
                         sysExcData = pendIt->second.second;
-                    
+
                         // Be optimistic that we won't have to re-add this afterwards.
                         // Also makes keeping track of this easier.
                         m_pendSysExcMap->erase(pendIt);
                     }
                 }
-            
+
                 bool createNewEvent = false;
                 if (!sysExcEvent) {
                     // Did not find a pending (unfinished) System Exclusive message.
                     // Create a new event.
                     createNewEvent = true;
-                
+
                     if (!beginNewMessage) {
                         RG_WARNING << "getMappedEventList(): WARNING: New ALSA message arrived with incorrect MIDI System Exclusive start byte.";
                         RG_WARNING << "getMappedEventList():          This is probably a bad transmission.";
@@ -2930,7 +3009,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                         // This is the start of a new message but have
                         // pending (incomplete) messages already.
                         createNewEvent = true;
-                    
+
                         // Decide how to handle previous (incomplete) message
                         if (sysExcData.size() > 0) {
                             RG_WARNING << "getMappedEventList(): WARNING: Sending an incomplete ALSA message to the composition.";
@@ -2947,7 +3026,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                         }
                     }
                 }
-                            
+
                 if (createNewEvent) {
                     // Still need a current event to work with.  Create it.
                     sysExcEvent = new MappedEvent();
@@ -2959,14 +3038,14 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
                 // We need to check to see if this event completes the
                 // System Exclusive event.
-            
+
                 bool pushOnMap = false;
                 if (!data.empty()) {
                     int lastChar = data.size() - 1;
-                
+
                     // Check to see if we are at the end of a message.
                     if (MidiByte(data.at(lastChar)) == MIDI_END_OF_EXCLUSIVE) {
-                        // Remove (EOX). RG doesn't use it. 
+                        // Remove (EOX). RG doesn't use it.
                         data.erase(lastChar);
 
                         // Push message to mapped event list
@@ -2986,13 +3065,13 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
 
                     pushOnMap = true;
                 }
-            
+
                 if (pushOnMap) {
                     // Put the unfinished event back in the pending map.
                     m_pendSysExcMap->insert(std::make_pair(deviceId,
                                                            std::make_pair(sysExcEvent, data)));
 
-                    if (beginNewMessage) { 
+                    if (beginNewMessage) {
                         RG_DEBUG << "getMappedEventList(): Encountered long System Exclusive Message (pooling message until transmission complete)";
                     }
                 }
@@ -3021,7 +3100,7 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
             if (m_midiSyncStatus == TRANSPORT_FOLLOWER  &&  !isPlaying()) {
                 RosegardenSequencer::getInstance()->transportJump(
                         RosegardenSequencer::TransportStopAtTime,
-                        RealTime::zeroTime);
+                        RealTime::zero());
                 RosegardenSequencer::getInstance()->transportChange(
                         RosegardenSequencer::TransportStart);
             }
@@ -3321,7 +3400,7 @@ AlsaDriver::insertMTCFullFrame(RealTime time)
 void
 AlsaDriver::insertMTCQFrames(RealTime sliceStart, RealTime sliceEnd)
 {
-    if (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime) {
+    if (sliceStart == RealTime::zero() && sliceEnd == RealTime::zero()) {
         // not a real slice
         return ;
     }
@@ -3533,7 +3612,7 @@ AlsaDriver::calibrateMTC()
         RealTime diff_c = m_mtcReceiveTime - m_mtcLastReceive;
 
 #ifdef MTC_DEBUG
-        printf("RG MTC: diffs %d %d %d\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
+        printf("RG MTC: diffs %d %d %u\n", diff_c.nsec, diff_e.nsec, m_mtcSkew);
 #endif
 
         m_mtcSigmaE += ((long long int) diff_e.nsec) * m_mtcSkew;
@@ -3603,7 +3682,7 @@ restarted.  Reset it to a sane default when called with factor of 0
 }
 
 bool
-AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
+AlsaDriver::testForMMCSysex(const snd_seq_event_t *event) const
 {
     if (m_mmcStatus != TRANSPORT_FOLLOWER)
         return false;
@@ -3631,12 +3710,45 @@ AlsaDriver::testForMMCSysex(const snd_seq_event_t *event)
         instruction == MIDI_MMC_DEFERRED_PLAY) {
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportPlay);
+    } else if (instruction == MIDI_MMC_RECORD_STROBE) {
+        RosegardenSequencer::getInstance()->transportChange(
+                RosegardenSequencer::TransportRecord);
     } else if (instruction == MIDI_MMC_STOP) {
         RosegardenSequencer::getInstance()->transportChange(
                 RosegardenSequencer::TransportStop);
     }
 
     return true;
+}
+
+void
+AlsaDriver::sendEvent(
+        const bool isSoftSynth,
+        const InstrumentId instrumentID,
+        snd_seq_event_t &alsaEvent,
+        const bool now)
+{
+    if (isSoftSynth) {
+        processSoftSynthEventOut(instrumentID, &alsaEvent, now);
+        return;
+    }
+
+    // ALSA Port
+
+    const int rc = snd_seq_event_output(m_midiHandle, &alsaEvent);
+    checkAlsaError(rc, "sendEvent(): output queued");
+
+    if (now) {
+        if (m_queueRunning  &&  !m_playing) {
+            // Restart queue
+            checkAlsaError(
+                    snd_seq_continue_queue(m_midiHandle, m_queue, nullptr),
+                    "sendEvent(): continue queue");
+        }
+        checkAlsaError(
+                snd_seq_drain_output(m_midiHandle),
+                "sendEvent(): draining");
+    }
 }
 
 void
@@ -3647,7 +3759,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
     LOCKED;
 
     // special case for unqueued events
-    bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+    bool now = (sliceStart == RealTime::zero() && sliceEnd == RealTime::zero());
 
 #ifdef DEBUG_PROCESS_MIDI_OUT
     RG_DEBUG << "processMidiOut(" << sliceStart << "," << sliceEnd << "), " << rgEventList.size() << " events, now is " << now;
@@ -3676,14 +3788,14 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
     // NB the MappedEventList is implicitly ordered by time (std::multiset)
 
-    // For each incoming mapped (Rosegarden) event
+    // For each incoming MappedEvent...
     for (MappedEvent *rgEvent : rgEventList) {
         // Skip all non-MIDI events.
-        if (rgEvent->getType() >= MappedEvent::Audio)
+        if (!rgEvent->isMidi())
             continue;
 
         if (rgEvent->getType() == MappedEvent::MidiNote &&
-            rgEvent->getDuration() == RealTime::zeroTime &&
+            rgEvent->getDuration() == RealTime::zero() &&
             rgEvent->getVelocity() == 0) {
             // NOTE OFF with duration zero is scheduled from the
             // internal segment mapper and we don't use that message
@@ -3709,12 +3821,13 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
         snd_seq_event_t alsaEvent;
         snd_seq_ev_clear(&alsaEvent);
-    
+
         const bool isExternalController =
                 (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
 
-        bool isSoftSynth = (!isExternalController &&
-                            (rgEvent->getInstrument() >= SoftSynthInstrumentBase));
+        const bool isSoftSynth =
+                (!isExternalController  &&
+                 rgEvent->getInstrumentId() >= SoftSynthInstrumentBase);
 
         RealTime outputTime = rgEvent->getEventTime() - m_playStartPosition +
             m_alsaPlayStartTime;
@@ -3749,7 +3862,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 
         if (!m_queueRunning && outputTime < alsaTimeNow) {
             RealTime adjust = alsaTimeNow - outputTime;
-            if (rgEvent->getDuration() > RealTime::zeroTime) {
+            if (rgEvent->getDuration() > RealTime::zero()) {
                 if (rgEvent->getDuration() <= adjust) {
 #ifdef DEBUG_PROCESS_MIDI_OUT
                     RG_DEBUG << "processMidiOut[" << now << "]: too late for this event, abandoning it";
@@ -3804,7 +3917,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             if (isExternalController) {
                 src = m_externalControllerPort;
             } else {
-                src = getOutputPortForMappedInstrument(rgEvent->getInstrument());
+                src = getOutputPortForMappedInstrument(rgEvent->getInstrumentId());
             }
 
             if (src < 0)
@@ -3818,7 +3931,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             alsaEvent.time.time = time;
         }
 
-        MappedInstrument *instrument = getMappedInstrument(rgEvent->getInstrument());
+        MappedInstrument *instrument = getMappedInstrument(rgEvent->getInstrumentId());
 
         // set the stop time for Note Off
         //
@@ -3890,10 +4003,10 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 info.level = rgEvent->getVelocity();
                 info.levelRight = 0;
                 SequencerDataBlock::getInstance()->setInstrumentLevel
-                    (rgEvent->getInstrument(), info);
+                    (rgEvent->getInstrumentId(), info);
             }
 
-            weedRecentNoteOffs(rgEvent->getPitch(), channel, rgEvent->getInstrument());
+            weedRecentNoteOffs(rgEvent->getPitch(), channel, rgEvent->getInstrumentId());
             break;
 
         case MappedEvent::MidiProgramChange:
@@ -3943,8 +4056,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 sprintf(out, "%c", MIDI_END_OF_EXCLUSIVE);
                 sysExData += out;
 
-                // Note: sysExData needs to stay around until this event
-                //   is actually sent.  event has a pointer to its contents.
+                // Note: sysExData needs to stay around until this event is
+                //       actually sent.  event has a pointer to its contents.
                 snd_seq_ev_set_sysex(&alsaEvent,
                                      sysExData.length(),
                                      (char*)(sysExData.c_str()));
@@ -3985,8 +4098,124 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                                       rgEvent->getData2());
             break;
 
-            // These types do nothing here, so go on to the
-            // next iteration.
+        case MappedEvent::MidiRPN:
+#if 0
+            // This does not work.  It sends an *ALSA* RPN, not a set of CCs.
+            // So ALSA synths need to handle *ALSA* RPNs.  Fluidsynth does
+            // not so I decided to translate this to CCs which should be
+            // compatible with everything.
+
+            // Based on snd_seq_ev_set_controller().
+            // There is no snd_seq_ev_set_regparam().
+            alsaEvent.type = SND_SEQ_EVENT_REGPARAM;
+            snd_seq_ev_set_fixed(&alsaEvent);
+            alsaEvent.data.control.channel = channel;
+            alsaEvent.data.control.param = rgEvent->getNumber();
+            alsaEvent.data.control.value = rgEvent->getValue();
+            break;
+#else
+            {
+                // Send the set of CCs required for the RPN.
+
+                const InstrumentId instrumentID = rgEvent->getInstrumentId();
+                const int number = rgEvent->getNumber();
+                const int value = rgEvent->getValue();
+
+                // BnH 65H <RPN MSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x65,
+                                          number >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 64H <RPN LSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x64,
+                                          number & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 06H <Value MSB>  (Data Entry MSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x06,
+                                          value >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 26H <Value LSB>  (Data Entry LSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x26,
+                                          value & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // Handled it.  Move on to the next.
+                continue;
+            }
+#endif
+
+        case MappedEvent::MidiNRPN:
+#if 0
+            // This does not work.  It sends an *ALSA* NRPN, not a set of CCs.
+            // So ALSA synths need to handle *ALSA* NRPNs.  Fluidsynth does
+            // not so I decided to translate this to CCs which should be
+            // compatible with everything.
+
+            // Based on snd_seq_ev_set_controller().
+            // There is no snd_seq_ev_set_nonregparam().
+            // ??? This isn't working.  I can see the events using aseqdump.
+            //     But when I send them to fluidsynth, they do nothing.
+            //     Sending the individual CCs works fine.  I suspect that we
+            //     need to abandon this approach.
+            alsaEvent.type = SND_SEQ_EVENT_NONREGPARAM;
+            snd_seq_ev_set_fixed(&alsaEvent);
+            alsaEvent.data.control.channel = channel;
+            alsaEvent.data.control.param = rgEvent->getNumber();
+            alsaEvent.data.control.value = rgEvent->getValue();
+            break;
+#else
+            {
+                // Send the set of CCs required for the NRPN.
+
+                const InstrumentId instrumentID = rgEvent->getInstrumentId();
+                const int number = rgEvent->getNumber();
+                const int value = rgEvent->getValue();
+
+                // BnH 63H <NRPN MSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x63,
+                                          number >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 62H <NRPN LSB>
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x62,
+                                          number & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 06H <Value MSB>  (Data Entry MSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x06,
+                                          value >> 7);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // BnH 26H <Value LSB>  (Data Entry LSB)
+                snd_seq_ev_set_controller(&alsaEvent,
+                                          channel,
+                                          0x26,
+                                          value & 0x7F);
+                sendEvent(isSoftSynth, instrumentID, alsaEvent, now);
+
+                // Handled it.  Move on to the next.
+                continue;
+            }
+#endif
+
+        // These types do nothing here, so go on to the
+        // next iteration.
         case MappedEvent::Audio:
         case MappedEvent::AudioCancel:
         case MappedEvent::AudioLevel:
@@ -4010,8 +4239,8 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         case MappedEvent::Text:
              continue;
 
-        default:
         case MappedEvent::InvalidMappedEvent:
+        default:
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut() - skipping unrecognised or invalid MappedEvent type";
 #endif
@@ -4030,34 +4259,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             RG_DEBUG << "  ALSA event type: " << alsaEvent.type << " (" << eventType << ")";
         }
 
-        if (isSoftSynth) {
-            if (debug)
-                RG_DEBUG << "  Calling processSoftSynthEventOut()...";
-
-            processSoftSynthEventOut(rgEvent->getInstrument(), &alsaEvent, now);
-
-        } else {
-            if (debug)
-                RG_DEBUG << "  Calling snd_seq_event_output()...";
-
-            int rc = snd_seq_event_output(m_midiHandle, &alsaEvent);
-            checkAlsaError(rc, "processMidiOut(): output queued");
-
-            if (debug)
-                RG_DEBUG << "  snd_seq_event_output() rc:" << rc;
-
-            if (now) {
-                if (m_queueRunning && !m_playing) {
-                    // restart queue
-#ifdef DEBUG_PROCESS_MIDI_OUT
-                    RG_DEBUG << "processMidiOut(): restarting queue after now-event";
-#endif
-
-                    checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, nullptr), "processMidiOut(): continue queue");
-                }
-                checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
-            }
-        }
+        sendEvent(isSoftSynth, rgEvent->getInstrumentId(), alsaEvent, now);
 
         // Add note to note off stack
         //
@@ -4066,7 +4268,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
                 new NoteOffEvent(outputStopTime,  // already calculated
                                  rgEvent->getPitch(),
                                  channel,
-                                 rgEvent->getInstrument());
+                                 rgEvent->getInstrumentId());
 
 #ifdef DEBUG_ALSA
             RG_DEBUG << "processMidiOut(): Adding NOTE OFF at " << outputStopTime;
@@ -4093,7 +4295,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
             checkAlsaError(snd_seq_continue_queue(m_midiHandle, m_queue, nullptr), "processMidiOut(): continue queue");
         }
 
-#ifdef DEBUG_PROCESS_MIDI_OUT 
+#ifdef DEBUG_PROCESS_MIDI_OUT
         //RG_DEBUG << "processMidiOut(): m_queueRunning " << m_queueRunning << ", now " << now;
 #endif
         checkAlsaError(snd_seq_drain_output(m_midiHandle), "processMidiOut(): draining");
@@ -4101,7 +4303,9 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
 }
 
 void
-AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev, bool now)
+AlsaDriver::processSoftSynthEventOut(InstrumentId id,
+                                     const snd_seq_event_t *event,
+                                     bool now)
 {
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
     RG_DEBUG << "processSoftSynthEventOut(): instrument " << id << ", now " << now;
@@ -4115,10 +4319,10 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
 
     if (synthPlugin) {
 
-        RealTime t(ev->time.time.tv_sec, ev->time.time.tv_nsec);
+        RealTime t(event->time.time.tv_sec, event->time.time.tv_nsec);
 
         if (now)
-            t = RealTime::zeroTime;
+            t = RealTime::zero();
         else
             t = t + m_playStartPosition - m_alsaPlayStartTime;
 
@@ -4126,7 +4330,7 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id, const snd_seq_event_t *ev,
         RG_DEBUG << "processSoftSynthEventOut(): event time " << t;
 #endif
 
-        synthPlugin->sendEvent(t, ev);
+        synthPlugin->sendEvent(t, event);
 
         if (now) {
 #ifdef DEBUG_PROCESS_SOFT_SYNTH_OUT
@@ -4239,20 +4443,21 @@ AlsaDriver::startClocksApproved()
     //!!!
     m_needJackStart = NeedNoJackStart;
     startClocks();
-    return ;
+    return;
 
-    int result;
+    // unreachable code
+    //int result;
 
     // Restart the timer
-    if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, nullptr)) < 0) {
-        RG_WARNING << "startClocksApproved(): WARNING: Couldn't start queue - " << snd_strerror(result);
-        reportFailure(MappedEvent::FailureALSACallFailed);
-    }
+    //if ((result = snd_seq_continue_queue(m_midiHandle, m_queue, nullptr)) < 0) {
+    //  RG_WARNING << "startClocksApproved(): WARNING: Couldn't start queue - " << snd_strerror(result);
+    //  reportFailure(MappedEvent::FailureALSACallFailed);
+    //}
 
-    m_queueRunning = true;
+    //m_queueRunning = true;
 
     // process pending MIDI events
-    checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocksApproved(): draining");
+    //checkAlsaError(snd_seq_drain_output(m_midiHandle), "startClocksApproved(): draining");
 }
 
 void
@@ -4288,14 +4493,14 @@ AlsaDriver::stopClocks()
     RG_DEBUG << "stopClocks(): ALSA time now is " << getAlsaTime();
 #endif
 
-    m_alsaPlayStartTime = RealTime::zeroTime;
+    m_alsaPlayStartTime = RealTime::zero();
 }
 
 
 void
 AlsaDriver::processEventsOut(const MappedEventList &rgEventList)
 {
-    processEventsOut(rgEventList, RealTime::zeroTime, RealTime::zeroTime);
+    processEventsOut(rgEventList, RealTime::zero(), RealTime::zero());
 }
 
 void
@@ -4305,7 +4510,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 {
     // special case for unqueued events
 #ifdef HAVE_LIBJACK
-    const bool now = (sliceStart == RealTime::zeroTime && sliceEnd == RealTime::zeroTime);
+    const bool now = (sliceStart == RealTime::zero() && sliceEnd == RealTime::zero());
 #endif
 
     if (m_startPlayback) {
@@ -4351,15 +4556,15 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             // we could make this just get the gui to reload our files
             // when (or before) this fails.
             //
-            audioFile = getAudioFile(mappedEvent->getAudioID());
+            audioFile = getAudioFile(mappedEvent->getAudioFileID());
 
             if (audioFile) {
                 MappedAudioFader *fader =
                     dynamic_cast<MappedAudioFader *>
-                    (m_studio->getAudioFader(mappedEvent->getInstrument()));
+                    (m_studio->getAudioFader(mappedEvent->getInstrumentId()));
 
                 if (!fader) {
-                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << mappedEvent->getInstrument();
+                    RG_WARNING << "processEventsOut(): WARNING: No fader for audio instrument " << mappedEvent->getInstrumentId();
                     continue;
                 }
 
@@ -4384,7 +4589,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
                 PlayableAudioFile *paf = nullptr;
 
                 try {
-                    paf = new PlayableAudioFile(mappedEvent->getInstrument(),
+                    paf = new PlayableAudioFile(mappedEvent->getInstrumentId(),
                                                 audioFile,
                                                 getSequencerTime() +
                                                 (RealTime(1, 0) / 4),
@@ -4504,7 +4709,7 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
             bool source = false;
 
             switch ((int)mappedEvent->getData1()) {
-            case 2:
+            case 2:  // JACK Transport Source
                 source = true;
                 enabled = true;
 #ifdef DEBUG_ALSA
@@ -4512,14 +4717,14 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 #endif
                 break;
 
-            case 1:
+            case 1:  // Follow JACK Transport
                 enabled = true;
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport";
 #endif
                 break;
 
-            case 0:
+            case 0:  // Ignore JACK Transport
             default:
 #ifdef DEBUG_ALSA
                 RG_DEBUG << "processEventsOut(): Rosegarden to ignore JACK transport";
@@ -4685,7 +4890,7 @@ AlsaDriver::record(RecordStatus recordStatus,
     if (recordStatus == RECORD_ON) {
         // start recording
         m_recordStatus = RECORD_ON;
-        m_alsaRecordStartTime = RealTime::zeroTime;
+        m_alsaRecordStartTime = RealTime::zero();
 
         unsigned int audioCount = 0;
 
@@ -4715,6 +4920,7 @@ AlsaDriver::record(RecordStatus recordStatus,
                 }
 #endif
 
+                // cppcheck-suppress knownConditionTrueFalse
                 if (!good) {
                     m_recordStatus = RECORD_OFF;
                     RG_WARNING << "record(): No JACK driver, or JACK driver failed to prepare for recording audio";
@@ -4737,6 +4943,7 @@ AlsaDriver::record(RecordStatus recordStatus,
     return true;
 }
 
+/* unused
 ClientPortPair
 AlsaDriver::getFirstDestination(bool duplex)
 {
@@ -4763,7 +4970,7 @@ AlsaDriver::getFirstDestination(bool duplex)
 
     return destPair;
 }
-
+*/
 
 // Sort through the ALSA client/port pairs for the range that
 // matches the one we're querying.  If none matches then send
@@ -4909,7 +5116,9 @@ AlsaDriver::isRecording(AlsaPortDescription *port)
 void
 AlsaDriver::checkForNewClients()
 {
-    //RG_DEBUG << "checkForNewClients() begin...";
+    // This is a very noisy message since this routine is called constantly.
+    // Use the next RG_DEBUG instead.
+    //RG_DEBUG << "checkForNewClients()";
 
     // If no ALSA client or port events have come in, bail.
     if (!m_portCheckNeeded)
@@ -5168,7 +5377,9 @@ AlsaDriver::setRecordDevice(DeviceId id, bool connectAction)
                            "setRecordDevice - failed subscription of input port") < 0) {
             // Not the end of the world if this fails but we
             // have to flag it internally.
-            //
+            // ??? I'm seeing this and it appears to mean nothing in the
+            //     grand scheme of things.  I'm still able to record.
+            //     Why issue this misleading message?  Can we do better?
             AUDIT << "AlsaDriver::setRecordDevice() - "
                   << int(sender.client) << ":" << int(sender.port)
                   << " failed to subscribe device "
@@ -5283,7 +5494,7 @@ AlsaDriver::sendMMC(MidiByte deviceArg,
 // Send a system real-time message from the sync output port
 //
 void
-AlsaDriver::sendSystemDirect(MidiByte command, int *args)
+AlsaDriver::sendSystemDirect(MidiByte command, int *arg)
 {
     snd_seq_event_t event;
 
@@ -5297,8 +5508,8 @@ AlsaDriver::sendSystemDirect(MidiByte command, int *args)
     event.type = command;
 
     // set args if we have them
-    if (args) {
-        event.data.control.value = *args;
+    if (arg) {
+        event.data.control.value = *arg;
     }
 
     int error = snd_seq_event_output_direct(m_midiHandle, &event);
@@ -5369,7 +5580,7 @@ AlsaDriver::sendSystemQueued(MidiByte command,
 void
 AlsaDriver::claimUnwantedPlugin(void *plugin)
 {
-    m_pluginScavenger.claim((RunnablePluginInstance *)plugin);
+    m_pluginScavenger.claim(static_cast<RunnablePluginInstance *>(plugin));
 }
 
 
@@ -5377,6 +5588,16 @@ void
 AlsaDriver::scavengePlugins()
 {
     m_pluginScavenger.scavenge();
+}
+
+void
+AlsaDriver::installExporter(WAVExporter* wavExporter)
+{
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver) {
+        m_jackDriver->installExporter(wavExporter);
+    }
+#endif
 }
 
 QString
@@ -5389,6 +5610,7 @@ void
 AlsaDriver::sleep(const RealTime &rt)
 {
     int npfd = snd_seq_poll_descriptors_count(m_midiHandle, POLLIN);
+    // cppcheck-suppress allocaCalled
     struct pollfd *pfd = (struct pollfd *)alloca(npfd * sizeof(struct pollfd));
     snd_seq_poll_descriptors(m_midiHandle, pfd, npfd, POLLIN);
     poll(pfd, npfd, rt.sec * 1000 + rt.msec());
@@ -5415,7 +5637,7 @@ AlsaDriver::runTasks()
         snd_seq_get_queue_tempo(m_midiHandle, m_queue, q_ptr);
 
         unsigned int t_skew = snd_seq_queue_tempo_get_skew(q_ptr);
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
 
         unsigned int t_base = snd_seq_queue_tempo_get_skew_base(q_ptr);
         if (!m_playing) {
@@ -5426,7 +5648,7 @@ AlsaDriver::runTasks()
         unsigned int newSkew = t_skew + (unsigned int)(t_skew * ratio);
 
         if (newSkew != t_skew) {
-#ifdef DEBUG_ALSA
+#ifdef DEBUG_ALSA_TIMER
             if (!m_playing) {
                 RG_DEBUG << "runTasks():     changed to " << newSkew;
             }
@@ -5554,41 +5776,41 @@ AlsaDriver::getKernelVersionString()
 }
 
 void
-AlsaDriver::extractVersion(std::string v, int &major, int &minor, int &subminor, std::string &suffix)
+AlsaDriver::extractVersion(std::string vstr, int &major, int &minor, int &subminor, std::string &suffix)
 {
     major = minor = subminor = 0;
     suffix = "";
-    if (v == "(unknown)") return;
+    if (vstr == "(unknown)") return;
 
     std::string::size_type sp, pp;
 
-    sp = v.find('.');
+    sp = vstr.find('.');
     if (sp == std::string::npos) goto done;
-    major = atoi(v.substr(0, sp).c_str());
+    major = atoi(vstr.substr(0, sp).c_str());
     pp = sp + 1;
 
-    sp = v.find('.', pp);
+    sp = vstr.find('.', pp);
     if (sp == std::string::npos) goto done;
-    minor = atoi(v.substr(pp, sp - pp).c_str());
+    minor = atoi(vstr.substr(pp, sp - pp).c_str());
     pp = sp + 1;
 
-    while (++sp < v.length() && (::isdigit(v[sp]) || v[sp] == '-')) { }
-    subminor = atoi(v.substr(pp, sp - pp).c_str());
+    while (++sp < vstr.length() && (::isdigit(vstr[sp]) || vstr[sp] == '-')) { }
+    subminor = atoi(vstr.substr(pp, sp - pp).c_str());
 
-    if (sp >= v.length()) goto done;
-    suffix = v.substr(sp);
+    if (sp >= vstr.length()) goto done;
+    suffix = vstr.substr(sp);
 
 done:
     RG_DEBUG << "extractVersion(): major = " << major << ", minor = " << minor << ", subminor = " << subminor << ", suffix = \"" << suffix << "\"";
 }
 
 bool
-AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
+AlsaDriver::versionIsAtLeast(const std::string& vstr, int major, int minor, int subminor)
 {
     int actualMajor, actualMinor, actualSubminor;
     std::string actualSuffix;
 
-    extractVersion(v, actualMajor, actualMinor, actualSubminor, actualSuffix);
+    extractVersion(vstr, actualMajor, actualMinor, actualSubminor, actualSuffix);
 
     bool ok = false;
 
@@ -5613,9 +5835,9 @@ AlsaDriver::versionIsAtLeast(std::string v, int major, int minor, int subminor)
         }
     }
 
-    RG_DEBUG << "versionIsAtLeast(): is version " << v << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no");
+    RG_DEBUG << "versionIsAtLeast(): is version " << vstr << " at least " << major << "." << minor << "." << subminor << "? " << (ok ? "yes" : "no");
     return ok;
-}    
+}
 
 bool
 AlsaDriver::throttledDebug() const
@@ -5650,11 +5872,17 @@ AlsaDriver::throttledDebug() const
     return false;
 }
 
+#if 0
 bool
 AlsaDriver::portInUse(int client, int port) const
 {
     // If the client/port is in m_devicePortMap, then it
     // is in use.  See setConnectionToDevice().
+
+    // ??? This has a serious bug.  It does not understand that some ports
+    //     are playback and some are record.  It just looks for the first
+    //     of either type.  That makes no sense.  It's probably better to
+    //     just not use this at all.
 
     for (DevicePortMap::const_iterator dpmi =
              m_devicePortMap.begin();
@@ -5669,6 +5897,7 @@ AlsaDriver::portInUse(int client, int port) const
     // Not found, so not in use.
     return false;
 }
+#endif
 
 bool
 AlsaDriver::isConnected(DeviceId deviceId) const
@@ -5684,11 +5913,14 @@ AlsaDriver::isConnected(DeviceId deviceId) const
             deviceIter->second != ClientPortPair(-1,-1));
 }
 
-bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value)
+bool AlsaDriver::handleTransportCCs(unsigned controlNumber, int value) const
 {
     // If transport CCs are not enabled, bail.
     if (!m_acceptTransportCCs)
         return false;
+
+    // Note that we go through the message queue since we are in a
+    // different thread.
 
     // Play
     if (controlNumber == 117) {
@@ -5837,18 +6069,17 @@ AlsaDriver::cancelAudioFile(const MappedEvent *mE)
     const AudioPlayQueue::FileList &files = m_audioQueue->getAllUnscheduledFiles();
     for (AudioPlayQueue::FileList::const_iterator fi = files.begin();
             fi != files.end(); ++fi) {
-        PlayableAudioFile *file = *fi;
+        PlayableData *file = *fi;
+        if (! file) continue;
         if (mE->getRuntimeSegmentId() == -1) {
 
-            // ERROR? The comparison between file->getAudioFile()->getId() of type unsigned int
-            //        and mE->getAudioID() of type int.
-            if (file->getInstrument() == mE->getInstrument() &&
-                    int(file->getAudioFile()->getId()) == mE->getAudioID()) {
+            if (file->getInstrument() == mE->getInstrumentId()  &&
+                file->getAudioFile()->getId() == mE->getAudioFileID()) {
                 file->cancel();
             }
         } else {
-            if (file->getRuntimeSegmentId() == mE->getRuntimeSegmentId() &&
-                    file->getStartTime() == mE->getEventTime()) {
+            if (file->getRuntimeSegmentId() == mE->getRuntimeSegmentId()  &&
+                file->getStartTime() == mE->getEventTime()) {
                 file->cancel();
             }
         }
@@ -5866,8 +6097,10 @@ AlsaDriver::clearAudioQueue()
     AudioPlayQueue *newQueue = new AudioPlayQueue();
     AudioPlayQueue *oldQueue = m_audioQueue;
     m_audioQueue = newQueue;
-    if (oldQueue)
+    if (oldQueue) {
+        oldQueue->deactivate();
         m_audioQueueScavenger.claim(oldQueue);
+    }
 }
 
 

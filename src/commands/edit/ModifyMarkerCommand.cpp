@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -36,7 +36,7 @@ ModifyMarkerCommand::ModifyMarkerCommand(Composition *comp,
         m_time(time),
         m_newTime(newTime),
         m_id(id),
-        m_name(name),
+        m_markerName(name),
         m_description(des),
         m_oldName(""),
         m_oldDescription("")
@@ -48,10 +48,10 @@ ModifyMarkerCommand::~ModifyMarkerCommand()
 void
 ModifyMarkerCommand::execute()
 {
-    Composition::markercontainer markers =
+    Composition::MarkerVector markers =
         m_composition->getMarkers();
 
-    Composition::markerconstiterator it = markers.begin();
+    Composition::MarkerVector::const_iterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
         if ((*it)->getID() == m_id) {
@@ -60,7 +60,7 @@ ModifyMarkerCommand::execute()
             if (m_oldDescription.empty())
                 m_oldDescription = (*it)->getDescription();
 
-            (*it)->setName(m_name);
+            (*it)->setName(m_markerName);
             (*it)->setDescription(m_description);
             (*it)->setTime(m_newTime);
             return ;
@@ -71,10 +71,10 @@ ModifyMarkerCommand::execute()
 void
 ModifyMarkerCommand::unexecute()
 {
-    Composition::markercontainer markers =
+    Composition::MarkerVector markers =
         m_composition->getMarkers();
 
-    Composition::markerconstiterator it = markers.begin();
+    Composition::MarkerVector::const_iterator it = markers.begin();
 
     for (; it != markers.end(); ++it) {
         if ((*it)->getID() == m_id) {

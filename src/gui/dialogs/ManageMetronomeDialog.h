@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,9 +19,10 @@
 #ifndef RG_MANAGEMETRONOMEDIALOG_H
 #define RG_MANAGEMETRONOMEDIALOG_H
 
-#include "base/MidiMetronome.h"
-#include <QDialog>
+//#include "base/MidiMetronome.h"
+#include "base/MidiProgram.h"
 
+#include <QDialog>
 
 class QWidget;
 class QSpinBox;
@@ -29,12 +30,15 @@ class QCheckBox;
 class QComboBox;
 class QDialogButtonBox;
 
+
 namespace Rosegarden
 {
 
-class RosegardenDocument;
-class PitchChooser;
+
 class Device;
+class MidiMetronome;
+class PitchChooser;
+class RosegardenDocument;
 
 
 class ManageMetronomeDialog : public QDialog
@@ -54,11 +58,9 @@ public slots:
     void slotPreviewPitch(int);
     void slotPitchSelectorChanged(int);
     void slotPitchChanged(int);
-    void populate(int dev);
+    void populate(int deviceIndex);
 
 protected:
-
-    //--------------- Data members ---------------------------------
 
     RosegardenDocument       *m_doc;
 
@@ -74,10 +76,13 @@ protected:
     QCheckBox              *m_playEnabled;
     QCheckBox              *m_recordEnabled;
 
-    bool                   m_modified;
-    MidiByte   m_barPitch;
-    MidiByte   m_beatPitch;
-    MidiByte   m_subBeatPitch;
+    // ??? Set but never used.  Probably intended to enable the Apply
+    //     button or something.
+    bool m_modified;
+
+    MidiByte m_barPitch;
+    MidiByte m_beatPitch;
+    MidiByte m_subBeatPitch;
 
     bool isSuitable(Device *, bool *hasConnectionReturn = nullptr);
     void setMetronome(Device *, const MidiMetronome &);

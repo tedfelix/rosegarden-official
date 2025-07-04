@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,12 +37,12 @@ class TrackLabelDialog : public QDialog
 public:
     TrackLabelDialog(QWidget *parent,
                      const QString &title,
-                     const QString &PrimaryLabel,
-                     const QString &PrimaryContents,
-                     const QString &PrimaryTooltip,
-                     const QString &SecondaryLabel,
-                     const QString &SecondaryContents,
-                     const QString &SecondaryTooltip);
+                     const QString &primaryLabel,
+                     const QString &primaryContents,
+                     const QString &primaryTooltip,
+                     const QString &secondaryLabel,
+                     const QString &secondaryContents,
+                     const QString &secondaryTooltip);
 
     QString getPrimaryText();
     QString getSecondaryText();

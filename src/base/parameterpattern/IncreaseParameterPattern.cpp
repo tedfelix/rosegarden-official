@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -54,16 +54,16 @@ IncreaseParameterPattern::getSliderSpec(const SelectionSituation * situation) co
 
     return result;
 }
-    
+
 void
 IncreaseParameterPattern::setEventProperties(iterator begin, iterator end,
                                              Result *result) const
 {
-    const int          delta    = result->m_parameters[0];
-    const int          increase = m_isIncrease ? delta : -delta;
+    const int          delta     = result->m_parameters[0];
+    const int          increase1 = m_isIncrease ? delta : -delta;
     for (iterator i = begin; i != end; ++i) {
-        result->m_situation->addToValue(*i, increase);
+        result->m_situation->addToValue(*i, increase1);
     }
 }
 
-} // End namespace Rosegarden 
+} // End namespace Rosegarden

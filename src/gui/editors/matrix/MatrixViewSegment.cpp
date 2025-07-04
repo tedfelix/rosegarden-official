@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -35,11 +35,11 @@ namespace Rosegarden
 {
 
 MatrixViewSegment::MatrixViewSegment(MatrixScene *scene,
-				     Segment *segment,
-                                     bool drum) :
+                                     Segment *segment,
+                                     bool drumMode) :
     ViewSegment(*segment),
     m_scene(scene),
-    m_drum(drum),
+    m_drum(drumMode),
     m_refreshStatusId(segment->getNewRefreshStatusId())
 {
 }
@@ -54,11 +54,13 @@ MatrixViewSegment::getRefreshStatus() const
     return m_segment.getRefreshStatus(m_refreshStatusId);
 }
 
+/* unused
 void
 MatrixViewSegment::resetRefreshStatus()
 {
     m_segment.getRefreshStatus(m_refreshStatusId).setNeedsRefresh(false);
 }
+*/
 
 bool
 MatrixViewSegment::wrapEvent(Event* e)
@@ -97,27 +99,35 @@ MatrixViewSegment::makeViewElement(Event* e)
 
     //RG_DEBUG << "  I am segment \"" << getSegment().getLabel() << "\"";
 
-    return new MatrixElement(m_scene, e, m_drum, pitchOffset);
+    return new MatrixElement(m_scene, e, m_drum, pitchOffset, &getSegment());
 }
 
 void
-MatrixViewSegment::endMarkerTimeChanged(const Segment *s, bool shorten)
+MatrixViewSegment::endMarkerTimeChanged(const Segment *segment, bool shorten)
 {
-    ViewSegment::endMarkerTimeChanged(s, shorten);
-    if (m_scene) m_scene->segmentEndMarkerTimeChanged(s, shorten);
+    ViewSegment::endMarkerTimeChanged(segment, shorten);
+    if (m_scene) m_scene->segmentEndMarkerTimeChanged(segment, shorten);
 }
 
 void
 MatrixViewSegment::updateElements(timeT from, timeT to)
 {
-    if (!m_viewElementList) return;
-    ViewElementList::iterator i = m_viewElementList->findTime(from);
-    ViewElementList::iterator j = m_viewElementList->findTime(to);
-    while (i != m_viewElementList->end()) {
-        MatrixElement *e = static_cast<MatrixElement *>(*i);
+    if (!m_viewElementList)
+        return;
+
+    ViewElementList::iterator viewElementIter =
+            m_viewElementList->findTime(from);
+    ViewElementList::iterator endIter = m_viewElementList->findTime(to);
+
+    // For each ViewElement in the from-to range...
+    while (viewElementIter != m_viewElementList->end()) {
+        MatrixElement *e = static_cast<MatrixElement *>(*viewElementIter);
+        // Update the item on the display.
         e->reconfigure();
-        if (i == j) break;
-        ++i;
+
+        if (viewElementIter == endIter)
+            break;
+        ++viewElementIter;
     }
 }
 
@@ -133,4 +143,3 @@ MatrixViewSegment::updateAll()
 }
 
 }
-

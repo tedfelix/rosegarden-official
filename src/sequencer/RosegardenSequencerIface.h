@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
@@ -12,21 +12,24 @@
     COPYING included with this distribution for more information.
 */
 
+#if 0
+
 #ifndef RG_ROSEGARDENSEQUENCERIFACE_H
 #define RG_ROSEGARDENSEQUENCERIFACE_H
 
+#include "base/Instrument.h"
 #include "gui/application/TransportStatus.h"
-
-#include "base/Event.h"
 #include "sound/MappedEventList.h"
 #include "sound/MappedEvent.h"
-#include "base/Instrument.h"
 #include "sound/MappedDevice.h"
 #include "sound/MappedStudio.h"
 #include "sound/MappedCommon.h"
 #include "sound/MappedBufMetaIterator.h"
 
-namespace Rosegarden {
+
+namespace Rosegarden
+{
+
 
 /// UNUSED
 /**
@@ -321,6 +324,9 @@ public:
     virtual void remapTracks() = 0;
 };
 
+
 }
 
-#endif // RG_ROSEGARDENSEQUENCERIFACE_H
+#endif
+
+#endif

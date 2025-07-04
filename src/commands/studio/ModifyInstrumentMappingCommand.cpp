@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -43,9 +43,9 @@ ModifyInstrumentMappingCommand::ModifyInstrumentMappingCommand(
 void
 ModifyInstrumentMappingCommand::execute()
 {
-    Composition::trackcontainer &tracks =
+    Composition::TrackMap &tracks =
         m_composition->getTracks();
-    Composition::trackcontainer::iterator it = tracks.begin();
+    Composition::TrackMap::iterator it = tracks.begin();
 
     for (; it != tracks.end(); ++it) {
         if (it->second->getInstrument() == m_fromInstrument) {

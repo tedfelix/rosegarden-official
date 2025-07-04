@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -21,6 +21,7 @@
 
 #include "base/ControlParameter.h"
 #include "base/MidiTypes.h"  // EventType
+#include "sound/Midi.h"
 #include "base/RealTime.h"
 #include "base/Selection.h"  // EventSelection
 #include "commands/edit/EventInsertionCommand.h"
@@ -60,18 +61,35 @@ enum PresetStyles {
 PitchBendSequenceDialog::PitchBendSequenceDialog(
         QWidget *parent,
         Segment *segment,
-        const ControlParameter &control,
+        const ControlParameter &controlParameter,
         timeT startTime,
         timeT endTime) :
     QDialog(parent),
     m_segment(segment),
-    m_controlParameter(control),
+    m_controlParameter(controlParameter),
     m_startTime(startTime),
     m_endTime(endTime)
 {
     Q_ASSERT_X(m_startTime < m_endTime,
                "PitchBendSequenceDialog ctor",
                "Time range invalid.");
+
+
+    // Compute m_default.
+    if (m_controlParameter.getType() == PitchBend::EventType)
+        m_default = 0;
+    else if (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_PAN)
+        m_default = 0;
+    else
+        m_default = m_controlParameter.getDefault();
+
+    // Compute m_center.
+    if (m_controlParameter.getType() == PitchBend::EventType)
+        m_center = m_controlParameter.getDefault();
+    else if (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_PAN)
+        m_center = m_controlParameter.getDefault();
+    else
+        m_center = 0;
 
     setModal(true);
 
@@ -191,9 +209,9 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     const WhatVaries whatVaries =
         isPitchbend() ? Pitch :
         // Volume
-        (m_controlParameter.getControllerNumber() == 7) ? Volume :
+        (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_VOLUME) ? Volume :
         // Expression
-        (m_controlParameter.getControllerNumber() == 11) ? Volume :
+        (m_controlParameter.getControllerNumber() == MIDI_CONTROLLER_EXPRESSION) ? Volume :
         Other;
 
     const double minSpinboxValue = getMinSpinboxValue();
@@ -206,7 +224,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         tr("Pre Bend") :
         tr("Pre Ramp");
     QGroupBox *prebendBox = new QGroupBox(prebendText);
-    prebendBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *prebendLayout = new QGridLayout(prebendBox);
     prebendLayout->setSpacing(5);
     mainLayout->addWidget(prebendBox);
@@ -248,7 +265,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
         tr("Bend Sequence") :
         tr("Ramp Sequence");
     QGroupBox *sequenceBox = new QGroupBox(sequenceText);
-    sequenceBox->setContentsMargins(5, 5, 5, 5);
     QGridLayout *sequenceLayout = new QGridLayout(sequenceBox);
     sequenceLayout->setSpacing(5);
     mainLayout->addWidget(sequenceBox);
@@ -295,7 +311,6 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     QGroupBox *modulation = new QGroupBox(modulationText);
     modulation->
         setToolTip(tr("<qt>Low-frequency oscillation for this controller. This is only possible when Ramp mode is linear and <i>Use this many steps</i> is set.</qt>"));
-    modulation->setContentsMargins(5, 5, 5, 5);
     QGridLayout *modulationLayout = new QGridLayout(modulation);
     modulationLayout->setSpacing(5);
     mainLayout->addWidget(modulation);
@@ -639,7 +654,7 @@ double
 PitchBendSequenceDialog::getMaxSpinboxValue() const
 {
     const int rangeAboveDefault =
-            m_controlParameter.getMax() - m_controlParameter.getDefault();
+            m_controlParameter.getMax() - m_center;
 
     if (useValue())
         return rangeAboveDefault;
@@ -652,7 +667,7 @@ PitchBendSequenceDialog::getMinSpinboxValue() const
 {
     // rangeBelowDefault and return value will be negative or zero.
     const int rangeBelowDefault =
-            m_controlParameter.getMin() - m_controlParameter.getDefault();
+            m_controlParameter.getMin() - m_center;
 
     if (useValue())
         return rangeBelowDefault;
@@ -675,7 +690,7 @@ PitchBendSequenceDialog::
 spinboxToValue(const QDoubleSpinBox *spinbox) const
 {
     int value =
-            spinboxToValueDelta(spinbox) + m_controlParameter.getDefault();
+            spinboxToValueDelta(spinbox) + m_center;
 
     return m_controlParameter.clamp(value);
 }
@@ -804,12 +819,15 @@ PitchBendSequenceDialog::restorePreset(int preset)
     settings.beginReadArray(m_controlParameter.getName().data());
     settings.setArrayIndex(preset);
 
-    m_startAtValue->setValue(settings.value("pre_bend_value", 0).toDouble());
+    m_startAtValue->setValue(settings.value(
+            "pre_bend_value",
+            m_default).toDouble());
     m_wait->setValue(settings.value("pre_bend_duration_value", 0).toDouble());
     m_rampDuration->setValue(
             settings.value("sequence_ramp_duration", 100).toDouble());
-    m_endValue->setValue(
-            settings.value("sequence_ramp_end_value", 0).toDouble());
+    m_endValue->setValue(settings.value(
+            "sequence_ramp_end_value",
+            m_default).toDouble());
 
     m_startAmplitude->setValue(
             settings.value("vibrato_start_amplitude", 0).toDouble());
@@ -1057,7 +1075,7 @@ PitchBendSequenceDialog::addStepwiseEvents(MacroCommand *macro)
         m_rampDuration->value() * sequenceDuration / 100;
     const timeT rampEndTime = sequenceStartTime + rampDuration;
     const RampMode rampMode = getRampMode();
-    
+
     // Add the first Event to the MacroCommand.
     macro->addCommand(new EventInsertionCommand(
             *m_segment,
@@ -1195,11 +1213,10 @@ PitchBendSequenceDialog::slotHelp()
     // free to create one.  This URL points to a transitional page
     // that relates only to this branch.  If or when this branch is
     // merged, it should replace the main-branch page
-    // "http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en" 
+    // "http://rosegardenmusic.com/wiki/doc:pitchBendSequenceDialog-en"
     QString helpURL = tr("http://rosegardenmusic.com/wiki/doc:pitchbendsequencedialog-controllerbranch-en");
     QDesktopServices::openUrl(QUrl(helpURL));
 }
 
 
 }
-

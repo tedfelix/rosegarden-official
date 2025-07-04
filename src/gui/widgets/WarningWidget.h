@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -57,7 +57,7 @@ public:
      * MIDI, audio, and the system timer are all functioning correctly.  This
      * widget is intended to be displayed on the status bar in the main window.
      */
-    WarningWidget(QWidget *parent = nullptr);
+    explicit WarningWidget(QWidget *parent = nullptr);
     ~WarningWidget() override;
 
     void setMidiWarning(const bool status);
@@ -68,7 +68,7 @@ public:
      * queue.  These will be displayed via displayMessageQueue() when the user
      * clicks the warning icon
      */
-    void queueMessage(const int type, const QString text, const QString informativeText);
+    void queueMessage(const int type, const QString& text, const QString& informativeText);
 
     /** We'll build the message queue out of these for convenience, so both the
      * text and informative text can be tossed about as one unit, along with a

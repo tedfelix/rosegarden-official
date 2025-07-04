@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -19,6 +19,8 @@
 #include "base/RealTime.h"
 #include "base/Instrument.h"
 
+#include "PlayableData.h"
+
 #include <set>
 #include <vector>
 #include <map>
@@ -27,6 +29,7 @@
 namespace Rosegarden
 {
 
+class PlayableData;
 class PlayableAudioFile;
 
 /**
@@ -46,17 +49,17 @@ public:
     virtual ~AudioPlayQueue();
 
     struct FileTimeCmp {
-        bool operator()(const PlayableAudioFile &, const PlayableAudioFile &) const;
-        bool operator()(const PlayableAudioFile *, const PlayableAudioFile *) const;
+        bool operator()(const PlayableData &, const PlayableData &) const;
+        bool operator()(const PlayableData *, const PlayableData *) const;
     };
-    typedef std::set<PlayableAudioFile *, FileTimeCmp> FileSet;
-    typedef std::list<PlayableAudioFile *> FileList;
+    typedef std::set<PlayableData *, FileTimeCmp> FileSet;
+    typedef std::list<PlayableData *> FileList;
 
     /**
      * Add a file to the queue.  AudioPlayQueue takes ownership of the
      * file and will delete it when removed.
      */
-    void addScheduled(PlayableAudioFile *file);
+    void addScheduled(PlayableData *file);
 
     /**
      * Add a file to the unscheduled list.  AudioPlayQueue takes
@@ -73,6 +76,11 @@ public:
      * delete it.
      */
     void erase(PlayableAudioFile *file);
+
+    /**
+     * deactivate the queue.
+     */
+    void deactivate();
 
     /**
      * Remove all files and delete them.
@@ -93,7 +101,7 @@ public:
      * Look up the files playing during a given slice and return them
      * in the passed FileSet.  The pointers returned are still owned
      * by me and the caller should not delete them.
-     */ 
+     */
     void getPlayingFiles(const RealTime &sliceStart,
                          const RealTime &sliceDuration,
                          FileSet &) const;
@@ -108,7 +116,7 @@ public:
     void getPlayingFilesForInstrument(const RealTime &sliceStart,
                                       const RealTime &sliceDuration,
                                       InstrumentId instrumentId,
-                                      PlayableAudioFile **files,
+                                      PlayableData **playing,
                                       size_t &size) const;
 
     /**
@@ -140,7 +148,7 @@ public:
 private:
     FileSet m_files;
 
-    typedef std::vector<PlayableAudioFile *> FileVector;
+    typedef std::vector<PlayableData *> FileVector;
     typedef std::map<int, FileVector> ReverseFileMap;
     ReverseFileMap m_index;
 
@@ -159,4 +167,3 @@ private:
 }
 
 #endif
-

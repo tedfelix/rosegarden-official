@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,22 +15,11 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixSelector]"
+#define RG_NO_DEBUG_PRINT
+
 #include "MatrixSelector.h"
 
-#include "misc/Strings.h"
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/NotationTypes.h"
-#include "base/Selection.h"
-#include "base/ViewElement.h"
-#include "base/SnapGrid.h"
-#include "commands/edit/EventEditCommand.h"
-#include "document/CommandHistory.h"
-#include "document/RosegardenDocument.h"
-#include "misc/ConfigGroups.h"
-#include "gui/dialogs/EventEditDialog.h"
-#include "gui/dialogs/SimpleEventEditDialog.h"
-#include "gui/general/GUIPalette.h"
 #include "MatrixElement.h"
 #include "MatrixMover.h"
 #include "MatrixPainter.h"
@@ -41,34 +30,32 @@
 #include "MatrixWidget.h"
 #include "MatrixScene.h"
 #include "MatrixMouseEvent.h"
-#include "misc/Debug.h"
 
-#include <QSettings>
+#include "base/BaseProperties.h"
+#include "base/Event.h"
+#include "base/NotationTypes.h"
+#include "base/SnapGrid.h"
+#include "commands/edit/EventEditCommand.h"
+#include "document/CommandHistory.h"
+#include "gui/editors/event/EditEvent.h"
+#include "gui/general/GUIPalette.h"
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
 {
 
-MatrixSelector::MatrixSelector(MatrixWidget *widget) :
-    MatrixTool("matrixselector.rc", "MatrixSelector", widget),
-    m_selectionRect(nullptr),
-    m_selectionOrigin(),
-    m_updateRect(false),
-    m_currentViewSegment(nullptr),
-    m_clickedElement(nullptr),
-    m_event(nullptr),
-    m_dispatchTool(nullptr),
-    m_justSelectedBar(false),
-    m_selectionToMerge(nullptr),
-    m_previousCollisions()
-{
-    //connect(m_widget, SIGNAL(usedSelection()),
-    //        this, SLOT(slotHideSelection()));
 
-    createAction("resize", SLOT(slotResizeSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
+MatrixSelector::MatrixSelector(MatrixWidget *widget) :
+    MatrixTool("matrixselector.rc", "MatrixSelector", widget)
+{
+    //connect(m_widget, &MatrixWidget::usedSelection,
+    //        this, &MatrixSelector::slotHideSelection);
+
+    createAction("resize", &MatrixSelector::slotResizeSelected);
+    createAction("draw", &MatrixSelector::slotDrawSelected);
+    createAction("erase", &MatrixSelector::slotEraseSelected);
+    createAction("move", &MatrixSelector::slotMoveSelected);
 
     createMenu();
 }
@@ -136,7 +123,7 @@ MatrixSelector::handleLeftButtonPress(const MatrixMouseEvent *e)
         if ((x + width) - resizeStart > 10) resizeStart = x + width - 10;
 
         m_dispatchTool = nullptr;
-        
+
         if (e->sceneX > resizeStart) {
             m_dispatchTool =
                 dynamic_cast<MatrixTool *>
@@ -198,7 +185,16 @@ MatrixSelector::handleMidButtonPress(const MatrixMouseEvent *e)
     m_event = nullptr;
 
     // Don't allow overlapping elements on the same channel
-    if (e->element) return;
+    // if (e->element) return;
+    if (e->element &&
+        e->element->getScene() &&
+        e->element->getSegment() ==
+        e->element->getScene()->getCurrentSegment()) {
+        RG_DEBUG << "handleMidButtonPress(): Will not create note at "
+                    "same pitch and time as existing note in active "
+                    "segment.";
+        return;
+    }
 
     m_dispatchTool =
         dynamic_cast<MatrixTool *>
@@ -222,6 +218,18 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
     if (!vs) return;
 
     if (element) {
+        // Don't allow editing note's parameters if not in active segment
+        // because there might be multiple overlapping non-active segment's
+        // notes at same pitch/time, and one chosen would be semi-arbitrary
+        // (e.g. first segment(??) in lowest numbered track).
+        if (!(element &&
+              element->getScene() &&
+              element->getSegment() ==
+              element->getScene()->getCurrentSegment())) {
+            RG_DEBUG << "handleMouseDoubleClick(): Note must be "
+                        "in active segment.";
+            return;
+        }
 
         if (element->event()->isa(Note::EventType) &&
             element->event()->has(BaseProperties::TRIGGER_SEGMENT_ID)) {
@@ -231,56 +239,47 @@ MatrixSelector::handleMouseDoubleClick(const MatrixMouseEvent *e)
             return;
         }
 
-        if (e->modifiers & Qt::ShiftModifier) { // advanced edit
+        EditEvent dialog(m_widget, *element->event());
 
-            EventEditDialog dialog(m_widget, *element->event(), true);
+        // Launch dialog.  Bail if canceled.
+        if (dialog.exec() != QDialog::Accepted)
+            return;
 
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
+        Event newEvent = dialog.getEvent();
+        // No changes?  Bail.
+        if (newEvent == *element->event())
+            return;
 
-                EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(), element->event(),
-                     dialog.getEvent());
+        CommandHistory::getInstance()->addCommand(new EventEditCommand(
+                vs->getSegment(),
+                element->event(),  // eventToModify
+                newEvent));  // newEvent
 
-                CommandHistory::getInstance()->addCommand(command);
-            }
+    }
 
-        } else {
+#if 0
+    // Feature Request #124: multiclick select methods should work in matrix
+    // editor (was #988167)
 
-            SimpleEventEditDialog dialog
-                (m_widget, RosegardenDocument::currentDocument, *element->event(), false);
+    // Postponing this, as it falls foul of world-matrix transformation
+    // etiquette and other such niceties
 
-            if (dialog.exec() == QDialog::Accepted &&
-                dialog.isModified()) {
+    else {
 
-                EventEditCommand *command = new EventEditCommand
-                    (vs->getSegment(), element->event(), dialog.getEvent());
+        QRect rect = staff->getBarExtents(ev->x(), ev->y());
 
-                CommandHistory::getInstance()->addCommand(command);
-            }
-        }
+        m_selectionRect->setX(rect.x() + 2);
+        m_selectionRect->setY(rect.y());
+        m_selectionRect->setSize(rect.width() - 4, rect.height());
 
-    } /*
-    	  
-          #988167: Matrix:Multiclick select methods don't work in matrix editor
-          Postponing this, as it falls foul of world-matrix transformation
-          etiquette and other such niceties
-     
-    	  else {
-     
-    	QRect rect = staff->getBarExtents(ev->x(), ev->y());
-     
-    	m_selectionRect->setX(rect.x() + 2);
-    	m_selectionRect->setY(rect.y());
-    	m_selectionRect->setSize(rect.width() - 4, rect.height());
-     
-    	m_selectionRect->show();
-    	m_updateRect = false;
-    	
-    	m_justSelectedBar = true;
-    	QTimer::singleShot(QApplication::doubleClickInterval(), this,
-    			   SLOT(slotClickTimeout()));
-        } */
+        m_selectionRect->show();
+        m_updateRect = false;
+
+        m_justSelectedBar = true;
+        QTimer::singleShot(QApplication::doubleClickInterval(), this,
+                           &MatrixSelector::slotClickTimeout);
+    }
+#endif
 }
 
 void
@@ -298,7 +297,7 @@ MatrixSelector::handleMouseTripleClick(const MatrixMouseEvent *e)
         handleLeftButtonPress(e);
         return;
 
-/*!!! see note above
+/* see note above
     } else {
 
         m_selectionRect->setX(staff->getX());
@@ -336,7 +335,7 @@ MatrixSelector::handleMouseMove(const MatrixMouseEvent *e)
 
     setViewCurrentSelection(false);
 
-    
+
 
 /*
     int w = int(p.x() - m_selectionRect->x());
@@ -406,18 +405,24 @@ MatrixSelector::handleMouseRelease(const MatrixMouseEvent *e)
     setContextHelpFor(e);
 }
 
+void MatrixSelector::keyPressEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyPressEvent(e);
+}
+
+void MatrixSelector::keyReleaseEvent(QKeyEvent *e)
+{
+    if (m_dispatchTool) m_dispatchTool->keyReleaseEvent(e);
+}
+
 void
 MatrixSelector::ready()
 {
-    if (m_widget) m_widget->setCanvasCursor(Qt::ArrowCursor);
+    if (m_widget)
+        m_widget->setCanvasCursor(Qt::ArrowCursor);
 
-
-/*!!!
-    connect(m_widget->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-            this, SLOT(slotMatrixScrolled(int, int)));
-*/
-    setContextHelp
-        (tr("Click and drag to select; middle-click and drag to draw new note"));
+    setContextHelp(tr(
+            "Click and drag to select; middle-click and drag to draw new note"));
 }
 
 void
@@ -428,26 +433,25 @@ MatrixSelector::stow()
         m_selectionRect = nullptr;
 //        m_widget->canvas()->update();
     }
-/*!!!
-    disconnect(m_widget->getCanvasView(), SIGNAL(contentsMoving (int, int)),
-               this, SLOT(slotMatrixScrolled(int, int)));
-*/
-
 }
 
+/* unused
 void
 MatrixSelector::slotHideSelection()
 {
     if (!m_selectionRect) return;
     m_selectionRect->hide();
-//!!!    m_selectionRect->setSize(0, 0);
-//!!!    m_widget->canvas()->update();
+//    m_selectionRect->setSize(0, 0);
+//    m_widget->canvas()->update();
 }
+*/
 
+/* unused
 void
-MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
+MatrixSelector::slotMatrixScrolled(int , int)
 {
-/*!!!
+*/
+/*
     if (m_updateRect) {
 
         int offsetX = newX - m_widget->getCanvasView()->contentsX();
@@ -471,15 +475,17 @@ MatrixSelector::slotMatrixScrolled(int /* newX */, int /* newY */)
         m_widget->canvas()->update();
     }
 */
-}
+//}
 
 void
 MatrixSelector::setViewCurrentSelection(bool always)
 {
     if (always) m_previousCollisions.clear();
 
+    MatrixScene::EventWithSegmentMap previewEvents;
+
     EventSelection* selection = nullptr;
-    bool changed = getSelection(selection);
+    bool changed = getSelection(selection, &previewEvents);
     if (!changed) {
         delete selection;
         return;
@@ -487,7 +493,7 @@ MatrixSelector::setViewCurrentSelection(bool always)
 
     if (m_selectionToMerge && selection &&
         m_selectionToMerge->getSegment() == selection->getSegment()) {
-        
+
         selection->addFromSelection(m_selectionToMerge);
         m_scene->setSelection(selection, true);
 
@@ -495,12 +501,16 @@ MatrixSelector::setViewCurrentSelection(bool always)
 
         m_scene->setSelection(selection, true);
     }
+    m_scene->setExtraPreviewEvents(previewEvents);
 }
 
 bool
-MatrixSelector::getSelection(EventSelection *&selection)
+MatrixSelector::getSelection(EventSelection *&selection,
+                             MatrixScene::EventWithSegmentMap* previewEvents)
 {
     if (!m_selectionRect || !m_selectionRect->isVisible()) return 0;
+
+    if (previewEvents) previewEvents->clear();
 
     Segment& originalSegment = m_currentViewSegment->getSegment();
     selection = new EventSelection(originalSegment);
@@ -535,10 +545,23 @@ MatrixSelector::getSelection(EventSelection *&selection)
             QGraphicsItem *item = l[i];
             MatrixElement *element = MatrixElement::getMatrixElement(item);
             if (element) {
-                //!!! NB. In principle, this element might not come
-                //!!! from the right segment (in practice we only have
-                //!!! one segment, but that may change)
-                selection->addEvent(element->event());
+                // The selection should only contain elements from the
+                // current segment however for preview play we should
+                // have all the elements
+                if (element->getSegment() ==
+                    element->getScene()->getCurrentSegment()) {
+                    selection->addEvent(element->event());
+                } else {
+                    // previewEvents contains events from other
+                    // segments which should also be preview played
+                    if (previewEvents) {
+                        if (previewEvents->find(element->event()) ==
+                            previewEvents->end()) {
+                            (*previewEvents)[element->event()] =
+                                element->getSegment();
+                        }
+                    }
+                }
             }
         }
     }
@@ -557,14 +580,14 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
     MatrixElement *element = e->element;
 
     if (!element) {
-        
+
         setContextHelp
             (tr("Click and drag to select; middle-click and drag to draw new note"));
 
     } else {
-        
+
         // same logic as in handleLeftButtonPress
-        
+
         float x = element->getLayoutX();
         float width = element->getWidth();
         float resizeStart = int(double(width) * 0.85) + x;
@@ -593,7 +616,7 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
                 } else {
                     setContextHelp(tr("Click and drag to copy note"));
                 }
-            }                
+            }
         }
     }
 }
@@ -601,5 +624,3 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
 QString MatrixSelector::ToolName() { return "selector"; }
 
 }
-
-

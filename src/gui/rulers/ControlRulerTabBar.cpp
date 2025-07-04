@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,9 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlRulerTabBar]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ControlRulerTabBar.h"
 
-#include "misc/Debug.h"
+//#include "misc/Debug.h"
 #include "gui/general/IconLoader.h"
 
 #include <QTabBar>
@@ -25,10 +28,13 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+
 namespace Rosegarden
 {
 
-ControlRulerTabBar::ControlRulerTabBar():QTabBar()
+
+ControlRulerTabBar::ControlRulerTabBar() :
+    QTabBar()
 {
     m_closeIcon = QPixmap(IconLoader::loadPixmap("tab-close"));
 }
@@ -36,10 +42,13 @@ ControlRulerTabBar::ControlRulerTabBar():QTabBar()
 void ControlRulerTabBar::paintEvent(QPaintEvent *event)
 {
     QTabBar::paintEvent(event);
-    
+
     QPainter painter(this);
 
-    for (std::vector<QRect*>::iterator it = m_closeButtons.begin(); it != m_closeButtons.end(); ++it) {
+    // For each close button, draw it.
+    for (CloseButtonVector::const_iterator it = m_closeButtons.begin();
+         it != m_closeButtons.end();
+         ++it) {
         painter.drawPixmap((*it)->topLeft(), m_closeIcon);
     }
 }
@@ -48,33 +57,37 @@ void ControlRulerTabBar::mousePressEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton) {
         int index = 0;
-        for (std::vector<QRect*>::iterator it = m_closeButtons.begin(); it != m_closeButtons.end(); ++it) {
+        // For each close button...
+        for (CloseButtonVector::const_iterator it = m_closeButtons.begin();
+             it != m_closeButtons.end();
+             ++it) {
+            // If this is the one the user clicked, emit.
             if ((*it)->contains(event->pos())) {
                 emit tabCloseRequest(index);
                 return;
             }
-            index++;
+            ++index;
         }
     }
-    
+
     QTabBar::mousePressEvent(event);
 }
 
 void ControlRulerTabBar::tabLayoutChange()
 {
-    for (std::vector<QRect*>::iterator it = m_closeButtons.begin(); it != m_closeButtons.end(); ++it) {
-        delete(*it);
-    }
     m_closeButtons.clear();
-    
-    QRect *newButton, rect;
+
+    QRect rect;
+    // For each tab...
     for (int index = 0; index < count(); ++index) {
         rect = tabRect(index);
-        // ??? MEMORY LEAK (confirmed)
-        newButton = new QRect(rect.right()-hMargin-m_closeIcon.width(),
-                rect.top()+(rect.height()-m_closeIcon.height())/2,
-                m_closeIcon.width(),
-                m_closeIcon.height());
+        constexpr int horizontalMargin = 5;
+        // Create a new button rect.
+        std::shared_ptr<QRect> newButton(
+            new QRect(rect.right()-horizontalMargin-m_closeIcon.width(),
+                      rect.top()+(rect.height()-m_closeIcon.height())/2,
+                      m_closeIcon.width(),
+                      m_closeIcon.height()));
         m_closeButtons.push_back(newButton);
     }
 }
@@ -82,14 +95,14 @@ void ControlRulerTabBar::tabLayoutChange()
 int ControlRulerTabBar::addTab(const QString &text)
 {
     // Append some white space to the tab name to make room
-    // for our close icon
+    // for our close icon.
     QString str = text;
     str.append("        ");
 
     int newindex = QTabBar::addTab(str);
-    
+
     return newindex;
 }
 
-}
 
+}

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,12 +18,17 @@
 #ifndef RG_SEGMENTID_H
 #define RG_SEGMENTID_H
 
-#include "base/Event.h"
+#include "base/PropertyName.h"
+#include "base/TimeT.h"
+
 
 namespace Rosegarden
 {
-  class Text;
-  
+
+
+class Event;
+
+
 /**
  * SegmentID supplies ID information for a segment, used for updating
  * figurations.
@@ -40,9 +45,9 @@ class SegmentID
   static const std::string ChordSource;
   static const std::string FigurationSource;
   static const std::string Target;
-  
-  SegmentID(const Event &e);
-  SegmentID(const std::string type, int ID = -1);
+
+  explicit SegmentID(const Event &e);
+  explicit SegmentID(const std::string& type, int ID = -1);
 
   /// Returned event is on heap; caller takes responsibility for ownership
   Event *getAsEvent(timeT absoluteTime) const;

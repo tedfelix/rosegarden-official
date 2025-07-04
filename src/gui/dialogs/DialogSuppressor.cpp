@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,7 +30,8 @@
 
 namespace Rosegarden
 {
-  
+
+/* unused
 void
 SuppressionTarget::slotSuppressionToggled(bool on)
 {
@@ -46,12 +47,14 @@ SuppressionTarget::slotSuppressionToggled(bool on)
     settings.setValue(m_key, on);
     settings.endGroup();
 }
+*/
 
+/* unused
 bool
 DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
 {
     if (isSuppressed(settingsKey)) return true;
-    
+
     QList<QDialogButtonBox *> bbl = dialog->findChildren<QDialogButtonBox *>();
     if (bbl.empty()) {
         std::cerr << "DialogSuppressor::shouldSuppress: Dialog does not contain a button box, nothing to hook into" << std::endl;
@@ -62,12 +65,12 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     if (!p) {
         std::cerr << "DialogSuppressor::shouldSuppress: Dialog's button box has no parent widget!?" << std::endl;
         return false;
-    }        
+    }
     QLayout *layout = p->layout();
-    if (!p) {
+    if (!layout) {
         std::cerr << "DialogSuppressor::shouldSuppress: Dialog's button box's parent widget has no layout!?" << std::endl;
         return false;
-    }        
+    }
     QWidget *impostor = new QWidget;
     QVBoxLayout *il = new QVBoxLayout;
     impostor->setLayout(il);
@@ -88,7 +91,9 @@ DialogSuppressor::shouldSuppress(QDialog *dialog, QString settingsKey)
     }
     return false;
 }
+*/
 
+/* unused
 bool
 DialogSuppressor::isSuppressed(QString settingsKey)
 {
@@ -98,6 +103,6 @@ DialogSuppressor::isSuppressed(QString settingsKey)
     settings.endGroup();
     return suppress;
 }
+*/
 
 }
-

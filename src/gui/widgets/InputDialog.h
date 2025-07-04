@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -91,12 +91,16 @@ public:
      *
      * This function returns the text which has been entered in the line
      * edit. It will not return an empty string.
-     * 
+     *
      * \author Adapted from Qt-X11-OpenSource 4.4.3, Copyright (C) 2009 Nokia Corporation
      */
-    static QString getText(QWidget *parent, const QString &title, const QString &label,
-                           LineEdit::EchoMode echo = LineEdit::Normal,
-                           const QString &text = QString(), bool *ok = nullptr, Qt::WindowFlags f = Qt::WindowFlags());
+    static QString getText(QWidget *parent,
+                           const QString &title,
+                           const QString &label,
+                           LineEdit::EchoMode mode = LineEdit::Normal,
+                           const QString &text = QString(),
+                           bool *ok = nullptr,
+                           Qt::WindowFlags f = Qt::WindowFlags());
 
     // Let's see if we can do without reinventing getInteger et al.  We use
     // getInteger() in one place.  It probably has a bad background, but it's

@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ class AudioWriteStream
 public:
     class Target {
     public:
-        Target(QString path, size_t channelCount, size_t sampleRate) :
+        Target(const QString& path, size_t channelCount, size_t sampleRate) :
             m_path(path), m_channelCount(channelCount), m_sampleRate(sampleRate)
         { }
 
@@ -57,7 +57,7 @@ public:
     QString getPath() const { return m_target.getPath(); }
     size_t getChannelCount() const { return m_target.getChannelCount(); }
     size_t getSampleRate() const { return m_target.getSampleRate(); }
-    
+
     virtual bool putInterleavedFrames(size_t count, float *frames) = 0;
 
     void remove()
@@ -67,7 +67,7 @@ public:
     }
 
 protected:
-    AudioWriteStream(Target t) : m_target(t) { }
+    explicit AudioWriteStream(Target t) : m_target(t) { }
     Target m_target;
 };
 
@@ -76,7 +76,7 @@ class AudioWriteStreamBuilder :
 public ConcreteThingBuilder<T, AudioWriteStream, AudioWriteStream::Target>
 {
 public:
-    AudioWriteStreamBuilder(QUrl uri, QStringList extensions) :
+    AudioWriteStreamBuilder(const QUrl& uri, QStringList extensions) :
         ConcreteThingBuilder<T, AudioWriteStream, AudioWriteStream::Target>
         (uri, extensions) {
     }

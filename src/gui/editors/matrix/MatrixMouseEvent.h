@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,16 +18,18 @@
 #ifndef RG_MATRIX_MOUSE_EVENT_H
 #define RG_MATRIX_MOUSE_EVENT_H
 
-#include <QString>
+#include "base/TimeT.h"
+
 #include <QPoint>
 
-#include "base/Event.h" // for timeT
 
 namespace Rosegarden
 {
 
+
 class MatrixViewSegment;
 class MatrixElement;
+
 
 class MatrixMouseEvent
 {
@@ -52,10 +54,13 @@ public:
 
     MatrixMouseEvent() :
         viewSegment(nullptr), element(nullptr),
-        time(0), pitch(0),
+        time(0), snappedLeftTime(0),
+        snappedRightTime(0), snapUnit(0),
+        pitch(0),
         sceneX(0), sceneY(0),
         modifiers(), buttons() { }
 };
+
 
 }
 

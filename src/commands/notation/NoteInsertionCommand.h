@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,14 +19,16 @@
 #define RG_NOTEINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
+#include "base/TimeT.h"
 #include "document/BasicCommand.h"
-#include "base/Event.h"
 #include "gui/editors/notation/NoteStyle.h"
 
 #include <QCoreApplication>
 
+
 namespace Rosegarden
 {
+
 
 class Segment;
 class Event;
@@ -64,25 +65,25 @@ public:
                          timeT endTime,
                          Note note,
                          int pitch,
-                         Accidental accidental,
+                         const Accidental& accidental,
                          AutoBeamMode autoBeam,
                          MatrixMode matrixType,
                          GraceMode grace,
                          float targetSubordering,
-                         NoteStyleName noteStyle);
+                         const NoteStyleName& noteStyle);
     NoteInsertionCommand(Segment &segment,
-                             timeT time,
-                             timeT endTime,
-                             Note note,
-                             int pitch,
-                             Accidental accidental,
-                             AutoBeamMode autoBeam,
-                             AutoTieBarlinesMode autoTieBarlines,
-                             MatrixMode matrixType,
-                             GraceMode grace,
-                             float targetSubordering,
-                             NoteStyleName noteStyle,
-                             int velocity = 0); // Zero for rest inserter
+                         timeT time,
+                         timeT endTime,
+                         Note note,
+                         int pitch,
+                         const Accidental& accidental,
+                         AutoBeamMode autoBeam,
+                         AutoTieBarlinesMode autoTieBarlines,
+                         MatrixMode matrixType,
+                         GraceMode grace,
+                         float targetSubordering,
+                         const NoteStyleName& noteStyle,
+                         int velocity = 0); // Zero for rest inserter
     ~NoteInsertionCommand() override;
 
     EventSelection *getSubsequentSelection() override;
@@ -91,7 +92,7 @@ public:
 protected:
     void modifySegment() override;
 
-    timeT getModificationStartTime(Segment &, timeT);
+    static timeT getModificationStartTime(Segment &, timeT);
 
     timeT m_insertionTime;
     Note m_note;

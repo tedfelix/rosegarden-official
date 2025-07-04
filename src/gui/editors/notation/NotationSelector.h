@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,7 +20,9 @@
 
 #include "NotationTool.h"
 #include "NotationMouseEvent.h"
-#include "base/Event.h"
+#include "NotationScene.h"
+
+#include "base/TimeT.h"
 
 #include <QString>
 #include <QPointF>
@@ -33,6 +35,7 @@ class QGraphicsRectItem;
 namespace Rosegarden
 {
 
+
 class ViewElement;
 class NotationWidget;
 class NotationElement;
@@ -40,6 +43,8 @@ class EventSelection;
 class Event;
 class NotationStaff;
 
+
+/// The Notation Arrow Tool
 /**
  * Rectangular note selection
  */
@@ -85,10 +90,10 @@ public:
      * is remembering as the current event.
      */
     virtual void handleEventRemoved(Event *event);
-    
+
     /**
      * Useful to get the tool name from a NotationTool object
-     */ 
+     */
     const QString getToolName() override { return ToolName(); }
 
     bool needsWheelEvents() override { return false; }
@@ -96,17 +101,10 @@ public:
     static QString ToolName();
 
 signals:
-    void editElement(NotationStaff *, NotationElement *, bool advanced);
+    void editElement(NotationStaff *, NotationElement *);
 
 public slots:
-    /**
-     * Hide the selection rectangle
-     *
-     * Should be called after a cut or a copy has been
-     * performed
-     */
-    void slotHideSelection();
-    
+
     void slotInsertSelected();
     void slotEraseSelected();
 //    void slotCollapseRests();
@@ -138,38 +136,38 @@ protected:
 //!!!    NotationStaff *getStaffForElement(NotationElement *elt);
 
     void drag(int x, int y, bool final);
-    void dragFine(int x, int y, bool final);
 
-    EventSelection *getEventsInSelectionRect();
+    EventSelection *getEventsInSelectionRect
+        (NotationScene::EventWithSegmentMap* previewEvents);
 
     //--------------- Data members ---------------------------------
 
-    QGraphicsRectItem *m_selectionRect;
+    QGraphicsRectItem *m_selectionRect{nullptr};
     QPointF m_selectionOrigin;
-    bool m_updateRect;
+    bool m_updateRect{false};
 
-    NotationStaff *m_selectedStaff;
-    NotationElement *m_clickedElement;
-    bool m_clickedShift;
-    bool m_startedFineDrag;
+    NotationStaff *m_selectedStaff{nullptr};
+    NotationElement *m_clickedElement{nullptr};
+    bool m_clickedShift{false};
+    bool m_startedFineDrag{false};
 
-    EventSelection *m_selectionToMerge;
+    EventSelection *m_selectionToMerge{nullptr};
 
-    long m_lastDragPitch;
-    timeT m_lastDragTime;
+    long m_lastDragPitch{0};
+    timeT m_lastDragTime{0};
 
-    bool m_justSelectedBar;
-    bool m_wholeStaffSelectionComplete;
+    bool m_justSelectedBar{false};
+    bool m_wholeStaffSelectionComplete{false};
     bool m_ties;
-    
+
 private:
-    bool m_doubleClick;
-    bool m_tripleClick;
-    NotationStaff * m_pointerStaff;
-    timeT m_pointerTime;
+    bool m_doubleClick{false};
+    bool m_tripleClick{false};
+    NotationStaff *m_pointerStaff{nullptr};
+    timeT m_pointerTime{0};
     // m_releaseTimer delays execution of mouse button release related code to *
     // allow the execution of a possible double click.
-    QTimer *m_releaseTimer;
+    QTimer *m_releaseTimer{nullptr};
 };
 
 class NotationSelectorNoTies : public NotationSelector
@@ -179,12 +177,12 @@ class NotationSelectorNoTies : public NotationSelector
     static QString ToolName();
 
  private:
- NotationSelectorNoTies(NotationWidget *widget) :
+ explicit NotationSelectorNoTies(NotationWidget *widget) :
     NotationSelector(widget, false)
         {}
 
 };
- 
+
 
 }
 

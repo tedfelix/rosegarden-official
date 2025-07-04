@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,10 +19,10 @@
 #ifndef RG_PROPERTYCONTROLRULER_H
 #define RG_PROPERTYCONTROLRULER_H
 
-#include "base/PropertyName.h"
 #include "ControlRuler.h"
-#include "base/Event.h"
-#include "base/Segment.h"
+
+#include "base/PropertyName.h"
+#include "base/TimeT.h"
 #include "base/ViewSegment.h"
 
 #include <QString>
@@ -35,10 +35,11 @@ class QContextMenuEvent;
 namespace Rosegarden
 {
 
+
 class ViewElement;
-class ViewSegment;
 class Segment;
 class RulerScale;
+
 
 /// The Velocity Ruler
 /**
@@ -48,10 +49,10 @@ class RulerScale;
 class PropertyControlRuler :  public ControlRuler, public ViewSegmentObserver
 {
 public:
-    PropertyControlRuler(PropertyName propertyName,
-                        ViewSegment *viewSegment,
-                        RulerScale *scale,
-                        QWidget *parent);
+    PropertyControlRuler(const PropertyName &propertyName,
+                         ViewSegment *viewSegment,
+                         RulerScale *rulerScale,
+                         QWidget *parent);
 
     ~PropertyControlRuler() override;
 
@@ -61,7 +62,7 @@ public:
 
     QString getName() override;
 
-    const PropertyName& getPropertyName()     { return m_propertyName; }
+    const PropertyName &getPropertyName()     { return m_propertyName; }
 
     // Allow something external to reset the selection of Events
     // that this ruler is displaying
@@ -73,16 +74,18 @@ public:
     void elementRemoved(const ViewSegment *, ViewElement*) override;
     void viewSegmentDeleted(const ViewSegment *) override;
 
-    virtual void selectAllProperties();
+    // unused virtual void selectAllProperties();
 
     /// SegmentObserver interface
     virtual void endMarkerTimeChanged(const Segment *, bool shorten);
 
     /// Keep selection in sync with the matrix and notation editors.
     void updateSelection(const std::vector<ViewElement *> &elementList);
-    void updateSelectedItems();
+    // unused void updateSelectedItems();
 
     void setTool(const QString &name) override;
+
+    virtual bool allowSimultaneousEvents() override;
 
 public slots:
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
@@ -101,7 +104,6 @@ protected:
 
     PropertyName m_propertyName;
 };
-
 
 
 }

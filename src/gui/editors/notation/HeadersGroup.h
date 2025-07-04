@@ -3,10 +3,10 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2007-2009
-        Yves Guillemot      <yc.guillemot@wanadoo.fr> 
+        Yves Guillemot      <yc.guillemot@wanadoo.fr>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -52,8 +52,8 @@ public:
     /**
      * Create an empty headers group
      */
-    HeadersGroup(RosegardenDocument *document);
-    
+    explicit HeadersGroup(RosegardenDocument *document);
+
     ~HeadersGroup() override;
 
     void removeAllHeaders();
@@ -66,13 +66,11 @@ public:
      * Resize a filler at bottom of group to set the headersGroup height
      * to the value specified in parameter.
      * (Used to give to the headers group exactly the same height as the
-     * canvas. Necessary to get synchronous vertical scroll.) 
+     * canvas. Necessary to get synchronous vertical scroll.)
      */
-    void completeToHeight(int height);
+    // unused void completeToHeight(int height);
 
-    NotationWidget * getNotationWidget()
-    { return m_widget;
-    }
+    //NotationWidget *getNotationWidget()  { return m_widget; }
 
     Composition *getComposition()
     { return &m_composition;
@@ -127,7 +125,7 @@ public slots :
     /**
      * Called when notation view moves.
      * Arg x is the scene X coord of the left of the view.
-     * Setting force to true forces the headers to be redrawn even 
+     * Setting force to true forces the headers to be redrawn even
      * if x has not changed since the last call.
      */
     void slotUpdateAllHeaders(int x, bool force = false);

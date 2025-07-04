@@ -18,6 +18,7 @@ private Q_SLOTS:
     void testEventType();
     void testInsert();
     void testErase();
+    void testFind();
 
 private:
     Composition::ReferenceSegment* setup_rs();
@@ -58,6 +59,7 @@ void TestReferenceSegment::testInsert()
         std::string msg = b.getMessage();
         QVERIFY(msg == "Bad type for event in ReferenceSegment (expected tempo, found xxx)");
     }
+    delete badEvent;
 
     Event *tempoEvent2 = new Event(TempoEventType, ttime2);
     tempoEvent2->set<Int>(TempoProperty, tempo2);
@@ -72,9 +74,12 @@ void TestReferenceSegment::testInsert()
 
 void TestReferenceSegment::testErase()
 {
+    // the events belong to the ReferenceSegment and are deleted on erase
     ReferenceSegment* rs = setup_rs();
 
-    rs->erase(rs->begin());
+    auto it0 = rs->begin();
+    Event *e = *it0;
+    rs->erase(it0);
 
     QCOMPARE(rs->size(), 4ul);
     std::string rss = toString(*rs);
@@ -83,50 +88,80 @@ void TestReferenceSegment::testErase()
     // get the second event
     auto it = rs->begin();
     ++it;
-    Event* e = *it;
+    e = *it;
     rs->eraseEvent(e);
 
     QCOMPARE(rs->size(), 3ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/50/100/");
 
-    auto it1 = rs->findNearestTime(60);
+    auto it1 = rs->findAtOrBefore(60);
+    e = *it1;
     rs->erase(it1);
     QCOMPARE(rs->size(), 2ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:10/100/");
 
+    // !!! clear() performs deletes!!!
     rs->clear();
     QCOMPARE(rs->size(), 0ul);
     rss = toString(*rs);
     QVERIFY(rss == "test:");
+
+    // !!! This deletes the events.
+    delete rs;
+}
+
+void TestReferenceSegment::testFind()
+{
+    ReferenceSegment::iterator i;
+
+    ReferenceSegment empty("empty");
+    i = empty.findAtOrBefore(10);
+    QCOMPARE(i, empty.end());
+
+    ReferenceSegment *rs = setup_rs();
+
+    i = rs->findAtOrBefore(10);
+    QCOMPARE((*i)->getAbsoluteTime(), 10l);
+    i = rs->findAtOrBefore(11);
+    QCOMPARE((*i)->getAbsoluteTime(), 10l);
+    i = rs->findAtOrBefore(-1);
+    QCOMPARE(i, rs->end());
+
+    // ??? Need to test the RealTime version as well.
+
+    delete rs;
 }
 
 Composition::ReferenceSegment* TestReferenceSegment::setup_rs()
 {
+    PropertyName testProperty("test_property");
+
     // setup a ReferenceSegment with some data
-    ReferenceSegment* rs = new ReferenceSegment("test");
+    ReferenceSegment *rs = new ReferenceSegment("test");
 
     Event* e1 = new Event("test", 0);
-    e1->set<Int>("test_property", 10);
+    e1->set<Int>(testProperty, 10);
     rs->insertEvent(e1);
 
     Event* e2 = new Event("test", 10);
-    e2->set<Int>("test_property", 1);
+    e2->set<Int>(testProperty, 1);
     rs->insertEvent(e2);
 
     Event* e3 = new Event("test", 20);
-    e3->set<Int>("test_property", 11);
+    e3->set<Int>(testProperty, 11);
     rs->insertEvent(e3);
 
     Event* e4 = new Event("test", 50);
-    e4->set<Int>("test_property", 45);
+    e4->set<Int>(testProperty, 45);
     rs->insertEvent(e4);
 
     Event* e5 = new Event("test", 100);
-    e5->set<Int>("test_property", 78);
+    e5->set<Int>(testProperty, 78);
     rs->insertEvent(e5);
 
+    // ??? Note that the caller needs to delete the events in here.
     return rs;
 }
 

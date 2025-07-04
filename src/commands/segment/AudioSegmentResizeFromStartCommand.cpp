@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -67,8 +67,8 @@ AudioSegmentResizeFromStartCommand::execute()
         //   will crash if the audio start time is negative.  Need to fix the
         //   preview code, then check to see if the playback code works
         //   properly given a negative start time.  Then this can be removed.
-        if (audioStartTime <= RealTime::zeroTime)
-            m_newSegment->setAudioStartTime(RealTime::zeroTime);
+        if (audioStartTime <= RealTime::zero())
+            m_newSegment->setAudioStartTime(RealTime::zero());
         else
             m_newSegment->setAudioStartTime(
                 m_segment->getAudioStartTime() - (oldRT - newRT));

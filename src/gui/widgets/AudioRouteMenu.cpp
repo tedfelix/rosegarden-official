@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -19,7 +19,6 @@
 
 #include "AudioRouteMenu.h"
 
-#include "gui/application/RosegardenMainWindow.h"
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/WheelyButton.h"
 #include "base/Instrument.h"
@@ -146,8 +145,9 @@ AudioRouteMenu::slotShowMenu()
         a->setObjectName(QString("%1").arg(i));
     }
 
-    connect(menu, SIGNAL(triggered(QAction *)),
-            SLOT(slotEntrySelected(QAction *)));
+    connect(menu, &QMenu::triggered,
+            this, (void(AudioRouteMenu::*)(QAction *))
+                    &AudioRouteMenu::slotEntrySelected);
 
     // Compute the position for the pop-up menu.
 
@@ -187,7 +187,7 @@ AudioRouteMenu::getNumEntries()
                 return 0;
 
             // If this is a stereo instrument
-            if (instrument->getAudioChannels() > 1) {
+            if (instrument->getNumAudioChannels() > 1) {
                 return stereoIns;
             } else {  // this is a mono instrument
                 // We'll have separate "L" and "R" entries for each input,
@@ -220,7 +220,7 @@ AudioRouteMenu::getCurrentEntry()
     switch (m_direction) {
 
     case In: {
-            bool stereo = (instrument->getAudioChannels() > 1);
+            bool stereo = (instrument->getNumAudioChannels() > 1);
 
             bool isBuss;
             int channel;
@@ -274,7 +274,7 @@ AudioRouteMenu::getEntryText(int entry)
             if (!instrument)
                 return nullptr;
 
-            bool stereo = (instrument->getAudioChannels() > 1);
+            bool stereo = (instrument->getNumAudioChannels() > 1);
             int recordIns = studio.getRecordIns().size();
 
             if (stereo) {
@@ -360,7 +360,7 @@ AudioRouteMenu::slotEntrySelected(int i)
 
             // Compute selected (new) entry's input and channel.
 
-            bool stereo = (instrument->getAudioChannels() > 1);
+            bool stereo = (instrument->getNumAudioChannels() > 1);
             int recordIns = studio.getRecordIns().size();
 
             bool newIsBuss;

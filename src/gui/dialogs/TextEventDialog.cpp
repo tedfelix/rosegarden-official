@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -15,11 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TextEventDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TextEventDialog.h"
+
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 #include "misc/ConfigGroups.h"
+#include "misc/ConnectCBActivated.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/LineEdit.h"
@@ -40,7 +44,7 @@
 #include <QStackedWidget>
 #include <QVBoxLayout>
 #include <QSpinBox>
-#include <QApplication>
+//#include <QApplication>
 #include <QUrl>
 #include <QDesktopServices>
 
@@ -48,9 +52,10 @@
 namespace Rosegarden
 {
 
+
 TextEventDialog::TextEventDialog(QWidget *parent,
                                  NotePixmapFactory *npf,
-                                 Text defaultText,
+                                 const Text& defaultText,
                                  int maxLength) :
         QDialog(parent),
         m_notePixmapFactory(npf),
@@ -62,12 +67,12 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     setSizePolicy(QSizePolicy(QSizePolicy::Maximum, QSizePolicy::Maximum));
 
     QVBoxLayout *vboxLayout = new QVBoxLayout;
-    QWidget *vbox = dynamic_cast<QWidget*>( this );
-    vbox->setLayout( vboxLayout );
+    QWidget *vbox = dynamic_cast<QWidget*>(this);
+    vbox->setLayout(vboxLayout);
 
-    QGroupBox *entryBox = new QGroupBox( tr("Specification"), vbox );
+    QGroupBox *entryBox = new QGroupBox(tr("Specification"), vbox);
     vboxLayout->addWidget(entryBox);
-    QGroupBox *exampleBox = new QGroupBox( tr("Preview"), vbox );
+    QGroupBox *exampleBox = new QGroupBox(tr("Preview"), vbox);
     QVBoxLayout *exampleBoxLayout = new QVBoxLayout;
     exampleBox->setLayout(exampleBoxLayout);
 
@@ -79,7 +84,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     innerFrame->setAutoFillBackground(true);
     QVBoxLayout *innerFrameLayout = new QVBoxLayout;
     innerFrame->setLayout(innerFrameLayout);
-    exampleBoxLayout->addWidget(innerFrame); 
+    exampleBoxLayout->addWidget(innerFrame);
     vboxLayout->addWidget(exampleBox);
 
     QGridLayout *entryGridLay = new QGridLayout;
@@ -292,7 +297,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
 // support them on the business end for all eternity and beyond
 //    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Segno));
 //    m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Coda));
-    
+
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate1));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::Alternate2));
     m_lilyPondDirectiveCombo->addItem(strtoqstr(Text::BarDouble));
@@ -356,26 +361,29 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     m_prevLyric = settings.value("previous_lyric", "").toString();
     m_prevAnnotation = settings.value("previous_annotation", "").toString();
 
-    QObject::connect(m_text, &QLineEdit::textChanged,
-                     this, &TextEventDialog::slotTextChanged);
-    QObject::connect(m_typeCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotTypeChanged(const QString &)));
-    QObject::connect(m_dynamicShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotDynamicShortcutChanged(const QString &)));
-    QObject::connect(m_directionShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotDirectionShortcutChanged(const QString &)));
-    QObject::connect(m_localDirectionShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLocalDirectionShortcutChanged(const QString &)));
-    QObject::connect(m_tempoShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotTempoShortcutChanged(const QString &)));
-    QObject::connect(m_localTempoShortcutCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLocalTempoShortcutChanged(const QString &)));
-    QObject::connect(m_lilyPondDirectiveCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotLilyPondDirectiveChanged(const QString &)));
+    connect(m_text, &QLineEdit::textChanged,
+            this, &TextEventDialog::slotTextChanged);
 
-    QObject::connect(m_optionLabel, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
-    QObject::connect(m_optionWidget, &QStackedWidget::currentChanged, this, &TextEventDialog::slotUpdateSize);
-        
+    ConnectCBActivated(m_typeCombo,
+                       this, &TextEventDialog::slotTypeChanged);
+    ConnectCBActivated(m_dynamicShortcutCombo,
+                       this, &TextEventDialog::slotDynamicShortcutChanged);
+    ConnectCBActivated(m_directionShortcutCombo,
+                       this, &TextEventDialog::slotDirectionShortcutChanged);
+    ConnectCBActivated(m_localDirectionShortcutCombo,
+                       this, &TextEventDialog::slotLocalDirectionShortcutChanged);
+    ConnectCBActivated(m_tempoShortcutCombo,
+                       this, &TextEventDialog::slotTempoShortcutChanged);
+    ConnectCBActivated(m_localTempoShortcutCombo,
+                       this, &TextEventDialog::slotLocalTempoShortcutChanged);
+    ConnectCBActivated(m_lilyPondDirectiveCombo,
+                       this, &TextEventDialog::slotLilyPondDirectiveChanged);
+
+    connect(m_optionLabel, &QStackedWidget::currentChanged,
+            this, &TextEventDialog::slotUpdateSize);
+    connect(m_optionWidget, &QStackedWidget::currentChanged,
+            this, &TextEventDialog::slotUpdateSize);
+
     m_text->setFocus();
     slotTypeChanged(strtoqstr(getTextType()));
 
@@ -385,11 +393,11 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // extreme, but it works, and it costs little, and other solutions I can
     // imagine would cost so much more.
     m_text->setText(strtoqstr(defaultText.getText()));
-    
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox, 1);
     //vboxLayout->setRowStretch(0, 10);
-    
+
     connect(buttonBox, &QDialogButtonBox::accepted, this, &TextEventDialog::slotOK);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
     connect(buttonBox, &QDialogButtonBox::helpRequested, this, &TextEventDialog::slotHelpRequested);

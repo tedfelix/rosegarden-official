@@ -1,3 +1,477 @@
+====== ROSEGARDEN 25.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 25.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Lilypond: Fix the missing dot in property paths (LilyPond > 2.22).
+    [3957c97969]
+  * LV2: Add port sampleRate feature.  [03d35cad0a]
+  * Fixed Import Studio does not create new devices.  Bug #1709.
+    [4460f3521b]
+  * Notation: Improve wording of highlight menu items.  Bug #1708.
+    [fdc4a3553c]
+  * Event Viewer: Fix editor closes when editing triggered segments.
+    [baeb7bad81]
+  * Fix crash when deleting a triggered segment that was being edited
+    with the notation or matrix editors.  [c9cafc8ad8]
+  * Fix wrong matrix editor window closed during segment split.
+    Bug #1699.  [80d3e70642]
+  * Handle unsaved untitled autosave.  Bug #1700.  [cef44d35e3]
+  * Matrix: Fix notes not sounding across a drag select.  Bug #1697.
+    [31ec6ed535]
+  * Fix file dialogs forget paths.  Feature Request #518.  [5588528e46]
+  * Fix crash when deleting a repeating segment opened in notation.
+    Bug #1711.  [119e4672d9]
+  * Fix crash on Manage MIDI Devices window close.  Debian #1091859.
+    [64943ed3d8]
+  * Fix crash on new document with bank editor open.  Bug #1712.
+    [f68d7dbcd6]
+  * Fix missing time resolution warning.  [6cbef7a786]
+  * Instrument Parameters: Fix "Pan" control label cut off on the
+    right.  [8a78c11ae2]
+  * Fix UI locks up when hitting "Record".  Bug #1713.  [e8d16c4792]
+  * Fix lyric editor with anacrusis [-1] problem.  Bug #1715.
+    [82045d5ca4]
+  * Fix LV2 plugin JC303 not working.  Bug #1714.  [b341fd1ce3]
+  * Add JACK stop at auto stop preference.  Bug #1693.  [c86d9ca6a7]
+  * Tempo And Time Signature Editor: Fix tempo time change leftovers.
+    Bug #1718.  [017bdd1b60]
+  * Fix potential crash when fast-forwarding or rewinding through a
+    large composition while it is playing.  Bug #1717.  [01ddaca815]
+  * Fix RG handling of jumping JACK transport.  Bug #1721.
+    [dc2062d42e]
+  * LilyPond: Fix deprecation warnings while processing RG output.
+    Bug #1675.  [39bef99be1]
+  * Matrix: Fix Add Tempo Change... not working.  [b9a781ee9c]
+  * Fix record input connections not happening.  [38d50e757f]
+  * Fix "toggle repeat" not handling mixed state in undo.  Bug #1722.
+    [1128116d13]
+  * Fix transport dialog time/bars not updating on Tempo and Time
+    Signature changes prior to the pointer position.  [66401b64fc]
+  * EventFilterDialog: Fix invalid read with "shortest" duration.
+    [8068e139ba]
+  * Fix LilyPond doesn't draw the repeat double bar when there are
+    alternative endings.  Bug #1676.  [2e4b03092a]
+
+===== New Features =====
+
+  * Add an extra large track size in presentation preferences.
+    Feature Request #524.  [76247e4efd]
+  * Add track label width to presentation preferences.  Feature Request
+    #525.  [a401a663d4]
+  * EditView: Add "Edit Triggered Segment" feature.  [287a3765e1]
+  * Add "Drag with dynamic modifiers (main window)" preference.
+    [561db23422]
+  * Constrained selection move in matrix editor.  Feature Request #298.
+    [4dfb643cf5]
+  * Add preference for dynamic drag.  Bug #1699.  [561db23422]
+  * Add "remove all from panel" command to the Manage Controllers
+    dialog Edit menu.  Feature Request #526.  [68a2373fd4]
+  * RPN and NRPN editing has been added to the Event List Editor.
+    Feature Request #467.  [bc567b76b3]  [0a43462bdb]
+  * MIDI Export: Add RPN and NRPN support.  Feature Request #467.
+    [f02f6bf8fb]
+  * Event List Editor: Add filtering All On/Off button.  [42f8635286]
+  * LV2: Graduate out of beta.  Enable by default.  [90fccdab0a]
+
+===== General Improvements =====
+
+  * The Event List Editor has been rewritten.
+  * The "Edit Event" dialog has been rewritten.  This pops up when double-
+    clicking on notes in Notation, the Matrix, and the Event List Editor.
+
+===== Additional Contributions =====
+
+  * Brazilian Portuguese translation. (Jeronimo Pellegrini)
+  * Emu-Vintage-Keys.rgd (Hugo van Galen)
+  * Roland-TD-7.rgd (Hugo van Galen)
+  * Updated Polish translation (Grzegorz Pruchniakowski)
+  * Updated German translation (Michael Stockinger)
+  * Updated French translation (Yves Guillemot)
+
+====== ROSEGARDEN 24.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 24.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * LV2: Fix link problem with no gtk2.  [2e168f0d]
+  * LV2: Add lv2 check for GUI library ok.  [9cb306b3]
+  * Manage MIDI Banks and Programs dialog now allows the same bank
+    MSB/LSB to be used for percussion and non-percussion banks on
+    the same device.  Bug #1692.
+  * Fix wrong ports being assigned on file load.  Bug #1687.
+    [663099cc]
+  * Fix autoscroll and highlighting behavior with multiple segments
+    on a track.  Bug #1672.
+  * Fix missing scroll bar on Instrument Parameters Bank dropdown.
+    Bug #1695.  [295a2f7a]
+  * Fix "turn repeats into copies" misses last segment.  Bug #1696.
+    [afcf2f0e]
+  * Fix shortcut order ignored.  Bug #1702.  [b1272a6d]
+  * Fix unexpected cursor position when moving from note to note
+    on a bar with a clef or time signature.  Bug #1704.  [215b9d27]
+  * Fix unexpected translation of bank and program names.  Bug #1705.
+    [6dbd6bcd]
+  * Fix unexpected Save As... directory.  Feature #522.  [15db9d10]
+  * Fix broken tempo line in tempo ruler after adding a time
+    signature change.  Bug #1706.  [6a7ef89e]
+  * Fix "Modify MIDI Filters" dialog does not mark document as changed.
+    Bug #1707.  [4e505977]
+  * Fix LV2 sfizz plugin support.  [8fce0614]
+  * Fix group box formatting issue in native/light theme.  Bug #1678.
+    [d2df6376]
+  * LV2: Fix crashes and locking related to atom buffers.  [95b09722]
+    [be37b31e]
+
+===== New Features =====
+
+  * Make MIDI File Division value configurable for Export.
+    GH #9.  [991e4839]
+  * WAV export of audio and soft synth tracks.
+    File > Export > Export WAV File...  [5b4d109e]
+  * Apply interpretations to more than one segment.
+    Segment > Interpret...  Feature #517.  [b8a243a5]
+  * LV2 support has been promoted to beta.  [a602850c]
+  * Advanced Looping has been promoted out of beta.  [25bdbf69]
+
+===== General Improvements =====
+
+  * Manage MIDI Banks and Programs dialog is now full-featured and can
+    be used to edit every aspect of an .rgd device file.
+    Studio > Manage MIDI Devices > Banks...
+  * Tempo and Time Signature Editor has been rewritten and improved.
+
+===== Additional Contributions =====
+
+  * Korg-M3-Factory-ALL.rgd (Chuck Elliot) 
+  * Korg-M1.rgd (Chuck Elliot) 
+  * Updated Polish translation (Grzegorz Pruchniakowski) 
+  * Updated Chinese translation (Icenowy Zheng) 
+  * Yamaha-MM6-MM8.rgd (Icenowy Zheng) 
+  * Yamaha-PSR-SX600.rgd (Huanyu Liu) 
+
+====== ROSEGARDEN 24.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 24.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * txt2rgd.py: Fix MSB/LSB bug.  [d501a6f3]
+  * Fix instrument selection for Ctrl+T (add track), file import and
+    merge.  Bug #1670.
+  * Disallow deletion of devices that are in use by tracks.  Bug #1670.
+  * Use track names for segment names on MusicXML import.  Bug #1673.
+    [d477398d]
+  * Fix misplaced TimeWidget title in "Native (Light)" theme.
+    Bug #1678.  [2b63faba]
+  * Fix an .rg parsing error related to softsynths.  [a8547260]
+  * Fix unobtainable segment presets and other preset issues.
+    Bug #1684.  [da32cccc]
+  * Fix audio time stretching erasing all audio data in release build.
+    Bug #1680.  [79d672b1]
+  * Fix submaster port count changing when changing the number of
+    audio input ports.  Bug #1685.  [1ac61ff6]
+  * Fix window focus problem when creating MIDI Devices.
+    Bug #1686.  [7baaffde]
+  * Fix track instrument reset when editing banks.  Bug #1688.
+    [d83d883b] [eab9b9a3]
+  * Fix buffer overflow in notation editor.  Bug #1689.  [dd4549b0]
+  * Fix examples pointing to various audio paths causing unwanted
+    directories to be created.  Bug #1668.  [26b26e6e]
+  * Fix slow refresh of note names in matrix.  Bug #1626.  [de035bfe]
+  * Fix notation not selecting current segment notes on launch.
+    Bug #1672.  [ae27b0c6]
+  * Fix UnusedAudioSelectionDialog column widths.  Feature #520.
+    [5d198075]
+
+===== New Features =====
+
+  * Experimental LV2 plugin support.  Feature request #462.
+    Enable via Edit > Preferences > LV2 Plugin Support.
+
+===== Additional Contributors =====
+
+  * Chuck Elliot - txt2rgd.py fix.
+  * Aere Greenway - ZynAddSubFX-2024.rgd updated device file.
+  * Olivier Seguin - Roland-SR-JV80-07.rgd device file.
+
+====== ROSEGARDEN 23.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 23.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Make punch-in also start recording.  [f7b3aa72]
+  * Fix broken metronome flash in the transport.  [975ffe9d]
+  * Fix solo affects archived tracks.  [bad41f2f]
+  * Fix data loss when recording with loop on.  [79889151]
+  * Prevent archived tracks from recording.  [82a43608]
+  * Fix arm status lost on save when archived.  [5d85e8bd]
+  * Fix armed+archive recording after load.  [ab8eba6d]
+  * Unarm archived Tracks when enforcing the arm rule: only one Track
+    can be armed per Instrument.  [7bcc351c]
+  * Skip archived tracks when routing.  [21e45666]
+  * Fix refresh artifacts on the Matrix piano keyboard.  Bug #1656.
+    [5cf37ed5]
+  * Fix error when rosegarden creates submaster outs.  Bug #1658.
+    [c89ab3b0]
+  * Fixed potential race conditions with audio files.  [1e8d4064]
+  * Fix segment relabel dialog not showing original label.  Bug #1660.
+    [3fbc6975]
+  * Fixed events with data1 == 121 being dropped.  Bug #1663.
+    [df93bd90]
+  * Fixed potential race conditions in the sequencer.  [6c7a6a0e]
+  * Fix removing the first note of a slurred group creates an
+    unreachable rest.  Bug #1662.  [fb214928]
+  * Fix cannot beam a group beginning or ending with a dotted eighth
+    note.  Bug #1666.  [eb0e6d75]
+  * Fix segment parameter box displaying translation of the label.
+    Bug #1667.  [89a4f18f]
+
+===== New Features =====
+
+  * Improved sub-beat highlighting in the Matrix editor.
+    Feature request #516. [d83b5715]
+  * Matrix editor preview note when hovering.
+    Feature request #516. [d83b5715]
+  * Add metronome and solo toggles to main menu.  [acf3c266]
+  * Add MMC RECORD STROBE support.  [9953f1f2]
+  * Add a preference to include ALSA port numbers when making
+    connections.  [06b0c44a]
+  * Use regexp for plugin blacklist.  [ec230e46] [028930e5]
+  * Updated yoshimi.rgd.  [b8a99b83]
+
+===== Additional Contributors =====
+
+  * Hugo van Galen
+
+
+====== ROSEGARDEN 23.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 23.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix crash related to static initialization order.  Bug #1647.
+    Release as 22.12.1.  [3e34166]
+  * Fix bug #1047, beaming groups erroneous after merging notes.
+    [83f1dca, 2709e76]
+  * Fix offset selection rectangle in Notation.  Bug #1444.  [fc08c3e]
+  * Fix time column widths in the Event Editor so that they don't need
+    resizing on every launch.  [aed705b]
+  * Event filter dialog improvements and fixes.  [c5e3c6a]
+  * Fix broken retrograde commands.  Bug #1648.  [84faef1]
+  * Lilypond: Fix volta/alternatives and lyrics.  Bug #1649.
+    [6e5ba2d]
+  * Lilypond: Fix vertical alignment of verses.  Bug #1650.  [b42cbff]
+  * Lilypond: Fix the printing of supplementary verses.  [46c7d3d]
+  * Lilypond: Fix multiple lyrics verses with repetition.  [50266c5]
+  * Lilypond: Fix the removing of an underscore at the end of a bar of
+    lyrics.  [62feb9b]
+  * Lilypond: Fix printing of verses is now working when voltas are
+    unfolded.  [2eae089]
+  * Lilypond: Fix bar number of verses in exported LilyPond files.
+    [94c0e55]
+  * Fix timer preference coming up empty for selections after
+    "HR timer".  [08748a6]
+  * Fix paste problems in notation editor.  Bug #1651.  [457f3de]
+  * Fix the LilyPond exporter autotest and update the baseline.
+    [768a657]
+  * Fix crash in LilyPond exporter.  Bug #1640.  [a49712d]
+  * Fix potential crash in the grid quantizer.  [4bdefd9]
+  * Fix quantizer crash.  Bug #1654.  [56ca66c, a8e669d]
+  * LilyPond: Fix a small bug related to numbers in the lyrics.
+    [10fa781]
+  * LilyPond: Fix for lyrics containing some special characters.
+    [e8c6988]
+  * LilyPond: Fix the rendering of dash and underscore.  [fc7eecd]
+  * Fix missing parameter patterns in the Set Event Velocities dialog.
+    [b76c392]
+  * Matrix: Fix deleting too many notes with ruler present.  Bug #1655.
+    [993e6f3]
+
+===== New Features =====
+
+  * File > Merge dialogs now allow merging of multiple files.  Feature
+    request #513.  [5f43b70]
+  * View > Full Screen (F11) added to main window.  [a09103c]
+  * Removed LEDs from archived tracks to make archived tracks easier to
+    identify.  [a5f4131]
+  * Edit > Preferences > General > Presentation.  Three UI themes are
+    now offered: Native (Light), Classic (Medium), and Dark.  Feature
+    request #498.  [994c2b1, et al.]
+  * Matrix and Notation now offer snap to grid in the control rulers.
+    Feature request #509 [349fff9, et al.]
+  * Add Ctrl+L shortcut for loop toggle.  Feature request #398.
+    [a5e8414]
+  * Add new LilyPond versions.  [6c7f0ef]
+  * Add "Remove notes smaller than X" field to grid quantizer.
+    Feature request #515.  [87c9a0c]
+  * Add "Remove articulations" to grid quantizer.  Feature request
+    #515.  [a69a4fd]
+
+===== Additional Contributors =====
+
+  * Lorenzo Sutton - Multiple file merge feature.  Feature Request
+    #513.
+
+
+====== ROSEGARDEN 22.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 22.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix a crash when deleting segments that are visible in notation.
+    [e67b14a]
+  * Hide the experimental Channel Fixed/Auto widgets behind a
+    preference.  To re-enable: Edit > Preferences > General >
+    Auto Channels (experimental).  [eda6701]
+  * Fix the Base Velocity dialog in the Event Editor which was
+    missing Ok/Cancel buttons.  [aa3218e]
+  * Fix lilypond syntax error when exporting lyrics.  Bug #1639.
+    [1702b0f]
+  * Fix restore of keyboard in the shortcut editor.  Feature request
+    #511.  [44ce000]
+  * Fix "out of processor power" dialog always coming up on some
+    systems.  Feature request #496.  [adab9c3]
+  * Fix MIDI file merge disconnects connections.  Bug #1645.
+    [fe70e17]
+
+===== New Features =====
+
+  * Advanced Looping rewrite including indicators in the Loop Ruler.
+    Enable via the preferences.  Edit > Preferences > General >
+    Advanced Looping (beta).
+  * Jump to loop feature.  Edit > Preferences > General >
+    Jump to loop.  [69350eb]
+  * Loop buttons added to the main, matrix, and notation toolbars.
+    [833ea5f]
+  * Ask "Replace or Merge?" on file drop.  Feature request #510.
+    [071e2a8]
+
+===== Additional Contributors =====
+
+  * Scott Snyder
+
+
+====== ROSEGARDEN 22.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 22.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Improve Cut/Copy/Delete behavior in both the matrix and the
+    notation editors.  Bug #1601.
+  * "Scroll to Follow Playback" now remembers its last setting.
+    Bug #1606.
+  * Fixed a problem in notation with note selection and the blue
+    indication.  Bug #1496.
+  * Fixed volume and pan issues with older .rg files.  [51647cc]
+  * Changed "For Notation" to "Exclude from Printing" in the
+    Segment Parameters.
+  * Fix confusing relative values in the "Insert Controller Sequence"
+    dialog for volume and expression.  [14ff99a]
+  * When changing the audio file path, the user is asked whether
+    they want to move the audio files to the new location.  [71a62e6]
+  * Fix stuck green preview note when switching modes.  Bug #1614.
+  * Fix modified flag (*) not cleared when saving in notation.
+    Bug #1617.
+  * Fix RG stopping JACK transport when it shouldn't.  Bug #1051.
+  * Fixed toolbar mode buttons not reflecting current state when
+    Esc is pressed.  Bug #1615.  [f651345]
+  * Notation: Fix green preview only available in one staff.
+    Bug #1619.
+  * Fixed issues when building with Qt6.  Feature Request #490.
+  * Fixed bad rendering of note heads at small font sizes.  Bug #1484.
+  * Fixed an endless loop in notation.  [7d734f7]
+  * Improved management of audio file paths.  Bug #1283.  Feature
+    Requests #494 and #495.
+  * Simplify editing of audio instrument label in audio parameters
+    panel.
+  * Fixed display bugs in matrix editor.  Bug #1622.  [b4425d7]
+  * Fix collapse notes in matrix.  Bug #1575.  [521ad4e]
+  * Fix scrollbar issues in main window combo boxes.
+    Feature Request #502.  [abdf22b]
+  * Fix deletes in the tempo/time signature editor.  Bug #1628.
+    [d55eea5]
+  * Fix problems editing multiple segments in matrix.  Bug #1624.
+    [8c1c6bc]
+  * Notation: fix crash when segment is deleted.  Bug #1260.  [cf0a28d]
+  * Notation: fix crash when undoing an Add Layer.  Bug #1260.
+    [7a1b6bf]
+  * Notation: fix note move issue.  Bug #1629.  [ba70dcf]
+  * Fix lilypond export sometimes ignores time signature.  Bug #1620.
+    [b7b16df]
+  * Fix hairpins not always exported to LilyPond.  Bug #1620.
+    [f57cbd9]
+  * Fix missing "StartupWMClass" in .desktop file.  Bug #1635.
+    [d3f5298]
+  * Fix chord ruler.  Bug #1633.  [2b2fbf7]
+  * Fix Event Filter dialog clearing selection on first launch.
+    [52c2f90]
+  * Fix lilypond common/cut time signatures.  Bug #1637.  [1c83f8b]
+  * Fix a crash when unquantizing using the quantize combo box on the
+    editors.  [329ab46]
+  * Fix a crash when resizing segments.  Bug #1638.  [cdec668]
+  * Fix a refresh issue when using the toolbar undo button.  [2a01178]
+
+===== New Features =====
+
+  * Stop playback at end of last segment.  (Preference.)
+  * Advanced Looping.  (Experimental preference.)  Bug #1605.
+  * Keyboard shortcut editor.  Feature Request #412.
+
+===== Additional Contributors =====
+
+  * Michael Stockinger (www.stockinger.org) - German Translation
+  * Kevin Cole - Yamaha PSR-220/230 device file
+
+
 ====== ROSEGARDEN 21.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 21.12
@@ -485,3 +959,64 @@ volume, pan, etc... control change knobs and faders.
   * Karl Marksteiner
   * Lucas
 
+
+====== ROSEGARDEN 17.04, codename "Twice in a Blue Moon" RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 17.04
+of Rosegarden, an audio and MIDI sequencer and musical notation editor
+for Linux.
+
+http://www.rosegardenmusic.com/
+
+The most visible change in 17.04 is that David Faure has generously
+replaced our very brittle and complex style system with a complete
+rewrite using QStyle (r14968).  Ted Felix invested the past ten months
+grinding through bugs, and cleaning Rosegarden's code to make it more
+efficient and maintainable.  Significant areas cleaned up include: the
+Track Parameters box (r14707-r14762), TrackButtons (r14765-r14770),
+progress dialogs (r14793-r14899), and the Audio Mixer window (r14910-
+r15013).  Yves Guillemot and David Faure squashed a few bugs as well.
+
+===== Bug Fixes =====
+
+  * Fix memory leak: delete StartupLogo when closing it (r14737)
+  * Add compilation fix for Ubuntu 16.04.01 LTS (r14738)
+  * TrackParameterBox: Fix initial track label problem (r14761)
+  * Fix #1534: Send channel setup when output is changed (r14743)
+  * TrackParameterBox: Make color combo visible for audio tracks
+    (r14762)
+  * autoload: Fix audio track colors (r14763)
+  * Fix #1532: Crash when trying to edit a triggered segment (r14772)
+  * Fix #1536: Crash on dangling Instrument IDs (r14776)
+  * Fix "Always use default studio" stickiness (r14781)
+  * Fix #1538: No sound when entering notes with keyboard (r14783)
+  * Fix time stamp bug in MIDI file export (r14785)
+  * Improve progress dialogs throughout the application (r14793-r14899)
+  * Repair control rulers in Qt 5 builds
+  * Cleanup incorrect name and filter during audio file export
+  * Fix compilation with -DQT_STRICT_ITERATORS (r14903)
+  * Fix compilation without jack (r14904)
+  * Enable -DQT_NO_URL_CAST_FROM_STRING and fix compilation accordingly
+    (r14905)
+  * Fix "all piano" issue with empty connections (r14906)
+  * Fix MIDI import connection problem (r14907)
+  * Fix a bug in the parallels checker, bug #1544 (r14959)
+  * Fix #1491 Xruns on exit (r14981)
+  * Fix wait cursor (r14985)
+
+===== New Features =====
+
+  * Hide unused frames for audio tracks in track parameters (r14729)
+  * Improve handling of collapsing frames in track parameters and
+    document properties (r14714)
+  * Track 20 recent files, rather than 10 (r14868)
+  * Replace stylesheet with custom QStyle (r14968)
+
+===== People who contributed device files to the Rosegarden Library =====
+
+  * Rainer Hans Liffers
+  * JP Morris
+
+===== People who contributed translations =====
+
+  * Jose Alfredo Murcia Andrés

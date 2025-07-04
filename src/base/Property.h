@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -25,7 +25,7 @@
 
 #include <rosegardenprivate_export.h>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 enum PropertyType { Int, String, Bool, RealTimeT };
@@ -40,24 +40,22 @@ public:
     typedef PropertyDefnNotDefined basic_type;
 
     static std::string typeName() { return "Undefined"; }
-    static basic_type parse(std::string);
+    static basic_type parse(const std::string&);
     static std::string unparse(basic_type);
 };
 
 template <PropertyType P>
 typename PropertyDefn<P>::basic_type
-PropertyDefn<P>::parse(std::string)
+PropertyDefn<P>::parse(const std::string&)
 {
     throw(0);
-    return "";
 }
 
 template <PropertyType P>
-std::string 
+std::string
 PropertyDefn<P>::unparse(typename PropertyDefn<P>::basic_type)
 {
     throw(0);
-    return "";
 }
 
 
@@ -68,7 +66,7 @@ public:
     typedef long basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -80,7 +78,7 @@ public:
     typedef std::string basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -91,7 +89,7 @@ public:
     typedef bool basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -102,7 +100,7 @@ public:
     typedef RealTime basic_type;
 
     static std::string typeName();
-    static basic_type parse(std::string s);
+    static basic_type parse(const std::string& s);
     static std::string unparse(basic_type i);
 };
 
@@ -126,11 +124,11 @@ public:
 };
 
 #ifndef NDEBUG
-inline std::ostream& operator<<(std::ostream &out, PropertyStoreBase &e)
+inline std::ostream& operator<<(std::ostream &out, const PropertyStoreBase &e)
 { e.dump(out); return out; }
 #endif
 
-inline QDebug &operator<<(QDebug &dbg, const PropertyStoreBase &psb)
+inline QDebug operator<<(QDebug dbg, const PropertyStoreBase &psb)
 {
     dbg << psb.getTypeName().c_str() << "-" << psb.unparse().c_str();
     return dbg;
@@ -140,7 +138,7 @@ template <PropertyType P>
 class ROSEGARDENPRIVATE_EXPORT PropertyStore : public PropertyStoreBase
 {
 public:
-    PropertyStore(typename PropertyDefn<P>::basic_type d) :
+    explicit PropertyStore(typename PropertyDefn<P>::basic_type d) :
         m_data(d) { }
     PropertyStore(const PropertyStore<P> &p) :
         PropertyStoreBase(p), m_data(p.m_data) { }
@@ -153,7 +151,7 @@ public:
 
     std::string unparse() const override;
 
-    typename PropertyDefn<P>::basic_type getData() { return m_data; }
+    typename PropertyDefn<P>::basic_type getData() const { return m_data; }
     void setData(typename PropertyDefn<P>::basic_type data) { m_data = data; }
 
     size_t getStorageSize() const override;

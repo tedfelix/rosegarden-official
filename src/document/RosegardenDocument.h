@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,7 +27,7 @@
 #include "base/Studio.h"
 #include "gui/editors/segment/compositionview/AudioPeaksThread.h"
 #include "sound/AudioFileManager.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QObject>
 #include <QString>
@@ -36,13 +36,12 @@
 #include <QPointer>
 #include <QSharedPointer>
 
+class QLockFile;
+class QTextStream;
+
 #include <map>
 #include <vector>
 
-class QLockFile;
-class QWidget;
-class QTextStream;
-class NoteOnRecSet;
 
 namespace Rosegarden
 {
@@ -60,7 +59,7 @@ class AudioPluginManager;
 /**
   * The RosegardenDocument class provides a document object that can be
   * used in conjunction with the classes RosegardenMainWindow and
-  * RosegardenMainViewWidget to create a document-view model 
+  * RosegardenMainViewWidget to create a document-view model
   * based on QApplication and QMainWindow. Thereby, the
   * document object is created by the RosegardenMainWindow instance and
   * contains the document structure with related methods for
@@ -94,12 +93,16 @@ public:
      * that is no longer the case since Thorn.  We need to be able to avoid
      * clearing the command history here, or certain commands wipe out the
      * entire undo history needlessly.
+     *
+     * If the path is not empty the file will be loaded but the document will
+     * still be considered "new"
      */
     RosegardenDocument(QObject *parent,
                        QSharedPointer<AudioPluginManager> audioPluginManager,
                        bool skipAutoload = false,
                        bool clearCommandHistory = true,
-                       bool enableSound = true);
+                       bool enableSound = true,
+                       const QString& path = "");
 
     /// The current document.
     /**
@@ -110,8 +113,8 @@ public:
      * RosegardenDocument, e.g. Composition, beware that the document may
      * have changed when your destructor is called.  In these cases, keep a
      * local copy of the document pointer so that you can detach from the
-     * correct document.  See, e.g. TempoView which uses EditViewBase::m_doc
-     * in this way.
+     * correct document.  See, e.g. TempoAndTimeSignatureEditor which uses
+     * EditViewBase::m_doc in this way.
      *
      * If we are crashing because this is null, be sure that when a document
      * is created, this pointer is set.  The rest of the system depends on
@@ -146,7 +149,7 @@ public:
     /**
      * removes a view from the list of currently connected views
      */
-    void detachView(RosegardenMainViewWidget *view);
+    // unused void detachView(RosegardenMainViewWidget *view);
 
     /**
      * adds an Edit View (notation, matrix, event list)
@@ -184,7 +187,7 @@ public:
 
     /**
      * clears the 'modified' status of the document (sets it back to false).
-     * 
+     *
      */
     void clearModifiedStatus();
 
@@ -220,7 +223,7 @@ public:
     /**
      * merge another document into this one
      */
-    void mergeDocument(RosegardenDocument *doc,
+    void mergeDocument(RosegardenDocument *srcDoc,
                        bool mergeAtEnd,
                        bool mergeTimesAndTempos);
 
@@ -228,20 +231,23 @@ public:
      * saves the document under filename and format.
      *
      * errMsg will be set to a user-readable error message if save fails
-     */ 
-    bool saveDocument(const QString &filename, QString& errMsg,
+     */
+    bool saveDocument(const QString &filename, QString &errMsg,
                       bool autosave = false);
 
     /// Save under a new name.
     bool saveAs(const QString &newName, QString &errMsg);
 
+    /// Saves the document to a suitably-named backup file.
+    void autoSave();
+
     /**
      * exports all or part of the studio to a file.  If devices is
      * empty, exports all devices.
-     */ 
+     */
     bool exportStudio(const QString &filename,
-		      QString &errMsg,
-                      std::vector<DeviceId> devices =
+                      QString &errMsg,
+                      const std::vector<DeviceId> &devices =
                       std::vector<DeviceId>());
 
     /**
@@ -276,18 +282,11 @@ public:
     bool isRegularDotRGFile() const;
 
     void setQuickMarker();
-    void jumpToQuickMarker();    
+    void jumpToQuickMarker();
     timeT getQuickMarkerTime() { return m_quickMarkerTime; }
 
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    Composition&       getComposition()       { return m_composition; }
-
-    /**
-     * returns the composition (the principal constituent of the document)
-     */
-    const Composition& getComposition() const { return m_composition; }
+    Composition &getComposition()  { return m_composition; }
+    const Composition &getComposition() const  { return m_composition; }
 
     /*
      * return the Studio
@@ -319,7 +318,7 @@ public:
      */
     DocumentConfiguration& getConfiguration() { return m_config; }
 
-    const DocumentConfiguration& getConfiguration() const 
+    const DocumentConfiguration& getConfiguration() const
         { return m_config; }
 
     /**
@@ -332,11 +331,11 @@ public:
      * These MIDI events come from AlsaDriver::getMappedEventList() in
      * the sequencer thread.
      */
-    void insertRecordedMidi(const MappedEventList &mc);
+    void insertRecordedMidi(const MappedEventList &mC);
 
     /**
      * Update the recording value() -- called regularly from
-     * RosegardenMainWindow::slotUpdatePlaybackPosition() while recording
+     * RosegardenMainWindow::processRecordedEvents() while recording
      */
     void updateRecordingMIDISegment();
 
@@ -362,16 +361,16 @@ public:
     void prepareAudio();
 
     /**
-     * Cause the loopChanged signal to be emitted and any
-     * associated internal work in the document to happen
-     */
-    void setLoop(timeT, timeT);
-
-    /**
      * Cause the document to use the given time as the origin
      * when inserting any subsequent recorded data
      */
     void setRecordStartTime(timeT t) { m_recordStartTime = t; }
+
+    /**
+     * Cause the document to use the given time as the pointer
+     * position before recording
+     */
+    void setPointerPositionBeforeRecord(timeT t) { m_pointerBeforeRecord = t; }
 
     /*
      * Get a MappedDevice from the sequencer and add the
@@ -387,7 +386,7 @@ public:
     /**
      * Audio play and record latencies direct from the sequencer
      */
-    
+
     RealTime getAudioPlayLatency();
     RealTime getAudioRecordLatency();
     void updateAudioRecordLatency();
@@ -398,14 +397,14 @@ public:
      * a preview is generated and that the sequencer also knows to add
      * the new file to its own hash table.  Flow of control is a bit
      * awkward around new audio files as timing is crucial - the gui can't
-     * access the file until lead-out information has been written by the 
+     * access the file until lead-out information has been written by the
      * sequencer.
      *
      * Note that the sequencer doesn't know the audio file id (yet),
      * only the instrument it was recorded to.  (It does know the
      * filename, but the instrument id is enough for us.)
      */
-    
+
     void finalizeAudioFile(InstrumentId instrument);
 
     /** Tell the document that an audio file has been orphaned.  An
@@ -437,7 +436,7 @@ public:
      */
     QSharedPointer<AudioPluginManager> getPluginManager()
         { return m_pluginManager; }
-    
+
     /**
      * Return the instrument that plays segment
      */
@@ -472,8 +471,6 @@ public:
      */
     QList<RosegardenMainViewWidget*>& getViewList() { return m_viewList; }
 
-    bool isBeingDestroyed() { return m_beingDestroyed; }
-
     static const unsigned int MinNbOfTracks; // 64
 
     /// Verify that the audio path exists and can be written to.
@@ -482,6 +479,9 @@ public:
     bool deleteOrphanedAudioFiles(bool documentWillNotBeSaved);
 
     void stealLockFile(RosegardenDocument *other);
+
+    /// Consistent loop button behavior across all windows.
+    void loopButton(bool checked);
 
 public slots:
     /**
@@ -507,14 +507,7 @@ public slots:
     void slotDocumentModified();
     void slotDocumentRestored();
 
-    /**
-     * saves the document to a suitably-named backup file
-     */
-    void slotAutoSave();
-
     void slotSetPointerPosition(timeT);
-
-    void slotSetLoop(timeT s, timeT e) {setLoop(s,e);}
 
     void slotDocColoursChanged();
 
@@ -561,7 +554,10 @@ signals:
     void audioFileFinalized(Segment*);
 
     void playPositionChanged(timeT);
-    void loopChanged(timeT, timeT);
+
+    /// Emitted whenever the Composition loop fields change.
+    void loopChanged();
+
     /**
      * We probably want to keep this notification as a special case.
      * The reason being that to detect a change to the color list will
@@ -579,7 +575,7 @@ private:
     /**
      * initializes the document generally
      */
-    void newDocument();
+    void newDocument(const QString& path = "");
 
     /**
      * Autoload
@@ -595,21 +591,10 @@ private:
      * @return false if parsing failed
      * @see RoseXmlHandler
      */
-    bool xmlParse(QString fileContents, QString &errMsg,
+    bool xmlParse(const QString &fileContents,
+                  QString &errMsg,
                   bool permanent,
                   bool &cancelled);
-
-    /**
-     * Set the "auto saved" status of the document
-     * Doc. modification sets it to false, autosaving
-     * sets it to true
-     */ 
-    void setAutoSaved(bool s) { m_autoSaved = s; }
-
-    /**
-     * Returns whether the document should be auto-saved
-     */
-    bool isAutoSaved() const { return m_autoSaved; }
 
     /**
      * Returns the name of the autosave file
@@ -629,9 +614,9 @@ private:
     /**
      * Save one segment to the given text stream
      */
-    void saveSegment(QTextStream&, Segment*,
-                     long totalNbOfEvents, long &count,
-                     QString extraAttributes = QString());
+    void saveSegment(QTextStream &outStream,
+                     const Segment *segment,
+                     const QString &additionalAttributes);
 
     /// Identifies a specific event within a specific segment.
     /**
@@ -643,8 +628,9 @@ private:
         Segment::iterator m_segmentIterator;
     };
 
+    /// A vector of note-on events that have been recorded.
     /**
-     * A vector of NoteOnRec elements, necessary in multitrack MIDI 
+     * A vector of NoteOnRec elements, necessary in multitrack MIDI
      * recording for NoteOn calculations
      */
     typedef std::vector<NoteOnRec> NoteOnRecSet;
@@ -652,7 +638,7 @@ private:
     /**
      * Store a single NoteOnRec element in the m_noteOnEvents map
      */
-    void storeNoteOnEvent( Segment *s, Segment::iterator it, 
+    void storeNoteOnEvent( Segment *s, Segment::iterator it,
                            int device, int channel );
 
     /// Adjust the end time for a list of overlapping note events.
@@ -663,8 +649,8 @@ private:
      * Replace recorded Note events in one or several segments, returning the
      * resulting NoteOnRecSet
      */
-    NoteOnRecSet* adjustEndTimes(NoteOnRecSet &rec_vec, timeT endTime);
-    
+    NoteOnRecSet* adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime);
+
     /**
      * Insert a recorded event in one or several segments
      */
@@ -700,15 +686,13 @@ private:
      */
     QList<EditViewBase*> m_editViewList;
 
-    /**
-     * the modified flag of the current document
-     */
     bool m_modified;
 
+    /// Whether an autosave or a regular save has occurred.
     /**
-     * the autosaved status of the current document
+     * This is used by autoSave() to avoid redundant auto-saves.
      */
-    bool m_autoSaved;
+    bool m_autoSaved{false};
 
     /**
      * the title of the current document
@@ -740,7 +724,7 @@ private:
 
     typedef std::map<InstrumentId, Segment *> RecordingSegmentMap;
 
-    /** 
+    /**
      * Segments onto which we can record MIDI events
      */
     //Segment *m_recordMIDISegment;
@@ -750,17 +734,17 @@ private:
      * Segments for recording audio (per instrument)
      */
     RecordingSegmentMap m_recordAudioSegments;
-    
+
     /**
      * a map[Pitch] of NoteOnRecSet elements, for NoteOn calculations
      */
     typedef std::map<int /*pitch*/, NoteOnRecSet> PitchMap;
-    
+
     /**
      * a map[Channel] of PitchMap
      */
     typedef std::map<int /*channel*/, PitchMap> ChanMap;
-    
+
     /**
      * a map[Port] of ChanMap
      */
@@ -792,7 +776,7 @@ private:
     RealTime m_audioRecordLatency;
 
     timeT m_recordStartTime;
-
+    timeT m_pointerBeforeRecord;
     timeT m_quickMarkerTime;
 
     std::vector<QString> m_orphanedRecordedAudioFiles;
@@ -802,9 +786,6 @@ private:
      *  Autosave period for this document in seconds
      */
     int m_autoSavePeriod;
-
-    // Set to true when the dtor starts
-    bool m_beingDestroyed;
 
     /**
      * Tells this document whether it should clear the command history upon
@@ -820,7 +801,19 @@ private:
      */
     bool m_clearCommandHistory;
 
-    /// Enable/disable playing sounds
+    /// Enable/disable control over ALSA and JACK.
+    /**
+     * Normally, RosegardenDocument directly makes changes to AlsaDriver
+     * to synchronize the MIDI and audio hardware to the document that is
+     * loaded.  However, there are times when we don't want RosegardenDocument
+     * to change any ALSA/JACK devices and connections.  E.g. when we are
+     * creating a temporary document for merging.  In those cases, set this
+     * to false and ALSA/JACK will not be touched by this RosegardenDocument
+     * instance.
+     *
+     * Some parts of the system refer to this as "permanent".  See
+     * openDocument().
+     */
     bool m_soundEnabled;
 
     /// Allow file lock to be released.

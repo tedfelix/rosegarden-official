@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,51 +18,61 @@
 #ifndef RG_TRIGGERSEGMENTMANAGER_H
 #define RG_TRIGGERSEGMENTMANAGER_H
 
-#include "base/Event.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QMainWindow>
-#include <QString>
-// #include <QTreeWidget>
-// #include <QTreeWidgetItem>
-
 
 class QWidget;
 class QPushButton;
 class QTreeWidget;
 class QTreeWidgetItem;
 class QCloseEvent;
-class QShortcut;
 
 
 namespace Rosegarden
 {
 
+
 class Command;
 class RosegardenDocument;
 
+
+/// The "Manage Trigger Segments" dialog.
+/**
+ * This and EventListEditor work together to allow for
+ * editing of all aspects of triggered segments.
+ *
+ * ??? This is awkward.  The Event List editor UI becomes a bloated mess
+ *     when it is asked to edit a triggered Segment and it must show
+ *     Label, Base Pitch, and Base Velocity.  TriggerSegmentManager
+ *     should allow *editing* of the data it displays.  Then the Event
+ *     List would not need to offer editing of triggered segment
+ *     properties.
+ */
 class TriggerSegmentManager : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
+
     TriggerSegmentManager(QWidget *parent,
                           RosegardenDocument *doc);
     ~TriggerSegmentManager() override;
 
-    void initDialog();
-
-    void addCommandToHistory(Command *command);
-
-    void setModified(bool value);
-    void checkModified();
-
     // reset the document
     void setDocument(RosegardenDocument *doc);
 
-    QShortcut* getShortcuts() { return m_shortcuts; }
+signals:
 
-public slots:
+    void editTriggerSegment(int);
+    void closing();
+
+protected:
+
+    void closeEvent(QCloseEvent *) override;
+
+private slots:
+
     void slotUpdate();
 
     void slotAdd();
@@ -79,29 +89,26 @@ public slots:
     void slotHelpRequested();
     void slotHelpAbout();
 
-signals:
-    void editTriggerSegment(int);
-    void closing();
-
-protected:
-    void closeEvent(QCloseEvent *) override;
+private:
 
     void setupActions();
-    QString makeDurationString(timeT startTime,
-                               timeT duration, int timeMode);
+    void initDialog();
 
-    //--------------- Data members ---------------------------------
-    RosegardenDocument        *m_doc;
+    RosegardenDocument *m_doc;
 
-    QPushButton             *m_addButton;
-    QPushButton             *m_deleteButton;
-    QPushButton             *m_deleteAllButton;
+    QPushButton *m_addButton;
+    QPushButton *m_deleteButton;
+    QPushButton *m_deleteAllButton;
 
-    QTreeWidget               *m_listView;
+    // ??? QTableWidget would make more sense.
+    QTreeWidget *m_treeWidget;
 
-    bool                     m_modified;
+    // ??? Set but never used for anything.  Get rid of this.
+    bool m_modified{false};
 
-    QShortcut *m_shortcuts;
+    void setModified(bool modified);
+    void addCommandToHistory(Command *command);
+
 };
 
 

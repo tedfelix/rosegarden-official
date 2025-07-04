@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -77,13 +77,11 @@ public:
     /// Returns false if not available
     bool getCharacter(CharName charName,
                       NoteCharacter &character,
-                      CharacterType type = Screen,
-                      bool inverted = false);
+                      bool inverted = false) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacter(CharName charName,
-                               CharacterType type = Screen,
-                               bool inverted = false);
+                               bool inverted = false) const;
 
     /** Returns false if not available, otherwise returns a coloured note
        character using either a specified hue (H) and minimum value (V), or
@@ -98,13 +96,13 @@ public:
                               NoteCharacter &character,
                               CharacterType type = Screen,
                               bool inverted = false,
-                              int saturation = PixmapFunctions::SaturationNotSpecified);
+                              int saturation = PixmapFunctions::SaturationNotSpecified) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterColoured(CharName charName,
                                        int hue, int minimum,
                                        CharacterType type = Screen,
-                                       bool inverted = false);
+                                       bool inverted = false) const;
 
     /// Returns an empty character if not available
     NoteCharacter getCharacterShaded(CharName charName,
@@ -134,14 +132,14 @@ private:
                    bool inverted = false) const;
 
     /// Returns false + blank pixmap if it can't find the right one
-    bool getColouredPixmap(CharName charName, QPixmap &pixmap,
+    bool getColouredPixmap(CharName baseCharName, QPixmap &pixmap,
                            int hue, int minimum,
                            bool inverted = false,
                            int saturation = PixmapFunctions::SaturationNotSpecified) const;
 
     /// Returns false + blank pixmap if it can't find the right one
-    bool getShadedPixmap(CharName charName, QPixmap &pixmap,
-                         bool inverted = false) const;
+    // unused bool getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
+    //                     bool inverted = false) const;
 
     friend class NoteFontFactory;
     NoteFont(QString fontName, int size = 0);
@@ -150,10 +148,10 @@ private:
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
     void add(CharName charName, bool inverted, QPixmap *pixmap) const;
 
-    NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
+    // unused NoteCharacterDrawRep *lookupDrawRep(QPixmap *pixmap) const;
 
-    CharName getNameWithColour(CharName origName, int hue) const;
-    CharName getNameShaded(CharName origName) const;
+    static CharName getNameWithColour(CharName origName, int hue);
+    // unused static CharName getNameShaded(CharName origName);
 
     typedef std::pair<QPixmap *, QPixmap *>    PixmapPair;
     typedef std::map<CharName, PixmapPair>     PixmapMap;

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -47,7 +47,7 @@ CutToTriggerSegmentCommand::CutToTriggerSegmentCommand(
         int baseVelocity,
         NoteStyleName noteStyle,
         bool retune,
-        std::string timeAdjust,
+        const std::string& timeAdjust,
         Mark mark) :
     BasicCommand(tr("Make Ornament"), *selection, true),
     m_paster(&comp, selection, name, basePitch, baseVelocity),
@@ -72,7 +72,7 @@ CutToTriggerSegmentCommand::execute()
     // Now take advantage of BasicCommand facilities, so that we only
     // have to define modifySegment.
     BasicCommand::execute();
-}  
+}
 void
 CutToTriggerSegmentCommand::unexecute()
 {
@@ -134,5 +134,5 @@ CutToTriggerSegmentCommand::modifySegment()
     if (rec)
         { rec->updateReferences(); }
 }
-    
+
 }

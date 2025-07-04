@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -22,17 +22,19 @@ namespace Rosegarden
 
 {
 
-SoundFile::SoundFile(const QString &fileName):
-        m_fileName(fileName),
+SoundFile::SoundFile(const QString &absoluteFilePath):
+        m_absoluteFilePath(absoluteFilePath),
         m_readChunkPtr( -1),
         m_readChunkSize(4096),  // 4k blocks
         m_inFile(nullptr),
         m_outFile(nullptr),
         m_loseBuffer(false),
         m_fileSize(0)
-{}
+{
+    //RG_DEBUG << "ctor: " << m_absoluteFilePath;
+}
 
-// Tidies up for any dervied classes
+// Tidies up for any derived classes
 //
 SoundFile::~SoundFile()
 {
@@ -59,7 +61,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
         //
         file->clear();
 
-        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes() - EOF encountered"));
+        throw(BadSoundFileException(m_absoluteFilePath, "SoundFile::getBytes() - EOF encountered"));
     }
 
     if (!(*file)) {
@@ -92,7 +94,7 @@ SoundFile::getBytes(std::ifstream *file, unsigned int numberOfBytes)
 // Read a specified number of bytes into a buffer.
 //
 size_t
-SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
+SoundFile::getBytes(std::ifstream *file, char *buffer, size_t n)
 {
     if (!(*file)) {
         RG_WARNING << "SoundFile::getBytes() -  stream is not well";
@@ -104,7 +106,7 @@ SoundFile::getBytes(std::ifstream *file, char *buf, size_t n)
         return 0;
     }
 
-    file->read(buf, n);
+    file->read(buffer, n);
     return file->gcount();
 }
 
@@ -114,14 +116,14 @@ std::string
 SoundFile::getBytes(unsigned int numberOfBytes)
 {
     if (m_inFile == nullptr)
-        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes - no open file handle"));
+        throw(BadSoundFileException(m_absoluteFilePath, "SoundFile::getBytes - no open file handle"));
 
     if (m_inFile->eof()) {
         // Reset the input stream so it's operational again
         //
         m_inFile->clear();
 
-        throw(BadSoundFileException(m_fileName, "SoundFile::getBytes() - EOF encountered"));
+        throw(BadSoundFileException(m_absoluteFilePath, "SoundFile::getBytes() - EOF encountered"));
     }
 
 
@@ -211,10 +213,10 @@ SoundFile::getBytes(unsigned int numberOfBytes)
 //
 void
 SoundFile::putBytes(std::ofstream *file,
-                    const std::string oS)
+                    const std::string& outputString)
 {
-    for (size_t i = 0; i < oS.length(); i++) {
-        *file << (FileByte) oS[i];
+    for (size_t i = 0; i < outputString.length(); i++) {
+        *file << (FileByte) outputString[i];
 
         // Every 1024 bytes, kick the event loop.
         if (i % 1024 == 0)
@@ -231,9 +233,9 @@ SoundFile::putBytes(std::ofstream *file, const char *buffer, size_t n)
 
 // Clip off any path from the filename
 QString
-SoundFile::getShortFilename() const
+SoundFile::getFileName() const
 {
-    QString rS = m_fileName;
+    QString rS = m_absoluteFilePath;
     size_t pos = rS.lastIndexOf("/");
 
     if (pos > 0 && ( pos + 1 ) < (size_t)rS.length())
@@ -272,20 +274,21 @@ SoundFile::getLittleEndianFromInteger(unsigned int value, unsigned int length)
     return r;
 }
 
-int
-SoundFile::getIntegerFromBigEndian(const std::string &/*s*/)
-{
-    return 0;
+// unused
+//int
+//SoundFile::getIntegerFromBigEndian(const std::string &/*s*/)
+//{
+//    return 0;
+//}
+
+// unused
+//std::string
+//SoundFile::getBigEndianFromInteger(unsigned int /*value*/, unsigned int /*length*/)
+//{
+//    std::string r;
+//
+//    return r;
+//}
+
+
 }
-
-std::string
-SoundFile::getBigEndianFromInteger(unsigned int /*value*/, unsigned int /*length*/)
-{
-    std::string r;
-
-    return r;
-}
-
-
-}
-

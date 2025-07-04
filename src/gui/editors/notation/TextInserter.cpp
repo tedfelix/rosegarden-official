@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -17,33 +17,35 @@
 
 #include "TextInserter.h"
 
+#include "NotationMouseEvent.h"
+#include "NotationScene.h"
+#include "NotationStaff.h"
+#include "NotationTool.h"
+#include "NotationWidget.h"
+
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "commands/notation/EraseEventCommand.h"
 #include "commands/notation/TextInsertionCommand.h"
 #include "gui/dialogs/TextEventDialog.h"
-#include "NotationTool.h"
-#include "NotationWidget.h"
-#include "NotationElement.h"
-#include "NotationStaff.h"
-#include "NotationScene.h"
-#include "NotationMouseEvent.h"
 #include "gui/widgets/Panned.h"
 #include "document/CommandHistory.h"
 #include "misc/ConfigGroups.h"
 
 #include <QSettings>
 
+
 namespace Rosegarden
 {
+
 
 TextInserter::TextInserter(NotationWidget *widget) :
     NotationTool("textinserter.rc", "TextInserter", widget),
     m_text("", Text::Dynamic)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("notes", SLOT(slotNotesSelected()));
+    createAction("select", &TextInserter::slotSelectSelected);
+    createAction("erase", &TextInserter::slotEraseSelected);
+    createAction("notes", &TextInserter::slotNotesSelected);
 
     QSettings settings;
     settings.beginGroup(TextEventDialogConfigGroup);

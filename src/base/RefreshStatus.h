@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -20,7 +20,7 @@
 #include <QtGlobal>
 #include <vector>
 
-namespace Rosegarden 
+namespace Rosegarden
 {
 
 /// Flag indicating that a refresh is needed.
@@ -39,7 +39,7 @@ class RefreshStatus
 public:
     RefreshStatus() : m_needsRefresh(false) {}
 
-    bool needsRefresh() { return m_needsRefresh; }
+    bool needsRefresh() const { return m_needsRefresh; }
     void setNeedsRefresh(bool s) { m_needsRefresh = s; }
 
 protected:
@@ -75,7 +75,7 @@ public:
     unsigned int getNewRefreshStatusId();
 
     /// Returns the number of observers.
-    size_t size() { return m_refreshStatuses.size(); }
+    size_t size() const { return m_refreshStatuses.size(); }
 
     /// Returns the refresh status object for a particular observer.
     /**

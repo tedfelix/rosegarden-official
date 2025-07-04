@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -14,30 +14,37 @@
 */
 
 #define RG_MODULE_STRING "[JackDriver]"
+#define RG_NO_DEBUG_PRINT
 
 #include "JackDriver.h"
+
 #include "AlsaDriver.h"
 #include "MappedStudio.h"
 #include "AudioProcess.h"
-#include "base/Profiler.h"
-#include "base/AudioLevel.h"
+#include "AudioInstrumentMixer.h"
 #include "Audit.h"
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
 
+#include "base/Profiler.h"
+#include "base/AudioLevel.h"
+#include "sound/WAVExporter.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include <QSettings>
 #include <QtGlobal>
+#include <QThread>
 
 #ifdef HAVE_ALSA
 #ifdef HAVE_LIBJACK
 
-//#define DEBUG_JACK_DRIVER 1
-//#define DEBUG_JACK_TRANSPORT 1
-//#define DEBUG_JACK_PROCESS 1
-//#define DEBUG_JACK_XRUN 1
+//#define DEBUG_JACK_DRIVER
+//#define DEBUG_JACK_TRANSPORT
+//#define DEBUG_JACK_PROCESS
+//#define DEBUG_JACK_XRUN
 
 namespace Rosegarden
 {
@@ -69,9 +76,10 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
         m_haveAsyncAudioEvent(false),
         m_kickedOutAt(0),
         m_framesProcessed(0),
-        m_ok(false)
+        m_ok(false),
+        m_playing(false),
+        m_exportManager(nullptr)
 {
-    Q_ASSERT(sizeof(sample_t) == sizeof(float));
     initialise();
 }
 
@@ -194,6 +202,7 @@ JackDriver::~JackDriver()
     delete instrumentMixer;
     delete reader;
     delete writer;
+    delete[] m_tempOutBuffer;
 
 #ifdef DEBUG_JACK_DRIVER
     RG_DEBUG << "dtor: exiting";
@@ -214,6 +223,8 @@ JackDriver::initialise(bool reinitialise)
 
     std::string jackClientName = "rosegarden";
 
+    m_checkLoad = Preferences::getJACKLoadCheck();
+
     // set up JackOpenOptions per user config
     QSettings settings;
     settings.beginGroup(SequencerOptionsConfigGroup);
@@ -229,10 +240,10 @@ JackDriver::initialise(bool reinitialise)
     //
     if ((m_client = jack_client_open(jackClientName.c_str(), jackOptions, &jackStatus)) == nullptr) {
         RG_WARNING << "initialise() - JACK server not running.  jackStatus:" << qPrintable(QString::number(jackStatus, 16)) << "(hex)";
-        RG_WARNING << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config";
+        RG_WARNING << "  Attempt to start JACK server was " << ((jackOptions & JackNoStartServer) ? "NOT " : "") << "made per user config";
         // Also send to user log.
         AUDIT << "JACK server not running.  jackStatus: 0x" << QString::number(jackStatus, 16) << "\n";
-        AUDIT << "  Attempt to start JACK server was " << (jackOptions & JackNoStartServer ? "NOT " : "") << "made per user config\n";
+        AUDIT << "  Attempt to start JACK server was " << ((jackOptions & JackNoStartServer) ? "NOT " : "") << "made per user config\n";
         return ;
     }
 
@@ -310,6 +321,8 @@ JackDriver::initialise(bool reinitialise)
         return ;
     }
 
+    // Start with an initial single stereo input pair so that we can
+    // make the default connections.  See connectDefaultInputs below.
     if (!createRecordInputs(1)) {
         RG_WARNING << "initialise() - failed to create record inputs!";
         AUDIT << "WARNING: failed to create record inputs!\n";
@@ -323,17 +336,27 @@ JackDriver::initialise(bool reinitialise)
     }
 
     // Now set up the default connections, if configured to do so
+
+    // Set up the outputs.
+    // E.g. "rosegarden:master out L" and "rosegarden:master out R" to
+    // "system:playback_1" and "system:playback_2".
+
     settings.beginGroup(SequencerOptionsConfigGroup);
-    bool connectDefaultOutputs = settings.value("connect_default_jack_outputs", true).toBool();
-    bool connectDefaultInputs = settings.value("connect_default_jack_inputs", true).toBool();
+    const bool connectDefaultOutputs =
+            settings.value("connect_default_jack_outputs", true).toBool();
     settings.endGroup();
 
-    const char **ports = jack_get_ports(m_client, nullptr, nullptr,
-            JackPortIsPhysical | JackPortIsInput);
-    
     if (connectDefaultOutputs) {
 
-        std::string playback_1, playback_2;
+        // Get the physical input ports.
+        const char **ports = jack_get_ports(
+                m_client,  // client
+                nullptr,  // port_name_pattern
+                nullptr,  // type_name_pattern
+                JackPortIsPhysical | JackPortIsInput);  // flags
+
+        std::string playback_1;
+        std::string playback_2;
 
         if (ports) {
             if (ports[0])
@@ -355,31 +378,30 @@ JackDriver::initialise(bool reinitialise)
             AUDIT << "WARNING: no JACK physical outputs found\n";
         }
 
+        // Connect LEFT
         if (playback_1 != "") {
             RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"";
             AUDIT << "connecting from " << "\"" << jack_port_name(m_outputMasters[0]) << "\" to \"" << playback_1.c_str() << "\"\n";
 
-            // connect our client up to the ALSA ports - first left output
-            //
             if (jack_connect(m_client, jack_port_name(m_outputMasters[0]),
                              playback_1.c_str())) {
                 RG_WARNING << "initialise() - cannot connect to JACK output port";
                 AUDIT << "WARNING: cannot connect to JACK output port\n";
-                return ;
             }
 
             /*
-                    // ??? monitors?
-                    if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
-                                     playback_1.c_str()))
-                    {
-                        RG_WARNING << "initialise() - cannot connect to JACK output port";
-                        audit << "WARNING: cannot connect to JACK output port\n";
-                        return;
-                    }
+            // ??? monitors?
+            if (jack_connect(m_client, jack_port_name(m_outputMonitors[0]),
+                             playback_1.c_str()))
+            {
+                RG_WARNING << "initialise() - cannot connect to JACK output port";
+                audit << "WARNING: cannot connect to JACK output port\n";
+                return;
+            }
             */
         }
 
+        // Connect RIGHT
         if (playback_2 != "") {
             RG_DEBUG << "initialise() - connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"";
             AUDIT << "WARNING: connecting from " << "\"" << jack_port_name(m_outputMasters[1]) << "\" to \"" << playback_2.c_str() << "\"\n";
@@ -391,38 +413,57 @@ JackDriver::initialise(bool reinitialise)
             }
 
             /*
-                    // ??? monitors?
-                    if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
-                                     playback_2.c_str()))
-                    {
-                        RG_WARNING << "initialise() - cannot connect to JACK output port";
-                        audit << "WARNING: cannot connect to JACK output port\n";
-                    }
+            // ??? monitors?
+            if (jack_connect(m_client, jack_port_name(m_outputMonitors[1]),
+                             playback_2.c_str()))
+            {
+                RG_WARNING << "initialise() - cannot connect to JACK output port";
+                audit << "WARNING: cannot connect to JACK output port\n";
+            }
             */
         }
 
+    } else {
+        AUDIT << "Skipping default output connections due to preferences.\n";
+        AUDIT << "  Go to Edit > Preferences > Audio > Make default JACK connections.\n";
     }
+
+    // Set up the inputs.
+    // E.g. "system:capture_1" and "system:capture_1" to
+    // "rosegarden:record in 1 L" and "rosegarden:record in 1 R".
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+    const bool connectDefaultInputs =
+            settings.value("connect_default_jack_inputs", true).toBool();
+    settings.endGroup();
 
     if (connectDefaultInputs) {
 
-        std::string capture_1, capture_2;
+        // We only look at the first two.
+        std::string capture_1;
+        std::string capture_2;
 
-        ports =
-            jack_get_ports(m_client, nullptr, nullptr,
-                           JackPortIsPhysical | JackPortIsOutput);
+        // Get the output ports.  Usually system:capture_1 and system:capture_2
+        // are the first two.
+        const char **ports = jack_get_ports(
+                m_client,  // client
+                nullptr,  // port_name_pattern
+                nullptr,  // type_name_pattern
+                JackPortIsPhysical | JackPortIsOutput);  // flags
 
         if (ports) {
-            if (ports[0])
+            unsigned int count = 0;
+            if (ports[0]) {
                 capture_1 = std::string(ports[0]);
-            if (ports[1])
+                ++count;
+            }
+            if (ports[1]) {
                 capture_2 = std::string(ports[1]);
+                ++count;
+            }
 
-            // count ports
-            unsigned int i = 0;
-            for (i = 0; ports[i]; i++)
-                ;
-            RG_DEBUG << "initialise() - found " << i << " JACK physical inputs";
-            AUDIT << "found " << i << " JACK physical inputs\n";
+            RG_DEBUG << "initialise() - found " << count << " JACK physical inputs";
+            AUDIT << "found " << count << " JACK physical inputs\n";
 
             jack_free(ports);
 
@@ -433,11 +474,14 @@ JackDriver::initialise(bool reinitialise)
 
         if (capture_1 != "") {
 
-            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"";
-            AUDIT << "connecting from " << "\"" << capture_1.c_str() << "\" to \"" << jack_port_name(m_inputPorts[0]) << "\"\n";
+            std::string recordIn1L = jack_port_name(m_inputPorts[0]);
 
-            if (jack_connect(m_client, capture_1.c_str(),
-                             jack_port_name(m_inputPorts[0]))) {
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_1 << "\" to \"" << recordIn1L << "\"";
+            AUDIT << "connecting from " << "\"" << capture_1 << "\" to \"" << recordIn1L << "\"\n";
+
+            if (jack_connect(m_client,  // client
+                             capture_1.c_str(),  // source_port
+                             recordIn1L.c_str())) {  // destination_port
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
@@ -445,15 +489,21 @@ JackDriver::initialise(bool reinitialise)
 
         if (capture_2 != "") {
 
-            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"";
-            AUDIT << "connecting from " << "\"" << capture_2.c_str() << "\" to \"" << jack_port_name(m_inputPorts[1]) << "\"\n";
+            std::string recordIn1R = jack_port_name(m_inputPorts[1]);
 
-            if (jack_connect(m_client, capture_2.c_str(),
-                             jack_port_name(m_inputPorts[1]))) {
+            RG_DEBUG << "initialise() - connecting from " << "\"" << capture_2 << "\" to \"" << recordIn1R << "\"";
+            AUDIT << "connecting from " << "\"" << capture_2 << "\" to \"" << recordIn1R << "\"\n";
+
+            if (jack_connect(m_client,  // client
+                             capture_2.c_str(),  // source_port
+                             recordIn1R.c_str())) {  // destination_port
                 RG_WARNING << "initialise() - cannot connect to JACK input port";
                 AUDIT << "WARNING: cannot connect to JACK input port\n";
             }
         }
+    } else {
+        AUDIT << "Skipping default input connections due to preferences.\n";
+        AUDIT << "  Go to Edit > Preferences > Audio > Make default JACK connections.\n";
     }
 
     RG_DEBUG << "initialise() - initialised JACK audio subsystem";
@@ -572,7 +622,7 @@ JackDriver::createSubmasterOutputs(int pairs)
         QString name;
         jack_port_t *port;
 
-        name = QString("submaster %d out L").arg(i + 1);
+        name = QString("submaster %1 out L").arg(i + 1);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -582,7 +632,7 @@ JackDriver::createSubmasterOutputs(int pairs)
             return false;
         m_outputSubmasters.push_back(port);
 
-        name = QString("submaster %d out R").arg(i + 1);
+        name = QString("submaster %1 out R").arg(i + 1);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -604,21 +654,29 @@ JackDriver::createSubmasterOutputs(int pairs)
 }
 
 bool
-JackDriver::createRecordInputs(int pairs)
+JackDriver::createRecordInputs(int newPairs)
 {
     if (!m_client)
         return false;
 
-    int pairsNow = int(m_inputPorts.size()) / 2;
-    if (pairs == pairsNow)
+    // Don't allow zero pairs.
+    if (newPairs < 1)
+        newPairs = 1;
+
+    const int oldPairs = int(m_inputPorts.size()) / 2;
+    // No change or a reduction?  Bail.
+    if (newPairs <= oldPairs)
         return true;
 
-    for (int i = pairsNow; i < pairs; ++i) {
+    // For each additional input port pair...
+    for (int pairNumber = oldPairs + 1; pairNumber <= newPairs; ++pairNumber) {
 
         QString name;
         jack_port_t *port;
 
-        name = QString("record in %1 L").arg(i + 1);
+        // Register the Left.
+
+        name = QString("record in %1 L").arg(pairNumber);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -626,9 +684,12 @@ JackDriver::createRecordInputs(int pairs)
                                   0);
         if (!port)
             return false;
+
         m_inputPorts.push_back(port);
 
-        name = QString("record in %1 R").arg(i + 1);
+        // Register the Right.
+
+        name = QString("record in %1 R").arg(pairNumber);
         port = jack_port_register(m_client,
                                   name.toLocal8Bit(),
                                   JACK_DEFAULT_AUDIO_TYPE,
@@ -636,15 +697,29 @@ JackDriver::createRecordInputs(int pairs)
                                   0);
         if (!port)
             return false;
+
         m_inputPorts.push_back(port);
     }
 
-    while ((int)m_outputSubmasters.size() > pairs * 2) {
-        std::vector<jack_port_t *>::iterator itr = m_outputSubmasters.end();
-        --itr;
+#if 0
+    // ??? Removing this since it will cause connections to be dropped.
+    //     If the user goes from a Composition with 4 inputs to one with
+    //     2 inputs, there's no need to delete input ports.  In fact,
+    //     there used to be a bug here where the input ports would never
+    //     be deleted.  No one complained.
+    //
+    //     I suspect the real solution would be to implement JACK input
+    //     connections the way we do MIDI input connections.  Try to find
+    //     all the ports and connect to them on Composition load.
+
+    // Delete any extra ports if we've gone down from say 2 pairs to 1.
+
+    while ((int)m_inputPorts.size() > newPairs * 2) {
+        std::vector<jack_port_t *>::iterator itr = m_inputPorts.end() - 1;
         jack_port_unregister(m_client, *itr);
-        m_outputSubmasters.erase(itr);
+        m_inputPorts.erase(itr);
     }
+#endif
 
     return true;
 }
@@ -653,8 +728,11 @@ JackDriver::createRecordInputs(int pairs)
 void
 JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 {
-    if (!m_client)
-        return ;
+    if (!m_client) {
+        RG_WARNING << "setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet";
+        AUDIT << "WARNING: setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet\n";
+        return;
+    }
 
     // Create a log that the user can easily see through the preferences
     // even in a release build.
@@ -665,12 +743,6 @@ JackDriver::setAudioPorts(bool faderOuts, bool submasterOuts)
 #ifdef DEBUG_JACK_DRIVER
     RG_DEBUG << "setAudioPorts(" << faderOuts << "," << submasterOuts << ")";
 #endif
-
-    if (!m_client) {
-        RG_WARNING << "setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet";
-        AUDIT << "WARNING: setAudioPorts(" << faderOuts << "," << submasterOuts << "): no client yet\n";
-        return ;
-    }
 
     if (faderOuts) {
         InstrumentId instrumentBase;
@@ -715,7 +787,7 @@ RealTime
 JackDriver::getAudioPlayLatency() const
 {
     if (!m_client)
-        return RealTime::zeroTime;
+        return RealTime::zero();
 
 #if 0
     // ??? DEPRECATED
@@ -741,7 +813,7 @@ RealTime
 JackDriver::getAudioRecordLatency() const
 {
     if (!m_client)
-        return RealTime::zeroTime;
+        return RealTime::zero();
 
 #if 0
     // ??? DEPRECATED
@@ -767,7 +839,7 @@ RealTime
 JackDriver::getInstrumentPlayLatency(InstrumentId id) const
 {
     if (m_instrumentLatencies.find(id) == m_instrumentLatencies.end()) {
-        return RealTime::zeroTime;
+        return RealTime::zero();
     } else {
         return m_instrumentLatencies.find(id)->second;
     }
@@ -783,10 +855,13 @@ int
 JackDriver::jackProcessStatic(jack_nframes_t nframes, void *arg)
 {
     JackDriver *inst = static_cast<JackDriver*>(arg);
-    if (inst)
-        return inst->jackProcess(nframes);
-    else
+    if (inst) {
+        int ret = inst->jackProcess(nframes);
+        inst->jackProcessDone();
+        return ret;
+    } else {
         return 0;
+    }
 }
 
 int
@@ -808,6 +883,27 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         return jackProcessEmpty(nframes);
     }
 
+#ifdef THREAD_DEBUG
+    static pid_t threadId{0};
+    // Note: This is not reliable since it is not thread safe.
+    if (threadId != gettid())
+    {
+        threadId = gettid();
+        RG_WARNING << "jackProcess(): gettid(): " << gettid();
+    }
+#endif
+
+    // Compute number of synths.
+    // ??? Performance: AudioInstrumentMixer should maintain this number as
+    //     a member variable so we don't have to recompute over and over in
+    //     real-time.
+    InstrumentId synthInstrumentBase;
+    int synthInstruments;
+    m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase,
+                                                synthInstruments);
+    int synthCount = m_instrumentMixer->getNumSoftSynths();
+    //RG_DEBUG << "process got" << synthCount << "synths";
+
     // synchronize MIDI and audio by adjusting MIDI playback rate
     if (m_alsaDriver->areClocksRunning()) {
         m_alsaDriver->checkTimerSync(m_framesProcessed);
@@ -818,7 +914,25 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     bool lowLatencyMode = m_alsaDriver->getLowLatencyMode();
     bool clocksRunning = m_alsaDriver->areClocksRunning();
     bool playing = m_alsaDriver->isPlaying();
-    bool asyncAudio = m_haveAsyncAudioEvent;
+    // if we have a synth plugin it may generate sound without
+    // receiving midi input so always process async audio
+    bool asyncAudio = m_haveAsyncAudioEvent || (synthCount > 0);
+
+    if (m_exportManager) {
+        // Transitioning to play.
+        if (playing  &&  !m_playing) {
+            RG_DEBUG << "export start playing";
+            m_exportManager->start();
+        }
+        // Transitioning to stop.
+        if (!playing  &&  m_playing) {
+            RG_DEBUG << "export stop playing";
+            m_exportManager->stop();
+            // finished with the exportManager - it is deleted elsewhere
+            m_exportManager = nullptr;
+        }
+        m_playing = playing;
+    }
 
 #ifdef DEBUG_JACK_PROCESS
     Profiler profiler("jackProcess", true);
@@ -853,9 +967,15 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         }
     }
 
-    if (jack_cpu_load(m_client) > 97.0) {
-        reportFailure(MappedEvent::FailureCPUOverload);
-        return jackProcessEmpty(nframes);
+    if (m_checkLoad)
+    {
+        // ??? jack_cpu_load() is not reliable.  It returns different
+        //     values on different systems.  Those values do not
+        //     necessarily reflect CPU usage.
+        if (jack_cpu_load(m_client) > 97.0) {
+            reportFailure(MappedEvent::FailureCPUOverload);
+            return jackProcessEmpty(nframes);
+        }
     }
 
 #ifdef DEBUG_JACK_PROCESS
@@ -996,10 +1116,6 @@ JackDriver::jackProcess(jack_nframes_t nframes)
   #endif
 #endif
 
-    InstrumentId synthInstrumentBase;
-    int synthInstruments;
-    m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
-
     // We always have the master out
 
     sample_t *master[2] = {
@@ -1051,7 +1167,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
         for (int ch = 0; ch < 2; ++ch) {
 
-            RingBuffer<AudioBussMixer::sample_t> *rb =
+            RingBuffer<sample_t> *rb =
                 m_bussMixer->getRingBuffer(buss, ch);
 
             if (!rb || m_bussMixer->isBussDormant(buss)) {
@@ -1094,7 +1210,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
     bool allInstrumentsDormant = true;
-    static RealTime dormantTime = RealTime::zeroTime;
+    static RealTime dormantTime;
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
@@ -1144,7 +1260,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
             }
 #endif
 
-            RingBuffer<AudioInstrumentMixer::sample_t, 2> *rb =
+            RingBuffer<sample_t, 2> *rb =
                 m_instrumentMixer->getRingBuffer(id, ch);
 
             if (!rb || m_instrumentMixer->isInstrumentDormant(id)) {
@@ -1208,9 +1324,9 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         SequencerDataBlock::getInstance()->setInstrumentLevel(id, info);
     }
 
-    if (asyncAudio) {
+    if (asyncAudio && synthCount == 0) {
         if (!allInstrumentsDormant) {
-            dormantTime = RealTime::zeroTime;
+            dormantTime = RealTime::zero();
         } else {
             dormantTime = dormantTime +
                           RealTime::frame2RealTime(m_bufferSize, m_sampleRate);
@@ -1253,6 +1369,11 @@ JackDriver::jackProcess(jack_nframes_t nframes)
         }
     }
 
+
+    if (m_exportManager && playing) {
+        m_exportManager->addSamples(master[0], master[1], m_bufferSize);
+    }
+
     if (playing) {
         if (!lowLatencyMode) {
             if (m_bussMixer->getBussCount() == 0) {
@@ -1274,6 +1395,13 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 #endif
 
     return 0;
+}
+
+void JackDriver::jackProcessDone()
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->audioProcessingDone();
+
 }
 
 int
@@ -1528,20 +1656,32 @@ JackDriver::jackProcessRecord(InstrumentId id,
     return 0;
 }
 
+#ifdef DEBUG_JACK_TRANSPORT
+static QString transportStateToString(jack_transport_state_t state)
+{
+    static std::vector<QString> states{
+        "Stopped", "Rolling", "Looping", "Starting", "NetStarting"};
+
+    if (state < 0  ||  state >= states.size())
+        return "???";
+
+    return states[state];
+}
+#endif
 
 int
 JackDriver::jackSyncCallback(jack_transport_state_t state,
                              jack_position_t *position,
                              void *arg)
 {
-    JackDriver *inst = (JackDriver *)arg;
-    if (!inst)
-        return true; // or rather, return "huh?"
+    JackDriver *jackDriver = static_cast<JackDriver *>(arg);
+    if (!jackDriver)
+        return true;
 
-    inst->m_alsaDriver->checkTimerSync(0); // reset, as not processing
+    jackDriver->m_alsaDriver->checkTimerSync(0); // reset, as not processing
 
-    if (!inst->m_jackTransportEnabled)
-        return true; // ignore
+    if (!jackDriver->m_jackTransportEnabled)
+        return true;
 
     RosegardenSequencer *sequencer =
             RosegardenSequencer::getInstance();
@@ -1550,16 +1690,26 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
 
 #ifdef DEBUG_JACK_TRANSPORT
 
-    RG_DEBUG << "jackSyncCallback(): state " << state << " [" << (state == 0 ? "stopped" : state == 1 ? "rolling" : state == 2 ? "looping" : state == 3 ? "starting" : "unknown") << "], frame " << position->frame << ", waiting " << inst->m_waiting << ", playing " << inst->m_alsaDriver->isPlaying();
-    RG_DEBUG << "jackSyncCallback(): m_waitingState " << inst->m_waitingState << ", unique_1 " << position->unique_1 << ", unique_2 " << position->unique_2;
-    RG_DEBUG << "jackSyncCallback(): rate " << position->frame_rate << ", bar " << position->bar << ", beat " << position->beat << ", tick " << position->tick << ", bpm " << position->beats_per_minute;
+    RG_DEBUG << "jackSyncCallback() ----------";
+    RG_DEBUG << "    state:" << state << transportStateToString(state);
+    RG_DEBUG << "    frame_rate:" << position->frame_rate << "| frame:" << position->frame << "| frame secs:" << (double)position->frame / (double)position->frame_rate;
+    //RG_DEBUG << "    usecs:" << position->usecs;  // Free-rolling timestamp.  Not very useful.
+    if (position->valid & JackPositionBBT)
+        RG_DEBUG << "    bar:" << position->bar << "| beat:" << position->beat << "| tick:" << position->tick << "| bpm:" << position->beats_per_minute;
+    if (position->unique_1 != position->unique_2)
+        RG_DEBUG << "    INCONSISTENT! unique_1:" << position->unique_1 << "| unique_2:" << position->unique_2;
+    RG_DEBUG << "    ALSA playing:" << jackDriver->m_alsaDriver->isPlaying();
+    RG_DEBUG << "    m_waiting:" << jackDriver->m_waiting << "| m_waitingState:" << jackDriver->m_waitingState << transportStateToString(jackDriver->m_waitingState);
 
 #endif
+
+    // Infer the transport request from the ALSA play state and the
+    // incoming JACK transport state.
 
     RosegardenSequencer::TransportRequest request =
             RosegardenSequencer::TransportNoChange;
 
-    if (inst->m_alsaDriver->isPlaying()) {
+    if (jackDriver->m_alsaDriver->isPlaying()) {
 
         if (state == JackTransportStarting) {
             request = RosegardenSequencer::TransportJumpToTime;
@@ -1567,16 +1717,29 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
             request = RosegardenSequencer::TransportStop;
         }
 
-    } else {
+    } else {  // ALSA is stopped.
 
         if (state == JackTransportStarting) {
             request = RosegardenSequencer::TransportStartAtTime;
         } else if (state == JackTransportStopped) {
+            // ??? Not necessarily.  If the position has changed, we probably
+            //     want to seek to that new position.  Since we are stopped and
+            //     these requests come in extremely rarely, we should probably
+            //     just assume that we need to do a position update.
             request = RosegardenSequencer::TransportNoChange;
+            // ??? But this results in an endless loop.  I'm guessing it is
+            //     because we send out a transport jump to JACK which then
+            //     sends another to us.
+            //request = RosegardenSequencer::TransportJumpToTime;
         }
     }
 
-    if (!inst->m_waiting || inst->m_waitingState != state) {
+#ifdef DEBUG_JACK_TRANSPORT
+    RG_DEBUG << "    inferred request:" << request << RosegardenSequencer::transportRequestToString(request);
+#endif
+
+    // If we aren't waiting, or the state has changed...
+    if (!jackDriver->m_waiting  ||  jackDriver->m_waitingState != state) {
 
         if (request == RosegardenSequencer::TransportJumpToTime ||
                 request == RosegardenSequencer::TransportStartAtTime) {
@@ -1585,64 +1748,69 @@ JackDriver::jackSyncCallback(jack_transport_state_t state,
                                                    position->frame_rate);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Requesting jump to " << rt;
+            RG_DEBUG << "    Requesting jump to " << rt;
 #endif
 
-            inst->m_waitingToken = sequencer->transportJump(request, rt);
+            jackDriver->m_waitingToken = sequencer->transportJump(request, rt);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
+            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
 #endif
 
         } else if (request == RosegardenSequencer::TransportStop) {
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Requesting state change to " << request;
+            RG_DEBUG << "    Requesting state change to " << request;
 #endif
 
-            inst->m_waitingToken = sequencer->transportChange(request);
+            jackDriver->m_waitingToken = sequencer->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
+            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
 #endif
 
         } else if (request == RosegardenSequencer::TransportNoChange) {
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Requesting no state change!";
+            RG_DEBUG << "    Requesting no state change!";
 #endif
 
-            inst->m_waitingToken = sequencer->transportChange(request);
+            // ??? Why are we requesting a token for no change?  Why
+            //     don't we just return true?
+            jackDriver->m_waitingToken = sequencer->transportChange(request);
 
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): My token is " << inst->m_waitingToken;
+            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
 #endif
 
         }
 
-        inst->m_waiting = true;
-        inst->m_waitingState = state;
+        jackDriver->m_waiting = true;
+        jackDriver->m_waitingState = state;
 
 #ifdef DEBUG_JACK_TRANSPORT
-        RG_DEBUG << "jackSyncCallback(): Setting waiting to " << inst->m_waiting << " and waiting state to " << inst->m_waitingState << " (request was " << request << ")";
+        RG_DEBUG << "    Setting m_waiting to true and waiting state to" << jackDriver->m_waitingState << transportStateToString(jackDriver->m_waitingState) << "(request was" << request << ")";
 #endif
 
-        return 0;
+        // Not done.  We need another call to confirm transport sync.
+        return false;
 
-    } else {
+    } else {  // waiting and the state has not changed
 
-        if (sequencer->isTransportSyncComplete(inst->m_waitingToken)) {
+        if (sequencer->isTransportSyncComplete(jackDriver->m_waitingToken)) {
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Sync complete";
+            RG_DEBUG << "    RG transport sync complete";
 #endif
 
-            return 1;
+            // Done.  We have confirmed transport is ready.
+            return true;
         } else {
 #ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "jackSyncCallback(): Sync not complete";
+            RG_DEBUG << "    RG transport sync not complete";
 #endif
 
-            return 0;
+            // Not done.  We need another call to confirm transport sync.
+            return false;
         }
     }
 }
@@ -1826,7 +1994,7 @@ JackDriver::jackBufferSize(jack_nframes_t nframes, void *arg)
     // have internal buffers) and the mix manager, with locks acquired
     // appropriately
 
-    delete [] inst->m_tempOutBuffer;
+    delete[] inst->m_tempOutBuffer;
     inst->m_tempOutBuffer = new sample_t[inst->m_bufferSize];
 
     return 0;
@@ -1938,6 +2106,7 @@ JackDriver::prepareAudio()
 void
 JackDriver::prebufferAudio()
 {
+    RG_DEBUG << "prebufferAudio";
     if (!m_instrumentMixer)
         return ;
 
@@ -1985,7 +2154,7 @@ JackDriver::updateAudioData()
     if (!m_ok || !m_client)
         return ;
 
-#ifdef DEBUG_JACK_DRIVER 
+#ifdef DEBUG_JACK_DRIVER
     //RG_DEBUG << "updateAudioData() begin...";
 #endif
 
@@ -2010,7 +2179,7 @@ JackDriver::updateAudioData()
     m_alsaDriver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
     RealTime jackLatency = getAudioPlayLatency();
-    RealTime maxLatency = RealTime::zeroTime;
+    RealTime maxLatency;
 
     for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
 
@@ -2067,9 +2236,9 @@ JackDriver::updateAudioData()
                 RG_WARNING << "updateAudioData(): WARNING: No such object as " << *connections.begin();
                 input = 1000;
             } else if (obj->getType() == MappedObject::AudioBuss) {
-                input = (int)((MappedAudioBuss *)obj)->getBussId();
+                input = (int)(static_cast<MappedAudioBuss *>(obj))->getBussId();
             } else if (obj->getType() == MappedObject::AudioInput) {
-                input = (int)((MappedAudioInput *)obj)->getInputNumber()
+                input = (int)(static_cast<MappedAudioInput *>(obj))->getInputNumber()
                         + 1000;
             } else {
                 RG_WARNING << "updateAudioData(): WARNING: Object " << *connections.begin() << " is not buss or input";
@@ -2106,7 +2275,7 @@ JackDriver::updateAudioData()
         }
 
         if (empty) {
-            m_instrumentLatencies[id] = RealTime::zeroTime;
+            m_instrumentLatencies[id] = RealTime::zero();
         } else {
             m_instrumentLatencies[id] = jackLatency +
                                         RealTime::frame2RealTime(pluginLatency, m_sampleRate);
@@ -2119,15 +2288,18 @@ JackDriver::updateAudioData()
     m_maxInstrumentLatency = maxLatency;
     m_directMasterAudioInstruments = directMasterAudioInstruments;
     m_directMasterSynthInstruments = directMasterSynthInstruments;
-    m_maxInstrumentLatency = maxLatency;
 
-    int inputs = m_alsaDriver->getMappedStudio()->
+    // Update the number of record inputs.
+    const int inputs = m_alsaDriver->getMappedStudio()->
                  getObjectCount(MappedObject::AudioInput);
-
-    if (m_client) {
-        // this will return with no work if the inputs are already correct:
-        createRecordInputs(inputs);
-    }
+    // Does no work if the inputs are already correct.
+    // ??? Why are we doing this in updateAudioData()?!  We should be doing
+    //     this when we load a new document and when the user changes it
+    //     in the document (via the audio mixer).  This is getting called
+    //     *constantly* on the JACK audio thread.  Does it need to be on the
+    //     JACK audio thread?  Or can we safely call it from the GUI
+    //     thread?
+    createRecordInputs(inputs);
 
     m_bussMixer->updateInstrumentConnections();
     m_instrumentMixer->updateInstrumentMuteStates();
@@ -2152,7 +2324,7 @@ JackDriver::updateAudioData()
         }
     }
 
-#ifdef DEBUG_JACK_DRIVER 
+#ifdef DEBUG_JACK_DRIVER
     //RG_DEBUG << "updateAudioData() end";
 #endif
 }
@@ -2179,9 +2351,9 @@ JackDriver::getNextSliceStart(const RealTime &now) const
     jack_nframes_t frame;
     bool neg = false;
 
-    if (now < RealTime::zeroTime) {
+    if (now < RealTime::zero()) {
         neg = true;
-        frame = RealTime::realTime2Frame(RealTime::zeroTime - now, m_sampleRate);
+        frame = RealTime::realTime2Frame(RealTime::zero() - now, m_sampleRate);
     } else {
         frame = RealTime::realTime2Frame(now, m_sampleRate);
     }
@@ -2200,12 +2372,12 @@ JackDriver::getNextSliceStart(const RealTime &now) const
         roundrt = RealTime::frame2RealTime(rounded + m_bufferSize, m_sampleRate);
 
     if (neg)
-        roundrt = RealTime::zeroTime - roundrt;
+        roundrt = RealTime::zero() - roundrt;  // ??? unary minus?
 
     return roundrt;
 }
 
-
+/* unused
 int
 JackDriver::getAudioQueueLocks()
 {
@@ -2255,7 +2427,9 @@ JackDriver::getAudioQueueLocks()
 
     return rv;
 }
+*/
 
+/* unused
 int
 JackDriver::tryAudioQueueLocks()
 {
@@ -2300,7 +2474,9 @@ JackDriver::tryAudioQueueLocks()
     }
     return rv;
 }
+*/
 
+/* unused
 int
 JackDriver::releaseAudioQueueLocks()
 {
@@ -2319,7 +2495,7 @@ JackDriver::releaseAudioQueueLocks()
         rv = m_bussMixer->releaseLock();
     return rv;
 }
-
+*/
 
 void
 JackDriver::setPluginInstance(InstrumentId id, QString identifier,
@@ -2336,6 +2512,9 @@ JackDriver::setPluginInstance(InstrumentId id, QString identifier,
 void
 JackDriver::removePluginInstance(InstrumentId id, int position)
 {
+    // ??? This and all the other pure delegation functions can be removed.
+    //     AudioInstrumentMixer is now a Singleton and can be accessed
+    //     globally through its getInstance().
     if (m_instrumentMixer)
         m_instrumentMixer->removePlugin(id, position);
 }
@@ -2413,9 +2592,24 @@ JackDriver::configurePlugin(InstrumentId id, int position, QString key, QString 
     return QString();
 }
 
+void JackDriver::savePluginState()
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->savePluginState();
+}
+
+void JackDriver::getPluginPlayableAudio(std::vector<PlayableData*>& playable)
+{
+    if (m_instrumentMixer)
+        m_instrumentMixer->getPluginPlayableAudio(playable);
+}
+
 RunnablePluginInstance *
 JackDriver::getSynthPlugin(InstrumentId id)
 {
+    // ??? This and all the other pure delegation functions can be removed.
+    //     AudioInstrumentMixer is now a Singleton and can be accessed
+    //     globally through its getInstance().
     if (m_instrumentMixer)
         return m_instrumentMixer->getSynthPlugin(id);
     else
@@ -2455,9 +2649,10 @@ JackDriver::closeRecordFile(InstrumentId id,
 {
     if (m_fileWriter) {
         return m_fileWriter->closeRecordFile(id, returnedId);
-        if (m_fileWriter->running() && !m_fileWriter->haveRecordFilesOpen()) {
-            m_fileWriter->terminate();
-        }
+        // unreachable
+        //if (m_fileWriter->running() && !m_fileWriter->haveRecordFilesOpen()) {
+        //  m_fileWriter->terminate();
+        //}
     } else
         return false;
 }
@@ -2468,6 +2663,12 @@ JackDriver::reportFailure(MappedEvent::FailureCode code)
 {
     if (m_alsaDriver)
         m_alsaDriver->reportFailure(code);
+}
+
+void
+JackDriver::installExporter(WAVExporter* wavExporter)
+{
+    m_exportManager = wavExporter;
 }
 
 

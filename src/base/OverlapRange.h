@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -13,20 +13,15 @@
     COPYING included with this distribution for more information.
 */
 
-
-
 #ifndef RG_OVERLAP_RANGE_H
 #define RG_OVERLAP_RANGE_H
 
 #include <vector>
-#include <map>
-
-#include "Event.h"
-
 
 
 namespace Rosegarden
 {
+
 
 class Composition;
 class Segment;
@@ -59,9 +54,9 @@ public :
     // usage of pushSegment() is mandatory to keep m_inconsistancy up to date.
     const std::vector<Segment *> *getSegments() const { return &m_segments; }
 
-    T getRangeProperty(Segment *segment, timeT t);
+    static T getRangeProperty(Segment *segment, timeT t);
 
-    bool isInconsistent() { return m_inconsistancy; }
+    bool isInconsistent() const { return m_inconsistancy; }
 
     void pushSegment(Segment *segment, timeT t) {
         int previousSize = m_segments.size();
@@ -76,15 +71,13 @@ public :
     }
 
 
-private :
-    //--------------- Data members ---------------------------------
+private:
 
     std::vector<Segment *> m_segments;
-    bool           m_inconsistancy;
-    T              m_property;
+    bool m_inconsistancy;
+    T m_property;
 
 };
-
 
 //------------- Specialized functions -----------------------------------
 
@@ -113,4 +106,3 @@ OverlapRange<int>::getRangeProperty(Segment *segment, timeT)
 }
 
 #endif // RG_OVERLAP_RANGE_H
-

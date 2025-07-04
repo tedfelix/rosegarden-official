@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,30 +18,26 @@
 #ifndef RG_TRACKEDITOR_H
 #define RG_TRACKEDITOR_H
 
-#include "base/MidiProgram.h"
-#include "base/Event.h"
-#include "gui/editors/segment/TrackButtons.h"
+#include "base/Instrument.h"
+#include "base/TimeT.h"
+#include "base/Track.h"
 
 #include <QString>
 #include <QWidget>
-#include <QScrollArea>
+
+class QDropEvent;
+class QDragEnterEvent;
 
 #include <vector>
 
 
-class QPaintEvent;
-class QDropEvent;
-class QDragEnterEvent;
-class QScrollBar;
-class QScrollArea;
-
 namespace Rosegarden
 {
+
 
 class Command;
 class TrackButtons;
 class TempoRuler;
-class Segment;
 class SimpleRulerScale;
 class RosegardenDocument;
 class RosegardenMainViewWidget;
@@ -50,6 +46,7 @@ class CompositionView;
 class CompositionModelImpl;
 class ChordNameRuler;
 class StandardRuler;
+
 
 /// Holds the CompositionView, TrackButtons, and Rulers.
 /**
@@ -95,7 +92,7 @@ public:
     /// Are we scrolling as we play?
     bool isTracking() const { return m_playTracking; }
     /// Toggle playback scrolling.
-    void toggleTracking();
+    void scrollToFollow();
 
     /// Adjust the canvas size to that required for the composition
     void updateCanvasSize();
@@ -171,12 +168,6 @@ private slots:
     void slotTRMousePress();
     void slotTRMouseRelease();
 
-    /// Show the given loop on the rulers
-    /**
-     * init() connects this to RosegardenDocument::loopChanged().
-     */
-    void slotSetLoop(timeT start, timeT end);
-
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
 
@@ -202,7 +193,7 @@ private:
     // QWidget overrides.
     void dragEnterEvent(QDragEnterEvent *) override;
     void dropEvent(QDropEvent *) override;
-    void dragMoveEvent(QDragMoveEvent *) override;
+    // unused void dragMoveEvent(QDragMoveEvent *) override;
 
     /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);

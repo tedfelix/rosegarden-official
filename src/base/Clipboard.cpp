@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -133,7 +133,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     const timeT segStart = copyFrom->getStartTime();
     const timeT segEndMarker = copyFrom->getEndMarkerTime();
     timeT segDuration = segEndMarker - segStart;
-    
+
     // We can't copy starting prior to the start of the segment.
     if (from < segStart)
         from = segStart;
@@ -152,10 +152,10 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     }
 
     s->setRepeating(false);
-    
+
     if (s->getType() == Segment::Audio) {
 
-        Composition *c = copyFrom->getComposition();
+        const Composition *c = copyFrom->getComposition();
 
         for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
@@ -212,22 +212,22 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     // We have a normal (MIDI) segment.
 
     s->erase(s->begin(), s->end());
-    
+
     for (int repeat = firstRepeat; repeat <= lastRepeat; ++repeat) {
 
         Segment::const_iterator ifrom = copyFrom->begin();
         Segment::const_iterator ito = copyFrom->end();
 
         if (!expandRepeats) {
-            ifrom = copyFrom->findTime(from);
-            ito = copyFrom->findTime(to);
+            ifrom = copyFrom->findTimeConst(from);
+            ito = copyFrom->findTimeConst(to);
         } else {
             if (repeat == firstRepeat) {
-                ifrom = copyFrom->findTime
+                ifrom = copyFrom->findTimeConst
                     (segStart + (from - segStart) % segDuration);
             }
             if (repeat == lastRepeat) {
-                ito = copyFrom->findTime
+                ito = copyFrom->findTimeConst
                     (segStart + (to - segStart) % segDuration);
             }
         }
@@ -246,15 +246,15 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
         s->setEndMarkerTime(to);
 
     // Make sure the end of the segment doesn't go past the end of the range.
-    // Need to use the end marker time from the original segment, not s, 
+    // Need to use the end marker time from the original segment, not s,
     // because its value may depend on the composition it's in.
     if (segEndMarker > to)
         s->setEndMarkerTime(to);
 
     // Fix the beginning.
-    
+
     timeT firstEventTime = s->getStartTime();
-    
+
     // if the beginning was chopped off and the first event isn't at the start
     if (from > segStart  &&  firstEventTime > from) {
         // Expand the beginning to the left so that it starts at the expected
@@ -263,7 +263,7 @@ Clipboard::newSegment(const Segment *copyFrom, timeT from, timeT to,
     }
 
     // Fix zero-length segments.
-    
+
     // if s is zero length
     if (s->getStartTime() == s->getEndMarkerTime()) {
         // Figure out what start and end time would look right.
@@ -359,7 +359,7 @@ Clipboard::getTimeSignatureSelection() const
 {
     return m_timeSigSelection;
 }
- 
+
 void
 Clipboard::setTempoSelection(const TempoSelection &ts)
 {
@@ -379,7 +379,7 @@ Clipboard::getTempoSelection() const
 {
     return m_tempoSelection;
 }
-    
+
 void
 Clipboard::copyFrom(const Clipboard *c)
 {
@@ -397,7 +397,7 @@ Clipboard::copyFrom(const Clipboard *c)
 
     m_tempoSelection = c->m_tempoSelection;
     m_haveTempoSelection = c->m_haveTempoSelection;
-    
+
     m_nominalStart = c->m_nominalStart;
     m_nominalEnd = c->m_nominalEnd;
 }
@@ -428,7 +428,7 @@ Clipboard::getBaseTime() const
             t = m_tempoSelection.begin()->first;
         }
     }
-    
+
     return t;
 }
 
@@ -440,7 +440,7 @@ Clipboard::setNominalRange(timeT start, timeT end)
 }
 
 void
-Clipboard::getNominalRange(timeT &start, timeT &end)
+Clipboard::getNominalRange(timeT &start, timeT &end) const
 {
     start = m_nominalStart;
     end = m_nominalEnd;
@@ -462,7 +462,7 @@ Clipboard::removeAudioSegments()
             m_segments.erase(j);
         }
     }
-    
+
     // If there are no segments, clear the clipboard.
     if (m_segments.empty())
         clear();

@@ -3,9 +3,9 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
-    This file contains code from 
+    This file contains code from
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
 
@@ -93,11 +93,11 @@ private:
     static int   const TOP_GUITAR_CHORD_MARGIN;
     static int   const FRET_PEN_WIDTH;
     static int   const STRING_PEN_WIDTH;
-    
+
 public:
 
     NoteSymbols(unsigned int nbOfStrings, unsigned int nbOfFrets) :
-        m_nbOfStrings(nbOfStrings), 
+        m_nbOfStrings(nbOfStrings),
         m_nbOfFrets(nbOfFrets) {};
 
     //! Display a mute symbol in the QPainter object
@@ -126,10 +126,12 @@ public:
      * The code from the KGuitar project was modified to display a bar. This feature was not
      * available in that project
      */
+    /* unused
     void drawBarreSymbol ( QPainter* p,
                            int fretNb,
                            unsigned int start,
                            unsigned int end ) const;
+    */
 
     void drawFretNumber ( QPainter* p,
                           unsigned int fret_num ) const;
@@ -138,43 +140,43 @@ public:
 
     void drawStrings ( QPainter* p ) const;
 
-    unsigned int getTopBorder ( unsigned int imgHeight ) const;
+    static unsigned int getTopBorder ( unsigned int imgHeight );
 
-    unsigned int getBottomBorder ( unsigned int imgHeight ) const;
+    // unused static unsigned int getBottomBorder ( unsigned int imgHeight );
 
-    unsigned int getLeftBorder ( unsigned int imgWidth ) const;
+    static unsigned int getLeftBorder ( unsigned int imgWidth );
 
-    unsigned int getRightBorder ( unsigned int imgWidth ) const;
+    // unused static unsigned int getRightBorder ( unsigned int imgWidth );
 
-    unsigned int getGuitarChordWidth ( int imgWidth ) const;
+    static unsigned int getGuitarChordWidth ( int imgWidth );
 
-    unsigned int getGuitarChordHeight ( int imgHeight ) const;
+    static unsigned int getGuitarChordHeight ( int imgHeight );
 
-    unsigned int getFontPixelSize ( int imgWidth, int imgHeight ) const;
-    
-    std::pair<bool, unsigned int>
+    static unsigned int getFontPixelSize ( int imgWidth, int imgHeight );
+
+    static std::pair<bool, unsigned int>
     getStringNumber ( int imgWidth,
                       unsigned int x_pos,
-                      unsigned int string_num ) const;
+                      unsigned int maxStringNum );
 
-    std::pair<bool, unsigned int>
+    static std::pair<bool, unsigned int>
     getFretNumber ( int imgHeight,
                     unsigned int y_pos,
-                    unsigned int maxFretNum ) const;
+                    unsigned int maxFretNum );
 
     QRect getTransientNoteSymbolRect(QSize guitarChordSize,
                                      unsigned int stringNb,
                                      int fretNb) const;
-    
+
     static void drawFingeringPixmap(const Fingering& fingering, const NoteSymbols& noteSymbols, QPainter *p);
-    
+
 private:
 
-    posPair
-    getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings ) const;
+    static posPair
+    getX ( int imgWidth, unsigned int stringNb, unsigned int nbOfStrings );
 
-    posPair
-    getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets ) const;
+    static posPair
+    getY ( int imgHeight, unsigned int fretNb, unsigned int nbOfFrets );
 
 
     unsigned int m_nbOfStrings;
@@ -187,4 +189,3 @@ private:
 }
 
 #endif /* SYMBOLS_H_ */
-

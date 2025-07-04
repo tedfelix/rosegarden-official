@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -45,10 +45,10 @@ class HydrogenXMLHandler : public XMLHandler
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::HydrogenXMLHandler)
 
 public:
-    HydrogenXMLHandler(Composition *comp,
+    HydrogenXMLHandler(Composition *composition,
             InstrumentId drumInstrument = MidiInstrumentBase + 9);
 
-    /** 
+    /**
       * Overloaded handler functions
       */
     bool startDocument() override;
@@ -61,7 +61,7 @@ public:
                             const QString& localName,
                             const QString& qName) override;
 
-    bool characters(const QString& ch) override;
+    bool characters(const QString& chars) override;
 
     bool endDocument () override;
 
@@ -73,7 +73,7 @@ private:
     virtual bool endElement_093(const QString& namespaceURI,
                                 const QString& localName,
                                 const QString& qName);
-    virtual bool characters_093(const QString& ch);
+    virtual bool characters_093(const QString& chars);
 
 protected:
     Composition *m_composition;
@@ -122,6 +122,7 @@ protected:
     //
     QString                  m_currentProperty;
 
+    // cppcheck-suppress unsafeClassCanLeak
     Segment     *m_segment;
     TrackId      m_currentTrackNb;
     bool                     m_segmentAdded;

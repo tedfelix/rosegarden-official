@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -95,7 +95,6 @@ NotationScene::NotationScene() :
 
 //    qRegisterMetaType<NotationMouseEvent>("Rosegarden::NotationMouseEvent");
 
-    m_segmentsDeleted.clear();
     setNotePixmapFactories();
 }
 
@@ -121,7 +120,7 @@ NotationScene::~NotationScene()
     delete m_clefKeyContext;
 
     for (unsigned int i = 0; i < m_staffs.size(); ++i) delete m_staffs[i];
-    
+
     for (std::vector<Segment *>::iterator it = m_clones.begin();
          it != m_clones.end(); ++it) {
         delete (*it);
@@ -166,7 +165,7 @@ NotationScene::getFontName() const
 }
 
 void
-NotationScene::setFontName(QString name)
+NotationScene::setFontName(const QString& name)
 {
     if (name == getFontName()) return;
     setNotePixmapFactories(name, getFontSize());
@@ -210,11 +209,13 @@ NotationScene::setHSpacing(int spacing)
     }
 }
 
+/* unused
 int
 NotationScene::getLeftGutter() const
 {
     return m_leftGutter;
 }
+*/
 
 void
 NotationScene::setLeftGutter(int gutter)
@@ -248,6 +249,7 @@ NotationScene::getCurrentStaff()
 void
 NotationScene::setCurrentStaff(NotationStaff *staff)
 {
+    if (! staff) return;
     // To unallow the direct edition of a repeated segment do it never be
     // the current one
     if (m_showRepeated && !m_editRepeated) {
@@ -260,9 +262,33 @@ NotationScene::setCurrentStaff(NotationStaff *staff)
                 m_currentStaff = i;
                 emit currentStaffChanged();
                 emit currentViewSegmentChanged(staff);
+                break;
             }
-            return;
         }
+    }
+    // update highlighting
+    NotationStaff* currentStaff = getCurrentStaff();
+    Segment* currentSegment = &(currentStaff->getSegment());
+    TrackId currentTrack = currentSegment->getTrack();
+
+    RG_DEBUG << "highlight current" <<
+        currentStaff << currentSegment << currentTrack;
+    for (int i = 0; i < int(m_staffs.size()); ++i) {
+        NotationStaff* iStaff = m_staffs[i];
+        Segment* iSegment = &(iStaff->getSegment());
+        TrackId iTrack = iSegment->getTrack();
+        bool onSameTrack = (currentTrack == iTrack);
+        RG_DEBUG << "highlight iter" << iStaff << iSegment << onSameTrack;
+        bool highlight = true;
+        if (iSegment != currentSegment && onSameTrack &&
+            m_highlightMode == "highlight_within_track") highlight = false;
+        if (iStaff != currentStaff &&
+            m_highlightMode == "highlight") highlight = false;
+        // do not affect repeats
+        if (iSegment->isTmp()) highlight = true;
+
+        RG_DEBUG << "highlight staff" << highlight;
+        m_staffs[i]->setHighlight(highlight);
     }
 }
 
@@ -307,7 +333,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
         // External segments and clones are now mixed inside m_segments
     } else {
         m_segments = m_externalSegments;
-        // No clone in that case 
+        // No clone in that case
     }
 
 
@@ -356,7 +382,7 @@ NotationScene::setStaffs(RosegardenDocument *document,
     m_visibleStaffs = trackIds.size();
 
     m_clefKeyContext->setSegments(this);
-    
+
     // Remember the names of the tracks
     for (std::set<TrackId>::iterator i = trackIds.begin();
          i != trackIds.end(); ++i) {
@@ -382,18 +408,17 @@ NotationScene::setStaffs(RosegardenDocument *document,
         initCurrentStaffIndex();
     }
 
-
-    connect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-            this, SLOT(slotCommandExecuted()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this, &NotationScene::slotCommandExecuted);
 }
 
 
 void
 NotationScene::createClonesFromRepeatedSegments()
 {
-    const Segment::Participation participation = 
+    const Segment::Participation participation =
         m_editRepeated ? Segment::editableClone : Segment::justForShow;
-    
+
     // Create clones (if needed)
     for (std::vector<Segment *>::iterator it = m_externalSegments.begin();
         it != m_externalSegments.end(); ++it) {
@@ -654,13 +679,13 @@ NotationScene::initCurrentStaffIndex()
     // otherwise we'll annoy the user.
     if (m_haveInittedCurrentStaff) { return; }
     m_haveInittedCurrentStaff = true;
-    
+
     // Can't do much if we have no staffs.
     if (m_staffs.empty()) { return; }
 
     Composition &composition = m_document->getComposition();
     timeT targetTime = composition.getPosition();
-    
+
     // Try the globally selected track (which we may not even include
     // any segments from)
     {
@@ -676,7 +701,7 @@ NotationScene::initCurrentStaffIndex()
     {
         // Careful, m_minTrack is an int indicating position, not a
         // TrackId, and must be converted.
-        const Track *track = 
+        const Track *track =
             composition.getTrackByPosition(m_minTrack);
         NotationStaff *staff = getStaffbyTrackAndTime(track, targetTime);
         if (staff) {
@@ -684,7 +709,7 @@ NotationScene::initCurrentStaffIndex()
             return;
         }
     }
-    
+
     // We shouldn't reach here.
     RG_WARNING << "Argh! Failed to find a staff!";
 }
@@ -792,6 +817,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
     // clicking on something specific
 
     const QList<QGraphicsItem *> collisions = items(scenePos);
+    //RG_DEBUG << "setupMouseEvent collisions:" << collisions.size();
 
     NotationElement *clickedNote = nullptr;
     NotationElement *clickedVagueNote = nullptr;
@@ -802,19 +828,28 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
         NotationElement *element = NotationElement::getNotationElement(*i);
         if (!element) continue;
+        RG_DEBUG << "setupMouseEvent event:" << *(element->event());
 
         // #957364 (Notation: Hard to select upper note in chords of
         // seconds) -- adjust x-coord for shifted note head
 
         double cx = element->getSceneX();
-        int nbw = 10;
 
-        nbw = m_notePixmapFactory->getNoteBodyWidth();
+        int nbw = m_notePixmapFactory->getNoteBodyWidth();
         bool shifted = false;
 
         if (element->event()->get<Bool>
             (m_properties->NOTE_HEAD_SHIFTED, shifted) && shifted) {
-            cx += nbw;
+            bool stemUp = false;
+            element->event()->get<Bool>(m_properties->VIEW_LOCAL_STEM_UP,
+                                        stemUp);
+            RG_DEBUG << "setupMouseEvent shift" << cx << nbw << stemUp;
+
+            if (stemUp) {
+                cx += nbw;
+            } else {
+                cx -= nbw;
+            }
         }
 
         if (element->isNote() && haveClickHeight) {
@@ -826,28 +861,35 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 
                 if (eventHeight == nme.height) {
 
+                    RG_DEBUG << "setupMouseEvent t1" << nme.sceneX << cx <<
+                        nbw;
                     if (!clickedNote &&
                         nme.sceneX >= cx &&
                         nme.sceneX <= cx + nbw) {
+                        RG_DEBUG << "setupMouseEvent cn1" << element;
                         clickedNote = element;
                     } else if (!clickedVagueNote &&
                                nme.sceneX >= cx - 2 &&
                                nme.sceneX <= cx + nbw + 2) {
+                        RG_DEBUG << "setupMouseEvent cnv1" << element;
                         clickedVagueNote = element;
                     }
 
                 } else if (eventHeight - 1 == nme.height ||
                            eventHeight + 1 == nme.height) {
                     if (!clickedVagueNote) {
+                        RG_DEBUG << "setupMouseEvent cv2" << element;
                         clickedVagueNote = element;
                     }
                 }
             }
         } else if (!element->isNote()) {
             if (!clickedNonNote) {
+                RG_DEBUG << "setupMouseEvent cn2" << element;
                 clickedNonNote = element;
             }
         }
+        RG_DEBUG << "setupMouseEvent" << clickedNote;
     }
 
     nme.exact = false;
@@ -879,7 +921,7 @@ NotationScene::setupMouseEvent(QPointF scenePos, Qt::MouseButtons buttons,
 void
 NotationScene::slotMouseLeavesView()
 {
-    clearPreviewNote(m_previewNoteStaff);
+    clearPreviewNote();
 }
 
 void
@@ -925,7 +967,7 @@ NotationScene::wheelEvent(QGraphicsSceneWheelEvent *e)
     }
 }
 
-void 
+void
 NotationScene::keyPressEvent(QKeyEvent * keyEvent)
 {
     processKeyboardEvent(keyEvent);
@@ -1080,29 +1122,30 @@ NotationScene::getInsertionTime(bool allowEndTime) const
 NotationScene::CursorCoordinates
 NotationScene::getCursorCoordinates(timeT t) const
 {
-    if (m_staffs.empty() || !m_hlayout) return CursorCoordinates();
+    if (m_staffs.empty() || !m_hlayout)
+        return CursorCoordinates();
 
-    NotationStaff *topStaff = nullptr;
-    NotationStaff *bottomStaff = nullptr;
+    const NotationStaff *topStaff = nullptr;
+    const NotationStaff *bottomStaff = nullptr;
+
+    // Find the topmost and bottom-most staves.
     for (uint i = 0; i < m_staffs.size(); ++i) {
-        if (!m_staffs[i]) continue;
-        if (!topStaff || m_staffs[i]->getY() < topStaff->getY()) {
-            topStaff = m_staffs[i];
-        }
-        if (!bottomStaff || m_staffs[i]->getY() > bottomStaff->getY()) {
-            bottomStaff = m_staffs[i];
-        }
+        const NotationStaff *staff = m_staffs[i];
+        if (!staff)
+            continue;
+
+        // If first or higher, save it.
+        if (!topStaff  ||  staff->getY() < topStaff->getY())
+            topStaff = staff;
+        // If first or lower, save it.
+        if (!bottomStaff  ||  staff->getY() > bottomStaff->getY())
+            bottomStaff = staff;
     }
 
-    NotationStaff *currentStaff = nullptr;
-    if (m_currentStaff < (int)m_staffs.size()) {
-        currentStaff = m_staffs[m_currentStaff];
-    }
+    const timeT snapped = snapTimeToNoteBoundary(t, true);
 
-    timeT snapped = snapTimeToNoteBoundary(t, true);
-
-    double x = m_hlayout->getXForTime(t);
-    double sx = m_hlayout->getXForTimeByEvent(snapped);
+    const double x = m_hlayout->getXForTime(t);
+    const double sx = m_hlayout->getXForTimeByEvent(snapped);
 
     StaffLayout::StaffLayoutCoords top =
         topStaff->getSceneCoordsForLayoutCoords
@@ -1114,6 +1157,10 @@ NotationScene::getCursorCoordinates(timeT t) const
 
     StaffLayout::StaffLayoutCoords singleTop = top;
     StaffLayout::StaffLayoutCoords singleBottom = bottom;
+
+    const NotationStaff *currentStaff = nullptr;
+    if (m_currentStaff < (int)m_staffs.size())
+        currentStaff = m_staffs[m_currentStaff];
 
     if (currentStaff) {
         singleTop =
@@ -1127,8 +1174,20 @@ NotationScene::getCursorCoordinates(timeT t) const
     CursorCoordinates cc;
     cc.allStaffs = QLineF(top.first, top.second,
                           bottom.first, bottom.second);
-    cc.currentStaff = QLineF(singleTop.first, singleTop.second,
-                             singleBottom.first, singleBottom.second);
+
+    // if the time is within the current segment we take the
+    // singleTop/Bottom cursor for time accuracy within that
+    // segment. If the time is outside the current segment we just use
+    // the top/bottom x coordinate to avoid the cursor jumping to the
+    // current segment.
+    cc.currentStaff = QLineF(top.first, singleTop.second,
+                             bottom.first, singleBottom.second);
+    if (currentStaff && currentStaff->includesTime(t)) {
+        // take the cursor position caluclated from the layout
+        cc.currentStaff = QLineF(singleTop.first, singleTop.second,
+                                 singleBottom.first, singleBottom.second);
+    }
+
     return cc;
 }
 
@@ -1244,38 +1303,109 @@ NotationScene::dumpVectors()
 }
 
 void
-NotationScene::segmentRemoved(const Composition *c, Segment *s)
+NotationScene::segmentRemoved(const Composition *comp, Segment *segment)
 {
-    NOTATION_DEBUG << "NotationScene::segmentRemoved(" << c << "," << s << ")";
-    if (!m_document || !c || (c != &m_document->getComposition())) return;
+    NOTATION_DEBUG << "NotationScene::segmentRemoved(" << comp << "," << segment << ")";
 
+    if (!m_document)
+        return;
+    if (!comp)
+        return;
+    if (comp != &m_document->getComposition())
+        return;
+
+    // Determine whether we care about this Segment being deleted.
+
+    std::vector<NotationStaff *>::iterator staffToDelete = m_staffs.end();
+
+    // For each NotationStaff in the NotationScene...
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
-         i != m_staffs.end(); ++i) {
-        if (s == &(*i)->getSegment()) {
-
-            m_segmentsDeleted.push_back(s); // Remember segment to be deleted
-
-            // The segmentDeleted() signal is about to be emitted. Therefore
-            // the whole scene is going to be deleted then restored (from
-            // NotationView) and to continue processing at best is useless and
-            // at the worst may cause a crash when the segment is deleted.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
-            suspendLayoutUpdates();   // Useful ???
-
-            if (m_segmentsDeleted.size() == m_externalSegments.size()) {
-                // There will be no more segment in scene.
-                m_sceneIsEmpty = true;
-            }
-
-            // Signal must be emitted only once. Nevertheless, all removed
-            // segments have to be remembered.
-            if (!m_finished) emit sceneNeedsRebuilding();
-            m_finished = true; // Stop further processing from this scene
-
+         i != m_staffs.end();
+         ++i) {
+        // Found it?
+        if (segment == &(*i)->getSegment()) {
+            staffToDelete = i;
             break;
         }
     }
+
+    // Not found?  Not a Segment we care about.  Bail.
+    if (staffToDelete == m_staffs.end())
+        return;
+
+    // This is one of our Segments being deleted.
+
+    // Collect all the staffs that need deleting into here.
+    std::set<NotationStaff *> staffsToDelete;
+
+    // Always delete the staff for the deleted segment.
+    staffsToDelete.insert(*staffToDelete);
+
+    // For each staff, check for staffs (repeats) linked to the deleted
+    // segment and add to staffsToDelete.
+    for (NotationStaff *staff : m_staffs) {
+        Segment *sseg = &staff->getSegment();
+        if (sseg->isLinkedTo(segment)) {
+            staffsToDelete.insert(staff);
+            RG_DEBUG << "segmentRemoved linked" << staff << segment << sseg <<
+                sseg->isTmp() << sseg->isLinkedTo(segment) <<
+                staffsToDelete.size();
+        }
+    }
+
+    // Remember segment to be deleted.
+    m_segmentsDeleted.push_back(segment);
+
+    // The segmentDeleted() signal is about to be emitted.  Therefore
+    // the whole scene is going to be deleted then restored (from
+    // NotationView) and to continue processing at best is useless and
+    // at the worst may cause a crash when the segment is deleted.
+    disconnect(CommandHistory::getInstance(),
+                   &CommandHistory::commandExecuted,
+               this, &NotationScene::slotCommandExecuted);
+    // Useful ???
+    suspendLayoutUpdates();
+
+    // All will be deleted?  Indicate empty.
+    if (m_segmentsDeleted.size() == m_externalSegments.size())
+        m_sceneIsEmpty = true;
+
+    // Signal must be emitted only once. Nevertheless, all removed
+    // segments have to be remembered.
+    if (!m_finished)
+        emit sceneNeedsRebuilding();
+
+    // Stop further processing from this scene
+    m_finished = true;
+
+    // The sceneNeedsRebuilding signal will cause the scene to be
+    // rebuilt.  However this uses a queued connection so the pointer
+    // update after undo is done before this so we must remove the
+    // deleted staff here.
+
+    // Always clear preview note.
+    clearPreviewNote();
+
+
+    // Assemble the new list of staffs (m_staffs).
+
+    std::vector<NotationStaff *> staffsNew;
+
+    for (NotationStaff *staff : m_staffs) {
+        // If we need to delete it, do so.
+        if (staffsToDelete.find(staff) != staffsToDelete.end()) {
+            delete staff;
+        } else {  // Keep it in the staff list.
+            staffsNew.push_back(staff);
+        }
+    }
+
+    m_staffs = staffsNew;
+
+
+    // Redo the layouts so that there aren't any stray pointers
+    // to the removed staff.
+    layout(nullptr, 0, 0);
 }
 
 void
@@ -1294,8 +1424,9 @@ NotationScene::segmentRepeatChanged(const Composition *c, Segment *s, bool)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and there is no point to continue processing
             // signals from the current NotationScene.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1322,8 +1453,9 @@ NotationScene::segmentRepeatEndChanged(const Composition *c, Segment *s, timeT)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and to continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1350,8 +1482,9 @@ NotationScene::segmentStartChanged(const Composition *c, Segment *s, timeT)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and to continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1378,8 +1511,9 @@ NotationScene::segmentEndMarkerChanged(const Composition *c, Segment *s, bool)
             // Therefore the whole scene is going to be deleted then restored
             // (from NotationView) and to continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1406,15 +1540,16 @@ NotationScene::trackChanged(const Composition *c, Track *t)
         // Is the segment part of the changed track ?
         if ((*i)->getTrack() == trackId) {
 
-            // The scene needs a rebuild only if what has changed is the 
+            // The scene needs a rebuild only if what has changed is the
             // name of the track
             if (t->getLabel() == m_trackLabels[trackId]) break;
 
             // The whole scene is going to be deleted then restored
             // (from NotationView). To continue processing at best is
             // useless and at worst may cause a crash related to deleted clones.
-            disconnect(CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-                       this, SLOT(slotCommandExecuted()));
+            disconnect(CommandHistory::getInstance(),
+                           &CommandHistory::commandExecuted,
+                       this, &NotationScene::slotCommandExecuted);
             suspendLayoutUpdates();
             m_finished = true;    // Stop further processing from this scene
 
@@ -1849,25 +1984,25 @@ NotationScene::handleEventRemoved(Event *e)
 }
 
 void
-NotationScene::setSelection(EventSelection *s,
+NotationScene::setSelection(EventSelection *selection,
                             bool preview)
 {
-    NOTATION_DEBUG << "NotationScene::setSelection: " << s;
+    //RG_DEBUG << "setSelection(): " << sselection;
 
-    if (!m_selection && !s) return;
-    if (m_selection == s) return;
-    if (m_selection && s && *m_selection == *s) {
+    if (!m_selection && !selection) return;
+    if (m_selection == selection) return;
+    if (m_selection && selection && *m_selection == *selection) {
         // selections are identical, no need to update elements, but
         // still need to replace the old selection to avoid a leak
         // (can't just delete s in case caller still refers to it)
         EventSelection *oldSelection = m_selection;
-        m_selection = s;
+        m_selection = selection;
         delete oldSelection;
         return;
     }
 
     EventSelection *oldSelection = m_selection;
-    m_selection = s;
+    m_selection = selection;
 
     NotationStaff *oldStaff = nullptr, *newStaff = nullptr;
 
@@ -1879,13 +2014,29 @@ NotationScene::setSelection(EventSelection *s,
         newStaff = setSelectionElementStatus(m_selection, true);
     }
 
+    timeT oldFrom = 0;
+    timeT oldTo = 0;
+    timeT newFrom = 0;
+    timeT newTo = 0;
+
+    if (oldSelection) {
+        oldFrom = std::min(oldSelection->getStartTime(),
+                           oldSelection->getNotationStartTime());
+        oldTo = std::max(oldSelection->getEndTime(),
+                         oldSelection->getNotationEndTime());
+    }
+    if (m_selection) {
+        newFrom = std::min(m_selection->getStartTime(),
+                           m_selection->getNotationStartTime());
+        newTo = std::max(m_selection->getEndTime(),
+                         m_selection->getNotationEndTime());
+    }
+
+    RG_DEBUG << "From and to times:" << oldFrom << oldTo << newFrom << newTo;
+
     if (oldSelection && m_selection && oldStaff && newStaff &&
         (oldStaff == newStaff)) {
 
-        timeT oldFrom = oldSelection->getStartTime();
-        timeT oldTo = oldSelection->getEndTime();
-        timeT newFrom = m_selection->getStartTime();
-        timeT newTo = m_selection->getEndTime();
 
         // if the regions overlap, render once
         if ((oldFrom <= newFrom && oldTo >= newFrom) ||
@@ -1898,12 +2049,10 @@ NotationScene::setSelection(EventSelection *s,
         }
     } else {
         if (oldSelection && oldStaff) {
-        oldStaff->renderElements(oldSelection->getStartTime(),
-                                 oldSelection->getEndTime());
+            oldStaff->renderElements(oldFrom, oldTo);
         }
         if (m_selection && newStaff) {
-        newStaff->renderElements(m_selection->getStartTime(),
-                                 m_selection->getEndTime());
+            newStaff->renderElements(newFrom, newTo);
         }
     }
 
@@ -1911,7 +2060,7 @@ NotationScene::setSelection(EventSelection *s,
 
     delete oldSelection;
 
-    emit selectionChanged(m_selection);
+    emit selectionChangedES(m_selection);
     emit QGraphicsScene::selectionChanged();
 }
 
@@ -1927,12 +2076,12 @@ NotationScene::setSingleSelectedEvent(NotationStaff *staff,
 }
 
 void
-NotationScene::setSingleSelectedEvent(Segment *seg,
+NotationScene::setSingleSelectedEvent(Segment *segment,
                                       Event *e,
                                       bool preview)
 {
-    if (!seg || !e) return;
-    EventSelection *s = new EventSelection(*seg);
+    if (!segment || !e) return;
+    EventSelection *s = new EventSelection(*segment);
     s->addEvent(e);
     setSelection(s, preview);
 }
@@ -1944,6 +2093,7 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
     NotationStaff *staff = nullptr;
 
+    // Find the NotationStaff for the EventSelection's Segment.
     for (std::vector<NotationStaff *>::iterator i = m_staffs.begin();
          i != m_staffs.end(); ++i) {
 
@@ -1960,12 +2110,16 @@ NotationScene::setSelectionElementStatus(EventSelection *s, bool set)
 
         Event *e = *i;
 
-        ViewElementList::iterator staffi = staff->findEvent(e);
-        if (staffi == staff->getViewElementList()->end()) continue;
+        ViewElementList::iterator staffElementIter = staff->findEvent(e);
+        // Not in the view?  Try the next.
+        if (staffElementIter == staff->getViewElementList()->end())
+            continue;
 
-        NotationElement *el = static_cast<NotationElement *>(*staffi);
+        NotationElement *element =
+                dynamic_cast<NotationElement *>(*staffElementIter);
 
-        el->setSelected(set);
+        if (element)
+            element->setSelected(set);
     }
 
     return staff;
@@ -2018,16 +2172,16 @@ NotationScene::showPreviewNote(NotationStaff *staff, double layoutX,
 }
 
 void
-NotationScene::clearPreviewNote(NotationStaff *staff)
+NotationScene::clearPreviewNote()
 {
-    if (staff) {
-        staff->clearPreviewNote();
+    if (m_previewNoteStaff) {
+        m_previewNoteStaff->clearPreviewNote();
         m_previewNoteStaff = nullptr;
     }
 }
 
 void
-NotationScene::playNote(Segment &segment, int pitch, int velocity)
+NotationScene::playNote(const Segment &segment, int pitch, int velocity)
 {
     if (!m_document) return;
 
@@ -2039,6 +2193,7 @@ NotationScene::playNote(Segment &segment, int pitch, int velocity)
                                    RealTime(0, 250000000));
 }
 
+/* unused
 bool
 NotationScene::constrainToSegmentArea(QPointF &scenePos)
 {
@@ -2069,6 +2224,7 @@ NotationScene::constrainToSegmentArea(QPointF &scenePos)
 
     return ok;
 }
+*/
 
 bool
 NotationScene::isEventRedundant(Event *ev, Segment &seg) const
@@ -2122,6 +2278,7 @@ NotationScene::isEventRedundant(Key &key, timeT time, Segment &seg) const
     return key == previousKey;
 }
 
+/* unused
 bool
 NotationScene::isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t)
 {
@@ -2147,6 +2304,7 @@ NotationScene::isAnotherStaffNearTime(NotationStaff *currentStaff, timeT t)
 
     return false;
 }
+*/
 
 void
 NotationScene::updateRefreshStatuses(TrackId track, timeT time)
@@ -2165,6 +2323,14 @@ NotationScene::updatePageSize()
     layout(nullptr, 0, 0);
 }
 
+void NotationScene::setHighlightMode(const QString& highlightMode)
+{
+    RG_DEBUG << "setHighlightMode" << highlightMode;
+    // update highlighting
+    m_highlightMode = highlightMode;
+    setCurrentStaff(getCurrentStaff());
+}
+
 ///YG: Only for debug
 void
 NotationScene::dumpBarDataMap()
@@ -2172,7 +2338,60 @@ NotationScene::dumpBarDataMap()
     m_hlayout->dumpBarDataMap();
 }
 
+void NotationScene::setExtraPreviewEvents(const EventWithSegmentMap& events)
+{
+    RG_DEBUG << "setExtraPreviewEvents" << events.size();
+    for (auto pair : events) {
+        const Event* e = pair.first;
+        const Segment* segment = pair.second;
+        if (m_additionalPreviewEvents.find(e) !=
+            m_additionalPreviewEvents.end()) continue; // already previewed
 
+        long pitch;
+        if (e->get<Int>(BaseProperties::PITCH, pitch)) {
+            long velocity = -1;
+            (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
+            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
+                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                playNote(*segment, pitch, velocity);
+            }
+        }
+    }
+    m_additionalPreviewEvents = events;
 }
 
+#if 0
+void
+NotationScene::setCurrentStaff(const timeT t)
+{
+    // ??? This is an attempt to fix Bug #1672.  It is currently not being
+    //     used as it introduces new problems.  Need to come up with
+    //     a better solution if possible.
+    //
+    //     See NotationWidget::updatePointer() which has a commented out
+    //     call to this.
 
+    NotationStaff *currentStaff = getCurrentStaff();
+
+    // Get the pointer scene coords for t (regardless of staff).
+    const double pointerSX = m_hlayout->getXForTime(t);
+    // To avoid vertical jumps, use the current staff's Y.
+    const double pointerSY = currentStaff->getY();
+    // figure out which staff that is in
+    // ??? Does this do "nearest"?  Probably need to test some
+    //     wild staff arrangements to make sure this works for all.
+    NotationStaff *staff =
+            getStaffForSceneCoords(pointerSX, pointerSY);
+    // If this is a different staff from the current...
+    if (staff != currentStaff) {
+        // set this as the current staff
+        setCurrentStaff(staff);
+        // ??? Should we change the selection to indicate new current staff?
+        //     That's NotationView::slotEditSelectWholeStaff() that we
+        //     usually use.  So the caller will likely need to do that.
+    }
+}
+#endif
+
+
+}

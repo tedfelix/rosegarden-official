@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,12 +18,13 @@
 #ifndef RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H
 #define RG_CREATETEMPOMAPFROMSEGMENTCOMMAND_H
 
-#include <map>
 #include "document/Command.h"
-#include "base/Event.h"
-#include "base/Composition.h" // for tempoT
+#include "base/TimeT.h"
+#include "base/Composition.h"  // for tempoT
 
 #include <QCoreApplication>
+
+#include <map>
 
 
 namespace Rosegarden
@@ -35,13 +35,12 @@ namespace Rosegarden
  * CreateTempoMapFromSegment applies timings found in a reference
  * segment to the composition as a whole via the tempo map.
  */
-
 class CreateTempoMapFromSegmentCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand)
+  Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateTempoMapFromSegmentCommand);
 
 public:
-    CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
+    explicit CreateTempoMapFromSegmentCommand(Segment *grooveSegment);
     ~CreateTempoMapFromSegmentCommand() override;
 
     void execute() override;
@@ -49,14 +48,13 @@ public:
 
 private:
     void initialise(Segment *s);
-    
+
     Composition *m_composition;
 
     typedef std::map<timeT, tempoT> TempoMap;
     TempoMap m_oldTempi;
     TempoMap m_newTempi;
 };
-    
 
 
 }

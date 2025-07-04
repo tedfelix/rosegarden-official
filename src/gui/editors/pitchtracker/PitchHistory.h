@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2009 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,7 +18,15 @@
 #ifndef RG_PITCH_HISTORY_H
 #define RG_PITCH_HISTORY_H
 
-#include "QList"
+#include "base/RealTime.h"
+#include "base/TimeT.h"
+
+#include <QList>
+
+
+namespace Rosegarden
+{
+
 
 /**
  * \addtogroup Codicil
@@ -36,15 +44,9 @@
  * \author Nick Bailey nick@n-ism.org
  * \date Apr 2010
  */
-
-#include "base/Event.h"
-
-namespace Rosegarden {
-
-struct RealTime;
-
-class PitchHistory {
-  public:
+class PitchHistory
+{
+public:
     void clear();
     
     QList<double>   m_detectFreqs;
@@ -57,6 +59,7 @@ class PitchHistory {
     QList<RealTime> m_targetChangeTimes;
 };
 /**\@}*/
+
 
 }
 

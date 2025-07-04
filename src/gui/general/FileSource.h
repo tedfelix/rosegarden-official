@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file originally from Sonic Visualiser, copyright 2007 Queen
     Mary, University of London.
@@ -73,7 +73,7 @@ public:
     /**
      * Construct a FileSource using the given remote URL.
      */
-    FileSource(QUrl url);
+    explicit FileSource(QUrl url);
 
     FileSource(const FileSource &);
 
@@ -126,7 +126,7 @@ public:
      * Return the location filename or URL as passed to the
      * constructor.
      */
-    QString getLocation() const;
+    // unused QString getLocation() const;
 
     /**
      * Return the name of the local file this FileSource refers to.
@@ -142,29 +142,29 @@ public:
      * Return the base name, i.e. the final path element (including
      * extension, if any) of the location.
      */
-    QString getBasename() const;
+    // unused QString getBasename() const;
 
     /**
      * Return the MIME content type of this file, if known.
      */
-    QString getContentType() const;
+    // unused QString getContentType() const;
 
     /**
      * Return the file extension for this file, if any.
      */
-    QString getExtension() const;
+    // unused QString getExtension() const;
 
     /**
      * Return an error message, if isOK() is false.
      */
-    QString getErrorString() const;
+    // unused QString getErrorString() const;
 
     /**
      * Specify whether any local, cached file should remain on disc
      * after this FileSource has been destroyed.  The default is false
      * (cached files share their FileSource owners' lifespans).
      */
-    void setLeaveLocalFile(bool leave);
+    // unused void setLeaveLocalFile(bool leave);
 
     /**
      * Return true if the given filename or URL refers to a remote
@@ -182,9 +182,6 @@ signals:
     /**
      * Emitted during URL retrieval, when the retrieval progress
      * notches up to a new percentage.
-     *
-     * ??? It looks like this is unused.  A search on "SIGNAL(progress"
-     *     turns up nothing.
      */
     void progress(int percent);
 
@@ -207,7 +204,7 @@ protected slots:
     void replyFailed(QNetworkReply::NetworkError);
     void replyFinished();
     void downloadProgress(qint64 done, qint64 total);
-    void cancelled();
+    //void cancelled();
 
 protected:
     FileSource &operator=(const FileSource &); // not provided

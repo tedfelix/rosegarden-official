@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -40,7 +40,7 @@ class RenameTrackCommand : public NamedCommand
 
 public:
     RenameTrackCommand(Composition *composition,
-                       TrackId track, 
+                       TrackId trackId,
                        QString longName,
                        QString shortName);
     ~RenameTrackCommand() override;
@@ -54,7 +54,7 @@ protected:
     Composition *m_composition;
     TrackId      m_trackId;
     QString      m_oldLongName;
-    QString      m_oldShortName;             
+    QString      m_oldShortName;
     QString      m_newLongName;
     QString      m_newShortName;
 };

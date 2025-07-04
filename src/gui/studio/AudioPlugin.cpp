@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -28,6 +28,7 @@ namespace Rosegarden
 {
 
 AudioPlugin::AudioPlugin(const QString &identifier,
+                         const PluginArch arch,
                          const QString &name,
                          unsigned long uniqueId,
                          const QString &label,
@@ -37,6 +38,7 @@ AudioPlugin::AudioPlugin(const QString &identifier,
                          bool isGrouped,
                          const QString &category):
         m_identifier(identifier),
+        m_arch(arch),
         m_name(name),
         m_uniqueId(uniqueId),
         m_label(label),

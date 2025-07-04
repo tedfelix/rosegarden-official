@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -50,15 +50,17 @@ public:
                      DeviceId device);
 
     // from instrument
-    MappedInstrument(const Instrument &instrument);
-    MappedInstrument(Instrument *instrument);
+    explicit MappedInstrument(const Instrument &instrument);
+    explicit MappedInstrument(Instrument *instrument);
 
     ~MappedInstrument() { ;}
 
     void setId(InstrumentId id) { m_id = id; }
     InstrumentId getId() const { return m_id; }
 
+    // cppcheck-suppress functionStatic
     void setType(Instrument::InstrumentType type) { m_type = type; }
+    // cppcheck-suppress functionStatic
     Instrument::InstrumentType getType() const { return m_type; }
 
     void setName(const std::string &name) { m_name = name; }
@@ -72,9 +74,9 @@ public:
     unsigned int getAudioChannels() const { return m_audioChannels; }
     void setAudioChannels(unsigned int channels) { m_audioChannels = channels; }
 
-    friend QDataStream& operator>>(QDataStream &dS, MappedInstrument *mI);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedInstrument *mI);
     friend QDataStream& operator<<(QDataStream &dS, MappedInstrument *mI);
-    friend QDataStream& operator>>(QDataStream &dS, MappedInstrument &mI);
+    // unused friend QDataStream& operator>>(QDataStream &dS, MappedInstrument &mI);
     friend QDataStream& operator<<(QDataStream &dS, const MappedInstrument &mI);
 
 private:

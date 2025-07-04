@@ -10,6 +10,8 @@
 #include <QProcess>
 #include <QSettings>
 
+#include <unistd.h>
+
 using namespace Rosegarden;
 
 // Unit test for lilypond export
@@ -19,7 +21,7 @@ class TestLilypondExport : public QObject
 
 private Q_SLOTS:
     // QTest special functions...
-    
+
     // Called once.
     void initTestCase();
 
@@ -139,14 +141,18 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("bogus-surf-jam") << "examples";
     QTest::newRow("beaming") << "examples";
     QTest::newRow("Brandenburg_No3-BWV_1048") << "examples";
-    QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
 
-    // Those work but are very slow, and they output lots and lots of
-    // WARNING: Rosegarden::Exception: "Bad type for Indication model event
-    //          (expected indication, found controller)"
-    //QTest::newRow("children") << "examples";
-    //QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples";
+    // ??? This one creates a directory in the user's home directory!?
+    //     The directory's name is simply a space (' ').  Why?
+    //     Otherwise this passes.  Please fix this one day.
+    // ??? This should work fine now.  The original issue was an audio path
+    //     that was set to a single space.  I went through all of the examples
+    //     and fixed these sorts of issues.  See [26b26e6e] from May 15, 2024.
+    //     Feel free to re-enable this.
+    //QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
 
+    QTest::newRow("children") << "examples";
+    QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples";
     QTest::newRow("Djer-Fire") << "examples";
     QTest::newRow("doodle-q") << "examples";
     QTest::newRow("exercise_notation") << "examples";
@@ -173,9 +179,9 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("Romanza") << "examples";
 
     // THIS ONE FAILS
-    // sicut-locutus.ly:98:47: error: syntax error, unexpected '}'
-    //                < f g > 2 _\markup { \italic
-    //                                              } _\markup { \italic Masked and substituted }  _~ f _~  |
+    // sicut-locutus.ly:107:47: Erreur : syntax error, unexpected '}'
+    //                 < f g > 2 _\markup { \italic  
+    //                                               } _\markup { \italic Masked and substituted }  _~ f _~  |
     //QTest::newRow("sicut-locutus") << "examples";
 
     QTest::newRow("stormy-riders") << "examples";
@@ -242,7 +248,7 @@ void TestLilypondExport::testExamples()
             qWarning() << "Generated file" << fileName << "does NOT compile!";
         }
 
-        qWarning() << "*********** GENERATING NEW BASELINE FILE (remember to add it to git) ***********";
+        std::cout << "*********** GENERATING NEW BASELINE FILE (remember to add it to git) ***********" << std::endl;
         QFile in(fileName);
         QVERIFY(in.open(QIODevice::ReadOnly));
         QFile out(QFile::decodeName(SRCDIR) + "/baseline/" + baseName + ".ly");

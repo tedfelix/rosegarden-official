@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,15 +18,14 @@
 #ifndef RG_TRACKBUTTONS_H
 #define RG_TRACKBUTTONS_H
 
+#include "TrackLabel.h"
+
 #include "base/Composition.h"
 #include "base/MidiProgram.h"
 #include "base/Track.h"
-#include "TrackLabel.h"
+
 #include <QFrame>
 #include <QString>
-#include <QSharedPointer>
-#include <vector>
-
 
 class QWidget;
 class QVBoxLayout;
@@ -35,15 +34,19 @@ class QPopupMenu;
 class QObject;
 class QMenu;
 
+#include <vector>
+
 
 namespace Rosegarden
 {
+
 
 class TrackVUMeter;
 class RosegardenDocument;
 class LedButton;
 class Instrument;
 class InstrumentStaticSignals;
+
 
 /// The QFrame containing the various widgets for each track.
 /**
@@ -156,7 +159,9 @@ public slots:
      *
      * @see changeTrackName()
      */
-    void slotRenameTrack(QString longLabel, QString shortLabel, TrackId trackId);
+    void slotRenameTrack(const QString &longLabel,
+                         const QString &shortLabel,
+                         TrackId trackId);
 
     /// Sets the level of the VU meter on a track.
     /**
@@ -205,8 +210,8 @@ public slots:
      * Connected to TrackParameterBox::instrumentSelected().  This is called
      * when the user changes the instrument via the Track Parameters box.
      */
-    void slotTPBInstrumentSelected(TrackId trackId, int item);
-    
+    void slotTPBInstrumentSelected(TrackId trackId, int instrumentIndex);
+
     /// Ensure track buttons on the UI match the Composition.
     /**
      * @see updateUI()
@@ -272,7 +277,7 @@ protected:
     /**
      * @see QSignalMapper::setMapping()
      */
-    void setButtonMapping(TrackLabel* obj, TrackId trackId);
+    void setButtonMapping(TrackLabel* trackLabel, TrackId trackId);
 
     /// Gets the proper color for an instrument based on its type.
     /**

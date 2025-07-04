@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -178,19 +178,19 @@ MusicXMLOptionsDialog::MusicXMLOptionsDialog(QWidget *parent,
 
     mainbox->setLayout(mainboxLayout);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply |
-                                                       QDialogButtonBox::Ok |
-                                                       QDialogButtonBox::Cancel |
-                                                       QDialogButtonBox::Help);
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Apply | QDialogButtonBox::Ok |
+            QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metaGridLayout->addWidget(buttonBox, 1, 0);
     metaGridLayout->setRowStretch(0, 10);
 
     setLayout(metaGridLayout);
 
-
-    connect(buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(buttonBox, &QDialogButtonBox::accepted,
+            this, &MusicXMLOptionsDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-    connect(buttonBox, &QDialogButtonBox::helpRequested, this, &MusicXMLOptionsDialog::help);
+    connect(buttonBox, &QDialogButtonBox::helpRequested,
+            this, &MusicXMLOptionsDialog::help);
 
     populateDefaultValues();
 

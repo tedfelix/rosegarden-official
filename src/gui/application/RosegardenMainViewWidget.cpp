@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[RosegardenMainViewWidget]"
+#define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainViewWidget.h"
 
@@ -44,14 +45,12 @@
 #include "commands/segment/SegmentSingleRepeatToCopyCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "RosegardenApplication.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
-#include "gui/dialogs/TempoDialog.h"
-#include "gui/editors/eventlist/EventView.h"
+#include "gui/editors/eventlist/EventListEditor.h"
 #include "gui/editors/matrix/MatrixView.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/parameters/InstrumentParameterBox.h"
@@ -150,30 +149,6 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
             &CompositionView::editSegment,
             this, &RosegardenMainViewWidget::slotEditSegment);
 
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentNotation(Segment *)),
-    //        SLOT(slotEditSegmentNotation(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentPitchView(Segment *)),
-    //        SLOT(slotEditSegmentPitchView(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentMatrix(Segment *)),
-    //        SLOT(slotEditSegmentMatrix(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentAudio(Segment *)),
-    //        SLOT(slotEditSegmentAudio(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(audioSegmentAutoSplit(Segment *)),
-    //        SLOT(slotSegmentAutoSplit(Segment *)));
-
-    //connect(m_trackEditor->getCompositionView(),
-    //        SIGNAL(editSegmentEventList(Segment *)),
-    //        SLOT(slotEditSegmentEventList(Segment *)));
-
     connect(m_trackEditor->getCompositionView(),
             &CompositionView::editRepeat,
             this, &RosegardenMainViewWidget::slotEditRepeat);
@@ -204,18 +179,10 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
                 &ExternalController::externalControllerRMVW,
             this, &RosegardenMainViewWidget::slotExternalController);
 
-    if (doc) {
-        /* signal no longer exists
-        	connect(doc, SIGNAL(recordingSegmentUpdated(Segment *,
-        						    timeT)),
-        		this, SLOT(slotUpdateRecordingSegment(Segment *,
-        						      timeT)));
-        */
-
-        QObject::connect
-        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-         m_trackEditor->getCompositionView(), SLOT(slotUpdateAll()));
-    }
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::commandExecuted,
+            m_trackEditor->getCompositionView(),
+            &CompositionView::slotUpdateAll);
 }
 
 RosegardenMainViewWidget::~RosegardenMainViewWidget()
@@ -246,22 +213,6 @@ void RosegardenMainViewWidget::updateSelectedSegments()
 {
     m_trackEditor->getCompositionView()->updateSelectedSegments();
 }
-
-/* hjj: WHAT DO DO WITH THIS ?
-void
-RosegardenMainViewWidget::slotEditMetadata(QString name)
-{
-    const QWidget *ww = dynamic_cast<const QWidget *>(sender());
-    QWidget *w = const_cast<QWidget *>(ww);
-
-    DocumentConfigureDialog *configDlg =
-        new DocumentConfigureDialog(RosegardenDocument::currentDocument, w ? w : this);
-
-    configDlg->selectMetadata(name);
-
-    configDlg->show();
-}
-*/
 
 void RosegardenMainViewWidget::slotEditSegment(Segment *segment)
 {
@@ -325,7 +276,7 @@ void RosegardenMainViewWidget::slotEditSegment(Segment *segment)
                 slotEditSegmentMatrix(segment);
             }
 
-        } else if (client == GeneralConfigurationPage::EventView) {
+        } else if (client == GeneralConfigurationPage::EventListEditor) {
             slotEditSegmentEventList(segment);
         } else {
             slotEditSegmentNotation(segment);
@@ -388,19 +339,16 @@ void RosegardenMainViewWidget::slotEditSegmentNotation(Segment *p)
     slotEditSegmentsNotation(segmentsToEdit);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentsNotation(std::vector<Segment *> segmentsToEdit)
+void RosegardenMainViewWidget::slotEditSegmentsNotation(const std::vector<Segment *>& segmentsToEdit)
 {
     createNotationView(segmentsToEdit);
 }
 
 void
-RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEdit)
+RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segmentsToEdit)
 {
     NotationView *notationView =
-        new NotationView(RosegardenDocument::currentDocument, segmentsToEdit, this);
-
-    connect(notationView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
+        new NotationView(RosegardenDocument::currentDocument, segmentsToEdit);
 
     connect(notationView, &NotationView::play,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotPlay);
@@ -419,37 +367,30 @@ RosegardenMainViewWidget::createNotationView(std::vector<Segment *> segmentsToEd
 
     connect(notationView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
-    connect(notationView, SIGNAL(openInNotation(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
-    connect(notationView, SIGNAL(openInMatrix(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
-    connect(notationView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
-    connect(notationView, SIGNAL(openInEventList(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
+    connect(notationView, &NotationView::openInNotation,
+            this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
+    connect(notationView, &NotationView::openInMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsMatrix);
+    connect(notationView, &NotationView::openInPercussionMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix);
+    connect(notationView, &NotationView::openInEventList,
+            this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
+    connect(notationView, &NotationView::openInPitchTracker,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
     connect(notationView, &NotationView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    // No such signal comes from NotationView
-    //connect(notationView, SIGNAL(staffLabelChanged(TrackId, QString)),
-    //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
-    connect(notationView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
-            notationView, SLOT(slotInsertableNoteOnReceived(int, int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
-            notationView, SLOT(slotInsertableNoteOffReceived(int, int)));
+    connect(sM, &SequenceManager::insertableNoteOnReceived,
+            notationView, &NotationView::slotInsertableNoteOnReceived);
+    connect(sM, &SequenceManager::insertableNoteOffReceived,
+            notationView, &NotationView::slotInsertableNoteOffReceived);
 
     connect(notationView, &NotationView::stepByStepTargetRequested,
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
-    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
-            notationView, SLOT(slotStepByStepTargetRequested(QObject *)));
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            notationView, &EditViewBase::slotCompositionStateUpdate);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            notationView, &EditViewBase::slotCompositionStateUpdate);
+    connect(this, &RosegardenMainViewWidget::stepByStepTargetRequested,
+            notationView, &NotationView::slotStepByStepTargetRequested);
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view.  Since scrollToTime is
@@ -527,7 +468,7 @@ void RosegardenMainViewWidget::slotEditSegmentPitchTracker(Segment *p)
     slotEditSegmentsPitchTracker(segmentsToEdit);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentsPitchTracker(std::vector<Segment *> segmentsToEdit)
+void RosegardenMainViewWidget::slotEditSegmentsPitchTracker(const std::vector<Segment *>& segmentsToEdit)
 {
     PitchTrackerView *view = createPitchTrackerView(segmentsToEdit);
     if (view) {
@@ -540,13 +481,10 @@ void RosegardenMainViewWidget::slotEditSegmentsPitchTracker(std::vector<Segment 
 }
 
 PitchTrackerView *
-RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segmentsToEdit)
+RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& segmentsToEdit)
 {
     PitchTrackerView *pitchTrackerView =
-        new PitchTrackerView(RosegardenDocument::currentDocument, segmentsToEdit, this);
-
-    connect(pitchTrackerView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
+        new PitchTrackerView(RosegardenDocument::currentDocument, segmentsToEdit);
 
     connect(pitchTrackerView, &NotationView::play,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotPlay);
@@ -565,44 +503,30 @@ RosegardenMainViewWidget::createPitchTrackerView(std::vector<Segment *> segments
 
     connect(pitchTrackerView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
-//  This probably is obsolete in Thorn.
-//    connect(pitchTrackerView, SIGNAL(jumpPlaybackTo(timeT)),
-//            RosegardenDocument::currentDocument, SLOT(slotSetPointerPosition(timeT)));
-    connect(pitchTrackerView, SIGNAL(openInNotation(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
-    connect(pitchTrackerView, SIGNAL(openInMatrix(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
-    connect(pitchTrackerView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
-    connect(pitchTrackerView, SIGNAL(openInEventList(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
-/* hjj: WHAT DO DO WITH THIS ?
-    connect(pitchTrackerView, SIGNAL(editMetadata(QString)),
-            this, SLOT(slotEditMetadata(QString)));
-*/
+    connect(pitchTrackerView, &PitchTrackerView::openInNotation,
+            this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
+    connect(pitchTrackerView, &PitchTrackerView::openInMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsMatrix);
+    connect(pitchTrackerView, &PitchTrackerView::openInPercussionMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix);
+    connect(pitchTrackerView, &PitchTrackerView::openInEventList,
+            this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
+    connect(pitchTrackerView, &PitchTrackerView::openInPitchTracker,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
     connect(pitchTrackerView, &NotationView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    // No such signal comes from PitchTrackerView
-    //connect(pitchTrackerView, SIGNAL(staffLabelChanged(TrackId, QString)),
-    //        this, SLOT(slotChangeTrackLabel(TrackId, QString)));
-    connect(pitchTrackerView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
-            pitchTrackerView, SLOT(slotInsertableNoteOnReceived(int, int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
-            pitchTrackerView, SLOT(slotInsertableNoteOffReceived(int, int)));
+    connect(sM, &SequenceManager::insertableNoteOnReceived,
+            pitchTrackerView, &PitchTrackerView::slotInsertableNoteOnReceived);
+    connect(sM, &SequenceManager::insertableNoteOffReceived,
+            pitchTrackerView, &PitchTrackerView::slotInsertableNoteOffReceived);
 
     connect(pitchTrackerView, &NotationView::stepByStepTargetRequested,
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
-    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
-            pitchTrackerView, SLOT(slotStepByStepTargetRequested(QObject *)));
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            pitchTrackerView, &EditViewBase::slotCompositionStateUpdate);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            pitchTrackerView, &EditViewBase::slotCompositionStateUpdate);
+    connect(this, &RosegardenMainViewWidget::stepByStepTargetRequested,
+            pitchTrackerView, &PitchTrackerView::slotStepByStepTargetRequested);
 
     // Encourage the notation view window to open to the same
     // interval as the current segment view.  Since scrollToTime is
@@ -722,26 +646,22 @@ void RosegardenMainViewWidget::slotEditSegmentPercussionMatrix(Segment* p)
     slotEditSegmentsPercussionMatrix(segmentsToEdit);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentsMatrix(std::vector<Segment *> segmentsToEdit)
+void RosegardenMainViewWidget::slotEditSegmentsMatrix(const std::vector<Segment *>& segmentsToEdit)
 {
     createMatrixView(segmentsToEdit, false);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(std::vector<Segment *> segmentsToEdit)
+void RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix(const std::vector<Segment *>& segmentsToEdit)
 {
     createMatrixView(segmentsToEdit, true);
 }
 
 void
-RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit, bool drumMode)
+RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segmentsToEdit, bool drumMode)
 {
     MatrixView *matrixView = new MatrixView(RosegardenDocument::currentDocument,
                                                   segmentsToEdit,
-                                                  drumMode,
-                                                  this);
-
-    connect(matrixView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
+                                                  drumMode);
 
     connect(matrixView, &MatrixView::play,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotPlay);
@@ -760,34 +680,30 @@ RosegardenMainViewWidget::createMatrixView(std::vector<Segment *> segmentsToEdit
 
     connect(matrixView, &EditViewBase::saveFile,
             RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
-    connect(matrixView, SIGNAL(openInNotation(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
-    connect(matrixView, SIGNAL(openInMatrix(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
-    connect(matrixView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
-    connect(matrixView, SIGNAL(openInEventList(std::vector<Segment *>)),
-            this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
+    connect(matrixView, &MatrixView::openInNotation,
+            this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
+    connect(matrixView, &MatrixView::openInMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsMatrix);
+    connect(matrixView, &MatrixView::openInPercussionMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix);
+    connect(matrixView, &MatrixView::openInEventList,
+            this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
     connect(matrixView, &MatrixView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    connect(matrixView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
+    connect(matrixView, &MatrixView::openInPitchTracker,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
 
     SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
 
-    connect(sM, SIGNAL(insertableNoteOnReceived(int, int)),
-            matrixView, SLOT(slotInsertableNoteOnReceived(int, int)));
-    connect(sM, SIGNAL(insertableNoteOffReceived(int, int)),
-            matrixView, SLOT(slotInsertableNoteOffReceived(int, int)));
+    connect(sM, &SequenceManager::insertableNoteOnReceived,
+            matrixView, &MatrixView::slotInsertableNoteOnReceived);
+    connect(sM, &SequenceManager::insertableNoteOffReceived,
+            matrixView, &MatrixView::slotInsertableNoteOffReceived);
 
     connect(matrixView, &MatrixView::stepByStepTargetRequested,
             this, &RosegardenMainViewWidget::stepByStepTargetRequested);
-    connect(this, SIGNAL(stepByStepTargetRequested(QObject *)),
-            matrixView, SLOT(slotStepByStepTargetRequested(QObject *)));
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-            matrixView, &EditViewBase::slotCompositionStateUpdate);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-            matrixView, &EditViewBase::slotCompositionStateUpdate);
+    connect(this, &RosegardenMainViewWidget::stepByStepTargetRequested,
+            matrixView, &MatrixView::slotStepByStepTargetRequested);
 
     // Encourage the matrix view window to open to the same
     // interval as the current segment view.   Since scrollToTime is
@@ -842,15 +758,17 @@ void RosegardenMainViewWidget::slotEditSegmentEventList(Segment *p)
     slotEditSegmentsEventList(segmentsToEdit);
 }
 
-void RosegardenMainViewWidget::slotEditSegmentsEventList(std::vector<Segment *> segmentsToEdit)
+void RosegardenMainViewWidget::slotEditSegmentsEventList(
+        const std::vector<Segment *> &segmentsToEdit)
 {
     int count = 0;
-    for (std::vector<Segment *>::iterator i = segmentsToEdit.begin();
-            i != segmentsToEdit.end(); ++i) {
-        std::vector<Segment *> tmpvec;
-        tmpvec.push_back(*i);
-        EventView *view = createEventView(tmpvec);
+    for (std::vector<Segment *>::const_iterator segmentIter =
+             segmentsToEdit.begin();
+         segmentIter != segmentsToEdit.end();
+         ++segmentIter) {
+        EventListEditor *view = createEventView(*segmentIter);
         if (view) {
+            // ??? Why does it start out hidden?
             view->show();
             if (++count == maxEditorsToOpen)
                 break;
@@ -878,6 +796,7 @@ void RosegardenMainViewWidget::slotEditTriggerSegment(int id)
     slotEditSegmentsEventList(segmentsToEdit);
 }
 
+/* unused
 void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
 {
     AudioSplitDialog aSD(this, segment, RosegardenDocument::currentDocument);
@@ -889,6 +808,7 @@ void RosegardenMainViewWidget::slotSegmentAutoSplit(Segment *segment)
         slotAddCommandToHistory(command);
     }
 }
+*/
 
 void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 {
@@ -914,7 +834,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
 
         RG_WARNING << "slotEditSegmentAudio() - external editor \"" << application.data() << "\" not found";
 
-         QMessageBox::warning(this, tr("Rosegarden"), 
+         QMessageBox::warning(this, tr("Rosegarden"),
                            tr("You've not yet defined an audio editor for Rosegarden to use.\nSee Edit -> Preferences -> Audio."));
 
         return ;
@@ -939,7 +859,7 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
     // Setup the process
     //
     QProcess *process = new QProcess();
-    splitCommand << aF->getFilename();
+    splitCommand << aF->getAbsoluteFilePath();
 
     // Start it
     //
@@ -959,7 +879,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
     // For readability
     CompositionView *compositionView = m_trackEditor->getCompositionView();
-    
+
     QScrollBar *horizScrollBar = compositionView->horizontalScrollBar();
     int halfWidth = lround(compositionView->viewport()->width() / 2.0);
     int oldHCenter = horizScrollBar->value() + halfWidth;
@@ -988,13 +908,13 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
     // At this point, the scroll bar's range has been updated.
     // We can now safely modify it.
-    
+
     // Maintain the center of the view.
-    // ??? See MatrixWidget and NotationWidget for a more extensive 
+    // ??? See MatrixWidget and NotationWidget for a more extensive
     //   zoom/panner feature.
     horizScrollBar->setValue(
         (int)(oldHCenter * (oldSize / size)) - halfWidth);
-    
+
     // ??? An alternate behavior is to have the zoom always center on the
     //   playback position pointer.  Might make this a user preference, or
     //   maybe when holding down "Shift" while zooming.
@@ -1024,9 +944,9 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
     SegmentSelection segments;
 
     if (QApplication::keyboardModifiers() != Qt::ShiftModifier) {
-      
+
         // Shift key is not pressed :
-        
+
         // Select all segments on the current track
         // (all the other segments will be deselected)
         for (Composition::iterator i =
@@ -1035,12 +955,12 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
             if (((int)(*i)->getTrack()) == trackId)
                 segments.insert(*i);
         }
-      
+
     } else {
 
         // Shift key is pressed :
 
-        // Get the list of the currently selected segments 
+        // Get the list of the currently selected segments
         segments = getSelection();
 
         // Segments on the current track will be added to or removed
@@ -1074,10 +994,10 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
                     }
                 }
             }
-            
+
 
         } else {
-        
+
             // There is no selected segment on this track :
             // Select all segments on this track
             for (Composition::iterator i =
@@ -1088,9 +1008,9 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
                 }
             }
         }
-        
+
     }
-    
+
 
     // This is now handled via Composition::notifyTrackSelectionChanged()
     //m_trackEditor->getTrackButtons()->selectTrack(track->getPosition());
@@ -1108,7 +1028,6 @@ void RosegardenMainViewWidget::slotSelectTrackSegments(int trackId)
 
     // inform
     emit segmentsSelected(segments);
-    emit compositionStateUpdate();
 }
 
 void RosegardenMainViewWidget::slotPropagateSegmentSelection(const SegmentSelection &segments)
@@ -1198,7 +1117,7 @@ RosegardenMainViewWidget::updateMeters()
         i->second = unknownState;
     }
 
-    for (Composition::trackcontainer::iterator i =
+    for (Composition::TrackMap::iterator i =
              RosegardenDocument::currentDocument->getComposition().getTracks().begin();
          i != RosegardenDocument::currentDocument->getComposition().getTracks().end(); ++i) {
 
@@ -1415,9 +1334,9 @@ void RosegardenMainViewWidget::slotShowSegmentLabels(bool v)
 }
 
 void RosegardenMainViewWidget::addTrack(
-        InstrumentId id, int pos)
+        InstrumentId instrument, int position)
 {
-    m_trackEditor->addTrack(id, pos);
+    m_trackEditor->addTrack(instrument, position);
 }
 
 void RosegardenMainViewWidget::slotDeleteTracks(
@@ -1433,15 +1352,6 @@ RosegardenMainViewWidget::slotAddCommandToHistory(Command *command)
 {
     CommandHistory::getInstance()->addCommand(command);
 }
-
-#if 0
-void
-RosegardenMainViewWidget::slotChangeTrackLabel(TrackId id,
-                                        QString label)
-{
-    m_trackEditor->getTrackButtons()->changeTrackName(id, label);
-}
-#endif
 
 void
 RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,
@@ -1468,6 +1378,7 @@ RosegardenMainViewWidget::slotAddAudioSegment(AudioFileId audioId,
     }
 }
 
+/* unused
 void
 RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFileId,
         const RealTime &startTime,
@@ -1494,6 +1405,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
         emit segmentsSelected(selection);
     }
 }
+*/
 
 void
 RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFileId,
@@ -1531,7 +1443,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 
     TrackId bestSoFar = currentTrackId;
 
-    for (Composition::trackcontainer::const_iterator
+    for (Composition::TrackMap::const_iterator
             ti = comp.getTracks().begin();
             ti != comp.getTracks().end(); ++ti) {
 
@@ -1573,14 +1485,14 @@ RosegardenMainViewWidget::slotDroppedNewAudio(QString audioDesc)
 {
     // If audio is not OK
     if (RosegardenDocument::currentDocument->getSequenceManager()  &&
-        !(RosegardenDocument::currentDocument->getSequenceManager()->getSoundDriverStatus() & 
+        !(RosegardenDocument::currentDocument->getSequenceManager()->getSoundDriverStatus() &
           AUDIO_OK)) {
 
 #ifdef HAVE_LIBJACK
-        QMessageBox::warning(this, tr("Rosegarden"), 
+        QMessageBox::warning(this, tr("Rosegarden"),
             tr("Cannot add dropped file.  JACK audio server is not available."));
 #else
-        QMessageBox::warning(this, tr("Rosegarden"), 
+        QMessageBox::warning(this, tr("Rosegarden"),
             tr("Cannot add dropped file.  This version of rosegarden was not built with audio support."));
 #endif
 
@@ -1705,19 +1617,20 @@ RosegardenMainViewWidget::slotDroppedAudio(QString audioDesc)
     slotAddAudioSegment(audioFileId, trackId, position, startTime, endTime);
 }
 
+/* unused
 void
 RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
 {
     RG_DEBUG << "slotSetRecord() - id = " << id << ",value = " << value;
-    /*
+*//*
         // IPB
         //
         m_instrumentParameterBox->setRecord(value);
     */
-#ifdef NOT_DEFINED
+    /* #ifdef NOT_DEFINED
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Composition::trackcontainer &tracks = comp.getTracks();
-    Composition::trackiterator it;
+    Composition::TrackMap &tracks = comp.getTracks();
+    Composition::TrackMap::iterator it;
 
     for (it = tracks.begin(); it != tracks.end(); ++it) {
         if (comp.getSelectedTrack() == (*it).second->getId()) {
@@ -1729,7 +1642,9 @@ RosegardenMainViewWidget::slotSetRecord(InstrumentId id, bool value)
     // Studio &studio = RosegardenDocument::currentDocument->getStudio();
     // Instrument *instr = studio.getInstrumentById(id);
 }
+*/
 
+/* unused
 void
 RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 {
@@ -1737,7 +1652,9 @@ RosegardenMainViewWidget::slotSetSolo(InstrumentId id, bool value)
 
     emit toggleSolo(value);
 }
+*/
 
+/* unused
 void
 RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
         timeT )
@@ -1766,6 +1683,7 @@ RosegardenMainViewWidget::slotUpdateRecordingSegment(Segment *segment,
 
     createNotationView(segments);
 }
+*/
 
 void
 RosegardenMainViewWidget::slotSynchroniseWithComposition()
@@ -1894,35 +1812,30 @@ RosegardenMainViewWidget::initChordNameRuler()
     getTrackEditor()->getChordNameRuler()->setReady();
 }
 
-EventView *
-RosegardenMainViewWidget::createEventView(std::vector<Segment *> segmentsToEdit)
+EventListEditor *
+RosegardenMainViewWidget::createEventView(Segment *segment)
 {
-    EventView *eventView = new EventView(RosegardenDocument::currentDocument,
-                                         segmentsToEdit,
-                                         this);
+    // EventListEditor expects a vector because of EditViewBase.
+    std::vector<Segment *> segments;
+    segments.push_back(segment);
 
-    connect(eventView, &EditViewBase::selectTrack,
-            this, &RosegardenMainViewWidget::slotSelectTrackSegments);
+    EventListEditor *eventView = new EventListEditor(
+            RosegardenDocument::currentDocument, segments);
 
     connect(eventView, &EditViewBase::saveFile,
-        RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
-
-    connect(eventView, SIGNAL(openInNotation(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsNotation(std::vector<Segment *>)));
-    connect(eventView, SIGNAL(openInMatrix(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsMatrix(std::vector<Segment *>)));
-    connect(eventView, SIGNAL(openInPercussionMatrix(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsPercussionMatrix(std::vector<Segment *>)));
-    connect(eventView, SIGNAL(openInEventList(std::vector<Segment *>)),
-        this, SLOT(slotEditSegmentsEventList(std::vector<Segment *>)));
-    connect(eventView, &EventView::editTriggerSegment,
-        this, &RosegardenMainViewWidget::slotEditTriggerSegment);
-    connect(this, &RosegardenMainViewWidget::compositionStateUpdate,
-        eventView, &EditViewBase::slotCompositionStateUpdate);
-    connect(RosegardenMainWindow::self(), &RosegardenMainWindow::compositionStateUpdate,
-        eventView, &EditViewBase::slotCompositionStateUpdate);
-    connect(eventView, &EditViewBase::toggleSolo,
-            RosegardenMainWindow::self(), &RosegardenMainWindow::slotToggleSolo);
+            RosegardenMainWindow::self(), &RosegardenMainWindow::slotFileSave);
+    connect(eventView, &EditViewBase::openInNotation,
+            this, &RosegardenMainViewWidget::slotEditSegmentsNotation);
+    connect(eventView, &EditViewBase::openInMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsMatrix);
+    connect(eventView, &EditViewBase::openInPercussionMatrix,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPercussionMatrix);
+    connect(eventView, &EditViewBase::openInEventList,
+            this, &RosegardenMainViewWidget::slotEditSegmentsEventList);
+    connect(eventView, &EditViewBase::openInPitchTracker,
+            this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
+    connect(eventView, &EventListEditor::editTriggerSegment,
+            this, &RosegardenMainViewWidget::slotEditTriggerSegment);
 
     return eventView;
 }

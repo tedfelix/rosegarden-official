@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -65,16 +65,16 @@ public:
                  MappedObjectType type,
                  MappedObjectId id):
         m_type(type),
-        m_id(id), 
+        m_id(id),
         m_name(name),
         m_parent(parent) {;}
 
     virtual ~MappedObject() {;}
 
-    MappedObjectId getId() { return m_id; }
-    MappedObjectType getType() { return m_type; }
+    MappedObjectId getId() const { return m_id; }
+    MappedObjectType getType() const { return m_type; }
 
-    std::string getName() { return m_name; }
+    std::string getName() const { return m_name; }
     void setName(const std::string &name) { m_name= name; }
 
     // Get and set properties
@@ -86,7 +86,7 @@ public:
                              MappedObjectValue &value) = 0;
 
     // Only relevant to objects that have string properties
-    // 
+    //
     virtual bool getStringProperty(const MappedObjectProperty &/* property */,
                                    QString &/* value */) { return false; }
 
@@ -94,7 +94,7 @@ public:
                              MappedObjectValue value) = 0;
 
     // Only relevant to objects that have string properties
-    // 
+    //
     virtual void setStringProperty(const MappedObjectProperty &/* property */,
                                    QString /* value */) { }
 
@@ -111,13 +111,13 @@ public:
 
     // Get a list of child ids - get a list of a certain type
     //
-    MappedObjectPropertyList getChildren();
-    MappedObjectPropertyList getChildren(MappedObjectType type);
+    // unused MappedObjectPropertyList getChildren();
+    // unused MappedObjectPropertyList getChildren(MappedObjectType type);
 
     // Child management
     //
-    void addChild(MappedObject *mO);
-    void removeChild(MappedObject *mO);
+    void addChild(MappedObject *object);
+    void removeChild(MappedObject *object);
 
     // Destruction
     //
@@ -191,8 +191,10 @@ public:
     // Get an object by ID and type.  (Returns 0 if the ID does not
     // exist or exists but is not of the correct type.)  This is
     // faster than getObjectById if you know the type already.
+    /* unused
     MappedObject *getObjectByIdAndType(MappedObjectId id,
                                        MappedObjectType type);
+    */
 
     // Get an arbitrary object of a given type - to see if any exist
     MappedObject *getObjectOfType(MappedObjectType type);
@@ -252,7 +254,7 @@ private:
     typedef std::map<MappedObjectId, MappedObject *> MappedObjectCategory;
     typedef std::map<MappedObjectType, MappedObjectCategory> MappedObjectMap;
     MappedObjectMap m_objects;
-    
+
     SoundDriver *m_soundDriver;
 };
 
@@ -284,13 +286,15 @@ public:
 
     ~MappedConnectableObject() override;
 
-    void setConnections(ConnectionDirection dir,
-                        MappedObjectValueList conns);
+    // unused void setConnections(ConnectionDirection dir,
+    //                            MappedObjectValueList conns);
 
+    // cppcheck-suppress functionConst
     void addConnection(ConnectionDirection dir, MappedObjectId id);
+    // cppcheck-suppress functionConst
     void removeConnection(ConnectionDirection dir, MappedObjectId id);
 
-    MappedObjectValueList getConnections (ConnectionDirection dir);
+    MappedObjectValueList getConnections (ConnectionDirection dir) const;
 
 protected:
 
@@ -377,7 +381,7 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    MappedObjectValue getBussId() { return m_bussId; }
+    MappedObjectValue getBussId() const { return m_bussId; }
 
     // super-convenience function: retrieve the ids of the instruments
     // connected to this buss
@@ -410,7 +414,7 @@ public:
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
 
-    MappedObjectValue getInputNumber() { return m_inputNumber; }
+    MappedObjectValue getInputNumber() const { return m_inputNumber; }
 
 protected:
     MappedObjectValue m_inputNumber;
@@ -429,8 +433,6 @@ public:
     static const MappedObjectProperty Ports;
     static const MappedObjectProperty Program;
     static const MappedObjectProperty Programs; // list property
-    static const MappedObjectProperty Instrument;
-    static const MappedObjectProperty Position;
     static const MappedObjectProperty Bypassed;
     static const MappedObjectProperty Configuration; // list property
 
@@ -443,8 +445,8 @@ public:
     bool getProperty(const MappedObjectProperty &property,
                              MappedObjectValue &value) override;
 
-    bool getStringProperty(const MappedObjectProperty &property,
-                                   QString &value) override;
+    // unused bool getStringProperty(const MappedObjectProperty &property,
+    //                          QString &value) override;
 
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
@@ -467,7 +469,7 @@ public:
 protected:
     QString                   m_identifier;
 
-    QString                   m_name;
+    QString                   m_pluginName;
     QString                   m_label;
     QString                   m_author;
     QString                   m_copyright;
@@ -485,7 +487,6 @@ class MappedPluginPort : public MappedObject
 {
 public:
     static const MappedObjectProperty PortNumber;
-    static const MappedObjectProperty Name;
     static const MappedObjectProperty Minimum;
     static const MappedObjectProperty Maximum;
     static const MappedObjectProperty Default;
@@ -501,8 +502,8 @@ public:
     bool getProperty(const MappedObjectProperty &property,
                              MappedObjectValue &value) override;
 
-    bool getStringProperty(const MappedObjectProperty &property,
-                                   QString &value) override;
+    // unused bool getStringProperty(const MappedObjectProperty &property,
+    //                               QString &value) override;
 
     void setProperty(const MappedObjectProperty &property,
                              MappedObjectValue value) override;
@@ -517,7 +518,7 @@ public:
 
 protected:
     int                     m_portNumber;
-    QString                 m_name;
+    QString                 m_portName;
     MappedObjectValue       m_minimum;
     MappedObjectValue       m_maximum;
     MappedObjectValue       m_default;
@@ -525,7 +526,7 @@ protected:
 
 };
 
-    
+
 }
 
 #endif // RG_MAPPEDSTUDIO_H

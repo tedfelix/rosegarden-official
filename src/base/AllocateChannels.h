@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2011 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -58,11 +58,11 @@ public:
                          Instrument *instrument,
                          RealTime marginBefore,
                          RealTime marginAfter);
-  
+
     // Free a channel interval
     void freeChannelInterval(ChannelInterval &old);
 
-  
+
     // Make it so that "channelNb" can be allocated from.
     void addChannel(ChannelId channelNb);
 
@@ -74,7 +74,8 @@ public:
 private:
 
     // Allocate a channel interval
-    ChannelInterval allocateChannelInterval(RealTime start, RealTime end,
+    ChannelInterval allocateChannelInterval(RealTime startTime,
+                                            RealTime endTime,
                                             Instrument *instrument,
                                             RealTime marginBefore,
                                             RealTime marginAfter);
@@ -112,7 +113,7 @@ class AllocateChannels : public QObject
 public:
     typedef std::set<ChannelId> FixedChannelSet;
 
-    AllocateChannels(ChannelSetup setup);
+    explicit AllocateChannels(ChannelSetup setup);
     ~AllocateChannels() override;
 
     void reallocateToFit(Instrument& instrument, ChannelInterval &ci,
@@ -128,18 +129,18 @@ public:
         { releaseReservedChannel(channel, m_fixedChannels); }
 
     ChannelId reallocateThruChannel(
-            Instrument& instrument, ChannelId channel);
-    ChannelId allocateThruChannel(Instrument& instrument);
+            const Instrument& instrument, ChannelId channel);
+    ChannelId allocateThruChannel(const Instrument& instrument);
     void releaseThruChannel(ChannelId channel)
         { releaseReservedChannel(channel, m_thruChannels); }
 
     static bool isPercussion(ChannelId channel);
-    static bool isPercussion(ChannelInterval &ci);
+    static bool isPercussion(const ChannelInterval &ci);
     static ChannelId getPercussionChannel() { return 9; }
 
 signals:
     void sigVacateChannel(ChannelId channel);
-  
+
 private:
     // Release channel from channelSet, making it available for normal use.
     void releaseReservedChannel(
@@ -147,7 +148,7 @@ private:
     // Reserve a channel, with respect only to channelSet and
     // m_freeChannels.
     void reserveChannel(ChannelId channel, FixedChannelSet& channelSet);
-      
+
     // Channel intervals for "normal" instruments: Not percussion, not
     // fixed.  ChannelManagers holding pieces of this are connected to
     // sigVacateChannel.

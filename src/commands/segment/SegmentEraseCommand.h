@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,11 +36,11 @@ class AudioFileManager;
 
 class SegmentEraseCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentEraseCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentEraseCommand);
 
 public:
     /// for removing segment normally
-    SegmentEraseCommand(Segment *segment);
+    explicit SegmentEraseCommand(Segment *segment);
 
     /// for removing audio segment when removing an audio file
     SegmentEraseCommand(Segment *segment,
@@ -50,7 +49,7 @@ public:
 
     void execute() override;
     void unexecute() override;
-    
+
 private:
     Composition *m_composition;
     Segment *m_segment;

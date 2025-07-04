@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -58,7 +58,7 @@ std::string
 Buss::getName() const
 {
     char buffer[20];
-    sprintf(buffer, "Submaster %d", m_id);
+    sprintf(buffer, "Submaster %u", m_id);
     return buffer;
 }
 
@@ -76,4 +76,3 @@ Buss::getAlias() const
 
 
 }
-

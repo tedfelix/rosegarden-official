@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -27,14 +27,14 @@ namespace Rosegarden {
 class ROSEGARDENPRIVATE_EXPORT Exception : public virtual std::exception
 {
 public:
-    Exception(const char *message);
+    explicit Exception(const char *message);
     Exception(const char *message, const char *file, int line);
 
-    Exception(std::string message);
-    Exception(std::string message, std::string file, int line);
+    explicit Exception(const std::string& message);
+    Exception(const std::string& message, const std::string& file, int line);
 
-    Exception(QString message);
-    Exception(QString message, QString file, int line);
+    explicit Exception(const QString& message);
+    Exception(const QString& message, QString file, int line);
 
     ~Exception() throw () override {}
 

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -69,7 +69,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
             m_rulerScale,
             15,  // height, 15 is the same height as the MarkerRuler
             m_invert,
-            m_isForMainWindow,
+            m_isForMainWindow,  // displayQuickMarker
             this);  // parent
     layout->addWidget(m_loopRuler);
 
@@ -79,9 +79,9 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         layout->addWidget(m_markerRuler);
     }
 
-    QObject::connect
-        (CommandHistory::getInstance(), SIGNAL(commandExecuted()),
-         this, SLOT(update()));
+    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+            this,
+            static_cast<void(StandardRuler::*)()>(&StandardRuler::update));
 
     if (RosegardenMainWindow::self()) {
         QObject::connect
@@ -129,23 +129,6 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
     QObject::connect
     (m_loopRuler, &LoopRuler::dragPointerToPosition,
      this, &StandardRuler::dragPointerToPosition);
-
-    QObject::connect
-    (m_loopRuler, &LoopRuler::dragLoopToPosition,
-     this, &StandardRuler::dragLoopToPosition);
-
-    QObject::connect
-    (m_markerRuler, &MarkerRuler::setLoop,
-     doc, &RosegardenDocument::slotSetLoop);
-
-    QObject::connect
-    (m_loopRuler, &LoopRuler::setLoop,
-     doc, &RosegardenDocument::slotSetLoop);
-
-    QObject::connect
-    (doc, &RosegardenDocument::loopChanged,
-     m_loopRuler,
-     &LoopRuler::slotSetLoopMarker);
 
 //    m_loopRuler->setBackgroundColor(GUIPalette::getColour(GUIPalette::PointerRuler));
 }

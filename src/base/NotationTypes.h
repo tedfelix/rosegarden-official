@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -16,26 +16,30 @@
 #ifndef RG_NOTATION_TYPES_H
 #define RG_NOTATION_TYPES_H
 
-#include <list>
-#include <map>
-
 #include <rosegardenprivate_export.h>
 
-#include "Event.h"
+#include "TimeT.h"
+#include "Exception.h"
+#include "PropertyName.h"
+
+#include <list>
+#include <string>
+#include <vector>
+#include <map>
+#include <memory>
 
 /*
  * NotationTypes.h
  *
  * This file contains definitions of several classes to assist in
- * creating and manipulating certain event types.  The classes are:
- * 
+ * creating and manipulating certain Event types.  The classes are:
+ *
  *   Accidental
  *   Clef
  *   Key
  *   Indication
  *   Pitch
  *   Note
- *   TimeSignature
  *   AccidentalTable
  *   Symbol
  *   GeneratedRegion
@@ -54,13 +58,20 @@
  * as the Note methods that calculate duration-related values without
  * reference to any specific pitch or other note-event properties; or
  * everything in Pitch).
- * 
+ *
  * This file also defines the event types and standard property names
  * for the basic events.
+ *
+ * See MidiTypes.h for MIDI-specific Event types like Controllers and
+ * Program Changes.
  */
 
-namespace Rosegarden 
+
+namespace Rosegarden
 {
+
+
+class Event;
 
 extern ROSEGARDENPRIVATE_EXPORT const int MIN_SUBORDERING;
 
@@ -92,9 +103,9 @@ namespace Accidentals
 
     typedef std::vector<Accidental> AccidentalList;
 
-	/** 
+	/**
 	 * When no accidental is specified for a pitch, there are several
-	 * strategies to determine what accidental to display for an 
+	 * strategies to determine what accidental to display for an
 	 * out-of-key pitch
 	 */
 	enum NoAccidentalStrategy {
@@ -103,7 +114,7 @@ namespace Accidentals
 		/** always use flats */
 		UseFlats,
 		/** always use sharps or always use flats depending on of what
-		 * type of accidentals the current key is made up */ 
+		 * type of accidentals the current key is made up */
 		UseKeySharpness,
 		/** use the most likely accidental for this key */
 		UseKey
@@ -113,7 +124,7 @@ namespace Accidentals
      * Get the predefined accidentals (i.e. the ones listed above)
      * in their defined order.
      */
-    extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
+     // unused extern ROSEGARDENPRIVATE_EXPORT AccidentalList getStandardAccidentals();
 
     /**
      * Get the change in pitch resulting from an accidental: -1 for
@@ -129,7 +140,7 @@ namespace Accidentals
      * Get the Accidental corresponding to a change in pitch: flat
      * for -1, double-sharp for 2, natural for 0 etc.
      *
-     * Useful for tying to code that represents accidentals by 
+     * Useful for tying to code that represents accidentals by
      * their pitch change.
      */
     extern ROSEGARDENPRIVATE_EXPORT Accidental getAccidental(int pitchChange);
@@ -141,8 +152,8 @@ namespace Accidentals
  */
 
 typedef std::string Mark;
-  
-namespace Marks //!!! This would be better as a class, these days
+
+namespace Marks
 {
     extern ROSEGARDENPRIVATE_EXPORT const Mark NoMark;         // " "
 
@@ -178,7 +189,7 @@ namespace Marks //!!! This would be better as a class, these days
      * text mark containing that string.  For example, the Sforzando
      * mark is actually defined as getTextMark("sf").
      */
-    extern ROSEGARDENPRIVATE_EXPORT Mark getTextMark(std::string text);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getTextMark(const std::string& text);
 
     /**
      * Return true if the given mark is a text mark.
@@ -196,7 +207,8 @@ namespace Marks //!!! This would be better as a class, these days
      * instead of a number to permit "fingering" marks containing
      * labels like "+".)
      */
-    extern ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark(std::string fingering);
+    extern ROSEGARDENPRIVATE_EXPORT Mark getFingeringMark
+    (const std::string& fingering);
 
     /**
      * Return true if the given mark is a fingering mark.
@@ -211,12 +223,12 @@ namespace Marks //!!! This would be better as a class, these days
     /**
      * Return true if the given mark makes sense when applied to a rest.
      */
-    extern ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(Mark mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(const Mark& mark);
 
     /**
      * Extract the number of marks from an event.
      */
-    extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
+    // unused extern ROSEGARDENPRIVATE_EXPORT int getMarkCount(const Event &e);
 
     /**
      * Extract the marks from an event.
@@ -240,7 +252,8 @@ namespace Marks //!!! This would be better as a class, these days
      * there to remove.  If the mark was not unique, removes only
      * the first instance of it.
      */
-    extern ROSEGARDENPRIVATE_EXPORT bool removeMark(Event &e, const Mark &mark);
+    extern ROSEGARDENPRIVATE_EXPORT bool removeMark
+    (Event &e, const Mark &markToRemove);
 
     /**
      * Returns true if the event has the given mark.
@@ -295,14 +308,14 @@ public:
      * returns the default clef (with a warning).  You should normally
      * test Clef::isValid() to catch that before construction.
      */
-    Clef(const Event &e);
+    explicit Clef(const Event &e);
 
     /**
      * Construct a Clef from the given data.  Throws a BadClefName
      * exception if the given string does not match one of the above
      * clef name constants.
      */
-    Clef(const std::string &s, int octaveOffset = 0);
+    explicit Clef(const std::string &s, int octaveOffset = 0);
 
     Clef(const Clef &c) : m_clef(c.m_clef), m_octaveOffset(c.m_octaveOffset) {
     }
@@ -335,7 +348,7 @@ public:
      */
     int getOctaveOffset() const { return m_octaveOffset; }
 
-    /** 
+    /**
      * Return the number of semitones a pitch in the treble clef would
      * have to be lowered by in order to be drawn with the same height
      * and accidental in this clef
@@ -406,13 +419,13 @@ public:
      * returns the default key (with a warning).  You should normally
      * test Key::isValid() to catch that before construction.
      */
-    Key(const Event &e);
+    explicit Key(const Event &e);
 
     /**
      * Construct the named key.  Throws a BadKeyName exception if the
      * given string does not match one of the known key names.
      */
-    Key(const std::string &name);
+    explicit Key(const std::string &name);
 
     /**
      * Construct a key from signature and mode.  May throw a
@@ -429,7 +442,6 @@ public:
     Key(const Key &kc);
 
     ~Key() {
-        delete m_accidentalHeights;
     }
 
     Key &operator=(const Key &kc);
@@ -478,7 +490,7 @@ public:
     int getTonicPitch() const {
         return m_keyDetailMap[m_name].m_tonicPitch;
     }
-    
+
     /**
      * Return the number of sharps or flats in the key's signature.
      */
@@ -488,7 +500,7 @@ public:
 
     /**
      * Return the key with the same signature but different
-     * major/minor mode.  For example if called on C major, 
+     * major/minor mode.  For example if called on C major,
      * returns A minor.
      */
     Key getEquivalent() const {
@@ -536,7 +548,7 @@ public:
      * same status in terms of accidentals as it had when
      * found in the given previous key.
      */
-    int convertFrom(int pitch, const Key &previousKey,
+    int convertFrom(int p, const Key &previousKey,
                     const Accidental &explicitAccidental =
                     Accidentals::NoAccidental) const;
 
@@ -571,15 +583,16 @@ public:
 
     /**
      * Transpose this key by the specified interval given in pitch and steps
-     * 
+     *
      * For example: transposing F major by a major triad (4,2) yields
      *  A major.
      */
-    Key transpose(int pitchDelta, int heightDelta);
+    Key transpose(int pitchDelta, int heightDelta) const;
 
 private:
+
     std::string m_name;
-    mutable std::vector<int> *m_accidentalHeights;
+    mutable std::shared_ptr<std::vector<int>> m_accidentalHeights;
 
     struct KeyDetails {
         bool   m_sharps;
@@ -592,8 +605,8 @@ private:
         KeyDetails(); // ctor needed in order to live in a map
 
         KeyDetails(bool sharps, bool minor, int sharpCount,
-                   std::string equivalence, std::string rg2name,
-                                   int m_tonicPitch);
+                   const std::string& equivalence, const std::string& rg2name,
+                   int tonicPitch);
 
         KeyDetails(const KeyDetails &d);
 
@@ -640,7 +653,7 @@ public:
     static const std::string FigParameterChord;
     static const std::string Figuration;
 
-    Indication(const Event &e)
+    explicit Indication(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
     Indication(const std::string &s, timeT indicationDuration)
         /* throw (BadIndicationName) */;
@@ -674,7 +687,7 @@ public:
     Event *getAsEvent(timeT absoluteTime) const;
 
 private:
-    bool isValid(const std::string &s) const;
+    static bool isValid(const std::string &s);
 
     std::string m_indicationType;
     timeT m_duration;
@@ -727,11 +740,11 @@ public:
     static const std::string Tiny;        // begin \tiny font section
     static const std::string Small;       // begin \small font section
     static const std::string NormalSize;  // begin \normalsize font section
-    
-    Text(const Event &e)
+
+    explicit Text(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
-    Text(const std::string &text,
-         const std::string &textType = UnspecifiedType);
+    explicit Text(const std::string &text,
+                  const std::string &textType = UnspecifiedType);
     Text(const Text &);
     Text &operator=(const Text &);
     ~Text();
@@ -740,10 +753,10 @@ public:
     std::string getTextType() const { return m_type; }
 
     // Relevant for lyrics, and borrowed for figuration IDs.
-    int getVerse() const { return m_verse; } 
+    int getVerse() const { return m_verse; }
     void setVerse(int verse) { m_verse = verse; }
 
-    static bool isTextOfType(Event *, std::string type);
+    static bool isTextOfType(Event *, const std::string& type);
 
     /**
      * Return those text types that the user should be allowed to
@@ -765,277 +778,6 @@ private:
     long m_verse;
 };
 
-
-
-/**
- * Pitch stores a note's pitch and provides information about it in
- * various different ways, notably in terms of the position of the
- * note on the staff and its associated accidental.
- *
- * (See docs/discussion/units.txt for explanation of pitch units.)
- *
- * This completely replaces the older NotationDisplayPitch class. 
- */
-
-class ROSEGARDENPRIVATE_EXPORT Pitch
-{
-public:
-    /**
-     * Construct a Pitch object based on the given Event, which must
-     * have a BaseProperties::PITCH property.  If the property is
-     * absent, NoData is thrown.  The BaseProperties::ACCIDENTAL
-     * property will also be used if present.
-     */
-    Pitch(const Event &e)
-        /* throw Event::NoData */;
-
-    /**
-     * Construct a Pitch object based on the given performance (MIDI) pitch.
-     */
-    Pitch(int performancePitch, 
-          const Accidental &explicitAccidental = Accidentals::NoAccidental);
-
-    /**
-     * Construct a Pitch based on octave and pitch in octave.  The
-     * lowest permissible octave number is octaveBase, and middle C is
-     * in octave octaveBase + 5.  pitchInOctave must be in the range
-     * 0-11 where 0 is C, 1 is C sharp, etc.
-     */
-    Pitch(int pitchInOctave, int octave,
-          const Accidental &explicitAccidental = Accidentals::NoAccidental,
-          int octaveBase = -2);
-
-    /**
-     * Construct a Pitch based on octave and note in scale.  The
-     * lowest permissible octave number is octaveBase, and middle C is
-     * in octave octaveBase + 5.  The octave supplied should be that
-     * of the root note in the given key, which may be in a different
-     * MIDI octave from the resulting pitch (as MIDI octaves always
-     * begin at C).  noteInScale must be in the range 0-6 where 0 is
-     * the root of the key and so on.  The accidental is relative to
-     * noteInScale: if there is an accidental in the key for this note
-     * already, explicitAccidental will be "added" to it.
-     *
-     * For minor keys, the harmonic scale is used.
-     */
-    Pitch(int noteInScale, int octave, const Key &key,
-          const Accidental &explicitAccidental = Accidentals::NoAccidental,
-          int octaveBase = -2);
-
-    /**
-     * Construct a Pitch based on (MIDI) octave, note in the C major scale and 
-     * performance pitch. The accidental is calculated based on these
-     * properties.
-     */
-    Pitch(int noteInCMajor, int octave, int pitch,
-          int octaveBase = -2);
-
-    /**
-     * Construct a Pitch based on octave and note name.  The lowest
-     * permissible octave number is octaveBase, and middle C is in
-     * octave octaveBase + 5.  noteName must be a character in the
-     * range [CDEFGAB] or lower-case equivalents.  The key is supplied
-     * so that we know how to interpret the NoAccidental case.
-     */
-    Pitch(char noteName, int octave, const Key &key,
-          const Accidental &explicitAccidental = Accidentals::NoAccidental,
-          int octaveBase = -2);
-    
-    /**
-     * Construct a Pitch corresponding a staff line or space on a
-     * classical 5-line staff.  The bottom staff line has height 0,
-     * the top has height 8, and both positive and negative values are
-     * permissible.
-     */
-    Pitch(int heightOnStaff, const Clef &clef, const Key &key,
-          const Accidental &explicitAccidental = Accidentals::NoAccidental);
-
-    Pitch(const Pitch &);
-    Pitch &operator=(const Pitch &);
-
-    /**
-     * Return the MIDI pitch for this Pitch object.
-     */
-    int getPerformancePitch() const;
-
-    /**
-     * Return the accidental for this pitch using a bool to prefer sharps over
-     * flats if there is any doubt.  This is the accidental
-     * that would be used to display this pitch outside of the context
-     * of any key; that is, it may duplicate an accidental actually in
-     * the current key.  This should not be used if you need to get an
-     * explicit accidental returned for E#, Fb, B# or Cb.
-     *
-     * This version of the function exists to avoid breaking old code.
-     */
-    Accidental getAccidental(bool useSharps) const;
-
-    /**
-     * Return the accidental for this pitch, using a key.  This should be used
-     * if you need an explicit accidental returned for E#, Fb, B# or Cb, which
-     * can't be resolved correctly without knowing that their key requires
-     * them to take an accidental.  The provided key will also be used to
-     * determine whether to prefer sharps over flats.
-     */
-    Accidental getAccidental(const Key &key) const;
-
-    /**
-     * Return the accidental that should be used to display this pitch
-     * in a given key.  For example, if the pitch is F-sharp in a key
-     * in which F has a sharp, NoAccidental will be returned.  (This
-     * is in contrast to getAccidental, which would return Sharp.)
-     * This obviously can't take into account things like which
-     * accidentals have already been displayed in the bar, etc.
-     */
-    Accidental getDisplayAccidental(const Key &key) const;
-
-    /**
-     * Return the accidental that should be used to display this pitch
-     * in a given key, using the given strategy to resolve pitches where
-     * an accidental is needed but not specified.
-     */
-    Accidental getDisplayAccidental(const Key &key, Accidentals::NoAccidentalStrategy) const;
-
-    /**
-     * Return the position in the scale for this pitch, as a number in
-     * the range 0 to 6 where 0 is the root of the key.
-     */
-    int getNoteInScale(const Key &key) const;
-
-    /**
-     * Return the note name for this pitch, as a single character in
-     * the range A to G.  (This is a reference value that should not
-     * normally be shown directly to the user, for i18n reasons.)
-     */
-    char getNoteName(const Key &key) const;
-
-    /**
-     * Return the height at which this pitch should display on a
-     * conventional 5-line staff.  0 is the bottom line, 1 the first
-     * space, etc., so for example middle-C in the treble clef would
-     * return -2.
-     *
-     * Chooses the most likely accidental for this pitch in this key.
-     */
-    int getHeightOnStaff(const Clef &clef, const Key &key) const;
-
-    /**
-     * Return the height at which this pitch should display on a
-     * conventional 5-line staff.  0 is the bottom line, 1 the first
-     * space, etc., so for example middle-C in the treble clef would
-     * return -2.
-     *
-     * Chooses the accidental specified by the 'useSharps' parameter
-     */
-    int getHeightOnStaff(const Clef &clef, bool useSharps) const;
-
-    /**
-     * Return the octave containing this pitch.  The octaveBase argument
-     * specifies the octave containing MIDI pitch 0; middle-C is in octave
-     * octaveBase + 5.
-     */
-    int getOctave(int octaveBase = -2) const;
-
-    /**
-     * Return the octave containing this pitch, including the accidentals. 
-     * The octaveBase argument specifies the octave containing MIDI pitch 0;
-     * middle-C is in octave octaveBase + 5.
-     */
-    int getOctaveAccidental(int octaveBase = -2, Accidental acc = Accidentals::NoAccidental) const;
-
-    /**
-     * Return the pitch within the octave, in the range 0 to 11.
-     */
-    int getPitchInOctave() const;
-
-    /**
-     * Return whether this pitch is diatonic in the given key.
-     */
-    bool isDiatonicInKey(const Key &key) const;
-    
-    /**
-     * Return a reference name for this pitch.  (C 4, Bb 2, etc...)
-     * using the key of C major explicitly, which should allow the accidentals
-     * to take their natural forms of C# Eb F# G# Ab Bb from the key, rather
-     * than being forced sharp explicilty.
-     *
-     * This replaces an earlier version of this function that took a "use
-     * sharps" argument to return either sharps or flats, which broke after
-     * Arnout Engelen did some really nice accidental spelling improvements to
-     * make everything more human.
-     */
-    std::string getAsString(bool inclOctave = true,
-                            int octaveBase = -2) const;
-
-    /**
-     * Return a number 0-6 corresponding to the given note name, which
-     * must be in the range [CDEFGAB] or lower-case equivalents.  The
-     * return value is in the range 0-6 with 0 for C, 1 for D etc.
-     */
-    static int getIndexForNote(char noteName);
-
-    /**
-     * Return a note name corresponding to the given note index, which
-     * must be in the range 0-6 with 0 for C, 1 for D etc.
-     */
-    static char getNoteForIndex(int index);
-
-    /**
-     * Calculate and return the performance (MIDI) pitch corresponding
-     * to the stored height and accidental, interpreting them as
-     * Rosegarden-2.1-style values (for backward compatibility use),
-     * in the given clef and key
-     */
-    static int getPerformancePitchFromRG21Pitch(int heightOnStaff,
-                                                const Accidental &accidental,
-                                                const Clef &clef,
-                                                const Key &key);
-
-    /**
-     * return the result of transposing the given pitch by the
-     * specified interval in the given key. The key is left unchanged,
-     * only the pitch is transposed.
-     */
-    Pitch transpose(const Key &key, int pitchDelta, int heightDelta);
-
-    /** 
-      * checks whether the accidental specified for this pitch (if any)
-      * is valid - for example, a Sharp for pitch 11 is invalid, as
-      * it's between A# and B#.
-      */  
-    bool validAccidental() const;
-
-    /**
-     * Returned event is on heap; caller takes responsibility for ownership
-     */
-    Event *getAsNoteEvent(timeT absoluteTime, timeT duration) const;
-
-    /**
-     * Get the major key that has this Pitch as the tonic
-     */
-    Key getAsKey() const;
-
-    /**
-     * Get the major or minor key that has this Pitch as the tonic
-     */
-    Key getAsKey(bool isMinor) const;
-
-private:
-    int m_pitch;
-    Accidental m_accidental;
-
-    static void rawPitchToDisplayPitch
-    (int, const Clef &, const Key &, int &, Accidental &, 
-    Accidentals::NoAccidentalStrategy);
-
-    static void displayPitchToRawPitch
-    (int, Accidental, const Clef &, const Key &,
-     int &, bool ignoreOffset = false);
-};
-
-
-
-class TimeSignature;
 
 
 /**
@@ -1086,7 +828,7 @@ public:
      * durational; they don't represent pitch, and may be as
      * relevant to rests as actual notes.
      */
-    Note(Type type, int dots = 0) :
+    explicit Note(Type type, int dots = 0) :
         m_type(type < Shortest ? Shortest :
                type >  Longest ?  Longest :
                type),
@@ -1117,9 +859,9 @@ public:
     Event *getAsNoteEvent(timeT absoluteTime, int pitch) const;
 
     /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsRestEvent(timeT absoluteTime) const;
+    // unused Event *getAsRestEvent(timeT absoluteTime) const;
 
-  
+
 private:
     Type m_type;
     int m_dots;
@@ -1129,185 +871,6 @@ private:
     // a time & effort saving device; if changing this, change
     // TimeSignature::m_crotchetTime etc too
     static const timeT m_shortestTime;
-};
-
-
-
-/**
- * TimeSignature contains arithmetic methods relevant to time
- * signatures and bar durations, including code for splitting long
- * rest intervals into bite-sized chunks.  Although there is a time
- * signature Event type, these Events don't appear in regular Segments
- * but only in the Composition's reference segment.
- */
-
-class ROSEGARDENPRIVATE_EXPORT TimeSignature
-{
-public:
-    static const TimeSignature DefaultTimeSignature;
-    typedef Exception BadTimeSignature;
-
-    TimeSignature() :
-        m_numerator(DefaultTimeSignature.m_numerator),
-        m_denominator(DefaultTimeSignature.m_denominator),
-        m_common(false), m_hidden(false), m_hiddenBars(false) { }
-
-    /**
-     * Construct a TimeSignature object describing a time signature
-     * with the given numerator and denominator.  If preferCommon is
-     * true and the time signature is a common or cut-common time, the
-     * constructed object will return true for isCommon; if hidden is
-     * true, the time signature is intended not to be displayed and
-     * isHidden will return true; if hiddenBars is true, the bar lines
-     * between this time signature and the next will not be shown.
-     */
-    TimeSignature(int numerator, int denominator,
-                  bool preferCommon = false,
-                  bool hidden = false,
-                  bool hiddenBars = false)
-        /* throw (BadTimeSignature) */;
-    
-    TimeSignature(const TimeSignature &ts) :
-        m_numerator(ts.m_numerator),
-        m_denominator(ts.m_denominator),
-        m_common(ts.m_common),
-        m_hidden(ts.m_hidden),
-        m_hiddenBars(ts.m_hiddenBars) { }
-
-    ~TimeSignature() { }
-
-    TimeSignature &operator=(const TimeSignature &ts);
-
-    bool operator==(const TimeSignature &ts) const {
-        return ts.m_numerator == m_numerator && ts.m_denominator == m_denominator;
-    }
-    bool operator!=(const TimeSignature &ts) const {
-        return !operator==(ts);
-    }
-    bool operator<(const TimeSignature &ts) const {
-        // We don't really need to ordered time signatures, but to be able to
-        // create a map keyed with time signatures. We want to distinguish
-        // 4/4 from 2/4 as well as 4/4 from 2/2.
-        double ratio1 = (double) m_numerator / (double) m_denominator;
-        double ratio2 = (double) ts.m_numerator / (double) ts.m_denominator;
-        if (ratio1 == ratio2) return m_denominator > ts.m_denominator;
-        else return ratio1 < ratio2;
-    }
-
-    int getNumerator()     const { return m_numerator; }
-    int getDenominator()   const { return m_denominator; }
-
-    bool isCommon()        const { return m_common; }
-    bool isHidden()        const { return m_hidden; }
-    bool hasHiddenBars()   const { return m_hiddenBars; }
-
-    void setHidden(bool hidden) { m_hidden = hidden; }
-
-    timeT getBarDuration() const;
-
-    /**
-     * Return the unit of the time signature.  This is the note
-     * implied by the denominator.  For example, the unit of 4/4 time
-     * is the crotchet, and that of 6/8 is the quaver.  (The numerator
-     * of the time signature gives the number of units per bar.)
-     */
-    Note::Type getUnit()  const;
-
-    /**
-     * Return the duration of the unit of the time signature.
-     * See also getUnit().  In most cases getBeatDuration() gives
-     * a more meaningful value.
-     */
-    timeT getUnitDuration() const;
-
-    /**
-     * Return true if this time signature indicates dotted time.
-     */
-    bool isDotted() const;
-
-    /**
-     * Return the duration of the beat of the time signature.  For
-     * example, the beat of 4/4 time is the crotchet, the same as its
-     * unit, but that of 6/8 is the dotted crotchet (there are only
-     * two beats in a 6/8 bar).  The beat therefore depends on whether
-     * the signature indicates dotted or undotted time.
-     */
-    timeT getBeatDuration() const;
-
-    /**
-     * Return the number of beats in a complete bar.
-     */
-    int getBeatsPerBar()  const {
-        return getBarDuration() / getBeatDuration();
-    }
-
-    /**
-     * Get the "optimal" list of rest durations to make up a bar in
-     * this time signature.
-     */
-    void getDurationListForBar(DurationList &dlist) const;
-
-    /**
-     * Get the "optimal" list of rest durations to make up a time
-     * interval of the given total duration, starting at the given
-     * offset after the start of a bar, assuming that the interval
-     * is entirely in this time signature.
-     */
-    void getDurationListForInterval(DurationList &dlist,
-                                    timeT intervalDuration,
-                                    timeT startOffset = 0) const;
-
-    /**
-     * Get the level of emphasis for a position in a bar. 4 is lots
-     * of emphasis, 0 is none.
-     */
-    int getEmphasisForTime(timeT offset);
-
-    /**
-     * Return a list of divisions, subdivisions, subsubdivisions
-     * etc of a bar in this time, up to the given depth.  For example,
-     * if the time signature is 6/8 and the depth is 3, return a list
-     * containing 2, 3, and 2 (there are 2 beats to the bar, each of
-     * which is best subdivided into 3 subdivisions, each of which
-     * divides most neatly into 2).
-     */
-    void getDivisions(int depth, std::vector<int> &divisions) const;
-
-private:
-    friend class Composition;
-    friend class TimeTempoSelection;
-
-    TimeSignature(const Event &e)
-        /* throw (Event::NoData, Event::BadType, BadTimeSignature) */;
-
-    static const std::string EventType;
-    static const int EventSubOrdering;
-    static const PropertyName NumeratorPropertyName;
-    static const PropertyName DenominatorPropertyName;
-    static const PropertyName ShowAsCommonTimePropertyName;
-    static const PropertyName IsHiddenPropertyName;
-    static const PropertyName HasHiddenBarsPropertyName;
-
-    /// Returned event is on heap; caller takes responsibility for ownership
-    Event *getAsEvent(timeT absoluteTime) const;
-
-private:
-    int m_numerator;
-    int m_denominator;
-
-    bool m_common;
-    bool m_hidden;
-    bool m_hiddenBars;
-
-    mutable int  m_barDuration;
-    mutable int  m_beatDuration;
-    mutable int  m_beatDivisionDuration;
-    mutable bool m_dotted;
-    void setInternalDurations() const;
-
-    // a time & effort saving device
-    static const timeT m_crotchetTime;
-    static const timeT m_dottedCrotchetTime;
 };
 
 
@@ -1344,9 +907,9 @@ public:
         BarResetExplicit    // c# | c -> add natural to c
     };
 
-    AccidentalTable(const Key & = Key(), const Clef & = Clef(),
-                    OctaveType = OctavesCautionary,
-                    BarResetType = BarResetCautionary);
+    explicit AccidentalTable(const Key & = Key(), const Clef & = Clef(),
+                             OctaveType = OctavesCautionary,
+                             BarResetType = BarResetCautionary);
 
     AccidentalTable(const AccidentalTable &);
     AccidentalTable &operator=(const AccidentalTable &);
@@ -1359,7 +922,7 @@ public:
 
     void newBar();
     void newClef(const Clef &);
-    
+
 private:
     Key m_key;
     Clef m_clef;
@@ -1368,7 +931,7 @@ private:
 
     struct AccidentalRec {
         AccidentalRec() : accidental(Accidentals::NoAccidental), previousBar(false) { }
-        AccidentalRec(Accidental a, bool p) : accidental(a), previousBar(p) { }
+        AccidentalRec(const Accidental& a, bool p) : accidental(a), previousBar(p) { }
         Accidental accidental;
         bool previousBar;
     };
@@ -1382,7 +945,7 @@ private:
     AccidentalMap m_newCanonicalAccidentals;
 };
 
- 
+
 /** Definitions for use in the Symbol event type
  *
  * A Symbol has no duration, and the things it represents will probably always
@@ -1405,16 +968,16 @@ public:
     static const std::string Coda;
     static const std::string Breath;
 
-    Symbol(const Event &e)
+    explicit Symbol(const Event &e)
         /* throw (Event::NoData, Event::BadType) */;
-    Symbol(const std::string &symbolType = UnspecifiedType);
+    explicit Symbol(const std::string &symbolType = UnspecifiedType);
     Symbol(const Symbol &);
     Symbol &operator=(const Symbol &);
     ~Symbol ();
 
     std::string getSymbolType() const { return m_type; }
 
-    static bool isSymbolOfType(Event *, std::string type);
+    // unused static bool isSymbolOfType(Event *, const std::string& type);
 
     /// Returned event is on heap; caller takes responsibility for ownership
     Event *getAsEvent(timeT absoluteTime) const;

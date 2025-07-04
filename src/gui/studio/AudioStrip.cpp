@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -137,14 +137,18 @@ void AudioStrip::createWidgets()
     QFont boldFont(font());
     boldFont.setBold(true);
 
-    const int maxWidth = 45;
+    // Reference width.  This is the width for controls that stretch
+    // across the entire strip.
+    constexpr int width = 45;
 
     // Label
 
     m_label = new Label(this);
     m_label->setFont(boldFont);
-    m_label->setMinimumWidth(maxWidth);
-    m_label->setMaximumWidth(maxWidth);
+    // ??? Without a max width, this still doesn't expand as much as it
+    //     should.  I'm guessing there are spacers between the strips and
+    //     they aren't fixed width.
+    m_label->setMinimumWidth(width);
     m_label->setMinimumHeight(12);
     m_label->setMaximumHeight(12);
     m_label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -159,7 +163,7 @@ void AudioStrip::createWidgets()
                                      AudioRouteMenu::Compact,
                                      m_id);
         m_input->getWidget()->setToolTip(tr("Record input source"));
-        m_input->getWidget()->setMaximumWidth(maxWidth);
+        m_input->getWidget()->setMaximumWidth(width);
         m_input->getWidget()->setMaximumHeight(15);
     }
 
@@ -171,7 +175,7 @@ void AudioStrip::createWidgets()
                                       AudioRouteMenu::Compact,
                                       m_id);
         m_output->getWidget()->setToolTip(tr("Output destination"));
-        m_output->getWidget()->setMaximumWidth(maxWidth);
+        m_output->getWidget()->setMaximumWidth(width);
         m_output->getWidget()->setMaximumHeight(15);
     }
 
@@ -255,7 +259,7 @@ void AudioStrip::createWidgets()
             PluginPushButton *pluginPushButton = new PluginPushButton(this);
             pluginPushButton->setFont(font());
             pluginPushButton->setText(tr("<none>"));
-            pluginPushButton->setMaximumWidth(45);
+            pluginPushButton->setMaximumWidth(width);
             pluginPushButton->setMaximumHeight(15);
             pluginPushButton->setToolTip(tr("Click to load an audio plugin"));
             pluginPushButton->setProperty("index", i);
@@ -370,7 +374,7 @@ void AudioStrip::updateWidgets()
     // Stereo
 
     if (isInput()) {
-        m_stereo = (instrument->getAudioChannels() > 1);
+        m_stereo = (instrument->getNumAudioChannels() > 1);
         m_stereoButton->setIcon(m_stereo ? m_stereoPixmap : m_monoPixmap);
     }
 
@@ -511,6 +515,8 @@ void AudioStrip::slotLabelClicked()
     // Get the appropriate instrument based on the ID.
     Instrument *instrument = studio.getInstrumentById(m_id);
 
+    // ??? A command would be better.  Then the user can undo.
+    //     See SegmentLabelCommand.
     instrument->setAlias(newAlias.toStdString());
 
     doc->slotDocumentModified();
@@ -657,8 +663,8 @@ AudioStrip::slotChannelsChanged()
         return;
 
     // Toggle number of channels
-    instrument->setAudioChannels(
-            (instrument->getAudioChannels() > 1) ? 1 : 2);
+    instrument->setNumAudioChannels(
+            (instrument->getNumAudioChannels() > 1) ? 1 : 2);
 
     doc->slotDocumentModified();
 }

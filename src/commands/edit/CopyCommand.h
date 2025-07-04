@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,12 +19,10 @@
 #define RG_COPYCOMMAND_H
 
 #include "document/Command.h"
-#include <QString>
-#include "base/Event.h"
 #include "base/Selection.h"
+
+#include <QString>
 #include <QCoreApplication>
-
-
 
 
 namespace Rosegarden
@@ -45,7 +42,11 @@ class CopyCommand : public NamedCommand
 
 public:
     /// Make a CopyCommand that copies events from within a Segment
-    CopyCommand(EventSelection &selection,
+    /**
+     * ??? selection should be a const &.  It is copied.  Ownership is
+     *     not transferred.
+     */
+    CopyCommand(EventSelection *selection,
                 Clipboard *clipboard);
 
     CopyCommand(EventSelection *selection1,

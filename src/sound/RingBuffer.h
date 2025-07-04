@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ public:
      * power of two, this means n should ideally be some power of two
      * minus one.
      */
-    RingBuffer(size_t n);
+    explicit RingBuffer(size_t n);
 
     virtual ~RingBuffer();
 
@@ -222,6 +222,7 @@ RingBuffer<T, N>::~RingBuffer()
 
     if (m_mlocked) {
 #ifdef MLOCK_TAKES_CHAR_PTR
+        // cppcheck-suppress invalidPointerCast
         ::munlock((char *)m_buffer, m_size * sizeof(T));
 #else
         ::munlock((void *)m_buffer, m_size * sizeof(T));
@@ -255,6 +256,7 @@ RingBuffer<T, N>::resize(size_t newSize)
 
     if (m_mlocked) {
 #ifdef MLOCK_TAKES_CHAR_PTR
+        // cppcheck-suppress invalidPointerCast
         ::munlock((char *)m_buffer, m_size * sizeof(T));
 #else
         ::munlock((void *)m_buffer, m_size * sizeof(T));
@@ -269,6 +271,7 @@ RingBuffer<T, N>::resize(size_t newSize)
 
     if (m_mlocked) {
 #ifdef MLOCK_TAKES_CHAR_PTR
+        // cppcheck-suppress invalidPointerCast
         if (::mlock((char *)m_buffer, m_size * sizeof(T))) {
 #else
         if (::mlock((void *)m_buffer, m_size * sizeof(T))) {
@@ -301,6 +304,7 @@ bool
 RingBuffer<T, N>::mlock()
 {
 #ifdef MLOCK_TAKES_CHAR_PTR
+    // cppcheck-suppress invalidPointerCast
     if (::mlock((char *)m_buffer, m_size * sizeof(T))) return false;
 #else
     if (::mlock((void *)m_buffer, m_size * sizeof(T))) return false;
@@ -314,6 +318,7 @@ bool
 RingBuffer<T, N>::munlock()
 {
 #ifdef MLOCK_TAKES_CHAR_PTR
+    // cppcheck-suppress invalidPointerCast
     if (::munlock((char *)m_buffer, m_size * sizeof(T))) return false;
 #else
     if (::munlock((void *)m_buffer, m_size * sizeof(T))) return false;

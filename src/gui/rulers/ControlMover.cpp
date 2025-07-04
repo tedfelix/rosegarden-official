@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -14,6 +14,9 @@
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[ControlMover]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "ControlMover.h"
 
@@ -42,10 +45,17 @@
 namespace Rosegarden
 {
 
-ControlMover::ControlMover(ControlRuler *parent, QString menuName) :
+ControlMover::ControlMover(ControlRuler *parent, const QString& menuName) :
     ControlTool("", menuName, parent),
     m_overCursor(Qt::OpenHandCursor),
-    m_notOverCursor(Qt::ArrowCursor)
+    m_notOverCursor(Qt::ArrowCursor),
+    m_mouseStartX(0.0),
+    m_mouseStartY(0.0),
+    m_lastDScreenX(0.0),
+    m_lastDScreenY(0.0),
+    m_selectionRect(nullptr),
+    m_snapGrid(parent->getSnapGrid()),
+    m_rulerScale(parent->getRulerScale())
 {
 }
 
@@ -55,7 +65,23 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
     if (m_overItem) {
         m_ruler->setCursor(Qt::BlankCursor);
 
+        bool activeFound = false;
         ControlItemVector::const_iterator it = e->itemList.begin();
+        while (it != e->itemList.end()) {
+            if ((*it)->active()) {
+                activeFound = true;
+                break;
+            }
+            it++;
+        }
+        if (! activeFound) {
+            if (!(e->modifiers & (Qt::ShiftModifier))) {
+                // No add to selection modifiers so clear the current selection
+                m_ruler->clearSelectedItems();
+            }
+            return;
+        }
+
         if ((*it)->isSelected()) {
             if (e->modifiers & (Qt::ShiftModifier))
                 m_ruler->removeFromSelection(*it);
@@ -67,7 +93,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
 
             m_ruler->addToSelection(*it);
         }
-        
+
         m_startPointList.clear();
         ControlItemList *selected = m_ruler->getSelectedItems();
         for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
@@ -84,20 +110,22 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
     m_mouseStartY = e->y;
     m_lastDScreenX = 0.0f;
     m_lastDScreenY = 0.0f;
-    
+
     m_ruler->update();
 }
 
 FollowMode
 ControlMover::handleMouseMove(const ControlMouseEvent *e)
 {
+    emit showContextHelp(tr("Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical"));
+
     if (e->buttons == Qt::NoButton) {
         // No button pressed, set cursor style
         setCursor(e);
     }
 
     if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A drag action is in progress        
+        // A drag action is in progress
         float deltaX = (e->x-m_mouseStartX);
         float deltaY = (e->y-m_mouseStartY);
 
@@ -109,7 +137,7 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         if (e->modifiers & Qt::ControlModifier) {
             // If the control key is held down, restrict movement to either horizontal or vertical
             //    depending on the direction the item has been moved
-            
+
             // For small displacements from the starting position, use the direction of this movement
             //    rather than the actual displacement - makes dragging through the original position
             //    less likely to switch constraint axis
@@ -117,17 +145,17 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
                 dScreenX = dScreenX-m_lastDScreenX;
                 dScreenY = dScreenY-m_lastDScreenY;
             }
-        
+
             if (fabs(dScreenX) > fabs(dScreenY)) {
                 deltaY = 0;
             } else {
                 deltaX = 0;
             }
         }
-        
+
         m_lastDScreenX = dScreenX;
         m_lastDScreenY = dScreenY;
-        
+
         ControlItemList *selected = m_ruler->getSelectedItems();
         std::vector<QPointF>::iterator pIt = m_startPointList.begin();
         for (ControlItemList::iterator it = selected->begin();
@@ -137,7 +165,15 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
             QSharedPointer<EventControlItem> item =
                     qSharedPointerDynamicCast<EventControlItem>(*it);
 
-            float x = pIt->x()+deltaX;
+            float x = pIt->x() + deltaX;
+            RG_DEBUG << "handleMouseMove" << x << pIt->x() << deltaX;
+            // snap only if shift is not pressed
+            if (! (e->modifiers & Qt::ShiftModifier)) {
+                timeT et = m_rulerScale->getTimeForX(x / xscale);
+                timeT etSnap = m_snapGrid->snapTime(et);
+                x =  m_rulerScale->getXForTime(etSnap) * xscale;
+                RG_DEBUG << "handleMouseMove snap" << et << etSnap << x;
+            }
             float xmin = m_ruler->getXMin() * xscale;
             float xmax = (m_ruler->getXMax() - 1) * xscale;
             x = std::max(x,xmin);
@@ -153,7 +189,7 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
     }
 
     m_ruler->update();
-    
+
     return NO_FOLLOW;
 }
 
@@ -179,7 +215,14 @@ void ControlMover::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
 
-    if (e->itemList.size()) isOverItem = true;
+    ControlItemVector::const_iterator it = e->itemList.begin();
+    while (it != e->itemList.end()) {
+        if ((*it)->active()) {
+            isOverItem = true;
+            break;
+        }
+        it++;
+    }
 
     if (!m_overItem) {
         if (isOverItem) {
@@ -206,4 +249,3 @@ void ControlMover::stow()
 
 QString ControlMover::ToolName() { return "mover"; }
 }
-

@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -31,7 +31,6 @@
 #include <QDataStream>
 #include <QMutex>
 #include <QString>
-#include <QThread>
 
 #include <unistd.h>
 
@@ -52,7 +51,7 @@ AudioPluginManager::AudioPluginManager(bool enableSound) :
     m_pluginClipboard.m_pluginNumber = -1;
     m_pluginClipboard.m_program = "";
     m_pluginClipboard.m_controlValues.clear();
-    
+
     m_enumerator.start();
 
     //RG_DEBUG << "ctor done";
@@ -66,8 +65,12 @@ AudioPluginManager::Enumerator::Enumerator(AudioPluginManager *manager) :
 void
 AudioPluginManager::Enumerator::run()
 {
+    // ??? Why is this in its own thread?  Was this an attempt to speed
+    //     up launch?  Protect rg from crashing plugins?  What?
+    //     It appears to have been intended to speed up rg launch.
+
     QMutexLocker locker(&(m_manager->m_mutex));
-    MappedObjectPropertyList rawPlugins;
+    std::vector<QString> rawPlugins;
 
     //RG_DEBUG << "Enumerator::run()...";
 
@@ -83,7 +86,15 @@ AudioPluginManager::Enumerator::run()
 
     while (i < rawPlugins.size()) {
 
+        // This routine expects the list of strings to be ordered
+        // this way.
+        // See LADSPAPluginFactory::enumeratePlugins(),
+        // DSSIPluginFactory::enumeratePlugins(), and
+        // LV2PluginFactory::enumeratePlugins().
+        // ??? I think we should replace this mess with a struct.
+
         QString identifier = rawPlugins[i++];
+        PluginArch arch = static_cast<PluginArch>(rawPlugins[i++].toInt());
         QString name = rawPlugins[i++];
         unsigned long uniqueId = rawPlugins[i++].toLong();
         QString label = rawPlugins[i++];
@@ -99,6 +110,7 @@ AudioPluginManager::Enumerator::run()
 
         QSharedPointer<AudioPlugin> aP = m_manager->addPlugin(
                                                identifier,
+                                               arch,
                                                name,
                                                uniqueId,
                                                label,
@@ -137,6 +149,7 @@ AudioPluginManager::Enumerator::run()
 
 QSharedPointer<AudioPlugin>
 AudioPluginManager::addPlugin(const QString &identifier,
+                              const PluginArch arch,
                               const QString &name,
                               unsigned long uniqueId,
                               const QString &label,
@@ -148,6 +161,7 @@ AudioPluginManager::addPlugin(const QString &identifier,
 {
     QSharedPointer<AudioPlugin> newPlugin(
              new AudioPlugin(identifier,
+                             arch,
                              name,
                              uniqueId,
                              label,
@@ -176,6 +190,7 @@ AudioPluginManager::removePlugin(const QString &identifier)
     return false;
 }
 
+/* unused
 std::vector<QString>
 AudioPluginManager::getPluginNames()
 {
@@ -190,6 +205,7 @@ AudioPluginManager::getPluginNames()
 
     return names;
 }
+*/
 
 QSharedPointer<AudioPlugin>
 AudioPluginManager::getPlugin(int number)
@@ -278,7 +294,7 @@ AudioPluginManager::end()
 }
 
 void
-AudioPluginManager::awaitEnumeration()
+AudioPluginManager::awaitEnumeration() const
 {
     // TODO: this should use a QSemaphore instead
     while (!m_enumerator.isDone()) {

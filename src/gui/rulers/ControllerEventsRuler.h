@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,8 +19,12 @@
 #define RG_CONTROLLEREVENTSRULER_H
 
 #include "ControlRuler.h"
-#include "base/Event.h"
+
 #include "base/Segment.h"
+
+#include <QLineF>
+#include <QRectF>
+#include <QSharedPointer>
 #include <QString>
 
 class QWidget;
@@ -30,11 +34,12 @@ class QMouseEvent;
 namespace Rosegarden
 {
 
-class Segment;
+
 class RulerScale;
 class Event;
 class ControlParameter;
 class ControlItem;
+
 
 /// Controller Ruler (volume, pan, pitchbend, etc...)
 /**
@@ -42,12 +47,14 @@ class ControlItem;
  */
 class ControllerEventsRuler : public ControlRuler, public SegmentObserver
 {
+    Q_OBJECT
+
 public:
-    ControllerEventsRuler(ViewSegment*,
-                          RulerScale*,
-                          QWidget* parent=nullptr,
+    ControllerEventsRuler(ViewSegment *,
+                          RulerScale *,
+                          QWidget *parent = nullptr,
                           const ControlParameter *controller = nullptr,
-                          const char* name=nullptr );
+                          const char *name = nullptr );
 
     ~ControllerEventsRuler() override;
 
@@ -80,7 +87,7 @@ public:
     virtual void addControlLine(
             double x1, double y1,
             double x2, double y2,
-            bool eraseExistingContollers);
+            bool eraseExistingControllers);
 
     /** Draw a rubber band indicating the controller line that will be drawn if
      * the user clicks another event into existence while moving the pencil
@@ -92,7 +99,7 @@ public:
      */
     virtual void stopRubberBand();
 
-    virtual Event * insertEvent(float,float);
+    virtual Event *insertEvent(float,float);
     virtual void eraseEvent(Event *event);
     virtual void eraseControllerEvent();
 
@@ -101,9 +108,24 @@ public:
 
     void setTool(const QString &name) override;
 
+    virtual void createRulerMenu() override;
+
+    virtual bool allowSimultaneousEvents() override;
+
+    // for key pressure
+    virtual int getPitch() const {return 0;}
+
+    virtual void getLimits(float& xmin, float& xmax);
+
 protected:
     virtual void init();
     virtual bool isOnThisRuler(Event *);
+
+    void drawItems(QPainter& painter, QPen& pen, QBrush& brush);
+    void drawSelectionRect(QPainter& painter, QPen& pen, QBrush& brush);
+    void drawRubberBand(QPainter& painter);
+
+    virtual Event* getNewEvent(timeT time, long value) const;
 
     //--------------- Data members ---------------------------------
     int  m_defaultItemWidth;

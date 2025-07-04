@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
  
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -21,8 +21,8 @@ namespace Rosegarden
 
 AudioFile::AudioFile(unsigned int id,
                      const std::string &label,
-                     const QString &fileName):
-        SoundFile(fileName),
+                     const QString &absoluteFilePath):
+        SoundFile(absoluteFilePath),
         m_type(UNKNOWN),
         m_id(id),
         m_label(label),
@@ -31,14 +31,15 @@ AudioFile::AudioFile(unsigned int id,
         m_channels(0),
         m_dataChunkIndex( -1)
 {
-    m_fileInfo = new QFileInfo(fileName);
+    m_fileInfo = new QFileInfo(absoluteFilePath);
 }
 
-AudioFile::AudioFile(const QString &fileName,
+#if 0
+AudioFile::AudioFile(const QString &absoluteFilePath,
                      unsigned int channels = 1,
                      unsigned int sampleRate = 48000,
                      unsigned int bitsPerSample = 16):
-        SoundFile(fileName),
+        SoundFile(absoluteFilePath),
         m_type(UNKNOWN),
         m_id(0),
         m_label(""),
@@ -47,8 +48,9 @@ AudioFile::AudioFile(const QString &fileName,
         m_channels(channels),
         m_dataChunkIndex( -1)
 {
-    m_fileInfo = new QFileInfo(fileName);
+    m_fileInfo = new QFileInfo(absoluteFilePath);
 }
+#endif
 
 AudioFile::~AudioFile()
 {

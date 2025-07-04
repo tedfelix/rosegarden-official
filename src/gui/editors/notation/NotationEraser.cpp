@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -31,8 +31,10 @@
 #include <QSettings>
 #include <QAction>
 
+
 namespace Rosegarden
 {
+
 
 NotationEraser::NotationEraser(NotationWidget *widget) :
     NotationTool("notationeraser.rc", "NotationEraser", widget),
@@ -43,12 +45,13 @@ NotationEraser::NotationEraser(NotationWidget *widget) :
 
     m_collapseRest = qStrToBool(settings.value("collapse", "false"));
 
-    QAction *a = createAction("toggle_rest_collapse", SLOT(slotToggleRestCollapse()));
+    QAction *a = createAction("toggle_rest_collapse",
+                              &NotationEraser::slotToggleRestCollapse);
     a->setCheckable(true);
     a->setChecked(m_collapseRest);
 
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("insert", SLOT(slotInsertSelected()));
+    createAction("select", &NotationEraser::slotSelectSelected);
+    createAction("insert", &NotationEraser::slotInsertSelected);
 
     settings.endGroup();
 }
@@ -57,7 +60,7 @@ void
 NotationEraser::ready()
 {
     m_widget->setCanvasCursor(Qt::PointingHandCursor);
-//!!!    m_nParentView->setHeightTracking(false);
+    // !!! m_nParentView->setHeightTracking(false);
 
     // The eraser tool doesn't use the wheel.
     m_widget->getView()->setWheelZoomPan(true);

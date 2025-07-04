@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -37,7 +37,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 PasteEventsCommand::PasteEventsCommand(Segment &segment,
-                                       Clipboard *clipboard,
+                                       const Clipboard *clipboard,
                                        timeT pasteTime,
                                        PasteType pasteType) :
     BasicCommand(getGlobalName(), segment, pasteTime,
@@ -65,7 +65,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
 }
 
 PasteEventsCommand::PasteEventsCommand(const QString& marking,
-                                       Clipboard *clipboard,
+                                       const Clipboard *clipboard,
                                        timeT pasteTime,
                                        PasteType pasteType) :
     BasicCommand(getGlobalName(), pasteTime, marking),
@@ -92,7 +92,7 @@ PasteEventsCommand::PasteEventsCommand(const QString& marking,
 }
 
 PasteEventsCommand::PasteEventsCommand(Segment &segment,
-                                       Clipboard *clipboard,
+                                       const Clipboard *clipboard,
                                        timeT pasteTime,
                                        timeT pasteEndTime,
                                        PasteType pasteType) :
@@ -115,6 +115,7 @@ PasteEventsCommand::getPasteTypes()
     static PasteTypeMap types;
     static bool haveTypes = false;
     if (!haveTypes) {
+        haveTypes = true;
         types[Restricted] =
             tr("Paste into an existing gap [\"restricted\"]");
         types[Simple] =
@@ -131,8 +132,8 @@ PasteEventsCommand::getPasteTypes()
 
 timeT
 PasteEventsCommand::getEffectiveEndTime(Segment &segment,
-                                        Clipboard *clipboard,
-                                        timeT pasteTime)
+                                        const Clipboard *clipboard,
+                                        timeT pasteTime) const
 {
     if (!clipboard->isSingleSegment()) {
         RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: not single segment";
@@ -246,7 +247,10 @@ PasteEventsCommand::modifySegment()
     RG_DEBUG << "pasteTime" << pasteTime << "origin" << origin;
 
     SegmentNotationHelper helper(*destination);
-    bool possible = helper.removeRests(pasteTime, duration, true);
+    // removeRests() changes the duration destructively but the
+    // variable "duration" is used by normalizeRests()
+    timeT d = duration;
+    bool possible = helper.removeRests(pasteTime, d, true);
     if (! possible) RG_WARNING << "pasting when not possible";
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
@@ -276,8 +280,8 @@ PasteEventsCommand::modifySegment()
     case Restricted: {
             // removeRests() changes the duration destructively but the
             // variable "duration" is used by normalizeRests()
-            timeT d = duration;
-            if (!helper.removeRests(pasteTime, d)) {
+            timeT dur = duration;
+            if (!helper.removeRests(pasteTime, dur)) {
                 return;
             }
             break;

@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -31,16 +31,18 @@
 #include "NotePixmapFactory.h"
 #include "gui/widgets/Panned.h"
 
+
 namespace Rosegarden
 {
+
 
 GuitarChordInserter::GuitarChordInserter(NotationWidget *widget) :
     NotationTool("guitarchordinserter.rc", "GuitarChordInserter", widget),
     m_guitarChordSelector(nullptr)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("notes", SLOT(slotNotesSelected()));
+    createAction("select", &GuitarChordInserter::slotSelectSelected);
+    createAction("erase", &GuitarChordInserter::slotEraseSelected);
+    createAction("notes", &GuitarChordInserter::slotNotesSelected);
 
     m_guitarChordSelector = new GuitarChordSelectorDialog(m_widget);
     m_guitarChordSelector->init();
@@ -52,12 +54,14 @@ GuitarChordInserter::slotNotesSelected()
     invokeInParentView("draw");
 }
 
+/* unused
 void
 GuitarChordInserter::slotGuitarChordSelected()
 {
     // Switch to last selected Guitar Chord
     // m_nParentView->slotLastGuitarChordAction();
 }
+*/
 
 void
 GuitarChordInserter::slotEraseSelected()
@@ -115,27 +119,28 @@ GuitarChordInserter::processDialog(NotationStaff* staff,
 }
 
 void
-GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *e)
+GuitarChordInserter::handleSelectedGuitarChord(const NotationMouseEvent *event)
 {
     // Get time of where guitar chord is inserted
-    timeT insertionTime = e->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
+    timeT insertionTime = event->element->event()->getAbsoluteTime(); // not getViewAbsoluteTime()
 
     // edit an existing guitar chord, if that's what we clicked on
     try {
-        Guitar::Chord chord(*(e->element->event()));
+        Guitar::Chord chord(*(event->element->event()));
 
         m_guitarChordSelector->setChord(chord);
-        
-        if (processDialog(e->staff, insertionTime)) {
+
+        if (processDialog(event->staff, insertionTime)) {
             // Erase old guitar chord
             EraseEventCommand *command =
-                new EraseEventCommand(e->staff->getSegment(),
-                                      e->element->event(),
+                new EraseEventCommand(event->staff->getSegment(),
+                                      event->element->event(),
                                       false);
 
             CommandHistory::getInstance()->addCommand(command);
         }
-    } catch (const Exception &e) {}
+    } catch (const Exception &e) {
+    }
 }
 
 void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)
@@ -147,4 +152,3 @@ void GuitarChordInserter::createNewGuitarChord(const NotationMouseEvent *e)
 QString GuitarChordInserter::ToolName() { return "guitarchordinserter"; }
 
 }
-

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,9 +30,9 @@ namespace Guitar
 const std::string Chord::EventType              = "guitarchord";
 const short Chord::EventSubOrdering             = -60;
 
-static const PropertyName RootPropertyName = "root";
-static const PropertyName ExtPropertyName = "ext";
-static const PropertyName FingeringPropertyName = "fingering";
+static const PropertyName RootPropertyName("root");
+static const PropertyName ExtPropertyName("ext");
+static const PropertyName FingeringPropertyName("fingering");
 
 Chord::Chord()
     : m_isUserChord(false)
@@ -65,13 +65,13 @@ Chord::Chord(const Event& e)
         else
             m_ext = strtoqstr(f);
     }
-    
+
     ok = e.get<String>(FingeringPropertyName, f);
     if (ok) {
         QString qf(strtoqstr(f));
         QString errString;
-    
-        Fingering fingering = Fingering::parseFingering(qf, errString);    
+
+        Fingering fingering = Fingering::parseFingering(qf, errString);
         setFingering(fingering);
     }
 }
@@ -85,11 +85,13 @@ Event* Chord::getAsEvent(timeT absoluteTime) const
     return e;
 }
 
+/* unused
 bool Chord::hasAltBass() const
 {
     static const QRegularExpression ALT_BASS_REGEXP("/[A-G]");
     return m_ext.contains(ALT_BASS_REGEXP);
 }
+*/
 
 bool operator<(const Chord& a, const Chord& b)
 {
@@ -109,7 +111,7 @@ bool operator<(const Chord& a, const Chord& b)
 
 }
 
-ROSEGARDENPRIVATE_EXPORT QDebug &operator<<(QDebug &dbg, const Rosegarden::Guitar::Chord &c)
+ROSEGARDENPRIVATE_EXPORT QDebug operator<<(QDebug dbg, const Rosegarden::Guitar::Chord &c)
 {
     dbg << "Chord root = " << c.getRoot() << ", ext = '" << c.getExt() << "'";
 

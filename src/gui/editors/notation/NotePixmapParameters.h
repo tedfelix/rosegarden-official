@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -38,16 +38,16 @@ class NotePixmapParameters
 {
 public:
     enum Triggering { triggerNone, triggerYes, triggerSkip, };
-    
+
     NotePixmapParameters(Note::Type noteType,
                          int dots,
-                         Accidental accidental =
+                         const Accidental& accidental =
                          Accidentals::NoAccidental);
     ~NotePixmapParameters();
 
     void setNoteType(Note::Type type) { m_noteType = type; }
     void setDots(int dots) { m_dots = dots; }
-    void setAccidental(Accidental acc) { m_accidental = acc; }
+    void setAccidental(const Accidental& acc) { m_accidental = acc; }
 
     void setAccidentalCautionary(bool cautionary) { m_cautionary = cautionary; }
     void setNoteHeadShifted(bool shifted) { m_shifted          = shifted;   }
@@ -97,9 +97,9 @@ public:
     void removeMarks();
 
     void setInRange(bool inRange)         { m_inRange          = inRange;    }
-    
-    void setForcedColor(QColor color) { m_forcedColor = color;
-                                        m_forceColor = true; }
+
+    void setForcedColor(const QColor& color) { m_forcedColor = color;
+                                               m_forceColor = true; }
     void clearForcedColour() { m_forceColor = false; }
 
     /** Return a list of normal marks that draw either above or below the note
@@ -161,7 +161,7 @@ public:
 		m_marks == p.m_marks &&
 
 		m_memberOfParallel == p.m_memberOfParallel &&
-		
+
 		m_forceColor == p.m_forceColor &&
 		((m_forcedColor == p.m_forcedColor) || !m_forceColor)
 

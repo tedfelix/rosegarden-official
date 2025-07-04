@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -27,7 +27,7 @@
 #include "misc/Preferences.h"
 #include "document/RosegardenDocument.h"
 #include "sequencer/RosegardenSequencer.h"
-#include "gui/application/RosegardenMainWindow.h"
+#include "sound/ExternalController.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "base/Studio.h"
 #include "gui/studio/StudioControl.h"
@@ -75,8 +75,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_baseOctaveNumber = new QSpinBox;
     m_baseOctaveNumber->setMinimum(-10);
     m_baseOctaveNumber->setMaximum(10);
-    m_baseOctaveNumber->setValue(
-            settings.value("midipitchoctave", -2).toInt());
+    m_baseOctaveNumber->setValue(Preferences::getMIDIPitchOctave());
     connect(m_baseOctaveNumber,
                 static_cast<void(QSpinBox::*)(int)>(&QSpinBox::valueChanged),
             this, &MIDIConfigurationPage::slotModified);
@@ -102,9 +101,28 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
 
     ++row;
 
+    QLabel *label;
+    QString toolTip;
+
+    label = new QLabel(tr("Match ALSA port numbers"));
+    toolTip = tr("Include ALSA port numbers when trying to match and restore MIDI connections when loading a file." );
+    label->setToolTip( toolTip );
+    layout->addWidget( label, row, 0, 1, 2 );
+
+    m_includeAlsaPortNumbersWhenMatching = new QCheckBox;
+    m_includeAlsaPortNumbersWhenMatching->setToolTip(toolTip);
+    m_includeAlsaPortNumbersWhenMatching->setChecked(
+            Preferences::getIncludeAlsaPortNumbersWhenMatching());
+    connect(m_includeAlsaPortNumbersWhenMatching, &QCheckBox::stateChanged,
+            this, &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_includeAlsaPortNumbersWhenMatching, row, 2);
+
+    ++row;
+
+
     // External controller port
-    QLabel *label = new QLabel(tr("External controller port"));
-    QString toolTip = tr("Enable the external controller port for control surfaces.");
+    label = new QLabel(tr("External controller port"));
+    toolTip = tr("Enable the external controller port for control surfaces.");
     label->setToolTip(toolTip);
     layout->addWidget(label, row, 0, 1, 2);
 
@@ -228,9 +246,10 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
             continue;
 
         m_sequencerTimingSource->addItem(timer);
-        if (timer == m_originalTimingSource)
-            m_sequencerTimingSource->setCurrentIndex(i);
     }
+
+    m_sequencerTimingSource->setCurrentIndex(
+            m_sequencerTimingSource->findText(m_originalTimingSource));
 
     connect(m_sequencerTimingSource,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
@@ -290,6 +309,18 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     layout->addWidget(m_soundFontChoose, row, 3);
 
     ++row;
+
+    // PPQN for MIDI File Export
+    layout->addWidget(new QLabel(tr("PPQN/Division for MIDI File Export")), row, 0);
+    m_ppqnSmfExport = new QSpinBox;
+    m_ppqnSmfExport->setMinimum(96);
+    m_ppqnSmfExport->setMaximum(960);
+    m_ppqnSmfExport->setValue(Preferences::getSMFExportPPQN());
+    connect(m_ppqnSmfExport,
+            static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+            this,
+            &MIDIConfigurationPage::slotModified);
+    layout->addWidget(m_ppqnSmfExport, row, 2, 1, 2);
 
     // Fill out the rest of the space so that we do not end up centered.
     layout->setRowStretch(row, 10);
@@ -457,9 +488,15 @@ MIDIConfigurationPage::apply()
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
 
-    settings.setValue("midipitchoctave", m_baseOctaveNumber->value());
+    Preferences::setMIDIPitchOctave(m_baseOctaveNumber->value());
     settings.setValue("alwaysusedefaultstudio",
                       m_useDefaultStudio->isChecked());
+
+    settings.setValue("includeAlsaPortNumbersWhenMatching",
+                        m_includeAlsaPortNumbersWhenMatching->isChecked());
+    Preferences::setIncludeAlsaPortNumbersWhenMatching(
+            m_includeAlsaPortNumbersWhenMatching->isChecked());
+
     settings.setValue("external_controller",
                       m_externalControllerPort->isChecked());
 
@@ -497,6 +534,7 @@ MIDIConfigurationPage::apply()
     settings.setValue("sfxloadpath", m_pathToLoadCommand->text());
     settings.setValue("soundfontpath", m_soundFont->text());
 
+    Preferences::setSMFExportPPQN(m_ppqnSmfExport->value());
 
     // *** MIDI Sync tab
 
@@ -506,28 +544,31 @@ MIDIConfigurationPage::apply()
 
     // Now send it (OLD METHOD - to be removed)
     // !!! No, don't remove -- this controls SPP as well doesn't it?
-    MappedEvent midiClockEvent(MidiInstrumentBase,  // InstrumentId
-                               MappedEvent::SystemMIDIClock,
-                               MidiByte(midiClock));
+    MappedEvent midiClockEvent;
+    midiClockEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    midiClockEvent.setType(MappedEvent::SystemMIDIClock);
+    midiClockEvent.setData1(MidiByte(midiClock));
     StudioControl::sendMappedEvent(midiClockEvent);
 
     settings.setValue("mmcmode", m_midiMachineControlMode->currentIndex());
-    MappedEvent mmcModeEvent(MidiInstrumentBase,  // InstrumentId
-                             MappedEvent::SystemMMCTransport,
-                             MidiByte(m_midiMachineControlMode->currentIndex()));
+    MappedEvent mmcModeEvent;
+    mmcModeEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mmcModeEvent.setType(MappedEvent::SystemMMCTransport);
+    mmcModeEvent.setData1(MidiByte(m_midiMachineControlMode->currentIndex()));
     StudioControl::sendMappedEvent(mmcModeEvent);
 
     settings.setValue("mtcmode", m_midiTimeCodeMode->currentIndex());
-    MappedEvent mtcModeEvent(MidiInstrumentBase,  // InstrumentId
-                             MappedEvent::SystemMTCTransport,
-                             MidiByte(m_midiTimeCodeMode->currentIndex()));
+    MappedEvent mtcModeEvent;
+    mtcModeEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    mtcModeEvent.setType(MappedEvent::SystemMTCTransport);
+    mtcModeEvent.setData1(MidiByte(m_midiTimeCodeMode->currentIndex()));
     StudioControl::sendMappedEvent(mtcModeEvent);
 
     settings.setValue("midisyncautoconnect", m_autoConnectSyncOut->isChecked());
-    MappedEvent autoConnectSyncOutEvent(
-            MidiInstrumentBase,  // InstrumentId
-            MappedEvent::SystemMIDISyncAuto,
-            MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
+    MappedEvent autoConnectSyncOutEvent;
+    autoConnectSyncOutEvent.setInstrumentId(MidiInstrumentBase);  // ??? needed?
+    autoConnectSyncOutEvent.setType(MappedEvent::SystemMIDISyncAuto);
+    autoConnectSyncOutEvent.setData1(MidiByte(m_autoConnectSyncOut->isChecked() ? 1 : 0));
     StudioControl::sendMappedEvent(autoConnectSyncOutEvent);
 
     settings.endGroup();

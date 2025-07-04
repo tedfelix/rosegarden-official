@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -17,29 +17,32 @@
 
 
 #include "TupletDialog.h"
-#include <QLayout>
 
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
+#include "misc/ConnectCBActivated.h"
+
+#include <QCheckBox>
 #include <QComboBox>
+#include <QDesktopServices>
 #include <QDialog>
 #include <QDialogButtonBox>
-#include <QCheckBox>
 #include <QFrame>
 #include <QGridLayout>
 #include <QGroupBox>
 #include <QLabel>
+#include <QLayout>
 #include <QObject>
 #include <QString>
 #include <QWidget>
-#include <QVBoxLayout>
 #include <QUrl>
-#include <QDesktopServices>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
+
 
 TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
                            timeT maxDuration) :
@@ -191,18 +194,10 @@ TupletDialog::TupletDialog(QWidget *parent, Note::Type defaultUnitType,
 
     updateTimingDisplays();
 
-    QObject::connect(m_unitCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotUnitChanged(const QString &)));
+    ConnectCBActivated(m_unitCombo, this, &TupletDialog::slotUnitChanged);
+    ConnectCBActivated(m_untupledCombo, this, &TupletDialog::slotUntupledChanged);
+    ConnectCBActivated(m_tupledCombo, this, &TupletDialog::slotTupledChanged);
 
-    QObject::connect(m_untupledCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotUntupledChanged(const QString &)));
-    QObject::connect(m_untupledCombo, SIGNAL(textChanged(const QString &)),
-                     this, SLOT(slotUntupledChanged(const QString &)));
-
-    QObject::connect(m_tupledCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotTupledChanged(const QString &)));
-    QObject::connect(m_tupledCombo, SIGNAL(textChanged(const QString &)),
-                     this, SLOT(slotTupledChanged(const QString &)));
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);

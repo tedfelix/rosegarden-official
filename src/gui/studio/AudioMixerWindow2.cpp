@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,7 +30,6 @@
 #include "sound/MappedEvent.h"
 #include "sound/Midi.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/Studio.h"
 
@@ -74,57 +73,67 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
             this, &AudioMixerWindow2::slotControlChange);
 
     // File > Close
-    createAction("file_close", SLOT(slotClose()));
+    createAction("file_close", &AudioMixerWindow2::slotClose);
 
     // Transport Menu
-    createAction("play", RosegardenMainWindow::self(), SLOT(slotPlay()));
-    createAction("stop", RosegardenMainWindow::self(), SLOT(slotStop()));
-    createAction("playback_pointer_back_bar", RosegardenMainWindow::self(), SLOT(slotRewind()));
-    createAction("playback_pointer_forward_bar", RosegardenMainWindow::self(), SLOT(slotFastforward()));
-    createAction("playback_pointer_start", RosegardenMainWindow::self(), SLOT(slotRewindToBeginning()));
-    createAction("playback_pointer_end", RosegardenMainWindow::self(), SLOT(slotFastForwardToEnd()));
-    createAction("record", RosegardenMainWindow::self(), SLOT(slotRecord()));
-    createAction("panic", RosegardenMainWindow::self(), SLOT(slotPanic()));
+    createAction("play", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotPlay);
+    createAction("stop", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotStop);
+    createAction("playback_pointer_back_bar", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotRewind);
+    createAction("playback_pointer_forward_bar", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotFastforward);
+    createAction("playback_pointer_start", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotRewindToBeginning);
+    createAction("playback_pointer_end", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotFastForwardToEnd);
+    createAction("record", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotRecord);
+    createAction("panic", RosegardenMainWindow::self(),
+                 &RosegardenMainWindow::slotPanic);
 
     // "Settings > Number of Stereo Inputs" Actions
     // For i in {1,2,4,8,16}
     for (int i = 1; i <= 16; i *= 2) {
         createAction(QString("inputs_%1").arg(i),
-                     SLOT(slotNumberOfStereoInputs()));
+                     &AudioMixerWindow2::slotNumberOfStereoInputs);
     }
 
     // "Settings > Number of Submasters" Actions
-    createAction("submasters_0", SLOT(slotNumberOfSubmasters()));
-    createAction("submasters_2", SLOT(slotNumberOfSubmasters()));
-    createAction("submasters_4", SLOT(slotNumberOfSubmasters()));
-    createAction("submasters_8", SLOT(slotNumberOfSubmasters()));
+    createAction("submasters_0", &AudioMixerWindow2::slotNumberOfSubmasters);
+    createAction("submasters_2", &AudioMixerWindow2::slotNumberOfSubmasters);
+    createAction("submasters_4", &AudioMixerWindow2::slotNumberOfSubmasters);
+    createAction("submasters_8", &AudioMixerWindow2::slotNumberOfSubmasters);
 
     // "Settings > Panning Law" Actions
     // ??? Can we do something easier to understand than panlaw_0,
     //     panlaw_1, etc...?  E.g. panlaw_0dB, panlaw_-3dB, panlaw_-6dB,
     //     panlaw_alt-3dB.
-    createAction("panlaw_0", SLOT(slotPanningLaw()));
-    createAction("panlaw_1", SLOT(slotPanningLaw()));
-    createAction("panlaw_2", SLOT(slotPanningLaw()));
-    createAction("panlaw_3", SLOT(slotPanningLaw()));
+    createAction("panlaw_0", &AudioMixerWindow2::slotPanningLaw);
+    createAction("panlaw_1", &AudioMixerWindow2::slotPanningLaw);
+    createAction("panlaw_2", &AudioMixerWindow2::slotPanningLaw);
+    createAction("panlaw_3", &AudioMixerWindow2::slotPanningLaw);
 
     // Settings > Show Audio Faders
-    createAction("show_audio_faders", SLOT(slotShowAudioFaders()));
+    createAction("show_audio_faders", &AudioMixerWindow2::slotShowAudioFaders);
 
     // Settings > Show Synth Faders
-    createAction("show_synth_faders", SLOT(slotShowSynthFaders()));
+    createAction("show_synth_faders", &AudioMixerWindow2::slotShowSynthFaders);
 
     // Settings > Show Audio Submasters
-    createAction("show_audio_submasters", SLOT(slotShowAudioSubmasters()));
+    createAction("show_audio_submasters",
+                 &AudioMixerWindow2::slotShowAudioSubmasters);
 
     // Settings > Show Unassigned Faders
-    createAction("show_unassigned_faders", SLOT(slotShowUnassignedFaders()));
+    createAction("show_unassigned_faders",
+                 &AudioMixerWindow2::slotShowUnassignedFaders);
 
     // Help > Help
-    createAction("mixer_help", SLOT(slotHelp()));
+    createAction("mixer_help", &AudioMixerWindow2::slotHelp);
 
     // Help > About Rosegarden
-    createAction("help_about_app", SLOT(slotAboutRosegarden()));
+    createAction("help_about_app", &AudioMixerWindow2::slotAboutRosegarden);
 
     createMenusAndToolbars("mixer.rc");
 

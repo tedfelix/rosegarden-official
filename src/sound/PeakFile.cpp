@@ -1,10 +1,10 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
- 
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
   published by the Free Software Foundation; either version 2 of the
@@ -84,7 +84,7 @@ PeakFile::open()
 {
     // Set the file size
     //
-    QFileInfo info(m_fileName);
+    QFileInfo info(m_absoluteFilePath);
     m_fileSize = (size_t)info.size(); // cast from qint64
 
     // If we're already open then don't open again
@@ -94,7 +94,7 @@ PeakFile::open()
 
     // Open
     //
-    m_inFile = new std::ifstream(m_fileName.toLocal8Bit(),
+    m_inFile = new std::ifstream(m_absoluteFilePath.toLocal8Bit(),
                                  std::ios::in | std::ios::binary);
     // Check we're open
     //
@@ -128,7 +128,7 @@ PeakFile::parseHeader()
     std::string header = getBytes(128);
 
     if (header.compare(0, 4, AUDIO_BWF_PEAK_ID) != 0) {
-        throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't find LEVL identifier"));
+        throw(BadSoundFileException(m_absoluteFilePath, "PeakFile::parseHeader - can't find LEVL identifier"));
     }
 
     int length = getIntegerFromLittleEndian(header.substr(4, 4));
@@ -136,7 +136,7 @@ PeakFile::parseHeader()
     // Get the length of the header minus the first 8 bytes
     //
     if (length == 0)
-        throw(BadSoundFileException(m_fileName, "PeakFile::parseHeader - can't get header length"));
+        throw(BadSoundFileException(m_absoluteFilePath, "PeakFile::parseHeader - can't get header length"));
 
     // Get the file information
     //
@@ -171,11 +171,12 @@ PeakFile::parseHeader()
 }
 
 void
+// cppcheck-suppress unusedFunction
 PeakFile::printStats()
 {
     RG_DEBUG << "printStats()";
 
-    RG_DEBUG << "  STATS for PeakFile" << m_fileName;
+    RG_DEBUG << "  STATS for PeakFile" << m_absoluteFilePath;
     RG_DEBUG << "  ----------------------------";
     RG_DEBUG << "    VERSION =" << m_version;
     RG_DEBUG << "    FORMAT  =" << m_format;
@@ -221,7 +222,7 @@ PeakFile::write()
     }
 
     // create and test that we've made it
-    m_outFile = new std::ofstream(m_fileName.toLocal8Bit(),
+    m_outFile = new std::ofstream(m_absoluteFilePath.toLocal8Bit(),
                                   std::ios::out | std::ios::binary);
     if (!(*m_outFile))
         return false;
@@ -592,11 +593,12 @@ PeakFile::writePeaks(std::ofstream *file)
                 } else if (bytes == 4)  // IEEE float (enforced by RIFFAudioFile)
                 {
                     // write out as 16-bit (m_format == 2)
+                    // cppcheck-suppress invalidPointerCast
                     float val = *(float *)samplePtr;
                     sampleValue = (int)(32767.0 * val);
                     samplePtr += 4;
                 } else {
-                    throw(BadSoundFileException(m_fileName, "PeakFile::writePeaks - unsupported bit depth"));
+                    throw(BadSoundFileException(m_absoluteFilePath, "PeakFile::writePeaks - unsupported bit depth"));
                 }
 
                 // First time for each channel
@@ -922,9 +924,9 @@ PeakFile::getPeak(const RealTime &time)
 }
 
 RealTime
-PeakFile::getTime(int peak)
+PeakFile::getTime(int block)
 {
-    int usecs = int((double)peak * (double)m_blockSize *
+    int usecs = int((double)block * (double)m_blockSize *
                     double(1000000.0) / double(m_audioFile->getSampleRate()));
     return RealTime(usecs / 1000000, (usecs % 1000000) * 1000);
 }
@@ -960,14 +962,13 @@ PeakFile::getSplitPoints(const RealTime &startTime,
         return points;
     }
 
-    float value;
     float fThreshold = float(threshold) / 100.0;
     bool belowThreshold = true;
-    RealTime startSplit = RealTime::zeroTime;
+    RealTime startSplit;
     bool inSplit = false;
 
     for (int i = startPeak; i < endPeak; i++) {
-        value = 0.0;
+        float value = 0.0;
 
         for (int ch = 0; ch < m_channels; ch++) {
             try {
@@ -1017,5 +1018,3 @@ PeakFile::getSplitPoints(const RealTime &startTime,
 
 
 }
-
-

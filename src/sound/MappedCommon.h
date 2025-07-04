@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -47,13 +47,13 @@ typedef enum
     Duplex
 } PortDirection;
 
-QDataStream& operator>>(QDataStream& s, MappedObjectIdList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectIdList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectIdList&);
 
-QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectPropertyList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectPropertyList&);
 
-QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
+// unused QDataStream& operator>>(QDataStream& s, MappedObjectValueList&);
 QDataStream& operator<<(QDataStream&, const MappedObjectValueList&);
 
 }

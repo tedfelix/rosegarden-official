@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -35,7 +35,7 @@ class WarningDialog : public QDialog
 {
     Q_OBJECT
 public:
-    WarningDialog(QWidget *parent = nullptr);
+    explicit WarningDialog(QWidget *parent = nullptr);
     ~WarningDialog() override;
 
     /** We'll build the message queue out of these for convenience, so both the

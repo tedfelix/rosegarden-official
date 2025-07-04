@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -51,7 +51,7 @@ public:
     // This is called with forceRescan from the startup tester thread;
     // at all other times, the cached results are used
     static std::set<QString> getFontNames(bool forceRescan = false);
-    static std::vector<int> getAllSizes(const QString &fontName); // sorted
+    // unused static std::vector<int> getAllSizes(const QString &fontName); // sorted
     static std::vector<int> getScreenSizes(const QString &fontName); // sorted
 
     static QString getDefaultFontName();
@@ -62,14 +62,20 @@ public:
     /// Return the default multi-staff size (prefers 6)
     static int getDefaultMultiSize(const QString &fontName);
 
-    static bool isAvailableInSize(const QString &fontName, int size);
+    // unused static bool isAvailableInSize(const QString &fontName, int size);
 
 private:
     NoteFontFactory() {}
+    ~NoteFontFactory();
     friend class NoteFontFactoryStatic;
 
     std::set<QString> m_fontNames;
-    std::map<std::pair<QString, int>, NoteFont *> m_fonts;
+
+    // The fonts that have been created.
+    typedef std::map<std::pair<QString, int>, NoteFont *> FontMap;
+    FontMap m_fonts;
+
+    // ??? Why do we need a mutex?  The notation UI is not multithreaded.
     QMutex m_mutex;
 };
 

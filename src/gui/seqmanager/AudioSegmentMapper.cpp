@@ -3,17 +3,19 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
     License, or (at your option) any later version.  See the file
     COPYING included with this distribution for more information.
 */
+
+#define RG_MODULE_STRING "[AudioSegmentMapper]"
 
 #include "AudioSegmentMapper.h"
 
@@ -82,11 +84,13 @@ AudioSegmentMapper::fillBuffer()
         RealTime audioStart = m_segment->getAudioStartTime();
         RealTime audioDuration = m_segment->getAudioEndTime() - audioStart;
 
-        MappedEvent e(track->getInstrument(),  // send instrument for audio
-                      m_segment->getAudioFileId(),
-                      eventTime,
-                      audioDuration,
-                      audioStart);
+        MappedEvent e;
+        e.setType(MappedEvent::Audio);
+        e.setInstrumentId(track->getInstrument());
+        e.setAudioFileID(m_segment->getAudioFileId());
+        e.setEventTime(eventTime);
+        e.setDuration(audioDuration);
+        e.setAudioStartMarker(audioStart);
 
         e.setTrackId(track->getId());
         e.setRuntimeSegmentId(m_segment->getRuntimeId());
@@ -129,7 +133,7 @@ AudioSegmentMapper::calculateSize()
 
 bool
 AudioSegmentMapper::
-shouldPlay(MappedEvent *evt, RealTime sliceStart)
+shouldPlay(MappedEvent *evt, RealTime startTime)
 {
     // If it's muted etc it doesn't play.
     if (mutedEtc()) { return false; }
@@ -137,7 +141,7 @@ shouldPlay(MappedEvent *evt, RealTime sliceStart)
     // Otherwise it should play if it's not already all done sounding.
     // The timeslice logic will have already excluded events that
     // start too late.
-    return !evt->EndedBefore(sliceStart);
+    return !evt->EndedBefore(startTime);
 }
 
 }

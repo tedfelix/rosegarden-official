@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -40,14 +40,14 @@ namespace Rosegarden
 PluginControl::PluginControl(QWidget *parent,
                              ControlType type,
                              QSharedPointer<PluginPort> port,
-                             QSharedPointer<AudioPluginManager> aPM,
+                             QSharedPointer<AudioPluginManager> pluginManager,
                              int index,
                              float initialValue,
                              bool showBounds):
         QWidget(parent),
         m_type(type),
         m_port(port),
-        m_pluginManager(aPM),
+        m_pluginManager(pluginManager),
         m_index(index)
 {
     setObjectName("PluginControl");
@@ -87,10 +87,10 @@ PluginControl::PluginControl(QWidget *parent,
             snapToTicks = true;
         }
         if (port->getDisplayHint() & PluginPort::Toggled) {
-            lowerBound = -0.0001;
-            upperBound = 1.0001;
-            step = 1.0;
-            pageStep = 1.0;
+            lowerBound = 0.0;
+            upperBound = 1.0;
+            step = upperBound - lowerBound;
+            pageStep = upperBound - lowerBound;
             ticks = Rotary::StepTicks;
             snapToTicks = true;
         }

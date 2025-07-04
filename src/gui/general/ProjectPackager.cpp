@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ProjectPackager]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ProjectPackager.h"
 
@@ -61,7 +62,7 @@ ProjectPackager::ProjectPackager(QWidget *parent, RosegardenDocument *document, 
         m_abortText(tr("<p>Processing aborted</p>"))
 
 {
-RG_DEBUG << "ProjectPackager::ProjectPackager():  mode: " << mode << 
+RG_DEBUG << "ProjectPackager::ProjectPackager():  mode: " << mode <<
     " m_filename: " << m_filename;
 
     this->setModal(false);
@@ -90,7 +91,7 @@ RG_DEBUG << "ProjectPackager::ProjectPackager():  mode: " << mode <<
     layout->addWidget(m_progress, 1, 1);
 
     QPushButton *ok = new QPushButton(tr("Cancel"), this);
-    connect(ok, SIGNAL(clicked()), this, SLOT(reject()));
+    connect(ok, &QPushButton::clicked, this, &ProjectPackager::reject);
     layout->addWidget(ok, 3, 1);
 
     sanityCheck();
@@ -243,7 +244,7 @@ ProjectPackager::getAudioFiles()
             // some polite sanity checking to avoid possible crashes
             if (!file) continue;
 
-            list << file->getFilename();
+            list << file->getAbsoluteFilePath();
         }
     }
 
@@ -274,7 +275,8 @@ ProjectPackager::getAudioFiles()
 }
 
 QStringList
-ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const QString newPath)
+ProjectPackager::getPluginFilesAndRewriteXML(const QString& fileToModify,
+                                             const QString& newPath)
 {
     // yet another miserable wrinkle in this whole wretched thing: we
     // automatically ignore audio files not actually used by segments, but
@@ -328,7 +330,7 @@ ProjectPackager::getPluginFilesAndRewriteXML(const QString fileToModify, const Q
     //  <synth identifier="dssi:/usr/lib/dssi/fluidsynth-dssi.so:FluidSynth-DSSI" bypassed="false" >
     //       <configure key="__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey" value="/home/michael/rosegarden/"/>
     //       <configure key="load" value="/home/michael/data/soundfonts/PC51f.sf2"/>
-    //  </synth>    
+    //  </synth>
     QString pluginAudioPathKey("<configure key=\"__ROSEGARDEN__:__RESERVED__:ProjectDirectoryKey\" value=\"");
     QString pluginAudioDataKey("<configure key=\"load\" value=\"");
 
@@ -391,7 +393,7 @@ RG_DEBUG << "rewriting the path for a plugin data item...";
             int e = line.indexOf(valueTagEndKey);
 
             QString extract = line.mid(s, e - s);
-            
+
 RG_DEBUG << "extracted value string:  value=\"" << extract << "\"";
 
             // save the extracted path to the list of extra files (and this is
@@ -432,7 +434,7 @@ RG_DEBUG << "old line: " << line;
 
 RG_DEBUG << "new line: " << line;
 
-        } else if (line.contains(audioFileKey) && 
+        } else if (line.contains(audioFileKey) &&
                    m_mode == ProjectPackager::Pack) {
 
             // sigh... more and more brittle, on the pack, but only the PACK
@@ -447,9 +449,9 @@ RG_DEBUG << "new line: " << line;
             QStringList::const_iterator si;
             bool keep = false;
             QFileInfo fileInfo;
-                    
-            for (si = usedAudioFiles.constBegin(); 
-                 si != usedAudioFiles.constEnd(); 
+
+            for (si = usedAudioFiles.constBegin();
+                 si != usedAudioFiles.constEnd();
                  ++si) {
 
                 fileInfo.setFile(*si);
@@ -553,8 +555,9 @@ ProjectPackager::sanityCheck() {
         puke(tr("<qt><p>The <b>wvunpack</b> command was not found.</p><p>WavPack is an audio compression format used to reduce the size of Rosegarden project packages with no loss of audio quality.  Please install WavPack and try again.  This utility is typically available to most distros as part of a package called \"wavpack\".</p>"));
         return;
     }
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(runPackUnpack(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &ProjectPackager::runPackUnpack);
 }
 
 void
@@ -601,7 +604,7 @@ RG_DEBUG << "ProjectPackager::runPack()";
     QFileInfo fi(m_filename);
     m_packDataDirName = fi.baseName();
 
-RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" << 
+RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" <<
     m_packDataDirName;
 
     QDir tmpDir(m_packTmpDirName);
@@ -641,7 +644,7 @@ RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" <<
     int afStep = ((af == 0) ? 1 : (100 / af));
 
     // make the data subdir
-    tmpDir.mkdir(m_packDataDirName);    
+    tmpDir.mkdir(m_packDataDirName);
 
     // copy the audio files (do not remove the originals!)
     af = 0;
@@ -738,7 +741,7 @@ RG_DEBUG << "cp " << oldName << " " << newName;
         // the bare minimum requirements
         QStringList files =  FileDialog::getOpenFileNames(this, "Open File", directory, tr("All files") + " (*)", nullptr);
         extraFiles << files;
-       
+
         //!!!  It would be nice to show the list of files already chosen and
         // added, in some nice little accumulator list widget, but this would
         // require doing something more complicated than using QMessageBox
@@ -764,7 +767,7 @@ RG_DEBUG << "cp " << oldName << " " << newName;
     // (iterator previously declared)
     ef = 0;
     for (si = extraFiles.constBegin(); si != extraFiles.constEnd(); ++si) {
-    
+
         // each QStringList item from the FileDialog will include the full path
         QString srcFile = (*si);
 
@@ -812,7 +815,7 @@ ProjectPackager::startAudioEncoder(QStringList files)
         puke(tr("<qt><p>Unable to write to temporary backend processing script %1.</p>%2</qt>").arg(m_abortText));
         return;
     }
-    
+
     // build the script
     QTextStream out(&m_script);
     out << "# This script was generated by Rosegarden to combine multiple external processing"      << "\n"
@@ -849,8 +852,9 @@ ProjectPackager::startAudioEncoder(QStringList files)
     m_process = new QProcess;
     m_process->setWorkingDirectory(m_packTmpDirName);
     m_process->start("bash", QStringList() << scriptName);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(finishPack(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &ProjectPackager::finishPack);
 }
 
 void
@@ -866,7 +870,7 @@ RG_DEBUG << "ProjectPackager::finishPack - exit code: " << exitCode;
     }
 
     m_script.remove();
-    
+
     // remove the original file which is now safely in a package
     //
     // Well.  Oops.  No, m_filename is the .rgp version, so we need to remove
@@ -882,7 +886,6 @@ RG_DEBUG << "ProjectPackager::finishPack - exit code: " << exitCode;
 
     rmdirRecursive(m_packTmpDirName);
     accept();
-    exitCode++; // break point
 }
 
 
@@ -896,7 +899,7 @@ ProjectPackager::runUnpack()
 {
 
 RG_DEBUG << "ProjectPackager::runUnpack() - unpacking " << m_filename;
-    
+
     m_info->setText(tr("Unpacking project..."));
 
     // go into spinner mode, and we'll just leave it there for the duration of
@@ -1088,8 +1091,9 @@ RG_DEBUG << "flad -d " << o1 << " -o " << o2;
     // was apparently the reason why tar always failed to do anything
     m_process->setWorkingDirectory(dirname);
     m_process->start("bash", QStringList() << scriptName);
-    connect(m_process, SIGNAL(finished(int, QProcess::ExitStatus)),
-            this, SLOT(finishUnpack(int, QProcess::ExitStatus)));
+    connect(m_process, (void(QProcess::*)(int, QProcess::ExitStatus))
+                    &QProcess::finished,
+            this, &ProjectPackager::finishUnpack);
 
     // wait up to 30 seconds for process to start
     m_info->setText(tr("Decoding audio files..."));
@@ -1132,9 +1136,7 @@ RG_DEBUG << "ProjectPackager::finishUnpack - exit code: " << exitCode;
 
     m_script.remove();
     accept();
-    exitCode++; // break point
 }
 
 
 }
-

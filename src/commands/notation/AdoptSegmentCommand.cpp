@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,10 +25,13 @@
 
 #include <QString>
 
+
 namespace Rosegarden
 {
+
+
 AdoptSegmentCommand::
-AdoptSegmentCommand(QString name, // 
+AdoptSegmentCommand(const QString& name, //
 		    NotationView &view,
 		    Segment *segment,
 		    bool into,
@@ -43,12 +46,12 @@ AdoptSegmentCommand(QString name, //
   m_comp(nullptr)
 {
     RG_DEBUG << "ctor 1" << getName();
-    QObject::connect(&view, SIGNAL(destroyed()),
-                     this, SLOT(slotViewdestroyed()));
+    connect(&view, &NotationView::destroyed,
+            this, &AdoptSegmentCommand::slotViewdestroyed);
 }
 
 AdoptSegmentCommand::
-AdoptSegmentCommand(QString name,
+AdoptSegmentCommand(const QString& name,
                     NotationView &view,
                     const QString& segmentMarking,
                     Composition* comp,
@@ -65,10 +68,10 @@ AdoptSegmentCommand(QString name,
   m_comp(comp)
 {
     RG_DEBUG << "ctor 2" << getName();
-    QObject::connect(&view, SIGNAL(destroyed()),
-                     this, SLOT(slotViewdestroyed()));
+    connect(&view, &NotationView::destroyed,
+            this, &AdoptSegmentCommand::slotViewdestroyed);
 }
-  
+
 AdoptSegmentCommand::
 ~AdoptSegmentCommand()
 {
@@ -77,6 +80,7 @@ AdoptSegmentCommand::
         delete m_segment;
     }
 }
+
 void
 AdoptSegmentCommand::slotViewdestroyed()
 {
@@ -91,7 +95,7 @@ AdoptSegmentCommand::execute()
     if (m_into) { adopt(); }
     else { unadopt(); }
 }
-  
+
 void
 AdoptSegmentCommand::unexecute()
 {
@@ -99,7 +103,7 @@ AdoptSegmentCommand::unexecute()
     if (m_into) { unadopt(); }
     else { adopt(); }
 }
-  
+
 void
 AdoptSegmentCommand::adopt()
 {

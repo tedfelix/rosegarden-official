@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -110,10 +110,9 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
         // Displaced Y will only be used for certain events -- in
         // particular not for notes, whose y-coord is obviously kind
         // of meaningful.
-        double displacedY = 0.0;
         long dyRaw = 0;
         el->event()->get<Int>(DISPLACED_Y, dyRaw);
-        displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
+        double displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
         el->setLayoutY(staff.getLayoutYForHeight( -9) + displacedY);
 
@@ -255,7 +254,7 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
                 const double eps = 0.001;
                 Event *eel = el->event();
                 double y = el->getLayoutY();
-                if (eel->has("pitch")) {
+                if (eel->has(BaseProperties::PITCH)) {
                     el->setIsColliding(fabs(y - y0) < eps);
                     y0 = y;
                 }
@@ -466,9 +465,10 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     NotationElementList::iterator scooter = i;
 
     timeT slurDuration = (*i)->event()->getDuration();
-    if (slurDuration == 0 && (*i)->event()->has("indicationduration")) {
+    PropertyName IndicationDurationPropertyName("indicationduration");
+    if (slurDuration == 0 && (*i)->event()->has(IndicationDurationPropertyName)) {
         slurDuration = (*i)->event()->get
-                       <Int>("indicationduration"); // obs property
+                       <Int>(IndicationDurationPropertyName);  // obsolete property
     }
     timeT endTime = (*i)->getViewAbsoluteTime() + slurDuration;
 
@@ -504,8 +504,8 @@ NotationVLayout::positionSlur(NotationStaff &staff,
             long h = 0;
             if (!event->get<Int>(m_properties.HEIGHT_ON_STAFF, h)) {
 				QMessageBox::warning
-					( dynamic_cast<QWidget *>(parent()), 
-					"", 
+					( dynamic_cast<QWidget *>(parent()),
+					"",
 	 				tr("Spanned note at %1 has no HEIGHT_ON_STAFF property!\nThis is a bug (the program would previously have crashed by now)").arg((*scooter)->getViewAbsoluteTime())
 					);
                 RG_WARNING << event;
@@ -606,7 +606,7 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     bool above = true;
 
     if ((*i)->event()->has(NotationProperties::SLUR_ABOVE) &&
-            (*i)->event()->isPersistent<Bool>(NotationProperties::SLUR_ABOVE)) {
+            (*i)->event()->isPersistent(NotationProperties::SLUR_ABOVE)) {
 
         (*i)->event()->get
         <Bool>(NotationProperties::SLUR_ABOVE, above);
@@ -731,15 +731,13 @@ NotationVLayout::positionSlur(NotationStaff &staff,
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_Y_DELTA, dy);
     (*i)->event()->setMaybe<Int>(m_properties.SLUR_LENGTH, length);
 
-    double displacedX = 0.0, displacedY = 0.0;
-
     long dxRaw = 0;
     (*i)->event()->get<Int>(DISPLACED_X, dxRaw);
-    displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
+    double displacedX = double(dxRaw * m_npf->getNoteBodyWidth()) / 1000.0;
 
     long dyRaw = 0;
     (*i)->event()->get<Int>(DISPLACED_Y, dyRaw);
-    displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
+    double displacedY = double(dyRaw * m_npf->getLineSpacing()) / 1000.0;
 
     (*i)->setLayoutX(startX + displacedX);
     (*i)->setLayoutY(y0 + displacedY);

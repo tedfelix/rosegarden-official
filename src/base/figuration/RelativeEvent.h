@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2012 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -22,7 +22,7 @@ namespace Rosegarden
 {
   class Event;
   class FigChord;
-  
+
 /// @class RelativeEvent
 /// Class to describe a relative event
 /// @author Tom Breton (Tehom)
@@ -36,11 +36,11 @@ public:
   {};
   virtual ~RelativeEvent() {}
 
-  virtual Event   *getAsEvent(timeT baseTime, const Key key,
+  virtual Event   *getAsEvent(timeT baseTime, const Key& key,
 			      const FigChord *notes)=0;
   void setScore(int score) { m_score = score; };
-  int getScore() { return m_score; };
-  timeT            getAbsoluteTime(timeT baseTime)
+  int getScore() const { return m_score; };
+  timeT            getAbsoluteTime(timeT baseTime) const
   { return m_relativeTime + baseTime; };
 protected:
   int              m_score;

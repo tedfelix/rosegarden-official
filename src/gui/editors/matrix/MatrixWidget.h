@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,16 +18,12 @@
 #ifndef RG_MATRIX_WIDGET_H
 #define RG_MATRIX_WIDGET_H
 
-#include "base/Event.h"             // for timeT
-#include "MatrixTool.h"
-#include "base/MidiTypes.h"         // for MidiByte
+#include "base/TimeT.h"
+#include "base/MidiTypes.h"  // for MidiByte
 #include "gui/general/AutoScroller.h"
 #include "gui/general/SelectionManager.h"
 
-#include <vector>
-
 #include <QSharedPointer>
-#include <QTimer>
 #include <QWidget>
 
 class QGraphicsScene;
@@ -35,12 +31,17 @@ class QGridLayout;
 class QLabel;
 class QPushButton;
 
+#include <vector>
+
+
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class Segment;
 class MatrixScene;
+class MatrixTool;
 class MatrixToolBox;
 class MatrixMouseEvent;
 class SnapGrid;
@@ -72,7 +73,8 @@ class Thumbwheel;
  *   - The tempo ruler
  *   - The top standard ruler
  *   - The pitch ruler, m_pianoView (to the left of the matrix)
- *   - The matrix itself, m_view and m_scene
+ *   - The matrix itself, m_view (Panned/QGraphicsView) and m_scene
+ *         (MatrixScene)
  *   - The bottom standard ruler, m_bottomStandardRuler
  *   - The controls widget, m_controlsWidget (optional)
  *   - The Segment label, m_segmentLabel
@@ -88,7 +90,7 @@ class MatrixWidget : public QWidget,
     Q_OBJECT
 
 public:
-    MatrixWidget(bool drumMode);
+    explicit MatrixWidget(bool drumMode);
     virtual ~MatrixWidget() override;
 
     Device *getCurrentDevice();
@@ -143,7 +145,7 @@ public:
 
     // Tools
 
-    MatrixToolBox *getToolBox() { return m_toolBox; }
+    QSharedPointer<MatrixToolBox> getToolBox()  { return m_toolBox; }
 
     /// Used by the tools to set an appropriate mouse cursor.
     void setCanvasCursor(QCursor cursor);
@@ -182,8 +184,15 @@ public:
     void showVelocityRuler();
     /// View > Rulers > Show Pitch Bend Ruler
     void showPitchBendRuler();
+    /// View > Rulers > Show Channel Pressure Ruler
+    void showChannelPressureRuler();
+    /// View > Rulers > Show Key Pressure Ruler
+    void showKeyPressureRuler();
     /// View > Rulers > Add Control Ruler
     void addControlRuler(QAction *);
+
+    void getZoomFactors(double& horizontalZoomFactor,
+                        double& verticalZoomFactor) const;
 
 signals:
     void toolChanged(QString);
@@ -208,6 +217,12 @@ signals:
      * Connected to MatrixView::slotUpdateMenuStates().
      */
     void rulerSelectionChanged();
+    /// Special case for velocity ruler.
+    /**
+     * See the emitter, ControlRuler::updateSelection(), for details.
+     */
+    void rulerSelectionUpdate();
+
 
     void showContextHelp(const QString &);
 
@@ -342,6 +357,9 @@ private:
     void zoomInFromPanner();
     void zoomOutFromPanner();
 
+    void keyPressEvent(QKeyEvent *e) override;
+    void keyReleaseEvent(QKeyEvent *e) override;
+
     QWidget *m_changerWidget;
     Thumbwheel *m_segmentChanger;
     int m_lastSegmentChangerValue;
@@ -370,6 +388,9 @@ private:
      * the PitchRuler.
      */
     bool m_drumMode;
+    // For determining if pitch ruler needs to be regenerated when
+    // changing segments.
+    enum class PrevPitchRulerType {NONE, PIANO, PERCUSSION} m_prevPitchRulerType;
 
     /// First note selected when doing a run up/down the keyboard.
     /**
@@ -391,7 +412,7 @@ private:
 
     // Tools
 
-    MatrixToolBox *m_toolBox; // I own this
+    QSharedPointer<MatrixToolBox> m_toolBox;
     MatrixTool *m_currentTool; // Toolbox owns this
     void setTool(QString name);
     /// Used by the MatrixMover and MatrixPainter tools for preview notes.

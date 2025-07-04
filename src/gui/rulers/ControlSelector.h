@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,19 +19,21 @@
 #define RG_CONTROLSELECTOR_H
 
 #include "ControlMover.h"
-//#include <QString>
-//#include "base/Event.h"
 #include "ControlItem.h"
 
+#include <QString>
 
 class QRectF;
 class QPoint;
 
+
 namespace Rosegarden
 {
 
+
 class Event;
 class ControlRuler;
+
 
 class ControlSelector : public ControlMover
 {
@@ -60,8 +62,6 @@ protected slots:
 
 protected:
     ControlSelector(ControlRuler *);
-    QRectF *m_selectionRect;
-    ControlItemList m_addedItems;
 };
 
 }

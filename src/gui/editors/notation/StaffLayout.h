@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,18 +18,22 @@
 #ifndef RG_STAFFLAYOUT_H
 #define RG_STAFFLAYOUT_H
 
-#include "base/Event.h"
+#include "base/TimeT.h"
 #include "base/ViewElement.h"
+
 #include <QRect>
+
+class QGraphicsScene;
+class QGraphicsItem;
+
+#include <set>
 #include <utility>
 #include <vector>
 
-class QGraphicsScene;
-class QGraphicsLineItem;
-class QGraphicsItem;
 
 namespace Rosegarden
 {
+
 
 class BarLineItem;
 class TimeSignature;
@@ -75,7 +79,7 @@ protected:
     /**
      * Create a new StaffLayout for the given ViewSegment, with a
      * linear layout.
-     * 
+     *
      * \a id is an arbitrary id for the staff in its view,
      *    not used within the StaffLayout implementation but
      *    queryable via getId
@@ -92,7 +96,7 @@ protected:
     /**
      * Create a new StaffLayout for the given ViewSegment, with a
      * page layout.
-     * 
+     *
      * \a id is an arbitrary id for the staff in its view,
      *    not used within the StaffLayout implementation but
      *    queryable via getId
@@ -271,8 +275,8 @@ public:
      * be called before the sizeStaff/positionElements procedure
      * begins.
      */
-    virtual void setMargin(double m);
-    
+    virtual void setMargin(double margin);
+
     /**
      * Get the scene width of the left and right margins.
      */
@@ -283,13 +287,13 @@ public:
      * reserved for the composition title and composer's name (used
      * only in MultiPageMode).
      */
-    virtual void setTitleHeight(int h);
+    virtual void setTitleHeight(int titleHeight);
 
     /**
      * Get the scene height of the title area.
      */
-    virtual int getTitleHeight() const;
-    
+    // unused virtual int getTitleHeight() const;
+
     /**
      * Returns the width of the entire staff after layout.  Call
      * this only after you've done the full sizeStaff/positionElements
@@ -326,13 +330,13 @@ public:
      * Returns the total height of a single staff row, including ruler
      */
     virtual int getHeightOfRow() const;
-    
+
     /**
      * Returns true if the given scene coordinates fall within
      * (any of the rows of) this staff.  False if they fall in the
      * gap between two rows.
      */
-    virtual bool containsSceneCoords(double sceneX, int sceneY) const; 
+    virtual bool containsSceneCoords(double sceneX, int sceneY) const;
 
     /**
      * Returns the scene y coordinate of the specified line on the
@@ -370,14 +374,12 @@ public:
     virtual QRect getBarExtents(double x, int y) const;
 
     /**
-     * Set whether this is the current staff or not.  A staff that is
-     * current will differ visually from non-current staffs.
-     * 
-     * The owner of the staffs should normally ensure that one staff
-     * is current (the default is non-current, even if there only is
-     * one staff) and that only one staff is current at once.
+     * Set whether this staff is highlighted or not.  A staff that is
+     * highlighted will differ visually from non-highlighted staffs.
+     *
+     * The owner of the staffs is responsible for the highlighting.
      */
-    virtual void setCurrent(bool current);
+    virtual void setHighlight(bool highlight);
 
     /**
      * Query the given horizontal layout object (which is assumed to
@@ -386,7 +388,7 @@ public:
      * and create the bars and staff lines accordingly.  It may be
      * called either before or after renderElements and/or
      * positionElements.
-     * 
+     *
      * No bars or staff lines will appear unless this method has
      * been called.
      */
@@ -416,13 +418,13 @@ public:
      */
     virtual void positionElements(timeT from,
                                   timeT to) = 0;
- 
+
     /* Some optional methods for the subclass. */
 
     /**
      * Return an iterator pointing to the nearest view element to the
      * given scene coordinates.
-     * 
+     *
      * If notesAndRestsOnly is true, do not return any view element
      * other than a note or rest.
      *
@@ -437,7 +439,7 @@ public:
      */
 /*
     virtual ViewElementList::iterator getClosestElementToSceneCoords
-    (double x, int y, 
+    (double x, int y,
      Event *&clef, Event *&key,
      bool notesAndRestsOnly = false, int proximityThreshold = 10) {
         StaffLayoutCoords layoutCoords = getLayoutCoordsForSceneCoords(x, y);
@@ -449,7 +451,7 @@ public:
     /**
      * Return an iterator pointing to the nearest view element to the
      * given layout x-coordinate.
-     * 
+     *
      * If notesAndRestsOnly is true, do not return any view element
      * other than a note or rest.
      *
@@ -504,7 +506,7 @@ public:
      * Return the smaller rectangle (in scene coords) enclosing the
      * whole segment area.
      */
-    virtual QRectF getSceneArea();
+    // unused virtual QRectF getSceneArea();
 
 public:
     // This should not really be public -- it should be one of the
@@ -534,7 +536,7 @@ public:
     // it and hasn't been supplied with a proper way to do without.
     // Please try to avoid calling this method.
     //!!! fix NotationView::print etc
-    int getRowSpacing() { return m_rowSpacing; }
+    int getRowSpacing() const { return m_rowSpacing; }
 
 protected:
     // Methods that the subclass may (indeed, should) use to convert
@@ -621,8 +623,6 @@ protected:
 
 protected:
 
-    //--------------- Data members ---------------------------------
-
     QGraphicsScene *m_scene;
     ViewSegment *m_viewSegment;
     SnapGrid *m_snapGrid;
@@ -635,7 +635,7 @@ protected:
     int      m_titleHeight;
     int      m_resolution;
     int      m_lineThickness;
-    
+
     PageMode m_pageMode;
     double   m_pageWidth;
     int      m_rowsPerPage;
@@ -645,7 +645,7 @@ protected:
     double   m_startLayoutX;
     double   m_endLayoutX;
 
-    bool     m_current;
+    bool     m_highlight;
 
     typedef std::vector<QGraphicsItem *> ItemList;
     typedef std::vector<ItemList> ItemMatrix;
@@ -662,7 +662,7 @@ protected:
     typedef std::vector<LineRec> LineRecList;
     typedef std::multiset<BarLineItem *, BarLineComparator> BarLineList;
     static bool compareBars(const BarLineItem *, const BarLineItem *);
-    static bool compareBarToLayoutX(const BarLineItem *, int);
+    // unused static bool compareBarToLayoutX(const BarLineItem *, int);
     BarLineList m_barLines;
     LineRecList m_beatLines;
     LineRecList m_barConnectingLines;

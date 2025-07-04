@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -19,16 +19,17 @@
 #ifndef RG_SEGMENTSPLITCOMMAND_H
 #define RG_SEGMENTSPLITCOMMAND_H
 
-#include <string>
 #include "document/Command.h"
-#include "base/Event.h"
+#include "base/TimeT.h"
 
 #include <QCoreApplication>
 
 #include <vector>
 
+
 namespace Rosegarden
 {
+
 
 class Segment;
 
@@ -46,23 +47,23 @@ public:
                         bool keepLabel = false);
     ~SegmentSplitCommand() override;
 
-    bool isValid() { return isValid(m_segment, m_splitTime); }
-    bool isValid(Segment * segment, timeT splitTime);
+    bool isValid()  { return isValid(m_segment, m_splitTime); }
+    static bool isValid(Segment *segment, timeT splitTime);
 
     void execute() override;
     void unexecute() override;
 
     static SegmentVec getNewSegments(Segment *segment, timeT splitTime,
 				     bool keepLabel);
-    Segment *getSegmentA() { return m_newSegmentA; }
-    Segment *getSegmentB() { return m_newSegmentB; }
+    Segment *getSegmentA()  { return m_newSegmentA; }
+    Segment *getSegmentB()  { return m_newSegmentB; }
 
 private:
     Segment *m_segment;
     Segment *m_newSegmentA;
     Segment *m_newSegmentB;
     timeT m_splitTime;
-    bool m_detached;
+    bool m_newIsDetached;
     bool m_keepLabel;
     bool m_wasSelected;
 };

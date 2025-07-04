@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -18,20 +18,21 @@
 #ifndef RG_NOTATIONHLAYOUT_H
 #define RG_NOTATIONHLAYOUT_H
 
-#include "base/LayoutEngine.h"
-#include "base/NotationTypes.h"
 #include "NotationElement.h"
+
+#include "base/LayoutEngine.h"
+#include "base/TimeT.h"
+
 #include <map>
+#include <string>
 #include <vector>
-#include "base/Event.h"
 
-
-class TieMap;
 class QObject;
 
 
 namespace Rosegarden
 {
+
 
 class ViewElement;
 class ViewSegment;
@@ -39,7 +40,6 @@ class Quantizer;
 class NotePixmapFactory;
 class NotationProperties;
 class NotationGroup;
-class NotationChord;
 class Key;
 class Composition;
 class Clef;
@@ -149,7 +149,7 @@ public:
      * property of the returned list is that 0, 100, and whatever the
      * default proportion is will be in it.
      */
-    static std::vector<int> getAvailableProportions();
+    // unused static std::vector<int> getAvailableProportions();
 
     /**
      * Returns the total length of all elements once layout is done
@@ -284,7 +284,7 @@ protected:
         } layoutData;
 
         BarData(NotationElementList::iterator i,
-                bool correct, TimeSignature timeSig, bool newTimeSig) {
+                bool correct, const TimeSignature& timeSig, bool newTimeSig) {
             basicData.start = i;
             basicData.correct = correct;
             basicData.timeSignature = timeSig;
@@ -303,7 +303,7 @@ protected:
         }
 
         /// YG: Only for debug
-        void dump(std::string indent);
+        void dump(const std::string& indent);
     };
 
     typedef std::map<int, BarData> BarDataList;
@@ -320,23 +320,25 @@ protected:
      */
     struct TrackTimeSig
     {
-        TrackId trackId;
-        TimeSignature timeSignature;
-
         TrackTimeSig(const TrackId & track,
-                     const TimeSignature & timeSig) {
-          trackId = track;
-          timeSignature = timeSig;
+                     const TimeSignature & timeSig) :
+            trackId(track),
+            timeSignature(timeSig)
+        {
         }
 
         bool operator<(const TrackTimeSig &tts) const {
-            // We need this operator to use TrackTimeSig as key of a map.
+            // We need this operator to use TrackTimeSig as key of a std::map.
             if (trackId == tts.trackId) {
                 return timeSignature < tts.timeSignature;
             } else {
                 return trackId < tts.trackId;
             }
         }
+
+        TrackId trackId;
+        TimeSignature timeSignature;
+
     };
 
 
@@ -350,7 +352,7 @@ protected:
      */
     void setBarBasicData(ViewSegment &staff, int barNo,
                          NotationElementList::iterator start, bool correct,
-                         TimeSignature timeSig, bool newTimeSig,
+                         const TimeSignature& timeSig, bool newTimeSig,
                          timeT segDelay, TrackId trackId);
 
     /**
@@ -366,7 +368,7 @@ protected:
      * staff has been preparsed since the last reset
      */
     BarDataList& getBarData(ViewSegment &staff);
-    const BarDataList& getBarData(ViewSegment &staff) const;
+    const BarDataList& getBarDataConst(ViewSegment &staff) const;
 
     /// Find the staff in which bar "barNo" is widest
     ViewSegment *getViewSegmentWithWidestBar(int barNo);
@@ -389,15 +391,19 @@ protected:
                 bool full);
 
     /// Find earliest element with quantized time of t or greater
-    NotationElementList::iterator getStartOfQuantizedSlice
-    (NotationElementList *, timeT t) const;
+    static NotationElementList::iterator getStartOfQuantizedSlice(
+            NotationElementList *, timeT t);
 
-    void scanChord
-    (NotationElementList *notes, NotationElementList::iterator &i,
-     const Clef &, const ::Rosegarden::Key &,
-     AccidentalTable &, float &lyricWidth,
-     ChunkList &chunks, NotePixmapFactory *, int ottavaShift,
-     NotationElementList::iterator &to);
+    void scanChord(NotationElementList *notes,
+                   NotationElementList::iterator &i,
+                   const Clef &,
+                   const Key &,
+                   AccidentalTable &,
+                   float &lyricWidth,
+                   ChunkList &chunks,
+                   NotePixmapFactory *,
+                   int ottavaShift,
+                   NotationElementList::iterator &to);
 
     typedef std::map<int, NotationElementList::iterator> TieMap;
 
@@ -405,22 +411,25 @@ protected:
     // moving it on to the last note in the chord; updates the TieMap;
     // and may modify the to-iterator if it turns out to point at a
     // note within the chord
-    void positionChord
-    (ViewSegment &staff,
-     NotationElementList::iterator &, const Clef &clef,
-     const ::Rosegarden::Key &key, TieMap &, NotationElementList::iterator &to);
+    void positionChord(ViewSegment &staff,
+                       NotationElementList::iterator &,
+                       const Clef &clef,
+                       const ::Rosegarden::Key &key,
+                       TieMap &,
+                       NotationElementList::iterator &to);
 
-    void sampleGroupElement
-    (ViewSegment &staff, const Clef &clef,
-     const ::Rosegarden::Key &key, const NotationElementList::iterator &);
+    void sampleGroupElement(ViewSegment &staff,
+                            const Clef &clef,
+                            const ::Rosegarden::Key &key,
+                            const NotationElementList::iterator &);
 
     /// Difference between absolute time of next event and of this
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationElementList::iterator &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationElementList::iterator &);
 
     /// Difference between absolute time of chord and of first event not in it
-    timeT getSpacingDuration
-    (ViewSegment &staff, const NotationChord &);
+    // unused timeT getSpacingDuration
+    //(ViewSegment &staff, const NotationChord &);
 
     float getLayoutWidth(ViewElement &,
                          NotePixmapFactory *,

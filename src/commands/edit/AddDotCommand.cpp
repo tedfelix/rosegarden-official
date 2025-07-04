@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -85,13 +85,13 @@ AddDotCommand::modifySegment()
         }
     }
 
-    for (EventVec::iterator i = toErase.begin(); i != toErase.end(); ++i) {
-        m_selection->getSegment().eraseSingle(*i);
+    for (EventVec::iterator it = toErase.begin(); it != toErase.end(); ++it) {
+        m_selection->getSegment().eraseSingle(*it);
     }
 
-    for (EventVec::iterator i = toInsert.begin(); i != toInsert.end(); ++i) {
+    for (EventVec::iterator it = toInsert.begin(); it != toInsert.end(); ++it) {
         Segment::iterator note =
-            m_selection->getSegment().insert(*i);
+            m_selection->getSegment().insert(*it);
         // segmentNotationHelper sometimes erases the event and makes
         // new ones.  actualEvent is always the first event timewise,
         // though it may be followed by tied notes.
@@ -102,7 +102,7 @@ AddDotCommand::modifySegment()
 
     // extend endTime to end of the bar to sort out the rests after
     // dot reduction
-    Composition* comp = m_selection->getSegment().getComposition();
+    const Composition* comp = m_selection->getSegment().getComposition();
     int barNo = comp->getBarNumber(endTime);
     timeT endBarTime = comp->getBarEnd(barNo);
     m_selection->getSegment().normalizeRests(getStartTime(), endBarTime);

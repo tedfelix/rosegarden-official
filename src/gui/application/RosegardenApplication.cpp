@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,21 +20,6 @@
 #include "RosegardenApplication.h"
 
 #include "misc/Debug.h"
-#include "misc/ConfigGroups.h"
-#include "document/RosegardenDocument.h"
-#include "gui/widgets/TmpStatusMsg.h"
-#include "RosegardenMainWindow.h"
-
-#include <QMainWindow>
-#include <QStatusBar>
-#include <QMessageBox>
-#include <QProcess>
-#include <QByteArray>
-#include <QEventLoop>
-#include <QSessionManager>
-#include <QString>
-#include <QSettings>
-
 
 using namespace Rosegarden;
 

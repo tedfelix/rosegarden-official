@@ -1,10 +1,9 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,38 +20,40 @@
 
 #include "document/Command.h"
 #include "base/Selection.h"
+
 #include <QString>
+
 #include <vector>
-#include <QCoreApplication>
 
 
 namespace Rosegarden
 {
 
-class Segment;
 
+class Segment;
 
 class SegmentJoinCommand : public NamedCommand
 {
-    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand)
+    Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentJoinCommand);
 
 public:
-    typedef std::vector<Segment *> SegmentVec;
-    SegmentJoinCommand(SegmentSelection &segments);
+    explicit SegmentJoinCommand(SegmentSelection &segments);
     ~SegmentJoinCommand() override;
+
+    static QString getGlobalName() { return tr("&Join"); }
 
     void execute() override;
     void unexecute() override;
+
+    typedef std::vector<Segment *> SegmentVec;
     static Segment *makeSegment(SegmentVec oldSegments);
 
-    static QString getGlobalName() { return tr("&Join"); }
-    
 private:
     SegmentVec m_oldSegments;
     Segment *m_newSegment;
-    bool m_detached;
-};
 
+    bool m_oldIsDetached;
+};
 
 
 }

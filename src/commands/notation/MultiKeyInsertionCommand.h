@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -20,21 +20,19 @@
 #define RG_MULTIKEYINSERTIONCOMMAND_H
 
 #include "base/NotationTypes.h"
-#include <QString>
-#include "base/Event.h"
-#include <QCoreApplication>
+#include "base/TimeT.h"
 #include "misc/Strings.h"
 #include "document/Command.h"
 #include "document/RosegardenDocument.h"
 
-
-class Add;
+#include <QCoreApplication>
+#include <QString>
 
 
 namespace Rosegarden
 {
 
-//class Composition;
+
 class RosegardenDocument;
 
 
@@ -43,17 +41,17 @@ class MultiKeyInsertionCommand : public MacroCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::MultiKeyInsertionCommand)
 
 public:
-    
+
     MultiKeyInsertionCommand(RosegardenDocument *doc,
                              timeT time,
-                             Key key,
+                             const Key& key,
                              bool shouldConvert,
                              bool shouldTranspose,
                              bool shouldTransposeKey,
-			     bool shouldIgnorePercussion); 
+			     bool shouldIgnorePercussion);
     ~MultiKeyInsertionCommand() override;
 
-    static QString getGlobalName(Key *key = nullptr) {
+    static QString getGlobalName(const Key *key = nullptr) {
         if (key) {
             return tr("Change all to &Key %1...").arg(strtoqstr(key->getName()));
         } else {

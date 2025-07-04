@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2008 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -15,30 +15,31 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[MatrixVelocity]"
 
 #include "MatrixVelocity.h"
 
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-#include "document/CommandHistory.h"
-#include "commands/edit/ChangeVelocityCommand.h"
 #include "MatrixElement.h"
 #include "MatrixViewSegment.h"
 #include "MatrixMouseEvent.h"
 #include "MatrixTool.h"
 #include "MatrixScene.h"
 #include "MatrixWidget.h"
+
+#include "base/BaseProperties.h"
+#include "base/Selection.h"
+#include "base/ViewElement.h"
+#include "document/CommandHistory.h"
+#include "commands/edit/ChangeVelocityCommand.h"
 #include "misc/Debug.h"
 #include "gui/rulers/ControlItem.h"
 #include "gui/rulers/ControlRulerWidget.h"
 #include "gui/rulers/PropertyControlRuler.h"
 
+
 namespace Rosegarden
 {
+
 
 MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     MatrixTool("matrixvelocity.rc", "MatrixVelocity", widget),
@@ -51,11 +52,11 @@ MatrixVelocity::MatrixVelocity(MatrixWidget *widget) :
     m_currentViewSegment(nullptr),
     m_start(false)
 {
-    createAction("select", SLOT(slotSelectSelected()));
-    createAction("draw", SLOT(slotDrawSelected()));
-    createAction("erase", SLOT(slotEraseSelected()));
-    createAction("move", SLOT(slotMoveSelected()));
-    createAction("resize", SLOT(slotResizeSelected()));
+    createAction("select", &MatrixVelocity::slotSelectSelected);
+    createAction("draw", &MatrixVelocity::slotDrawSelected);
+    createAction("erase", &MatrixVelocity::slotEraseSelected);
+    createAction("move", &MatrixVelocity::slotMoveSelected);
+    createAction("resize", &MatrixVelocity::slotResizeSelected);
 
     createMenu();
 }
@@ -77,6 +78,13 @@ void
 MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
 {
     if (!e->element) return;
+
+    if (e->element->getSegment() !=
+        e->element->getScene()->getCurrentSegment()) {
+        RG_DEBUG << "handleLeftButtonPress(): Will only adjust velocity "
+                    "of notes in active segment.";
+        return;
+    }
 
     // Mouse position is no more related to pitch
     m_widget->showHighlight(false);
@@ -142,13 +150,13 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
 
     m_velocityDelta = 128 * m_velocityScale;
 
-	// Preview calculated velocity info on element
-	// Dupe from MatrixMover
+        // Preview calculated velocity info on element
+        // Dupe from MatrixMover
     EventSelection* selection = m_scene->getSelection();
 
 
     // Is a velocity ruler visible ?
-    ControlRulerWidget * controlRulerWidget =
+    ControlRulerWidget *controlRulerWidget =
             m_scene->getMatrixWidget()->getControlsWidget();
 
     // Assuming velocity is the only one property ruler
@@ -201,20 +209,20 @@ MatrixVelocity::handleMouseMove(const MatrixMouseEvent *e)
     }
 
 
-	/** Might be something for the feature
-	EventSelection* selection = m_mParentView->getCurrentSelection();
-	EventContainer::iterator it = selection->getSegmentEvents().begin();
-	MatrixElement *element = 0;
-	for (; it != selection->getSegmentEvents().end(); it++) {
-	    element = m_currentViewSegment->getElement(*it);
-	    if (element) {
-		// Somehow show the calculated velocity for each selected element
-		// char label[16];
-		// sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
-		// element->label(label) /// DOES NOT EXISTS
-	    }
-	}
-	*/
+        /** Might be something for the feature
+        EventSelection* selection = m_mParentView->getCurrentSelection();
+        EventContainer::iterator it = selection->getSegmentEvents().begin();
+        MatrixElement *element = 0;
+        for (; it != selection->getSegmentEvents().end(); it++) {
+            element = m_currentViewSegment->getElement(*it);
+            if (element) {
+                // Somehow show the calculated velocity for each selected element
+                // char label[16];
+                // sprintf(label,"%d",(*it->getVelocity())*m_velocityScale);
+                // element->label(label) /// DOES NOT EXISTS
+            }
+        }
+        */
 
     // Preview velocity delta in contexthelp
     if (minVelocity == maxVelocity) {

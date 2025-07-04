@@ -4,7 +4,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -21,16 +21,16 @@
 
 #include "document/BasicCommand.h"
 #include "base/Selection.h"
-#include <map>
-#include <QString>
-#include "base/Event.h"
+
 #include <QCoreApplication>
+#include <QString>
 
-
+#include <map>
 
 
 namespace Rosegarden
 {
+
 
 class Segment;
 class Clipboard;
@@ -59,7 +59,7 @@ public:
      * the events to be pasted.
      */
     PasteEventsCommand(Segment &segment,
-                       Clipboard *clipboard,
+                       const Clipboard *clipboard,
                        timeT pasteTime,
                        PasteType pasteType);
 
@@ -68,7 +68,7 @@ public:
      * the events to be pasted. Identify the segment by marking
      */
     PasteEventsCommand(const QString& marking,
-                       Clipboard *clipboard,
+                       const Clipboard *clipboard,
                        timeT pasteTime,
                        PasteType pasteType);
 
@@ -81,11 +81,11 @@ public:
      * latest time in the destination segment that may be modified
      * by the paste.
      */
-    PasteEventsCommand(Segment &segment,
-                       Clipboard *clipboard,
-                       timeT pasteTime,
-                       timeT pasteEndTime,
-                       PasteType pasteType);
+  PasteEventsCommand(Segment &segment,
+                     const Clipboard *clipboard,
+                     timeT pasteTime,
+                     timeT pasteEndTime,
+                     PasteType pasteType);
 
     ~PasteEventsCommand() override;
 
@@ -99,8 +99,8 @@ public:
 protected:
     void modifySegment() override;
     timeT getEffectiveEndTime(Segment &,
-                                          Clipboard *,
-                                          timeT);
+                              const Clipboard *,
+                              timeT) const;
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;

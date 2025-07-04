@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[Panned]"
+#define RG_NO_DEBUG_PRINT 1
 
 #include "Panned.h"
 
@@ -95,6 +96,7 @@ Panned::scrollContentsBy(int dx, int dy)
 #endif
 
 void
+// cppcheck-suppress unusedFunction
 Panned::drawForeground(QPainter *paint, const QRectF &)
 {
     Profiler profiler("Panned::drawForeground");
@@ -115,6 +117,12 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
     }
 
     // Draw the Playback Position Pointer
+
+    // ??? Why is the "pointer" drawn in drawForeground, after these complex
+    //     manual updates, instead of making the pointer a graphics item and
+    //     letting QGraphicsScene/QGraphicsView take care of updating correctly
+    //     for that item?  -- David Faure on the dev mailing list.
+    //     https://sourceforge.net/p/rosegarden/mailman/message/37663494/
 
     if (!m_pointerVisible)
         return;
@@ -140,6 +148,8 @@ Panned::drawForeground(QPainter *paint, const QRectF &)
 void
 Panned::slotSetViewport(QRectF viewportScene)
 {
+    RG_DEBUG << "slotSetViewport" << viewportScene << viewportScene.center() <<
+        m_viewportScene;
     // ??? We're just centering.  That explains why zoom has to travel by
     //     a different path (zoomIn() and zoomOut() signals).
     centerOn(viewportScene.center());

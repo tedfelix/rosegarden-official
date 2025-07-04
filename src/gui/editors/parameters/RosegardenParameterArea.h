@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file Copyright 2006 Martin Shepherd <mcs@astro.caltech.edu>.
 
@@ -45,7 +45,7 @@ public:
 
     // Create the parameter display area.
 
-    RosegardenParameterArea(QWidget *parent = nullptr);
+    explicit RosegardenParameterArea(QWidget *parent = nullptr);
 
     // Add a rosegarden parameter box to the list that are to be displayed.
 

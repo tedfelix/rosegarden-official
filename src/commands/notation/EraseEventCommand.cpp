@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -135,18 +135,21 @@ EraseEventCommand::modifySegment()
             Indication indication(*m_event);
             if (indication.isOttavaType()) {
 
-                for (Segment::iterator i = getSegment().findTime
-                                           (m_event->getAbsoluteTime());
-                        i != getSegment().findTime
+                for (Segment::iterator i1 = getSegment().findTime
+                         (m_event->getAbsoluteTime());
+                        i1 != getSegment().findTime
                         (m_event->getAbsoluteTime() + indication.getIndicationDuration());
-                        ++i) {
-                    (*i)->unset(NotationProperties::OTTAVA_SHIFT);
+                        ++i1) {
+                    (*i1)->unset(NotationProperties::OTTAVA_SHIFT);
                 }
             }
         } catch (...) {}
     }
 
+    timeT start = m_event->getNotationAbsoluteTime();
+    timeT end = start + m_event->getNotationDuration();
     helper.deleteEvent(m_event, m_collapseRest);
+    helper.updateIndications(start, end);
 }
 
 }

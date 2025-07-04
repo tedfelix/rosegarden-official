@@ -3,7 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
+    Modifications and additions Copyright (c) 2023 Mark R. Rubin aka "thanks4opensource" aka "thanks4opensrc"
 
     This file is Copyright 2003-2006
         D. Michael McIntyre <dmmcintyr@users.sourceforge.net>
@@ -21,33 +22,39 @@
 #ifndef RG_EVENTFILTERDIALOG_H
 #define RG_EVENTFILTERDIALOG_H
 
+#include "base/TimeT.h"
+
 #include <QDialog>
-#include <utility>
-#include <vector>
-#include "base/Event.h"
-#include <QCheckBox>
 #include <QComboBox>
 
+class QCheckBox;
 class QWidget;
 class QSpinBox;
 class QPushButton;
 class QGridLayout;
 
+#include <utility>
+#include <vector>
+
+
 namespace Rosegarden
 {
 
+
 class Event;
 
-/// The Event Filter dialog.
+
+/// The "Event Filter" dialog.
 /**
- * Launched by Edit > Filter Selection in the Matrix and Notation editors.
- *
  * Creates a dialog box to allow the user to dial up various selection
- * criteria used for removing events from a selection.  It is up to the caller
- * to actually manipulate the selection.  After the dialog has been accepted,
- * its filterEvent() method can be used to decide whether a particular event
- * should continue to be selected.  See MatrixView::slotFilterSelection()
- * and NotationView::slotFilterSelection() for examples of how to use this.
+ * criteria used for removing events from a selection.
+ *
+ * To use: Select some notes in either notation or the matrix.  In the
+ * menu, select Edit > Filter Selection.  Dial up whatever filtering criteria
+ * you want and press OK.  The selection will be modified accordingly.
+ *
+ * ??? It would be nice to be able to see the effect of the filtering
+ *     in real-time on the selection.
  */
 class EventFilterDialog : public QDialog
 {
@@ -55,7 +62,7 @@ class EventFilterDialog : public QDialog
 
 public:
 
-    EventFilterDialog(QWidget* parent);
+    explicit EventFilterDialog(QWidget* parent);
     ~EventFilterDialog() override;
 
     //-------[ accessor functions ]------------------------
@@ -70,32 +77,35 @@ public:
     filterRange getVelocity();
     filterRange getDuration();
 
-    // returns TRUE if the property value falls with in the filterRange 
+    // returns TRUE if the property value falls with in the filterRange
     bool eventInRange(filterRange foo, long property) {
         if (foo.first > foo.second)
             return (property <= foo.second || property >= foo.first);
         else
             return (property >= foo.first && property <= foo.second); }
 
-    // Used to do the work of deciding whether to keep or reject an event
-    // based on the state of the dialog's widgets.  Returns TRUE if an event
-    // should continue to be selected.  This method is the heart of the
-    // EventFilterDialog's public interface.
-    bool keepEvent(Event* const &e);
+    /**
+     * Used to do the work of deciding whether to keep or reject an event
+     * based on the state of the dialog's widgets.  Returns TRUE if an event
+     * should continue to be selected.
+     *
+     * After the dialog has been accepted, keepEvent() can be used to decide
+     * whether a particular event should continue to be selected.  See
+     * MatrixView::slotFilterSelection() and NotationView::slotFilterSelection()
+     * for examples of how to use this routine.
+     */
+    bool keepEvent(const Event *e);
 
-protected:
+private:
 
-    //--------[ member functions ]-------------------------
-    
     // initialize the dialog
     void initDialog();
 
-    // populate the duration combos
-    void populateDurationCombos();
+    void populateDurationCombo(QComboBox *durationCombo);
 
     // convert duration from combobox index into actual RG duration
     // between 0 and LONG_MAX
-    long getDurationFromIndex(int index);
+    long getDurationFromIndex(unsigned index);
 
     // simple A B swap used to flip inclusive/exclusive values
     void invert (filterRange &);
@@ -119,7 +129,7 @@ protected slots:
     // update note name text display and ensure From <= To
     void slotPitchFromChanged(int pitch);
     void slotPitchToChanged(int pitch);
-    
+
     // ensure From <= To to guarantee a logical range for these sets
     void slotVelocityFromChanged(int velocity);
     void slotVelocityToChanged(int velocity);
@@ -130,23 +140,25 @@ protected slots:
     void slotPitchFromChooser();
     void slotPitchToChooser();
 
-    
+
 private:
+    void resetValuesToAll();
+
     //---------[ data members ]-----------------------------
 
-    QGridLayout* layout;
+    QGridLayout* m_layout;
 
     QComboBox*   m_noteDurationFromComboBox;
     QComboBox*   m_noteDurationIncludeComboBox;
     QComboBox*   m_noteDurationToComboBox;
     QComboBox*   m_notePitchIncludeComboBox;
     QComboBox*   m_noteVelocityIncludeComboBox;
-    
+
     QPushButton* m_pitchFromChooserButton;
     QPushButton* m_pitchToChooserButton;
     QPushButton* m_buttonAll;
     QPushButton* m_buttonNone;
-    
+
     QSpinBox*    m_pitchFromSpinBox;
     QSpinBox*    m_pitchToSpinBox;
     QSpinBox*    m_velocityFromSpinBox;
@@ -155,7 +167,7 @@ private:
     QCheckBox*   m_useNotationDuration;
     QCheckBox*   m_selectRests;
 
-    std::vector<timeT> m_standardQuantizations;
+    std::vector<timeT> m_comboDurations;
 
 };
 

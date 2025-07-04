@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This file is Copyright 2002
@@ -24,7 +24,7 @@
 #include <set>
 #include <vector>
 
-#include "base/NotationTypes.h"
+#include "base/TimeSignature.h"
 
 namespace Rosegarden
 {
@@ -66,10 +66,10 @@ class ChordLabel
 {
 public:
     ChordLabel();
-    ChordLabel(Key key, int mask, int bass);
-    ChordLabel(ChordType type, int rootPitch, int inversion = 0) :
+    ChordLabel(const Key& key, int mask, int bass);
+    ChordLabel(const ChordType& type, int rootPitch, int inversion = 0) :
         m_data(type, rootPitch, inversion) { };
-    int rootPitch();
+    int rootPitch() const;
     /**
      * Gives the name of the chord in lead-sheet notation: C, Dm,
      * G#7b5...
@@ -91,7 +91,7 @@ private:
     //      shouldn't I find a neater way to keep a ChordMap?
     struct ChordData
     {
-        ChordData(ChordType type, int rootPitch, int inversion = 0) :
+        ChordData(const ChordType& type, int rootPitch, int inversion = 0) :
             m_type(type),
             m_rootPitch(rootPitch),
             m_inversion(inversion) { };
@@ -106,7 +106,7 @@ private:
         int m_inversion;
     };
     ChordData m_data;
-    void checkMap();
+    static void checkMap();
 
     typedef std::multimap<int, ChordData> ChordMap;
     static ChordMap m_chordMap;
@@ -122,7 +122,7 @@ public:
     /**
      * Returns the key in force during a given event.
      */
-    Key getKeyForEvent(Event *e, Segment &s);
+    static Key getKeyForEvent(const Event *e, Segment &s);
 
     /**
      * Inserts in the given Segment labels for all of the chords found in
@@ -135,7 +135,7 @@ public:
      * Returns a time signature that is probably reasonable for the
      * given timeslice.
      */
-    TimeSignature guessTimeSignature(CompositionTimeSliceAdapter &c);
+    TimeSignature guessTimeSignature(const CompositionTimeSliceAdapter &c);
 
     /**
      * Returns a guess at the starting key of the given timeslice,
@@ -144,7 +144,7 @@ public:
     Key guessKey(CompositionTimeSliceAdapter &c);
 
     /**
-     * Returns a guess at the appropriate key at time t, based on 
+     * Returns a guess at the appropriate key at time t, based on
      * existing key signatures.  May fall back to guessKey.
      */
     static Key
@@ -155,8 +155,8 @@ public:
      * Returns a guess at the appropriate key for segment s at time t.
      */
     static Key
-        guessKeyForSegment(timeT t, const Segment *s);
-    
+        guessKeyForSegment(timeT t, const Segment *segment);
+
     /**
      * Like labelChords, but the algorithm is more complicated. This tries
      * to guess the chords that should go under a beat even when all of the
@@ -169,7 +169,7 @@ protected:
     typedef std::pair<double, ChordLabel> ChordPossibility;
     typedef std::vector<ChordPossibility> HarmonyGuess;
     typedef std::vector<std::pair<timeT, HarmonyGuess> > HarmonyGuessList;
-    struct cp_less : public std::binary_function<ChordPossibility, ChordPossibility, bool>
+    struct cp_less
     {
         bool operator()(ChordPossibility l, ChordPossibility r);
     };
@@ -191,8 +191,8 @@ protected:
         double& operator[](int i);
         const double& operator[](int i) const;
         double distance(const PitchProfile &other);
-        double dotProduct(const PitchProfile &other);
-        double productScorer(const PitchProfile &other);
+        // unused double dotProduct(const PitchProfile &other) const;
+        double productScorer(const PitchProfile &other) const;
         PitchProfile normalized();
         PitchProfile& operator*=(double d);
         PitchProfile& operator+=(const PitchProfile &d);
@@ -210,9 +210,9 @@ protected:
     /// For use by guessHarmonies (refineHarmonyGuessList)
     // #### grep ProgressionMap to something else
     struct ChordProgression {
-        ChordProgression(ChordLabel first_,
-                         ChordLabel second_ = ChordLabel(),
-                         Key key_ = Key());
+        explicit ChordProgression(const ChordLabel& first_,
+                                  const ChordLabel& second_ = ChordLabel(),
+                                  const Key& key_ = Key());
         ChordLabel first;
         ChordLabel second;
         Key homeKey;
@@ -223,12 +223,12 @@ protected:
     static ProgressionMap m_progressionMap;
 
     /// For use by guessHarmonies (refineHarmonyGuessList)
-    void checkProgressionMap();
+    static void checkProgressionMap();
 
     /// For use by checkProgressionMap
-    void addProgressionToMap(Key k,
-                             int firstChordNumber,
-                             int secondChordNumber);
+    static void addProgressionToMap(Key k,
+                                    int firstChordNumber,
+                                    int secondChordNumber);
 
 };
 

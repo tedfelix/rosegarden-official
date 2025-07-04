@@ -3,8 +3,8 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     This file is Copyright 2005-2011 Chris Cannam.
 
     This program is free software; you can redistribute it and/or
@@ -33,7 +33,7 @@ public:
     class FileDRMProtected : virtual public std::exception
     {
     public:
-        FileDRMProtected(QString file) throw();
+        explicit FileDRMProtected(QString file) throw();
         ~FileDRMProtected() throw() override { }
         const char *what() const throw() override;
 
@@ -49,7 +49,7 @@ public:
 
     size_t getChannelCount() const { return m_channelCount; }
     size_t getSampleRate() const { return m_sampleRate; }
-    
+
     void setRetrievalSampleRate(size_t);
 
     /**
@@ -64,7 +64,7 @@ public:
      * rate).
      */
     size_t getInterleavedFrames(size_t count, float *frames);
-    
+
 protected:
     AudioReadStream();
     virtual size_t getFrames(size_t count, float *frames) = 0;
@@ -80,7 +80,7 @@ class AudioReadStreamBuilder :
     public ConcreteThingBuilder<T, AudioReadStream, QString>
 {
 public:
-    AudioReadStreamBuilder(QUrl uri, QStringList extensions) :
+    AudioReadStreamBuilder(const QUrl& uri, QStringList extensions) :
         ConcreteThingBuilder<T, AudioReadStream, QString>(uri, extensions) {
     }
 };

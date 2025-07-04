@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -34,8 +34,12 @@ const QColor GUIPalette::PreviewColor = Qt::darkGreen;
 const QColor GUIPalette::OutRangeColor = Qt::red;
 
 
-QColor GUIPalette::getColour(const char* const colourName)
+QColor GUIPalette::getColour(const char * const colourName)
 {
+#if 0
+    // The settings were never actually used.  No part of the code
+    // writes to them.
+
     QSettings config; // should probably become a member var for performance reasons
     config.beginGroup(ColoursConfigGroup);
 
@@ -48,6 +52,9 @@ QColor GUIPalette::getColour(const char* const colourName)
 
     config.endGroup();
     return color;
+#else
+    return getInstance()->m_defaultsMap[colourName];
+#endif
 }
 
 GUIPalette::GUIPalette()
@@ -120,7 +127,7 @@ GUIPalette::GUIPalette()
     m_defaultsMap[MatrixBarLine] = QColor(60, 60, 60);
     m_defaultsMap[BarLineIncorrect] = QColor(211, 0, 31);
     m_defaultsMap[BeatLine] = QColor(200, 200, 200);
-    m_defaultsMap[SubBeatLine] = QColor(212, 212, 212);
+    m_defaultsMap[SubBeatLine] = QColor(232, 232, 232);
     m_defaultsMap[StaffConnectingLine] = QColor(192, 192, 192);
     m_defaultsMap[StaffConnectingTerminatingLine] = QColor(128, 128, 128);
 

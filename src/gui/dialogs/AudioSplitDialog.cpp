@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
  
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -25,7 +25,6 @@
 #include "base/RealTime.h"
 #include "base/Segment.h"
 #include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenApplication.h"
 #include "sound/AudioFileManager.h"
 
 #include <QDialog>
@@ -101,8 +100,8 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     m_thresholdSpin = new QSpinBox;
     hboxLayout->addWidget(m_thresholdSpin);
     m_thresholdSpin->setSuffix(" %");
-    connect(m_thresholdSpin, SIGNAL(valueChanged(int)),
-            SLOT(slotThresholdChanged(int)));
+    connect(m_thresholdSpin, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
+            this, &AudioSplitDialog::slotThresholdChanged);
 
     // ensure this is cleared
     m_previewBoxes.clear();

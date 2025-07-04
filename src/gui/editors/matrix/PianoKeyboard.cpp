@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -20,8 +20,8 @@
 #include "PianoKeyboard.h"
 #include "misc/Debug.h"
 
+#include "base/Pitch.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/general/MidiPitchLabel.h"
 #include "gui/rulers/PitchRuler.h"
 
 #include <QColor>
@@ -39,13 +39,14 @@ namespace Rosegarden
 
 const unsigned int smallWhiteKeyHeight = 14;
 const unsigned int whiteKeyHeight = 18;
-    
+
 PianoKeyboard::PianoKeyboard(QWidget *parent, int keys)
         : PitchRuler(parent),
         m_keySize(48, 18),
         m_blackKeySize(24, 8),
         m_nbKeys(keys),
         m_mouseDown(false),
+        m_selecting(false),
         m_highlight(new QWidget(this)),
         m_lastHighlightPitch(-1),
         m_lastKeyPressed(0)
@@ -77,11 +78,10 @@ void PianoKeyboard::computeKeyPos()
     //    int y = -9;
     int y = -4;
 
-    unsigned int posInOctave = 0,
-                               keyHeight = smallWhiteKeyHeight;
+    unsigned int keyHeight = smallWhiteKeyHeight;
 
     for (unsigned int i = 0; i < m_nbKeys; ++i) {
-        posInOctave = (i + 5) % 7;
+        unsigned int posInOctave = (i + 5) % 7;
 
         if (y >= 0) {
             m_whiteKeyPos.push_back(y);
@@ -154,9 +154,8 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
         // m_labelKeyPos contains two more octaves than we need
         pitch -= 24;
 
-        MidiPitchLabel label(pitch);
         paint.drawText(m_blackKeySize.width(), m_labelKeyPos[i],
-                       label.getQString());
+                       Pitch::toStringOctave(pitch));
     }
 
     // Black Keys
@@ -171,6 +170,7 @@ void PianoKeyboard::paintEvent(QPaintEvent*)
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
 void PianoKeyboard::enterEvent(QEnterEvent *)
 #else
+// cppcheck-suppress unusedFunction
 void PianoKeyboard::enterEvent(QEvent *)
 #endif
 {

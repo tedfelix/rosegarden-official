@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -53,8 +53,8 @@ class Segment;
  *
  * ??? Rename: ControllerSequenceDialog
  *
- * @authors Jani (original author?),
- *          Tom Breton (Tehom),
+ * @authors Jani Frilander (original pitchbend-only version),
+ *          Tom Breton (Tehom) (expanded to include all controllers),
  *          Tim Munro
  */
 class PitchBendSequenceDialog : public QDialog
@@ -106,6 +106,10 @@ private:
     bool isController() const;
     // ??? Promote to ControlParameter.
     bool isPitchbend() const;
+    /// 0 for pitchbend and pan.  Otherwise CC default.
+    int m_default;
+    /// Center to use for pitchbend (8192) and pan (64).  Otherwise 0.
+    int m_center;
 
     const timeT m_startTime;
     const timeT m_endTime;

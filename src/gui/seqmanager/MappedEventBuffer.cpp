@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -33,7 +33,6 @@ namespace Rosegarden
 
 MappedEventBuffer::MappedEventBuffer(RosegardenDocument *doc) :
     m_doc(doc),
-    m_start(RealTime::zeroTime),
     m_end(std::numeric_limits<int>::max(), 0),  // 68 years
     m_buffer(nullptr),
     m_capacity(0),
@@ -73,7 +72,7 @@ MappedEventBuffer::refresh()
     int newFill = calculateSize();
     int oldSize = capacity();
 
-#ifdef DEBUG_MAPPED_EVENT_BUFFER    
+#ifdef DEBUG_MAPPED_EVENT_BUFFER
     RG_DEBUG << "refresh() - " << this
                  << " - old size = " << oldSize
                  << " - old fill = " << size()
@@ -166,7 +165,9 @@ mapAnEvent(MappedEvent *e)
         reserve(newSize);
     }
 
-    getBuffer()[size()] = e;
+    // Copy the event into the buffer.
+    getBuffer()[size()] = *e;
+
     // Some mappers need this to be done now because they may resize
     // the buffer later, which will only copy the filled part.
     resize(size() + 1);

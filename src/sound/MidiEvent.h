@@ -1,8 +1,8 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 /*
-  Rosegarden
-  A sequencer and musical notation editor.
-  Copyright 2000-2021 the Rosegarden development team.
+    Rosegarden
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
 
   This program is free software; you can redistribute it and/or
   modify it under the terms of the GNU General Public License as
@@ -11,12 +11,18 @@
   COPYING included with this distribution for more information.
 */
 
-
 #ifndef RG_MIDIEVENT_H
 #define RG_MIDIEVENT_H
 
 #include "Midi.h"
-#include "base/Event.h"
+
+#include "base/MidiProgram.h"
+#include "base/TimeT.h"
+
+#include <QDebug>
+
+#include <string>
+
 
 namespace Rosegarden
 {
@@ -85,7 +91,7 @@ public:
     void setMetaMessage(const std::string &meta) { m_metaMessage = meta; }
     std::string getMetaMessage() const { return m_metaMessage; }
 
-    friend QDebug &operator<<(QDebug &, const MidiEvent &);
+    friend QDebug operator<<(QDebug, const MidiEvent &);
 
 private:
     /// Delta or absolute time, depending.
@@ -99,7 +105,7 @@ private:
     std::string m_metaMessage;
 };
 
-QDebug &operator<<(QDebug &, const MidiEvent &);
+QDebug operator<<(QDebug, const MidiEvent &);
 
 
 }

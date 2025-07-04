@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,8 +29,9 @@
 namespace Rosegarden
 {
 
+/* unused
 QBitmap
-PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
+PixmapFunctions::generateMask(const QPixmap &map, const QRgb &rgb)
 {
     QImage i(map.toImage());
     // QImage im(i.width(), i.height(), 1, 2, QImage::LittleEndian);
@@ -38,7 +39,7 @@ PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
 
     for (int y = 0; y < i.height(); ++y) {
         for (int x = 0; x < i.width(); ++x) {
-            if (i.pixel(x, y) != px) {
+            if (i.pixel(x, y) != rgb) {
                 im.setPixel(x, y, 1);
             } else {
                 im.setPixel(x, y, 0);
@@ -49,7 +50,9 @@ PixmapFunctions::generateMask(const QPixmap &map, const QRgb &px)
     QBitmap m = QBitmap::fromImage(im);
     return m;
 }
+*/
 
+ /* unused
 QBitmap
 PixmapFunctions::generateMask(const QPixmap &map)
 {
@@ -78,6 +81,7 @@ PixmapFunctions::generateMask(const QPixmap &map)
     QBitmap m = QBitmap::fromImage(im);
     return m;
 }
+*/
 
 QPixmap
 PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int saturation)
@@ -127,7 +131,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
             // saturation of 255
             int newSaturation = (saturation == SaturationNotSpecified  ? 255 - v : saturation);
 
-            QColor newColour = QColor::fromHsv(                
+            QColor newColour = QColor::fromHsv(
                                  newHue,
                                  newSaturation,
                                  v > minimum ? v : minimum);
@@ -162,6 +166,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
     return rmap;
 }
 
+/* unused
 QPixmap
 PixmapFunctions::shadePixmap(const QPixmap &map)
 {
@@ -178,9 +183,9 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
 
             int newV =  255 - ((255 - v) / 2);
             QColor newColor = QColor::fromHsv(h, s, newV);
-            
+
             image.setPixel(x, y, newColor.rgb());
-            
+
         }
     }
 
@@ -188,6 +193,7 @@ PixmapFunctions::shadePixmap(const QPixmap &map)
     if (!map.mask().isNull()) rmap.setMask(map.mask());
     return rmap;
 }
+*/
 
 QPixmap
 PixmapFunctions::flipVertical(const QPixmap &map)
@@ -204,6 +210,7 @@ PixmapFunctions::flipVertical(const QPixmap &map)
     return rmap;
 }
 
+/* unused
 QPixmap
 PixmapFunctions::flipHorizontal(const QPixmap &map)
 {
@@ -218,6 +225,7 @@ PixmapFunctions::flipHorizontal(const QPixmap &map)
 
     return rmap;
 }
+*/
 
 std::pair<QPixmap, QPixmap>
 PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
@@ -242,6 +250,7 @@ PixmapFunctions::splitPixmap(const QPixmap &pixmap, int x)
     return std::pair<QPixmap, QPixmap>(left, right);
 }
 
+/* unused
 void
 PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
                                   int x0, int y0,
@@ -280,5 +289,6 @@ PixmapFunctions::drawPixmapMasked(QPixmap &dest, QBitmap &destMask,
     dest = QPixmap::fromImage(idp);
     destMask = QBitmap::fromImage(idm);
 }
+*/
 
 }

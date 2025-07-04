@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     This file is Copyright 2005
         Immanuel Litzroth         <immanuel203@gmail.com>
@@ -32,7 +32,7 @@ class QSocketNotifier;
 
 namespace Rosegarden
 {
-  
+
 class RosegardenMainWindow;
 class RosegardenDocument;
 
@@ -47,23 +47,23 @@ class TranzportClient : public QObject, public CompositionObserver
 {
     Q_OBJECT
 public:
-    TranzportClient(RosegardenMainWindow *rgGUIApp);
-      
+    explicit TranzportClient(RosegardenMainWindow *rgGUIApp);
+
     ~TranzportClient() override;
 
 public slots:
     void readData();
-      
+
     void slotDocumentLoaded(RosegardenDocument *doc);
-      
+
     void writeCommandQueue();
 
     void pointerPositionChanged(timeT time);
-      
-    void loopChanged(timeT t1, timeT t2);
+
+    void loopChanged();
 
 signals:
-    
+
     void play();
     void stop();
     void record();
@@ -79,13 +79,13 @@ signals:
     void solo(bool);
     void undo();
     void redo();
-      
+
     void setPosition(timeT);
-      
+
 public:
 
     void stateUpdate();
-      
+
 public:
     enum ButtonMasks
     {
@@ -136,26 +136,26 @@ public:
         LightPunch
     };
 
-    void LightOn(Light l);
-      
-    void LightOff(Light l);
-      
+    void LightOn(Light light);
+
+    void LightOff(Light light);
+
     enum Row
     {
         Top,
         Bottom,
     };
-    
+
     void LCDWrite(const std::string& text,
                   Row row = Top,
                   uint8_t offset = 0);
-      
+
     void write(uint64_t buf);
-      
-        
+
+
 private:
     int m_descriptor;
-      
+
     QSocketNotifier *m_socketReadNotifier;
     QSocketNotifier *m_socketWriteNotifier;
 
@@ -174,19 +174,19 @@ private:
 
     static const uint8_t LCDLength = 20;
     TranzportClient(const TranzportClient&);
-      
+
     typedef uint64_t CommandType;
     std::queue<CommandType> commands;
-      
+
     // CompositionObserver overrides
-    void trackChanged(const Composition *c, Track *t) override;
+    void trackChanged(const Composition *c, Track *track) override;
     // tracksAdded() need not be overridden as adding a track will not change
     // anything the TranzPort would display.
     // tracksDeleted() should probably be overridden to clear the display on
     // the TranzPort when the selected track is deleted.
 
 };
-  
+
 }
 
 #endif // RG_TRANZPORTCLIENT_H

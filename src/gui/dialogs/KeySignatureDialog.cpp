@@ -3,11 +3,11 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
- 
+    Copyright 2000-2025 the Rosegarden development team.
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -21,6 +21,7 @@
 
 #include "misc/Strings.h"
 #include "misc/Debug.h"
+#include "misc/ConnectCBActivated.h"
 #include "base/NotationTypes.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 #include "gui/widgets/BigArrowButton.h"
@@ -52,8 +53,8 @@ namespace Rosegarden
 
 KeySignatureDialog::KeySignatureDialog(QWidget *parent,
                                        NotePixmapFactory *npf,
-                                       Clef clef,
-                                       Rosegarden::Key defaultKey,
+                                       const Clef& clef,
+                                       const Rosegarden::Key& defaultKey,
                                        bool showApplyToAll,
                                        bool showConversionOptions,
                                        QString explanatoryText) :
@@ -78,10 +79,6 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     metagrid->addWidget(vbox, 0, 0);
 
-
-    QWidget *keyBox = nullptr;
-    QWidget *nameBox = nullptr;
-
     QGroupBox *keyFrame = new QGroupBox( tr("Key signature"), vbox );
     QVBoxLayout *keyFrameLayout = new QVBoxLayout;
     vboxLayout->addWidget(keyFrame);
@@ -99,10 +96,10 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     vboxLayout->addWidget(conversionFrame);
     vbox->setLayout(vboxLayout);
 
-    keyBox = new QWidget(keyFrame);
+    QWidget *keyBox = new QWidget(keyFrame);
     QHBoxLayout *keyBoxLayout = new QHBoxLayout;
     keyFrameLayout->addWidget(keyBox);
-    nameBox = new QWidget(keyFrame);
+    QWidget *nameBox = new QWidget(keyFrame);
     QHBoxLayout *nameBoxLayout = new QHBoxLayout;
     keyFrameLayout->addWidget(nameBox);
 
@@ -144,10 +141,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     m_explanatoryLabel = explanatoryLabel;
 
     QPixmap pm;
-    // ??? This check might not be quite right.  The Qt docs indicate
-    //     this should be 5.15.  We've had users getting compilation errors
-    //     here.  Not sure exactly how to verify this.
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
     // This is not actually a copy as Qt does implicit data sharing.
     pm = m_keyPixmap->pixmap(Qt::ReturnByValue);
 #else
@@ -221,8 +216,8 @@ KeySignatureDialog::KeySignatureDialog(QWidget *parent,
     connect(m_keyCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &KeySignatureDialog::slotKeyNameChanged);
-    QObject::connect(m_majorMinorCombo, SIGNAL(activated(const QString &)),
-                     this, SLOT(slotMajorMinorChanged(const QString &)));
+    ConnectCBActivated(m_majorMinorCombo,
+                       this, &KeySignatureDialog::slotMajorMinorChanged);
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     metagrid->addWidget(buttonBox, 1, 0);
     metagrid->setRowStretch(0, 10);
@@ -323,7 +318,7 @@ KeySignatureDialog::slotKeyDown()
 
 struct KeyNameComparator
 {
-    bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) {
+    bool operator()(const Rosegarden::Key &k1, const Rosegarden::Key &k2) const {
         return (k1.getName() < k2.getName());
     }
 };

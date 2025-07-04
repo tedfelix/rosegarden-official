@@ -1,9 +1,9 @@
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
-  
+
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -64,7 +64,7 @@ public :
      * Create a new text float with parent widget \a parent
      * If \a parent is not null, \a reparent() is called to take the context in.
      */
-    BaseTextFloat(QWidget *parent);
+    explicit BaseTextFloat(QWidget *parent);
 
     ~BaseTextFloat() override {}
 
@@ -115,7 +115,7 @@ protected :
     QWidget *m_widget;
 
     // Position of top left corner of the parent widget relative to the
-    // top left corner of either top level or dialog window. 
+    // top left corner of either top level or dialog window.
     QPoint   m_totalPos;
 
     // Width and height of text-bounding rectangle.

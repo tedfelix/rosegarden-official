@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -20,18 +20,17 @@
 #include <algorithm>
 
 #include "Event.h"
-#include "base/Segment.h"
+#include "Segment.h"
 #include "CompositionTimeSliceAdapter.h"
-#include "base/BaseProperties.h"
-#include "base/NotationTypes.h"
-#include "base/MidiTypes.h"
+#include "BaseProperties.h"
+#include "NotationTypes.h"
+#include "MidiTypes.h"
 #include "Quantizer.h"
+
 #include "misc/Debug.h"
 
 namespace Rosegarden
 {
-
-class Quantizer;
 
 /**
  * A "set" in Rosegarden terminology is a collection of elements found
@@ -47,7 +46,7 @@ class Quantizer;
  * an iterator into that container.  Derived classes must call
  * initialise().  It has to be done this way otherwise the expected
  * virtual functions wouldn't get called.
- * 
+ *
  * The initialise() method scans the surrounding area of the list for
  * the maximal set of contiguous or within-the-same-bar elements
  * before and after the passed-in iterator such that all elements are
@@ -100,7 +99,8 @@ public:
     Iterator getHighestNote() const     { return m_highest;  }
     Iterator getLowestNote() const      { return m_lowest;   }
 
-    virtual bool contains(const Iterator &) const = 0;
+    // unused
+    //virtual bool contains(const Iterator &) const = 0;
 
     /// Return the pointed-to element, in Event form (public to work around gcc-2.95 bug)
     static Event *getAsEvent(const Iterator &i);
@@ -168,14 +168,15 @@ public:
     GenericChord(Container &c,
                  Iterator elementInChord,
                  const Quantizer *quantizer,
-                 PropertyName stemUpProperty = PropertyName::EmptyPropertyName);
+                 PropertyName stemUpProperty = PropertyName::Empty());
 
     ~GenericChord() override;
 
     virtual int getMarkCountForChord() const;
     virtual std::vector<Mark> getMarksForChord() const;
     virtual std::vector<int> getPitches() const;
-    bool contains(const Iterator &) const override;
+    // unused
+    //bool contains(const Iterator &) const override;
 
     void initialiseFinish() override;
 
@@ -234,10 +235,10 @@ class Chord : public GenericChord<Event, Segment, true>
 
  public:
     Chord(Container &c,
-          Iterator elementInChord,
+          const Iterator& elementInChord,
           const Quantizer *quantizer,
           PropertyName stemUpProperty =
-          PropertyName::EmptyPropertyName)
+          PropertyName::Empty())
         : GenericChord<Element, Container, singleStaff>
               (c, elementInChord, quantizer, stemUpProperty)
         { initialise(); }
@@ -251,10 +252,10 @@ class GlobalChord : public GenericChord<Event, CompositionTimeSliceAdapter, fals
 
  public:
     GlobalChord(Container &c,
-          Iterator elementInChord,
+          const Iterator& elementInChord,
           const Quantizer *quantizer,
           PropertyName stemUpProperty =
-          PropertyName::EmptyPropertyName)
+          PropertyName::Empty())
         : GenericChord<Element, Container, singleStaff>
               (c, elementInChord, quantizer, stemUpProperty)
         { initialise(); }
@@ -285,7 +286,7 @@ extern bool
 get__String(Event *e, const PropertyName &name, std::string &ref);
 
 extern bool
-isPersistent__Bool(Event *e, const PropertyName &name);
+isPersistent__Bool(const Event *e, const PropertyName &name);
 
 extern void
 setMaybe__Int(Event *e, const PropertyName &name, long value);
@@ -337,15 +338,13 @@ AbstractSet<Element, Container>::initialise()
         if (sample(j, false)) {
             m_initial = j;
             if (AbstractSet::getAsEvent(j)->isa(Note::EventType)) {
-		m_initialNote = j;
-		if (m_finalNote == getContainer().end()) {
-		    m_finalNote = j;
-		}
-	    }
+                m_initialNote = j;
+                if (m_finalNote == getContainer().end()) {
+                    m_finalNote = j;
+                }
+            }
         }
     }
-
-    j = m_baseIterator;
 
     // then scan forwards to find an element not in the desired set,
     // sampling everything as far forward as the one before it
@@ -354,11 +353,11 @@ AbstractSet<Element, Container>::initialise()
         if (sample(j, true)) {
             m_final = j;
             if (AbstractSet::getAsEvent(j)->isa(Note::EventType)) {
-		m_finalNote = j;
-		if (m_initialNote == getContainer().end()) {
-		    m_initialNote = j;
-		}
-	    }
+                m_finalNote = j;
+                if (m_initialNote == getContainer().end()) {
+                    m_initialNote = j;
+                }
+            }
         }
     }
 
@@ -373,7 +372,7 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
     const Quantizer &q(getQuantizer());
     Event *e = AbstractSet::getAsEvent(i);
     timeT d(q.getQuantizedDuration(e));
-    
+
     if (e->isa(Note::EventType) || d > 0) {
         if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(AbstractSet::getAsEvent(m_longest))) {
@@ -407,7 +406,7 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 
 
 //////////////////////////////////////////////////////////////////////
- 
+
 template <class Element, class Container, bool singleStaff>
 GenericChord<Element, Container, singleStaff>::GenericChord(Container &c,
                                                             Iterator i,
@@ -436,8 +435,8 @@ initialiseFinish()
 {
     if (std::vector<typename Container::iterator>::size() > 1) {
         std::stable_sort(std::vector<typename Container::iterator>::begin(),
-			 std::vector<typename Container::iterator>::end(),
-			 PitchGreater());
+                         std::vector<typename Container::iterator>::end(),
+                         PitchGreater());
     }
  }
 
@@ -447,11 +446,11 @@ GenericChord<Element, Container, singleStaff>::test(const Iterator &i)
 {
     Event *e = GenericChord::getAsEvent(i);
     if (AbstractSet<Element, Container>::
-	getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
-	return false;
+        getQuantizer().getQuantizedAbsoluteTime(e) != m_time) {
+        return false;
     }
     if (e->getSubOrdering() != m_subordering) {
-	return false;
+        return false;
     }
 
     // We permit note or rest events etc here, because if a chord is a
@@ -493,7 +492,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
         // explicitly in different groups, or have stems pointing in
         // different directions by design, or have substantially
         // different x displacements, count as separate chords.
-        
+
         // Per #930473 ("Inserting notes into beamed chords is
         // broken"), if one note is in a group and the other isn't,
         // that's no problem.  In fact we should actually modify the
@@ -503,7 +502,7 @@ GenericChord<Element, Container, singleStaff>::sample(const Iterator &i,
 
             Event *e0 = GenericChord::getAsEvent(AbstractSet<Element, Container>::m_baseIterator);
 
-            if (!(m_stemUpProperty == PropertyName::EmptyPropertyName)) {
+            if (!(m_stemUpProperty == PropertyName::Empty())) {
 
                 if (e0->has(m_stemUpProperty) &&
                     e1->has(m_stemUpProperty) &&
@@ -639,7 +638,7 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
         if (GenericChord::getAsEvent(*i)->has(BaseProperties::PITCH)) {
             int pitch = get__Int
                 (GenericChord::getAsEvent(*i), BaseProperties::PITCH);
-            if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch) 
+            if (pitches.size() > 0 && pitches[pitches.size()-1] == pitch)
                 continue;
             pitches.push_back(pitch);
         }
@@ -649,17 +648,18 @@ GenericChord<Element, Container, singleStaff>::getPitches() const
 }
 
 
-template <class Element, class Container, bool singleStaff>
-bool
-GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
-{
-    for (typename std::vector<typename Container::iterator>::const_iterator
-             i = std::vector<typename Container::iterator>::begin();
-         i != std::vector<typename Container::iterator>::end(); ++i) {
-        if (*i == itr) return true;
-    }
-    return false;
-}
+// unused
+// template <class Element, class Container, bool singleStaff>
+// bool
+// GenericChord<Element, Container, singleStaff>::contains(const Iterator &itr) const
+// {
+//     for (typename std::vector<typename Container::iterator>::const_iterator
+//              i = std::vector<typename Container::iterator>::begin();
+//          i != std::vector<typename Container::iterator>::end(); ++i) {
+//         if (*i == itr) return true;
+//     }
+//     return false;
+// }
 
 
 template <class Element, class Container, bool singleStaff>
@@ -699,8 +699,8 @@ GenericChord<Element, Container, singleStaff>::getFirstElementNotInChord()
     return m_firstReject;
 }
 
-        
-template <class Element, class Container, bool singleStaff>     
+
+template <class Element, class Container, bool singleStaff>
 bool
 GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const Iterator &a,
                                                            const Iterator &b)
@@ -710,6 +710,7 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
         long bp = get__Int(GenericChord::getAsEvent(b), BaseProperties::PITCH);
         return (ap < bp);
     } catch (const Event::NoData &) {
+        // cppcheck-suppress ConfigurationNotChecked
         RG_WARNING << "Bad karma: PitchGreater failed to find one or both pitches";
         return false;
     }
@@ -720,4 +721,3 @@ GenericChord<Element, Container, singleStaff>::PitchGreater::operator()(const It
 
 
 #endif
-

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
     This program is free software; you can redistribute it and/or
@@ -23,9 +23,10 @@
 
 #include <string>
 
-// Internal representation of some very MIDI-specific event types
-// that fall clearly outside of NotationTypes and still require
-// representation.
+// Event factories for some very MIDI-specific event types
+// that fall clearly outside of NotationTypes.
+
+// See NotationTypes.h for more Event types.
 
 
 namespace Rosegarden 
@@ -53,7 +54,7 @@ namespace PitchBend
 
 namespace Controller
 {
-    extern const std::string EventType;
+    extern const char *EventType;
     constexpr int EventSubOrdering = -5;
 
     extern const PropertyName NUMBER;
@@ -61,6 +62,36 @@ namespace Controller
 
     /// Returned Event is on heap; caller takes responsibility for ownership.
     Event *makeEvent(timeT absoluteTime, MidiByte number, MidiByte value);
+
+    const QString &getName(MidiByte number);
+}
+
+//////////////////////////////////////////////////////////////////////
+// Registered Parameter Numbers
+namespace RPN
+{
+    extern const char *EventType;
+    constexpr int EventSubOrdering = -5;
+
+    extern const PropertyName NUMBER;
+    extern const PropertyName VALUE;
+
+    /// Returned Event is on heap; caller takes responsibility for ownership.
+    Event *makeEvent(timeT absoluteTime, int number, int value);
+}
+
+//////////////////////////////////////////////////////////////////////
+// Non-Registered Parameter Numbers
+namespace NRPN
+{
+    extern const char *EventType;
+    constexpr int EventSubOrdering = -5;
+
+    extern const PropertyName NUMBER;
+    extern const PropertyName VALUE;
+
+    /// Returned Event is on heap; caller takes responsibility for ownership.
+    Event *makeEvent(timeT absoluteTime, int number, int value);
 }
 
 //////////////////////////////////////////////////////////////////////

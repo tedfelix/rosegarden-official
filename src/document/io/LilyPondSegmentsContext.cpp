@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -37,11 +37,12 @@ LilyPondSegmentsContext::LilyPondSegmentsContext(Composition *composition) :
     m_firstSegmentStartTime(0),
     m_lastSegmentEndTime(0),
     m_automaticVoltaUsable(true),
-    m_repeatWithVolta(false),
-    m_currentVoltaChain(nullptr),
-    m_firstVolta(false),
-    m_lastVolta(false),
-    m_wasRepeatingWithoutVolta(false),
+    m_GSSSegment(nullptr),
+    m_repeatWithAlt(false),
+    m_currentAltChain(nullptr),
+    m_firstAlt(false),
+    m_lastAlt(false),
+    m_wasRepeatingWithoutAlt(false),
     m_lastWasOK(false)
 {
     m_segments.clear();
@@ -58,14 +59,16 @@ LilyPondSegmentsContext::~LilyPondSegmentsContext()
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
-                if (sit->rawVoltaChain) {
-                    VoltaChain::iterator i;
-                    for (i = sit->rawVoltaChain->begin();
-                            i != sit->rawVoltaChain->end(); ++i) {
+                if (sit->rawAltChain) {
+                    AltChain::iterator i;
+                    for (i = sit->rawAltChain->begin();
+                            i != sit->rawAltChain->end(); ++i) {
                         delete *i;
                     }
-                    delete sit->rawVoltaChain;
-                    delete sit->sortedVoltaChain;
+                    delete sit->rawAltChain;
+                    // sortedAltChain elements points to rawAltChain ones:
+                    // They already have been deleted.
+                    delete sit->sortedAltChain;
                 }
             }
         }
@@ -83,7 +86,7 @@ LilyPondSegmentsContext::addSegment(Segment *segment)
 
 
 bool
-LilyPondSegmentsContext::containsNoSegment()
+LilyPondSegmentsContext::containsNoSegment() const
 {
     return m_segments.size() == 0;
 }
@@ -97,7 +100,7 @@ LilyPondSegmentsContext::precompute()
 
     // Look for previous key of each segment.
     // Walk through the segments of a voice and set the previousKey of each
-    // segment to the value of the last key found in the previous contiguous 
+    // segment to the value of the last key found in the previous contiguous
     // segment.
     // This works because segments of a same voice can be contiguous but can't
     // overlap.
@@ -136,7 +139,7 @@ LilyPondSegmentsContext::precompute()
     }
 
     // Set at initialization.
-    // If needed, sortAndGatherVolta() method or following "Look for linked
+    // If needed, sortAndGatherAlt() method or following "Look for linked
     // segments" loop will clear it.
     m_automaticVoltaUsable = true;
 
@@ -248,8 +251,8 @@ LilyPondSegmentsContext::precompute()
     }
 
 
-    // Look for linked segments which may be exported as repeat with volta
-    // or as simple repeat
+    // Look for linked segments which may be exported as repeat with alternate
+    // endings or as simple repeat
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
 
         // No LilyPond automatic volta when multiple voices on the same track
@@ -262,7 +265,7 @@ LilyPondSegmentsContext::precompute()
     }
 
     // Check linked segment repeat consistency between tracks/voices and
-    // mark inconsistent repeats
+    // mark inconsistent repeats with the noRepeat flag.
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
@@ -295,16 +298,16 @@ LilyPondSegmentsContext::precompute()
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
                 sit->repeatId = 0;
-                sit->volta = false;
+                sit->alt = false;
                 sit->ignored = false;
-                sit->numberOfVolta = 0;
+                sit->numberOfAlt = 0;
                 sit->simpleRepeatId = 0;
             }
         }
     }
 
     // Then look again for repeats from linked segments
-    // (without looking at the inconsistent ones)
+    // (but without looking at the inconsistent ones)
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             vit->second.scanForRepeatedLinks();
@@ -312,8 +315,8 @@ LilyPondSegmentsContext::precompute()
     }
 
 
-    // On each voice of each track, store the volta of each repeat sequence
-    // inside the main segment data
+    // On each voice of each track, store the alternate ending of each
+    // repeat sequence inside the main segment data
     int currentRepeatId = 0;
     const SegmentData * currentMainSeg = nullptr;
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
@@ -322,26 +325,27 @@ LilyPondSegmentsContext::precompute()
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             // int voiceIndex = vit->first;
 
-            // First pass: count the repetitions and remember the volta
+            // First pass: count the repetitions and remember the alternate
+            // ending
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
                 if (sit->repeatId) {
                     if (sit->repeatId != currentRepeatId) {
                         currentRepeatId = sit->repeatId;
                         currentMainSeg = &(*sit);
-                        currentMainSeg->numberOfVolta = 1;
-                        currentMainSeg->rawVoltaChain = new VoltaChain;
+                        currentMainSeg->numberOfAlt = 1;
+                        currentMainSeg->rawAltChain = new AltChain;
                     } else {
-                        // Main repeating segment or volta ?
-                        if (sit->volta) {
-                            // Insert volta in list
+                        // Main repeating segment or alternate ending ?
+                        if (sit->alt) {
+                            // Insert alternate ending in list
                             SegmentData sd = *sit;
-                            Volta * volta = new Volta(
+                            AlternateEnding * alt = new AlternateEnding(
                                         &(*sit),
-                                        currentMainSeg->numberOfVolta);
-                            currentMainSeg->rawVoltaChain->push_back(volta);
+                                        currentMainSeg->numberOfAlt);
+                            currentMainSeg->rawAltChain->push_back(alt);
                         } else {
                             // Count more one repeat
-                            currentMainSeg->numberOfVolta++;
+                            currentMainSeg->numberOfAlt++;
                         }
                     }
                 }
@@ -354,18 +358,18 @@ LilyPondSegmentsContext::precompute()
             // Nevertheless this code is temporarily kept here.
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
                 if (sit->repeatId) {
-                    if (sit->numberOfVolta == 1) {
-                        // As numberOfVolta = 1 there is one and only
-                        // one volta
-                        Volta * volta = (*sit->rawVoltaChain)[0];
-                        volta->data->volta = false;
-                        volta->data->ignored = false;
-                        volta->data->repeatId = 0;
-                        delete volta;
-                        delete sit->rawVoltaChain;
-                        sit->rawVoltaChain = nullptr;
+                    if (sit->numberOfAlt == 1) {
+                        // As numberOfAlt = 1 there is one and only
+                        // one alternate endingf
+                        AlternateEnding * alt = (*sit->rawAltChain)[0];
+                        alt->data->alt = false;
+                        alt->data->ignored = false;
+                        alt->data->repeatId = 0;
+                        delete alt;
+                        delete sit->rawAltChain;
+                        sit->rawAltChain = nullptr;
                         sit->repeatId = 0;
-                        sit->numberOfVolta = 0;
+                        sit->numberOfAlt = 0;
                     }
                 }
             }
@@ -373,7 +377,8 @@ LilyPondSegmentsContext::precompute()
     }
 
 
-    // Sort the volta in the print order and gather the duplicate ones
+    // Sort the alternate endings in the print order and gather
+    // the duplicate ones
 
     // Each repeating group of segments has one main repeating segment.
     // First gather the main segments of the synchronous groups of segments
@@ -383,7 +388,7 @@ LilyPondSegmentsContext::precompute()
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             for (sit = vit->second.begin(); sit != vit->second.end(); ++sit) {
-                if (sit->rawVoltaChain) {
+                if (sit->rawAltChain) {
                     const SegmentData * sd = &(*sit);
                     repeatMap[sit->segment->getStartTime()].push_back(sd);
                 }
@@ -395,10 +400,10 @@ LilyPondSegmentsContext::precompute()
     // There should be at most one element of each SegmentDataList in each
     // tracks/voices.
 
-    // Now sort and gather the volta in each synchronous group (the grouped
-    // volta have to be synchronous)
+    // Now sort and gather the alternate endings in each synchronous group
+    // (the grouped alternate endings have to be synchronous)
     for (RepeatMap::iterator i = repeatMap.begin(); i != repeatMap.end(); ++i) {
-        sortAndGatherVolta(i->second);
+        sortAndGatherAlt(i->second);
     }
 
 
@@ -464,7 +469,7 @@ LilyPondSegmentsContext::fixRepeatStartTimes()
 }
 
 void
-LilyPondSegmentsContext::fixVoltaStartTimes()
+LilyPondSegmentsContext::fixAltStartTimes()
 {
     TrackMap::iterator tit;
     VoiceMap::iterator vit;
@@ -474,17 +479,17 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
     // we know what segment may be repeated and what segment may be unfolded.
     // We can compute the start time of each segment in the LilyPond score.
 
-    // Validate the output of repeat with volta in LilyPond score
-    m_repeatWithVolta = true;
+    // Validate the output of repeat with alternate endings in LilyPond score
+    m_repeatWithAlt = true;
 
-    // Sort the repeat/volta sequences into start times
+    // Sort the volta/alt sequences by start times
     std::map<timeT, const SegmentData *> repeatedSegments;
     repeatedSegments.clear();
     for (tit = m_segments.begin(); tit != m_segments.end(); ++tit) {
         for (vit = tit->second.begin(); vit != tit->second.end(); ++vit) {
             SegmentSet &segSet = vit->second;
             for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-                if (sit->numberOfVolta) {
+                if (sit->numberOfAlt) {
                     repeatedSegments[sit->startTime] = &(*sit);
                 }
             }
@@ -498,11 +503,11 @@ LilyPondSegmentsContext::fixVoltaStartTimes()
 
         // Compute the duration error
         timeT duration = segData->duration;
-        timeT wholeDuration = duration * segData->numberOfVolta;
-        VoltaChain::iterator vci;
-        for (vci = segData->sortedVoltaChain->begin();
-             vci != segData->sortedVoltaChain->end(); ++vci) {
-            wholeDuration += (*vci)->data->duration * (*vci)->voltaNumber.size();
+        timeT wholeDuration = duration * segData->numberOfAlt;
+        AltChain::iterator vci;
+        for (vci = segData->sortedAltChain->begin();
+             vci != segData->sortedAltChain->end(); ++vci) {
+            wholeDuration += (*vci)->data->duration * (*vci)->altNumber.size();
             duration += (*vci)->data->duration;
         }
         timeT deltaT = wholeDuration - duration;
@@ -567,6 +572,7 @@ LilyPondSegmentsContext::useNextVoice()
     return m_voiceIterator->first;
 }
 
+/* unused
 int
 LilyPondSegmentsContext::getVoiceIndex()
 {
@@ -574,18 +580,19 @@ LilyPondSegmentsContext::getVoiceIndex()
     if (m_voiceIterator == m_trackIterator->second.end()) return -1;
     return m_voiceIterator->first;
 }
+*/
 
 Segment *
 LilyPondSegmentsContext::useFirstSegment()
 {
     m_lastWasOK = false;
-    m_firstVolta = false;
-    m_lastVolta = false;
+    m_firstAlt = false;
+    m_lastAlt = false;
     m_segIterator = m_voiceIterator->second.begin();
     if (m_segIterator == m_voiceIterator->second.end()) return nullptr;
-    if (m_repeatWithVolta && m_segIterator->ignored) return useNextSegment();
+    if (m_repeatWithAlt && m_segIterator->ignored) return useNextSegment();
 
-    m_wasRepeatingWithoutVolta = false;
+    m_wasRepeatingWithoutAlt = false;
     m_lastWasOK = true;
     return m_segIterator->segment;
 }
@@ -594,31 +601,31 @@ Segment *
 LilyPondSegmentsContext::useNextSegment()
 {
     if (m_lastWasOK) {
-        m_wasRepeatingWithoutVolta = isRepeated();
-        if (m_repeatWithVolta) {
-            // Process possible volta segment
-            if (m_segIterator->numberOfVolta) {
-                if (!m_currentVoltaChain) {
-                    m_firstVolta = true;
-                    m_currentVoltaChain = m_segIterator->sortedVoltaChain;
-                    m_voltaIterator = m_currentVoltaChain->begin();
-                    if (m_voltaIterator != m_currentVoltaChain->end()) {
-                        if (m_currentVoltaChain->size() == 1) m_lastVolta = true;
-                        return (*m_voltaIterator)->data->segment;
+        m_wasRepeatingWithoutAlt = isRepeated();
+        if (m_repeatWithAlt) {
+            // Process possible alternate ending segment
+            if (m_segIterator->numberOfAlt) {
+                if (!m_currentAltChain) {
+                    m_firstAlt = true;
+                    m_currentAltChain = m_segIterator->sortedAltChain;
+                    m_altIterator = m_currentAltChain->begin();
+                    if (m_altIterator != m_currentAltChain->end()) {
+                        if (m_currentAltChain->size() == 1) m_lastAlt = true;
+                        return (*m_altIterator)->data->segment;
                     }
                 } else {
-                    m_firstVolta = false;
-                    ++m_voltaIterator;
-                    if (m_voltaIterator != m_currentVoltaChain->end()) {
-                        VoltaChain::iterator nextIt = m_voltaIterator;
+                    m_firstAlt = false;
+                    ++m_altIterator;
+                    if (m_altIterator != m_currentAltChain->end()) {
+                        AltChain::iterator nextIt = m_altIterator;
                         ++nextIt;
-                        if (nextIt == m_currentVoltaChain->end()) {
-                            m_lastVolta = true;
+                        if (nextIt == m_currentAltChain->end()) {
+                            m_lastAlt = true;
                         }
-                        return (*m_voltaIterator)->data->segment;
+                        return (*m_altIterator)->data->segment;
                     } else {
-                        m_lastVolta = false;
-                        m_currentVoltaChain = nullptr;
+                        m_lastAlt = false;
+                        m_currentAltChain = nullptr;
                     }
                 }
             }
@@ -628,102 +635,113 @@ LilyPondSegmentsContext::useNextSegment()
 
     ++m_segIterator;
     if (m_segIterator == (*m_voiceIterator).second.end()) return nullptr;
-    if (m_repeatWithVolta && (*m_segIterator).ignored) return useNextSegment();
+    if (m_repeatWithAlt && (*m_segIterator).ignored) return useNextSegment();
 
     m_lastWasOK = true;
     return m_segIterator->segment;
 }
 
 timeT
-LilyPondSegmentsContext::getSegmentStartTime()
+LilyPondSegmentsContext::getSegmentStartTime() const
 {
     return m_segIterator->startTime;
 }
 
 int
-LilyPondSegmentsContext::getNumberOfRepeats()
+LilyPondSegmentsContext::getNumberOfVolta() const
 {
-    if (m_repeatWithVolta && (*m_segIterator).repeatId) {
-        return (*m_segIterator).numberOfVolta;
-    } else if ((*m_segIterator).simpleRepeatId) {
-        return (*m_segIterator).numberOfSimpleRepeats;
+    if (m_repeatWithAlt && m_segIterator->repeatId) {
+        return m_segIterator->numberOfAlt;
+    } else if (m_segIterator->simpleRepeatId) {
+        return m_segIterator->numberOfSimpleRepeats;
     } else {
-        return (*m_segIterator).numberOfRepeats;
+        int n = m_segIterator->numberOfRepeats;
+        return n ? n : 1;  // A not repeated segment is seen as played once
     }
 }
 
 bool
-LilyPondSegmentsContext::isRepeated()
+LilyPondSegmentsContext::isRepeated() const
 {
     return m_segIterator->numberOfRepeats
           || m_segIterator->numberOfSimpleRepeats;
 }
 
 bool
-LilyPondSegmentsContext::isRepeatingSegment()
+LilyPondSegmentsContext::isRepeatingSegment() const
 {
     return (*m_segIterator).numberOfRepeats
            && !(*m_segIterator).simpleRepeatId;
 }
 
 bool
-LilyPondSegmentsContext::isSimpleRepeatedLinks()
+LilyPondSegmentsContext::isSimpleRepeatedLinks() const
 {
     return (*m_segIterator).numberOfSimpleRepeats
            && (*m_segIterator).simpleRepeatId;
 }
 
 bool
-LilyPondSegmentsContext::isRepeatWithVolta()
+LilyPondSegmentsContext::isRepeatWithAlt() const
 {
-    if (m_repeatWithVolta) {
-        return (*m_segIterator).numberOfVolta;
+    if (m_repeatWithAlt) {
+        return (*m_segIterator).numberOfAlt;
     } else {
         return false;
     }
 }
 
 bool
-LilyPondSegmentsContext::isSynchronous()
+LilyPondSegmentsContext::isSynchronous() const
 {
     return (*m_segIterator).synchronous;
 }
 
 bool
-LilyPondSegmentsContext::isVolta()
+LilyPondSegmentsContext::isAlt() const
 {
-    return m_currentVoltaChain;
+    return m_currentAltChain;
 }
 
 bool
-LilyPondSegmentsContext::isFirstVolta()
+LilyPondSegmentsContext::isFirstAlt() const
 {
-    return m_firstVolta;
+    return m_firstAlt;
 }
 
 bool
-LilyPondSegmentsContext::isLastVolta()
+LilyPondSegmentsContext::isLastAlt() const
 {
-    return m_lastVolta;
+    return m_lastAlt;
+}
+
+const std::set<int> *
+LilyPondSegmentsContext::getAltNumbers() const
+{
+    if (!m_currentAltChain) return nullptr;  // Seg. is not an alt. ending
+    if (!(*m_segIterator).sortedAltChain) return nullptr;
+    if (m_altIterator == (*m_segIterator).sortedAltChain->end()) return nullptr;
+    return &(*m_altIterator)->altNumber;
 }
 
 std::string
-LilyPondSegmentsContext::getVoltaText()
+LilyPondSegmentsContext::getAltText()
 {
     std::stringstream out;
     std::set<int>::iterator it;
     int last, current;
 
-    if (!(*m_segIterator).sortedVoltaChain) return std::string("");
-    if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end())
+    if (!m_currentAltChain) return std::string("?");  // Seg. is not an alt. end.
+    if (!(*m_segIterator).sortedAltChain) return std::string("");
+    if (m_altIterator == (*m_segIterator).sortedAltChain->end())
         return std::string("");
 
-    it = (*m_voltaIterator)->voltaNumber.begin();
+    it = (*m_altIterator)->altNumber.begin();
     last = *it;
     out << last;
     current = last;
 
-    for (++it; it != (*m_voltaIterator)->voltaNumber.end(); ++it) {
+    for (++it; it != (*m_altIterator)->altNumber.end(); ++it) {
         if (*it > current + 1) {
             if (current == last) {
                 out << ", " << *it;
@@ -750,25 +768,25 @@ LilyPondSegmentsContext::getVoltaText()
 }
 
 int
-LilyPondSegmentsContext::getVoltaRepeatCount()
+LilyPondSegmentsContext::getAltRepeatCount()
 {
-    if (!(*m_segIterator).sortedVoltaChain) return 0;
-    if (m_voltaIterator == (*m_segIterator).sortedVoltaChain->end()) return 0;
-
-    return (*m_voltaIterator)->voltaNumber.size();
+    if (!m_currentAltChain) return -1;  // Current segment is not an alt. ending
+    if (!(*m_segIterator).sortedAltChain) return 0;
+    if (m_altIterator == (*m_segIterator).sortedAltChain->end()) return 0;
+    return (*m_altIterator)->altNumber.size();
 }
 
 Rosegarden::Key
-LilyPondSegmentsContext::getPreviousKey()
+LilyPondSegmentsContext::getPreviousKey() const
 {
-    if (m_currentVoltaChain) return (*m_voltaIterator)->data->previousKey;
+    if (m_currentAltChain) return (*m_altIterator)->data->previousKey;
     return m_segIterator->previousKey;
 }
 
 bool
-LilyPondSegmentsContext::wasRepeatingWithoutVolta()
+LilyPondSegmentsContext::wasRepeatingWithoutAlt() const
 {
-    return m_wasRepeatingWithoutVolta;
+    return m_wasRepeatingWithoutAlt;
 }
 
 bool
@@ -802,7 +820,7 @@ LilyPondSegmentsContext::getFirstSynchronousSegment(Segment * seg)
     if (m_GSSSegIterator->synchronous &&
         (m_GSSSegIterator->segment != m_GSSSegment) &&
         (m_GSSSegIterator->segment->getStartTime() == m_GSSSegment->getStartTime()) &&
-        (m_GSSSegIterator->segment != m_GSSSegment)) {
+        (m_GSSSegIterator->segment->getEndMarkerTime() == m_GSSSegment->getEndMarkerTime())) {
             return &(*m_GSSSegIterator);
     }
 
@@ -827,24 +845,23 @@ LilyPondSegmentsContext::getNextSynchronousSegment()
         if (m_GSSSegIterator->synchronous &&
             (m_GSSSegIterator->segment != m_GSSSegment) &&
             (m_GSSSegIterator->segment->getStartTime() == m_GSSSegment->getStartTime()) &&
-            (m_GSSSegIterator->segment != m_GSSSegment)) {
+            (m_GSSSegIterator->segment->getEndMarkerTime() == m_GSSSegment->getEndMarkerTime())) {
                 return &(*m_GSSSegIterator);
         }
     }
 }
-
-
 
 void
 LilyPondSegmentsContext::SegmentSet::scanForRepeatedLinks()
 {
     SegmentSet::iterator sit;
 
-    // First look for repeats with volta (which have precedence on simple repeats)
+    // First look for repeats with alternate endings (which have precedence
+    // on simple repeats)
     for (sit = begin(); sit != end(); ++sit) {
         setIterators(sit);
-        if (isPossibleStartOfRepeatWithVolta()) {
-            while (isNextSegmentsOfRepeatWithVolta()) {
+        if (isPossibleStartOfRepeatWithAlt()) {
+            while (isNextSegmentsOfRepeatWithAlt()) {
                 // Nothing to do here
             }
 
@@ -874,11 +891,11 @@ LilyPondSegmentsContext::SegmentSet::scanForRepeatedLinks()
 }
 
 bool
-LilyPondSegmentsContext::SegmentSet::isPossibleStartOfRepeatWithVolta()
+LilyPondSegmentsContext::SegmentSet::isPossibleStartOfRepeatWithAlt()
 {
     // OK if
     // s0 and s2 are valid repeating segs
-    // s1 and s3 are valid volta
+    // s1 and s3 are valid alternate endings
     //
     // If OK, mark s0, s1, s2 and s3 and return true
     // else keep them unchanged and return false
@@ -887,7 +904,7 @@ LilyPondSegmentsContext::SegmentSet::isPossibleStartOfRepeatWithVolta()
     if (m_it3 == end()) return false;
 
 
-    // Is *m_it0 a valid base of a repeating segment with volta ?
+    // Is *m_it0 a valid base of a repeating segment with alternate endings ?
 
     // Such a base is not already registered in a repeat chain
     if (m_it0->repeatId) return false;
@@ -931,41 +948,42 @@ LilyPondSegmentsContext::SegmentSet::isPossibleStartOfRepeatWithVolta()
     // It must be be a plain linked segment
     if (!m_it2->segment->isPlainlyLinked()) return false;
 
-    // It can't be separated from the previous volta neither overlap it
+    // It can't be separated from the previous alternate ending neither
+    // overlap it
     if (    m_it2->segment->getStartTime()
          != m_it1->segment->getEndMarkerTime()) return false;
 
 
-    // Is *m_it1 a valid volta ?
+    // Is *m_it1 a valid alternate ending ?
 
-    // A valid volta is not repeating
+    // A valid alternate ending is not repeating
     if (m_it1->numberOfRepeats) return false;
 
-    // A valid volta can't be the repeated segment
+    // A valid alternate ending can't be the repeated segment
     if (m_it1->segment->isLinkedTo(m_it0->segment)) return false;
 
-    // A valid volta can't be separated from the repeated
+    // A valid alternate ending can't be separated from the repeated
     // segment neither overlap it
     if (    m_it1->segment->getStartTime()
          != m_it0->segment->getEndMarkerTime()) return false;
 
-    // A volta which is not the last one must be synchronous
+    // An alternate ending which is not the last one must be synchronous
     if (!m_it1->synchronous) return false;
 
-    // A volta which is not the last one must have the same number
+    // An alternate ending which is not the last one must have the same number
     // of parallel segments has the main repeated segment
     if (m_it1->syncCount != m_it0->syncCount) return false;
 
 
-    // Is *m_it3 a valid volta ?
+    // Is *m_it3 a valid alternate ending ?
 
-    // A valid volta is not repeating
+    // A valid alternate ending is not repeating
     if (m_it3->numberOfRepeats) return false;
 
-    // A valid volta can't be the repeated segment
+    // A valid alternate ending can't be the repeated segment
     if (m_it3->segment->isLinkedTo(m_it0->segment)) return false;
 
-    // A valid volta can't be separated from the repeated
+    // A valid alternate ending can't be separated from the repeated
     // segment neither overlap it
     if (    m_it3->segment->getStartTime()
          != m_it2->segment->getEndMarkerTime()) return false;
@@ -973,30 +991,30 @@ LilyPondSegmentsContext::SegmentSet::isPossibleStartOfRepeatWithVolta()
 
     // All test succeeded
 
-    // Mark the segments as repeat with volta
+    // Mark the segments as repeat with alternate ending
     m_it0->repeatId = m_nextRepeatId;
     m_it1->repeatId = m_nextRepeatId;
-    m_it1->volta = true;
+    m_it1->alt = true;
     m_it1->ignored = true;
     m_it2->repeatId = m_nextRepeatId;
     m_it2->ignored = true;
     m_it3->repeatId = m_nextRepeatId;
-    m_it3->volta = true;
+    m_it3->alt = true;
     m_it3->ignored = true;
 
-    // set iterators for the isNextSegmentsOfRepeatWithVolta() step
+    // set iterators for the isNextSegmentsOfRepeatWithAlt() step
     setIterators(m_it2);
 
     return true;
 }
 
 bool
-LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithVolta()
+LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithAlt()
 {
-    // s0 and s1 are the last found repeated and volta segs
+    // s0 and s1 are the last found repeated and alt. ending segs
     //
     // OK if
-    // s2 and s3 are the next possible repeated and volta segs
+    // s2 and s3 are the next possible repeated and alt. ending segs
     //
     // If OK, mark s2 and s3 and return true
     // else keep them unchanged and return false
@@ -1005,7 +1023,7 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithVolta()
     if (m_it3 == end()) return false;
 
 
-    // Is the previous volta valid as an intermediary one ?
+    // Is the previous alternate ending valid as an intermediary one ?
 
     // It must be synchronous
     if (!m_it1->synchronous) return false;
@@ -1030,7 +1048,7 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithVolta()
 
     // It must be a synchronous segment
     if (!m_it2->synchronous) return false;
-    
+
     // It must have the right number of parallel segments
     if (m_it2->syncCount != m_it0-> syncCount) return false;
 
@@ -1040,19 +1058,20 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithVolta()
     // It must be be a plain linked segment
     if (!m_it0->segment->isPlainlyLinked()) return false;
 
-    // It can't be separated from the previous volta neither overlap it
+    // It can't be separated from the previous alternate ending
+    // neither overlap it
     if (    m_it2->segment->getStartTime()
          != m_it1->segment->getEndMarkerTime()) return false;
 
-    // Is *m_sit3 a valid volta ?
+    // Is *m_sit3 a valid alternate ending ?
 
-    // A valid volta is not repeating
+    // A valid alternate ending is not repeating
     if (m_it3->numberOfRepeats) return false;
 
-    // A valid volta can't be the repeated segment
+    // A valid alternate ending can't be the repeated segment
     if (m_it3->segment->isLinkedTo(m_it0->segment)) return false;
 
-    // A valid volta can't be separated from the repeated
+    // A valid alternate ending can't be separated from the repeated
     // segment neither overlap it
     if (    m_it3->segment->getStartTime()
          != m_it2->segment->getEndMarkerTime()) return false;
@@ -1060,14 +1079,14 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentsOfRepeatWithVolta()
 
     // All test succeeded
 
-    // Mark the segments as repeat with volta
+    // Mark the segments as repeat with alternate endings
     m_it2->repeatId = m_nextRepeatId;
     m_it2->ignored = true;
     m_it3->repeatId = m_nextRepeatId;
-    m_it3->volta = true;
+    m_it3->alt = true;
     m_it3->ignored = true;
 
-    // set iterators for the isNextSegmentsOfRepeatWithVolta() step
+    // set iterators for the isNextSegmentsOfRepeatWithAlt() step
     setIterators(m_it2);
 
     return true;
@@ -1104,8 +1123,8 @@ LilyPondSegmentsContext::SegmentSet::isPossibleStartOfSimpleRepeat()
     // Such a base must be a plain linked segment
     if (!m_it0->segment->isPlainlyLinked()) return false;
 
-    // A segment part of a repeat with volta chain can't be a simple
-    // repeated segment (precedence to repeat with volta)
+    // A segment part of a repeat with alternate endings chain can't be
+    // a simple repeated segment (precedence to repeat with alt. endings)
     if (m_it0->repeatId) return false;
 
     // Is *m_it1 a repeated *m_it0 ?
@@ -1138,13 +1157,13 @@ LilyPondSegmentsContext::SegmentSet::isPossibleStartOfSimpleRepeat()
     if (    m_it1->segment->getStartTime()
          != m_it0->segment->getEndMarkerTime()) return false;
 
-    // A segment part of a repeat with volta chain can't be a simple
-    // repeated segment (precedence to repeat with volta)
+    // A segment part of a repeat with alternate endings chain can't be a
+    // simple repeated segment (precedence to repeat with alternate endings)
     if (m_it1->repeatId) return false;
 
     // All test succeeded
 
-    // Mark the segments as repeat without volta
+    // Mark the segments as repeat without alternate ending
     m_it0->simpleRepeatId = m_nextRepeatId;
     m_it0->numberOfSimpleRepeats = 2;
     m_it0->wholeDuration = m_it0->duration * 2;
@@ -1203,13 +1222,13 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentOfSimpleRepeat()
     if (    m_it1->segment->getStartTime()
          != m_it0->segment->getEndMarkerTime()) return false;
 
-    // A segment part of a repeat with volta chain can't be a simple
-    // repeated segment (precedence to repeat with volta)
+    // A segment part of a repeat with alternate endings chain can't be a
+    // simple repeated segment (precedence to repeat with alternate endings)
     if (m_it1->repeatId) return false;
 
     // All test succeeded
 
-    // Mark the segment as repeat without volta
+    // Mark the segment as repeat without alternate ending
     m_it1->simpleRepeatId = m_nextRepeatId;
     m_it1->ignored = true;
 
@@ -1223,43 +1242,42 @@ LilyPondSegmentsContext::SegmentSet::isNextSegmentOfSimpleRepeat()
     return true;
 }
 
-
-
 void
-LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
+LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)
 {
     int idx;
     SegmentDataList::iterator it;
     SegmentDataList::iterator it1 = repeatList.begin();
     if (it1 == repeatList.end()) return;   // This should not happen
 
-    // Initialize the sorted volta chains with the first raw volta
+    // Initialize the sorted alternate endings chains with the first
+    // raw alternate ending
     for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-        (*it)->sortedVoltaChain = new VoltaChain;
-        if ((*it)->rawVoltaChain) {
-            (*it)->sortedVoltaChain->push_back((*(*it)->rawVoltaChain)[0]);
+        (*it)->sortedAltChain = new AltChain;
+        if ((*it)->rawAltChain) {
+            (*it)->sortedAltChain->push_back((*(*it)->rawAltChain)[0]);
         } else {
             // DON'T CRASH...
             std::cerr << "###############################"
                       << "############################################\n";
-            std::cerr << "LilyPondSegmentsContext::sortAndGatherVolta:"
-                      << " rawVoltaChain = 0 : THIS IS A BUG\n";
+            std::cerr << "LilyPondSegmentsContext::sortAndGatherAlt:"
+                      << " rawAltChain = 0 : THIS IS A BUG\n";
             std::cerr << "###############################"
                       << "############################################\n";
             return;
         }
     }
 
-    // Add the following volta
-    for (idx = 1; idx < (*it1)->numberOfVolta; idx++) {
-        // Is the volta indexed by idx similar to a previous one ?
+    // Add the following alternate endings
+    for (idx = 1; idx < (*it1)->numberOfAlt; idx++) {
+        // Is the alternate ending indexed by idx similar to a previous one ?
         bool found = false;
         int idx2;
-        for (idx2 = 0; idx2 < (int)(*it1)->sortedVoltaChain->size(); idx2++) {
+        for (idx2 = 0; idx2 < (int)(*it1)->sortedAltChain->size(); idx2++) {
             bool linked = true;
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-                Segment * seg1 = (*(*it)->rawVoltaChain)[idx]->data->segment;
-                Segment * seg2 = (*(*it)->sortedVoltaChain)[idx2]->data->segment;
+                Segment * seg1 = (*(*it)->rawAltChain)[idx]->data->segment;
+                Segment * seg2 = (*(*it)->sortedAltChain)[idx2]->data->segment;
                 if (!seg1->isPlainlyLinkedTo(seg2)) {
                     linked = false;
                     break;
@@ -1271,21 +1289,53 @@ LilyPondSegmentsContext::sortAndGatherVolta(SegmentDataList & repeatList)
             }
         }
         if (found) {
-            // Add new volta number in existing volta
+            // Add new alternate ending number in existing alternate ending
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-                (*(*it)->sortedVoltaChain)[idx2]->voltaNumber.insert(idx + 1);
+                (*(*it)->sortedAltChain)[idx2]->altNumber.insert(idx + 1);
             }
-            // Automatic volta in LilyPond is not possible when volta others
-            // than the first one is played several time.
+            // Automatic volta in LilyPond is not possible when an alternate
+            // ending other than the first one is played several time.
+            // (i.e. A B B : "1", "2-3")
             if (idx2 != 0) m_automaticVoltaUsable = false;
         } else {
-            // Add one more volta
+            // Add one more alternate ending
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-                (*it)->sortedVoltaChain->push_back((*(*it)->rawVoltaChain)[idx]);
+                (*it)->sortedAltChain->push_back((*(*it)->rawAltChain)[idx]);
+            }
+        }
+    }
+
+    // Previous code sets m_automaticVoltaUsable to false when the alternate
+    // endings sequence is "A B B" or "A A B B", but fails when sequence is
+    // "A A B A".
+    // Look again at the alternate endings and set m_automaticVoltaUsable
+    // as needed.
+    for (it = repeatList.begin(); it != repeatList.end(); ++it) {
+        if ((*it)->sortedAltChain) {
+            int altIndex = 0;
+            for (AltChain::iterator ia = (*it)->sortedAltChain->begin();
+                                ia != (*it)->sortedAltChain->end(); ++ia) {
+                altIndex++;
+                // Iterator to first number
+                std::set<int>::iterator is = (*ia)->altNumber.begin();
+                // Iterator to last number
+                std::set<int>::reverse_iterator ie = (*ia)->altNumber.rbegin();
+                int size = (*ia)->altNumber.size();
+                // The first alternate ending should start at number 1
+                if ((altIndex == 1) && (*is != 1)) m_automaticVoltaUsable = false;
+                // The numbers of an alternate ending should de continuous
+                if ((*ie - *is) != (size - 1)) m_automaticVoltaUsable = false;
             }
         }
     }
 }
+
+Segment *
+LilyPondSegmentsContext::getArbitrarySegment(int trackPos)
+{
+    return m_segments[trackPos][0].begin()->segment;
+}
+
 
 void
 LilyPondSegmentsContext::dump()
@@ -1324,38 +1374,38 @@ LilyPondSegmentsContext::dump()
                     << std::endl;
                 std::cout << "               noRepeat=" << (*sit).noRepeat
                     << " repeatId=" << (*sit).repeatId
-                    << " numberOfVolta=" << (*sit).numberOfVolta
-                    << " rawVoltaChain=" << (*sit).rawVoltaChain
+                    << " numberOfAlt=" << (*sit).numberOfAlt
+                    << " rawAltChain=" << (*sit).rawAltChain
                     << std::endl;
-                if (sit->rawVoltaChain) {
-                    VoltaChain::iterator i;
-                    for (i = sit->rawVoltaChain->begin(); i != sit->rawVoltaChain->end(); ++i) {
+                if (sit->rawAltChain) {
+                    AltChain::iterator i;
+                    for (i = sit->rawAltChain->begin(); i != sit->rawAltChain->end(); ++i) {
                         std::cout << "                 --> \"" << (*i)->data->segment->getLabel()
                             << "\": ";
                         std::set<int>::iterator j;
-                        for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
+                        for (j = (*i)->altNumber.begin(); j != (*i)->altNumber.end(); ++j) {
                             std::cout << (*j) << " ";
                         }
                         std::cout << "\n";
                     }
                 }
-                std::cout << "               sortedVoltaChain=" << (*sit).sortedVoltaChain
+                std::cout << "               sortedAltChain=" << (*sit).sortedAltChain
                         << std::endl;
-                if (sit->sortedVoltaChain) {
-                    VoltaChain::iterator i;
-                    for (i = sit->sortedVoltaChain->begin(); i != sit->sortedVoltaChain->end(); ++i) {
+                if (sit->sortedAltChain) {
+                    AltChain::iterator i;
+                    for (i = sit->sortedAltChain->begin(); i != sit->sortedAltChain->end(); ++i) {
                         std::cout << "                 --> \"" << (*i)->data->segment->getLabel()
                                 << "\"  [" << (*i)->data->previousKey.getName()
                                 << "] : ";
                         std::set<int>::iterator j;
-                        for (j = (*i)->voltaNumber.begin(); j != (*i)->voltaNumber.end(); ++j) {
+                        for (j = (*i)->altNumber.begin(); j != (*i)->altNumber.end(); ++j) {
                             std::cout << (*j) << " ";
                         }
                         std::cout << "\n";
                     }
                 }
                 std::cout << "               ignored=" << (*sit).ignored
-                          << " simpleRepeatId=" 
+                          << " simpleRepeatId="
                           << (*sit).simpleRepeatId << std::endl;
             }
         }
@@ -1395,27 +1445,27 @@ LilyPondSegmentsContext::SegmentDataList::dump()
     for (it = begin(); it != end(); ++it) {
         std::cout << " \"" << (*it)->segment->getLabel() << "\"" << std::endl;
 
-        if ((*it)->rawVoltaChain) {
+        if ((*it)->rawAltChain) {
             std::cout << "raw:" << std::endl;
-            VoltaChain::iterator ivc;
-            for (ivc=(*it)->rawVoltaChain->begin();
-                     ivc!=(*it)->rawVoltaChain->end(); ++ivc) {
+            AltChain::iterator ivc;
+            for (ivc=(*it)->rawAltChain->begin();
+                     ivc!=(*it)->rawAltChain->end(); ++ivc) {
                 std::cout << "   \"" << (*ivc)->data->segment->getLabel() << "\" :";
-                for (std::set<int>::iterator u=(*ivc)->voltaNumber.begin();
-                        u!=(*ivc)->voltaNumber.end(); ++u) {
+                for (std::set<int>::iterator u=(*ivc)->altNumber.begin();
+                        u!=(*ivc)->altNumber.end(); ++u) {
                     std::cout << " " << (*u);
                 }
             }
         }
-        
-        if ((*it)->sortedVoltaChain) {
+
+        if ((*it)->sortedAltChain) {
             std::cout << std::endl << "sorted:" << std::endl;
-            VoltaChain::iterator ivc;
-            for (ivc=(*it)->sortedVoltaChain->begin();
-                     ivc!=(*it)->sortedVoltaChain->end(); ++ivc) {
+            AltChain::iterator ivc;
+            for (ivc=(*it)->sortedAltChain->begin();
+                     ivc!=(*it)->sortedAltChain->end(); ++ivc) {
                 std::cout << "   \"" << (*ivc)->data->segment->getLabel() << "\" :";
-                for (std::set<int>::iterator u=(*ivc)->voltaNumber.begin();
-                        u!=(*ivc)->voltaNumber.end(); ++u) {
+                for (std::set<int>::iterator u=(*ivc)->altNumber.begin();
+                        u!=(*ivc)->altNumber.end(); ++u) {
                     std::cout << " " << (*u);
                 }
             }

@@ -3,7 +3,7 @@
 /*
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
-    Copyright 2000-2021 the Rosegarden development team.
+    Copyright 2000-2025 the Rosegarden development team.
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
@@ -30,7 +30,7 @@ namespace Rosegarden
 
 
 SelectionSituation::
-SelectionSituation(std::string eventType,
+SelectionSituation(const std::string& eventType,
                    EventSelection *selection,
                    int currentFlatValue) :
     m_eventType(eventType),
@@ -98,10 +98,10 @@ getMinMax() const
     for (EventContainer::const_iterator i = events.begin();
          i != events.end();
          ++i) {
-        if (isSuitable(*i)) { 
+        if (isSuitable(*i)) {
             long value;
             ControllerEventAdapter(*i).getValue(value);
-           
+
             if (max < value) { max = value; }
             if (value < min) { min = value; }
         }
@@ -134,6 +134,3 @@ calcMeanValue() const
 }
 
 }
-
-
-
