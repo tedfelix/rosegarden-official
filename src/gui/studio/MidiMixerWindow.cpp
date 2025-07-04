@@ -232,11 +232,13 @@ MidiMixerWindow::setupTabs()
 
         // For each Instrument in this MidiDevice...
         for (const Instrument *instrument : instruments) {
+            const InstrumentId instrumentId = instrument->getId();
 
             // Add a new MidiStrip.
             m_midiStrips.push_back(std::make_shared<MidiStrip>());
             std::shared_ptr<MidiStrip> midiStrip = m_midiStrips.back();
-            midiStrip->m_id = instrument->getId();
+            midiStrip->m_id = instrumentId;
+            m_instrumentIDToStripIndex[instrumentId] = m_midiStrips.size() - 1;
 
             // For each controller...
             for (size_t controllerIndex = 0;
@@ -269,16 +271,13 @@ MidiMixerWindow::setupTabs()
                 }
                 rotary->setKnobColour(knobColour);
 
-                rotary->setProperty("instrumentId", instrument->getId());
+                rotary->setProperty("instrumentId", instrumentId);
                 rotary->setProperty("controllerNumber", controllerNumber);
 
-                float value;
-                try {
+                float value{0};
+                if (instrument->hasController(controllerNumber))
                     value = float(instrument->getControllerValue(
                             controllerNumber));
-                } catch (const std::string &s) {
-                    continue;
-                }
                 rotary->setPosition(value);
 
                 connect(rotary, &Rotary::valueChanged,
@@ -310,15 +309,11 @@ MidiMixerWindow::setupTabs()
                     20,  // i_width
                     80,  // i_height
                     tabFrame);  // parent
-            fader->setProperty("instrumentId", instrument->getId());
-            MidiByte volumeValue;
-            try {
+            fader->setProperty("instrumentId", instrumentId);
+            MidiByte volumeValue{0};
+            if (instrument->hasController(MIDI_CONTROLLER_VOLUME))
                 volumeValue = instrument->
                         getControllerValue(MIDI_CONTROLLER_VOLUME);
-            } catch (std::string& s) {
-                // This should never get called.
-                volumeValue = instrument->getVolume();
-            }
             fader->setFader(float(volumeValue));
             connect(fader, &Fader::faderChanged,
                     this, &MidiMixerWindow::slotFaderLevelChanged);
@@ -411,43 +406,18 @@ MidiMixerWindow::slotControlChange(
     if (!instrument->hasController(controllerNumber))
         return;
 
-    // ??? Why doesn't the signal already have this for us?
     const MidiByte controllerValue = instrument->getControllerValue(
             controllerNumber);
 
     // Find the appropriate strip index given the InstrumentId.
 
-    size_t stripIndex = 0;
-    bool found = false;
-
-    // ??? Performance: LINEAR SEARCH
-    //     We've got to be able to do better.  A
-    //     std::map<InstrumentId, StripIndex> or similar should be better.
-
-    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
-
-    // For each MidiDevice in the Studio...
-    for (const MidiDevice *midiDevice : devices) {
-        InstrumentVector instruments = midiDevice->getPresentationInstruments();
-
-        // For each Instrument in the Device...
-        for (const Instrument *currentInstrument : instruments) {
-            if (currentInstrument->getId() == instrument->getId()) {
-                found = true;
-                break;
-            }
-
-            ++stripIndex;
-        }
-
-        if (found)
-            break;
-    }
-
-    // If the strip wasn't found, bail.
-    if (!found)
+    InstrumentIDToStripIndex::const_iterator iter =
+            m_instrumentIDToStripIndex.find(instrument->getId());
+    // Not found?  Bail.
+    if (iter == m_instrumentIDToStripIndex.end())
         return;
 
+    const size_t stripIndex = iter->second;
     if (stripIndex >= m_midiStrips.size())
         return;
 
@@ -456,14 +426,7 @@ MidiMixerWindow::slotControlChange(
     if (controllerNumber == MIDI_CONTROLLER_VOLUME) {
 
         // Update the volume Fader.
-
-        // setFader() emits a signal.  If we don't block it, we crash
-        // due to an endless loop.
-        // ??? Can we make Fader::setFader() only emit a signal on a
-        //     user change?  Then blockSignals() would be unnecessary.
-        m_midiStrips[stripIndex]->m_volumeFader->blockSignals(true);
         m_midiStrips[stripIndex]->m_volumeFader->setFader(controllerValue);
-        m_midiStrips[stripIndex]->m_volumeFader->blockSignals(false);
 
     } else {
 
@@ -491,20 +454,15 @@ void
 MidiMixerWindow::updateMeters()
 {
     // For each strip...
-    for (size_t stripIndex = 0;
-         stripIndex != m_midiStrips.size();
-         ++stripIndex) {
+    for (std::shared_ptr<MidiStrip> midiStrip : m_midiStrips) {
         LevelInfo info;
         if (!SequencerDataBlock::getInstance()->getInstrumentLevelForMixer(
-                m_midiStrips[stripIndex]->m_id, info)) {
+                midiStrip->m_id, info)) {
             continue;
         }
-        if (m_midiStrips[stripIndex]->m_vuMeter) {
-            m_midiStrips[stripIndex]->m_vuMeter->setLevel(double(info.level / 127.0));
-            RG_DEBUG << "updateMeters() - level  " << info.level;
-        } else {
-            RG_DEBUG << "updateMeters() - m_vuMeter for m_faders[" << stripIndex << "] is nullptr!";
-        }
+
+        if (midiStrip->m_vuMeter)
+            midiStrip->m_vuMeter->setLevel(double(info.level / 127.0));
     }
 }
 

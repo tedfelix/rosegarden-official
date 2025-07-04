@@ -460,6 +460,8 @@ AudioStrip::controlChange(int cc)
 
         // Get the appropriate instrument based on the ID.
         // ??? Performance: LINEAR SEARCH
+        // ??? Caller already has this.  They could pass it in and we could
+        //     avoid this.
         Instrument *instrument = studio.getInstrumentById(m_id);
 
         m_fader->setFader(instrument->getLevel());
@@ -477,6 +479,8 @@ AudioStrip::controlChange(int cc)
 
         // Get the appropriate instrument based on the ID.
         // ??? Performance: LINEAR SEARCH
+        // ??? Caller already has this.  They could pass it in and we could
+        //     avoid this.
         Instrument *instrument = studio.getInstrumentById(m_id);
 
         m_pan->setPosition(instrument->getPan() - 100);

@@ -141,6 +141,9 @@ private:
     typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
     MidiStripVector m_midiStrips;
 
+    typedef std::map<InstrumentId, int /*stripIndex*/> InstrumentIDToStripIndex;
+    InstrumentIDToStripIndex m_instrumentIDToStripIndex;
+
     /// Get InstrumentParameterBox controllers and remove volume.
     ControlList getIPBControlParameters(const MidiDevice *) const;
 

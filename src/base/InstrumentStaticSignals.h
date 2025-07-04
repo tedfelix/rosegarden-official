@@ -76,6 +76,10 @@ signals:
      * Note that this only applies to the initial control change
      * on a Track.  This has nothing to do with any control changes
      * that may appear on the rulers as the Composition progresses.
+     *
+     * ??? Controller value could be included in this signal, but we would
+     *     have to take into account the difference between MIDI and Audio
+     *     handling of volume and pan.
      */
     void controlChange(Instrument *instrument, int cc);
 

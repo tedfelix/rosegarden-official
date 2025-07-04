@@ -579,7 +579,8 @@ AudioMixerWindow2::slotControlChange(Instrument *instrument, int controllerNumbe
     InstrumentId instrumentId = instrument->getId();
 
     // for each input strip
-    // ??? Performance: LINEAR SEARCH.  std::map<id, strip> might be better.
+    // ??? Performance: LINEAR SEARCH.  std::map<InstrumentId, stripIndex>
+    //     might be better.  See MidiMixerWindow::m_instrumentIDToStripIndex.
     for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
         // If this is the one
         if (m_inputStrips[i]->getId() == instrumentId) {
