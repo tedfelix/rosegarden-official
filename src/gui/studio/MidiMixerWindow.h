@@ -82,6 +82,8 @@ private slots:
 
     /// Handle events from the external controller port.
     /**
+     * Modifies the Instrument on the currently displayed tab's Device.
+     *
      * @see RosegardenMainViewWidget::slotExternalController()
      * @see AudioMixerWindow2::slotExternalController()
      */

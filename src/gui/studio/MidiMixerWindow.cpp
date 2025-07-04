@@ -483,59 +483,50 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
     const MidiByte controllerNumber = event->getData1();
     const MidiByte value = event->getData2();
 
-    int tabIndex = m_tabWidget->currentIndex();
-
-    int loopTabIndex = 0;
+    // Get the MidiDevice for the current tab.
 
     const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
-    // For each MidiDevice in the Studio...
-    for (const MidiDevice *midiDevice : devices) {
+    const size_t currentTabIndex = m_tabWidget->currentIndex();
+    if (currentTabIndex >= devices.size())
+        return;
 
-        if (loopTabIndex != tabIndex) {
-            ++loopTabIndex;
+    const MidiDevice *midiDevice = devices[currentTabIndex];
+
+    // Get the Instrument for a specific channel in the Device.
+
+    const InstrumentVector instruments =
+            midiDevice->getPresentationInstruments();
+
+    // For each Instrument in the Device...
+    for (Instrument *instrument : instruments) {
+
+        // Not the right one?  Try the next.
+        if (instrument->getNaturalMidiChannel() != channel)
             continue;
-        }
 
-        // At this point, we've found the Device for the current tab.
-        // ??? Why not a std::vector<MidiDevice *> member variable?  Then this
-        //     device loop is unnecessary.
+        // Finally we need the specific controller on the Instrument.
+        // ??? WHY?  This doesn't appear to do anything other than filter
+        //     out controllers it cannot find in the MidiDevice.
+        // ??? We could use MidiDevice::getControlParameter(
+        //         Controller::EventType, controllerNumber) instead.  It
+        //     will return nullptr if it cannot find it.
 
-        // Next we need the Instrument for a specific channel in the Device.
+        const ControlList controllerList =
+                midiDevice->getControlParameters();
 
-        const InstrumentVector instruments =
-                midiDevice->getPresentationInstruments();
+        // For each Controller in the Instrument...
+        for (const ControlParameter &controlParameter : controllerList) {
+            // If this is the right controller...
+            if (controlParameter.getControllerNumber() == controllerNumber) {
+                RG_DEBUG << "slotExternalController(): Setting controller " << controllerNumber << " for instrument " << instrument->getId() << " to " << value;
 
-        // For each Instrument in the Device...
-        for (Instrument *instrument : instruments) {
+                instrument->setControllerValue(controllerNumber, value);
+                Instrument::emitControlChange(instrument, controllerNumber);
+                m_document->setModified();
 
-            // Not the right one?  Try the next.
-            if (instrument->getNaturalMidiChannel() != channel)
-                continue;
-
-            // Finally we need the specific controller on the Instrument.
-            // ??? WHY?  This doesn't appear to do anything other than filter
-            //     out controllers it cannot find in the MidiDevice.
-
-            const ControlList controllerList =
-                    midiDevice->getControlParameters();
-
-            // For each Controller in the Instrument...
-            // ??? MidiDevice::getControlParameter() already does this.
-            for (const ControlParameter &controlParameter : controllerList) {
-                // If this is the right controller...
-                if (controlParameter.getControllerNumber() == controllerNumber) {
-                    RG_DEBUG << "slotExternalController(): Setting controller " << controllerNumber << " for instrument " << instrument->getId() << " to " << value;
-
-                    instrument->setControllerValue(controllerNumber, value);
-                    Instrument::emitControlChange(instrument, controllerNumber);
-                    m_document->setModified();
-
-                    break;
-                }
+                break;
             }
-
-            break;
         }
 
         break;
@@ -563,41 +554,28 @@ MidiMixerWindow::sendControllerRefresh()
     // ??? Would be nice if we could skip all this if nothing is actually
     //     connected to the "external controller" port.
 
-    const int currentTabIndex = m_tabWidget->currentIndex();
-    if (currentTabIndex < 0)
-        return;
-
-    int loopTabIndex = 0;
+    // Get the MidiDevice for the current tab.
 
     const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
-    // For each Device in the Studio...
-    for (const MidiDevice *midiDevice : devices) {
+    const size_t currentTabIndex = m_tabWidget->currentIndex();
+    if (currentTabIndex >= devices.size())
+        return;
 
-        // Not the MidiDevice for the current tab?  Try the next.
-        if (loopTabIndex != currentTabIndex) {
-            // Keep count of the MidiDevice objects.
-            ++loopTabIndex;
+    const MidiDevice *midiDevice = devices[currentTabIndex];
+
+    const InstrumentVector instruments =
+            midiDevice->getPresentationInstruments();
+
+    // For each Instrument...
+    for (const Instrument *instrument : instruments) {
+
+        // No fixed channel?  Try the next.
+        if (!instrument->hasFixedChannel())
             continue;
-        }
 
-        // Found the MidiDevice for the current tab.
+        ExternalController::sendAllCCs(instrument);
 
-        const InstrumentVector instruments =
-                midiDevice->getPresentationInstruments();
-
-        // For each Instrument...
-        for (const Instrument *instrument : instruments) {
-
-            // No fixed channel?  Try the next.
-            if (!instrument->hasFixedChannel())
-                continue;
-
-            ExternalController::sendAllCCs(instrument);
-
-        }
-
-        break;
     }
 }
 
