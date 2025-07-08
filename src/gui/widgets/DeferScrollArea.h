@@ -40,9 +40,14 @@ public:
     ~DeferScrollArea() override;
 
     void wheelEvent(QWheelEvent*) override;
+    void keyPressEvent(QKeyEvent* event) override;
+    void keyReleaseEvent(QKeyEvent* event) override;
+
 public slots:
 signals:
     void gotWheelEvent(QWheelEvent*);
+    void gotKeyPressEvent(QKeyEvent*);
+    void gotKeyReleaseEvent(QKeyEvent*);
 
 protected:
 };

@@ -353,6 +353,22 @@ void CompositionView::slotExternalWheelEvent(QWheelEvent *e)
     e->accept();
 }
 
+void CompositionView::slotExternalKeyPressEvent(QKeyEvent *e)
+{
+    // Pass it up to RosegardenScrollView.
+    keyPressEvent(e);
+    // We've got this.  No need to propagate.
+    e->accept();
+}
+
+void CompositionView::slotExternalKeyReleaseEvent(QKeyEvent *e)
+{
+    // Pass it up to RosegardenScrollView.
+    keyReleaseEvent(e);
+    // We've got this.  No need to propagate.
+    e->accept();
+}
+
 void CompositionView::slotUpdateAll()
 {
     Profiler profiler("CompositionView::slotUpdateAll()");
