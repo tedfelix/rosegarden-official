@@ -511,6 +511,8 @@ SegmentNotationHelper::splitIntoTie(Segment::iterator &from, Segment::iterator t
     // if its duration is very close to requested duration, but that's
     // probably not a task for this function
 
+    RG_DEBUG << "Segment before splitIntoTie" << segment();
+
     timeT eventDuration = (*from)->getDuration();
     timeT baseTime = (*from)->getAbsoluteTime();
 
@@ -615,6 +617,8 @@ SegmentNotationHelper::splitIntoTie(Segment::iterator &from, Segment::iterator t
         last = insert(*i);
         if (from == end()) from = last;
     }
+
+    RG_DEBUG << "Segment after splitIntoTie" << segment();
 
     return last;
 }
@@ -895,8 +899,12 @@ SegmentNotationHelper::insertNote(Event *modelEvent)
         }
     }
     if (j != end() && (*j)->has(BEAMED_GROUP_TUPLET_BASE)) {
-        duration = duration * (*j)->get<Int>(BEAMED_GROUP_TUPLED_COUNT) /
-            (*j)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+        int tupled = (*j)->get<Int>(BEAMED_GROUP_TUPLED_COUNT);
+        int untupled = (*j)->get<Int>(BEAMED_GROUP_UNTUPLED_COUNT);
+        duration = getTupletNoteDuration(duration,
+                                         absoluteTime,
+                                         tupled,
+                                         untupled);
     }
 
     RG_DEBUG << "duration" << duration;
@@ -2351,6 +2359,34 @@ SegmentNotationHelper::autoSlur(timeT startTime, timeT endTime, bool legatoOnly)
     }
 }
 
+timeT SegmentNotationHelper::getTupletNoteDuration
+(timeT baseDuration, // untupled duration
+ timeT insertionTime,
+ int tupled,
+ int untupled)
+{
+    // find start of tuple
+    timeT baseUnit = baseDuration * tupled;
+    RG_DEBUG << "Base unit:" << baseUnit;
+    int tupletStartRatio = insertionTime / baseUnit;
+    timeT tupletStart = tupletStartRatio * baseUnit;
+    timeT approxNoteDuration = baseDuration * tupled / untupled;
+    RG_DEBUG << "tuplet start:" << tupletStart;
+    double posInTupleD = ((double)(insertionTime - tupletStart) /
+                          (double)approxNoteDuration);
+    int posInTuple = (int)(posInTupleD + 0.5);
+    int posNextInTuple = posInTuple + 1;
+    RG_DEBUG << "next position in tuple" << posNextInTuple;
+    double noteEndTimeD = (double)tupletStart +
+        (double)(posNextInTuple * baseDuration * tupled) /
+        (double)untupled;
+    timeT noteEndTime = (timeT)(noteEndTimeD + 0.5);
+    RG_DEBUG << "note end time:" << noteEndTime;
+    timeT trueDuration = noteEndTime - insertionTime;
+    RG_DEBUG << "true duration:" << trueDuration;
+    return trueDuration;
+}
+
 void SegmentNotationHelper::updateIndications(timeT startTime, timeT endTime)
 {
     RG_DEBUG << "updateIndications" << startTime << endTime;
@@ -2478,6 +2514,7 @@ int SegmentNotationHelper::findBorderTuplet(
 {
     Segment::iterator beginB = segment().findTime(segment().getBarStartForTime((*it)->getAbsoluteTime()));
     Segment::iterator endB = segment().findTime(segment().getBarEndForTime((*it)->getAbsoluteTime()));
+
     int maxcount = 0;
     int count = 0;
     int index = 0;
@@ -2521,6 +2558,5 @@ int SegmentNotationHelper::findBorderTuplet(
     end=endB;
     return count;
 }
-
 
 } // end of namespace
