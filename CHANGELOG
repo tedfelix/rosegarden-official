@@ -15,8 +15,10 @@ Included in this release...
   * Fix incorrect bpm on TimeWidget.  [d94e0e096c]
   * Fix occasional unwanted recovery prompt.  Bug #1725.  [b2ed6a748d]
   * Fix stuck lilypond preview dialog.  Bug #1726.  [5857468170]
+  * Fix track buttons and segment canvas getting out of sync.  Bug
+    #1728.  [b06a0cee07]
 
-stopped at bfe7faf877
+stopped at 7189b15212
 
 ===== New Features =====
 
