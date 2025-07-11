@@ -1362,7 +1362,8 @@ void CompositionView::leaveEvent(QEvent *)
     // Ask RosegardenMainWindow to clear the context help in the status bar.
     emit showContextHelp("");
     m_contextHelpShown = false;
-    clearFocus();
+    // no need to clear focus
+    //clearFocus();
 }
 
 void CompositionView::slotToolHelpChanged(const QString &text)
