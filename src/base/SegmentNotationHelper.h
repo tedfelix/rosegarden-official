@@ -553,6 +553,12 @@ public:
      */
     void autoSlur(timeT startTime, timeT endTime, bool legatoOnly);
 
+    /// get duration of tuplet note
+    timeT getTupletNoteDuration(timeT baseDuration, // untupled duration
+                                timeT insertionTime,
+                                int tupled,
+                                int untupled);
+
     /// Remove and adjust slurs as needed for a time range.
     /**
      * ??? This routine really just deals in slurs.  Would a better name be

@@ -56,6 +56,11 @@ TupletCommand::modifySegment()
         for (Segment::iterator i = getSegment().findTime(getStartTime());
                 getSegment().isBeforeEndMarker(i); ++i) {
 
+            // skip anything that is not a note or a rest
+            bool noteOrRest = (*i)->isa(Note::EventType) ||
+                (*i)->isa(Note::EventRestType);
+            if (! noteOrRest) continue;
+
             if ((*i)->getNotationAbsoluteTime() >=
                     getStartTime() + (m_unit * m_tupled))
                 break;

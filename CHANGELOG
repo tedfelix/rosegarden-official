@@ -1,3 +1,36 @@
+====== ROSEGARDEN 25.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 25.12
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * Fix tuplet of 7 in one beat leads to incorrect durations.  Bug
+    #1464.  [ffe92b80a1]
+  * Fix incorrect bpm on TimeWidget.  [d94e0e096c]
+  * Fix occasional unwanted recovery prompt.  Bug #1725.  [b2ed6a748d]
+  * Fix stuck lilypond preview dialog.  Bug #1726.  [5857468170]
+  * Fix track buttons and segment canvas getting out of sync.  Bug
+    #1728.  [b06a0cee07]
+
+stopped at 7189b15212
+
+===== New Features =====
+
+  * Rulers now support aftertouch, both channel and key.  Feature
+    Request #527.  [5ee9c807d8]
+
+===== General Improvements =====
+
+  * Time widget rewrite and UI simplification.  [e91f8a73f0]
+
+===== Additional Contributions =====
+
 ====== ROSEGARDEN 25.06 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 25.06

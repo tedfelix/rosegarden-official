@@ -228,6 +228,24 @@ public slots:
      */
     void slotExternalWheelEvent(QWheelEvent *);
 
+    /// Handle TrackButtons scroll key events.
+    /**
+     * Forwards the events to RosegardenScrollView to make sure we are
+     * synced up with TrackButtons.
+     *
+     * @see TrackEditor::m_trackButtonScroll
+     */
+    void slotExternalKeyPressEvent(QKeyEvent *);
+
+    /// Handle TrackButtons scroll key events.
+    /**
+     * Forwards the events to RosegardenScrollView to make sure we are
+     * synced up with TrackButtons.
+     *
+     * @see TrackEditor::m_trackButtonScroll
+     */
+    void slotExternalKeyReleaseEvent(QKeyEvent *);
+
     /// Redraw everything.  Segments and artifacts.
     /**
      * This is called in many places after making changes that affect the

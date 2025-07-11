@@ -267,10 +267,14 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_compositionView->verticalScrollBar(), &QAbstractSlider::sliderMoved,
             this, &TrackEditor::slotVerticalScrollTrackButtons);
 
-    // Connect scrolling with the mouse wheel in the TrackButtons to
-    // scrolling the CompositionView.
+    // Connect scrolling with the mouse wheel and key events in the
+    // TrackButtons to the CompositionView.
     connect(m_trackButtonScroll, &DeferScrollArea::gotWheelEvent,
             m_compositionView, &CompositionView::slotExternalWheelEvent);
+    connect(m_trackButtonScroll, &DeferScrollArea::gotKeyPressEvent,
+            m_compositionView, &CompositionView::slotExternalKeyPressEvent);
+    connect(m_trackButtonScroll, &DeferScrollArea::gotKeyReleaseEvent,
+            m_compositionView, &CompositionView::slotExternalKeyReleaseEvent);
 
     // Synchronize the rulers with the horizontal scrollbar.
 
