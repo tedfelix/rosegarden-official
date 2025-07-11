@@ -36,9 +36,8 @@ class SegmentExcludeFromPrintingCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::SegmentExcludeFromPrintingCommand)
 
 public:
-    SegmentExcludeFromPrintingCommand(
-            SegmentSelection &segments,
-			bool exclude);
+    SegmentExcludeFromPrintingCommand(const SegmentSelection &segments,
+                                      bool exclude);
 
     void execute() override;
     void unexecute() override;

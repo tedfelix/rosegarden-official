@@ -258,15 +258,11 @@ SegmentSplitByPitchCommand::getNewRangingSplitPitch(Segment::iterator prevNote,
     while (lastSplitPitch > middle && lastSplitPitch > m_splitPitch - 12) {
         if (lastSplitPitch - lowest < 12)
             return lastSplitPitch;
-        if (lastSplitPitch <= m_splitPitch - 12)
-            return lastSplitPitch;
         --lastSplitPitch;
     }
 
     while (lastSplitPitch < middle && lastSplitPitch < m_splitPitch + 12) {
         if (highest - lastSplitPitch < 12)
-            return lastSplitPitch;
-        if (lastSplitPitch >= m_splitPitch + 12)
             return lastSplitPitch;
         ++lastSplitPitch;
     }
@@ -296,8 +292,8 @@ SegmentSplitByPitchCommand::getSplitPitchAt(Segment::iterator i)
         // Find tone index.
         typedef std::vector<int>::iterator iterator;
         int toneIndex = 0;
-        for (iterator i = c0p.begin(); i != c0p.end(); ++i) {
-            if ((*i) < m_splitPitch) { toneIndex++; }
+        for (iterator i1 = c0p.begin(); i1 != c0p.end(); ++i1) {
+            if ((*i1) < m_splitPitch) { toneIndex++; }
         }
         m_toneIndex = toneIndex;
         // This time split-pitch will just be initial split-pitch, so

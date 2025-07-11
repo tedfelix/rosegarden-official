@@ -38,10 +38,10 @@ class Segment;
 class SegmentCommand : public NamedCommand
 {
 public:
-    SegmentCommand(QString name, const std::vector<Segment*>&);
+    SegmentCommand(const QString& name, const std::vector<Segment*>&);
 
     typedef std::vector<Segment*> segmentlist;
-    
+
 protected:
     segmentlist m_segments;
 };

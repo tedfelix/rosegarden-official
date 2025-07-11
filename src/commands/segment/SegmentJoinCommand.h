@@ -46,7 +46,7 @@ public:
     void unexecute() override;
 
     typedef std::vector<Segment *> SegmentVec;
-    static Segment *makeSegment(SegmentVec oldSegments);
+    static Segment *makeSegment(const SegmentVec& oldSegments);
 
 private:
     SegmentVec m_oldSegments;

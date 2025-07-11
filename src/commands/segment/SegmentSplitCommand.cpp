@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -60,8 +60,8 @@ SegmentSplitCommand::~SegmentSplitCommand()
 // ??? Or we could have execute() return a bool indicating success, then
 //   deal with failure within CommandHistory::addCommand().  That seems
 //   like a big project, however.
-bool 
-SegmentSplitCommand::isValid(Segment * segment, timeT splitTime)
+bool
+SegmentSplitCommand::isValid(const Segment * segment, timeT splitTime)
 {
     // Can't split before or at the very start of a segment.
     if (splitTime <= segment->getStartTime())
@@ -85,7 +85,7 @@ getNewSegments(Segment *segment, timeT splitTime, bool keepLabel)
     newSegmentB->setStartTime(splitTime);
 
     // !!! Set Composition?
-    
+
     Event *clefEvent = nullptr;
     Event *keyEvent = nullptr;
 
@@ -192,7 +192,7 @@ SegmentSplitCommand::execute()
         m_newSegmentA = splitSegments[0];
         m_newSegmentB = splitSegments[1];
     }
-    
+
     m_segment->getComposition()->addSegment(m_newSegmentA);
     m_segment->getComposition()->addSegment(m_newSegmentB);
     m_segment->getComposition()->detachSegment(m_segment);

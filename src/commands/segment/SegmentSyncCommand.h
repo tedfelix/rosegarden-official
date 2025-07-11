@@ -42,8 +42,11 @@ public:
     SegmentSyncCommand(SegmentSelection selection,
             int newTranspose, int lowRange, int highRange, const Clef& clef);
 
-    SegmentSyncCommand(std::vector<Segment *> segments,
-            int newTranspose, int lowRange, int highRange, const Clef& clef);
+    SegmentSyncCommand(const std::vector<Segment *>& segments,
+                       int newTranspose,
+                       int lowRange,
+                       int highRange,
+                       const Clef& clef);
 
     SegmentSyncCommand(SegmentMultiSet& segments, TrackId selectedTrack,
             int newTranspose, int lowRange, int highRange, const Clef& clef);
