@@ -495,11 +495,13 @@ private:
      * Override (non-virtual) ActionFileClient's version to allow for more
      * complex enable/disable behavior.
      */
+    // cppcheck-suppress duplInheritedMember
     void enterActionState(QString stateName);
     /**
      * Override (non-virtual) ActionFileClient's version to allow for more
      * complex enable/disable behavior.
      */
+    // cppcheck-suppress duplInheritedMember
     void leaveActionState(QString stateName);
 
 public slots:

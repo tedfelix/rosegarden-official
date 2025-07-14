@@ -37,6 +37,7 @@ namespace Rosegarden
 
 class RIFFAudioFile : public AudioFile
 {
+    // cppcheck-suppress duplInheritedMember
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RIFFAudioFile)
 public:
     RIFFAudioFile(unsigned int id,

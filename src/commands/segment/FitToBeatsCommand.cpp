@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -88,7 +88,7 @@ FitToBeatsCommand::initialise(Segment *s)
 
     // Get the real times from the beat segment
     vecRealTime beatRealTimes;
-    int success = 
+    int success =
         getBeatRealTimes(s, beatRealTimes);
     if(!success) { return; }
 
@@ -104,12 +104,12 @@ FitToBeatsCommand::initialise(Segment *s)
     scratchComposition.clear();
     scratchComposition.setCompositionDefaultTempo(defaultTempo);
 
-    
+
     // Set tempos in scratchComposition such that each observed beat
     // in beatRealTimes takes one beatTime.
     {
         // Starting time is the same for both.
-        timeT firstBeatTime = 
+        timeT firstBeatTime =
             m_composition->getElapsedTimeForRealTime(beatRealTimes[0]);
 
         unsigned int numBeats = beatRealTimes.size();
@@ -209,7 +209,7 @@ FitToBeatsCommand::initialise(Segment *s)
             }
             else {
                 timeT oldEndTime = oldStartTime + duration;
-                RealEndTime = 
+                RealEndTime =
                     m_composition->getElapsedRealTime(oldEndTime);
             }
 
@@ -268,7 +268,7 @@ FitToBeatsCommand::getBeatRealTimes(Segment *s,
 // @remarks Currently discards ramping because TempoT doesn't hold it.
 // @author Tom Breton (Tehom)
 FitToBeatsCommand::TempoChange
-FitToBeatsCommand::getTempoChange(Composition &composition, int i)
+FitToBeatsCommand::getTempoChange(const Composition &composition, int i)
 {
     return composition.getTempoChange(i);
 }
@@ -278,12 +278,13 @@ FitToBeatsCommand::getTempoChange(Composition &composition, int i)
 // @param Reference to a TempoMap, to be filled.
 // @author Tom Breton (Tehom)
 void
-FitToBeatsCommand::getCurrentTempi(Composition &composition, TempoMap &Tempos)
+FitToBeatsCommand::getCurrentTempi(const Composition &composition,
+                                   TempoMap &Tempos)
 {
     const int numTempoChanges = composition.getTempoChangeCount();
     for (int i = 0; i < numTempoChanges; ++i) {
         TempoChange tempoChange =
-            getTempoChange(composition, i); 
+            getTempoChange(composition, i);
         Tempos[tempoChange.first] = tempoChange.second;
     }
 }

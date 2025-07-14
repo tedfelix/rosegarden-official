@@ -78,6 +78,7 @@ public:
     ~ClefLinkInsertionCommand() override;
 
     QString getThisGlobalName(const Clef *clef = nullptr) override;
+    // cppcheck-suppress duplInheritedMember
     static QString getGlobalName(const Clef *clef = nullptr);
 
 protected:

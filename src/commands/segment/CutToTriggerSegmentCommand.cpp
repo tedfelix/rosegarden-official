@@ -42,13 +42,13 @@ namespace Rosegarden
 CutToTriggerSegmentCommand::CutToTriggerSegmentCommand(
         EventSelection *selection,
         Composition &comp,
-        QString name,
+        const QString& name,
         int basePitch,
         int baseVelocity,
-        NoteStyleName noteStyle,
+        const NoteStyleName& noteStyle,
         bool retune,
         const std::string& timeAdjust,
-        Mark mark) :
+        const Mark& mark) :
     BasicCommand(tr("Make Ornament"), *selection, true),
     m_paster(&comp, selection, name, basePitch, baseVelocity),
     m_selection(selection),

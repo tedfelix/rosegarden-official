@@ -86,7 +86,7 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
 
     int startBar = m_composition->getBarNumber(s->getStartTime());
     int barNo = startBar;
-    int beat = 0;
+    int beat1 = 0;
 
     for (Segment::iterator i = s->begin(); s->isBeforeEndMarker(i); ++i) {
         if ((*i)->isa(Note::EventType)) {
@@ -96,11 +96,11 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
                 m_composition->getTimeSignatureInBar(barNo, isNew);
 
             beatTimeTs.push_back(m_composition->getBarStart(barNo) +
-                                 beat * sig.getBeatDuration());
+                                 beat1 * sig.getBeatDuration());
 
-            if (++beat >= sig.getBeatsPerBar()) {
+            if (++beat1 >= sig.getBeatsPerBar()) {
                 ++barNo;
-                beat = 0;
+                beat1 = 0;
             }
 
             beatRealTimes.push_back(s->getComposition()->getElapsedRealTime
@@ -132,10 +132,10 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
 
     timeT quarter = Note(Note::Crotchet).getDuration();
 
-    for (size_t beat = 1; beat < beatTimeTs.size(); ++beat) {
+    for (size_t beat2 = 1; beat2 < beatTimeTs.size(); ++beat2) {
 
-        timeT beatTime = beatTimeTs[beat] - beatTimeTs[beat - 1];
-        RealTime beatRealTime = beatRealTimes[beat] - beatRealTimes[beat - 1];
+        timeT beatTime = beatTimeTs[beat2] - beatTimeTs[beat2 - 1];
+        RealTime beatRealTime = beatRealTimes[beat2] - beatRealTimes[beat2 - 1];
 
         // Calculate tempo to nearest qpm.
         // This is 60 / {quarter note duration in seconds}
@@ -148,11 +148,11 @@ CreateTempoMapFromSegmentCommand::initialise(Segment *s)
         double qpm = (60.0 * beatTime) / (beatSec * quarter);
         tempoT tempo = Composition::getTempoForQpm(int(qpm + 0.001));
 
-        RG_DEBUG << "prev beat: " << beatTimeTs[beat] << ", prev beat real time " << beatRealTimes[beat];
+        RG_DEBUG << "prev beat: " << beatTimeTs[beat2] << ", prev beat real time " << beatRealTimes[beat2];
         RG_DEBUG << "time " << beatTime << ", rt " << beatRealTime << ", beatSec " << beatSec << ", tempo " << tempo;
 
         if (tempo != prevTempo) {
-            m_newTempi[beatTimeTs[beat - 1]] = tempo;
+            m_newTempi[beatTimeTs[beat2 - 1]] = tempo;
             prevTempo = tempo;
         }
     }

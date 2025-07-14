@@ -40,7 +40,7 @@ class Segment;
 class SegmentReconfigureCommand : public NamedCommand
 {
 public:
-    SegmentReconfigureCommand(QString name, Composition *composition);
+    SegmentReconfigureCommand(const QString& name, Composition *composition);
     ~SegmentReconfigureCommand() override;
 
     // ??? rename: addChange()
@@ -67,7 +67,7 @@ private:
 
     // Does the actual work of swapping the changes into the segments.
     timeT swap();
-    
+
     // Command overrides
     void execute() override;
     void unexecute() override;

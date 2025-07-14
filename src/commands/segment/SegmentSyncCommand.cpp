@@ -45,7 +45,11 @@ SegmentSyncCommand::SegmentSyncCommand(SegmentSelection selection, int newTransp
     }
 }
 
-SegmentSyncCommand::SegmentSyncCommand(std::vector<Segment *> segments, int newTranspose, int lowRange, int highRange, const Clef& clef) :
+SegmentSyncCommand::SegmentSyncCommand(const std::vector<Segment *>& segments,
+                                       int newTranspose,
+                                       int lowRange,
+                                       int highRange,
+                                       const Clef& clef) :
         MacroCommand(tr("Sync segment parameters"))
 {
 	for (size_t i = 0; i < segments.size(); i++) {

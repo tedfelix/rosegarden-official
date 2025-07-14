@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -29,7 +29,7 @@ namespace Rosegarden
 
 
 SegmentReconfigureCommand::SegmentReconfigureCommand(
-        QString name,
+        const QString& name,
         Composition *composition) :
     NamedCommand(name),
     m_composition(composition),
@@ -95,7 +95,7 @@ SegmentReconfigureCommand::swap()
         return 0;
 
     timeT latestEndTime = 0;
-    
+
     for (ChangeSet::iterator i = m_changeSet.begin();
             i != m_changeSet.end(); ++i) {
 
@@ -135,7 +135,7 @@ SegmentReconfigureCommand::swap()
 
         // If segment left from the current segment is repeating then we need to reconfigure
         // it
-        Segment* curr_segment = i->segment;
+        const Segment* curr_segment = i->segment;
         Composition::iterator segment_iterator = m_composition->findSegment(curr_segment);
 
         // Check that we don't have most upper left segment in the composition

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -65,7 +65,7 @@ SegmentJoinCommand::~SegmentJoinCommand()
 }
 
 Segment *
-SegmentJoinCommand::makeSegment(SegmentVec oldSegments)
+SegmentJoinCommand::makeSegment(const SegmentVec& oldSegments)
 {
     // We can proceed even if composition is nullptr, just normalize
     // rests will do less.
@@ -185,7 +185,7 @@ SegmentJoinCommand::makeSegment(SegmentVec oldSegments)
         /// than ideal without it;
         newSegment->setComposition(composition);
         newSegment->normalizeRests(overlapStart, overlapEnd);
-        newSegment->setComposition(nullptr);        
+        newSegment->setComposition(nullptr);
     }
 
     return newSegment;
@@ -209,7 +209,7 @@ SegmentJoinCommand::execute()
     // Select this new joined segment.
     RosegardenMainWindow::self()->getView()->getTrackEditor()->
         getCompositionView()->getModel()->setSelected(m_newSegment);
-    
+
     for (size_t i = 0; i < m_oldSegments.size(); ++i) {
         composition->detachSegment(m_oldSegments[i]);
     }

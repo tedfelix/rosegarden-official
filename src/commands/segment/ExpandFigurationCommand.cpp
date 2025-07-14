@@ -114,7 +114,7 @@ ExpandFigurationCommand::initialise(SegmentSelection selection)
         Q_ASSERT_X(it != segMap.end(),
                    "ExpandFigurationCommand::initialise",
                    "didn't find the segment");
-        SegmentFigData& segmentData = it->second;
+        const SegmentFigData& segmentData = it->second;
 
         if (!segmentData.isa(SegmentFigData::ChordSource))
             { continue; }
