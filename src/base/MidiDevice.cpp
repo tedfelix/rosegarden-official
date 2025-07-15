@@ -1048,21 +1048,18 @@ ControlParameter *
 MidiDevice::getControlParameter(
         const std::string &type, Rosegarden::MidiByte controllerNumber)
 {
-    ControlList::iterator it = m_controlList.begin();
-
-    for (; it != m_controlList.end(); ++it)
+    // For each ControlParameter...
+    for (ControlParameter &controlParameter : m_controlList)
     {
-        if (it->getType() == type)
+        if (controlParameter.getType() == type)
         {
             // Return matched on type for most events
-            //
             if (type != Rosegarden::Controller::EventType)
-                return &*it;
+                return &controlParameter;
 
             // Also match controller value for Controller events
-            //
-            if (it->getControllerNumber() == controllerNumber)
-                return  &*it;
+            if (controlParameter.getControllerNumber() == controllerNumber)
+                return  &controlParameter;
         }
     }
 

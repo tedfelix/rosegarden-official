@@ -157,6 +157,7 @@ MidiMixerWindow::MidiMixerWindow() :
     // ??? Ideally, we need to allow resizing, scale the controls, and
     //     store/restore the window size on close/open.
     //     AMW2 needs this ability as well.
+    //     Bug #1677
     setFixedSize(geometry().size());
 }
 
@@ -181,14 +182,14 @@ MidiMixerWindow::setupTabs()
 
     // For each MidiDevice in the Studio...
     for (const MidiDevice *midiDevice : devices) {
-        // Get the control parameters that are on the IPB (and hence can
-        // be shown here too).
-        ControlList controls = getIPBControlParameters(midiDevice);
-
         InstrumentVector instruments = midiDevice->getPresentationInstruments();
         // Don't add a frame for empty devices
         if (!instruments.size())
             continue;
+
+        // Get the control parameters that are on the IPB (and hence can
+        // be shown here too).
+        const ControlList controls = getIPBControlParameters(midiDevice);
 
         QFrame *tabFrame = new QFrame(m_tabWidget);
         tabFrame->setContentsMargins(10, 10, 10, 10);
@@ -498,39 +499,37 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
     const InstrumentVector instruments =
             midiDevice->getPresentationInstruments();
 
-    // For each Instrument in the Device...
-    for (Instrument *instrument : instruments) {
+    // Find the Instrument for this channel.
 
-        // Not the right one?  Try the next.
-        if (instrument->getNaturalMidiChannel() != channel)
+    Instrument *instrument = nullptr;
+
+    for (Instrument *loopInstrument : instruments) {
+        if (!loopInstrument)
             continue;
-
-        // Finally we need the specific controller on the Instrument.
-        // ??? WHY?  This doesn't appear to do anything other than filter
-        //     out controllers it cannot find in the MidiDevice.
-        // ??? We could use MidiDevice::getControlParameter(
-        //         Controller::EventType, controllerNumber) instead.  It
-        //     will return nullptr if it cannot find it.
-
-        const ControlList controllerList =
-                midiDevice->getControlParameters();
-
-        // For each Controller in the Instrument...
-        for (const ControlParameter &controlParameter : controllerList) {
-            // If this is the right controller...
-            if (controlParameter.getControllerNumber() == controllerNumber) {
-                RG_DEBUG << "slotExternalController(): Setting controller " << controllerNumber << " for instrument " << instrument->getId() << " to " << value;
-
-                instrument->setControllerValue(controllerNumber, value);
-                Instrument::emitControlChange(instrument, controllerNumber);
-                m_document->setModified();
-
-                break;
-            }
+        // If this is the one, we're done.
+        if (loopInstrument->getNaturalMidiChannel() == channel) {
+            instrument = loopInstrument;
+            break;
         }
-
-        break;
     }
+    // Not found?  Bail.
+    if (!instrument)
+        return;
+
+    // Only handle controllers that are defined for the MidiDevice.
+
+    // Find the controller on the MidiDevice.
+    const ControlParameter *controlParameter =
+            midiDevice->getControlParameterConst(
+                    Controller::EventType, controllerNumber);
+
+    // If this MidiDevice has this controller, make the control change.
+    if (controlParameter) {
+        instrument->setControllerValue(controllerNumber, value);
+        Instrument::emitControlChange(instrument, controllerNumber);
+        m_document->setModified();
+    }
+
 }
 
 void
@@ -582,13 +581,13 @@ MidiMixerWindow::sendControllerRefresh()
 void
 MidiMixerWindow::slotSynchronise()
 {
-    RG_DEBUG << "MidiMixer::slotSynchronise";
+    RG_DEBUG << "slotSynchronise()";
 
     // This is connected to DeviceManagerDialog::deviceNamesChanged() but it
     // does nothing.
 
     // ??? We should probably connect to document changed and refresh
-    //     everything.  See what AudioMixerWindow does and follow its lead.
+    //     everything.  See AudioMixerWindow2::slotDocumentModified().
 
     //setupTabs();
 }
@@ -614,9 +613,6 @@ MidiMixerWindow::slotHelpAbout()
 ControlList
 MidiMixerWindow::getIPBControlParameters(const MidiDevice *dev) const
 {
-    // ??? Instrument::getStaticControllers() might simplify all
-    //     this quite a bit.  See RosegardenMainWindow::changeEvent().
-
     const ControlList allControllers = dev->getIPBControlParameters();
     ControlList controllersFiltered;
 
@@ -642,9 +638,6 @@ MidiMixerWindow::changeEvent(QEvent *event)
     // in Rosegarden native mode.
     if (!ExternalController::self().isNative())
         return;
-
-    // ??? Double updates seem to go out so we might want to be a little
-    //     more picky about the event we react to.
 
     // We only want to handle window activation.
     if (event->type() != QEvent::ActivationChange)
