@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -44,6 +43,7 @@ class Fader;
 class MappedEvent;
 class MidiDevice;
 class MidiMixerVUMeter;
+class MidiStrip;
 class RosegardenDocument;
 class Rotary;
 
@@ -120,25 +120,6 @@ private:
      * sync with whichever Mixer window is active.
      */
     void sendControllerRefresh();
-
-    // ??? Need to move this out into its own header/cpp and move functionality
-    //     from here into this new class.  See AudioStrip.
-    class MidiStrip
-    {
-    public:
-        InstrumentId m_id{0};
-        MidiMixerVUMeter *m_vuMeter{nullptr};
-        Fader *m_volumeFader{nullptr};
-        // ??? We can get rid of this once we get IntrumentId and controller
-        //     number into the Rotary objects via QObject properties.  Then
-        //     all we need is the Rotary * here.
-        struct RotaryInfo
-        {
-            MidiByte controllerNumber{0};
-            Rotary *rotary{nullptr};
-        };
-        std::vector<RotaryInfo> m_controllerRotaries;
-    };
 
     typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
     MidiStripVector m_midiStrips;

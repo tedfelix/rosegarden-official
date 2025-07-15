@@ -21,6 +21,7 @@
 #include "MidiMixerWindow.h"
 
 #include "MidiMixerVUMeter.h"
+#include "MidiStrip.h"
 
 #include "sound/Midi.h"  // For MIDI_CONTROLLER_VOLUME, etc...
 #include "misc/Debug.h"
