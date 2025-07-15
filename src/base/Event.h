@@ -68,6 +68,14 @@ namespace Rosegarden
  * ProgramChange (in MidiTypes.h) which can create Event objects as
  * needed.  Generally, the concrete types provide a "getAs*Event()" routine
  * to create a corresponding Event object.
+ *
+ * ??? In general, Rosegarden keeps an Event for each tied note in notation.
+ *     Bug #1575 discusses the possibility of keeping a single Event for each
+ *     set of tied notes and making ties just a notation editor thing.  Matrix
+ *     would show the complete Event without ties.  This would require some
+ *     redesign here and there.  Not sure it can actually be done.  But it does
+ *     sound like it has potential as a design improvement so long as it
+ *     doesn't make the code harder to understand.
  */
 class ROSEGARDENPRIVATE_EXPORT Event
 {
