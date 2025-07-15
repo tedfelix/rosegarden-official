@@ -39,17 +39,11 @@ class MidiStrip
 {
 public:
     InstrumentId m_id{0};
+
+    // Widgets
     MidiMixerVUMeter *m_vuMeter{nullptr};
     Fader *m_volumeFader{nullptr};
-    // ??? We can get rid of this once we get IntrumentId and controller
-    //     number into the Rotary objects via QObject properties.  Then
-    //     all we need is the Rotary * here.
-    struct RotaryInfo
-    {
-        MidiByte controllerNumber{0};
-        Rotary *rotary{nullptr};
-    };
-    std::vector<RotaryInfo> m_controllerRotaries;
+    std::vector<Rotary *> m_controllerRotaries;
 };
 
 

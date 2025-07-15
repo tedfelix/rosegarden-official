@@ -204,31 +204,7 @@ MidiMixerWindow::setupTabs()
 
         QLabel *label;
 
-        // Controller labels
-        for (size_t controlIndex = 0;
-             controlIndex < controls.size();
-             ++controlIndex) {
-            label = new QLabel(
-                    QObject::tr(controls[controlIndex].getName().c_str()),
-                    tabFrame);
-            gridLayout->addWidget(label, controlIndex, 0, Qt::AlignRight);
-        }
-
-        // Volume label
-        label = new QLabel(tr("Volume"), tabFrame);
-        gridLayout->addWidget(label, controls.size() + 1, 0, Qt::AlignRight);
-
-        // Instrument label
-        const QString instrument = tr("Instrument");
-        label = new QLabel(instrument, tabFrame);
-        label->setFixedWidth(fontMetrics().boundingRect(instrument).width() + 2);
-        gridLayout->addWidget(label, controls.size() + 2, 0, Qt::AlignRight);
-
-        // Add a column spacer.
-        gridLayout->setColumnMinimumWidth(1, 10);
-
-        // Grid layout column.
-        int col = 2;
+        int col = 0;
 
         int stripNum = 1;
 
@@ -242,11 +218,33 @@ MidiMixerWindow::setupTabs()
             midiStrip->m_id = instrumentId;
             m_instrumentIDToStripIndex[instrumentId] = m_midiStrips.size() - 1;
 
+            int row = 0;
+
             // For each controller...
             for (size_t controllerIndex = 0;
                  controllerIndex < controls.size();
                  ++controllerIndex) {
 
+                // Controller name label
+                // ??? This is pretty odd looking.  We need to default to a
+                //     larger overall MMW size and get the label closer to each
+                //     Rotary.  Maybe even add a label feature to Rotary so it
+                //     can handle it better.  We can also add the label to the
+                //     Rotary tooltip.  It already has a default tool tip.  We
+                //     need a way to add the label to it.
+                QString controllerName = QObject::tr(
+                        controls[controllerIndex].getName().c_str());
+                controllerName = controllerName.left(3);
+                label = new QLabel(controllerName, tabFrame);
+                QFont font = label->font();
+                font.setPointSize((font.pointSize() * 8) / 10);
+                label->setFont(font);
+                //label->setAlignment(Qt::AlignHCenter);
+                gridLayout->addWidget(label, row, col, Qt::AlignHCenter | Qt::AlignBottom);
+
+                ++row;
+
+                // Controller rotary
                 const MidiByte controllerNumber =
                         controls[controllerIndex].getControllerNumber();
                 const bool centred =
@@ -286,12 +284,11 @@ MidiMixerWindow::setupTabs()
                         this, &MidiMixerWindow::slotControllerChanged);
 
                 gridLayout->addWidget(
-                        rotary, controllerIndex, col, Qt::AlignCenter);
+                        rotary, row, col, Qt::AlignCenter);
 
-                MidiStrip::RotaryInfo rotaryInfo;
-                rotaryInfo.controllerNumber = controllerNumber;
-                rotaryInfo.rotary = rotary;
-                midiStrip->m_controllerRotaries.push_back(rotaryInfo);
+                midiStrip->m_controllerRotaries.push_back(rotary);
+
+                ++row;
             }
 
             // VU meter
@@ -300,8 +297,10 @@ MidiMixerWindow::setupTabs()
                     VUMeter::FixedHeightVisiblePeakHold,  // type
                     6,  // width
                     30);  // height
-            gridLayout->addWidget(meter, controls.size(), col, Qt::AlignCenter);
+            gridLayout->addWidget(meter, row, col, Qt::AlignCenter);
             midiStrip->m_vuMeter = meter;
+
+            ++row;
 
             // Volume
             Fader *fader = new Fader(
@@ -320,8 +319,10 @@ MidiMixerWindow::setupTabs()
             connect(fader, &Fader::faderChanged,
                     this, &MidiMixerWindow::slotFaderLevelChanged);
             gridLayout->addWidget(
-                    fader, controls.size() + 1, col, Qt::AlignCenter);
+                    fader, row, col, Qt::AlignCenter);
             midiStrip->m_volumeFader = fader;
+
+            ++row;
 
             // Instrument number
             QLabel *instrumentNumberLabel = new QLabel(
@@ -329,9 +330,11 @@ MidiMixerWindow::setupTabs()
                     tabFrame);
             gridLayout->addWidget(
                     instrumentNumberLabel,  // widget
-                    controls.size() + 2,  // row
+                    row,  // row
                     col,  // column
                     Qt::AlignCenter);  // alignment
+
+            ++row;
 
             ++col;
         }
@@ -443,8 +446,8 @@ MidiMixerWindow::slotControlChange(
              ++controllerIndex) {
             // If this is the one, set the rotary.
             if (controllerNumber == controls[controllerIndex].getControllerNumber()) {
-                m_midiStrips[stripIndex]->m_controllerRotaries[controllerIndex].
-                        rotary->setPosition(controllerValue);
+                m_midiStrips[stripIndex]->m_controllerRotaries[controllerIndex]->
+                        setPosition(controllerValue);
                 break;
             }
         }
