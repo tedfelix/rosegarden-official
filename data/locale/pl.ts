@@ -4360,12 +4360,12 @@
     <message>
         <location line="+1"/>
         <source>Choir Aahs</source>
-        <translation>Chór Aaa</translation>
+        <translation>Chór "Aaa"</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Voice Oohs</source>
-        <translation>Głos Ooo</translation>
+        <translation>Głos "Ooo"</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -14713,12 +14713,12 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location line="+17"/>
         <source>Set Global Tempo</source>
-        <translation>Ustaw główne tempo</translation>
+        <translation>Ustaw tempo główne</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>Set Global and Default Tempo</source>
-        <translation>Ustaw główne i domyślne tempo</translation>
+        <translation>Ustaw tempo główne i domyślne</translation>
     </message>
 </context>
 <context>
@@ -20726,12 +20726,12 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+7"/>
         <source>global element must precede note elements</source>
-        <translation>globalny element musi poprzedzić element nuty</translation>
+        <translation>element główny musi poprzedzać elementy nut</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>global and note elements may have shape or charname attribute, but not both</source>
-        <translation>globalne elementy i nuty mogą mieć atrybuty kształtu i nazwy, ale nie obydwa na raz</translation>
+        <translation>elementy główne i nut mogą mieć atrybuty kształtu i nazwy, ale nie obydwa na raz</translation>
     </message>
 </context>
 <context>
@@ -23139,7 +23139,7 @@ Chcesz go otworzyć?</translation>
     <message>
         <location line="+117"/>
         <source>Set Global Tempo</source>
-        <translation>Ustaw główne tempo</translation>
+        <translation>Ustaw tempo główne</translation>
     </message>
     <message>
         <location line="+73"/>
@@ -23672,7 +23672,7 @@ Chcesz ją teraz ustawić?</translation>
     </message>
     <message>
         <source>Set Global and Default Tempo</source>
-        <translation type="obsolete">Ustaw główne i domyślne tempo</translation>
+        <translation type="obsolete">Ustaw tempo główne i domyślne</translation>
     </message>
     <message>
         <source>Move Tempo Change</source>
@@ -24859,7 +24859,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+16"/>
         <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Zaznacz czynność w poniższej tabeli, a następnie kliknij dwukrotnie myszką jedno z czterech pól &lt;b&gt;Skrót&lt;/b&gt; w tabeli. Naciśnij nowy klawisz skrótu. Skrót można usunąć, naciskając Shift w polu &lt;b&gt;Skrót&lt;/b&gt;.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Czynności oznaczone &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;jasnoniebieskim tłem&lt;/span&gt; są globalne i ważne dla wszystkich okien.&lt;/i&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Zaznacz czynność w poniższej tabeli, a następnie kliknij dwukrotnie myszką jedno z czterech pól &lt;b&gt;Skrót&lt;/b&gt; w tabeli. Naciśnij nowy klawisz skrótu. Skrót można usunąć, naciskając Shift w polu &lt;b&gt;Skrót&lt;/b&gt;.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Czynności oznaczone &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;jasnoniebieskim tłem&lt;/span&gt; są główne i ważne dla wszystkich okien.&lt;/i&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
