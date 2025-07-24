@@ -3219,96 +3219,123 @@ RosegardenMainWindow::slotSplitSelectionByDrum()
 void
 RosegardenMainWindow::slotCreateAnacrusis()
 {
-    if (!m_view->haveSelection()) return;
+    // No selection?  Bail.
+    if (!m_view->haveSelection())
+        return;
 
     SegmentSelection selection = m_view->getSelection();
-    if (selection.empty()) return;
+    // ??? We already checked this above.
+    if (selection.empty())
+        return;
+
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     bool haveBeginningSegment = false;
-    timeT compOrigStart = comp.getStartMarker();
-    timeT compositionEnd = comp.getEndMarker();
+    const timeT origCompStart = comp.getStartMarker();
+    const timeT compositionEnd = comp.getEndMarker();
 
-    for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
-        if ((*i)->getStartTime() == compOrigStart) haveBeginningSegment = true;
+    // Make sure at least one Segment is at the Composition start.
+    for (Segment *segment : selection) {
+        if (segment->getStartTime() == origCompStart)
+            haveBeginningSegment = true;
     }
 
     if (!haveBeginningSegment) {
-        QMessageBox::information(this,
-                                 tr("Rosegarden"),
-                                 tr("<qt><p>In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.</p></qt>")
-                                );
+        QMessageBox::information(
+                this,
+                tr("Rosegarden"),
+                tr("<qt><p>In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.</p></qt>"));
         return;
     }
 
-    timeT defaultDuration = Note(Note::QuarterNote).getDuration();
-    timeT minimumDuration = Note(Note::SixtyFourthNote).getDuration();
-    bool constrainToCompositionDuration = false;
-    TimeDialog dialog(m_view,
-                      tr("Anacrusis Amount"),
-                      compOrigStart - defaultDuration,
-                      defaultDuration,
-                      minimumDuration,
-                      constrainToCompositionDuration);
+    const timeT defaultDuration = Note(Note::QuarterNote).getDuration();
+    TimeDialog dialog(
+            m_view,  // parent
+            tr("Anacrusis Amount"),  // title
+            origCompStart - defaultDuration,  // startTime
+            defaultDuration,  // defaultDuration
+            Note(Note::SixtyFourthNote).getDuration(),  // minimumDuration
+            false);  // constrainToCompositionDuration
 
-    // NB. To get this to work correctly and preserve the ability to undo the
-    // entire operation, I finally resorted to splitting it up into three
-    // separate commands.  This means it takes three undo operations to revert
-    // what can be done in one swipe.  I find this rather irritating, but I've
-    // decided to quit while I'm ahead, and leave it here.
-    if (dialog.exec() == QDialog::Accepted) {
-        timeT anacrusisAmount = dialog.getTime();
-        timeT newCompStart = compOrigStart - (comp.getBarEnd(1) - comp.getBarStart(1));
-        MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
+    if (dialog.exec() != QDialog::Accepted)
+        return;
 
-        ChangeCompositionLengthCommand *changeLengthCommand =
-            new ChangeCompositionLengthCommand(&comp,
-                                              newCompStart, compositionEnd,
-                                              comp.autoExpandEnabled());
+    const timeT anacrusisAmount = dialog.getTime();
+    const timeT barOneDuration = comp.getBarEnd(1) - comp.getBarStart(1);
 
-        bool plural = (selection.size() > 1);
-        SegmentReconfigureCommand *reconfigureCommand =
-            new SegmentReconfigureCommand(plural ?
-                                              tr("Set Segment Start Times") :
-                                              tr("Set Segment Start Time"),
-                                          &RosegardenDocument::currentDocument->getComposition());
+    // ??? What if they ask for an anacrusis greater than one bar?  We should
+    //     probably disallow that.
 
-        for (SegmentSelection::iterator i = selection.begin(); i != selection.end(); ++i) {
+    // ??? Reimplement this as a single command so that it doesn't require
+    //     three undos to undo.  It's a little tricky because we need to make
+    //     assumptions about the new Composition start.
 
-            //timeT newStartTime = compOrigStart - anacrusisAmount;
-            timeT newStartTime = (*i)->getStartTime() - anacrusisAmount;
-            reconfigureCommand->addSegment(*i,
-                                          newStartTime,
-                                          (*i)->getEndMarkerTime(false) - (*i)->getStartTime() + newStartTime,
-                                          (*i)->getTrack()
-                                          );
-        }
+    MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
 
-        macro->addCommand(changeLengthCommand);
-        macro->addCommand(reconfigureCommand);
+    // New composition start is one bar prior.
+    const timeT newCompStart = origCompStart - barOneDuration;
 
-        CommandHistory::getInstance()->addCommand(macro);
+    ChangeCompositionLengthCommand *changeLengthCommand =
+            new ChangeCompositionLengthCommand(
+                    &comp,  // composition
+                    newCompStart,  // startTime
+                    compositionEnd,  // endTime
+                    comp.autoExpandEnabled());  // autoExpand
 
-        macro = new MacroCommand(tr("Insert Corrected Tempo and Time Signature"));
-        macro->addCommand(new AddTempoChangeCommand(&comp,
-                    comp.getStartMarker(),
-                    comp.getTempoAtTime(compOrigStart)));
+    const bool plural = (selection.size() > 1);
+    const QString name = plural ?
+            tr("Set Segment Start Times") :
+            tr("Set Segment Start Time");
 
-        macro->addCommand(new AddTimeSignatureAndNormalizeCommand(&comp,
-                    comp.getStartMarker(),
-                    comp.getTimeSignatureAt(compOrigStart)));
+    SegmentReconfigureCommand *reconfigureCommand =
+            new SegmentReconfigureCommand(name, &comp);
 
-        CommandHistory::getInstance()->addCommand(macro);
-
-        macro = new MacroCommand(tr("Remove Original Tempo and Time Signature"));
-        macro->addCommand(new RemoveTimeSignatureCommand(&comp,
-                    comp.getTimeSignatureNumberAt(compOrigStart)));
-
-        macro->addCommand(new RemoveTempoChangeCommand(&comp,
-                    comp.getTempoChangeNumberAt(compOrigStart)));
-
-        CommandHistory::getInstance()->addCommand(macro);
+    // For each Segment in the selection, add to the command.
+    for (Segment *segment : selection) {
+        const timeT newStartTime = segment->getStartTime() - anacrusisAmount;
+        const timeT newEndMarkerTime = segment->getEndMarkerTime(false) -
+                segment->getStartTime() + newStartTime;
+        reconfigureCommand->addSegment(
+                segment,
+                newStartTime,
+                newEndMarkerTime,
+                segment->getTrack());  // newTrack
     }
+
+    macro->addCommand(changeLengthCommand);
+    macro->addCommand(reconfigureCommand);
+
+    CommandHistory::getInstance()->addCommand(macro);
+
+    // Command #2
+
+    macro = new MacroCommand(tr("Insert Corrected Tempo and Time Signature"));
+
+    macro->addCommand(new AddTempoChangeCommand(
+            &comp,
+            comp.getStartMarker(),  // time
+            comp.getTempoAtTime(origCompStart)));  // tempo
+
+    macro->addCommand(new AddTimeSignatureAndNormalizeCommand(
+            &comp,
+            comp.getStartMarker(),  // time
+            comp.getTimeSignatureAt(origCompStart)));  // timeSig
+
+    CommandHistory::getInstance()->addCommand(macro);
+
+    // Command #3
+
+    macro = new MacroCommand(tr("Remove Original Tempo and Time Signature"));
+
+    macro->addCommand(new RemoveTimeSignatureCommand(
+            &comp,
+            comp.getTimeSignatureNumberAt(origCompStart)));
+
+    macro->addCommand(new RemoveTempoChangeCommand(
+            &comp,
+            comp.getTempoChangeNumberAt(origCompStart)));
+
+    CommandHistory::getInstance()->addCommand(macro);
 }
 
 void
