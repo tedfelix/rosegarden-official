@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SystemFontQt]"
+#define RG_NO_DEBUG_PRINT
+
 #include "SystemFontQt.h"
 
 #include "misc/Debug.h"
@@ -25,7 +28,9 @@
 #include <QPainter>
 #include <QPixmap>
 
+
 namespace Rosegarden {
+
 
 QPixmap
 SystemFontQt::renderChar(CharName charName, int glyph, int code,
@@ -34,12 +39,12 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     success = false;
 
     if (strategy == OnlyGlyphs) {
-        NOTATION_DEBUG << "SystemFontQt::renderChar: OnlyGlyphs strategy not supported by Qt renderer, can't render character" << charName << "(glyph" << glyph << ")";
+        NOTATION_DEBUG << "SystemFontQt::renderChar(): OnlyGlyphs strategy not supported by Qt renderer, can't render character" << charName << "(glyph" << glyph << ")";
         return QPixmap();
     }
 
     if (code < 0) {
-        NOTATION_DEBUG << "SystemFontQt::renderChar: Can't render using Qt with only glyph value (" << glyph << ") for character" << charName << ", need a code point";
+        NOTATION_DEBUG << "SystemFontQt::renderChar(): Can't render using Qt with only glyph value (" << glyph << ") for character" << charName << ", need a code point";
         return QPixmap();
     }
 
@@ -54,7 +59,7 @@ SystemFontQt::renderChar(CharName charName, int glyph, int code,
     painter.setFont(m_font);
     painter.setPen(QColor(Qt::black));
     
-    NOTATION_DEBUG << "NoteFont: Drawing character code" << code << "for" << charName << "using QFont";
+    NOTATION_DEBUG << "SystemFontQt::renderChar(): Drawing character code" << code << "for" << charName << "using QFont";
 
     painter.drawText(-bounding.x(), -bounding.y(), qc);
     

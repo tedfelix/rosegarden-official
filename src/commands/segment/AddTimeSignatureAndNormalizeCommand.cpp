@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AddTimeSignatureAndNormalizeCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AddTimeSignatureAndNormalizeCommand.h"
 
@@ -27,11 +29,18 @@
 namespace Rosegarden
 {
 
-AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
-(Composition *composition, timeT time, const TimeSignature& timeSig) :
-        MacroCommand(AddTimeSignatureCommand::getGlobalName())
+
+AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand(
+        Composition *composition,
+        timeT time,
+        const TimeSignature &timeSig) :
+    MacroCommand(AddTimeSignatureCommand::getGlobalName())
 {
+    // Add the time signature.
+
     addCommand(new AddTimeSignatureCommand(composition, time, timeSig));
+
+    // Normalize.
 
     // only up to the next time signature
     timeT nextTimeSigTime(composition->getDuration());
@@ -41,25 +50,32 @@ AddTimeSignatureAndNormalizeCommand::AddTimeSignatureAndNormalizeCommand
         nextTimeSigTime = composition->getTimeSignatureChange(index + 1).first;
     }
 
+    // For each Segment in the Composition...
     for (Composition::iterator i = composition->begin();
-         i != composition->end(); ++i) {
+         i != composition->end();
+         ++i) {
+        Segment *segment = (*i);
 
-        if ((*i)->getType() != Segment::Internal) continue;
+        // Skip any non-MIDI (audio) segments.
+        if (segment->getType() != Segment::Internal)
+            continue;
 
-        timeT startTime = (*i)->getStartTime();
-        timeT endTime = (*i)->getEndTime();
+        const timeT startTime = segment->getStartTime();
+        const timeT endTime = segment->getEndTime();
 
-        if (startTime >= nextTimeSigTime || endTime <= time)
+        // If this Segment is not within the time period affected by
+        // the time signature, try the next.
+        if (startTime >= nextTimeSigTime  ||  endTime <= time)
             continue;
 
         // "Make Notes Viable" splits and ties notes at barlines, and
         // also does a rest normalize.  It's what we normally want
         // when adding a time signature.
 
-        addCommand(new MakeRegionViableCommand
-                   (**i,
-                    std::max(startTime, time),
-                    std::min(endTime, nextTimeSigTime)));
+        addCommand(new MakeRegionViableCommand(
+                *segment,
+                std::max(startTime, time),
+                std::min(endTime, nextTimeSigTime)));
     }
 }
 
