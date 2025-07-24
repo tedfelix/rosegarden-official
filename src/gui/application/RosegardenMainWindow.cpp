@@ -57,7 +57,7 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
-#include "commands/segment/AddTimeSignatureAndNormalizeCommand.h"
+#include "commands/segment/AddTimeSignatureCommand.h"
 #include "commands/segment/AudioSegmentAutoSplitCommand.h"
 #include "commands/segment/AudioSegmentRescaleCommand.h"
 #include "commands/segment/AudioSegmentSplitCommand.h"
@@ -3263,14 +3263,14 @@ RosegardenMainWindow::slotCreateAnacrusis()
     const timeT anacrusisAmount = dialog.getTime();
     const timeT barOneDuration = comp.getBarEnd(1) - comp.getBarStart(1);
 
-    // ??? What if they ask for an anacrusis greater than one bar?  We should
-    //     probably disallow that.
-
-    // ??? Reimplement this as a single command so that it doesn't require
-    //     three undos to undo.  It's a little tricky because we need to make
-    //     assumptions about the new Composition start.
+    // ??? Probably should let them know.  Or even better get TimeWidget to
+    //     let them know.
+    if (anacrusisAmount >= barOneDuration)
+        return;
 
     MacroCommand *macro = new MacroCommand(tr("Create Anacrusis"));
+
+    // Move the composition start back one bar.
 
     // New composition start is one bar prior.
     const timeT newCompStart = origCompStart - barOneDuration;
@@ -3282,6 +3282,11 @@ RosegardenMainWindow::slotCreateAnacrusis()
                     compositionEnd,  // endTime
                     comp.autoExpandEnabled());  // autoExpand
 
+    macro->addCommand(changeLengthCommand);
+
+    // Move the Segments back by the anacrusis duration.
+
+    // ??? Do we really need this for a command within a macro?
     const bool plural = (selection.size() > 1);
     const QString name = plural ?
             tr("Set Segment Start Times") :
@@ -3302,38 +3307,23 @@ RosegardenMainWindow::slotCreateAnacrusis()
                 segment->getTrack());  // newTrack
     }
 
-    macro->addCommand(changeLengthCommand);
     macro->addCommand(reconfigureCommand);
 
-    CommandHistory::getInstance()->addCommand(macro);
-
-    // Command #2
-
-    macro = new MacroCommand(tr("Insert Corrected Tempo and Time Signature"));
+    // Move initial tempo to bar 0 (new composition start).
 
     macro->addCommand(new AddTempoChangeCommand(
             &comp,
-            comp.getStartMarker(),  // time
+            newCompStart,  // time
             comp.getTempoAtTime(origCompStart)));  // tempo
+    macro->addCommand(new RemoveTempoChangeCommand(&comp, 1));
 
-    macro->addCommand(new AddTimeSignatureAndNormalizeCommand(
+    // Move initial time signature to bar 0 (new composition start).
+
+    macro->addCommand(new AddTimeSignatureCommand(
             &comp,
-            comp.getStartMarker(),  // time
+            newCompStart,  // time
             comp.getTimeSignatureAt(origCompStart)));  // timeSig
-
-    CommandHistory::getInstance()->addCommand(macro);
-
-    // Command #3
-
-    macro = new MacroCommand(tr("Remove Original Tempo and Time Signature"));
-
-    macro->addCommand(new RemoveTimeSignatureCommand(
-            &comp,
-            comp.getTimeSignatureNumberAt(origCompStart)));
-
-    macro->addCommand(new RemoveTempoChangeCommand(
-            &comp,
-            comp.getTempoChangeNumberAt(origCompStart)));
+    macro->addCommand(new RemoveTimeSignatureCommand(&comp, 1));
 
     CommandHistory::getInstance()->addCommand(macro);
 }
