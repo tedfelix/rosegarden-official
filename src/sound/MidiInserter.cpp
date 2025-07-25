@@ -222,14 +222,12 @@ MidiInserter::insertCopy(const MappedEvent &event)
 
     const MidiByte midiChannel = event.getRecordedChannel();
     TrackData &trackData = getTrackData(event.getTrackId(), midiChannel);
-    const timeT midiEventAbsoluteTime = getAbsoluteTime(event.getEventTime());
+    timeT midiEventAbsoluteTime = getAbsoluteTime(event.getEventTime());
 
-#ifdef BUG1627
     // to avoid negative times here we subtract the start time
-    timeT start = m_comp.getStartMarker();
-    start = (start * m_timingDivision) / crotchetDuration;
-    midiEventAbsoluteTime -= start;
-#endif
+    timeT startTime = m_comp.getElapsedTimeForRealTime(RealTime::zero());
+    startTime = (startTime * m_timingDivision) / crotchetDuration;
+    midiEventAbsoluteTime -= startTime;
 
     // If we are ramping, calculate a previous tempo that would get us
     // to this event at this time and pre-insert it, unless this
