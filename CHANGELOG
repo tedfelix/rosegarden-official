@@ -17,8 +17,13 @@ Included in this release...
   * Fix stuck lilypond preview dialog.  Bug #1726.  [5857468170]
   * Fix track buttons and segment canvas getting out of sync.  Bug
     #1728.  [b06a0cee07]
+  * Fix main window losing focus when mouse leaves.  Bug #1728.
+    [c384771ccb]
+  * Fix MIDI export problems with anacrusis and tempo changes.  Bug
+    #1627.  [0683a0890d]
+  * Fix undo anacrusis requiring three undos.  [c4d89ee242]
 
-stopped at 7189b15212
+stopped at 79f9fc3e13
 
 ===== New Features =====
 
