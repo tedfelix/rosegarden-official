@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -42,7 +41,9 @@ public:
         m_composition(composition),
         m_tempoChangeIndex(index),
         m_oldTime(0),
-        m_oldTempo(0){}
+        m_oldTempo(0),
+        m_oldTarget(-1)
+{}
 
     ~RemoveTempoChangeCommand() override {}
 
@@ -56,6 +57,7 @@ private:
     int m_tempoChangeIndex;
     timeT m_oldTime;
     tempoT m_oldTempo;
+    tempoT m_oldTarget;
 };
 
 

@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -58,6 +57,7 @@ private:
     tempoT m_target;
 
     tempoT m_oldTempo{0};
+    tempoT m_oldTarget{-1};
     int m_tempoChangeIndex{0};
 };
 

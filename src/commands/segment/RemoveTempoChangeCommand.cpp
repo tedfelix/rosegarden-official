@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -31,10 +31,13 @@ RemoveTempoChangeCommand::execute()
     if (m_tempoChangeIndex >= 0) {
         std::pair<timeT, tempoT> data =
             m_composition->getTempoChange(m_tempoChangeIndex);
+        std::pair<bool, tempoT> data2 =
+            m_composition->getTempoRamping(m_tempoChangeIndex, false);
 
         // store
         m_oldTime = data.first;
         m_oldTempo = data.second;
+        m_oldTarget = data2.second;
     }
 
     // do we need to (re)store the index number?
@@ -46,7 +49,9 @@ RemoveTempoChangeCommand::execute()
 void
 RemoveTempoChangeCommand::unexecute()
 {
-    m_composition->addTempoAtTime(m_oldTime, m_oldTempo);
+    if (m_tempoChangeIndex >= 0) {
+        m_composition->addTempoAtTime(m_oldTime, m_oldTempo, m_oldTarget);
+    }
 }
 
 }
