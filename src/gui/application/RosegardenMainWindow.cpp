@@ -3223,6 +3223,10 @@ RosegardenMainWindow::slotCreateAnacrusis()
     if (!m_view->haveSelection())
         return;
 
+    // ??? This really makes no sense.  One will *never* want to apply this
+    //     process to only a subset of the Segments.  Should we force this
+    //     to apply to all segments?  I have a feeling that is the right thing
+    //     to do.
     SegmentSelection selection = m_view->getSelection();
     // ??? We already checked this above.
     if (selection.empty())
@@ -3317,6 +3321,8 @@ RosegardenMainWindow::slotCreateAnacrusis()
             comp.getTempoAtTime(origCompStart)));  // tempo
     macro->addCommand(new RemoveTempoChangeCommand(&comp, 1));
 
+    // ??? We need to move the remaining tempos back anacrusisAmount.
+
     // Move initial time signature to bar 0 (new composition start).
 
     macro->addCommand(new AddTimeSignatureCommand(
@@ -3324,6 +3330,9 @@ RosegardenMainWindow::slotCreateAnacrusis()
             newCompStart,  // time
             comp.getTimeSignatureAt(origCompStart)));  // timeSig
     macro->addCommand(new RemoveTimeSignatureCommand(&comp, 1));
+
+    // ??? We need to move the remaining time signatures back
+    //     anacrusisAmount.
 
     CommandHistory::getInstance()->addCommand(macro);
 }
