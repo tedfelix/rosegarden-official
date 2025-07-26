@@ -3219,16 +3219,17 @@ RosegardenMainWindow::slotSplitSelectionByDrum()
 void
 RosegardenMainWindow::slotCreateAnacrusis()
 {
+    // ??? Replace all this with a Composition > Shift Left (Anacrusis)
+    //     command that acts on all Segments and allows shifts of arbitrary
+    //     amounts.  It should handle expanding Composition start in a
+    //     sensible manner.  E.g. do it when the Composition is empty
+    //     or when the Segments need it.
+
     // No selection?  Bail.
     if (!m_view->haveSelection())
         return;
 
-    // ??? This really makes no sense.  One will *never* want to apply this
-    //     process to only a subset of the Segments.  Should we force this
-    //     to apply to all segments?  I have a feeling that is the right thing
-    //     to do.
     SegmentSelection selection = m_view->getSelection();
-    // ??? We already checked this above.
     if (selection.empty())
         return;
 
@@ -3267,8 +3268,6 @@ RosegardenMainWindow::slotCreateAnacrusis()
     const timeT anacrusisAmount = dialog.getTime();
     const timeT barOneDuration = comp.getBarEnd(1) - comp.getBarStart(1);
 
-    // ??? Probably should let them know.  Or even better get TimeWidget to
-    //     let them know.
     if (anacrusisAmount >= barOneDuration)
         return;
 
@@ -3322,6 +3321,10 @@ RosegardenMainWindow::slotCreateAnacrusis()
     macro->addCommand(new RemoveTempoChangeCommand(&comp, 1));
 
     // ??? We need to move the remaining tempos back anacrusisAmount.
+    //
+    //     Maybe a new MoveTemposAndTimeSignaturesCommand?  Modifying
+    //     Event times is perilous, though.  Might want to go with
+    //     a delete/add approach to avoid modifying immutable Events.
 
     // Move initial time signature to bar 0 (new composition start).
 
