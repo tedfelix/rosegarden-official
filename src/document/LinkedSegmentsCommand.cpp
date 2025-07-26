@@ -43,7 +43,7 @@ LinkedSegmentsCommand::LinkedSegmentsCommand(const QString &name,
       Q_CHECK_PTR((*i)->getLinker());
     }
   }
-#endif            
+#endif
 }
 
 LinkedSegmentsCommand::~LinkedSegmentsCommand()
@@ -74,7 +74,7 @@ LinkedSegmentsCommand::unexecuteAttachDetach()
 
 void
 LinkedSegmentsCommand::
-copyAuxProperties(Segment *source, Segment *target)
+copyAuxProperties(const Segment *source, Segment *target)
 {
   // Set its track, repeatingness, etc
   target->setTrack(source->getTrack());
@@ -87,5 +87,3 @@ copyAuxProperties(Segment *source, Segment *target)
 }
 
 }
-
-

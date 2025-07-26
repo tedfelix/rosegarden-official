@@ -1403,8 +1403,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
 
             QString connection = atts.value("connection").toString();
-            if ((m_createDevices) && (m_device) &&
-                !connection.isNull() && (!connection.isEmpty()) ) {
+            if ((m_createDevices) && (m_device) && !connection.isEmpty() ) {
                 setMIDIDeviceConnection(connection);
             }
 
@@ -2754,7 +2753,7 @@ RoseXmlHandler::setMIDIDeviceName(const QString &name)
 {
     RG_DEBUG << "setMIDIDeviceName(" << name << ")";
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    const MidiDevice *md = dynamic_cast<const MidiDevice *>(m_device);
     if (!md) return;
 
     RosegardenSequencer::getInstance()->renameDevice(

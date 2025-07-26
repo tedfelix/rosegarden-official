@@ -305,16 +305,18 @@ CommandHistory::updateActions()
     m_actionCounts.clear();
 
     // for undo then redo
-    for (int undo = 0; undo <= 1; ++undo) {
+    for (int undoFlag = 0; undoFlag <= 1; ++undoFlag) {
 
-        QAction *action(undo ? m_undoAction : m_redoAction);
-        QMenu *menu(undo ? m_undoMenu : m_redoMenu);
-        CommandStack &stack(undo ? m_undoStack : m_redoStack);
-        QString actionName(undo ? "edit_undo" : "edit_redo");
+        QAction *action(undoFlag ? m_undoAction : m_redoAction);
+        QMenu *menu(undoFlag ? m_undoMenu : m_redoMenu);
+        CommandStack &stack(undoFlag ? m_undoStack : m_redoStack);
+        QString actionName(undoFlag ? "edit_undo" : "edit_redo");
 
         if (stack.empty()) {
 
-            QString text(undo ? tr("Nothing to undo") : tr("Nothing to redo"));
+            QString text(undoFlag ?
+                         tr("Nothing to undo") :
+                         tr("Nothing to redo"));
 
             action->setEnabled(false);
             action->setText(text);
@@ -324,9 +326,9 @@ CommandHistory::updateActions()
             QString commandName = stack.top().command->getName();
             commandName.replace(QRegularExpression("&"), "");
 
-            QString text = (undo ? tr("&Undo %1") : tr("Re&do %1"))
+            QString text = (undoFlag ? tr("&Undo %1") : tr("Re&do %1"))
                 .arg(commandName);
-            ActionData* adata = ActionData::getInstance();
+            const ActionData* adata = ActionData::getInstance();
             QString key = "rosegardenmainwindow.rc:";
             key += actionName;
             KeyList ksList = adata->getShortcuts(key);
@@ -361,11 +363,11 @@ CommandHistory::updateActions()
             commandName.replace(QRegularExpression("&"), "");
 
             QString text;
-            if (undo) text = tr("&Undo %1").arg(commandName);
-            else      text = tr("Re&do %1").arg(commandName);
+            if (undoFlag) text = tr("&Undo %1").arg(commandName);
+            else          text = tr("Re&do %1").arg(commandName);
 
-            QAction *action = menu->addAction(text);
-            m_actionCounts[action] = j++;
+            QAction *addedAction = menu->addAction(text);
+            m_actionCounts[addedAction] = j++;
         }
 
         while (!tempStack.empty()) {

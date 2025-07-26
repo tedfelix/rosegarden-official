@@ -41,7 +41,7 @@ static const QString commentsKeyBase() { return "comments_"; }
 // Strings used in XML to ask for a note popup at startup
 static const QString commentsPopup() { return "comments_popup"; }
 
-// Size of the numeric part of the line key 
+// Size of the numeric part of the line key
 static const int keyNumSize(6);
 
 // Make the key associated to a comment line from its line number and page name.
@@ -57,16 +57,16 @@ static QString lineKey(const QString &pageName, int lineNumber)
     return commentsKeyBase() + pageName + sep + number;
 }
 
-MetadataHelper::CommentsKey::CommentsKey(QString keyString) :
+MetadataHelper::CommentsKey::CommentsKey(const QString& keyString) :
     m_key(keyString),
     m_isOK(false),
     m_pageName("")
 {
     int baseKeyLength = commentsKeyBase().size();
 
-    // A valid comment key has a minimum length 
+    // A valid comment key has a minimum length
     m_isOK = keyString.size() >= (baseKeyLength + keyNumSize);
- 
+
     // A valid comment key starts with the comment key base string
     m_isOK = m_isOK && keyString.startsWith(commentsKeyBase());
 
@@ -74,7 +74,7 @@ MetadataHelper::CommentsKey::CommentsKey(QString keyString) :
     m_isOK = m_isOK && (keyString.mid(baseKeyLength - 1,
                             keyString.size() - keyNumSize -
                             baseKeyLength + 1).right(1) == "_");
-           
+
     if (!m_isOK) return;         // key is not a comments key
 
     // Get the page of a comment line from its key.
@@ -91,7 +91,7 @@ MetadataHelper::CommentsKey::CommentsKey(QString keyString) :
 // Line number 0 is used to store a time stamp.
 // Return -1 if the key is not related to a comment.
 int
-MetadataHelper::CommentsKey::lineNumber() 
+MetadataHelper::CommentsKey::lineNumber()
 {
     if (!m_isOK) return -1;
     return m_key.right(keyNumSize).toInt();
@@ -122,10 +122,10 @@ MetadataHelper::getComments()
     // Create the texts
     CommentsMap comments;
     comments.clear();
-    
+
     for (std::map< QString, std::set<QString> >::iterator it0 = keys.begin();
              it0 != keys.end(); ++it0) {
-        
+
         std::set<QString> keySet = it0->second;
         QStringList lines;
         if (keySet.size()) {
@@ -155,7 +155,7 @@ MetadataHelper::getComments()
                 lastLine = currentLine;
             }
         }
-        
+
         comments[it0->first].text = lines.join("\n");
     }
 
@@ -181,7 +181,7 @@ MetadataHelper::setComments(CommentsMap comments)
 
     // Clear the metadata
     metadata.clear();
-    
+
     // Add the strings other than comments
     for (HeadersMap::iterator it = notComments.begin();
             it != notComments.end(); ++it) {
@@ -204,9 +204,11 @@ MetadataHelper::setComments(CommentsMap comments)
 #endif
         bool textExists = false;
         int n = 0;
-        for (QStringList::iterator it = lines.begin(); it != lines.end(); ++it) {
+        for (QStringList::iterator it2 = lines.begin();
+             it2 != lines.end();
+             ++it2) {
             n++;
-            QString value = *it;
+            QString value = *it2;
             if (!value.isEmpty()) {
                 QString key = lineKey(page, n);
                 metadata.set<String>(static_cast<PropertyName>(qstrtostr(key)), qstrtostr(value));
@@ -275,7 +277,7 @@ MetadataHelper::setHeaders(HeadersMap data)
 
     // Clear the metadata
     metadata.clear();
-    
+
     // Add the strings other than comments to the metadata
     for (HeadersMap::iterator it = data.begin();
             it != data.end(); ++it) {
@@ -311,7 +313,7 @@ MetadataHelper::setPopupWanted(bool enabled)
         m_doc->slotDocumentModified();
     }
 }
-    
+
 bool
 MetadataHelper::popupWanted()
 {
