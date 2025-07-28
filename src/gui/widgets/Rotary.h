@@ -19,6 +19,7 @@
 #define RG_ROTARY_H
 
 #include <QColor>
+#include <QString>
 #include <QWidget>
 
 
@@ -38,8 +39,8 @@ public:
 
     enum TickMode {
         NoTicks,        // plain circle with no marks for end points etc
-        LimitTicks,     // marks at end points but not any intermediate points
-        IntervalTicks,  // end points plus quarter, half, three-quarters
+        //LimitTicks,     // [UNUSED] marks at end points but not any intermediate points
+        //IntervalTicks,  // [UNUSED] end points plus quarter, half, three-quarters
         PageStepTicks,  // end points plus every page-step interval
         StepTicks       // end points plus every step interval
     };

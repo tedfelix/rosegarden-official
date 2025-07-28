@@ -16,35 +16,26 @@
 */
 
 #define RG_MODULE_STRING "[Rotary]"
+#define RG_NO_DEBUG_PRINT
 
 #include "Rotary.h"
 
 #include "misc/Debug.h"
-#include "misc/ConfigGroups.h"
-#include "base/Profiler.h"
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ThornStyle.h"
 #include "TextFloat.h"
 
-#include <QApplication>
-#include <QBrush>
-#include <QColor>
 #include <QDialog>
 #include <QImage>
 #include <QPainter>
-#include <QPalette>
 #include <QPen>
 #include <QPixmap>
 #include <QPoint>
-#include <QString>
-#include <QTimer>
-#include <QToolTip>
-#include <QWidget>
 #include <QMouseEvent>
 #include <QColormap>
 
-#include <cmath>
+#include <math.h>
 #include <map>
 
 
@@ -56,24 +47,22 @@ namespace
 {
     void a_drawTick(QPainter &paint, double angle, int size, bool internal)
     {
-        double hyp = double(size) / 2.0;
-        double x0 = hyp - (hyp - 1) * sin(angle);
-        double y0 = hyp + (hyp - 1) * cos(angle);
+        const double hyp = double(size) / 2.0;
+        const double x0 = hyp - (hyp - 1) * sin(angle);
+        const double y0 = hyp + (hyp - 1) * cos(angle);
+        const double len = hyp / 4;
 
+        // If not the first or last ticks, draw them extending inward.  "- len"
         if (internal) {
 
-            double len = hyp / 4;
-            double x1 = hyp - (hyp - len) * sin(angle);
-            double y1 = hyp + (hyp - len) * cos(angle);
-
+            const double x1 = hyp - (hyp - len) * sin(angle);
+            const double y1 = hyp + (hyp - len) * cos(angle);
             paint.drawLine(int(x0), int(y0), int(x1), int(y1));
 
-        } else {
+        } else {  // First and last ticks extend outward.  "+ len"
 
-            double len = hyp / 4;
-            double x1 = hyp - (hyp + len) * sin(angle);
-            double y1 = hyp + (hyp + len) * cos(angle);
-
+            const double x1 = hyp - (hyp + len) * sin(angle);
+            const double y1 = hyp + (hyp + len) * cos(angle);
             paint.drawLine(int(x0), int(y0), int(x1), int(y1));
         }
     }
@@ -84,7 +73,14 @@ namespace
             size(s), colour(c), angle(a), numTicks(n), centred(ct) { }
 
         bool operator<(const CacheIndex &i) const {
-            // woo!
+            // ??? This can be simplified:
+            //     if (size != i.size)
+            //        return size < i.size;
+            //     else if (colour != i.colour)
+            //        return colour < i.colour;
+            //     else if (angle != i.angle)
+            //        return angle < i.angle;
+            //     ... you get the idea.
             if (size < i.size) return true;
             else if (size > i.size) return false;
             else if (colour < i.colour) return true;
@@ -107,12 +103,23 @@ namespace
 
     typedef std::map<CacheIndex, QPixmap> PixmapCache;
     // Cache holds pixmaps of every position the knob has visited, for every
-    // size the knob has been.
-    // ??? I presume this is some sort of an attempt at optimization?  When
-    //     we move to dynamically sizing knobs, I have a feeling this will
-    //     result in a massive waste of memory compared with the amount of
-    //     "performance" that it provides.  Recommend making this disable-able
-    //     and doing some performance measurements and comparisons.
+    // color, size, and mode the knob has been in.
+    // ??? This appears to be here because the knob image is scaled up and
+    //     back down for anti-aliasing.  Caching the resulting images should
+    //     improve performance a little.  We need to MEASURE.  Do we still need
+    //     this with modern hardware?
+    //
+    //     QPainter offers anti-aliasing with floats.  Might not work
+    //     with all engines.  Need to test.  I did.  It looks bad.
+    //
+    //     Bear in mind that only one of these will
+    //     ever be moving (unless we implement automation one day) and only
+    //     in response to user input (unless automation).
+    //
+    //     Key concern is that when we allow the user to resize, this cache
+    //     will grow to be enormous.  Right now it's pretty small since the
+    //     Rotary objects can never be resized.  We could purge the cache on
+    //     resize.  That should help.
     Q_GLOBAL_STATIC(PixmapCache, rotaryPixmapCache)
 
 }
@@ -202,7 +209,7 @@ Rotary::setCentered(bool centred)
 void
 Rotary::paintEvent(QPaintEvent *)
 {
-    Profiler profiler("Rotary::paintEvent");
+    //Profiler profiler("Rotary::paintEvent");
 
     //!!! This should be pulled from GUIPalette eventually.  We're no longer
     // relying on Qt to come up with dark and mid and highlight and whatnot
@@ -245,12 +252,12 @@ Rotary::paintEvent(QPaintEvent *)
 
     int numTicks = 0;
     switch (m_tickMode) {
-    case LimitTicks:
-        numTicks = 2;
-        break;
-    case IntervalTicks:
-        numTicks = 5;
-        break;
+//    case LimitTicks:
+//        numTicks = 2;
+//        break;
+//    case IntervalTicks:
+//        numTicks = 5;
+//        break;
     case PageStepTicks:
         numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_pageStep;
         break;
@@ -278,8 +285,10 @@ Rotary::paintEvent(QPaintEvent *)
         return ;
     }
 
-    int scale = 4;
-    int width = m_size * scale;
+    // Draw at four times the required size for anti-aliasing.
+    constexpr int scale = 4;
+    const int width = m_size * scale;
+    // Temporary pixmap to draw on.
     QPixmap map(width, width);
     QColor bg = ThornStyle::isEnabled() ? QColor::fromRgb(0x40, 0x40, 0x40) : palette().window().color();
     map.fill(bg);
@@ -331,12 +340,15 @@ Rotary::paintEvent(QPaintEvent *)
     pen.setWidth(scale);
     paint.setPen(pen);
 
-    for (int i = 0; i < numTicks; ++i) {
+    // For each tick...
+    for (int tick = 0; tick < numTicks; ++tick) {
         int div = numTicks;
         if (div > 1)
             --div;
-        a_drawTick(paint, rotaryMin + (rotaryMax - rotaryMin) * i / div,
-                   width, i != 0 && i != numTicks - 1);
+        a_drawTick(paint,
+                   rotaryMin + (rotaryMax - rotaryMin) * tick / div,  // angle
+                   width,  // size
+                   tick != 0 && tick != numTicks - 1);  // internal
     }
 
 
@@ -403,8 +415,16 @@ Rotary::paintEvent(QPaintEvent *)
 
     paint.end();
 
-    QImage i = map.toImage().scaled(m_size, m_size, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
-    (*pixmapCache)[index] = QPixmap::fromImage(i);
+    // Scale it down to target size with smoothing.
+    QImage image = map.toImage().scaled(
+            m_size,
+            m_size,
+            Qt::IgnoreAspectRatio,
+            Qt::SmoothTransformation);
+    // Add to pixmap cache.
+    (*pixmapCache)[index] = QPixmap::fromImage(image);
+
+    // Draw on the screen.
     paint.begin(this);
     paint.drawPixmap(0, 0, (*pixmapCache)[index]);
     paint.end();
@@ -420,22 +440,23 @@ Rotary::snapPosition()
         switch (m_tickMode) {
 
         case NoTicks:
-            break; // meaningless
-
-        case LimitTicks:
-            if (m_position < (m_minimum + m_maximum) / 2.0) {
-                m_snapPosition = m_minimum;
-            } else {
-                m_snapPosition = m_maximum;
-            }
+            // "snap" has no meaning when there are no ticks.
             break;
 
-        case IntervalTicks:
-            m_snapPosition = m_minimum +
-                             (m_maximum - m_minimum) / 4.0 *
-                             int((m_snapPosition - m_minimum) /
-                                 ((m_maximum - m_minimum) / 4.0));
-            break;
+//        case LimitTicks:
+//            if (m_position < (m_minimum + m_maximum) / 2.0) {
+//                m_snapPosition = m_minimum;
+//            } else {
+//                m_snapPosition = m_maximum;
+//            }
+//            break;
+
+//        case IntervalTicks:
+//            m_snapPosition = m_minimum +
+//                             (m_maximum - m_minimum) / 4.0 *
+//                             int((m_snapPosition - m_minimum) /
+//                                 ((m_maximum - m_minimum) / 4.0));
+//            break;
 
         case PageStepTicks:
             m_snapPosition = m_minimum +
