@@ -50,6 +50,35 @@
 namespace Rosegarden
 {
 
+
+namespace
+{
+    void a_drawTick(QPainter &paint, double angle, int size, bool internal)
+    {
+        double hyp = double(size) / 2.0;
+        double x0 = hyp - (hyp - 1) * sin(angle);
+        double y0 = hyp + (hyp - 1) * cos(angle);
+
+        if (internal) {
+
+            double len = hyp / 4;
+            double x1 = hyp - (hyp - len) * sin(angle);
+            double y1 = hyp + (hyp - len) * cos(angle);
+
+            paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+
+        } else {
+
+            double len = hyp / 4;
+            double x1 = hyp - (hyp + len) * sin(angle);
+            double y1 = hyp + (hyp + len) * cos(angle);
+
+            paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+        }
+    }
+}
+
+
 #define ROTARY_MIN (0.25 * M_PI)
 #define ROTARY_MAX (1.75 * M_PI)
 #define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
@@ -96,34 +125,34 @@ Rotary::Rotary(QWidget *parent,
                bool snapToTicks,
                bool centred,
                bool logarithmic) :
-        QWidget(parent),
-        m_minimum(minimum),
-        m_maximum(maximum),
-        m_step(step),
-        m_pageStep(pageStep),
-        m_size(size),
-        m_tickMode(ticks),
-        m_snapToTicks(snapToTicks),
-        m_centred(centred),
-        m_logarithmic(logarithmic),
-        m_position(initialPosition),
-        m_snapPosition(m_position),
-        m_initialPosition(initialPosition),
-        m_buttonPressed(false),
-        m_lastY(0),
-        m_lastX(0),
-        m_knobColour(0, 0, 0)
+    QWidget(parent),
+    m_minimum(minimum),
+    m_maximum(maximum),
+    m_step(step),
+    m_pageStep(pageStep),
+    m_size(size),
+    m_tickMode(ticks),
+    m_snapToTicks(snapToTicks),
+    m_centred(centred),
+    m_logarithmic(logarithmic),
+    m_initialPosition(initialPosition),
+    m_position(initialPosition),
+    m_snapPosition(initialPosition)
 {
     setObjectName("RotaryWidget");
 
     setAttribute(Qt::WA_NoSystemBackground);
 
-    this->setToolTip(tr("<qt><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>"));
+    updateToolTip();
+
     setFixedSize(size, size);
 }
 
-Rotary::~Rotary()
+void
+Rotary::setLabel(const QString &label)
 {
+    m_label = label;
+    updateToolTip();
 }
 
 void
@@ -320,8 +349,8 @@ Rotary::paintEvent(QPaintEvent *)
         int div = numTicks;
         if (div > 1)
             --div;
-        drawTick(paint, ROTARY_MIN + (ROTARY_MAX - ROTARY_MIN) * i / div,
-                 width, i != 0 && i != numTicks - 1);
+        a_drawTick(paint, ROTARY_MIN + (ROTARY_MAX - ROTARY_MIN) * i / div,
+                   width, i != 0 && i != numTicks - 1);
     }
 
 
@@ -396,31 +425,6 @@ Rotary::paintEvent(QPaintEvent *)
 }
 
 void
-Rotary::drawTick(QPainter &paint, double angle, int size, bool internal)
-{
-    double hyp = double(size) / 2.0;
-    double x0 = hyp - (hyp - 1) * sin(angle);
-    double y0 = hyp + (hyp - 1) * cos(angle);
-
-    if (internal) {
-
-        double len = hyp / 4;
-        double x1 = hyp - (hyp - len) * sin(angle);
-        double y1 = hyp + (hyp - len) * cos(angle);
-
-        paint.drawLine(int(x0), int(y0), int(x1), int(y1));
-
-    } else {
-
-        double len = hyp / 4;
-        double x1 = hyp - (hyp + len) * sin(angle);
-        double y1 = hyp + (hyp + len) * cos(angle);
-
-        paint.drawLine(int(x0), int(y0), int(x1), int(y1));
-    }
-}
-
-void
 Rotary::snapPosition()
 {
     m_snapPosition = m_position;
@@ -460,6 +464,9 @@ Rotary::snapPosition()
             break;
         }
     }
+
+    updateToolTip();
+
 }
 
 void
@@ -681,5 +688,15 @@ Rotary::setPosition(float position)
     snapPosition();
     update();
 }
+
+void
+Rotary::updateToolTip()
+{
+    QString toolTip = tr("<qt><p>%1: %2</p><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>").
+            arg(m_label).
+            arg(m_snapPosition);
+    setToolTip(toolTip);
+}
+
 
 }

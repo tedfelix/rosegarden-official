@@ -799,7 +799,7 @@ AudioPluginDialog::slotPluginSelected(int index)
                 !hidden) {
                 PluginControl *control =
                     new PluginControl(m_pluginParamsBox,
-                                      PluginControl::Rotary,
+                                      PluginControl::ControlType::Rotary,
                                       *it,
                                       m_pluginManager,
                                       count,

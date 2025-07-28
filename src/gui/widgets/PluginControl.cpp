@@ -63,7 +63,7 @@ PluginControl::PluginControl(QWidget *parent,
     controlTitle->setMinimumWidth
         (QFontMetrics(controlTitle->font()).boundingRect("Bandwidth 1").width());
 
-    if (type == Rotary) {
+    if (type == ControlType::Rotary) {
         float lowerBound = port->getLowerBound();
         float upperBound = port->getUpperBound();
         // Default value was already handled when calling this constructor
@@ -133,18 +133,18 @@ PluginControl::PluginControl(QWidget *parent,
 //                  << ", actual upper " << upperBound << ", step "
 //                  << step << std::endl;
 
-        m_dial = new ::Rosegarden::Rotary(this,
-                                          lowerBound,    // min
-                                          upperBound,    // max
-                                          step,          // step
-                                          pageStep,      // page step
-                                          initialValue,  // initial
-                                          30,            // size
-                                          ticks,
-                                          snapToTicks,
-                                          false,         // centred
-                                          logarithmic);
-
+        m_dial = new Rotary(this,
+                            lowerBound,    // min
+                            upperBound,    // max
+                            step,          // step
+                            pageStep,      // page step
+                            initialValue,  // initial
+                            30,            // size
+                            ticks,
+                            snapToTicks,
+                            false,         // centred
+                            logarithmic);
+        m_dial->setLabel(strtoqstr(port->getName()));
         m_dial->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPlugin));
 
         connect(m_dial, &Rotary::valueChanged,

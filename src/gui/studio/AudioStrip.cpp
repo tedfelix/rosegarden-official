@@ -211,7 +211,7 @@ void AudioStrip::createWidgets()
                 Rotary::NoTicks,  // ticks
                 false,  // centred
                 true);  // logarithmic
-        m_pan->setToolTip(tr("Pan"));
+        m_pan->setLabel(tr("Pan"));
 
         if (isSubmaster()) {
             m_pan->setKnobColour(

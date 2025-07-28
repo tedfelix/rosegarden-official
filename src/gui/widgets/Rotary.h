@@ -48,7 +48,7 @@ public:
     /**
      * centred: When set to true, draws a red arc from the center to the
      *          current position.
-     *          When set to false, draws a red arc from 0 to the current
+     *          When set to false, draws a red arc from minimum to the current
      *          position.
      */
     Rotary(QWidget *parent,
@@ -62,7 +62,8 @@ public:
            bool snapToTicks = false,
            bool centred = false,
            bool logarithmic = false); // extents are logs, exp for display
-    ~Rotary() override;
+
+    void setLabel(const QString &label);
 
     void setMinimum(float min);
     float getMinValue() const { return m_minimum; }
@@ -118,28 +119,31 @@ protected:
     void enterEvent(QEvent *) override;
 #endif
 
+private:
+
+    QString m_label{"Value"};
+    QColor m_knobColour{Qt::black};
+
+    float m_minimum;
+    float m_maximum;
+    float m_step;
+    float m_pageStep;
+    int m_size;
+    TickMode m_tickMode;
+    bool m_snapToTicks;
+    bool m_centred;
+    bool m_logarithmic;
+
+    float m_initialPosition;
+    float m_position;
+    float m_snapPosition;
     void snapPosition();
-    void drawPosition();
-    void drawTick(QPainter &paint, double angle, int size, bool internal);
+    void updateToolTip();
 
-    float                m_minimum;
-    float                m_maximum;
-    float                m_step;
-    float                m_pageStep;
-    int                  m_size;
-    TickMode             m_tickMode;
-    bool                 m_snapToTicks;
-    bool                 m_centred;
-    bool                 m_logarithmic;
+    bool m_buttonPressed{false};
+    int m_lastY{0};
+    int m_lastX{0};
 
-    float                m_position;
-    float                m_snapPosition;
-    float                m_initialPosition;
-    bool                 m_buttonPressed;
-    int                  m_lastY;
-    int                  m_lastX;
-
-    QColor               m_knobColour;
 };
 
 

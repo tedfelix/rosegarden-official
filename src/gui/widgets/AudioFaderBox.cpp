@@ -135,6 +135,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
 
     m_pan = new Rotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 22,
                        Rotary::NoTicks, false, true);
+    m_pan->setLabel(tr("Pan"));
 
     // same as the knob colour on the MIDI pan
     m_pan->setKnobColour(GUIPalette::getColour(GUIPalette::RotaryPastelGreen));
@@ -164,7 +165,6 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
         m_audioOutput = nullptr;
     }
 
-    m_pan->setToolTip(tr("Set the audio pan position in the stereo field"));
     m_synthGUIButton->setToolTip(tr("Open the synth plugin's native editor"));
     m_stereoButton->setToolTip(tr("Mono or Stereo Instrument"));
     m_recordFader->setToolTip(tr("Record level"));

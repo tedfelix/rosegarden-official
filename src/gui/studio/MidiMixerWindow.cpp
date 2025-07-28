@@ -234,8 +234,7 @@ MidiMixerWindow::setupTabs()
                 //     need a way to add the label to it.
                 QString controllerName = QObject::tr(
                         controls[controllerIndex].getName().c_str());
-                controllerName = controllerName.left(3);
-                label = new QLabel(controllerName, tabFrame);
+                label = new QLabel(controllerName.left(3), tabFrame);
                 QFont font = label->font();
                 font.setPointSize((font.pointSize() * 8) / 10);
                 label->setFont(font);
@@ -261,6 +260,7 @@ MidiMixerWindow::setupTabs()
                         Rotary::NoTicks,  // ticks
                         false,  // snapToTicks
                         centred);
+                rotary->setLabel(controllerName);
 
                 // Color
                 QColor knobColour = QColor(Qt::white);

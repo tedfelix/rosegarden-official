@@ -476,14 +476,15 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                                 Rotary::NoTicks,   // ticks
                                 false,             // snapToTicks
                                 (it->getDefault() == 64));  // centred, see setCentered() above
+            std::string name = it->getName();
+            rotary->setLabel(strtoqstr(name));
             rotary->setKnobColour(knobColour);
             hboxLayout->addWidget(rotary);
 
             // Add a label
 
             SqueezedLabel *label = new SqueezedLabel(
-                QCoreApplication::translate("MIDI_CONTROLLER",
-                                            it->getName().c_str()), hbox);
+                QCoreApplication::translate("MIDI_CONTROLLER", name.c_str()), hbox);
 
             // ??? This has no effect on the font.
             label->setFont(font());
