@@ -405,10 +405,11 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
     int count = 0;
     RotaryInfoVector::iterator rotaryIter = m_rotaries.begin();
 
-    // For each controller
-    for (ControlList::iterator it = list.begin();
-            it != list.end(); ++it) {
-        if (it->getIPBPosition() == -1)
+    // For each controller...
+    for (ControlList::const_iterator controlListIter = list.begin();
+         controlListIter != list.end();
+         ++controlListIter) {
+        if (controlListIter->getIPBPosition() == -1)
             continue;
 
         // Get the knob colour (even if it's default, because otherwise it turns
@@ -416,7 +417,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         // whole time, this simple!)
         //
         const QColor c = comp.getGeneralColourMap().getColour(
-                it->getColourIndex());
+                controlListIter->getColourIndex());
         const QColor knobColour = QColor(c.red(), c.green(), c.blue());
 
         Rotary *rotary = nullptr;
@@ -427,24 +428,27 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // Update the controller number that is associated with the
             // existing rotary widget.
 
-            rotaryIter->controller = it->getControllerNumber();
+            rotaryIter->controller = controlListIter->getControllerNumber();
 
             // Update the properties of the existing rotary widget.
 
             rotary = rotaryIter->rotary;
 
-            rotary->setMinimum(it->getMin());
-            rotary->setMaximum(it->getMax());
+            std::string name = controlListIter->getName();
+            rotary->setLabel(name.c_str());
+
+            rotary->setMinimum(controlListIter->getMin());
+            rotary->setMaximum(controlListIter->getMax());
             // If the default is 64, then this is most likely a "centered"
             // control which should show its distance from the 12 o'clock
             // position around the outside.
-            rotary->setCentered((it->getDefault() == 64));
+            rotary->setCentered((controlListIter->getDefault() == 64));
             rotary->setKnobColour(knobColour);
 
             // Update the controller name.
             rotaryIter->label->setText(
                 QCoreApplication::translate("MIDI_CONTROLLER",
-                                            it->getName().c_str()));
+                                            name.c_str()));
 
             // Next Rotary widget
             ++rotaryIter;
@@ -461,23 +465,23 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             // Add a Rotary
 
             float pageStep = 5.0;
-            if (it->getMax() - it->getMin() < 10)
+            if (controlListIter->getMax() - controlListIter->getMin() < 10)
                 pageStep = 1.0;
-            else if (it->getMax() - it->getMin() < 20)
+            else if (controlListIter->getMax() - controlListIter->getMin() < 20)
                 pageStep = 2.0;
 
             rotary = new Rotary(hbox,          // parent
-                                it->getMin(),  // minimum
-                                it->getMax(),  // maximum
+                                controlListIter->getMin(),  // minimum
+                                controlListIter->getMax(),  // maximum
                                 1.0,           // step
                                 pageStep,      // pageStep
-                                it->getDefault(),  // initialPosition
+                                controlListIter->getDefault(),  // initialPosition
                                 20,                // size
                                 Rotary::NoTicks,   // ticks
                                 false,             // snapToTicks
-                                (it->getDefault() == 64),  // centred, see setCentered() above
+                                (controlListIter->getDefault() == 64),  // centred, see setCentered() above
                                 false);
-            std::string name = it->getName();
+            std::string name = controlListIter->getName();
             rotary->setLabel(strtoqstr(name));
             rotary->setKnobColour(knobColour);
             hboxLayout->addWidget(rotary);
@@ -502,7 +506,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
             RotaryInfo ri;
             ri.rotary = rotary;
             ri.label = label;
-            ri.controller = it->getControllerNumber();
+            ri.controller = controlListIter->getControllerNumber();
             m_rotaries.push_back(ri);
 
             // Connect for changes to the Rotary by the user.
@@ -516,7 +520,7 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
         // Add signal mapping
         //
         m_rotaryMapper->setMapping(rotary,
-                                   int(it->getControllerNumber()));
+                                   int(controlListIter->getControllerNumber()));
 
         ++count;
     }

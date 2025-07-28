@@ -179,28 +179,6 @@ Rotary::setMaximum(float max)
     update();
 }
 
-/* unused
-void
-Rotary::setStep(float step)
-{
-    if (m_step == step)
-        return;
-
-    m_step = step;
-    update();
-}
-*/
-
-void
-Rotary::setPageStep(float step)
-{
-    if (m_pageStep == step)
-        return;
-
-    m_pageStep = step;
-    update();
-}
-
 void
 Rotary::setKnobColour(const QColor &colour)
 {

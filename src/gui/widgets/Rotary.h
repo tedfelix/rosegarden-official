@@ -24,7 +24,6 @@
 
 class QWheelEvent;
 class QPaintEvent;
-class QPainter;
 class QMouseEvent;
 
 
@@ -52,42 +51,27 @@ public:
      *          position.
      */
     Rotary(QWidget *parent,
-           float minimum, // = 0.0,
-           float maximum, // = 100.0,
-           float step, // = 1.0,
-           float pageStep, // = 10.0,
-           float initialPosition, // = 50.0,
-           int size, // = 20,
-           TickMode ticks, // = NoTicks,
-           bool snapToTicks, // = false,
-           bool centred, // = false,
-           bool logarithmic /*= false*/); // extents are logs, exp for display
+           float minimum,
+           float maximum,
+           float step,
+           float pageStep,
+           float initialPosition,
+           int size,
+           TickMode ticks,
+           bool snapToTicks,
+           bool centred,
+           bool logarithmic); // extents are logs, exp for display
 
     void setLabel(const QString &label);
 
     void setMinimum(float min);
-    float getMinValue() const { return m_minimum; }
-
     void setMaximum(float max);
-    float getMaxValue() const { return m_maximum; }
 
-    // unused void setStep(float step);
-    float getStep() const { return m_step; }
-
-    void setPageStep(float step);
-    float getPageStep() const { return m_pageStep; }
-
-    int getSize() const { return m_size; }
-
-    // Position
-    //
     float getPosition() const { return m_position; }
     void setPosition(float position);
 
     // Set the colour of the knob
-    //
     void setKnobColour(const QColor &colour);
-    QColor getKnobColour() const { return m_knobColour; }
 
     /// Set "distance from center" mode.
     /**
@@ -100,13 +84,15 @@ public:
      * volume.
      */
     void setCentered(bool centred);
-    /// Are we in "distance from center" mode?
-    bool getCentered() const { return m_centred; }
 
 signals:
+
+    /// Emitted only when the user changes the Rotary.
     void valueChanged(float);
 
 protected:
+
+    // QWidget Overrides
     void paintEvent(QPaintEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
