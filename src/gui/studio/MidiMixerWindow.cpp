@@ -229,9 +229,7 @@ MidiMixerWindow::setupTabs()
                 // ??? This is pretty odd looking.  We need to default to a
                 //     larger overall MMW size and get the label closer to each
                 //     Rotary.  Maybe even add a label feature to Rotary so it
-                //     can handle it better.  We can also add the label to the
-                //     Rotary tooltip.  It already has a default tool tip.  We
-                //     need a way to add the label to it.
+                //     can handle it better.
                 QString controllerName = QObject::tr(
                         controls[controllerIndex].getName().c_str());
                 label = new QLabel(controllerName.left(3), tabFrame);
