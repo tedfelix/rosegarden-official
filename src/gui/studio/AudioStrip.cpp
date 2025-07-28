@@ -209,8 +209,9 @@ void AudioStrip::createWidgets()
                 0.0,  // initialPosition
                 20,  // size
                 Rotary::NoTicks,  // ticks
-                false,  // centred
-                true);  // logarithmic
+                false,  // snapToTicks
+                true,  // centred
+                false);  // logarithmic
         m_pan->setLabel(tr("Pan"));
 
         if (isSubmaster()) {

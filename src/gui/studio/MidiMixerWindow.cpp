@@ -259,7 +259,8 @@ MidiMixerWindow::setupTabs()
                         20,  // size
                         Rotary::NoTicks,  // ticks
                         false,  // snapToTicks
-                        centred);
+                        centred,
+                        false);
                 rotary->setLabel(controllerName);
 
                 // Color

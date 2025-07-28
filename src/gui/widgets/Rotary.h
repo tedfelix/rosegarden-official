@@ -52,16 +52,16 @@ public:
      *          position.
      */
     Rotary(QWidget *parent,
-           float minimum = 0.0,
-           float maximum = 100.0,
-           float step = 1.0,
-           float pageStep = 10.0,
-           float initialPosition = 50.0,
-           int size = 20,
-           TickMode ticks = NoTicks,
-           bool snapToTicks = false,
-           bool centred = false,
-           bool logarithmic = false); // extents are logs, exp for display
+           float minimum, // = 0.0,
+           float maximum, // = 100.0,
+           float step, // = 1.0,
+           float pageStep, // = 10.0,
+           float initialPosition, // = 50.0,
+           int size, // = 20,
+           TickMode ticks, // = NoTicks,
+           bool snapToTicks, // = false,
+           bool centred, // = false,
+           bool logarithmic /*= false*/); // extents are logs, exp for display
 
     void setLabel(const QString &label);
 

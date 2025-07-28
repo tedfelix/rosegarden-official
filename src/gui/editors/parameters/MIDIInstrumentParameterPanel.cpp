@@ -475,7 +475,8 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                                 20,                // size
                                 Rotary::NoTicks,   // ticks
                                 false,             // snapToTicks
-                                (it->getDefault() == 64));  // centred, see setCentered() above
+                                (it->getDefault() == 64),  // centred, see setCentered() above
+                                false);
             std::string name = it->getName();
             rotary->setLabel(strtoqstr(name));
             rotary->setKnobColour(knobColour);

@@ -134,7 +134,7 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_stereoPixmap = IconLoader::loadPixmap("stereo");
 
     m_pan = new Rotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 22,
-                       Rotary::NoTicks, false, true);
+                       Rotary::NoTicks, false, true, false);
     m_pan->setLabel(tr("Pan"));
 
     // same as the knob colour on the MIDI pan

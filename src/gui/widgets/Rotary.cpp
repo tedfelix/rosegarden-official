@@ -47,6 +47,7 @@
 #include <cmath>
 #include <map>
 
+
 namespace Rosegarden
 {
 
@@ -76,42 +77,45 @@ namespace
             paint.drawLine(int(x0), int(y0), int(x1), int(y1));
         }
     }
+
+    struct CacheIndex {
+
+        CacheIndex(int s, int c, int a, int n, int ct) :
+            size(s), colour(c), angle(a), numTicks(n), centred(ct) { }
+
+        bool operator<(const CacheIndex &i) const {
+            // woo!
+            if (size < i.size) return true;
+            else if (size > i.size) return false;
+            else if (colour < i.colour) return true;
+            else if (colour > i.colour) return false;
+            else if (angle < i.angle) return true;
+            else if (angle > i.angle) return false;
+            else if (numTicks < i.numTicks) return true;
+            else if (numTicks > i.numTicks) return false;
+            else if (centred == i.centred) return false;
+            else if (!centred) return true;
+            return false;
+        }
+
+        int          size;
+        unsigned int colour;
+        int          angle;
+        int          numTicks;
+        bool         centred;
+    };
+
+    typedef std::map<CacheIndex, QPixmap> PixmapCache;
+    // Cache holds pixmaps of every position the knob has visited, for every
+    // size the knob has been.
+    // ??? I presume this is some sort of an attempt at optimization?  When
+    //     we move to dynamically sizing knobs, I have a feeling this will
+    //     result in a massive waste of memory compared with the amount of
+    //     "performance" that it provides.  Recommend making this disable-able
+    //     and doing some performance measurements and comparisons.
+    Q_GLOBAL_STATIC(PixmapCache, rotaryPixmapCache)
+
 }
-
-
-#define ROTARY_MIN (0.25 * M_PI)
-#define ROTARY_MAX (1.75 * M_PI)
-#define ROTARY_RANGE (ROTARY_MAX - ROTARY_MIN)
-
-struct CacheIndex {
-
-    CacheIndex(int s, int c, int a, int n, int ct) :
-        size(s), colour(c), angle(a), numTicks(n), centred(ct) { }
-
-    bool operator<(const CacheIndex &i) const {
-        // woo!
-        if (size < i.size) return true;
-        else if (size > i.size) return false;
-        else if (colour < i.colour) return true;
-        else if (colour > i.colour) return false;
-        else if (angle < i.angle) return true;
-        else if (angle > i.angle) return false;
-        else if (numTicks < i.numTicks) return true;
-        else if (numTicks > i.numTicks) return false;
-        else if (centred == i.centred) return false;
-        else if (!centred) return true;
-        return false;
-    }
-
-    int          size;
-    unsigned int colour;
-    int          angle;
-    int          numTicks;
-    bool         centred;
-};
-
-typedef std::map<CacheIndex, QPixmap> PixmapCache;
-Q_GLOBAL_STATIC(PixmapCache, rotaryPixmapCache)
 
 
 Rotary::Rotary(QWidget *parent,
@@ -231,29 +235,33 @@ Rotary::paintEvent(QPaintEvent *)
 
     // same color as slider grooves and VU meter backgrounds
 //    const QColor Dark = QColor(0x20, 0x20, 0x20);
-    const QColor Dark = QColor(0x10, 0x10, 0x10);
+    const QColor darkColor = QColor(0x10, 0x10, 0x10);
 
     // this is the undefined color state for a knob, which probably indicates
     // some issue with our internal color hanlding.  It looks like this was a
     // hack to try to get around black knobs related to a bug setting up the
     // color index when making new knobs in the studio controller editor.  We'll
     // just make these a really obvious ah hah color then:
-    const QColor Base = Qt::white;
+    const QColor baseColor = Qt::white;
 
     // the knob pointer should be a sharp, high contrast color
-    const QColor Pointer = Qt::black;
+    const QColor pointerColor = Qt::black;
 
     // tick marks should contrast against Dark and Base
-    const QColor Ticks = QColor(0xAA, 0xAA, 0xAA);
+    const QColor ticksColor = QColor(0xAA, 0xAA, 0xAA);
 
 
     QPainter paint;
 
-    double angle = ROTARY_MIN // offset
-                   + (ROTARY_RANGE *
-                      (double(m_snapPosition - m_minimum) /
-                       (double(m_maximum) - double(m_minimum))));
-    int degrees = int(angle * 180.0 / M_PI);
+    constexpr double rotaryMin{0.25 * M_PI};
+    constexpr double rotaryMax{1.75 * M_PI};
+    constexpr double rotaryRange{rotaryMax - rotaryMin};
+
+    const double angle = rotaryMin // offset
+                         + (rotaryRange *
+                            (double(m_snapPosition - m_minimum) /
+                             (double(m_maximum) - double(m_minimum))));
+    const int degrees = int(angle * 180.0 / M_PI);
 
     //    RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel();
 
@@ -300,14 +308,14 @@ Rotary::paintEvent(QPaintEvent *)
     paint.begin(&map);
 
     QPen pen;
-    pen.setColor(Dark);
+    pen.setColor(darkColor);
     pen.setWidth(scale);
     paint.setPen(pen);
 
     if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
     } else {
-        paint.setBrush(Base);
+        paint.setBrush(baseColor);
     }
 
     QColor c(m_knobColour);
@@ -341,7 +349,7 @@ Rotary::paintEvent(QPaintEvent *)
     paint.setBrush(Qt::NoBrush);
 
     // draw the tick marks on larger sized knobs
-    pen.setColor(Ticks);
+    pen.setColor(ticksColor);
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -349,7 +357,7 @@ Rotary::paintEvent(QPaintEvent *)
         int div = numTicks;
         if (div > 1)
             --div;
-        a_drawTick(paint, ROTARY_MIN + (ROTARY_MAX - ROTARY_MIN) * i / div,
+        a_drawTick(paint, rotaryMin + (rotaryMax - rotaryMin) * i / div,
                    width, i != 0 && i != numTicks - 1);
     }
 
@@ -372,7 +380,7 @@ Rotary::paintEvent(QPaintEvent *)
 
     // draw a dark circle to outline the knob
     int shadowAngle = -720;
-    c = Dark;
+    c = darkColor;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -383,7 +391,7 @@ Rotary::paintEvent(QPaintEvent *)
 
     // draw a computed trough thingie all the way around the knob
     shadowAngle = 2160;
-    c = Dark;
+    c = darkColor;
     for (int arc = 120; arc < 2880; arc += 240) {
         pen.setColor(c);
         paint.setPen(pen);
@@ -410,7 +418,7 @@ Rotary::paintEvent(QPaintEvent *)
     double y = hyp + len * cos(angle);
 
     pen.setWidth(scale * 2);
-    pen.setColor(Pointer);
+    pen.setColor(pointerColor);
     paint.setPen(pen);
 
     paint.drawLine(int(x0), int(y0), int(x), int(y));
