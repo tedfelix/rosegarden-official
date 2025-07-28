@@ -98,7 +98,8 @@ initPluginData()
         LilvNode* nameNode = lilv_plugin_get_name(plugin);
         RG_DEBUG << "Name:" << lilv_node_as_string(nameNode);
         pluginData.name = lilv_node_as_string(nameNode);
-        lilv_free(nameNode);
+        lilv_node_free(nameNode);
+        nameNode = nullptr;
 
         QString label = pluginData.name;
         if (label.length() > 20) {
