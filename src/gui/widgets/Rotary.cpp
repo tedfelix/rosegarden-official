@@ -45,25 +45,25 @@ namespace Rosegarden
 
 namespace
 {
+
     void a_drawTick(QPainter &paint, double angle, int size, bool internal)
     {
-        const double hyp = double(size) / 2.0;
-        const double x0 = hyp - (hyp - 1) * sin(angle);
-        const double y0 = hyp + (hyp - 1) * cos(angle);
-        const double len = hyp / 4;
+        const double halfSize = double(size) / 2.0;
+        // 0 degrees is at 6 o'clock and goes CW.
+        const int x0 = lround(halfSize - (halfSize - 1) * sin(angle));
+        const int y0 = lround(halfSize + (halfSize - 1) * cos(angle));
 
-        // If not the first or last ticks, draw them extending inward.  "- len"
+        const double tickLen = halfSize / 4;
+
+        // If not the first or last ticks, draw them extending inward.  "- tickLen"
         if (internal) {
-
-            const double x1 = hyp - (hyp - len) * sin(angle);
-            const double y1 = hyp + (hyp - len) * cos(angle);
-            paint.drawLine(int(x0), int(y0), int(x1), int(y1));
-
-        } else {  // First and last ticks extend outward.  "+ len"
-
-            const double x1 = hyp - (hyp + len) * sin(angle);
-            const double y1 = hyp + (hyp + len) * cos(angle);
-            paint.drawLine(int(x0), int(y0), int(x1), int(y1));
+            const int x1 = lround(halfSize - (halfSize - tickLen) * sin(angle));
+            const int y1 = lround(halfSize + (halfSize - tickLen) * cos(angle));
+            paint.drawLine(x0, y0, x1, y1);
+        } else {  // First and last ticks extend outward.  "+ tickLen"
+            const int x1 = lround(halfSize - (halfSize + tickLen) * sin(angle));
+            const int y1 = lround(halfSize + (halfSize + tickLen) * cos(angle));
+            paint.drawLine(x0, y0, x1, y1);
         }
     }
 
@@ -211,37 +211,13 @@ Rotary::paintEvent(QPaintEvent *)
 {
     //Profiler profiler("Rotary::paintEvent");
 
-    //!!! This should be pulled from GUIPalette eventually.  We're no longer
-    // relying on Qt to come up with dark and mid and highlight and whatnot
-    // colors, because they're getting inverted to a far lighter color than is
-    // appropriate, even against my stock lightish slate blue default KDE
-    // background, let alone the new darker scheme we're imposing through the
-    // stylesheet.
-
-    // same color as slider grooves and VU meter backgrounds
-//    const QColor Dark = QColor(0x20, 0x20, 0x20);
-    const QColor darkColor = QColor(0x10, 0x10, 0x10);
-
-    // this is the undefined color state for a knob, which probably indicates
-    // some issue with our internal color hanlding.  It looks like this was a
-    // hack to try to get around black knobs related to a bug setting up the
-    // color index when making new knobs in the studio controller editor.  We'll
-    // just make these a really obvious ah hah color then:
-    const QColor baseColor = Qt::white;
-
-    // the knob pointer should be a sharp, high contrast color
-    const QColor pointerColor = Qt::black;
-
-    // tick marks should contrast against Dark and Base
-    const QColor ticksColor = QColor(0xAA, 0xAA, 0xAA);
-
-
     QPainter paint;
 
     constexpr double rotaryMin{0.25 * M_PI};
     constexpr double rotaryMax{1.75 * M_PI};
     constexpr double rotaryRange{rotaryMax - rotaryMin};
 
+    // Convert m_snapPosition to angle in radians.
     const double angle = rotaryMin // offset
                          + (rotaryRange *
                             (double(m_snapPosition - m_minimum) /
@@ -269,40 +245,56 @@ Rotary::paintEvent(QPaintEvent *)
         break;
     }
 
-    //From Qt doc
+    // Check the cache.
 
-    QColormap colorMap = QColormap::instance();
-    uint pixel(colorMap.pixel(m_knobColour));
+    const QColormap colorMap = QColormap::instance();
+    const uint pixel(colorMap.pixel(m_knobColour));
 
     CacheIndex index(m_size, pixel, degrees, numTicks, m_centred);
 
     PixmapCache *pixmapCache = rotaryPixmapCache();
 
+    // If it's in the cache, use it.
     if (pixmapCache->find(index) != pixmapCache->end()) {
         paint.begin(this);
         paint.drawPixmap(0, 0, (*pixmapCache)[index]);
         paint.end();
-        return ;
+        return;
     }
+
+    // Cache miss.  Have to draw from scratch.
 
     // Draw at four times the required size for anti-aliasing.
     constexpr int scale = 4;
     const int width = m_size * scale;
+
     // Temporary pixmap to draw on.
     QPixmap map(width, width);
+
     QColor bg = ThornStyle::isEnabled() ? QColor::fromRgb(0x40, 0x40, 0x40) : palette().window().color();
     map.fill(bg);
+
     paint.begin(&map);
 
+    // Knob Circle
+
     QPen pen;
+    // same color as slider grooves and VU meter backgrounds
+    const QColor darkColor = QColor(0x10, 0x10, 0x10);
     pen.setColor(darkColor);
     pen.setWidth(scale);
+    // ??? Redundant?  We do this again later.
     paint.setPen(pen);
 
     if (m_knobColour != QColor(Qt::black)) {
         paint.setBrush(m_knobColour);
     } else {
-        paint.setBrush(baseColor);
+        // This is the undefined color state for a knob, which probably indicates
+        // some issue with our internal color handling.  It looks like this was a
+        // hack to try to get around black knobs related to a bug setting up the
+        // color index when making new knobs in the studio controller editor.  We'll
+        // just make these a really obvious "ah ha!" color then:
+        paint.setBrush(Qt::white);
     }
 
     QColor c(m_knobColour);
@@ -313,6 +305,8 @@ Rotary::paintEvent(QPaintEvent *)
 
     // draw a base knob color circle
     paint.drawEllipse(indent, indent, width - 2*indent, width - 2*indent);
+
+    // Highlight
 
     // draw a highlight computed from the knob color
     pen.setWidth(2 * scale);
@@ -333,10 +327,11 @@ Rotary::paintEvent(QPaintEvent *)
         --darkWidth;
     }
 
+    // Ticks
+
     paint.setBrush(Qt::NoBrush);
 
-    // draw the tick marks on larger sized knobs
-    pen.setColor(ticksColor);
+    pen.setColor(QColor(0xAA, 0xAA, 0xAA));
     pen.setWidth(scale);
     paint.setPen(pen);
 
@@ -351,6 +346,7 @@ Rotary::paintEvent(QPaintEvent *)
                    tick != 0 && tick != numTicks - 1);  // internal
     }
 
+    // Range?
 
     // draw the bright metering bit
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
@@ -408,7 +404,8 @@ Rotary::paintEvent(QPaintEvent *)
     double y = hyp + len * cos(angle);
 
     pen.setWidth(scale * 2);
-    pen.setColor(pointerColor);
+    // the knob pointer should be a sharp, high contrast color
+    pen.setColor(Qt::black);
     paint.setPen(pen);
 
     paint.drawLine(int(x0), int(y0), int(x), int(y));

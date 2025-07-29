@@ -122,7 +122,9 @@ private:
     bool m_logarithmic;
 
     float m_initialPosition;
+    // The position while in motion.  No snap.
     float m_position;
+    // The final reported position after snap.  Between m_minimum and m_maximum.
     float m_snapPosition;
     void snapPosition();
     void updateToolTip();
