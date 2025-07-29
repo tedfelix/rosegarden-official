@@ -38,6 +38,10 @@
 #include <math.h>
 #include <map>
 
+// You can turn caching back on by setting this to 1.
+// ??? Need to do some benchmarking of caching vs. no caching.
+#define CACHING 0
+
 
 namespace Rosegarden
 {
@@ -67,6 +71,7 @@ namespace
         }
     }
 
+#if CACHING
     struct CacheIndex {
 
         CacheIndex(int s, int c, int a, int n, int ct) :
@@ -121,6 +126,7 @@ namespace
     //     Rotary objects can never be resized.  We could purge the cache on
     //     resize.  That should help.
     Q_GLOBAL_STATIC(PixmapCache, rotaryPixmapCache)
+#endif
 
 }
 
@@ -246,6 +252,7 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Check the cache.
 
+#if CACHING
     const QColormap colorMap = QColormap::instance();
     const uint pixel(colorMap.pixel(m_knobColour));
 
@@ -261,8 +268,15 @@ Rotary::paintEvent(QPaintEvent *)
         paint.end();
         return;
     }
+#endif
 
     // Cache miss.  Have to draw from scratch.
+
+    // ??? Caching was in here for speed.  I suspect we can get a similar boost
+    //     by keeping a "background" pixmap as a member which would have the
+    //     knob circle, ticks, and trough.  Then the position range and pointer
+    //     can be drawn over top of that background.  The background would only
+    //     be redrawn on size change.
 
     // Draw at four times the required size for anti-aliasing.
     constexpr int scale = 4;
@@ -403,13 +417,19 @@ Rotary::paintEvent(QPaintEvent *)
             m_size,
             Qt::IgnoreAspectRatio,
             Qt::SmoothTransformation);
+#if CACHING
     // Add to pixmap cache.
     (*pixmapCache)[index] = QPixmap::fromImage(image);
+#endif
 
     // Draw on the screen.
 
     paint.begin(this);
+#if CACHING
     paint.drawPixmap(0, 0, (*pixmapCache)[index]);
+#else
+    paint.drawImage(0, 0, image);
+#endif
     paint.end();
 }
 
