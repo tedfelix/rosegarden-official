@@ -1320,7 +1320,8 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
     int value = -1;
 
     // Figure out who sent this signal.
-    Rotary *rotary = dynamic_cast<Rotary *>(m_rotaryMapper->mapping(controllerNumber));
+    const Rotary *rotary = dynamic_cast<const Rotary *>(
+            m_rotaryMapper->mapping(controllerNumber));
     if (rotary)
         value = static_cast<int>(std::floor(rotary->getPosition() + .5));
 

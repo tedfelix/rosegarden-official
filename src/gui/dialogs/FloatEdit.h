@@ -32,8 +32,7 @@ namespace Rosegarden
 {
 
 
-/** A simple input dialog for requesting a float value
- */
+/// A simple input dialog for requesting a float value
 class FloatEdit : public QDialog
 {
     Q_OBJECT

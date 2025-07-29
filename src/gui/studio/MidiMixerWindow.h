@@ -72,7 +72,7 @@ private slots:
     /**
      * Connected to InstrumentStaticSignals::controlChange().
      */
-    void slotControlChange(Instrument *instrument, int cc);
+    void slotControlChange(Instrument *instrument, int controllerNumber);
 
     void slotFaderLevelChanged(float value);
     void slotControllerChanged(float value);

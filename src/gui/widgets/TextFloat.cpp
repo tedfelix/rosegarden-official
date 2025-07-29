@@ -25,7 +25,11 @@ namespace Rosegarden
 {
 
 
-TextFloat *TextFloat::m_instance{nullptr};
+namespace
+{
+    static TextFloat *a_instance{nullptr};
+}
+
 
 TextFloat::TextFloat() :
         BaseTextFloat(nullptr)
@@ -35,16 +39,16 @@ TextFloat::TextFloat() :
 TextFloat::~TextFloat()
 {
     // Avoid reuse when QObject deletes us.
-    m_instance = nullptr;
+    a_instance = nullptr;
 }
 
 TextFloat *
 TextFloat::getInstance()
 {
-    if (!m_instance)
-        m_instance = new TextFloat;
+    if (!a_instance)
+        a_instance = new TextFloat;
 
-    return m_instance;
+    return a_instance;
 
 #if 0
     // Can't do the usual as this is a QObject and it ends up being managed

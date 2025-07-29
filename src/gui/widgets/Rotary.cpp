@@ -454,20 +454,23 @@ Rotary::mousePressEvent(QMouseEvent *e)
         m_buttonPressed = true;
         m_lastY = e->pos().y();
         m_lastX = e->pos().x();
-    } else if (e->button() == Qt::MiddleButton) {  // reset to centre position
+    } else if (e->button() == Qt::MiddleButton) {
+        // reset to centre position
         m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
-    } else if (e->button() == Qt::RightButton) {  // reset to default
+    } else if (e->button() == Qt::RightButton) {
+        // reset to default
         m_position = m_initialPosition;
         snapPosition();
         update();
         emit valueChanged(m_snapPosition);
     }
 
-    TextFloat *textFloat = TextFloat::getInstance();
+    // Set up the tooltip (TextFloat) while moving.
 
+    TextFloat *textFloat = TextFloat::getInstance();
 
     if (m_logarithmic) {
         textFloat->setText(QString("%1").arg(powf(10, m_position)));
@@ -475,13 +478,12 @@ Rotary::mousePressEvent(QMouseEvent *e)
         textFloat->setText(QString("%1").arg(m_position));
     }
 
-    QPoint offset = QPoint(width() + width() / 5, height() / 5);
+    const QPoint offset = QPoint(width() + width() / 5, height() / 5);
     textFloat->display(offset);
 
-//    std::cerr << "Rotary::mousePressEvent: logarithmic = " << m_logarithmic
-//              << ", position = " << m_position << std::endl;
+    //RG_DEBUG << "mousePressEvent: logarithmic = " << m_logarithmic << ", position = " << m_position;
 
-    if (e->button() == Qt::RightButton || e->button() == Qt::MiddleButton) {
+    if (e->button() == Qt::RightButton  ||  e->button() == Qt::MiddleButton) {
         // wait 500ms then hide text float
         textFloat->hideAfterDelay(500);
     }
@@ -511,45 +513,51 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
         }
     }
 
-    FloatEdit dialog(this,
-                     tr("Select a new value"),
-                     tr("Enter a new value"),
-                     minv,
-                     maxv,
-                     val,
-                     step);
+    // ??? The text is not getting displayed.
+    FloatEdit dialog(this,  // parent
+                     tr("Select a new value"),  // title
+                     tr("Enter a new value"),  // text
+                     minv,  // min
+                     maxv,  // max
+                     val,  // value
+                     step);  // step
 
-    // Reposition - we need to sum the relative positions up to the
+#if 0
+    // Reposition the dialog.
+
+    // ??? This always ends up in the middle of the parent window for me.
+
+    // we need to sum the relative positions up to the
     // topLevel or dialog to please move(). Move just top/right of the rotary
     //
     // (Copied from the text float moving code Yves fixed up.)
-    //
-    dialog.reparent(this);
-
-    QWidget *par = parentWidget();
-    QPoint totalPos = this->pos();
-    while (par->parentWidget() && !par->isWindow()) {
-        par = par->parentWidget();
-        totalPos += par->pos();
+    QWidget *parent2 = parentWidget();
+    QPoint totalPos = pos();
+    while (parent2->parentWidget()  &&  !parent2->isWindow()) {
+        parent2 = parent2->parentWidget();
+        totalPos += parent2->pos();
     }
 
+    // ??? Can you even move a dialog before calling exec()?
     dialog.move(totalPos + QPoint(width() + 2, -height() / 2));
-    dialog.show();
+#endif
 
-    if (dialog.exec() == QDialog::Accepted) {
-        float newval = dialog.getValue();
-        if (m_logarithmic) {
-//          if (m_position < powf(10, -10)) m_position = -10;
-            if (m_position < -10) m_position = -10;
-            else m_position = log10f(newval);
-        } else {
-            m_position = newval;
-        }
-        snapPosition();
-        update();
+    if (dialog.exec() != QDialog::Accepted)
+        return;
 
-        emit valueChanged(m_snapPosition);
+    const float newval = dialog.getValue();
+    if (m_logarithmic) {
+        if (m_position < -10)
+            m_position = -10;
+        else
+            m_position = log10f(newval);
+    } else {
+        m_position = newval;
     }
+    snapPosition();
+    update();
+
+    emit valueChanged(m_snapPosition);
 }
 
 void
@@ -561,7 +569,6 @@ Rotary::mouseReleaseEvent(QMouseEvent *e)
         m_lastX = 0;
 
         // Hide the float text
-        //
         TextFloat::getInstance()->hideAfterDelay(500);
     }
 }

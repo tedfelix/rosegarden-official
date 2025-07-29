@@ -108,8 +108,6 @@ private:
     // Singleton.
     TextFloat();
 
-    static TextFloat *m_instance;
-
     // Used to remember a parent widget change.
     bool m_newlyAttached{false};
 
