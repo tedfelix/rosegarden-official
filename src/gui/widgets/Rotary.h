@@ -38,11 +38,14 @@ class Rotary : public QWidget
 public:
 
     enum TickMode {
-        NoTicks,        // plain circle with no marks for end points etc
+        NoTicks,        // no ticks and no snap
         //LimitTicks,     // [UNUSED] marks at end points but not any intermediate points
         //IntervalTicks,  // [UNUSED] end points plus quarter, half, three-quarters
-        PageStepTicks,  // end points plus every page-step interval
-        StepTicks       // end points plus every step interval
+        TicksNoSnap,    // 11 ticks and no snap.
+        //PageStepTicks,  // [UNUSED] end points plus every page-step interval
+        StepTicks       // ticks at step interval, snap enabled
+                        // ??? Should we make the snap mandatory?  Is it always
+                        //     used that way?
     };
 
     /**
@@ -54,8 +57,8 @@ public:
     Rotary(QWidget *parent,
            float minimum,
            float maximum,
-           float step,
-           float pageStep,
+           float step,  // resolution
+           float pageStep,  // mouse wheel step size
            float initialPosition,
            int size,
            TickMode ticks,
@@ -113,7 +116,9 @@ private:
 
     float m_minimum;
     float m_maximum;
+    // Overall resolution of the rotary.
     float m_step;
+    // Mouse wheel steps.
     float m_pageStep;
     int m_size;
     TickMode m_tickMode;

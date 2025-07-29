@@ -74,11 +74,14 @@ PluginControl::PluginControl(QWidget *parent,
             lowerBound = swap;
         }
 
+        // NoHint (float assumed)
         float step = (upperBound - lowerBound) / 100.0;
+        // Assume 11 ticks and no snap.
         float pageStep = step * 10.f;
-        Rotary::TickMode ticks = Rotary::PageStepTicks;
+        Rotary::TickMode ticks = Rotary::TicksNoSnap;
         bool snapToTicks = false;
 
+        // Integer
         if (port->getDisplayHint() & PluginPort::Integer) {
             step = 1.0;
             ticks = Rotary::StepTicks;
@@ -86,6 +89,8 @@ PluginControl::PluginControl(QWidget *parent,
                 pageStep = 10.0;
             snapToTicks = true;
         }
+
+        // Toggled
         if (port->getDisplayHint() & PluginPort::Toggled) {
             lowerBound = 0.0;
             upperBound = 1.0;
@@ -95,10 +100,14 @@ PluginControl::PluginControl(QWidget *parent,
             snapToTicks = true;
         }
 
-        float displayLower = lowerBound, displayUpper = upperBound;
+        // Capture before we modify for log.
+        const float displayLower = lowerBound;
+        const float displayUpper = upperBound;
 
-        bool logarithmic = (port->getDisplayHint() & PluginPort::Logarithmic);
+        const bool logarithmic =
+                (port->getDisplayHint() & PluginPort::Logarithmic);
 
+        // Logarithmic
         if (logarithmic) {
             float logthresh = -10;
             float thresh = powf(10, logthresh);
@@ -111,6 +120,8 @@ PluginControl::PluginControl(QWidget *parent,
             else upperBound = logthresh;
 
             step = (upperBound - lowerBound) / 100.0;
+            ticks = Rotary::TicksNoSnap;
+            snapToTicks = false;
             pageStep = step * 10.f;
             initialValue = log10f(initialValue);
         }

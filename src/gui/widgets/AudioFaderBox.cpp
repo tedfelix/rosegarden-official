@@ -133,8 +133,17 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
     m_monoPixmap = IconLoader::loadPixmap("mono");
     m_stereoPixmap = IconLoader::loadPixmap("stereo");
 
-    m_pan = new Rotary(this, -100.0, 100.0, 1.0, 5.0, 0.0, 22,
-                       Rotary::NoTicks, false, true, false);
+    m_pan = new Rotary(this,  // parent
+                       -100.0,  // minimum
+                       100.0,  // maximum
+                       1.0,  // step
+                       5.0,  // pageStep
+                       0.0,  // initialPosition
+                       22,  // size
+                       Rotary::NoTicks,  // ticks
+                       false,  // snapToTicks
+                       true,  // centred
+                       false);  // logarithmic
     m_pan->setLabel(tr("Pan"));
 
     // same as the knob colour on the MIDI pan

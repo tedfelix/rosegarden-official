@@ -239,9 +239,12 @@ Rotary::paintEvent(QPaintEvent *)
 //    case IntervalTicks:
 //        numTicks = 5;
 //        break;
-    case PageStepTicks:
-        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_pageStep;
+    case TicksNoSnap:
+        numTicks = 11;
         break;
+//    case PageStepTicks:
+//        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_pageStep;
+//        break;
     case StepTicks:
         numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
         break;
@@ -438,12 +441,13 @@ Rotary::snapPosition()
 {
     m_snapPosition = m_position;
 
-    if (m_snapToTicks) {
+    //if (m_snapToTicks) {
 
         switch (m_tickMode) {
 
         case NoTicks:
-            // "snap" has no meaning when there are no ticks.
+        case TicksNoSnap:
+            // No snapping in these cases.
             break;
 
 //        case LimitTicks:
@@ -461,11 +465,11 @@ Rotary::snapPosition()
 //                                 ((m_maximum - m_minimum) / 4.0));
 //            break;
 
-        case PageStepTicks:
-            m_snapPosition = m_minimum +
-                             m_pageStep *
-                             int((m_snapPosition - m_minimum) / m_pageStep);
-            break;
+//        case PageStepTicks:
+//            m_snapPosition = m_minimum +
+//                             m_pageStep *
+//                             int((m_snapPosition - m_minimum) / m_pageStep);
+//            break;
 
         case StepTicks:
             m_snapPosition = m_minimum +
@@ -473,7 +477,7 @@ Rotary::snapPosition()
                              int((m_snapPosition - m_minimum) / m_step);
             break;
         }
-    }
+    //}
 
     updateToolTip();
 
@@ -641,6 +645,9 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 void
 Rotary::wheelEvent(QWheelEvent *e)
 {
+    // ??? Wheel direction is reversed.  Up should increase.  Down should
+    //     reduce.  Wonder if anyone will notice a change?
+
     // We'll handle this.  Don't pass to parent.
     e->accept();
 
