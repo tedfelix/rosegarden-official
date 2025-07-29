@@ -44,8 +44,6 @@ public:
         TicksNoSnap,    // 11 ticks and no snap.
         //PageStepTicks,  // [UNUSED] end points plus every page-step interval
         StepTicks       // ticks at step interval, snap enabled
-                        // ??? Should we make the snap mandatory?  Is it always
-                        //     used that way?
     };
 
     /**
@@ -62,7 +60,6 @@ public:
            float initialPosition,
            int size,
            TickMode ticks,
-           bool snapToTicks,
            bool centred,
            bool logarithmic); // extents are logs, exp for display
 
@@ -122,7 +119,6 @@ private:
     float m_pageStep;
     int m_size;
     TickMode m_tickMode;
-    bool m_snapToTicks;
     bool m_centred;
     bool m_logarithmic;
 

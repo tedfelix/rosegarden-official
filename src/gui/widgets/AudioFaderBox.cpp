@@ -141,7 +141,6 @@ AudioFaderBox::AudioFaderBox(QWidget *parent,
                        0.0,  // initialPosition
                        22,  // size
                        Rotary::NoTicks,  // ticks
-                       false,  // snapToTicks
                        true,  // centred
                        false);  // logarithmic
     m_pan->setLabel(tr("Pan"));

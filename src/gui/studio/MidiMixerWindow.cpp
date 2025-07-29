@@ -256,7 +256,6 @@ MidiMixerWindow::setupTabs()
                         controls[controllerIndex].getDefault(),  // initialPosition
                         20,  // size
                         Rotary::NoTicks,  // ticks
-                        false,  // snapToTicks
                         centred,
                         false);
                 rotary->setLabel(controllerName);

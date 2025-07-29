@@ -79,7 +79,6 @@ PluginControl::PluginControl(QWidget *parent,
         // Assume 11 ticks and no snap.
         float pageStep = step * 10.f;
         Rotary::TickMode ticks = Rotary::TicksNoSnap;
-        bool snapToTicks = false;
 
         // Integer
         if (port->getDisplayHint() & PluginPort::Integer) {
@@ -87,7 +86,6 @@ PluginControl::PluginControl(QWidget *parent,
             ticks = Rotary::StepTicks;
             if (upperBound - lowerBound > 30.0)
                 pageStep = 10.0;
-            snapToTicks = true;
         }
 
         // Toggled
@@ -97,7 +95,6 @@ PluginControl::PluginControl(QWidget *parent,
             step = upperBound - lowerBound;
             pageStep = upperBound - lowerBound;
             ticks = Rotary::StepTicks;
-            snapToTicks = true;
         }
 
         // Capture before we modify for log.
@@ -121,7 +118,6 @@ PluginControl::PluginControl(QWidget *parent,
 
             step = (upperBound - lowerBound) / 100.0;
             ticks = Rotary::TicksNoSnap;
-            snapToTicks = false;
             pageStep = step * 10.f;
             initialValue = log10f(initialValue);
         }
@@ -152,7 +148,6 @@ PluginControl::PluginControl(QWidget *parent,
                             initialValue,  // initial
                             30,            // size
                             ticks,
-                            snapToTicks,
                             false,         // centred
                             logarithmic);
         m_dial->setLabel(strtoqstr(port->getName()));

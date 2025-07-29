@@ -478,7 +478,6 @@ MIDIInstrumentParameterPanel::setupControllers(MidiDevice *md)
                                 controlListIter->getDefault(),  // initialPosition
                                 20,                // size
                                 Rotary::NoTicks,   // ticks
-                                false,             // snapToTicks
                                 (controlListIter->getDefault() == 64),  // centred, see setCentered() above
                                 false);
             std::string name = controlListIter->getName();
