@@ -168,10 +168,10 @@ private:
                                         const std::pair<int, int> &tupletRatio,
                                         bool &overlong);
 
-    static void handleStartingPreEvents(eventstartlist &preEventsToStart,
-                                        const Segment *seg,
-                                        const Segment::iterator &j,
-                                        std::ofstream &str);
+    void handleStartingPreEvents(eventstartlist &preEventsToStart,
+                                 const Segment *seg,
+                                 const Segment::iterator &j,
+                                 std::ofstream &str);
     void handleEndingPreEvents(eventendlist &preEventsInProgress,
                                const Segment::iterator &j,
                                std::ofstream &str);

@@ -1179,7 +1179,7 @@ LilyPondExporter::write()
         bool tempoMarksInvisible = false;
 
         str << indent(col++) << "globalTempo = {" << std::endl;
-        if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS) {
+        if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS && tempoMarksInvisible == false) {
             str << indent(col) << "\\override Score.MetronomeMark.transparent = ##t" << std::endl;
             tempoMarksInvisible = true;
         }
@@ -1209,7 +1209,7 @@ LilyPondExporter::write()
             // Do not apply it before the first segment appears.
             if (tempoChangeTime < compositionStartTime) {
                 tempoChangeTime = compositionStartTime;
-            } else {
+            } else if (tempoChangeTime >= compositionEndTime) {
                 tempoChangeTime = compositionEndTime;
             }
             if (prevTempoChangeTime < compositionStartTime) {
