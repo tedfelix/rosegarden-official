@@ -227,22 +227,11 @@ Rotary::paintEvent(QPaintEvent *)
     constexpr double radiansToDegrees = 180 / M_PI;
     const int degrees = int(angle * radiansToDegrees);
 
-    //    RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel();
-
     int numTicks = 0;
     switch (m_tickMode) {
-//    case LimitTicks:
-//        numTicks = 2;
-//        break;
-//    case IntervalTicks:
-//        numTicks = 5;
-//        break;
     case TicksNoSnap:
         numTicks = 11;
         break;
-//    case PageStepTicks:
-//        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_pageStep;
-//        break;
     case StepTicks:
         numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
         break;
@@ -256,6 +245,8 @@ Rotary::paintEvent(QPaintEvent *)
 #if CACHING
     const QColormap colorMap = QColormap::instance();
     const uint pixel(colorMap.pixel(m_knobColour));
+
+    //RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel();
 
     CacheIndex index(m_size, pixel, degrees, numTicks, m_centred);
 
@@ -439,46 +430,22 @@ Rotary::snapPosition()
 {
     m_snapPosition = m_position;
 
-    //if (m_snapToTicks) {
+    switch (m_tickMode) {
 
-        switch (m_tickMode) {
+    case NoTicks:
+    case TicksNoSnap:
+        // No snapping in these cases.
+        break;
 
-        case NoTicks:
-        case TicksNoSnap:
-            // No snapping in these cases.
-            break;
-
-//        case LimitTicks:
-//            if (m_position < (m_minimum + m_maximum) / 2.0) {
-//                m_snapPosition = m_minimum;
-//            } else {
-//                m_snapPosition = m_maximum;
-//            }
-//            break;
-
-//        case IntervalTicks:
-//            m_snapPosition = m_minimum +
-//                             (m_maximum - m_minimum) / 4.0 *
-//                             int((m_snapPosition - m_minimum) /
-//                                 ((m_maximum - m_minimum) / 4.0));
-//            break;
-
-//        case PageStepTicks:
-//            m_snapPosition = m_minimum +
-//                             m_pageStep *
-//                             int((m_snapPosition - m_minimum) / m_pageStep);
-//            break;
-
-        case StepTicks:
-            m_snapPosition = m_minimum +
-                             m_step *
-                             int((m_snapPosition - m_minimum) / m_step);
-            break;
-        }
-    //}
+    case StepTicks:
+        // Snap to m_step.
+        m_snapPosition = m_minimum +
+                         m_step *
+                         int((m_snapPosition - m_minimum) / m_step);
+        break;
+    }
 
     updateToolTip();
-
 }
 
 void

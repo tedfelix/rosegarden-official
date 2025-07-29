@@ -39,10 +39,7 @@ public:
 
     enum TickMode {
         NoTicks,        // no ticks and no snap
-        //LimitTicks,     // [UNUSED] marks at end points but not any intermediate points
-        //IntervalTicks,  // [UNUSED] end points plus quarter, half, three-quarters
         TicksNoSnap,    // 11 ticks and no snap.
-        //PageStepTicks,  // [UNUSED] end points plus every page-step interval
         StepTicks       // ticks at step interval, snap enabled
     };
 
