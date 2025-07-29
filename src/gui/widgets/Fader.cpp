@@ -446,7 +446,7 @@ Fader::enterEvent(QEnterEvent *)
 Fader::enterEvent(QEvent *)
 #endif
 {
-    TextFloat::getTextFloat()->attach(this);
+    TextFloat::getInstance()->attach(this);
 }
 
 void
@@ -470,7 +470,7 @@ Fader::showFloatText()
                .arg(int(v * 1000) % 10);
     }
 
-    TextFloat *textFloat = TextFloat::getTextFloat();
+    TextFloat *textFloat = TextFloat::getInstance();
 
     textFloat->setText(text);
 

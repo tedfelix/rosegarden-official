@@ -38,7 +38,6 @@
 #include "commands/edit/SelectionPropertyCommand.h"
 #include "document/CommandHistory.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/widgets/TextFloat.h"
 
 #include <QColor>
 #include <QPoint>

@@ -380,7 +380,7 @@ TempoRuler::enterEvent(QEnterEvent *)
 TempoRuler::enterEvent(QEvent *)
 #endif
 {
-    TextFloat::getTextFloat()->attach(this);
+    TextFloat::getInstance()->attach(this);
     setMouseTracking(true);
 }
 
@@ -391,7 +391,7 @@ TempoRuler::leaveEvent(QEvent *)
         setMouseTracking(false);
         m_illuminate = -1;
         m_illuminatePoint = false;
-        TextFloat::getTextFloat()->hide();
+        TextFloat::getInstance()->hide();
 
         update();
     }
@@ -455,7 +455,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
                      .arg(tempoText).arg(tqi).arg(tq0).arg(tq00);
     }
 
-    TextFloat *textFloat = TextFloat::getTextFloat();
+    TextFloat *textFloat = TextFloat::getInstance();
 
     if (showTime && time >= 0) {
         textFloat->setText(QString("%1\n%2").arg(timeText).arg(tempoText));

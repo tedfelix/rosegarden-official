@@ -275,15 +275,15 @@ Rotary::paintEvent(QPaintEvent *)
     const int width = m_size * scale;
 
     // Temporary pixmap to draw on.
-    QPixmap map(width, width);
+    QPixmap pixmap(width, width);
 
     const QColor bg = ThornStyle::isEnabled() ?
             QColor::fromRgb(0x40, 0x40, 0x40) :
             palette().window().color();
-    map.fill(bg);
+    pixmap.fill(bg);
 
     QPainter paint;
-    paint.begin(&map);
+    paint.begin(&pixmap);
 
     // Knob Circle
 
@@ -382,7 +382,6 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Pointer
 
-    // calculate and draw the pointer
     const double halfWidth = double(width) / 2.0;
     double len = halfWidth - indent;
     --len;
@@ -402,9 +401,9 @@ Rotary::paintEvent(QPaintEvent *)
 
     paint.end();
 
-    // Scale it down to target size with smoothing.
+    // Scale the QPixmap down to target size with smoothing.
 
-    QImage image = map.toImage().scaled(
+    QImage image = pixmap.toImage().scaled(
             m_size,
             m_size,
             Qt::IgnoreAspectRatio,
@@ -467,7 +466,7 @@ Rotary::mousePressEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
     }
 
-    TextFloat *textFloat = TextFloat::getTextFloat();
+    TextFloat *textFloat = TextFloat::getInstance();
 
 
     if (m_logarithmic) {
@@ -563,7 +562,7 @@ Rotary::mouseReleaseEvent(QMouseEvent *e)
 
         // Hide the float text
         //
-        TextFloat::getTextFloat()->hideAfterDelay(500);
+        TextFloat::getInstance()->hideAfterDelay(500);
     }
 }
 
@@ -598,7 +597,7 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
         emit valueChanged(m_snapPosition);
 
         // draw on the float text
-        TextFloat *textFloat = TextFloat::getTextFloat();
+        TextFloat *textFloat = TextFloat::getInstance();
         if (m_logarithmic) {
             textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
         } else {
@@ -630,7 +629,7 @@ Rotary::wheelEvent(QWheelEvent *e)
     snapPosition();
     update();
 
-    TextFloat *textFloat = TextFloat::getTextFloat();
+    TextFloat *textFloat = TextFloat::getInstance();
 
     // draw on the float text
     if (m_logarithmic) {
@@ -656,7 +655,7 @@ Rotary::enterEvent(QEnterEvent *)
 Rotary::enterEvent(QEvent *)
 #endif
 {
-    TextFloat::getTextFloat()->attach(this);
+    TextFloat::getInstance()->attach(this);
 }
 
 

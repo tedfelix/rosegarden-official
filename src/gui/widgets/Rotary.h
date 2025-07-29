@@ -32,19 +32,20 @@ namespace Rosegarden
 {
 
 
+/// Draw a rotary control with a knob and optional ticks.
 class Rotary : public QWidget
 {
     Q_OBJECT
 public:
 
     enum TickMode {
-        NoTicks,        // no ticks and no snap
-        TicksNoSnap,    // 11 ticks and no snap.
-        StepTicks       // ticks at step interval, snap enabled
+        NoTicks,      // no ticks and no snap
+        TicksNoSnap,  // 11 ticks and no snap.
+        StepTicks     // ticks at step interval, snap enabled
     };
 
     /**
-     * centred: When set to true, draws a red arc from the center to the
+     * centred: When set to true, draws a red arc from the top to the
      *          current position.
      *          When set to false, draws a red arc from minimum to the current
      *          position.
@@ -58,14 +59,14 @@ public:
            int size,
            TickMode ticks,
            bool centred,
-           bool logarithmic); // extents are logs, exp for display
+           bool logarithmic);
 
     void setLabel(const QString &label);
 
     void setMinimum(float min);
     void setMaximum(float max);
 
-    float getPosition() const { return m_position; }
+    float getPosition() const  { return m_position; }
     void setPosition(float position);
 
     // Set the colour of the knob
@@ -105,7 +106,7 @@ protected:
 
 private:
 
-    QString m_label{"Value"};
+    QString m_label{tr("Value")};
     QColor m_knobColour{Qt::black};
 
     float m_minimum;
@@ -127,7 +128,9 @@ private:
     void snapPosition();
     void updateToolTip();
 
+    // true while the left mouse button is pressed.
     bool m_buttonPressed{false};
+    // Last position to detect how much the mouse has moved.
     int m_lastY{0};
     int m_lastX{0};
 
