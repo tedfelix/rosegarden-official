@@ -116,6 +116,8 @@ private:
 
     QString m_label{tr("Value")};
     QColor m_knobColour{Qt::black};
+    /// true if the client set the color.
+    bool m_colorSet{false};
 
     float m_minimum;
     float m_maximum;
@@ -139,13 +141,17 @@ private:
     void snapPosition();
     void updateToolTip();
     void valueChanged2();
-    void updateFloatText();
+
+    void positionTextFloat();
+    void updateTextFloat();
 
     // true while the left mouse button is pressed.
     bool m_buttonPressed{false};
     // Last position to detect how much the mouse has moved.
     int m_lastY{0};
     int m_lastX{0};
+
+    void profile();
 
 };
 

@@ -38,9 +38,11 @@
 #include <math.h>
 #include <map>
 
-// You can turn caching back on by setting this to 1.
-// ??? Need to do some benchmarking of caching vs. no caching.
+// Turn caching back on by setting this to 1.
+// Caching takes us from 9433FPS to 156250FPS.  9433FPS seems ok.
 #define CACHING 0
+
+#define PROFILER 0
 
 
 namespace Rosegarden
@@ -227,6 +229,8 @@ Rotary::setMaximum(float max)
 void
 Rotary::setKnobColour(const QColor &colour)
 {
+    m_colorSet = true;
+
     if (m_knobColour == colour)
         return;
 
@@ -247,6 +251,16 @@ Rotary::setCentered(bool centred)
 void
 Rotary::paintEvent(QPaintEvent *)
 {
+#if PROFILER
+    // Prevent infinite recursion.
+    static bool inProfiler{false};
+    if (!inProfiler) {
+        inProfiler = true;
+        profile();
+        inProfiler = false;
+    }
+#endif
+
     //Profiler profiler("Rotary::paintEvent");
 
     constexpr double rotaryMin{0.25 * M_PI};
@@ -298,11 +312,10 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Cache miss.  Have to draw from scratch.
 
-    // ??? Caching was in here for speed.  I suspect we can get a similar boost
-    //     by keeping a "background" pixmap as a member which would have the
-    //     knob circle, ticks, and trough.  Then the position range and pointer
-    //     can be drawn over top of that background.  The background would only
-    //     be redrawn on size change.
+    // ??? Try improving performance by keeping a "background" pixmap as a
+    //     member which would have the knob circle, ticks, and trough.  Then
+    //     the position range and pointer can be drawn over top of that
+    //     background.  The background would only be redrawn on size change.
 
     // Draw at four times the required size for anti-aliasing.
     constexpr int scale = 4;
@@ -322,11 +335,10 @@ Rotary::paintEvent(QPaintEvent *)
     // Knob Circle
 
     // If the client set a color, use it.
-    if (m_knobColour != QColor(Qt::black)) {
+    if (m_colorSet) {
         paint.setBrush(m_knobColour);
     } else {
         // Go with white to get our attention that the color was not set.
-        // ??? Should probably have a bool indicating the color was not set.
         paint.setBrush(Qt::white);
     }
 
@@ -492,14 +504,20 @@ Rotary::valueChanged2()
 }
 
 void
-Rotary::updateFloatText()
+Rotary::updateTextFloat()
 {
     TextFloat *textFloat = TextFloat::getInstance();
-    if (m_logarithmic) {
+    if (m_logarithmic)
         textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
-    } else {
+    else
         textFloat->setText(QString("%1").arg(m_snapPosition));
-    }
+}
+
+void
+Rotary::positionTextFloat()
+{
+    // Nudge it just a little closer.
+    TextFloat::getInstance()->display(QPoint(0, 5));
 }
 
 void
@@ -525,11 +543,10 @@ Rotary::mousePressEvent(QMouseEvent *e)
 
     // Set up the tooltip (TextFloat) while moving.
 
-    updateFloatText();
+    updateTextFloat();
+    positionTextFloat();
 
     TextFloat *textFloat = TextFloat::getInstance();
-    const QPoint offset = QPoint(width() + width() / 5, height() / 5);
-    textFloat->display(offset);
 
     //RG_DEBUG << "mousePressEvent: logarithmic = " << m_logarithmic << ", position = " << m_position;
 
@@ -646,7 +663,7 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 
     update();
     valueChanged2();
-    updateFloatText();
+    updateTextFloat();
 }
 
 void
@@ -669,14 +686,11 @@ Rotary::wheelEvent(QWheelEvent *e)
 
     snapPosition();
     update();
-    updateFloatText();
+    updateTextFloat();
 
     TextFloat *textFloat = TextFloat::getInstance();
 
-    // Move just top/right of the rotary
-    // ??? Factor out.  This is done in two places.
-    QPoint offset = QPoint(width() + width() / 5, height() / 5);
-    textFloat->display(offset);
+    positionTextFloat();
 
     // Keep text float visible for 500ms
     textFloat->hideAfterDelay(500);
@@ -703,7 +717,7 @@ Rotary::getPosition() const
     // ??? Why doesn't this deal in m_snapPosition?  PluginControl is the only
     //     one that might notice.  Need to see if we can come up with a
     //     test case that makes a mess of this.  Or perhaps we will
-    //     fond out that snap is useless and can be removed.
+    //     find out that snap is useless and can be removed.
 
     if (m_logarithmic)
         return powf(10, m_position);
@@ -741,6 +755,33 @@ Rotary::updateToolTip()
             arg(m_label).
             arg(value);
     setToolTip(toolTip);
+}
+
+void
+Rotary::profile()
+{
+    RG_WARNING << "profile()";
+
+    constexpr int iterations = 1000;
+    // usec clock.  See CLOCKS_PER_SEC.
+    const clock_t start = clock();
+
+    for (int i = 0; i < iterations; ++i)
+        paintEvent(nullptr);
+    const clock_t end = clock();
+
+    const clock_t elapsed = end - start;
+    const double oneIteration = double(elapsed) / double(iterations);
+    const double fps = double(iterations) / (double(elapsed) / CLOCKS_PER_SEC);
+
+    RG_WARNING << "  elapsed:" << elapsed << "usec CPU";
+    RG_WARNING << "  one iteration:" << oneIteration << "usec CPU";
+    RG_WARNING << "  FPS:" << fps;
+
+    // Small knob (MIPP) results:
+    //   136029 (136.029usec, 7351.37 FPS) No cache.
+    //   ???    Background pixmap, no cache.
+    //   6400   (6.4usec, 156250 FPS) with cache.
 }
 
 
