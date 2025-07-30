@@ -21,7 +21,6 @@
 
 #include <QDialog>
 
-
 class QWidget;
 class QString;
 class QLabel;
@@ -38,6 +37,7 @@ class FloatEdit : public QDialog
     Q_OBJECT
 
 public:
+
     FloatEdit(QWidget *parent,
               const QString &title,
               const QString &text,
@@ -46,17 +46,13 @@ public:
               float value,
               float step);
 
-    /// Get a float value from the dialog
+    /// Get the user's selected value from the dialog
     float getValue() const;
 
-    /// Reparent the float edit dialog correctly by context, so it can be made
-    /// to appear in a sensible place
-    void reparent(QWidget *newParent);
+private:
 
-protected:
+    QDoubleSpinBox *m_spin;
 
-    QLabel            *m_text;
-    QDoubleSpinBox    *m_spin;
 };
 
 

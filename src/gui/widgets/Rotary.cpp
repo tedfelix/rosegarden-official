@@ -459,12 +459,20 @@ Rotary::mousePressEvent(QMouseEvent *e)
         m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
+        // ??? But what if we are in logarithmic?  Shouldn't we return
+        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
+        //     the only potential caller does the powf() on its own.  See
+        //     PluginControl::slotValueChanged().
         emit valueChanged(m_snapPosition);
     } else if (e->button() == Qt::RightButton) {
         // reset to default
         m_position = m_initialPosition;
         snapPosition();
         update();
+        // ??? But what if we are in logarithmic?  Shouldn't we return
+        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
+        //     the only potential caller does the powf() on its own.  See
+        //     PluginControl::slotValueChanged().
         emit valueChanged(m_snapPosition);
     }
 
@@ -515,7 +523,7 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 
     // ??? The text is not getting displayed.
     FloatEdit dialog(this,  // parent
-                     tr("Select a new value"),  // title
+                     tr("Rosegarden"),  // title
                      tr("Enter a new value"),  // text
                      minv,  // min
                      maxv,  // max
@@ -557,6 +565,10 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
     snapPosition();
     update();
 
+    // ??? But what if we are in logarithmic?  Shouldn't we return
+    //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
+    //     the only potential caller does the powf() on its own.  See
+    //     PluginControl::slotValueChanged().
     emit valueChanged(m_snapPosition);
 }
 
@@ -601,6 +613,10 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 
         update();
 
+        // ??? But what if we are in logarithmic?  Shouldn't we return
+        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
+        //     the only potential caller does the powf() on its own.  See
+        //     PluginControl::slotValueChanged().
         emit valueChanged(m_snapPosition);
 
         // draw on the float text
@@ -652,6 +668,10 @@ Rotary::wheelEvent(QWheelEvent *e)
     // Keep text float visible for 500ms
     textFloat->hideAfterDelay(500);
 
+    // ??? But what if we are in logarithmic?  Shouldn't we return
+    //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
+    //     the only potential caller does the powf() on its own.  See
+    //     PluginControl::slotValueChanged().
     emit valueChanged(m_snapPosition);
 }
 
@@ -665,10 +685,15 @@ Rotary::enterEvent(QEvent *)
     TextFloat::getInstance()->attach(this);
 }
 
-
 void
 Rotary::setPosition(float position)
 {
+    // ??? What if we are in logarithmic???  Don't we need to convert to
+    //     position?
+    //     PluginControl::setValue() is the only one that cares and it
+    //     does the work for us.  We need to move that responsibility here
+    //     where it belongs.
+
     if (m_position == position)
         return;
 
@@ -680,9 +705,15 @@ Rotary::setPosition(float position)
 void
 Rotary::updateToolTip()
 {
+    float value;
+    if (m_logarithmic)
+        value = powf(10, m_snapPosition);
+    else
+        value = m_snapPosition;
+
     QString toolTip = tr("<qt><p>%1: %2</p><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>").
             arg(m_label).
-            arg(m_snapPosition);
+            arg(value);
     setToolTip(toolTip);
 }
 

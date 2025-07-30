@@ -40,7 +40,7 @@ public:
 
     enum TickMode {
         NoTicks,      // no ticks and no snap
-        TicksNoSnap,  // 11 ticks and no snap.
+        TicksNoSnap,  // 11 ticks and no snap
         StepTicks     // ticks at step interval, snap enabled
     };
 
@@ -66,7 +66,14 @@ public:
     void setMinimum(float min);
     void setMaximum(float max);
 
-    float getPosition() const  { return m_position; }
+    float getPosition() const
+    {
+        // ??? But what if we are in logarithmic?  Shouldn't we return
+        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
+        //     the only potential caller does the powf() on its own.  See
+        //     PluginControl::getValue().
+        return m_position;
+    }
     void setPosition(float position);
 
     // Set the colour of the knob

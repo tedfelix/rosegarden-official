@@ -207,16 +207,22 @@ PluginControl::setValue(float value, bool emitSignals)
 float
 PluginControl::getValue() const
 {
-    if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
-        return m_dial == nullptr ? 0 : powf(10, m_dial->getPosition());
-    } else {
-        return m_dial == nullptr ? 0 : m_dial->getPosition();
-    }
+    if (!m_dial)
+        return 0;
+
+    // ??? Rotary should handle the powf() stuff.  This shouldn't
+    //     care.
+    if (m_port->getDisplayHint() & PluginPort::Logarithmic)
+        return powf(10, m_dial->getPosition());
+    else
+        return m_dial->getPosition();
 }
 
 void
 PluginControl::slotValueChanged(float value)
 {
+    // ??? Rotary should handle the powf() stuff.  This shouldn't
+    //     care.
     if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
         emit valueChanged(powf(10, value));
     } else {
