@@ -45,6 +45,10 @@ public:
     };
 
     /**
+     * ??? In log mode, minimum, maximum, step, and pageStep need to be log.
+     *     Now that we handle log position properly, we need to handle all the
+     *     others as well.  PluginControl's ctor is the only user.
+     *
      * centred: When set to true, draws a red arc from the top to the
      *          current position.
      *          When set to false, draws a red arc from minimum to the current
@@ -66,14 +70,7 @@ public:
     void setMinimum(float min);
     void setMaximum(float max);
 
-    float getPosition() const
-    {
-        // ??? But what if we are in logarithmic?  Shouldn't we return
-        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
-        //     the only potential caller does the powf() on its own.  See
-        //     PluginControl::getValue().
-        return m_position;
-    }
+    float getPosition() const;
     void setPosition(float position);
 
     // Set the colour of the knob
@@ -125,6 +122,9 @@ private:
     int m_size;
     TickMode m_tickMode;
     bool m_centred;
+    // In logarithmic mode, the log position is stored in the position
+    // related member variables.  This includes m_minimum, m_maximum,
+    // m_step and m_pageStep.
     bool m_logarithmic;
 
     float m_initialPosition;
@@ -134,6 +134,7 @@ private:
     float m_snapPosition;
     void snapPosition();
     void updateToolTip();
+    void valueChanged2();
 
     // true while the left mouse button is pressed.
     bool m_buttonPressed{false};

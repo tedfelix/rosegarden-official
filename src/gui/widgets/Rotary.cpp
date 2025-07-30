@@ -149,20 +149,16 @@ Rotary::Rotary(QWidget *parent,
     m_size(size),
     m_tickMode(ticks),
     m_centred(centred),
-    m_logarithmic(logarithmic),
-    m_initialPosition(initialPosition),  // ??? This is not right for logarithmic.
-                                         //     PluginControl's ctor calls log10f().
-                                         //     We should do that in here.
-    m_position(initialPosition),  // ??? This is not right for logarithmic.
-                                  //     PluginControl's ctor calls log10f().
-                                  //     We should do that in here.
-    m_snapPosition(initialPosition)  // ??? This is not right for logarithmic.
-                                     //     PluginControl's ctor calls log10f().
-                                     //     We should do that in here.
+    m_logarithmic(logarithmic)
 {
     setObjectName("RotaryWidget");
-
     setAttribute(Qt::WA_NoSystemBackground);
+
+    if (m_logarithmic)
+        initialPosition = log10f(initialPosition);;
+    m_initialPosition = initialPosition;
+    m_position = initialPosition;
+    m_snapPosition = initialPosition;
 
     updateToolTip();
 
@@ -454,6 +450,16 @@ Rotary::snapPosition()
 }
 
 void
+Rotary::valueChanged2()
+{
+    float value = m_snapPosition;
+    if (m_logarithmic)
+        value = powf(10, value);
+
+    emit valueChanged(value);
+}
+
+void
 Rotary::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
@@ -465,21 +471,13 @@ Rotary::mousePressEvent(QMouseEvent *e)
         m_position = (m_maximum + m_minimum) / 2.0;
         snapPosition();
         update();
-        // ??? But what if we are in logarithmic?  Shouldn't we return
-        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
-        //     the only potential caller does the powf() on its own.  See
-        //     PluginControl::slotValueChanged().
-        emit valueChanged(m_snapPosition);
+        valueChanged2();
     } else if (e->button() == Qt::RightButton) {
         // reset to default
         m_position = m_initialPosition;
         snapPosition();
         update();
-        // ??? But what if we are in logarithmic?  Shouldn't we return
-        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
-        //     the only potential caller does the powf() on its own.  See
-        //     PluginControl::slotValueChanged().
-        emit valueChanged(m_snapPosition);
+        valueChanged2();
     }
 
     // Set up the tooltip (TextFloat) while moving.
@@ -527,7 +525,6 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
         }
     }
 
-    // ??? The text is not getting displayed.
     FloatEdit dialog(this,  // parent
                      tr("Rosegarden"),  // title
                      tr("Enter a new value"),  // text
@@ -570,12 +567,7 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
     }
     snapPosition();
     update();
-
-    // ??? But what if we are in logarithmic?  Shouldn't we return
-    //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
-    //     the only potential caller does the powf() on its own.  See
-    //     PluginControl::slotValueChanged().
-    emit valueChanged(m_snapPosition);
+    valueChanged2();
 }
 
 void
@@ -619,11 +611,7 @@ Rotary::mouseMoveEvent(QMouseEvent *e)
 
         update();
 
-        // ??? But what if we are in logarithmic?  Shouldn't we return
-        //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
-        //     the only potential caller does the powf() on its own.  See
-        //     PluginControl::slotValueChanged().
-        emit valueChanged(m_snapPosition);
+        valueChanged2();
 
         // draw on the float text
         TextFloat *textFloat = TextFloat::getInstance();
@@ -674,11 +662,7 @@ Rotary::wheelEvent(QWheelEvent *e)
     // Keep text float visible for 500ms
     textFloat->hideAfterDelay(500);
 
-    // ??? But what if we are in logarithmic?  Shouldn't we return
-    //     powf(10, m_snapPosition)?  Probably.  PluginControl which is
-    //     the only potential caller does the powf() on its own.  See
-    //     PluginControl::slotValueChanged().
-    emit valueChanged(m_snapPosition);
+    valueChanged2();
 }
 
 void
@@ -691,15 +675,31 @@ Rotary::enterEvent(QEvent *)
     TextFloat::getInstance()->attach(this);
 }
 
+float
+Rotary::getPosition() const
+{
+    // Test Case: Use the "Copy" button on the AudioPluginDialog.
+
+    // ??? Why doesn't this deal in m_snapPosition?  PluginControl is the only
+    //     one that might notice.  Need to see if we can come up with a
+    //     test case that makes a mess of this.  Or perhaps we can
+    //     learn that snap is useless and can be removed.
+
+    if (m_logarithmic)
+        return powf(10, m_position);
+
+    return m_position;
+}
+
 void
 Rotary::setPosition(float position)
 {
-    // ??? What if we are in logarithmic???  Don't we need to convert to
-    //     position?
-    //     PluginControl::setValue() is the only one that cares and it
-    //     does the work for us.  We need to move that responsibility here
-    //     where it belongs.
+    // Test Case: Use the "Paste" button on the AudioPluginDialog.
 
+    if (m_logarithmic)
+        position = log10f(position);
+
+    // No change?  Bail.
     if (m_position == position)
         return;
 

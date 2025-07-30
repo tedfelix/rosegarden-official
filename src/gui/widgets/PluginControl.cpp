@@ -31,7 +31,7 @@
 #include <QString>
 #include <QWidget>
 
-#include <cmath>
+#include <math.h>
 
 
 namespace Rosegarden
@@ -106,8 +106,11 @@ PluginControl::PluginControl(QWidget *parent,
 
         // Logarithmic
         if (logarithmic) {
-            float logthresh = -10;
-            float thresh = powf(10, logthresh);
+            // ??? Rotary still expects log inputs for minimum, maximum,
+            //     step and pageStep.  Need to fix that and get rid of all
+            //     of this.
+            constexpr float logthresh = -10;
+            const float thresh = powf(10, logthresh);
             if (lowerBound > thresh) lowerBound = log10f(lowerBound);
             else {
                 if (upperBound > 1) lowerBound = 0;
@@ -117,9 +120,9 @@ PluginControl::PluginControl(QWidget *parent,
             else upperBound = logthresh;
 
             step = (upperBound - lowerBound) / 100.0;
+
             ticks = Rotary::TicksNoSnap;
             pageStep = step * 10.f;
-            initialValue = log10f(initialValue);
         }
 
         QLabel *low;
@@ -141,11 +144,11 @@ PluginControl::PluginControl(QWidget *parent,
 //                  << step << std::endl;
 
         m_dial = new Rotary(this,
-                            lowerBound,    // min
-                            upperBound,    // max
-                            step,          // step
-                            pageStep,      // page step
-                            initialValue,  // initial
+                            lowerBound,    // minimum
+                            upperBound,    // maximum
+                            step,
+                            pageStep,
+                            initialValue,  // initialPosition
                             30,            // size
                             ticks,
                             false,         // centred
@@ -194,14 +197,10 @@ PluginControl::PluginControl(QWidget *parent,
 void
 PluginControl::setValue(float value, bool emitSignals)
 {
-    float position = value;
-    if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
-        position = log10f(position);
-    }
-    if (!emitSignals) m_dial->blockSignals(true);
-    m_dial->setPosition(position);
-    if (!emitSignals) m_dial->blockSignals(false);
-    else emit valueChanged(value);
+    m_dial->setPosition(value);
+
+    if (emitSignals)
+        emit valueChanged(value);
 }
 
 float
@@ -210,24 +209,20 @@ PluginControl::getValue() const
     if (!m_dial)
         return 0;
 
-    // ??? Rotary should handle the powf() stuff.  This shouldn't
-    //     care.
-    if (m_port->getDisplayHint() & PluginPort::Logarithmic)
-        return powf(10, m_dial->getPosition());
-    else
-        return m_dial->getPosition();
+    return m_dial->getPosition();
 }
 
 void
 PluginControl::slotValueChanged(float value)
 {
-    // ??? Rotary should handle the powf() stuff.  This shouldn't
-    //     care.
-    if (m_port->getDisplayHint() & PluginPort::Logarithmic) {
-        emit valueChanged(powf(10, value));
-    } else {
-        emit valueChanged(value);
-    }
+    // ??? This used to be here to do conversion for log mode.  That is
+    //     no longer needed.  Remove this middleman and connect things
+    //     up directly to Rotary::valueChanged().  Assuming that is possible
+    //     and makes sense.  Otherwise just connect Rotary to the signal and
+    //     get rid of this function.
+
+    emit valueChanged(value);
 }
+
 
 }
