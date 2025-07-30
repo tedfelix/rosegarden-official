@@ -150,9 +150,15 @@ Rotary::Rotary(QWidget *parent,
     m_tickMode(ticks),
     m_centred(centred),
     m_logarithmic(logarithmic),
-    m_initialPosition(initialPosition),
-    m_position(initialPosition),
-    m_snapPosition(initialPosition)
+    m_initialPosition(initialPosition),  // ??? This is not right for logarithmic.
+                                         //     PluginControl's ctor calls log10f().
+                                         //     We should do that in here.
+    m_position(initialPosition),  // ??? This is not right for logarithmic.
+                                  //     PluginControl's ctor calls log10f().
+                                  //     We should do that in here.
+    m_snapPosition(initialPosition)  // ??? This is not right for logarithmic.
+                                     //     PluginControl's ctor calls log10f().
+                                     //     We should do that in here.
 {
     setObjectName("RotaryWidget");
 
