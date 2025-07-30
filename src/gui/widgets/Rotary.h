@@ -46,10 +46,6 @@ public:
     };
 
     /**
-     * ??? In log mode, minimum, maximum, step, and pageStep need to be log.
-     *     Now that we handle log position properly, we need to handle all the
-     *     others as well.  PluginControl's ctor is the only user.
-     *
      * ??? logarithmic is always TicksNoSnap.  Should we make logarithmic
      *     a "TickMode"?  Then we can get rid of the logarithmic param.
      *     We could also consider some log ticks to go with it.
@@ -143,6 +139,7 @@ private:
     void snapPosition();
     void updateToolTip();
     void valueChanged2();
+    void updateFloatText();
 
     // true while the left mouse button is pressed.
     bool m_buttonPressed{false};

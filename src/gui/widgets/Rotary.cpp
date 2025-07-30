@@ -492,6 +492,17 @@ Rotary::valueChanged2()
 }
 
 void
+Rotary::updateFloatText()
+{
+    TextFloat *textFloat = TextFloat::getInstance();
+    if (m_logarithmic) {
+        textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
+    } else {
+        textFloat->setText(QString("%1").arg(m_snapPosition));
+    }
+}
+
+void
 Rotary::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
@@ -514,14 +525,9 @@ Rotary::mousePressEvent(QMouseEvent *e)
 
     // Set up the tooltip (TextFloat) while moving.
 
+    updateFloatText();
+
     TextFloat *textFloat = TextFloat::getInstance();
-
-    if (m_logarithmic) {
-        textFloat->setText(QString("%1").arg(powf(10, m_position)));
-    } else {
-        textFloat->setText(QString("%1").arg(m_position));
-    }
-
     const QPoint offset = QPoint(width() + width() / 5, height() / 5);
     textFloat->display(offset);
 
@@ -545,8 +551,6 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
         minv = powf(10, minv);
         maxv = powf(10, maxv);
         val = powf(10, val);
-//      step = powf(10, step);
-//      if (step > 0.001) step = 0.001;
         step = (maxv - minv) / 100.0;
         if (step > 1.0) {
             step = .1;
@@ -559,7 +563,7 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 
     FloatEdit dialog(this,  // parent
                      tr("Rosegarden"),  // title
-                     tr("Enter a new value"),  // text
+                     m_label,  // text
                      minv,  // min
                      maxv,  // max
                      val,  // value
@@ -590,10 +594,9 @@ Rotary::mouseDoubleClickEvent(QMouseEvent * /*e*/)
 
     const float newval = dialog.getValue();
     if (m_logarithmic) {
+        m_position = log10f(newval);
         if (m_position < -10)
             m_position = -10;
-        else
-            m_position = log10f(newval);
     } else {
         m_position = newval;
     }
@@ -607,8 +610,8 @@ Rotary::mouseReleaseEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::LeftButton) {
         m_buttonPressed = false;
-        m_lastY = 0;
         m_lastX = 0;
+        m_lastY = 0;
 
         // Hide the float text
         TextFloat::getInstance()->hideAfterDelay(500);
@@ -618,76 +621,60 @@ Rotary::mouseReleaseEvent(QMouseEvent *e)
 void
 Rotary::mouseMoveEvent(QMouseEvent *e)
 {
-    if (m_buttonPressed) {
-        // Dragging by x or y axis when clicked modifies value
-        //
-        float newValue = m_position +
-            (m_lastY - float(e->pos().y()) + float(e->pos().x()) - m_lastX)
-            * m_step;
+    // Not dragging?  Bail.
+    if (!m_buttonPressed)
+        return;
 
-        if (newValue > m_maximum)
-            m_position = m_maximum;
-        else
-            if (newValue < m_minimum)
-                m_position = m_minimum;
-            else
-                m_position = newValue;
+    const int x = e->pos().x();
+    const int y = e->pos().y();
 
-        m_lastY = e->pos().y();
-        m_lastX = e->pos().x();
+    // Dragging by x or y axis modifies value.
+    // Dragging diagonally moves either really fast (Manhattan Distance) or
+    // not at all.
+    float newValue = m_position + (m_lastY - y + x - m_lastX) * m_step;
+    if (newValue < m_minimum)
+        newValue = m_minimum;
+    else if (newValue > m_maximum)
+        newValue = m_maximum;
 
-        snapPosition();
+    m_position = newValue;
 
-        // don't update if there's nothing to update
-        //        if (m_lastPosition == m_snapPosition) return;
+    snapPosition();
 
-        update();
+    m_lastX = x;
+    m_lastY = y;
 
-        valueChanged2();
-
-        // draw on the float text
-        TextFloat *textFloat = TextFloat::getInstance();
-        if (m_logarithmic) {
-            textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
-        } else {
-            textFloat->setText(QString("%1").arg(m_snapPosition));
-        }
-    }
+    update();
+    valueChanged2();
+    updateFloatText();
 }
 
 void
 Rotary::wheelEvent(QWheelEvent *e)
 {
-    // ??? Wheel direction is reversed.  Up should increase.  Down should
-    //     reduce.  Wonder if anyone will notice a change?
-
     // We'll handle this.  Don't pass to parent.
     e->accept();
 
-    if (e->angleDelta().y() > 0)
+    // Wheel going down?  Decrease the value.  This is consistent with
+    // QSpinBox.
+    if (e->angleDelta().y() < 0)
         m_position -= m_pageStep;
-    else if (e->angleDelta().y() < 0)
+    else if (e->angleDelta().y() > 0)  // Wheel going up?
         m_position += m_pageStep;
 
     if (m_position > m_maximum)
         m_position = m_maximum;
-
     if (m_position < m_minimum)
         m_position = m_minimum;
 
     snapPosition();
     update();
+    updateFloatText();
 
     TextFloat *textFloat = TextFloat::getInstance();
 
-    // draw on the float text
-    if (m_logarithmic) {
-        textFloat->setText(QString("%1").arg(powf(10, m_snapPosition)));
-    } else {
-        textFloat->setText(QString("%1").arg(m_snapPosition));
-    }
-
     // Move just top/right of the rotary
+    // ??? Factor out.  This is done in two places.
     QPoint offset = QPoint(width() + width() / 5, height() / 5);
     textFloat->display(offset);
 
@@ -704,6 +691,7 @@ Rotary::enterEvent(QEnterEvent *)
 Rotary::enterEvent(QEvent *)
 #endif
 {
+    // Take over the TextFloat.
     TextFloat::getInstance()->attach(this);
 }
 
@@ -714,8 +702,8 @@ Rotary::getPosition() const
 
     // ??? Why doesn't this deal in m_snapPosition?  PluginControl is the only
     //     one that might notice.  Need to see if we can come up with a
-    //     test case that makes a mess of this.  Or perhaps we can
-    //     learn that snap is useless and can be removed.
+    //     test case that makes a mess of this.  Or perhaps we will
+    //     fond out that snap is useless and can be removed.
 
     if (m_logarithmic)
         return powf(10, m_position);
