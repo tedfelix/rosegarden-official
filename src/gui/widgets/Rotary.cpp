@@ -154,8 +154,40 @@ Rotary::Rotary(QWidget *parent,
     setObjectName("RotaryWidget");
     setAttribute(Qt::WA_NoSystemBackground);
 
-    if (m_logarithmic)
-        initialPosition = log10f(initialPosition);;
+    if (m_logarithmic) {
+        // The only user of log mode is PluginControl.
+
+        // Log can never reach 0, so we need special handling if someone
+        // asks for numbers close to 0 or below.
+        // This handling might be specific to plugins.  If changes are needed
+        // to this, be sure to regression test PluginControl to make sure those
+        // changes don't affect it.  Might be a good idea to add a plugin mode
+        // to this class if multiple behaviors are needed.
+        constexpr float logMinimum = -10;
+        // .0000000001, 1e-10
+        const float linearMinimum = powf(10, logMinimum);
+        if (m_minimum > linearMinimum) {
+            m_minimum = log10f(m_minimum);
+        } else {
+            if (m_maximum > 1)
+                m_minimum = 0;  // ??? Why not logMinimum in both cases?
+            else
+                m_minimum = logMinimum;
+        }
+        if (m_maximum > linearMinimum)
+            m_maximum = log10f(m_maximum);
+        else
+            m_maximum = logMinimum;
+
+        // Override step and pageStep since they make little sense in
+        // the log domain.
+        // 100 steps
+        m_step = (m_maximum - m_minimum) / 100;
+        // 10 pages
+        m_pageStep = m_step * 10;
+
+        initialPosition = log10f(initialPosition);
+    }
     m_initialPosition = initialPosition;
     m_position = initialPosition;
     m_snapPosition = initialPosition;

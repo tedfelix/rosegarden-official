@@ -42,12 +42,20 @@ public:
         NoTicks,      // no ticks and no snap
         TicksNoSnap,  // 11 ticks and no snap
         StepTicks     // ticks at step interval, snap enabled
+        //Log         // [proposed] log mode, 11 ticks, no snap
     };
 
     /**
      * ??? In log mode, minimum, maximum, step, and pageStep need to be log.
      *     Now that we handle log position properly, we need to handle all the
      *     others as well.  PluginControl's ctor is the only user.
+     *
+     * ??? logarithmic is always TicksNoSnap.  Should we make logarithmic
+     *     a "TickMode"?  Then we can get rid of the logarithmic param.
+     *     We could also consider some log ticks to go with it.
+     *
+     * For log mode, step and pageStep are ignored.  step defaults to 100
+     * divisions of the Rotary and pageStep to 10.
      *
      * centred: When set to true, draws a red arc from the top to the
      *          current position.
