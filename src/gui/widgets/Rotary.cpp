@@ -39,14 +39,10 @@
 #include <map>
 
 // Turn caching back on by setting this to 1.
-// Caching takes us from 9433FPS to 156250FPS.  9433FPS seems ok.
+// Caching takes us from 14358.9FPS to 156250FPS.  14358.9FPS seems ok.
 #define CACHING 0
 
 #define PROFILER 0
-
-// Set to zero to remove background drawing in prep for moving the
-// background to a separate QPixmap.
-#define BACKGROUND 1
 
 
 namespace Rosegarden
@@ -64,7 +60,6 @@ namespace
     constexpr double a_rotaryMax{1.75 * M_PI};
     constexpr double a_rotaryRange{a_rotaryMax - a_rotaryMin};
 
-//#if BACKGROUND
     void a_drawTick(QPainter &paint, double angle, int size, bool internal)
     {
         const double halfSize = double(size) / 2.0;
@@ -85,7 +80,6 @@ namespace
             paint.drawLine(x0, y0, x1, y1);
         }
     }
-//#endif
 
 #if CACHING
     struct CacheIndex {
@@ -265,16 +259,26 @@ Rotary::setCentered(bool centred)
     update();
 }
 
-void Rotary::drawBackground(QPainter *paint)
+void Rotary::updateBackground()
 {
+    m_backgroundPixmap = QPixmap(m_scaledWidth, m_scaledWidth);
+
+    const QColor backgroundColor = ThornStyle::isEnabled() ?
+            QColor::fromRgb(0x40, 0x40, 0x40) :
+            palette().window().color();
+    m_backgroundPixmap.fill(backgroundColor);
+
+    QPainter paint;
+    paint.begin(&m_backgroundPixmap);
+
     // Knob Circle
 
     // If the client set a color, use it.
     if (m_colorSet) {
-        paint->setBrush(m_knobColour);
+        paint.setBrush(m_knobColour);
     } else {
         // Go with white to get our attention that the color was not set.
-        paint->setBrush(Qt::white);
+        paint.setBrush(Qt::white);
     }
 
     // ??? Is this ctor expensive?  Should we move to member?
@@ -283,10 +287,10 @@ void Rotary::drawBackground(QPainter *paint)
     pen.setWidth(a_scale);
     // Black outline around knob.
     pen.setColor(QColor(0x10, 0x10, 0x10));
-    paint->setPen(pen);
+    paint.setPen(pen);
 
     // draw a base knob color circle
-    paint->drawEllipse(m_indent, m_indent,
+    paint.drawEllipse(m_indent, m_indent,
                        m_scaledWidth - 2*m_indent, m_scaledWidth - 2*m_indent);
 
 #if 0
@@ -331,18 +335,18 @@ void Rotary::drawBackground(QPainter *paint)
         break;
     }
 
-    paint->setBrush(Qt::NoBrush);
+    paint.setBrush(Qt::NoBrush);
 
     pen.setColor(QColor(0xAA, 0xAA, 0xAA));
     pen.setWidth(a_scale);
-    paint->setPen(pen);
+    paint.setPen(pen);
 
     // For each tick...
     for (int tick = 0; tick < numTicks; ++tick) {
         int div = numTicks;
         if (div > 1)
             --div;
-        a_drawTick(*paint,
+        a_drawTick(paint,
                    a_rotaryMin + (a_rotaryMax - a_rotaryMin) * tick / div,  // angle
                    m_scaledWidth,  // size
                    tick != 0 && tick != numTicks - 1);  // internal
@@ -353,13 +357,15 @@ void Rotary::drawBackground(QPainter *paint)
     pen.setWidth(a_scale);
     // same color as slider grooves and VU meter backgrounds
     pen.setColor(QColor(0x10, 0x10, 0x10));
-    paint->setPen(pen);
-    paint->drawArc(a_scale / 2,
+    paint.setPen(pen);
+    paint.drawArc(a_scale / 2,
                   a_scale / 2,
                   m_scaledWidth - a_scale,
                   m_scaledWidth - a_scale,
                   lround(-a_rotaryMin * a_radiansToDegrees - 90) * 16,
                   lround(-(a_rotaryMax - a_rotaryMin) * a_radiansToDegrees) * 16);
+
+    m_backgroundPixmapValid = true;
 }
 
 void
@@ -408,33 +414,20 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Cache miss.  Have to draw from scratch.
 
-    // ??? Try improving performance by keeping a "background" pixmap as a
-    //     member which would have the knob circle, ticks, and trough.  Then
-    //     the position range and pointer can be drawn over top of that
-    //     background.  The background would only be redrawn on size change.
-
     // Temporary pixmap to draw on.
     QPixmap pixmap(m_scaledWidth, m_scaledWidth);
 
     QPen pen;
 
-    // Background fill.
-    // ??? Include this in the background pixmap.
-#if BACKGROUND
-    const QColor bg = ThornStyle::isEnabled() ?
-            QColor::fromRgb(0x40, 0x40, 0x40) :
-            palette().window().color();
-#else
-    const QColor bg{Qt::gray};
-#endif
-    pixmap.fill(bg);
-
     QPainter paint;
     paint.begin(&pixmap);
 
-#if BACKGROUND
-    drawBackground(&paint);
-#endif
+    // If the cached background isn't valid, fill it in.
+    if (!m_backgroundPixmapValid)
+        updateBackground();
+
+    // Copy background to pixmap.
+    paint.drawPixmap(0, 0, m_backgroundPixmap);
 
     // Position Range (bright orange)
 
@@ -473,13 +466,12 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Scale the QPixmap down to target size with smoothing.
 
-    // ??? QPixmap offers a scaled() routine.  Is that faster?
+#if CACHING
     QImage image = pixmap.toImage().scaled(
             m_size,
             m_size,
             Qt::IgnoreAspectRatio,
             Qt::SmoothTransformation);
-#if CACHING
     // Add to pixmap cache.
     (*pixmapCache)[index] = QPixmap::fromImage(image);
 #endif
@@ -490,7 +482,12 @@ Rotary::paintEvent(QPaintEvent *)
 #if CACHING
     paint.drawPixmap(0, 0, (*pixmapCache)[index]);
 #else
-    paint.drawImage(0, 0, image);
+    pixmap = pixmap.scaled(
+            m_size,
+            m_size,
+            Qt::IgnoreAspectRatio,
+            Qt::SmoothTransformation);
+    paint.drawPixmap(0, 0, pixmap);
 #endif
     paint.end();
 }
@@ -804,8 +801,8 @@ Rotary::profile()
     RG_WARNING << "  FPS:" << fps;
 
     // Small knob (MIPP) results:
-    //   136029 (136.029usec, 7351.37 FPS) No cache.
-    //      ??? Background pixmap, no cache.
+    //   136029 (136.029usec, 7351.37 FPS) No cache of any kind.
+    //    69643 (69.643usec, 14358.9 FPS) Background cache only.
     //    66426 (66.426usec, 15054.3 FPS) No background, no cache.
     //     6400 (6.4usec, 156250 FPS) with cache.
 }

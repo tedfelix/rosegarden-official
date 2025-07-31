@@ -19,6 +19,7 @@
 #define RG_ROTARY_H
 
 #include <QColor>
+#include <QPixmap>
 #include <QString>
 #include <QWidget>
 
@@ -153,7 +154,9 @@ private:
     int m_lastY{0};
     int m_lastX{0};
 
-    void drawBackground(QPainter *paint);
+    QPixmap m_backgroundPixmap;
+    bool m_backgroundPixmapValid{false};
+    void updateBackground();
 
     void profile();
 
