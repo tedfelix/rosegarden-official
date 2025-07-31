@@ -20,11 +20,12 @@
 
 #include "Rotary.h"
 
+#include "TextFloat.h"
+
 #include "misc/Debug.h"
 #include "gui/dialogs/FloatEdit.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/ThornStyle.h"
-#include "TextFloat.h"
 
 #include <QDialog>
 #include <QImage>
@@ -40,8 +41,13 @@
 
 // Turn caching back on by setting this to 1.
 // Caching takes us from 14358.9FPS to 156250FPS.  14358.9FPS seems ok.
+// I think we should remove this caching.  While it does result in a 10x
+// performance improvement, it is complex, and given that we want to be
+// able to dynamically size Rotary in the future, this cache is going to get
+// really big.
 #define CACHING 0
 
+// See profile().
 #define PROFILER 0
 
 
@@ -60,7 +66,7 @@ namespace
     constexpr double a_rotaryMax{1.75 * M_PI};
     constexpr double a_rotaryRange{a_rotaryMax - a_rotaryMin};
 
-    void a_drawTick(QPainter &paint, double angle, int size, bool internal)
+    void a_drawTick(QPainter &painter, double angle, int size, bool internal)
     {
         const double halfSize = double(size) / 2.0;
         // 0 degrees is at 6 o'clock and goes CW.
@@ -73,11 +79,11 @@ namespace
         if (internal) {
             const int x1 = lround(halfSize - (halfSize - tickLen) * sin(angle));
             const int y1 = lround(halfSize + (halfSize - tickLen) * cos(angle));
-            paint.drawLine(x0, y0, x1, y1);
+            painter.drawLine(x0, y0, x1, y1);
         } else {  // First and last ticks extend outward.  "+ tickLen"
             const int x1 = lround(halfSize - (halfSize + tickLen) * sin(angle));
             const int y1 = lround(halfSize + (halfSize + tickLen) * cos(angle));
-            paint.drawLine(x0, y0, x1, y1);
+            painter.drawLine(x0, y0, x1, y1);
         }
     }
 
@@ -205,6 +211,19 @@ Rotary::Rotary(QWidget *parent,
     m_position = initialPosition;
     m_snapPosition = initialPosition;
 
+    m_numTicks = 0;
+    switch (m_tickMode) {
+    case TicksNoSnap:
+        m_numTicks = 11;
+        break;
+    case StepTicks:
+        m_numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
+        break;
+    case NoTicks:
+    default:
+        break;
+    }
+
     updateToolTip();
 
     setFixedSize(size, size);
@@ -268,29 +287,27 @@ void Rotary::updateBackground()
             palette().window().color();
     m_backgroundPixmap.fill(backgroundColor);
 
-    QPainter paint;
-    paint.begin(&m_backgroundPixmap);
+    QPainter painter(&m_backgroundPixmap);
 
     // Knob Circle
 
     // If the client set a color, use it.
     if (m_colorSet) {
-        paint.setBrush(m_knobColour);
+        painter.setBrush(m_knobColour);
     } else {
         // Go with white to get our attention that the color was not set.
-        paint.setBrush(Qt::white);
+        painter.setBrush(Qt::white);
     }
 
-    // ??? Is this ctor expensive?  Should we move to member?
     QPen pen;
 
     pen.setWidth(a_scale);
     // Black outline around knob.
     pen.setColor(QColor(0x10, 0x10, 0x10));
-    paint.setPen(pen);
+    painter.setPen(pen);
 
     // draw a base knob color circle
-    paint.drawEllipse(m_indent, m_indent,
+    painter.drawEllipse(m_indent, m_indent,
                        m_scaledWidth - 2*m_indent, m_scaledWidth - 2*m_indent);
 
 #if 0
@@ -307,14 +324,14 @@ void Rotary::updateBackground()
     while (darkWidth) {
         color = color.lighter(101);
         pen.setColor(color);
-        paint.setPen(pen);
-        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
+        painter.setPen(pen);
+        painter.drawEllipse(pos, pos, darkWidth, darkWidth);
         if (!--darkWidth)
             break;
-        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
+        painter.drawEllipse(pos, pos, darkWidth, darkWidth);
         if (!--darkWidth)
             break;
-        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
+        painter.drawEllipse(pos, pos, darkWidth, darkWidth);
         ++pos;
         --darkWidth;
     }
@@ -322,34 +339,21 @@ void Rotary::updateBackground()
 
     // Ticks
 
-    int numTicks = 0;
-    switch (m_tickMode) {
-    case TicksNoSnap:
-        numTicks = 11;
-        break;
-    case StepTicks:
-        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
-        break;
-    case NoTicks:
-    default:
-        break;
-    }
-
-    paint.setBrush(Qt::NoBrush);
+    painter.setBrush(Qt::NoBrush);
 
     pen.setColor(QColor(0xAA, 0xAA, 0xAA));
     pen.setWidth(a_scale);
-    paint.setPen(pen);
+    painter.setPen(pen);
 
     // For each tick...
-    for (int tick = 0; tick < numTicks; ++tick) {
-        int div = numTicks;
+    for (int tick = 0; tick < m_numTicks; ++tick) {
+        int div = m_numTicks;
         if (div > 1)
             --div;
-        a_drawTick(paint,
+        a_drawTick(painter,
                    a_rotaryMin + (a_rotaryMax - a_rotaryMin) * tick / div,  // angle
                    m_scaledWidth,  // size
-                   tick != 0 && tick != numTicks - 1);  // internal
+                   tick != 0 && tick != m_numTicks - 1);  // internal
     }
 
     // Trough
@@ -357,8 +361,8 @@ void Rotary::updateBackground()
     pen.setWidth(a_scale);
     // same color as slider grooves and VU meter backgrounds
     pen.setColor(QColor(0x10, 0x10, 0x10));
-    paint.setPen(pen);
-    paint.drawArc(a_scale / 2,
+    painter.setPen(pen);
+    painter.drawArc(a_scale / 2,
                   a_scale / 2,
                   m_scaledWidth - a_scale,
                   m_scaledWidth - a_scale,
@@ -381,8 +385,6 @@ Rotary::paintEvent(QPaintEvent *)
     }
 #endif
 
-    //Profiler profiler("Rotary::paintEvent");
-
     // Convert m_snapPosition to angle in radians.
     const double angle = a_rotaryMin // offset
                          + (a_rotaryRange *
@@ -398,16 +400,16 @@ Rotary::paintEvent(QPaintEvent *)
 
     //RG_DEBUG << "degrees: " << degrees << ", size " << m_size << ", pixel " << m_knobColour.pixel();
 
-    CacheIndex index(m_size, pixel, degrees, numTicks, m_centred);
+    CacheIndex index(m_size, pixel, degrees, m_numTicks, m_centred);
 
     PixmapCache *pixmapCache = rotaryPixmapCache();
 
     // If it's in the cache, use it.
     if (pixmapCache->find(index) != pixmapCache->end()) {
-        QPainter paint;
-        paint.begin(this);
-        paint.drawPixmap(0, 0, (*pixmapCache)[index]);
-        paint.end();
+        QPainter painter;
+        painter.begin(this);
+        painter.drawPixmap(0, 0, (*pixmapCache)[index]);
+        painter.end();
         return;
     }
 #endif
@@ -419,27 +421,27 @@ Rotary::paintEvent(QPaintEvent *)
 
     QPen pen;
 
-    QPainter paint;
-    paint.begin(&pixmap);
+    QPainter painter;
+    painter.begin(&pixmap);
 
     // If the cached background isn't valid, fill it in.
     if (!m_backgroundPixmapValid)
         updateBackground();
 
     // Copy background to pixmap.
-    paint.drawPixmap(0, 0, m_backgroundPixmap);
+    painter.drawPixmap(0, 0, m_backgroundPixmap);
 
     // Position Range (bright orange)
 
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
     pen.setWidth(m_indent - a_scale);
-    paint.setPen(pen);
+    painter.setPen(pen);
 
     if (m_centred) {
-        paint.drawArc(m_indent / 2 + 1, m_indent / 2, m_scaledWidth - m_indent, m_scaledWidth - m_indent,
+        painter.drawArc(m_indent / 2 + 1, m_indent / 2, m_scaledWidth - m_indent, m_scaledWidth - m_indent,
                       90 * 16, -(degrees - 180) * 16);
     } else {
-        paint.drawArc(m_indent / 2 + 1, m_indent / 2, m_scaledWidth - m_indent, m_scaledWidth - m_indent,
+        painter.drawArc(m_indent / 2 + 1, m_indent / 2, m_scaledWidth - m_indent, m_scaledWidth - m_indent,
                       (180 + 45) * 16, -(degrees - 45) * 16);
     }
 
@@ -458,11 +460,11 @@ Rotary::paintEvent(QPaintEvent *)
 
     pen.setWidth(a_scale * 2);
     pen.setColor(Qt::black);
-    paint.setPen(pen);
+    painter.setPen(pen);
 
-    paint.drawLine(int(x0), int(y0), int(x), int(y));
+    painter.drawLine(int(x0), int(y0), int(x), int(y));
 
-    paint.end();
+    painter.end();
 
     // Scale the QPixmap down to target size with smoothing.
 
@@ -478,18 +480,18 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Draw on the screen.
 
-    paint.begin(this);
+    painter.begin(this);
 #if CACHING
-    paint.drawPixmap(0, 0, (*pixmapCache)[index]);
+    painter.drawPixmap(0, 0, (*pixmapCache)[index]);
 #else
     pixmap = pixmap.scaled(
             m_size,
             m_size,
             Qt::IgnoreAspectRatio,
             Qt::SmoothTransformation);
-    paint.drawPixmap(0, 0, pixmap);
+    painter.drawPixmap(0, 0, pixmap);
 #endif
-    paint.end();
+    painter.end();
 }
 
 void

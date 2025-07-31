@@ -130,6 +130,7 @@ private:
     int m_scaledWidth;
     int m_indent;
     TickMode m_tickMode;
+    int m_numTicks{0};
     bool m_centred;
     // In logarithmic mode, the log position is stored in the position
     // related member variables.  This includes m_minimum, m_maximum,
