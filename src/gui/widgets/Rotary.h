@@ -126,6 +126,8 @@ private:
     // Mouse wheel steps.
     float m_pageStep;
     int m_size;
+    int m_scaledWidth;
+    int m_indent;
     TickMode m_tickMode;
     bool m_centred;
     // In logarithmic mode, the log position is stored in the position
@@ -150,6 +152,8 @@ private:
     // Last position to detect how much the mouse has moved.
     int m_lastY{0};
     int m_lastX{0};
+
+    void drawBackground(QPainter *paint);
 
     void profile();
 

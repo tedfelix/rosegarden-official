@@ -44,6 +44,10 @@
 
 #define PROFILER 0
 
+// Set to zero to remove background drawing in prep for moving the
+// background to a separate QPixmap.
+#define BACKGROUND 1
+
 
 namespace Rosegarden
 {
@@ -52,6 +56,15 @@ namespace Rosegarden
 namespace
 {
 
+    // Draw at four times the required size for anti-aliasing.
+    constexpr int a_scale = 4;
+
+    constexpr double a_radiansToDegrees = 180 / M_PI;
+    constexpr double a_rotaryMin{0.25 * M_PI};
+    constexpr double a_rotaryMax{1.75 * M_PI};
+    constexpr double a_rotaryRange{a_rotaryMax - a_rotaryMin};
+
+//#if BACKGROUND
     void a_drawTick(QPainter &paint, double angle, int size, bool internal)
     {
         const double halfSize = double(size) / 2.0;
@@ -72,6 +85,7 @@ namespace
             paint.drawLine(x0, y0, x1, y1);
         }
     }
+//#endif
 
 #if CACHING
     struct CacheIndex {
@@ -155,6 +169,9 @@ Rotary::Rotary(QWidget *parent,
 {
     setObjectName("RotaryWidget");
     setAttribute(Qt::WA_NoSystemBackground);
+
+    m_scaledWidth = m_size * a_scale;
+    m_indent = m_scaledWidth * 0.15 + 1;
 
     if (m_logarithmic) {
         // The only user of log mode is PluginControl.
@@ -248,6 +265,103 @@ Rotary::setCentered(bool centred)
     update();
 }
 
+void Rotary::drawBackground(QPainter *paint)
+{
+    // Knob Circle
+
+    // If the client set a color, use it.
+    if (m_colorSet) {
+        paint->setBrush(m_knobColour);
+    } else {
+        // Go with white to get our attention that the color was not set.
+        paint->setBrush(Qt::white);
+    }
+
+    // ??? Is this ctor expensive?  Should we move to member?
+    QPen pen;
+
+    pen.setWidth(a_scale);
+    // Black outline around knob.
+    pen.setColor(QColor(0x10, 0x10, 0x10));
+    paint->setPen(pen);
+
+    // draw a base knob color circle
+    paint->drawEllipse(m_indent, m_indent,
+                       m_scaledWidth - 2*m_indent, m_scaledWidth - 2*m_indent);
+
+#if 0
+    // Highlight
+
+    // Draw a highlight to make the knob look slightly raised and round
+    // on top.  Easiest to see with larger knobs.
+    // This is really subtle.  Removing this to simulate flat matte knob tops
+    // which is more of a modern look for 2025.
+    QColor color = m_knobColour;
+    pen.setWidth(2 * a_scale);
+    int pos = indent + (m_scaledWidth - 2 * indent) / 8;
+    int darkWidth = (m_scaledWidth - 2 * indent) * 2 / 3;
+    while (darkWidth) {
+        color = color.lighter(101);
+        pen.setColor(color);
+        paint.setPen(pen);
+        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
+        if (!--darkWidth)
+            break;
+        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
+        if (!--darkWidth)
+            break;
+        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
+        ++pos;
+        --darkWidth;
+    }
+#endif
+
+    // Ticks
+
+    int numTicks = 0;
+    switch (m_tickMode) {
+    case TicksNoSnap:
+        numTicks = 11;
+        break;
+    case StepTicks:
+        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
+        break;
+    case NoTicks:
+    default:
+        break;
+    }
+
+    paint->setBrush(Qt::NoBrush);
+
+    pen.setColor(QColor(0xAA, 0xAA, 0xAA));
+    pen.setWidth(a_scale);
+    paint->setPen(pen);
+
+    // For each tick...
+    for (int tick = 0; tick < numTicks; ++tick) {
+        int div = numTicks;
+        if (div > 1)
+            --div;
+        a_drawTick(*paint,
+                   a_rotaryMin + (a_rotaryMax - a_rotaryMin) * tick / div,  // angle
+                   m_scaledWidth,  // size
+                   tick != 0 && tick != numTicks - 1);  // internal
+    }
+
+    // Trough
+
+    pen.setWidth(a_scale);
+    // same color as slider grooves and VU meter backgrounds
+    pen.setColor(QColor(0x10, 0x10, 0x10));
+    paint->setPen(pen);
+    paint->drawArc(a_scale / 2,
+                  a_scale / 2,
+                  m_scaledWidth - a_scale,
+                  m_scaledWidth - a_scale,
+                  lround(-a_rotaryMin * a_radiansToDegrees - 90) * 16,
+                  lround(-(a_rotaryMax - a_rotaryMin) * a_radiansToDegrees) * 16);
+}
+
 void
 Rotary::paintEvent(QPaintEvent *)
 {
@@ -263,30 +377,12 @@ Rotary::paintEvent(QPaintEvent *)
 
     //Profiler profiler("Rotary::paintEvent");
 
-    constexpr double rotaryMin{0.25 * M_PI};
-    constexpr double rotaryMax{1.75 * M_PI};
-    constexpr double rotaryRange{rotaryMax - rotaryMin};
-
     // Convert m_snapPosition to angle in radians.
-    const double angle = rotaryMin // offset
-                         + (rotaryRange *
+    const double angle = a_rotaryMin // offset
+                         + (a_rotaryRange *
                             (double(m_snapPosition - m_minimum) /
                              (double(m_maximum) - double(m_minimum))));
-    constexpr double radiansToDegrees = 180 / M_PI;
-    const int degrees = int(angle * radiansToDegrees);
-
-    int numTicks = 0;
-    switch (m_tickMode) {
-    case TicksNoSnap:
-        numTicks = 11;
-        break;
-    case StepTicks:
-        numTicks = 1 + (m_maximum + 0.0001 - m_minimum) / m_step;
-        break;
-    case NoTicks:
-    default:
-        break;
-    }
+    const int degrees = int(angle * a_radiansToDegrees);
 
     // Check the cache.
 
@@ -317,119 +413,47 @@ Rotary::paintEvent(QPaintEvent *)
     //     the position range and pointer can be drawn over top of that
     //     background.  The background would only be redrawn on size change.
 
-    // Draw at four times the required size for anti-aliasing.
-    constexpr int scale = 4;
-    const int width = m_size * scale;
-
     // Temporary pixmap to draw on.
-    QPixmap pixmap(width, width);
+    QPixmap pixmap(m_scaledWidth, m_scaledWidth);
 
+    QPen pen;
+
+    // Background fill.
+    // ??? Include this in the background pixmap.
+#if BACKGROUND
     const QColor bg = ThornStyle::isEnabled() ?
             QColor::fromRgb(0x40, 0x40, 0x40) :
             palette().window().color();
+#else
+    const QColor bg{Qt::gray};
+#endif
     pixmap.fill(bg);
 
     QPainter paint;
     paint.begin(&pixmap);
 
-    // Knob Circle
-
-    // If the client set a color, use it.
-    if (m_colorSet) {
-        paint.setBrush(m_knobColour);
-    } else {
-        // Go with white to get our attention that the color was not set.
-        paint.setBrush(Qt::white);
-    }
-
-    int indent = width * 0.15 + 1;
-
-    QPen pen;
-    pen.setWidth(scale);
-    // Black outline around knob.
-    pen.setColor(QColor(0x10, 0x10, 0x10));
-    paint.setPen(pen);
-
-    // draw a base knob color circle
-    paint.drawEllipse(indent, indent, width - 2*indent, width - 2*indent);
-
-#if 0
-    // Highlight
-
-    // Draw a highlight to make the knob look slightly raised and round
-    // on top.  Easiest to see with larger knobs.
-    // This is really subtle.  Removing this to simulate flat matte knob tops
-    // which is more of a modern look for 2025.
-    QColor color = m_knobColour;
-    pen.setWidth(2 * scale);
-    int pos = indent + (width - 2 * indent) / 8;
-    int darkWidth = (width - 2 * indent) * 2 / 3;
-    while (darkWidth) {
-        color = color.lighter(101);
-        pen.setColor(color);
-        paint.setPen(pen);
-        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
-        if (!--darkWidth)
-            break;
-        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
-        if (!--darkWidth)
-            break;
-        paint.drawEllipse(pos, pos, darkWidth, darkWidth);
-        ++pos;
-        --darkWidth;
-    }
+#if BACKGROUND
+    drawBackground(&paint);
 #endif
-
-    // Ticks
-
-    paint.setBrush(Qt::NoBrush);
-
-    pen.setColor(QColor(0xAA, 0xAA, 0xAA));
-    pen.setWidth(scale);
-    paint.setPen(pen);
-
-    // For each tick...
-    for (int tick = 0; tick < numTicks; ++tick) {
-        int div = numTicks;
-        if (div > 1)
-            --div;
-        a_drawTick(paint,
-                   rotaryMin + (rotaryMax - rotaryMin) * tick / div,  // angle
-                   width,  // size
-                   tick != 0 && tick != numTicks - 1);  // internal
-    }
 
     // Position Range (bright orange)
 
     pen.setColor(GUIPalette::getColour(GUIPalette::RotaryMeter));
-    pen.setWidth(indent - scale);
+    pen.setWidth(m_indent - a_scale);
     paint.setPen(pen);
 
     if (m_centred) {
-        paint.drawArc(indent / 2 + 1, indent / 2, width - indent, width - indent,
+        paint.drawArc(m_indent / 2 + 1, m_indent / 2, m_scaledWidth - m_indent, m_scaledWidth - m_indent,
                       90 * 16, -(degrees - 180) * 16);
     } else {
-        paint.drawArc(indent / 2 + 1, indent / 2, width - indent, width - indent,
+        paint.drawArc(m_indent / 2 + 1, m_indent / 2, m_scaledWidth - m_indent, m_scaledWidth - m_indent,
                       (180 + 45) * 16, -(degrees - 45) * 16);
     }
 
-    // Trough
-
-    pen.setWidth(scale);
-    // same color as slider grooves and VU meter backgrounds
-    pen.setColor(QColor(0x10, 0x10, 0x10));
-    paint.setPen(pen);
-    paint.drawArc(scale / 2,
-                  scale / 2,
-                  width - scale,
-                  width - scale,
-                  lround(-rotaryMin * radiansToDegrees - 90) * 16,
-                  lround(-(rotaryMax - rotaryMin) * radiansToDegrees) * 16);
-
     // Pointer
 
-    const double halfWidth = double(width) / 2.0;
-    double len = halfWidth - indent;
+    const double halfWidth = double(m_scaledWidth) / 2.0;
+    double len = halfWidth - m_indent;
     --len;
 
     // Start in the middle.
@@ -439,7 +463,7 @@ Rotary::paintEvent(QPaintEvent *)
     const double x = halfWidth - len * sin(angle);
     const double y = halfWidth + len * cos(angle);
 
-    pen.setWidth(scale * 2);
+    pen.setWidth(a_scale * 2);
     pen.setColor(Qt::black);
     paint.setPen(pen);
 
@@ -449,6 +473,7 @@ Rotary::paintEvent(QPaintEvent *)
 
     // Scale the QPixmap down to target size with smoothing.
 
+    // ??? QPixmap offers a scaled() routine.  Is that faster?
     QImage image = pixmap.toImage().scaled(
             m_size,
             m_size,
@@ -780,8 +805,9 @@ Rotary::profile()
 
     // Small knob (MIPP) results:
     //   136029 (136.029usec, 7351.37 FPS) No cache.
-    //   ???    Background pixmap, no cache.
-    //   6400   (6.4usec, 156250 FPS) with cache.
+    //      ??? Background pixmap, no cache.
+    //    66426 (66.426usec, 15054.3 FPS) No background, no cache.
+    //     6400 (6.4usec, 156250 FPS) with cache.
 }
 
 
