@@ -146,7 +146,7 @@ private:
 
     void readConfigVariables();
 
-    Event *nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const;
+    Event *nextNoteInGroup(const Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const;
 
     // Return true if the given segment has to be print
     // (readConfigVAriables() should have been called before)
