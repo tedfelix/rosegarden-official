@@ -540,8 +540,18 @@ Rotary::updateTextFloat()
 void
 Rotary::positionTextFloat()
 {
+#if 1
+    // Original positioning approach.  Putting this back in as there
+    // appears to be a problem related to double-clicks if this isn't done.
+    // The TextFloat is getting the second click and the double-click never
+    // happens.
+    const QPoint offset = QPoint(width() + width() / 5, height() / 5);
+    TextFloat::getInstance()->display(offset);
+#else
     // Nudge it just a little closer.
+    // This looks better, but might be interfering with double-clicks.
     TextFloat::getInstance()->display(QPoint(0, 5));
+#endif
 }
 
 void
