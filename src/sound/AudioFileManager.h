@@ -18,9 +18,11 @@
 #ifndef RG_AUDIOFILEMANAGER_H
 #define RG_AUDIOFILEMANAGER_H
 
-#include <string>
-#include <vector>
-#include <set>
+#include "AudioFile.h"
+#include "PeakFileManager.h"
+
+#include "base/XmlExportable.h"
+#include "base/Exception.h"
 
 #include <QObject>
 #include <QUrl>
@@ -29,11 +31,10 @@
 
 class QPixmap;
 
-#include "AudioFile.h"
-#include "PeakFileManager.h"
-
-#include "base/XmlExportable.h"
-#include "base/Exception.h"
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
 
 
 namespace Rosegarden
@@ -234,7 +235,7 @@ public:
     void drawPreview(AudioFileId id,
                      const RealTime &startTime,
                      const RealTime &endTime,
-                     QPixmap *pixmap);
+                     std::shared_ptr<QPixmap> pixmap);
 
     /**
      * Usually used to show how an audio Segment makes up part of
@@ -247,7 +248,7 @@ public:
                                 const RealTime &endTime,
                                 const RealTime &highlightStart,
                                 const RealTime &highlightEnd,
-                                QPixmap *pixmap);
+                                std::shared_ptr<QPixmap> pixmap);
 
     /// Get a split point vector from a peak file
     /**

@@ -41,7 +41,7 @@
 #include "gui/general/IconLoader.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "gui/widgets/LedButton.h"
-#include "sound/AudioFileManager.h"
+//#include "sound/AudioFileManager.h"
 #include "sound/ControlBlock.h"
 #include "sound/PluginIdentifier.h"
 #include "sequencer/RosegardenSequencer.h"

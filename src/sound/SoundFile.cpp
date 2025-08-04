@@ -12,6 +12,7 @@
 */
 
 #define RG_MODULE_STRING "[SoundFile]"
+#define RG_NO_DEBUG_PRINT
 
 #include "SoundFile.h"
 #include "misc/Debug.h"
@@ -41,11 +42,13 @@ SoundFile::~SoundFile()
     if (m_inFile) {
         m_inFile->close();
         delete m_inFile;
+        m_inFile = nullptr;
     }
 
     if (m_outFile) {
         m_outFile->close();
         delete m_outFile;
+        m_outFile = nullptr;
     }
 
 }

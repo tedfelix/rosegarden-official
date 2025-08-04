@@ -14,23 +14,30 @@
 */
 
 #define RG_MODULE_STRING "[PeakFileManager]"
+#define RG_NO_DEBUG_PRINT
 
 #include "PeakFileManager.h"
 
-#include <vector>
+#include "AudioFile.h"
+
+#include "base/RealTime.h"
+#include "PeakFile.h"
+#include "misc/Debug.h"
 
 #include <QFile>
 #include <QProgressDialog>
 
-#include "AudioFile.h"
-#include "base/RealTime.h"
-#include "PeakFile.h"
-#include "misc/Debug.h"
+#include <vector>
 
 
 namespace Rosegarden
 {
 
+
+PeakFileManager::~PeakFileManager()
+{
+    clear();
+}
 
 bool
 PeakFileManager::insertAudioFile(AudioFile *audioFile)

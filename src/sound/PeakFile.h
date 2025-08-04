@@ -52,7 +52,6 @@ class PeakFile : public QObject, public SoundFile
 
 public:
     explicit PeakFile(AudioFile *audioFile);
-    ~PeakFile() override;
 
     bool open() override;
     void close() override;

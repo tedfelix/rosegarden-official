@@ -912,7 +912,7 @@ void
 AudioFileManager::drawPreview(AudioFileId id,
                               const RealTime &startTime,
                               const RealTime &endTime,
-                              QPixmap *pixmap)
+                              std::shared_ptr<QPixmap> pixmap)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
@@ -934,7 +934,7 @@ AudioFileManager::drawPreview(AudioFileId id,
                                  pixmap->width(),
                                  false);
 
-    QPainter painter(pixmap);
+    QPainter painter(pixmap.get());
     pixmap->fill(Qt::white);
     painter.setPen(Qt::gray);
 //    painter.setPen(qApp->palette().color(QPalette::Active,
@@ -976,7 +976,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         const RealTime &endTime,
         const RealTime &highlightStart,
         const RealTime &highlightEnd,
-        QPixmap *pixmap)
+        std::shared_ptr<QPixmap> pixmap)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
@@ -1003,7 +1003,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
     int endWidth = (int)(double(pixmap->width()) * (highlightEnd /
                          (endTime - startTime)));
 
-    QPainter painter(pixmap);
+    QPainter painter(pixmap.get());
     pixmap->fill(Qt::white);
 //    pixmap->fill(qApp->palette().color(QPalette::Active,
 //                                       QColorGroup::Base));

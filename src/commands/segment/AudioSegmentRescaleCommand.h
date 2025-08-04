@@ -63,6 +63,7 @@ public:
     static QString getGlobalName() { return tr("Stretch or S&quash..."); }
 
 private:
+    // ??? This is unused outside of the ctors.  Remove it.
     AudioFileManager *m_afm;
     AudioFileTimeStretcher *m_stretcher;
     Segment *m_segment;

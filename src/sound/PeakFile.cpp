@@ -75,10 +75,6 @@ PeakFile::PeakFile(AudioFile *audioFile) :
 {
 }
 
-PeakFile::~PeakFile()
-{
-}
-
 bool
 PeakFile::open()
 {
@@ -92,8 +88,11 @@ PeakFile::open()
     if (m_inFile && m_inFile->is_open())
         return true;
 
+    // ??? Really need to switch to shared_ptr for this!
+    if (m_inFile)
+        delete m_inFile;
+
     // Open
-    //
     m_inFile = new std::ifstream(m_absoluteFilePath.toLocal8Bit(),
                                  std::ios::in | std::ios::binary);
     // Check we're open
