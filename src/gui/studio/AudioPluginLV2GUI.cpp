@@ -70,8 +70,10 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
         RG_DEBUG << "failed to get plugin " << m_id;
         return;
     }
-    LilvNode* name = lilv_plugin_get_name(plugin);
-    QString sname = lilv_node_as_string(name);
+    LilvNode* nameNode = lilv_plugin_get_name(plugin);
+    QString sname = lilv_node_as_string(nameNode);
+    lilv_node_free(nameNode);
+    nameNode = nullptr;
     RG_DEBUG << "got plugin " << sname;
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();

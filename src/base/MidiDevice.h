@@ -118,12 +118,12 @@ public:
     void mergeKeyMappingList(const KeyMappingList &keyMappingList);
 
     /// Includes special Instrument below MidiInstrumentBase.
-    InstrumentList getAllInstruments() const override;
+    InstrumentVector getAllInstruments() const override;
     /// Omit special system Instruments below MidiInstrumentBase.
     /**
      * See generatePresentationList().
      */
-    InstrumentList getPresentationInstruments() const override;
+    InstrumentVector getPresentationInstruments() const override;
 
     // Retrieve Librarian details
     //
@@ -253,7 +253,7 @@ protected:
     MidiMetronome *m_metronome;
 
     // used when we're presenting the instruments
-    InstrumentList  m_presentationInstrumentList;
+    InstrumentVector  m_presentationInstrumentList;
 
     // Is this device Play or Record?
     //

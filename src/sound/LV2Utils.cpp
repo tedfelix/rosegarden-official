@@ -122,7 +122,11 @@ QString LV2Utils::getStateStringFromInstance
                                    uris.c_str(),
                                    nullptr);
     lilv_state_free(state);
-    return QString(s);
+
+    QString stateString(s);
+    lilv_free(s);
+
+    return stateString;
 }
 
 void LV2Utils::setInstanceStateFromString

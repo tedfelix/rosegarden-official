@@ -39,12 +39,13 @@ class PluginControl : public QWidget
     Q_OBJECT
 public:
 
-    typedef enum
+    // ??? An enum with only one value seems kinda useless.
+    enum class ControlType
     {
-        Rotary,
-        Slider,
-        NumericSlider
-    } ControlType;
+        Rotary
+        //Slider,
+        //NumericSlider
+    };
 
     PluginControl(QWidget *parent,
                   ControlType type,
@@ -68,14 +69,12 @@ public slots:
 signals:
     void valueChanged(float value);
 
-protected:
-
-    //--------------- Data members ---------------------------------
+private:
 
     ControlType          m_type;
     QSharedPointer<PluginPort> m_port;
 
-    ::Rosegarden::Rotary              *m_dial; // we have to specify the namespace here otherwise gcc 4.1 thinks it's the enum value above
+    Rotary *m_dial;
     QSharedPointer<AudioPluginManager> m_pluginManager;
 
     int                  m_index;

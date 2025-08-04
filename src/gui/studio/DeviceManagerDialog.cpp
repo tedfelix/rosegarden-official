@@ -394,7 +394,7 @@ DeviceManagerDialog::updateDevicesList
     QString outPort;
     QList < MidiDevice * >midiDevices;
 
-    DeviceList *devices = m_studio->getDevices();
+    DeviceVector *devices = m_studio->getDevices();
 
     // observe any devices we are not yet observing
     for(Device* device : *devices) {

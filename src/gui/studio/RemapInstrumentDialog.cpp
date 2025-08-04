@@ -113,8 +113,8 @@ RemapInstrumentDialog::populateCombo()
     Studio *studio = &m_doc->getStudio();
 
     if (m_deviceButton->isChecked()) {
-        DeviceList *devices = studio->getDevices();
-        DeviceListIterator it;
+        DeviceVector *devices = studio->getDevices();
+        DeviceVector::iterator it;
         m_devices.clear();
 
         for (it = devices->begin(); it != devices->end(); it++) {
@@ -144,7 +144,7 @@ RemapInstrumentDialog::populateCombo()
         }
     } else {
         m_instruments = studio->getPresentationInstruments();
-        InstrumentList::iterator it = m_instruments.begin();
+        InstrumentVector::iterator it = m_instruments.begin();
 
         for (; it != m_instruments.end(); ++it) {
             m_fromCombo->addItem((*it)->getLocalizedPresentationName());

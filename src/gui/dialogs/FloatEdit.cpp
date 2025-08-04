@@ -15,91 +15,86 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[FloatEdit]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FloatEdit.h"
 
-#include <QDoubleSpinBox>
-#include <QDialog>
 #include <QDialogButtonBox>
-#include <QGroupBox>
+#include <QDoubleSpinBox>
 #include <QLabel>
 #include <QString>
-#include <QWidget>
 #include <QVBoxLayout>
 
-#include <cmath>
+#include <math.h>  // ceil() and log10()
+
 
 namespace Rosegarden
 {
 
+
 FloatEdit::FloatEdit(QWidget *parent,
                      const QString &title,
-                     const QString &/*text*/,
+                     const QString &text,
                      float min,
                      float max,
                      float value,
                      float step):
-        QDialog(parent)
+    QDialog(parent)
 {
     setModal(true);
     setWindowTitle(title);
-    setObjectName("MinorDialog");
+    //setObjectName("MinorDialog");
 
-    QGridLayout *metagrid = new QGridLayout;
-    setLayout(metagrid);
-    QGroupBox *groupBox = new QGroupBox();
-    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
-    metagrid->addWidget(groupBox, 0, 0);
+    QVBoxLayout *layout = new QVBoxLayout(this);
 
-    // Calculate decimal points according to the step size
-    //
-    double calDP = log10(step);
-    int dps = 0;
-    if (calDP < 0.0)
-//      dps = int( -calDP);
-        dps = static_cast<int>(ceil(-calDP));
-    //std::cout << "CAL DP = " << calDP << ", dps = " << dps << std::endl;
+    // Text
+    if (!text.isEmpty())
+        layout->addWidget(new QLabel(text, this));
 
-    m_spin = new QDoubleSpinBox(groupBox);
-    m_spin->setDecimals(dps);
+    // Spin Box
+
+    // Calculate required decimal points according to the step size
+    int decimals = 0;
+    if (step < 1)
+        decimals = ceil(-log10(step));
+
+    //RG_DEBUG << "CAL DP = " << calDP << ", decimals = " << decimals;
+
+    m_spin = new QDoubleSpinBox(this);
+    m_spin->setDecimals(decimals);
+    // ??? Min and max on a spin box is brutal.  It can render it impossible
+    //     to enter values with the keyboard.  Might want to consider an
+    //     out of range indicator instead.  See TimeWidget2.
     m_spin->setMinimum(min);
     m_spin->setMaximum(max);
     m_spin->setSingleStep(step);
     m_spin->setValue(value);
-    groupBoxLayout->addWidget(m_spin);
+    layout->addWidget(m_spin);
 
-    groupBoxLayout->addWidget(
-        new QLabel(QString("(min: %1, max: %2)").arg(min).arg(max)));
-    groupBox->setLayout(groupBoxLayout);
+    // Range
+    layout->addWidget(new QLabel(
+            QString("(min: %1, max: %2)").arg(min).arg(max),
+            this));
 
-    QDialogButtonBox *buttonBox
-        = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
-    metagrid->addWidget(buttonBox, 1, 0);
-    metagrid->setRowStretch(0, 10);
+    // Button Box
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(
+            QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    layout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
+    // Have to show before geometry() will work.
+    show();
+
+    // Lock the window size.
+    setFixedSize(geometry().size());
 }
 
 float
 FloatEdit::getValue() const
 {
     return m_spin->value();
-}
-
-
-void
-FloatEdit::reparent(QWidget *newParent)
-{
-
-    // Reparent to either top level or dialog
-    //
-    while (newParent->parentWidget() && !newParent->isWindow()) {
-        newParent = newParent->parentWidget();
-    }
-
-    setParent(newParent, Qt::Dialog);
-
-    // FloatEdit widget is now at top left corner of newParent (Qt4)
 }
 
 

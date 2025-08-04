@@ -73,8 +73,8 @@ protected:
     QComboBox           *m_fromCombo;
     QComboBox           *m_toCombo;
 
-    DeviceList m_devices;
-    InstrumentList m_instruments;
+    DeviceVector m_devices;
+    InstrumentVector m_instruments;
 };
 
 

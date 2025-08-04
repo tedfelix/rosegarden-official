@@ -15,44 +15,52 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TextFloat]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TextFloat.h"
-#include "gui/general/GUIPalette.h"
-
-#include <QPaintEvent>
-#include <QPoint>
-#include <QString>
-#include <QWidget>
-
-#include <iostream>
 
 
 namespace Rosegarden
 {
 
 
-TextFloat *TextFloat::m_textFloat = nullptr;
+namespace
+{
+    static TextFloat *a_instance{nullptr};
+}
 
-TextFloat::TextFloat(QWidget *parent):
-    BaseTextFloat(parent),
-    m_newlyAttached(false)
+
+TextFloat::TextFloat() :
+        BaseTextFloat(nullptr)
 {
 }
 
 TextFloat::~TextFloat()
 {
-    // m_textFloat is static
-    m_textFloat = nullptr;
+    // Avoid reuse when QObject deletes us.
+    a_instance = nullptr;
 }
 
 TextFloat *
-TextFloat::getTextFloat()
+TextFloat::getInstance()
 {
-    if (!m_textFloat) {
-        m_textFloat = new TextFloat(nullptr);
-    }
+    if (!a_instance)
+        a_instance = new TextFloat;
 
-    return m_textFloat;
+    return a_instance;
+
+#if 0
+    // Can't do the usual as this is a QObject and it ends up being managed
+    // by its parent.  It could go away at any time.  The dtor makes sure
+    // we don't reuse a deleted instance.
+
+    // Guaranteed in C++11 to be lazy initialized and thread-safe.
+    // See ISO/IEC 14882:2011 6.7(4).
+    static TextFloat instance;
+
+    return &instance;
+#endif
 }
 
 void
@@ -89,6 +97,7 @@ TextFloat::display(QPoint offset)
     // then wrap to BaseTextFloat
     BaseTextFloat::display(offset);
 }
+
 
 }
 

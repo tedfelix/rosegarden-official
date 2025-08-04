@@ -79,8 +79,8 @@ SplitByRecordingSrcDialog::SplitByRecordingSrcDialog(QWidget *parent, Rosegarden
     m_deviceIds.push_back( -1);
     m_device->addItem(tr("any"));
 
-    DeviceList *devices = doc->getStudio().getDevices();
-    DeviceListConstIterator it;
+    DeviceVector *devices = doc->getStudio().getDevices();
+    DeviceVector::const_iterator it;
     for (it = devices->begin(); it != devices->end(); it++) {
         MidiDevice *dev =
             dynamic_cast<MidiDevice*>(*it);

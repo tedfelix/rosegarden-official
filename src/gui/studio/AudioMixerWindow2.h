@@ -42,7 +42,7 @@ class AudioMixerWindow2 : public QMainWindow, public ActionFileClient
     Q_OBJECT
 
 public:
-    explicit AudioMixerWindow2(QWidget *parent);
+    explicit AudioMixerWindow2();
     ~AudioMixerWindow2() override;
 
 protected:
@@ -86,7 +86,7 @@ private slots:
     void slotExternalController(const MappedEvent *event);
 
     /// Connected to InstrumentStaticSignals::controlChange().
-    void slotControlChange(Instrument *instrument, int cc);
+    void slotControlChange(Instrument *instrument, int controllerNumber);
 
 private:
     /// Central widget required for using a layout with QMainWindow.

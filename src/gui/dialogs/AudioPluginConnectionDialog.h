@@ -52,8 +52,8 @@ class AudioPluginConnectionDialog : public QDialog
     void setupChannelCB(int connectionIndex,
                         int instrumentIndex);
 
-    InstrumentList m_iListAudio;
-    InstrumentList m_iListAudioSynth;
+    InstrumentVector m_iListAudio;
+    InstrumentVector m_iListAudioSynth;
     std::vector<QString> m_pluginPorts;
     std::vector<QComboBox*> m_instrumentCB;
     std::vector<QComboBox*> m_channelCB;

@@ -37,7 +37,7 @@ class AllocateChannels;
 class DeviceObserver;
 
 typedef unsigned int DeviceId;
-typedef std::vector<Instrument *> InstrumentList;
+typedef std::vector<Instrument *> InstrumentVector;
 
 class Device : public XmlExportable
 {
@@ -85,7 +85,7 @@ public:
     virtual bool isOutput() const = 0;
 
     /// All Instruments on a Device.
-    virtual InstrumentList getAllInstruments() const = 0;
+    virtual InstrumentVector getAllInstruments() const = 0;
     /// All Instruments that a user is allowed to select.
     /**
      * For SoftSynthDevice and AudioDevice, this is the same as
@@ -95,7 +95,7 @@ public:
      * Any Instrument with an ID less than MidiInstrumentBase is dropped from
      * this list.  See MidiDevice::generatePresentationList().
      */
-    virtual InstrumentList getPresentationInstruments() const = 0;
+    virtual InstrumentVector getPresentationInstruments() const = 0;
     /// Returns an InstrumentId that is not currently on a Track.
     /**
      * composition can be specified when working with a new Composition
@@ -123,7 +123,7 @@ protected:
 
     void notifyDeviceModified();
 
-    InstrumentList     m_instruments;
+    InstrumentVector     m_instruments;
     std::string        m_name;
     DeviceType         m_type;
     DeviceId           m_id;

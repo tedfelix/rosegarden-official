@@ -22,6 +22,7 @@ namespace Rosegarden
 {
 
 // ??? Move this to ControlParameter.h.
+// ??? Rename: ControlParametersVector
 typedef std::vector<ControlParameter> ControlList;
 
 class Controllable

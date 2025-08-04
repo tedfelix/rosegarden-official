@@ -46,6 +46,7 @@ class AudioRouteMenu;
 class PluginPushButton;
 
 
+/// Audio controls that appear in the AudioInstrumentParameterPanel
 class AudioFaderBox : public QFrame
 {
     Q_OBJECT

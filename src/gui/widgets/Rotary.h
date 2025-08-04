@@ -19,12 +19,13 @@
 #define RG_ROTARY_H
 
 #include <QColor>
+#include <QPixmap>
+#include <QString>
 #include <QWidget>
 
 
 class QWheelEvent;
 class QPaintEvent;
-class QPainter;
 class QMouseEvent;
 
 
@@ -32,55 +33,53 @@ namespace Rosegarden
 {
 
 
+/// Draw a rotary control with a knob and optional ticks.
 class Rotary : public QWidget
 {
     Q_OBJECT
 public:
 
     enum TickMode {
-        NoTicks,        // plain circle with no marks for end points etc
-        LimitTicks,     // marks at end points but not any intermediate points
-        IntervalTicks,  // end points plus quarter, half, three-quarters
-        PageStepTicks,  // end points plus every page-step interval
-        StepTicks       // end points plus every step interval
+        NoTicks,      // no ticks and no snap
+        TicksNoSnap,  // 11 ticks and no snap
+        StepTicks     // ticks at step interval, snap enabled
+        //Log         // [proposed] log mode, 11 ticks, no snap
     };
 
+    /**
+     * ??? logarithmic is always TicksNoSnap.  Should we make logarithmic
+     *     a "TickMode"?  Then we can get rid of the logarithmic param.
+     *     We could also consider some log ticks to go with it.
+     *
+     * For log mode, step and pageStep are ignored.  step defaults to 100
+     * divisions of the Rotary and pageStep to 10.
+     *
+     * centred: When set to true, draws a red arc from the top to the
+     *          current position.
+     *          When set to false, draws a red arc from minimum to the current
+     *          position.
+     */
     Rotary(QWidget *parent,
-           float minimum = 0.0,
-           float maximum = 100.0,
-           float step = 1.0,
-           float pageStep = 10.0,
-           float initialPosition = 50.0,
-           int size = 20,
-           TickMode ticks = NoTicks,
-           bool snapToTicks = false,
-           bool centred = false,
-           bool logarithmic = false); // extents are logs, exp for display
-    ~Rotary() override;
+           float minimum,
+           float maximum,
+           float step,  // resolution
+           float pageStep,  // mouse wheel step size
+           float initialPosition,
+           int size,
+           TickMode ticks,
+           bool centred,
+           bool logarithmic);
+
+    void setLabel(const QString &label);
 
     void setMinimum(float min);
-    float getMinValue() const { return m_minimum; }
-
     void setMaximum(float max);
-    float getMaxValue() const { return m_maximum; }
 
-    // unused void setStep(float step);
-    float getStep() const { return m_step; }
-
-    void setPageStep(float step);
-    float getPageStep() const { return m_pageStep; }
-
-    int getSize() const { return m_size; }
-
-    // Position
-    //
-    float getPosition() const { return m_position; }
+    float getPosition() const;
     void setPosition(float position);
 
     // Set the colour of the knob
-    //
     void setKnobColour(const QColor &colour);
-    QColor getKnobColour() const { return m_knobColour; }
 
     /// Set "distance from center" mode.
     /**
@@ -93,13 +92,15 @@ public:
      * volume.
      */
     void setCentered(bool centred);
-    /// Are we in "distance from center" mode?
-    bool getCentered() const { return m_centred; }
 
 signals:
+
+    /// Emitted only when the user changes the Rotary.
     void valueChanged(float);
 
 protected:
+
+    // QWidget Overrides
     void paintEvent(QPaintEvent *e) override;
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
@@ -112,28 +113,54 @@ protected:
     void enterEvent(QEvent *) override;
 #endif
 
+private:
+
+    QString m_label{tr("Value")};
+    QColor m_knobColour{Qt::black};
+    /// true if the client set the color.
+    bool m_colorSet{false};
+
+    float m_minimum;
+    float m_maximum;
+    // Overall resolution of the rotary.
+    float m_step;
+    // Mouse wheel steps.
+    float m_pageStep;
+    int m_size;
+    int m_scaledWidth;
+    int m_indent;
+    TickMode m_tickMode;
+    int m_numTicks{0};
+    bool m_centred;
+    // In logarithmic mode, the log position is stored in the position
+    // related member variables.  This includes m_minimum, m_maximum,
+    // m_step and m_pageStep.
+    bool m_logarithmic;
+
+    float m_initialPosition;
+    // The position while in motion.  No snap.
+    float m_position;
+    // The final reported position after snap.  Between m_minimum and m_maximum.
+    float m_snapPosition;
     void snapPosition();
-    void drawPosition();
-    void drawTick(QPainter &paint, double angle, int size, bool internal);
+    void updateToolTip();
+    void valueChanged2();
 
-    float                m_minimum;
-    float                m_maximum;
-    float                m_step;
-    float                m_pageStep;
-    int                  m_size;
-    TickMode             m_tickMode;
-    bool                 m_snapToTicks;
-    bool                 m_centred;
-    bool                 m_logarithmic;
+    void positionTextFloat();
+    void updateTextFloat();
 
-    float                m_position;
-    float                m_snapPosition;
-    float                m_initialPosition;
-    bool                 m_buttonPressed;
-    int                  m_lastY;
-    int                  m_lastX;
+    // true while the left mouse button is pressed.
+    bool m_buttonPressed{false};
+    // Last position to detect how much the mouse has moved.
+    int m_lastY{0};
+    int m_lastX{0};
 
-    QColor               m_knobColour;
+    QPixmap m_backgroundPixmap;
+    bool m_backgroundPixmapValid{false};
+    void updateBackground();
+
+    void profile();
+
 };
 
 

@@ -166,7 +166,7 @@ namespace
 void
 AddTracksDialog::initDeviceComboBox()
 {
-    const DeviceList &deviceList =
+    const DeviceVector &deviceList =
             *(RosegardenDocument::currentDocument->getStudio().getDevices());
 
     // Sort them into this set.
@@ -198,7 +198,7 @@ void AddTracksDialog::updateInstrumentComboBox()
     if (!device)
         return;
 
-    InstrumentList instrumentList = device->getPresentationInstruments();
+    InstrumentVector instrumentList = device->getPresentationInstruments();
     if (instrumentList.empty())
         return;
 
@@ -260,7 +260,7 @@ void AddTracksDialog::accept()
 
     InstrumentId startInstrumentId = m_instrument->currentData().toUInt();
 
-    InstrumentList instrumentList = device->getPresentationInstruments();
+    InstrumentVector instrumentList = device->getPresentationInstruments();
     if (instrumentList.empty())
         return;
 

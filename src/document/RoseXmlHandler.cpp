@@ -2382,7 +2382,7 @@ RoseXmlHandler::endElement(const QString& namespaceURI,
         }
 
         Studio &studio = getStudio();
-        for (DeviceList::iterator i = studio.getDevices()->begin();
+        for (DeviceVector::iterator i = studio.getDevices()->begin();
              i != studio.getDevices()->end(); ++i) {
             MidiMetronome mm(0);
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);

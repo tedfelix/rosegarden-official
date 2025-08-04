@@ -36,12 +36,13 @@
 #include <QDesktopServices>
 #include <QHBoxLayout>
 
+
 namespace Rosegarden
 {
 
 
-AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
-        QMainWindow(parent),
+AudioMixerWindow2::AudioMixerWindow2() :
+        QMainWindow(RosegardenMainWindow::self()),
         m_centralWidget(new QWidget),
         m_layout(new QHBoxLayout(m_centralWidget)),
         m_masterStrip(new AudioStrip(this, 0))
@@ -152,6 +153,12 @@ AudioMixerWindow2::AudioMixerWindow2(QWidget *parent) :
     updateWidgets();
 
     show();
+
+    // ??? Ideally, we need to allow resizing, scale the controls, and
+    //     store/restore the window size on close/open.
+    //     MMW needs this ability as well.
+    setFixedSize(geometry().size());
+
 }
 
 AudioMixerWindow2::~AudioMixerWindow2()
@@ -166,14 +173,14 @@ AudioMixerWindow2::updateStripCounts()
 
     // Verify Input Strips
 
-    InstrumentList instruments = studio.getPresentationInstruments();
+    InstrumentVector instruments = studio.getPresentationInstruments();
     std::vector<InstrumentId> instrumentIds;
 
     // For each instrument
-    for (InstrumentList::iterator i = instruments.begin();
+    for (InstrumentVector::iterator i = instruments.begin();
          i != instruments.end();
          ++i) {
-        Instrument *instrument = *i;
+        const Instrument *instrument = *i;
 
         // Not audio or softsynth, try the next.
         if (instrument->getType() != Instrument::Audio  &&
@@ -567,16 +574,17 @@ AudioMixerWindow2::slotExternalController(const MappedEvent *event)
 }
 
 void
-AudioMixerWindow2::slotControlChange(Instrument *instrument, int cc)
+AudioMixerWindow2::slotControlChange(Instrument *instrument, int controllerNumber)
 {
     InstrumentId instrumentId = instrument->getId();
 
     // for each input strip
-    // ??? Performance: LINEAR SEARCH.  std::map<id, strip> might be better.
+    // ??? Performance: LINEAR SEARCH.  std::map<InstrumentId, stripIndex>
+    //     might be better.  See MidiMixerWindow::m_instrumentIDToStripIndex.
     for (unsigned i = 0; i < m_inputStrips.size(); ++i) {
         // If this is the one
         if (m_inputStrips[i]->getId() == instrumentId) {
-            m_inputStrips[i]->controlChange(cc);
+            m_inputStrips[i]->controlChange(controllerNumber);
             break;
         }
     }

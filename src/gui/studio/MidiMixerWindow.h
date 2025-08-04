@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,12 +20,14 @@
 
 #include "MixerWindow.h"
 
-#include "base/MidiDevice.h"
+#include "base/Controllable.h"
 #include "gui/general/ActionFileClient.h"
-#include "sound/ExternalController.h"
 
 #include <memory>
+#include <utility>
 #include <vector>
+
+#include <QTimer>
 
 class QWidget;
 class QTabWidget;
@@ -38,100 +39,101 @@ namespace Rosegarden
 {
 
 
-class Rotary;
-class RosegardenDocument;
-class MidiMixerVUMeter;
-class MappedEvent;
 class Fader;
-class InstrumentStaticSignals;
+class MappedEvent;
+class MidiDevice;
+class MidiMixerVUMeter;
+class MidiStrip;
+class RosegardenDocument;
+class Rotary;
 
 
+/// The MIDI Mixer.
 class MidiMixerWindow : public MixerWindow, public ActionFileClient
 {
     Q_OBJECT
 
 public:
-    MidiMixerWindow(QWidget *parent, RosegardenDocument *document);
 
-    /**
-     * Setup the tabs on the Mixer according to the Studio
-     */
-    void setupTabs();
-
-    /* 
-     * Update the VU meters
-     */
-    void updateMeters();
-    void updateMonitorMeter();
+    MidiMixerWindow();
 
 public slots:
-    void slotSynchronise(); // synchronise with updated studio
+
+    /// Used by DeviceManagerDialog to update Device names.
+    /**
+     * ??? I think this is going away.  We need to handle document modified
+     *     and refresh like AMW2 does.  See AudioMixerWindow2::updateWidgets().
+     */
+    void slotSynchronise();
+
+private slots:
+
+    /// Update the strip to match changes to the Instrument.
+    /**
+     * Connected to InstrumentStaticSignals::controlChange().
+     */
+    void slotControlChange(Instrument *instrument, int controllerNumber);
+
+    void slotFaderLevelChanged(float value);
+    void slotControllerChanged(float value);
+
+    /// Calls sendControllerRefresh().
+    void slotCurrentTabChanged(int);
 
     /// Handle events from the external controller port.
     /**
+     * Modifies the Instrument on the currently displayed tab's Device.
+     *
      * @see RosegardenMainViewWidget::slotExternalController()
      * @see AudioMixerWindow2::slotExternalController()
      */
     void slotExternalController(const MappedEvent *event);
 
-    void slotCurrentTabChanged(int);
+    /// Help > Help
     void slotHelpRequested();
+    /// Help > About Rosegarden
     void slotHelpAbout();
 
-signals:
-    void play();
-    void stop();
-    void fastForwardPlayback();
-    void rewindPlayback();
-    void fastForwardPlaybackToEnd();
-    void rewindPlaybackToBeginning();
-    void record();
-    void panic();
-
-protected slots:
-    /// Handle InstrumentStaticSignals::controlChange().
-    void slotControlChange(Instrument *instrument, int cc);
-
-    //void slotPanChanged(float);
-    void slotFaderLevelChanged(float);
-    void slotControllerChanged(float);
-
+    /// File > Close
     void slotClose()  { close(); }
 
-protected:
-    void changeEvent(QEvent *event) override;
+    /**
+     * ??? Move this to MidiStrip.
+     */
+    void updateMeters();
 
-    void addTab(QWidget *tab, const QString &title);
-
-    void sendControllerRefresh() override;
+private:
 
     QTabWidget *m_tabWidget;
 
-    struct FaderStruct {
+    /// Setup the tabs on the Mixer according to the Studio
+    void setupTabs();
 
-        FaderStruct():m_id(0), m_vuMeter(nullptr), m_volumeFader(nullptr) {}
+    // QWidget override.
+    /// Calls sendControllerRefresh() in response to window activation.
+    void changeEvent(QEvent *event) override;
 
-        InstrumentId m_id;
-        MidiMixerVUMeter *m_vuMeter;
-        Fader *m_volumeFader;
-        std::vector<std::pair<MidiByte, Rotary *>> m_controllerRotaries;
-
-    };
-
-    typedef std::vector<std::shared_ptr<FaderStruct>> FaderVector;
-    FaderVector m_faders;
-
-    QFrame *m_tabFrame;
-
-    // Grab IPB controls and remove Volume.
-    ControlList getIPBForMidiMixer(MidiDevice *) const;
-
-private:
+    /// Send MIDI volume and pan messages to the "external controller" port.
     /**
-     * ??? This should not take an Instrument *.  It should update the
-     *     widgets for all Instruments.
+     * This is called when the window is activated or the tab is changed.  It
+     * allows the device connected to the "external controller" port to stay in
+     * sync with whichever Mixer window is active.
      */
-    void updateWidgets(Instrument *);
+    void sendControllerRefresh();
+
+    typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
+    MidiStripVector m_midiStrips;
+
+    typedef std::map<InstrumentId, int /*stripIndex*/> InstrumentIDToStripIndex;
+    InstrumentIDToStripIndex m_instrumentIDToStripIndex;
+
+    /// Get InstrumentParameterBox controllers and remove volume.
+    ControlList getIPBControlParameters(const MidiDevice *) const;
+
+    /**
+     * ??? Move this to MidiStrip.
+     */
+    QTimer m_timer;
 
 };
 

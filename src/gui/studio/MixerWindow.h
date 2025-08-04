@@ -19,47 +19,47 @@
 #define RG_MIXERWINDOW_H
 
 #include "base/Instrument.h"
-#include "base/MidiProgram.h"
 
 #include <QMainWindow>
 
 class QWidget;
 class QCloseEvent;
 
+
 namespace Rosegarden
 {
+
 
 class Studio;
 class RosegardenDocument;
 
 
+/// Base class for MidiMixerWindow only.
+/**
+ * ??? Either move this into MidiMixerWindow or have AudioMixerWindow derive
+ *     from this as well.  There is little point in having a base class that is
+ *     only inherited by one class.
+ */
 class MixerWindow: public QMainWindow
 {
     Q_OBJECT
 
 public:
+
     MixerWindow(QWidget *parent, RosegardenDocument *document);
 
 signals:
+
     void closing();
 
-protected slots:
-    void slotClose();
-
 protected:
-    void closeEvent(QCloseEvent *) override;
 
-    /// Send MIDI volume and pan messages to the "external controller" port.
-    /**
-     * This is called when a Mixer window (MIDI or Audio) is activated by
-     * the user.  It allows the device connected to the "external controller"
-     * port to stay in sync with whichever Mixer window is active.
-     */
-    virtual void sendControllerRefresh() = 0;
+    void closeEvent(QCloseEvent *) override;
 
     RosegardenDocument *m_document;
     Studio *m_studio;
     InstrumentId m_currentId;
+
 };
 
 

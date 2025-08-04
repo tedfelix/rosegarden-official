@@ -20,16 +20,18 @@
 
 #include "BaseTextFloat.h"
 
+#include <QPoint>
+
 class QString;
 class QWidget;
-class QPoint;
 
 
 namespace Rosegarden
 {
 
-/**
 
+/// Floating tooltip widget.
+/**
   A TextFloat is a box containing some text which can be displayed anywhere
   above the application windows, not necessarily above its parent widget.
 
@@ -73,18 +75,15 @@ namespace Rosegarden
 
   Warning : To call TextFloat::getTextFloat() is now mandatory in all methods
             needing a pointer to the TextFloat instance.
-
 */
-
 class TextFloat : public BaseTextFloat
 {
+public:
 
-public :
+    ~TextFloat() override;
 
-    /**
-     * Get the TextFloat instance address
-     */
-    static TextFloat *getTextFloat();
+    /// Singleton instance function.
+    static TextFloat *getInstance();
 
     /**
      * Attach the TextFloat to the given widget
@@ -104,18 +103,16 @@ public :
      */
     void display(QPoint offset) override;
 
-    ~TextFloat() override;
+private:
 
-protected :
-    explicit TextFloat(QWidget *parent);
+    // Singleton.
+    TextFloat();
 
     // Used to remember a parent widget change.
-    bool m_newlyAttached;
-
-private :
-    static TextFloat *m_textFloat;
+    bool m_newlyAttached{false};
 
 };
+
 
 }
 

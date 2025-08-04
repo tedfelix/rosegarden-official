@@ -38,7 +38,7 @@ const DeviceId Device::EXTERNAL_CONTROLLER = 10002;
 Device::~Device()
 {
     //SEQUENCER_DEBUG << "~Device";
-    InstrumentList::iterator it = m_instruments.begin();
+    InstrumentVector::iterator it = m_instruments.begin();
     // For each Instrument
     for (; it != m_instruments.end(); ++it) {
         (*it)->sendWholeDeviceDestroyed();
@@ -74,7 +74,7 @@ void
 Device::sendChannelSetups() const
 {
     // For each Instrument, send channel setup
-    for (InstrumentList::const_iterator it = m_instruments.begin();
+    for (InstrumentVector::const_iterator it = m_instruments.begin();
          it != m_instruments.end();
          ++it) {
         (*it)->sendChannelSetup();
@@ -84,7 +84,7 @@ Device::sendChannelSetups() const
 InstrumentId
 Device::getAvailableInstrument(const Composition *composition) const
 {
-    InstrumentList instruments = getPresentationInstruments();
+    InstrumentVector instruments = getPresentationInstruments();
     if (instruments.empty())
         return NoInstrument;
 

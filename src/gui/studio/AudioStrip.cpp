@@ -209,9 +209,9 @@ void AudioStrip::createWidgets()
                 0.0,  // initialPosition
                 20,  // size
                 Rotary::NoTicks,  // ticks
-                false,  // centred
-                true);  // logarithmic
-        m_pan->setToolTip(tr("Pan"));
+                true,  // centred
+                false);  // logarithmic
+        m_pan->setLabel(tr("Pan"));
 
         if (isSubmaster()) {
             m_pan->setKnobColour(
@@ -327,7 +327,7 @@ void AudioStrip::updateWidgets()
     // Get the appropriate buss based on the ID.
     Buss *buss = nullptr;
     if (!isInput()) {
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
         buss = busses[m_id];
     }
 
@@ -387,7 +387,7 @@ void AudioStrip::updateWidgets()
                 studio.getInstrumentById(m_id));
     }
     if (isSubmaster()) {
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
         if (m_id < busses.size()) {
             pluginContainer =
                     dynamic_cast<const PluginContainer *>(busses[m_id]);
@@ -460,6 +460,8 @@ AudioStrip::controlChange(int cc)
 
         // Get the appropriate instrument based on the ID.
         // ??? Performance: LINEAR SEARCH
+        // ??? Caller already has this.  They could pass it in and we could
+        //     avoid this.
         Instrument *instrument = studio.getInstrumentById(m_id);
 
         m_fader->setFader(instrument->getLevel());
@@ -477,6 +479,8 @@ AudioStrip::controlChange(int cc)
 
         // Get the appropriate instrument based on the ID.
         // ??? Performance: LINEAR SEARCH
+        // ??? Caller already has this.  They could pass it in and we could
+        //     avoid this.
         Instrument *instrument = studio.getInstrumentById(m_id);
 
         m_pan->setPosition(instrument->getPan() - 100);
@@ -561,7 +565,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
     // If this is the master or a submaster Fader
     if (isSubmaster()  ||  isMaster()) {
 
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
 
         // If the buss ID is out of range, bail.
         if (m_id >= busses.size())
@@ -618,7 +622,7 @@ AudioStrip::slotPanChanged(float pan)
 
     if (isSubmaster()  ||  isMaster()) {
 
-        BussList busses = studio.getBusses();
+        BussVector busses = studio.getBusses();
 
         if (m_id >= busses.size())
             return;

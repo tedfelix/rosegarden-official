@@ -42,8 +42,8 @@ AudioDevice::AudioDevice(const AudioDevice &dev):
 {
     // Copy the instruments
     //
-    InstrumentList insList = dev.getAllInstruments();
-    InstrumentList::iterator iIt = insList.begin();
+    InstrumentVector insList = dev.getAllInstruments();
+    InstrumentVector::iterator iIt = insList.begin();
     for (; iIt != insList.end(); ++iIt)
         m_instruments.push_back(new Instrument(**iIt));
 }
@@ -82,7 +82,7 @@ AudioDevice::toXmlString() const
                 << "\" name=\""         << m_name
                 << "\" type=\"audio\">" << std::endl;
 
-    InstrumentList::const_iterator iit;
+    InstrumentVector::const_iterator iit;
     for (iit = m_instruments.begin(); iit != m_instruments.end(); ++iit)
         audioDevice << (*iit)->toXmlString();
 

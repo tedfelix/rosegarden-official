@@ -68,10 +68,10 @@ ModifyDeviceMappingCommand::execute()
                 //
                 MidiByte channel = instr->getNaturalMidiChannel();
 
-                InstrumentList destList = m_studio->
+                InstrumentVector destList = m_studio->
                                           getDevice(m_toDevice)->getPresentationInstruments();
 
-                InstrumentList::iterator dIt = destList.begin();
+                InstrumentVector::iterator dIt = destList.begin();
 
                 for (; dIt != destList.end(); ++dIt) {
                     if ((*dIt)->getNaturalMidiChannel() == channel) {
@@ -102,7 +102,7 @@ ModifyDeviceMappingCommand::execute()
             } else // audio is involved in the mapping - use indexes
             {
                 // assign by index numbers
-                InstrumentList destList = m_studio->
+                InstrumentVector destList = m_studio->
                                           getDevice(m_toDevice)->getPresentationInstruments();
 
                 // skip if we can't match

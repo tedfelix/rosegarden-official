@@ -323,7 +323,7 @@ BankEditorDialog::updateDialog()
 
     MidiDeviceTreeWidgetItem *selectDeviceItem{nullptr};
 
-    DeviceList *devices = m_studio->getDevices();
+    DeviceVector *devices = m_studio->getDevices();
 
     // For each Device in the Studio...
     for (Device *device : *devices) {

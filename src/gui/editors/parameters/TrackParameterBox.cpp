@@ -557,7 +557,7 @@ TrackParameterBox::slotPlaybackDeviceChanged(int index)
         return;
 
     // Query the Studio to get an Instrument for this Device.
-    InstrumentList instrumentList = device->getPresentationInstruments();
+    InstrumentVector instrumentList = device->getPresentationInstruments();
 
     // Try to preserve the Instrument number (channel) if possible.
     int instrumentIndex = m_instrument->currentIndex();
@@ -988,7 +988,7 @@ TrackParameterBox::getTrack()
 void
 TrackParameterBox::updatePlaybackDevice(DeviceId deviceId)
 {
-    const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
+    const DeviceVector &deviceList = *(m_doc->getStudio().getDevices());
 
     // Generate local device name and ID lists to compare against the members.
 
@@ -1056,7 +1056,7 @@ TrackParameterBox::updateInstrument(const Instrument *instrument)
     const DeviceId deviceId = instrument->getDevice()->getId();
     const Device &device = *(m_doc->getStudio().getDevice(deviceId));
 
-    const InstrumentList instrumentList = device.getPresentationInstruments();
+    const InstrumentVector instrumentList = device.getPresentationInstruments();
 
     // Generate local instrument name and ID lists to compare against the
     // members.
@@ -1147,7 +1147,7 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
     // others.  Cache names and IDs and only reload if a real change is
     // detected.
 
-    const DeviceList &deviceList = *(m_doc->getStudio().getDevices());
+    const DeviceVector &deviceList = *(m_doc->getStudio().getDevices());
 
     // Generate local recording device name and ID lists to compare against
     // the members.

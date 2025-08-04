@@ -567,7 +567,8 @@ RosegardenMainWindow::RosegardenMainWindow(
     settings.endGroup();
 
     // Connect the various timers to their handlers.
-    connect(m_updateUITimer, &QTimer::timeout, this, &RosegardenMainWindow::slotUpdateUI);
+    connect(m_updateUITimer, &QTimer::timeout,
+            this, &RosegardenMainWindow::slotUpdateUI);
     m_updateUITimer->start(updateUITime);
     connect(m_inputTimer, &QTimer::timeout, this, &RosegardenMainWindow::slotHandleInputs);
     m_inputTimer->start(20);
@@ -4876,7 +4877,6 @@ RosegardenMainWindow::slotUpdateUI()
 
 
     // Update the VU meters
-    if (m_midiMixer && m_midiMixer->isVisible()) m_midiMixer->updateMeters();
     if (m_view) m_view->updateMeters();
 }
 
@@ -4950,9 +4950,6 @@ RosegardenMainWindow::slotUpdateCPUMeter()
 void
 RosegardenMainWindow::slotUpdateMonitoring()
 {
-    if (m_midiMixer && m_midiMixer->isVisible())
-        m_midiMixer->updateMonitorMeter();
-
     m_view->updateMonitorMeters();
 }
 
@@ -7041,47 +7038,19 @@ RosegardenMainWindow::slotOpenAudioMixer()
         return;
     }
 
-    m_audioMixerWindow2 = new AudioMixerWindow2(this);
-
-    return;
+    m_audioMixerWindow2 = new AudioMixerWindow2;
 }
 
 void
 RosegardenMainWindow::slotOpenMidiMixer()
 {
     if (m_midiMixer) {
-        m_midiMixer->show();
-        m_midiMixer->raise();
         m_midiMixer->activateWindow();
-        return ;
+        m_midiMixer->raise();
+        return;
     }
 
-    m_midiMixer = new MidiMixerWindow(this, RosegardenDocument::currentDocument);
-
-    connect(m_midiMixer, &MixerWindow::closing,
-            this, &RosegardenMainWindow::slotMidiMixerClosed);
-
-    connect(this, &RosegardenMainWindow::documentAboutToChange,
-            m_midiMixer, &QWidget::close);
-
-    connect(m_midiMixer, &MidiMixerWindow::play,
-            this, &RosegardenMainWindow::slotPlay);
-    connect(m_midiMixer, &MidiMixerWindow::stop,
-            this, &RosegardenMainWindow::slotStop);
-    connect(m_midiMixer, &MidiMixerWindow::fastForwardPlayback,
-            this, &RosegardenMainWindow::slotFastforward);
-    connect(m_midiMixer, &MidiMixerWindow::rewindPlayback,
-            this, &RosegardenMainWindow::slotRewind);
-    connect(m_midiMixer, &MidiMixerWindow::fastForwardPlaybackToEnd,
-            this, &RosegardenMainWindow::slotFastForwardToEnd);
-    connect(m_midiMixer, &MidiMixerWindow::rewindPlaybackToBeginning,
-            this, &RosegardenMainWindow::slotRewindToBeginning);
-    connect(m_midiMixer, &MidiMixerWindow::record,
-            this, &RosegardenMainWindow::slotRecord);
-    connect(m_midiMixer, &MidiMixerWindow::panic,
-            this, &RosegardenMainWindow::slotPanic);
-
-    m_midiMixer->show();
+    m_midiMixer = new MidiMixerWindow;
 }
 
 void
@@ -7739,10 +7708,10 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
 
         if (pl && pl->isGrouped()) {
 
-            InstrumentList il =
+            InstrumentVector il =
                 RosegardenDocument::currentDocument->getStudio().getAllInstruments();
 
-            for (InstrumentList::iterator i = il.begin();
+            for (InstrumentVector::iterator i = il.begin();
                     i != il.end(); ++i) {
 
                 for (AudioPluginVector::iterator pli =
@@ -7977,8 +7946,6 @@ RosegardenMainWindow::slotSynthPluginManagerClosed()
 void
 RosegardenMainWindow::slotMidiMixerClosed()
 {
-    RG_DEBUG << "slotMidiMixerClosed()\n";
-
     m_midiMixer = nullptr;
 }
 
@@ -8161,7 +8128,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         // We actually only copy across MIDI play devices... for now
         std::vector<DeviceId> midiPlayDevices;
 
-        for (DeviceList::const_iterator i =
+        for (DeviceVector::const_iterator i =
                  oldStudio.begin(); i != oldStudio.end(); ++i) {
 
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
@@ -8173,7 +8140,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
 
         std::vector<DeviceId>::iterator di(midiPlayDevices.begin());
 
-        for (DeviceList::const_iterator i = newStudio.begin();
+        for (DeviceVector::const_iterator i = newStudio.begin();
              i != newStudio.end(); ++i) {
 
             MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
