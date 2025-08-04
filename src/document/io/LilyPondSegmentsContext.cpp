@@ -338,7 +338,6 @@ LilyPondSegmentsContext::precompute()
                         // Main repeating segment or alternate ending ?
                         if (sit->alt) {
                             // Insert alternate ending in list
-                            SegmentData sd = *sit;
                             AlternateEnding * alt = new AlternateEnding(
                                         &(*sit),
                                         currentMainSeg->numberOfAlt);
