@@ -22,13 +22,16 @@ Included in this release...
   * Fix MIDI export problems with anacrusis and tempo changes.  Bug
     #1627.  [0683a0890d]
   * Fix undo anacrusis requiring three undos.  [c4d89ee242]
+  * Fix undo for tempo changes losing ramp info.  [ea1982fdcf]
 
-stopped at 79f9fc3e13
+stopped at eee2941115
 
 ===== New Features =====
 
   * Rulers now support aftertouch, both channel and key.  Feature
     Request #527.  [5ee9c807d8]
+  * Rotary (knob) widget now shows label (e.g. pan) and value in its
+    tooltip.  [4c42d7dc4d]
 
 ===== General Improvements =====
 
