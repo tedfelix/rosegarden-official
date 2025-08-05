@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioFileManager]"
+#define RG_NO_DEBUG_PRINT
 
 #include <pthread.h>  // pthread_mutex_lock() and friends
 
@@ -1216,33 +1217,12 @@ AudioFileManager::save()
 
     }
 
-    const Preferences::Location location =
-            static_cast<Preferences::Location>(
-                    Preferences::getDefaultAudioLocation());
-
     // Indicate audio location was confirmed by the user.
     // Also avoid recursion loop as the second save will end up here again.
     m_audioLocationConfirmed = true;
 
-    QString audioPath = "./audio";
-
-    switch (location) {
-    case Preferences::AudioDir:
-        audioPath = "./audio";
-        break;
-    case Preferences::DocumentNameDir:
-        audioPath = documentNameDir;
-        break;
-    case Preferences::DocumentDir:
-        audioPath = ".";
-        break;
-    case Preferences::CentralDir:
-        audioPath = "~/rosegarden-audio";
-        break;
-    case Preferences::CustomDir:
-        audioPath = Preferences::getCustomAudioLocation();
-        break;
-    }
+    const QString audioPath = Preferences::getDefaultAudioLocationString(
+            m_document->getAbsFilePath());
 
     // Set the new location, move the files, and save.
     setRelativeAudioPath(audioPath, true);

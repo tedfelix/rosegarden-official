@@ -22,6 +22,7 @@
 
 #include "gui/configuration/GeneralConfigurationPage.h"
 
+#include <QFileInfo>
 #include <QSettings>
 
 
@@ -178,6 +179,29 @@ void Preferences::setDefaultAudioLocation(Location location)
 Preferences::Location Preferences::getDefaultAudioLocation()
 {
     return static_cast<Location>(afldLocation.get());
+}
+
+QString Preferences::getDefaultAudioLocationString(const QString &absFilePath)
+{
+    const Location location = Preferences::getDefaultAudioLocation();
+
+    switch (location) {
+    case AudioDir:
+        return "./audio";
+    case DocumentNameDir:
+        {
+            QFileInfo fileInfo(absFilePath);
+            return "./" + fileInfo.completeBaseName();
+        }
+    case DocumentDir:
+        return ".";
+    case CentralDir:
+        return "~/rosegarden-audio";
+    case CustomDir:
+        return getCustomAudioLocation();
+    }
+
+    return "./audio";
 }
 
 static PreferenceString afldCustomLocation(

@@ -90,6 +90,8 @@ namespace Preferences
     };
     void setDefaultAudioLocation(Location location);
     Location getDefaultAudioLocation();
+    /// Send in RosegardenDocument::getAbsFilePath().
+    QString getDefaultAudioLocationString(const QString &absFilePath);
 
     void setCustomAudioLocation(const QString &location);
     QString getCustomAudioLocation();

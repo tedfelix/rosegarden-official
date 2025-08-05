@@ -63,12 +63,64 @@
 #include <QColor>
 #include <QDataStream>
 #include <QDialog>
+#include <QDir>
 #include <QFileInfo>
 #include <QString>
 #include <QStringList>
 
 namespace Rosegarden
 {
+
+namespace
+{
+
+    // Copied from AudioFileManager
+    // ??? Needs to be promoted to a misc/FileUtils.h/cpp.
+    QString a_toAbsolute(const QString &relativePath, const QString &docAbsFilePath)
+    {
+        if (relativePath.isEmpty())
+            return relativePath;
+
+        QString absolutePath = relativePath;
+
+        // Convert tilde to home dir.
+        if (absolutePath.left(1) == "~") {
+            absolutePath.remove(0, 1);
+            absolutePath = QDir::homePath() + absolutePath;
+        }
+
+        // Handle double-dot.  A bit messy, but should work.
+        if (absolutePath.left(2) == "..")
+            absolutePath = "./" + absolutePath;
+
+        // Convert dot to .rg file location.
+        if (absolutePath.left(1) == ".") {
+            absolutePath.remove(0, 1);
+            QString absFilePath = docAbsFilePath;
+            QFileInfo fileInfo(absFilePath);
+            absolutePath = fileInfo.canonicalPath() + absolutePath;
+        }
+
+        return absolutePath;
+    }
+
+    // Copied from AudioFileManager
+    // ??? Needs to be promoted to a misc/FileUtils.h/cpp.
+    QString a_addTrailingSlash(const QString &path)
+    {
+        if (path.isEmpty())
+            return "/";
+
+        QString path2 = path;
+
+        // Add a trailing "/" if needed.
+        if (!path2.endsWith('/'))
+            path2 += "/";
+
+        return path2;
+    }
+
+}
 
 using namespace BaseProperties;
 
@@ -2771,33 +2823,101 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     // dialogs.
     QApplication::restoreOverrideCursor();
 
+    QString newAudioDirectory;
+    QString newFilePath;
+    QFileInfo fileInfo;
+
     // Try some of the usual places first.
 
-    // ??? First, see if we can find the file on our own.  Look in these places:
-    //       - Preferences::getDefaultAudioLocation()
-    //       - ./audio
-    //       - ./<DocumentName>
-    //       - .
-    //       - ~/rosegarden-audio  (not sure these two are a good idea)
-    //       - ~/rosegarden
-#if 0
-    // ??? This is a really involved process.  See AudioFileManager::save().
-    //     I think we need to move the enum and that code to Preferences.
-    //     The enum belongs in the preferences.  The document stores the string.
-    //     UI is the last place where it belongs.  Let's first try moving the
-    //     enum and see how big of a mess that makes.
+    // Preferences default audio location
+    newAudioDirectory = Preferences::getDefaultAudioLocationString(
+            m_doc->getAbsFilePath());
+    // *** BEGIN insertAudioFile(), duplicated 4 times
+    newFilePath = newAudioDirectory;
+    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath += file;
+    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    fileInfo.setFile(newFilePath);
 
-    QString newAudioDirectory2 = Preferences::getDefaultAudioLocation();
-    const QString newFilePath = newAudioDirectory + "/" + file;
-    QFileInfo fileInfo(newFilePath);
+    if (fileInfo.exists()) {
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
 
-    bool found2 = fileInfo.exists();
-#endif
+        // This should succeed now.
+        getAudioFileManager().insertFile(
+                qstrtostr(label),
+                file,
+                id.toInt());
 
+        // Continue loading.
+        return true;
+    }
+    // *** END insertAudioFile()
+
+    // ./audio (Preferences::AudioDir)
+    newAudioDirectory = "./audio";
+    newFilePath = newAudioDirectory;
+    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath += file;
+    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    fileInfo.setFile(newFilePath);
+
+    if (fileInfo.exists()) {
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+
+        // This should succeed now.
+        getAudioFileManager().insertFile(
+                qstrtostr(label),
+                file,
+                id.toInt());
+
+        // Continue loading.
+        return true;
+    }
+
+    // ./<DocumentName> (Preferences::DocumentNameDir)
+    fileInfo.setFile(m_doc->getAbsFilePath());
+    newAudioDirectory = "./" + fileInfo.completeBaseName();
+    newFilePath = newAudioDirectory;
+    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath += file;
+    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    fileInfo.setFile(newFilePath);
+
+    if (fileInfo.exists()) {
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+
+        // This should succeed now.
+        getAudioFileManager().insertFile(
+                qstrtostr(label),
+                file,
+                id.toInt());
+
+        // Continue loading.
+        return true;
+    }
+
+    // . (Preferences::DocumentDir)
+    newAudioDirectory = ".";
+    newFilePath = newAudioDirectory;
+    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath += file;
+    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    fileInfo.setFile(newFilePath);
+
+    if (fileInfo.exists()) {
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+
+        // This should succeed now.
+        getAudioFileManager().insertFile(
+                qstrtostr(label),
+                file,
+                id.toInt());
+
+        // Continue loading.
+        return true;
+    }
 
     // Let the user look around and try to find the file.
-
-    QString newAudioDirectory;
 
     bool found = false;
 
@@ -2838,9 +2958,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
 
         newAudioDirectory = fileLocateDialog.getPath();
         const QString newFilePath = newAudioDirectory + "/" + file;
-        QFileInfo fileInfo(newFilePath);
+        QFileInfo fileInfo2(newFilePath);
 
-        found = fileInfo.exists();
+        found = fileInfo2.exists();
 
     }
 
