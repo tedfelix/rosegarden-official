@@ -1403,10 +1403,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
 
             QString connection = atts.value("connection").toString();
-            if ((m_createDevices) && (m_device) &&
-                !connection.isNull() && (!connection.isEmpty()) ) {
+            if (m_createDevices  &&  m_device  &&  !connection.isEmpty())
                 setMIDIDeviceConnection(connection);
-            }
 
             if (m_createDevices)
                 setMIDIDeviceName(nameStr);
@@ -1854,7 +1852,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "plugin" || lcName == "synth") {
 
-        PluginContainer *container = nullptr;
+        const PluginContainer *container{nullptr};
 
         if (m_section == InInstrument) {
 //            RG_WARNING << "Found plugin in instrument";
@@ -2754,23 +2752,33 @@ RoseXmlHandler::setMIDIDeviceName(const QString &name)
 {
     RG_DEBUG << "setMIDIDeviceName(" << name << ")";
 
-    MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
-    if (!md) return;
+    const MidiDevice *md = dynamic_cast<const MidiDevice *>(m_device);
+    if (!md)
+        return;
 
-    RosegardenSequencer::getInstance()->renameDevice(
-            md->getId(), name);
+    RosegardenSequencer::getInstance()->renameDevice(md->getId(), name);
 }
 
 bool
-RoseXmlHandler::locateAudioFile(const QString& id,
-                                const QString& file,
-                                const QString& label)
+RoseXmlHandler::locateAudioFile(const QString &id,
+                                const QString &file,
+                                const QString &label)
 {
     StartupLogo::hideIfStillThere();
 
     // Get rid of the wait cursor so it doesn't interfere with the
     // dialogs.
     QApplication::restoreOverrideCursor();
+
+    // ??? First, see if we can find the file on our own.  Look first in the
+    //     directory set in the preferences,
+    //     Preferences::getDefaultAudioLocation().  Then try each of the
+    //     suggested directories as listed in the AudioConfigurationPage and
+    //     the AudioFileLocationDialog.
+    //       - ./audio
+    //       - ./<DocumentName>
+    //       - .
+    //       - ~/rosegarden-audio
 
     // Let the user look around and try to find the file.
 

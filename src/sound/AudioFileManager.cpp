@@ -557,8 +557,9 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    AudioFile *sourceFile = getAudioFile(source);
-    if (!sourceFile) return nullptr;
+    const AudioFile *sourceFile = getAudioFile(source);
+    if (!sourceFile)
+        return nullptr;
 
     AudioFileId newId = getUniqueAudioFileID();
     QString fileName = "";
@@ -783,11 +784,10 @@ AudioFileManager::toXmlString() const
     audioFiles << ">" << std::endl;
     audioFiles << "    <audioPath value=\"" << m_relativeAudioPath << "\"/>" << std::endl;
 
-    QString fileName;
 
     // For each AudioFile
     for (const AudioFile *audioFile : m_audioFiles) {
-        fileName = audioFile->getAbsoluteFilePath();
+        QString fileName = audioFile->getAbsoluteFilePath();
 
         // If the absolute audio path is here, remove it.
         // ??? insertFile() is the other side of this.
@@ -1058,7 +1058,7 @@ AudioFileManager::print()
     RG_DEBUG << "print():" << m_audioFiles.size() << "entries";
 
     // For each AudioFile
-    for (AudioFile *audioFile : m_audioFiles) {
+    for (const AudioFile *audioFile : m_audioFiles) {
         RG_DEBUG << "  " << audioFile->getId() << " : " <<
                             audioFile->getLabel() << " : \"" <<
                             audioFile->getAbsoluteFilePath() << "\"";
