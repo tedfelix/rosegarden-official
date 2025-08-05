@@ -6788,10 +6788,7 @@ RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId audioFileID)
 void
 RosegardenMainWindow::slotDeleteAllAudioFiles()
 {
-    RosegardenDocument::currentDocument->getAudioFileManager().clear();
-
     // Clear at the sequencer
-    //
     RosegardenSequencer::getInstance()->clearAllAudioFiles();
 }
 

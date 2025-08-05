@@ -251,6 +251,8 @@ AudioFileManager::removeFile(AudioFileId id)
         delete(audioFile);
         m_audioFiles.erase(audioFileIter);
 
+        m_document->setModified();
+
         return true;
     }
 
@@ -683,6 +685,8 @@ AudioFileManager::importFile(const QString &fileName, int targetSampleRate)
         // Don't catch SoundFile::BadSoundFileException
 
         m_expectedSampleRate = targetSampleRate;
+
+        m_document->setModified();
 
         return aF->getId();
     }
