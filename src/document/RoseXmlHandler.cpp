@@ -23,6 +23,7 @@
 #include "sound/Midi.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "misc/Preferences.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "base/BaseProperties.h"
@@ -2770,15 +2771,29 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     // dialogs.
     QApplication::restoreOverrideCursor();
 
-    // ??? First, see if we can find the file on our own.  Look first in the
-    //     directory set in the preferences,
-    //     Preferences::getDefaultAudioLocation().  Then try each of the
-    //     suggested directories as listed in the AudioConfigurationPage and
-    //     the AudioFileLocationDialog.
+    // Try some of the usual places first.
+
+    // ??? First, see if we can find the file on our own.  Look in these places:
+    //       - Preferences::getDefaultAudioLocation()
     //       - ./audio
     //       - ./<DocumentName>
     //       - .
-    //       - ~/rosegarden-audio
+    //       - ~/rosegarden-audio  (not sure these two are a good idea)
+    //       - ~/rosegarden
+#if 0
+    // ??? This is a really involved process.  See AudioFileManager::save().
+    //     I think we need to move the enum and that code to Preferences.
+    //     The enum belongs in the preferences.  The document stores the string.
+    //     UI is the last place where it belongs.  Let's first try moving the
+    //     enum and see how big of a mess that makes.
+
+    QString newAudioDirectory2 = Preferences::getDefaultAudioLocation();
+    const QString newFilePath = newAudioDirectory + "/" + file;
+    QFileInfo fileInfo(newFilePath);
+
+    bool found2 = fileInfo.exists();
+#endif
+
 
     // Let the user look around and try to find the file.
 

@@ -199,9 +199,9 @@ protected:
 
     bool m_hasActiveAudio;
 
-    bool locateAudioFile(const QString& id,
-                         const QString& file,
-                         const QString& label);
+    bool locateAudioFile(const QString &id,
+                         const QString &file,
+                         const QString &label);
     /// Whether the audio skip warning has been issued.
     bool m_audioSkipWarning;
 

@@ -1216,8 +1216,8 @@ AudioFileManager::save()
 
     }
 
-    const AudioFileLocationDialog::Location location =
-            static_cast<AudioFileLocationDialog::Location>(
+    const Preferences::Location location =
+            static_cast<Preferences::Location>(
                     Preferences::getDefaultAudioLocation());
 
     // Indicate audio location was confirmed by the user.
@@ -1227,19 +1227,19 @@ AudioFileManager::save()
     QString audioPath = "./audio";
 
     switch (location) {
-    case AudioFileLocationDialog::AudioDir:
+    case Preferences::AudioDir:
         audioPath = "./audio";
         break;
-    case AudioFileLocationDialog::DocumentNameDir:
+    case Preferences::DocumentNameDir:
         audioPath = documentNameDir;
         break;
-    case AudioFileLocationDialog::DocumentDir:
+    case Preferences::DocumentDir:
         audioPath = ".";
         break;
-    case AudioFileLocationDialog::CentralDir:
+    case Preferences::CentralDir:
         audioPath = "~/rosegarden-audio";
         break;
-    case AudioFileLocationDialog::CustomDir:
+    case Preferences::CustomDir:
         audioPath = Preferences::getCustomAudioLocation();
         break;
     }

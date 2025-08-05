@@ -170,14 +170,14 @@ bool Preferences::getAudioFileLocationDlgDontShow()
 
 static PreferenceInt afldLocation(AudioFileLocationDialogGroup, "location", 0);
 
-void Preferences::setDefaultAudioLocation(int location)
+void Preferences::setDefaultAudioLocation(Location location)
 {
     afldLocation.set(location);
 }
 
-int Preferences::getDefaultAudioLocation()
+Preferences::Location Preferences::getDefaultAudioLocation()
 {
-    return afldLocation.get();
+    return static_cast<Location>(afldLocation.get());
 }
 
 static PreferenceString afldCustomLocation(

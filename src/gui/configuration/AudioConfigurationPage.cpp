@@ -310,7 +310,8 @@ AudioConfigurationPage::apply()
     Preferences::setAudioFileLocationDlgDontShow(
             !m_showAudioLocation->isChecked());
     Preferences::setDefaultAudioLocation(
-            m_defaultAudioLocation->currentIndex());
+            static_cast<Preferences::Location>(
+                    m_defaultAudioLocation->currentIndex()));
     Preferences::setCustomAudioLocation(
             m_customAudioLocation->text());
 

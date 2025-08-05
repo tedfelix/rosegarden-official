@@ -143,23 +143,24 @@ AudioFileLocationDialog::AudioFileLocationDialog(
 void
 AudioFileLocationDialog::updateWidgets()
 {
-    const Location location =
-            static_cast<Location>(Preferences::getDefaultAudioLocation());
+    const Preferences::Location location =
+            static_cast<Preferences::Location>(
+                    Preferences::getDefaultAudioLocation());
 
     switch (location) {
-    case AudioDir:
+    case Preferences::AudioDir:
         m_audioDir->setChecked(true);
         break;
-    case DocumentNameDir:
+    case Preferences::DocumentNameDir:
         m_documentNameDir->setChecked(true);
         break;
-    case DocumentDir:
+    case Preferences::DocumentDir:
         m_documentDir->setChecked(true);
         break;
-    case CentralDir:
+    case Preferences::CentralDir:
         m_centralDir->setChecked(true);
         break;
-    case CustomDir:
+    case Preferences::CustomDir:
         m_customDir->setChecked(true);
         break;
     }
@@ -171,18 +172,18 @@ void AudioFileLocationDialog::accept()
 {
     // Copy the user's choices to the Preferences.
 
-    Location location = AudioDir;
+    Preferences::Location location = Preferences::AudioDir;
 
     if (m_audioDir->isChecked())
-        location = AudioDir;
+        location = Preferences::AudioDir;
     if (m_documentNameDir->isChecked())
-        location = DocumentNameDir;
+        location = Preferences::DocumentNameDir;
     if (m_documentDir->isChecked())
-        location = DocumentDir;
+        location = Preferences::DocumentDir;
     if (m_centralDir->isChecked())
-        location = CentralDir;
+        location = Preferences::CentralDir;
     if (m_customDir->isChecked())
-        location = CustomDir;
+        location = Preferences::CustomDir;
 
     Preferences::setDefaultAudioLocation(location);
     Preferences::setCustomAudioLocation(m_customDirText->text());
