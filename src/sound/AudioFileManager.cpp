@@ -39,6 +39,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/SetWaitCursor.h"
 
+#include <QApplication>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QPainter>
@@ -1197,12 +1198,18 @@ AudioFileManager::save()
     if (!Preferences::getAudioFileLocationDlgDontShow())
     {
 
+        // Stop wait cursor.
+        QApplication::restoreOverrideCursor();
+
         // Ask the user to pick an audio file path.
         // Results go to the Preferences.
         AudioFileLocationDialog audioFileLocationDialog(
                 RosegardenMainWindow::self(),
                 documentNameDir);
         audioFileLocationDialog.exec();
+
+        // Start wait cursor.
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
     }
 
