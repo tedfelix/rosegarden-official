@@ -19,11 +19,13 @@
 #define RG_NO_DEBUG_PRINT
 
 #include "RoseXmlHandler.h"
+#include "RosegardenDocument.h"
 
 #include "sound/Midi.h"
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/FileUtil.h"
 #include "misc/Preferences.h"
+#include "misc/Strings.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
 #include "base/BaseProperties.h"
@@ -51,7 +53,6 @@
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
@@ -68,59 +69,10 @@
 #include <QString>
 #include <QStringList>
 
+
 namespace Rosegarden
 {
 
-namespace
-{
-
-    // Copied from AudioFileManager
-    // ??? Needs to be promoted to a misc/FileUtils.h/cpp.
-    QString a_toAbsolute(const QString &relativePath, const QString &docAbsFilePath)
-    {
-        if (relativePath.isEmpty())
-            return relativePath;
-
-        QString absolutePath = relativePath;
-
-        // Convert tilde to home dir.
-        if (absolutePath.left(1) == "~") {
-            absolutePath.remove(0, 1);
-            absolutePath = QDir::homePath() + absolutePath;
-        }
-
-        // Handle double-dot.  A bit messy, but should work.
-        if (absolutePath.left(2) == "..")
-            absolutePath = "./" + absolutePath;
-
-        // Convert dot to .rg file location.
-        if (absolutePath.left(1) == ".") {
-            absolutePath.remove(0, 1);
-            QString absFilePath = docAbsFilePath;
-            QFileInfo fileInfo(absFilePath);
-            absolutePath = fileInfo.canonicalPath() + absolutePath;
-        }
-
-        return absolutePath;
-    }
-
-    // Copied from AudioFileManager
-    // ??? Needs to be promoted to a misc/FileUtils.h/cpp.
-    QString a_addTrailingSlash(const QString &path)
-    {
-        if (path.isEmpty())
-            return "/";
-
-        QString path2 = path;
-
-        // Add a trailing "/" if needed.
-        if (!path2.endsWith('/'))
-            path2 += "/";
-
-        return path2;
-    }
-
-}
 
 using namespace BaseProperties;
 
@@ -2845,9 +2797,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
             m_doc->getAbsFilePath());
     // *** BEGIN insertAudioFile(), duplicated 4 times
     newFilePath = newAudioDirectory;
-    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath = FileUtil::addTrailingSlash(newFilePath);
     newFilePath += file;
-    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
@@ -2869,9 +2821,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     // ./audio (Preferences::AudioDir)
     newAudioDirectory = "./audio";
     newFilePath = newAudioDirectory;
-    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath = FileUtil::addTrailingSlash(newFilePath);
     newFilePath += file;
-    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
@@ -2893,9 +2845,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     fileInfo.setFile(m_doc->getAbsFilePath());
     newAudioDirectory = "./" + fileInfo.completeBaseName();
     newFilePath = newAudioDirectory;
-    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath = FileUtil::addTrailingSlash(newFilePath);
     newFilePath += file;
-    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
@@ -2916,9 +2868,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     // . (Preferences::DocumentDir)
     newAudioDirectory = ".";
     newFilePath = newAudioDirectory;
-    newFilePath = a_addTrailingSlash(newFilePath);
+    newFilePath = FileUtil::addTrailingSlash(newFilePath);
     newFilePath += file;
-    newFilePath = a_toAbsolute(newFilePath, m_doc->getAbsFilePath());
+    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {

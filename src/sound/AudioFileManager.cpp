@@ -18,11 +18,26 @@
 #define RG_MODULE_STRING "[AudioFileManager]"
 #define RG_NO_DEBUG_PRINT
 
-#include <pthread.h>  // pthread_mutex_lock() and friends
+#include "AudioFileManager.h"
 
-#include <string>
-#include <sstream>  // std::stringstream
-#include <unistd.h>
+#include "AudioFile.h"
+#include "WAVAudioFile.h"
+#include "BWFAudioFile.h"
+#include "audiostream/AudioReadStream.h"
+#include "audiostream/AudioReadStreamFactory.h"
+#include "audiostream/AudioWriteStream.h"
+#include "audiostream/AudioWriteStreamFactory.h"
+
+#include "gui/dialogs/AudioFileLocationDialog.h"
+#include "gui/general/FileSource.h"
+#include "misc/Debug.h"
+#include "misc/FileUtil.h"
+#include "misc/Preferences.h"
+#include "misc/Strings.h"  // qstrtostr() and friends
+#include "sequencer/RosegardenSequencer.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/SetWaitCursor.h"
 
 #include <QMessageBox>
 #include <QPixmap>
@@ -33,43 +48,12 @@
 #include <QDir>
 #include <QRegularExpression>
 
-#include "gui/dialogs/AudioFileLocationDialog.h"
-#include "gui/general/FileSource.h"
-#include "AudioFile.h"
-#include "WAVAudioFile.h"
-#include "BWFAudioFile.h"
-#include "misc/Debug.h"
-#include "misc/Preferences.h"
-#include "misc/Strings.h"  // qstrtostr() and friends
-#include "sequencer/RosegardenSequencer.h"
-#include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
-#include "sound/audiostream/AudioReadStream.h"
-#include "sound/audiostream/AudioReadStreamFactory.h"
-#include "sound/audiostream/AudioWriteStream.h"
-#include "sound/audiostream/AudioWriteStreamFactory.h"
-#include "gui/application/SetWaitCursor.h"
+#include <string>
+#include <sstream>  // std::stringstream
+#include <unistd.h>
 
-#include "AudioFileManager.h"
+#include <pthread.h>  // pthread_mutex_lock() and friends
 
-namespace
-{
-
-    QString addTrailingSlash(const QString &path)
-    {
-        if (path.isEmpty())
-            return "/";
-
-        QString path2 = path;
-
-        // Add a trailing "/" if needed.
-        if (!path2.endsWith('/'))
-            path2 += "/";
-
-        return path2;
-    }
-
-}
 
 namespace Rosegarden
 {
@@ -292,7 +276,8 @@ AudioFileManager::insertFile(const std::string &name,
         // ...see if the name is already an absolute or relative path.
 
         // Try expanding any beginning tilde or dot.
-        absoluteFilePath = toAbsolute(fileName);
+        absoluteFilePath = FileUtil::toAbsolute(
+                fileName, m_document->getAbsFilePath());
 
         fileInfo.setFile(absoluteFilePath);
         if (!fileInfo.exists())
@@ -345,8 +330,9 @@ AudioFileManager::setRelativeAudioPath(
         newRelativePath = "./" + newRelativePath;
     }
 
-    QString newAbsolutePath = toAbsolute(newRelativePath);
-    newAbsolutePath = addTrailingSlash(newAbsolutePath);
+    QString newAbsolutePath = FileUtil::toAbsolute(
+            newRelativePath, m_document->getAbsFilePath());
+    newAbsolutePath = FileUtil::addTrailingSlash(newAbsolutePath);
 
     // ??? This is probably only needed if the directory does not
     //     exist in the first place and we have no files to move.
@@ -444,8 +430,9 @@ AudioFileManager::createAudioPath()
 QString
 AudioFileManager::getAbsoluteAudioPath() const
 {
-    QString absoluteAudioPath = toAbsolute(m_relativeAudioPath);
-    absoluteAudioPath = addTrailingSlash(absoluteAudioPath);
+    QString absoluteAudioPath = FileUtil::toAbsolute(
+            m_relativeAudioPath, m_document->getAbsFilePath());
+    absoluteAudioPath = FileUtil::addTrailingSlash(absoluteAudioPath);
     return absoluteAudioPath;
 }
 
@@ -1133,35 +1120,6 @@ AudioFileManager::getActualSampleRates() const
     return rates;
 }
 
-QString
-AudioFileManager::toAbsolute(const QString &relativePath) const
-{
-    if (relativePath.isEmpty())
-        return relativePath;
-
-    QString absolutePath = relativePath;
-
-    // Convert tilde to home dir.
-    if (absolutePath.left(1) == "~") {
-        absolutePath.remove(0, 1);
-        absolutePath = QDir::homePath() + absolutePath;
-    }
-
-    // Handle double-dot.  A bit messy, but should work.
-    if (absolutePath.left(2) == "..")
-        absolutePath = "./" + absolutePath;
-
-    // Convert dot to .rg file location.
-    if (absolutePath.left(1) == "."  &&  m_document) {
-        absolutePath.remove(0, 1);
-        QString absFilePath = m_document->getAbsFilePath();
-        QFileInfo fileInfo(absFilePath);
-        absolutePath = fileInfo.canonicalPath() + absolutePath;
-    }
-
-    return absolutePath;
-}
-
 void
 AudioFileManager::moveFiles(const QString &newPath)
 {
@@ -1170,8 +1128,9 @@ AudioFileManager::moveFiles(const QString &newPath)
 
     SetWaitCursor setWaitCursor;
 
-    QString newPath2 = toAbsolute(newPath);
-    newPath2 = addTrailingSlash(newPath2);
+    QString newPath2 = FileUtil::toAbsolute(
+            newPath, m_document->getAbsFilePath());
+    newPath2 = FileUtil::addTrailingSlash(newPath2);
 
     // for each audio file
     for (AudioFile *audioFile : m_audioFiles)

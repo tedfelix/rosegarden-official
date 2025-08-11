@@ -346,12 +346,6 @@ private:
      */
     int convertAudioFile(const QString &inFile, const QString &outFile);
 
-    /// Convert a relative path or file path to absolute.
-    /**
-     * Expands "~" and "." to an absolute path.
-     */
-    QString toAbsolute(const QString &relativePath) const;
-
     /// Get a short file name from a long one (with '/'s)
     QString getShortFilename(const QString &fileName) const;
 
