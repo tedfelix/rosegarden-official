@@ -204,6 +204,12 @@ protected:
                          const QString &label);
     /// Whether the audio skip warning has been issued.
     bool m_audioSkipWarning;
+    /// Insert audio file with check for existence.  Returns false if not found.
+    bool insertAudioFile(const QString &newAudioDirectory,
+                         const QString &id,
+                         const QString &file,
+                         const QString &label);
+
 
     // In case we encounter an old solo attribute at the composition level,
     // hold onto it and use it to set the solo for the proper track.

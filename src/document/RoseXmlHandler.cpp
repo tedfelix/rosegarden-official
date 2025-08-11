@@ -2776,6 +2776,38 @@ RoseXmlHandler::setMIDIDeviceName(const QString &name)
 }
 
 bool
+RoseXmlHandler::insertAudioFile(const QString &newAudioDirectory,
+                                const QString &id,
+                                const QString &file,
+                                const QString &label)
+{
+    QString newFilePath = newAudioDirectory;
+    newFilePath = FileUtil::addTrailingSlash(newFilePath);
+    newFilePath += file;
+    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
+
+    QFileInfo fileInfo{newFilePath};
+
+    if (fileInfo.exists()) {
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                                   true,  // create
+                                                   false);  // doMoveFiles
+
+        // This should succeed now.
+        getAudioFileManager().insertFile(
+                qstrtostr(label),
+                file,
+                id.toInt());
+
+        // Found.
+        return true;
+    }
+
+    // Not found.
+    return false;
+}
+
+bool
 RoseXmlHandler::locateAudioFile(const QString &id,
                                 const QString &file,
                                 const QString &label)
@@ -2795,98 +2827,24 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     // Preferences default audio location
     newAudioDirectory = Preferences::getDefaultAudioLocationString(
             m_doc->getAbsFilePath());
-    // *** BEGIN insertAudioFile(), duplicated 4 times
-    newFilePath = newAudioDirectory;
-    newFilePath = FileUtil::addTrailingSlash(newFilePath);
-    newFilePath += file;
-    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
-    fileInfo.setFile(newFilePath);
-
-    if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
-                                                   true,  // create
-                                                   false);  // doMoveFiles
-
-        // This should succeed now.
-        getAudioFileManager().insertFile(
-                qstrtostr(label),
-                file,
-                id.toInt());
-
-        // Continue loading.
+    if (insertAudioFile(newAudioDirectory, id, file, label))
         return true;
-    }
-    // *** END insertAudioFile()
 
     // ./audio (Preferences::AudioDir)
     newAudioDirectory = "./audio";
-    newFilePath = newAudioDirectory;
-    newFilePath = FileUtil::addTrailingSlash(newFilePath);
-    newFilePath += file;
-    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
-    fileInfo.setFile(newFilePath);
-
-    if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
-                                                   true,  // create
-                                                   false);  // doMoveFiles
-
-        // This should succeed now.
-        getAudioFileManager().insertFile(
-                qstrtostr(label),
-                file,
-                id.toInt());
-
-        // Continue loading.
+    if (insertAudioFile(newAudioDirectory, id, file, label))
         return true;
-    }
 
     // ./<DocumentName> (Preferences::DocumentNameDir)
     fileInfo.setFile(m_doc->getAbsFilePath());
     newAudioDirectory = "./" + fileInfo.completeBaseName();
-    newFilePath = newAudioDirectory;
-    newFilePath = FileUtil::addTrailingSlash(newFilePath);
-    newFilePath += file;
-    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
-    fileInfo.setFile(newFilePath);
-
-    if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
-                                                   true,  // create
-                                                   false);  // doMoveFiles
-
-        // This should succeed now.
-        getAudioFileManager().insertFile(
-                qstrtostr(label),
-                file,
-                id.toInt());
-
-        // Continue loading.
+    if (insertAudioFile(newAudioDirectory, id, file, label))
         return true;
-    }
 
     // . (Preferences::DocumentDir)
     newAudioDirectory = ".";
-    newFilePath = newAudioDirectory;
-    newFilePath = FileUtil::addTrailingSlash(newFilePath);
-    newFilePath += file;
-    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
-    fileInfo.setFile(newFilePath);
-
-    if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
-                                                   true,  // create
-                                                   false);  // doMoveFiles
-
-        // This should succeed now.
-        getAudioFileManager().insertFile(
-                qstrtostr(label),
-                file,
-                id.toInt());
-
-        // Continue loading.
+    if (insertAudioFile(newAudioDirectory, id, file, label))
         return true;
-    }
 
     // Let the user look around and try to find the file.
 
