@@ -329,6 +329,7 @@ AudioFileManager::insertFile(const std::string &name,
 void
 AudioFileManager::setRelativeAudioPath(
         const QString &newPath,
+        bool create,
         bool doMoveFiles)
 {
     QString newRelativePath = newPath;
@@ -365,31 +366,33 @@ AudioFileManager::setRelativeAudioPath(
         originalLocation = tr("<br />Audio files will remain in their original location.<br />(%1)").
             arg(getAbsoluteAudioPath());
 
-    // Make the path if needed.
-    // We need to make the path even if we are not moving files into it to
-    // make sure it is there for recording.  Otherwise we will end up back
-    // here and the user will be stuck.
-    const bool success = QDir().mkpath(newAbsolutePath);
-    if (!success) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Cannot create audio path.<br />%1").
-                    arg(newAbsolutePath) + originalLocation);
-        return;
-    }
+    if (create  ||  doMoveFiles) {
+        // Make the path if needed.
+        // We need to make the path even if we are not moving files into it to
+        // make sure it is there for recording.  Otherwise we will end up back
+        // here and the user will be stuck.
+        const bool success = QDir().mkpath(newAbsolutePath);
+        if (!success) {
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Audio File Location"),
+                    tr("Cannot create audio path.<br />%1").
+                        arg(newAbsolutePath) + originalLocation);
+            return;
+        }
 
-    // Is the new path writable?
-    // (We could do this only when moving to allow for opening and working
-    // with read-only audio repositories.  But then we put off the
-    // unpleasant news to recording time.)
-    if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Audio path is not writable.<br />%1").
-                    arg(newAbsolutePath) + originalLocation);
-        return;
+        // Is the new path writable?
+        // (We could do this only when moving to allow for opening and working
+        // with read-only audio repositories.  But then we put off the
+        // unpleasant news to recording time.)
+        if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Audio File Location"),
+                    tr("Audio path is not writable.<br />%1").
+                        arg(newAbsolutePath) + originalLocation);
+            return;
+        }
     }
 
     if (doMoveFiles) {
@@ -409,6 +412,33 @@ AudioFileManager::setRelativeAudioPath(
         RosegardenMainWindow::self()->slotFileSave();
     }
 
+}
+
+void
+AudioFileManager::createAudioPath()
+{
+    const QString absoluteAudioPath = getAbsoluteAudioPath();
+
+    const bool success = QDir().mkpath(absoluteAudioPath);
+    if (!success) {
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Audio File Location"),
+                tr("Cannot create audio path.<br />%1").
+                    arg(absoluteAudioPath));
+        return;
+    }
+
+    // Is the new path writable?
+    // Make sure the user is warned before recording audio fails later.
+    if (access(qstrtostr(absoluteAudioPath).c_str(), W_OK) != 0) {
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Audio File Location"),
+                tr("Audio path is not writable.<br />%1").
+                    arg(absoluteAudioPath));
+        return;
+    }
 }
 
 QString
@@ -1225,7 +1255,9 @@ AudioFileManager::save()
             m_document->getAbsFilePath());
 
     // Set the new location, move the files, and save.
-    setRelativeAudioPath(audioPath, true);
+    setRelativeAudioPath(audioPath,
+                         true,  // create
+                         true);  // doMoveFiles
 }
 
 

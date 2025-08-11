@@ -269,7 +269,9 @@ AudioPropertiesPage::apply()
             moveFiles = true;
         }
         // Update the AudioFileManager.
-        audioFileManager.setRelativeAudioPath(newPath, moveFiles);
+        audioFileManager.setRelativeAudioPath(newPath,
+                                              true,  // create
+                                              moveFiles);
 
         // Avoid showing the prompt when they save.
         // Since we don't store this flag in the document, they can

@@ -1306,7 +1306,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        getAudioFileManager().setRelativeAudioPath(audioPath);
+        // Set the audio path, but don't create it until endDocument().
+        // This way, if the .rg file has an unexpected audio path in it,
+        // e.g. one that was deleted when the .rg file was moved,
+        // we don't end up creating something the user doesn't want.
+        // See Bug #1730.
+        getAudioFileManager().setRelativeAudioPath(audioPath,
+                                                   false,  // create
+                                                   false);  // doMoveFiles
 
     } else if (lcName == "begin") {
 
@@ -2610,10 +2617,14 @@ RoseXmlHandler::fatalError(int lineNumber, int columnNumber,
 bool
 RoseXmlHandler::endDocument()
 {
-    if (m_foundTempo == false) {
-        getComposition().setCompositionDefaultTempo
-        (Composition::getTempoForQpm(120.0));
+    if (!m_foundTempo) {
+        getComposition().setCompositionDefaultTempo(
+                Composition::getTempoForQpm(120.0));
     }
+
+    // Create the audio path in case it doesn't exist for some reason.
+    // This makes sure audio can be recorded and imported.
+    getAudioFileManager().createAudioPath();
 
     return true;
 }
@@ -2840,7 +2851,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                                   true,  // create
+                                                   false);  // doMoveFiles
 
         // This should succeed now.
         getAudioFileManager().insertFile(
@@ -2862,7 +2875,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                                   true,  // create
+                                                   false);  // doMoveFiles
 
         // This should succeed now.
         getAudioFileManager().insertFile(
@@ -2884,7 +2899,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                                   true,  // create
+                                                   false);  // doMoveFiles
 
         // This should succeed now.
         getAudioFileManager().insertFile(
@@ -2905,7 +2922,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     fileInfo.setFile(newFilePath);
 
     if (fileInfo.exists()) {
-        getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                                   true,  // create
+                                                   false);  // doMoveFiles
 
         // This should succeed now.
         getAudioFileManager().insertFile(
@@ -2964,7 +2983,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
 
     }
 
-    getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+    getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                               true,  // create
+                                               false);  // doMoveFiles
 
     // This should succeed now.
     getAudioFileManager().insertFile(
