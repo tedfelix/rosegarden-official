@@ -2854,6 +2854,7 @@ RoseXmlHandler::locateAudioFile(const QString &id,
 
         FileLocateDialog fileLocateDialog(
                 RosegardenMainWindow::self(),
+                m_doc,
                 file,
                 getAudioFileManager().getAbsoluteAudioPath());
         fileLocateDialog.exec();

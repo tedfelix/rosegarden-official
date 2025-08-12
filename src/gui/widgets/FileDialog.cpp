@@ -200,7 +200,7 @@ FileDialog::getExistingDirectory(QWidget *parent,
                                  const QString &caption,
                                  const QString &dir)
 {
-    QFileDialog::Options options = QFileDialog::ShowDirsOnly;
+    QFileDialog::Options options{};
 
     if (!Preferences::getUseNativeFileDialogs())
         options |= QFileDialog::DontUseNativeDialog;
@@ -219,6 +219,7 @@ FileDialog::getExistingDirectory(QWidget *parent,
 
     return QString();    
 }
+
 
 }
 
