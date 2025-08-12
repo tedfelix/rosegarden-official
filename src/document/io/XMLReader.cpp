@@ -101,7 +101,7 @@ bool XMLReader::doParse(QXmlStreamReader& reader)
             break;
         default:
             {
-                RG_DEBUG << "defaut for token" << token;
+                RG_DEBUG << "default for token" << token;
             }
             break;
         }

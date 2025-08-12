@@ -2863,7 +2863,9 @@ RoseXmlHandler::locateAudioFile(const QString &id,
 
         // If the user decides to abort, cancel the load.
         if (result == FileLocateDialog::Cancel) {
-            m_errorString = "Audio file not found.";
+            // Magic value to suppress message box from
+            // RosegardenDocument::openDocument().
+            m_errorString = "<suppress>";
             // Stop loading this file.
             return false;
         }

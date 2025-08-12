@@ -1214,7 +1214,8 @@ AudioFileManager::save()
     }
 
     // Indicate audio location was confirmed by the user.
-    // Also avoid recursion loop as the second save will end up here again.
+    // Also avoid recursion loop as the second save (in setRelativeAudioPath())
+    // will end up here again.
     m_audioLocationConfirmed = true;
 
     const QString audioPath = Preferences::getDefaultAudioLocationString(
