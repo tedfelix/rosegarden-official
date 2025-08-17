@@ -846,8 +846,8 @@ void RosegardenMainViewWidget::slotEditSegmentAudio(Segment *segment)
         return;
     }
 
-    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().
-                    getAudioFile(segment->getAudioFileId());
+    const AudioFile *aF = RosegardenDocument::currentDocument->
+            getAudioFileManager().getAudioFile(segment->getAudioFileId());
     if (aF == nullptr) {
         RG_WARNING << "slotEditSegmentAudio() - can't find audio file";
         return ;

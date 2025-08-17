@@ -29,12 +29,15 @@ namespace Rosegarden
 {
 
 
+class RosegardenDocument;
+
 class FileLocateDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     FileLocateDialog(QWidget *parent,
+                     RosegardenDocument *doc,
                      const QString &file,
                      const QString &path);
 
@@ -42,17 +45,17 @@ public:
     Result getResult() const  { return m_result; }
 
     QString getPath()  { return m_path; }
-    QString getFileName()  { return m_fileName; }
 
 private slots:
 
     void slotButtonClicked(QAbstractButton *button);
 
 private:
-    Result m_result;
+    RosegardenDocument *m_doc;
+
+    Result m_result{Cancel};
 
     QString m_path;
-    QString m_fileName;
 };
   
 

@@ -39,14 +39,6 @@ class AudioFileLocationDialog : public QDialog
 public:
     AudioFileLocationDialog(QWidget *parent, QString documentNameDir);
 
-    enum Location {
-        AudioDir,
-        DocumentNameDir,
-        DocumentDir,
-        CentralDir,
-        CustomDir
-    };
-
 public slots:
     virtual void accept() override;
 

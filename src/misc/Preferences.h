@@ -81,9 +81,17 @@ namespace Preferences
     void setAudioFileLocationDlgDontShow(bool value);
     bool getAudioFileLocationDlgDontShow();
 
-    // See AudioFileLocationDialog::Location enum.
-    void setDefaultAudioLocation(int location);
-    int getDefaultAudioLocation();
+    enum Location {
+        AudioDir,
+        DocumentNameDir,
+        DocumentDir,
+        CentralDir,
+        CustomDir
+    };
+    void setDefaultAudioLocation(Location location);
+    Location getDefaultAudioLocation();
+    /// Send in RosegardenDocument::getAbsFilePath().
+    QString getDefaultAudioLocationString(const QString &absFilePath);
 
     void setCustomAudioLocation(const QString &location);
     QString getCustomAudioLocation();

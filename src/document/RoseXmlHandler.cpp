@@ -19,9 +19,12 @@
 #define RG_NO_DEBUG_PRINT
 
 #include "RoseXmlHandler.h"
+#include "RosegardenDocument.h"
 
 #include "sound/Midi.h"
 #include "misc/Debug.h"
+#include "misc/FileUtil.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "base/AudioLevel.h"
 #include "base/AudioPluginInstance.h"
@@ -50,7 +53,6 @@
 #include "gui/widgets/StartupLogo.h"
 #include "gui/studio/AudioPlugin.h"
 #include "gui/studio/AudioPluginManager.h"
-#include "RosegardenDocument.h"
 #include "sound/AudioFileManager.h"
 #include "XmlStorableEvent.h"
 #include "XmlSubHandler.h"
@@ -62,12 +64,15 @@
 #include <QColor>
 #include <QDataStream>
 #include <QDialog>
+#include <QDir>
 #include <QFileInfo>
 #include <QString>
 #include <QStringList>
 
+
 namespace Rosegarden
 {
+
 
 using namespace BaseProperties;
 
@@ -1253,7 +1258,14 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             return false;
         }
 
-        getAudioFileManager().setRelativeAudioPath(audioPath);
+        // Set the audio path, but don't create it until endDocument().
+        // This way, if the .rg file has an unexpected audio path in it,
+        // e.g. one that was deleted when the .rg file was moved,
+        // we don't end up creating something the user doesn't want.
+        // See Bug #1730.
+        getAudioFileManager().setRelativeAudioPath(audioPath,
+                                                   false,  // create
+                                                   false);  // doMoveFiles
 
     } else if (lcName == "begin") {
 
@@ -1403,9 +1415,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             }
 
             QString connection = atts.value("connection").toString();
-            if ((m_createDevices) && (m_device) && !connection.isEmpty() ) {
+            if (m_createDevices  &&  m_device  &&  !connection.isEmpty())
                 setMIDIDeviceConnection(connection);
-            }
 
             if (m_createDevices)
                 setMIDIDeviceName(nameStr);
@@ -1853,7 +1864,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
     } else if (lcName == "plugin" || lcName == "synth") {
 
-        PluginContainer *container = nullptr;
+        const PluginContainer *container{nullptr};
 
         if (m_section == InInstrument) {
 //            RG_WARNING << "Found plugin in instrument";
@@ -2558,10 +2569,14 @@ RoseXmlHandler::fatalError(int lineNumber, int columnNumber,
 bool
 RoseXmlHandler::endDocument()
 {
-    if (m_foundTempo == false) {
-        getComposition().setCompositionDefaultTempo
-        (Composition::getTempoForQpm(120.0));
+    if (!m_foundTempo) {
+        getComposition().setCompositionDefaultTempo(
+                Composition::getTempoForQpm(120.0));
     }
+
+    // Create the audio path in case it doesn't exist for some reason.
+    // This makes sure audio can be recorded and imported.
+    getAudioFileManager().createAudioPath();
 
     return true;
 }
@@ -2756,14 +2771,45 @@ RoseXmlHandler::setMIDIDeviceName(const QString &name)
     const MidiDevice *md = dynamic_cast<const MidiDevice *>(m_device);
     if (!md) return;
 
-    RosegardenSequencer::getInstance()->renameDevice(
-            md->getId(), name);
+    RosegardenSequencer::getInstance()->renameDevice(md->getId(), name);
 }
 
 bool
-RoseXmlHandler::locateAudioFile(const QString& id,
-                                const QString& file,
-                                const QString& label)
+RoseXmlHandler::insertAudioFile(const QString &newAudioDirectory,
+                                const QString &id,
+                                const QString &file,
+                                const QString &label)
+{
+    QString newFilePath = newAudioDirectory;
+    newFilePath = FileUtil::addTrailingSlash(newFilePath);
+    newFilePath += file;
+    newFilePath = FileUtil::toAbsolute(newFilePath, m_doc->getAbsFilePath());
+
+    QFileInfo fileInfo{newFilePath};
+
+    if (fileInfo.exists()) {
+        getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                                   true,  // create
+                                                   false);  // doMoveFiles
+
+        // This should succeed now.
+        getAudioFileManager().insertFile(
+                qstrtostr(label),
+                file,
+                id.toInt());
+
+        // Found.
+        return true;
+    }
+
+    // Not found.
+    return false;
+}
+
+bool
+RoseXmlHandler::locateAudioFile(const QString &id,
+                                const QString &file,
+                                const QString &label)
 {
     StartupLogo::hideIfStillThere();
 
@@ -2771,9 +2817,35 @@ RoseXmlHandler::locateAudioFile(const QString& id,
     // dialogs.
     QApplication::restoreOverrideCursor();
 
-    // Let the user look around and try to find the file.
-
     QString newAudioDirectory;
+    QString newFilePath;
+    QFileInfo fileInfo;
+
+    // Try some of the usual places first.
+
+    // Preferences default audio location
+    newAudioDirectory = Preferences::getDefaultAudioLocationString(
+            m_doc->getAbsFilePath());
+    if (insertAudioFile(newAudioDirectory, id, file, label))
+        return true;
+
+    // ./audio (Preferences::AudioDir)
+    newAudioDirectory = "./audio";
+    if (insertAudioFile(newAudioDirectory, id, file, label))
+        return true;
+
+    // ./<DocumentName> (Preferences::DocumentNameDir)
+    fileInfo.setFile(m_doc->getAbsFilePath());
+    newAudioDirectory = "./" + fileInfo.completeBaseName();
+    if (insertAudioFile(newAudioDirectory, id, file, label))
+        return true;
+
+    // . (Preferences::DocumentDir)
+    newAudioDirectory = ".";
+    if (insertAudioFile(newAudioDirectory, id, file, label))
+        return true;
+
+    // Let the user look around and try to find the file.
 
     bool found = false;
 
@@ -2781,6 +2853,7 @@ RoseXmlHandler::locateAudioFile(const QString& id,
 
         FileLocateDialog fileLocateDialog(
                 RosegardenMainWindow::self(),
+                m_doc,
                 file,
                 getAudioFileManager().getAbsoluteAudioPath());
         fileLocateDialog.exec();
@@ -2789,7 +2862,9 @@ RoseXmlHandler::locateAudioFile(const QString& id,
 
         // If the user decides to abort, cancel the load.
         if (result == FileLocateDialog::Cancel) {
-            m_errorString = "Audio file not found.";
+            // Magic value to suppress message box from
+            // RosegardenDocument::openDocument().
+            m_errorString = "<suppress>";
             // Stop loading this file.
             return false;
         }
@@ -2814,13 +2889,15 @@ RoseXmlHandler::locateAudioFile(const QString& id,
 
         newAudioDirectory = fileLocateDialog.getPath();
         const QString newFilePath = newAudioDirectory + "/" + file;
-        QFileInfo fileInfo(newFilePath);
+        QFileInfo fileInfo2(newFilePath);
 
-        found = fileInfo.exists();
+        found = fileInfo2.exists();
 
     }
 
-    getAudioFileManager().setRelativeAudioPath(newAudioDirectory);
+    getAudioFileManager().setRelativeAudioPath(newAudioDirectory,
+                                               true,  // create
+                                               false);  // doMoveFiles
 
     // This should succeed now.
     getAudioFileManager().insertFile(

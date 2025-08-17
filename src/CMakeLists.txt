@@ -91,13 +91,14 @@ set(rg_CPPS
   document/CommandHistory.cpp
   document/XmlSubHandler.cpp
   document/MetadataHelper.cpp
-  misc/ConfigGroups.cpp
-  misc/TempDir.cpp
   misc/AppendLabel.cpp
+  misc/ConfigGroups.cpp
   misc/Debug.cpp
-  misc/Version.cpp
-  misc/Strings.cpp
+  misc/FileUtil.cpp
   misc/Preferences.cpp
+  misc/Strings.cpp
+  misc/TempDir.cpp
+  misc/Version.cpp
   gui/dialogs/AudioFileLocationDialog.cpp
   gui/dialogs/PasteNotationDialog.cpp
   gui/dialogs/ConfigureDialogBase.cpp

@@ -54,7 +54,7 @@ Configuration::getPropertyNames()
 {
     std::vector<std::string> v;
     for (const_iterator i = begin(); i != end(); ++i) {
-	v.push_back(i->first.getName());
+        v.push_back(i->first.getName());
     }
     std::sort(v.begin(), v.end());
     return v;
@@ -82,8 +82,8 @@ Configuration::toXmlString() const
 
     for (const_iterator i = begin(); i != end(); ++i) {
         config <<  "<property name=\""
-	       << encode(i->first.getName()) << "\" value=\""
-	       << encode(get<String>(i->first)) << "\"/>" << endl;
+               << encode(i->first.getName()) << "\" value=\""
+               << encode(get<String>(i->first)) << "\"/>" << endl;
     }
 
     config << endl;
@@ -127,22 +127,22 @@ namespace CompositionMetadataKeys
     // is defined by the creation order of the edit fields.
     // The edit fields are created in the order of the keys in getFixedKeys().
     std::vector<PropertyName> getFixedKeys() {
-	std::vector<PropertyName> keys;
-	keys.push_back(Dedication);
-	keys.push_back(Title);
-	keys.push_back(Subtitle);
-	keys.push_back(Subsubtitle);
-	keys.push_back(Poet);
-	keys.push_back(Instrument);
-	keys.push_back(Composer);
-	keys.push_back(Meter);
-	keys.push_back(Arranger);
-	keys.push_back(Piece);
-	keys.push_back(Opus);
-	keys.push_back(Copyright);
-	keys.push_back(Tagline);
+        std::vector<PropertyName> keys;
+        keys.push_back(Dedication);
+        keys.push_back(Title);
+        keys.push_back(Subtitle);
+        keys.push_back(Subsubtitle);
+        keys.push_back(Poet);
+        keys.push_back(Instrument);
+        keys.push_back(Composer);
+        keys.push_back(Meter);
+        keys.push_back(Arranger);
+        keys.push_back(Piece);
+        keys.push_back(Opus);
+        keys.push_back(Copyright);
+        keys.push_back(Tagline);
 
-	return keys;
+        return keys;
     }
 }
 

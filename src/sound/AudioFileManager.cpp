@@ -16,13 +16,30 @@
 */
 
 #define RG_MODULE_STRING "[AudioFileManager]"
+#define RG_NO_DEBUG_PRINT
 
-#include <pthread.h>  // pthread_mutex_lock() and friends
+#include "AudioFileManager.h"
 
-#include <string>
-#include <sstream>  // std::stringstream
-#include <unistd.h>
+#include "AudioFile.h"
+#include "WAVAudioFile.h"
+#include "BWFAudioFile.h"
+#include "audiostream/AudioReadStream.h"
+#include "audiostream/AudioReadStreamFactory.h"
+#include "audiostream/AudioWriteStream.h"
+#include "audiostream/AudioWriteStreamFactory.h"
 
+#include "gui/dialogs/AudioFileLocationDialog.h"
+#include "gui/general/FileSource.h"
+#include "misc/Debug.h"
+#include "misc/FileUtil.h"
+#include "misc/Preferences.h"
+#include "misc/Strings.h"  // qstrtostr() and friends
+#include "sequencer/RosegardenSequencer.h"
+#include "document/RosegardenDocument.h"
+#include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/SetWaitCursor.h"
+
+#include <QApplication>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QPainter>
@@ -32,43 +49,12 @@
 #include <QDir>
 #include <QRegularExpression>
 
-#include "gui/dialogs/AudioFileLocationDialog.h"
-#include "gui/general/FileSource.h"
-#include "AudioFile.h"
-#include "WAVAudioFile.h"
-#include "BWFAudioFile.h"
-#include "misc/Debug.h"
-#include "misc/Preferences.h"
-#include "misc/Strings.h"  // qstrtostr() and friends
-#include "sequencer/RosegardenSequencer.h"
-#include "document/RosegardenDocument.h"
-#include "gui/application/RosegardenMainWindow.h"
-#include "sound/audiostream/AudioReadStream.h"
-#include "sound/audiostream/AudioReadStreamFactory.h"
-#include "sound/audiostream/AudioWriteStream.h"
-#include "sound/audiostream/AudioWriteStreamFactory.h"
-#include "gui/application/SetWaitCursor.h"
+#include <string>
+#include <sstream>  // std::stringstream
+#include <unistd.h>
 
-#include "AudioFileManager.h"
+#include <pthread.h>  // pthread_mutex_lock() and friends
 
-namespace
-{
-
-    QString addTrailingSlash(const QString &path)
-    {
-        if (path.isEmpty())
-            return "/";
-
-        QString path2 = path;
-
-        // Add a trailing "/" if needed.
-        if (!path2.endsWith('/'))
-            path2 += "/";
-
-        return path2;
-    }
-
-}
 
 namespace Rosegarden
 {
@@ -251,6 +237,8 @@ AudioFileManager::removeFile(AudioFileId id)
         delete(audioFile);
         m_audioFiles.erase(audioFileIter);
 
+        m_document->setModified();
+
         return true;
     }
 
@@ -289,7 +277,8 @@ AudioFileManager::insertFile(const std::string &name,
         // ...see if the name is already an absolute or relative path.
 
         // Try expanding any beginning tilde or dot.
-        absoluteFilePath = toAbsolute(fileName);
+        absoluteFilePath = FileUtil::toAbsolute(
+                fileName, m_document->getAbsFilePath());
 
         fileInfo.setFile(absoluteFilePath);
         if (!fileInfo.exists())
@@ -326,6 +315,7 @@ AudioFileManager::insertFile(const std::string &name,
 void
 AudioFileManager::setRelativeAudioPath(
         const QString &newPath,
+        bool create,
         bool doMoveFiles)
 {
     QString newRelativePath = newPath;
@@ -341,8 +331,9 @@ AudioFileManager::setRelativeAudioPath(
         newRelativePath = "./" + newRelativePath;
     }
 
-    QString newAbsolutePath = toAbsolute(newRelativePath);
-    newAbsolutePath = addTrailingSlash(newAbsolutePath);
+    QString newAbsolutePath = FileUtil::toAbsolute(
+            newRelativePath, m_document->getAbsFilePath());
+    newAbsolutePath = FileUtil::addTrailingSlash(newAbsolutePath);
 
     // ??? This is probably only needed if the directory does not
     //     exist in the first place and we have no files to move.
@@ -362,31 +353,33 @@ AudioFileManager::setRelativeAudioPath(
         originalLocation = tr("<br />Audio files will remain in their original location.<br />(%1)").
             arg(getAbsoluteAudioPath());
 
-    // Make the path if needed.
-    // We need to make the path even if we are not moving files into it to
-    // make sure it is there for recording.  Otherwise we will end up back
-    // here and the user will be stuck.
-    const bool success = QDir().mkpath(newAbsolutePath);
-    if (!success) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Cannot create audio path.<br />%1").
-                    arg(newAbsolutePath) + originalLocation);
-        return;
-    }
+    if (create  ||  doMoveFiles) {
+        // Make the path if needed.
+        // We need to make the path even if we are not moving files into it to
+        // make sure it is there for recording.  Otherwise we will end up back
+        // here and the user will be stuck.
+        const bool success = QDir().mkpath(newAbsolutePath);
+        if (!success) {
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Audio File Location"),
+                    tr("Cannot create audio path.<br />%1").
+                        arg(newAbsolutePath) + originalLocation);
+            return;
+        }
 
-    // Is the new path writable?
-    // (We could do this only when moving to allow for opening and working
-    // with read-only audio repositories.  But then we put off the
-    // unpleasant news to recording time.)
-    if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Audio path is not writable.<br />%1").
-                    arg(newAbsolutePath) + originalLocation);
-        return;
+        // Is the new path writable?
+        // (We could do this only when moving to allow for opening and working
+        // with read-only audio repositories.  But then we put off the
+        // unpleasant news to recording time.)
+        if (access(qstrtostr(newAbsolutePath).c_str(), W_OK) != 0) {
+            QMessageBox::warning(
+                    RosegardenMainWindow::self(),
+                    tr("Audio File Location"),
+                    tr("Audio path is not writable.<br />%1").
+                        arg(newAbsolutePath) + originalLocation);
+            return;
+        }
     }
 
     if (doMoveFiles) {
@@ -408,11 +401,39 @@ AudioFileManager::setRelativeAudioPath(
 
 }
 
+void
+AudioFileManager::createAudioPath()
+{
+    const QString absoluteAudioPath = getAbsoluteAudioPath();
+
+    const bool success = QDir().mkpath(absoluteAudioPath);
+    if (!success) {
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Audio File Location"),
+                tr("Cannot create audio path.<br />%1").
+                    arg(absoluteAudioPath));
+        return;
+    }
+
+    // Is the new path writable?
+    // Make sure the user is warned before recording audio fails later.
+    if (access(qstrtostr(absoluteAudioPath).c_str(), W_OK) != 0) {
+        QMessageBox::warning(
+                RosegardenMainWindow::self(),
+                tr("Audio File Location"),
+                tr("Audio path is not writable.<br />%1").
+                    arg(absoluteAudioPath));
+        return;
+    }
+}
+
 QString
 AudioFileManager::getAbsoluteAudioPath() const
 {
-    QString absoluteAudioPath = toAbsolute(m_relativeAudioPath);
-    absoluteAudioPath = addTrailingSlash(absoluteAudioPath);
+    QString absoluteAudioPath = FileUtil::toAbsolute(
+            m_relativeAudioPath, m_document->getAbsFilePath());
+    absoluteAudioPath = FileUtil::addTrailingSlash(absoluteAudioPath);
     return absoluteAudioPath;
 }
 
@@ -555,8 +576,9 @@ AudioFileManager::createDerivedAudioFile(AudioFileId source,
     MutexLock lock (&audioFileManagerLock)
         ;
 
-    AudioFile *sourceFile = getAudioFile(source);
-    if (!sourceFile) return nullptr;
+    const AudioFile *sourceFile = getAudioFile(source);
+    if (!sourceFile)
+        return nullptr;
 
     AudioFileId newId = getUniqueAudioFileID();
     QString fileName = "";
@@ -684,6 +706,8 @@ AudioFileManager::importFile(const QString &fileName, int targetSampleRate)
 
         m_expectedSampleRate = targetSampleRate;
 
+        m_document->setModified();
+
         return aF->getId();
     }
 }
@@ -779,11 +803,10 @@ AudioFileManager::toXmlString() const
     audioFiles << ">" << std::endl;
     audioFiles << "    <audioPath value=\"" << m_relativeAudioPath << "\"/>" << std::endl;
 
-    QString fileName;
 
     // For each AudioFile
     for (const AudioFile *audioFile : m_audioFiles) {
-        fileName = audioFile->getAbsoluteFilePath();
+        QString fileName = audioFile->getAbsoluteFilePath();
 
         // If the absolute audio path is here, remove it.
         // ??? insertFile() is the other side of this.
@@ -912,7 +935,7 @@ void
 AudioFileManager::drawPreview(AudioFileId id,
                               const RealTime &startTime,
                               const RealTime &endTime,
-                              QPixmap *pixmap)
+                              std::shared_ptr<QPixmap> pixmap)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
@@ -934,7 +957,7 @@ AudioFileManager::drawPreview(AudioFileId id,
                                  pixmap->width(),
                                  false);
 
-    QPainter painter(pixmap);
+    QPainter painter(pixmap.get());
     pixmap->fill(Qt::white);
     painter.setPen(Qt::gray);
 //    painter.setPen(qApp->palette().color(QPalette::Active,
@@ -976,7 +999,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
         const RealTime &endTime,
         const RealTime &highlightStart,
         const RealTime &highlightEnd,
-        QPixmap *pixmap)
+        std::shared_ptr<QPixmap> pixmap)
 {
     MutexLock lock (&audioFileManagerLock)
         ;
@@ -1003,7 +1026,7 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
     int endWidth = (int)(double(pixmap->width()) * (highlightEnd /
                          (endTime - startTime)));
 
-    QPainter painter(pixmap);
+    QPainter painter(pixmap.get());
     pixmap->fill(Qt::white);
 //    pixmap->fill(qApp->palette().color(QPalette::Active,
 //                                       QColorGroup::Base));
@@ -1054,7 +1077,7 @@ AudioFileManager::print()
     RG_DEBUG << "print():" << m_audioFiles.size() << "entries";
 
     // For each AudioFile
-    for (AudioFile *audioFile : m_audioFiles) {
+    for (const AudioFile *audioFile : m_audioFiles) {
         RG_DEBUG << "  " << audioFile->getId() << " : " <<
                             audioFile->getLabel() << " : \"" <<
                             audioFile->getAbsoluteFilePath() << "\"";
@@ -1098,35 +1121,6 @@ AudioFileManager::getActualSampleRates() const
     return rates;
 }
 
-QString
-AudioFileManager::toAbsolute(const QString &relativePath) const
-{
-    if (relativePath.isEmpty())
-        return relativePath;
-
-    QString absolutePath = relativePath;
-
-    // Convert tilde to home dir.
-    if (absolutePath.left(1) == "~") {
-        absolutePath.remove(0, 1);
-        absolutePath = QDir::homePath() + absolutePath;
-    }
-
-    // Handle double-dot.  A bit messy, but should work.
-    if (absolutePath.left(2) == "..")
-        absolutePath = "./" + absolutePath;
-
-    // Convert dot to .rg file location.
-    if (absolutePath.left(1) == "."  &&  m_document) {
-        absolutePath.remove(0, 1);
-        QString absFilePath = m_document->getAbsFilePath();
-        QFileInfo fileInfo(absFilePath);
-        absolutePath = fileInfo.canonicalPath() + absolutePath;
-    }
-
-    return absolutePath;
-}
-
 void
 AudioFileManager::moveFiles(const QString &newPath)
 {
@@ -1135,8 +1129,9 @@ AudioFileManager::moveFiles(const QString &newPath)
 
     SetWaitCursor setWaitCursor;
 
-    QString newPath2 = toAbsolute(newPath);
-    newPath2 = addTrailingSlash(newPath2);
+    QString newPath2 = FileUtil::toAbsolute(
+            newPath, m_document->getAbsFilePath());
+    newPath2 = FileUtil::addTrailingSlash(newPath2);
 
     // for each audio file
     for (AudioFile *audioFile : m_audioFiles)
@@ -1203,6 +1198,9 @@ AudioFileManager::save()
     if (!Preferences::getAudioFileLocationDlgDontShow())
     {
 
+        // Stop wait cursor.
+        QApplication::restoreOverrideCursor();
+
         // Ask the user to pick an audio file path.
         // Results go to the Preferences.
         AudioFileLocationDialog audioFileLocationDialog(
@@ -1210,38 +1208,23 @@ AudioFileManager::save()
                 documentNameDir);
         audioFileLocationDialog.exec();
 
-    }
+        // Start wait cursor.
+        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
 
-    const AudioFileLocationDialog::Location location =
-            static_cast<AudioFileLocationDialog::Location>(
-                    Preferences::getDefaultAudioLocation());
+    }
 
     // Indicate audio location was confirmed by the user.
-    // Also avoid recursion loop as the second save will end up here again.
+    // Also avoid recursion loop as the second save (in setRelativeAudioPath())
+    // will end up here again.
     m_audioLocationConfirmed = true;
 
-    QString audioPath = "./audio";
-
-    switch (location) {
-    case AudioFileLocationDialog::AudioDir:
-        audioPath = "./audio";
-        break;
-    case AudioFileLocationDialog::DocumentNameDir:
-        audioPath = documentNameDir;
-        break;
-    case AudioFileLocationDialog::DocumentDir:
-        audioPath = ".";
-        break;
-    case AudioFileLocationDialog::CentralDir:
-        audioPath = "~/rosegarden-audio";
-        break;
-    case AudioFileLocationDialog::CustomDir:
-        audioPath = Preferences::getCustomAudioLocation();
-        break;
-    }
+    const QString audioPath = Preferences::getDefaultAudioLocationString(
+            m_document->getAbsFilePath());
 
     // Set the new location, move the files, and save.
-    setRelativeAudioPath(audioPath, true);
+    setRelativeAudioPath(audioPath,
+                         true,  // create
+                         true);  // doMoveFiles
 }
 
 

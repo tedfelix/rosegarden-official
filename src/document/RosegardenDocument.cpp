@@ -629,10 +629,15 @@ bool RosegardenDocument::openDocument(const QString &filename,
     if (!okay) {
         StartupLogo::hideIfStillThere();
 
-        QString msg(tr("Error when parsing file '%1':<br />\"%2\"")
-                     .arg(filename)
-                     .arg(errMsg));
-        QMessageBox::warning(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
+        // If the message box has not been suppressed, display it.
+        if (errMsg != "<suppress>") {
+            QString msg(tr("Error when parsing file '%1':<br />\"%2\"")
+                         .arg(filename)
+                         .arg(errMsg));
+            QMessageBox::warning(dynamic_cast<QWidget *>(parent()),
+                                 tr("Rosegarden"),
+                                 msg);
+        }
 
         return false;
     }

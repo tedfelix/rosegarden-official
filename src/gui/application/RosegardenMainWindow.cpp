@@ -6714,10 +6714,11 @@ RosegardenMainWindow::slotPlayAudioFile(unsigned int id,
                                     const RealTime &startTime,
                                     const RealTime &duration)
 {
-    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().getAudioFile(id);
-
-    if (aF == nullptr)
-        return ;
+    // Make sure id is valid.
+    const AudioFile *aF = RosegardenDocument::currentDocument->
+            getAudioFileManager().getAudioFile(id);
+    if (!aF)
+        return;
 
     MappedEvent mE;
     mE.setType(MappedEvent::Audio);
@@ -6734,12 +6735,13 @@ RosegardenMainWindow::slotPlayAudioFile(unsigned int id,
 void
 RosegardenMainWindow::slotAddAudioFile(unsigned int id)
 {
-    AudioFile *aF = RosegardenDocument::currentDocument->getAudioFileManager().getAudioFile(id);
+    const AudioFile *aF = RosegardenDocument::currentDocument->
+            getAudioFileManager().getAudioFile(id);
+    if (!aF)
+        return;
 
-    if (aF == nullptr) return;
-
-    int result = RosegardenSequencer::getInstance()->
-        addAudioFile(aF->getAbsoluteFilePath(), aF->getId());
+    const int result = RosegardenSequencer::getInstance()->addAudioFile(
+            aF->getAbsoluteFilePath(), aF->getId());
 
     if (!result) {
         QMessageBox::critical(this, tr("Rosegarden"), tr("Sequencer failed to add audio file %1").arg(aF->getAbsoluteFilePath()));
@@ -6788,10 +6790,7 @@ RosegardenMainWindow::slotCancelAudioPlayingFile(AudioFileId audioFileID)
 void
 RosegardenMainWindow::slotDeleteAllAudioFiles()
 {
-    RosegardenDocument::currentDocument->getAudioFileManager().clear();
-
     // Clear at the sequencer
-    //
     RosegardenSequencer::getInstance()->clearAllAudioFiles();
 }
 

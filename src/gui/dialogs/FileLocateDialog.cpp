@@ -16,14 +16,16 @@
 */
 
 #define RG_MODULE_STRING "[FileLocateDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FileLocateDialog.h"
 
 #include "gui/widgets/FileDialog.h"
 #include "misc/Debug.h"
+#include "misc/FileUtil.h"
+#include "document/RosegardenDocument.h"
 
 #include <QDialogButtonBox>
-#include <QFileInfo>
 #include <QLabel>
 #include <QWidget>
 #include <QGridLayout>
@@ -35,12 +37,12 @@ namespace Rosegarden
 
 
 FileLocateDialog::FileLocateDialog(QWidget *parent,
+                                   RosegardenDocument *doc,
                                    const QString &file,
                                    const QString &path):
     QDialog(parent),
-    m_result(Cancel),
-    m_path(path),
-    m_fileName(file)
+    m_doc(doc),
+    m_path(path)
 {
     setWindowTitle(tr("Locate audio file"));
     setModal(true);
@@ -53,7 +55,7 @@ FileLocateDialog::FileLocateDialog(QWidget *parent,
 
     QLabel *label = new QLabel(
             tr("<p>Could not find audio file:</p><p>&nbsp;&nbsp;%1</p><p>at expected audio file location:</p><p>&nbsp;&nbsp;%2</p><p>You can either cancel the file open and move the files yourself or locate the missing file and adjust the audio file location to match.</p><p>Which would you like to do?</p>").
-                    arg(m_fileName).
+                    arg(file).
                     arg(m_path));
 
     gridLayout->addWidget(label, row, 0);
@@ -92,23 +94,22 @@ FileLocateDialog::slotButtonClicked(QAbstractButton *button)
     m_result = static_cast<Result>(button->property("Action").toInt());
 
     if (m_result == Locate) {
-        // ??? We really just need a directory.  Is there a directory open
-        //     dialog that would show the files to help confirm we are in
-        //     the right place?
-        m_fileName = FileDialog::getOpenFileName(
-                this,  // parent
-                tr("Select an Audio File"),  // caption
-                m_path,  // dir
-                tr("Requested file") +
-                    QString(" (%1)").arg(QFileInfo(m_fileName).fileName()) +
-                    ";;" +
-                tr("WAV files") + " (*.wav *.WAV)" + ";;" +
-                tr("All files") + " (*)");  // filter
+        // It's likely that the path in the .rg file doesn't exist.  Start from
+        // the location of the .rg file.
+        const QString dir = FileUtil::toAbsolute(
+                ".",
+                m_doc->getAbsFilePath());
 
-        if (!m_fileName.isEmpty()) {
-            QFileInfo fileInfo(m_fileName);
-            m_path = fileInfo.path();
-        }
+        m_path = FileDialog::getExistingDirectory(
+                this,  // parent
+                tr("Select a Directory"),  // caption
+                dir);
+
+        // ??? Would be nice if we could determine whether to go with
+        //     "./" or "~/" on the front of the path.  That would prevent
+        //     problems the next time the .rg file and audio files are moved
+        //     to a new location.  Maybe a FileUtil::toRelative()?  Be sure
+        //     to check for "./" before "~/".
     }
 
     // Always accept.  The buttons are all actions.  There isn't really a

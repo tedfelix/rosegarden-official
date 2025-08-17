@@ -18,9 +18,11 @@
 #ifndef RG_AUDIOFILEMANAGER_H
 #define RG_AUDIOFILEMANAGER_H
 
-#include <string>
-#include <vector>
-#include <set>
+#include "AudioFile.h"
+#include "PeakFileManager.h"
+
+#include "base/XmlExportable.h"
+#include "base/Exception.h"
 
 #include <QObject>
 #include <QUrl>
@@ -29,11 +31,10 @@
 
 class QPixmap;
 
-#include "AudioFile.h"
-#include "PeakFileManager.h"
-
-#include "base/XmlExportable.h"
-#include "base/Exception.h"
+#include <memory>
+#include <set>
+#include <string>
+#include <vector>
 
 
 namespace Rosegarden
@@ -147,7 +148,10 @@ public:
     void clear();
 
     /// Set the relative audio file path.  E.g. "./audio"
-    void setRelativeAudioPath(const QString &newPath, bool doMoveFiles = false);
+    void setRelativeAudioPath(
+            const QString &newPath, bool create, bool doMoveFiles);
+    /// Creates the audio path.
+    void createAudioPath();
     QString getRelativeAudioPath() const  { return m_relativeAudioPath; }
     /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
     QString getAbsoluteAudioPath() const;
@@ -234,7 +238,7 @@ public:
     void drawPreview(AudioFileId id,
                      const RealTime &startTime,
                      const RealTime &endTime,
-                     QPixmap *pixmap);
+                     std::shared_ptr<QPixmap> pixmap);
 
     /**
      * Usually used to show how an audio Segment makes up part of
@@ -247,7 +251,7 @@ public:
                                 const RealTime &endTime,
                                 const RealTime &highlightStart,
                                 const RealTime &highlightEnd,
-                                QPixmap *pixmap);
+                                std::shared_ptr<QPixmap> pixmap);
 
     /// Get a split point vector from a peak file
     /**
@@ -341,12 +345,6 @@ private:
      * which normally provide the more suitable interface for import.
      */
     int convertAudioFile(const QString &inFile, const QString &outFile);
-
-    /// Convert a relative path or file path to absolute.
-    /**
-     * Expands "~" and "." to an absolute path.
-     */
-    QString toAbsolute(const QString &relativePath) const;
 
     /// Get a short file name from a long one (with '/'s)
     QString getShortFilename(const QString &fileName) const;

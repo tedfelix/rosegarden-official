@@ -17,6 +17,7 @@
 
 
 #define RG_MODULE_STRING "[AudioManagerDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioManagerDialog.h"
 
@@ -237,7 +238,8 @@ void
 AudioManagerDialog::slotPopulateFileList()
 {
     // create pixmap of given size
-    QPixmap *audioPixmap = new QPixmap(m_maxPreviewWidth, m_previewHeight);
+    std::shared_ptr<QPixmap> audioPixmap{
+            new QPixmap(m_maxPreviewWidth, m_previewHeight)};
 
     // Store last selected item if we have one
     //
@@ -309,7 +311,7 @@ AudioManagerDialog::slotPopulateFileList()
                         audioPixmap);
         } catch (const Exception &e) {
             audioPixmap->fill(); // white
-            QPainter p(audioPixmap);
+            QPainter p(audioPixmap.get());
             p.setPen(QColor(Qt::black));
             p.drawText(10, m_previewHeight / 2, QString("<no preview>"));
         }

@@ -45,6 +45,7 @@ class PeakFileManager : public QObject
     Q_OBJECT
 public:
     PeakFileManager()  { }
+    ~PeakFileManager() override;
 
     /**
      * Check that a given audio file has a valid and up to date

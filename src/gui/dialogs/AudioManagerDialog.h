@@ -53,6 +53,11 @@ class AudioFile;
 class Command;
 
 /// Audio File Manager
+/**
+ * ??? This does not use the command history and the user can end up in
+ *     a really bad situation.  Need to implement all of this functionality
+ *     as commands so they can be undone.
+ */
 class AudioManagerDialog : public QMainWindow, public ActionFileClient
 {
     Q_OBJECT
