@@ -2818,7 +2818,6 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     QApplication::restoreOverrideCursor();
 
     QString newAudioDirectory;
-    QString newFilePath;
     QFileInfo fileInfo;
 
     // Try some of the usual places first.

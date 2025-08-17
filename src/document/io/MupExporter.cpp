@@ -166,7 +166,7 @@ MupExporter::writeBar(std::ofstream &str,
                       const Composition *c,
                       Segment *s,
                       timeT barStart, timeT barEnd,
-                      TimeSignature &timeSig,
+                      const TimeSignature &timeSig,
                       TrackId trackNo)
 {
     timeT writtenDuration = 0;

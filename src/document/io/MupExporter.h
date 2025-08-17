@@ -57,7 +57,7 @@ protected:
                    const Composition *,
                    Segment *,
                    timeT, timeT,
-                   TimeSignature &,
+                   const TimeSignature &,
                    TrackId);
     void writeClefAndKey(std::ofstream &, TrackId trackNo);
     static void writeInventedRests(std::ofstream &,

@@ -106,7 +106,9 @@ protected:
      */
     class PMapData {
     public:
-        PMapData(int pitch=1, const std::string &notehead="", int upper=true) :
+        explicit PMapData(int pitch=1,
+                          const std::string &notehead="",
+                          int upper=true) :
                 m_pitch(pitch),
                 m_notehead(notehead),
                 m_voice(upper?1:2)
