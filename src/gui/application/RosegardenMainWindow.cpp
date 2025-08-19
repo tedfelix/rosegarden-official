@@ -7955,24 +7955,7 @@ RosegardenMainWindow::slotMidiMixerClosed()
 void
 RosegardenMainWindow::slotAudioManagerClosed()
 {
-    // File > Manage Audio Files...
     RG_DEBUG << "slotAudioManagerClosed()";
-
-    // ??? I don't believe we should be changing the selection here. I
-    // don't understand the comments about added audio segments and
-    // parameter boxes. Removing for now
-    //if (RosegardenDocument::currentDocument->isModified()) {
-        //if (m_view) {
-            // ??? Can't just remove this when the time comes.
-            // ??? This is needed to make sure newly added audio segments
-            //     are selected.  It may also update the parameter boxes.
-            //     We'll need to devise an appropriate way to handle this
-            //     before removing this call.
-            //m_view->slotSelectTrackSegments(
-                //RosegardenDocument::currentDocument->getComposition().
-                           //getSelectedTrack());
-        //}
-    //}
 
     m_audioManagerDialog = nullptr;
 }

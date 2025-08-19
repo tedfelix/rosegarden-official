@@ -1246,6 +1246,7 @@ public slots:
      */
     void slotManageTriggerSegments();
 
+    /// File > Manage Audio Files...
     /**
      * View the audio file manager - and some associated actions
      */
