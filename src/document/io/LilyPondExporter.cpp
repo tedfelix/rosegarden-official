@@ -208,6 +208,8 @@ Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it,
             continue;
         }
 
+        // Found the next note.  Determine whether it is part of the group.
+
         long newGroupId = -1;
         event->get<Int>(BEAMED_GROUP_ID, newGroupId);
 
@@ -215,9 +217,12 @@ Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it,
             newGroupId = -1;
         }
 
+        // Not part of the group?
         if (newGroupId == -1 || newGroupId != currentGroupId) {
             return nullptr;
         }
+
+        // Part of the group.
         return event;
     }
     return nullptr;
