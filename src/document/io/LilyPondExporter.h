@@ -146,7 +146,7 @@ private:
 
     void readConfigVariables();
 
-    Event *nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const;
+    Event *nextNoteInGroup(const Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const;
 
     // Return true if the given segment has to be print
     // (readConfigVAriables() should have been called before)
@@ -168,10 +168,10 @@ private:
                                         const std::pair<int, int> &tupletRatio,
                                         bool &overlong);
 
-    void handleStartingPreEvents(eventstartlist &preEventsToStart,
-                                 const Segment *seg,
-                                 const Segment::iterator &j,
-                                 std::ofstream &str);
+    static void handleStartingPreEvents(eventstartlist &preEventsToStart,
+                                        const Segment *seg,
+                                        const Segment::iterator &j,
+                                        std::ofstream &str);
     void handleEndingPreEvents(eventendlist &preEventsInProgress,
                                const Segment::iterator &j,
                                std::ofstream &str);

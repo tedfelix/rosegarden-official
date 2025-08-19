@@ -39,7 +39,9 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     m_studio(studio),
     m_deviceId(deviceId),
     m_baseInstrumentId(0),
-    m_deviceCreated(true)  // We are doing delete.
+    m_deviceCreated(true),  // We are doing delete.
+    m_withData(false),
+    m_variationType(MidiDevice::NoVariations)
 {
     RG_DEBUG << "ctor" << m_deviceName << m_type << m_direction;
     Device *device = m_studio->getDevice(m_deviceId);
@@ -55,7 +57,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     m_type = device->getType();
     m_direction = MidiDevice::Play;
 
-    MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
+    const MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (midiDevice) {
         m_direction = midiDevice->getDirection();
 

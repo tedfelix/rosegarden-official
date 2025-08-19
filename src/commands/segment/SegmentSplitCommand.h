@@ -47,7 +47,7 @@ public:
                         bool keepLabel = false);
     ~SegmentSplitCommand() override;
 
-    bool isValid()  { return isValid(m_segment, m_splitTime); }
+    bool isValid() const { return isValid(m_segment, m_splitTime); }
     static bool isValid(const Segment *segment, timeT splitTime);
 
     void execute() override;

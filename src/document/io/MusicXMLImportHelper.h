@@ -78,9 +78,11 @@ private:
 
     class IndicationStart {
     public:
-        IndicationStart(const QString &staff="", const QString &voice="",
-                        const std::string &name="", timeT time=0, int number=1,
-                        const std::string &endName="") :
+        explicit IndicationStart(const QString &staff="",
+                                 const QString &voice="",
+                                 const std::string &name="",
+                                 timeT time=0, int number=1,
+                                 const std::string &endName="") :
                 m_staff(staff),
                 m_voice(voice),
                 m_name(name),

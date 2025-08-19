@@ -145,6 +145,7 @@ MusicXMLXMLHandler::startElement(const QString& /*namespaceURI*/,
             m_currentState = ReadHeader;
             ret = getAttributeString(atts, "version", m_mxmlVersion);
         }
+        // cppcheck-suppress duplicateConditionalAssign
         if (!ret)
             ret = startHeader(qName, atts);
         break;
@@ -588,7 +589,7 @@ MusicXMLXMLHandler::startNoteData(const QString& qName,
             // start is implicit at <time-modifications>.
         } else if (type.toLower() == "stop") {
             m_tupletGroup = false;
-            if (!m_tupletGroup && !m_beamGroup)
+            if (!m_beamGroup)
                 m_groupId = -(m_groupId + 1);
         } else
             cerrWarning(QString("Undefined type \"%1\", ignored.").arg(type));

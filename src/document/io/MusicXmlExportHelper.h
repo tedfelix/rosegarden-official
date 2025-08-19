@@ -323,7 +323,7 @@ protected:
      * Returns true is selectedSegmentsOnly is true and the segment is not
      * selected.
      */
-    bool skipSegment(Segment *segment, bool selectedSegmentsOnly);
+    bool skipSegment(const Segment *segment, bool selectedSegmentsOnly);
 
     Composition     *m_composition;
     RosegardenMainViewWidget *m_view;

@@ -363,8 +363,8 @@ MusicXmlExportHelper::emptyQuantizeQueue(PercussionMap &pm,
 
     timeT duration = end - begin;
     if (duration >= beat) {
-        timeT end = ((begin + beat)/beat)*beat;
-        duration = end - begin;
+        timeT end2 = ((begin + beat)/beat)*beat;
+        duration = end2 - begin;
     }
     Note note = Note::getNearestNote(duration);
     bool empty = true;
@@ -418,7 +418,8 @@ MusicXmlExportHelper::setInstrumentCount(int count)
 }
 
 bool
-MusicXmlExportHelper::skipSegment(Segment *segment, bool selectedSegmentsOnly)
+MusicXmlExportHelper::skipSegment(const Segment *segment,
+                                  bool selectedSegmentsOnly)
 {
     if (selectedSegmentsOnly) {
         bool segmentSelected = true;
@@ -567,7 +568,8 @@ MusicXmlExportHelper::printSummary()
     if (getStaffCount() == 0) RG_DEBUG << "  No staves found.";
     else {
         for (int i = 0; i < getStaffCount(); i++) {
-            Track *track = m_composition->getTrackById(m_staves[i].trackId);
+            const Track *track =
+                m_composition->getTrackById(m_staves[i].trackId);
             RG_DEBUG << "  Staff " << i+1 << " (track \""
                       << track->getLabel() << "\")   "
                       << m_staves[i].startTime << " - "
@@ -1193,8 +1195,8 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
             long base = 0;
             event.get<Int>(BEAMED_GROUP_TUPLET_BASE, base);
             if (base != noteDuration) {
-                Note note = Note::getNearestNote(base);
-                tmpNote << "          <normal-type>" << getNoteName(note.getNoteType())
+                Note note2 = Note::getNearestNote(base);
+                tmpNote << "          <normal-type>" << getNoteName(note2.getNoteType())
                                                      << "</normal-type>\n";
             }
         }
@@ -1230,9 +1232,9 @@ MusicXmlExportHelper::addNote(const Segment &segment, const Event &event)
             int nxt = m_nxtbeam & (1 << (number-1));
             if (cur == 0) break;
             std::string s;
-            if (!prv && cur && nxt) s = "begin";
-            else if (prv && cur && !nxt) s = "end";
-            else if (prv && cur && nxt) s = "continue";
+            if (!prv && nxt) s = "begin";
+            else if (prv && !nxt) s = "end";
+            else if (prv && nxt) s = "continue";
             else {
                 if (m_prvbeam > m_nxtbeam) s = "backward hook";
                 else s = "forward hook";
@@ -1532,9 +1534,9 @@ MusicXmlExportHelper::updatePart(Segment *segment, Event &event)
             if (isLast || ((*i)->getNotationAbsoluteTime() >= barEnd)) {
                 m_nxtbeam = 0;
             } else {
-                Note note = Note::getNearestNote((*i)->getNotationDuration());
-                m_nxtbeam = note.getNoteType() <= 3
-                          ? (1 << (4 - note.getNoteType())) - 1 : 0;
+                Note note2 = Note::getNearestNote((*i)->getNotationDuration());
+                m_nxtbeam = note2.getNoteType() <= 3
+                          ? (1 << (4 - note2.getNoteType())) - 1 : 0;
             }
             isLastEvent = false;
             break;

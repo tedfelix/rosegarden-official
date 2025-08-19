@@ -164,7 +164,7 @@ public:
     /**
      * Return the position of the current track or -1
      */
-    int getTrackPos();
+    int getTrackPos() const;
 
     /**
      * Prepare to get the segments on the first voice of the current track.

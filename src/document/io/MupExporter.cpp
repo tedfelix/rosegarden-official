@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -46,7 +46,7 @@ using namespace BaseProperties;
 
 MupExporter::MupExporter(QObject * /*parent*/,
                          Composition *composition,
-                         string fileName) :
+                         const string& fileName) :
         m_composition(composition),
         m_fileName(fileName)
 {
@@ -163,10 +163,10 @@ MupExporter::write()
 
 timeT
 MupExporter::writeBar(std::ofstream &str,
-                      Composition *c,
+                      const Composition *c,
                       Segment *s,
                       timeT barStart, timeT barEnd,
-                      TimeSignature &timeSig,
+                      const TimeSignature &timeSig,
                       TrackId trackNo)
 {
     timeT writtenDuration = 0;
@@ -197,8 +197,8 @@ MupExporter::writeBar(std::ofstream &str,
                 int dots = e->get
                            <Int>(NOTE_DOTS);
                 duration = Note(type, dots).getDuration();
-            } catch (const Exception &e) { // no properties
-                RG_WARNING << "WARNING: MupExporter::writeBar: incomplete note properties: " << e.getMessage();
+            } catch (const Exception &exc) { // no properties
+                RG_WARNING << "WARNING: MupExporter::writeBar: incomplete note properties: " << exc.getMessage();
             }
 
             timeT toNext = duration;
@@ -379,7 +379,7 @@ MupExporter::writeClefAndKey(std::ofstream &str, TrackId trackNo)
 
 void
 MupExporter::writeInventedRests(std::ofstream &str,
-                                TimeSignature &timeSig,
+                                const TimeSignature &timeSig,
                                 timeT offset,
                                 timeT duration)
 {

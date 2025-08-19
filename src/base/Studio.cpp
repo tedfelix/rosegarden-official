@@ -136,7 +136,7 @@ void
 Studio::removeDevice(DeviceId id)
 {
     DeviceVector::iterator it;
-    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
         if ((*it)->getId() == id) {
             Device* d = *it;
             m_devices.erase(it);
@@ -189,7 +189,7 @@ Studio::getSpareDeviceId(InstrumentId &baseInstrumentId)
 
     std::set<DeviceId> ids;
     DeviceVector::iterator it;
-    for (it = m_devices.begin(); it != m_devices.end(); it++) {
+    for (it = m_devices.begin(); it != m_devices.end(); ++it) {
         ids.insert((*it)->getId());
         if ((*it)->getType() == Device::Midi) {
             InstrumentVector il = (*it)->getAllInstruments();
@@ -222,7 +222,7 @@ Studio::getAllInstruments()
 
     // Append lists
     //
-    for (it = m_devices.begin(); it != m_devices.end(); it++)
+    for (it = m_devices.begin(); it != m_devices.end(); ++it)
     {
         // get sub list
         InstrumentVector subList = (*it)->getAllInstruments();
@@ -509,7 +509,7 @@ Studio::toXmlString(const std::vector<DeviceId> &devices) const
     if (devices.empty()) { // export all devices and busses
 
         for (DeviceVector::const_iterator it = m_devices.begin();
-             it != m_devices.end(); it++) {
+             it != m_devices.end(); ++it) {
             studio << (*it)->toXmlString() << endl << endl;
         }
 
@@ -882,7 +882,7 @@ bool
 Studio::haveMidiDevices() const
 {
     DeviceVector::const_iterator it = m_devices.begin();
-    for (; it != m_devices.end(); it++)
+    for (; it != m_devices.end(); ++it)
     {
         if ((*it)->getType() == Device::Midi) return true;
     }

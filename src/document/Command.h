@@ -56,7 +56,7 @@ public:
     ~NamedCommand() override { }
 
     QString getName() const override { return m_name; }
-    virtual void setName(QString name) { m_name = name; }
+    virtual void setName(const QString& name) { m_name = name; }
 
 protected:
     QString m_name;
@@ -65,7 +65,7 @@ protected:
 class ROSEGARDENPRIVATE_EXPORT MacroCommand : public Command
 {
 public:
-    explicit MacroCommand(QString name);
+    explicit MacroCommand(const QString& name);
     ~MacroCommand() override;
 
     virtual void addCommand(Command *command);
@@ -76,7 +76,7 @@ public:
     void unexecute() override;
 
     QString getName() const override;
-    virtual void setName(QString name);
+    virtual void setName(const QString& name);
 
     virtual const std::vector<Command *>& getCommands() { return m_commands; }
 
@@ -93,7 +93,7 @@ class ROSEGARDENPRIVATE_EXPORT BundleCommand : public MacroCommand
 {
     Q_DECLARE_TR_FUNCTIONS(BundleCommand)
 public:
-    explicit BundleCommand(QString name);
+    explicit BundleCommand(const QString& name);
     ~BundleCommand() override;
 
     QString getName() const override;

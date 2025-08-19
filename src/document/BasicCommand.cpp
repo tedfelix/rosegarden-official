@@ -385,7 +385,7 @@ BasicCommand::requireSegment()
     RG_DEBUG << "requireSegment()...";
 
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Composition &composition = doc->getComposition();
+    const Composition &composition = doc->getComposition();
 
     // Get the marked Segment.
     m_segment = composition.getSegmentByMarking(m_segmentMarking);

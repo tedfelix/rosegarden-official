@@ -165,7 +165,7 @@ static bool canStartOrEndBeam(Event *event)
     return true;
 }
 
-Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const
+Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const
 {
     Event *event = *it;
     long currentGroupId = -1;
@@ -207,8 +207,6 @@ Event *LilyPondExporter::nextNoteInGroup(Segment *s, Segment::iterator it, const
         if (eventTime == currentTime && subOrdering == event->getSubOrdering()) {
             continue;
         }
-        currentTime = eventTime;
-        subOrdering = event->getSubOrdering();
 
         long newGroupId = -1;
         event->get<Int>(BEAMED_GROUP_ID, newGroupId);
@@ -246,7 +244,7 @@ LilyPondExporter::isSegmentToPrint(Segment *seg)
     }
 
     // Check whether the track is a non-midi track.
-    Track *track = m_composition->getTrackById(seg->getTrack());
+    const Track *track = m_composition->getTrackById(seg->getTrack());
     InstrumentId instrumentId = track->getInstrument();
     bool isMidiTrack = instrumentId >= MidiInstrumentBase;
 
@@ -459,7 +457,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                             QString restsDuration(lilyHalfDuration(type));
 
                             // Add possible dots
-                            for (int i = dots; i; i--) {
+                            for (int i2 = dots; i2; i2--) {
                                 restsDuration += ".";
                             }
 
@@ -673,7 +671,7 @@ std::string
 LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
 {
 
-    std::string inStr = "", outStr = "";
+    std::string inStr, outStr = "";
     std::string prefix = (stemUp) ? "_" : "^";
 
     // shoot text mark straight through unless it's sf or rf
@@ -790,7 +788,7 @@ LilyPondExporter::protectIllegalChars(const std::string& inStr)
 struct MarkerComp {
     // Sort Markers by time
     // Perhaps this should be made generic with a template?
-    bool operator()(Marker *a, Marker *b) const {
+    bool operator()(const Marker *a, const Marker *b) const {
         return a->getTime() < b->getTime();
     }
 };
@@ -978,8 +976,8 @@ LilyPondExporter::write()
     }
 
     // Find out the printed length of the composition
-    Composition::iterator i = m_composition->begin();
-    if ((*i) == nullptr) {
+    Composition::iterator i1 = m_composition->begin();
+    if ((*i1) == nullptr) {
         // The composition is empty!
         str << indent(col) << "\\score {" << std::endl;
         str << indent(++col) << "% no segments found" << std::endl;
@@ -991,20 +989,20 @@ LilyPondExporter::write()
         m_warningMessage = tr("Export succeeded, but the composition was empty.");
         return false;
     }
-    timeT compositionStartTime = (*i)->getStartTime();
-    timeT compositionEndTime = (*i)->getEndMarkerTime();
-    for (; i != m_composition->end(); ++i) {
+    timeT compositionStartTime = (*i1)->getStartTime();
+    timeT compositionEndTime = (*i1)->getEndMarkerTime();
+    for (; i1 != m_composition->end(); ++i1) {
 
         // Allow some oportunities for user to cancel
         if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
             return false;
         }
 
-        if (compositionStartTime > (*i)->getStartTime()) {
-            compositionStartTime = (*i)->getStartTime();
+        if (compositionStartTime > (*i1)->getStartTime()) {
+            compositionStartTime = (*i1)->getStartTime();
         }
-        if (compositionEndTime < (*i)->getEndMarkerTime()) {
-            compositionEndTime = (*i)->getEndMarkerTime();
+        if (compositionEndTime < (*i1)->getEndMarkerTime()) {
+            compositionEndTime = (*i1)->getEndMarkerTime();
         }
     }
 
@@ -1012,10 +1010,10 @@ LilyPondExporter::write()
     // to see the repetitions in a global context and to compute
     // the place of the different voices in the Lilypond score.
     LilyPondSegmentsContext lsc(m_composition);
-    for (Composition::iterator i = m_composition->begin();
-            i != m_composition->end(); ++i) {
-        if (isSegmentToPrint(*i)) {
-            lsc.addSegment(*i);
+    for (Composition::iterator i2 = m_composition->begin();
+            i2 != m_composition->end(); ++i2) {
+        if (isSegmentToPrint(*i2)) {
+            lsc.addSegment(*i2);
         }
     }
 
@@ -1179,14 +1177,14 @@ LilyPondExporter::write()
         bool tempoMarksInvisible = false;
 
         str << indent(col++) << "globalTempo = {" << std::endl;
-        if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS && tempoMarksInvisible == false) {
+        if (m_exportTempoMarks == EXPORT_NONE_TEMPO_MARKS) {
             str << indent(col) << "\\override Score.MetronomeMark.transparent = ##t" << std::endl;
             tempoMarksInvisible = true;
         }
         str << indent(col) << "\\tempo 4 = " << tempo << "  ";
         int prevTempo = tempo;
 
-        for (int i = 0; i < tempoCount; ++i) {
+        for (int i2 = 0; i2 < tempoCount; ++i2) {
 
             // Allow some oportunities for user to cancel
             if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
@@ -1194,7 +1192,7 @@ LilyPondExporter::write()
             }
 
             std::pair<timeT, tempoT> tempoChange =
-                m_composition->getTempoChange(i);
+                m_composition->getTempoChange(i2);
 
             timeT tempoChangeTime = tempoChange.first;
 
@@ -1209,8 +1207,6 @@ LilyPondExporter::write()
             // Do not apply it before the first segment appears.
             if (tempoChangeTime < compositionStartTime) {
                 tempoChangeTime = compositionStartTime;
-            } else if (tempoChangeTime >= compositionEndTime) {
-                tempoChangeTime = compositionEndTime;
             }
             if (prevTempoChangeTime < compositionStartTime) {
                 prevTempoChangeTime = compositionStartTime;
@@ -1400,7 +1396,7 @@ LilyPondExporter::write()
 
             std::ostringstream staffNameWithTranspose;
             staffNameWithTranspose << "\\markup { \\center-column { \"" << staffName << " \"";
-            Segment * firstSeg = lsc.getArbitrarySegment(trackPos);
+            const Segment * firstSeg = lsc.getArbitrarySegment(trackPos);
             if ((firstSeg->getTranspose() % 12) != 0) {
                 staffNameWithTranspose << " \\line { ";
                 int t = firstSeg->getTranspose();
@@ -1437,12 +1433,12 @@ LilyPondExporter::write()
         }
 
         // Set midi instrument for the Staff when possible
-        Instrument *instr = m_studio->getInstrumentById(
+        const Instrument *instr = m_studio->getInstrumentById(
             track->getInstrument());
         if (instr) {
             str << indent(col)
                 << "\\set Staff.midiInstrument = \""
-                << instr->getProgramName().c_str()
+                << instr->getProgramName()
                 << "\"" << std::endl;
         }
 
@@ -1969,10 +1965,10 @@ LilyPondExporter::write()
         // Look for the voice with the larger number of verses
         int maxVers = 0;
         int lyricsVoice = 0;
-        for (unsigned int i = 0; i < verses.size(); i++) {
-            if (verses[i] > maxVers) {
-                maxVers = verses[i];
-                lyricsVoice = i;
+        for (unsigned int i2 = 0; i2 < verses.size(); i2++) {
+            if (verses[i2] > maxVers) {
+                maxVers = verses[i2];
+                lyricsVoice = i2;
             }
         }
 
@@ -2204,47 +2200,46 @@ LilyPondExporter::calculateDuration(Segment *s,
 
     // Examine the following event, and truncate our duration
     // if we overlap it.
-    Segment::iterator nextElt = s->end();
-    toNext = soundingDuration;
+    Segment::iterator nextElement = s->end();
 
     if ((*i)->isa(Note::EventType)) {
 
         Chord chord(*s, i, m_composition->getNotationQuantizer());
-        Segment::iterator nextElt = chord.getFinalElement();
-        ++nextElt;
+        Segment::iterator nextElt2 = chord.getFinalElement();
+        ++nextElt2;
 
-        if (s->isBeforeEndMarker(nextElt)) {
+        if (s->isBeforeEndMarker(nextElt2)) {
             // The quantizer sometimes sticks a rest at the same time
             // as this note -- don't use that one here, and mark it as
             // not to be exported -- it's just a heavy-handed way of
             // rendering counterpoint in RG
-            if ((*nextElt)->isa(Note::EventRestType) &&
-                (*nextElt)->getNotationAbsoluteTime() == absTime) {
-                (*nextElt)->set<Bool>(SKIP_PROPERTY, true);
-                ++nextElt;
+            if ((*nextElt2)->isa(Note::EventRestType) &&
+                (*nextElt2)->getNotationAbsoluteTime() == absTime) {
+                (*nextElt2)->set<Bool>(SKIP_PROPERTY, true);
+                ++nextElt2;
             }
         }
 
     } else {
-        nextElt = i;
-        ++nextElt;
-        while (s->isBeforeEndMarker(nextElt)) {
-            if ((*nextElt)->isa(Controller::EventType) ||
-                (*nextElt)->isa(ProgramChange::EventType) ||
-                (*nextElt)->isa(SystemExclusive::EventType) ||
-                (*nextElt)->isa(ChannelPressure::EventType) ||
-                (*nextElt)->isa(KeyPressure::EventType) ||
-                (*nextElt)->isa(PitchBend::EventType)) {
-                ++nextElt;
+        nextElement = i;
+        ++nextElement;
+        while (s->isBeforeEndMarker(nextElement)) {
+            if ((*nextElement)->isa(Controller::EventType) ||
+                (*nextElement)->isa(ProgramChange::EventType) ||
+                (*nextElement)->isa(SystemExclusive::EventType) ||
+                (*nextElement)->isa(ChannelPressure::EventType) ||
+                (*nextElement)->isa(KeyPressure::EventType) ||
+                (*nextElement)->isa(PitchBend::EventType)) {
+                ++nextElement;
             } else {
                 break;
             }
         }
     }
 
-    if (s->isBeforeEndMarker(nextElt)) {
+    if (s->isBeforeEndMarker(nextElement)) {
         //RG_DEBUG << "calculateDuration: inside conditional";
-        toNext = (*nextElt)->getNotationAbsoluteTime() - absTime;
+        toNext = (*nextElement)->getNotationAbsoluteTime() - absTime;
         // if the note was lengthened, assume it was lengthened to the left
         // when truncating to the beginning of the next note
         if (durationCorrection > 0) {
@@ -2325,10 +2320,10 @@ void LilyPondExporter::handleGuitarChord(Segment::iterator i, std::ofstream &str
             } else if (fingering.getStringStatus(6-stringNum) == Guitar::Fingering::OPEN) {
                 str << stringNum << "-o;";
             } else {
-                int stringStatus = fingering.getStringStatus(6-stringNum);
                 if ((stringNum <= barreStart) && (stringNum >= barreEnd)) {
                     str << stringNum << "-" << barreFret << ";";
                 } else {
+                    int stringStatus = fingering.getStringStatus(6-stringNum);
                     str << stringNum << "-" << stringStatus << ";";
                 }
             }
@@ -2791,7 +2786,6 @@ LilyPondExporter::writeBar(Segment *s,
                 // duration change
                 if (needsSlashRest) {
                     str << "\\rest";
-                    needsSlashRest = false;
                 }
 
                 if (lilyText != "") {
@@ -2918,7 +2912,6 @@ LilyPondExporter::writeBar(Segment *s,
     } // end of the gigantic while loop, I think
 
     if (isGrace == 1) {
-        isGrace = 0;
         // str << "%{ grace ends %} "; // DEBUG
         str << "} ";
     }
@@ -2955,7 +2948,6 @@ LilyPondExporter::writeBar(Segment *s,
 
         durationRatio = writeSkip(timeSignature, writtenDuration,
                                   (barEnd - barStart) - writtenDuration, true, str);
-        durationRatioSum = fractionSum(durationRatioSum, durationRatio);
     }
     //
     // Export bar and bar checks.
@@ -3043,7 +3035,7 @@ LilyPondExporter::writeSkip(const TimeSignature &timeSig,
     DurationList dlist;
     timeSig.getDurationListForInterval(dlist, duration, offset);
     std::pair<int,int> durationRatioSum(0,1);
-    std::pair<int,int> durationRatio(0,1);
+    std::pair<int,int> durationRatio;
     int t = 0, count = 0;
 
     for (DurationList::iterator i = dlist.begin(); ; ++i) {
@@ -3516,7 +3508,6 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             seg->isBeforeEndMarker(j); ++j) {
 
         Syllable syllable("", 0);
-        QString rawSyllable("");
         bool isNote = (*j)->isa(Note::EventType);
         bool isLyric = false;
         bool found = false;
@@ -3563,7 +3554,7 @@ LilyPondExporter::getVerseText(Segment *seg, int currentVerse, int indentCol)
             if (verse == currentVerse) {
                 std::string ssyllable;
                 (*j)->get<String>(Text::TextPropertyName, ssyllable);
-                rawSyllable = QString(strtoqstr(ssyllable));
+                QString rawSyllable = QString(strtoqstr(ssyllable));
 
                 // Remove leading and trailing spaces
                 // This spaces can't be created with the lyric editor, but may
