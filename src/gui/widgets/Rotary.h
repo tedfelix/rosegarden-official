@@ -34,6 +34,14 @@ namespace Rosegarden
 
 
 /// Draw a rotary control with a knob and optional ticks.
+/**
+ * ??? The tool tip that this generates is pretty huge and might get in the
+ *     way.  Can we offer a signal that provides the tool tip text which
+ *     can be used by a parent window to update its status text on hover?
+ *     The usual tool tip still needs to be available for windows that do
+ *     not have status bars.  But windows with status bars can turn it off.
+ *     We'll also still need the current value TextFloat regardless.
+ */
 class Rotary : public QWidget
 {
     Q_OBJECT
