@@ -6648,6 +6648,10 @@ RosegardenMainWindow::slotAudioManager()
     m_audioManagerDialog =
         new AudioManagerDialog(this, RosegardenDocument::currentDocument);
 
+    if (m_view->haveSelection()) {
+        SegmentSelection selection(m_view->getSelection());
+        m_audioManagerDialog->slotSegmentSelection(selection);
+    }
     connect(m_audioManagerDialog, &AudioManagerDialog::playAudioFile,
             this, &RosegardenMainWindow::slotPlayAudioFile);
 
@@ -7951,21 +7955,7 @@ RosegardenMainWindow::slotMidiMixerClosed()
 void
 RosegardenMainWindow::slotAudioManagerClosed()
 {
-    // File > Manage Audio Files...
     RG_DEBUG << "slotAudioManagerClosed()";
-
-    if (RosegardenDocument::currentDocument->isModified()) {
-        if (m_view) {
-            // ??? Can't just remove this when the time comes.
-            // ??? This is needed to make sure newly added audio segments
-            //     are selected.  It may also update the parameter boxes.
-            //     We'll need to devise an appropriate way to handle this
-            //     before removing this call.
-            m_view->slotSelectTrackSegments(
-                    RosegardenDocument::currentDocument->getComposition().
-                            getSelectedTrack());
-        }
-    }
 
     m_audioManagerDialog = nullptr;
 }
