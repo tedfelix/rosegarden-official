@@ -23,8 +23,19 @@ Included in this release...
     #1627.  [0683a0890d]
   * Fix undo anacrusis requiring three undos.  [c4d89ee242]
   * Fix undo for tempo changes losing ramp info.  [ea1982fdcf]
+  * Fix adding and removing files in the Audio File Manager does not
+    mark the document as modified.  [efc375058c]
+  * Improve missing audio file handling.  Bug #1730.  [bdaf8dc014]
+  * Fix audio directories being created unnecessarily.  Bug #1730.
+    [f7053b39dc]
+  * Fix wait cursor during audio file location dialog.  [a915292fc0]
+  * Use "open directory" dialog in file location dialog instead of
+    broken "file open" dialog.  Bug #1730.  [6461bc9ce4]
+  * Fix unnecessary error message box.  Bug #1730.  [c6ef6415c7]
+  * Fix selection problems when closing the Audio File Manager.  Bug
+    #1733.  [83fa32bdb2]
 
-stopped at eee2941115
+stopped at 9e4b17fc6f
 
 ===== New Features =====
 

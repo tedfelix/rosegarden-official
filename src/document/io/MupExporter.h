@@ -47,23 +47,23 @@ class Composition;
 class MupExporter
 {
 public:
-    MupExporter(QObject *parent, Composition *, std::string fileName);
+    MupExporter(QObject *parent, Composition *, const std::string& fileName);
     ~MupExporter();
 
     bool write();
 
 protected:
     timeT writeBar(std::ofstream &,
-                   Composition *,
+                   const Composition *,
                    Segment *,
                    timeT, timeT,
-                   TimeSignature &,
+                   const TimeSignature &,
                    TrackId);
     void writeClefAndKey(std::ofstream &, TrackId trackNo);
     static void writeInventedRests(std::ofstream &,
-                            TimeSignature &timeSig,
-                            timeT offset,
-                            timeT duration);
+                                   const TimeSignature &timeSig,
+                                   timeT offset,
+                                   timeT duration);
     void writePitch(std::ofstream &, TrackId, Event *event);
     static void writeDuration(std::ofstream &, timeT duration);
 

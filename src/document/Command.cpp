@@ -20,7 +20,7 @@
 namespace Rosegarden
 {
 
-MacroCommand::MacroCommand(QString name) :
+MacroCommand::MacroCommand(const QString& name) :
     m_name(name)
 {
 }
@@ -83,12 +83,12 @@ MacroCommand::getName() const
 }
 
 void
-MacroCommand::setName(QString name)
+MacroCommand::setName(const QString& name)
 {
     m_name = name;
 }
 
-BundleCommand::BundleCommand(QString name) :
+BundleCommand::BundleCommand(const QString& name) :
     MacroCommand(name)
 {
 }

@@ -2769,8 +2769,7 @@ RoseXmlHandler::setMIDIDeviceName(const QString &name)
     RG_DEBUG << "setMIDIDeviceName(" << name << ")";
 
     const MidiDevice *md = dynamic_cast<const MidiDevice *>(m_device);
-    if (!md)
-        return;
+    if (!md) return;
 
     RosegardenSequencer::getInstance()->renameDevice(md->getId(), name);
 }
@@ -2819,7 +2818,6 @@ RoseXmlHandler::locateAudioFile(const QString &id,
     QApplication::restoreOverrideCursor();
 
     QString newAudioDirectory;
-    QString newFilePath;
     QFileInfo fileInfo;
 
     // Try some of the usual places first.

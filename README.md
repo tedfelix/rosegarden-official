@@ -62,6 +62,10 @@ This will significantly speed up the build:
 
 You will need to start a new terminal for a change to .bashrc to take effect.
 
+Rosegarden builds with Qt version 5 by default.  To use Qt version 6:
+
+    cmake .. -DUSE_QT6=ON
+
 The default install location might not be ideal.  You can override this
 when you run cmake.  E.g. to install Rosegarden to /usr/bin:
 
@@ -76,8 +80,7 @@ For a debug build, use the CMAKE_BUILD_TYPE variable:
 
 This will build Rosegarden so that it is useful for debugging, which can
 greatly improve our ability to find and correct bugs by allowing Rosegarden
-to produce useful stack traces when it crashes.  The debug binary will be
-somewhat large: about 200MB as of July 2019.  See "Running the Unit Tests"
+to produce useful stack traces when it crashes.  See "Running the Unit Tests"
 below for information on doing a debug build and running the tests.
 
 A debug build results in the use of shared libs and the building of unit

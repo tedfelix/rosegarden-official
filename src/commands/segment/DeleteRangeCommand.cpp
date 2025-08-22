@@ -278,7 +278,7 @@ calculateNewSegments()
     for (SegmentVec::const_iterator i = m_originalSegments.begin();
          i != m_originalSegments.end();
          ++i) {
-        Segment *oldSegment = *i;
+        const Segment *oldSegment = *i;
         Segment *newSegment =
             (oldSegment == segment) ?
             segmentFinal :

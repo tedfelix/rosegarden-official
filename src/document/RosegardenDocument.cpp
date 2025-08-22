@@ -3030,9 +3030,9 @@ RosegardenDocument::createLock(const QString &absFilePath) // static
 
         // Ignore the lock and open the file.
 
-        lockFile->removeStaleLockFile();
+        (void)lockFile->removeStaleLockFile();
         // This should succeed now.
-        lockFile->tryLock();
+        (void)lockFile->tryLock();
         return lockFile;
     }
 

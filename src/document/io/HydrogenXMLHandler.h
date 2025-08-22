@@ -45,8 +45,9 @@ class HydrogenXMLHandler : public XMLHandler
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::HydrogenXMLHandler)
 
 public:
-    HydrogenXMLHandler(Composition *composition,
-            InstrumentId drumInstrument = MidiInstrumentBase + 9);
+    explicit HydrogenXMLHandler
+    (Composition *composition,
+     InstrumentId drumInstrument = MidiInstrumentBase + 9);
 
     /**
       * Overloaded handler functions

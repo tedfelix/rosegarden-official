@@ -222,7 +222,7 @@ LilyPondSegmentsContext::precompute()
                             vit2 != tit2->second.end(); ++vit2) {
                         SegmentSet &segSet2 = vit2->second;
                         for (sit2 = segSet2.begin(); sit2 != segSet2.end(); ++sit2) {
-                            Segment * seg2 = sit2->segment;
+                            const Segment * seg2 = sit2->segment;
                             if (seg == seg2) continue;
                             timeT start2 = seg2->getStartTime();
                             timeT end2 = start2 + sit2->wholeDuration;
@@ -338,7 +338,6 @@ LilyPondSegmentsContext::precompute()
                         // Main repeating segment or alternate ending ?
                         if (sit->alt) {
                             // Insert alternate ending in list
-                            SegmentData sd = *sit;
                             AlternateEnding * alt = new AlternateEnding(
                                         &(*sit),
                                         currentMainSeg->numberOfAlt);
@@ -415,7 +414,7 @@ LilyPondSegmentsContext::precompute()
             // int voiceIndex = vit->first;
             SegmentSet &segSet = vit->second;
             for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-                Segment * seg = sit->segment;
+                const Segment * seg = sit->segment;
                 sit->startTime = seg->getStartTime() - m_firstSegmentStartTime;
             }
         }
@@ -545,7 +544,7 @@ LilyPondSegmentsContext::useNextTrack()
 }
 
 int
-LilyPondSegmentsContext::getTrackPos()
+LilyPondSegmentsContext::getTrackPos() const
 {
     if (m_trackIterator == m_segments.end()) return -1;
     return (*m_trackIterator).first;
@@ -1276,7 +1275,8 @@ LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)
         for (idx2 = 0; idx2 < (int)(*it1)->sortedAltChain->size(); idx2++) {
             bool linked = true;
             for (it = repeatList.begin(); it != repeatList.end(); ++it) {
-                Segment * seg1 = (*(*it)->rawAltChain)[idx]->data->segment;
+                const Segment * seg1 =
+                    (*(*it)->rawAltChain)[idx]->data->segment;
                 Segment * seg2 = (*(*it)->sortedAltChain)[idx2]->data->segment;
                 if (!seg1->isPlainlyLinkedTo(seg2)) {
                     linked = false;
@@ -1357,7 +1357,7 @@ LilyPondSegmentsContext::dump()
             SegmentSet &segSet = vit->second;
 
             for (sit = segSet.begin(); sit != segSet.end(); ++sit) {
-                Segment * seg = (*sit).segment;
+                const Segment * seg = (*sit).segment;
 
                 std::cout << "     Segment \"" << seg->getLabel() << "\""
                     << " voice=" << m_composition->getSegmentVoiceIndex(seg)

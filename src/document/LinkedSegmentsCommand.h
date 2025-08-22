@@ -60,7 +60,7 @@ protected:
     void unexecuteAttachDetach();
     // Copy auxilliary properties of source segment to target: track,
     // repeatingness, delay.  Does not include any segment-time properties.
-    static void copyAuxProperties(Segment *source, Segment *target);
+    static void copyAuxProperties(const Segment *source, Segment *target);
 
     // The original segments, in a linked group that all start at the
     // same time or a singleton.
