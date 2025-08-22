@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioMixerWindow2]"
+//#define RG_NO_DEBUG_PRINT
 
 #include "AudioMixerWindow2.h"
 
@@ -35,6 +36,7 @@
 
 #include <QDesktopServices>
 #include <QHBoxLayout>
+#include <QMessageBox>
 
 
 namespace Rosegarden
@@ -394,6 +396,7 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
         return;
 
     QString name = action->objectName();
+    RG_DEBUG << "slotNumberOfStereoInputs" << name;
 
     // Not the expected action name?  Bail.
     if (name.left(7) != "inputs_")
@@ -401,6 +404,22 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
 
     // Extract the number of inputs from the action name.
     unsigned count = name.mid(7).toUInt();
+
+    // check for inputs in use
+    InUseList ilist;
+    checkRecordInUsed(count, ilist);
+    if (ilist.size() > 0) {
+        QString warnText =
+            tr("Cannot reduce input count. Inputs in use:");
+        for (const InUse& inUse : ilist) {
+            std::string iname = inUse.instrument->getName();
+            warnText += tr("\nInput %1 Instrument %2").arg(inUse.id).
+                arg(QString(iname.c_str()));
+        }
+        QMessageBox::warning(this, tr("Change inputs"), warnText);
+        updateWidgets(); // to reset the active menu item
+        return;
+    }
 
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
@@ -423,6 +442,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         return;
 
     QString name = action->objectName();
+    RG_DEBUG << "slotNumberOfSubmasters" << name;
 
     // Not the expected action name?  Bail.
     if (name.left(11) != "submasters_")
@@ -430,6 +450,22 @@ AudioMixerWindow2::slotNumberOfSubmasters()
 
     // Extract the count from the name.
     int count = name.mid(11).toInt();
+
+    // check for submasters in use
+    InUseList ilist;
+    checkSubmasterUsed(count, ilist);
+    if (ilist.size() > 0) {
+        QString warnText =
+            tr("Cannot reduce submaster count. Submasters in use:");
+        for (const InUse& inUse : ilist) {
+            std::string iname = inUse.instrument->getName();
+            warnText += tr("\nSubmaster %1 Instrument %2").arg(inUse.id).
+                arg(QString(iname.c_str()));
+        }
+        QMessageBox::warning(this, tr("Change inputs"), warnText);
+        updateWidgets(); // to reset the active menu item
+        return;
+    }
 
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
@@ -619,6 +655,75 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     // For each strip, send vol/pan to the external controller port.
     for (unsigned i = 0; i < count; i++)
         m_inputStrips[i]->updateExternalController();
+}
+
+void AudioMixerWindow2::checkRecordInUsed(int newCount, InUseList& inUseList)
+{
+    inUseList.clear();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    Studio &studio = doc->getStudio();
+    // get actual count
+    RecordInVector recs = studio.getRecordIns();
+    int oldCount = recs.size();
+
+    if (newCount > oldCount) return; // no problem increasing count
+
+    // check for in use
+    InstrumentVector instruments = studio.getPresentationInstruments();
+    // For each instrument
+    for (InstrumentVector::iterator i = instruments.begin();
+         i != instruments.end();
+         ++i) {
+        const Instrument *instrument = *i;
+        bool isBuss;
+        int channel;
+        int recIn = instrument->getAudioInput(isBuss, channel);
+        if (isBuss) continue; // only checking record in
+        if (recIn >= newCount) {
+            InUse iu;
+            iu.id = recIn + 1;
+            iu.instrument = instrument;
+            inUseList.push_back(iu);
+        }
+    }
+}
+
+void AudioMixerWindow2::checkSubmasterUsed(int newCount, InUseList& inUseList)
+{
+    inUseList.clear();
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    Studio &studio = doc->getStudio();
+    // get actual count
+    BussVector buss = studio.getBusses();
+    int oldCount = buss.size();
+
+    if (newCount > oldCount) return; // no problem increasing count
+
+    // check for in use
+    InstrumentVector instruments = studio.getPresentationInstruments();
+    // For each instrument
+    for (InstrumentVector::iterator i = instruments.begin();
+         i != instruments.end();
+         ++i) {
+        const Instrument *instrument = *i;
+        bool isBuss;
+        int channel;
+        int subm = instrument->getAudioInput(isBuss, channel);
+        if (isBuss && subm > newCount) {
+            InUse iu;
+            iu.id = subm;
+            iu.instrument = instrument;
+            inUseList.push_back(iu);
+        }
+        // and outputs
+        subm = instrument->getAudioOutput();
+        if (subm > newCount) {
+            InUse iu;
+            iu.id = subm;
+            iu.instrument = instrument;
+            inUseList.push_back(iu);
+        }
+    }
 }
 
 

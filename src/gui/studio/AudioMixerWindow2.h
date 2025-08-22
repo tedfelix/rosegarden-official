@@ -23,6 +23,8 @@
 
 #include <QMainWindow>
 
+#include <list>
+
 class QHBoxLayout;
 class QWidget;
 
@@ -101,6 +103,16 @@ private:
     void updateStripCounts();
     void updateWidgets();
 
+    // check for in use
+    struct InUse
+    {
+        int id;
+        const Instrument* instrument;
+    };
+    typedef std::list<InUse> InUseList;
+
+    void checkRecordInUsed(int newCount, InUseList& inUseList);
+    void checkSubmasterUsed(int newCount, InUseList& inUseList);
 };
 
 
