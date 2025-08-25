@@ -289,9 +289,14 @@ AudioMixerWindow2::updateStripCounts()
     // If either Strip count was wrong, recreate the layout.
     if (recreateLayout) {
         // Remove the widgets from the layout.
-        while (m_layout->takeAt(0) != nullptr) {
-            // Do nothing.  Normally, we might delete the child widgets.
-            // But we're about to re-add them below.
+        while (true) {
+            QLayoutItem *layoutItem = m_layout->takeAt(0);
+            if (!layoutItem)
+                break;
+
+            // Keep the child widgets as we will reuse them below.
+
+            delete layoutItem;
         }
 
         // Add the input strips
