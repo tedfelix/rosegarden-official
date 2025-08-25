@@ -1197,20 +1197,12 @@ AudioFileManager::save()
     // If the preferences indicate prompting
     if (!Preferences::getAudioFileLocationDlgDontShow())
     {
-
-        // Stop wait cursor.
-        QApplication::restoreOverrideCursor();
-
         // Ask the user to pick an audio file path.
         // Results go to the Preferences.
         AudioFileLocationDialog audioFileLocationDialog(
                 RosegardenMainWindow::self(),
                 documentNameDir);
         audioFileLocationDialog.exec();
-
-        // Start wait cursor.
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
     }
 
     // Indicate audio location was confirmed by the user.
@@ -1221,10 +1213,15 @@ AudioFileManager::save()
     const QString audioPath = Preferences::getDefaultAudioLocationString(
             m_document->getAbsFilePath());
 
-    // Set the new location, move the files, and save.
-    setRelativeAudioPath(audioPath,
-                         true,  // create
-                         true);  // doMoveFiles
+    {
+        SetWaitCursor setWaitCursor;
+
+        // Set the new location, move the files, and save.
+        setRelativeAudioPath(audioPath,
+                             true,  // create
+                             true);  // doMoveFiles
+    }
+
 }
 
 

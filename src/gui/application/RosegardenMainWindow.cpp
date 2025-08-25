@@ -2146,24 +2146,24 @@ RosegardenMainWindow::slotFileSave()
     const QString& docFilePath =
             RosegardenDocument::currentDocument->getAbsFilePath();
 
+    // An attempt to address Bug #1725.  Stop the auto-save timer to make
+    // sure no auto-saves sneak in while we are saving.
+    m_autoSaveTimer->stop();
+
     QString errMsg;
     bool success;
 
     {
         SetWaitCursor setWaitCursor;
 
-        // An attempt to address Bug #1725.  Stop the auto-save timer to make
-        // sure no auto-saves sneak in while we are saving.
-        m_autoSaveTimer->stop();
-
         success = RosegardenDocument::currentDocument->saveDocument(
                 docFilePath, errMsg);
-
-        // Restart the auto-save timer at the current time so that the next
-        // auto-save happens as far into the future as possible.
-        m_lastAutoSaveTime = QTime::currentTime();
-        m_autoSaveTimer->start(autoSaveTimerInterval);
     }
+
+    // Restart the auto-save timer at the current time so that the next
+    // auto-save happens as far into the future as possible.
+    m_lastAutoSaveTime = QTime::currentTime();
+    m_autoSaveTimer->start(autoSaveTimerInterval);
 
     if (!success) {
         if (!errMsg.isEmpty())
@@ -2275,16 +2275,18 @@ RosegardenMainWindow::fileSaveAs(bool asTemplate)
     if (newName.isEmpty())
         return false;
 
-    SetWaitCursor waitCursor;
-
     QString errMsg;
+    bool success{false};
 
     // An attempt to address Bug #1725.  Stop the auto-save timer to
     // make sure no auto-saves sneak in while we are saving.
     m_autoSaveTimer->stop();
 
-    const bool success =
-            RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+    {
+        SetWaitCursor waitCursor;
+
+        success = RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+    }
 
     // Restart the auto-save timer at the current time so that the next
     // auto-save happens as far into the future as possible.
