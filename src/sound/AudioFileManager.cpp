@@ -401,33 +401,6 @@ AudioFileManager::setRelativeAudioPath(
 
 }
 
-void
-AudioFileManager::createAudioPath()
-{
-    const QString absoluteAudioPath = getAbsoluteAudioPath();
-
-    const bool success = QDir().mkpath(absoluteAudioPath);
-    if (!success) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Cannot create audio path.<br />%1").
-                    arg(absoluteAudioPath));
-        return;
-    }
-
-    // Is the new path writable?
-    // Make sure the user is warned before recording audio fails later.
-    if (access(qstrtostr(absoluteAudioPath).c_str(), W_OK) != 0) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Audio path is not writable.<br />%1").
-                    arg(absoluteAudioPath));
-        return;
-    }
-}
-
 QString
 AudioFileManager::getAbsoluteAudioPath() const
 {

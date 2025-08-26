@@ -2574,10 +2574,6 @@ RoseXmlHandler::endDocument()
                 Composition::getTempoForQpm(120.0));
     }
 
-    // Create the audio path in case it doesn't exist for some reason.
-    // This makes sure audio can be recorded and imported.
-    getAudioFileManager().createAudioPath();
-
     return true;
 }
 

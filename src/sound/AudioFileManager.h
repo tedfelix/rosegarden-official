@@ -150,8 +150,6 @@ public:
     /// Set the relative audio file path.  E.g. "./audio"
     void setRelativeAudioPath(
             const QString &newPath, bool create, bool doMoveFiles);
-    /// Creates the audio path.
-    void createAudioPath();
     QString getRelativeAudioPath() const  { return m_relativeAudioPath; }
     /// Get the absolute audio path.  E.g. "/home/ted/Documents/project1/audio/"
     QString getAbsoluteAudioPath() const;
