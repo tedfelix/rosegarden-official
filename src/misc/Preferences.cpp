@@ -237,6 +237,13 @@ bool Preferences::getBug1623()
     return bug1623.get();
 }
 
+static PreferenceBool musewhirl(ExperimentalConfigGroup, "musewhirl", false);
+
+bool Preferences::getMusewhirl()
+{
+    return musewhirl.get();
+}
+
 static PreferenceBool lv2(ExperimentalConfigGroup, "lv2-b", true);
 
 void Preferences::setLV2(bool value)
