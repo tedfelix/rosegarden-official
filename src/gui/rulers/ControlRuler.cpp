@@ -592,7 +592,7 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
             double width = x1 - x0;
 
             double gridLines = double(timeSig.getBarDuration()) /
-                double(m_snapGrid->getSnapTime(x0));
+                double(m_snapGrid->getSnapTimeForX(x0));
 
             double dx = width / gridLines;
             double x = x0;

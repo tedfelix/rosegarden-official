@@ -331,7 +331,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
     // Get the "snap size" of the grid at the current X coord.  It can change
     // with certain snap modes and different time signatures.
     // ??? rename getSnapTime() -> getSnapTimeForX()
-    timeT snapSize = m_canvas->grid().getSnapTime(double(pos.x()));
+    timeT snapSize = m_canvas->grid().getSnapTimeForX(double(pos.x()));
 
     // If snap to grid is off
     if (snapSize == 0) {

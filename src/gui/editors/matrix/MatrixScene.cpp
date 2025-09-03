@@ -370,9 +370,9 @@ MatrixScene::recreateLines()
 
         // If the snap time is zero we default to beat markers
         //
-        if (m_snapGrid && m_snapGrid->getSnapTime(x0)) {
+        if (m_snapGrid && m_snapGrid->getSnapTimeForX(x0)) {
             gridLines = double(timeSig.getBarDuration()) /
-                        double(m_snapGrid->getSnapTime(x0));
+                        double(m_snapGrid->getSnapTimeForX(x0));
         } else {
             gridLines = timeSig.getBeatsPerBar();
         }
@@ -688,7 +688,7 @@ MatrixScene::setupMouseEvent(QGraphicsSceneMouseEvent *e,
 //        mme.snappedRightTime = m_snapGrid->snapX(sx, SnapGrid::SnapRight);
         mme.snappedLeftTime = m_snapGrid->snapTime(mme.time, SnapGrid::SnapLeft);
         mme.snappedRightTime = m_snapGrid->snapTime(mme.time, SnapGrid::SnapRight);
-        mme.snapUnit = m_snapGrid->getSnapTime(sx);
+        mme.snapUnit = m_snapGrid->getSnapTimeForX(sx);
     }
 
     if (mme.viewSegment) {

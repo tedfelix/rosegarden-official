@@ -24,6 +24,7 @@
 #include "misc/Strings.h"
 #include "base/Composition.h"
 #include "base/RulerScale.h"
+#include "base/SnapGrid.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
@@ -146,7 +147,10 @@ MarkerRuler::minimumSizeHint() const
 void
 MarkerRuler::slotInsertMarkerHere()
 {
-    emit addMarker(getClickPosition());
+    SnapGrid snapGrid(m_rulerScale);
+    snapGrid.setSnapTime(SnapGrid::SnapToBeat);
+    const timeT clickTime = snapGrid.snapX(m_clickX - m_currentXOffset);
+    emit addMarker(clickTime);
 }
 
 void
@@ -194,15 +198,6 @@ MarkerRuler::slotEditMarker()
                                     qstrtostr(dialog.getComment()));
         CommandHistory::getInstance()->addCommand(command);
     }
-}
-
-timeT
-MarkerRuler::getClickPosition()
-{
-    timeT t = m_rulerScale->getTimeForX
-              (m_clickX - m_currentXOffset);
-
-    return t;
 }
 
 Rosegarden::Marker*

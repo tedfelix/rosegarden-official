@@ -72,19 +72,22 @@ signals:
     
     void deleteMarker(int, timeT, QString name, QString description);
 
-protected slots:
+protected:
+
+    void paintEvent(QPaintEvent*) override;
+    void mousePressEvent(QMouseEvent *e) override;
+    void mouseDoubleClickEvent(QMouseEvent *e) override;
+
+private slots:
+
     void slotInsertMarkerHere();
     void slotInsertMarkerAtPointer();
     void slotDeleteMarker();
     void slotEditMarker();
     
-protected:
-    void paintEvent(QPaintEvent*) override;
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
+private:
 
     void createMenu();
-    timeT getClickPosition();
     Marker *getMarkerAtClickPosition();
     
     //--------------- Data members ---------------------------------

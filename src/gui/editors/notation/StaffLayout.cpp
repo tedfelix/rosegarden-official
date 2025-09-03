@@ -826,9 +826,9 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
 
         // If the snap time is zero we default to beat markers
         //
-        if (m_snapGrid && m_snapGrid->getSnapTime(x))
+        if (m_snapGrid && m_snapGrid->getSnapTimeForX(x))
             gridLines = double(timeSig.getBarDuration()) /
-                        double(m_snapGrid->getSnapTime(x));
+                        double(m_snapGrid->getSnapTimeForX(x));
         else
             gridLines = timeSig.getBeatsPerBar();
 
