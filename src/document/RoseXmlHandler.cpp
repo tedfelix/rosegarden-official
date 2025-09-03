@@ -1418,6 +1418,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (m_createDevices  &&  m_device  &&  !connection.isEmpty())
                 setMIDIDeviceConnection(connection);
 
+            // ??? Getting warnings in the logging when we try to do this for
+            //     input devices (e.g. "record in").  Should we skip this when
+            //     direction == "record"?
             if (m_createDevices)
                 setMIDIDeviceName(nameStr);
 

@@ -993,7 +993,7 @@ AlsaDriver::renameDevice(DeviceId id, const QString& name)
 {
     DeviceIntMap::iterator outputPorIter = m_outputPorts.find(id);
     if (outputPorIter == m_outputPorts.end()) {
-        RG_WARNING << "renameDevice(): WARNING: Cannot find device " << id << " in port map";
+        RG_WARNING << "renameDevice(): WARNING: Cannot find device ID" << id << "in port map.  Cannot rename to" << name;
         return ;
     }
 
