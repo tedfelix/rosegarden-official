@@ -304,13 +304,14 @@ MarkerRuler::paintEvent(QPaintEvent*)
             every++;
     }
 
-    for (int i = firstBar; i <= lastBar; ++i) {
+    // For each bar...
+    for (int bar = firstBar; bar <= lastBar; ++bar) {
 
-        double x = m_rulerScale->getBarPosition(i) + m_currentXOffset;
+        double x = m_rulerScale->getBarPosition(bar) + m_currentXOffset;
 
         // avoid writing bar numbers that will be overwritten
-        if (i < lastBar) {
-            double nextx = m_rulerScale->getBarPosition(i+1) + m_currentXOffset;
+        if (bar < lastBar) {
+            double nextx = m_rulerScale->getBarPosition(bar+1) + m_currentXOffset;
             if ((nextx - x) < 0.0001) continue;
         }
 
@@ -318,7 +319,7 @@ MarkerRuler::paintEvent(QPaintEvent*)
             break;
 
         // always the first bar number
-        if (every && i != firstBar) {
+        if (every && bar != firstBar) {
             if (count < every) {
                 count++;
                 continue;
@@ -332,13 +333,13 @@ MarkerRuler::paintEvent(QPaintEvent*)
         if (every == firstBar)
             count++;
 
-        if (i != lastBar) {
+        if (bar != lastBar) {
             painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), barHeight);
 
-            if (i >= 0) {
+            if (bar >= 0) {
                 const int yText = painter.fontMetrics().ascent();
                 const QPoint textDrawPoint(static_cast<int>(x + 4), yText);
-                painter.drawText(textDrawPoint, QString("%1").arg(i + 1));
+                painter.drawText(textDrawPoint, QString("%1").arg(bar + 1));
             }
         } else {
             const QPen normalPen = painter.pen();
@@ -352,31 +353,43 @@ MarkerRuler::paintEvent(QPaintEvent*)
     if (m_doc) {
         Composition &comp = m_doc->getComposition();
         Composition::MarkerVector markers = comp.getMarkers();
-        Composition::MarkerVector::const_iterator it;
 
         timeT start = comp.getBarStart(firstBar);
         timeT end = comp.getBarEnd(lastBar);
 
         QFontMetrics metrics = painter.fontMetrics();
+        QBrush backgroundBrush{GUIPalette::getColour(GUIPalette::MarkerBackground)};
+        QPen pen(Qt::black, 2);
+        painter.setPen(pen);
 
-        for (it = markers.begin(); it != markers.end(); ++it) {
-            if ((*it)->getTime() >= start && (*it)->getTime() < end) {
-                QString name(strtoqstr((*it)->getName()));
+        // For each marker...
+        for (const Marker *marker : markers) {
+            const timeT markerTime = marker->getTime();
 
-                double x = m_rulerScale->getXForTime((*it)->getTime())
-                           + m_currentXOffset;
+            // Out of range?  Try the next.
+            if (markerTime < start)
+                continue;
+            if (markerTime >= end)
+                continue;
 
-                painter.fillRect(static_cast<int>(x), 1,
-                                 static_cast<int>(metrics.boundingRect(name).width() + 5),
-                                 barHeight - 2,
-                                 QBrush(GUIPalette::getColour(GUIPalette::MarkerBackground)));
+            const QString name(strtoqstr(marker->getName()));
 
-                painter.drawLine(int(x), 1, int(x), barHeight - 2);
-                painter.drawLine(int(x) + 1, 1, int(x) + 1, barHeight - 2);
+            const int x =
+                    m_rulerScale->getXForTime(markerTime) + m_currentXOffset;
 
-                const QPoint textDrawPoint(static_cast<int>(x + 3), barHeight - 4);
-                painter.drawText(textDrawPoint, name);
-            }
+            // Background rect.
+            painter.fillRect(x,  // x
+                             1,  // y
+                             metrics.boundingRect(name).width() + 5,  // w
+                             barHeight - 2,  // h
+                             backgroundBrush);
+
+            // Thick black line to the left.
+            painter.drawLine(x, 1, x, barHeight - 2);
+
+            // Name
+            const QPoint textDrawPoint(x + 3, barHeight - 4);
+            painter.drawText(textDrawPoint, name);
         }
     }
 }
