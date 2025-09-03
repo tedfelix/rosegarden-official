@@ -1177,19 +1177,6 @@ public slots:
     void slotZoomOut();
 
     /**
-     * Add marker
-     */
-    void slotAddMarker(timeT time);
-
-    /**
-     * Remove a marker
-     */
-    void slotDeleteMarker(int id,
-                          timeT time,
-                          const QString& name,
-                          const QString& description);
-
-    /**
      * Document modified
      */
     void slotDocumentModified(bool modified = true);

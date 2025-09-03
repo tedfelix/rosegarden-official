@@ -6357,34 +6357,6 @@ RosegardenMainWindow::slotZoomOut()
 }
 
 void
-RosegardenMainWindow::slotAddMarker(timeT time)
-{
-    AddMarkerCommand *command =
-        new AddMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
-                             time,
-                            qStrToStrUtf8(tr("new marker")),
-                            qStrToStrUtf8(tr("no description")) );
-
-    CommandHistory::getInstance()->addCommand(command);
-}
-
-void
-RosegardenMainWindow::slotDeleteMarker(int id,
-                                       timeT time,
-                                       const QString& name,
-                                       const QString& description)
-{
-    RemoveMarkerCommand *command =
-        new RemoveMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
-                                id,
-                                time,
-                                qstrtostr(name),
-                                qstrtostr(description));
-
-    CommandHistory::getInstance()->addCommand(command);
-}
-
-void
 RosegardenMainWindow::slotDocumentModified(bool modified)
 {
     RG_DEBUG << "slotDocumentModified(" << modified << ") - doc path = " << RosegardenDocument::currentDocument->getAbsFilePath();
@@ -8336,11 +8308,11 @@ RosegardenMainWindow::slotNewerVersionAvailable(QString v)
 void
 RosegardenMainWindow::slotAddMarker2()
 {
-    AddMarkerCommand *command =
-        new AddMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
-                             RosegardenDocument::currentDocument->getComposition().getPosition(),
-                             "new marker",
-                             "no description");
+    AddMarkerCommand *command = new AddMarkerCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            RosegardenDocument::currentDocument->getComposition().getPosition(),
+            "new marker",
+            "no description");
 
     m_view->slotAddCommandToHistory(command);
 }

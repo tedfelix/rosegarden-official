@@ -29,7 +29,7 @@ namespace Rosegarden
 RemoveMarkerCommand::RemoveMarkerCommand(Composition *comp,
         int id,
         timeT time,
-        const std::string &,
+        const std::string & /*name*/,
         const std::string &description):
         NamedCommand(getGlobalName()),
         m_composition(comp),

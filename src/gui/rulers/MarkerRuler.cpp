@@ -29,7 +29,9 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/general/GUIPalette.h"
+#include "commands/edit/AddMarkerCommand.h"
 #include "commands/edit/ModifyMarkerCommand.h"
+#include "commands/edit/RemoveMarkerCommand.h"
 #include "document/CommandHistory.h"
 
 #include <QMouseEvent>
@@ -133,30 +135,45 @@ MarkerRuler::slotInsertMarkerHere()
     SnapGrid snapGrid(m_rulerScale);
     snapGrid.setSnapTime(SnapGrid::SnapToBeat);
     const timeT clickTime = snapGrid.snapX(m_clickX - m_currentXOffset);
-    emit addMarker(clickTime);
+
+    AddMarkerCommand *command = new AddMarkerCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            clickTime,
+            qStrToStrUtf8(tr("new marker")),
+            qStrToStrUtf8(tr("no description")));
+
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
 MarkerRuler::slotInsertMarkerAtPointer()
 {
-    emit addMarker(m_doc->getComposition().getPosition());
+    const timeT pointerTime = m_doc->getComposition().getPosition();
+
+    AddMarkerCommand *command = new AddMarkerCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            pointerTime,
+            qStrToStrUtf8(tr("new marker")),
+            qStrToStrUtf8(tr("no description")));
+
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
 MarkerRuler::slotDeleteMarker()
 {
-    // ??? Move the code for this from RMW to here and get rid of the
-    //     signal/slot stuff.
+    const Rosegarden::Marker *marker = getMarkerAtClickPosition();
+    if (!marker)
+        return;
 
-    RG_DEBUG << "MarkerRuler::slotDeleteMarker()\n";
+    RemoveMarkerCommand *command = new RemoveMarkerCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            marker->getID(),
+            marker->getTime(),
+            marker->getName(),
+            marker->getDescription());
 
-    Rosegarden::Marker* marker = getMarkerAtClickPosition();
-
-    if (marker)
-        emit deleteMarker(marker->getID(),
-                          marker->getTime(),
-                          strtoqstr(marker->getName()),
-                          strtoqstr(marker->getDescription()));
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 void
@@ -165,17 +182,6 @@ MarkerRuler::slotEditMarker()
     Rosegarden::Marker* marker = getMarkerAtClickPosition();
 
     if (!marker) return;
-
-    // I think the ruler should be doing all this stuff itself, or
-    // emitting signals connected to a dedicated marker model object,
-    // not just relying on the app object.  Same goes for practically
-    // everything else we do.  Hey ho.  Having this here is
-    // inconsistent with the other methods, so if anyone wants to move
-    // it, be my guest.
-    // ??? The ruler should definitely be doing all this stuff itself.  E.g.
-    //     RMW::slotDeleteMarker() belongs here.  See if we can move all the
-    //     others to here.  A model object is overkill for so little
-    //     functionality.
 
     MarkerModifyDialog dialog(this, marker);
     if (dialog.exec() == QDialog::Accepted) {
@@ -447,7 +453,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     // Left-click without modifiers, set pointer to clicked marker.
 
     if (clickedMarker)
-        emit setPointerPosition(clickedMarker->getTime());
+        m_doc->slotSetPointerPosition(clickedMarker->getTime());
 }
 
 void

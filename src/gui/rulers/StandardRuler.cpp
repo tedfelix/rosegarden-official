@@ -85,14 +85,6 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
 
     if (RosegardenMainWindow::self()) {
         QObject::connect
-                (m_markerRuler, &MarkerRuler::addMarker,
-                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotAddMarker);
-
-        QObject::connect
-                (m_markerRuler, &MarkerRuler::deleteMarker,
-                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotDeleteMarker);
-
-        QObject::connect
                 (m_loopRuler, &LoopRuler::setPlayPosition,
                  RosegardenMainWindow::self(), &RosegardenMainWindow::slotSetPlayPosition);
     }
@@ -116,10 +108,6 @@ void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
     //
     QObject::connect
     (m_loopRuler, &LoopRuler::setPointerPosition,
-     doc, &RosegardenDocument::slotSetPointerPosition);
-
-    QObject::connect
-    (m_markerRuler, &MarkerRuler::setPointerPosition,
      doc, &RosegardenDocument::slotSetPointerPosition);
 
     QObject::connect

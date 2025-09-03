@@ -60,30 +60,6 @@ public:
 
     void setWidth(int width) { m_width = width; }
 
-signals:
-
-    /// Set the pointer position on mouse single click
-    /*
-     * ??? Just call RosegardenDocument::slotSetPointerPosition() directly!!!
-     */
-    void setPointerPosition(timeT);
-
-    /// add a marker
-    /*
-     * ??? Move RosegardenMainWindow::slotAddMarker() here and do the work here.
-     */
-    void addMarker(timeT);
-    
-    /*
-     * StandardRuler connects this to RosegardenMainWindow::slotDeleteMarker().
-     *
-     * ??? Why doesn't MarkerRuler connect itself?  Even better, move
-     *     RosegardenMainWindow::slotDeleteMarker() here and do the work here.
-     */
-    void deleteMarker(
-            int markerID, timeT markerTime,
-            const QString &name, const QString &description);
-
 protected:
 
     void paintEvent(QPaintEvent*) override;
