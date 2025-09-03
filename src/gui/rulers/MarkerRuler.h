@@ -61,16 +61,28 @@ public:
     void setWidth(int width) { m_width = width; }
 
 signals:
+
     /// Set the pointer position on mouse single click
+    /*
+     * ??? Just call RosegardenDocument::slotSetPointerPosition() directly!!!
+     */
     void setPointerPosition(timeT);
 
-    /// Open the marker editor window on double click
-    void editMarkers();
-
     /// add a marker
+    /*
+     * ??? Move RosegardenMainWindow::slotAddMarker() here and do the work here.
+     */
     void addMarker(timeT);
     
-    void deleteMarker(int, timeT, QString name, QString description);
+    /*
+     * StandardRuler connects this to RosegardenMainWindow::slotDeleteMarker().
+     *
+     * ??? Why doesn't MarkerRuler connect itself?  Even better, move
+     *     RosegardenMainWindow::slotDeleteMarker() here and do the work here.
+     */
+    void deleteMarker(
+            int markerID, timeT markerTime,
+            const QString &name, const QString &description);
 
 protected:
 
@@ -84,22 +96,21 @@ private slots:
     void slotInsertMarkerAtPointer();
     void slotDeleteMarker();
     void slotEditMarker();
+    void slotManageMarkers();
     
 private:
 
-    void createMenu();
-    Marker *getMarkerAtClickPosition();
-    
-    //--------------- Data members ---------------------------------
-    int m_currentXOffset;
-    int m_width;
-    int m_clickX;
-    
-    QMenu *m_menu;
-    
     RosegardenDocument *m_doc;
+    
+    int m_currentXOffset{0};
+    int m_width{-1};
+    int m_clickX{0};
+    
+    QMenu *m_menu{nullptr};
+    void createMenu();
+    
     RulerScale *m_rulerScale;
-    QMainWindow *m_parentMainWindow;
+    Marker *getMarkerAtClickPosition();
 
 };
 

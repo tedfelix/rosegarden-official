@@ -26,8 +26,9 @@
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
 #include "document/RosegardenDocument.h"
-#include "gui/general/GUIPalette.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
+#include "gui/general/GUIPalette.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "document/CommandHistory.h"
 
@@ -46,7 +47,6 @@
 #include <QWidget>
 #include <QAction>
 #include <QToolTip>
-#include <QMainWindow>
 #include <QRegion>
 
 
@@ -59,28 +59,10 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          QWidget *parent,
                          const char *name) :
     QWidget(parent),
-    m_currentXOffset(0),
-    m_width(-1),
-    m_clickX(0),
-    m_menu(nullptr),
     m_doc(doc),
-    m_rulerScale(rulerScale),
-    m_parentMainWindow(dynamic_cast<QMainWindow *>(doc->parent()))  // ??? Gets clobbered inside.
+    m_rulerScale(rulerScale)
 {
     setObjectName(name);
-
-    // If the parent window has a main window above it, we need to use
-    // that as the parent main window, not the document's parent.
-    // Otherwise we'll end up adding all actions to the same
-    // (document-level) action collection regardless of which window
-    // we're in.
-
-    QObject *probe = parent;
-    while (probe  &&  !dynamic_cast<QMainWindow *>(probe)) {
-        probe = probe->parent();
-    }
-    if (probe)
-        m_parentMainWindow = dynamic_cast<QMainWindow *>(probe);
 
     QFont font;
     font.setPointSize((font.pointSize() * 9) / 10);
@@ -91,6 +73,7 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                  &MarkerRuler::slotInsertMarkerAtPointer);
     createAction("delete_marker", &MarkerRuler::slotDeleteMarker);
     createAction("edit_marker", &MarkerRuler::slotEditMarker);
+    createAction("manage_markers", &MarkerRuler::slotManageMarkers);
 
     setToolTip(tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
@@ -162,6 +145,9 @@ MarkerRuler::slotInsertMarkerAtPointer()
 void
 MarkerRuler::slotDeleteMarker()
 {
+    // ??? Move the code for this from RMW to here and get rid of the
+    //     signal/slot stuff.
+
     RG_DEBUG << "MarkerRuler::slotDeleteMarker()\n";
 
     Rosegarden::Marker* marker = getMarkerAtClickPosition();
@@ -186,6 +172,10 @@ MarkerRuler::slotEditMarker()
     // everything else we do.  Hey ho.  Having this here is
     // inconsistent with the other methods, so if anyone wants to move
     // it, be my guest.
+    // ??? The ruler should definitely be doing all this stuff itself.  E.g.
+    //     RMW::slotDeleteMarker() belongs here.  See if we can move all the
+    //     others to here.  A model object is overkill for so little
+    //     functionality.
 
     MarkerModifyDialog dialog(this, marker);
     if (dialog.exec() == QDialog::Accepted) {
@@ -463,9 +453,14 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 void
 MarkerRuler::mouseDoubleClickEvent(QMouseEvent *)
 {
-    RG_DEBUG << "MarkerRuler::mouseDoubleClickEvent";
-
-    emit editMarkers();
+    RosegardenMainWindow::self()->slotEditMarkers();
 }
+
+void
+MarkerRuler::slotManageMarkers()
+{
+    RosegardenMainWindow::self()->slotEditMarkers();
+}
+
 
 }

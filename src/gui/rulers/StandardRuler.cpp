@@ -85,10 +85,6 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
 
     if (RosegardenMainWindow::self()) {
         QObject::connect
-                (m_markerRuler, &MarkerRuler::editMarkers,
-                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotEditMarkers);
-
-        QObject::connect
                 (m_markerRuler, &MarkerRuler::addMarker,
                  RosegardenMainWindow::self(), &RosegardenMainWindow::slotAddMarker);
 
