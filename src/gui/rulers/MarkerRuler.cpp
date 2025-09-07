@@ -46,9 +46,7 @@
 #include <QRect>
 #include <QSize>
 #include <QString>
-#include <QWidget>
 #include <QAction>
-#include <QToolTip>
 #include <QRegion>
 
 
@@ -80,27 +78,15 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
     setToolTip(tr("Click on a marker to move the playback pointer.\nShift-click to set a range between markers.\nDouble-click to open the marker editor."));
 }
 
-MarkerRuler::~MarkerRuler()
-{
-}
-
 void
 MarkerRuler::createMenu()
 {
     createMenusAndToolbars("markerruler.rc");
 
     m_menu = findChild<QMenu *>("marker_ruler_menu");
-
-//    if (!tmp) {
-//        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
-//                 << domDocument().toString(4) << endl;
-//    }
-
-    if (!m_menu) {
-        RG_DEBUG << "MarkerRuler::createMenu() failed\n";
-    }
+    if (!m_menu)
+        RG_WARNING << "createMenu() failed\n";
 }
-
 
 void
 MarkerRuler::scrollHoriz(int x)
@@ -112,9 +98,8 @@ MarkerRuler::scrollHoriz(int x)
 QSize
 MarkerRuler::sizeHint() const
 {
-    int lastBar =
-        m_rulerScale->getLastVisibleBar();
-    double width =
+    const int lastBar = m_rulerScale->getLastVisibleBar();
+    const double width =
         m_rulerScale->getBarPosition(lastBar) +
         m_rulerScale->getBarWidth(lastBar);
 
@@ -124,9 +109,7 @@ MarkerRuler::sizeHint() const
 QSize
 MarkerRuler::minimumSizeHint() const
 {
-    double firstBarWidth = m_rulerScale->getBarWidth(0);
-
-    return QSize(static_cast<int>(firstBarWidth), fontMetrics().height());
+    return QSize(m_rulerScale->getBarWidth(0), fontMetrics().height());
 }
 
 void
@@ -176,57 +159,44 @@ MarkerRuler::slotDeleteMarker()
 void
 MarkerRuler::slotEditMarker()
 {
-    Rosegarden::Marker* marker = getMarkerAtClickPosition();
-
-    if (!marker) return;
+    Rosegarden::Marker *marker = getMarkerAtClickPosition();
+    if (!marker)
+        return;
 
     MarkerModifyDialog dialog(this, marker);
     if (dialog.exec() == QDialog::Accepted) {
-        ModifyMarkerCommand *command =
-            new ModifyMarkerCommand(&m_doc->getComposition(),
-                                    marker->getID(),
-                                    dialog.getOriginalTime(),
-                                    dialog.getTime(),
-                                    qstrtostr(dialog.getText()),
-                                    qstrtostr(dialog.getComment()));
+        ModifyMarkerCommand *command = new ModifyMarkerCommand(
+                &m_doc->getComposition(),
+                marker->getID(),
+                dialog.getOriginalTime(),
+                dialog.getTime(),
+                qstrtostr(dialog.getText()),
+                qstrtostr(dialog.getComment()));
         CommandHistory::getInstance()->addCommand(command);
     }
 }
 
-Rosegarden::Marker*
+Rosegarden::Marker *
 MarkerRuler::getMarkerAtClickPosition()
 {
-    // NO_QT3 NOTE:
-    //
-    // Let's try this.  We used to use QRect visibleRect() to get a rect for
-    // further calculations.  Now the equivalent method returns a region instead
-    // of a rect.  A region could be a complex shape, but our old code was
-    // written with a rectangle in mind.  Let's try getting the boundingRect for
-    // the entire region, and using that for our subsequent calculations,
-    // instead of refactoring everything to take a region into account (which
-    // requires deeper understanding of what the old code did than I have at a
-    // glance).  This is a shot in the dark, and it's hard to predict how this
-    // is going to behave until the code is running and testable.
-    QRect clipRect = visibleRegion().boundingRect();
-
-    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
-                                            m_currentXOffset);
-    int lastBar = m_rulerScale->getLastVisibleBar();
-    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
-        firstBar = m_rulerScale->getFirstVisibleBar();
-    }
-
     Composition &comp = m_doc->getComposition();
-    Composition::MarkerVector markers = comp.getMarkers();
 
-    timeT start = comp.getBarStart(firstBar);
-    timeT end = comp.getBarEnd(lastBar);
+    int firstBar = m_rulerScale->getBarForX(-m_currentXOffset);
+    if (firstBar < m_rulerScale->getFirstVisibleBar())
+        firstBar = m_rulerScale->getFirstVisibleBar();
+    const timeT start = comp.getBarStart(firstBar);
+
+    const int lastBar = m_rulerScale->getLastVisibleBar();
+    const timeT end = comp.getBarEnd(lastBar);
+
+    Composition::MarkerVector markers = comp.getMarkers();
 
     // need these to calculate the visible extents of a marker tag
     QFontMetrics metrics = fontMetrics();
 
     for (Composition::MarkerVector::const_iterator i = markers.begin();
-            i != markers.end(); ++i) {
+         i != markers.end();
+         ++i) {
 
         if ((*i)->getTime() >= start && (*i)->getTime() < end) {
 

@@ -19,7 +19,6 @@
 #define RG_REMOVEMARKERCOMMAND_H
 
 #include "document/Command.h"
-#include "base/TimeT.h"
 
 #include <QCoreApplication>
 #include <QString>
@@ -43,21 +42,20 @@ public:
     RemoveMarkerCommand(Composition *comp, int markerID);
     ~RemoveMarkerCommand() override;
 
-    static QString getGlobalName() { return tr("&Remove Marker"); }
+    static QString getGlobalName()  { return tr("&Remove Marker"); }
 
     void execute() override;
     void unexecute() override;
 
 private:
 
-    Composition     *m_composition;
-    Marker          *m_marker;
-    int              m_markerID;
-    //timeT            m_time;
-    //std::string m_descr;
+    Composition *m_composition;
+    int m_markerID;
+
+    Marker *m_marker{nullptr};
     // Indicates that m_marker is no longer attached to the Composition and
     // must be destroyed in the ctor.
-    bool m_detached;
+    bool m_detached{false};
 
 };
 

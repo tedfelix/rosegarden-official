@@ -20,7 +20,6 @@
 #define RG_MARKERRULER_H
 
 #include "gui/general/ActionFileClient.h"
-#include "base/TimeT.h"
 
 #include <QSize>
 #include <QWidget>
@@ -28,7 +27,6 @@
 class QPaintEvent;
 class QMouseEvent;
 class QMenu;
-class QMainWindow;
 
 
 namespace Rosegarden
@@ -51,7 +49,7 @@ public:
                 QWidget *parent = nullptr,
                 const char *name = nullptr);
 
-    ~MarkerRuler() override;
+    ~MarkerRuler() override  { }
     
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
@@ -78,6 +76,7 @@ private:
 
     RosegardenDocument *m_doc;
     
+    /// Horizontal scroll offset.  E.g. -100 if we are scrolled right 100 pixels.
     int m_currentXOffset{0};
     int m_width{-1};
     int m_clickX{0};

@@ -53,7 +53,6 @@
 #include "commands/edit/TransposeCommand.h"
 #include "commands/edit/AddMarkerCommand.h"
 #include "commands/edit/ModifyMarkerCommand.h"
-#include "commands/edit/RemoveMarkerCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"

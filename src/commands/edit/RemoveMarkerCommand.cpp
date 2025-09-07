@@ -20,7 +20,6 @@
 
 #include "base/Composition.h"
 #include "base/Marker.h"
-#include <QString>
 
 
 namespace Rosegarden
@@ -31,9 +30,7 @@ RemoveMarkerCommand::RemoveMarkerCommand(Composition *comp,
                                          int markerID) :
     NamedCommand(getGlobalName()),
     m_composition(comp),
-    m_marker(nullptr),
-    m_markerID(markerID),
-    m_detached(false)
+    m_markerID(markerID)
 {
 }
 
@@ -49,7 +46,9 @@ RemoveMarkerCommand::execute()
     const Composition::MarkerVector &markers =
             m_composition->getMarkers();
 
+    // For each marker...
     for (Marker *marker : markers) {
+        // Found it?  Detach from Composition.
         if (marker->getID() == m_markerID) {
             m_marker = marker;
             m_composition->detachMarker(m_marker);

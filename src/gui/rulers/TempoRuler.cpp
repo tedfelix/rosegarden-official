@@ -898,13 +898,8 @@ TempoRuler::createMenu()
 
     m_menu = findChild<QMenu *>("tempo_ruler_menu");
 
-//    if (!tmp) {
-//        RG_DEBUG << "MarkerRuler::createMenu() menu not found\n"
-//                 << domDocument().toString(4) << endl;
-//    }
-
     if (!m_menu) {
-        RG_DEBUG << "TempoRuler::createMenu() failed\n";
+        RG_DEBUG << "createMenu() failed\n";
     }
 }
 
