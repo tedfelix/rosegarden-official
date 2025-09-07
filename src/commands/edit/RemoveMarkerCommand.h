@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -41,11 +40,7 @@ class RemoveMarkerCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::RemoveMarkerCommand)
 
 public:
-    RemoveMarkerCommand(Composition *comp,
-                        int id,
-                        timeT time,
-                        const std::string &name,
-                        const std::string &description);
+    RemoveMarkerCommand(Composition *comp, int markerID);
     ~RemoveMarkerCommand() override;
 
     static QString getGlobalName() { return tr("&Remove Marker"); }
@@ -53,14 +48,16 @@ public:
     void execute() override;
     void unexecute() override;
 
-protected:
+private:
 
     Composition     *m_composition;
     Marker          *m_marker;
-    int              m_id;
-    timeT            m_time;
-    std::string                  m_descr;
-    bool                         m_detached;
+    int              m_markerID;
+    //timeT            m_time;
+    //std::string m_descr;
+    // Indicates that m_marker is no longer attached to the Composition and
+    // must be destroyed in the ctor.
+    bool m_detached;
 
 };
 

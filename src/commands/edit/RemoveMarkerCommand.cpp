@@ -26,19 +26,16 @@
 namespace Rosegarden
 {
 
+
 RemoveMarkerCommand::RemoveMarkerCommand(Composition *comp,
-        int id,
-        timeT time,
-        const std::string & /*name*/,
-        const std::string &description):
-        NamedCommand(getGlobalName()),
-        m_composition(comp),
-        m_marker(nullptr),
-        m_id(id),
-        m_time(time),
-        m_descr(description),
-        m_detached(false)
-{}
+                                         int markerID) :
+    NamedCommand(getGlobalName()),
+    m_composition(comp),
+    m_marker(nullptr),
+    m_markerID(markerID),
+    m_detached(false)
+{
+}
 
 RemoveMarkerCommand::~RemoveMarkerCommand()
 {
@@ -49,17 +46,15 @@ RemoveMarkerCommand::~RemoveMarkerCommand()
 void
 RemoveMarkerCommand::execute()
 {
-    Composition::MarkerVector markers =
-        m_composition->getMarkers();
+    const Composition::MarkerVector &markers =
+            m_composition->getMarkers();
 
-    Composition::MarkerVector::const_iterator it = markers.begin();
-
-    for (; it != markers.end(); ++it) {
-        if ((*it)->getID() == m_id) {
-            m_marker = (*it);
+    for (Marker *marker : markers) {
+        if (marker->getID() == m_markerID) {
+            m_marker = marker;
             m_composition->detachMarker(m_marker);
             m_detached = true;
-            return ;
+            return;
         }
     }
 }
@@ -71,5 +66,6 @@ RemoveMarkerCommand::unexecute()
         m_composition->addMarker(m_marker);
     m_detached = false;
 }
+
 
 }

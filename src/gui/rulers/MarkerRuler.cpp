@@ -168,10 +168,7 @@ MarkerRuler::slotDeleteMarker()
 
     RemoveMarkerCommand *command = new RemoveMarkerCommand(
             &RosegardenDocument::currentDocument->getComposition(),
-            marker->getID(),
-            marker->getTime(),
-            marker->getName(),
-            marker->getDescription());
+            marker->getID());
 
     CommandHistory::getInstance()->addCommand(command);
 }
