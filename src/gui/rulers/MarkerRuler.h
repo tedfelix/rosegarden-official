@@ -69,6 +69,7 @@ private slots:
     void slotInsertMarkerHere();
     void slotInsertMarkerAtPointer();
     void slotDeleteMarker();
+    void slotRenameMarker();
     void slotEditMarker();
     void slotManageMarkers();
     
@@ -79,13 +80,16 @@ private:
     /// Horizontal scroll offset.  E.g. -100 if we are scrolled right 100 pixels.
     int m_currentXOffset{0};
     int m_width{-1};
+
+    /// Click position.  Set by mousePressEvent().
     int m_clickX{0};
+    /// Returns the Marker at m_clickX if there is one.
+    Marker *getMarkerAtClickPosition();
     
     QMenu *m_menu{nullptr};
     void createMenu();
     
     RulerScale *m_rulerScale;
-    Marker *getMarkerAtClickPosition();
 
 };
 

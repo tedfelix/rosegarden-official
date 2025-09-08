@@ -29,6 +29,7 @@
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/general/GUIPalette.h"
+#include "gui/widgets/InputDialog.h"
 #include "commands/edit/AddMarkerCommand.h"
 #include "commands/edit/ModifyMarkerCommand.h"
 #include "commands/edit/RemoveMarkerCommand.h"
@@ -72,6 +73,7 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
     createAction("insert_marker_at_pointer",
                  &MarkerRuler::slotInsertMarkerAtPointer);
     createAction("delete_marker", &MarkerRuler::slotDeleteMarker);
+    createAction("rename_marker", &MarkerRuler::slotRenameMarker);
     createAction("edit_marker", &MarkerRuler::slotEditMarker);
     createAction("manage_markers", &MarkerRuler::slotManageMarkers);
 
@@ -174,6 +176,45 @@ MarkerRuler::slotEditMarker()
                 qstrtostr(dialog.getComment()));
         CommandHistory::getInstance()->addCommand(command);
     }
+}
+
+void
+MarkerRuler::slotRenameMarker()
+{
+    Rosegarden::Marker *marker = getMarkerAtClickPosition();
+    if (!marker)
+        return;
+
+    // ??? Launch a rename dialog for now.  Really we should put a
+    //     QLineEdit over top of the name on the ruler and give that
+    //     focus.
+
+    bool ok{false};
+
+    QString newName = InputDialog::getText(
+            this,  // parent
+            tr("Rosegarden"),  // title
+            tr("Enter new name:"),  // label
+            LineEdit::Normal,  // mode
+            strtoqstr(marker->getName()),  // text
+            &ok);  // ok
+
+    // Canceled?  Bail.
+    if (!ok)
+        return;
+
+    // No change?  Bail.
+    if (newName == strtoqstr(marker->getName()))
+        return;
+
+    ModifyMarkerCommand *command = new ModifyMarkerCommand(
+            &m_doc->getComposition(),  // comp
+            marker->getID(),  // id
+            marker->getTime(),  // time
+            marker->getTime(),  // newTime
+            qstrtostr(newName),  // name
+            marker->getDescription());  // des
+    CommandHistory::getInstance()->addCommand(command);
 }
 
 Rosegarden::Marker *
@@ -367,20 +408,19 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     if (!m_doc || !e)
         return;
 
-    RG_DEBUG << "MarkerRuler::mousePressEvent: x = " << e->pos().x();
+    RG_DEBUG << "mousePressEvent(): x = " << e->pos().x();
 
     m_clickX = e->pos().x();
     Rosegarden::Marker* clickedMarker = getMarkerAtClickPosition();
 
     // if right-click, show popup menu
-    //
     if (e->button() == Qt::RightButton) {
         if (!m_menu)
             createMenu();
         if (m_menu) {
-//             actionCollection()->action("delete_marker")->setEnabled(clickedMarker != 0);
-//             actionCollection()->action("edit_marker")->setEnabled(clickedMarker != 0);
+            // Enable items if a marker was actually clicked.
             findAction("delete_marker")->setEnabled(clickedMarker != nullptr);
+            findAction("rename_marker")->setEnabled(clickedMarker != nullptr);
             findAction("edit_marker")->setEnabled(clickedMarker != nullptr);
 
             m_menu->exec(QCursor::pos());

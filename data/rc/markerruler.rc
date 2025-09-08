@@ -8,6 +8,7 @@
   <Separator/>
   <Action name="delete_marker" text="Delete Marker" icon="event-delete" />
   <Separator/>
+  <Action name="rename_marker" text="Rename Marker" />
   <Action name="edit_marker" text="Edit Marker" icon="event-edit" />
   <Action name="manage_markers" text="Manage Markers" />
 </Menu>
