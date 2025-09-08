@@ -220,49 +220,57 @@ MarkerRuler::slotRenameMarker()
 Rosegarden::Marker *
 MarkerRuler::getMarkerAtClickPosition()
 {
+    // ??? This does not handle small Markers overlapping large ones.
+
     Composition &comp = m_doc->getComposition();
 
     int firstBar = m_rulerScale->getBarForX(-m_currentXOffset);
     if (firstBar < m_rulerScale->getFirstVisibleBar())
         firstBar = m_rulerScale->getFirstVisibleBar();
-    const timeT start = comp.getBarStart(firstBar);
+    const timeT rulerStart = comp.getBarStart(firstBar);
 
     const int lastBar = m_rulerScale->getLastVisibleBar();
-    const timeT end = comp.getBarEnd(lastBar);
+    const timeT rulerEnd = comp.getBarEnd(lastBar);
 
-    Composition::MarkerVector markers = comp.getMarkers();
+    const Composition::MarkerVector &markers = comp.getMarkers();
 
     // need these to calculate the visible extents of a marker tag
     QFontMetrics metrics = fontMetrics();
 
-    for (Composition::MarkerVector::const_iterator i = markers.begin();
-         i != markers.end();
-         ++i) {
+    // For each Marker from left to right...
+    for (Composition::MarkerVector::const_iterator markerIter = markers.begin();
+         markerIter != markers.end();
+         ++markerIter) {
+        const Marker *marker = *markerIter;
+        timeT markerTime = marker->getTime();
 
-        if ((*i)->getTime() >= start && (*i)->getTime() < end) {
+        // Not visible?  Try the next.
+        if (markerTime < rulerStart)
+            continue;
+        if (markerTime >= rulerEnd)
+            continue;
 
-            QString name(strtoqstr((*i)->getName()));
+        // Compute the current Marker's x coord and width.
+        const int x = m_rulerScale->getXForTime(markerTime) +
+                m_currentXOffset;
+        QString name(strtoqstr(marker->getName()));
+        const int width = metrics.boundingRect(name).width() + 5;
 
-            int x = m_rulerScale->getXForTime((*i)->getTime())
-                    + m_currentXOffset;
+        // Get the x coord for the next Marker.
+        // Assume there is no next Marker.
+        int nextX = -1;
+        Composition::MarkerVector::const_iterator nextMarkerIter = markerIter + 1;
+        if (nextMarkerIter != markers.end()) {
+            nextX = m_rulerScale->getXForTime((*nextMarkerIter)->getTime()) +
+                    m_currentXOffset;
+        }
 
-            int width = metrics.boundingRect(name).width() + 5;
-
-            int nextX = -1;
-            Composition::MarkerVector::const_iterator j = i;
-            ++j;
-            if (j != markers.end()) {
-                nextX = m_rulerScale->getXForTime((*j)->getTime())
-                        + m_currentXOffset;
-            }
-
-            if (m_clickX >= x && m_clickX <= x + width) {
-
-                if (nextX < x || m_clickX <= nextX) {
-
-                    return *i;
-                }
-            }
+        // If the click x is within the marker...
+        if (m_clickX >= x  &&  m_clickX <= x + width) {
+            // If there is no next Marker or the click X is prior to the
+            // next Marker, go with this Marker.
+            if (nextX == -1  ||  m_clickX <= nextX)
+                return *markerIter;
         }
     }
 
@@ -270,32 +278,32 @@ MarkerRuler::getMarkerAtClickPosition()
 }
 
 void
-MarkerRuler::paintEvent(QPaintEvent*)
+MarkerRuler::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
-    // See note elsewhere...
-    QRect clipRect = visibleRegion().boundingRect();
+    // ??? How is this different from geometry()?
+    const QRect clipRect = visibleRegion().boundingRect();
+    // ??? This breaks the bottom ruler.  Why?
+    //const QRect clipRect = geometry();
 
-    // In a stylesheet world, we have to paint our our own background to rescue
-    // it from the muddle of QWidget background style hacks
+    // Background
     QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::RulerBackground));
     painter.fillRect(clipRect, bg);
 
-    // Now we set the pen dungle flungy to the newly defined foreground color in
-    // GUIPalette to make the text all pretty like again.  (Whew.)
     painter.setPen(GUIPalette::getColour(GUIPalette::RulerForeground));
 
-    int firstBar = m_rulerScale->getBarForX(clipRect.x() -
-                                            m_currentXOffset);
-    int lastBar = m_rulerScale->getLastVisibleBar();
-    if (firstBar < m_rulerScale->getFirstVisibleBar()) {
+    int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
+    if (firstBar < m_rulerScale->getFirstVisibleBar())
         firstBar = m_rulerScale->getFirstVisibleBar();
-    }
 
+    const int lastBar = m_rulerScale->getLastVisibleBar();
+
+    // ??? m_currentXOffset is usually way off the screen to the left.
+    //     Shouldn't this be 0?
     painter.drawLine(m_currentXOffset, 0, clipRect.width(), 0);
 
-    float minimumWidth = 25.0;
+    const float minimumWidth = 25.0;
     float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
                               m_rulerScale->getBarPosition(firstBar)))
                      / minimumWidth;
