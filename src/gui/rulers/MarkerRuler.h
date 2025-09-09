@@ -19,6 +19,7 @@
 #ifndef RG_MARKERRULER_H
 #define RG_MARKERRULER_H
 
+#include "base/TimeT.h"
 #include "gui/general/ActionFileClient.h"
 
 #include <QSize>
@@ -62,6 +63,8 @@ protected:
 
     void paintEvent(QPaintEvent*) override;
     void mousePressEvent(QMouseEvent *e) override;
+    void mouseMoveEvent(QMouseEvent *e) override;
+    void mouseReleaseEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *e) override;
 
 private slots:
@@ -86,6 +89,13 @@ private:
     /// Returns the Marker at m_clickX if there is one.
     Marker *getMarkerAtClickPosition();
     
+    bool m_leftPressed{false};
+
+    /// Storing an ID instead of a pointer for safety.
+    int m_dragMarkerID{-1};
+    bool m_dragging{false};
+    timeT m_dragTime{0};
+
     QMenu *m_menu{nullptr};
     void createMenu();
     

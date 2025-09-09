@@ -357,8 +357,16 @@ MarkerRuler::paintEvent(QPaintEvent *)
     const QPen widePen(Qt::black, 2);
     painter.setPen(widePen);
 
+    const Marker *draggedMarker{nullptr};
+
     // For each marker...
     for (const Marker *marker : markers) {
+
+        // If we're dragging, don't draw the dragged marker until the end.
+        if (m_dragging  &&  marker->getID() == m_dragMarkerID) {
+            draggedMarker = marker;
+            continue;
+        }
 
         const timeT markerTime = marker->getTime();
 
@@ -391,6 +399,32 @@ MarkerRuler::paintEvent(QPaintEvent *)
         painter.drawText(textDrawPoint, name);
 
     }
+
+    if (draggedMarker) {
+        // Draw the dragged marker at its dragged position.
+
+        // ??? Factor out a drawMarker() and reuse above?
+
+        const QString name(strtoqstr(draggedMarker->getName()));
+
+        const int x =
+                m_rulerScale->getXForTime(m_dragTime) + m_currentXOffset;
+        const QRect markerRect(
+                x,  // left
+                1,  // top
+                metrics.boundingRect(name).width() + 5,  // width
+                rulerHeight - 2);  // height
+
+        // Background rect.
+        painter.fillRect(markerRect, backgroundBrush);
+
+        // Thick black line to the left.
+        painter.drawLine(x, 1, x, rulerHeight - 2);
+
+        // Name
+        const QPoint textDrawPoint(x + 3, rulerHeight - 4);
+        painter.drawText(textDrawPoint, name);
+    }
 }
 
 void
@@ -403,8 +437,13 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 
     RG_DEBUG << "mousePressEvent(): x = " << e->pos().x();
 
+    // No need to propagate.
+    e->accept();
+
     m_clickX = e->pos().x();
     Rosegarden::Marker *clickedMarker = getMarkerAtClickPosition();
+    if (clickedMarker)
+        m_dragMarkerID = clickedMarker->getID();
 
     // if right-click, show popup menu
     if (e->button() == Qt::RightButton) {
@@ -423,6 +462,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 
     // Left-Click
     if (e->button() == Qt::LeftButton) {
+
+        m_leftPressed = true;
 
         // Shift+Left-Click => set loop.
         if (e->modifiers() & Qt::ShiftModifier) {
@@ -471,6 +512,82 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
             return;
         }
 
+    }
+}
+
+void
+MarkerRuler::mouseMoveEvent(QMouseEvent *e)
+{
+    // No need to propagate.
+    e->accept();
+
+    // Left-click drag?
+    if (m_leftPressed) {
+
+        // Not dragging yet and haven't overcome hysteresis?  Bail.
+        if (!m_dragging  &&  abs(m_clickX - e->pos().x()) < 5)
+            return;
+
+        // We are now dragging.
+
+        m_dragging = true;
+
+        // Compute drag time.
+        // ??? Might want to use the shift modifier to turn off snap.
+        SnapGrid snapGrid(m_rulerScale);
+        snapGrid.setSnapTime(SnapGrid::SnapToBeat);
+        // ??? Need to take into account click position relative to
+        //     the marker so we continue holding the Marker in the same
+        //     place.
+        m_dragTime = snapGrid.snapX(e->pos().x() - m_currentXOffset);
+
+        // ??? Perform any needed autoscroll.  See AutoScroller and LoopRuler.
+
+        update();
+
+    }
+}
+
+void
+MarkerRuler::mouseReleaseEvent(QMouseEvent *e)
+{
+    // No need to propagate.
+    e->accept();
+
+    if (e->button() == Qt::LeftButton) {
+        m_leftPressed = false;
+
+        if (m_dragging) {
+            m_dragging = false;
+
+            // Find the marker by ID.  We could have stored the Marker
+            // pointer, but that's not safe if the Marker goes away.
+
+            const Marker *marker = nullptr;
+
+            // ??? Promote to Composition::findMarker(markerID).
+            Composition &comp = m_doc->getComposition();
+            const Composition::MarkerVector &markers = comp.getMarkers();
+            for (Marker *marker2 : markers) {
+                if (marker2->getID() == m_dragMarkerID) {
+                    marker = marker2;
+                    break;
+                }
+            }
+
+            if (marker) {
+                ModifyMarkerCommand *command = new ModifyMarkerCommand(
+                        &m_doc->getComposition(),  // comp
+                        marker->getID(),  // id
+                        marker->getTime(),  // time
+                        m_dragTime,  // newTime
+                        marker->getName(),  // name
+                        marker->getDescription());  // des
+                CommandHistory::getInstance()->addCommand(command);
+            }
+
+            m_dragMarkerID = -1;
+        }
     }
 }
 
