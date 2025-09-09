@@ -48,7 +48,6 @@
 #include <QSize>
 #include <QString>
 #include <QAction>
-#include <QRegion>
 
 
 namespace Rosegarden
@@ -282,89 +281,96 @@ MarkerRuler::paintEvent(QPaintEvent *)
 {
     QPainter painter(this);
 
-    // ??? How is this different from geometry()?
-    const QRect clipRect = visibleRegion().boundingRect();
-    // ??? This breaks the bottom ruler.  Why?
-    //const QRect clipRect = geometry();
+    const QRect rulerRect = rect();
 
     // Background
     QBrush bg = QBrush(GUIPalette::getColour(GUIPalette::RulerBackground));
-    painter.fillRect(clipRect, bg);
+    painter.fillRect(rulerRect, bg);
 
     painter.setPen(GUIPalette::getColour(GUIPalette::RulerForeground));
 
-    int firstBar = m_rulerScale->getBarForX(clipRect.x() - m_currentXOffset);
+    // Draw the top frame line.
+    painter.drawLine(rulerRect.left(), 0, rulerRect.right(), 0);
+
+    // Draw the bar lines and numbers.
+
+    int firstBar = m_rulerScale->getBarForX(-m_currentXOffset);
     if (firstBar < m_rulerScale->getFirstVisibleBar())
         firstBar = m_rulerScale->getFirstVisibleBar();
 
     const int lastBar = m_rulerScale->getLastVisibleBar();
 
-    // ??? m_currentXOffset is usually way off the screen to the left.
-    //     Shouldn't this be 0?
-    painter.drawLine(m_currentXOffset, 0, clipRect.width(), 0);
+    // Special handling when a bar is less than 25 pixels wide.
+    const double minimumWidth = 25.0;
+    double barWidth = m_rulerScale->getBarPosition(firstBar + 1) -
+                      m_rulerScale->getBarPosition(firstBar);
+    double testSize = barWidth / minimumWidth;
 
-    const float minimumWidth = 25.0;
-    float testSize = ((float)(m_rulerScale->getBarPosition(firstBar + 1) -
-                              m_rulerScale->getBarPosition(firstBar)))
-                     / minimumWidth;
-
-    const int barHeight = height();
-
+    // How often to display a bar number.
+    //   every == 0: display every bar number.
+    //   every == 1: display every other bar number.  1, 3, 5, ...
+    //   every == 3: display every fourth bar number.  1, 5, 9, ...
+    //   etc...
     int every = 0;
-    int count = 0;
-
     if (testSize < 1.0) {
         every = (int(1.0 / testSize));
 
+        // If every is even, go with the next.
         if (every % 2 == 0)
-            every++;
+            ++every;
     }
 
-    // For each bar...
+    const int rulerHeight = height();
+    // Counter to determine when to display a bar number.  See "every".
+    int count = 0;
+
+    // For each bar (0-based)...
     for (int bar = firstBar; bar <= lastBar; ++bar) {
 
-        double x = m_rulerScale->getBarPosition(bar) + m_currentXOffset;
+        const double barX =
+                m_rulerScale->getBarPosition(bar) + m_currentXOffset;
 
         // avoid writing bar numbers that will be overwritten
         if (bar < lastBar) {
-            double nextx = m_rulerScale->getBarPosition(bar+1) + m_currentXOffset;
-            if ((nextx - x) < 0.0001) continue;
+            const double nextx = m_rulerScale->getBarPosition(bar+1) + m_currentXOffset;
+            if ((nextx - barX) < 0.0001)
+                continue;
         }
 
-        if (x > clipRect.x() + clipRect.width())
+        // If x is beyond the right edge of the ruler, we're done.
+        // ??? This is actually (x > clipRect.right()).
+        if (barX > rulerRect.right())
             break;
 
-        // always the first bar number
-        if (every && bar != firstBar) {
+        // If we are skipping bars and this is not the first bar...
+        // (We always draw the first bar line.)
+        if (every  &&  bar != firstBar) {
+            // Still skipping?  Try the next.
             if (count < every) {
-                count++;
+                ++count;
                 continue;
             }
 
-            // reset count if we passed
+            // No longer skipping.  Reset the skip counter and draw the bar.
             count = 0;
         }
 
-        // adjust count for first bar line
-        if (every == firstBar)
-            count++;
+        // Bar line.
+        painter.drawLine(barX, 0, barX, rulerHeight);
 
-        if (bar != lastBar) {
-            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), barHeight);
-
-            if (bar >= 0) {
-                const int yText = painter.fontMetrics().ascent();
-                const QPoint textDrawPoint(static_cast<int>(x + 4), yText);
-                painter.drawText(textDrawPoint, QString("%1").arg(bar + 1));
-            }
-        } else {
-            const QPen normalPen = painter.pen();
-            QPen endPen(Qt::black, 2);
-            painter.setPen(endPen);
-            painter.drawLine(static_cast<int>(x), 0, static_cast<int>(x), barHeight);
-            painter.setPen(normalPen);
+        // Only draw the bar number for bars 1 through the bar before
+        // the last bar.
+        // ??? But the bar number for the last bar will just be drawn off the
+        //     edge.  There's no harm in that.  Reduce this to (bar >= 0)?
+        if (bar != lastBar  &&  bar >= 0) {
+            const int yText = painter.fontMetrics().ascent();
+            const QPoint textDrawPoint(static_cast<int>(barX + 4), yText);
+            painter.drawText(textDrawPoint, QString("%1").arg(bar + 1));
         }
+
     }
+
+    // Draw the markers.
 
     if (m_doc) {
         Composition &comp = m_doc->getComposition();
@@ -375,8 +381,8 @@ MarkerRuler::paintEvent(QPaintEvent *)
 
         QFontMetrics metrics = painter.fontMetrics();
         QBrush backgroundBrush{GUIPalette::getColour(GUIPalette::MarkerBackground)};
-        QPen pen(Qt::black, 2);
-        painter.setPen(pen);
+        const QPen widePen(Qt::black, 2);
+        painter.setPen(widePen);
 
         // For each marker...
         for (const Marker *marker : markers) {
@@ -397,14 +403,14 @@ MarkerRuler::paintEvent(QPaintEvent *)
             painter.fillRect(x,  // x
                              1,  // y
                              metrics.boundingRect(name).width() + 5,  // w
-                             barHeight - 2,  // h
+                             rulerHeight - 2,  // h
                              backgroundBrush);
 
             // Thick black line to the left.
-            painter.drawLine(x, 1, x, barHeight - 2);
+            painter.drawLine(x, 1, x, rulerHeight - 2);
 
             // Name
-            const QPoint textDrawPoint(x + 3, barHeight - 4);
+            const QPoint textDrawPoint(x + 3, rulerHeight - 4);
             painter.drawText(textDrawPoint, name);
         }
     }
