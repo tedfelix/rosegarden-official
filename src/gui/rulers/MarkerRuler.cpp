@@ -333,6 +333,8 @@ MarkerRuler::paintEvent(QPaintEvent *)
         if (bar < lastBar) {
             const double nextx =
                     m_rulerScale->getBarPosition(bar+1) + m_currentXOffset;
+            // If the next bar would be drawn over top of this one, try the
+            // next bar.
             if ((nextx - barX) < 0.0001)
                 continue;
         }
@@ -361,60 +363,71 @@ MarkerRuler::paintEvent(QPaintEvent *)
 
     // Draw the markers.
 
-    if (m_doc) {
-        Composition &comp = m_doc->getComposition();
-        Composition::MarkerVector markers = comp.getMarkers();
+    if (!m_doc)
+        return;
 
-        timeT start = comp.getBarStart(firstBar);
-        timeT end = comp.getBarEnd(lastBar);
+    const Composition &comp = m_doc->getComposition();
+    const Composition::MarkerVector markers = comp.getMarkers();
 
-        QFontMetrics metrics = painter.fontMetrics();
-        QBrush backgroundBrush{GUIPalette::getColour(GUIPalette::MarkerBackground)};
-        const QPen widePen(Qt::black, 2);
-        painter.setPen(widePen);
+    const timeT end = comp.getBarEnd(lastBar);
 
-        // For each marker...
-        for (const Marker *marker : markers) {
-            const timeT markerTime = marker->getTime();
+    const QFontMetrics metrics = painter.fontMetrics();
+    // ??? Add color as a Marker attribute so each marker can have a different
+    //     color.
+    const QBrush backgroundBrush(
+            GUIPalette::getColour(GUIPalette::MarkerBackground));
 
-            // Out of range?  Try the next.
-            if (markerTime < start)
-                continue;
-            if (markerTime >= end)
-                continue;
+    const QPen widePen(Qt::black, 2);
+    painter.setPen(widePen);
 
-            const QString name(strtoqstr(marker->getName()));
+    // For each marker...
+    for (const Marker *marker : markers) {
 
-            const int x =
-                    m_rulerScale->getXForTime(markerTime) + m_currentXOffset;
+        const timeT markerTime = marker->getTime();
 
-            // Background rect.
-            painter.fillRect(x,  // x
-                             1,  // y
-                             metrics.boundingRect(name).width() + 5,  // w
-                             rulerHeight - 2,  // h
-                             backgroundBrush);
+        // Out of range?  Try the next.
+        if (markerTime >= end)
+            continue;
 
-            // Thick black line to the left.
-            painter.drawLine(x, 1, x, rulerHeight - 2);
+        const QString name(strtoqstr(marker->getName()));
 
-            // Name
-            const QPoint textDrawPoint(x + 3, rulerHeight - 4);
-            painter.drawText(textDrawPoint, name);
-        }
+        const int x =
+                m_rulerScale->getXForTime(markerTime) + m_currentXOffset;
+        const QRect markerRect(
+                x,  // left
+                1,  // top
+                metrics.boundingRect(name).width() + 5,  // width
+                rulerHeight - 2);  // height
+
+        // Right edge is not visible?  Try the next.
+        if (markerRect.right() < 0)
+            continue;
+
+        // Background rect.
+        painter.fillRect(markerRect, backgroundBrush);
+
+        // Thick black line to the left.
+        painter.drawLine(x, 1, x, rulerHeight - 2);
+
+        // Name
+        const QPoint textDrawPoint(x + 3, rulerHeight - 4);
+        painter.drawText(textDrawPoint, name);
+
     }
 }
 
 void
 MarkerRuler::mousePressEvent(QMouseEvent *e)
 {
-    if (!m_doc || !e)
+    if (!e)
+        return;
+    if (!m_doc)
         return;
 
     RG_DEBUG << "mousePressEvent(): x = " << e->pos().x();
 
     m_clickX = e->pos().x();
-    Rosegarden::Marker* clickedMarker = getMarkerAtClickPosition();
+    Rosegarden::Marker *clickedMarker = getMarkerAtClickPosition();
 
     // if right-click, show popup menu
     if (e->button() == Qt::RightButton) {
@@ -431,52 +444,57 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         return;
     }
 
-    bool shiftPressed = ((e->modifiers() & Qt::ShiftModifier) != 0);
+    // Left-Click
+    if (e->button() == Qt::LeftButton) {
 
-    // Shift+Left-Click => set loop.
-    if (shiftPressed) {
+        // Shift+Left-Click => set loop.
+        if (e->modifiers() & Qt::ShiftModifier) {
 
-        Composition &comp = m_doc->getComposition();
+            Composition &comp = m_doc->getComposition();
 
-        const Composition::MarkerVector &markers = comp.getMarkers();
-        if (markers.empty())
+            const Composition::MarkerVector &markers = comp.getMarkers();
+            if (markers.empty())
+                return;
+
+            const timeT clickTime = m_rulerScale->getTimeForX(
+                    e->pos().x() - m_currentXOffset);
+
+            timeT loopStart = 0;
+            timeT loopEnd = 0;
+
+            // For each marker, find the one that is after the clickTime.
+            for (const Marker *marker : markers) {
+
+                loopEnd = marker->getTime();
+
+                // Found it.
+                if (loopEnd >= clickTime)
+                    break;
+
+                loopStart = loopEnd;
+
+            }
+
+            // Not found?  Select to the end.
+            if (loopStart == loopEnd)
+                loopEnd = comp.getEndMarker();
+
+            comp.setLoopMode(Composition::LoopOn);
+            comp.setLoopStart(loopStart);
+            comp.setLoopEnd(loopEnd);
+            emit m_doc->loopChanged();
+
             return;
 
-        const timeT clickTime = m_rulerScale->getTimeForX
-            (e->pos().x() - m_currentXOffset);
-
-        timeT loopStart = 0;
-        timeT loopEnd = 0;
-
-        // For each marker, find the one that is after the clickTime.
-        for (const Marker *marker : markers) {
-
-            loopEnd = marker->getTime();
-
-            // Found it.
-            if (loopEnd >= clickTime)
-                break;
-
-            loopStart = loopEnd;
         }
 
-        // Not found?  Select to the end.
-        if (loopStart == loopEnd)
-            loopEnd = comp.getEndMarker();
-
-        comp.setLoopMode(Composition::LoopOn);
-        comp.setLoopStart(loopStart);
-        comp.setLoopEnd(loopEnd);
-        emit m_doc->loopChanged();
-
-        return;
+        // Left-click without modifiers, set pointer to clicked marker.
+        if (clickedMarker) {
+            m_doc->slotSetPointerPosition(clickedMarker->getTime());
+            return;
+        }
 
     }
-
-    // Left-click without modifiers, set pointer to clicked marker.
-
-    if (clickedMarker)
-        m_doc->slotSetPointerPosition(clickedMarker->getTime());
 }
 
 void
