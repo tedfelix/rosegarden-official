@@ -219,34 +219,24 @@ MarkerRuler::slotRenameMarker()
 Rosegarden::Marker *
 MarkerRuler::getMarkerAtClickPosition()
 {
-    // ??? This does not handle small Markers overlapping large ones.
-
     Composition &comp = m_doc->getComposition();
-
-    int firstBar = m_rulerScale->getBarForX(-m_currentXOffset);
-    if (firstBar < m_rulerScale->getFirstVisibleBar())
-        firstBar = m_rulerScale->getFirstVisibleBar();
-    const timeT rulerStart = comp.getBarStart(firstBar);
+    QFontMetrics metrics = fontMetrics();
 
     const int lastBar = m_rulerScale->getLastVisibleBar();
-    const timeT rulerEnd = comp.getBarEnd(lastBar);
+    const timeT rulerEndTime = comp.getBarEnd(lastBar);
 
     const Composition::MarkerVector &markers = comp.getMarkers();
 
-    // need these to calculate the visible extents of a marker tag
-    QFontMetrics metrics = fontMetrics();
-
-    // For each Marker from left to right...
-    for (Composition::MarkerVector::const_iterator markerIter = markers.begin();
-         markerIter != markers.end();
+    // For each marker from right to left (backwards)...
+    for (Composition::MarkerVector::const_reverse_iterator markerIter =
+                 markers.rbegin();
+         markerIter != markers.rend();
          ++markerIter) {
         const Marker *marker = *markerIter;
-        timeT markerTime = marker->getTime();
+        const timeT markerTime = marker->getTime();
 
-        // Not visible?  Try the next.
-        if (markerTime < rulerStart)
-            continue;
-        if (markerTime >= rulerEnd)
+        // Skip any that are off to the right.
+        if (markerTime >= rulerEndTime)
             continue;
 
         // Compute the current Marker's x coord and width.
@@ -255,22 +245,9 @@ MarkerRuler::getMarkerAtClickPosition()
         QString name(strtoqstr(marker->getName()));
         const int width = metrics.boundingRect(name).width() + 5;
 
-        // Get the x coord for the next Marker.
-        // Assume there is no next Marker.
-        int nextX = -1;
-        Composition::MarkerVector::const_iterator nextMarkerIter = markerIter + 1;
-        if (nextMarkerIter != markers.end()) {
-            nextX = m_rulerScale->getXForTime((*nextMarkerIter)->getTime()) +
-                    m_currentXOffset;
-        }
-
-        // If the click x is within the marker...
-        if (m_clickX >= x  &&  m_clickX <= x + width) {
-            // If there is no next Marker or the click X is prior to the
-            // next Marker, go with this Marker.
-            if (nextX == -1  ||  m_clickX <= nextX)
-                return *markerIter;
-        }
+        // If the click x is within the marker, we've got it.
+        if (m_clickX >= x  &&  m_clickX <= x + width)
+            return *markerIter;
     }
 
     return nullptr;
