@@ -300,29 +300,26 @@ MarkerRuler::paintEvent(QPaintEvent *)
 
     const int lastBar = m_rulerScale->getLastVisibleBar();
 
-    // Special handling when a bar is less than 25 pixels wide.
-    const double minimumWidth = 25.0;
-    double barWidth = m_rulerScale->getBarPosition(firstBar + 1) -
-                      m_rulerScale->getBarPosition(firstBar);
-    double testSize = barWidth / minimumWidth;
-
-    // How often to display a bar number.
-    //   every == 0: display every bar number.
-    //   every == 1: display every other bar number.  1, 3, 5, ...
-    //   every == 3: display every fourth bar number.  1, 5, 9, ...
+    // How many bar numbers to skip.
+    //   skip == 0: display every bar number.  1, 2, 3, ...
+    //   skip == 1: display every other bar number.  1, 3, 5, ...
+    //   skip == 3: display every fourth bar number.  1, 5, 9, ...
     //   etc...
-    int every = 0;
-    if (testSize < 1.0) {
-        every = (int(1.0 / testSize));
+    int skip = 0;
 
-        // If every is even, go with the next.
-        if (every % 2 == 0)
-            ++every;
+    const double minimumWidth = 25;
+    const double barWidth = m_rulerScale->getBarPosition(firstBar + 1) -
+                            m_rulerScale->getBarPosition(firstBar);
+    // If the bar is too small, compute an appropriate skip.
+    if (barWidth < minimumWidth) {
+        skip = minimumWidth / barWidth;
+
+        // If skip is even, go with the next.
+        if (skip % 2 == 0)
+            ++skip;
     }
 
     const int rulerHeight = height();
-    // Counter to determine when to display a bar number.  See "every".
-    int count = 0;
 
     // For each bar (0-based)...
     for (int bar = firstBar; bar <= lastBar; ++bar) {
@@ -330,38 +327,30 @@ MarkerRuler::paintEvent(QPaintEvent *)
         const double barX =
                 m_rulerScale->getBarPosition(bar) + m_currentXOffset;
 
-        // avoid writing bar numbers that will be overwritten
+        // Avoid writing bar numbers that will be overwritten.
+        // This happens in the notation editor when it compresses away bars.
+        // See Bug #1580 for an example .rg file to test this.
         if (bar < lastBar) {
-            const double nextx = m_rulerScale->getBarPosition(bar+1) + m_currentXOffset;
+            const double nextx =
+                    m_rulerScale->getBarPosition(bar+1) + m_currentXOffset;
             if ((nextx - barX) < 0.0001)
                 continue;
         }
 
         // If x is beyond the right edge of the ruler, we're done.
-        // ??? This is actually (x > clipRect.right()).
         if (barX > rulerRect.right())
             break;
 
-        // If we are skipping bars and this is not the first bar...
-        // (We always draw the first bar line.)
-        if (every  &&  bar != firstBar) {
-            // Still skipping?  Try the next.
-            if (count < every) {
-                ++count;
-                continue;
-            }
-
-            // No longer skipping.  Reset the skip counter and draw the bar.
-            count = 0;
-        }
+        // Not a bar we draw?  Try the next.
+        if (bar % (skip + 1) != 0)
+            continue;
 
         // Bar line.
         painter.drawLine(barX, 0, barX, rulerHeight);
 
+        // Bar number.
         // Only draw the bar number for bars 1 through the bar before
         // the last bar.
-        // ??? But the bar number for the last bar will just be drawn off the
-        //     edge.  There's no harm in that.  Reduce this to (bar >= 0)?
         if (bar != lastBar  &&  bar >= 0) {
             const int yText = painter.fontMetrics().ascent();
             const QPoint textDrawPoint(static_cast<int>(barX + 4), yText);
