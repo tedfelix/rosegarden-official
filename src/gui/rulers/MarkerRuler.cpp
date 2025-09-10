@@ -573,24 +573,15 @@ MarkerRuler::mouseReleaseEvent(QMouseEvent *e)
         if (m_dragging) {
             m_dragging = false;
 
+            Composition &comp = m_doc->getComposition();
+
             // Find the marker by ID.  We could have stored the Marker
             // pointer, but that's not safe if the Marker goes away.
-
-            const Marker *marker = nullptr;
-
-            // ??? Promote to Composition::findMarker(markerID).
-            Composition &comp = m_doc->getComposition();
-            const Composition::MarkerVector &markers = comp.getMarkers();
-            for (Marker *marker2 : markers) {
-                if (marker2->getID() == m_dragMarkerID) {
-                    marker = marker2;
-                    break;
-                }
-            }
+            const Marker *marker = comp.findMarker(m_dragMarkerID);
 
             if (marker) {
                 ModifyMarkerCommand *command = new ModifyMarkerCommand(
-                        &m_doc->getComposition(),  // comp
+                        &comp,  // comp
                         marker->getID(),  // id
                         marker->getTime(),  // time
                         m_dragTime,  // newTime

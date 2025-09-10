@@ -246,6 +246,8 @@ public:
 
     void clearMarkers();
 
+    Marker *findMarker(int markerID) const;
+
 
     //////
     //
