@@ -22,6 +22,7 @@
 #include "base/TimeT.h"
 #include "gui/general/ActionFileClient.h"
 
+#include <QPointer>
 #include <QSize>
 #include <QWidget>
 
@@ -34,6 +35,7 @@ namespace Rosegarden
 {
 
 
+class AutoScroller;
 class Marker;
 class RulerScale;
 class RosegardenDocument;
@@ -48,6 +50,8 @@ public:
     MarkerRuler(RosegardenDocument *doc,
                 RulerScale *rulerScale,
                 QWidget *parent);
+    void setAutoScroller(QPointer<AutoScroller> autoScroller)
+            { m_autoScroller = autoScroller; }
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
@@ -116,6 +120,8 @@ private:
     void createMenu();
     
     RulerScale *m_rulerScale;
+
+    QPointer<AutoScroller> m_autoScroller;
 
 };
 

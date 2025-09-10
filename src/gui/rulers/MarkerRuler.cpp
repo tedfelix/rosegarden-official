@@ -28,6 +28,7 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
+#include "gui/general/AutoScroller.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/widgets/InputDialog.h"
 #include "commands/edit/AddMarkerCommand.h"
@@ -514,7 +515,12 @@ MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
             comp.setLoopEnd(loopEnd);
             emit m_doc->loopChanged();
 
-            emit startMouseMove();
+            if (m_autoScroller) {
+                m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
+                m_autoScroller->start();
+            } else {
+                emit startMouseMove();
+            }
 
             return;
 
@@ -523,7 +529,12 @@ MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
         // Left-click without modifiers, set pointer to clicked marker.
         if (clickedMarker) {
             m_doc->slotSetPointerPosition(clickedMarker->getTime());
-            emit startMouseMove();
+            if (m_autoScroller) {
+                m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
+                m_autoScroller->start();
+            } else {
+                emit startMouseMove();
+            }
             return;
         }
 
@@ -598,7 +609,11 @@ MarkerRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             m_dragMarkerID = -1;
         }
 
-        emit stopMouseMove();
+        if (m_autoScroller) {
+            m_autoScroller->stop();
+        } else {
+            emit stopMouseMove();
+        }
     }
 }
 

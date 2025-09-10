@@ -461,63 +461,55 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::selectionChanged,
             this, &MatrixWidget::selectionChanged);
 
-    m_topStandardRuler = new StandardRuler(document,
-                                           m_referenceScale,
-                                           false);  // invert
+    // ChordNameRuler
+    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
+                                          document,
+                                          segments,
+                                          24);     // height
+    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
 
-    m_bottomStandardRuler = new StandardRuler(document,
-                                               m_referenceScale,
-                                               true);  // invert
-
+    // TempoRuler
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,
                                   24,     // height
                                   true,   // small
                                   ThornStyle::isEnabled());
-
-    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
-                                          document,
-                                          segments,
-                                          24);     // height
-
-    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
-
-    m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
-    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
-
-    m_topStandardRuler->connectRulerToDocPointer(document);
-    m_bottomStandardRuler->connectRulerToDocPointer(document);
-
-    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
-            this, &MatrixWidget::slotStandardRulerDrag);
-    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
-            this, &MatrixWidget::slotStandardRulerDrag);
-
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
-
-    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
-
     connect(m_tempoRuler, &TempoRuler::mousePress,
             this, &MatrixWidget::slotTRMousePress);
     connect(m_tempoRuler, &TempoRuler::mouseRelease,
             this, &MatrixWidget::slotTRMouseRelease);
+    m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
+
+    // Top StandardRuler
+    m_topStandardRuler = new StandardRuler(document,
+                                           m_referenceScale,
+                                           false);  // invert
+    m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+    m_topStandardRuler->setAutoScroller(&m_autoScroller);
+    m_topStandardRuler->connectRulerToDocPointer(document);
+    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &MatrixWidget::slotStandardRulerDrag);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &MatrixWidget::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &MatrixWidget::slotSRStopMouseMove);
+    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
+
+    // Bottom StandardRuler
+    m_bottomStandardRuler = new StandardRuler(document,
+                                               m_referenceScale,
+                                               true);  // invert
+    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+    m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
+    m_bottomStandardRuler->connectRulerToDocPointer(document);
+    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &MatrixWidget::slotStandardRulerDrag);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &MatrixWidget::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &MatrixWidget::slotSRStopMouseMove);
+    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
+
 
     connect(m_document, &RosegardenDocument::pointerPositionChanged,
             this, &MatrixWidget::slotPointerPositionChanged);

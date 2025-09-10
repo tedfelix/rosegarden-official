@@ -21,6 +21,7 @@
 
 #include "base/TimeT.h"
 
+#include <QPointer>
 #include <QWidget>
 
 
@@ -28,6 +29,7 @@ namespace Rosegarden
 {
 
 
+class AutoScroller;
 class RulerScale;
 class RosegardenDocument;
 class LoopRuler;
@@ -48,6 +50,7 @@ public:
                   QWidget *parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
+    void setAutoScroller(QPointer<AutoScroller> autoScroller);
 
     LoopRuler *getLoopRuler()  { return m_loopRuler; }
     MarkerRuler *getMarkerRuler()  { return m_markerRuler; }
@@ -86,6 +89,7 @@ private:
 
     MarkerRuler *m_markerRuler;
     LoopRuler *m_loopRuler;
+
 };
 
 

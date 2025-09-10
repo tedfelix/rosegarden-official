@@ -50,8 +50,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
     m_invert(invert),
     m_currentXOffset(0),
     m_doc(doc),
-    m_rulerScale(rulerScale),
-    m_markerRuler(nullptr)
+    m_rulerScale(rulerScale)
 {
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -95,6 +94,12 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
 void StandardRuler::setSnapGrid(const SnapGrid *grid)
 {
     m_loopRuler->setSnapGrid(grid);
+}
+
+void StandardRuler::setAutoScroller(QPointer<AutoScroller> autoScroller)
+{
+    if (m_markerRuler)
+        m_markerRuler->setAutoScroller(autoScroller);
 }
 
 void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
