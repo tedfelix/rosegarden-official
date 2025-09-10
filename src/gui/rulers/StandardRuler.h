@@ -61,7 +61,7 @@ public:
      * If you don't call this, you'll have to connect the
      * LoopRuler's signals up to something yourself.
      */
-    void connectRulerToDocPointer(RosegardenDocument *doc);
+    void setDocument(RosegardenDocument *doc);
     
     void setMinimumWidth(int width);
 

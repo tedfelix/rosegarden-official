@@ -499,68 +499,61 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_segmentLabel->setAutoFillBackground(true);
     m_layout->addWidget(m_segmentLabel, SEGMENTLABEL_ROW, MAIN_COL, 1, 1);
 
-    m_topStandardRuler = new StandardRuler(document,
-                                           m_referenceScale,
-                                           false);  // invert
+    // ChordNameRuler
+    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
+                                          document,
+                                          segments,
+                                          24);     // height
+    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
 
-    m_bottomStandardRuler = new StandardRuler(document,
-                                              m_referenceScale,
-                                              true);  // invert
-
+    // TempoRuler
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,
                                   24,     // height
                                   true,   // small
                                   ThornStyle::isEnabled());
-
-    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
-                                          document,
-                                          segments,
-                                          24);     // height
-
-    m_rawNoteRuler = new RawNoteRuler(m_referenceScale,
-                                      segments[0],
-                                      20);  // why not 24 as other rulers ?
-
-    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
-
-    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
-            this, &NotationWidget::slotStandardRulerDrag);
-    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
-            this, &NotationWidget::slotStandardRulerDrag);
-
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &NotationWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &NotationWidget::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &NotationWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &NotationWidget::slotSRStopMouseMove);
-
-    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
-            this, &NotationWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
-            this, &NotationWidget::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
-            this, &NotationWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
-            this, &NotationWidget::slotSRStopMouseMove);
-
     connect(m_tempoRuler, &TempoRuler::mousePress,
             this, &NotationWidget::slotTRMousePress);
     connect(m_tempoRuler, &TempoRuler::mouseRelease,
             this, &NotationWidget::slotTRMouseRelease);
+    m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
+
+    // RawNoteRuler
+    m_rawNoteRuler = new RawNoteRuler(m_referenceScale,
+                                      segments[0],
+                                      20);  // why not 24 as other rulers ?
+    m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
+
+    // Top StandardRuler
+    m_topStandardRuler = new StandardRuler(document,
+                                           m_referenceScale,
+                                           false);  // invert
+    m_topStandardRuler->setDocument(document);
+    m_topStandardRuler->setAutoScroller(&m_autoScroller);
+    connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &NotationWidget::slotStandardRulerDrag);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &NotationWidget::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &NotationWidget::slotSRStopMouseMove);
+    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
+
+    // Bottom StandardRuler
+    m_bottomStandardRuler = new StandardRuler(document,
+                                              m_referenceScale,
+                                              true);  // invert
+    m_bottomStandardRuler->setDocument(document);
+    m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
+    connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
+            this, &NotationWidget::slotStandardRulerDrag);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
+            this, &NotationWidget::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &NotationWidget::slotSRStopMouseMove);
+    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
 
     connect(m_document, &RosegardenDocument::pointerPositionChanged,
             this, &NotationWidget::slotPointerPositionChanged);
-
-    m_topStandardRuler->connectRulerToDocPointer(document);
-    m_bottomStandardRuler->connectRulerToDocPointer(document);
 
     m_chordNameRuler->setReady();
 

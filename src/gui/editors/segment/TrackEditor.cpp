@@ -157,7 +157,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                      false,
                                      true,
                                      this);
-    m_topStandardRuler->connectRulerToDocPointer(m_doc);
+    m_topStandardRuler->setDocument(m_doc);
     grid->addWidget(m_topStandardRuler, 2, 1);
 
     // Segment Canvas (CompositionView)
@@ -178,7 +178,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                         true,
                                         true,
                                         m_compositionView);
-    m_bottomStandardRuler->connectRulerToDocPointer(m_doc);
+    m_bottomStandardRuler->setDocument(m_doc);
 
     m_compositionView->setBottomRuler(m_bottomStandardRuler);
 

@@ -102,7 +102,7 @@ void StandardRuler::setAutoScroller(QPointer<AutoScroller> autoScroller)
         m_markerRuler->setAutoScroller(autoScroller);
 }
 
-void StandardRuler::connectRulerToDocPointer(RosegardenDocument *doc)
+void StandardRuler::setDocument(RosegardenDocument *doc)
 {
     //RG_DEBUG << "connectRulerToDocPointer()";
 

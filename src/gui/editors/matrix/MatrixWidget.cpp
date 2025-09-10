@@ -486,7 +486,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                            false);  // invert
     m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
     m_topStandardRuler->setAutoScroller(&m_autoScroller);
-    m_topStandardRuler->connectRulerToDocPointer(document);
+    m_topStandardRuler->setDocument(document);
     connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &MatrixWidget::slotStandardRulerDrag);
     connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
@@ -501,7 +501,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                                true);  // invert
     m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
     m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
-    m_bottomStandardRuler->connectRulerToDocPointer(document);
+    m_bottomStandardRuler->setDocument(document);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &MatrixWidget::slotStandardRulerDrag);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
