@@ -59,6 +59,13 @@ public:
 
     void setWidth(int width) { m_width = width; }
 
+signals:
+
+    // These signals are used by Notation, Matrix, and the Segment Canvas
+    // for auto scroll.
+    void startMouseMove();
+    void stopMouseMove();
+
 protected:
 
     void paintEvent(QPaintEvent*) override;

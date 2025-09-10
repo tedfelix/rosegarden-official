@@ -67,6 +67,7 @@
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/RawNoteRuler.h"
 #include "gui/rulers/LoopRuler.h"
+#include "gui/rulers/MarkerRuler.h"
 
 #include "gui/seqmanager/SequenceManager.h"
 
@@ -539,6 +540,15 @@ NotationWidget::setSegments(RosegardenDocument *document,
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
             this, &NotationWidget::slotSRStartMouseMove);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &NotationWidget::slotSRStopMouseMove);
+
+    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
+            this, &NotationWidget::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
+            this, &NotationWidget::slotSRStopMouseMove);
+    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
+            this, &NotationWidget::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
             this, &NotationWidget::slotSRStopMouseMove);
 
     connect(m_tempoRuler, &TempoRuler::mousePress,

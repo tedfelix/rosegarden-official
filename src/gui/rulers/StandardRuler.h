@@ -50,6 +50,7 @@ public:
     void setSnapGrid(const SnapGrid *grid);
 
     LoopRuler *getLoopRuler() { return m_loopRuler; }
+    MarkerRuler *getMarkerRuler() { return m_markerRuler; }
 
     /**
      * Make connections from the LoopRuler to the document's

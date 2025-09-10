@@ -47,6 +47,7 @@
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/LoopRuler.h"
+#include "gui/rulers/MarkerRuler.h"
 #include "gui/widgets/DeferScrollArea.h"
 #include "sound/AudioFile.h"
 #include "document/Command.h"
@@ -242,6 +243,15 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
             this, &TrackEditor::slotSRStartMouseMove);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &TrackEditor::slotSRStopMouseMove);
+
+    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
+            this, &TrackEditor::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
+            this, &TrackEditor::slotSRStopMouseMove);
+    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
+            this, &TrackEditor::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
             this, &TrackEditor::slotSRStopMouseMove);
 
     // Connect for TempoRuler mouse press/release to allow for

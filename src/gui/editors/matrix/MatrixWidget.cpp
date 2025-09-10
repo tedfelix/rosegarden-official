@@ -47,6 +47,7 @@
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
+#include "gui/rulers/MarkerRuler.h"
 
 #include "gui/general/ThornStyle.h"
 
@@ -502,6 +503,15 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
             this, &MatrixWidget::slotSRStartMouseMove);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
+            this, &MatrixWidget::slotSRStopMouseMove);
+
+    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
+            this, &MatrixWidget::slotSRStartMouseMove);
+    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
+            this, &MatrixWidget::slotSRStopMouseMove);
+    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
+            this, &MatrixWidget::slotSRStartMouseMove);
+    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
             this, &MatrixWidget::slotSRStopMouseMove);
 
     connect(m_tempoRuler, &TempoRuler::mousePress,

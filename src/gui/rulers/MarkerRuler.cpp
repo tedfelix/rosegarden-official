@@ -374,6 +374,9 @@ MarkerRuler::paintEvent(QPaintEvent *)
         if (markerTime >= end)
             continue;
 
+        // !!! This code is repeated below.  Make sure this is in sync so that
+        //     static and dragged markers look the same.
+
         const QString name(strtoqstr(marker->getName()));
 
         const int x =
@@ -401,9 +404,8 @@ MarkerRuler::paintEvent(QPaintEvent *)
     }
 
     if (draggedMarker) {
-        // Draw the dragged marker at its dragged position.
 
-        // ??? Factor out a drawMarker() and reuse above?
+        // Draw the dragged marker at its dragged position.
 
         const QString name(strtoqstr(draggedMarker->getName()));
 
@@ -415,8 +417,15 @@ MarkerRuler::paintEvent(QPaintEvent *)
                 metrics.boundingRect(name).width() + 5,  // width
                 rulerHeight - 2);  // height
 
+        // We should add 26 to the MarkerBackground hue.  That gives a
+        // different color.  187, 233, 255.
+        // Manipulating a QColor that was RGB by HSV is a bit complicated.
+        //const QBrush draggedBrush(
+        //        GUIPalette::getColour(GUIPalette::MarkerBackground));
+        const QBrush draggedBrush(QColor(187, 233, 255));
+
         // Background rect.
-        painter.fillRect(markerRect, backgroundBrush);
+        painter.fillRect(markerRect, draggedBrush);
 
         // Thick black line to the left.
         painter.drawLine(x, 1, x, rulerHeight - 2);
@@ -424,6 +433,7 @@ MarkerRuler::paintEvent(QPaintEvent *)
         // Name
         const QPoint textDrawPoint(x + 3, rulerHeight - 4);
         painter.drawText(textDrawPoint, name);
+
     }
 }
 
@@ -502,6 +512,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
             comp.setLoopEnd(loopEnd);
             emit m_doc->loopChanged();
 
+            emit startMouseMove();
+
             return;
 
         }
@@ -509,6 +521,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
         // Left-click without modifiers, set pointer to clicked marker.
         if (clickedMarker) {
             m_doc->slotSetPointerPosition(clickedMarker->getTime());
+            emit startMouseMove();
             return;
         }
 
@@ -540,8 +553,6 @@ MarkerRuler::mouseMoveEvent(QMouseEvent *e)
         //     the marker so we continue holding the Marker in the same
         //     place.
         m_dragTime = snapGrid.snapX(e->pos().x() - m_currentXOffset);
-
-        // ??? Perform any needed autoscroll.  See AutoScroller and LoopRuler.
 
         update();
 
@@ -588,6 +599,8 @@ MarkerRuler::mouseReleaseEvent(QMouseEvent *e)
 
             m_dragMarkerID = -1;
         }
+
+        emit stopMouseMove();
     }
 }
 
