@@ -100,6 +100,8 @@ void StandardRuler::setAutoScroller(QPointer<AutoScroller> autoScroller)
 {
     if (m_markerRuler)
         m_markerRuler->setAutoScroller(autoScroller);
+    if (m_loopRuler)
+        m_loopRuler->setAutoScroller(autoScroller);
 }
 
 void StandardRuler::setDocument(RosegardenDocument *doc)

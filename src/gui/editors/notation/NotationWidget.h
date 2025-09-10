@@ -222,8 +222,6 @@ private slots:
 
     // Standard Ruler
     void slotStandardRulerDrag(timeT t);
-    void slotSRStartMouseMove();
-    void slotSRStopMouseMove();
 
     // ControlRulerWidget
     void slotCRWMousePress();

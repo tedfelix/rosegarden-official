@@ -239,18 +239,6 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     m_topStandardRuler->setAutoScroller(m_compositionView->getAutoScroller());
     m_bottomStandardRuler->setAutoScroller(m_compositionView->getAutoScroller());
 
-    // Connect for all standard ruler mouse move starts and stops.  This
-    // allows for auto-scroll while the user drags (pointer or loop) in
-    // a StandardRuler.
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &TrackEditor::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &TrackEditor::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &TrackEditor::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &TrackEditor::slotSRStopMouseMove);
-
     // Connect for TempoRuler mouse press/release to allow for
     // auto-scroll while the user drags in the TempoRuler.
     connect(m_tempoRuler, &TempoRuler::mousePress,
@@ -468,18 +456,6 @@ TrackEditor::slotPointerDraggedToPosition(timeT position)
     double newPosition = m_rulerScale->getXForTime(position);
 
     m_compositionView->drawPointer(static_cast<int>(newPosition));
-}
-
-void
-TrackEditor::slotSRStartMouseMove()
-{
-    m_compositionView->setFollowMode(FOLLOW_HORIZONTAL);
-    m_compositionView->startAutoScroll();
-}
-
-void TrackEditor::slotSRStopMouseMove()
-{
-    m_compositionView->stopAutoScroll();
 }
 
 void

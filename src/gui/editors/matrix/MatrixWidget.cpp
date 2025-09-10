@@ -489,10 +489,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_topStandardRuler->setDocument(document);
     connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &MatrixWidget::slotStandardRulerDrag);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
 
     // Bottom StandardRuler
@@ -504,10 +500,6 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_bottomStandardRuler->setDocument(document);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &MatrixWidget::slotStandardRulerDrag);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
 
 
@@ -1189,20 +1181,6 @@ MatrixWidget::slotStandardRulerDrag(timeT t)
 {
     updatePointer(t);
 }
-
-void
-MatrixWidget::slotSRStartMouseMove()
-{
-    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
-    m_autoScroller.start();
-}
-
-void
-MatrixWidget::slotSRStopMouseMove()
-{
-    m_autoScroller.stop();
-}
-
 void
 MatrixWidget::slotCRWMousePress()
 {

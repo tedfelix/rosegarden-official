@@ -259,10 +259,6 @@ private slots:
     /// Display the playback position pointer.
     void slotPointerPositionChanged(timeT t);
     void slotStandardRulerDrag(timeT t);
-    /// Handle StandardRuler startMouseMove()
-    void slotSRStartMouseMove();
-    /// Handle StandardRuler stopMouseMove()
-    void slotSRStopMouseMove();
 
     /// Handle ControlRulerWidget::mousePress().
     void slotCRWMousePress();

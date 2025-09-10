@@ -532,10 +532,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_topStandardRuler->setAutoScroller(&m_autoScroller);
     connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &NotationWidget::slotStandardRulerDrag);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &NotationWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &NotationWidget::slotSRStopMouseMove);
     m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
 
     // Bottom StandardRuler
@@ -546,10 +542,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &NotationWidget::slotStandardRulerDrag);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &NotationWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &NotationWidget::slotSRStopMouseMove);
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
 
     connect(m_document, &RosegardenDocument::pointerPositionChanged,
@@ -982,19 +974,6 @@ void
 NotationWidget::slotStandardRulerDrag(timeT t)
 {
     updatePointer(t);
-}
-
-void
-NotationWidget::slotSRStartMouseMove()
-{
-    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
-    m_autoScroller.start();
-}
-
-void
-NotationWidget::slotSRStopMouseMove()
-{
-    m_autoScroller.stop();
 }
 
 void
