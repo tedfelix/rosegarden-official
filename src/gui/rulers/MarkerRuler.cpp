@@ -217,7 +217,7 @@ MarkerRuler::slotRenameMarker()
 }
 
 Rosegarden::Marker *
-MarkerRuler::getMarkerAtClickPosition()
+MarkerRuler::getMarkerAtClickPosition(int *clickDelta)
 {
     Composition &comp = m_doc->getComposition();
     QFontMetrics metrics = fontMetrics();
@@ -246,8 +246,11 @@ MarkerRuler::getMarkerAtClickPosition()
         const int width = metrics.boundingRect(name).width() + 5;
 
         // If the click x is within the marker, we've got it.
-        if (m_clickX >= x  &&  m_clickX <= x + width)
+        if (m_clickX >= x  &&  m_clickX <= x + width) {
+            if (clickDelta)
+                *clickDelta = m_clickX - x;
             return *markerIter;
+        }
     }
 
     return nullptr;
@@ -451,7 +454,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     e->accept();
 
     m_clickX = e->pos().x();
-    Rosegarden::Marker *clickedMarker = getMarkerAtClickPosition();
+    Rosegarden::Marker *clickedMarker =
+            getMarkerAtClickPosition(&m_dragClickDelta);
     if (clickedMarker)
         m_dragMarkerID = clickedMarker->getID();
 
@@ -546,13 +550,11 @@ MarkerRuler::mouseMoveEvent(QMouseEvent *e)
         m_dragging = true;
 
         // Compute drag time.
-        // ??? Might want to use the shift modifier to turn off snap.
+        // ??? Might want to use the shift modifier to turn off snap?
         SnapGrid snapGrid(m_rulerScale);
         snapGrid.setSnapTime(SnapGrid::SnapToBeat);
-        // ??? Need to take into account click position relative to
-        //     the marker so we continue holding the Marker in the same
-        //     place.
-        m_dragTime = snapGrid.snapX(e->pos().x() - m_currentXOffset);
+        m_dragTime = snapGrid.snapX(
+                e->pos().x() - m_currentXOffset - m_dragClickDelta);
 
         update();
 

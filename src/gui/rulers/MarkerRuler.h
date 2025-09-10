@@ -94,13 +94,20 @@ private:
     /// Click position.  Set by mousePressEvent().
     int m_clickX{0};
     /// Returns the Marker at m_clickX if there is one.
-    Marker *getMarkerAtClickPosition();
+    Marker *getMarkerAtClickPosition(int *clickDelta = nullptr);
     
     bool m_leftPressed{false};
 
     /// Storing an ID instead of a pointer for safety.
     int m_dragMarkerID{-1};
     bool m_dragging{false};
+    /// Maintains the grab point.
+    /**
+     * Take into account click position relative to the marker start so if
+     * e.g. we grab the marker at its right edge, we hold the marker at its
+     * right edge throughout the drag.
+     */
+    int m_dragClickDelta{0};
     timeT m_dragTime{0};
 
     QMenu *m_menu{nullptr};
