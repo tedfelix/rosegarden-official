@@ -547,10 +547,17 @@ MarkerRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 
         m_dragging = true;
 
+        // Would be nice to be able to do this, but we need a QMainWindow *.
+        // Elsewhere, signal/slot spaghetti is used.  Search on showContextHelp.
+        //m_mainWindow->statusBar()->showMessage(
+        //      tr("Hold Shift to avoid snapping to beat grid"), 10000);
+
         // Compute drag time.
-        // ??? Might want to use the shift modifier to turn off snap?
         SnapGrid snapGrid(m_rulerScale);
-        snapGrid.setSnapTime(SnapGrid::SnapToBeat);
+        if (mouseEvent->modifiers() & Qt::ShiftModifier)
+            snapGrid.setSnapTime(SnapGrid::NoSnap);
+        else
+            snapGrid.setSnapTime(SnapGrid::SnapToBeat);
         m_dragTime = snapGrid.snapX(
                 mouseEvent->pos().x() - m_currentXOffset - m_dragClickDelta);
 
