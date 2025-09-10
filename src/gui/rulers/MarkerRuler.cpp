@@ -56,14 +56,11 @@ namespace Rosegarden
 
 MarkerRuler::MarkerRuler(RosegardenDocument *doc,
                          RulerScale *rulerScale,
-                         QWidget *parent,
-                         const char *name) :
+                         QWidget *parent) :
     QWidget(parent),
     m_doc(doc),
     m_rulerScale(rulerScale)
 {
-    setObjectName(name);
-
     QFont font;
     font.setPointSize((font.pointSize() * 9) / 10);
     setFont(font);
@@ -442,26 +439,26 @@ MarkerRuler::paintEvent(QPaintEvent *)
 }
 
 void
-MarkerRuler::mousePressEvent(QMouseEvent *e)
+MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
 {
-    if (!e)
+    if (!mouseEvent)
         return;
     if (!m_doc)
         return;
 
-    RG_DEBUG << "mousePressEvent(): x = " << e->pos().x();
+    RG_DEBUG << "mousePressEvent(): x = " << mouseEvent->pos().x();
 
     // No need to propagate.
-    e->accept();
+    mouseEvent->accept();
 
-    m_clickX = e->pos().x();
+    m_clickX = mouseEvent->pos().x();
     Rosegarden::Marker *clickedMarker =
             getMarkerAtClickPosition(&m_dragClickDelta);
     if (clickedMarker)
         m_dragMarkerID = clickedMarker->getID();
 
     // if right-click, show popup menu
-    if (e->button() == Qt::RightButton) {
+    if (mouseEvent->button() == Qt::RightButton) {
         if (!m_menu)
             createMenu();
         if (m_menu) {
@@ -476,12 +473,12 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
     }
 
     // Left-Click
-    if (e->button() == Qt::LeftButton) {
+    if (mouseEvent->button() == Qt::LeftButton) {
 
         m_leftPressed = true;
 
         // Shift+Left-Click => set loop.
-        if (e->modifiers() & Qt::ShiftModifier) {
+        if (mouseEvent->modifiers() & Qt::ShiftModifier) {
 
             Composition &comp = m_doc->getComposition();
 
@@ -490,7 +487,7 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
                 return;
 
             const timeT clickTime = m_rulerScale->getTimeForX(
-                    e->pos().x() - m_currentXOffset);
+                    mouseEvent->pos().x() - m_currentXOffset);
 
             timeT loopStart = 0;
             timeT loopEnd = 0;
@@ -534,16 +531,16 @@ MarkerRuler::mousePressEvent(QMouseEvent *e)
 }
 
 void
-MarkerRuler::mouseMoveEvent(QMouseEvent *e)
+MarkerRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
     // No need to propagate.
-    e->accept();
+    mouseEvent->accept();
 
     // Left-click drag?
     if (m_leftPressed) {
 
         // Not dragging yet and haven't overcome hysteresis?  Bail.
-        if (!m_dragging  &&  abs(m_clickX - e->pos().x()) < 5)
+        if (!m_dragging  &&  abs(m_clickX - mouseEvent->pos().x()) < 5)
             return;
 
         // We are now dragging.
@@ -555,7 +552,7 @@ MarkerRuler::mouseMoveEvent(QMouseEvent *e)
         SnapGrid snapGrid(m_rulerScale);
         snapGrid.setSnapTime(SnapGrid::SnapToBeat);
         m_dragTime = snapGrid.snapX(
-                e->pos().x() - m_currentXOffset - m_dragClickDelta);
+                mouseEvent->pos().x() - m_currentXOffset - m_dragClickDelta);
 
         update();
 
@@ -563,12 +560,12 @@ MarkerRuler::mouseMoveEvent(QMouseEvent *e)
 }
 
 void
-MarkerRuler::mouseReleaseEvent(QMouseEvent *e)
+MarkerRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 {
     // No need to propagate.
-    e->accept();
+    mouseEvent->accept();
 
-    if (e->button() == Qt::LeftButton) {
+    if (mouseEvent->button() == Qt::LeftButton) {
         m_leftPressed = false;
 
         if (m_dragging) {

@@ -43,14 +43,14 @@ class StandardRuler : public QWidget
 public:
     StandardRuler(RosegardenDocument *doc,
                   RulerScale *rulerScale,
-                  bool invert = false, // draw upside-down
+                  bool invert,  // draw upside-down for bottom rulers
                   bool isForMainWindow = false,
                   QWidget *parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
 
-    LoopRuler *getLoopRuler() { return m_loopRuler; }
-    MarkerRuler *getMarkerRuler() { return m_markerRuler; }
+    LoopRuler *getLoopRuler()  { return m_loopRuler; }
+    MarkerRuler *getMarkerRuler()  { return m_markerRuler; }
 
     /**
      * Make connections from the LoopRuler to the document's
@@ -77,9 +77,8 @@ signals:
     void dragPointerToPosition(timeT);
 
 private:
-    //--------------- Data members ---------------------------------
+
     bool m_invert;
-    bool m_isForMainWindow;
     int m_currentXOffset;
 
     RosegardenDocument *m_doc;

@@ -501,11 +501,11 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     m_topStandardRuler = new StandardRuler(document,
                                            m_referenceScale,
-                                           false);
+                                           false);  // invert
 
     m_bottomStandardRuler = new StandardRuler(document,
                                               m_referenceScale,
-                                              true);
+                                              true);  // invert
 
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,

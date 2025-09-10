@@ -47,11 +47,8 @@ class MarkerRuler : public QWidget, public ActionFileClient
 public:
     MarkerRuler(RosegardenDocument *doc,
                 RulerScale *rulerScale,
-                QWidget *parent = nullptr,
-                const char *name = nullptr);
+                QWidget *parent);
 
-    ~MarkerRuler() override  { }
-    
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
@@ -63,16 +60,21 @@ signals:
 
     // These signals are used by Notation, Matrix, and the Segment Canvas
     // for auto scroll.
+    // ??? It would be nice to avoid signals and slots and instead have a
+    //     pointer to an AutoScroller that we can talk to directly.  We could
+    //     let the client provide an AutoScroller pointer via a setter at an
+    //     arbitrary time (the main window needs this due to the way it is
+    //     organized).
     void startMouseMove();
     void stopMouseMove();
 
 protected:
 
-    void paintEvent(QPaintEvent*) override;
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseMoveEvent(QMouseEvent *e) override;
-    void mouseReleaseEvent(QMouseEvent *e) override;
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
+    void paintEvent(QPaintEvent *paintEvent) override;
+    void mousePressEvent(QMouseEvent *mouseEvent) override;
+    void mouseMoveEvent(QMouseEvent *mouseEvent) override;
+    void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
+    void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
 
 private slots:
 

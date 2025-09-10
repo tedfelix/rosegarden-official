@@ -16,17 +16,19 @@
 */
 
 #define RG_MODULE_STRING "[StandardRuler]"
+#define RG_NO_DEBUG_PRINT
 
 #include "StandardRuler.h"
 
-#include "misc/Debug.h"
+#include "LoopRuler.h"
 #include "MarkerRuler.h"
+
+#include "misc/Debug.h"
 #include "base/RulerScale.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
-#include "gui/rulers/LoopRuler.h"
 #include "document/RosegardenDocument.h"
 
 #include <QObject>
@@ -38,21 +40,19 @@
 namespace Rosegarden
 {
 
+
 StandardRuler::StandardRuler(RosegardenDocument *doc,
                              RulerScale *rulerScale,
                              bool invert,
                              bool isForMainWindow,
-                             QWidget* parent) :
-        QWidget(parent),
-        m_invert(invert),
-        m_isForMainWindow(isForMainWindow),
-        m_currentXOffset(0),
-        m_doc(doc),
-        m_rulerScale(rulerScale),
-        m_markerRuler(nullptr)
+                             QWidget *parent) :
+    QWidget(parent),
+    m_invert(invert),
+    m_currentXOffset(0),
+    m_doc(doc),
+    m_rulerScale(rulerScale),
+    m_markerRuler(nullptr)
 {
-//    QString localStyle("QWidget { background-color: #EEEEEE; color: #000000; }");
-
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -69,7 +69,7 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
             m_rulerScale,
             15,  // height, 15 is the same height as the MarkerRuler
             m_invert,
-            m_isForMainWindow,  // displayQuickMarker
+            isForMainWindow,  // displayQuickMarker
             this);  // parent
     layout->addWidget(m_loopRuler);
 
@@ -79,14 +79,16 @@ StandardRuler::StandardRuler(RosegardenDocument *doc,
         layout->addWidget(m_markerRuler);
     }
 
-    connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
+    connect(CommandHistory::getInstance(),
+            &CommandHistory::commandExecuted,
             this,
             static_cast<void(StandardRuler::*)()>(&StandardRuler::update));
 
     if (RosegardenMainWindow::self()) {
-        QObject::connect
-                (m_loopRuler, &LoopRuler::setPlayPosition,
-                 RosegardenMainWindow::self(), &RosegardenMainWindow::slotSetPlayPosition);
+        QObject::connect(m_loopRuler,
+                         &LoopRuler::setPlayPosition,
+                         RosegardenMainWindow::self(),
+                         &RosegardenMainWindow::slotSetPlayPosition);
     }
 }
 
