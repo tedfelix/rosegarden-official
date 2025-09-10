@@ -60,18 +60,6 @@ public:
 
     void setWidth(int width) { m_width = width; }
 
-signals:
-
-    // These signals are used by Notation, Matrix, and the Segment Canvas
-    // for auto scroll.
-    // ??? It would be nice to avoid signals and slots and instead have a
-    //     pointer to an AutoScroller that we can talk to directly.  We could
-    //     let the client provide an AutoScroller pointer via a setter at an
-    //     arbitrary time (the main window needs this due to the way it is
-    //     organized).
-    void startMouseMove();
-    void stopMouseMove();
-
 protected:
 
     void paintEvent(QPaintEvent *paintEvent) override;

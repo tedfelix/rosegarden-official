@@ -518,8 +518,6 @@ MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
             if (m_autoScroller) {
                 m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
                 m_autoScroller->start();
-            } else {
-                emit startMouseMove();
             }
 
             return;
@@ -532,8 +530,6 @@ MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
             if (m_autoScroller) {
                 m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
                 m_autoScroller->start();
-            } else {
-                emit startMouseMove();
             }
             return;
         }
@@ -609,11 +605,8 @@ MarkerRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             m_dragMarkerID = -1;
         }
 
-        if (m_autoScroller) {
+        if (m_autoScroller)
             m_autoScroller->stop();
-        } else {
-            emit stopMouseMove();
-        }
     }
 }
 

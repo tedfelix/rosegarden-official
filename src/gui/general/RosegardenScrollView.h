@@ -140,6 +140,10 @@ protected:
 
     void wheelEvent(QWheelEvent *) override;
 
+    // *** Auto Scrolling
+
+    AutoScroller m_autoScroller;
+
 private:
 
     StandardRuler *m_bottomRuler;
@@ -157,10 +161,6 @@ private:
 
     /// Adjust the scrollbars' max and page step.
     void updateScrollBars();
-
-    // *** Auto Scrolling
-
-    AutoScroller m_autoScroller;
 
 };
 

@@ -220,6 +220,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 
     // Connections
 
+    // Many of these cannot be done above as they depend on m_compositionView.
+
     //connect(m_trackButtons, &TrackButtons::widthChanged,
     //        this, &TrackEditor::slotTrackButtonsWidthChanged);
 
@@ -233,6 +235,10 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 //    connect(m_trackButtons, &TrackButtons::modified,
 //            m_doc, &RosegardenDocument::slotDocumentModified);
 
+    // Have to do this after CompositionView is created.
+    m_topStandardRuler->setAutoScroller(m_compositionView->getAutoScroller());
+    m_bottomStandardRuler->setAutoScroller(m_compositionView->getAutoScroller());
+
     // Connect for all standard ruler mouse move starts and stops.  This
     // allows for auto-scroll while the user drags (pointer or loop) in
     // a StandardRuler.
@@ -243,15 +249,6 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
             this, &TrackEditor::slotSRStartMouseMove);
     connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &TrackEditor::slotSRStopMouseMove);
-
-    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
-            this, &TrackEditor::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
-            this, &TrackEditor::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::startMouseMove,
-            this, &TrackEditor::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getMarkerRuler(), &MarkerRuler::stopMouseMove,
             this, &TrackEditor::slotSRStopMouseMove);
 
     // Connect for TempoRuler mouse press/release to allow for
