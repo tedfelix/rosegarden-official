@@ -73,7 +73,7 @@ MarkerRuler::MarkerRuler(RosegardenDocument *doc,
     createAction("edit_marker", &MarkerRuler::slotEditMarker);
     createAction("manage_markers", &MarkerRuler::slotManageMarkers);
 
-    setToolTip(tr("Click on a marker to move the playback pointer.\nClick and drag a marker to move it.\nShift-click to set a range between markers.\nDouble-click to open the marker editor.\nRight-click for context menu."));
+    setToolTip(tr("Click on a marker to move the playback pointer.\nClick and drag a marker to move it.\nShift-click to set a range between markers.\nDouble-click to rename a marker.\nRight-click for context menu."));
 
 }
 
@@ -603,9 +603,10 @@ MarkerRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 }
 
 void
-MarkerRuler::mouseDoubleClickEvent(QMouseEvent *)
+MarkerRuler::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 {
-    RosegardenMainWindow::self()->slotEditMarkers();
+    m_clickX = mouseEvent->pos().x();
+    slotRenameMarker();
 }
 
 void
