@@ -310,14 +310,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_pianoView, &Panned::wheelEventReceived,
             m_view, &Panned::slotEmulateWheelEvent);
 
-    // Connect ControlRulerWidget for Auto-Scroll.
-    connect(m_controlsWidget, &ControlRulerWidget::mousePress,
-            this, &MatrixWidget::slotCRWMousePress);
-    connect(m_controlsWidget, &ControlRulerWidget::mouseMove,
-            this, &MatrixWidget::slotCRWMouseMove);
-    connect(m_controlsWidget, &ControlRulerWidget::mouseRelease,
-            this, &MatrixWidget::slotCRWMouseRelease);
-
     m_toolBox.reset(new MatrixToolBox(this));
 
     // Relay context help from matrix tools
@@ -439,6 +431,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     generatePitchRuler();
 
+    m_controlsWidget->setAutoScroller(&m_autoScroller);
     m_controlsWidget->setViewSegment(
             dynamic_cast<ViewSegment *>(m_scene->getCurrentViewSegment()));
     m_controlsWidget->setRulerScale(m_referenceScale);
@@ -1177,23 +1170,6 @@ void
 MatrixWidget::slotStandardRulerDrag(timeT t)
 {
     updatePointer(t);
-}
-void
-MatrixWidget::slotCRWMousePress()
-{
-    m_autoScroller.start();
-}
-
-void
-MatrixWidget::slotCRWMouseMove(FollowMode followMode)
-{
-    m_autoScroller.setFollowMode(followMode);
-}
-
-void
-MatrixWidget::slotCRWMouseRelease()
-{
-    m_autoScroller.stop();
 }
 
 void

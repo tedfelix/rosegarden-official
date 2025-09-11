@@ -780,7 +780,8 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         }
     }
 
-    emit mousePress();
+    if (m_autoScroller)
+        m_autoScroller->start();
 }
 
 void ControlRuler::createRulerMenu()
@@ -797,7 +798,8 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
         m_currentTool->handleMouseRelease(&controlMouseEvent);
     }
 
-    emit mouseRelease();
+    if (m_autoScroller)
+        m_autoScroller->stop();
 }
 
 void ControlRuler::mouseMoveEvent(QMouseEvent* e)
@@ -806,9 +808,12 @@ void ControlRuler::mouseMoveEvent(QMouseEvent* e)
         return;
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+    // ??? Isn't this always FOLLOW_HORIZONTAL?  I don't think we can
+    //     scroll anything vertically within the control rulers.
     FollowMode mode = m_currentTool->handleMouseMove(&controlMouseEvent);
 
-    emit mouseMove(mode);
+    if (m_autoScroller)
+        m_autoScroller->setFollowMode(mode);
 }
 
 void

@@ -223,11 +223,6 @@ private slots:
     // Standard Ruler
     void slotStandardRulerDrag(timeT t);
 
-    // ControlRulerWidget
-    void slotCRWMousePress();
-    void slotCRWMouseMove(FollowMode followMode);
-    void slotCRWMouseRelease();
-
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 

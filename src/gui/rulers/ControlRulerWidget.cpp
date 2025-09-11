@@ -55,13 +55,6 @@ namespace Rosegarden
 
 
 ControlRulerWidget::ControlRulerWidget() :
-    m_viewSegment(nullptr),
-    m_controlRulerList(),
-    m_scale(nullptr),
-    m_leftMargin(0),
-    m_currentToolName(),
-    m_pannedRect(),
-    m_selectedElements(),
     m_editorSnap(SnapGrid::NoSnap)
 {
     QVBoxLayout *layout = new QVBoxLayout;
@@ -462,28 +455,19 @@ ControlRulerWidget::addControlRuler(const ControlParameter &controlParameter)
     if (!m_viewSegment)
         return;
 
-    ControlRuler* controlRuler;
+    ControlRuler *controlRuler;
     if (controlParameter == ControlParameter::getKeyPressure()) {
-        KeyPressureRuler* keyPressureRuler =
-            new KeyPressureRuler
-            (m_viewSegment, m_scale, this, &controlParameter);
+        KeyPressureRuler *keyPressureRuler = new KeyPressureRuler(
+                m_viewSegment, m_scale, this, &controlParameter);
         keyPressureRuler->setElementSelection(m_selectedElements);
         controlRuler = keyPressureRuler;
     } else {
-        controlRuler =
-            new ControllerEventsRuler
-            (m_viewSegment, m_scale, this, &controlParameter);
+        controlRuler = new ControllerEventsRuler(
+                m_viewSegment, m_scale, this, &controlParameter);
     }
 
+    controlRuler->setAutoScroller(m_autoScroller);
     controlRuler->setXOffset(m_leftMargin);
-
-    // Mouse signals.  Forward them from the current ControlRuler.
-    connect(controlRuler, &ControlRuler::mousePress,
-            this, &ControlRulerWidget::mousePress);
-    connect(controlRuler, &ControlRuler::mouseMove,
-            this, &ControlRulerWidget::mouseMove);
-    connect(controlRuler, &ControlRuler::mouseRelease,
-            this, &ControlRulerWidget::mouseRelease);
 
     connect(controlRuler, &ControlRuler::rulerSelectionChanged,
             this, &ControlRulerWidget::slotChildRulerSelectionChanged);

@@ -454,11 +454,13 @@ NotationWidget::setSegments(RosegardenDocument *document,
     if (m_controlRulerWidget) delete m_controlRulerWidget;
     if (m_segmentLabel) delete m_segmentLabel;
 
+    // ControlRulerWidget
     m_controlRulerWidget = new ControlRulerWidget;
     m_layout->addWidget(m_controlRulerWidget, CONTROLS_ROW, MAIN_COL, 1, 1);
     m_controlRulerWidget->setViewSegment(
             dynamic_cast<ViewSegment *>(m_scene->getCurrentStaff()));
     m_controlRulerWidget->setRulerScale(m_referenceScale, m_leftGutter);
+    m_controlRulerWidget->setAutoScroller(&m_autoScroller);
 
     connect(m_view, &Panned::viewportChanged,
             m_controlRulerWidget, &ControlRulerWidget::slotSetPannedRect);
@@ -485,14 +487,6 @@ NotationWidget::setSegments(RosegardenDocument *document,
 
     connect(this, &NotationWidget::toolChanged,
             m_controlRulerWidget, &ControlRulerWidget::slotSetTool);
-
-    // Connect ControlRulerWidget for Auto-Scroll.
-    connect(m_controlRulerWidget, &ControlRulerWidget::mousePress,
-            this, &NotationWidget::slotCRWMousePress);
-    connect(m_controlRulerWidget, &ControlRulerWidget::mouseMove,
-            this, &NotationWidget::slotCRWMouseMove);
-    connect(m_controlRulerWidget, &ControlRulerWidget::mouseRelease,
-            this, &NotationWidget::slotCRWMouseRelease);
 
     m_segmentLabel = new QLabel("Segment Label");
     m_segmentLabel->setAlignment(Qt::AlignHCenter);
@@ -971,24 +965,6 @@ void
 NotationWidget::slotStandardRulerDrag(timeT t)
 {
     updatePointer(t);
-}
-
-void
-NotationWidget::slotCRWMousePress()
-{
-    m_autoScroller.start();
-}
-
-void
-NotationWidget::slotCRWMouseMove(FollowMode followMode)
-{
-    m_autoScroller.setFollowMode(followMode);
-}
-
-void
-NotationWidget::slotCRWMouseRelease()
-{
-    m_autoScroller.stop();
 }
 
 void

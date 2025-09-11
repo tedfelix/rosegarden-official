@@ -260,13 +260,6 @@ private slots:
     void slotPointerPositionChanged(timeT t);
     void slotStandardRulerDrag(timeT t);
 
-    /// Handle ControlRulerWidget::mousePress().
-    void slotCRWMousePress();
-    /// Handle ControlRulerWidget::mouseMove().
-    void slotCRWMouseMove(FollowMode followMode);
-    /// Handle ControlRulerWidget::mouseRelease().
-    void slotCRWMouseRelease();
-
     /// Hide the horizontal scrollbar when not needed.
     /**
      * ??? Why do we need to manage this?  We turn off the horizontal
