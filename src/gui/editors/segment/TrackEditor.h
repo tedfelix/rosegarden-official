@@ -160,10 +160,6 @@ private slots:
      */
     void slotPointerDraggedToPosition(timeT position);
 
-    // TempoRuler mouse press/release for auto-scroll.
-    void slotTRMousePress();
-    void slotTRMouseRelease();
-
     /// Scroll the track buttons along with the segment canvas
     void slotVerticalScrollTrackButtons(int y);
 

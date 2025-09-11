@@ -236,24 +236,9 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
 //            m_doc, &RosegardenDocument::slotDocumentModified);
 
     // Have to do this after CompositionView is created.
+    m_tempoRuler->setAutoScroller(m_compositionView->getAutoScroller());
     m_topStandardRuler->setAutoScroller(m_compositionView->getAutoScroller());
     m_bottomStandardRuler->setAutoScroller(m_compositionView->getAutoScroller());
-
-    // Connect for TempoRuler mouse press/release to allow for
-    // auto-scroll while the user drags in the TempoRuler.
-    connect(m_tempoRuler, &TempoRuler::mousePress,
-            this, &TrackEditor::slotTRMousePress);
-    connect(m_tempoRuler, &TempoRuler::mouseRelease,
-            this, &TrackEditor::slotTRMouseRelease);
-
-    // &&&  Interesting one here.  Q(3)ScrollArea had a contentsMoving signal we
-    // used to grab for some purpose.  Q(Abstract)ScrollArea has no usable
-    // signals whatsoever.  I think this is why autoscrolling is still slightly
-    // wonky in Thorn, but I don't reckon there's much to do about this one
-    // unless we write a custom widget or something.
-    //
-    //connect(m_compositionView, &CompositionView::contentsMoving,
-    //        this, &TrackEditor::slotCanvasScrolled);
 
     // Synchronize TrackButtons scroll area (m_trackButtonScroll) with
     // segment canvas's vertical scrollbar.
@@ -456,19 +441,6 @@ TrackEditor::slotPointerDraggedToPosition(timeT position)
     double newPosition = m_rulerScale->getXForTime(position);
 
     m_compositionView->drawPointer(static_cast<int>(newPosition));
-}
-
-void
-TrackEditor::slotTRMousePress()
-{
-    m_compositionView->setFollowMode(FOLLOW_HORIZONTAL);
-    m_compositionView->startAutoScroll();
-}
-
-void
-TrackEditor::slotTRMouseRelease()
-{
-    m_compositionView->stopAutoScroll();
 }
 
 void

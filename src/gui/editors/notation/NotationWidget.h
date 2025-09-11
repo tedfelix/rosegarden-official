@@ -228,10 +228,6 @@ private slots:
     void slotCRWMouseMove(FollowMode followMode);
     void slotCRWMouseRelease();
 
-    // TempoRuler
-    void slotTRMousePress();
-    void slotTRMouseRelease();
-
     void slotZoomInFromPanner();
     void slotZoomOutFromPanner();
 

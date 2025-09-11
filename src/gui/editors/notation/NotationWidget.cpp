@@ -512,10 +512,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                   24,     // height
                                   true,   // small
                                   ThornStyle::isEnabled());
-    connect(m_tempoRuler, &TempoRuler::mousePress,
-            this, &NotationWidget::slotTRMousePress);
-    connect(m_tempoRuler, &TempoRuler::mouseRelease,
-            this, &NotationWidget::slotTRMouseRelease);
+    m_tempoRuler->setAutoScroller(&m_autoScroller);
     m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
 
     // RawNoteRuler
@@ -990,19 +987,6 @@ NotationWidget::slotCRWMouseMove(FollowMode followMode)
 
 void
 NotationWidget::slotCRWMouseRelease()
-{
-    m_autoScroller.stop();
-}
-
-void
-NotationWidget::slotTRMousePress()
-{
-    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
-    m_autoScroller.start();
-}
-
-void
-NotationWidget::slotTRMouseRelease()
 {
     m_autoScroller.stop();
 }

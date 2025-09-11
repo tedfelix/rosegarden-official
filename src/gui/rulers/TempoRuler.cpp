@@ -31,6 +31,7 @@
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/dialogs/TempoDialog.h"
+#include "gui/general/AutoScroller.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/widgets/TextFloat.h"
@@ -122,7 +123,10 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
             return;
         }
 
-        emit mousePress();
+        if (m_autoScroller) {
+            m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
+            m_autoScroller->start();
+        }
 
         int x = e->pos().x() + 1;
         int y = e->pos().y();
@@ -186,7 +190,8 @@ TempoRuler::mousePressEvent(QMouseEvent *e)
 void
 TempoRuler::mouseReleaseEvent(QMouseEvent *e)
 {
-    emit mouseRelease();
+    if (m_autoScroller)
+        m_autoScroller->stop();
 
     if (m_dragVert) {
 

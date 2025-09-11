@@ -474,10 +474,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                   24,     // height
                                   true,   // small
                                   ThornStyle::isEnabled());
-    connect(m_tempoRuler, &TempoRuler::mousePress,
-            this, &MatrixWidget::slotTRMousePress);
-    connect(m_tempoRuler, &TempoRuler::mouseRelease,
-            this, &MatrixWidget::slotTRMouseRelease);
+    m_tempoRuler->setAutoScroller(&m_autoScroller);
     m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
 
     // Top StandardRuler
@@ -1195,19 +1192,6 @@ MatrixWidget::slotCRWMouseMove(FollowMode followMode)
 
 void
 MatrixWidget::slotCRWMouseRelease()
-{
-    m_autoScroller.stop();
-}
-
-void
-MatrixWidget::slotTRMousePress()
-{
-    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
-    m_autoScroller.start();
-}
-
-void
-MatrixWidget::slotTRMouseRelease()
 {
     m_autoScroller.stop();
 }

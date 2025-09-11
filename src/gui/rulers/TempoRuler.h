@@ -26,6 +26,7 @@
 #include <QFont>
 #include <QFontMetrics>
 #include <QPixmap>
+#include <QPointer>
 #include <QSize>
 #include <QWidget>
 
@@ -40,6 +41,7 @@ namespace Rosegarden
 {
 
 
+class AutoScroller;
 class EditTempoController;
 class RulerScale;
 class RosegardenDocument;
@@ -67,15 +69,13 @@ public:
                int height = 0,
                bool small = false,
                bool Thorn = true);
+    void setAutoScroller(QPointer<AutoScroller> autoScroller)
+            { m_autoScroller = autoScroller; }
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
     void setMinimumWidth(int width) { m_width = width; }
-
-signals:
-    void mousePress();
-    void mouseRelease();
 
 public slots:
     void slotScrollHoriz(int x);
@@ -146,6 +146,8 @@ private:
     QPixmap m_buffer;
 
     bool m_Thorn;
+
+    QPointer<AutoScroller> m_autoScroller;
 };
 
 
