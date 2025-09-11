@@ -1388,7 +1388,7 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
     // ??? Would it be better to push this down into the tools?
     if (e->button() == Qt::LeftButton  ||
         e->button() == Qt::MiddleButton)
-        startAutoScroll();
+        m_autoScroller.start();
 
     // Delegate to current tool
     if (m_currentTool)
@@ -1398,7 +1398,7 @@ void CompositionView::mousePressEvent(QMouseEvent *e)
 void CompositionView::mouseReleaseEvent(QMouseEvent *e)
 {
     // In case there is no tool, and auto scroll is running.
-    stopAutoScroll();
+    m_autoScroller.stop();
 
     if (m_currentTool)
         m_currentTool->mouseReleaseEvent(e);;
@@ -1447,7 +1447,7 @@ void CompositionView::mouseMoveEvent(QMouseEvent *e)
 
     // ??? Can we push the rest of this down into the tools?
 
-    setFollowMode(followMode);
+    m_autoScroller.setFollowMode(followMode);
 }
 
 void CompositionView::keyPressEvent(QKeyEvent *e)

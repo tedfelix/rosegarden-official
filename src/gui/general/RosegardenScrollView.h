@@ -79,11 +79,6 @@ public:
 
     void updateContents();
 
-    void startAutoScroll();
-    void setFollowMode(FollowMode followMode)
-            { m_autoScroller.setFollowMode(followMode); }
-    void stopAutoScroll();
-
     bool isAutoScrolling() const  { return m_autoScroller.isRunning(); }
 
     /// Playback scrolling.
