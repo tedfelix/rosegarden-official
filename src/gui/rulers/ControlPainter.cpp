@@ -117,11 +117,10 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 
                 QSharedPointer<ControlItem> item =
                         ruler->addControlItem2(x,e->y);
-                // ??? MEMORY LEAK (confirmed)
-                ControlMouseEvent *newevent = new ControlMouseEvent(e);
-                newevent->itemList.push_back(item);
+                ControlMouseEvent newevent(e);
+                newevent.itemList.push_back(item);
                 m_overItem = true;
-                ControlMover::handleLeftButtonPress(newevent);
+                ControlMover::handleLeftButtonPress(&newevent);
             }
 
             // Save these coordinates for next time

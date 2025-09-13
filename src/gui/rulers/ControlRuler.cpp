@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[ControlRuler]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "ControlRuler.h"
 
@@ -411,8 +411,8 @@ void ControlRuler::updateSegment()
     start = getRulerScale()->getTimeForX(xmin);
     end = getRulerScale()->getTimeForX(xmax)+durationAdd;
 
-    RG_DEBUG << "updateSegment added events:" <<
-        m_eventSelection->getAddedEvents();
+    RG_DEBUG << "updateSegment(): added events" << m_eventSelection->getAddedEvents();
+
     if (m_eventSelection->getAddedEvents() == 0) {
         // We do not have a valid set of selected events to update
         if (m_selectedItems.size() == 0) {
@@ -437,13 +437,16 @@ void ControlRuler::updateSegment()
         }
     }
 
-    EventSelection *eventsToErase = new EventSelection(*m_segment);
-    if (! allowSimultaneousEvents()) {
+    EventSelection eventsToErase(*m_segment);
+
+    if (!allowSimultaneousEvents()) {
         // check for events at the same time and delete them
         // For each selected item...
         for (QSharedPointer<const ControlItem> cItem : m_selectedItems) {
             const double xItem = cItem->xStart();
-            RG_DEBUG << "updateSegment check for event at" << xItem;
+
+            RG_DEBUG << "updateSegment(): check for event at" << xItem;
+
             // For each control item starting at xItem...
             for (ControlItemMap::const_iterator otherItemIter =
                      m_controlItemMap.lower_bound(xItem);
@@ -454,15 +457,14 @@ void ControlRuler::updateSegment()
                 // If this is the same as the item we are checking,
                 // try the next.
                 if (cItem == otherItemIter->second) {
-                    RG_DEBUG << "updateSegment ignoring new item";
+                    RG_DEBUG << "updateSegment(): ignoring new item";
                     continue;
                 }
                 const double xOther = otherItemIter->first;
                 // ??? This should never happen due to lower_bound().
                 //     Can we remove?
                 if (xOther < xItem) {
-                    RG_DEBUG << "updateSegment ignoring" << xOther <<
-                        "before" << xItem;
+                    RG_DEBUG << "updateSegment(): ignoring" << xOther << "before" << xItem;
                     continue;
                 }
                 // If we are past the original item position, we're done.
@@ -470,25 +472,27 @@ void ControlRuler::updateSegment()
                     break;
 
                 // Found a duplicate, add to eventsToErase.
-                RG_DEBUG << "updateSegment erase old event at" << xOther;
+
+                RG_DEBUG << "updateSegment(): erase old event at" << xOther;
+
                 Event *eventToDelete = otherItemIter->second->getEvent();
-                eventsToErase->addEvent(eventToDelete, false);
+                eventsToErase.addEvent(eventToDelete, false);
             }
         }
     }
 
+    RG_DEBUG << "updateSegment(): selectedItems:" << m_selectedItems.size();
+
     // Add change command to macro
     // ControlChangeCommand calls each selected items updateSegment method
     // Note that updateSegment deletes and renews the event whether it has moved or not
-    RG_DEBUG << "updateSegment selectedItems:" << m_selectedItems.size();
     macro->addCommand(new ControlChangeCommand(m_selectedItems,
                                                *m_segment,
                                                start,
                                                end));
 
-    if (eventsToErase->getAddedEvents() != 0) {
-        macro->addCommand(new EraseCommand(eventsToErase));
-    }
+    if (eventsToErase.getAddedEvents() != 0)
+        macro->addCommand(new EraseCommand(&eventsToErase));
 
     CommandHistory::getInstance()->addCommand(macro);
 
@@ -742,11 +746,11 @@ ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
     controlMouseEvent.snappedXRight =
         m_rulerScale->getXForTime(rightTime) * m_xScale;
 
-    RG_DEBUG << "createControlMouseEvent snap" <<
-        controlMouseEvent.x << mtime <<
-        controlMouseEvent.snappedXLeft << leftTime <<
-        controlMouseEvent.snappedXRight << rightTime <<
-        m_xScale;
+    //RG_DEBUG << "createControlMouseEvent(): snap" <<
+    //    controlMouseEvent.x << mtime <<
+    //    controlMouseEvent.snappedXLeft << leftTime <<
+    //    controlMouseEvent.snappedXRight << rightTime <<
+    //    m_xScale;
 
     for (ControlItemList::iterator it = m_visibleItems.begin();
             it != m_visibleItems.end(); ++it) {

@@ -83,7 +83,7 @@ EraseCommand::eraseInSegment(EventSelection *selection)
          ++i) {
 
         if ((*i)->isa(Clef::EventType) ||
-                (*i)->isa(Key ::EventType)) {
+                (*i)->isa(Key::EventType)) {
             erasedLongEffectEvent = true;
         } else if ((*i)->isa(Indication::EventType)) {
 
