@@ -160,6 +160,8 @@ public:
 
     /**
      * Return the number of events added to this selection.
+     *
+     * ??? rename: size()
      */
     unsigned int getAddedEvents() const { return m_segmentEvents.size(); }
     bool empty() const  { return m_segmentEvents.empty(); }
