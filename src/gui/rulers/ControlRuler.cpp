@@ -388,8 +388,7 @@ void ControlRuler::updateSegment()
 
     QString commandLabel = "Adjust control/property";
 
-    // ??? MEMORY LEAK (confirmed) Probably due to return from middle.
-    MacroCommand *macro = new MacroCommand(commandLabel);
+    std::unique_ptr<MacroCommand> macro(new MacroCommand(commandLabel));
 
     // Find the extent of the selected items
     float xmin=FLT_MAX,xmax=-1.0;
@@ -415,11 +414,8 @@ void ControlRuler::updateSegment()
 
     if (m_eventSelection->size() == 0) {
         // We do not have a valid set of selected events to update
-        if (m_selectedItems.size() == 0) {
-            // There are no selected items, nothing to update
-            // ??? LEAK?  "macro" needs deleting.
+        if (m_selectedItems.empty())
             return;
-        }
 
         // Events will be added by the controlItem->updateSegment methods
         commandLabel = "Add control";
@@ -495,7 +491,7 @@ void ControlRuler::updateSegment()
     if (eventsToErase.size() != 0)
         macro->addCommand(new EraseCommand(&eventsToErase));
 
-    CommandHistory::getInstance()->addCommand(macro);
+    CommandHistory::getInstance()->addCommand(macro.release());
 
     updateSelection();
 }

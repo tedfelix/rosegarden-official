@@ -71,6 +71,9 @@ public:
 
     /// Add a command to the command history.
     /**
+     * command must be a pointer to memory allocated with new.  CommandHistory
+     * will take ownership of the pointer.  (std::shared_ptr would be helpful.)
+     *
      * The command will be executed before being added.
      *
      * Normally the pointer position for undo is the actual pointer position
