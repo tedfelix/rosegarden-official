@@ -135,7 +135,7 @@ MatrixResizer::handleMouseMove(const MatrixMouseEvent *e)
     timeT durationDiff = newDuration - m_currentElement->getViewDuration();
 
     EventSelection* selection = m_scene->getSelection();
-    if (!selection || selection->getAddedEvents() == 0) return NO_FOLLOW;
+    if (!selection || selection->size() == 0) return NO_FOLLOW;
 
     EventContainer::iterator it =
         selection->getSegmentEvents().begin();
@@ -184,10 +184,10 @@ MatrixResizer::handleMouseRelease(const MatrixMouseEvent *e)
     timeT durationDiff = newDuration - m_currentElement->getViewDuration();
 
     EventSelection *selection = m_scene->getSelection();
-    if (!selection || selection->getAddedEvents() == 0) return;
+    if (!selection || selection->size() == 0) return;
 
     QString commandLabel = tr("Resize Event");
-    if (selection->getAddedEvents() > 1) commandLabel = tr("Resize Events");
+    if (selection->size() > 1) commandLabel = tr("Resize Events");
 
     MacroCommand *macro = new MacroCommand(commandLabel);
 
@@ -263,7 +263,7 @@ void MatrixResizer::ready()
 void MatrixResizer::setBasicContextHelp()
 {
     EventSelection *selection = m_scene->getSelection();
-    if (selection && selection->getAddedEvents() > 1) {
+    if (selection && selection->size() > 1) {
         setContextHelp(tr("Click and drag to resize selected notes"));
     } else {
         setContextHelp(tr("Click and drag to resize a note"));

@@ -878,7 +878,7 @@ PitchBendSequenceDialog::accept()
         // For some reason, if we perform the erase with an empty selection,
         // we end up with the segment expanded to the beginning of the
         // composition.
-        if (selection.getAddedEvents() != 0)
+        if (selection.size() != 0)
             macro->addCommand(new EraseCommand(&selection));
     }
 

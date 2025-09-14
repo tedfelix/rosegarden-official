@@ -411,9 +411,9 @@ void ControlRuler::updateSegment()
     start = getRulerScale()->getTimeForX(xmin);
     end = getRulerScale()->getTimeForX(xmax)+durationAdd;
 
-    RG_DEBUG << "updateSegment(): added events" << m_eventSelection->getAddedEvents();
+    RG_DEBUG << "updateSegment(): added events" << m_eventSelection->size();
 
-    if (m_eventSelection->getAddedEvents() == 0) {
+    if (m_eventSelection->size() == 0) {
         // We do not have a valid set of selected events to update
         if (m_selectedItems.size() == 0) {
             // There are no selected items, nothing to update
@@ -492,7 +492,7 @@ void ControlRuler::updateSegment()
                                                start,
                                                end));
 
-    if (eventsToErase.getAddedEvents() != 0)
+    if (eventsToErase.size() != 0)
         macro->addCommand(new EraseCommand(&eventsToErase));
 
     CommandHistory::getInstance()->addCommand(macro);

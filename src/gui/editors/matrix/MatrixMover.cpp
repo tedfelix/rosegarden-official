@@ -346,7 +346,7 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
     long pitchOffset = selection->getSegment().getTranspose();
     diffPitch += (pitchOffset * -1);
 
-    if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
+    if ((diffTime == 0 && diffPitch == 0) || selection->size() == 0) {
         removeDuplicates();
         m_currentElement = nullptr;
         m_event = nullptr;
@@ -362,13 +362,13 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     QString commandLabel;
     if (m_quickCopy) {
-        if (selection->getAddedEvents() < 2) {
+        if (selection->size() < 2) {
             commandLabel = tr("Copy and Move Event");
         } else {
             commandLabel = tr("Copy and Move Events");
         }
     } else {
-        if (selection->getAddedEvents() < 2) {
+        if (selection->size() < 2) {
             commandLabel = tr("Move Event");
         } else {
             commandLabel = tr("Move Events");
@@ -487,7 +487,7 @@ void MatrixMover::stow()
 void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 {
     EventSelection *selection = m_scene->getSelection();
-    if (!selection || selection->getAddedEvents() < 2) {
+    if (!selection || selection->size() < 2) {
         if (!ctrlPressed) {
             setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));
         } else {
