@@ -417,6 +417,7 @@ void ControlRuler::updateSegment()
         // We do not have a valid set of selected events to update
         if (m_selectedItems.size() == 0) {
             // There are no selected items, nothing to update
+            // ??? LEAK?  "macro" needs deleting.
             return;
         }
 

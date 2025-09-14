@@ -48,12 +48,6 @@ EraseCommand::EraseCommand(
         m_selection2 = nullptr;
 }
 
-EraseCommand::~EraseCommand()
-{
-    // ??? MEMORY LEAK (confirmed)  delete here isn't a reliable solution.
-    //delete m_selection;
-}
-
 void
 EraseCommand::modifySegment()
 {

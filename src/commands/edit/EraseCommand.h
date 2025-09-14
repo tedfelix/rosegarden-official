@@ -51,7 +51,6 @@ public:
      */
     explicit EraseCommand(EventSelection *selection1,
                           EventSelection *selection2 = nullptr);
-    ~EraseCommand() override;
 
     /// Erase the events in segment that are in selection.
     /**
