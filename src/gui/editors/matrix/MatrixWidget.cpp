@@ -1080,9 +1080,6 @@ MatrixWidget::addControlRuler(QAction *action)
 
     const ControlList &list = c->getControlParameters();
 
-    QString itemStr;
-//  int i = 0;
-
     for (ControlList::const_iterator it = list.begin();
          it != list.end();
          ++it) {

@@ -660,21 +660,21 @@ NotationGroup::applyBeam(NotationStaff &staff)
     //    RG_DEBUG << "applyBeam starting for group" << this;
 
     for (NELIterator i = getInitialNote(); i != getContainer().end(); ++i) {
-        NotationElement* el = static_cast<NotationElement*>(*i);
+        NotationElement *notationElement1 = static_cast<NotationElement *>(*i);
 
         // Clear tuplingness for all events in the group, to be
         // reinstated by any subsequent call to applyTuplingLine.  We
         // do this because applyTuplingLine doesn't clear these
         // properties from notes that don't need them; it only applies
         // them to notes that do.
-        el->event()->unset(m_properties.TUPLING_LINE_MY_Y);
+        notationElement1->event()->unset(m_properties.TUPLING_LINE_MY_Y);
 
-        if (el->isNote() &&
-                el->event()->has(BaseProperties::NOTE_TYPE) &&
-                el->event()->get
-                <Int>(BaseProperties::NOTE_TYPE) < Note::Crotchet &&
-                el->event()->has(BaseProperties::BEAMED_GROUP_ID) &&
-                el->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
+        if (notationElement1->isNote()  &&
+            notationElement1->event()->has(BaseProperties::NOTE_TYPE)  &&
+            notationElement1->event()->get<Int>(BaseProperties::NOTE_TYPE) <
+                    Note::Crotchet  &&
+            notationElement1->event()->has(BaseProperties::BEAMED_GROUP_ID)  &&
+            notationElement1->event()->get<Int>(BaseProperties::BEAMED_GROUP_ID) == m_groupNo) {
 
             NotationChord chord(getContainer(), i, &getQuantizer(),
                                 m_properties, m_clef, m_key);
@@ -685,44 +685,45 @@ NotationGroup::applyBeam(NotationStaff &staff)
             bool hasShifted = chord.hasNoteHeadShifted();
 
             for (j = 0; j < chord.size(); ++j) {
-                NotationElement *el = static_cast<NotationElement*>(*chord[j]);
+                NotationElement *notationElement3 = static_cast<NotationElement*>(*chord[j]);
 
-                el->event()->setMaybe<Bool>
-                (m_properties.CHORD_PRIMARY_NOTE, false);
+                notationElement3->event()->setMaybe<Bool>(
+                        m_properties.CHORD_PRIMARY_NOTE, false);
 
-                el->event()->setMaybe<Bool>
-                (m_properties.DRAW_FLAG, false);
+                notationElement3->event()->setMaybe<Bool>(
+                        m_properties.DRAW_FLAG, false);
 
-                el->event()->setMaybe<Bool>
-                (NotationProperties::BEAMED, true);
+                notationElement3->event()->setMaybe<Bool>(
+                        NotationProperties::BEAMED, true);
 
-                el->event()->setMaybe<Bool>
-                (NotationProperties::BEAM_ABOVE, beam.aboveNotes);
+                notationElement3->event()->setMaybe<Bool>(
+                        NotationProperties::BEAM_ABOVE, beam.aboveNotes);
 
-                el->event()->setMaybe<Bool>
-                (m_properties.VIEW_LOCAL_STEM_UP, beam.aboveNotes);
+                notationElement3->event()->setMaybe<Bool>(
+                        m_properties.VIEW_LOCAL_STEM_UP, beam.aboveNotes);
 
                 bool shifted = chord.isNoteHeadShifted(chord[j]);
-                el->event()->setMaybe<Bool>
-                (m_properties.NOTE_HEAD_SHIFTED, shifted);
+                notationElement3->event()->setMaybe<Bool>(
+                        m_properties.NOTE_HEAD_SHIFTED, shifted);
 
-                long dots = 0;
-                (void)el->event()->get
-                <Int>(BaseProperties::NOTE_DOTS, dots);
+                long dotsUnused = 0;
+                (void)notationElement3->event()->get<Int>(
+                        BaseProperties::NOTE_DOTS, dotsUnused);
 
-                el->event()->setMaybe<Bool>
-                (m_properties.NOTE_DOT_SHIFTED, false);
-                if (hasShifted && beam.aboveNotes) {
+                notationElement3->event()->setMaybe<Bool>(
+                        m_properties.NOTE_DOT_SHIFTED, false);
+
+                if (hasShifted  &&  beam.aboveNotes) {
                     long dots = 0;
-                    (void)el->event()->get
-                    <Int>(BaseProperties::NOTE_DOTS, dots);
+                    (void)notationElement3->event()->get<Int>(
+                            BaseProperties::NOTE_DOTS, dots);
                     if (dots > 0) {
-                        el->event()->setMaybe<Bool>
-                        (m_properties.NOTE_DOT_SHIFTED, true);
+                        notationElement3->event()->setMaybe<Bool>(
+                                m_properties.NOTE_DOT_SHIFTED, true);
                     }
                 }
 
-                el->event()->setMaybe<Bool>
+                notationElement3->event()->setMaybe<Bool>
                 (m_properties.NEEDS_EXTRA_SHIFT_SPACE,
                  chord.hasNoteHeadShifted() && !beam.aboveNotes);
             }
@@ -732,16 +733,16 @@ NotationGroup::applyBeam(NotationStaff &staff)
             else
                 j = chord.size() - 1;
 
-            NotationElement *el = static_cast<NotationElement*>(*chord[j]);
-            el->event()->setMaybe<Bool>(NotationProperties::BEAMED, false); // set later
-            el->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, true); // set later
+            NotationElement *notationElement2 = static_cast<NotationElement *>(*chord[j]);
+            notationElement2->event()->setMaybe<Bool>(NotationProperties::BEAMED, false); // set later
+            notationElement2->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, true); // set later
 
-            int x = (int)el->getLayoutX();
+            int x = (int)notationElement2->getLayoutX();
             int myY = (int)(gradient * (x - initialX)) + beam.startY;
 
             int beamCount =
-                NoteStyleFactory::getStyleForEvent(el->event())->
-                getFlagCount(el->event()->get
+                NoteStyleFactory::getStyleForEvent(notationElement2->event())->
+                getFlagCount(notationElement2->event()->get
                              <Int>(BaseProperties::NOTE_TYPE));
 
             // If THIS_PART_BEAMS is true, then when drawing the
@@ -782,8 +783,8 @@ NotationGroup::applyBeam(NotationStaff &staff)
                                  <Int>(BaseProperties::NOTE_TYPE));
 
                 if ((beamCount > 0) && (prevBeamCount > 0)) {
-                    el->event()->setMaybe<Bool>(m_properties.BEAMED, true);
-                    el->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, false);
+                    notationElement2->event()->setMaybe<Bool>(m_properties.BEAMED, true);
+                    notationElement2->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, false);
                     prevEl->event()->setMaybe<Bool>(m_properties.BEAMED, true);
                     prevEl->event()->setMaybe<Bool>(m_properties.DRAW_FLAG, false);
                 }
@@ -803,25 +804,25 @@ NotationGroup::applyBeam(NotationStaff &staff)
                 }
 
             } else {
-                el->event()->setMaybe<Bool>(m_properties.BEAM_THIS_PART_BEAMS, true);
+                notationElement2->event()->setMaybe<Bool>(m_properties.BEAM_THIS_PART_BEAMS, true);
             }
 
-            el->event()->setMaybe<Bool>(m_properties.CHORD_PRIMARY_NOTE, true);
+            notationElement2->event()->setMaybe<Bool>(m_properties.CHORD_PRIMARY_NOTE, true);
 
-            el->event()->setMaybe<Int>(m_properties.BEAM_MY_Y, myY);
-            el->event()->setMaybe<Int>(m_properties.BEAM_GRADIENT, beam.gradient);
+            notationElement2->event()->setMaybe<Int>(m_properties.BEAM_MY_Y, myY);
+            notationElement2->event()->setMaybe<Int>(m_properties.BEAM_GRADIENT, beam.gradient);
 
             // until they're set next time around the loop, as (*prev)->...
-            //      el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_Y, myY);
-            el->event()->setMaybe<Int>(m_properties.BEAM_SECTION_WIDTH, 0);
-            el->event()->setMaybe<Int>(m_properties.BEAM_NEXT_BEAM_COUNT, 1);
+            //      notationElement2->event()->setMaybe<Int>(m_properties.BEAM_NEXT_Y, myY);
+            notationElement2->event()->setMaybe<Int>(m_properties.BEAM_SECTION_WIDTH, 0);
+            notationElement2->event()->setMaybe<Int>(m_properties.BEAM_NEXT_BEAM_COUNT, 1);
 
             prevprev = prev;
             prev = chord[j];
             i = chord.getFinalElement();
 
         }
-        else if (el->isNote()) {
+        else if (notationElement1->isNote()) {
 
             //!!! should we really be setting these here as well as in
             // applyStemProperties?
@@ -834,7 +835,7 @@ NotationGroup::applyBeam(NotationStaff &staff)
             */
         }
 
-        if (i == finalNote || el->getViewAbsoluteTime() > finalTime) break;
+        if (i == finalNote || notationElement1->getViewAbsoluteTime() > finalTime) break;
     }
 }
 

@@ -283,16 +283,20 @@ MatrixScene::getCurrentViewSegment()
 bool
 MatrixScene::segmentsContainNotes() const
 {
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+    // For each Segment...
+    for (unsigned int segmentIndex = 0;
+         segmentIndex < m_segments.size();
+         ++segmentIndex) {
 
-        const Segment *segment = m_segments[i];
+        const Segment *segment = m_segments[segmentIndex];
 
-        for (Segment::const_iterator i = segment->begin();
-             segment->isBeforeEndMarker(i); ++i) {
+        // For each Event...
+        for (Segment::const_iterator eventIter = segment->begin();
+             segment->isBeforeEndMarker(eventIter);
+             ++eventIter) {
 
-            if (((*i)->getType() == Note::EventType)) {
+            if (((*eventIter)->getType() == Note::EventType))
                 return true;
-            }
         }
     }
 
