@@ -1004,7 +1004,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
 
                 std::string indicationType = indication.getIndicationType();
 
-                int length;
+                int length1;
                 // int y1;
 
                 if ((indicationType == Indication::Slur ||
@@ -1027,48 +1027,48 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     double x, w;
                     static_cast<NotationElement *>(*indicationEnd)->
                     getLayoutAirspace(x, w);
-                    length = (int)(x + w - elt->getLayoutX() -
+                    length1 = (int)(x + w - elt->getLayoutX() -
                                    m_notePixmapFactory->getBarMargin());
 
                 } else {
 
-                    length = (int)((*indicationEnd)->getLayoutX() -
+                    length1 = (int)((*indicationEnd)->getLayoutX() -
                                    elt->getLayoutX());
 
                     if (indication.isOttavaType()) {
-                        length -= m_notePixmapFactory->getNoteBodyWidth();
+                        length1 -= m_notePixmapFactory->getNoteBodyWidth();
                     }
                 }
 
                 // y1 = (int)(*indicationEnd)->getLayoutY();
 
-                if (length < m_notePixmapFactory->getNoteBodyWidth()) {
-                    length = m_notePixmapFactory->getNoteBodyWidth();
+                if (length1 < m_notePixmapFactory->getNoteBodyWidth()) {
+                    length1 = m_notePixmapFactory->getNoteBodyWidth();
                 }
 
                 if (indicationType == Indication::Crescendo ||
                     indicationType == Indication::Decrescendo) {
 
                     item = m_notePixmapFactory->makeHairpin
-                            (length, indicationType == Indication::Crescendo);
+                            (length1, indicationType == Indication::Crescendo);
                 } else if (indicationType == Indication::TrillLine) {
 
                     // skip m_printPainter as it is no longer relevant
-                    item = m_notePixmapFactory->makeTrillLine(length);
+                    item = m_notePixmapFactory->makeTrillLine(length1);
 
                 } else if (indicationType == Indication::Slur ||
                            indicationType == Indication::PhrasingSlur) {
 
                     bool above = true;
                     long dy = 0;
-                    long length = 10;
+                    long slurLength = 10;
 
                     elt->event()->get<Bool>(properties.SLUR_ABOVE, above);
                     elt->event()->get<Int>(properties.SLUR_Y_DELTA, dy);
-                    elt->event()->get<Int>(properties.SLUR_LENGTH, length);
+                    elt->event()->get<Int>(properties.SLUR_LENGTH, slurLength);
 
                     item = m_notePixmapFactory->makeSlur
-                            (length, dy, above,
+                            (slurLength, dy, above,
                              indicationType == Indication::PhrasingSlur);
 
                 } else if (indicationType == Indication::FigParameterChord) {
@@ -1082,8 +1082,7 @@ NotationStaff::renderSingleElement(ViewElementList::iterator &vli,
                     int octaves = indication.getOttavaShift();
 
                     if (octaves != 0) {
-                        item = m_notePixmapFactory->makeOttava
-                                (length, octaves);
+                        item = m_notePixmapFactory->makeOttava(length1, octaves);
                     } else {
 
                         RG_DEBUG << "Unrecognised indicationType " << indicationType;
