@@ -19,6 +19,7 @@
 #define RG_NO_DEBUG_PRINT 1
 
 #include "NotationWidget.h"
+
 #include "NotationScene.h"
 #include "NotationToolBox.h"
 #include "NoteRestInserter.h"
@@ -32,6 +33,7 @@
 #include "StaffLayout.h"
 #include "HeadersGroup.h"
 #include "NotationStaff.h"
+#include "NotationView.h"
 
 #include "base/RulerScale.h"
 #include "base/BaseProperties.h"
@@ -520,6 +522,8 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                            m_referenceScale,
                                            false);  // invert
     m_topStandardRuler->setDocument(document);
+    NotationView *mainWindow = dynamic_cast<NotationView *>(parent());
+    m_topStandardRuler->setMainWindow(mainWindow);
     m_topStandardRuler->setAutoScroller(&m_autoScroller);
     connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &NotationWidget::slotStandardRulerDrag);
@@ -530,6 +534,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                               m_referenceScale,
                                               true);  // invert
     m_bottomStandardRuler->setDocument(document);
+    m_bottomStandardRuler->setMainWindow(mainWindow);
     m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &NotationWidget::slotStandardRulerDrag);

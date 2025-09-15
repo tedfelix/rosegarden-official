@@ -104,6 +104,14 @@ void StandardRuler::setAutoScroller(QPointer<AutoScroller> autoScroller)
         m_loopRuler->setAutoScroller(autoScroller);
 }
 
+void StandardRuler::setMainWindow(QPointer<QMainWindow> mainWindow)
+{
+    if (m_markerRuler)
+        m_markerRuler->setMainWindow(mainWindow);
+    //if (m_loopRuler)
+    //    m_loopRuler->setMainWindow(mainWindow);
+}
+
 void StandardRuler::setDocument(RosegardenDocument *doc)
 {
     //RG_DEBUG << "connectRulerToDocPointer()";

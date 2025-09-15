@@ -30,6 +30,7 @@
 #include "MatrixResizer.h"
 #include "MatrixVelocity.h"
 #include "MatrixMouseEvent.h"
+#include "MatrixView.h"
 #include "MatrixViewSegment.h"
 #include "PianoKeyboard.h"
 
@@ -475,6 +476,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                            m_referenceScale,
                                            false);  // invert
     m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+    MatrixView *mainWindow = dynamic_cast<MatrixView *>(parent());
+    m_topStandardRuler->setMainWindow(mainWindow);
     m_topStandardRuler->setAutoScroller(&m_autoScroller);
     m_topStandardRuler->setDocument(document);
     connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
@@ -486,6 +489,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                                                m_referenceScale,
                                                true);  // invert
     m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+    m_bottomStandardRuler->setMainWindow(mainWindow);
     m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
     m_bottomStandardRuler->setDocument(document);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,

@@ -27,6 +27,7 @@
 #include <QWidget>
 
 class QPaintEvent;
+class QMainWindow;
 class QMouseEvent;
 class QMenu;
 
@@ -52,6 +53,9 @@ public:
                 QWidget *parent);
     void setAutoScroller(QPointer<AutoScroller> autoScroller)
             { m_autoScroller = autoScroller; }
+    /// For status text.
+    void setMainWindow(QPointer<QMainWindow> mainWindow)
+            { m_mainWindow = mainWindow; }
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
@@ -109,6 +113,7 @@ private:
     
     RulerScale *m_rulerScale;
 
+    QPointer<QMainWindow> m_mainWindow;
     QPointer<AutoScroller> m_autoScroller;
 
 };

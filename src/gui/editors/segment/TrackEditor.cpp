@@ -158,6 +158,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                      true,
                                      this);
     m_topStandardRuler->setDocument(m_doc);
+    m_topStandardRuler->setMainWindow(RosegardenMainWindow::self());
     grid->addWidget(m_topStandardRuler, 2, 1);
 
     // Segment Canvas (CompositionView)
@@ -179,6 +180,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
                                         true,
                                         m_compositionView);
     m_bottomStandardRuler->setDocument(m_doc);
+    m_bottomStandardRuler->setMainWindow(RosegardenMainWindow::self());
 
     m_compositionView->setBottomRuler(m_bottomStandardRuler);
 

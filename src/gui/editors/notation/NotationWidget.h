@@ -37,8 +37,10 @@ class QString;
 class QGraphicsScene;
 class QTimer;
 
+
 namespace Rosegarden
 {
+
 
 class Device;
 class RosegardenDocument;
@@ -61,6 +63,12 @@ class RawNoteRuler;
 class ControlRulerWidget;
 class HeadersGroup;
 
+
+/// QWidget that fills the notation editor's (NotationView) client area.
+/**
+ * The main notation editor window, NotationView, owns the only instance
+ * of this class.  See NotationView::m_notationWidget.
+ */
 class NotationWidget : public QWidget,
                        public SelectionManager
 {

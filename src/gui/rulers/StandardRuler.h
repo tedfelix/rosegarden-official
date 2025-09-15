@@ -24,6 +24,8 @@
 #include <QPointer>
 #include <QWidget>
 
+class QMainWindow;
+
 
 namespace Rosegarden
 {
@@ -50,6 +52,7 @@ public:
                   QWidget *parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
+    void setMainWindow(QPointer<QMainWindow> mainWindow);
     void setAutoScroller(QPointer<AutoScroller> autoScroller);
 
     LoopRuler *getLoopRuler()  { return m_loopRuler; }

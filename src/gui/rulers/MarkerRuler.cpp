@@ -44,9 +44,11 @@
 #include <QPainter>
 #include <QPen>
 #include <QPoint>
+#include <QMainWindow>
 #include <QMenu>
 #include <QRect>
 #include <QSize>
+#include <QStatusBar>
 #include <QString>
 #include <QAction>
 
@@ -554,10 +556,9 @@ MarkerRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 
         m_dragging = true;
 
-        // Would be nice to be able to do this, but we need a QMainWindow *.
-        // Elsewhere, signal/slot spaghetti is used.  Search on showContextHelp.
-        //m_mainWindow->statusBar()->showMessage(
-        //      tr("Hold Shift to avoid snapping to beat grid"), 10000);
+        if (m_mainWindow)
+            m_mainWindow->statusBar()->showMessage(
+                    tr("Hold Shift to avoid snapping to beat grid"), 10000);
 
         // Compute drag time.
         SnapGrid snapGrid(m_rulerScale);
@@ -584,6 +585,9 @@ MarkerRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 
         if (m_dragging) {
             m_dragging = false;
+
+            if (m_mainWindow)
+                m_mainWindow->statusBar()->clearMessage();
 
             Composition &comp = m_doc->getComposition();
 
