@@ -767,16 +767,16 @@ void NoteRestInserter::showPreview(bool play)
 
         // Prepare to get the elements of the bar in reverse order
         typedef std::reverse_iterator<Segment::iterator> RevIt;
-        RevIt rit(it);
-        RevIt last(itFirst);
+        RevIt reverseEventIter1(it);
+        RevIt last1(itFirst);
 
         // While done is false whe have to look back to some previous event
         // which may modify the accidental preview
         bool done = false;
 
         // Walk through the bar
-        for ( ; rit != last; ++rit) {
-            Event *ev = *rit;
+        for ( ; reverseEventIter1 != last1; ++reverseEventIter1) {
+            Event *ev = *reverseEventIter1;
             bool lookForNoteOnSameOctave = false;
 
             if (ev->isa(Key::EventType)) {
@@ -985,12 +985,12 @@ void NoteRestInserter::showPreview(bool play)
             itFirst = segment.findTime(startOfPreviousBar);
 
             // Prepare to get the elements of the previous bar in reverse order
-            RevIt rit(itLast);
-            RevIt last(itFirst);
+            RevIt reverseEventIter2(itLast);
+            RevIt last2(itFirst);
 
             // Walk through the bar
-            for ( ; rit != last; ++rit) {
-                Event *ev = *rit;
+            for ( ; reverseEventIter2 != last2; ++reverseEventIter2) {
+                Event *ev = *reverseEventIter2;
 
                 if (ev->isa(Key::EventType)) {
                     // Stop looking for notes as soon as a key signature is found

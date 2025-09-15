@@ -104,13 +104,13 @@ AudioPeaksThread::process()
 
         // process 1st request and leave
         inQueue = m_queue.size();
-        RequestQueue::iterator i = m_queue.begin();
+        RequestQueue::iterator i1 = m_queue.begin();
 
-        // i->first is width, which we use only to provide an ordering to
+        // i1->first is width, which we use only to provide an ordering to
         // ensure we do smaller files first.  We don't use it here.
 
-        RequestRec &rec = i->second;
-        int token = rec.first;
+        RequestRec &rec = i1->second;
+        const int token = rec.first;
         Request req = rec.second;
         m_mutex.unlock();
 
@@ -157,10 +157,10 @@ AudioPeaksThread::process()
         // (i.e. hasn't been cancelled).  Otherwise we shouldn't notify
 
         bool found = false;
-        for (RequestQueue::iterator i = m_queue.begin(); i != m_queue.end(); ++i) {
-            if (i->second.first == token) {
+        for (RequestQueue::iterator i2 = m_queue.begin(); i2 != m_queue.end(); ++i2) {
+            if (i2->second.first == token) {
                 found = true;
-                m_queue.erase(i);
+                m_queue.erase(i2);
                 break;
             }
         }

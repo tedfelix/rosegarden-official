@@ -91,8 +91,8 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
 
     // * Label
 
-    QLabel *label = new QLabel(tr("Label"), this);
-    label->setFont(m_font);
+    QLabel *labelLabel = new QLabel(tr("Label"), this);
+    labelLabel->setFont(m_font);
 
     m_label = new Label("", this);
     // SPECIAL_LABEL => Gray background, black text.  See ThornStyle.cpp.
@@ -164,10 +164,11 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     for (unsigned int i = 0; i < m_standardQuantizations.size(); ++i) {
         timeT time = m_standardQuantizations[i];
         timeT error = 0;
-        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
+        const QString text = NotationStrings::makeNoteMenuLabel(
+                time, true, error);
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
         // Add the icon and label to the ComboBox.
-        m_quantize->addItem(error ? noMap : pmap, label);
+        m_quantize->addItem(error ? noMap : pmap, text);
     }
     m_quantize->addItem(noMap, tr("Off"));
 
@@ -210,13 +211,14 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
         m_delays.push_back(time);
 
         timeT error = 0;
-        QString label = NotationStrings::makeNoteMenuLabel(time, true, error);
+        const QString text = NotationStrings::makeNoteMenuLabel(
+                time, true, error);
         QPixmap pmap = NotePixmapFactory::makeNoteMenuPixmap(time, error);
 
         // check if it's a valid note duration (it will be for the
         // time defn above, but if we were basing it on the sequencer
         // resolution it might not be) & include a note pixmap if so
-        m_delay->addItem((error ? noMap : pmap), label);
+        m_delay->addItem((error ? noMap : pmap), text);
     }
 
     // For each real-time delay (msecs)
@@ -300,7 +302,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
     gridLayout->setContentsMargins(0, 0, 0, 0);
     gridLayout->setSpacing(2);
     // Row 0: Label
-    gridLayout->addWidget(label, 0, 0);
+    gridLayout->addWidget(labelLabel, 0, 0);
     gridLayout->addWidget(m_label, 0, 1, 1, 5);
     // Row 1: Repeat/Transpose
     gridLayout->addWidget(repeatLabel, 1, 0);

@@ -337,27 +337,27 @@ TempoAndTimeSignatureEditor::updateTable()
             m_tableWidget->insertRow(row);
 
             // Time
-            QTableWidgetItem *item = new QTableWidgetItem;
-            item->setData(Qt::EditRole, timeVariant);
-            item->setData(TimeRole, QVariant(qlonglong(sig.first)));
-            item->setData(TypeRole, (int)Type::TimeSignature);
-            item->setData(IndexRole, timeSignatureIndex);
-            m_tableWidget->setItem(row, 0, item);
+            QTableWidgetItem *item1 = new QTableWidgetItem;
+            item1->setData(Qt::EditRole, timeVariant);
+            item1->setData(TimeRole, QVariant(qlonglong(sig.first)));
+            item1->setData(TypeRole, (int)Type::TimeSignature);
+            item1->setData(IndexRole, timeSignatureIndex);
+            m_tableWidget->setItem(row, 0, item1);
 
             // Type
-            item = new QTableWidgetItem(tr("Time Signature   "));
-            m_tableWidget->setItem(row, 1, item);
+            item1 = new QTableWidgetItem(tr("Time Signature   "));
+            m_tableWidget->setItem(row, 1, item1);
 
             // Value
-            item = new QTableWidgetItem(
+            item1 = new QTableWidgetItem(
                     QString("%1/%2   ").
                             arg(sig.second.getNumerator()).
                             arg(sig.second.getDenominator()));
-            m_tableWidget->setItem(row, 2, item);
+            m_tableWidget->setItem(row, 2, item1);
 
             // Properties
-            item = new QTableWidgetItem(properties);
-            m_tableWidget->setItem(row, 3, item);
+            item1 = new QTableWidgetItem(properties);
+            m_tableWidget->setItem(row, 3, item1);
 
             // Create key.
             Key key;
@@ -366,10 +366,10 @@ TempoAndTimeSignatureEditor::updateTable()
 
             // Set current if it is the right one.
             if (haveCurrentItem  &&  currentItemKey == key) {
-                item = m_tableWidget->item(row, currentItemColumn);
-                if (item) {
+                item1 = m_tableWidget->item(row, currentItemColumn);
+                if (item1) {
                     m_tableWidget->setCurrentItem(
-                            item, QItemSelectionModel::NoUpdate);
+                            item1, QItemSelectionModel::NoUpdate);
                 }
             }
 
@@ -388,10 +388,10 @@ TempoAndTimeSignatureEditor::updateTable()
                 // Select the entire row.
                 // For each column...
                 for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
-                    QTableWidgetItem *item = m_tableWidget->item(row, col);
-                    if (!item)
+                    QTableWidgetItem *item2 = m_tableWidget->item(row, col);
+                    if (!item2)
                         continue;
-                    item->setSelected(true);
+                    item2->setSelected(true);
                 }
                 haveSelection = true;
             }
@@ -447,25 +447,25 @@ TempoAndTimeSignatureEditor::updateTable()
             m_tableWidget->insertRow(row);
 
             // Time
-            QTableWidgetItem *item = new QTableWidgetItem;
-            item->setData(Qt::EditRole, timeVariant);
-            item->setData(TimeRole, QVariant(qlonglong(time)));
-            item->setData(TypeRole, (int)Type::Tempo);
-            item->setData(IndexRole, tempoIndex);
-            m_tableWidget->setItem(row, 0, item);
+            QTableWidgetItem *item1 = new QTableWidgetItem;
+            item1->setData(Qt::EditRole, timeVariant);
+            item1->setData(TimeRole, QVariant(qlonglong(time)));
+            item1->setData(TypeRole, (int)Type::Tempo);
+            item1->setData(IndexRole, tempoIndex);
+            m_tableWidget->setItem(row, 0, item1);
 
             // Type
-            item = new QTableWidgetItem(tr("Tempo   "));
-            m_tableWidget->setItem(row, 1, item);
+            item1 = new QTableWidgetItem(tr("Tempo   "));
+            m_tableWidget->setItem(row, 1, item1);
 
             // Value
-            item = new QTableWidgetItem(desc);
-            m_tableWidget->setItem(row, 2, item);
+            item1 = new QTableWidgetItem(desc);
+            m_tableWidget->setItem(row, 2, item1);
 
             // Properties
             // Put an empty one in or things get strange.
-            item = new QTableWidgetItem();
-            m_tableWidget->setItem(row, 3, item);
+            item1 = new QTableWidgetItem();
+            m_tableWidget->setItem(row, 3, item1);
 
             // Create key.
             Key key;
@@ -474,10 +474,10 @@ TempoAndTimeSignatureEditor::updateTable()
 
             // Set current if it is the right one.
             if (haveCurrentItem  &&  currentItemKey == key) {
-                item = m_tableWidget->item(row, currentItemColumn);
-                if (item)
+                item1 = m_tableWidget->item(row, currentItemColumn);
+                if (item1)
                     m_tableWidget->setCurrentItem(
-                            item, QItemSelectionModel::NoUpdate);
+                            item1, QItemSelectionModel::NoUpdate);
             }
 
             // There's a new item we need to select.
@@ -495,10 +495,10 @@ TempoAndTimeSignatureEditor::updateTable()
                 // Select the entire row.
                 // For each column...
                 for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
-                    QTableWidgetItem *item = m_tableWidget->item(row, col);
-                    if (!item)
+                    QTableWidgetItem *item2 = m_tableWidget->item(row, col);
+                    if (!item2)
                         continue;
-                    item->setSelected(true);
+                    item2->setSelected(true);
                 }
                 haveSelection = true;
             }

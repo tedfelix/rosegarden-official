@@ -763,9 +763,9 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
 
     // The bar lines have to be in order of layout-x (there's no
     // such interesting stipulation for beat or connecting lines)
-    BarLineList::iterator insertPoint = lower_bound
+    BarLineList::iterator insertPoint1 = lower_bound
         (m_barLines.begin(), m_barLines.end(), line, compareBars);
-    m_barLines.insert(insertPoint, line);
+    m_barLines.insert(insertPoint1, line);
 
     if (lastBarInRow) {
 
@@ -788,9 +788,9 @@ StaffLayout::insertBar(double layoutX, double width, bool isCorrect,
         else
             eline->show();
 
-        BarLineList::iterator insertPoint = lower_bound
+        BarLineList::iterator insertPoint2 = lower_bound
             (m_barLines.begin(), m_barLines.end(), eline, compareBars);
-        m_barLines.insert(insertPoint, eline);
+        m_barLines.insert(insertPoint2, eline);
     }
 
     if (showBarNo) {
