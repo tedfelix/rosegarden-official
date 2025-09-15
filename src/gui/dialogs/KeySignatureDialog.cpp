@@ -407,8 +407,8 @@ KeySignatureDialog::slotKeyNameChanged(int index)
     if (m_explanatoryLabel)
         m_explanatoryLabel->hide();
 
-    const QString s = m_keyCombo->itemData(index).toString();
-    std::string name(getKeyName(s, m_key.isMinor()));
+    const QString comboBoxString = m_keyCombo->itemData(index).toString();
+    std::string name(getKeyName(comboBoxString, m_key.isMinor()));
 
     try {
         m_key = Rosegarden::Key(name);
@@ -419,8 +419,8 @@ KeySignatureDialog::slotKeyNameChanged(int index)
             name = name.substr(0, space);
         m_keyCombo->setEditText(strtoqstr(name));
 
-    } catch (const Rosegarden::Key::BadKeyName &s) {
-        RG_WARNING << s.getMessage();
+    } catch (const Rosegarden::Key::BadKeyName &exception) {
+        RG_WARNING << exception.getMessage();
         setValid(false);
     }
 
@@ -428,19 +428,19 @@ KeySignatureDialog::slotKeyNameChanged(int index)
 }
 
 void
-KeySignatureDialog::slotMajorMinorChanged(const QString &s)
+KeySignatureDialog::slotMajorMinorChanged(const QString &quality)
 {
     if (m_ignoreComboChanges)
         return ;
 
     QString text = m_keyCombo->itemData(m_keyCombo->currentIndex()).toString();
-    std::string name(getKeyName(text, s == tr("Minor")));
+    std::string name(getKeyName(text, quality == tr("Minor")));
 
     try {
         m_key = Rosegarden::Key(name);
         setValid(true);
-    } catch (const Rosegarden::Key::BadKeyName &s) {
-        RG_WARNING << s.getMessage();
+    } catch (const Rosegarden::Key::BadKeyName &exception) {
+        RG_WARNING << exception.getMessage();
         setValid(false);
     }
 

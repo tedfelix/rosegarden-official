@@ -1173,8 +1173,8 @@ AudioPluginDialog::slotDefault()
     if (!inst)
         return ;
 
-    int i = m_pluginList->currentIndex();
-    int n = m_pluginsInList[i];
+    int index = m_pluginList->currentIndex();
+    int n = m_pluginsInList[index];
     if (n == 0)
         return ;
 
@@ -1182,14 +1182,16 @@ AudioPluginDialog::slotDefault()
     if (!plugin)
         return ;
 
-    for (std::vector<PluginControl *>::iterator i = m_pluginWidgets.begin();
-         i != m_pluginWidgets.end(); ++i) {
+    for (std::vector<PluginControl *>::iterator pluginControlIter =
+                 m_pluginWidgets.begin();
+         pluginControlIter != m_pluginWidgets.end();
+         ++pluginControlIter) {
 
         for (AudioPlugin::PluginPortVector::iterator pi = plugin->begin();
              pi != plugin->end();
              ++pi) {
-            if ((*pi)->getNumber() == (*i)->getIndex()) {
-                (*i)->setValue((*pi)->getDefaultValue(), true); // and emit
+            if ((*pi)->getNumber() == (*pluginControlIter)->getIndex()) {
+                (*pluginControlIter)->setValue((*pi)->getDefaultValue(), true); // and emit
                 break;
             }
         }
