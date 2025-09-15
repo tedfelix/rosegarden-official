@@ -181,7 +181,7 @@ MarkerRuler::slotEditMarker()
 void
 MarkerRuler::slotRenameMarker()
 {
-    Rosegarden::Marker *marker = getMarkerAtClickPosition();
+    const Rosegarden::Marker *marker = getMarkerAtClickPosition();
     if (!marker)
         return;
 
@@ -348,7 +348,7 @@ MarkerRuler::paintEvent(QPaintEvent *)
         return;
 
     const Composition &comp = m_doc->getComposition();
-    const Composition::MarkerVector markers = comp.getMarkers();
+    const Composition::MarkerVector &markers = comp.getMarkers();
 
     const timeT end = comp.getBarEnd(lastBar);
 

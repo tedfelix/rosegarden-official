@@ -450,39 +450,40 @@ AnalysisHelper::cp_less::operator()(ChordPossibility l, ChordPossibility r)
 
 void
 AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
-                                       HarmonyGuessList &l, Segment &segment)
+                                       HarmonyGuessList &harmonyGuessList,
+                                       Segment &segment)
 {
     // (Fetch the piece's starting key from the key guesser)
     Key key;
 
     checkProgressionMap();
 
-    if (l.size() < 2)
+    if (harmonyGuessList.size() < 2)
     {
-        l.clear();
+        harmonyGuessList.clear();
         return;
     }
 
     // Look at the list of harmony guesses two guesses at a time.
 
-    HarmonyGuessList::iterator i = l.begin();
+    HarmonyGuessList::iterator i = harmonyGuessList.begin();
     // j stays ahead of i
     HarmonyGuessList::iterator j = i + 1;
 
     ChordLabel bestGuessForFirstChord, bestGuessForSecondChord;
-    while (j != l.end())
+    while (j != harmonyGuessList.end())
     {
 
         double highestScore = 0;
 
         // For each possible pair of chords (i.e., two for loops here)
-        for (HarmonyGuess::iterator k = i->second.begin();
-             k != i->second.end();
-             ++k)
+        for (HarmonyGuess::iterator harmonyIter1 = i->second.begin();
+             harmonyIter1 != i->second.end();
+             ++harmonyIter1)
         {
-            for (HarmonyGuess::iterator l = j->second.begin();
-                 l != j->second.end();
-                 ++l)
+            for (HarmonyGuess::iterator harmonyIter2 = j->second.begin();
+                 harmonyIter2 != j->second.end();
+                 ++harmonyIter2)
             {
                 // Print the guess being processed:
 
@@ -494,7 +495,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                 // its scores.
 
                 double currentScore;
-                currentScore = k->first * l->first;
+                currentScore = harmonyIter1->first * harmonyIter2->first;
 
                 //    std::cerr << currentScore << std::endl;
 
@@ -507,14 +508,14 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
 
                 ProgressionMap::iterator pmi =
                     m_progressionMap.lower_bound(
-                        ChordProgression(k->second, l->second)
+                        ChordProgression(harmonyIter1->second, harmonyIter2->second)
                     );
 
                 // no initialization
                 for ( ;
                      pmi != m_progressionMap.end()
-                     && pmi->first == k->second
-                     && pmi->second == l->second;
+                     && pmi->first == harmonyIter1->second
+                     && pmi->second == harmonyIter2->second;
                      ++pmi)
                 {
                     // key doesn't have operator== defined
@@ -535,8 +536,8 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                 // progression
                 if (currentScore > highestScore)
                 {
-                    bestGuessForFirstChord  = k->second;
-                    bestGuessForSecondChord = l->second;
+                    bestGuessForFirstChord  = harmonyIter1->second;
+                    bestGuessForSecondChord = harmonyIter2->second;
                     highestScore = currentScore;
                 }
 

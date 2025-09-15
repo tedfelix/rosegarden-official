@@ -609,22 +609,22 @@ private:
                             PropertyMap::const_iterator &i) const
     {
         PropertyMap::iterator j;
-        PropertyMap *map = const_cast<Event *>(this)->find(name, j);
+        PropertyMap *propertyMap = const_cast<Event *>(this)->find(name, j);
         i = j;
-        return map;
+        return propertyMap;
     }
 
     // cppcheck-suppress functionConst
     PropertyMap::iterator insert(const PropertyPair &pair, bool persistent)
     {
-        PropertyMap **map =
+        PropertyMap **propertyMap =
             (persistent ? &m_data->m_properties : &m_nonPersistentProperties);
 
         // If the map hasn't been created yet, create it.
-        if (!*map)
-            *map = new PropertyMap();
+        if (!*propertyMap)
+            *propertyMap = new PropertyMap();
 
-        return (*map)->insert(pair).first;
+        return (*propertyMap)->insert(pair).first;
     }
 
     static int getSubOrdering(const std::string& eventType);
@@ -651,10 +651,10 @@ Event::get(const PropertyName &name,
 #endif
 
     PropertyMap::const_iterator i;
-    const PropertyMap *map = find(name, i);
+    const PropertyMap *propertyMap = find(name, i);
 
     // Not found?  Bail.
-    if (!map)
+    if (!propertyMap)
         return false;
 
     PropertyStoreBase *sb = i->second;
@@ -680,9 +680,9 @@ Event::get(const PropertyName &name) const
 #endif
 
     PropertyMap::const_iterator i;
-    const PropertyMap *map = find(name, i);
+    const PropertyMap *propertyMap = find(name, i);
 
-    if (map) {
+    if (propertyMap) {
 
         PropertyStoreBase *sb = i->second;
         if (sb->getType() == P)
@@ -711,12 +711,12 @@ Event::isPersistent(const PropertyName &name) const
     // throw (NoData)
 {
     PropertyMap::const_iterator i;
-    const PropertyMap *map = find(name, i);
+    const PropertyMap *propertyMap = find(name, i);
 
-    if (!map)
+    if (!propertyMap)
         throw NoData(name.getName(), __FILE__, __LINE__);
 
-    return (map == m_data->m_properties);
+    return (propertyMap == m_data->m_properties);
 }
 
 
@@ -736,14 +736,14 @@ Event::set(const PropertyName &name, typename PropertyDefn<P>::basic_type value,
     unshare();
 
     PropertyMap::iterator i;
-    PropertyMap *map = find(name, i);
+    PropertyMap *propertyMap = find(name, i);
 
     // If found, update.
-    if (map) {
-        bool persistentBefore = (map == m_data->m_properties);
+    if (propertyMap) {
+        bool persistentBefore = (propertyMap == m_data->m_properties);
         if (persistentBefore != persistent) {
             i = insert(*i, persistent);
-            map->erase(name);
+            propertyMap->erase(name);
         }
 
         PropertyStoreBase *sb = i->second;
@@ -779,12 +779,12 @@ Event::setMaybe(const PropertyName &name, typename PropertyDefn<P>::basic_type v
     unshare();
 
     PropertyMap::iterator i;
-    const PropertyMap *map = find(name, i);
+    const PropertyMap *propertyMap = find(name, i);
 
     // If found, update only if not persistent
-    if (map) {
+    if (propertyMap) {
         // If persistent, bail.
-        if (map == m_data->m_properties)
+        if (propertyMap == m_data->m_properties)
             return;
 
         PropertyStoreBase *sb = i->second;

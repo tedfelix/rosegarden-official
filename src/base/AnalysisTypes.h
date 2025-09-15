@@ -180,7 +180,7 @@ protected:
 
     /// For use by guessHarmonies
     void refineHarmonyGuessList(CompositionTimeSliceAdapter &c,
-                                HarmonyGuessList& l,
+                                HarmonyGuessList &harmonyGuessList,
                                 Segment &);
 
     /// For use by guessHarmonies (makeHarmonyGuessList)

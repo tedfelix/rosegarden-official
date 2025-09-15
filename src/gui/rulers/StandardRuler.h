@@ -56,7 +56,6 @@ public:
     void setAutoScroller(QPointer<AutoScroller> autoScroller);
 
     LoopRuler *getLoopRuler()  { return m_loopRuler; }
-    MarkerRuler *getMarkerRuler()  { return m_markerRuler; }
 
     /**
      * Make connections from the LoopRuler to the document's
