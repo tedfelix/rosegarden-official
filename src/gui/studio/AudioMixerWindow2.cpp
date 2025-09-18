@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioMixerWindow2]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioMixerWindow2.h"
 
@@ -28,10 +28,14 @@
 #include "gui/general/IconLoader.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
+#include "base/RecordIn.h"
+#include "sound/MappedCommon.h"
 #include "sound/MappedEvent.h"
+#include "sound/MappedStudio.h"
 #include "sound/Midi.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/studio/StudioControl.h"
 #include "base/Studio.h"
 
 #include <QDesktopServices>
@@ -411,23 +415,69 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
     unsigned count = name.mid(7).toUInt();
 
     // check for inputs in use
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    Studio &studio = doc->getStudio();
+
     InUseList ilist;
     checkRecordInUsed(count, ilist);
     if (ilist.size() > 0) {
         QString warnText =
-            tr("Cannot reduce input count. Inputs in use:");
+            tr("Inputs in use:");
         for (const InUse& inUse : ilist) {
             std::string iname = inUse.instrument->getName();
             warnText += tr("\nInput %1 Instrument %2").arg(inUse.id).
                 arg(QString(iname.c_str()));
         }
-        QMessageBox::warning(this, tr("Change inputs"), warnText);
-        updateWidgets(); // to reset the active menu item
-        return;
-    }
+        warnText += tr("\nReset these to input 1 ?");
+        QMessageBox::StandardButton reply =
+            QMessageBox::warning(this,
+                                 tr("Change Inputs"),
+                                 warnText,
+                                 QMessageBox::Ok | QMessageBox::Cancel,
+                                 QMessageBox::Cancel);
+        if (reply == QMessageBox::Cancel) {
+            updateWidgets(); // to reset the active menu item
+            return;
+        }
 
-    RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Studio &studio = doc->getStudio();
+        // reset the instruments to input 1
+        for (const InUse& inUse : ilist) {
+            bool oldIsBuss;
+            int oldChannel;
+            int oldInput =
+                inUse.instrument->getAudioInput(oldIsBuss, oldChannel);
+            Q_ASSERT(oldIsBuss == false);
+            MappedObjectId oldMappedId = 0;
+            RecordIn *in = studio.getRecordIn(oldInput);
+            if (in) oldMappedId = in->mappedId;
+            int newChannel = 0;
+            int newInput = 0; // Input 1
+            // Compute new mapped ID
+            MappedObjectId newMappedId = 0;
+            in = studio.getRecordIn(newInput);
+            Q_ASSERT(in != nullptr);
+            newMappedId = in->mappedId;
+            // Update the Studio
+            if (oldMappedId != 0) {
+                StudioControl::disconnectStudioObjects
+                    (oldMappedId, inUse.instrument->getMappedId());
+            } else {
+                StudioControl::disconnectStudioObject
+                    (inUse.instrument->getMappedId());
+            }
+            StudioControl::setStudioObjectProperty
+                (inUse.instrument->getMappedId(),
+                 MappedAudioFader::InputChannel,
+                 MappedObjectValue(newChannel));
+            if (newMappedId != 0) {
+                // Connect the input to the instrument.
+                StudioControl::connectStudioObjects
+                    (newMappedId, inUse.instrument->getMappedId());
+            }
+            // Update the Instrument
+            inUse.instrument->setAudioInputToRecord(newInput, newChannel);
+        }
+    }
 
     studio.setRecordInCount(count);
 
@@ -457,23 +507,99 @@ AudioMixerWindow2::slotNumberOfSubmasters()
     int count = name.mid(11).toInt();
 
     // check for submasters in use
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    Studio &studio = doc->getStudio();
+
     InUseList ilist;
     checkSubmasterUsed(count, ilist);
     if (ilist.size() > 0) {
         QString warnText =
-            tr("Cannot reduce submaster count. Submasters in use:");
+            tr("Submasters in use:");
         for (const InUse& inUse : ilist) {
             std::string iname = inUse.instrument->getName();
             warnText += tr("\nSubmaster %1 Instrument %2").arg(inUse.id).
                 arg(QString(iname.c_str()));
         }
-        QMessageBox::warning(this, tr("Change inputs"), warnText);
-        updateWidgets(); // to reset the active menu item
-        return;
-    }
+        warnText += tr("\nReset these to Master ?");
+        QMessageBox::StandardButton reply =
+            QMessageBox::warning(this,
+                                 tr("Change Submasters"),
+                                 warnText,
+                                 QMessageBox::Ok | QMessageBox::Cancel,
+                                 QMessageBox::Cancel);
+        if (reply == QMessageBox::Cancel) {
+            updateWidgets(); // to reset the active menu item
+            return;
+        }
 
-    RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Studio &studio = doc->getStudio();
+        // reset the instruments to Master
+        for (const InUse& inUse : ilist) {
+            if (inUse.isInput) {
+                // submaster as input
+                bool oldIsBuss;
+                int oldChannel;
+                int oldInput =
+                    inUse.instrument->getAudioInput(oldIsBuss, oldChannel);
+                Q_ASSERT(oldIsBuss == true);
+                MappedObjectId oldMappedId = 0;
+                Buss *buss = studio.getBussById(oldInput);
+                if (buss) oldMappedId = buss->getMappedId();
+                int newChannel = 0;
+                int newInput = 0; // Master
+                // Compute new mapped ID
+                MappedObjectId newMappedId = 0;
+                buss = studio.getBussById(newInput);
+                Q_ASSERT(buss != nullptr);
+                newMappedId = buss->getMappedId();
+                // Update the Studio
+                if (oldMappedId != 0) {
+                    StudioControl::disconnectStudioObjects
+                        (oldMappedId, inUse.instrument->getMappedId());
+                } else {
+                    StudioControl::disconnectStudioObject
+                        (inUse.instrument->getMappedId());
+                }
+                StudioControl::setStudioObjectProperty
+                    (inUse.instrument->getMappedId(),
+                     MappedAudioFader::InputChannel,
+                     MappedObjectValue(newChannel));
+                if (newMappedId != 0) {
+                    // Connect the input to the instrument.
+                    StudioControl::connectStudioObjects
+                        (newMappedId, inUse.instrument->getMappedId());
+                }
+                // Update the Instrument
+                inUse.instrument->setAudioInputToBuss(newInput, newChannel);
+            } else {
+                // submaster as ouptput
+                BussId bussId = inUse.instrument->getAudioOutput();
+                Buss *oldBuss = studio.getBussById(bussId);
+
+                Buss *newBuss = studio.getBussById(0);
+                Q_ASSERT(newBuss != nullptr);
+
+                // Update the Studio
+
+                if (oldBuss) {
+                    StudioControl::disconnectStudioObjects
+                        (inUse.instrument->getMappedId(),
+                         oldBuss->getMappedId());
+                } else {
+                    StudioControl::disconnectStudioObject
+                        (inUse.instrument->getMappedId());
+                }
+
+                StudioControl::connectStudioObjects
+                    (inUse.instrument->getMappedId(),
+                     newBuss->getMappedId());
+
+                // Update the Instrument
+
+                inUse.instrument->setAudioOutput(0);
+            }
+        }
+
+    }
 
     // Add one for the master buss.
     studio.setBussCount(count + 1);
@@ -679,7 +805,7 @@ void AudioMixerWindow2::checkRecordInUsed(int newCount, InUseList& inUseList)
     for (InstrumentVector::iterator i = instruments.begin();
          i != instruments.end();
          ++i) {
-        const Instrument *instrument = *i;
+        Instrument *instrument = *i;
         bool isBuss;
         int channel;
         int recIn = instrument->getAudioInput(isBuss, channel);
@@ -687,6 +813,7 @@ void AudioMixerWindow2::checkRecordInUsed(int newCount, InUseList& inUseList)
         if (recIn >= newCount) {
             InUse iu;
             iu.id = recIn + 1;
+            iu.isInput = true;
             iu.instrument = instrument;
             inUseList.push_back(iu);
         }
@@ -710,13 +837,14 @@ void AudioMixerWindow2::checkSubmasterUsed(int newCount, InUseList& inUseList)
     for (InstrumentVector::iterator i = instruments.begin();
          i != instruments.end();
          ++i) {
-        const Instrument *instrument = *i;
+        Instrument *instrument = *i;
         bool isBuss;
         int channel;
         int subm = instrument->getAudioInput(isBuss, channel);
         if (isBuss && subm > newCount) {
             InUse iu;
             iu.id = subm;
+            iu.isInput = true;
             iu.instrument = instrument;
             inUseList.push_back(iu);
         }
@@ -725,6 +853,7 @@ void AudioMixerWindow2::checkSubmasterUsed(int newCount, InUseList& inUseList)
         if (subm > newCount) {
             InUse iu;
             iu.id = subm;
+            iu.isInput = false;
             iu.instrument = instrument;
             inUseList.push_back(iu);
         }

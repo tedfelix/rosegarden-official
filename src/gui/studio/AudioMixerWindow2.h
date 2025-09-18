@@ -107,7 +107,8 @@ private:
     struct InUse
     {
         int id;
-        const Instrument* instrument;
+        bool isInput;
+        Instrument* instrument;
     };
     typedef std::list<InUse> InUseList;
 
