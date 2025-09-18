@@ -79,11 +79,6 @@ public:
 
     void updateContents();
 
-    void startAutoScroll();
-    void setFollowMode(FollowMode followMode)
-            { m_autoScroller.setFollowMode(followMode); }
-    void stopAutoScroll();
-
     bool isAutoScrolling() const  { return m_autoScroller.isRunning(); }
 
     /// Playback scrolling.
@@ -140,6 +135,10 @@ protected:
 
     void wheelEvent(QWheelEvent *) override;
 
+    // *** Auto Scrolling
+
+    AutoScroller m_autoScroller;
+
 private:
 
     StandardRuler *m_bottomRuler;
@@ -157,10 +156,6 @@ private:
 
     /// Adjust the scrollbars' max and page step.
     void updateScrollBars();
-
-    // *** Auto Scrolling
-
-    AutoScroller m_autoScroller;
 
 };
 

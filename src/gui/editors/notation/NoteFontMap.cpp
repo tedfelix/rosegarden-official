@@ -88,9 +88,9 @@ NoteFontMap::NoteFontMap(QString name) :
 
     XMLReader reader;
     reader.setHandler(this);
-    bool ok = reader.parse(mapFile);
+    bool success = reader.parse(mapFile);
 
-    if (!ok) {
+    if (!success) {
         throw MappingFileReadFailed(m_errorString);
     }
 }
@@ -336,14 +336,14 @@ NoteFontMap::startElement(const QString &, const QString &,
     } else if (lcName == "codebase") {
 
         int bn = 0, fn = 0;
-        bool ok;
+        bool ok2;
         QString base = attributes.value("base").toString();
         if ( base.isEmpty() ) {
             m_errorString = "base is a required attribute of codebase";
             return false;
         }
-        bn = base.toInt(&ok);
-        if (!ok || bn < 0) {
+        bn = base.toInt(&ok2);
+        if (!ok2 || bn < 0) {
             m_errorString =
                 QString("invalid base attribute \"%1\" (must be integer >= 0)").
                 arg(base);
@@ -355,8 +355,8 @@ NoteFontMap::startElement(const QString &, const QString &,
             m_errorString = "font-id is a required attribute of codebase";
             return false;
         }
-        fn = fontId.trimmed().toInt(&ok);
-        if (!ok || fn < 0) {
+        fn = fontId.trimmed().toInt(&ok2);
+        if (!ok2 || fn < 0) {
             m_errorString =
                 QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
                 arg(fontId);
@@ -379,10 +379,10 @@ NoteFontMap::startElement(const QString &, const QString &,
         QString glyph = attributes.value("glyph").toString();
 
         int icode = -1;
-        bool ok = false;
+        bool ok2 = false;
         if (!code.isEmpty()) {
-            icode = code.trimmed().toInt(&ok);
-            if (!ok || icode < 0) {
+            icode = code.trimmed().toInt(&ok2);
+            if (!ok2 || icode < 0) {
                 m_errorString =
                     QString("invalid code attribute \"%1\" (must be integer >= 0)").
                     arg(code);
@@ -392,10 +392,10 @@ NoteFontMap::startElement(const QString &, const QString &,
         }
 
         int iglyph = -1;
-        ok = false;
+        ok2 = false;
         if (!glyph.isEmpty()) {
-            iglyph = glyph.trimmed().toInt(&ok);
-            if (!ok || iglyph < 0) {
+            iglyph = glyph.trimmed().toInt(&ok2);
+            if (!ok2 || iglyph < 0) {
                 m_errorString =
                     QString("invalid glyph attribute \"%1\" (must be integer >= 0)").
                     arg(glyph);
@@ -416,8 +416,8 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString inversionCode = attributes.value("inversion-code").toString();
         if (!inversionCode.isEmpty()) {
-            icode = inversionCode.trimmed().toInt(&ok);
-            if (!ok || icode < 0) {
+            icode = inversionCode.trimmed().toInt(&ok2);
+            if (!ok2 || icode < 0) {
                 m_errorString =
                     QString("invalid inversion code attribute \"%1\" (must be integer >= 0)").
                     arg(inversionCode);
@@ -428,8 +428,8 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString inversionGlyph = attributes.value("inversion-glyph").toString();
         if (!inversionGlyph.isEmpty()) {
-            iglyph = inversionGlyph.trimmed().toInt(&ok);
-            if (!ok || iglyph < 0) {
+            iglyph = inversionGlyph.trimmed().toInt(&ok2);
+            if (!ok2 || iglyph < 0) {
                 m_errorString =
                     QString("invalid inversion glyph attribute \"%1\" (must be integer >= 0)").
                     arg(inversionGlyph);
@@ -440,8 +440,8 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString fontId = attributes.value("font-id").toString();
         if (!fontId.isEmpty()) {
-            int n = fontId.trimmed().toInt(&ok);
-            if (!ok || n < 0) {
+            int n = fontId.trimmed().toInt(&ok2);
+            if (!ok2 || n < 0) {
                 m_errorString =
                     QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
                     arg(fontId);
@@ -553,10 +553,10 @@ NoteFontMap::startElement(const QString &, const QString &,
 
         QString id = attributes.value("font-id").toString();
         int n = -1;
-        bool ok = false;
+        bool ok2 = false;
 		if ( ! id.isEmpty()) {
-            n = id.trimmed().toInt(&ok);
-            if (!ok) {
+            n = id.trimmed().toInt(&ok2);
+            if (!ok2) {
                 m_errorString =
                     QString("invalid font-id attribute \"%1\" (must be integer >= 0)").
                     arg(id);

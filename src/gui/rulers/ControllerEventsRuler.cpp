@@ -432,7 +432,9 @@ ControllerEventsRuler::addControlItem2(float x, float y)
     clearSelectedItems();
 
     QSharedPointer<EventControlItem> item(new EventControlItem(
-            this, new ControllerEventAdapter(nullptr), QPolygonF()));
+            this,  // controlRuler
+            new ControllerEventAdapter(nullptr),  // ControllerEventAdapter
+            QPolygonF()));  // polygon
     item->reconfigure(x,y);
     item->setSelected(true);
 
@@ -485,11 +487,10 @@ ControllerEventsRuler::addControlLine(
 
     MacroCommand *macro = new MacroCommand(tr("Insert Line of Controllers"));
 
+    EventSelection selection(*m_segment);
+
     // If Ctrl was not pressed
     if (eraseExistingControllers) {
-
-        // ??? MEMORY LEAK (confirmed)  EraseCommand doesn't take ownership.
-        EventSelection *selection = new EventSelection(*m_segment);
 
         // For each event in the time range
         for (Segment::const_iterator i = m_segment->findTime(startTime);
@@ -501,7 +502,7 @@ ControllerEventsRuler::addControlLine(
             if (m_controller->matches(e)) {
                 RG_DEBUG << "addControlLine event to delete" <<
                     e->getAbsoluteTime();
-                selection->addEvent(e, false);
+                selection.addEvent(e, false);
             }
         }
 
@@ -509,10 +510,8 @@ ControllerEventsRuler::addControlLine(
         // For some reason, if we perform the erase with an empty selection,
         // we end up with the segment expanded to the beginning of the
         // composition.
-        if (selection->getAddedEvents() != 0)
-            macro->addCommand(new EraseCommand(selection));
-        else
-            delete selection;
+        if (selection.size() != 0)
+            macro->addCommand(new EraseCommand(&selection));
 
     }
 

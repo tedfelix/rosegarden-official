@@ -80,7 +80,8 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
     else {
         // Make new control event here
         // This tool should not be applied to a PropertyControlRuler but in case it is
-        ControllerEventsRuler* ruler = dynamic_cast <ControllerEventsRuler*>(m_ruler);
+        ControllerEventsRuler *ruler =
+                dynamic_cast<ControllerEventsRuler *>(m_ruler);
         //if (ruler) ruler->insertControllerEvent(e->x,e->y);
         if (ruler) {
             double xscale = m_ruler->getXScale();
@@ -116,12 +117,11 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
             } else {
 
                 QSharedPointer<ControlItem> item =
-                        ruler->addControlItem2(x,e->y);
-                // ??? MEMORY LEAK (confirmed)
-                ControlMouseEvent *newevent = new ControlMouseEvent(e);
-                newevent->itemList.push_back(item);
+                        ruler->addControlItem2(x, e->y);
+                ControlMouseEvent newevent(e);
+                newevent.itemList.push_back(item);
                 m_overItem = true;
-                ControlMover::handleLeftButtonPress(newevent);
+                ControlMover::handleLeftButtonPress(&newevent);
             }
 
             // Save these coordinates for next time

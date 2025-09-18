@@ -5,10 +5,12 @@
 <Menu name="marker_ruler_menu">
   <Action name="insert_marker_here" text="Insert Marker" icon="event-insert" />
   <Action name="insert_marker_at_pointer" text="Insert Marker at Playback Position" />
-<Separator/>
+  <Separator/>
   <Action name="delete_marker" text="Delete Marker" icon="event-delete" />
-<Separator/>
+  <Separator/>
+  <Action name="rename_marker" text="Rename Marker" />
   <Action name="edit_marker" text="Edit Marker" icon="event-edit" />
+  <Action name="manage_markers" text="Manage Markers" />
 </Menu>
 
 </kpartgui>

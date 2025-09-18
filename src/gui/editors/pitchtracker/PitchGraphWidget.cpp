@@ -60,7 +60,7 @@ PitchGraphWidget::PitchGraphWidget(PitchHistory &history, QWidget *parent) :
 
     m_ignoreOctave =
         settings.value("ignoreoctave",
-                       PitchTrackerConfigurationPage::defaultIgnore8ve).
+                       PitchTrackerConfigurationPage::defaultIgnore8veConstant).
                        toBool();
 
     settings.endGroup();

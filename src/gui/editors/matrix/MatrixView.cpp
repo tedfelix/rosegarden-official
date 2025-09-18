@@ -1105,7 +1105,7 @@ MatrixView::slotQuantizeSelection(int q)
     if (!selection) return;
 
     if (unit) {
-        if (selection && selection->getAddedEvents()) {
+        if (selection && selection->size()) {
             CommandHistory::getInstance()->addCommand
                 (new EventQuantizeCommand(*selection, quant));
         } else {

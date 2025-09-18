@@ -293,7 +293,10 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
         m_startDrag = m_loopGrid->snapX(x);
         m_endDrag = m_startDrag;
 
-        emit startMouseMove(FOLLOW_HORIZONTAL);
+        if (m_autoScroller) {
+            m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
+            m_autoScroller->start();
+        }
 
         return;
     }
@@ -323,12 +326,10 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
 
         m_lastMouseXPos = x;
 
-        // ??? This signal is never emitted with any other argument.
-        //     Remove the parameter.  This gets a little tricky because
-        //     some clients need this and share slots with other signal
-        //     sources.  It would probably be best to connect this signal
-        //     to a slot in the client that is specific to LoopRuler.
-        emit startMouseMove(FOLLOW_HORIZONTAL);
+        if (m_autoScroller) {
+            m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
+            m_autoScroller->start();
+        }
 
     }
 
@@ -391,7 +392,8 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             emit m_doc->loopChanged();
         }
 
-        emit stopMouseMove();
+        if (m_autoScroller)
+            m_autoScroller->stop();
     }
 
     if (mouseEvent->button() == Qt::LeftButton) {
@@ -401,7 +403,8 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
         // canvas while the user has dragged the pointer in an edit view)
         emit setPointerPosition(m_grid->snapX(m_lastMouseXPos));
 
-        emit stopMouseMove();
+        if (m_autoScroller)
+            m_autoScroller->stop();
     }
 }
 

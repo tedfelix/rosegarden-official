@@ -40,12 +40,16 @@ public:
      */
     explicit SnapGrid(const RulerScale *rulerScale, int ysnap = 0);
 
+    const RulerScale *getRulerScale() const
+    {
+        return m_rulerScale;
+    }
+
+    // Common snap times for setSnapTime().
     static const timeT NoSnap;
     static const timeT SnapToBar;
     static const timeT SnapToBeat;
     static const timeT SnapToUnit;
-
-    enum SnapDirection { SnapEither, SnapLeft, SnapRight };
 
     /**
      * Set the snap size of the grid to the given time.
@@ -56,13 +60,27 @@ public:
      */
     void setSnapTime(timeT snap);
 
+    enum SnapDirection { SnapEither, SnapLeft, SnapRight };
+
+    /**
+     * Snap a given x-coordinate to the nearest time on the grid.  Of
+     * course this also does x-to-time conversion, so it's useful even
+     * in NoSnap mode.  If the snap time is greater than the bar
+     * duration at this point, the bar duration will be used instead.
+     *
+     * If d is SnapLeft or SnapRight, a time to the left or right
+     * respectively of the given coordinate will be returned;
+     * otherwise the nearest time on either side will be returned.
+     */
+    timeT snapX(double x, SnapDirection direction = SnapEither) const;
+
     /**
      * Return the snap size of the grid, at the given x-coordinate.
      * (The x-coordinate is required in case the built-in snap size is
      * SnapToBar, SnapToBeat or SnapToUnit, in which case we need to
      * know the current time signature.)  Returns zero for NoSnap.
      */
-    timeT getSnapTime(double x) const;
+    timeT getSnapTimeForX(double x) const;
 
     /**
      * Return the snap setting -- the argument that was passed to
@@ -80,18 +98,6 @@ public:
      * current time signature.)  Returns zero for NoSnap.
      */
     timeT getSnapTime(timeT time) const;
-
-    /**
-     * Snap a given x-coordinate to the nearest time on the grid.  Of
-     * course this also does x-to-time conversion, so it's useful even
-     * in NoSnap mode.  If the snap time is greater than the bar
-     * duration at this point, the bar duration will be used instead.
-     *
-     * If d is SnapLeft or SnapRight, a time to the left or right
-     * respectively of the given coordinate will be returned;
-     * otherwise the nearest time on either side will be returned.
-     */
-    timeT snapX(double x, SnapDirection direction = SnapEither) const;
 
     /**
      * Snap a given time to the nearest time on the grid.  Unlike
@@ -124,15 +130,18 @@ public:
      */
     int getYBinCoordinate(int requestedBin) const;
 
+#if 0
     /**
      * Set the default vertical step.  This is used as the height for
      * bins that have no specific height multiple set, and the base
      * height for bins that have a multiple.  Setting the Y snap here
      * is equivalent to specifying it in the constructor.
      */
-    void setYSnap(int ysnap) {
+    void setYSnap(int ysnap)
+    {
         m_ysnap = ysnap;
     }
+#endif
 
     /**
      * Retrieve the default vertical step.
@@ -149,6 +158,7 @@ public:
         m_ymultiple[bin] = multiple;
     }
 
+#if 0
     /**
      * Retrieve the height multiple for a bin.
      */
@@ -156,12 +166,10 @@ public:
         if (m_ymultiple.find(bin) == m_ymultiple.end()) return 1;
         return m_ymultiple[bin];
     }
+#endif
 
-    const RulerScale *getRulerScale() const {
-        return m_rulerScale;
-    }
+private:
 
-protected:
     const RulerScale *m_rulerScale; // I don't own this
     timeT m_snapTime;
     int m_ysnap;

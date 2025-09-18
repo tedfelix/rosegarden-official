@@ -430,21 +430,21 @@ void RG21Loader::closeGroup()
 {
     if (m_groupType == GROUP_TYPE_TUPLED) {
 
-        Segment::iterator i = m_currentSegment->end();
+        Segment::iterator segmentIter = m_currentSegment->end();
         std::vector<Event *> toInsert;
         std::vector<Segment::iterator> toErase;
 
-        if (i != m_currentSegment->begin()) {
+        if (segmentIter != m_currentSegment->begin()) {
 
-            --i;
+            --segmentIter;
             long groupId;
             timeT prev = m_groupStartTime + m_groupTupledLength;
 
-            while ((*i)->get
+            while ((*segmentIter)->get
                     <Int>(BEAMED_GROUP_ID, groupId) &&
                     groupId == m_groupId) {
 
-                timeT absoluteTime = (*i)->getAbsoluteTime();
+                timeT absoluteTime = (*segmentIter)->getAbsoluteTime();
                 timeT offset = absoluteTime - m_groupStartTime;
                 timeT intended =
                     (offset * m_groupTupledLength) / m_groupUntupledLength;
@@ -455,7 +455,7 @@ void RG21Loader::closeGroup()
                 << ", m_groupTupledLength = " << m_groupTupledLength
                 << ", m_groupUntupledCount = " << m_groupUntupledCount
                 << ", m_groupUntupledLength = " << m_groupUntupledLength
-                << ", absoluteTime = " << (*i)->getAbsoluteTime()
+                << ", absoluteTime = " << (*segmentIter)->getAbsoluteTime()
                 << ", offset = " << offset
                 << ", intended = " << intended
                 << ", new absolute time = "
@@ -464,7 +464,7 @@ void RG21Loader::closeGroup()
                 << (prev - absoluteTime);
 
                 absoluteTime = absoluteTime + intended - offset;
-                Event *e(new Event(**i, absoluteTime, prev - absoluteTime));
+                Event *e(new Event(**segmentIter, absoluteTime, prev - absoluteTime));
                 prev = absoluteTime;
 
                 // See comment in parseGroupStart
@@ -483,9 +483,9 @@ void RG21Loader::closeGroup()
                 // if it's an indication event that will invalidate our
                 // indicationsExtant entry.  Hence this unpleasantness:
 
-                if ((*i)->isa(Indication::EventType)) {
+                if ((*segmentIter)->isa(Indication::EventType)) {
                     long indicationId = 0;
-                    if ((*i)->get
+                    if ((*segmentIter)->get
                             <Int>(PropertyName("indicationId"), indicationId)) {
                         EventIdMap::iterator ei =
                             m_indicationsExtant.find(indicationId);
@@ -497,19 +497,19 @@ void RG21Loader::closeGroup()
                 }
 
                 toInsert.push_back(e);
-                toErase.push_back(i);
+                toErase.push_back(segmentIter);
 
-                if (i == m_currentSegment->begin())
+                if (segmentIter == m_currentSegment->begin())
                     break;
-                --i;
+                --segmentIter;
             }
         }
 
-        for (size_t i = 0; i < toInsert.size(); ++i) {
-            m_currentSegment->insert(toInsert[i]);
+        for (size_t index = 0; index < toInsert.size(); ++index) {
+            m_currentSegment->insert(toInsert[index]);
         }
-        for (size_t i = 0; i < toErase.size(); ++i) {
-            m_currentSegment->erase(toErase[i]);
+        for (size_t index = 0; index < toErase.size(); ++index) {
+            m_currentSegment->erase(toErase[index]);
         }
 
         m_currentSegmentTime = m_groupStartTime + m_groupTupledLength;

@@ -32,16 +32,25 @@ namespace Rosegarden
 class EventSelection;
 
 
-/// Erase a selection from within a segment
+/// Erase Events from within a Segment.
 class EraseCommand : public BasicCommand
 {
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::EraseCommand)
 
 public:
     /// Allow for multiple selections.  E.g. matrix and CC ruler.
+    /**
+     * EraseCommand does not take ownership of these pointers.  It only
+     * needs them for the first execute.  It uses brute-force redo, so
+     * the selection(s) can be deleted by the client once the command has
+     * been executed.
+     *
+     * ??? This would require no explanation if we used std::shared_ptr here.
+     *     The change would have a bit of a ripple effect, but it should be
+     *     doable.
+     */
     explicit EraseCommand(EventSelection *selection1,
                           EventSelection *selection2 = nullptr);
-    ~EraseCommand() override;
 
     /// Erase the events in segment that are in selection.
     /**
@@ -59,7 +68,7 @@ private:
     /**
      * Only used on first execute (cf BasicCommand::bruteForceRedo).
      *
-     * QSharedPointer would be nice.
+     * std::shared_ptr would be nice.
      */
     EventSelection *m_selection1;
     EventSelection *m_selection2;

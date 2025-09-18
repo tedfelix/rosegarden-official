@@ -742,37 +742,37 @@ EventListEditor::updateTableWidget()
         // Going with 20 to match the setMaximumSectionSize() call.
         m_tableWidget->setRowHeight(row, 20);
 
-        int col{0};
+        int col1{0};
 
         // Time
         QTableWidgetItem *timeItem = new QTableWidgetItem(timeStr);
         timeItem->setData(SegmentPtrRole, QVariant::fromValue((void *)(m_segments[0])));
         timeItem->setData(EventPtrRole, QVariant::fromValue((void *)event));
-        m_tableWidget->setItem(row, col++, timeItem);
+        m_tableWidget->setItem(row, col1++, timeItem);
 
         // Duration
-        QTableWidgetItem *item = new QTableWidgetItem(durationStr);
-        m_tableWidget->setItem(row, col++, item);
+        QTableWidgetItem *item1 = new QTableWidgetItem(durationStr);
+        m_tableWidget->setItem(row, col1++, item1);
 
         // Type
-        item = new QTableWidgetItem(strtoqstr(event->getType()));
-        m_tableWidget->setItem(row, col++, item);
+        item1 = new QTableWidgetItem(strtoqstr(event->getType()));
+        m_tableWidget->setItem(row, col1++, item1);
 
         // Pitch
-        item = new QTableWidgetItem(pitchStr);
-        m_tableWidget->setItem(row, col++, item);
+        item1 = new QTableWidgetItem(pitchStr);
+        m_tableWidget->setItem(row, col1++, item1);
 
         // Velocity
-        item = new QTableWidgetItem(velocityStr);
-        m_tableWidget->setItem(row, col++, item);
+        item1 = new QTableWidgetItem(velocityStr);
+        m_tableWidget->setItem(row, col1++, item1);
 
         // Type (Data1)
-        item = new QTableWidgetItem(data1Str);
-        m_tableWidget->setItem(row, col++, item);
+        item1 = new QTableWidgetItem(data1Str);
+        m_tableWidget->setItem(row, col1++, item1);
 
         // Value (Data2)
-        item = new QTableWidgetItem(data2Str);
-        m_tableWidget->setItem(row, col++, item);
+        item1 = new QTableWidgetItem(data2Str);
+        m_tableWidget->setItem(row, col1++, item1);
 
         // Assemble a key so we can uniquely identify each row for selection
         // persistence across updates.
@@ -791,20 +791,20 @@ EventListEditor::updateTableWidget()
 
         // Set current if it is the right one.
         if (haveCurrentItem  &&  key == currentItemKey) {
-            item = m_tableWidget->item(row, currentItemColumn);
-            if (item)
-                m_tableWidget->setCurrentItem(item, QItemSelectionModel::NoUpdate);
+            item1 = m_tableWidget->item(row, currentItemColumn);
+            if (item1)
+                m_tableWidget->setCurrentItem(item1, QItemSelectionModel::NoUpdate);
         }
 
         // Restore selection.
         if (selection.find(key) != selection.end()) {
             // Select the entire row.
             // For each column...
-            for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
-                QTableWidgetItem *item = m_tableWidget->item(row, col);
-                if (!item)
+            for (int col2 = 0; col2 < m_tableWidget->columnCount(); ++col2) {
+                QTableWidgetItem *item2 = m_tableWidget->item(row, col2);
+                if (!item2)
                     continue;
-                item->setSelected(true);
+                item2->setSelected(true);
             }
         }
     }

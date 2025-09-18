@@ -2738,8 +2738,8 @@ LilyPondExporter::writeBar(Segment *s,
                         int heightOnStaff = 4 + offset;
 
                         // find out the pitch corresponding to the rest position
-                        Clef m_lastClefFound((*s).getClefAtTime(event->getAbsoluteTime()));
-                        Pitch helper(heightOnStaff, m_lastClefFound, Rosegarden::Key::DefaultKey);
+                        Clef lastClefFound((*s).getClefAtTime(event->getAbsoluteTime()));
+                        Pitch helper(heightOnStaff, lastClefFound, Rosegarden::Key::DefaultKey);
 
                         // use MIDI pitch to get a named note with octavation
                         int p = helper.getPerformancePitch();

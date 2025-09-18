@@ -19,22 +19,24 @@
 #ifndef RG_MARKERRULER_H
 #define RG_MARKERRULER_H
 
-#include "gui/general/ActionFileClient.h"
 #include "base/TimeT.h"
+#include "gui/general/ActionFileClient.h"
 
+#include <QPointer>
 #include <QSize>
 #include <QWidget>
 
 class QPaintEvent;
+class QMainWindow;
 class QMouseEvent;
 class QMenu;
-class QMainWindow;
 
 
 namespace Rosegarden
 {
 
 
+class AutoScroller;
 class Marker;
 class RulerScale;
 class RosegardenDocument;
@@ -48,11 +50,13 @@ class MarkerRuler : public QWidget, public ActionFileClient
 public:
     MarkerRuler(RosegardenDocument *doc,
                 RulerScale *rulerScale,
-                QWidget *parent = nullptr,
-                const char *name = nullptr);
+                QWidget *parent);
+    void setAutoScroller(QPointer<AutoScroller> autoScroller)
+            { m_autoScroller = autoScroller; }
+    /// For status text.
+    void setMainWindow(QPointer<QMainWindow> mainWindow)
+            { m_mainWindow = mainWindow; }
 
-    ~MarkerRuler() override;
-    
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
@@ -60,43 +64,57 @@ public:
 
     void setWidth(int width) { m_width = width; }
 
-signals:
-    /// Set the pointer position on mouse single click
-    void setPointerPosition(timeT);
+protected:
 
-    /// Open the marker editor window on double click
-    void editMarkers();
+    void paintEvent(QPaintEvent *paintEvent) override;
+    void mousePressEvent(QMouseEvent *mouseEvent) override;
+    void mouseMoveEvent(QMouseEvent *mouseEvent) override;
+    void mouseReleaseEvent(QMouseEvent *mouseEvent) override;
+    void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
 
-    /// add a marker
-    void addMarker(timeT);
-    
-    void deleteMarker(int, timeT, QString name, QString description);
+private slots:
 
-protected slots:
     void slotInsertMarkerHere();
     void slotInsertMarkerAtPointer();
     void slotDeleteMarker();
+    void slotRenameMarker();
     void slotEditMarker();
+    void slotManageMarkers();
     
-protected:
-    void paintEvent(QPaintEvent*) override;
-    void mousePressEvent(QMouseEvent *e) override;
-    void mouseDoubleClickEvent(QMouseEvent *e) override;
+private:
 
-    void createMenu();
-    timeT getClickPosition();
-    Marker *getMarkerAtClickPosition();
-    
-    //--------------- Data members ---------------------------------
-    int m_currentXOffset;
-    int m_width;
-    int m_clickX;
-    
-    QMenu *m_menu;
-    
     RosegardenDocument *m_doc;
+    
+    /// Horizontal scroll offset.  E.g. -100 if we are scrolled right 100 pixels.
+    int m_currentXOffset{0};
+    int m_width{-1};
+
+    /// Click position.  Set by mousePressEvent().
+    int m_clickX{0};
+    /// Returns the Marker at m_clickX if there is one.
+    Marker *getMarkerAtClickPosition(int *clickDelta = nullptr);
+    
+    bool m_leftPressed{false};
+
+    /// Storing an ID instead of a pointer for safety.
+    int m_dragMarkerID{-1};
+    bool m_dragging{false};
+    /// Maintains the grab point.
+    /**
+     * Take into account click position relative to the marker start so if
+     * e.g. we grab the marker at its right edge, we hold the marker at its
+     * right edge throughout the drag.
+     */
+    int m_dragClickDelta{0};
+    timeT m_dragTime{0};
+
+    QMenu *m_menu{nullptr};
+    void createMenu();
+    
     RulerScale *m_rulerScale;
-    QMainWindow *m_parentMainWindow;
+
+    QPointer<QMainWindow> m_mainWindow;
+    QPointer<AutoScroller> m_autoScroller;
 
 };
 

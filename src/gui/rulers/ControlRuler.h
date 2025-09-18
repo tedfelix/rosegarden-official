@@ -27,6 +27,7 @@
 
 #include <QColor>
 #include <QPoint>
+#include <QPointer>
 #include <QString>
 #include <QWidget>
 
@@ -43,6 +44,8 @@ class QContextMenuEvent;
 namespace Rosegarden
 {
 
+
+class AutoScroller;
 class ControlTool;
 class ControlToolBox;
 class ControlSelector;
@@ -55,9 +58,8 @@ class NotationStaff;
 class ViewSegment;
 class SnapGrid;
 
-/**
- * ControlRuler : base class for Control Rulers
- */
+
+/// Base class for control rulers.
 class ControlRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
@@ -69,6 +71,9 @@ public:
                  RulerScale*,
                  QWidget* parent = nullptr);
     ~ControlRuler() override;
+
+    void setAutoScroller(QPointer<AutoScroller> autoScroller)
+            { m_autoScroller = autoScroller; }
 
     virtual QString getName() = 0;
 
@@ -143,9 +148,6 @@ public:
     virtual bool allowSimultaneousEvents() = 0;
 
 signals:
-    void mousePress();
-    void mouseMove(FollowMode);
-    void mouseRelease();
 
     /**
      * Eventually ends up calling MatrixView::slotUpdateMenuStates().
@@ -210,8 +212,6 @@ protected:
     // unused QColor valueToColour(int max, int val);
     void updateSelection();
     virtual void createRulerMenu();
-
-    //--------------- Data members ---------------------------------
 
 //    EditViewBase*               m_parentEditView;
 //    QScrollBar*                 m_mainHorizontalScrollBar;
@@ -278,6 +278,8 @@ protected:
 
  private:
     void setSnapTimeFromActionName(const QString& actionName);
+
+    QPointer<AutoScroller> m_autoScroller;
 };
 
 

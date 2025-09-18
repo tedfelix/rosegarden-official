@@ -250,7 +250,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
 
     DeviceVector *devices = m_doc->getStudio().getDevices();
     DeviceVector::const_iterator it;
-    int count = 0;
+    int deviceCount = 0;
     Device *dev = nullptr;
 
     for (it = devices->begin(); it != devices->end(); it++) {
@@ -258,17 +258,17 @@ ManageMetronomeDialog::populate(int deviceIndex)
         dev = *it;
         if (!isSuitable(dev)) continue;
 
-        if (count == deviceIndex) break;
-        count++;
+        if (deviceCount == deviceIndex) break;
+        deviceCount++;
     }
 
     // sanity
-    if (count < 0 || dev == nullptr || !isSuitable(dev)) {
+    if (deviceCount < 0 || dev == nullptr || !isSuitable(dev)) {
         return ;
     }
 
     // populate instrument list
-    InstrumentVector list = dev->getPresentationInstruments();
+    InstrumentVector instruments = dev->getPresentationInstruments();
     InstrumentVector::iterator iit;
 
     const MidiMetronome *metronome = getMetronome(dev);
@@ -277,7 +277,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     if (metronome == nullptr) {
         InstrumentId id = SystemInstrumentBase;
 
-        for (iit = list.begin(); iit != list.end(); ++iit) {
+        for (iit = instruments.begin(); iit != instruments.end(); ++iit) {
             if ((*iit)->isPercussion()) {
                 id = (*iit)->getId();
                 break;
@@ -292,9 +292,9 @@ ManageMetronomeDialog::populate(int deviceIndex)
     // metronome should now be set but we still check it
     if (metronome) {
         int position = 0;
-        int count = 0;
+        int instrumentCount = 0;
 
-        for (iit = list.begin(); iit != list.end(); ++iit) {
+        for (iit = instruments.begin(); iit != instruments.end(); ++iit) {
 
             QString iname(QObject::tr((*iit)->getName().c_str()));
             QString ipname((*iit)->getLocalizedPresentationName());
@@ -329,9 +329,9 @@ ManageMetronomeDialog::populate(int deviceIndex)
             m_metronomeInstrument->addItem(text);
 
             if ((*iit)->getId() == metronome->getInstrument()) {
-                position = count;
+                position = instrumentCount;
             }
-            count++;
+            instrumentCount++;
         }
         m_metronomeInstrument->setCurrentIndex(position);
 

@@ -34,8 +34,10 @@ Included in this release...
   * Fix unnecessary error message box.  Bug #1730.  [c6ef6415c7]
   * Fix selection problems when closing the Audio File Manager.  Bug
     #1733.  [83fa32bdb2]
+  * Fix cursor not returning to normal after using audio location
+    dialog.  Bug #1736.  [0d38af676e]
 
-stopped at 9e4b17fc6f
+stopped at fb0d829f94
 
 ===== New Features =====
 
@@ -43,6 +45,9 @@ stopped at 9e4b17fc6f
     Request #527.  [5ee9c807d8]
   * Rotary (knob) widget now shows label (e.g. pan) and value in its
     tooltip.  [4c42d7dc4d]
+  * Snap markers to beat.  Feature request #537.  [6c69fa3354]
+  * Move markers by dragging them.  Feature Request #536 [66b9451054]
+    [00eb33ffa7]
 
 ===== General Improvements =====
 

@@ -214,16 +214,6 @@ void RosegardenScrollView::setBottomRuler(StandardRuler *ruler)
     }
 }
 
-void RosegardenScrollView::startAutoScroll()
-{
-    m_autoScroller.start();
-}
-
-void RosegardenScrollView::stopAutoScroll()
-{
-    m_autoScroller.stop();
-}
-
 void RosegardenScrollView::scrollHoriz(int x)
 {
     QScrollBar *hbar = horizontalScrollBar();

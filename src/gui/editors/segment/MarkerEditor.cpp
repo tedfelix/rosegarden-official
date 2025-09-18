@@ -304,29 +304,24 @@ void
 MarkerEditor::slotDeleteAll()
 {
     RG_DEBUG << "slotDeleteAll()";
+
     MacroCommand *command = new MacroCommand(tr("Remove all markers"));
 
-//     QTreeWidgetItem *item = m_listView->firstChild();
-    int cnt = m_treeWidget->topLevelItemCount();
+    const int itemCount = m_treeWidget->topLevelItemCount();
 
-//     do {
-    for(int i=0; i< cnt; i++){
-        QTreeWidgetItem *item = m_treeWidget->topLevelItem(i);
+    for (int itemIndex = 0; itemIndex < itemCount; ++itemIndex) {
+        QTreeWidgetItem *item = m_treeWidget->topLevelItem(itemIndex);
 
-        MarkerEditorViewItem *ei =
+        MarkerEditorViewItem *viewItem =
                 dynamic_cast<MarkerEditorViewItem *>(item);
 
-        if (!ei || ei->isFake())
-                continue;
+        if (!viewItem  ||  viewItem->isFake())
+            continue;
 
-        RemoveMarkerCommand *rc =
-            new RemoveMarkerCommand(&m_doc->getComposition(),
-                                    ei->getID(),
-                                    ei->getRawTime(),
-                                    qstrtostr(item->text(1)),
-                                    qstrtostr(item->text(2)));
-        command->addCommand(rc);
-    };    // while ((item = item->nextSibling()));
+        RemoveMarkerCommand *removeMarkerCommand = new RemoveMarkerCommand(
+                &m_doc->getComposition(), viewItem->getID());
+        command->addCommand(removeMarkerCommand);
+    }
 
     addCommandToHistory(command);
 }
@@ -352,18 +347,14 @@ MarkerEditor::slotDelete()
 
     QTreeWidgetItem *item = m_treeWidget->currentItem();
 
-    MarkerEditorViewItem *ei =
+    MarkerEditorViewItem *viewItem =
         dynamic_cast<MarkerEditorViewItem *>(item);
 
-    if (!ei || ei->isFake())
-        return ;
+    if (!viewItem  ||  viewItem->isFake())
+        return;
 
-    RemoveMarkerCommand *command =
-        new RemoveMarkerCommand(&m_doc->getComposition(),
-                                ei->getID(),
-                                ei->getRawTime(),
-                                qstrtostr(item->text(1)),
-                                qstrtostr(item->text(2)));
+    RemoveMarkerCommand *command = new RemoveMarkerCommand(
+            &m_doc->getComposition(), viewItem->getID());
 
     addCommandToHistory(command);
 

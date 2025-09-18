@@ -21,6 +21,7 @@
 #include "base/Controllable.h"  // For ControlList
 #include "base/Segment.h"
 
+#include <QPointer>
 #include <QWidget>
 
 class QStackedWidget;
@@ -34,6 +35,7 @@ namespace Rosegarden
 {
 
 
+class AutoScroller;
 class ControllerEventsRuler;
 class ControlRuler;
 class ControlRulerTabBar;
@@ -45,6 +47,7 @@ class Segment;
 class SelectionSituation;
 class ViewElement;
 class ViewSegment;
+
 
 /// The rulers and tabs that appear below the Matrix and Notation editors.
 /**
@@ -60,6 +63,11 @@ class ControlRulerWidget : public QWidget
 
 public:
     ControlRulerWidget();
+
+    // ??? Auto-scroll does not seem to work with the selection tool.  Works
+    //     with the move tool.  Tested with PitchBend.
+    void setAutoScroller(QPointer<AutoScroller> autoScroller)
+            { m_autoScroller = autoScroller; }
 
     /// Switch to showing this Segment.
     /**
@@ -134,13 +142,6 @@ public slots:
     void slotSetTool(const QString &);
 
 signals:
-    // These three are used by MatrixWidget and NotationWidget for
-    // autoscrolling when working in the rulers.
-    // ??? Auto-scroll does not seem to work with the selection tool.  Works
-    //     with the move tool.  Tested with PitchBend.
-    void mousePress();
-    void mouseMove(FollowMode);
-    void mouseRelease();
 
     /// See ControlRuler::rulerSelectionChanged() for details.
     void childRulerSelectionChanged();
@@ -169,7 +170,7 @@ private:
     std::vector<std::shared_ptr<Segment::RulerSet>> m_segmentRulerSets;
 
     /// The Segment we are currently editing.
-    ViewSegment *m_viewSegment;
+    ViewSegment *m_viewSegment{nullptr};
 
     void launchRulers();
 
@@ -177,11 +178,11 @@ private:
     // *** UI
 
     /// The Rulers
-    QStackedWidget *m_stackedWidget;
+    QStackedWidget *m_stackedWidget{nullptr};
     ControllerEventsRuler *getActiveRuler();
 
     /// The tabs under the rulers.
-    ControlRulerTabBar *m_tabBar;
+    ControlRulerTabBar *m_tabBar{nullptr};
 
 
     typedef std::list<ControlRuler *> ControlRulerList;
@@ -190,10 +191,10 @@ private:
     void addRuler(ControlRuler *, QString);
     void removeRuler(ControlRuler *ruler);
 
-    RulerScale *m_scale;
+    RulerScale *m_scale{nullptr};
 
     /// Left margin used by NotationWidget to line things up?
-    int m_leftMargin;
+    int m_leftMargin{0};
 
     QString m_currentToolName;
 
@@ -205,6 +206,8 @@ private:
 
     /// the snap setting from the editor
     timeT m_editorSnap;
+
+    QPointer<AutoScroller> m_autoScroller;
 
 private slots:
     void tabChanged(int index);

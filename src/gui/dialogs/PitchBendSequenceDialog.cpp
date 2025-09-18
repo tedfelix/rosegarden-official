@@ -856,10 +856,10 @@ PitchBendSequenceDialog::accept()
     QString commandName(tr("%1 Sequence").arg(controllerName));
     MacroCommand *macro = new MacroCommand(commandName);
 
+    EventSelection selection(*m_segment);
+
     // In Replace and JustErase modes, erase the events in the time range.
     if (getReplaceMode() != AddNewEvents) {
-
-        EventSelection *selection = new EventSelection(*m_segment);
 
         // For each event in the time range
         for (Segment::const_iterator i = m_segment->findTime(m_startTime);
@@ -869,7 +869,7 @@ PitchBendSequenceDialog::accept()
 
             // If this is a relevant event, add it to the selection.
             if (m_controlParameter.matches(e))
-                selection->addEvent(e, false);
+                selection.addEvent(e, false);
         }
 
         // If there is something in the selection, add the EraseCommand.
@@ -878,10 +878,8 @@ PitchBendSequenceDialog::accept()
         // For some reason, if we perform the erase with an empty selection,
         // we end up with the segment expanded to the beginning of the
         // composition.
-        if (selection->getAddedEvents() != 0)
-            macro->addCommand(new EraseCommand(selection));
-        else
-            delete selection;
+        if (selection.size() != 0)
+            macro->addCommand(new EraseCommand(&selection));
     }
 
     // In Replace and OnlyAdd modes, add the requested controller events.

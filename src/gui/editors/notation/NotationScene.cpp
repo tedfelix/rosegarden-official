@@ -488,16 +488,16 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 {
     // (i)  Do not change staff, if mouse was clicked within the current staff.
 
-    StaffLayout *s = nullptr;
+    StaffLayout *staffLayout1 = nullptr;
 
     if (m_currentStaff < (int)m_staffs.size()) {
-        s = m_staffs[m_currentStaff];
+        staffLayout1 = m_staffs[m_currentStaff];
     }
 
-    if (s && s->containsSceneCoords(x, y)) {
+    if (staffLayout1 && staffLayout1->containsSceneCoords(x, y)) {
 
         StaffLayout::StaffLayoutCoords coords =
-            s->getLayoutCoordsForSceneCoords(x, y);
+            staffLayout1->getLayoutCoordsForSceneCoords(x, y);
 
         timeT t = m_hlayout->getTimeForX(coords.first);
 
@@ -515,16 +515,16 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
             if (m_staffs[i]->getSegment().isTmp()) continue;
         }
 
-        StaffLayout *s = m_staffs[i];
+        StaffLayout *staffLayout2 = m_staffs[i];
 
-        if (s->containsSceneCoords(x, y)) {
+        if (staffLayout2->containsSceneCoords(x, y)) {
 
             StaffLayout::StaffLayoutCoords coords =
-                s->getLayoutCoordsForSceneCoords(x, y);
+                staffLayout2->getLayoutCoordsForSceneCoords(x, y);
 
-	    timeT t = m_hlayout->getTimeForX(coords.first);
+            timeT t = m_hlayout->getTimeForX(coords.first);
 
-	    if (m_staffs[i]->includesTime(t)) {
+            if (m_staffs[i]->includesTime(t)) {
                 return m_staffs[i];
             }
         }
@@ -731,14 +731,16 @@ NotationScene::getCurrentSegment()
 bool
 NotationScene::segmentsContainNotes() const
 {
-    for (unsigned int i = 0; i < m_segments.size(); ++i) {
+    for (unsigned int segmentIndex = 0;
+         segmentIndex < m_segments.size();
+         ++segmentIndex) {
 
-        const Segment *segment = m_segments[i];
+        const Segment *segment = m_segments[segmentIndex];
 
-        for (Segment::const_iterator i = segment->begin();
-             segment->isBeforeEndMarker(i); ++i) {
+        for (Segment::const_iterator eventIter = segment->begin();
+             segment->isBeforeEndMarker(eventIter); ++eventIter) {
 
-            if (((*i)->getType() == Note::EventType)) {
+            if (((*eventIter)->getType() == Note::EventType)) {
                 return true;
             }
         }

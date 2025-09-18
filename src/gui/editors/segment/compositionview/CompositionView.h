@@ -89,6 +89,8 @@ public:
     /// Scroll in such a way that the track position is visible.
     void makeTrackPosVisible(int trackPos);
 
+    AutoScroller *getAutoScroller()  { return &m_autoScroller; }
+
     // *** Segments
 
     /// Enables/disables display of the text labels on each segment.

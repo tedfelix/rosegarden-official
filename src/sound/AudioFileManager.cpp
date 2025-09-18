@@ -331,20 +331,13 @@ AudioFileManager::setRelativeAudioPath(
         newRelativePath = "./" + newRelativePath;
     }
 
+    // No change?  Bail.
+    if (m_relativeAudioPath == newRelativePath)
+        return;
+
     QString newAbsolutePath = FileUtil::toAbsolute(
             newRelativePath, m_document->getAbsFilePath());
     newAbsolutePath = FileUtil::addTrailingSlash(newAbsolutePath);
-
-    // ??? This is probably only needed if the directory does not
-    //     exist in the first place and we have no files to move.
-    //     The issue here is that the user should know that if they
-    //     keep changing this, they will leave a trail of empty
-    //     directories.
-    //QMessageBox::information(
-    //        RosegardenMainWindow::self(),
-    //        tr("Audio File Location"),
-    //        tr("Creating the new directory for audio files:<br />%1").
-    //            arg(newAbsolutePath));
 
     QString originalLocation;
     // If the files are moving, provide the user with some additional
@@ -395,37 +388,49 @@ AudioFileManager::setRelativeAudioPath(
     }
 
     if (doMoveFiles) {
-        // Force a save.
+        // Force a save of the .rg file.
+
+        // We need to update the audio file path in the .rg file.  See
+        // toXmlString().  If we don't do this, the .rg file will end up out
+        // of sync with where the audio files are now.
+
+#if 0
+        // ??? RECURSION.  Can't we reduce this to calling
+        //     RosegardenDocument::saveDocument() which should avoid the
+        //     recursion?  Or do we actually need the full save process
+        //     (e.g. potential "save as" if no filename) in some cases?
         RosegardenMainWindow::self()->slotFileSave();
+#else
+        // ??? This avoids the recursion.  But it needs testing.  Will it work
+        //     in all possible save situations?  It seems to work in the two
+        //     key cases (new file with audio and move audio).  I'm going with
+        //     it.
+
+        QString docFilePath = m_document->getAbsFilePath();
+
+        QString errMsg;
+        const bool success = RosegardenDocument::currentDocument->saveDocument(
+                docFilePath, errMsg);
+
+        if (!success) {
+            if (!errMsg.isEmpty()) {
+                QMessageBox::critical(
+                        RosegardenMainWindow::self(),
+                        tr("Rosegarden"),
+                        tr("Could not save document at %1\nError was : %2").
+                                arg(docFilePath).arg(errMsg));
+            } else {
+                QMessageBox::critical(
+                        RosegardenMainWindow::self(),
+                        tr("Rosegarden"),
+                        tr("Could not save document at %1").
+                                arg(docFilePath));
+            }
+        }
+#endif
+
     }
 
-}
-
-void
-AudioFileManager::createAudioPath()
-{
-    const QString absoluteAudioPath = getAbsoluteAudioPath();
-
-    const bool success = QDir().mkpath(absoluteAudioPath);
-    if (!success) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Cannot create audio path.<br />%1").
-                    arg(absoluteAudioPath));
-        return;
-    }
-
-    // Is the new path writable?
-    // Make sure the user is warned before recording audio fails later.
-    if (access(qstrtostr(absoluteAudioPath).c_str(), W_OK) != 0) {
-        QMessageBox::warning(
-                RosegardenMainWindow::self(),
-                tr("Audio File Location"),
-                tr("Audio path is not writable.<br />%1").
-                    arg(absoluteAudioPath));
-        return;
-    }
 }
 
 QString
@@ -1197,20 +1202,12 @@ AudioFileManager::save()
     // If the preferences indicate prompting
     if (!Preferences::getAudioFileLocationDlgDontShow())
     {
-
-        // Stop wait cursor.
-        QApplication::restoreOverrideCursor();
-
         // Ask the user to pick an audio file path.
         // Results go to the Preferences.
         AudioFileLocationDialog audioFileLocationDialog(
                 RosegardenMainWindow::self(),
                 documentNameDir);
         audioFileLocationDialog.exec();
-
-        // Start wait cursor.
-        QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-
     }
 
     // Indicate audio location was confirmed by the user.
@@ -1221,10 +1218,15 @@ AudioFileManager::save()
     const QString audioPath = Preferences::getDefaultAudioLocationString(
             m_document->getAbsFilePath());
 
-    // Set the new location, move the files, and save.
-    setRelativeAudioPath(audioPath,
-                         true,  // create
-                         true);  // doMoveFiles
+    {
+        SetWaitCursor setWaitCursor;
+
+        // Set the new location, move the files, and save.
+        setRelativeAudioPath(audioPath,
+                             true,  // create
+                             true);  // doMoveFiles
+    }
+
 }
 
 

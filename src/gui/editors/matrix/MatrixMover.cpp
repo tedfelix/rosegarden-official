@@ -310,8 +310,8 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     if (!m_currentElement || !m_currentViewSegment) return;
 
-    timeT newTime = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
-    int newPitch = e->pitch;
+    timeT newTime1 = e->snappedLeftTime - m_clickSnappedLeftDeltaTime;
+    int newPitch1 = e->pitch;
 
     EventSelection* selection = m_scene->getSelection();
 
@@ -319,56 +319,56 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
         m_constraintH->hide();
         m_constraintV->hide();
         if (vertical) {
-            newTime = m_currentElement->getViewAbsoluteTime();
+            newTime1 = m_currentElement->getViewAbsoluteTime();
         } else {
-            newPitch = m_event->get<Int>(BaseProperties::PITCH);
+            newPitch1 = m_event->get<Int>(BaseProperties::PITCH);
             // allow for transpose
             long pitchOffset = selection->getSegment().getTranspose();
-            newPitch += pitchOffset;
+            newPitch1 += pitchOffset;
         }
     }
     m_dragConstrained = false;
 
-    if (newPitch > 127) newPitch = 127;
-    if (newPitch < 0) newPitch = 0;
+    if (newPitch1 > 127) newPitch1 = 127;
+    if (newPitch1 < 0) newPitch1 = 0;
 
     // get a basic pitch difference calculation comparing the current element's
     // pitch to the pitch the mouse was released at (see note in
     // handleMouseMove)
     using BaseProperties::PITCH;
-    timeT diffTime = newTime - m_currentElement->getViewAbsoluteTime();
+    timeT diffTime = newTime1 - m_currentElement->getViewAbsoluteTime();
     int diffPitch = 0;
     if (m_event->has(PITCH)) {
-        diffPitch = newPitch - m_event->get<Int>(PITCH);
+        diffPitch = newPitch1 - m_event->get<Int>(PITCH);
     }
 
     // factor in transpose to adjust the height calculation
     long pitchOffset = selection->getSegment().getTranspose();
     diffPitch += (pitchOffset * -1);
 
-    if ((diffTime == 0 && diffPitch == 0) || selection->getAddedEvents() == 0) {
+    if ((diffTime == 0 && diffPitch == 0) || selection->size() == 0) {
         removeDuplicates();
         m_currentElement = nullptr;
         m_event = nullptr;
         return;
     }
 
-    if (newPitch != m_lastPlayedPitch) {
+    if (newPitch1 != m_lastPlayedPitch) {
         long velocity = m_widget->getCurrentVelocity();
         m_event->get<Int>(BaseProperties::VELOCITY, velocity);
-        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch + (pitchOffset * -1), velocity);
-        m_lastPlayedPitch = newPitch;
+        m_scene->playNote(m_currentViewSegment->getSegment(), newPitch1 + (pitchOffset * -1), velocity);
+        m_lastPlayedPitch = newPitch1;
     }
 
     QString commandLabel;
     if (m_quickCopy) {
-        if (selection->getAddedEvents() < 2) {
+        if (selection->size() < 2) {
             commandLabel = tr("Copy and Move Event");
         } else {
             commandLabel = tr("Copy and Move Events");
         }
     } else {
-        if (selection->getAddedEvents() < 2) {
+        if (selection->size() < 2) {
             commandLabel = tr("Move Event");
         } else {
             commandLabel = tr("Move Events");
@@ -405,31 +405,31 @@ MatrixMover::handleMouseRelease(const MatrixMouseEvent *e)
 
     for (; it != selection->getSegmentEvents().end(); ++it) {
 
-        timeT newTime = (*it)->getAbsoluteTime() + diffTime;
+        timeT newTime2 = (*it)->getAbsoluteTime() + diffTime;
 
-        int newPitch = 60;
+        int newPitch2 = 60;
         if ((*it)->has(PITCH)) {
-            newPitch = (*it)->get<Int>(PITCH) + diffPitch;
+            newPitch2 = (*it)->get<Int>(PITCH) + diffPitch;
         }
 
         Event *newEvent = nullptr;
 
-        if (newTime < segment.getStartTime()) {
-            newTime = segment.getStartTime();
+        if (newTime2 < segment.getStartTime()) {
+            newTime2 = segment.getStartTime();
         }
 
-        if (newTime + (*it)->getDuration() >= segment.getEndMarkerTime()) {
+        if (newTime2 + (*it)->getDuration() >= segment.getEndMarkerTime()) {
             timeT limit = getSnapGrid()->snapTime
                 (segment.getEndMarkerTime() - 1, SnapGrid::SnapLeft);
-            if (newTime > limit) newTime = limit;
+            if (newTime2 > limit) newTime2 = limit;
             timeT newDuration = std::min
-                ((*it)->getDuration(), segment.getEndMarkerTime() - newTime);
-            newEvent = new Event(**it, newTime, newDuration);
+                ((*it)->getDuration(), segment.getEndMarkerTime() - newTime2);
+            newEvent = new Event(**it, newTime2, newDuration);
         } else {
-            newEvent = new Event(**it, newTime);
+            newEvent = new Event(**it, newTime2);
         }
 
-        newEvent->set<Int>(BaseProperties::PITCH, newPitch);
+        newEvent->set<Int>(BaseProperties::PITCH, newPitch2);
 
         macro->addCommand(new MatrixModifyCommand(segment,
                                                   (*it),
@@ -487,7 +487,7 @@ void MatrixMover::stow()
 void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 {
     EventSelection *selection = m_scene->getSelection();
-    if (!selection || selection->getAddedEvents() < 2) {
+    if (!selection || selection->size() < 2) {
         if (!ctrlPressed) {
             setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));
         } else {

@@ -48,12 +48,6 @@ EraseCommand::EraseCommand(
         m_selection2 = nullptr;
 }
 
-EraseCommand::~EraseCommand()
-{
-    // ??? MEMORY LEAK (confirmed)  delete here isn't a reliable solution.
-    //delete m_selection;
-}
-
 void
 EraseCommand::modifySegment()
 {
@@ -83,7 +77,7 @@ EraseCommand::eraseInSegment(EventSelection *selection)
          ++i) {
 
         if ((*i)->isa(Clef::EventType) ||
-                (*i)->isa(Key ::EventType)) {
+                (*i)->isa(Key::EventType)) {
             erasedLongEffectEvent = true;
         } else if ((*i)->isa(Indication::EventType)) {
 

@@ -66,13 +66,13 @@ timeT ChangingSegment::getRepeatTimeAt(const SnapGrid &grid, const QPoint &pos) 
 
 void ChangingSegment::setStartTime(timeT time, const SnapGrid &grid)
 {
-    int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
+    const int x1 = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
 
-    int curX = rect().x();
-    m_rect.rect.setX(x);
+    const int curX = rect().x();
+    m_rect.rect.setX(x1);
     if (m_rect.isRepeating()) {
-        int deltaX = curX - x;
-        int curW = m_rect.baseWidth;
+        const int deltaX = curX - x1;
+        const int curW = m_rect.baseWidth;
         m_rect.baseWidth = curW + deltaX;
     }
 }
@@ -87,10 +87,10 @@ timeT ChangingSegment::getStartTime(const SnapGrid &grid)
 
 void ChangingSegment::setEndTime(timeT time, const SnapGrid &grid)
 {
-    int x = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
+    const int x1 = int(nearbyint(grid.getRulerScale()->getXForTime(time)));
     QRect r = rect();
     QPoint topRight = r.topRight();
-    topRight.setX(x);
+    topRight.setX(x1);
     r.setTopRight(topRight);
     m_rect.rect.setWidth(r.width());
 

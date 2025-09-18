@@ -21,9 +21,10 @@
 
 #include "base/SnapGrid.h"
 
+#include <QPen>
+#include <QPointer>
 #include <QSize>
 #include <QWidget>
-#include <QPen>
 
 class QPaintEvent;
 class QPainter;
@@ -34,6 +35,7 @@ namespace Rosegarden
 {
 
 
+class AutoScroller;
 class RulerScale;
 class RosegardenDocument;
 
@@ -57,6 +59,9 @@ public:
               bool displayQuickMarker,
               QWidget *parent);
     ~LoopRuler() override;
+
+    void setAutoScroller(QPointer<AutoScroller> autoScroller)
+            { m_autoScroller = autoScroller; }
 
     void setSnapGrid(const SnapGrid *grid);
 
@@ -91,11 +96,6 @@ signals:
      * StandardRuler.
      */
     void setPlayPosition(timeT);
-
-    // These signals are used by Notation, Matrix, and the Segment Canvas
-    // for auto scroll.
-    void startMouseMove(int directionConstraint);
-    void stopMouseMove();
 
 protected:
 
@@ -155,6 +155,8 @@ private:
 
     /// between loop positions
     void drawLoopMarker(QPainter *);
+
+    QPointer<AutoScroller> m_autoScroller;
 
 };
 

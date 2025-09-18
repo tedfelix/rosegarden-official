@@ -199,9 +199,8 @@ StaffHeader::StaffHeader(HeadersGroup *group,
 
         NotationStaff *notationStaff = (*staffs)[i];
         Segment &segment = notationStaff->getSegment();
-        TrackId trackId = segment.getTrack();
 
-        if (trackId  == m_track) {
+        if (segment.getTrack() == m_track) {
             m_segments.insert(&segment);
         }
     }
@@ -363,7 +362,7 @@ StaffHeader::paintEvent(QPaintEvent *)
 
     wHeight -= 4;    // Make room to the label frame :
                      // 4 = 2 * (margin + lineWidth)
-wWidth -= 4; /// ???
+    wWidth -= 4; /// ???
 
     int lw = m_lineSpacing;
     int h;
@@ -402,7 +401,7 @@ wWidth -= 4; /// ???
     paint.setFont(npf->getTrackHeaderFont());
 
     QString text;
-    QString textLine;
+    QString textLine1;
 
     int charHeight = npf->getTrackHeaderFontMetrics().height();
     int charWidth = npf->getTrackHeaderFontMetrics().maxWidth();
@@ -430,17 +429,17 @@ wWidth -= 4; /// ???
                          + (l - 1) * npf->getTrackHeaderTextLineSpacing();
         if (l == numberOfTextLines) {
             int transposeSpace = transposeWidth ? transposeWidth + charWidth / 4 : 0;
-            textLine = npf->getOneLine(text, m_lastWidth - transposeSpace - charWidth / 2);
+            textLine1 = npf->getOneLine(text, m_lastWidth - transposeSpace - charWidth / 2);
             if (!text.isEmpty()) {
                 // String too long : cut it and replace last character with dots
-                int len = textLine.length();
-                if (len > 1) textLine.replace(len - 1, 1, tr("..."));
+                int len = textLine1.length();
+                if (len > 1) textLine1.replace(len - 1, 1, tr("..."));
             }
         } else {
-            textLine = npf->getOneLine(text, m_lastWidth - charWidth / 2);
+            textLine1 = npf->getOneLine(text, m_lastWidth - charWidth / 2);
         }
-        if (textLine.isEmpty()) break;
-        paint.drawText(charWidth / 4, upperTextY, textLine);
+        if (textLine1.isEmpty()) break;
+        paint.drawText(charWidth / 4, upperTextY, textLine1);
     }
 
 
@@ -478,16 +477,16 @@ wWidth -= 4; /// ???
         int lowerTextY = wHeight - 4            // -4 : adjust
             - (numberOfTextLines - l) * npf->getTrackHeaderTextLineSpacing();
 
-        QString textLine = npf->getOneLine(text, m_lastWidth - charWidth / 2);
-        if (textLine.isEmpty()) break;
+        QString textLine2 = npf->getOneLine(text, m_lastWidth - charWidth / 2);
+        if (textLine2.isEmpty()) break;
 
         if ((l == numberOfTextLines)  && !text.isEmpty()) {
                 // String too long : cut it and replace last character by dots
-                int len = textLine.length();
-                if (len > 1) textLine.replace(len - 1, 1, tr("..."));
+                int len = textLine2.length();
+                if (len > 1) textLine2.replace(len - 1, 1, tr("..."));
         }
 
-        paint.drawText(charWidth / 4, lowerTextY, textLine);
+        paint.drawText(charWidth / 4, lowerTextY, textLine2);
     }
 
     // Draw a blue rectangle around the header if staff is the current one

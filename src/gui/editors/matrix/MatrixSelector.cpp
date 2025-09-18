@@ -566,7 +566,7 @@ MatrixSelector::getSelection(EventSelection *&selection,
         }
     }
 
-    if (selection->getAddedEvents() == 0) {
+    if (selection->size() == 0) {
         delete selection;
         selection = nullptr;
     }
@@ -598,13 +598,13 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
         EventSelection *s = m_scene->getSelection();
 
         if (e->sceneX > resizeStart) {
-            if (s && s->getAddedEvents() > 1) {
+            if (s && s->size() > 1) {
                 setContextHelp(tr("Click and drag to resize selected notes"));
             } else {
                 setContextHelp(tr("Click and drag to resize note"));
             }
         } else {
-            if (s && s->getAddedEvents() > 1) {
+            if (s && s->size() > 1) {
                 if (!ctrlPressed) {
                     setContextHelp(tr("Click and drag to move selected notes; hold Ctrl as well to copy"));
                 } else {

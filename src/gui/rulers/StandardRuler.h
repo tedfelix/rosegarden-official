@@ -21,13 +21,17 @@
 
 #include "base/TimeT.h"
 
+#include <QPointer>
 #include <QWidget>
+
+class QMainWindow;
 
 
 namespace Rosegarden
 {
 
 
+class AutoScroller;
 class RulerScale;
 class RosegardenDocument;
 class LoopRuler;
@@ -43,13 +47,15 @@ class StandardRuler : public QWidget
 public:
     StandardRuler(RosegardenDocument *doc,
                   RulerScale *rulerScale,
-                  bool invert = false, // draw upside-down
+                  bool invert,  // draw upside-down for bottom rulers
                   bool isForMainWindow = false,
                   QWidget *parent = nullptr);
 
     void setSnapGrid(const SnapGrid *grid);
+    void setMainWindow(QPointer<QMainWindow> mainWindow);
+    void setAutoScroller(QPointer<AutoScroller> autoScroller);
 
-    LoopRuler *getLoopRuler() { return m_loopRuler; }
+    LoopRuler *getLoopRuler()  { return m_loopRuler; }
 
     /**
      * Make connections from the LoopRuler to the document's
@@ -57,7 +63,7 @@ public:
      * If you don't call this, you'll have to connect the
      * LoopRuler's signals up to something yourself.
      */
-    void connectRulerToDocPointer(RosegardenDocument *doc);
+    void setDocument(RosegardenDocument *doc);
     
     void setMinimumWidth(int width);
 
@@ -76,9 +82,8 @@ signals:
     void dragPointerToPosition(timeT);
 
 private:
-    //--------------- Data members ---------------------------------
+
     bool m_invert;
-    bool m_isForMainWindow;
     int m_currentXOffset;
 
     RosegardenDocument *m_doc;
@@ -86,6 +91,7 @@ private:
 
     MarkerRuler *m_markerRuler;
     LoopRuler *m_loopRuler;
+
 };
 
 

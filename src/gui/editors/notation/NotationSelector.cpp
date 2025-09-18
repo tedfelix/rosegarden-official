@@ -804,7 +804,7 @@ NotationSelector::getEventsInSelectionRect
        }
     }
 
-    if (selection->getAddedEvents() > 0) {
+    if (selection->size() > 0) {
         return selection;
     } else {
         delete selection;

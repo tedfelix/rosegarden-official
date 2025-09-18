@@ -117,6 +117,7 @@ namespace Preferences
     // Experimental
 
     bool getBug1623();
+    bool getMusewhirl();
 
     // Enable/disable LV2 plugin discovery.
     void setLV2(bool value);

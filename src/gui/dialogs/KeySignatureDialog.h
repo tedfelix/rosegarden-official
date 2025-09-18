@@ -77,7 +77,7 @@ public slots:
     void slotKeyUp();
     void slotKeyDown();
     void slotKeyNameChanged(int);
-    void slotMajorMinorChanged(const QString &);
+    void slotMajorMinorChanged(const QString &quality);
     void slotHelpRequested();
 
 protected:

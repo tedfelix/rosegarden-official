@@ -300,9 +300,9 @@ protected:
                         const NoteItemDimensions &dimensions,
                         QPainter *painter);
     void drawNoteAux(const NotePixmapParameters &params,
-                     QPainter *painter, int x, int y);
+                     QPainter *painter, int i_x, int i_y);
     void drawRestAux(const NotePixmapParameters &params, QPoint &hotspot,
-                     QPainter *painter, int x, int y);
+                     QPainter *painter, int i_x, int y);
     void drawHairpinAux(int length, bool isCrescendo,
                         QPainter *painter, int x, int y);
     void drawSlurAux(int length, int dy, bool above, bool smooth,

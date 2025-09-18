@@ -246,6 +246,8 @@ public:
 
     void clearMarkers();
 
+    Marker *findMarker(int markerID) const;
+
 
     //////
     //
@@ -1157,9 +1159,8 @@ protected:
 
     RefreshStatusArray<RefreshStatus> m_refreshStatusArray;
 
-    // User defined markers in the composition
-    //
-    MarkerVector                   m_markers;
+    /// Sorted vector of Markers.  See addMarker().
+    MarkerVector m_markers;
 
     // Trigger segments (unsorted segments fired by events elsewhere)
     //

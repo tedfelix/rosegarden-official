@@ -2645,6 +2645,16 @@ Composition::detachMarker(const Rosegarden::Marker *marker)
     return false;
 }
 
+Marker *
+Composition::findMarker(int markerID) const
+{
+    for (Marker *marker : m_markers) {
+        if (marker->getID() == markerID)
+            return marker;
+    }
+    return nullptr;
+}
+
 Segment*
 Composition::getSegmentByMarking(const QString& marking) const
 {

@@ -545,7 +545,7 @@ NotePixmapFactory::sketchNoteTiny(const NotePixmapParameters &params,
 
 void
 NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
-                               QPainter *painter, int x, int y)
+                               QPainter *painter, int i_x, int i_y)
 {
     NoteFont::CharacterType charType =
         m_inPrinterMethod ? NoteFont::Printer : NoteFont::Screen;
@@ -591,7 +591,7 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
         painter->save();
         m_p->beginExternal(painter);
 //        NOTATION_DEBUG << "Translate: (" << x << "," << y << ")";
-        painter->translate(x - m_nd.left, y - m_nd.above - m_nd.noteBodyHeight / 2);
+        painter->translate(i_x - m_nd.left, i_y - m_nd.above - m_nd.noteBodyHeight / 2);
     } else {
         createPixmap(m_nd.noteBodyWidth + m_nd.left + m_nd.right,
                      m_nd.noteBodyHeight + m_nd.above + m_nd.below);
@@ -639,17 +639,17 @@ NotePixmapFactory::drawNoteAux(const NotePixmapParameters &params,
 
     if (params.m_dots > 0) {
 
-        int x = m_nd.left + m_nd.noteBodyWidth + dotWidth / 2;
-        int y = m_nd.above + m_nd.noteBodyHeight / 2 - dot.getHeight() / 2;
+        int x2 = m_nd.left + m_nd.noteBodyWidth + dotWidth / 2;
+        int y2 = m_nd.above + m_nd.noteBodyHeight / 2 - dot.getHeight() / 2;
 
-        if (params.m_onLine) y -= m_nd.noteBodyHeight / 2;
+        if (params.m_onLine) y2 -= m_nd.noteBodyHeight / 2;
 
-        if (params.m_shifted) x += m_nd.noteBodyWidth;
-        else if (params.m_dotShifted) x += m_nd.noteBodyWidth;
+        if (params.m_shifted) x2 += m_nd.noteBodyWidth;
+        else if (params.m_dotShifted) x2 += m_nd.noteBodyWidth;
 
         for (int i = 0; i < params.m_dots; ++i) {
-            m_p->drawNoteCharacter(x, y, dot);
-            x += dotWidth;
+            m_p->drawNoteCharacter(x2, y2, dot);
+            x2 += dotWidth;
         }
     }
 
@@ -1818,7 +1818,7 @@ NotePixmapFactory::drawRest(const NotePixmapParameters &params,
 
 void
 NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
-                               QPoint &hotspot, QPainter *painter, int x, int y)
+                               QPoint &hotspot, QPainter *painter, int i_x, int y)
 {
     CharName charName(m_style->getRestCharName(params.m_noteType,
                                                params.m_restOutsideStave));
@@ -1862,7 +1862,7 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
     if (painter) {
         painter->save();
         m_p->beginExternal(painter);
-        painter->translate(x - m_nd.left, y - m_nd.above - hotspot.y());
+        painter->translate(i_x - m_nd.left, y - m_nd.above - hotspot.y());
     } else {
         createPixmap(m_nd.noteBodyWidth + m_nd.left + m_nd.right,
                      m_nd.noteBodyHeight + m_nd.above + m_nd.below);
@@ -1883,8 +1883,8 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
     }
 
     for (int i = 0; i < params.m_dots; ++i) {
-        int x = m_nd.left + m_nd.noteBodyWidth + i * dotWidth + dotWidth / 2;
-        m_p->drawNoteCharacter(x, restY, dot);
+        int x2 = m_nd.left + m_nd.noteBodyWidth + i * dotWidth + dotWidth / 2;
+        m_p->drawNoteCharacter(x2, restY, dot);
     }
 
     if (params.m_restOutsideStave &&
@@ -1915,11 +1915,11 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
 {
     Profiler profiler("NotePixmapFactory::makeClef");
 
-    NoteCharacter plain = getCharacter(m_style->getClefCharName(clef),
+    NoteCharacter plainCharacter = getCharacter(m_style->getClefCharName(clef),
                                        colourType, false);
 
     int oct = clef.getOctaveOffset();
-    if (oct == 0) return plain.makeItem();
+    if (oct == 0) return plainCharacter.makeItem();
 
     // Since there was an offset, we have additional bits to draw, and must
     // match up the colour.  This bit is rather hacky, but I decided not to
@@ -1938,7 +1938,7 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
     int tw = m_clefOttavaFontMetrics.boundingRect(text).width();
     int ascent = m_clefOttavaFontMetrics.ascent();
 
-    createPixmap(plain.getWidth(), plain.getHeight() + th);
+    createPixmap(plainCharacter.getWidth(), plainCharacter.getHeight() + th);
 
     // The selected state is part of the ColourType enum, but it requires fluid
     // external control, and can't be managed in the same way as more static
@@ -1968,12 +1968,12 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
         case OutRangeColour:
         default:
             // fix bug with ottava marks not reflecting invisibility properly
-            QColor plain = (m_shaded ? Qt::gray : Qt::black);
-            m_p->painter().setPen(plain);
+            QColor plainColor = (m_shaded ? Qt::gray : Qt::black);
+            m_p->painter().setPen(plainColor);
         }
     }
 
-    m_p->drawNoteCharacter(0, oct < 0 ? 0 : th, plain);
+    m_p->drawNoteCharacter(0, oct < 0 ? 0 : th, plainCharacter);
 
     m_p->painter().setFont(m_clefOttavaFont);
 
@@ -1982,10 +1982,10 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
     // 8/15 above and below clef pixmaps was getting cut off.  Supplying an
     // adjustment of -2 and 4 yields just perfect results, but who knows how
     // this will turn out on somebody else's setup.
-    m_p->drawText(plain.getWidth() / 2 - tw / 2,
-                  ascent + (oct < 0 ? plain.getHeight() - 2 : 4), text);
+    m_p->drawText(plainCharacter.getWidth() / 2 - tw / 2,
+                  ascent + (oct < 0 ? plainCharacter.getHeight() - 2 : 4), text);
 
-    QPoint hotspot(plain.getHotspot());
+    QPoint hotspot(plainCharacter.getHotspot());
     if (oct > 0) hotspot.setY(hotspot.y() + th);
     return makeItem(hotspot);
 }

@@ -250,7 +250,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     if (selection) selection = new EventSelection(*selection);
     else selection = new EventSelection(m_currentViewSegment->getSegment());
 
-    if (selection->getAddedEvents() == 0 || m_velocityDelta == 0) {
+    if (selection->size() == 0 || m_velocityDelta == 0) {
         delete selection;
         // Mouse position is again related to pitch
         m_widget->showHighlight(true);
@@ -258,7 +258,7 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
     } else {
         QString commandLabel = tr("Change Velocity");
 
-        if (selection->getAddedEvents() > 1) {
+        if (selection->size() > 1) {
             commandLabel = tr("Change Velocities");
         }
 
@@ -300,7 +300,7 @@ void
 MatrixVelocity::setBasicContextHelp()
 {
     EventSelection *selection = m_scene->getSelection();
-    if (selection && selection->getAddedEvents() > 1) {
+    if (selection && selection->size() > 1) {
         setContextHelp(tr("Click and drag to scale velocity of selected notes"));
     } else {
         setContextHelp(tr("Click and drag to scale velocity of note"));

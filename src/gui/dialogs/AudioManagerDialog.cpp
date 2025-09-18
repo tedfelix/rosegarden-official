@@ -325,8 +325,8 @@ AudioManagerDialog::slotPopulateFileList()
 
         // Duration
         const RealTime length = audioFile.getLength();
-        const QString msecs = QString::asprintf("%03d", length.nsec / 1000000);
-        item->setText(1, QString("%1.%2s").arg(length.sec).arg(msecs));
+        const QString audioFileDurationMsecs = QString::asprintf("%03d", length.nsec / 1000000);
+        item->setText(1, QString("%1.%2s").arg(length.sec).arg(audioFileDurationMsecs));
 
         // set start time and duration
         item->setStartTime(RealTime::zero());
@@ -392,11 +392,11 @@ AudioManagerDialog::slotPopulateFileList()
 
             // Write segment duration
             //
-            const QString msecs =
+            const QString segmentDurationMsecs =
                 QString::asprintf("%03d", segmentDuration.nsec / 1000000);
             childItem->setText(1, QString("%1.%2s")
                                .arg(segmentDuration.sec)
-                               .arg(msecs));
+                               .arg(segmentDurationMsecs));
 
             try {
                 m_doc->getAudioFileManager().

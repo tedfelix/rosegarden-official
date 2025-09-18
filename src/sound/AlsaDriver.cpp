@@ -952,13 +952,36 @@ AlsaDriver::removeDevice(DeviceId id)
     }
 }
 
+namespace
+{
+    QString a_getPortName(snd_seq_t *handle, int portNumber)
+    {
+        snd_seq_port_info_t *pinfo;
+        snd_seq_port_info_alloca(&pinfo);
+        snd_seq_get_port_info(handle, portNumber, pinfo);
+        return snd_seq_port_info_get_name(pinfo);
+    }
+}
+
 void
 AlsaDriver::removeAllDevices()
 {
+    // Bug #1732 diagnostics.  Please clean this up at some point.
+    const bool musewhirl = Preferences::getMusewhirl();
+    if (musewhirl)
+        RG_WARNING << "removeAllDevices()...";
+
     while (!m_outputPorts.empty()) {
+        if (musewhirl)
+            RG_WARNING << "  " << a_getPortName(m_midiHandle, m_outputPorts.begin()->second) << " [" << m_outputPorts.begin()->first << "," << m_outputPorts.begin()->second << "]";
+
         checkAlsaError(snd_seq_delete_port(m_midiHandle,
                                            m_outputPorts.begin()->second),
                        "removeAllDevices");
+
+        if (musewhirl)
+            RG_WARNING << "      port deleted";
+
         m_outputPorts.erase(m_outputPorts.begin());
     }
 
@@ -968,15 +991,15 @@ AlsaDriver::removeAllDevices()
 void
 AlsaDriver::renameDevice(DeviceId id, const QString& name)
 {
-    DeviceIntMap::iterator i = m_outputPorts.find(id);
-    if (i == m_outputPorts.end()) {
-        RG_WARNING << "renameDevice(): WARNING: Cannot find device " << id << " in port map";
+    DeviceIntMap::iterator outputPorIter = m_outputPorts.find(id);
+    if (outputPorIter == m_outputPorts.end()) {
+        RG_WARNING << "renameDevice(): WARNING: Cannot find device ID" << id << "in port map.  Cannot rename to" << name;
         return ;
     }
 
     snd_seq_port_info_t *pinfo;
     snd_seq_port_info_alloca(&pinfo);
-    snd_seq_get_port_info(m_midiHandle, i->second, pinfo);
+    snd_seq_get_port_info(m_midiHandle, outputPorIter->second, pinfo);
 
     QString oldName = snd_seq_port_info_get_name(pinfo);
     int sep = oldName.indexOf(" - ");
@@ -989,14 +1012,14 @@ AlsaDriver::renameDevice(DeviceId id, const QString& name)
     }
 
     snd_seq_port_info_set_name(pinfo, newName.toLocal8Bit().data());
-    checkAlsaError(snd_seq_set_port_info(m_midiHandle, i->second, pinfo),
+    checkAlsaError(snd_seq_set_port_info(m_midiHandle, outputPorIter->second, pinfo),
                    "renameDevice");
 
     MappedDevice *device = findDevice(id);
     if (device)
         device->setName(qstrtostr(newName));
 
-    RG_DEBUG << "renameDevice(): Renamed " << m_client << ":" << i->second << " to " << name;
+    RG_DEBUG << "renameDevice(): Renamed " << m_client << ":" << outputPorIter->second << " to " << name;
 }
 
 ClientPortPair

@@ -53,7 +53,6 @@
 #include "commands/edit/TransposeCommand.h"
 #include "commands/edit/AddMarkerCommand.h"
 #include "commands/edit/ModifyMarkerCommand.h"
-#include "commands/edit/RemoveMarkerCommand.h"
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/InterpretCommand.h"
 #include "commands/segment/AddTempoChangeCommand.h"
@@ -2146,24 +2145,24 @@ RosegardenMainWindow::slotFileSave()
     const QString& docFilePath =
             RosegardenDocument::currentDocument->getAbsFilePath();
 
+    // An attempt to address Bug #1725.  Stop the auto-save timer to make
+    // sure no auto-saves sneak in while we are saving.
+    m_autoSaveTimer->stop();
+
     QString errMsg;
     bool success;
 
     {
         SetWaitCursor setWaitCursor;
 
-        // An attempt to address Bug #1725.  Stop the auto-save timer to make
-        // sure no auto-saves sneak in while we are saving.
-        m_autoSaveTimer->stop();
-
         success = RosegardenDocument::currentDocument->saveDocument(
                 docFilePath, errMsg);
-
-        // Restart the auto-save timer at the current time so that the next
-        // auto-save happens as far into the future as possible.
-        m_lastAutoSaveTime = QTime::currentTime();
-        m_autoSaveTimer->start(autoSaveTimerInterval);
     }
+
+    // Restart the auto-save timer at the current time so that the next
+    // auto-save happens as far into the future as possible.
+    m_lastAutoSaveTime = QTime::currentTime();
+    m_autoSaveTimer->start(autoSaveTimerInterval);
 
     if (!success) {
         if (!errMsg.isEmpty())
@@ -2275,16 +2274,18 @@ RosegardenMainWindow::fileSaveAs(bool asTemplate)
     if (newName.isEmpty())
         return false;
 
-    SetWaitCursor waitCursor;
-
     QString errMsg;
+    bool success{false};
 
     // An attempt to address Bug #1725.  Stop the auto-save timer to
     // make sure no auto-saves sneak in while we are saving.
     m_autoSaveTimer->stop();
 
-    const bool success =
-            RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+    {
+        SetWaitCursor waitCursor;
+
+        success = RosegardenDocument::currentDocument->saveAs(newName, errMsg);
+    }
 
     // Restart the auto-save timer at the current time so that the next
     // auto-save happens as far into the future as possible.
@@ -6355,34 +6356,6 @@ RosegardenMainWindow::slotZoomOut()
 }
 
 void
-RosegardenMainWindow::slotAddMarker(timeT time)
-{
-    AddMarkerCommand *command =
-        new AddMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
-                             time,
-                            qStrToStrUtf8(tr("new marker")),
-                            qStrToStrUtf8(tr("no description")) );
-
-    CommandHistory::getInstance()->addCommand(command);
-}
-
-void
-RosegardenMainWindow::slotDeleteMarker(int id,
-                                       timeT time,
-                                       const QString& name,
-                                       const QString& description)
-{
-    RemoveMarkerCommand *command =
-        new RemoveMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
-                                id,
-                                time,
-                                qstrtostr(name),
-                                qstrtostr(description));
-
-    CommandHistory::getInstance()->addCommand(command);
-}
-
-void
 RosegardenMainWindow::slotDocumentModified(bool modified)
 {
     RG_DEBUG << "slotDocumentModified(" << modified << ") - doc path = " << RosegardenDocument::currentDocument->getAbsFilePath();
@@ -8334,11 +8307,11 @@ RosegardenMainWindow::slotNewerVersionAvailable(QString v)
 void
 RosegardenMainWindow::slotAddMarker2()
 {
-    AddMarkerCommand *command =
-        new AddMarkerCommand(&RosegardenDocument::currentDocument->getComposition(),
-                             RosegardenDocument::currentDocument->getComposition().getPosition(),
-                             "new marker",
-                             "no description");
+    AddMarkerCommand *command = new AddMarkerCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            RosegardenDocument::currentDocument->getComposition().getPosition(),
+            "new marker",
+            "no description");
 
     m_view->slotAddCommandToHistory(command);
 }

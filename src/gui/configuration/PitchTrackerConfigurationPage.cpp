@@ -45,7 +45,7 @@ namespace Rosegarden
 
 const int PitchTrackerConfigurationPage::defaultGraphWidth = 4000;
 const int PitchTrackerConfigurationPage::defaultGraphHeight = 100;
-const bool PitchTrackerConfigurationPage::defaultIgnore8ve = true;
+const bool PitchTrackerConfigurationPage::defaultIgnore8veConstant = true;
 
 
 PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
@@ -165,11 +165,10 @@ PitchTrackerConfigurationPage::PitchTrackerConfigurationPage(QWidget *parent) :
     m_ignore8ve = new QCheckBox(frame);
     connect(m_ignore8ve, &QCheckBox::stateChanged,
             this, &PitchTrackerConfigurationPage::slotModified);
-    bool defaultIgnore8ve =
-           settings.value("ignoreoctave",
-                          PitchTrackerConfigurationPage::defaultIgnore8ve
-                         ).toBool();
-    m_ignore8ve->setChecked(defaultIgnore8ve);
+    const bool ignore8ve = settings.value(
+            "ignoreoctave",
+            PitchTrackerConfigurationPage::defaultIgnore8veConstant).toBool();
+    m_ignore8ve->setChecked(ignore8ve);
     layout->addWidget(m_ignore8ve, row, 1, 1, 2);
     ++row;
 

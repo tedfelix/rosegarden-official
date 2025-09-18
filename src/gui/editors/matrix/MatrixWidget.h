@@ -259,22 +259,6 @@ private slots:
     /// Display the playback position pointer.
     void slotPointerPositionChanged(timeT t);
     void slotStandardRulerDrag(timeT t);
-    /// Handle StandardRuler startMouseMove()
-    void slotSRStartMouseMove();
-    /// Handle StandardRuler stopMouseMove()
-    void slotSRStopMouseMove();
-
-    /// Handle ControlRulerWidget::mousePress().
-    void slotCRWMousePress();
-    /// Handle ControlRulerWidget::mouseMove().
-    void slotCRWMouseMove(FollowMode followMode);
-    /// Handle ControlRulerWidget::mouseRelease().
-    void slotCRWMouseRelease();
-
-    /// Handle TempoRuler::mousePress().
-    void slotTRMousePress();
-    /// Handle TempoRuler::mouseRelease().
-    void slotTRMouseRelease();
 
     /// Hide the horizontal scrollbar when not needed.
     /**

@@ -30,6 +30,7 @@
 #include "MatrixResizer.h"
 #include "MatrixVelocity.h"
 #include "MatrixMouseEvent.h"
+#include "MatrixView.h"
 #include "MatrixViewSegment.h"
 #include "PianoKeyboard.h"
 
@@ -47,6 +48,7 @@
 #include "gui/rulers/TempoRuler.h"
 #include "gui/rulers/ChordNameRuler.h"
 #include "gui/rulers/LoopRuler.h"
+#include "gui/rulers/MarkerRuler.h"
 
 #include "gui/general/ThornStyle.h"
 
@@ -309,14 +311,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_pianoView, &Panned::wheelEventReceived,
             m_view, &Panned::slotEmulateWheelEvent);
 
-    // Connect ControlRulerWidget for Auto-Scroll.
-    connect(m_controlsWidget, &ControlRulerWidget::mousePress,
-            this, &MatrixWidget::slotCRWMousePress);
-    connect(m_controlsWidget, &ControlRulerWidget::mouseMove,
-            this, &MatrixWidget::slotCRWMouseMove);
-    connect(m_controlsWidget, &ControlRulerWidget::mouseRelease,
-            this, &MatrixWidget::slotCRWMouseRelease);
-
     m_toolBox.reset(new MatrixToolBox(this));
 
     // Relay context help from matrix tools
@@ -438,6 +432,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
     generatePitchRuler();
 
+    m_controlsWidget->setAutoScroller(&m_autoScroller);
     m_controlsWidget->setViewSegment(
             dynamic_cast<ViewSegment *>(m_scene->getCurrentViewSegment()));
     m_controlsWidget->setRulerScale(m_referenceScale);
@@ -460,54 +455,47 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     connect(m_scene, &MatrixScene::selectionChanged,
             this, &MatrixWidget::selectionChanged);
 
-    m_topStandardRuler = new StandardRuler(document,
-                                           m_referenceScale,
-                                           false);
+    // ChordNameRuler
+    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
+                                          document,
+                                          segments,
+                                          24);     // height
+    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
 
-    m_bottomStandardRuler = new StandardRuler(document,
-                                               m_referenceScale,
-                                               true);
-
+    // TempoRuler
     m_tempoRuler = new TempoRuler(m_referenceScale,
                                   document,
                                   24,     // height
                                   true,   // small
                                   ThornStyle::isEnabled());
-
-    m_chordNameRuler = new ChordNameRuler(m_referenceScale,
-                                          document,
-                                          segments,
-                                          24);     // height
-
-    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
+    m_tempoRuler->setAutoScroller(&m_autoScroller);
     m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
-    m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
 
+    // Top StandardRuler
+    m_topStandardRuler = new StandardRuler(document,
+                                           m_referenceScale,
+                                           false);  // invert
     m_topStandardRuler->setSnapGrid(m_scene->getSnapGrid());
-    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
-
-    m_topStandardRuler->connectRulerToDocPointer(document);
-    m_bottomStandardRuler->connectRulerToDocPointer(document);
-
+    MatrixView *mainWindow = dynamic_cast<MatrixView *>(parent());
+    m_topStandardRuler->setMainWindow(mainWindow);
+    m_topStandardRuler->setAutoScroller(&m_autoScroller);
+    m_topStandardRuler->setDocument(document);
     connect(m_topStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &MatrixWidget::slotStandardRulerDrag);
+    m_layout->addWidget(m_topStandardRuler, TOPRULER_ROW, MAIN_COL, 1, 1);
+
+    // Bottom StandardRuler
+    m_bottomStandardRuler = new StandardRuler(document,
+                                               m_referenceScale,
+                                               true);  // invert
+    m_bottomStandardRuler->setSnapGrid(m_scene->getSnapGrid());
+    m_bottomStandardRuler->setMainWindow(mainWindow);
+    m_bottomStandardRuler->setAutoScroller(&m_autoScroller);
+    m_bottomStandardRuler->setDocument(document);
     connect(m_bottomStandardRuler, &StandardRuler::dragPointerToPosition,
             this, &MatrixWidget::slotStandardRulerDrag);
+    m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
 
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_topStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::startMouseMove,
-            this, &MatrixWidget::slotSRStartMouseMove);
-    connect(m_bottomStandardRuler->getLoopRuler(), &LoopRuler::stopMouseMove,
-            this, &MatrixWidget::slotSRStopMouseMove);
-
-    connect(m_tempoRuler, &TempoRuler::mousePress,
-            this, &MatrixWidget::slotTRMousePress);
-    connect(m_tempoRuler, &TempoRuler::mouseRelease,
-            this, &MatrixWidget::slotTRMouseRelease);
 
     connect(m_document, &RosegardenDocument::pointerPositionChanged,
             this, &MatrixWidget::slotPointerPositionChanged);
@@ -1092,9 +1080,6 @@ MatrixWidget::addControlRuler(QAction *action)
 
     const ControlList &list = c->getControlParameters();
 
-    QString itemStr;
-//  int i = 0;
-
     for (ControlList::const_iterator it = list.begin();
          it != list.end();
          ++it) {
@@ -1186,50 +1171,6 @@ void
 MatrixWidget::slotStandardRulerDrag(timeT t)
 {
     updatePointer(t);
-}
-
-void
-MatrixWidget::slotSRStartMouseMove()
-{
-    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
-    m_autoScroller.start();
-}
-
-void
-MatrixWidget::slotSRStopMouseMove()
-{
-    m_autoScroller.stop();
-}
-
-void
-MatrixWidget::slotCRWMousePress()
-{
-    m_autoScroller.start();
-}
-
-void
-MatrixWidget::slotCRWMouseMove(FollowMode followMode)
-{
-    m_autoScroller.setFollowMode(followMode);
-}
-
-void
-MatrixWidget::slotCRWMouseRelease()
-{
-    m_autoScroller.stop();
-}
-
-void
-MatrixWidget::slotTRMousePress()
-{
-    m_autoScroller.setFollowMode(FOLLOW_HORIZONTAL);
-    m_autoScroller.start();
-}
-
-void
-MatrixWidget::slotTRMouseRelease()
-{
-    m_autoScroller.stop();
 }
 
 void

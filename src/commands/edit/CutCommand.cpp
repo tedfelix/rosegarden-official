@@ -19,11 +19,12 @@
 
 #include "CutCommand.h"
 
+#include "CopyCommand.h"
+#include "EraseCommand.h"
+
 #include "base/Clipboard.h"
 #include "base/Selection.h"
 #include "commands/segment/SegmentEraseCommand.h"
-#include "CopyCommand.h"
-#include "EraseCommand.h"
 #include "misc/Debug.h"
 
 #include <QString>
@@ -31,6 +32,7 @@
 
 namespace Rosegarden
 {
+
 
 CutCommand::CutCommand(EventSelection *selection,
                        Clipboard *clipboard) :
