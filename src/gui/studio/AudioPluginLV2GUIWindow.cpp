@@ -147,6 +147,8 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     LV2_URID af_urid = LV2URIDMapper::uridMap(LV2_ATOM__Float);
     float sampleRate = pluginInstance->getSampleRate();
     LV2_URID titleUrid = LV2URIDMapper::uridMap(LV2_UI__windowTitle);
+    LV2_URID scaleFactorUrid = LV2URIDMapper::uridMap(LV2_UI__scaleFactor);
+    float scaleFactor = 1.0;
     LV2_URID as_urid = LV2URIDMapper::uridMap(LV2_ATOM__String);
     LV2_Options_Option opt;
     opt.context = LV2_OPTIONS_INSTANCE;
@@ -160,6 +162,11 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     opt.size = m_titleStdString.size();
     opt.type = as_urid;
     opt.value = m_titleStdString.c_str();
+    m_options.push_back(opt);
+    opt.key = scaleFactorUrid;
+    opt.size = 4;
+    opt.type = af_urid;
+    opt.value = &scaleFactor;
     m_options.push_back(opt);
     opt.subject = 0;
     opt.key = 0;
