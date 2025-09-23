@@ -92,7 +92,7 @@ private:
 
     struct EventTreeNode
     {
-        explicit EventTreeNode(Segment::iterator n) : node(n) { }
+        explicit EventTreeNode(Segment::const_iterator n) : eventIter(n) { }
         ~EventTreeNode() {
             for (const EventTreeNode *node : children) {
                 delete node;
@@ -102,15 +102,24 @@ private:
         int getDepth() const;
         int getChildrenAboveOrBelow(bool below, int p = -1) const;
 
-        Segment::iterator node;
+        // ??? Seems like this might be better as an Event *.
+        Segment::const_iterator eventIter;
         EventTreeNodeList children;
     };
 
-    std::pair<timeT, timeT> getExtents(Segment::const_iterator i);
-    Segment::iterator addChildren(const Segment *s,
-                                  Segment::iterator to,
-                                  timeT rightBound,
-                                  EventTreeNode *node);
+    /// Returns the widest period of time covered by the event.
+    std::pair<timeT /*start*/, timeT /*duration*/> getExtents(
+            const Event *event) const;
+    /// Adds children to parentNode.
+    /**
+     * Adds events from parentNode->eventIter to parentNode->children.
+     *
+     * ??? Should this be an EventTreeNode member?
+     */
+    Segment::const_iterator addChildren(const Segment *s,
+                                        Segment::const_iterator to,
+                                        timeT rightBound,
+                                        EventTreeNode *parentNode);
 
     void drawNode(QPainter &painter,
                   const EventTreeNode *node,
@@ -118,7 +127,7 @@ private:
                   double yorigin);
 
     EventTreeNodeList m_forest;
-    void buildForest(const Segment *s, Segment::iterator from, Segment::iterator to);
+    void buildForest(const Segment *s, Segment::const_iterator from, Segment::const_iterator to);
 
     // DEBUG
     // ??? Move private statics to .cpp.

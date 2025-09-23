@@ -120,76 +120,75 @@ RawNoteRuler::minimumSizeHint() const
     return res;
 }
 
-std::pair<timeT, timeT>
-RawNoteRuler::getExtents(Segment::const_iterator i)
+std::pair<timeT /*start*/, timeT /*duration*/>
+RawNoteRuler::getExtents(const Event *event) const
 {
     const Quantizer *q =
         m_segment->getComposition()->getNotationQuantizer();
 
-    timeT u0 = (*i)->getAbsoluteTime();
-    timeT u1 = u0 + (*i)->getDuration();
+    const timeT uStart = event->getAbsoluteTime();
+    const timeT qStart = q->getQuantizedAbsoluteTime(event);
+    const timeT start = std::min(uStart, qStart);
 
-    timeT q0 = q->getQuantizedAbsoluteTime(*i);
-    timeT q1 = q0 + q->getQuantizedDuration(*i);
+    const timeT uDuration = uStart + event->getDuration();
+    const timeT qDuration = qStart + q->getQuantizedDuration(event);
+    const timeT duration = std::max(uDuration, qDuration);
 
-    timeT t0 = std::min(u0, q0);
-    timeT t1 = std::max(u1, q1);
-
-    return std::pair<timeT, timeT>(t0, t1);
+    return std::pair<timeT, timeT>(start, duration);
 }
 
-Segment::iterator
+Segment::const_iterator
 RawNoteRuler::addChildren(const Segment *s,
-                          Segment::iterator to,
-                          timeT rightBound,
-                          EventTreeNode *node)
+                          const Segment::const_iterator to,
+                          const timeT rightBound,
+                          EventTreeNode * const parentNode)
 {
-    Segment::iterator i = node->node;
+    const Segment::const_iterator i = parentNode->eventIter;
+    const std::pair<timeT, timeT> iex = getExtents(*i);
+    const timeT iexDuration = iex.second;
 
-    std::pair<timeT, timeT> iex = getExtents(i);
-    Segment::iterator j = i;
-    Segment::iterator rightmost = to;
-
-#ifdef DEBUG_RAW_NOTE_RULER
-
-    RG_DEBUG << "addChildren called for extents " << iex.first << "->" << iex.second << ", rightBound " << rightBound;
-#endif
-
-    for (++j; j != to && s->isBeforeEndMarker(j); ) {
-
-        if (!(*j)->isa(Note::EventType)) {
-            ++j;
-            continue;
-        }
-        std::pair<timeT, timeT> jex = getExtents(j);
+    Segment::const_iterator eventIter = i;
+    Segment::const_iterator rightmost = to;
 
 #ifdef DEBUG_RAW_NOTE_RULER
-
-        RG_DEBUG << "addChildren: event at " << (*j)->getAbsoluteTime() << ", extents " << jex.first << "->" << jex.second;
+    RG_DEBUG << "addChildren called for extents " << iex.first << "->" << iexDuration << ", rightBound " << rightBound;
 #endif
 
-        if (jex.first == jex.second) {
-            ++j;
+    for (++eventIter; eventIter != to  &&  s->isBeforeEndMarker(eventIter); ) {
+
+        if (!(*eventIter)->isa(Note::EventType)) {
+            ++eventIter;
             continue;
         }
-        if (jex.first >= iex.second || jex.first >= rightBound)
+        const std::pair<timeT, timeT> jex = getExtents(*eventIter);
+        const timeT jexStart = jex.first;
+        const timeT jexDuration = jex.second;
+
+#ifdef DEBUG_RAW_NOTE_RULER
+        RG_DEBUG << "addChildren: event at " << (*eventIter)->getAbsoluteTime() << ", extents " << jexStart << "->" << jexDuration;
+#endif
+
+        if (jexStart == jexDuration) {
+            ++eventIter;
+            continue;
+        }
+        if (jexStart >= iexDuration  ||  jexStart >= rightBound)
             break;
 
 #ifdef DEBUG_RAW_NOTE_RULER
-
         RG_DEBUG << "addChildren: adding";
 #endif
 
-        EventTreeNode *subnode = new EventTreeNode(j);
+        EventTreeNode *subnode = new EventTreeNode(eventIter);
 
-        Segment::iterator subRightmost = addChildren(s, to, rightBound, subnode);
+        Segment::const_iterator subRightmost = addChildren(s, to, rightBound, subnode);
         if (subRightmost != to)
             rightmost = subRightmost;
         else
-            rightmost = j;
+            rightmost = eventIter;
 
-        node->children.push_back(subnode);
-        j = s->findTime(jex.second);
+        parentNode->children.push_back(subnode);
+        eventIter = s->findTime(jexDuration);
     }
 
     return rightmost;
@@ -197,8 +196,8 @@ RawNoteRuler::addChildren(const Segment *s,
 
 void
 RawNoteRuler::buildForest(const Segment *s,
-                          Segment::iterator from,
-                          Segment::iterator to)
+                          Segment::const_iterator from,
+                          Segment::const_iterator to)
 {
     for (const EventTreeNode *node : m_forest) {
         delete node;
@@ -208,14 +207,14 @@ RawNoteRuler::buildForest(const Segment *s,
     timeT endTime = (s->isBeforeEndMarker(to) ? (*to)->getAbsoluteTime() :
                      s->getEndMarkerTime());
 
-    for (Segment::iterator i = from; i != to && s->isBeforeEndMarker(i); ) {
+    for (Segment::const_iterator i = from; i != to && s->isBeforeEndMarker(i); ) {
 
         if (!(*i)->isa(Note::EventType)) {
             ++i;
             continue;
         }
 
-        std::pair<timeT, timeT> iex = getExtents(i);
+        std::pair<timeT, timeT> iex = getExtents(*i);
 
 #ifdef DEBUG_RAW_NOTE_RULER
 
@@ -230,7 +229,7 @@ RawNoteRuler::buildForest(const Segment *s,
             break;
 
         EventTreeNode *node = new EventTreeNode(i);
-        Segment::iterator rightmost = addChildren(s, to, iex.second, node);
+        Segment::const_iterator rightmost = addChildren(s, to, iex.second, node);
         m_forest.push_back(node);
 
         if (rightmost != to) {
@@ -257,9 +256,9 @@ RawNoteRuler::dumpSubtree(const EventTreeNode *node, int depth)
         std::cerr << "  ";
     if (depth > 0)
         std::cerr << "->";
-    std::cerr << (*node->node)->getAbsoluteTime() << "," << (*node->node)->getDuration() << " [";
+    std::cerr << (*node->eventIter)->getAbsoluteTime() << "," << (*node->eventIter)->getDuration() << " [";
     long pitch = 0;
-    if ((*node->node)->get<Int>(BaseProperties::PITCH, pitch)) {
+    if ((*node->eventIter)->get<Int>(BaseProperties::PITCH, pitch)) {
         std::cerr << pitch << "]" << std::endl;
     }
     else {
@@ -302,14 +301,14 @@ RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p) const
 {
     long pitch(p);
     if (pitch < 0)
-        (*node)->get<Int>(BaseProperties::PITCH, pitch);
+        (*eventIter)->get<Int>(BaseProperties::PITCH, pitch);
 
     int max = 0;
 
     for (const EventTreeNode *node : children) {
         int forThisChild = node->getChildrenAboveOrBelow(below, pitch);
         long thisChildPitch = pitch;
-        (*node->node)->get<Int>(BaseProperties::PITCH, thisChildPitch);
+        (*node->eventIter)->get<Int>(BaseProperties::PITCH, thisChildPitch);
         if (below ? (thisChildPitch < pitch) : (thisChildPitch > pitch)) {
             ++forThisChild;
         }
@@ -346,13 +345,13 @@ RawNoteRuler::drawNode(QPainter &painter,
 
     double myOrigin = yorigin + (heightPer * above);
     long myPitch = 60;
-    (*node->node)->get<Int>(BaseProperties::PITCH, myPitch);
+    (*node->eventIter)->get<Int>(BaseProperties::PITCH, myPitch);
 
     long velocity = 100;
-    (*node->node)->get<Int>(BaseProperties::VELOCITY, velocity);
+    (*node->eventIter)->get<Int>(BaseProperties::VELOCITY, velocity);
 
-    timeT start = (*node->node)->getAbsoluteTime();
-    timeT end = (*node->node)->getDuration() + start;
+    timeT start = (*node->eventIter)->getAbsoluteTime();
+    timeT end = (*node->eventIter)->getDuration() + start;
 
     double u0 = m_rulerScale->getXForTime(start);
     double u1 = m_rulerScale->getXForTime(end);
@@ -361,9 +360,9 @@ RawNoteRuler::drawNode(QPainter &painter,
     u1 += m_currentXOffset;
 
     start = m_segment->getComposition()->getNotationQuantizer()->
-            getQuantizedAbsoluteTime(*node->node);
+            getQuantizedAbsoluteTime(*node->eventIter);
     end = start + m_segment->getComposition()->getNotationQuantizer()->
-          getQuantizedDuration(*node->node);
+          getQuantizedDuration(*node->eventIter);
 
     double q0 = m_rulerScale->getXForTime(start);
     double q1 = m_rulerScale->getXForTime(end);
@@ -408,7 +407,7 @@ RawNoteRuler::drawNode(QPainter &painter,
     for (const EventTreeNode *node : node->children) {
 
         long nodePitch = myPitch;
-        (*node->node)->get<Int>(BaseProperties::PITCH, nodePitch);
+        (*node->eventIter)->get<Int>(BaseProperties::PITCH, nodePitch);
 
         if (nodePitch < myPitch) {
 
@@ -530,12 +529,12 @@ RawNoteRuler::paintEvent(QPaintEvent *paintEvent2)
     NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to;
 #endif
 
-    Segment::iterator i = m_segment->findNearestTime(from);
+    Segment::const_iterator i = m_segment->findNearestTime(from);
     if (i == m_segment->end())
         i = m_segment->begin();
 
     // somewhat experimental, as is this whole class
-    Segment::iterator j = m_segment->findTime(to);
+    Segment::const_iterator j = m_segment->findTime(to);
     buildForest(m_segment, i, j);
 
 #ifdef DEBUG_RAW_NOTE_RULER
