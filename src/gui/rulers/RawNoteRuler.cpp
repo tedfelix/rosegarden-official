@@ -16,9 +16,11 @@
 */
 
 #define RG_MODULE_STRING "[RawNoteRuler]"
+#define RG_NO_DEBUG_PRINT
 
-#include <QPaintEvent>
 #include "RawNoteRuler.h"
+
+#include "DefaultVelocityColour.h"
 
 #include "misc/Debug.h"
 #include "base/BaseProperties.h"
@@ -27,12 +29,12 @@
 #include "base/NotationQuantizer.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
-#include "DefaultVelocityColour.h"
 #include "gui/general/GUIPalette.h"
 #include "misc/Strings.h"
 
 #include <QColor>
 #include <QPainter>
+#include <QPaintEvent>
 #include <QRect>
 #include <QSize>
 #include <QToolTip>
@@ -42,38 +44,39 @@
 namespace Rosegarden
 {
 
+
 RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
                            Segment *segment,
-                           int height,
-                           QWidget *parent) :
-        QWidget(parent),
-        m_height(height),
-        m_currentXOffset(0),
-        m_width( -1),
-        m_segment(segment),
-        m_rulerScale(rulerScale)
+                           int height) :
+    m_height(height),
+    m_segment(segment),
+    m_rulerScale(rulerScale)
 {
-//    setBackgroundColor(GUIPalette::getColour(GUIPalette::RawNoteRulerBackground));
-    this->setToolTip("");
-    
-    if (m_segment) m_segment->addObserver(this);
+    if (m_segment)
+        m_segment->addObserver(this);
 }
 
 RawNoteRuler::~RawNoteRuler()
 {
-    // QToolTip::remove(this);
-    
-    if (m_segment) m_segment->removeObserver(this);
+    if (m_segment)
+        m_segment->removeObserver(this);
 }
 
 void
 RawNoteRuler::setCurrentSegment(Segment *segment)
 {
-    if (segment == m_segment) return;  // Don't waste CPU time
+    // No change?  Bail.
+    if (segment == m_segment)
+        return;
     
-    if (m_segment) m_segment->removeObserver(this);
+    // Out with the old.
+    if (m_segment)
+        m_segment->removeObserver(this);
+
+    // In with the new.
     m_segment = segment;
-    if (m_segment) m_segment->addObserver(this);
+    if (m_segment)
+        m_segment->addObserver(this);
 }
 
 void
@@ -115,9 +118,7 @@ RawNoteRuler::sizeHint() const
         m_rulerScale->getBarPosition(m_rulerScale->getLastVisibleBar()) +
         m_rulerScale->getBarWidth(m_rulerScale->getLastVisibleBar());
 
-    QSize res(std::max(int(width), m_width), m_height);
-
-    return res;
+    return QSize(width, m_height);
 }
 
 QSize
@@ -188,6 +189,7 @@ RawNoteRuler::addChildren(Segment *s,
         RG_DEBUG << "addChildren: adding";
 #endif
 
+        // ??? MEMORY LEAK
         EventTreeNode *subnode = new EventTreeNode(j);
 
         Segment::iterator subRightmost = addChildren(s, to, rightBound, subnode);
@@ -238,6 +240,7 @@ RawNoteRuler::buildForest(Segment *s,
         if (iex.first >= endTime)
             break;
 
+        // ??? MEMORY LEAK
         EventTreeNode *node = new EventTreeNode(i);
         Segment::iterator rightmost = addChildren(s, to, iex.second, node);
         m_forest.push_back(node);
@@ -261,7 +264,6 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
 {
     if (!node)
         return ;
-#ifdef DEBUG_RAW_NOTE_RULER
 
     for (int i = 0; i < depth; ++i)
         std::cerr << "  ";
@@ -270,8 +272,7 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
     std::cerr << (*node->node)->getAbsoluteTime() << ","
     << (*node->node)->getDuration() << " [";
     long pitch = 0;
-    if ((*node->node)->get
-            <Int>(PITCH, pitch)) {
+    if ((*node->node)->get<Int>(BaseProperties::PITCH, pitch)) {
         std::cerr << pitch << "]" << std::endl;
     }
     else {
@@ -281,14 +282,11 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
             i != node->children.end(); ++i) {
         dumpSubtree(*i, depth + 1);
     }
-#endif
-    (void)depth; // avoid warnings
 }
 
 void
 RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
 {
-#ifdef DEBUG_RAW_NOTE_RULER
     std::cerr << "\nFOREST:\n" << std::endl;
 
     for (unsigned int i = 0; i < forest->size(); ++i) {
@@ -298,9 +296,6 @@ RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
     }
 
     std::cerr << std::endl;
-#endif
-
-    (void)forest; // avoid warnings
 }
 
 int
@@ -455,6 +450,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         return ;
 
     // Tooltips
+    // ??? Setting this on every paint seems a bit much.  Can we at least
+    //     detect a change to the segment and update then?  How about in
+    //     setCurrentSegment()?
     {
         // QToolTip::remove(this);
         TrackId trackId = m_segment->getTrack();
@@ -464,10 +462,10 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         if (track)
             trackPosition = track->getPosition();
 
-        this->setToolTip(tr("Track #%1, Segment \"%2\" (runtime id %3)")
-                            .arg(trackPosition + 1)
-                            .arg(strtoqstr(m_segment->getLabel()))
-                            .arg(m_segment->getRuntimeId()));
+        setToolTip(tr("Track #%1, Segment \"%2\" (runtime id %3)").
+                       arg(trackPosition + 1).
+                       arg(strtoqstr(m_segment->getLabel())).
+                       arg(m_segment->getRuntimeId()));
     }
 
     //    START_TIMING;
@@ -560,11 +558,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     Segment::iterator j = m_segment->findTime(to);
     buildForest(m_segment, i, j);
 
-    //    PRINT_ELAPSED("RawNoteRuler::paintEvent: buildForest");
-
+#ifdef DEBUG_RAW_NOTE_RULER
     dumpForest(&m_forest);
-
-    //    PRINT_ELAPSED("RawNoteRuler::paintEvent: dumpForest");
+#endif
 
     for (EventTreeNode::NodeList::iterator fi = m_forest.begin();
             fi != m_forest.end(); ++fi) {

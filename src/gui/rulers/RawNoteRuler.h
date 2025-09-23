@@ -46,46 +46,42 @@ class DefaultVelocityColour;
  * otherwise show this relatively precise unquantized information.
  * It has no editing function (yet?)
  */
-
 class RawNoteRuler : public QWidget, public SegmentObserver
 {
     Q_OBJECT
 
 public:
+
     RawNoteRuler(RulerScale *rulerScale,
                  Segment *segment,
-                 int height = 0,
-                 QWidget* parent = nullptr);
+                 int height);
 
     ~RawNoteRuler() override;
 
     void setCurrentSegment(Segment *segment);
 
+    // QWidget overrides.
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
 
-    void setMinimumWidth(int width) { m_width = width; }
 
-
-/** SegmentObserver methods : **/
-
-// Used to update the ruler when notes are moved around or deleted
-    void eventAdded(const Segment *, Event *) override { update(); }
-    void eventRemoved(const Segment *, Event *) override { update(); }
-
+    // SegmentObserver overrides
+    void eventAdded(const Segment *, Event *) override  { update(); }
+    void eventRemoved(const Segment *, Event *) override  { update(); }
     void segmentDeleted(const Segment *) override;
 
-
 public slots:
+
+    // ??? Not used as a slot.  Move to public.
     void slotScrollHoriz(int x);
 
 protected:
     void paintEvent(QPaintEvent *) override;
 
 private:
-    int  m_height;
-    int  m_currentXOffset;
-    int  m_width;
+    int m_height;
+    int m_currentXOffset{0};
+    //int m_width{-1};
 
     Segment *m_segment;
     RulerScale *m_rulerScale;
