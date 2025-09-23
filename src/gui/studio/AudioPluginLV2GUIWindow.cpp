@@ -25,10 +25,12 @@
 #include "sound/LV2PluginInstance.h"
 #include "sound/LV2URIDMapper.h"
 #include "LV2Gtk.h"
+#include "gui/application/RosegardenMainWindow.h"
 
 #include <QTimer>
 #include <QWindow>
 #include <QCloseEvent>
+#include <QScreen>
 
 #include <set>
 
@@ -63,6 +65,17 @@ namespace
     {
         RG_DEBUG << "resize" << width << height;
         if (width == 0 || height == 0) return 0; // refuse zero values
+        // If scaling is being used the window size must be reduced
+        // here because qt will scale it up again. I believe this
+        // applies for all plugins whether they support the
+        // scaleFactor option or not.
+        float scaleFactor =
+            Rosegarden::RosegardenMainWindow::self()->
+            screen()->devicePixelRatio();
+        RG_DEBUG << "resize adjust for scaleFactor" << scaleFactor;
+        width /= scaleFactor;
+        height /= scaleFactor;
+        RG_DEBUG << "resize adjusted size" << width << height;
         QWidget *widget = static_cast<QWidget *>(handle);
         if (widget) {
             widget->resize(width, height);
@@ -148,7 +161,9 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     float sampleRate = pluginInstance->getSampleRate();
     LV2_URID titleUrid = LV2URIDMapper::uridMap(LV2_UI__windowTitle);
     LV2_URID scaleFactorUrid = LV2URIDMapper::uridMap(LV2_UI__scaleFactor);
-    float scaleFactor = 1.0;
+    float scaleFactor =
+        RosegardenMainWindow::self()->screen()->devicePixelRatio();
+    RG_DEBUG << "scaleFactor" << scaleFactor;
     LV2_URID as_urid = LV2URIDMapper::uridMap(LV2_ATOM__String);
     LV2_Options_Option opt;
     opt.context = LV2_OPTIONS_INSTANCE;
@@ -221,6 +236,18 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
         int width;
         int height;
         lv2gtk->getSize(m_gwidget, width, height);
+        RG_DEBUG << "gtk got size" << width << height;
+        // If scaling is being used the window size must be reduced
+        // here because qt will scale it up again. I believe this
+        // applies for all plugins whether they support the
+        // scaleFactor option or not.
+        float scaleFactor =
+            Rosegarden::RosegardenMainWindow::self()->
+            screen()->devicePixelRatio();
+        RG_DEBUG << "gtk resize adjust for scaleFactor" << scaleFactor;
+        width /= scaleFactor;
+        height /= scaleFactor;
+        RG_DEBUG << "gtk resize adjusted size" << width << height;
         resize(width, height);
 
         const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
@@ -292,6 +319,17 @@ void AudioPluginLV2GUIWindow::setSize(int width, int height, bool isRequest)
     // Disallow shrinking of both dimensions.
     if (this->width() >= width && this->height() >= height) return;
 
+    // If scaling is being used the window size must be reduced
+    // here because qt will scale it up again. I believe this
+    // applies for all plugins whether they support the
+    // scaleFactor option or not.
+    float scaleFactor =
+        Rosegarden::RosegardenMainWindow::self()->
+        screen()->devicePixelRatio();
+    RG_DEBUG << "setSize adjust for scaleFactor" << scaleFactor;
+    width /= scaleFactor;
+    height /= scaleFactor;
+    RG_DEBUG << "setSize adjusted size" << width << height;
     resize(width, height);
 }
 
