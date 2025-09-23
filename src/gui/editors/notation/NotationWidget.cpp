@@ -1253,7 +1253,7 @@ NotationWidget::slotHScroll()
     m_bottomStandardRuler->slotScrollHoriz(x);
     m_tempoRuler->slotScrollHoriz(x);
     m_chordNameRuler->slotScrollHoriz(x);
-    m_rawNoteRuler->slotScrollHoriz(x);
+    m_rawNoteRuler->scrollHoriz(x);
 
     // Update staff headers
     m_headersGroup->slotUpdateAllHeaders(xs);

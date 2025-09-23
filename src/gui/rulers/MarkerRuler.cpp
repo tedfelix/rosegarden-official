@@ -105,7 +105,7 @@ MarkerRuler::sizeHint() const
         m_rulerScale->getBarPosition(lastBar) +
         m_rulerScale->getBarWidth(lastBar);
 
-    return QSize(std::max(int(width), m_width), fontMetrics().height());
+    return QSize(width, fontMetrics().height());
 }
 
 QSize

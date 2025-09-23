@@ -59,42 +59,40 @@ public:
     ~RawNoteRuler() override;
 
     void setCurrentSegment(Segment *segment);
+    void scrollHoriz(int x);
 
     // QWidget overrides.
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;
-
 
     // SegmentObserver overrides
     void eventAdded(const Segment *, Event *) override  { update(); }
     void eventRemoved(const Segment *, Event *) override  { update(); }
     void segmentDeleted(const Segment *) override;
 
-public slots:
-
-    // ??? Not used as a slot.  Move to public.
-    void slotScrollHoriz(int x);
-
 protected:
+
+    // QWidget override
     void paintEvent(QPaintEvent *) override;
 
 private:
-    int m_height;
-    int m_currentXOffset{0};
-    //int m_width{-1};
 
-    Segment *m_segment;
     RulerScale *m_rulerScale;
+    Segment *m_segment;
+    int m_height;
+
+    /// Horizontal scroll offset.  E.g. -100 if we are scrolled right 100 pixels.
+    int m_currentXOffset{0};
+
+    struct EventTreeNode;
+    typedef std::vector<EventTreeNode *> EventTreeNodeList;
 
     struct EventTreeNode
     {
-        typedef std::vector<EventTreeNode *> NodeList;
-
         explicit EventTreeNode(Segment::iterator n) : node(n) { }
         ~EventTreeNode() {
-            for (NodeList::iterator i = children.begin();
-                 i != children.end(); ++i) {
-                delete *i;
+            for (const EventTreeNode *node : children) {
+                delete node;
             }
         }
 
@@ -102,20 +100,21 @@ private:
         int getChildrenAboveOrBelow(bool below = false, int p = -1);
 
         Segment::iterator node;
-        NodeList children;
+        EventTreeNodeList children;
     };
 
     std::pair<timeT, timeT> getExtents(Segment::iterator);
     Segment::iterator addChildren(Segment *, Segment::iterator, timeT, EventTreeNode *);
-    void dumpSubtree(EventTreeNode *, int);
-    void dumpForest(std::vector<EventTreeNode *> *);
-    void buildForest(Segment *, Segment::iterator, Segment::iterator);
 
     void drawNode(QPainter &, DefaultVelocityColour &, EventTreeNode *,
                   double height, double yorigin);
 
-    // needs to be class with dtor &c and containing above methods
-    EventTreeNode::NodeList m_forest;
+    EventTreeNodeList m_forest;
+    void buildForest(Segment *, Segment::iterator, Segment::iterator);
+
+    // ??? Move private statics to .cpp.
+    static void dumpSubtree(const EventTreeNode *, int);
+    static void dumpForest(const EventTreeNodeList *);
 };
 
 

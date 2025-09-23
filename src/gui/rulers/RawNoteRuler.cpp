@@ -48,9 +48,9 @@ namespace Rosegarden
 RawNoteRuler::RawNoteRuler(RulerScale *rulerScale,
                            Segment *segment,
                            int height) :
-    m_height(height),
+    m_rulerScale(rulerScale),
     m_segment(segment),
-    m_rulerScale(rulerScale)
+    m_height(height)
 {
     if (m_segment)
         m_segment->addObserver(this);
@@ -60,6 +60,10 @@ RawNoteRuler::~RawNoteRuler()
 {
     if (m_segment)
         m_segment->removeObserver(this);
+
+    for (const EventTreeNode *node : m_forest) {
+        delete node;
+    }
 }
 
 void
@@ -86,7 +90,7 @@ RawNoteRuler::segmentDeleted(const Segment *)
 }
 
 void
-RawNoteRuler::slotScrollHoriz(int x)
+RawNoteRuler::scrollHoriz(int x)
 {
 //###    int w = width(), h = height();
     int dx = x - ( -m_currentXOffset);
@@ -189,7 +193,6 @@ RawNoteRuler::addChildren(Segment *s,
         RG_DEBUG << "addChildren: adding";
 #endif
 
-        // ??? MEMORY LEAK
         EventTreeNode *subnode = new EventTreeNode(j);
 
         Segment::iterator subRightmost = addChildren(s, to, rightBound, subnode);
@@ -210,9 +213,8 @@ RawNoteRuler::buildForest(Segment *s,
                           Segment::iterator from,
                           Segment::iterator to)
 {
-    for (EventTreeNode::NodeList::iterator i = m_forest.begin();
-            i != m_forest.end(); ++i) {
-        delete *i;
+    for (const EventTreeNode *node : m_forest) {
+        delete node;
     }
     m_forest.clear();
 
@@ -240,7 +242,6 @@ RawNoteRuler::buildForest(Segment *s,
         if (iex.first >= endTime)
             break;
 
-        // ??? MEMORY LEAK
         EventTreeNode *node = new EventTreeNode(i);
         Segment::iterator rightmost = addChildren(s, to, iex.second, node);
         m_forest.push_back(node);
@@ -260,7 +261,7 @@ RawNoteRuler::buildForest(Segment *s,
 }
 
 void
-RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
+RawNoteRuler::dumpSubtree(const EventTreeNode *node, int depth)
 {
     if (!node)
         return ;
@@ -269,8 +270,7 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
         std::cerr << "  ";
     if (depth > 0)
         std::cerr << "->";
-    std::cerr << (*node->node)->getAbsoluteTime() << ","
-    << (*node->node)->getDuration() << " [";
+    std::cerr << (*node->node)->getAbsoluteTime() << "," << (*node->node)->getDuration() << " [";
     long pitch = 0;
     if ((*node->node)->get<Int>(BaseProperties::PITCH, pitch)) {
         std::cerr << pitch << "]" << std::endl;
@@ -278,19 +278,19 @@ RawNoteRuler::dumpSubtree(EventTreeNode *node, int depth)
     else {
         std::cerr << "no-pitch]" << std::endl;
     }
-    for (EventTreeNode::NodeList::iterator i = node->children.begin();
-            i != node->children.end(); ++i) {
+    for (EventTreeNodeList::const_iterator i = node->children.cbegin();
+         i != node->children.cend();
+         ++i) {
         dumpSubtree(*i, depth + 1);
     }
 }
 
 void
-RawNoteRuler::dumpForest(EventTreeNode::NodeList *forest)
+RawNoteRuler::dumpForest(const EventTreeNodeList *forest)
 {
     std::cerr << "\nFOREST:\n" << std::endl;
 
     for (unsigned int i = 0; i < forest->size(); ++i) {
-
         std::cerr << "\nTREE " << i << ":\n" << std::endl;
         dumpSubtree((*forest)[i], 0);
     }
@@ -302,7 +302,7 @@ int
 RawNoteRuler::EventTreeNode::getDepth()
 {
     int subchildrenDepth = 0;
-    for (NodeList::iterator i = children.begin();
+    for (EventTreeNodeList::iterator i = children.begin();
             i != children.end(); ++i) {
         int subchildDepth = (*i)->getDepth();
         if (subchildDepth > subchildrenDepth)
@@ -321,7 +321,7 @@ RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p)
 
     int max = 0;
 
-    for (NodeList::iterator i = children.begin();
+    for (EventTreeNodeList::iterator i = children.begin();
             i != children.end(); ++i) {
         int forThisChild = (*i)->getChildrenAboveOrBelow(below, pitch);
         long thisChildPitch = pitch;
@@ -423,7 +423,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     paint.drawLine(ui0, iy + 1, ui0, iy + ih - 1);
     paint.drawLine(ui1 - 1, iy + 1, ui1 - 1, iy + ih - 1);
 
-    for (EventTreeNode::NodeList::iterator i = node->children.begin();
+    for (EventTreeNodeList::iterator i = node->children.begin();
             i != node->children.end(); ++i) {
 
         long nodePitch = myPitch;
@@ -562,7 +562,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     dumpForest(&m_forest);
 #endif
 
-    for (EventTreeNode::NodeList::iterator fi = m_forest.begin();
+    for (EventTreeNodeList::iterator fi = m_forest.begin();
             fi != m_forest.end(); ++fi) {
 
         // Each tree in the forest should represent a note that starts

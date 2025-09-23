@@ -62,8 +62,6 @@ public:
 
     void scrollHoriz(int x);
 
-    void setWidth(int width) { m_width = width; }
-
 protected:
 
     void paintEvent(QPaintEvent *paintEvent) override;
@@ -87,7 +85,6 @@ private:
     
     /// Horizontal scroll offset.  E.g. -100 if we are scrolled right 100 pixels.
     int m_currentXOffset{0};
-    int m_width{-1};
 
     /// Click position.  Set by mousePressEvent().
     int m_clickX{0};
