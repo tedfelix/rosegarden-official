@@ -37,14 +37,17 @@ namespace Rosegarden
 
 
 class RulerScale;
-class DefaultVelocityColour;
 
 
 /**
  * RawNoteRuler is a ruler that shows in a vaguely matrix-like fashion
  * when notes start and end, for use with a notation view that can't
  * otherwise show this relatively precise unquantized information.
- * It has no editing function (yet?)
+ * It has no editing function.
+ *
+ * The RawNoteRuler shows notes as stacked voices.  This can help with
+ * teasing apart voices into separate segments to get notation to look
+ * right when printed.
  */
 class RawNoteRuler : public QWidget, public SegmentObserver
 {
@@ -73,7 +76,7 @@ public:
 protected:
 
     // QWidget override
-    void paintEvent(QPaintEvent *) override;
+    void paintEvent(QPaintEvent *paintEvent2) override;
 
 private:
 
@@ -103,21 +106,24 @@ private:
         EventTreeNodeList children;
     };
 
-    std::pair<timeT, timeT> getExtents(Segment::iterator);
-    Segment::iterator addChildren(Segment *, Segment::iterator, timeT, EventTreeNode *);
+    std::pair<timeT, timeT> getExtents(Segment::const_iterator i);
+    Segment::iterator addChildren(const Segment *s,
+                                  Segment::iterator to,
+                                  timeT rightBound,
+                                  EventTreeNode *node);
 
     void drawNode(QPainter &painter,
-                  DefaultVelocityColour &,
                   const EventTreeNode *node,
                   double height,
                   double yorigin);
 
     EventTreeNodeList m_forest;
-    void buildForest(Segment *, Segment::iterator, Segment::iterator);
+    void buildForest(const Segment *s, Segment::iterator from, Segment::iterator to);
 
+    // DEBUG
     // ??? Move private statics to .cpp.
-    static void dumpSubtree(const EventTreeNode *, int);
-    static void dumpForest(const EventTreeNodeList *);
+    static void dumpSubtree(const EventTreeNode *node, int depth);
+    static void dumpForest(const EventTreeNodeList *forest);
 };
 
 

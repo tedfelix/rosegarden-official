@@ -61,6 +61,7 @@ RawNoteRuler::~RawNoteRuler()
     if (m_segment)
         m_segment->removeObserver(this);
 
+    // ??? std::shared_ptr would help.
     for (const EventTreeNode *node : m_forest) {
         delete node;
     }
@@ -92,27 +93,13 @@ RawNoteRuler::segmentDeleted(const Segment *)
 void
 RawNoteRuler::scrollHoriz(int x)
 {
-//###    int w = width(), h = height();
-    int dx = x - ( -m_currentXOffset);
-    if (dx == 0)
-        return ;
+    // No change?  Bail.
+    if (m_currentXOffset == -x)
+        return;
+
     m_currentXOffset = -x;
 
     update();
-
-//### bitBlt is no more working with Qt4
-//     if (dx > w*3 / 4 || dx < -w*3 / 4) {
-//         update();
-//         return ;
-//     }
-// 
-//     if (dx > 0) { // moving right, so the existing stuff moves left
-//         bitBlt(this, 0, 0, this, dx, 0, w - dx, h);
-//         repaint(w - dx, 0, dx, h);
-//     } else {      // moving left, so the existing stuff moves right
-//         bitBlt(this, -dx, 0, this, 0, 0, w + dx, h);
-//         repaint(0, 0, -dx, h);
-//     }
 }
 
 QSize
@@ -134,7 +121,7 @@ RawNoteRuler::minimumSizeHint() const
 }
 
 std::pair<timeT, timeT>
-RawNoteRuler::getExtents(Segment::iterator i)
+RawNoteRuler::getExtents(Segment::const_iterator i)
 {
     const Quantizer *q =
         m_segment->getComposition()->getNotationQuantizer();
@@ -152,7 +139,7 @@ RawNoteRuler::getExtents(Segment::iterator i)
 }
 
 Segment::iterator
-RawNoteRuler::addChildren(Segment *s,
+RawNoteRuler::addChildren(const Segment *s,
                           Segment::iterator to,
                           timeT rightBound,
                           EventTreeNode *node)
@@ -209,7 +196,7 @@ RawNoteRuler::addChildren(Segment *s,
 }
 
 void
-RawNoteRuler::buildForest(Segment *s,
+RawNoteRuler::buildForest(const Segment *s,
                           Segment::iterator from,
                           Segment::iterator to)
 {
@@ -334,8 +321,10 @@ RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p) const
 }
 
 void
-RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
-                       const EventTreeNode *node, double height, double yorigin)
+RawNoteRuler::drawNode(QPainter &painter,
+                       const EventTreeNode *node,
+                       double height,
+                       double yorigin)
 {
     int depth = node->getDepth();
     int above = node->getChildrenAboveOrBelow(false);
@@ -361,7 +350,6 @@ RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
 
     long velocity = 100;
     (*node->node)->get<Int>(BaseProperties::VELOCITY, velocity);
-    QColor colour = vc.getColour(velocity);
 
     timeT start = (*node->node)->getAbsoluteTime();
     timeT end = (*node->node)->getDuration() + start;
@@ -405,6 +393,7 @@ RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
     << heightPer << ", iy " << iy << endl;
 #endif
 
+    QColor colour = DefaultVelocityColour::getInstance()->getColour(velocity);
     painter.setPen(colour);
     painter.setBrush(colour);
     painter.drawRect(ui0 + 1, iy + 1, uiw, ih - 1);
@@ -424,7 +413,6 @@ RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
         if (nodePitch < myPitch) {
 
             drawNode(painter,
-                     vc,
                      node,
                      height - heightPer - myOrigin,
                      myOrigin + heightPer);
@@ -432,7 +420,6 @@ RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
         } else {
 
             drawNode(painter,
-                     vc,
                      node,
                      myOrigin - yorigin,
                      yorigin);
@@ -441,7 +428,7 @@ RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
 }
 
 void
-RawNoteRuler::paintEvent(QPaintEvent* e)
+RawNoteRuler::paintEvent(QPaintEvent *paintEvent2)
 {
     if (!m_segment || !m_segment->getComposition())
         return ;
@@ -465,11 +452,9 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
                        arg(m_segment->getRuntimeId()));
     }
 
-    //    START_TIMING;
-
     QPainter painter(this);
-    painter.setClipRegion(e->region());
-    painter.setClipRect(e->rect().normalized());
+    painter.setClipRegion(paintEvent2->region());
+    painter.setClipRect(paintEvent2->rect().normalized());
 
     QRect clipRect = painter.clipRegion().boundingRect();
 
@@ -541,8 +526,6 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         }
     }
 
-    //    PRINT_ELAPSED("RawNoteRuler::paintEvent: drawing bar lines and divisions");
-
 #ifdef DEBUG_RAW_NOTE_RULER
     NOTATION_DEBUG << "RawNoteRuler: from is " << from << ", to is " << to;
 #endif
@@ -569,14 +552,12 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         // as it.
 
         drawNode(painter,
-                 *DefaultVelocityColour::getInstance(),
                  node,
-                 m_height - 3,
-                 2);
+                 m_height - 3,  // height
+                 2);  // yorigin
 
     }
-
-    //    PRINT_ELAPSED("RawNoteRuler::paintEvent: complete");
 }
+
 
 }

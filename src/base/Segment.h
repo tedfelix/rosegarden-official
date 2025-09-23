@@ -429,7 +429,7 @@ public:
      * Returns an iterator pointing to the first element starting at
      * or beyond the given absolute time
      */
-    iterator findTime(timeT time)
+    iterator findTime(timeT time) const
     {
         Event temp("temp", time, 0, MIN_SUBORDERING);
         return lower_bound(&temp);
