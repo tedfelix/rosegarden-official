@@ -36,8 +36,10 @@ Included in this release...
     #1733.  [83fa32bdb2]
   * Fix cursor not returning to normal after using audio location
     dialog.  Bug #1736.  [0d38af676e]
+  * Fix sfizz plugin UI not visible.  Bug #1738.  [090f160bce]
+    [f908ea2646]
 
-stopped at fb0d829f94
+stopped at f908ea2646
 
 ===== New Features =====
 
@@ -45,9 +47,11 @@ stopped at fb0d829f94
     Request #527.  [5ee9c807d8]
   * Rotary (knob) widget now shows label (e.g. pan) and value in its
     tooltip.  [4c42d7dc4d]
-  * Snap markers to beat.  Feature request #537.  [6c69fa3354]
+  * Snap markers to beat.  Feature Request #537.  [6c69fa3354]
   * Move markers by dragging them.  Feature Request #536 [66b9451054]
-    [00eb33ffa7]
+    [00eb33ffa7] [8f334a5dbf]
+  * Double-click to rename a marker.  Feature Request #535
+    [3973fdf484]
 
 ===== General Improvements =====
 
