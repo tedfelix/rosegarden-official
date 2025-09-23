@@ -96,8 +96,8 @@ private:
             }
         }
 
-        int getDepth();
-        int getChildrenAboveOrBelow(bool below = false, int p = -1);
+        int getDepth() const;
+        int getChildrenAboveOrBelow(bool below, int p = -1) const;
 
         Segment::iterator node;
         EventTreeNodeList children;
@@ -106,8 +106,11 @@ private:
     std::pair<timeT, timeT> getExtents(Segment::iterator);
     Segment::iterator addChildren(Segment *, Segment::iterator, timeT, EventTreeNode *);
 
-    void drawNode(QPainter &, DefaultVelocityColour &, EventTreeNode *,
-                  double height, double yorigin);
+    void drawNode(QPainter &painter,
+                  DefaultVelocityColour &,
+                  const EventTreeNode *node,
+                  double height,
+                  double yorigin);
 
     EventTreeNodeList m_forest;
     void buildForest(Segment *, Segment::iterator, Segment::iterator);

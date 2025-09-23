@@ -278,10 +278,8 @@ RawNoteRuler::dumpSubtree(const EventTreeNode *node, int depth)
     else {
         std::cerr << "no-pitch]" << std::endl;
     }
-    for (EventTreeNodeList::const_iterator i = node->children.cbegin();
-         i != node->children.cend();
-         ++i) {
-        dumpSubtree(*i, depth + 1);
+    for (const EventTreeNode *node2 : node->children) {
+        dumpSubtree(node2, depth + 1);
     }
 }
 
@@ -299,34 +297,32 @@ RawNoteRuler::dumpForest(const EventTreeNodeList *forest)
 }
 
 int
-RawNoteRuler::EventTreeNode::getDepth()
+RawNoteRuler::EventTreeNode::getDepth() const
 {
     int subchildrenDepth = 0;
-    for (EventTreeNodeList::iterator i = children.begin();
-            i != children.end(); ++i) {
-        int subchildDepth = (*i)->getDepth();
+
+    for (const EventTreeNode *node : children) {
+        const int subchildDepth = node->getDepth();
         if (subchildDepth > subchildrenDepth)
             subchildrenDepth = subchildDepth;
     }
+
     return subchildrenDepth + 1;
 }
 
 int
-RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p)
+RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p) const
 {
     long pitch(p);
     if (pitch < 0)
-        (*node)->get
-        <Int>(BaseProperties::PITCH, pitch);
+        (*node)->get<Int>(BaseProperties::PITCH, pitch);
 
     int max = 0;
 
-    for (EventTreeNodeList::iterator i = children.begin();
-            i != children.end(); ++i) {
-        int forThisChild = (*i)->getChildrenAboveOrBelow(below, pitch);
+    for (const EventTreeNode *node : children) {
+        int forThisChild = node->getChildrenAboveOrBelow(below, pitch);
         long thisChildPitch = pitch;
-        (*(*i)->node)->get
-        <Int>(BaseProperties::PITCH, thisChildPitch);
+        (*node->node)->get<Int>(BaseProperties::PITCH, thisChildPitch);
         if (below ? (thisChildPitch < pitch) : (thisChildPitch > pitch)) {
             ++forThisChild;
         }
@@ -338,8 +334,8 @@ RawNoteRuler::EventTreeNode::getChildrenAboveOrBelow(bool below, int p)
 }
 
 void
-RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
-                       EventTreeNode *node, double height, double yorigin)
+RawNoteRuler::drawNode(QPainter &painter, DefaultVelocityColour &vc,
+                       const EventTreeNode *node, double height, double yorigin)
 {
     int depth = node->getDepth();
     int above = node->getChildrenAboveOrBelow(false);
@@ -348,8 +344,7 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 
     int below = node->getChildrenAboveOrBelow(true);
 
-    NOTATION_DEBUG << "RawNoteRuler::drawNode: children above: "
-    << above << ", below: " << below << endl;
+    NOTATION_DEBUG << "RawNoteRuler::drawNode: children above: " << above << ", below: " << below << endl;
 #endif
 
     int toFit = depth;
@@ -362,12 +357,10 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
 
     double myOrigin = yorigin + (heightPer * above);
     long myPitch = 60;
-    (*node->node)->get
-    <Int>(BaseProperties::PITCH, myPitch);
+    (*node->node)->get<Int>(BaseProperties::PITCH, myPitch);
 
     long velocity = 100;
-    (*node->node)->get
-    <Int>(BaseProperties::VELOCITY, velocity);
+    (*node->node)->get<Int>(BaseProperties::VELOCITY, velocity);
     QColor colour = vc.getColour(velocity);
 
     timeT start = (*node->node)->getAbsoluteTime();
@@ -412,33 +405,37 @@ RawNoteRuler::drawNode(QPainter &paint, DefaultVelocityColour &vc,
     << heightPer << ", iy " << iy << endl;
 #endif
 
-    paint.setPen(colour);
-    paint.setBrush(colour);
-    paint.drawRect(ui0 + 1, iy + 1, uiw, ih - 1);
+    painter.setPen(colour);
+    painter.setBrush(colour);
+    painter.drawRect(ui0 + 1, iy + 1, uiw, ih - 1);
 
-    paint.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
-    paint.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
-    paint.drawLine(qi0, iy, qi1 - 1, iy);
-    paint.drawLine(qi0, iy + ih, qi1 - 1, iy + ih);
-    paint.drawLine(ui0, iy + 1, ui0, iy + ih - 1);
-    paint.drawLine(ui1 - 1, iy + 1, ui1 - 1, iy + ih - 1);
+    painter.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
+    painter.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
+    painter.drawLine(qi0, iy, qi1 - 1, iy);
+    painter.drawLine(qi0, iy + ih, qi1 - 1, iy + ih);
+    painter.drawLine(ui0, iy + 1, ui0, iy + ih - 1);
+    painter.drawLine(ui1 - 1, iy + 1, ui1 - 1, iy + ih - 1);
 
-    for (EventTreeNodeList::iterator i = node->children.begin();
-            i != node->children.end(); ++i) {
+    for (const EventTreeNode *node : node->children) {
 
         long nodePitch = myPitch;
-        (*(*i)->node)->get
-        <Int>(BaseProperties::PITCH, nodePitch);
+        (*node->node)->get<Int>(BaseProperties::PITCH, nodePitch);
 
         if (nodePitch < myPitch) {
 
-            drawNode(paint, vc, *i,
-                     height - heightPer - myOrigin, myOrigin + heightPer);
+            drawNode(painter,
+                     vc,
+                     node,
+                     height - heightPer - myOrigin,
+                     myOrigin + heightPer);
 
         } else {
 
-            drawNode(paint, vc, *i,
-                     myOrigin - yorigin, yorigin);
+            drawNode(painter,
+                     vc,
+                     node,
+                     myOrigin - yorigin,
+                     yorigin);
         }
     }
 }
@@ -470,32 +467,32 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
 
     //    START_TIMING;
 
-    QPainter paint(this);
-    paint.setClipRegion(e->region());
-    paint.setClipRect(e->rect().normalized());
+    QPainter painter(this);
+    painter.setClipRegion(e->region());
+    painter.setClipRect(e->rect().normalized());
 
-    QRect clipRect = paint.clipRegion().boundingRect();
+    QRect clipRect = painter.clipRegion().boundingRect();
 
     timeT from = m_rulerScale->getTimeForX
                  (clipRect.x() - m_currentXOffset - 100);
     timeT to = m_rulerScale->getTimeForX
                (clipRect.x() + clipRect.width() - m_currentXOffset + 100);
 
-    paint.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
-    paint.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
-    paint.drawLine(0, 0, width(), 0);
+    painter.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
+    painter.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
+    painter.drawLine(0, 0, width(), 0);
 
     // draw the extent of the segment using its color
 
     QColor brushColor = m_segment->getComposition()->
                         getSegmentColourMap().getColour(m_segment->getColourIndex());
-    paint.setPen(brushColor);
-    paint.setBrush(brushColor);
+    painter.setPen(brushColor);
+    painter.setBrush(brushColor);
     int x0 = int(m_rulerScale->getXForTime(m_segment->getStartTime()) + 
                  m_currentXOffset);
     int x1 = int(m_rulerScale->getXForTime(m_segment->getEndMarkerTime()) + 
                  m_currentXOffset);
-    paint.drawRect(x0, 1, x1-x0+1, height()-1);
+    painter.drawRect(x0, 1, x1-x0+1, height()-1);
 
     // draw the bar divisions
 
@@ -518,18 +515,18 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         timeT base = timeSig.getBarDuration();
         timeT barEnd = barStart + base;
 
-        paint.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
-        paint.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
+        painter.setPen(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
+        painter.setBrush(GUIPalette::getColour(GUIPalette::RawNoteRulerForeground));
 
         int x = int(m_rulerScale->getXForTime(barStart) +
                     m_currentXOffset);
-        paint.drawLine(x, 1, x, m_height);
+        painter.drawLine(x, 1, x, m_height);
 
         for (int depth = 0; depth < 3; ++depth) {
 
             int grey = depth * 60 + 60;
-            paint.setPen(QColor(grey, grey, grey));
-            paint.setBrush(QColor(grey, grey, grey));
+            painter.setPen(QColor(grey, grey, grey));
+            painter.setBrush(QColor(grey, grey, grey));
 
             base /= divisions[depth];
             timeT t(barStart + base);
@@ -537,7 +534,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
                 if ((t - barStart) % (base * divisions[depth]) != 0) {
                     int x = int(m_rulerScale->getXForTime(t) +
                                 m_currentXOffset);
-                    paint.drawLine(x, 1, x, m_height);
+                    painter.drawLine(x, 1, x, m_height);
                 }
                 t += base;
             }
@@ -562,8 +559,7 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
     dumpForest(&m_forest);
 #endif
 
-    for (EventTreeNodeList::iterator fi = m_forest.begin();
-            fi != m_forest.end(); ++fi) {
+    for (const EventTreeNode *node : m_forest) {
 
         // Each tree in the forest should represent a note that starts
         // at a time when no other notes are playing (at least of
@@ -572,7 +568,11 @@ RawNoteRuler::paintEvent(QPaintEvent* e)
         // playing during its parent node's note, or at the same time
         // as it.
 
-        drawNode(paint, *DefaultVelocityColour::getInstance(), *fi, m_height - 3, 2);
+        drawNode(painter,
+                 *DefaultVelocityColour::getInstance(),
+                 node,
+                 m_height - 3,
+                 2);
 
     }
 
