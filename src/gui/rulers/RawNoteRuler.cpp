@@ -138,14 +138,14 @@ RawNoteRuler::getExtents(const Event *event) const
 }
 
 Segment::const_iterator
-RawNoteRuler::addChildren(const Segment *s,
+RawNoteRuler::addChildren(const Segment *segment,
                           const Segment::const_iterator to,
                           const timeT rightBound,
                           EventTreeNode * const parentNode)
 {
     const Segment::const_iterator i = parentNode->eventIter;
     const std::pair<timeT, timeT> iex = getExtents(*i);
-    const timeT iexDuration = iex.second;
+    const timeT parentDuration = iex.second;
 
     Segment::const_iterator eventIter = i;
     Segment::const_iterator rightmost = to;
@@ -154,25 +154,30 @@ RawNoteRuler::addChildren(const Segment *s,
     RG_DEBUG << "addChildren called for extents " << iex.first << "->" << iexDuration << ", rightBound " << rightBound;
 #endif
 
-    for (++eventIter; eventIter != to  &&  s->isBeforeEndMarker(eventIter); ) {
+    for (++eventIter; eventIter != to  &&  segment->isBeforeEndMarker(eventIter); ) {
 
+        // Not a note?  Try the next.
         if (!(*eventIter)->isa(Note::EventType)) {
             ++eventIter;
             continue;
         }
-        const std::pair<timeT, timeT> jex = getExtents(*eventIter);
-        const timeT jexStart = jex.first;
-        const timeT jexDuration = jex.second;
+
+        const std::pair<timeT, timeT> eventExtents = getExtents(*eventIter);
+        const timeT eventStart = eventExtents.first;
+        const timeT eventDuration = eventExtents.second;
 
 #ifdef DEBUG_RAW_NOTE_RULER
-        RG_DEBUG << "addChildren: event at " << (*eventIter)->getAbsoluteTime() << ", extents " << jexStart << "->" << jexDuration;
+        RG_DEBUG << "addChildren: event at " << (*eventIter)->getAbsoluteTime() << ", extents " << eventStart << "->" << eventDuration;
 #endif
 
-        if (jexStart == jexDuration) {
+        // Non-event?  Try the next.
+        if (eventStart == eventDuration) {
             ++eventIter;
             continue;
         }
-        if (jexStart >= iexDuration  ||  jexStart >= rightBound)
+
+        // Past the right bounds?  We're done.
+        if (eventStart >= parentDuration  ||  eventStart >= rightBound)
             break;
 
 #ifdef DEBUG_RAW_NOTE_RULER
@@ -181,14 +186,18 @@ RawNoteRuler::addChildren(const Segment *s,
 
         EventTreeNode *subnode = new EventTreeNode(eventIter);
 
-        Segment::const_iterator subRightmost = addChildren(s, to, rightBound, subnode);
+        Segment::const_iterator subRightmost = addChildren(segment, to, rightBound, subnode);
         if (subRightmost != to)
             rightmost = subRightmost;
         else
             rightmost = eventIter;
 
         parentNode->children.push_back(subnode);
-        eventIter = s->findTime(jexDuration);
+
+        // ??? Seems like a serious bug.  This shouldn't be a duration.  I
+        //     guess in most cases this just means a lot of extra iterating.
+        //     What should this really be doing?  Continuing the iteration?
+        eventIter = segment->findTime(eventDuration);
     }
 
     return rightmost;
