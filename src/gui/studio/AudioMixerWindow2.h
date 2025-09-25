@@ -23,7 +23,7 @@
 
 #include <QMainWindow>
 
-#include <list>
+#include <vector>
 
 class QHBoxLayout;
 class QWidget;
@@ -103,17 +103,25 @@ private:
     void updateStripCounts();
     void updateWidgets();
 
-    // check for in use
-    struct InUse
+    // An instrument whose "record in" or submaster is beyond the new
+    // record in or submaster count.
+    struct InvalidInstrument
     {
-        int id;
-        bool isInput;
-        Instrument* instrument;
+        // ??? Why isn't this const?
+        Instrument *instrument{nullptr};
+        // Out of range Record In ID or Submaster ID.
+        int id{0};
+        // For recording, this can either be an input or a submaster.
+        bool isInput{false};
     };
-    typedef std::list<InUse> InUseList;
+    typedef std::vector<InvalidInstrument> InvalidInstrumentVector;
 
-    void checkRecordInUsed(int newCount, InUseList& inUseList);
-    void checkSubmasterUsed(int newCount, InUseList& inUseList);
+    /// Get a list of the instruments that point to a "record in" beyond newCount.
+    void getRecordInInvalid(
+            int newCount, InvalidInstrumentVector &invalidInstrumentList);
+    /// Get a list of the instruments that point to a submaster beyond newCount.
+    void getSubmasterInvalid(
+            int newCount, InvalidInstrumentVector &invalidInstrumentList);
 };
 
 
