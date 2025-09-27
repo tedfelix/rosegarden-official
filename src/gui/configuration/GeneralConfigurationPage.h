@@ -113,6 +113,7 @@ private:
     QCheckBox *m_autoChannels;
     QCheckBox *m_lv2;
     QCheckBox *m_dynamicDrag;
+    QCheckBox *m_lv2Environment;
 
     // Presentation tab
     QComboBox *m_theme;

@@ -126,6 +126,9 @@ namespace Preferences
     void setDynamicDrag(bool value);
     bool getDynamicDrag();
 
+    void setLv2Environment(bool value);
+    bool getLv2Environment();
+
     void setAutoChannels(bool value);
     bool getAutoChannels();
 
