@@ -23,6 +23,8 @@
 
 #include <QMainWindow>
 
+#include <vector>
+
 class QHBoxLayout;
 class QWidget;
 
@@ -101,6 +103,24 @@ private:
     void updateStripCounts();
     void updateWidgets();
 
+    // An instrument whose "record in" or submaster is beyond the new
+    // record in or submaster count.
+    struct InvalidInstrument
+    {
+        Instrument *instrument{nullptr};
+        // Out of range Record In ID or Submaster ID.
+        int id{0};
+        // For recording, this can either be an input or a submaster.
+        bool isInput{false};
+    };
+    typedef std::vector<InvalidInstrument> InvalidInstrumentVector;
+
+    /// Get a list of the instruments that point to a "record in" beyond newCount.
+    void getRecordInInvalid(
+            int newCount, InvalidInstrumentVector &invalidInstrumentList);
+    /// Get a list of the instruments that point to a submaster beyond newCount.
+    void getSubmasterInvalid(
+            int newCount, InvalidInstrumentVector &invalidInstrumentList);
 };
 
 
