@@ -101,7 +101,8 @@ public:
      * newInput - The new buss or record input ID.  E.g. 0 is input 1.
      * newChannel - For record inputs only.  0 for left, 1 for right.  ???
      */
-    void setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel);
+    void setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel) const;
+    void setOutput(Instrument *instrument, int bussID) const;
 
     // An instrument whose "record in" or submaster is beyond the new
     // record in or submaster count.
@@ -126,7 +127,7 @@ public:
 
     // Return a Buss
     BussVector getBusses() const;
-    Buss *getBussById(BussId id);
+    Buss *getBussById(BussId id) const;
     void addBuss(Buss *buss);
     //void removeBuss(BussId id);
     void setBussCount(unsigned newBussCount);
@@ -135,7 +136,7 @@ public:
     PluginContainer *getContainerById(InstrumentId id);
 
     RecordInVector getRecordIns() const  { return m_recordIns; }
-    RecordIn *getRecordIn(int number);
+    RecordIn *getRecordIn(int number) const;
     void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
     void setRecordInCount(unsigned newRecordInCount);
 

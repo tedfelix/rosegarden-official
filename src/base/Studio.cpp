@@ -351,9 +351,9 @@ Studio::getBusses() const
 }
 
 Buss *
-Studio::getBussById(BussId id)
+Studio::getBussById(BussId id) const
 {
-    for (BussVector::iterator i = m_busses.begin(); i != m_busses.end(); ++i) {
+    for (BussVector::const_iterator i = m_busses.begin(); i != m_busses.end(); ++i) {
         if ((*i)->getId() == id) return *i;
     }
     return nullptr;
@@ -438,7 +438,7 @@ Studio::getContainerById(InstrumentId id)
 }
 
 RecordIn *
-Studio::getRecordIn(int number)
+Studio::getRecordIn(int number) const
 {
     if (number >= 0  &&  number < int(m_recordIns.size()))
         return m_recordIns[number];
@@ -1046,7 +1046,7 @@ Studio::getSubmasterInvalid(int newCount) const
 }
 
 void
-Studio::setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel)
+Studio::setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel) const
 {
     bool oldIsBuss;
     // 0 == left, 1 == right, mono only
@@ -1113,6 +1113,36 @@ Studio::setInput(Instrument *instrument, bool isBuss, int newInput, int newChann
         instrument->setAudioInputToBuss(newInput, newChannel);
     else
         instrument->setAudioInputToRecord(newInput, newChannel);
+}
+
+void
+Studio::setOutput(Instrument *instrument, int bussID) const
+{
+    BussId oldBussId = instrument->getAudioOutput();
+    Buss *oldBuss = getBussById(oldBussId);
+
+    Buss *newBuss = getBussById(bussID);
+    if (!newBuss)
+        return;
+
+    // Update the Studio
+
+    // Disconnect the old.
+    if (oldBuss) {
+        StudioControl::disconnectStudioObjects(
+                instrument->getMappedId(), oldBuss->getMappedId());
+    } else {
+        StudioControl::disconnectStudioObject(
+                instrument->getMappedId());
+    }
+
+    // Connect the new.
+    StudioControl::connectStudioObjects(
+            instrument->getMappedId(), newBuss->getMappedId());
+
+    // Update the Instrument
+
+    instrument->setAudioOutput(bussID);
 }
 
 

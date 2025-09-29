@@ -324,7 +324,7 @@ AudioRouteMenu::slotEntrySelected(QAction *a)
 }
 
 void
-AudioRouteMenu::slotEntrySelected(int i)
+AudioRouteMenu::slotEntrySelected(int entryIndex)
 {
     if (m_instrumentId == NoInstrument)
         return;
@@ -351,19 +351,19 @@ AudioRouteMenu::slotEntrySelected(int i)
             int newInput;
 
             if (stereo) {
-                newIsBuss = (i >= recordIns);
+                newIsBuss = (entryIndex >= recordIns);
                 if (newIsBuss) {
-                    newInput = i - recordIns;
+                    newInput = entryIndex - recordIns;
                 } else {
-                    newInput = i;
+                    newInput = entryIndex;
                 }
             } else {
-                newIsBuss = (i >= recordIns * 2);
-                newChannel = i % 2;
+                newIsBuss = (entryIndex >= recordIns * 2);
+                newChannel = entryIndex % 2;
                 if (newIsBuss) {
-                    newInput = i / 2 - recordIns;
+                    newInput = entryIndex / 2 - recordIns;
                 } else {
-                    newInput = i / 2;
+                    newInput = entryIndex / 2;
                 }
             }
 
@@ -375,30 +375,7 @@ AudioRouteMenu::slotEntrySelected(int i)
         }
 
     case Out: {
-            BussId bussId = instrument->getAudioOutput();
-            Buss *oldBuss = studio.getBussById(bussId);
-
-            Buss *newBuss = studio.getBussById(i);
-            if (!newBuss)
-                return;
-
-            // Update the Studio
-
-            if (oldBuss) {
-                StudioControl::disconnectStudioObjects(
-                        instrument->getMappedId(), oldBuss->getMappedId());
-            } else {
-                StudioControl::disconnectStudioObject(
-                        instrument->getMappedId());
-            }
-
-            StudioControl::connectStudioObjects(
-                    instrument->getMappedId(), newBuss->getMappedId());
-
-            // Update the Instrument
-
-            instrument->setAudioOutput(i);
-
+            studio.setOutput(instrument, entryIndex);
             doc->slotDocumentModified();
 
             break;
