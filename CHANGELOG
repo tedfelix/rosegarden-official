@@ -38,8 +38,10 @@ Included in this release...
     dialog.  Bug #1736.  [0d38af676e]
   * Fix sfizz plugin UI not visible.  Bug #1738.  [090f160bce]
     [f908ea2646]
+  * Fix intruments refering to invalid audio inputs and submasters.
+    Bug #1735.  [faa8e5186d]  [722d5a2c67]
 
-stopped at f908ea2646
+stopped at 682eb3681f
 
 ===== New Features =====
 
