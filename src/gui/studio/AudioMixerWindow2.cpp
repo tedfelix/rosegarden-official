@@ -424,12 +424,17 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
 
     // If we've got some instruments pointing to invalid inputs....
     if (invalidInstruments.size() > 0) {
-        QString warnText = tr("The following instruments are using inputs you are removing:");
-        warnText += "\n";
+        QString warnText = tr("The following instruments are using inputs you are removing:\n");
+        int count{0};
         for (const InvalidInstrument &invalidInstrument : invalidInstruments) {
             warnText += tr("  %1 : input %2\n").
                     arg(invalidInstrument.instrument->getName().c_str()).
                     arg(invalidInstrument.id);
+            // Limit the list.
+            if (++count == 30) {
+                warnText += "  ...\n";
+                break;
+            }
         }
         warnText += tr("These will be set to input 1.  Are you sure?");
         QMessageBox::StandardButton reply =
@@ -537,11 +542,17 @@ AudioMixerWindow2::slotNumberOfSubmasters()
     if (invalidInstruments.size() > 0) {
         QString warnText =
             tr("The following instruments are using submasters you are removing:\n");
+        int count{0};
         for (const InvalidInstrument& inUse : invalidInstruments) {
             std::string iname = inUse.instrument->getName();
             warnText += tr("  %1 : submaster %2\n").
                     arg(QString(iname.c_str())).
                     arg(inUse.id);
+            // Limit the list.
+            if (++count == 30) {
+                warnText += "  ...\n";
+                break;
+            }
         }
         warnText += tr("Outputs will be set to master and inputs will be set to input 1.\nAre you sure?");
         QMessageBox::StandardButton reply =
