@@ -958,5 +958,86 @@ void Studio::removeObserver(StudioObserver *obs)
     m_observers.remove(obs);
 }
 
+void Studio::getRecordInInvalid(
+        int newCount, InvalidInstrumentVector &invalidInstrumentList)
+{
+    // Gathers instruments that use record inputs beyond newCount.
+
+    // ??? Return the InvalidInstrumentVector instead of taking as &.
+    //     C++11 makes this fast.
+
+    invalidInstrumentList.clear();
+    // get actual count
+    RecordInVector recs = getRecordIns();
+    int oldCount = recs.size();
+
+    if (newCount > oldCount) return; // no problem increasing count
+
+    InstrumentVector instruments = getPresentationInstruments();
+
+    // For each instrument...
+    for (Instrument *instrument : instruments) {
+        bool isBuss;
+        int channel;
+        int recIn = instrument->getAudioInput(isBuss, channel);
+        // only checking record in
+        if (isBuss)
+            continue;
+        // If this instrument is connected to a record in that is going away...
+        if (recIn >= newCount) {
+            // Add it to the list.
+            InvalidInstrument iu;
+            iu.id = recIn + 1;
+            iu.isInput = true;
+            iu.instrument = instrument;
+            invalidInstrumentList.push_back(iu);
+        }
+    }
+}
+
+void Studio::getSubmasterInvalid(
+        int newCount, InvalidInstrumentVector &inUseList)
+{
+    // Gathers instruments that use submasters beyond newCount.
+
+    // ??? Return the InvalidInstrumentVector instead of taking as &.
+    //     C++11 makes this fast.
+
+    inUseList.clear();
+    // get actual count
+    BussVector buss = getBusses();
+    int oldCount = buss.size();
+
+    if (newCount > oldCount) return; // no problem increasing count
+
+    // check for in use
+    InstrumentVector instruments = getPresentationInstruments();
+    // For each instrument
+    for (InstrumentVector::iterator i = instruments.begin();
+         i != instruments.end();
+         ++i) {
+        Instrument *instrument = *i;
+        bool isBuss;
+        int channel;
+        int subm = instrument->getAudioInput(isBuss, channel);
+        if (isBuss && subm > newCount) {
+            InvalidInstrument iu;
+            iu.id = subm;
+            iu.isInput = true;
+            iu.instrument = instrument;
+            inUseList.push_back(iu);
+        }
+        // and outputs
+        subm = instrument->getAudioOutput();
+        if (subm > newCount) {
+            InvalidInstrument iu;
+            iu.id = subm;
+            iu.isInput = false;
+            iu.instrument = instrument;
+            inUseList.push_back(iu);
+        }
+    }
+}
+
 
 }

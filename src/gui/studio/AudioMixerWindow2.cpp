@@ -419,14 +419,14 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
 
     // Check for instruments pointing to record inputs that are now invalid.
 
-    InvalidInstrumentVector invalidInstruments;
-    getRecordInInvalid(count, invalidInstruments);
+    Studio::InvalidInstrumentVector invalidInstruments;
+    studio.getRecordInInvalid(count, invalidInstruments);
 
     // If we've got some instruments pointing to invalid inputs....
     if (invalidInstruments.size() > 0) {
         QString warnText = tr("The following instruments are using inputs you are removing:\n");
         int count{0};
-        for (const InvalidInstrument &invalidInstrument : invalidInstruments) {
+        for (const Studio::InvalidInstrument &invalidInstrument : invalidInstruments) {
             warnText += tr("  %1 : input %2\n").
                     arg(invalidInstrument.instrument->getName().c_str()).
                     arg(invalidInstrument.id);
@@ -450,7 +450,7 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
 
         // For each instrument with a now invalid input...
         // reset the instruments to input 1
-        for (const InvalidInstrument &inUse : invalidInstruments) {
+        for (const Studio::InvalidInstrument &inUse : invalidInstruments) {
 
             // This is a non-trivial process involving making changes to the
             // Studio along with a change to the Instrument.
@@ -537,13 +537,13 @@ AudioMixerWindow2::slotNumberOfSubmasters()
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
-    InvalidInstrumentVector invalidInstruments;
-    getSubmasterInvalid(count, invalidInstruments);
+    Studio::InvalidInstrumentVector invalidInstruments;
+    studio.getSubmasterInvalid(count, invalidInstruments);
     if (invalidInstruments.size() > 0) {
         QString warnText =
             tr("The following instruments are using submasters you are removing:\n");
         int count{0};
-        for (const InvalidInstrument& inUse : invalidInstruments) {
+        for (const Studio::InvalidInstrument& inUse : invalidInstruments) {
             std::string iname = inUse.instrument->getName();
             warnText += tr("  %1 : submaster %2\n").
                     arg(QString(iname.c_str())).
@@ -567,7 +567,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         }
 
         // For each instrument with a now invalid submaster...
-        for (const InvalidInstrument& inUse : invalidInstruments) {
+        for (const Studio::InvalidInstrument &inUse : invalidInstruments) {
 
             // If the submaster was being used as an input...
             if (inUse.isInput) {
@@ -847,91 +847,6 @@ AudioMixerWindow2::changeEvent(QEvent *event)
     // For each strip, send vol/pan to the external controller port.
     for (unsigned i = 0; i < count; i++)
         m_inputStrips[i]->updateExternalController();
-}
-
-void AudioMixerWindow2::getRecordInInvalid(
-        int newCount, InvalidInstrumentVector &invalidInstrumentList)
-{
-    // Gathers instruments that use record inputs beyond newCount.
-    // ??? Move to Studio.
-    // ??? Return the InvalidInstrumentVector instead of taking as &.
-    //     C++11 makes this fast.
-
-    invalidInstrumentList.clear();
-    RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Studio &studio = doc->getStudio();
-    // get actual count
-    RecordInVector recs = studio.getRecordIns();
-    int oldCount = recs.size();
-
-    if (newCount > oldCount) return; // no problem increasing count
-
-    InstrumentVector instruments = studio.getPresentationInstruments();
-
-    // For each instrument...
-    for (Instrument *instrument : instruments) {
-        bool isBuss;
-        int channel;
-        int recIn = instrument->getAudioInput(isBuss, channel);
-        // only checking record in
-        if (isBuss)
-            continue;
-        // If this instrument is connected to a record in that is going away...
-        if (recIn >= newCount) {
-            // Add it to the list.
-            InvalidInstrument iu;
-            iu.id = recIn + 1;
-            iu.isInput = true;
-            iu.instrument = instrument;
-            invalidInstrumentList.push_back(iu);
-        }
-    }
-}
-
-void AudioMixerWindow2::getSubmasterInvalid(
-        int newCount, InvalidInstrumentVector &inUseList)
-{
-    // Gathers instruments that use submasters beyond newCount.
-    // ??? Move to Studio.
-    // ??? Return the InvalidInstrumentVector instead of taking as &.
-    //     C++11 makes this fast.
-
-    inUseList.clear();
-    RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Studio &studio = doc->getStudio();
-    // get actual count
-    BussVector buss = studio.getBusses();
-    int oldCount = buss.size();
-
-    if (newCount > oldCount) return; // no problem increasing count
-
-    // check for in use
-    InstrumentVector instruments = studio.getPresentationInstruments();
-    // For each instrument
-    for (InstrumentVector::iterator i = instruments.begin();
-         i != instruments.end();
-         ++i) {
-        Instrument *instrument = *i;
-        bool isBuss;
-        int channel;
-        int subm = instrument->getAudioInput(isBuss, channel);
-        if (isBuss && subm > newCount) {
-            InvalidInstrument iu;
-            iu.id = subm;
-            iu.isInput = true;
-            iu.instrument = instrument;
-            inUseList.push_back(iu);
-        }
-        // and outputs
-        subm = instrument->getAudioOutput();
-        if (subm > newCount) {
-            InvalidInstrument iu;
-            iu.id = subm;
-            iu.isInput = false;
-            iu.instrument = instrument;
-            inUseList.push_back(iu);
-        }
-    }
 }
 
 
