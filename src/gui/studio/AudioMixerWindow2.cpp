@@ -532,40 +532,9 @@ AudioMixerWindow2::slotNumberOfSubmasters()
             } else {
 
                 // submaster was being used as an output...
-
                 // Switch to "master".
+                studio.setOutput(invalidInstrument.instrument, 0);
 
-                // ??? AudioRouteMenu::slotEntrySelected() does almost the exact
-                //     same thing.  Factor that out into a routine this can use.
-                //     Perhaps a Studio::setOutput().
-
-                // submaster as output
-                BussId bussId = invalidInstrument.instrument->getAudioOutput();
-                Buss *oldBuss = studio.getBussById(bussId);
-
-                // master
-                Buss *newBuss = studio.getBussById(0);
-                Q_ASSERT(newBuss != nullptr);
-
-                // Update the Studio
-
-                if (oldBuss) {
-                    StudioControl::disconnectStudioObjects
-                        (invalidInstrument.instrument->getMappedId(),
-                         oldBuss->getMappedId());
-                } else {
-                    StudioControl::disconnectStudioObject
-                        (invalidInstrument.instrument->getMappedId());
-                }
-
-                StudioControl::connectStudioObjects
-                    (invalidInstrument.instrument->getMappedId(),
-                     newBuss->getMappedId());
-
-                // Update the Instrument
-
-                // master
-                invalidInstrument.instrument->setAudioOutput(0);
             }
         }
 
