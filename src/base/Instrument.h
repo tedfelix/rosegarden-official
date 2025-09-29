@@ -224,7 +224,7 @@ public:
      * ones.
      *
      * Note that simply changing this is not enough.  The Studio needs to be
-     * updated to match.  See AudioRouteMenu::slotEntrySelected() for details.
+     * updated to match.  See Studio::setInput().
      */
     /// Configure for recording from an audio input.
     void setAudioInputToBuss(BussId buss, int channel = 0);
@@ -233,14 +233,14 @@ public:
      * ones.
      *
      * Note that simply changing this is not enough.  The Studio needs to be
-     * updated to match.  See AudioRouteMenu::slotEntrySelected() for details.
+     * updated to match.  See Studio::setInput().
      */
     void setAudioInputToRecord(int recordIn, int channel = 0);
     int getAudioInput(bool &isBuss, int &channel) const;
 
     /**
      * Note that simply changing this is not enough.  The Studio needs to be
-     * updated to match.  See AudioRouteMenu::slotEntrySelected() for details.
+     * updated to match.  See Studio::setOutput().
      */
     void setAudioOutput(BussId buss) { m_audioOutput = buss; }
     BussId getAudioOutput() const { return m_audioOutput; }

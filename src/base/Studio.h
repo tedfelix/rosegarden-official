@@ -102,6 +102,17 @@ public:
      * newChannel - For record inputs only.  0 for left, 1 for right.  ???
      */
     void setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel) const;
+    /// Sets the output for an Instrument.
+    /**
+     * Since the studio needs to have connections that match, this routine
+     * simplifies the process by doing all the necessary work.
+     *
+     * This sets the output in the provided Instrument and updates the Studio
+     * connections to match.
+     *
+     * instrument - The instrument to change.
+     * bussID - The new buss ID.  E.g. 0 is master, 1 is submaster 1...
+     */
     void setOutput(Instrument *instrument, int bussID) const;
 
     // An instrument whose "record in" or submaster is beyond the new
