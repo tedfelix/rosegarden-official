@@ -339,28 +339,6 @@ AudioRouteMenu::slotEntrySelected(int i)
     switch (m_direction) {
 
     case In: {
-            // ??? AudioMixerWindow2::slotNumberOfStereoInputs() does the
-            //     exact same thing.  Factor into a new routine in Studio:
-            //     Studio::setInput(Instrument *, int inputID, int channel)
-
-            bool oldIsBuss;
-            // 0 == left, 1 == right, mono only
-            int oldChannel;
-            int oldInput = instrument->getAudioInput(oldIsBuss, oldChannel);
-
-            // Compute old mapped ID
-
-            MappedObjectId oldMappedId = 0;
-
-            if (oldIsBuss) {
-                Buss *buss = studio.getBussById(oldInput);
-                if (buss)
-                    oldMappedId = buss->getMappedId();
-            } else {
-                RecordIn *in = studio.getRecordIn(oldInput);
-                if (in)
-                    oldMappedId = in->mappedId;
-            }
 
             // Compute selected (new) entry's input and channel.
 
@@ -389,49 +367,7 @@ AudioRouteMenu::slotEntrySelected(int i)
                 }
             }
 
-            // Compute new mapped ID
-
-            MappedObjectId newMappedId = 0;
-
-            if (newIsBuss) {
-                Buss *buss = studio.getBussById(newInput);
-                if (!buss)
-                    return;
-                newMappedId = buss->getMappedId();
-            } else {
-                RecordIn *in = studio.getRecordIn(newInput);
-                if (!in)
-                    return;
-                newMappedId = in->mappedId;
-            }
-
-            // Update the Studio
-
-            if (oldMappedId != 0) {
-                StudioControl::disconnectStudioObjects(
-                        oldMappedId, instrument->getMappedId());
-            } else {
-                StudioControl::disconnectStudioObject(
-                        instrument->getMappedId());
-            }
-
-            StudioControl::setStudioObjectProperty(
-                    instrument->getMappedId(),
-                    MappedAudioFader::InputChannel,
-                    MappedObjectValue(newChannel));
-
-            if (newMappedId != 0) {
-                // Connect the input to the instrument.
-                StudioControl::connectStudioObjects(
-                        newMappedId, instrument->getMappedId());
-            }
-
-            // Update the Instrument
-
-            if (newIsBuss)
-                instrument->setAudioInputToBuss(newInput, newChannel);
-            else
-                instrument->setAudioInputToRecord(newInput, newChannel);
+            studio.setInput(instrument, newIsBuss, newInput, newChannel);
 
             doc->slotDocumentModified();
 

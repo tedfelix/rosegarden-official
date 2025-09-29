@@ -16,25 +16,28 @@
 #define RG_MODULE_STRING "[Studio]"
 #define RG_NO_DEBUG_PRINT
 
-#include <iostream>
+#include "Studio.h"
 
-#include "base/Studio.h"
-#include "MidiDevice.h"
 #include "AudioDevice.h"
-#include "SoftSynthDevice.h"
+#include "Composition.h"
 #include "Instrument.h"
+#include "MidiDevice.h"
+#include "SoftSynthDevice.h"
+#include "Track.h"
 
+#include "gui/studio/StudioControl.h"
 #include "base/RecordIn.h"
 #include "base/Segment.h"
 #include "misc/Strings.h"
-#include "Track.h"
-#include "Composition.h"
 #include "sequencer/RosegardenSequencer.h"
 
+#include <QString>
+
+//#include <iostream>
+#include <set>
 #include <sstream>
 #include <string>
-
-#include <QString>
+#include <vector>
 
 
 using std::endl;
@@ -42,6 +45,7 @@ using std::endl;
 
 namespace Rosegarden
 {
+
 
 Studio::Studio() :
     amwShowAudioFaders(true),
@@ -341,7 +345,7 @@ Studio::getInstrumentFor(const Track *track) const
 }
 
 BussVector
-Studio::getBusses()
+Studio::getBusses() const
 {
     return m_busses;
 }
@@ -959,7 +963,7 @@ void Studio::removeObserver(StudioObserver *obs)
 }
 
 Studio::InvalidInstrumentVector
-Studio::getRecordInInvalid(int newCount)
+Studio::getRecordInInvalid(int newCount) const
 {
     // Gathers instruments that use record inputs beyond newCount.
 
@@ -997,7 +1001,7 @@ Studio::getRecordInInvalid(int newCount)
 }
 
 Studio::InvalidInstrumentVector
-Studio::getSubmasterInvalid(int newCount)
+Studio::getSubmasterInvalid(int newCount) const
 {
     // Gathers instruments that use submasters beyond newCount.
 
@@ -1039,6 +1043,76 @@ Studio::getSubmasterInvalid(int newCount)
     }
 
     return invalidInstruments;
+}
+
+void
+Studio::setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel)
+{
+    bool oldIsBuss;
+    // 0 == left, 1 == right, mono only
+    int oldChannel;
+    int oldInput = instrument->getAudioInput(oldIsBuss, oldChannel);
+
+    // Compute old mapped ID
+
+    MappedObjectId oldMappedId = 0;
+
+    if (oldIsBuss) {
+        Buss *buss = getBussById(oldInput);
+        if (buss)
+            oldMappedId = buss->getMappedId();
+    } else {
+        RecordIn *in = getRecordIn(oldInput);
+        if (in)
+            oldMappedId = in->mappedId;
+    }
+
+    // Compute new mapped ID
+
+    MappedObjectId newMappedId = 0;
+
+    if (isBuss) {
+        Buss *buss = getBussById(newInput);
+        if (!buss)
+            return;
+        newMappedId = buss->getMappedId();
+    } else {
+        RecordIn *in = getRecordIn(newInput);
+        if (!in)
+            return;
+        newMappedId = in->mappedId;
+    }
+
+    // Update the Studio
+
+    // Disconnect any old connection.
+    if (oldMappedId != 0) {
+        StudioControl::disconnectStudioObjects(
+                oldMappedId, instrument->getMappedId());
+    } else {
+        StudioControl::disconnectStudioObject(
+                instrument->getMappedId());
+    }
+
+    // Connect the new connection.
+
+    StudioControl::setStudioObjectProperty(
+            instrument->getMappedId(),
+            MappedAudioFader::InputChannel,
+            MappedObjectValue(newChannel));
+
+    if (newMappedId != 0) {
+        // Connect the input to the instrument.
+        StudioControl::connectStudioObjects(
+                newMappedId, instrument->getMappedId());
+    }
+
+    // Update the Instrument
+
+    if (isBuss)
+        instrument->setAudioInputToBuss(newInput, newChannel);
+    else
+        instrument->setAudioInputToRecord(newInput, newChannel);
 }
 
 

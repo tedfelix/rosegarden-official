@@ -88,6 +88,21 @@ public:
     Instrument *getInstrumentFor(const Segment *) const;
     Instrument *getInstrumentFor(const Track *) const;
 
+    /// Sets the input for an Instrument.
+    /**
+     * Since the studio needs to have connections that match, this routine
+     * simplifies the process by doing all the necessary work.
+     *
+     * This sets the input in the provided Instrument and updates the Studio
+     * connections to match.
+     *
+     * instrument - The instrument to change.
+     * isBuss - Is the new input a buss (submaster) or a record input.
+     * newInput - The new buss or record input ID.  E.g. 0 is input 1.
+     * newChannel - For record inputs only.  0 for left, 1 for right.  ???
+     */
+    void setInput(Instrument *instrument, bool isBuss, int newInput, int newChannel);
+
     // An instrument whose "record in" or submaster is beyond the new
     // record in or submaster count.
     struct InvalidInstrument
@@ -101,12 +116,16 @@ public:
     typedef std::vector<InvalidInstrument> InvalidInstrumentVector;
 
     /// Get a list of the instruments that point to a "record in" beyond newCount.
-    InvalidInstrumentVector getRecordInInvalid(int newCount);
+    InvalidInstrumentVector getRecordInInvalid(int newCount) const;
+    /// Sets invalid record ins to "input 1".
+    void fixRecordIns(int count);
     /// Get a list of the instruments that point to a submaster beyond newCount.
-    InvalidInstrumentVector getSubmasterInvalid(int newCount);
+    InvalidInstrumentVector getSubmasterInvalid(int newCount) const;
+    /// Sets invalid submasters to "input 1" for inputs and "master" for outputs..
+    void fixSubmasters(int count);
 
     // Return a Buss
-    BussVector getBusses();
+    BussVector getBusses() const;
     Buss *getBussById(BussId id);
     void addBuss(Buss *buss);
     //void removeBuss(BussId id);
@@ -115,7 +134,7 @@ public:
     // Return an Instrument or a Buss
     PluginContainer *getContainerById(InstrumentId id);
 
-    RecordInVector getRecordIns() { return m_recordIns; }
+    RecordInVector getRecordIns() const  { return m_recordIns; }
     RecordIn *getRecordIn(int number);
     void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
     void setRecordInCount(unsigned newRecordInCount);
