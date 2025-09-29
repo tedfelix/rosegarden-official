@@ -426,7 +426,8 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
     if (invalidInstruments.size() > 0) {
         QString warnText = tr("The following instruments are using inputs you are removing:\n");
         int count{0};
-        for (const Studio::InvalidInstrument &invalidInstrument : invalidInstruments) {
+        for (const Studio::InvalidInstrument &invalidInstrument :
+             invalidInstruments) {
             warnText += tr("  %1 : input %2\n").
                     arg(invalidInstrument.instrument->getName().c_str()).
                     arg(invalidInstrument.id);
@@ -448,60 +449,10 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
             return;
         }
 
-        // For each instrument with a now invalid input...
-        // reset the instruments to input 1
-        for (const Studio::InvalidInstrument &inUse : invalidInstruments) {
-
-            // This is a non-trivial process involving making changes to the
-            // Studio along with a change to the Instrument.
-
-            // ??? AudioRouteMenu::slotEntrySelected() does almost the exact
-            //     same thing.  Factor that out into a routine this can use.
-            //     Perhaps a Studio::setInput().  Then all this reduces to
-            //     one line:
-            //       studio.setInput(inUse.instrument, 0, 0);
-
-            bool oldIsBuss;
-            int oldChannel;
-            int oldInput =
-                inUse.instrument->getAudioInput(oldIsBuss, oldChannel);
-            Q_ASSERT(oldIsBuss == false);
-
-            MappedObjectId oldMappedId = 0;
-            RecordIn *in = studio.getRecordIn(oldInput);
-            if (in) oldMappedId = in->mappedId;
-
-            // Input 1
-            const int newInput = 0;
-            const int newChannel = 0;
-
-            // Compute new mapped ID
-            MappedObjectId newMappedId = 0;
-            in = studio.getRecordIn(newInput);
-            Q_ASSERT(in != nullptr);
-            newMappedId = in->mappedId;
-
-            // Update the Studio
-            if (oldMappedId != 0) {
-                StudioControl::disconnectStudioObjects
-                    (oldMappedId, inUse.instrument->getMappedId());
-            } else {
-                StudioControl::disconnectStudioObject
-                    (inUse.instrument->getMappedId());
-            }
-
-            StudioControl::setStudioObjectProperty
-                (inUse.instrument->getMappedId(),
-                 MappedAudioFader::InputChannel,
-                 MappedObjectValue(newChannel));
-            if (newMappedId != 0) {
-                // Connect the input to the instrument.
-                StudioControl::connectStudioObjects
-                    (newMappedId, inUse.instrument->getMappedId());
-            }
-
-            // Update the Instrument
-            inUse.instrument->setAudioInputToRecord(newInput, newChannel);
+        // For each instrument with a now invalid input, set it to input 1.
+        for (const Studio::InvalidInstrument &invalidInstrument :
+             invalidInstruments) {
+            studio.setInput(invalidInstrument.instrument, false, 0, 0);
         }
     }
 
@@ -543,11 +494,12 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         QString warnText =
             tr("The following instruments are using submasters you are removing:\n");
         int count{0};
-        for (const Studio::InvalidInstrument& inUse : invalidInstruments) {
-            std::string iname = inUse.instrument->getName();
+        for (const Studio::InvalidInstrument &invalidInstrument :
+             invalidInstruments) {
+            std::string iname = invalidInstrument.instrument->getName();
             warnText += tr("  %1 : submaster %2\n").
                     arg(QString(iname.c_str())).
-                    arg(inUse.id);
+                    arg(invalidInstrument.id);
             // Limit the list.
             if (++count == 30) {
                 warnText += "  ...\n";
@@ -567,58 +519,15 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         }
 
         // For each instrument with a now invalid submaster...
-        for (const Studio::InvalidInstrument &inUse : invalidInstruments) {
+        for (const Studio::InvalidInstrument &invalidInstrument :
+             invalidInstruments) {
 
             // If the submaster was being used as an input...
-            if (inUse.isInput) {
+            if (invalidInstrument.isInput) {
 
                 // Switch to "input 1" instead of "master" to avoid feedback
                 // loops.
-
-                // ??? AudioRouteMenu::slotEntrySelected() does almost the exact
-                //     same thing.  Factor that out into a routine this can use.
-                //     Perhaps a Studio::setInput().
-
-                bool oldIsBuss;
-                int oldChannel;
-                int oldInput =
-                    inUse.instrument->getAudioInput(oldIsBuss, oldChannel);
-                Q_ASSERT(oldIsBuss == true);
-                MappedObjectId oldMappedId = 0;
-                Buss *buss = studio.getBussById(oldInput);
-                if (buss) oldMappedId = buss->getMappedId();
-
-                // Input 1
-                const int newInput = 0;
-                const int newChannel = 0;
-
-                // Compute new mapped ID
-                MappedObjectId newMappedId = 0;
-                RecordIn *in = studio.getRecordIn(newInput);
-                Q_ASSERT(in != nullptr);
-                newMappedId = in->mappedId;
-
-                // Update the Studio
-                if (oldMappedId != 0) {
-                    StudioControl::disconnectStudioObjects
-                        (oldMappedId, inUse.instrument->getMappedId());
-                } else {
-                    StudioControl::disconnectStudioObject
-                        (inUse.instrument->getMappedId());
-                }
-
-                StudioControl::setStudioObjectProperty(
-                        inUse.instrument->getMappedId(),
-                        MappedAudioFader::InputChannel,
-                        MappedObjectValue(newChannel));
-                if (newMappedId != 0) {
-                    // Connect the input to the instrument.
-                    StudioControl::connectStudioObjects(
-                            newMappedId, inUse.instrument->getMappedId());
-                }
-
-                // Update the Instrument
-                inUse.instrument->setAudioInputToRecord(newInput, newChannel);
+                studio.setInput(invalidInstrument.instrument, false, 0, 0);
 
             } else {
 
@@ -631,7 +540,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
                 //     Perhaps a Studio::setOutput().
 
                 // submaster as output
-                BussId bussId = inUse.instrument->getAudioOutput();
+                BussId bussId = invalidInstrument.instrument->getAudioOutput();
                 Buss *oldBuss = studio.getBussById(bussId);
 
                 // master
@@ -642,21 +551,21 @@ AudioMixerWindow2::slotNumberOfSubmasters()
 
                 if (oldBuss) {
                     StudioControl::disconnectStudioObjects
-                        (inUse.instrument->getMappedId(),
+                        (invalidInstrument.instrument->getMappedId(),
                          oldBuss->getMappedId());
                 } else {
                     StudioControl::disconnectStudioObject
-                        (inUse.instrument->getMappedId());
+                        (invalidInstrument.instrument->getMappedId());
                 }
 
                 StudioControl::connectStudioObjects
-                    (inUse.instrument->getMappedId(),
+                    (invalidInstrument.instrument->getMappedId(),
                      newBuss->getMappedId());
 
                 // Update the Instrument
 
                 // master
-                inUse.instrument->setAudioOutput(0);
+                invalidInstrument.instrument->setAudioOutput(0);
             }
         }
 
