@@ -218,12 +218,30 @@ public:
     void setNumAudioChannels(unsigned int ch) { m_numAudioChannels = ch; }
     unsigned int getNumAudioChannels() const { return m_numAudioChannels; }
 
-    // An audio input can be a buss or a record input. The channel number
-    // is required for mono instruments, ignored for stereo ones.
+    /// Configure for recording from a buss.
+    /**
+     * The channel number is required for mono instruments, ignored for stereo
+     * ones.
+     *
+     * Note that simply changing this is not enough.  The Studio needs to be
+     * updated to match.  See AudioRouteMenu::slotEntrySelected() for details.
+     */
+    /// Configure for recording from an audio input.
     void setAudioInputToBuss(BussId buss, int channel = 0);
+    /**
+     * The channel number is required for mono instruments, ignored for stereo
+     * ones.
+     *
+     * Note that simply changing this is not enough.  The Studio needs to be
+     * updated to match.  See AudioRouteMenu::slotEntrySelected() for details.
+     */
     void setAudioInputToRecord(int recordIn, int channel = 0);
     int getAudioInput(bool &isBuss, int &channel) const;
 
+    /**
+     * Note that simply changing this is not enough.  The Studio needs to be
+     * updated to match.  See AudioRouteMenu::slotEntrySelected() for details.
+     */
     void setAudioOutput(BussId buss) { m_audioOutput = buss; }
     BussId getAudioOutput() const { return m_audioOutput; }
 

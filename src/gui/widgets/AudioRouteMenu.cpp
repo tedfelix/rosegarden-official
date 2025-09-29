@@ -339,6 +339,10 @@ AudioRouteMenu::slotEntrySelected(int i)
     switch (m_direction) {
 
     case In: {
+            // ??? AudioMixerWindow2::slotNumberOfStereoInputs() does the
+            //     exact same thing.  Factor into a new routine in Studio:
+            //     Studio::setInput(Instrument *, int inputID, int channel)
+
             bool oldIsBuss;
             // 0 == left, 1 == right, mono only
             int oldChannel;
@@ -424,11 +428,10 @@ AudioRouteMenu::slotEntrySelected(int i)
 
             // Update the Instrument
 
-            if (newIsBuss) {
+            if (newIsBuss)
                 instrument->setAudioInputToBuss(newInput, newChannel);
-            } else {
+            else
                 instrument->setAudioInputToRecord(newInput, newChannel);
-            }
 
             doc->slotDocumentModified();
 

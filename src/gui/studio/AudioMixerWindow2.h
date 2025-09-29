@@ -107,7 +107,6 @@ private:
     // record in or submaster count.
     struct InvalidInstrument
     {
-        // ??? Why isn't this const?
         Instrument *instrument{nullptr};
         // Out of range Record In ID or Submaster ID.
         int id{0};
