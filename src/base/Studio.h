@@ -101,11 +101,9 @@ public:
     typedef std::vector<InvalidInstrument> InvalidInstrumentVector;
 
     /// Get a list of the instruments that point to a "record in" beyond newCount.
-    void getRecordInInvalid(
-            int newCount, InvalidInstrumentVector &invalidInstrumentList);
+    InvalidInstrumentVector getRecordInInvalid(int newCount);
     /// Get a list of the instruments that point to a submaster beyond newCount.
-    void getSubmasterInvalid(
-            int newCount, InvalidInstrumentVector &invalidInstrumentList);
+    InvalidInstrumentVector getSubmasterInvalid(int newCount);
 
     // Return a Buss
     BussVector getBusses();

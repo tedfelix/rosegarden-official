@@ -419,8 +419,8 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
 
     // Check for instruments pointing to record inputs that are now invalid.
 
-    Studio::InvalidInstrumentVector invalidInstruments;
-    studio.getRecordInInvalid(count, invalidInstruments);
+    const Studio::InvalidInstrumentVector invalidInstruments =
+                studio.getRecordInInvalid(count);
 
     // If we've got some instruments pointing to invalid inputs....
     if (invalidInstruments.size() > 0) {
@@ -537,8 +537,8 @@ AudioMixerWindow2::slotNumberOfSubmasters()
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
 
-    Studio::InvalidInstrumentVector invalidInstruments;
-    studio.getSubmasterInvalid(count, invalidInstruments);
+    const Studio::InvalidInstrumentVector invalidInstruments =
+            studio.getSubmasterInvalid(count);
     if (invalidInstruments.size() > 0) {
         QString warnText =
             tr("The following instruments are using submasters you are removing:\n");

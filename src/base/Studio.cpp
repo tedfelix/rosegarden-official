@@ -958,20 +958,19 @@ void Studio::removeObserver(StudioObserver *obs)
     m_observers.remove(obs);
 }
 
-void Studio::getRecordInInvalid(
-        int newCount, InvalidInstrumentVector &invalidInstrumentList)
+Studio::InvalidInstrumentVector
+Studio::getRecordInInvalid(int newCount)
 {
     // Gathers instruments that use record inputs beyond newCount.
 
-    // ??? Return the InvalidInstrumentVector instead of taking as &.
-    //     C++11 makes this fast.
-
-    invalidInstrumentList.clear();
+    InvalidInstrumentVector invalidInstruments;
     // get actual count
     RecordInVector recs = getRecordIns();
     int oldCount = recs.size();
 
-    if (newCount > oldCount) return; // no problem increasing count
+    // no problem increasing count
+    if (newCount > oldCount)
+        return invalidInstruments;
 
     InstrumentVector instruments = getPresentationInstruments();
 
@@ -990,25 +989,26 @@ void Studio::getRecordInInvalid(
             iu.id = recIn + 1;
             iu.isInput = true;
             iu.instrument = instrument;
-            invalidInstrumentList.push_back(iu);
+            invalidInstruments.push_back(iu);
         }
     }
+
+    return invalidInstruments;
 }
 
-void Studio::getSubmasterInvalid(
-        int newCount, InvalidInstrumentVector &inUseList)
+Studio::InvalidInstrumentVector
+Studio::getSubmasterInvalid(int newCount)
 {
     // Gathers instruments that use submasters beyond newCount.
 
-    // ??? Return the InvalidInstrumentVector instead of taking as &.
-    //     C++11 makes this fast.
-
-    inUseList.clear();
+    InvalidInstrumentVector invalidInstruments;
     // get actual count
     BussVector buss = getBusses();
     int oldCount = buss.size();
 
-    if (newCount > oldCount) return; // no problem increasing count
+    // no problem increasing count
+    if (newCount > oldCount)
+        return invalidInstruments;
 
     // check for in use
     InstrumentVector instruments = getPresentationInstruments();
@@ -1025,7 +1025,7 @@ void Studio::getSubmasterInvalid(
             iu.id = subm;
             iu.isInput = true;
             iu.instrument = instrument;
-            inUseList.push_back(iu);
+            invalidInstruments.push_back(iu);
         }
         // and outputs
         subm = instrument->getAudioOutput();
@@ -1034,9 +1034,11 @@ void Studio::getSubmasterInvalid(
             iu.id = subm;
             iu.isInput = false;
             iu.instrument = instrument;
-            inUseList.push_back(iu);
+            invalidInstruments.push_back(iu);
         }
     }
+
+    return invalidInstruments;
 }
 
 
