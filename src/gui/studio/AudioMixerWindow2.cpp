@@ -484,6 +484,7 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
                 StudioControl::disconnectStudioObject
                     (inUse.instrument->getMappedId());
             }
+
             StudioControl::setStudioObjectProperty
                 (inUse.instrument->getMappedId(),
                  MappedAudioFader::InputChannel,
@@ -542,7 +543,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
                     arg(QString(iname.c_str())).
                     arg(inUse.id);
         }
-        warnText += tr("These will be set to master.  Are you sure?");
+        warnText += tr("Outputs will be set to master and inputs will be set to input 1.\nAre you sure?");
         QMessageBox::StandardButton reply =
             QMessageBox::warning(this,
                                  tr("Rosegarden"),
@@ -555,17 +556,18 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         }
 
         // For each instrument with a now invalid submaster...
-        // reset the instruments to Master
         for (const InvalidInstrument& inUse : invalidInstruments) {
 
             // If the submaster was being used as an input...
             if (inUse.isInput) {
 
+                // Switch to "input 1" instead of "master" to avoid feedback
+                // loops.
+
                 // ??? AudioRouteMenu::slotEntrySelected() does almost the exact
                 //     same thing.  Factor that out into a routine this can use.
                 //     Perhaps a Studio::setInput().
 
-                // submaster as input
                 bool oldIsBuss;
                 int oldChannel;
                 int oldInput =
@@ -574,13 +576,17 @@ AudioMixerWindow2::slotNumberOfSubmasters()
                 MappedObjectId oldMappedId = 0;
                 Buss *buss = studio.getBussById(oldInput);
                 if (buss) oldMappedId = buss->getMappedId();
-                int newChannel = 0;
-                int newInput = 0; // Master
+
+                // Input 1
+                const int newInput = 0;
+                const int newChannel = 0;
+
                 // Compute new mapped ID
                 MappedObjectId newMappedId = 0;
-                buss = studio.getBussById(newInput);
-                Q_ASSERT(buss != nullptr);
-                newMappedId = buss->getMappedId();
+                RecordIn *in = studio.getRecordIn(newInput);
+                Q_ASSERT(in != nullptr);
+                newMappedId = in->mappedId;
+
                 // Update the Studio
                 if (oldMappedId != 0) {
                     StudioControl::disconnectStudioObjects
@@ -589,21 +595,25 @@ AudioMixerWindow2::slotNumberOfSubmasters()
                     StudioControl::disconnectStudioObject
                         (inUse.instrument->getMappedId());
                 }
-                StudioControl::setStudioObjectProperty
-                    (inUse.instrument->getMappedId(),
-                     MappedAudioFader::InputChannel,
-                     MappedObjectValue(newChannel));
+
+                StudioControl::setStudioObjectProperty(
+                        inUse.instrument->getMappedId(),
+                        MappedAudioFader::InputChannel,
+                        MappedObjectValue(newChannel));
                 if (newMappedId != 0) {
                     // Connect the input to the instrument.
-                    StudioControl::connectStudioObjects
-                        (newMappedId, inUse.instrument->getMappedId());
+                    StudioControl::connectStudioObjects(
+                            newMappedId, inUse.instrument->getMappedId());
                 }
+
                 // Update the Instrument
-                inUse.instrument->setAudioInputToBuss(newInput, newChannel);
+                inUse.instrument->setAudioInputToRecord(newInput, newChannel);
 
             } else {
 
                 // submaster was being used as an output...
+
+                // Switch to "master".
 
                 // ??? AudioRouteMenu::slotEntrySelected() does almost the exact
                 //     same thing.  Factor that out into a routine this can use.
@@ -613,6 +623,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
                 BussId bussId = inUse.instrument->getAudioOutput();
                 Buss *oldBuss = studio.getBussById(bussId);
 
+                // master
                 Buss *newBuss = studio.getBussById(0);
                 Q_ASSERT(newBuss != nullptr);
 
@@ -633,6 +644,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
 
                 // Update the Instrument
 
+                // master
                 inUse.instrument->setAudioOutput(0);
             }
         }
