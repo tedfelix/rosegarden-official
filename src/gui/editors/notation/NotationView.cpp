@@ -4935,19 +4935,21 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
 
     timeT insertionTime = selection->getStartTime();
 
-    Clipboard *c = new Clipboard;
-    CopyCommand *cc = new CopyCommand(selection, c);
-    cc->execute();
+    // Temporary clipboard to hold the notes we are moving.
+    Clipboard clipboard;
 
+    // Use a temporary CopyCommand just to get the notes into the clipboard.
+    CopyCommand copyCommand(selection, &clipboard);
+    copyCommand.execute();
+
+    // Erase from the source.
     command->addCommand(new EraseCommand(selection));
 
-    command->addCommand(new PasteEventsCommand
-                        (*segment, c, insertionTime,
-                         type));
+    // Paste into the destination.
+    command->addCommand(new PasteEventsCommand(
+            *segment, &clipboard, insertionTime, type));
 
     CommandHistory::getInstance()->addCommand(command);
-
-    delete c;
 }
 
 void
