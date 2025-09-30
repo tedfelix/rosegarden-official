@@ -102,7 +102,7 @@ private:
 
     void setGroupProperties(Event *);
 
-    long convertRG21Pitch(long rg21pitch, int noteModifier);
+    long convertRG21Pitch(long rg21pitch, int noteModifier) const;
     static timeT convertRG21Duration(QStringList::Iterator&);
     typedef std::vector<std::string> StringVector;
     static StringVector convertRG21ChordMods(int chordMod);

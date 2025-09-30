@@ -204,7 +204,7 @@ protected:
 
     void readConfigVariables();
     bool isPercussionTrack(const Track *track);
-    bool exportTrack(Track *track);
+    bool exportTrack(const Track *track);
     void writeHeader(std::ostream &str);
     MusicXmlExportHelper* initalisePart(timeT compositionEndTime, int curTrackPos,
                             bool &exporting, bool &inMultiStaffGroup);

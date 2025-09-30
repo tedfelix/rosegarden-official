@@ -121,7 +121,7 @@ MusicXmlExporter::isPercussionTrack(const Track *track)
 }
 
 bool
-MusicXmlExporter::exportTrack(Track *track)
+MusicXmlExporter::exportTrack(const Track *track)
 {
     if (!track) return false;
     if (track->getInstrument() < MidiInstrumentBase) {
