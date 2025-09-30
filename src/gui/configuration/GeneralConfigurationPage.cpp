@@ -370,6 +370,21 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     ++row;
 
+    label = new QLabel(tr("Setup LV2 Environment"), frame);
+    tipText = tr(
+            "<qt><p>If set, set environment variables for lv2 plugins on gnome and wayland. In Rosegarden the environment variable XDG_SESSION_TYPE will be set to x11 on wayland displays and QT_QPA_PLATFORMTHEME will be set to gtk2 on non kde desktops. If you don't want this behaviour switch this item off</p></qt>");
+    label->setToolTip(tipText);
+    layout->addWidget(label, row, 0);
+    m_lv2Environment = new QCheckBox(frame);
+    m_lv2Environment->setToolTip(tipText);
+    m_lv2Environment->setChecked(Preferences::getLv2Environment());
+    connect(m_lv2Environment, &QCheckBox::stateChanged,
+            this, &GeneralConfigurationPage::slotModified);
+
+    layout->addWidget(m_lv2Environment, row, 1, 1, 2);
+
+    ++row;
+
     settings.beginGroup(GeneralOptionsConfigGroup);
 
     // Skip a row.  Leave some space for the next field.
@@ -697,6 +712,7 @@ void GeneralConfigurationPage::apply()
     Preferences::setAutoChannels(m_autoChannels->isChecked());
     Preferences::setLV2(m_lv2->isChecked());
     Preferences::setDynamicDrag(m_dynamicDrag->isChecked());
+    Preferences::setLv2Environment(m_lv2Environment->isChecked());
 
     // Presentation tab
 

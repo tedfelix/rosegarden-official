@@ -56,6 +56,7 @@
 #include <QPixmapCache>
 #include <QStringList>
 #include <QThread>
+#include <QStyleFactory>
 
 #include <sound/SoundDriverFactory.h>
 #include <sys/time.h>
@@ -383,6 +384,42 @@ static void convert(const QStringList &args)
 
 int main(int argc, char *argv[])
 {
+    QString organizationName("rosegardenmusic");
+    QString organizationDomain("rosegardenmusic.com");
+    QString applicationName("Rosegarden");
+
+    {
+        // on wayland and gnome there are some requirements for
+        // environment variables to avoid crashes when using lv2
+        // plugin UIs. These variables are set here. Use organization
+        // and application here as QApplication is not yet
+        // initialized.
+
+        QSettings settings(organizationName, applicationName);
+        settings.beginGroup(GeneralOptionsConfigGroup);
+        bool changeEnv = settings.value("Lv2Environment", true).toBool();
+        if (changeEnv) {
+            RG_DEBUG << "check and update lv2 environment variables";
+            QString st = QString(qgetenv("XDG_SESSION_TYPE"));
+            if (st == "wayland") {
+                RG_DEBUG << "set XDG_SESSION_TYPE to x11";
+                qputenv("XDG_SESSION_TYPE", "x11");
+            }
+            QString cd = QString(qgetenv("XDG_CURRENT_DESKTOP"));
+            if (cd != "KDE") {
+                RG_DEBUG << "set QT_QPA_PLATFORMTHEME to gtk2";
+                qputenv("QT_QPA_PLATFORMTHEME", "gtk2");
+            }
+        }
+
+#ifdef HAVE_GTK2
+        QStringList styles = QStyleFactory::keys();
+        RG_DEBUG << "styles:" << styles;
+        if (! styles.contains("gtk2")) {
+            RG_WARNING << QObject::tr("Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin");
+        }
+#endif
+    }
 
     // Initialization of static objects related to read and write of audio
     // files.
@@ -456,9 +493,9 @@ int main(int argc, char *argv[])
 
     RosegardenApplication theApp(argc, argv);
 
-    theApp.setOrganizationName("rosegardenmusic");
-    theApp.setOrganizationDomain("rosegardenmusic.com");
-    theApp.setApplicationName(QObject::tr("Rosegarden"));
+    theApp.setOrganizationName(organizationName);
+    theApp.setOrganizationDomain(organizationDomain);
+    theApp.setApplicationName(applicationName);
 
     // If Thorn was turned on in settings, but the user has specified a
     // style on the command line (obnoxious user!) then we must turn this option

@@ -270,6 +270,19 @@ bool Preferences::getDynamicDrag()
     return dynamicDrag.get();
 }
 
+static PreferenceBool lv2Environment(
+        GeneralOptionsConfigGroup, "Lv2Environment", true);
+
+void Preferences::setLv2Environment(bool value)
+{
+    lv2Environment.set(value);
+}
+
+bool Preferences::getLv2Environment()
+{
+    return lv2Environment.get();
+}
+
 static PreferenceBool autoChannels(
         ExperimentalConfigGroup, "autoChannels", false);
 
