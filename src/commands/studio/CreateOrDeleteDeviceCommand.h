@@ -39,43 +39,27 @@ class CreateOrDeleteDeviceCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::CreateOrDeleteDeviceCommand)
 
 public:
-    // Creation constructor
-    CreateOrDeleteDeviceCommand
-        (Studio *studio,
-         const std::string& name,
-         Device::DeviceType type,
-         MidiDevice::DeviceDirection direction,
-         const std::string& connection,
-         bool withData = false,
-         const std::string &librarianName = "",
-         const std::string &librarianEmail = "",
-         MidiDevice::VariationType variationType = MidiDevice::NoVariations,
-         const BankList& bankList = BankList(),
-         const ProgramList& programList = ProgramList(),
-         const ControlList& controlList = ControlList(),
-         const KeyMappingList& keyMappingList = KeyMappingList()
+    // Create
+    // ??? The way this is called, it is either the first five parameters, or
+    //     all the parameters extracted from a MidiDevice object.  Have two
+    //     ctors.  One that takes the five parameters and one that takes a
+    //     MidiDevice.
+    CreateOrDeleteDeviceCommand(
+            Studio *studio,
+            const std::string &name,
+            Device::DeviceType type,
+            MidiDevice::DeviceDirection direction,
+            const std::string &connection,
+            bool withData = false,
+            const std::string &librarianName = "",
+            const std::string &librarianEmail = "",
+            MidiDevice::VariationType variationType = MidiDevice::NoVariations,
+            const BankList &bankList = BankList(),
+            const ProgramList &programList = ProgramList(),
+            const ControlList &controlList = ControlList(),
+            const KeyMappingList &keyMappingList = KeyMappingList());
 
-         ) :
-    NamedCommand(getGlobalName(false)),
-        m_studio(studio),
-        m_deviceName(name),
-        m_type(type),
-        m_direction(direction),
-        m_connection(connection),
-        m_deviceId(Device::NO_DEVICE),
-        m_baseInstrumentId(MidiInstrumentBase),
-        m_deviceCreated(false),
-        m_withData(withData),
-        m_librarianName(librarianName),
-        m_librarianEmail(librarianEmail),
-        m_variationType(variationType),
-        m_bankList(bankList),
-        m_programList(programList),
-        m_controlList(controlList),
-        m_keyMappingList(keyMappingList)
-            { }
-
-    // Deletion constructor
+    // Delete
     CreateOrDeleteDeviceCommand(Studio *studio,
                                 DeviceId deviceId);
 
@@ -87,6 +71,7 @@ public:
     void unexecute() override  { execute(); }
 
 private:
+
     Studio *m_studio;
     std::string m_deviceName;
     Device::DeviceType m_type;
@@ -107,8 +92,8 @@ private:
     ProgramList m_programList;
     ControlList m_controlList;
     KeyMappingList m_keyMappingList;
-};
 
+};
 
 
 }

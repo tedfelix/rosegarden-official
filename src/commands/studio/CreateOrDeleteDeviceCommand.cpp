@@ -33,6 +33,41 @@
 namespace Rosegarden
 {
 
+
+CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(
+        Studio *studio,
+        const std::string &name,
+        Device::DeviceType type,
+        MidiDevice::DeviceDirection direction,
+        const std::string &connection,
+        bool withData,
+        const std::string &librarianName,
+        const std::string &librarianEmail,
+        MidiDevice::VariationType variationType,
+        const BankList &bankList,
+        const ProgramList &programList,
+        const ControlList &controlList,
+        const KeyMappingList &keyMappingList) :
+    NamedCommand(getGlobalName(false)),
+    m_studio(studio),
+    m_deviceName(name),
+    m_type(type),
+    m_direction(direction),
+    m_connection(connection),
+    m_deviceId(Device::NO_DEVICE),
+    m_baseInstrumentId(MidiInstrumentBase),
+    m_deviceCreated(false),
+    m_withData(withData),
+    m_librarianName(librarianName),
+    m_librarianEmail(librarianEmail),
+    m_variationType(variationType),
+    m_bankList(bankList),
+    m_programList(programList),
+    m_controlList(controlList),
+    m_keyMappingList(keyMappingList)
+{
+}
+
 CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
                                                          DeviceId deviceId) :
     NamedCommand(getGlobalName(true)),
@@ -82,8 +117,12 @@ CreateOrDeleteDeviceCommand::execute()
 
         m_deviceId = m_studio->getSpareDeviceId(m_baseInstrumentId);
 
-        bool success = RosegardenSequencer::getInstance()->
-            addDevice(m_type, m_deviceId, m_baseInstrumentId, m_direction);
+        bool success = RosegardenSequencer::getInstance()->addDevice(
+                m_type,
+                m_deviceId,
+                m_baseInstrumentId,
+                m_direction,
+                m_deviceName);
 
         if (!success) {
             RG_WARNING << "execute(): WARNING: addDevice() failed";

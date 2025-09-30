@@ -8134,21 +8134,20 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
                     ++di;
                 } else {
                     RG_DEBUG << "new device" << md->getName();
-                    command->addCommand(new CreateOrDeleteDeviceCommand
-                                        (&oldStudio,
-                                         md->getName(),
-                                         md->getType(),
-                                         md->getDirection(),
-                                         "",
-                                         true,
-                                         md->getLibrarianName(),
-                                         md->getLibrarianEmail(),
-                                         md->getVariationType(),
-                                         md->getBanks(),
-                                         md->getPrograms(),
-                                         md->getControlParameters(),
-                                         md->getKeyMappings()
-                                         ));
+                    command->addCommand(new CreateOrDeleteDeviceCommand(
+                            &oldStudio,
+                            md->getName(),
+                            md->getType(),
+                            md->getDirection(),
+                            "",  // connection
+                            true,  // withData
+                            md->getLibrarianName(),
+                            md->getLibrarianEmail(),
+                            md->getVariationType(),
+                            md->getBanks(),  // bankList
+                            md->getPrograms(),  // programList
+                            md->getControlParameters(),  // controlList
+                            md->getKeyMappings()));  // keyMappingList
                 }
             }
         }

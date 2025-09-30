@@ -31,6 +31,7 @@
 #include <QString>
 
 #include <deque>
+#include <string>
 
 
 namespace Rosegarden {
@@ -147,7 +148,8 @@ public:
     bool addDevice(Device::DeviceType type,
                    DeviceId id,
                    InstrumentId baseInstrumentId,
-                   MidiDevice::DeviceDirection direction);
+                   MidiDevice::DeviceDirection direction,
+                   const std::string &name);
 
     /// Remove the device of the given id.
     /**

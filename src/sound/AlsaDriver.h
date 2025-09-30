@@ -425,7 +425,8 @@ public:
     bool addDevice(Device::DeviceType type,
                            DeviceId deviceId,
                            InstrumentId baseInstrumentId,
-                           MidiDevice::DeviceDirection direction) override;
+                           MidiDevice::DeviceDirection direction,
+                           const std::string &name) override;
     void removeDevice(DeviceId id) override;
     void removeAllDevices() override;
     void renameDevice(DeviceId id, const QString& name) override;
@@ -517,7 +518,8 @@ protected:
 
     void addInstrumentsForDevice(MappedDevice *device, InstrumentId base);
     MappedDevice *createMidiDevice(DeviceId deviceId,
-                                   MidiDevice::DeviceDirection);
+                                   MidiDevice::DeviceDirection direction,
+                                   const std::string &name);
 
     /// Send MIDI out via ALSA.
     /**

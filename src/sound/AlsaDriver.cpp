@@ -808,15 +808,14 @@ AlsaDriver::generateFixedInstruments()
 
 MappedDevice *
 AlsaDriver::createMidiDevice(DeviceId deviceId,
-                             MidiDevice::DeviceDirection reqDirection)
+                             MidiDevice::DeviceDirection direction,
+                             const std::string &name)
 {
-    const char *deviceName = "unnamed";
-
-    if (reqDirection == MidiDevice::Play) {
+    if (direction == MidiDevice::Play) {
 
         const QString portName = QString("out %1 - %2").
                 arg(m_outputPorts.size() + 1).
-                arg(deviceName);
+                arg(name.c_str());
 
         const int outputPort = checkAlsaError(
                 snd_seq_create_simple_port(
@@ -834,10 +833,8 @@ AlsaDriver::createMidiDevice(DeviceId deviceId,
         }
     }
 
-    MappedDevice *device = new MappedDevice(deviceId,
-                                            Device::Midi,
-                                            deviceName);
-    device->setDirection(reqDirection);
+    MappedDevice *device = new MappedDevice(deviceId, Device::Midi, name);
+    device->setDirection(direction);
 
     return device;
 }
@@ -882,13 +879,14 @@ bool
 AlsaDriver::addDevice(Device::DeviceType type,
                       DeviceId deviceId,
                       InstrumentId baseInstrumentId,
-                      MidiDevice::DeviceDirection direction)
+                      MidiDevice::DeviceDirection direction,
+                      const std::string &name)
 {
     RG_DEBUG << "addDevice(" << type << "," << direction << ")";
 
     if (type == Device::Midi) {
 
-        MappedDevice *device = createMidiDevice(deviceId, direction);
+        MappedDevice *device = createMidiDevice(deviceId, direction, name);
         if (!device) {
             RG_WARNING << "addDevice(): WARNING: Device creation failed, type: " << type << " deviceId: " << deviceId << " baseInstrumentId: " << baseInstrumentId << " direction: " << direction;
         } else {

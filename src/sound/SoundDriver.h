@@ -94,7 +94,8 @@ public:
     virtual bool addDevice(Device::DeviceType,
                            DeviceId,
                            InstrumentId,
-                           MidiDevice::DeviceDirection)
+                           MidiDevice::DeviceDirection,
+                           const std::string & /*name*/)
         { return false; }
     virtual void removeDevice(DeviceId) { }
     virtual void removeAllDevices() { }

@@ -530,11 +530,12 @@ bool
 RosegardenSequencer::addDevice(Device::DeviceType type,
                                DeviceId id,
                                InstrumentId baseInstrumentId,
-                               MidiDevice::DeviceDirection direction)
+                               MidiDevice::DeviceDirection direction,
+                               const std::string &name)
 {
     LOCKED;
 
-    return m_driver->addDevice(type, id, baseInstrumentId, direction);
+    return m_driver->addDevice(type, id, baseInstrumentId, direction, name);
 }
 
 void

@@ -1418,12 +1418,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             if (m_createDevices  &&  m_device  &&  !connection.isEmpty())
                 setMIDIDeviceConnection(connection);
 
-            // ??? Getting warnings in the logging when we try to do this for
-            //     input devices (e.g. "record in").  Should we skip this when
-            //     direction == "record"?
-            if (m_createDevices)
-                setMIDIDeviceName(nameStr);
-
             QString vstr = atts.value("variation").toString().toLower();
             MidiDevice::VariationType variation =
                 MidiDevice::NoVariations;
@@ -2588,9 +2582,9 @@ RoseXmlHandler::setSubHandler(XmlSubHandler* sh)
 }
 
 void
-RoseXmlHandler::addMIDIDevice(const QString& name,
+RoseXmlHandler::addMIDIDevice(const QString &name,
                               bool createAtSequencer,
-                              const QString& dir)
+                              const QString &dir)
 {
     /**
     *   params:
@@ -2617,8 +2611,8 @@ RoseXmlHandler::addMIDIDevice(const QString& name,
     deviceId = getStudio().getSpareDeviceId(instrumentBase);
 
     if (createAtSequencer) {
-        if (!RosegardenSequencer::getInstance()->
-            addDevice(Device::Midi, deviceId, instrumentBase, devDir)) {
+        if (!RosegardenSequencer::getInstance()->addDevice(
+                Device::Midi, deviceId, instrumentBase, devDir, qstrtostr(name))) {
             RG_DEBUG << "addMIDIDevice() - sequencer addDevice failed";
             return;
         }
