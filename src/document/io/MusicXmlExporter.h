@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -130,7 +129,7 @@ public:
         program(0),
         unpitched(0)
       {};
-      MidiInstrument(Instrument * instrument, int pitch);
+      MidiInstrument(const Instrument * instrument, int pitch);
       int         channel;
       int         program;
       int         unpitched;
@@ -204,7 +203,7 @@ protected:
     RosegardenMainViewWidget *m_view;
 
     void readConfigVariables();
-    bool isPercussionTrack(Track *track);
+    bool isPercussionTrack(const Track *track);
     bool exportTrack(Track *track);
     void writeHeader(std::ostream &str);
     MusicXmlExportHelper* initalisePart(timeT compositionEndTime, int curTrackPos,

@@ -47,7 +47,7 @@ namespace Rosegarden
 using namespace BaseProperties;
 
 MusicXmlExporter::MidiInstrument::
-MidiInstrument(Instrument * instrument, int pitch) :
+MidiInstrument(const Instrument * instrument, int pitch) :
     channel(instrument->hasFixedChannel() ?
             (int(instrument->getNaturalMidiChannel()) + 1) :
             -1),
@@ -106,10 +106,10 @@ MusicXmlExporter::readConfigVariables()
 }
 
 bool
-MusicXmlExporter::isPercussionTrack(Track *track)
+MusicXmlExporter::isPercussionTrack(const Track *track)
 {
     bool percussion = false;
-    Instrument *instrument =  m_doc->getStudio().getInstrumentFor(track);
+    const Instrument *instrument =  m_doc->getStudio().getInstrumentFor(track);
     if (instrument) {
         percussion = instrument->isPercussion();
 
@@ -123,6 +123,7 @@ MusicXmlExporter::isPercussionTrack(Track *track)
 bool
 MusicXmlExporter::exportTrack(Track *track)
 {
+    if (!track) return false;
     if (track->getInstrument() < MidiInstrumentBase) {
         // Not a MIDI track!
         return false;
