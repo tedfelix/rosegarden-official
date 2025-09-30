@@ -14,7 +14,6 @@
 */
 
 #define RG_MODULE_STRING "[MidiFile]"
-// Turn off all debugging here.
 #define RG_NO_DEBUG_PRINT
 
 #include "MidiFile.h"
@@ -250,27 +249,26 @@ MidiFile::read(const QString &filename)
     clearMidiComposition();
 
     // Open the file
-    std::ifstream *midiFile =
-            new std::ifstream(filename.toLocal8Bit(),
-                              std::ios::in | std::ios::binary);
+    std::ifstream midiFile(filename.toLocal8Bit(),
+                           std::ios::in | std::ios::binary);
 
-    if (!(*midiFile)) {
+    if (!midiFile) {
         m_error = "File not found or not readable.";
         m_format = MIDI_FILE_NOT_LOADED;
         return false;
     }
 
     // Compute the file size so we can report progress.
-    midiFile->seekg(0, std::ios::end);
-    m_fileSize = midiFile->tellg();
-    midiFile->seekg(0, std::ios::beg);
+    midiFile.seekg(0, std::ios::end);
+    m_fileSize = midiFile.tellg();
+    midiFile.seekg(0, std::ios::beg);
 
     // The parsing process throws string exceptions back up here if we
     // run into trouble which we can then pass back out to whomever
     // called us using m_error and a nice bool.
     try {
         // Parse the MIDI header first.
-        parseHeader(midiFile);
+        parseHeader(&midiFile);
 
         // For each track chunk in the MIDI file.
         for (unsigned track = 0; track < m_numberOfTracks; ++track) {
@@ -278,12 +276,12 @@ MidiFile::read(const QString &filename)
             RG_DEBUG << "read(): Parsing MIDI file track " << track;
 
             // Skip any alien chunks.
-            findNextTrack(midiFile);
+            findNextTrack(&midiFile);
 
             RG_DEBUG << "read(): Track has " << m_trackByteCount << " bytes";
 
             // Read the track into m_midiComposition.
-            parseTrack(midiFile);
+            parseTrack(&midiFile);
         }
 
     } catch (const Exception &e) {
@@ -294,7 +292,7 @@ MidiFile::read(const QString &filename)
         return false;
     }
 
-    midiFile->close();
+    midiFile.close();
 
     return true;
 }
