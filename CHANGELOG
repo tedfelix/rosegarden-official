@@ -38,10 +38,14 @@ Included in this release...
     dialog.  Bug #1736.  [0d38af676e]
   * Fix sfizz plugin UI not visible.  Bug #1738.  [090f160bce]
     [f908ea2646]
-  * Fix intruments refering to invalid audio inputs and submasters.
-    Bug #1735.  [faa8e5186d]  [722d5a2c67]
+  * Fix instruments refering to invalid audio inputs and submasters.
+    Bug #1735.  [faa8e5186d] [722d5a2c67] [01b5e6d96f]
+  * Fix LV2 crashes due to environment variables.  Bug #1737.
+    [58a2e3d9fe]
+  * Fix new MIDI ports called "unnamed" rather than "New Device".
+    Bug #1710.  [2c18d18906]
 
-stopped at 682eb3681f
+stopped at 2c18d18906
 
 ===== New Features =====
 
