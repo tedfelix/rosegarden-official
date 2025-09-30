@@ -412,7 +412,7 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
         return;
 
     // Extract the number of inputs from the action name.
-    unsigned count = name.mid(7).toUInt();
+    const unsigned recordInCount = name.mid(7).toUInt();
 
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
@@ -420,19 +420,19 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
     // Check for instruments pointing to record inputs that are now invalid.
 
     const Studio::InvalidInstrumentVector invalidInstruments =
-                studio.getRecordInInvalid(count);
+                studio.getRecordInInvalid(recordInCount);
 
     // If we've got some instruments pointing to invalid inputs....
     if (invalidInstruments.size() > 0) {
         QString warnText = tr("The following instruments are using inputs you are removing:\n");
-        int count{0};
+        int lineCount{0};
         for (const Studio::InvalidInstrument &invalidInstrument :
              invalidInstruments) {
             warnText += tr("  %1 : input %2\n").
                     arg(invalidInstrument.instrument->getName().c_str()).
                     arg(invalidInstrument.id);
             // Limit the list.
-            if (++count == 30) {
+            if (++lineCount == 30) {
                 warnText += "  ...\n";
                 break;
             }
@@ -449,14 +449,11 @@ AudioMixerWindow2::slotNumberOfStereoInputs()
             return;
         }
 
-        // For each instrument with a now invalid input, set it to input 1.
-        for (const Studio::InvalidInstrument &invalidInstrument :
-             invalidInstruments) {
-            studio.setInput(invalidInstrument.instrument, false, 0, 0);
-        }
+        studio.fixRecordIns(recordInCount);
+
     }
 
-    studio.setRecordInCount(count);
+    studio.setRecordInCount(recordInCount);
 
     // Set the mapped IDs for the RecordIns.
     // ??? Overkill?  Can we do better?
@@ -481,7 +478,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
         return;
 
     // Extract the count from the name.
-    int count = name.mid(11).toInt();
+    const int submasterCount = name.mid(11).toInt();
 
     // check for submasters in use
 
@@ -489,11 +486,11 @@ AudioMixerWindow2::slotNumberOfSubmasters()
     Studio &studio = doc->getStudio();
 
     const Studio::InvalidInstrumentVector invalidInstruments =
-            studio.getSubmasterInvalid(count);
+            studio.getSubmasterInvalid(submasterCount);
     if (invalidInstruments.size() > 0) {
         QString warnText =
             tr("The following instruments are using submasters you are removing:\n");
-        int count{0};
+        int lineCount{0};
         for (const Studio::InvalidInstrument &invalidInstrument :
              invalidInstruments) {
             std::string iname = invalidInstrument.instrument->getName();
@@ -501,7 +498,7 @@ AudioMixerWindow2::slotNumberOfSubmasters()
                     arg(QString(iname.c_str())).
                     arg(invalidInstrument.id);
             // Limit the list.
-            if (++count == 30) {
+            if (++lineCount == 30) {
                 warnText += "  ...\n";
                 break;
             }
@@ -518,30 +515,12 @@ AudioMixerWindow2::slotNumberOfSubmasters()
             return;
         }
 
-        // For each instrument with a now invalid submaster...
-        for (const Studio::InvalidInstrument &invalidInstrument :
-             invalidInstruments) {
-
-            // If the submaster was being used as an input...
-            if (invalidInstrument.isInput) {
-
-                // Switch to "input 1" instead of "master" to avoid feedback
-                // loops.
-                studio.setInput(invalidInstrument.instrument, false, 0, 0);
-
-            } else {
-
-                // submaster was being used as an output...
-                // Switch to "master".
-                studio.setOutput(invalidInstrument.instrument, 0);
-
-            }
-        }
+        studio.fixSubmasters(submasterCount);
 
     }
 
     // Add one for the master buss.
-    studio.setBussCount(count + 1);
+    studio.setBussCount(submasterCount + 1);
 
     doc->initialiseStudio();
 

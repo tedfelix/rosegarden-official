@@ -1145,5 +1145,45 @@ Studio::setOutput(Instrument *instrument, int bussID) const
     instrument->setAudioOutput(bussID);
 }
 
+void
+Studio::fixRecordIns(int count)
+{
+    InvalidInstrumentVector invalidInstruments =
+            getRecordInInvalid(count);
+
+    // For each instrument with an invalid input, set it to input 1.
+    for (const Studio::InvalidInstrument &invalidInstrument :
+         invalidInstruments) {
+        setInput(invalidInstrument.instrument, false, 0, 0);
+    }
+}
+
+void
+Studio::fixSubmasters(int count)
+{
+    InvalidInstrumentVector invalidInstruments =
+            getSubmasterInvalid(count);
+
+    // For each instrument with an invalid submaster...
+    for (const Studio::InvalidInstrument &invalidInstrument :
+         invalidInstruments) {
+
+        // If the submaster was being used as an input...
+        if (invalidInstrument.isInput) {
+
+            // Switch to "input 1" instead of "master" to avoid feedback
+            // loops.
+            setInput(invalidInstrument.instrument, false, 0, 0);
+
+        } else {
+
+            // submaster was being used as an output...
+            // Switch to "master".
+            setOutput(invalidInstrument.instrument, 0);
+
+        }
+    }
+}
+
 
 }
