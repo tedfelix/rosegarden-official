@@ -136,8 +136,9 @@ public:
     /// Sets invalid submasters to "input 1" for inputs and "master" for outputs..
     void fixSubmasters(int count);
 
-    // Return a Buss
-    BussVector getBusses() const;
+    // Busses
+    BussVector getBusses() const  { return m_busses; }
+    size_t getNumberOfBusses() const  { return m_busses.size(); }
     Buss *getBussById(BussId id) const;
     void addBuss(Buss *buss);
     //void removeBuss(BussId id);
@@ -146,7 +147,9 @@ public:
     // Return an Instrument or a Buss
     PluginContainer *getContainerById(InstrumentId id);
 
+    // Record Ins
     RecordInVector getRecordIns() const  { return m_recordIns; }
+    size_t getNumberOfRecordIns() const  { return m_recordIns.size(); }
     RecordIn *getRecordIn(int number) const;
     void addRecordIn(RecordIn *ri) { m_recordIns.push_back(ri); }
     void setRecordInCount(unsigned newRecordInCount);

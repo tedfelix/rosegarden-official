@@ -344,12 +344,6 @@ Studio::getInstrumentFor(const Track *track) const
     return getInstrumentById(iid);
 }
 
-BussVector
-Studio::getBusses() const
-{
-    return m_busses;
-}
-
 Buss *
 Studio::getBussById(BussId id) const
 {

@@ -1666,126 +1666,141 @@ RosegardenDocument::xmlParse(const QString &fileContents,
     bool ok = reader.parse(fileContents);
 
     if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
-        QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
+        QMessageBox::information(dynamic_cast<QWidget *>(parent()),
+                                 tr("Rosegarden"),
+                                 tr("File load cancelled"));
         cancelled = true;
+
+        // No parse failure as far as we know.
         return true;
     }
 
+    // Parsing failed?
     if (!ok) {
-
-#if 0
-        if (m_progressDialog  &&  m_progressDialog->wasCanceled()) {
-            RG_DEBUG << "File load cancelled";
-            StartupLogo::hideIfStillThere();
-            QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("File load cancelled"));
-            cancelled = true;
-            return true;
-        } else {
-#endif
-            errMsg = handler.errorString();
-#if 0
-        }
-#endif
-
-    } else {
-
-        if (getSequenceManager() &&
-            !(getSequenceManager()->getSoundDriverStatus() & AUDIO_OK)) {
-
-            StartupLogo::hideIfStillThere();
-
-            if (handler.hasActiveAudio() ||
-                (m_pluginManager && !handler.pluginsNotFound().empty())) {
-
-#ifdef HAVE_LIBJACK
-                QMessageBox::information
-                    (dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
-#else
-                QMessageBox::information
-                    (dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
-#endif
-            }
-
-        } else {
-
-            bool shownWarning = false;
-
-            int sr = 0;
-            if (getSequenceManager()) {
-                sr = getSequenceManager()->getSampleRate();
-            }
-
-            int er = m_audioFileManager.getExpectedSampleRate();
-
-            std::set<int> rates = m_audioFileManager.getActualSampleRates();
-            bool other = false;
-            bool mixed = (rates.size() > 1);
-            for (std::set<int>::iterator i = rates.begin();
-                 i != rates.end(); ++i) {
-                if (*i != sr) {
-                    other = true;
-                    break;
-                }
-            }
-
-            if (sr != 0 &&
-                handler.hasActiveAudio() &&
-                ((er != 0 && er != sr) ||
-                 (other && !mixed))) {
-
-                if (er == 0) er = *rates.begin();
-
-                StartupLogo::hideIfStillThere();
-
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
-
-                shownWarning = true;
-
-            } else if (sr != 0 && mixed) {
-
-                StartupLogo::hideIfStillThere();
-
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr));
-
-                shownWarning = true;
-            }
-
-            if (m_pluginManager && !handler.pluginsNotFound().empty()) {
-
-                // We only warn if a plugin manager is present, so as
-                // to avoid warnings when importing a studio from
-                // another file (which is the normal case in which we
-                // have no plugin manager).
-
-                QString msg(tr("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
-
-                // For each plugin that wasn't found...
-                for (const QString &ident : handler.pluginsNotFound()) {
-                    msg += QString("<li>%1</li>").arg(ident);
-                }
-                msg += "</ul>";
-
-                StartupLogo::hideIfStillThere();
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-                shownWarning = true;
-
-            }
-
-            if (handler.isDeprecated() && !shownWarning) {
-
-                QString msg(tr("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
-                slotDocumentModified(); // so file can be re-saved immediately
-
-                StartupLogo::hideIfStillThere();
-                QMessageBox::information(dynamic_cast<QWidget *>(parent()), tr("Rosegarden"), msg);
-            }
-
-        }
-
-        getComposition().resetLinkedSegmentRefreshStatuses();
+        errMsg = handler.errorString();
+        return false;
     }
 
-    return ok;
+    // Parse was OK.
+    // Do some post-processing.
+
+    // Clean up connections if needed.
+    Studio &studio = getStudio();
+    studio.fixRecordIns(studio.getNumberOfRecordIns());
+    studio.fixSubmasters(studio.getNumberOfBusses());
+
+    // If audio is NOT OK...
+    if (getSequenceManager() &&
+        !(getSequenceManager()->getSoundDriverStatus() & AUDIO_OK)) {
+
+        StartupLogo::hideIfStillThere();
+
+        if (handler.hasActiveAudio() ||
+            (m_pluginManager && !handler.pluginsNotFound().empty())) {
+
+#ifdef HAVE_LIBJACK
+            QMessageBox::information(
+                    dynamic_cast<QWidget *>(parent()),
+                    tr("Rosegarden"),
+                    tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.</p><p>Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.</p><p><b>WARNING:</b> If you re-save this composition, all audio and plugin data and settings in it will be lost.</p>"));
+#else
+            QMessageBox::information(
+                    dynamic_cast<QWidget *>(parent()),
+                    tr("Rosegarden"),
+                    tr("<h3>Audio and plugins not available</h3><p>This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.</p><p><b>WARNING:</b> If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.</p>"));
+#endif
+        }
+
+    } else {  // Audio is OK.
+
+        bool shownWarning = false;
+
+        int sr = 0;
+        if (getSequenceManager()) {
+            sr = getSequenceManager()->getSampleRate();
+        }
+
+        int er = m_audioFileManager.getExpectedSampleRate();
+
+        std::set<int> rates = m_audioFileManager.getActualSampleRates();
+        bool other = false;
+        bool mixed = (rates.size() > 1);
+        for (std::set<int>::iterator i = rates.begin();
+             i != rates.end(); ++i) {
+            if (*i != sr) {
+                other = true;
+                break;
+            }
+        }
+
+        if (sr != 0 &&
+            handler.hasActiveAudio() &&
+            ((er != 0 && er != sr) ||
+             (other && !mixed))) {
+
+            if (er == 0) er = *rates.begin();
+
+            StartupLogo::hideIfStillThere();
+
+            QMessageBox::information(
+                    dynamic_cast<QWidget *>(parent()),
+                    tr("Rosegarden"),
+                    tr("<h3>Incorrect audio sample rate</h3><p>This composition contains audio files that were recorded or imported with the audio server running at a different sample rate (%1 Hz) from the current JACK server sample rate (%2 Hz).</p><p>Rosegarden will play this composition at the correct speed, but any audio files in it will probably sound awful.</p><p>Please consider re-starting the JACK server at the correct rate (%3 Hz) and re-loading this composition before you do any more work with it.</p>").arg(er).arg(sr).arg(er));
+
+            shownWarning = true;
+
+        } else if (sr != 0 && mixed) {
+
+            StartupLogo::hideIfStillThere();
+
+            QMessageBox::information(
+                    dynamic_cast<QWidget *>(parent()),
+                    tr("Rosegarden"),
+                    tr("<h3>Inconsistent audio sample rates</h3><p>This composition contains audio files at more than one sample rate.</p><p>Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.</p><p>Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.</p>").arg(sr));
+
+            shownWarning = true;
+        }
+
+        if (m_pluginManager && !handler.pluginsNotFound().empty()) {
+
+            // We only warn if a plugin manager is present, so as
+            // to avoid warnings when importing a studio from
+            // another file (which is the normal case in which we
+            // have no plugin manager).
+
+            QString msg(tr("<h3>Plugins not found</h3><p>The following audio plugins could not be loaded:</p><ul>"));
+
+            // For each plugin that wasn't found...
+            for (const QString &ident : handler.pluginsNotFound()) {
+                msg += QString("<li>%1</li>").arg(ident);
+            }
+            msg += "</ul>";
+
+            StartupLogo::hideIfStillThere();
+            QMessageBox::information(dynamic_cast<QWidget *>(parent()),
+                                     tr("Rosegarden"),
+                                     msg);
+            shownWarning = true;
+
+        }
+
+        if (handler.isDeprecated() && !shownWarning) {
+
+            QString msg(tr("This file contains one or more old element types that are now deprecated.\nSupport for these elements may disappear in future versions of Rosegarden.\nWe recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions."));
+            slotDocumentModified(); // so file can be re-saved immediately
+
+            StartupLogo::hideIfStillThere();
+            QMessageBox::information(dynamic_cast<QWidget *>(parent()),
+                                     tr("Rosegarden"),
+                                     msg);
+        }
+
+    }
+
+    getComposition().resetLinkedSegmentRefreshStatuses();
+
+    // Parsing was successful.
+    return true;
 }
 
 void
