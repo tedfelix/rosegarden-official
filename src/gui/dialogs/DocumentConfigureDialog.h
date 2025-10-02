@@ -35,8 +35,8 @@ class DocumentConfigureDialog : public ConfigureDialogBase
 {
     Q_OBJECT
 public:
-    DocumentConfigureDialog(QWidget *parent,
-                            const char *name = nullptr);
+    explicit DocumentConfigureDialog(QWidget *parent,
+                                     const char *name = nullptr);
 
     void showAudioPage();
 
