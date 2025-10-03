@@ -218,30 +218,30 @@ void RosegardenScrollView::scrollHoriz(int x)
 {
     QScrollBar *hbar = horizontalScrollBar();
 
-    const int contentsX = hbar->value();
+    const int contentsX2 = hbar->value();
 
     if (x == 0) {
 
         hbar->setValue(0);
 
-    } else if (x > (contentsX + viewport()->width() * 1.6)  ||
-               x < (contentsX - viewport()->width() * 0.7)) {
+    } else if (x > (contentsX2 + viewport()->width() * 1.6)  ||
+               x < (contentsX2 - viewport()->width() * 0.7)) {
         // The requested x is relatively far away.
 
         // Put it slightly to the left of center.
         hbar->setValue(x - int(viewport()->width() * 0.4));
 
-    } else if (x > (contentsX + viewport()->width() * 0.9)) {
+    } else if (x > (contentsX2 + viewport()->width() * 0.9)) {
         // The requested x is slightly off to the right.
 
         // Go right a little more than half of a page.
-        hbar->setValue(contentsX + int(viewport()->width() * 0.6));
+        hbar->setValue(contentsX2 + int(viewport()->width() * 0.6));
 
-    } else if (x < (contentsX + viewport()->width() * 0.1)) {
+    } else if (x < (contentsX2 + viewport()->width() * 0.1)) {
         // The requested x is slightly off to the left.
 
         // Go left a little more than half of a page.
-        hbar->setValue(contentsX - int(viewport()->width() * 0.6));
+        hbar->setValue(contentsX2 - int(viewport()->width() * 0.6));
     }
 }
 

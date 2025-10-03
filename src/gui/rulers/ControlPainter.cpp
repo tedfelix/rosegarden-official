@@ -58,22 +58,22 @@ ControlPainter::ControlPainter(ControlRuler *parent) :
 void
 ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
 {
-    ControllerEventsRuler *ruler =
+    ControllerEventsRuler *ruler1 =
         static_cast <ControllerEventsRuler*> (m_ruler);
-    float xmin, xmax;
-    ruler->getLimits(xmin, xmax);
-    RG_DEBUG << "handleLeftButtonPress limits" << xmin << xmax << e->x <<
+    float xmin1, xmax1;
+    ruler1->getLimits(xmin1, xmax1);
+    RG_DEBUG << "handleLeftButtonPress limits" << xmin1 << xmax1 << e->x <<
         e->snappedXLeft << e->snappedXRight;
     if ((e->x - e->snappedXLeft) > (e->snappedXRight - e->x)) { // using right
-        if (e->snappedXRight < xmin || e->snappedXRight >= xmax) return;
+        if (e->snappedXRight < xmin1 || e->snappedXRight >= xmax1) return;
     } else { // using left
-        if (e->snappedXLeft < xmin || e->snappedXLeft >= xmax) return;
+        if (e->snappedXLeft < xmin1 || e->snappedXLeft >= xmax1) return;
     }
     if (e->itemList.size()) {
         ControlItemVector::const_iterator it = e->itemList.begin();
-        ruler->clearSelectedItems();
-        ruler->addToSelection(*it);
-        ruler->eraseControllerEvent();
+        ruler1->clearSelectedItems();
+        ruler1->addToSelection(*it);
+        ruler1->eraseControllerEvent();
 
         m_ruler->setCursor(Qt::CrossCursor);
     }

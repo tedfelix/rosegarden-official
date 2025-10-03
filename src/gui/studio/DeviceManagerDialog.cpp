@@ -738,16 +738,16 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
 
     // create a list of all listed portNames
     int cnt = treeWid->topLevelItemCount();
-    int i = 0;
-    while (i < cnt) {
-        twItem = treeWid->topLevelItem(i);
+    int itemIndex = 0;
+    while (itemIndex < cnt) {
+        twItem = treeWid->topLevelItem(itemIndex);
 
         portName = twItem->text(0);
 
         if (!portNamesAvail.contains(portName)) {
             // port disappeared, remove entry
 
-            twItem = treeWid->takeTopLevelItem(i); // remove list entry
+            twItem = treeWid->takeTopLevelItem(itemIndex); // remove list entry
             //
             delete(twItem);
             cnt = treeWid->topLevelItemCount(); // update count
@@ -756,7 +756,7 @@ DeviceManagerDialog::updatePortsList(QTreeWidget * treeWid,
 
         portNamesListed << portName;    // append to list
         //
-        i += 1;
+        itemIndex += 1;
     }
 
     portNamesAvail << m_noPortName; // add nullPort

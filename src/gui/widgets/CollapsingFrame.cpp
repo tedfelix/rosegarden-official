@@ -63,9 +63,9 @@ CollapsingFrame::CollapsingFrame(
     m_toggleButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     m_toggleButton->setAutoRaise(true);
 
-    QFont font(m_toggleButton->font());
-    font.setBold(true);
-    m_toggleButton->setFont(font);
+    QFont font2(m_toggleButton->font());
+    font2.setBold(true);
+    m_toggleButton->setFont(font2);
 
     m_toggleButton->setIcon(IconLoader::load("style/arrow-down-small-inverted"));
 

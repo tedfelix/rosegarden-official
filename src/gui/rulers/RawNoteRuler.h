@@ -122,7 +122,7 @@ private:
                                         EventTreeNode *parentNode);
 
     void drawNode(QPainter &painter,
-                  const EventTreeNode *node,
+                  const EventTreeNode *i_node,
                   double height,
                   double yorigin);
 

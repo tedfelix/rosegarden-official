@@ -66,13 +66,13 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
         m_ruler->setCursor(Qt::BlankCursor);
 
         bool activeFound = false;
-        ControlItemVector::const_iterator it = e->itemList.begin();
-        while (it != e->itemList.end()) {
-            if ((*it)->active()) {
+        ControlItemVector::const_iterator controlItemIter1 = e->itemList.begin();
+        while (controlItemIter1 != e->itemList.end()) {
+            if ((*controlItemIter1)->active()) {
                 activeFound = true;
                 break;
             }
-            it++;
+            controlItemIter1++;
         }
         if (! activeFound) {
             if (!(e->modifiers & (Qt::ShiftModifier))) {
@@ -82,16 +82,16 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
             return;
         }
 
-        if ((*it)->isSelected()) {
+        if ((*controlItemIter1)->isSelected()) {
             if (e->modifiers & (Qt::ShiftModifier))
-                m_ruler->removeFromSelection(*it);
+                m_ruler->removeFromSelection(*controlItemIter1);
         } else {
             if (!(e->modifiers & (Qt::ShiftModifier))) {
                 // No add to selection modifiers so clear the current selection
                 m_ruler->clearSelectedItems();
             }
 
-            m_ruler->addToSelection(*it);
+            m_ruler->addToSelection(*controlItemIter1);
         }
 
         m_startPointList.clear();

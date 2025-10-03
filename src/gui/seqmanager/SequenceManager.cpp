@@ -682,28 +682,28 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
     // For each event
     for (i = mC.begin(); i != mC.end(); ++i) {
 
-        const MappedEvent *event = (*i);
+        const MappedEvent *event2 = (*i);
 
         // Bank Select
 
         // ??? This *requires* that BS and PC come in together.  Is there a
         //     guarantee that they will come in together?
 
-        if (event->getType() == MappedEvent::MidiController) {
-            int controlNumber = event->getData1();
+        if (event2->getType() == MappedEvent::MidiController) {
+            int controlNumber = event2->getData1();
 
             // If Bank Select LSB
             if (controlNumber == 32) {
-                bankLSB = event->getData2();
+                bankLSB = event2->getData2();
             } else if (controlNumber == 0) {  // Bank Select MSB
-                bankMSB = event->getData2();
+                bankMSB = event2->getData2();
             }
         }
 
         // Program Change
 
-        if (event->getType() == MappedEvent::MidiProgramChange) {
-            int programChange = event->getData1();
+        if (event2->getType() == MappedEvent::MidiProgramChange) {
+            int programChange = event2->getData1();
 
             // Send to MIPP.  If "Receive external" is checked, the MIPP
             // will update to show this bank and program.
@@ -1435,12 +1435,12 @@ void SequenceManager::refresh()
     }
 #endif
 
-    std::vector<Segment*>::iterator i;
+    std::vector<Segment*>::iterator segmentIter1;
 
     // Removed Segments
 
-    for (i = m_removedSegments.begin(); i != m_removedSegments.end(); ++i) {
-        segmentDeleted(*i);
+    for (segmentIter1 = m_removedSegments.begin(); segmentIter1 != m_removedSegments.end(); ++segmentIter1) {
+        segmentDeleted(*segmentIter1);
     }
     m_removedSegments.clear();
 
@@ -1460,8 +1460,8 @@ void SequenceManager::refresh()
 
     // Added Segments
 
-    for (i = m_addedSegments.begin(); i != m_addedSegments.end(); ++i) {
-        segmentAdded(*i);
+    for (segmentIter1 = m_addedSegments.begin(); segmentIter1 != m_addedSegments.end(); ++segmentIter1) {
+        segmentAdded(*segmentIter1);
     }
     m_addedSegments.clear();
 }

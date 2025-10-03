@@ -187,12 +187,12 @@ void SynthPluginManagerDialog:: setupGuiCreatePluginList(){
         m_scrollWidgetLayout->addWidget ( new QLabel ( QString ( "%1" ).arg ( i + 1 ),
                                                        m_scrollWidget ), i, 0 );
 
-        AudioPluginInstance *plugin = instrument->getPlugin
+        AudioPluginInstance *pluginInstance = instrument->getPlugin
             ( Instrument::SYNTH_PLUGIN_POSITION );
 
         std::string identifier;
-        if ( plugin )
-            identifier = plugin->getIdentifier();
+        if ( pluginInstance )
+            identifier = pluginInstance->getIdentifier();
 
         // int currentIndex = 0;
 

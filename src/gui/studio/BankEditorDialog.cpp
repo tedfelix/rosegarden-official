@@ -321,7 +321,7 @@ BankEditorDialog::updateDialog()
     //       cleared it.  That's very helpful.
     m_treeWidget->clear();
 
-    MidiDeviceTreeWidgetItem *selectDeviceItem{nullptr};
+    MidiDeviceTreeWidgetItem *selectDeviceItem2{nullptr};
 
     DeviceVector *devices = m_studio->getDevices();
 
@@ -359,7 +359,7 @@ BankEditorDialog::updateDialog()
         // Is this the parent Device item of the selected item?
         // Save it if so.
         if (deviceItem->getDevice() == parentDevice)
-            selectDeviceItem = deviceItem;
+            selectDeviceItem2 = deviceItem;
     }
 
     m_treeWidget->blockSignals(false);
@@ -373,22 +373,22 @@ BankEditorDialog::updateDialog()
         return;
 
     // Device is gone?  No selection.
-    if (!selectDeviceItem)
+    if (!selectDeviceItem2)
         return;
 
     // The device itself is selected?
     if (selectedType == SelectedType::DEVICE) {
-        m_treeWidget->setCurrentItem(selectDeviceItem);
+        m_treeWidget->setCurrentItem(selectDeviceItem2);
         return;
     }
 
     // Bank or Keymap?
     if (selectedType == SelectedType::BANK  ||
         selectedType == SelectedType::KEYMAP) {
-        int childCount = selectDeviceItem->childCount();
+        int childCount = selectDeviceItem2->childCount();
         // For each child (bank and key map) of the selected Device item...
         for (int i=0; i < childCount; ++i) {
-            QTreeWidgetItem *childItem = selectDeviceItem->child(i);
+            QTreeWidgetItem *childItem = selectDeviceItem2->child(i);
 
             // ??? This is polymorphism like above.  Express this in the
             //     class hierarchy so we can reduce this to a single "if":
@@ -419,10 +419,10 @@ BankEditorDialog::updateDialog()
             }
         }
 
-        RG_DEBUG << "updateDialog() punting, going with device" << selectDeviceItem->getName();
+        RG_DEBUG << "updateDialog() punting, going with device" << selectDeviceItem2->getName();
 
         // No suitable child item found - select device.
-        m_treeWidget->setCurrentItem(selectDeviceItem);
+        m_treeWidget->setCurrentItem(selectDeviceItem2);
     }
 }
 

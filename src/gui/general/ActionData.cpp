@@ -187,9 +187,9 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
         ddatak.editActionText = etextAdj;
         ddatak.editContext = m_contextMap.at(efile);
         std::set<QKeySequence> newKS;
-        KeyList shortcuts = getShortcuts(key);
+        KeyList shortcuts1 = getShortcuts(key);
         std::set<QKeySequence> oldKS;
-        for (auto& val : shortcuts) {
+        for (auto& val : shortcuts1) {
             oldKS.insert(val);
         }
 
@@ -217,8 +217,8 @@ void ActionData::getDuplicateShortcuts(const std::set<QString>& keys,
                 const ActionInfo& mainfo = m_actionMap.at(mkey);
                 // ignore passed key
                 if (mkey == key) continue;
-                QStringList mklist = mkey.split(":");
-                QString mcontext = m_contextMap.at(mklist[0]);
+                QStringList mklist1 = mkey.split(":");
+                QString mcontext = m_contextMap.at(mklist1[0]);
                 bool contextRelevant;
                 if (sameContext) {
                     contextRelevant = (mcontext == ddatak.editContext);
@@ -697,9 +697,9 @@ void ActionData::fillModel()
     m_model->setHeaderData(7, Qt::Horizontal, QObject::tr("Shortcut 4"));
 
     QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
-    for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
-        const QString& key = (*i).first;
-        const ActionInfo& ainfo = (*i).second;
+    for (auto actionIter = m_actionMap.begin(); actionIter != m_actionMap.end(); actionIter++) {
+        const QString& key = (*actionIter).first;
+        const ActionInfo& ainfo = (*actionIter).second;
         QString textAdj = ainfo.text;
         QStringList klist = key.split(":");
         QString file = klist[0];
@@ -781,9 +781,9 @@ void ActionData::updateModel(const QString& changedKey)
     QPixmap udPixmap = QPixmap(IconLoader::loadPixmap("button-record"));
     QPixmap noPixmap;
     int row = m_model->rowCount() - 1;
-    for (auto i = m_actionMap.begin(); i != m_actionMap.end(); i++) {
-        const QString& key = (*i).first;
-        const ActionInfo& ainfo = (*i).second;
+    for (auto actionIter = m_actionMap.begin(); actionIter != m_actionMap.end(); actionIter++) {
+        const QString& key = (*actionIter).first;
+        const ActionInfo& ainfo = (*actionIter).second;
 
         if (key == changedKey || changedKey == "") {
             auto usiter = m_userShortcuts.find(key);

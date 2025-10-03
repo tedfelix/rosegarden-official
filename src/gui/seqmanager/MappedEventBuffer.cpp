@@ -51,12 +51,12 @@ MappedEventBuffer::~MappedEventBuffer()
 void
 MappedEventBuffer::init()
 {
-    int size = calculateSize();
+    int size2 = calculateSize();
 
-    if (size > 0) {
-        reserve(size);
+    if (size2 > 0) {
+        reserve(size2);
 
-        //RG_DEBUG << "init() : size = " << size;
+        //RG_DEBUG << "init() : size = " << size2;
 
         fillBuffer();
     } else {

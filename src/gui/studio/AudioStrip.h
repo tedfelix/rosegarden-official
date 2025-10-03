@@ -82,7 +82,7 @@ signals:
 private slots:
     void slotLabelClicked();
     void slotFaderLevelChanged(float dB);
-    void slotPanChanged(float pan);
+    void slotPanChanged(float i_pan);
     void slotChannelsChanged();
     void slotSelectPlugin();
 

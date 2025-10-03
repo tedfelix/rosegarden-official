@@ -583,7 +583,7 @@ AudioStrip::slotFaderLevelChanged(float dB)
 }
 
 void
-AudioStrip::slotPanChanged(float pan)
+AudioStrip::slotPanChanged(float i_pan)
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     Studio &studio = doc->getStudio();
@@ -595,7 +595,7 @@ AudioStrip::slotPanChanged(float pan)
         if (!instrument)
             return;
 
-        instrument->setPan(MidiByte(lround(pan + 100.0)));
+        instrument->setPan(MidiByte(lround(i_pan + 100.0)));
         Instrument::emitControlChange(instrument, MIDI_CONTROLLER_PAN);
         doc->setModified();
 
@@ -630,9 +630,9 @@ AudioStrip::slotPanChanged(float pan)
         StudioControl::setStudioObjectProperty(
                 MappedObjectId(busses[m_id]->getMappedId()),
                 MappedAudioBuss::Pan,
-                MappedObjectValue(pan));
+                MappedObjectValue(i_pan));
 
-        busses[m_id]->setPan(MidiByte(pan + 100.0));
+        busses[m_id]->setPan(MidiByte(i_pan + 100.0));
 
         return;
 

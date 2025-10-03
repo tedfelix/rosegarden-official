@@ -210,7 +210,7 @@ ControlEditorDialog::slotUpdate(bool added)
         return ;
 
     ControlList::const_iterator it = md->beginControllers();
-    ControlParameterItem *item = nullptr;
+    ControlParameterItem *controlParameterItem = nullptr;
     int i = 0;
 
     // Attempt to track last controller selected so we can reselect it
@@ -242,7 +242,7 @@ ControlEditorDialog::slotUpdate(bool added)
         if (it->getType() == PitchBend::EventType ||
             it->getType() == KeyPressure::EventType ||
             it->getType() == ChannelPressure::EventType) {
-            item = new ControlParameterItem(
+            controlParameterItem = new ControlParameterItem(
                                             i++,
                                             m_treeWidget,
                                             QStringList()
@@ -257,7 +257,7 @@ ControlEditorDialog::slotUpdate(bool added)
                                                 << position
                                           );
         } else {
-            item = new ControlParameterItem(
+            controlParameterItem = new ControlParameterItem(
                             i++,
                             m_treeWidget,
                             QStringList()
@@ -273,8 +273,8 @@ ControlEditorDialog::slotUpdate(bool added)
                            );
         }
 
-        if (item->getId() == lastControllerId) {
-            m_treeWidget->setCurrentItem(item);
+        if (controlParameterItem->getId() == lastControllerId) {
+            m_treeWidget->setCurrentItem(controlParameterItem);
         }
 
 
@@ -284,9 +284,9 @@ ControlEditorDialog::slotUpdate(bool added)
         QColor c = comp.getGeneralColourMap().getColour(it->getColourIndex());
         colourPixmap.fill(QColor(c.red(), c.green(), c.blue()));
 
-        item->setIcon(7, QIcon(colourPixmap));
+        controlParameterItem->setIcon(7, QIcon(colourPixmap));
 
-        m_treeWidget->addTopLevelItem(item);
+        m_treeWidget->addTopLevelItem(controlParameterItem);
     }
 
     if(m_treeWidget->topLevelItemCount() == 0) {
@@ -321,8 +321,8 @@ ControlEditorDialog::slotUpdate(bool added)
     //
     if (added) {
         RG_DEBUG << "ControlEditorDialog: detected new item entered; launching editor";
-        m_treeWidget->setCurrentItem(item);
-        slotEdit(item, 0);
+        m_treeWidget->setCurrentItem(controlParameterItem);
+        slotEdit(controlParameterItem, 0);
     }
 }
 

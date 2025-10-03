@@ -601,8 +601,8 @@ RG_DEBUG << "ProjectPackager::runPack()";
     m_packTmpDirName = QString("%1/rosegarden-project-packager-tmp").arg(QDir::homePath());
 
     // the data directory where audio and other files will go
-    QFileInfo fi(m_filename);
-    m_packDataDirName = fi.baseName();
+    QFileInfo fileInfo1(m_filename);
+    m_packDataDirName = fileInfo1.baseName();
 
 RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" <<
     m_packDataDirName;
@@ -616,8 +616,8 @@ RG_DEBUG << "using tmp data directory: " << m_packTmpDirName << "/" <<
     //
     // m_filename comes in already having an .rgp extension, but the file
     // was saved .rg
-    QString oldName = QString("%1/%2.rg").arg(fi.path()).arg(fi.baseName());
-    QString newName = QString("%1/%2.rg").arg(m_packTmpDirName).arg(fi.baseName());
+    QString oldName = QString("%1/%2.rg").arg(fileInfo1.path()).arg(fileInfo1.baseName());
+    QString newName = QString("%1/%2.rg").arg(m_packTmpDirName).arg(fileInfo1.baseName());
 
     // if the tmp directory already exists, just hose it
     rmdirRecursive(m_packTmpDirName);
@@ -1035,9 +1035,9 @@ ProjectPackager::startAudioDecoder(QStringList flacFiles, QStringList wavpackFil
 
     // The working directory must be the key to why tar is not failing, but
     // failing to do anything detectable.  Let's cut apart m_filename...
-    QFileInfo fi(m_filename);
-    QString dirname = fi.path();
-    QString basename = QString("%1.%2").arg(fi.baseName()).arg(fi.completeSuffix());
+    QFileInfo fileInfo1(m_filename);
+    QString dirname = fileInfo1.path();
+    QString basename = QString("%1.%2").arg(fileInfo1.baseName()).arg(fileInfo1.completeSuffix());
 
     // There were mysterious stupid problems running tar xf in a separate
     // QProcess step, so screw it, let's just throw it into this script!
