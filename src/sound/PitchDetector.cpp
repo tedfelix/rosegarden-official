@@ -166,7 +166,7 @@ double PitchDetector::autocorrelation() {
     value = 0;
     double max = 0;
 
-    int c=0;
+    int c1=0;
 
     double buff[m_frameSize/2];
     //fill buffer with magnitudes
@@ -188,9 +188,9 @@ double PitchDetector::autocorrelation() {
 
     // find end of peak in smoothed buffer (c must atart after smoothing)
     // starts at 50
-    for ( c=30; c<(m_frameSize/4) && smoothed[c] >= smoothed[c+1]; c++ ) {
+    for ( c1=30; c1<(m_frameSize/4) && smoothed[c1] >= smoothed[c1+1]; c1++ ) {
     }
-    if ( c >= m_frameSize/4 ) {
+    if ( c1 >= m_frameSize/4 ) {
 #if DEBUG_PT
         std::cout << "error: no end to first peak\n";
 #endif
@@ -201,7 +201,7 @@ double PitchDetector::autocorrelation() {
     //find next peak from bin 30 (1500Hz) to 588 (75Hz)
     for ( int i=0; i<m_frameSize/2; i++ ) {
         value =  smoothed[i];
-        if ( i>c && i<588 && value > max ) {
+        if ( i>c1 && i<588 && value > max ) {
             max = value;
             bin = i;
         }
@@ -255,13 +255,13 @@ double PitchDetector::hps() {
     for ( int i=0; i<m_frameSize/6; i++ ) {
         int i2 = 2*i;
         int i3 = 3*i;
-        double hps =
+        double hps2 =
             abs( std::complex<double>(m_ft1[i][0], m_ft1[i][1]) ) +
             0.8*abs( std::complex<double>(m_ft1[i2][0], m_ft1[i2][1]) ) +
             0.6*abs( std::complex<double>(m_ft1[i3][0], m_ft1[i3][1]) );
 
-        if ( max < hps ) {
-            max = hps;
+        if ( max < hps2 ) {
+            max = hps2;
             fBin = i;
         }
     }

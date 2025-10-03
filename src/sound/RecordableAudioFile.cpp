@@ -78,7 +78,7 @@ RecordableAudioFile::write()
     // Use a static buffer -- this obviously requires that write() is
     // only called from a single thread
     static size_t bufferSize = 0;
-    static sample_t *buffer = nullptr;
+    static sample_t *buffer2 = nullptr;
     static char *encodeBuffer = nullptr;
 
     unsigned int bits = m_audioFile->getBitsPerSample();
@@ -108,20 +108,20 @@ RecordableAudioFile::write()
 
     size_t bufferReqd = channels * s;
     if (bufferReqd > bufferSize) {
-	if (buffer) {
+	if (buffer2) {
             // cppcheck-suppress memleakOnRealloc
-	    buffer = (sample_t *)realloc(buffer, bufferReqd * sizeof(sample_t));
+	    buffer2 = (sample_t *)realloc(buffer2, bufferReqd * sizeof(sample_t));
             // cppcheck-suppress memleakOnRealloc
 	    encodeBuffer = (char *)realloc(encodeBuffer, bufferReqd * 4);
 	} else {
-	    buffer = (sample_t *) malloc(bufferReqd * sizeof(sample_t));
+	    buffer2 = (sample_t *) malloc(bufferReqd * sizeof(sample_t));
 	    encodeBuffer = (char *)malloc(bufferReqd * 4);
 	}
 	bufferSize = bufferReqd;
     }
 
     for (unsigned int ch = 0; ch < channels; ++ch) {
-	m_ringBuffers[ch]->read(buffer + ch * s, s);
+	m_ringBuffers[ch]->read(buffer2 + ch * s, s);
     }
 
     // interleave and convert
@@ -130,7 +130,7 @@ RecordableAudioFile::write()
 	size_t index = 0;
 	for (size_t i = 0; i < s; ++i) {
 	    for (unsigned int ch = 0; ch < channels; ++ch) {
-		float sample = buffer[i + ch * s];
+		float sample = buffer2[i + ch * s];
 		unsigned char b2 =
                     (unsigned char)((long)(sample * 32767.0) & 0xff);
 		unsigned char b1 =
@@ -143,7 +143,7 @@ RecordableAudioFile::write()
 	char *encodePointer = encodeBuffer;
 	for (size_t i = 0; i < s; ++i) {
 	    for (unsigned int ch = 0; ch < channels; ++ch) {
-		float sample = buffer[i + ch * s];
+		float sample = buffer2[i + ch * s];
                 // cppcheck-suppress invalidPointerCast
 		*(float *)encodePointer = sample;
 		encodePointer += sizeof(float);
