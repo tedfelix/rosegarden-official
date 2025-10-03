@@ -46,8 +46,8 @@ class AudioConfigurationPage : public TabbedConfigurationPage
 {
     Q_OBJECT
 public:
-    AudioConfigurationPage(RosegardenDocument *doc,
-                               QWidget *parent = nullptr);
+    explicit AudioConfigurationPage(RosegardenDocument *doc,
+                                    QWidget *parent = nullptr);
 
     void apply() override;
 
@@ -82,7 +82,7 @@ private:
     LineEdit *m_externalAudioEditorPath;
 
 #ifdef HAVE_LIBJACK
-    // Number of JACK input ports our RG client creates - 
+    // Number of JACK input ports our RG client creates -
     // this decides how many audio input destinations
     // we have.
     QCheckBox *m_createFaderOuts;
@@ -100,7 +100,7 @@ private:
 
 
 };
- 
+
 
 
 }

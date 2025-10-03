@@ -100,7 +100,7 @@ public:
     /**
      * Select a tool at the CompositionView
      */
-    void selectTool(QString toolName);
+    void selectTool(const QString& toolName);
 
     void updateMeters();
     void updateMonitorMeters();
@@ -170,7 +170,7 @@ public slots:
 
     void slotShowSegmentLabels(bool);
 
-    void slotDeleteTracks(std::vector<TrackId> tracks);
+    void slotDeleteTracks(const std::vector<TrackId>& tracks);
 
     // unused void slotAddAudioSegmentCurrentPosition(AudioFileId,
     //                                        const RealTime &startTime,

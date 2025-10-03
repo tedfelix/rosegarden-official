@@ -1052,11 +1052,11 @@ Studio::setInput(Instrument *instrument, bool isBuss, int newInput, int newChann
     MappedObjectId oldMappedId = 0;
 
     if (oldIsBuss) {
-        Buss *buss = getBussById(oldInput);
+        const Buss *buss = getBussById(oldInput);
         if (buss)
             oldMappedId = buss->getMappedId();
     } else {
-        RecordIn *in = getRecordIn(oldInput);
+        const RecordIn *in = getRecordIn(oldInput);
         if (in)
             oldMappedId = in->mappedId;
     }
@@ -1066,12 +1066,12 @@ Studio::setInput(Instrument *instrument, bool isBuss, int newInput, int newChann
     MappedObjectId newMappedId = 0;
 
     if (isBuss) {
-        Buss *buss = getBussById(newInput);
+        const Buss *buss = getBussById(newInput);
         if (!buss)
             return;
         newMappedId = buss->getMappedId();
     } else {
-        RecordIn *in = getRecordIn(newInput);
+        const RecordIn *in = getRecordIn(newInput);
         if (!in)
             return;
         newMappedId = in->mappedId;
@@ -1113,9 +1113,9 @@ void
 Studio::setOutput(Instrument *instrument, int bussID) const
 {
     BussId oldBussId = instrument->getAudioOutput();
-    Buss *oldBuss = getBussById(oldBussId);
+    const Buss *oldBuss = getBussById(oldBussId);
 
-    Buss *newBuss = getBussById(bussID);
+    const Buss *newBuss = getBussById(bussID);
     if (!newBuss)
         return;
 

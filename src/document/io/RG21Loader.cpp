@@ -569,7 +569,7 @@ bool RG21Loader::parseStaveType()
         Track *track = m_composition->getTrackById(staffNo);
 
         if (track) {
-            Instrument *instr =
+            const Instrument *instr =
                 m_studio->assignMidiProgramToInstrument(programNo, false);
             if (instr)
                 track->setInstrument(instr->getId());
@@ -633,7 +633,7 @@ void RG21Loader::closeSegment()
     }
 }
 
-long RG21Loader::convertRG21Pitch(long rg21pitch, int noteModifier)
+long RG21Loader::convertRG21Pitch(long rg21pitch, int noteModifier) const
 {
     Accidental accidental =
         (noteModifier & ModSharp) ? Sharp :
@@ -660,8 +660,8 @@ bool RG21Loader::readNextLine()
 
         m_currentLine = m_currentLine.simplified();
 
-        if (m_currentLine[0] == '#' ||
-                m_currentLine.length() == 0) {
+        if (m_currentLine.length() == 0 ||
+            m_currentLine[0] == '#') {
             inComment = true;
             continue; // skip comments
         }

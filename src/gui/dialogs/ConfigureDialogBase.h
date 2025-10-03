@@ -40,7 +40,9 @@ class ConfigureDialogBase : public QDialog
 {
     Q_OBJECT
 public:
-    ConfigureDialogBase(QWidget *parent = nullptr, const QString &label = {}, const char *name = nullptr);
+    explicit ConfigureDialogBase(QWidget *parent = nullptr,
+                                 const QString &label = {},
+                                 const char *name = nullptr);
 
     ~ConfigureDialogBase() override;
 
@@ -68,10 +70,10 @@ public:
 protected:
 
     ConfigurationPages m_configurationPages;
-    
+
     QPushButton       *m_applyButton;
     //QDialogButtonBox  *m_dialogButtonBox;
-    IconStackedWidget *m_iconWidget;    
+    IconStackedWidget *m_iconWidget;
 };
 
 

@@ -192,7 +192,7 @@ RosegardenMainViewWidget::~RosegardenMainViewWidget()
     delete m_rulerScale;
 }
 
-void RosegardenMainViewWidget::selectTool(QString toolName)
+void RosegardenMainViewWidget::selectTool(const QString& toolName)
 {
     m_trackEditor->getCompositionView()->setTool(toolName);
 }
@@ -261,11 +261,13 @@ void RosegardenMainViewWidget::slotEditSegment(Segment *segment)
         if (client == GeneralConfigurationPage::MatrixView) {
 
             bool isPercussion = false;
-            Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById
+            const Track *track =
+                RosegardenDocument::currentDocument->
+                getComposition().getTrackById
                 (segment->getTrack());
             if (track) {
                 InstrumentId iid = track->getInstrument();
-                Instrument *instrument =
+                const Instrument *instrument =
                     RosegardenDocument::currentDocument->getStudio().getInstrumentById(iid);
                 if (instrument && instrument->isPercussion()) isPercussion = true;
             }
@@ -380,7 +382,8 @@ RosegardenMainViewWidget::createNotationView(const std::vector<Segment *>& segme
     connect(notationView, &NotationView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
 
-    SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
+    const SequenceManager *sM =
+        RosegardenDocument::currentDocument->getSequenceManager();
 
     connect(sM, &SequenceManager::insertableNoteOnReceived,
             notationView, &NotationView::slotInsertableNoteOnReceived);
@@ -516,7 +519,8 @@ RosegardenMainViewWidget::createPitchTrackerView(const std::vector<Segment *>& s
     connect(pitchTrackerView, &NotationView::editTriggerSegment,
             this, &RosegardenMainViewWidget::slotEditTriggerSegment);
 
-    SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
+    const SequenceManager *sM =
+        RosegardenDocument::currentDocument->getSequenceManager();
 
     connect(sM, &SequenceManager::insertableNoteOnReceived,
             pitchTrackerView, &PitchTrackerView::slotInsertableNoteOnReceived);
@@ -693,7 +697,8 @@ RosegardenMainViewWidget::createMatrixView(const std::vector<Segment *>& segment
     connect(matrixView, &MatrixView::openInPitchTracker,
             this, &RosegardenMainViewWidget::slotEditSegmentsPitchTracker);
 
-    SequenceManager *sM = RosegardenDocument::currentDocument->getSequenceManager();
+    const SequenceManager *sM =
+        RosegardenDocument::currentDocument->getSequenceManager();
 
     connect(sM, &SequenceManager::insertableNoteOnReceived,
             matrixView, &MatrixView::slotInsertableNoteOnReceived);
@@ -1121,7 +1126,7 @@ RosegardenMainViewWidget::updateMeters()
              RosegardenDocument::currentDocument->getComposition().getTracks().begin();
          i != RosegardenDocument::currentDocument->getComposition().getTracks().end(); ++i) {
 
-        Track *track = i->second;
+        const Track *track = i->second;
         if (!track) continue;
 
         InstrumentId instrumentId = track->getInstrument();
@@ -1144,14 +1149,13 @@ RosegardenMainViewWidget::updateMeters()
             recStates[instrumentId] == oldState)
             continue;
 
-        Instrument *instrument =
+        const Instrument *instrument =
             RosegardenDocument::currentDocument->getStudio().getInstrumentById(instrumentId);
         if (!instrument) continue;
 
         // This records the level of this instrument, not necessarily
         // caused by notes on this particular track.
-        LevelInfo &info = levels[instrumentId];
-        LevelInfo &recInfo = recLevels[instrumentId];
+        const LevelInfo &info = levels[instrumentId];
 
         if (instrument->getType() == Instrument::Audio ||
             instrument->getType() == Instrument::SoftSynth) {
@@ -1183,6 +1187,7 @@ RosegardenMainViewWidget::updateMeters()
                 (RosegardenDocument::currentDocument->getSequenceManager()->getTransportStatus()
                  != PLAYING)) {
 
+                const LevelInfo &recInfo = recLevels[instrumentId];
                 if (recInfo.level != 0 || recInfo.levelRight != 0) {
                     recDBleft = AudioLevel::fader_to_dB
                                 (recInfo.level, 127, AudioLevel::LongFader);
@@ -1194,7 +1199,7 @@ RosegardenMainViewWidget::updateMeters()
 
             if (toSet) {
                 RosegardenDocument *doc = RosegardenDocument::currentDocument;
-                Composition &comp = doc->getComposition();
+                const Composition &comp = doc->getComposition();
 
                 InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
@@ -1244,7 +1249,7 @@ void
 RosegardenMainViewWidget::updateMonitorMeters()
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    Composition &comp = doc->getComposition();
+    const Composition &comp = doc->getComposition();
 
     InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
@@ -1340,7 +1345,7 @@ void RosegardenMainViewWidget::addTrack(
 }
 
 void RosegardenMainViewWidget::slotDeleteTracks(
-    std::vector<TrackId> tracks)
+    const std::vector<TrackId>& tracks)
 {
     RG_DEBUG << "slotDeleteTracks() - deleting " << tracks.size() << " tracks";
 
@@ -1429,7 +1434,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 
     if (track) {
         InstrumentId ii = track->getInstrument();
-        Instrument *instrument = studio.getInstrumentById(ii);
+        const Instrument *instrument = studio.getInstrumentById(ii);
 
         if (instrument &&
                 instrument->getType() == Instrument::Audio) {

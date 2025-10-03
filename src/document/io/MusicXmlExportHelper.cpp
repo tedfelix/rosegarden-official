@@ -1471,19 +1471,17 @@ std::string
 MusicXmlExportHelper::retrieve(bool direction, timeT time)
 {
     std::string result = "";
-    std::vector<std::vector<SimpleQueue>::iterator> toErase;
+    // the internet says this is the way to delete during iteration
     for (std::vector<SimpleQueue>::iterator i = tmp_queue.begin();
-         i != tmp_queue.end(); ++i) {
+         i != tmp_queue.end();) {
         SimpleQueue sq = *i;
         if ((sq.direction == direction) && (sq.staff == m_staff) &&
             (sq.voice == m_curVoice) && (sq.time <= time)) {
             result += sq.string;
-            toErase.push_back(i);
+            i = tmp_queue.erase(i);
+        } else {
+            ++i;
         }
-    }
-    for (std::vector<std::vector<SimpleQueue>::iterator>::iterator i = toErase.begin();
-         i != toErase.end(); ++i) {
-        tmp_queue.erase(*i);
     }
 
     return result;
