@@ -63,7 +63,7 @@ public:
      * convert notation from being suitable for one instrument to being suitable
      * for another one.
      */
-    PresetHandlerDialog(QWidget* parent, bool fromNotation = false);
+    explicit PresetHandlerDialog(QWidget* parent, bool fromNotation = false);
 
     /** Destroy the PresetHandlerDialog */
     ~PresetHandlerDialog() override;

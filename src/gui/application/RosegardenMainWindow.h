@@ -175,7 +175,7 @@ public:
 
     bool openURL(const QUrl &url, bool replace);
 
-    bool exportMIDIFile(QString file);
+    bool exportMIDIFile(const QString& file);
 
     /// export a Csound scorefile
     bool exportCsoundFile(const QString &file);
@@ -496,13 +496,13 @@ private:
      * complex enable/disable behavior.
      */
     // cppcheck-suppress duplInheritedMember
-    void enterActionState(QString stateName);
+    void enterActionState(QString stateName) override;
     /**
      * Override (non-virtual) ActionFileClient's version to allow for more
      * complex enable/disable behavior.
      */
     // cppcheck-suppress duplInheritedMember
-    void leaveActionState(QString stateName);
+    void leaveActionState(QString stateName) override;
 
 public slots:
 
@@ -1399,8 +1399,8 @@ public slots:
     void slotJumpToQuickMarker();
 
     void slotDisplayWarning(int type,
-                            QString text,
-                            QString informativeText);
+                            const QString& text,
+                            const QString& informativeText);
 
     // slots for save and restore of pointer position
     void slotAboutToExecuteCommand();

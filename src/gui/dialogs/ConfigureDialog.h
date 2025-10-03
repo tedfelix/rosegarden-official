@@ -37,17 +37,17 @@ class ConfigureDialog : public ConfigureDialogBase
 {
     Q_OBJECT
 public:
-    ConfigureDialog(RosegardenDocument *doc,
-                    QWidget *parent=nullptr,
-                    const char *name=nullptr );
+    explicit ConfigureDialog(RosegardenDocument *doc,
+                             QWidget *parent=nullptr,
+                             const char *name=nullptr );
 //    ~ConfigureDialog();
 
 
-    void setNotationPage();    
-    
+    void setNotationPage();
+
 signals:
     void updateAutoSaveInterval(unsigned int);
-    
+
 protected:
 };
 

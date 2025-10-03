@@ -4,13 +4,13 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     This file is Copyright 2009
         Immanuel Litzroth         <immanuel203@gmail.com>
 
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -57,7 +57,7 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     m_composition(&m_rgDocument->getComposition())
 {
     m_descriptor = open("/dev/tranzport0",O_RDWR);
-    
+
     if (m_descriptor < 0) {
         throw Exception(qstrtostr(QObject::tr("Failed to open tranzport device /dev/tranzport0")));
     }
@@ -76,7 +76,7 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
 
     connect(m_socketReadNotifier, &QSocketNotifier::activated, this, &TranzportClient::readData);
     connect(m_socketWriteNotifier, &QSocketNotifier::activated, this, &TranzportClient::writeCommandQueue);
-        
+
     connect(this, &TranzportClient::play,
             m_rgGUIApp, &RosegardenMainWindow::slotPlay );
     connect(this, &TranzportClient::stop,
@@ -162,7 +162,7 @@ TranzportClient::slotDocumentLoaded(RosegardenDocument *doc)
             this, &TranzportClient::loopChanged);
     connect(this, &TranzportClient::setPosition,
             m_rgDocument, &RosegardenDocument::slotSetPointerPosition);
-                
+
     while (not commands.empty()) {
         commands.pop();
     }
@@ -218,14 +218,14 @@ TranzportClient::trackChanged(const Composition *c,
                               Track* track)
 {
     RG_DEBUG << "TranzportClient, CompositionObserver::trackChanged";
-    
+
     if (device_online) {
         const Track* track2 = c->getTrackById(c->getSelectedTrack());
 
         // If the changed track is the selected track
         if (track == track2) {
             RG_DEBUG << "TranzportClient, CompositionObserver::trackChanged updating";
-            
+
             if (track->isArmed()) {
                 LightOn(LightTrackrec);
             } else {
@@ -242,7 +242,7 @@ TranzportClient::trackChanged(const Composition *c,
         }
     }
 }
-    
+
 void
 TranzportClient::loopChanged()
 {
@@ -279,7 +279,7 @@ TranzportClient::stateUpdate()
         }
 
         TrackId trackID = m_composition->getSelectedTrack();
-        Track* track = m_composition->getTrackById(trackID);
+        const Track* track = m_composition->getTrackById(trackID);
 
         if (track->isArmed()) {
             LightOn(LightTrackrec);
@@ -303,7 +303,7 @@ TranzportClient::stateUpdate()
         LCDWrite(ss.str(), Bottom, 10);
     }
 }
-    
+
 TranzportClient::~TranzportClient()
 {
     delete m_socketReadNotifier;
@@ -313,8 +313,8 @@ TranzportClient::~TranzportClient()
 
     RG_DEBUG << "TranzportClient::~TranzportClient: cleaned up ";
 }
-  
-    
+
+
 void TranzportClient::writeCommandQueue()
 {
     RG_DEBUG << "TranzportClient: writeCommandQueue";
@@ -325,7 +325,7 @@ void TranzportClient::writeCommandQueue()
     }
 
     uint64_t cmd = commands.front();
-    int res = ::write(m_descriptor, (void*)&cmd, 8);
+    int res = ::write(m_descriptor, static_cast<void*>(&cmd), 8);
     m_socketWriteNotifier->setEnabled(false);
 
     if (res < 0) {
@@ -335,7 +335,7 @@ void TranzportClient::writeCommandQueue()
         return;
     } else if (res != 8) {
         RG_DEBUG << "TranzportClient::writeCommandQueue: could not write full data to device";
-        
+
         commands.pop();
         m_socketWriteNotifier->setEnabled(true);
     }
@@ -346,7 +346,7 @@ void TranzportClient::writeCommandQueue()
         m_socketWriteNotifier->setEnabled(true);
     }
 }
-    
+
 void
 TranzportClient::write(uint64_t buf)
 {
@@ -356,7 +356,7 @@ TranzportClient::write(uint64_t buf)
         m_socketWriteNotifier->setEnabled(true);
     }
 }
-    
+
 void
 TranzportClient::LightOn(Light light)
 {
@@ -371,7 +371,7 @@ TranzportClient::LightOn(Light light)
     cmd[6] = 0x00;
     cmd[7] = 0x00;
 
-    write(*(uint64_t*) cmd);
+    write(*reinterpret_cast<uint64_t*>(cmd));
 }
 
 void
@@ -387,7 +387,7 @@ TranzportClient::LightOff(Light light)
     cmd[5] = 0x00;
     cmd[6] = 0x00;
     cmd[7] = 0x00;
-    write(*(uint64_t*)cmd);
+    write(*reinterpret_cast<uint64_t*>(cmd));
 }
 
 void
@@ -405,7 +405,7 @@ TranzportClient::LCDWrite(const std::string& text,
 
     uint8_t cmd[8];
     uint8_t cell = row == Top ? 0 : 5;
-    
+
     for (int i = 0; i < LCDLength;) {
         cmd[0] = 0x00;
         cmd[1] = 0x01;
@@ -415,10 +415,10 @@ TranzportClient::LCDWrite(const std::string& text,
         cmd[5] = str[i++];
         cmd[6] = str[i++];
         cmd[7] = 0x00;
-        write(*(uint64_t*)cmd);
+        write(*reinterpret_cast<uint64_t*>(cmd));
     }
 }
-    
+
 void
 TranzportClient::readData()
 {
@@ -510,7 +510,7 @@ TranzportClient::readData()
                 timeT currentTime = m_composition->getPosition();
                 Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestNext = std::numeric_limits<long>::max();
-                
+
                 for (Composition::MarkerVector::const_iterator it = mc.begin();
                      it != mc.end();
                      ++it) {
@@ -704,4 +704,3 @@ TranzportClient::readData()
 }
 
 }
-

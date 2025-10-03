@@ -143,7 +143,7 @@ void
 ViewSegment::endMarkerTimeChanged(const Segment *constSegment, bool shorten)
 {
     // Cast away const since findTime() is unfortunately not const.
-    Segment *segment = const_cast<Segment *>(constSegment);
+    const Segment *segment = const_cast<Segment *>(constSegment);
 
     // If this isn't our Segment, bail.
     if (segment != &m_segment) {

@@ -358,6 +358,7 @@ static void convert(const QStringList &args)
             true,  // clearCommandHistory
             false);  // m_useSequencer
 
+    // cppcheck-suppress danglingLifetime
     RosegardenDocument::currentDocument = &doc;
 
     bool ok;

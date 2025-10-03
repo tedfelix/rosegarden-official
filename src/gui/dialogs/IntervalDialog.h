@@ -43,8 +43,10 @@ class ROSEGARDENPRIVATE_EXPORT IntervalDialog : public QDialog
 {
     Q_OBJECT
 public:
-    IntervalDialog(QWidget *parent, bool askChangeKey = false, bool askTransposeSegmentBack = false);
-    
+    explicit IntervalDialog(QWidget *parent,
+                            bool askChangeKey = false,
+                            bool askTransposeSegmentBack = false);
+
     // Distance in semitones
     int getChromaticDistance();
 
@@ -53,21 +55,21 @@ public:
 
     // Transpose within key or change the key?
     bool getChangeKey();
-    
+
     // Transpose the segment itself in the opposite direction?
     bool getTransposeSegmentBack();
-    
+
     static QString getIntervalName(int intervalDiatonic, int intervalChromatic);
-    
+
 public slots:
     void slotSetReferenceNote(int,int,int);
     void slotSetTargetNote(int,int,int);
-    
+
 private:
     int getOctaveDistance();
     int getStepDistanceChromatic();
     int getAccidentalCorrectionChromatic();
-    
+
     DiatonicPitchChooser *m_referencenote;
     DiatonicPitchChooser *m_targetnote;
 

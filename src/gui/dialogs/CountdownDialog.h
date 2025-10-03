@@ -37,7 +37,7 @@ class CountdownDialog : public QDialog
     Q_OBJECT
 
 public:
-    CountdownDialog(QWidget *parent, int seconds = 300);
+    explicit CountdownDialog(QWidget *parent, int seconds = 300);
 
     void setLabel(const QString &label);
     void setElapsedTime(int elapsedSeconds);
