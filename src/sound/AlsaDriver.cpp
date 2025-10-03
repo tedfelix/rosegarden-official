@@ -594,14 +594,14 @@ AlsaDriver::generatePortList()
     // for sorting and then device creation.
     //
     while (snd_seq_query_next_client(m_midiHandle, cinfo) >= 0) {
-        int client = snd_seq_client_info_get_client(cinfo);
+        int client1 = snd_seq_client_info_get_client(cinfo);
         snd_seq_port_info_alloca(&pinfo);
-        snd_seq_port_info_set_client(pinfo, client);
+        snd_seq_port_info_set_client(pinfo, client1);
         snd_seq_port_info_set_port(pinfo, -1);
 
         // Ignore ourselves and the system client
         //
-        if (client == m_client || client == 0)
+        if (client1 == m_client || client1 == 0)
             continue;
 
         while (snd_seq_query_next_port(m_midiHandle, pinfo) >= 0) {

@@ -96,21 +96,21 @@ void SampleWindow<T>::encache()
 {
     int n = int(m_size);
     T *mult = new T[n];
-    int i;
-    for (i = 0; i < n; ++i) mult[i] = 1.0;
+    int i1;
+    for (i1 = 0; i1 < n; ++i1) mult[i1] = 1.0;
 
     switch (m_type) {
 
     case Rectangular:
-	for (i = 0; i < n; ++i) {
-	    mult[i] *= 0.5;
+	for (i1 = 0; i1 < n; ++i1) {
+	    mult[i1] *= 0.5;
 	}
 	break;
 
     case Bartlett:
-	for (i = 0; i < n/2; ++i) {
-	    mult[i] *= (i / T(n/2));
-	    mult[i + n/2] *= (1.0 - (i / T(n/2)));
+	for (i1 = 0; i1 < n/2; ++i1) {
+	    mult[i1] *= (i1 / T(n/2));
+	    mult[i1 + n/2] *= (1.0 - (i1 / T(n/2)));
 	}
 	break;
 
@@ -127,24 +127,24 @@ void SampleWindow<T>::encache()
 	break;
 
     case Gaussian:
-	for (i = 0; i < n; ++i) {
-            mult[i] *= pow(2, - pow((i - (n-1)/2.0) / ((n-1)/2.0 / 3), 2));
+	for (i1 = 0; i1 < n; ++i1) {
+            mult[i1] *= pow(2, - pow((i1 - (n-1)/2.0) / ((n-1)/2.0 / 3), 2));
 	}
 	break;
 
     case Parzen:
     {
         int N = n-1;
-        for (i = 0; i < N/4; ++i) {
-            T m = 2 * pow(1.0 - (T(N)/2 - i) / (T(N)/2), 3);
-            mult[i] *= m;
-            mult[N-i] *= m;
+        for (i1 = 0; i1 < N/4; ++i1) {
+            T m = 2 * pow(1.0 - (T(N)/2 - i1) / (T(N)/2), 3);
+            mult[i1] *= m;
+            mult[N-i1] *= m;
         }
-        for (i = N/4; i <= N/2; ++i) {
-            int wn = i - N/2;
+        for (i1 = N/4; i1 <= N/2; ++i1) {
+            int wn = i1 - N/2;
             T m = 1.0 - 6 * pow(wn / (T(N)/2), 2) * (1.0 - abs(wn) / (T(N)/2));
-            mult[i] *= m;
-            mult[N-i] *= m;
+            mult[i1] *= m;
+            mult[N-i1] *= m;
         }
         break;
     }

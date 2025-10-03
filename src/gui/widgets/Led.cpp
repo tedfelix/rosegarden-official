@@ -92,13 +92,13 @@ Led::draw(QPainter &painter)
     tmpPainter.setRenderHint(QPainter::Antialiasing, false);
 
     // Set the color of the LED according to given parameters
-    QColor color = m_state ? m_color : m_offColor;
+    QColor color2 = m_state ? m_color : m_offColor;
 
 
     // *** Draw the flat LED
 
     tmpPainter.setPen(Qt::NoPen);
-    QBrush brush(color);
+    QBrush brush(color2);
     tmpPainter.setBrush(brush);
     tmpPainter.drawEllipse(0, 0, width2, width2);
 
@@ -122,7 +122,7 @@ Led::draw(QPainter &painter)
 
     int lightFactor = (130 * 2 / (catchlightWidth ? catchlightWidth : 1)) + 100;
 
-    QColor catchlightColor = color;
+    QColor catchlightColor = color2;
 
     // Now draw the catchlight on the LED:
     while (catchlightWidth)

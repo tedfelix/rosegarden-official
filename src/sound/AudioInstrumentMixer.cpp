@@ -672,7 +672,7 @@ AudioInstrumentMixer::generateBuffers()
 
     unsigned int maxChannels = 0;
 
-    size_t bufferSamples = m_blockSize;
+    size_t bufferSamples1 = m_blockSize;
 
     if (!m_driver->getLowLatencyMode()) {
         RealTime bufferLength = m_driver->getAudioMixBufferLength();
@@ -685,13 +685,13 @@ AudioInstrumentMixer::generateBuffers()
 
     }
 
-    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+    for (int instrumentIndex = 0; instrumentIndex < audioInstruments + synthInstruments; ++instrumentIndex) {
 
         InstrumentId id;
-        if (i < audioInstruments)
-            id = audioInstrumentBase + i;
+        if (instrumentIndex < audioInstruments)
+            id = audioInstrumentBase + instrumentIndex;
         else
-            id = synthInstrumentBase + (i - audioInstruments);
+            id = synthInstrumentBase + (instrumentIndex - audioInstruments);
 
         // Get a fader for this instrument - if we can't then this
         // isn't a valid audio track.
@@ -724,7 +724,7 @@ AudioInstrumentMixer::generateBuffers()
 
         if (!replaceBuffers) {
             for (size_t i = 0; i < rec.buffers.size(); ++i) {
-                if (rec.buffers[i]->getSize() != bufferSamples) {
+                if (rec.buffers[i]->getSize() != bufferSamples1) {
                     replaceBuffers = true;
                     break;
                 }
@@ -748,7 +748,7 @@ AudioInstrumentMixer::generateBuffers()
             // explicitly request reader 1.
 
             RingBuffer<sample_t, 2> *rb =
-                new RingBuffer<sample_t, 2>(bufferSamples);
+                new RingBuffer<sample_t, 2>(bufferSamples1);
 
             if (!rb->mlock()) {
                 //		std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
@@ -838,13 +838,13 @@ AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
     int synthInstruments;
     m_driver->getSoftSynthInstrumentNumbers(synthInstrumentBase, synthInstruments);
 
-    for (int i = 0; i < audioInstruments + synthInstruments; ++i) {
+    for (int instrumentIndex = 0; instrumentIndex < audioInstruments + synthInstruments; ++instrumentIndex) {
 
         InstrumentId id;
-        if (i < audioInstruments)
-            id = audioInstrumentBase + i;
+        if (instrumentIndex < audioInstruments)
+            id = audioInstrumentBase + instrumentIndex;
         else
-            id = synthInstrumentBase + (i - audioInstruments);
+            id = synthInstrumentBase + (instrumentIndex - audioInstruments);
 
         m_bufferMap[id].dormant = true;
         m_bufferMap[id].muted = false;

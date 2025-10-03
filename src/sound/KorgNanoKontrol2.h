@@ -54,7 +54,7 @@ public:
     void recording();
 
     /// Handle MappedEvent's from the external controller port.
-    void processEvent(const MappedEvent *event);
+    void processEvent(const MappedEvent *i_event);
 
 private:
     // Current 8-channel page.

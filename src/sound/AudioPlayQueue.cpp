@@ -137,8 +137,8 @@ AudioPlayQueue::erase(PlayableAudioFile *file)
     RG_DEBUG << "erase(" << file << "): start " << file->getStartTime() << ", end " << file->getEndTime();
 #endif
 
-    FileSet::iterator fi = m_files.find(file);
-    if (fi == m_files.end()) {
+    FileSet::iterator fileSetIter = m_files.find(file);
+    if (fileSetIter == m_files.end()) {
         for (FileList::iterator fli = m_unscheduled.begin();
                 fli != m_unscheduled.end(); ++fli) {
             if (*fli == file) {
@@ -149,7 +149,7 @@ AudioPlayQueue::erase(PlayableAudioFile *file)
         }
         return ;
     }
-    m_files.erase(fi);
+    m_files.erase(fileSetIter);
 
     InstrumentId instrument = file->getInstrument();
     unsigned int index = instrumentId2Index(instrument);

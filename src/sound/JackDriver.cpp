@@ -2193,9 +2193,9 @@ JackDriver::updateAudioData()
         if (!fader)
             continue;
 
-        float f = 2;
-        (void)fader->getProperty(MappedAudioFader::Channels, f);
-        int channels = (int)f;
+        float channelsFloat = 2;
+        (void)fader->getProperty(MappedAudioFader::Channels, channelsFloat);
+        int channels = (int)channelsFloat;
 
         int inputChannel = -1;
         if (channels == 1) {

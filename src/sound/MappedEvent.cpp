@@ -119,19 +119,19 @@ MappedEvent::MappedEvent(const Event &e)
             m_type = InvalidMappedEvent;
         }
 
-    } catch (const Event::NoData &d) {
+    } catch (const Event::NoData &noData) {
 
 #ifdef DEBUG_MAPPEDEVENT
         RG_WARNING << "Caught Event::NoData in MappedEvent ctor, message is:\n" << d.getMessage();
 #endif
 
-    } catch (const Event::BadType &b) {
+    } catch (const Event::BadType &badType) {
 
 #ifdef DEBUG_MAPPEDEVENT
         RG_WARNING << "Caught Event::BadType in MappedEvent ctor, message is:\n" << b.getMessage();
 #endif
 
-    } catch (const SystemExclusive::BadEncoding &e) {
+    } catch (const SystemExclusive::BadEncoding &badEncoding) {
 
 #ifdef DEBUG_MAPPEDEVENT
         RG_WARNING << "Caught bad SysEx encoding in MappedEvent ctor";

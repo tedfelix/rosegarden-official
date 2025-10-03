@@ -358,7 +358,7 @@ AudioBussMixer::generateBuffers()
     std::cerr << "AudioBussMixer::generateBuffers: have " << m_bussCount << " busses" << std::endl;
 #endif
 
-    size_t bufferSamples = m_blockSize;
+    size_t bufferSamples1 = m_blockSize;
 
     if (!m_driver->getLowLatencyMode()) {
         RealTime bufferLength = m_driver->getAudioMixBufferLength();
@@ -374,7 +374,7 @@ AudioBussMixer::generateBuffers()
             continue;
 
         for (unsigned int ch = 0; ch < 2; ++ch) {
-            RingBuffer<sample_t> *rb = new RingBuffer<sample_t>(bufferSamples);
+            RingBuffer<sample_t> *rb = new RingBuffer<sample_t>(bufferSamples1);
             if (!rb->mlock()) {
                 //		std::cerr << "WARNING: AudioBussMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
             }

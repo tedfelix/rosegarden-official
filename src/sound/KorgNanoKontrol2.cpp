@@ -144,17 +144,17 @@ void KorgNanoKontrol2::recording()
     setPlayRecordStopLEDs(false, true, false);
 }
 
-void KorgNanoKontrol2::processEvent(const MappedEvent *event)
+void KorgNanoKontrol2::processEvent(const MappedEvent *i_event)
 {
     // Not a CC?  Bail.
-    if (event->getType() != MappedEvent::MidiController)
+    if (i_event->getType() != MappedEvent::MidiController)
         return;
 
     // ??? See RosegardenMainWindow::customEvent().  That would be a
     //     more generic, albeit slower (message queue), way to do this.
 
-    const MidiByte controlNumber = event->getData1();
-    const MidiByte value = event->getData2();
+    const MidiByte controlNumber = i_event->getData1();
+    const MidiByte value = i_event->getData2();
 
     // Record
     // Handle this first for "speed".
