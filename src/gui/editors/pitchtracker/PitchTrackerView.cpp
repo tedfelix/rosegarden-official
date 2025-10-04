@@ -62,10 +62,8 @@ namespace Rosegarden
 /*************************************
   CONSTRUCTOR, DESTRUCTOR, AND INIT
  *************************************/
-PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
-                                   const std::vector<Segment *>& segments) :
-        NotationView(doc, segments),
-        m_doc(doc),
+PitchTrackerView::PitchTrackerView(const std::vector<Segment *>& segments) :
+        NotationView(segments),
         m_jackCaptureClient(nullptr),
         m_jackConnected(false),
         m_pitchDetector(nullptr),
@@ -161,7 +159,7 @@ PitchTrackerView::PitchTrackerView(RosegardenDocument *doc,
     m_pitchDetector = new PitchDetector(m_framesize, m_stepsize, sampleRate);
     m_pitchDetector->setMethod(pdMethod);
 
-    setSegments(doc, segments);
+    setSegments(segments);
 
     setupActions(tuning, method);
 #else
@@ -242,19 +240,11 @@ PitchTrackerView::slotNewPitchEstimationMethod(QAction *a)
 
 
 void
-PitchTrackerView::setSegments(RosegardenDocument *document,
-                              const std::vector<Segment *>& /* segments */)
+PitchTrackerView::setSegments(const std::vector<Segment *>& /* segments */)
 {
-    // m_document is owned by our parent, NotationView
-    if (m_document) {
-        //disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
-        //           this, &PitchTrackerView::slotPointerPositionChanged);
-    }
-    m_document = document;
-
     // update GUI
 
-    connect(m_document, &RosegardenDocument::pointerPositionChanged,
+    connect(m_doc, &RosegardenDocument::pointerPositionChanged,
             this, &PitchTrackerView::slotUpdateValues);
 
     connect(this, &NotationView::play,

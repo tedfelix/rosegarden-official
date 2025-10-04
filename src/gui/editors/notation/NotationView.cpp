@@ -212,10 +212,8 @@ namespace Rosegarden
 
 using namespace Accidentals;
 
-NotationView::NotationView(RosegardenDocument *doc,
-                           const std::vector<Segment *>& segments) :
+NotationView::NotationView(const std::vector<Segment *>& segments) :
     EditViewBase(segments),
-    m_document(doc),
     m_durationMode(InsertingRests),
     m_durationPressed(nullptr),
     m_accidentalPressed(nullptr),
@@ -388,7 +386,8 @@ NotationView::NotationView(RosegardenDocument *doc,
     initStatusBar();
 
     slotUpdateWindowTitle();
-    connect(m_document, &RosegardenDocument::documentModified,
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    connect(doc, &RosegardenDocument::documentModified,
             this, &NotationView::slotUpdateWindowTitle);
 
     connect(m_notationWidget, &NotationWidget::showContextHelp,
@@ -411,8 +410,7 @@ NotationView::NotationView(RosegardenDocument *doc,
 
     m_notationWidget->resumeLayoutUpdates();
 
-    connect(RosegardenDocument::currentDocument,
-                &RosegardenDocument::loopChanged,
+    connect(doc, &RosegardenDocument::loopChanged,
             this, &NotationView::slotLoopChanged);
     // Make sure we are in sync.
     slotLoopChanged();
@@ -456,9 +454,7 @@ NotationView::NotationView(RosegardenDocument *doc,
     // that isn't available until the NotationView is shown.  (xScale)
     launchRulers(segments);
 
-    const bool followPlayback =
-            RosegardenDocument::currentDocument->getComposition().
-            getEditorFollowPlayback();
+    const bool followPlayback = doc->getComposition().getEditorFollowPlayback();
     RG_DEBUG << "set scroll_to_follow checked" << followPlayback;
     findAction("scroll_to_follow")->setChecked(followPlayback);
 }
@@ -609,7 +605,8 @@ NotationView::setWidgetSegments()
     allSegments.insert(allSegments.end(),
                        m_adoptedSegments.begin(),
                        m_adoptedSegments.end());
-    m_notationWidget->setSegments(m_document, allSegments);
+    m_notationWidget->setSegments(RosegardenDocument::currentDocument,
+                                  allSegments);
     // Reconnect because there's a new scene.
     connect(m_notationWidget->getScene(), &NotationScene::selectionChanged,
             this, &NotationView::slotUpdateMenuStates);
@@ -1241,8 +1238,9 @@ NotationView::setupActions()
     QMenu *spacingActionMenu = new QMenu(tr("S&pacing"), this);
     spacingActionMenu->setObjectName("stretch_actionmenu");
 
-    m_notationWidget->getScene()->setHSpacing(
-            RosegardenDocument::currentDocument->getComposition().m_notationSpacing);
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    m_notationWidget->getScene()->
+        setHSpacing(doc->getComposition().m_notationSpacing);
     m_availableSpacings = NotationHLayout::getAvailableSpacings();
 
     ag = new QActionGroup(this);
@@ -1256,7 +1254,7 @@ NotationView::setupActions()
         ag->addAction(a);
         a->setText(QString("%1%").arg(*i));
         a->setCheckable(true);
-        a->setChecked(*i == RosegardenDocument::currentDocument->getComposition().m_notationSpacing);
+        a->setChecked(*i == doc->getComposition().m_notationSpacing);
 
         spacingActionMenu->addAction(a);
     }
@@ -1663,7 +1661,8 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
         heading = tr("LilyPond preview options");
     }
 
-    LilyPondOptionsDialog dialog(this, RosegardenDocument::currentDocument, caption, heading, true);
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    LilyPondOptionsDialog dialog(this, doc, caption, heading, true);
     if (dialog.exec() != QDialog::Accepted) {
         return false;
     }
@@ -1671,7 +1670,7 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
     RosegardenMainViewWidget *view = RosegardenMainWindow::self()->getView();
 
     LilyPondExporter e(
-            RosegardenDocument::currentDocument,  // doc
+            doc,  // doc
             view->getSelection(),  // selection
             std::string(QFile::encodeName(file)),  // fileName
             this);  // parent
@@ -2006,7 +2005,7 @@ NotationView::slotEditPaste()
         setSelection(new EventSelection(*segment, insertionTime, endTime),
                      false);
 //!!!        slotSetInsertCursorPosition(endTime, true, false);
-        m_document->slotSetPointerPosition(endTime);
+        RosegardenDocument::currentDocument->slotSetPointerPosition(endTime);
     }
 }
 
@@ -2065,7 +2064,8 @@ NotationView::slotEditGeneralPaste()
             setSelection(new EventSelection(*segment, insertionTime, endTime),
                          false);
 //!!!            slotSetInsertCursorPosition(endTime, true, false);
-            m_document->slotSetPointerPosition(endTime);
+            RosegardenDocument::currentDocument->
+                slotSetPointerPosition(endTime);
         }
     }
 }
@@ -2076,12 +2076,13 @@ NotationView::slotPreviewSelection()
     if (!getSelection())
         return;
 
-    Composition &composition = m_document->getComposition();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    Composition &composition = doc->getComposition();
 
     composition.setLoopMode(Composition::LoopOn);
     composition.setLoopStart(getSelection()->getStartTime());
     composition.setLoopEnd(getSelection()->getEndTime());
-    emit m_document->loopChanged();
+    emit doc->loopChanged();
 }
 
 void
@@ -2090,11 +2091,12 @@ NotationView::slotClearLoop()
     // ??? Not sure why there is a Move > Clear Loop.  The LoopRuler
     //     is available.  One has full control of looping from there.
 
-    Composition &composition = m_document->getComposition();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    Composition &composition = doc->getComposition();
 
     // Less destructive.  Just turn it off.
     composition.setLoopMode(Composition::LoopOff);
-    emit m_document->loopChanged();
+    emit doc->loopChanged();
 }
 
 void
@@ -2280,7 +2282,8 @@ NotationView::slotCurrentStaffUp()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition = RosegardenDocument::currentDocument->getComposition().getPosition();
+    timeT pointerPosition =
+        RosegardenDocument::currentDocument->getComposition().getPosition();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -2300,7 +2303,8 @@ NotationView::slotCurrentStaffDown()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition = RosegardenDocument::currentDocument->getComposition().getPosition();
+    timeT pointerPosition =
+        RosegardenDocument::currentDocument->getComposition().getPosition();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -2763,7 +2767,8 @@ NotationView::initializeNoteRestInserter()
     // Set Default Duration based on Time Signature denominator.
     // The default unitType is taken from the denominator of the time signature:
     //   e.g. 4/4 -> 1/4, 6/8 -> 1/8, 2/2 -> 1/2.
-    TimeSignature sig = RosegardenDocument::currentDocument->getComposition().getTimeSignatureAt(getInsertionTime());
+    TimeSignature sig =
+        RosegardenDocument::currentDocument->getComposition().getTimeSignatureAt(getInsertionTime());
     Note::Type unitType = sig.getUnit();
 
     QString actionName = NotationStrings::getReferenceName(Note(unitType,0));
@@ -3370,7 +3375,8 @@ NotationView::slotTransformsInterpret()
         CommandHistory::getInstance()->addCommand
             (new InterpretCommand
              (*selection,
-              RosegardenDocument::currentDocument->getComposition().getNotationQuantizer(),
+              RosegardenDocument::currentDocument->
+              getComposition().getNotationQuantizer(),
               dialog.getInterpretations()));
     }
 }
@@ -3428,7 +3434,8 @@ NotationView::slotMakeOrnament()
 
     CommandHistory::getInstance()->
         addCommand(new CutToTriggerSegmentCommand
-                   (getSelection(), RosegardenDocument::currentDocument->getComposition(),
+                   (getSelection(), RosegardenDocument::currentDocument->
+                    getComposition(),
                     name, basePitch, baseVelocity,
                     style->getName(), true,
                     BaseProperties::TRIGGER_SEGMENT_ADJUST_NONE,
@@ -3443,7 +3450,8 @@ NotationView::slotUseOrnament()
     if (!getSelection())
         return ;
 
-    UseOrnamentDialog dialog(this, &RosegardenDocument::currentDocument->getComposition());
+    UseOrnamentDialog dialog(this, &RosegardenDocument::currentDocument->
+                             getComposition());
     if (dialog.exec() != QDialog::Accepted)
         return ;
 
@@ -3483,8 +3491,9 @@ NotationView::slotShowOrnamentExpansion()
 void
 NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
 {
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     TriggerSegmentRec *rec =
-        RosegardenDocument::currentDocument->getComposition().getTriggerSegmentRec(trigger);
+        doc->getComposition().getTriggerSegmentRec(trigger);
 
     if (!rec) { return; }
     Segment *link = rec->makeLinkedSegment(trigger, containing);
@@ -3496,7 +3505,7 @@ NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
     // The same track the host segment had
     link->setTrack(containing->getTrack());
     // Give it a composition so it doesn't get into trouble.
-    link->setComposition(&RosegardenDocument::currentDocument->getComposition());
+    link->setComposition(&doc->getComposition());
 
     // Adopt it into the view.
     CommandHistory::getInstance()->addCommand
@@ -3508,10 +3517,11 @@ NotationView::EditOrnamentInline(Event *trigger, Segment *containing)
 void
 NotationView::ShowOrnamentExpansion(Event *trigger, Segment *containing)
 {
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     TriggerSegmentRec *rec =
-        RosegardenDocument::currentDocument->getComposition().getTriggerSegmentRec(trigger);
+        doc->getComposition().getTriggerSegmentRec(trigger);
     if (!rec) { return; }
-    Instrument *instrument = RosegardenDocument::currentDocument->getInstrument(containing);
+    Instrument *instrument = doc->getInstrument(containing);
 
     Segment *s =
         rec->makeExpansion(trigger, containing, instrument);
@@ -3522,7 +3532,7 @@ NotationView::ShowOrnamentExpansion(Event *trigger, Segment *containing)
     s->setGreyOut();
     // The same track the host segment had
     s->setTrack(containing->getTrack());
-    s->setComposition(&RosegardenDocument::currentDocument->getComposition());
+    s->setComposition(&doc->getComposition());
     s->normalizeRests(s->getStartTime(), s->getEndTime());
 
     // Adopt it into the view.
@@ -3796,7 +3806,8 @@ NotationView::slotEditSwitchPreset()
 
     if (dialog.getConvertAllSegments()) {
         // get all segments for this track and convert them.
-        Composition& comp = RosegardenDocument::currentDocument->getComposition();
+        Composition& comp =
+            RosegardenDocument::currentDocument->getComposition();
         TrackId selectedTrack = getCurrentSegment()->getTrack();
 
         // satisfy #1885251 the way that seems most reasonble to me at the
@@ -3939,7 +3950,10 @@ NotationView::slotCheckForParallels()
     Composition *composition = segment->getComposition();
 
     CheckForParallelsDialog *dialog =
-        new CheckForParallelsDialog(this, m_document, m_notationWidget->getScene(), composition);
+        new CheckForParallelsDialog(this,
+                                    RosegardenDocument::currentDocument,
+                                    m_notationWidget->getScene(),
+                                    composition);
 
     dialog->show();
 }
@@ -4053,7 +4067,8 @@ NotationView::slotRegenerateScene()
     m_notationWidget->slotSetFontName(m_fontName);
     m_notationWidget->slotSetFontSize(m_fontSize);
     m_notationWidget->getScene()->setHSpacing(
-            RosegardenDocument::currentDocument->getComposition().m_notationSpacing);
+            RosegardenDocument::currentDocument->
+            getComposition().m_notationSpacing);
 
     // restore zoom factors
     m_notationWidget->setVerticalZoomFactor(vZoomFactor);
@@ -4160,7 +4175,8 @@ NotationView::slotGroupTuplet(bool simple)
 
     if (!hasTimingAlready) {
 //        slotSetInsertCursorPosition(t + (unit * tupled), true, false);
-        m_document->slotSetPointerPosition(t + (unit * tupled));
+        RosegardenDocument::currentDocument->
+            slotSetPointerPosition(t + (unit * tupled));
     }
 }
 
@@ -4493,7 +4509,8 @@ NotationView::slotStepBackward()
         { --i; }
 
     if (i != segment->end()){
-        m_document->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
+        RosegardenDocument::currentDocument->
+            slotSetPointerPosition((*i)->getNotationAbsoluteTime());
     }
 }
 
@@ -4511,10 +4528,11 @@ NotationView::slotStepForward()
             !isShowable(*i)))
         { ++i; }
 
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (i == segment->end()){
-        m_document->slotSetPointerPosition(segment->getEndMarkerTime());
+        doc->slotSetPointerPosition(segment->getEndMarkerTime());
     } else {
-        m_document->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
+        doc->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
     }
 }
 
@@ -4701,12 +4719,12 @@ void
 NotationView::slotHoveredOverAbsoluteTimeChanged(unsigned int time)
 {
     timeT t = time;
-    RealTime rt =
-        RosegardenDocument::currentDocument->getComposition().getElapsedRealTime(t);
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    RealTime rt = doc->getComposition().getElapsedRealTime(t);
     long ms = rt.msec();
 
     int bar, beat, fraction, remainder;
-    RosegardenDocument::currentDocument->getComposition().getMusicalTimeForAbsoluteTime
+    doc->getComposition().getMusicalTimeForAbsoluteTime
         (t, bar, beat, fraction, remainder);
 
     //    QString message;
@@ -4752,8 +4770,9 @@ NotationView::slotSpacingComboChanged(int index)
     int spacing = m_availableSpacings[index];
     if (m_notationWidget) m_notationWidget->getScene()->setHSpacing(spacing);
 
-    RosegardenDocument::currentDocument->getComposition().m_notationSpacing = spacing;
-    RosegardenDocument::currentDocument->slotDocumentModified();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    doc->getComposition().m_notationSpacing = spacing;
+    doc->slotDocumentModified();
 
     QString action = QString("spacing_%1").arg(spacing);
     findAction(action)->setChecked(true);
@@ -5525,7 +5544,8 @@ NotationView::slotNewLayerFromSelection()
 void
 NotationView::slotConfigure()
 {
-    ConfigureDialog *configDlg =  new ConfigureDialog(RosegardenDocument::currentDocument, this);
+    ConfigureDialog *configDlg =
+        new ConfigureDialog(RosegardenDocument::currentDocument, this);
 
     configDlg->setNotationPage();
     configDlg->show();
@@ -5599,7 +5619,8 @@ NotationView::slotInterpretActivate()
     // though it were the dialog
     CommandHistory::getInstance()->addCommand(new InterpretCommand
          (*selection,
-          RosegardenDocument::currentDocument->getComposition().getNotationQuantizer(),
+          RosegardenDocument::currentDocument->
+          getComposition().getNotationQuantizer(),
           flags));
 }
 

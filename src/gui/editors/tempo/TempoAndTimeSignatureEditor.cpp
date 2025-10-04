@@ -171,7 +171,7 @@ TempoAndTimeSignatureEditor::TempoAndTimeSignatureEditor(timeT openTime)
     // Note: Must do this AFTER restoreState() or else it will not work.
     m_tableWidget->horizontalHeader()->setStretchLastSection(true);
 
-    m_doc->getComposition().addObserver(this);
+    RosegardenDocument::currentDocument->getComposition().addObserver(this);
 
 }
 

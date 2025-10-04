@@ -33,7 +33,6 @@ namespace Rosegarden
 {
 
 
-class RosegardenDocument;
 class MatrixWidget;
 class Segment;
 class CommandRegistry;
@@ -58,8 +57,7 @@ class MatrixView : public EditViewBase,
     Q_OBJECT
 
 public:
-    MatrixView(RosegardenDocument *doc,
-               const std::vector<Segment *>& segments,
+    MatrixView(const std::vector<Segment *>& segments,
                bool drumMode);
 
     ~MatrixView() override;
@@ -265,7 +263,6 @@ protected:
     void insertControllerSequence(const ControlParameter &controlParameter);
 
 private:
-    RosegardenDocument *m_document;
     MatrixWidget *m_matrixWidget;
     QSharedPointer<CommandRegistry> m_commandRegistry;
 

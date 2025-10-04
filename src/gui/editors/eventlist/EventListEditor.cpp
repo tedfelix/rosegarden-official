@@ -155,8 +155,7 @@ namespace
 }
 
 
-EventListEditor::EventListEditor(RosegardenDocument *doc,
-                     const std::vector<Segment *> &segments) :
+EventListEditor::EventListEditor(const std::vector<Segment *> &segments) :
     EditViewBase(segments)
 {
     // We only support a single Segment.
@@ -176,10 +175,11 @@ EventListEditor::EventListEditor(RosegardenDocument *doc,
     setStatusBar(new QStatusBar(this));
 
     // Connect for changes so we can update the list.
-    connect(doc, &RosegardenDocument::documentModified,
+    connect(RosegardenDocument::currentDocument,
+            &RosegardenDocument::documentModified,
             this, &EventListEditor::slotDocumentModified);
 
-    Composition &comp = doc->getComposition();
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
     m_isTriggerSegment = (comp.getTriggerSegmentId(segments[0]) >= 0);
 

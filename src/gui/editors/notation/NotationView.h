@@ -56,8 +56,7 @@ class ROSEGARDENPRIVATE_EXPORT NotationView : public EditViewBase,
 public:
     typedef std::vector<Segment *> SegmentVector;
     typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
-    NotationView(RosegardenDocument *doc,
-                 const std::vector<Segment *>& segments);
+    NotationView(const std::vector<Segment *>& segments);
 
     ~NotationView() override;
 
@@ -492,9 +491,6 @@ private:
 
 // FIXME: likely to be debated. --gp     Used for subclassing in pitchtracker
 protected:
-    // !!! Duplicates m_doc in base class
-    RosegardenDocument *m_document;
-
     NotationWidget *m_notationWidget;
     EventSelection *getRulerSelection() const;
 

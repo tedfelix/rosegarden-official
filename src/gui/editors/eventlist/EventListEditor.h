@@ -43,7 +43,6 @@ namespace Rosegarden
 {
 
 
-class RosegardenDocument;
 class Event;
 
 
@@ -57,8 +56,7 @@ class EventListEditor : public EditViewBase
 
 public:
 
-    EventListEditor(RosegardenDocument *doc,
-                    const std::vector<Segment *> &segments);
+    EventListEditor(const std::vector<Segment *> &segments);
 
     ~EventListEditor() override;
 
