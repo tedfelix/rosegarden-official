@@ -139,14 +139,15 @@ public:
         return create(getURIFor(tag), p);
     }
 
-    void registerBuilder(QUrl uri, Builder *builder) {
+    void registerBuilder(const QUrl& uri, Builder *builder) {
         if (m_registry.contains(uri)) {
             throw DuplicateThingException();
         }
 	m_registry[uri] = builder;
     }
 
-    void registerBuilder(QUrl uri, Builder *builder, QStringList tags) {
+    void registerBuilder(const QUrl& uri, Builder *builder,
+                         const QStringList& tags) {
         if (m_registry.contains(uri)) {
             throw DuplicateThingException();
         }

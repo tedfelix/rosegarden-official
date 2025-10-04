@@ -56,7 +56,7 @@ class ROSEGARDENPRIVATE_EXPORT NotationView : public EditViewBase,
 public:
     typedef std::vector<Segment *> SegmentVector;
     typedef void (NotationView::*opOnEvent) (Event* e, Segment *containing);
-    NotationView(const std::vector<Segment *>& segments);
+    explicit NotationView(const std::vector<Segment *>& segments);
 
     ~NotationView() override;
 

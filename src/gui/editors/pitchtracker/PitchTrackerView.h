@@ -53,7 +53,7 @@ class PitchTrackerView : public NotationView
 
 public:
     // basic Rosegarden infrastructure
-    PitchTrackerView(const std::vector<Segment *> &segments);
+    explicit PitchTrackerView(const std::vector<Segment *> &segments);
     ~PitchTrackerView() override;
 
     void setSegments(const std::vector<Segment *> &segments);

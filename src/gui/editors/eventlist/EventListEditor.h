@@ -56,7 +56,7 @@ class EventListEditor : public EditViewBase
 
 public:
 
-    EventListEditor(const std::vector<Segment *> &segments);
+    explicit EventListEditor(const std::vector<Segment *> &segments);
 
     ~EventListEditor() override;
 

@@ -67,7 +67,7 @@ public:
     }
 
 protected:
-    explicit AudioWriteStream(Target t) : m_target(t) { }
+    explicit AudioWriteStream(const Target& t) : m_target(t) { }
     Target m_target;
 };
 
@@ -76,7 +76,7 @@ class AudioWriteStreamBuilder :
 public ConcreteThingBuilder<T, AudioWriteStream, AudioWriteStream::Target>
 {
 public:
-    AudioWriteStreamBuilder(const QUrl& uri, QStringList extensions) :
+    AudioWriteStreamBuilder(const QUrl& uri, const QStringList& extensions) :
         ConcreteThingBuilder<T, AudioWriteStream, AudioWriteStream::Target>
         (uri, extensions) {
     }

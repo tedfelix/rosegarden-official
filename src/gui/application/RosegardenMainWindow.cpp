@@ -497,16 +497,16 @@ RosegardenMainWindow::RosegardenMainWindow(
 
     // Now autoload
     //
-    enterActionState("new_file"); //@@@ JAS orig. 0
-    leaveActionState("have_segments"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    leaveActionState("have_selection"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    leaveActionState("have_clipboard_can_paste_as_links");
+    RosegardenMainWindow::enterActionState("new_file"); //@@@ JAS orig. 0
+    RosegardenMainWindow::leaveActionState("have_segments"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+    RosegardenMainWindow::leaveActionState("have_selection"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+    RosegardenMainWindow::leaveActionState("have_clipboard_can_paste_as_links");
     slotTestClipboard();
 
     // Check for lack of MIDI devices and disable Studio options accordingly
     //
     if (!RosegardenDocument::currentDocument->getStudio().haveMidiDevices())
-        leaveActionState("got_midi_devices"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        RosegardenMainWindow::leaveActionState("got_midi_devices"); //@@@ JAS orig. KXMLGUIClient::StateReverse
 
     emit startupStatusMessage(tr("Starting..."));
 
@@ -540,8 +540,8 @@ RosegardenMainWindow::RosegardenMainWindow(
         //RG_DEBUG << e.getMessage().c_str();
     }
 
-    enterActionState("have_project_packager");
-    enterActionState("have_lilypondview");
+    RosegardenMainWindow::enterActionState("have_project_packager");
+    RosegardenMainWindow::enterActionState("have_lilypondview");
 
     QTimer::singleShot(1000, this, &RosegardenMainWindow::slotTestStartupTester);
 
@@ -1229,7 +1229,7 @@ RosegardenMainWindow::initView()
     m_zoomSlider->setSize(double(zoomLevel) / 1000.0);
     slotChangeZoom(zoomLevel);
 
-    enterActionState("new_file"); //@@@ JAS orig. 0
+    RosegardenMainWindow::enterActionState("new_file"); //@@@ JAS orig. 0
 
     if (findAction("show_chord_name_ruler")->isChecked()) {
         SetWaitCursor swc;
