@@ -695,8 +695,8 @@ NotationConfigurationPage::slotFontComboChanged(int index)
     settings.endGroup();
 
     try {
-        NoteFont *noteFont = NoteFontFactory::getFont
-                             (fontStr, NoteFontFactory::getDefaultSize(fontStr));
+        const NoteFont *noteFont = NoteFontFactory::getFont
+            (fontStr, NoteFontFactory::getDefaultSize(fontStr));
         const NoteFontMap &map(noteFont->getNoteFontMap());
         m_fontOriginLabel->setText(tr(map.getOrigin().toStdString().c_str()));
         m_fontCopyrightLabel->setText(tr(map.getCopyright().toStdString().c_str()));

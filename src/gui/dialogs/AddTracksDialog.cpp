@@ -192,7 +192,7 @@ void AddTracksDialog::updateInstrumentComboBox()
 {
     m_instrument->clear();
 
-    Studio &studio = RosegardenDocument::currentDocument->getStudio();
+    const Studio &studio = RosegardenDocument::currentDocument->getStudio();
 
     const Device *device = studio.getDevice(m_device->currentData().toUInt());
     if (!device)
@@ -250,7 +250,7 @@ void AddTracksDialog::accept()
     if (m_device->currentIndex() < 0)
         return;
 
-    Studio &studio = RosegardenDocument::currentDocument->getStudio();
+    const Studio &studio = RosegardenDocument::currentDocument->getStudio();
 
     const Device *device = studio.getDevice(m_device->currentData().toUInt());
     if (!device)

@@ -64,6 +64,7 @@ CommentsConfigurationPage::CommentsConfigurationPage(
 
     // Top widgets
     m_pageLabel = new QLabel();
+    // cppcheck-suppress constVariablePointer
     QLabel *filler = new QLabel("");
     m_pageButton = new QPushButton();
 
@@ -91,11 +92,11 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     setClearButton();
     m_reloadButton = new QPushButton();
     setReloadButton();
-    
+
 
 
     // Define the page layout
-    
+
     // Main layout
     // Contains top widgets, text editor and bottom widgets
     QVBoxLayout *layout = new QVBoxLayout;
@@ -107,10 +108,10 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     pageNameLayout->addWidget(m_pageLabel);
     pageNameLayout->addWidget(filler);
     pageNameLayout->addWidget(m_pageButton);
-    
-    // Editor 
+
+    // Editor
     layout->addWidget(m_textEdit);
-    
+
     // Bottom widgets layout
     QHBoxLayout *buttonsLayout = new QHBoxLayout;
     layout->addLayout(buttonsLayout);
@@ -118,14 +119,14 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     buttonsLayout->addWidget(m_clearButton);
     buttonsLayout->addWidget(m_reloadButton);
 
-    
+
 
     // Read the comments from the document metadata
     m_comments = loadFromMetadata();
 
     // Display the reference page
     m_textEdit->setPlainText(m_comments[m_page].text);
-    
+
     // Set the pages related labels
     if (m_comments.size() == 1) {
         m_pageLabel->setText(tr(""));
@@ -182,7 +183,7 @@ CommentsConfigurationPage::createPage()
 }
 
 void
-CommentsConfigurationPage::showPage(QString pageName)
+CommentsConfigurationPage::showPage(const QString& pageName)
 {
     cacheEditedCommentPage();
     m_page = pageName;

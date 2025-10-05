@@ -448,7 +448,7 @@ AudioManagerDialog::getCurrentSelection()
         RG_WARNING << "AudioManagerDialog::getCurrentSelection() - til.isEmpty() so we're returning 0 and this game is over. Fail.";
         return nullptr;
     }
-    AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
+    const AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
     if (item == nullptr) {
         RG_WARNING << "AudioManagerDialog::getCurrentSelection() - item == 0 so we're returning 0 and this game is over. Epic fail.";
         return nullptr;
@@ -496,7 +496,7 @@ AudioManagerDialog::slotExportAudio()
     if (!item)
         return;
 
-    Segment *segment = item->getSegment();
+    const Segment *segment = item->getSegment();
 
     QString destFileName =
             FileDialog::getSaveFileName(
@@ -661,7 +661,7 @@ AudioManagerDialog::slotRemove()
 void
 AudioManagerDialog::slotPlayPreview()
 {
-    AudioFile *audioFile = getCurrentSelection();
+    const AudioFile *audioFile = getCurrentSelection();
 
     QList<QTreeWidgetItem*> til = m_fileList->selectedItems();
     if (til.isEmpty()) {
@@ -1292,15 +1292,15 @@ AudioManagerDialog::addAudioFile(const QString &filePath)
 bool
 AudioManagerDialog::isSelectedTrackAudio()
 {
-    Composition &comp = m_doc->getComposition();
-    Studio &studio = m_doc->getStudio();
+    const Composition &comp = m_doc->getComposition();
+    const Studio &studio = m_doc->getStudio();
 
     TrackId currentTrackId = comp.getSelectedTrack();
-    Track *track = comp.getTrackById(currentTrackId);
+    const Track *track = comp.getTrackById(currentTrackId);
 
     if (track) {
         InstrumentId ii = track->getInstrument();
-        Instrument *instrument = studio.getInstrumentById(ii);
+        const Instrument *instrument = studio.getInstrumentById(ii);
 
         if (instrument &&
                 instrument->getType() == Instrument::Audio)

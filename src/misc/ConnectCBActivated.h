@@ -32,7 +32,7 @@ namespace Rosegarden
  * deprecation warning.
  */
 template <typename T>
-void ConnectCBActivated(QComboBox *comboBox,
+void ConnectCBActivated(const QComboBox *comboBox,
                         T *targetObject,
                         void(T::*targetFunction)(const QString &))
 {

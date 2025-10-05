@@ -54,13 +54,13 @@ protected slots:
     void slotResetUndoClearButton();
     void slotResetUndoReloadButton();
     void slotShowPagesMenu();
-    
-    // Store the currently edited page in m_comments and update its time stamp 
+
+    // Store the currently edited page in m_comments and update its time stamp
     void cacheEditedCommentPage();
- 
+
 protected:
     MetadataHelper::CommentsMap loadFromMetadata();
-    void showPage(QString pageName);
+    void showPage(const QString& pageName);
     void createPage();
 
     // Set the correct label and tool tip for a button according to it's use
@@ -70,17 +70,17 @@ protected:
     void setReloadButton();
     void setUndoClearButton();
     void setUndoReloadButton();
-    
+
     RosegardenDocument *m_doc;
     MetadataHelper::CommentsMap m_comments;
     QString m_page;         // Current page
-    
+
     QLabel *m_pageLabel;
     QPushButton *m_pageButton;
     QPlainTextEdit *m_textEdit;
     ConfigureDialogBase *m_parentDialog;
     QCheckBox *m_checkBox;
-    
+
     QPushButton *m_clearButton;
     QPushButton *m_reloadButton;
     QString m_saveTextClear;
