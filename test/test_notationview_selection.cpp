@@ -72,7 +72,7 @@ void TestNotationViewSelection::initTestCase()
     std::vector<Segment *> segmentsVec;
     segmentsVec.push_back(m_segment);
 
-    m_view = new NotationView(&m_doc, segmentsVec);
+    m_view = new NotationView(segmentsVec);
 
     QVERIFY(!m_view->getSelection());
     QCOMPARE(m_view->getCurrentSegment(), m_segment);

@@ -65,7 +65,7 @@ protected:
 //    QByteArray m_stdoutBuffer;
 //    bool m_versionHttpFailed;
 //    void parseStdoutBuffer(QStringList &target);
-    bool isVersionNewerThan(QString, QString);
+    bool isVersionNewerThan(const QString&, const QString&);
 };
 
 

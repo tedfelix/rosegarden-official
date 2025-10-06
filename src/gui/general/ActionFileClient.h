@@ -116,9 +116,9 @@ protected:
     QToolBar *findToolbar(QString toolbarName);
 
     /// Enable/disable and show/hide actions based on the new state.
-    void enterActionState(QString stateName);
+    virtual void enterActionState(QString stateName);
     /// Enable/disable and show/hide actions based on leaving the state.
-    void leaveActionState(QString stateName);
+    virtual void leaveActionState(QString stateName);
 
     /// Enable auto-repeat for a toolbar button.
     void enableAutoRepeat(

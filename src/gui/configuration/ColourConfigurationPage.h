@@ -58,7 +58,7 @@ signals:
 protected slots:
     void slotAddNew();
     void slotDelete();
-    void slotTextChanged(unsigned int, QString);
+    void slotTextChanged(unsigned int, const QString&);
     void slotColourChanged(unsigned int, QColor);
 
 protected:

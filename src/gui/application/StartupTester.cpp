@@ -117,7 +117,7 @@ StartupTester::haveAudioFileImporter(QStringList *missingApplications)
 */
 
 bool
-StartupTester::isVersionNewerThan(QString a, QString b)
+StartupTester::isVersionNewerThan(const QString& a, const QString& b)
 {
     QRegularExpression re("[._-]");
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))

@@ -55,7 +55,7 @@ public:
 */
 
 protected:
-    static QString durationToString(Composition &comp,
+    static QString durationToString(const Composition &comp,
                                     timeT absTime,
                                     timeT duration,
                                     RealTime rt) {

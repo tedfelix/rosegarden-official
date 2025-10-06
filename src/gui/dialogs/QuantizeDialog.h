@@ -38,7 +38,7 @@ class QuantizeDialog : public QDialog
     Q_OBJECT
 
 public:
-    QuantizeDialog(QWidget *parent, bool inNotation = false);
+    explicit QuantizeDialog(QWidget *parent, bool inNotation = false);
 
     /// Returns a Quantizer configured to the user's specifications.
     std::shared_ptr<Quantizer> getQuantizer() const;

@@ -33,18 +33,34 @@ class AudioListItem : public QTreeWidgetItem
 {
 public:
     //    AudioListItem(QTreeWidget *parent):QTreeWidgetItem(), m_segment(0) {;}
- AudioListItem( const QStringList &strings, int type = Type ) : QTreeWidgetItem(strings, type), m_id(0), m_segment(nullptr) {  }
+    explicit AudioListItem(const QStringList &strings,
+                           int type = Type ) :
+        QTreeWidgetItem(strings, type), m_id(0), m_segment(nullptr) {  }
 
     // without m_id
- AudioListItem( QTreeWidget *parent, const QStringList &strings, int type=Type ) : QTreeWidgetItem(parent, strings, type), m_id(0), m_segment(nullptr) {  }
+    AudioListItem(QTreeWidget *parent,
+                  const QStringList &strings,
+                  int type=Type ) :
+        QTreeWidgetItem(parent, strings, type), m_id(0), m_segment(nullptr) {  }
 
- AudioListItem( AudioListItem *parent, const QStringList &strings, int type=Type ) : QTreeWidgetItem(parent, strings, type), m_id(0), m_segment(nullptr) {  }
+    AudioListItem(AudioListItem *parent,
+                  const QStringList &strings,
+                  int type=Type ) :
+        QTreeWidgetItem(parent, strings, type), m_id(0), m_segment(nullptr) {  }
 
 
     // with m_id
-    AudioListItem( QTreeWidget *parent, const QStringList &strings, AudioFileId id, int type=Type ) :QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
+    AudioListItem(QTreeWidget *parent,
+                  const QStringList &strings,
+                  AudioFileId id,
+                  int type=Type ) :
+        QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
 
-    AudioListItem( AudioListItem *parent, const QStringList &strings, AudioFileId id, int type=Type ) :QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
+    AudioListItem(AudioListItem *parent,
+                  const QStringList &strings,
+                  AudioFileId id,
+                  int type=Type ) :
+        QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
 
 
 

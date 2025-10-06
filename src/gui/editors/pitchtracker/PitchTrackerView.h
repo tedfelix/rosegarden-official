@@ -53,12 +53,10 @@ class PitchTrackerView : public NotationView
 
 public:
     // basic Rosegarden infrastructure
-    PitchTrackerView(RosegardenDocument *doc,
-                     const std::vector<Segment *> &segments);
+    explicit PitchTrackerView(const std::vector<Segment *> &segments);
     ~PitchTrackerView() override;
 
-    void setSegments(RosegardenDocument *document,
-                     const std::vector<Segment *> &segments);
+    void setSegments(const std::vector<Segment *> &segments);
 
     bool getJackConnected() {
         return m_jackConnected;
@@ -82,8 +80,6 @@ protected:
     /** Record new pitch data (history maintenance utility) */
     void addPitchTime(double freq, timeT time, RealTime realTime);
 
-    // doc for real-time/score-time conversion
-    RosegardenDocument         *m_doc;
     // get audio
     JackCaptureClient          *m_jackCaptureClient;
     bool                        m_jackConnected;

@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -61,6 +61,7 @@ ColourConfigurationPage::ColourConfigurationPage(QWidget *parent) :
     m_colourtable = new ColourTable(frame, m_map, m_listmap);
     m_colourtable->setFixedHeight(280);
 
+    // cppcheck-suppress duplicateExpression
     layout->addWidget(m_colourtable, 0, 0, 0- 0+1, 1- 0+1);
 
     QPushButton* addColourButton = new QPushButton(tr("Add New Color"),
@@ -97,7 +98,8 @@ ColourConfigurationPage::ColourConfigurationPage(QWidget *parent) :
 }
 
 void
-ColourConfigurationPage::slotTextChanged(unsigned int index, QString string)
+ColourConfigurationPage::slotTextChanged(unsigned int index,
+                                         const QString& string)
 {
     m_map.modifyName(m_listmap[index], std::string(string.toLatin1()));
     m_colourtable->populate_table(m_map, m_listmap);
@@ -138,7 +140,7 @@ ColourConfigurationPage::slotAddNew()
         //int result = box.getColor( temp );
         //QColor col = QColorDialog::getColor();
         // QRgb rgba = QColorDialog::getRgba( 0xFFFFFFFF, &c_ok, 0 );    // 0 == parent
-        
+
         QColor temp2 = temp;
         m_map.addEntry(temp2, qstrtostr(newName));
         m_colourtable->populate_table(m_map, m_listmap);
@@ -153,10 +155,10 @@ ColourConfigurationPage::slotDelete()
 {
     //old: QTableWidgetSelection temp = m_colourtable->selection(0);
     QList<QTableWidgetItem *> temp = m_colourtable->selectedItems();
-    
+
 //    if ((!temp.isActive()) || (temp.topRow() == 0))    //&&& check re-implementation
 //        return ;
-    
+
     if( temp.isEmpty() ){
         // fail silently
         return;

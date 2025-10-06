@@ -126,17 +126,16 @@ namespace Rosegarden
 {
 
 
-MatrixView::MatrixView(RosegardenDocument *doc,
-                       const std::vector<Segment *>& segments,
+MatrixView::MatrixView(const std::vector<Segment *>& segments,
                        bool drumMode) :
     EditViewBase(segments),
     m_quantizations(Quantizer::getQuantizations()),
     m_drumMode(drumMode),
     m_inChordMode(false)
 {
-    m_document = doc;
     m_matrixWidget = new MatrixWidget(m_drumMode);
     setCentralWidget(m_matrixWidget);
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     m_matrixWidget->setSegments(doc, segments);
 
     // Many actions are created here
@@ -191,12 +190,12 @@ MatrixView::MatrixView(RosegardenDocument *doc,
         MATRIX_DEBUG << "newest state for action '" << toolAction->objectName() << "' is " << toolAction->isChecked();
     }
 
-    m_scrollToFollow = m_document->getComposition().getEditorFollowPlayback();
+    m_scrollToFollow = doc->getComposition().getEditorFollowPlayback();
     findAction("scroll_to_follow")->setChecked(m_scrollToFollow);
     m_matrixWidget->setScrollToFollowPlayback(m_scrollToFollow);
 
     slotUpdateWindowTitle();
-    connect(m_document, &RosegardenDocument::documentModified,
+    connect(doc, &RosegardenDocument::documentModified,
             this, &MatrixView::slotUpdateWindowTitle);
 
     // Set initial visibility ...
@@ -276,8 +275,7 @@ MatrixView::MatrixView(RosegardenDocument *doc,
     enableAutoRepeat("Transport Toolbar", "cursor_back");
     enableAutoRepeat("Transport Toolbar", "cursor_forward");
 
-    connect(RosegardenDocument::currentDocument,
-                &RosegardenDocument::loopChanged,
+    connect(doc, &RosegardenDocument::loopChanged,
             this, &MatrixView::slotLoopChanged);
     // Make sure we are in sync.
     slotLoopChanged();
@@ -614,10 +612,10 @@ MatrixView::setupActions()
     bool channelPressureEnabled = false;
     bool keyPressureEnabled = false;
     for(const Segment* segment : m_segments) {
-        Track *track =
-            m_document->getComposition().getTrackById(segment->getTrack());
+        RosegardenDocument* doc = RosegardenDocument::currentDocument;
+        Track *track = doc->getComposition().getTrackById(segment->getTrack());
 
-        Instrument *instrument = m_document->getStudio().
+        Instrument *instrument = doc->getStudio().
             getInstrumentById(track->getInstrument());
 
         if (instrument) {
@@ -952,8 +950,9 @@ MatrixView::getRulerSelection() const
 timeT
 MatrixView::getInsertionTime() const
 {
-    if (!m_document) return 0;
-    return m_document->getComposition().getPosition();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    if (!doc) return 0;
+    return doc->getComposition().getPosition();
 }
 
 const SnapGrid *
@@ -1248,8 +1247,8 @@ MatrixView::slotPlaceControllers()
     ControlParameter *cp = cr->getControlParameter();
     if (!cp) { return; }
 
-    const Instrument *instrument =
-        RosegardenDocument::currentDocument->getInstrument(getCurrentSegment());
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    const Instrument *instrument = doc->getInstrument(getCurrentSegment());
     if (!instrument) { return; }
 
     PlaceControllersCommand *command =
@@ -1265,7 +1264,8 @@ MatrixView::slotTriggerSegment()
 {
     if (!getSelection()) return;
 
-    TriggerSegmentDialog dialog(this, &m_document->getComposition());
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    TriggerSegmentDialog dialog(this, &doc->getComposition());
     if (dialog.exec() != QDialog::Accepted) return;
 
     CommandHistory::getInstance()->addCommand
@@ -1315,12 +1315,13 @@ MatrixView::slotPreviewSelection()
     if (!getSelection())
         return;
 
-    Composition &composition = m_document->getComposition();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    Composition &composition = doc->getComposition();
 
     composition.setLoopMode(Composition::LoopOn);
     composition.setLoopStart(getSelection()->getStartTime());
     composition.setLoopEnd(getSelection()->getEndTime());
-    emit m_document->loopChanged();
+    emit doc->loopChanged();
 }
 
 void
@@ -1329,11 +1330,12 @@ MatrixView::slotClearLoop()
     // ??? Not sure why there is a Move > Clear Loop.  The LoopRuler
     //     is available.  One has full control of looping from there.
 
-    Composition &composition = m_document->getComposition();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    Composition &composition = doc->getComposition();
 
     // Less destructive.  Just turn it off.
     composition.setLoopMode(Composition::LoopOff);
-    emit m_document->loopChanged();
+    emit doc->loopChanged();
 }
 
 void
@@ -1428,7 +1430,8 @@ MatrixView::slotScrollToFollow()
 {
     m_scrollToFollow = !m_scrollToFollow;
     m_matrixWidget->setScrollToFollowPlayback(m_scrollToFollow);
-    m_document->getComposition().setEditorFollowPlayback(m_scrollToFollow);
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    doc->getComposition().setEditorFollowPlayback(m_scrollToFollow);
 }
 
 void
@@ -1843,10 +1846,11 @@ MatrixView::slotStepBackward()
 
     time = getSnapGrid()->snapTime(time - 1, SnapGrid::SnapLeft);
 
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (time < segment->getStartTime()){
-        m_document->slotSetPointerPosition(segment->getStartTime());
+        doc->slotSetPointerPosition(segment->getStartTime());
     } else {
-        m_document->slotSetPointerPosition(time);
+        doc->slotSetPointerPosition(time);
     }
 }
 
@@ -1869,10 +1873,11 @@ MatrixView::stepForward(bool force)
 
     time = getSnapGrid()->snapTime(time + 1, SnapGrid::SnapRight);
 
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (!force && (time > segment->getEndMarkerTime())){
-        m_document->slotSetPointerPosition(segment->getEndMarkerTime());
+        doc->slotSetPointerPosition(segment->getEndMarkerTime());
     } else {
-        m_document->slotSetPointerPosition(time);
+        doc->slotSetPointerPosition(time);
     }
 }
 
@@ -1982,7 +1987,7 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
     CommandHistory::getInstance()->addCommand(command);
 
     if (!m_inChordMode) {
-        m_document->slotSetPointerPosition(endTime);
+        RosegardenDocument::currentDocument->slotSetPointerPosition(endTime);
     }
 }
 
@@ -2101,7 +2106,7 @@ MatrixView::slotInsertNoteFromAction()
     CommandHistory::getInstance()->addCommand(command);
 
     if (!m_inChordMode) {
-        m_document->slotSetPointerPosition(endTime);
+        RosegardenDocument::currentDocument->slotSetPointerPosition(endTime);
     }
 
     emit noteInsertedFromKeyboard(segment, pitch);

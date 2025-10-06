@@ -47,7 +47,7 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     Studio& studio = doc->getStudio();
 
     int position = 0;
-    while(Track* track = comp.getTrackByPosition(position)) {
+    while(const Track* track = comp.getTrackByPosition(position)) {
         Instrument* instr = studio.getInstrumentFor(track);
         Instrument::InstrumentType itype = instr->getType();
         if (itype == Instrument::Audio) {
@@ -67,13 +67,13 @@ AudioPluginConnectionDialog::AudioPluginConnectionDialog
     InstrumentId pluginInstrumentId = m_connections.baseInstrument;
     QString pluginInstrumentName;
     if (pluginInstrumentId >= AudioInstrumentBase) {
-        Instrument* pluginInstrument =
+        const Instrument* pluginInstrument =
             studio.getInstrumentById(pluginInstrumentId);
         pluginInstrumentName =
             pluginInstrument->getLocalizedPresentationName();
     } else {
         // ist not an instrument its a buss
-        Buss* pluginBuss = studio.getBussById(pluginInstrumentId);
+        const Buss* pluginBuss = studio.getBussById(pluginInstrumentId);
         pluginInstrumentName =
             strtoqstr(pluginBuss->getPresentationName());
     }

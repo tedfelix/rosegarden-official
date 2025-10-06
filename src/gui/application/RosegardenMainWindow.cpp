@@ -497,16 +497,16 @@ RosegardenMainWindow::RosegardenMainWindow(
 
     // Now autoload
     //
-    enterActionState("new_file"); //@@@ JAS orig. 0
-    leaveActionState("have_segments"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    leaveActionState("have_selection"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    leaveActionState("have_clipboard_can_paste_as_links");
+    RosegardenMainWindow::enterActionState("new_file"); //@@@ JAS orig. 0
+    RosegardenMainWindow::leaveActionState("have_segments"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+    RosegardenMainWindow::leaveActionState("have_selection"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+    RosegardenMainWindow::leaveActionState("have_clipboard_can_paste_as_links");
     slotTestClipboard();
 
     // Check for lack of MIDI devices and disable Studio options accordingly
     //
     if (!RosegardenDocument::currentDocument->getStudio().haveMidiDevices())
-        leaveActionState("got_midi_devices"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        RosegardenMainWindow::leaveActionState("got_midi_devices"); //@@@ JAS orig. KXMLGUIClient::StateReverse
 
     emit startupStatusMessage(tr("Starting..."));
 
@@ -540,8 +540,8 @@ RosegardenMainWindow::RosegardenMainWindow(
         //RG_DEBUG << e.getMessage().c_str();
     }
 
-    enterActionState("have_project_packager");
-    enterActionState("have_lilypondview");
+    RosegardenMainWindow::enterActionState("have_project_packager");
+    RosegardenMainWindow::enterActionState("have_lilypondview");
 
     QTimer::singleShot(1000, this, &RosegardenMainWindow::slotTestStartupTester);
 
@@ -1229,7 +1229,7 @@ RosegardenMainWindow::initView()
     m_zoomSlider->setSize(double(zoomLevel) / 1000.0);
     slotChangeZoom(zoomLevel);
 
-    enterActionState("new_file"); //@@@ JAS orig. 0
+    RosegardenMainWindow::enterActionState("new_file"); //@@@ JAS orig. 0
 
     if (findAction("show_chord_name_ruler")->isChecked()) {
         SetWaitCursor swc;
@@ -3193,8 +3193,9 @@ RosegardenMainWindow::slotSplitSelectionByDrum()
 
 
                 // get percussion key map, if available, or a fat 0 otherwise
-                Composition &comp = RosegardenDocument::currentDocument->getComposition();
-                Track *track = comp.getTrackById((*i)->getTrack());
+                const Composition &comp =
+                    RosegardenDocument::currentDocument->getComposition();
+                const Track *track = comp.getTrackById((*i)->getTrack());
                 Instrument *inst = RosegardenDocument::currentDocument->getStudio().getInstrumentById(track->getInstrument());
                 const MidiKeyMapping *keyMap = inst->getKeyMapping();
 
@@ -3242,7 +3243,7 @@ RosegardenMainWindow::slotCreateAnacrusis()
     const timeT compositionEnd = comp.getEndMarker();
 
     // Make sure at least one Segment is at the Composition start.
-    for (Segment *segment : selection) {
+    for (const Segment *segment : selection) {
         if (segment->getStartTime() == origCompStart)
             haveBeginningSegment = true;
     }
@@ -4860,7 +4861,8 @@ RosegardenMainWindow::slotUpdateUI()
     // Update the playback position pointer
 
     RealTime position = SequencerDataBlock::getInstance()->getPositionPointer();
-    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    const Composition &comp =
+        RosegardenDocument::currentDocument->getComposition();
     timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
 
     // We don't want slotSetPointerPosition() to affect the sequencer.
@@ -5060,7 +5062,8 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 void
 RosegardenMainWindow::displayBarTime(timeT t)
 {
-    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    const Composition &comp
+        = RosegardenDocument::currentDocument->getComposition();
 
     int barNo = comp.getBarNumber(t);
     timeT barStart = comp.getBarStart(barNo);
@@ -5257,7 +5260,7 @@ RosegardenMainWindow::slotExportMIDI()
 }
 
 bool
-RosegardenMainWindow::exportMIDIFile(QString file)
+RosegardenMainWindow::exportMIDIFile(const QString& file)
 {
     // Progress Dialog
     QProgressDialog progressDialog(
@@ -5832,7 +5835,7 @@ RosegardenMainWindow::slotToggleRecord()
 void
 RosegardenMainWindow::slotLoopChanged()
 {
-    Composition &composition =
+    const Composition &composition =
         RosegardenDocument::currentDocument->getComposition();
 
     // ??? Should RD do this on its own in response to loopChanged()?
@@ -5912,7 +5915,8 @@ RosegardenMainWindow::slotPlay()
 void
 RosegardenMainWindow::slotJumpToTime(RealTime rt)
 {
-    Composition *comp = &RosegardenDocument::currentDocument->getComposition();
+    const Composition *comp =
+        &RosegardenDocument::currentDocument->getComposition();
     timeT t = comp->getElapsedTimeForRealTime(rt);
     RosegardenDocument::currentDocument->slotSetPointerPosition(t);
 }
@@ -6532,7 +6536,9 @@ RosegardenMainWindow::createRecordAudioFiles(const QVector<InstrumentId> &record
         AudioFile *aF = nullptr;
         try {
             std::string alias = "";
-            Instrument *ins = RosegardenDocument::currentDocument->getStudio().getInstrumentById(recordInstruments[i]);
+            const Instrument *ins =
+                RosegardenDocument::currentDocument->
+                getStudio().getInstrumentById(recordInstruments[i]);
             if (ins) alias = ins->getAlias();
             aF = RosegardenDocument::currentDocument->getAudioFileManager().createRecordingAudioFile(RosegardenDocument::currentDocument->getTitle(),
                                                                        strtoqstr(alias));
@@ -6575,7 +6581,9 @@ RosegardenMainWindow::getArmedInstruments()
     for (Composition::TrackIdSet::const_iterator i =
                 tr.begin(); i != tr.end(); ++i) {
         TrackId tid = (*i);
-        Track *track = RosegardenDocument::currentDocument->getComposition().getTrackById(tid);
+        const Track *track =
+            RosegardenDocument::currentDocument->
+            getComposition().getTrackById(tid);
         if (track) {
             iid.insert(track->getInstrument());
         } else {
@@ -6795,7 +6803,7 @@ RosegardenMainWindow::slotRelabelSegments()
     QString oldLabel = strtoqstr((*selection.begin())->getLabel());
 
     // For each Segment in the SegmentSelection...
-    for (Segment *segment : selection) {
+    for (const Segment *segment : selection) {
         // If they don't all have the same name, go with blank.
         if (strtoqstr(segment->getLabel()) != oldLabel) {
             oldLabel = "";
@@ -7329,7 +7337,9 @@ RosegardenMainWindow::slotPluginSelected(InstrumentId instrumentId,
     // It's assumed that ports etc will already have been set up on
     // the AudioPluginInstance before this is invoked.
 
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginSelected - "
         << "no instrument or buss of id " << instrumentId;
@@ -7477,7 +7487,9 @@ RosegardenMainWindow::slotChangePluginPort(InstrumentId instrumentId,
                                            int portIndex,
                                            float value)
 {
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginPort - "
         << "no instrument or buss of id " << instrumentId;
@@ -7522,7 +7534,9 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
                                             int pluginIndex,
                                             int portIndex)
 {
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginPortChanged - "
                  << "no instrument or buss of id " << instrumentId;
@@ -7566,7 +7580,9 @@ RosegardenMainWindow::slotChangePluginProgram(InstrumentId instrumentId,
         int pluginIndex,
         QString program)
 {
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginProgram - "
         << "no instrument or buss of id " << instrumentId;
@@ -7615,7 +7631,9 @@ void
 RosegardenMainWindow::slotPluginProgramChanged(InstrumentId instrumentId,
         int pluginIndex)
 {
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginProgramChanged - "
         << "no instrument or buss of id " << instrumentId;
@@ -7665,7 +7683,9 @@ RosegardenMainWindow::slotChangePluginConfiguration(InstrumentId instrumentId,
                                                     const QString &configKey,
                                                     const QString &configValue)
 {
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotChangePluginConfiguration - "
         << "no instrument or buss of id " << instrumentId;
@@ -7761,7 +7781,9 @@ void
 RosegardenMainWindow::slotPluginBypassed(InstrumentId instrumentId,
                                          int pluginIndex, bool bypassed)
 {
-    PluginContainer *container = RosegardenDocument::currentDocument->getStudio().getContainerById(instrumentId);
+    const PluginContainer *container =
+        RosegardenDocument::currentDocument->
+        getStudio().getContainerById(instrumentId);
     if (!container) {
         RG_DEBUG << "slotPluginBypassed - "
         << "no instrument or buss of id " << instrumentId;
@@ -7951,8 +7973,9 @@ void
 RosegardenMainWindow::slotPopulateTrackInstrumentPopup()
 {
     RG_DEBUG << "slotSetTrackInstrument\n";
-    Composition &comp = RosegardenDocument::currentDocument->getComposition();
-    Track *track = comp.getTrackById(comp.getSelectedTrack());
+    const Composition &comp =
+        RosegardenDocument::currentDocument->getComposition();
+    const Track *track = comp.getTrackById(comp.getSelectedTrack());
 
     if (!track) {
         RG_DEBUG << "Weird: no track available for instrument popup!";
@@ -8093,7 +8116,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &file)
         for (DeviceVector::const_iterator i =
                  oldStudio.begin(); i != oldStudio.end(); ++i) {
 
-            MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
+            const MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
             if (md && (md->getDirection() == MidiDevice::Play)) {
                 midiPlayDevices.push_back((*i)->getId());
@@ -8377,8 +8400,8 @@ RosegardenMainWindow::slotJumpToQuickMarker()
 
 void
 RosegardenMainWindow::slotDisplayWarning(int type,
-                                         QString text,
-                                         QString informativeText)
+                                         const QString& text,
+                                         const QString& informativeText)
 {
     RG_WARNING << "slotDisplayWarning(): MAIN WINDOW DISPLAY WARNING:  type " << type << " text" << text;
 
@@ -8737,7 +8760,7 @@ RosegardenMainWindow::changeEvent(QEvent *event)
     if (instrumentId == NoInstrument)
         return;
 
-    Instrument *instrument =
+    const Instrument *instrument =
             RosegardenDocument::currentDocument->getStudio().getInstrumentById(instrumentId);
 
     if (!instrument)
@@ -8816,7 +8839,7 @@ RosegardenMainWindow::customEvent(QEvent *event)
     }
 
     if (event->type() == Rewind) {
-        ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
+        const ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
         if (!buttonEvent)
             return;
 
@@ -8825,7 +8848,7 @@ RosegardenMainWindow::customEvent(QEvent *event)
         return;
     }
     if (event->type() == FastForward) {
-        ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
+        const ButtonEvent *buttonEvent = dynamic_cast<ButtonEvent *>(event);
         if (!buttonEvent)
             return;
 

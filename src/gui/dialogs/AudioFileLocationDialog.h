@@ -37,7 +37,7 @@ class AudioFileLocationDialog : public QDialog
     Q_OBJECT
 
 public:
-    AudioFileLocationDialog(QWidget *parent, QString documentNameDir);
+    AudioFileLocationDialog(QWidget *parent, const QString& documentNameDir);
 
 public slots:
     virtual void accept() override;

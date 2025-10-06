@@ -225,7 +225,7 @@ RingBuffer<T, N>::~RingBuffer()
         // cppcheck-suppress invalidPointerCast
         ::munlock((char *)m_buffer, m_size * sizeof(T));
 #else
-        ::munlock((void *)m_buffer, m_size * sizeof(T));
+        ::munlock(static_cast<void *>(m_buffer), m_size * sizeof(T));
 #endif
     }
     delete[] m_buffer;
@@ -259,7 +259,7 @@ RingBuffer<T, N>::resize(size_t newSize)
         // cppcheck-suppress invalidPointerCast
         ::munlock((char *)m_buffer, m_size * sizeof(T));
 #else
-        ::munlock((void *)m_buffer, m_size * sizeof(T));
+        ::munlock(static_cast<void *>(m_buffer), m_size * sizeof(T));
 #endif
     }
 
@@ -274,7 +274,7 @@ RingBuffer<T, N>::resize(size_t newSize)
         // cppcheck-suppress invalidPointerCast
         if (::mlock((char *)m_buffer, m_size * sizeof(T))) {
 #else
-        if (::mlock((void *)m_buffer, m_size * sizeof(T))) {
+            if (::mlock(static_cast<void *>(m_buffer), m_size * sizeof(T))) {
 #endif
             m_mlocked = false;
         }
@@ -307,7 +307,7 @@ RingBuffer<T, N>::mlock()
     // cppcheck-suppress invalidPointerCast
     if (::mlock((char *)m_buffer, m_size * sizeof(T))) return false;
 #else
-    if (::mlock((void *)m_buffer, m_size * sizeof(T))) return false;
+    if (::mlock(static_cast<void *>(m_buffer), m_size * sizeof(T))) return false;
 #endif
     m_mlocked = true;
     return true;
@@ -321,7 +321,7 @@ RingBuffer<T, N>::munlock()
     // cppcheck-suppress invalidPointerCast
     if (::munlock((char *)m_buffer, m_size * sizeof(T))) return false;
 #else
-    if (::munlock((void *)m_buffer, m_size * sizeof(T))) return false;
+    if (::munlock(static_cast<void *>(m_buffer), m_size * sizeof(T))) return false;
 #endif
     m_mlocked = false;
     return true;
