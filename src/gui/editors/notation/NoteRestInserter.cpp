@@ -372,11 +372,11 @@ NoteRestInserter::setCursorShape()
         params.setDots(getCurrentNote().getDots());
         params.setForcedColor(GUIPalette::PreviewColor);
 
-        QGraphicsPixmapItem * gitem =
-            dynamic_cast<QGraphicsPixmapItem *>(pixmapFactory->makeRest(params));
-        NOTATION_DEBUG << "rest: gitem =" << gitem;
+        std::unique_ptr<QGraphicsPixmapItem> graphicsPixmapItem(
+            dynamic_cast<QGraphicsPixmapItem *>(pixmapFactory->makeRest(params)));
+        NOTATION_DEBUG << "rest: graphicsPixmapItem =" << graphicsPixmapItem;
 
-        QPixmap pixmap = gitem->pixmap();
+        QPixmap pixmap = graphicsPixmapItem->pixmap();
         QCursor cursor(pixmap);
         m_widget->setCanvasCursor(cursor);
     } else {
