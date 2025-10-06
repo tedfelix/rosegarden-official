@@ -15,9 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[LilyPondOptionsDialog]"
+#define RG_NO_DEBUG_PRINT
+
 #include "LilyPondOptionsDialog.h"
 
 #include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 #include "document/io/LilyPondExporter.h"
 #include "document/RosegardenDocument.h"
 #include "gui/configuration/HeadersConfigurationPage.h"
@@ -369,14 +373,17 @@ LilyPondOptionsDialog::populateDefaultValues()
     QSettings settings;
     settings.beginGroup(LilyPondExportConfigGroup);
 
-    m_lilyLanguage->setCurrentIndex(settings.value("lilylanguage",
-        LILYPOND_VERSION_DEFAULT - LILYPOND_VERSION_TOO_OLD + 1).toUInt());
-    // See also setDefaultLilyPondVersion below
-    int defaultPaperSize = 1; // A4
+    // Compatibility level
+    m_lilyLanguage->setCurrentIndex(settings.value(
+            "lilylanguage", LILYPOND_VERSION_DEFAULT_SETTINGS).toUInt());
+
+    // Paper size
+    int defaultPaperSize = 1; // PAPER_A4
     if (QLocale::system().country() == QLocale::UnitedStates) {
-        defaultPaperSize = 5; // Letter
+        defaultPaperSize = 5; // PAPER_LETTER
     }
     m_lilyPaperSize->setCurrentIndex(settings.value("lilypapersize", defaultPaperSize).toUInt());
+
     m_lilyPaperLandscape->setChecked(qStrToBool(settings.value("lilypaperlandscape", "false")));
     m_lilyFontSize->setCurrentIndex(settings.value("lilyfontsize", FONT_20).toUInt());
     m_lilyRaggedBottom->setChecked(qStrToBool(settings.value("lilyraggedbottom", "false")));
@@ -385,6 +392,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     m_lilyChordNamesMode->setChecked(qStrToBool(settings.value("lilychordnamesmode", "false")));
     m_lilyExportLyrics->setCurrentIndex(settings.value("lilyexportlyrics", 1).toUInt());
     m_lilyTempoMarks->setCurrentIndex(settings.value("lilyexporttempomarks", 0).toUInt());
+
     if (m_createdFromNotationEditor) {
         // This item is the default when the dialog is opened from the notation
         // editor.
@@ -392,6 +400,7 @@ LilyPondOptionsDialog::populateDefaultValues()
     } else {
         m_lilyExportSelection->setCurrentIndex(settings.value("lilyexportselection", 1).toUInt());
     }
+
     m_lilyExportBeams->setChecked(settings.value("lilyexportbeamings", "false").toBool());
     m_lilyExportStaffGroup->setChecked(settings.value("lilyexportstaffbrackets", "true").toBool());
     m_lilyMarkerMode->setCurrentIndex(settings.value("lilyexportmarkermode", 0).toUInt());
@@ -467,42 +476,5 @@ LilyPondOptionsDialog::accept()
     QDialog::accept();
 }
 
-/* unused
-void
-LilyPondOptionsDialog::setDefaultLilyPondVersion(QString version)
-{
-    QSettings settings;
-    settings.beginGroup(LilyPondExportConfigGroup);
-
-    int index = -1;
-    bool unstable = false;
-    if (version == "2.6" || version.startsWith("2.6.")) {
-        index = 0;
-    } else if (version == "2.7" || version.startsWith("2.7.")) {
-        unstable = true;
-        index = 1;
-    } else if (version == "2.8" || version.startsWith("2.8.")) {
-        index = 1;
-    } else if (version == "2.9" || version.startsWith("2.9.")) {
-        unstable = true;
-        index = 2;
-    } else if (version == "2.10" || version.startsWith("2.10.")) {
-        index = 2;
-    } else if (version == "2.11" || version.startsWith("2.11.")) {
-        unstable = true;
-        index = 3;
-    } else if (version == "2.12" || version.startsWith("2.12.")) {
-        index = 3;
-    }
-    if (unstable) {
-        std::cerr << "\nWARNING: Unstable LilyPond version detected, selecting next language version up\n" << std::endl;
-    }
-    if (index >= 0) {
-        settings.setValue("lilylanguage", index);
-    }
-
-    settings.endGroup();
-}
-*/
 
 }

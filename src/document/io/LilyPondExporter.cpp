@@ -28,7 +28,7 @@
 */
 
 #define RG_MODULE_STRING "[LilyPondExporter]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "LilyPondExporter.h"
 #include "LilyPondSegmentsContext.h"
@@ -861,6 +861,12 @@ LilyPondExporter::write()
                    << " instead";
         m_languageLevel = LILYPOND_VERSION_DEFAULT - 1;
     }
+
+    // We always feed the .ly file into convert-ly so the version ends up
+    // being whatever version is installed.  These RG_DEBUG's are the
+    // only way to see whether the version selection is working properly.
+    RG_DEBUG << "write(): m_languageLevel+1 " << m_languageLevel+1;
+    RG_DEBUG << "write(): string " << LilyPond_Version_Strings[m_languageLevel+1];
 
     str << "\\version \"" << LilyPond_Version_Strings[m_languageLevel+1] << "\"\n";
 

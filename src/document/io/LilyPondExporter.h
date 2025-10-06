@@ -293,6 +293,8 @@ private:
     const PropertyName SKIP_PROPERTY;
 
     unsigned int m_paperSize;
+    // ??? These need to be public someplace LilyPondOptionsDialog can get
+    //     to them.  It needs PAPER_A4 and PAPER_LETTER.
     static const unsigned int PAPER_A3      = 0;
     static const unsigned int PAPER_A4      = 1;
     static const unsigned int PAPER_A5      = 2;
