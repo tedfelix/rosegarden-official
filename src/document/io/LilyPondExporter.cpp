@@ -135,7 +135,7 @@ LilyPondExporter::readConfigVariables()
     m_exportBeams = qStrToBool(settings.value("lilyexportbeamings", "false"));
     m_exportStaffGroup = qStrToBool(settings.value("lilyexportstaffbrackets", "true"));
 
-    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_DEFAULT).toUInt();
+    m_languageLevel = settings.value("lilylanguage", LILYPOND_VERSION_DEFAULT_SETTINGS).toUInt();
     m_exportMarkerMode = settings.value("lilyexportmarkermode", EXPORT_NO_MARKERS).toUInt();
     m_exportNoteLanguage = settings.value("lilyexportnotelanguage", LilyPondLanguage::NEDERLANDS).toUInt();
     m_chordNamesMode = qStrToBool(settings.value("lilychordnamesmode", "false"));
@@ -845,19 +845,24 @@ LilyPondExporter::write()
 
     str << m_language->getImportStatement();
 
+    // note: m_languageLevel runs from 0 to n for valid language
+    // versions. However the version enum and text runs from 0:
+    // LILYPOND_VERSION_TOO_OLD upwards. So m_languagelevel+1 must be
+    // used below
+
     // Verify that m_languageLevel is in the right range
-    if (    m_languageLevel <= LILYPOND_VERSION_TOO_OLD
-         || m_languageLevel >= LILYPOND_VERSION_TOO_NEW) {
+    if (    m_languageLevel+1 <= LILYPOND_VERSION_TOO_OLD
+         || m_languageLevel+1 >= LILYPOND_VERSION_TOO_NEW) {
 
         // force the default version if there was an error
         RG_WARNING << "ERROR: Unknown language level " << m_languageLevel
                    << ", using version "
                    << LilyPond_Version_Names[LILYPOND_VERSION_DEFAULT]
                    << " instead";
-        m_languageLevel = LILYPOND_VERSION_DEFAULT;
+        m_languageLevel = LILYPOND_VERSION_DEFAULT - 1;
     }
 
-    str << "\\version \"" << LilyPond_Version_Strings[m_languageLevel] << "\"\n";
+    str << "\\version \"" << LilyPond_Version_Strings[m_languageLevel+1] << "\"\n";
 
 
     // LilyPond \header block

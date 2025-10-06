@@ -64,6 +64,8 @@ enum {
 
 // Default version used if some error occurs
 const int LILYPOND_VERSION_DEFAULT = LILYPOND_VERSION_TOO_OLD + 1;
+// For the settings the default must be 1 lower. See also the comment in cpp
+const int LILYPOND_VERSION_DEFAULT_SETTINGS = LILYPOND_VERSION_DEFAULT - 1;
 
 // Versions strings associated with the previous enum.
 // They are used inside the LilyPond code.
