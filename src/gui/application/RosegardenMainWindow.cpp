@@ -496,10 +496,13 @@ RosegardenMainWindow::RosegardenMainWindow(
     m_seqManager->sendPreferences();
 
     // Now autoload
-    //
-    RosegardenMainWindow::enterActionState("new_file"); //@@@ JAS orig. 0
-    RosegardenMainWindow::leaveActionState("have_segments"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-    RosegardenMainWindow::leaveActionState("have_selection"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+
+    // Virtual functions do not work at construction time since the vtable is
+    // not complete.  Specify the exact function to make that clear.
+    // ??? Can we make these calls later to avoid caring about this?
+    RosegardenMainWindow::enterActionState("new_file");
+    RosegardenMainWindow::leaveActionState("have_segments");
+    RosegardenMainWindow::leaveActionState("have_selection");
     RosegardenMainWindow::leaveActionState("have_clipboard_can_paste_as_links");
     slotTestClipboard();
 
@@ -540,6 +543,9 @@ RosegardenMainWindow::RosegardenMainWindow(
         //RG_DEBUG << e.getMessage().c_str();
     }
 
+    // Virtual functions do not work at construction time since the vtable is
+    // not complete.  Specify the exact function to make that clear.
+    // ??? Can we make these calls later to avoid caring about this?
     RosegardenMainWindow::enterActionState("have_project_packager");
     RosegardenMainWindow::enterActionState("have_lilypondview");
 

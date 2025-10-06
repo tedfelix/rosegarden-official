@@ -44,8 +44,9 @@ Included in this release...
     [58a2e3d9fe]
   * Fix new MIDI ports called "unnamed" rather than "New Device".
     Bug #1710.  [2c18d18906]
+  * Fix lilypond version issue.  Bug #1739.  [55ef24b9bf]
 
-stopped at 2c18d18906
+stopped at da0b1bbfbe
 
 ===== New Features =====
 
