@@ -28,6 +28,7 @@
 
 class QPaintEvent;
 class QPainter;
+class QMainWindow;
 class QMouseEvent;
 
 
@@ -62,6 +63,10 @@ public:
 
     void setAutoScroller(QPointer<AutoScroller> autoScroller)
             { m_autoScroller = autoScroller; }
+
+    /// For status text.
+    void setMainWindow(QPointer<QMainWindow> mainWindow)
+            { m_mainWindow = mainWindow; }
 
     void setSnapGrid(const SnapGrid *grid);
 
@@ -113,6 +118,7 @@ private slots:
 
 private:
 
+    QMainWindow *m_mainWindow{nullptr};
     RosegardenDocument *m_doc;
 
     /**

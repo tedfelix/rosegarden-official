@@ -27,11 +27,13 @@
 #include "document/RosegardenDocument.h"
 #include "misc/Preferences.h"
 
-#include <QPainter>
-#include <QRect>
-#include <QPaintEvent>
-#include <QMouseEvent>
 #include <QBrush>
+#include <QMainWindow>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QRect>
+#include <QStatusBar>
 
 #include <utility>  // std::swap()
 
@@ -416,6 +418,12 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
         if (m_autoScroller)
             m_autoScroller->stop();
     }
+
+    // The main window uses the default grid.
+    const bool usingDefaultGrid = (m_grid == &m_defaultGrid);
+    if (usingDefaultGrid  &&  m_mainWindow)
+        m_mainWindow->statusBar()->clearMessage();
+
 }
 
 void
@@ -432,9 +440,12 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 void
 LoopRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
+    // The main window uses the default grid.
+    const bool usingDefaultGrid = (m_grid == &m_defaultGrid);
+
     // If the client hasn't provided its own grid, adjust the snap
     // based on the modifier keys.  This is for the main window.
-    if (m_grid == &m_defaultGrid) {
+    if (usingDefaultGrid) {
         // If the ctrl key is pressed, enable snap to beat
         if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
             m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
@@ -457,6 +468,11 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
         m_lastMouseXPos = x;
 
     }
+
+    if (usingDefaultGrid  &&  m_mainWindow)
+        m_mainWindow->statusBar()->showMessage(
+                tr("Hold Ctrl to snap to beat, Alt to snap to unit."), 10000);
+
 }
 
 void LoopRuler::slotLoopChanged()
