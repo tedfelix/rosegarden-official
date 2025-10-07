@@ -155,7 +155,7 @@ private:
     void checkParallels(std::vector<Transition> &tSet);
 
     // returns true if the transition set has parallels
-    bool hasParallels(std::vector<Transition> &tSet,
+    bool hasParallels(const std::vector<Transition> &tSet,
                       std::vector<Parallel> &parVec);
 
     // fill the fields of a parallel with exception of type

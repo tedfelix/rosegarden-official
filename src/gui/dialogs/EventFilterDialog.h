@@ -94,7 +94,7 @@ public:
      * MatrixView::slotFilterSelection() and NotationView::slotFilterSelection()
      * for examples of how to use this routine.
      */
-    bool keepEvent(const Event *e);
+    bool keepEvent(const Event *event);
 
 private:
 

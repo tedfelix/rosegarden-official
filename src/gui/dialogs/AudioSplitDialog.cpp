@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -86,7 +86,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     layout->addWidget(box);
 
     m_scene = new QGraphicsScene;
-	
+
     m_view = new QGraphicsView(m_scene);
     boxLayout->addWidget(m_view);
 
@@ -113,6 +113,7 @@ AudioSplitDialog::AudioSplitDialog(QWidget *parent,
     drawPreview();
     drawSplits(1);
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     layout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -135,7 +136,7 @@ AudioSplitDialog::slotHelpRequested()
 void
 AudioSplitDialog::noPreviewMsg()
 {
-    QGraphicsSimpleTextItem *text = 
+    QGraphicsSimpleTextItem *text =
         new QGraphicsSimpleTextItem(tr("<no preview generated for this audio file>"));
     text->setBrush(Qt::black);
     m_scene->addItem(text);
@@ -155,7 +156,7 @@ AudioSplitDialog::drawPreview()
 
     // empty the preview boxes
     m_previewBoxes.erase(m_previewBoxes.begin(), m_previewBoxes.end());
-  
+
     // Draw a bounding box
     //
     int border = 5;
@@ -300,20 +301,19 @@ AudioSplitDialog::drawSplits(int threshold)
 
     qreal startX = (m_sceneWidth - m_previewWidth) / 2;
     qreal halfHeight = m_sceneHeight / 2;
-    qreal x1, x2;
     qreal overlapHeight = 10;
 
     for (it = splitPoints.begin(); it != splitPoints.end(); ++it) {
         RealTime splitStart = it->first - startTime;
         RealTime splitEnd = it->second - startTime;
 
-        x1 = ticksPerUsec * double(double(splitStart.sec) * 1000000.0 + (double)splitStart.usec());
+        qreal x1 = ticksPerUsec * double(double(splitStart.sec) * 1000000.0 + (double)splitStart.usec());
 
-        x2 = ticksPerUsec * double(double(splitEnd.sec) * 1000000.0 + double(splitEnd.usec()));
+        qreal x2 = ticksPerUsec * double(double(splitEnd.sec) * 1000000.0 + double(splitEnd.usec()));
 
         QGraphicsRectItem *rect = m_scene->addRect(startX + x1,
                                                    halfHeight - qreal(m_previewHeight) / 2 - overlapHeight / 2,
-                                                   x2 - x1, 
+                                                   x2 - x1,
                                                    qreal(m_previewHeight) + overlapHeight,
                                                    QPen(Qt::red),
                                                    QBrush(Qt::blue));

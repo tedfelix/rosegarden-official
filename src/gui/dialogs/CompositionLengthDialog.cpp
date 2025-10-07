@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -95,12 +95,13 @@ CompositionLengthDialog::CompositionLengthDialog(
     m_autoExpandCheckBox = new QCheckBox(gbox);
     m_autoExpandCheckBox->setChecked(m_composition->autoExpandEnabled());
     gboxLayout->addWidget(m_autoExpandCheckBox, 2, 1);
-    
+
     // GROUP BOX END
 
     // Now the button box on the bottom, outside the group box and any of the
     // previous layouts, just gets added to the vbox under the QDialog widget
     // we're coming in with.  No overall grid layout required.
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);
 

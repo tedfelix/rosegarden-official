@@ -505,7 +505,6 @@ EventFilterDialog::keepEvent(const Event *event)
                      << " out of range.";
             return false;
         }
-        property = 0;
 
         return true;
     } else if (event->isa(Note::EventRestType)) {

@@ -56,6 +56,7 @@ AudioPluginPresetDialog::AudioPluginPresetDialog
     presetBox->setLayout(boxLayout);
     QHBoxLayout * presetLayout = new QHBoxLayout;
     boxLayout->addLayout(presetLayout);
+    // cppcheck-suppress constVariablePointer
     QLabel* presetLabel = new QLabel(tr("Predefined presets:"));
     presetLayout->addWidget(presetLabel);
     m_presetCombo = new QComboBox;
@@ -64,6 +65,7 @@ AudioPluginPresetDialog::AudioPluginPresetDialog
         m_presetCombo->addItem(preset.label);
     }
     presetLayout->addWidget(m_presetCombo);
+    // cppcheck-suppress constVariablePointer
     QPushButton* presetButton = new QPushButton(tr("Set Preset"));
     connect(presetButton, &QPushButton::clicked,
             this, &AudioPluginPresetDialog::slotSetPreset);
@@ -71,17 +73,21 @@ AudioPluginPresetDialog::AudioPluginPresetDialog
 
     QHBoxLayout* fileLayout = new QHBoxLayout;
     boxLayout->addLayout(fileLayout);
+    // cppcheck-suppress constVariablePointer
     QLabel* fileLabel = new QLabel(tr("Load/Save state from/to file"));
     fileLayout->addWidget(fileLabel);
+    // cppcheck-suppress constVariablePointer
     QPushButton* loadButton = new QPushButton(tr("Load"));
     connect(loadButton, &QPushButton::clicked,
             this, &AudioPluginPresetDialog::slotLoadPreset);
     fileLayout->addWidget(loadButton);
+    // cppcheck-suppress constVariablePointer
     QPushButton* saveButton = new QPushButton(tr("Save"));
     connect(saveButton, &QPushButton::clicked,
             this, &AudioPluginPresetDialog::slotSavePreset);
     fileLayout->addWidget(saveButton);
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
     // "Close" button has the RejectRole
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);

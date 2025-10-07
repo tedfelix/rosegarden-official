@@ -163,6 +163,7 @@ ClefDialog::ClefDialog(QWidget *parent,
     // the strip of standard buttons at the bottom, sans the help button,
     // because I'm pretty much the one who would ever make context sensitive
     // help work, and I think there's little chance of ever doing that.
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vboxLayout->addWidget(buttonBox);

@@ -116,8 +116,11 @@ CheckForParallelsDialog::CheckForParallelsDialog(NotationView *parent,
     // buttons
 
     startButton = new QPushButton(tr("Start"));  // is not local as we want to change text after first start
+    // cppcheck-suppress constVariablePointer
     QPushButton *clearButton = new QPushButton(tr("Clear"));
+    // cppcheck-suppress constVariablePointer
     QPushButton *exportButton = new QPushButton(tr("Export"));
+    // cppcheck-suppress constVariablePointer
     QPushButton *okButton = new QPushButton(tr("Ok"));
 
     QHBoxLayout *hBoxLayout = new QHBoxLayout;
@@ -335,12 +338,10 @@ CheckForParallelsDialog::writeTransitionList(std::vector<Transition> list)
 {
     std::vector<Transition>::iterator it = list.begin();
 
-    QString text;
-
-    int count = 0;
+    //int count = 0;
 
     while (it!=list.end()) {
-        text = "transition #" + QString("%1").arg(count++);
+        //QString text = "transition #" + QString("%1").arg(count++);
         writeTransition(it);
         ++it;
     }
@@ -753,7 +754,8 @@ CheckForParallelsDialog::populateParallel(Transition t1, Transition t2, Parallel
 }
 
 bool
-CheckForParallelsDialog::hasParallels(std::vector<Transition> &tSet, std::vector<Parallel> &parVec)
+CheckForParallelsDialog::hasParallels(const std::vector<Transition> &tSet,
+                                      std::vector<Parallel> &parVec)
 {
     int intervalBegin;
     int intervalEnd;

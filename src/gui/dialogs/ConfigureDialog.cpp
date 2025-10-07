@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -46,7 +46,7 @@ ConfigureDialog::ConfigureDialog(RosegardenDocument *doc,
                                  const char *name)
     : ConfigureDialogBase(parent, tr("Rosegarden - Preferences"), name )
 {
-    
+
     // General
     GeneralConfigurationPage *generalConfigurationPage =
             new GeneralConfigurationPage(this);
@@ -121,8 +121,8 @@ ConfigureDialog::setNotationPage()
     for (ConfigurationPages::iterator i = m_configurationPages.begin();
             i != m_configurationPages.end(); ++i) {
 
-        NotationConfigurationPage *page =
-            dynamic_cast<NotationConfigurationPage *>(*i);
+        const NotationConfigurationPage *page =
+            dynamic_cast<const NotationConfigurationPage *>(*i);
 
         if (!page) {
             ++index;
