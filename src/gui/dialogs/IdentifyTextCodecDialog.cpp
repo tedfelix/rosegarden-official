@@ -15,11 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[IdentifyTextCodecDialog]"
+#define RG_NO_DEBUG_PRINT
 
 #include "IdentifyTextCodecDialog.h"
 
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 #include "base/NotationTypes.h"
+
 #include <QComboBox>
 #include <QDialog>
 #include <QDialogButtonBox>
@@ -35,6 +39,7 @@
 
 namespace Rosegarden
 {
+
 
 // This dialog used to use QTextCodec::codecForContent() to guess an
 // appropriate codec for the string, and then call
@@ -61,29 +66,29 @@ codecPreserves(QTextCodec &codec, std::string encoded)
 }
 
 IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
-                                                 const std::string& text) :
+                                                 const std::string &text) :
     QDialog(parent),
-    m_text(text)
+    m_exampleText(text)
 {
-    setModal(true);
     setWindowTitle(tr("Rosegarden"));
+    setModal(true);
 
     QVBoxLayout *vboxLayout = new QVBoxLayout;
     setLayout(vboxLayout);
 
     vboxLayout->addWidget(new QLabel(tr("<qt><h3>Choose Text Encoding</h3></qt>")));
 
-    QGroupBox *g = new QGroupBox;
-    QVBoxLayout *gl = new QVBoxLayout;
-    vboxLayout->addWidget(g, 20);
-    g->setLayout(gl);
+    QGroupBox *groupBox = new QGroupBox;
+    QVBoxLayout *groupBoxLayout = new QVBoxLayout;
+    vboxLayout->addWidget(groupBox, 20);
+    groupBox->setLayout(groupBoxLayout);
 
     QLabel *l = new QLabel(tr("<qt><p>This file contains text in an unknown language encoding.</p><p>Please select one of the following estimated text encodings for use with the text in this file:</p></qt>"));
     l->setWordWrap(true);
-    gl->addWidget(l);
+    groupBoxLayout->addWidget(l);
 
     QComboBox *codecs = new QComboBox;
-    gl->addWidget(codecs);
+    groupBoxLayout->addWidget(codecs);
 
     QString defaultCodec;
     // QTextCodec *codec = 0;
@@ -111,17 +116,12 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     codecDescriptions["KOI8-U"] = tr("Ukrainian");
     codecDescriptions["TSCII"] = tr("Tamil");
 
-    // int i = 0;
-    int current = -1;
-
     QList<int> mibs = QTextCodec::availableMibs();
 
     m_codecs.clear();
 
     QSet<QTextCodec *> seen;
 
-    QTextCodec *cc = nullptr;
-    int currentWeight = -1;
     QMap<QString, int> codecWeights;
     codecWeights["UTF-8"] = 20;
     codecWeights["ISO-8859-1"] = 14;
@@ -131,22 +131,33 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     codecWeights["Big5"] = 10;
     codecWeights["GB18030"] = 10;
     codecWeights["KOI8-R"] = 10;
+    int currentWeight = -1;
+    // Best codec based on codecWeights and codecPreserves().
+    QTextCodec *bestCodec = nullptr;
+    int bestCodecIndex = -1;
 
-    for (int i = 0; i < mibs.size(); ++i) {
+    // For each codec...
+    for (int mibListIndex = 0; mibListIndex < mibs.size(); ++mibListIndex) {
 
-        int mib = mibs[i];
+        int mib = mibs[mibListIndex];
 
         QTextCodec *codec = QTextCodec::codecForMib(mib);
-        if (!codec) continue;
-        if (seen.contains(codec)) continue;
+        if (!codec)
+            continue;
+
+        // Already seen?  Try the next.
+        if (seen.contains(codec))
+            continue;
+
         seen.insert(codec);
 
-        bool preserves = codecPreserves(*codec, m_text);
+        bool preserves = codecPreserves(*codec, m_exampleText);
 
-//        std::cerr << "codec " << codec->name().data() << " mib " << mib << " preserves " << preserves << std::endl;
+        //RG_DEBUG << "ctor:" << mibListIndex << "codec " << codec->name().data() << " mib " << mib << " preserves " << preserves;
 
         QStringList names;
         names.push_back(QString::fromLatin1(codec->name()));
+        // Add the aliases.
         foreach (QByteArray ba, codec->aliases()) {
             names.push_back(QString::fromLatin1(ba));
         }
@@ -154,12 +165,13 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
         QString goodName;
         QString description;
 
+        // For each name and alias for the current codec...
         foreach (QString name, names) {
 
             if (codecDescriptions.contains(name)) {
                 goodName = name;
                 description = codecDescriptions[name];
-//                std::cerr << "have description " << description.toStdString() << " for name " << name.toStdString() << std::endl;
+                //RG_DEBUG << "ctor: have description " << description.toStdString() << " for name " << name.toStdString();
                 if (description == "") {
                     if (name.left(3) == "windows-") {
                         description = tr("Microsoft Code Page %1")
@@ -167,16 +179,18 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
                     }
                 }
             } else {
-//                std::cerr << "have no description for name " << name.toStdString() << std::endl;
+                //RG_DEBUG << "ctor: have no description for name " << name.toStdString();
             }
 
             if (preserves) {
                 int weight = 0;
-                if (codecWeights.contains(name)) {
+                if (codecWeights.contains(name))
                     weight = codecWeights[name];
-                }
-                if (!cc || currentWeight < weight) {
-                    cc = codec;
+
+                // If we don't have a best codec yet, or this one's weight is
+                // the best we've seen so far, pick this as the best codec.
+                if (!bestCodec  ||  currentWeight < weight) {
+                    bestCodec = codec;
                     currentWeight = weight;
                 }
             }
@@ -198,14 +212,20 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
 
         m_codecs.push_back(goodName);
         codecs->addItem(description);
-        if (cc == codec) current = i;
+
+        if (bestCodec == codec)
+            bestCodecIndex = codecs->count() - 1;
     }
+
+    if (bestCodecIndex < 0)
+        bestCodecIndex = 0;
+    codecs->setCurrentIndex(bestCodecIndex);
 
     connect(codecs,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &IdentifyTextCodecDialog::slotCodecSelected);
 
-    gl->addWidget(new QLabel(tr("\nExample text from file:")));
+    groupBoxLayout->addWidget(new QLabel(tr("\nExample text from file:")));
     m_example = new QLabel;
 
     // background: #fff3c3; color: black;
@@ -214,17 +234,18 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     pal.setColor(QPalette::Text, Qt::black);
     m_example->setPalette(pal);
 
-    gl->addWidget(m_example, 20);
+    groupBoxLayout->addWidget(m_example, 20);
     QFont font;
     font.setStyleHint(QFont::TypeWriter);
     m_example->setFont(font);
-    if (current < 0) current = 0;
-    codecs->setCurrentIndex(current);
-    slotCodecSelected(current);
+    // Update the example text.
+    slotCodecSelected(bestCodecIndex);
+
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     vboxLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+
 }
 
 void
@@ -239,18 +260,20 @@ QString
 IdentifyTextCodecDialog::getExampleText()
 {
     QTextCodec *codec = QTextCodec::codecForName(m_codec.toLatin1());
-    if (!codec) return "";
-//    std::cerr << "codec->name() returns " << codec->name().data() << std::endl;
+    if (!codec)
+        return "";
+
+    //RG_DEBUG << "getExampleText(): codec->name() returns " << codec->name().data();
 
     int offset = 0;
-    for (; offset + 80 < (int)m_text.length(); ++offset) {
-        if (!isascii(m_text[offset])) {
+    for (; offset + 80 < (int)m_exampleText.length(); ++offset) {
+        if (!isascii(m_exampleText[offset])) {
             for (int i = 0; i < 80; ++i) {
                 if (offset == 0) {
                     break;
                 }
                 --offset;
-                if (m_text[offset] == '\n') {
+                if (m_exampleText[offset] == '\n') {
                     break;
                 }
             }
@@ -260,9 +283,10 @@ IdentifyTextCodecDialog::getExampleText()
 
     if (offset < 20) offset = 0;
 
-    QString outText = codec->toUnicode(m_text.c_str(), m_text.length());
+    QString outText = codec->toUnicode(m_exampleText.c_str(), m_exampleText.length());
     outText = outText.mid(offset, 160);
     return outText;
 }
+
 
 }

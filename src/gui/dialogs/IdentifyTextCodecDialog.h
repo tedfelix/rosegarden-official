@@ -18,19 +18,18 @@
 #ifndef RG_IDENTIFYTEXTCODECDIALOG_H
 #define RG_IDENTIFYTEXTCODECDIALOG_H
 
-#include <string>
 #include <QDialog>
 #include <QString>
-#include <deque>
-
+#include <QStringList>
 
 class QWidget;
 class QLabel;
 
+#include <string>
+
 
 namespace Rosegarden
 {
-
 
 
 class IdentifyTextCodecDialog : public QDialog
@@ -38,20 +37,26 @@ class IdentifyTextCodecDialog : public QDialog
     Q_OBJECT
 
 public:
-    IdentifyTextCodecDialog(QWidget *parent, const std::string& text);
+
+    IdentifyTextCodecDialog(QWidget *parent, const std::string &text);
 
     QString getCodec() const { return m_codec; }
 
 protected slots:
+
     void slotCodecSelected(int);
 
 protected:
-    QString getExampleText();
 
-    std::string m_text;
     QString m_codec;
     QStringList m_codecs;
+
+    std::string m_exampleText;
+    // Use the selected codec (m_codec) to translate m_exampleText to unicode
+    // for display.
+    QString getExampleText();
     QLabel *m_example;
+
 };
 
 
