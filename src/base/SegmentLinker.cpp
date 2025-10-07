@@ -180,7 +180,10 @@ SegmentLinker::slotUpdateLinkedSegments(Command *command)
                 linkedSegmentsUpdated = true;
             }
         } else {
-            RG_WARNING << "oops, trying to update linked segment set twice!";
+            // Bug #1740.  Removing this.  The code is doing what it claims
+            // above.  Only the first Segment is processed.  No need to draw
+            // attention to it in the logs.  Especially with an RG_WARNING.
+            //RG_WARNING << "oops, trying to update linked segment set twice!";
         }
 
         rs.setNeedsRefresh(false);
