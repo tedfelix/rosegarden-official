@@ -272,10 +272,14 @@ double
 LoopRuler::mouseEventToSceneX(QMouseEvent *mouseEvent)
 {
     double x = mouseEvent->pos().x() - m_currentXOffset;
+    if (x < 0)
+        x = 0;
+
     Composition &composition = m_doc->getComposition();
     double xCompEnd = m_rulerScale->getXForTime(composition.getEndMarker());
     //RG_DEBUG << "mouseEventToSceneX" << x << xCompEnd;
     if (x > xCompEnd) x = xCompEnd;
+
     return x;
 }
 
@@ -415,9 +419,7 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
 void
 LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
-    double x = mouseEventToSceneX(mE);
-    if (x < 0)
-        x = 0;
+    const double x = mouseEventToSceneX(mE);
 
     RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopDrag;
 
@@ -438,9 +440,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
             m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     }
 
-    double x = mouseEventToSceneX(mE);
-    if (x < 0)
-        x = 0;
+    const double x = mouseEventToSceneX(mE);
 
     if (m_loopDrag) {
         if (m_loopGrid->snapX(x) != m_endDrag) {
