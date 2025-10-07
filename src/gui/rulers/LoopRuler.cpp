@@ -312,12 +312,14 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
     // Left button pointer drag
     if (leftButton) {
 
-        // If we are still using the default grid, that means we are being
-        // used by the TrackEditor (instead of the MatrixEditor).
+        // If the client hasn't provided its own grid, adjust the snap
+        // based on the modifier keys.  This is for the main window.
         if (m_grid == &m_defaultGrid) {
             // If the ctrl key is pressed, enable snap to beat
             if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
                 m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+            else if ((mouseEvent->modifiers() & Qt::AltModifier) != 0)
+                m_defaultGrid.setSnapTime(SnapGrid::SnapToUnit);
             else
                 m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
         }
@@ -428,19 +430,21 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 }
 
 void
-LoopRuler::mouseMoveEvent(QMouseEvent *mE)
+LoopRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    // If we are still using the default grid, that means we are being
-    // used by the TrackEditor (instead of the MatrixEditor).
+    // If the client hasn't provided its own grid, adjust the snap
+    // based on the modifier keys.  This is for the main window.
     if (m_grid == &m_defaultGrid) {
         // If the ctrl key is pressed, enable snap to beat
-        if ((mE->modifiers() & Qt::ControlModifier) != 0)
+        if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
             m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+        else if ((mouseEvent->modifiers() & Qt::AltModifier) != 0)
+            m_defaultGrid.setSnapTime(SnapGrid::SnapToUnit);
         else
             m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     }
 
-    const double x = mouseEventToSceneX(mE);
+    const double x = mouseEventToSceneX(mouseEvent);
 
     if (m_loopDrag) {
         if (m_loopGrid->snapX(x) != m_endDrag) {
