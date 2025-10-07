@@ -272,6 +272,10 @@ double
 LoopRuler::mouseEventToSceneX(QMouseEvent *mouseEvent)
 {
     double x = mouseEvent->pos().x() - m_currentXOffset;
+    Composition &composition = m_doc->getComposition();
+    double xCompEnd = m_rulerScale->getXForTime(composition.getEndMarker());
+    //RG_DEBUG << "mouseEventToSceneX" << x << xCompEnd;
+    if (x > xCompEnd) x = xCompEnd;
     return x;
 }
 
