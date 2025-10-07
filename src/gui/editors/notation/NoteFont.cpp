@@ -25,7 +25,7 @@
 #include "base/Profiler.h"
 #include "gui/general/PixmapFunctions.h"
 #include "NoteCharacter.h"
-#include "NoteFontMap.h"
+//#include "NoteFontMap.h"
 #include "SystemFont.h"
 #include <QBitmap>
 #include <QImage>

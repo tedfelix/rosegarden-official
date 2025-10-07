@@ -27,7 +27,6 @@
 #include "misc/Debug.h"
 #include "misc/Strings.h"
 #include "gui/general/ResourceFinder.h"
-#include "NoteFontMap.h"
 
 #include <QFont>
 #include <QFontInfo>

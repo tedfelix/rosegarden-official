@@ -127,6 +127,11 @@ public:
     QPoint getHotspot(CharName charName, bool inverted = false) const;
 
 private:
+
+    // Use NoteFontFactory to create instances.
+    NoteFont(QString fontName, int size = 0);
+    friend class NoteFontFactory;
+
     /// Returns false + blank pixmap if it can't find the right one
     bool getPixmap(CharName charName, QPixmap &pixmap,
                    bool inverted = false) const;
@@ -141,8 +146,6 @@ private:
     // unused bool getShadedPixmap(CharName baseCharName, QPixmap &pixmap,
     //                     bool inverted = false) const;
 
-    friend class NoteFontFactory;
-    NoteFont(QString fontName, int size = 0);
     std::set<int> getSizes() const { return m_fontMap.getSizes(); }
 
     bool lookup(CharName charName, bool inverted, QPixmap *&pixmap) const;
