@@ -67,7 +67,7 @@ RulerScale::getBeatWidth(int n) const
 
     // cope with partial bars
     double theoreticalWidth =
-	(getBarWidth(n) * timeSig.getBarDuration()) / barDuration;
+        (getBarWidth(n) * timeSig.getBarDuration()) / barDuration;
 
     return theoreticalWidth / timeSig.getBeatsPerBar();
 }
@@ -78,12 +78,12 @@ RulerScale::getBarForX(double x) const
     // binary search
 
     int minBar = getFirstVisibleBar(),
-	maxBar = getLastVisibleBar();
+        maxBar = getLastVisibleBar();
 
     while (maxBar > minBar) {
-	int middle = minBar + (maxBar - minBar) / 2;
-	if (x > getBarPosition(middle)) minBar = middle + 1;
-	else maxBar = middle;
+        int middle = minBar + (maxBar - minBar) / 2;
+        if (x > getBarPosition(middle)) minBar = middle + 1;
+        else maxBar = middle;
     }
 
     // we've just done equivalent of lower_bound -- we're one bar too
@@ -103,14 +103,14 @@ RulerScale::getTimeForX(double x) const
 
     if (barWidth < 1.0) {
 
-	return barRange.first;
+        return barRange.first;
 
     } else {
 
-	timeT barDuration = barRange.second - barRange.first;
-	x -= getBarPosition(n);
+        timeT barDuration = barRange.second - barRange.first;
+        x -= getBarPosition(n);
 
-	return barRange.first + (timeT)nearbyint(((double)(x * barDuration) / barWidth));
+        return barRange.first + (timeT)nearbyint(((double)(x * barDuration) / barWidth));
     }
 }
 
@@ -125,12 +125,12 @@ RulerScale::getXForTime(timeT time) const
 
     if (barDuration == 0) {
 
-	return getBarPosition(n);
+        return getBarPosition(n);
 
     } else {
 
-	time -= barRange.first;
-	return getBarPosition(n) + (double)(time * barWidth) / barDuration;
+        time -= barRange.first;
+        return getBarPosition(n) + (double)(time * barWidth) / barDuration;
     }
 }
 
@@ -167,7 +167,7 @@ RulerScale::getTotalWidth() const
 
 
 SimpleRulerScale::SimpleRulerScale(Composition *composition,
-				   double origin, double ratio) :
+                                   double origin, double ratio) :
     RulerScale(composition),
     m_origin(origin),
     m_ratio(ratio)
@@ -224,7 +224,7 @@ SimpleRulerScale::getTimeForX(double x) const
 
     int firstBar = getFirstVisibleBar();
     if (firstBar != 0) {
-	t += m_composition->getBarRange(firstBar).first;
+        t += m_composition->getBarRange(firstBar).first;
     }
 
     return t;
@@ -235,7 +235,7 @@ SimpleRulerScale::getXForTime(timeT time) const
 {
     int firstBar = getFirstVisibleBar();
     if (firstBar != 0) {
-	time -= m_composition->getBarRange(firstBar).first;
+        time -= m_composition->getBarRange(firstBar).first;
     }
 
     return m_origin + (double)time / m_ratio;
@@ -311,7 +311,7 @@ SegmentsRulerScale::getBarPosition(int n) const
 
     int firstBar = getFirstVisibleBar();
     if (firstBar != 0) {
-	t -= m_composition->getBarRange(firstBar).first;
+        t -= m_composition->getBarRange(firstBar).first;
     }
 
     return m_origin + (double)t / m_ratio;
