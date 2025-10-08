@@ -112,7 +112,7 @@ void SegmentMover::mousePressEvent(QMouseEvent *e)
     setChangingSegment(changingSegment);
     m_clickPoint = pos;
 
-    setSnapTime(e, SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToUnit);
 
     int x = int(m_canvas->grid().getRulerScale()->getXForTime(
                     segment->getStartTime()));
@@ -255,7 +255,7 @@ int SegmentMover::mouseMoveEvent(QMouseEvent *e)
 
     QPoint pos = m_canvas->viewportToContents(e->pos());
 
-    setSnapTime(e, SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToUnit);
 
     setContextHelp2(e->modifiers());
 

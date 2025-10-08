@@ -317,10 +317,12 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
         // If the client hasn't provided its own grid, adjust the snap
         // based on the modifier keys.  This is for the main window.
         if (m_grid == &m_defaultGrid) {
-            // If the ctrl key is pressed, enable snap to beat
+            // If the ctrl key is pressed, enable snap to unit.
+            // ??? This is inconsistent with moving things.  There we
+            //     assume snap unless shift is pressed.  See SegmentMover
+            //     and SegmentPencil.  Not sure how much pain it would cause
+            //     to sync all this up to one standard.
             if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
-                m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
-            else if ((mouseEvent->modifiers() & Qt::AltModifier) != 0)
                 m_defaultGrid.setSnapTime(SnapGrid::SnapToUnit);
             else
                 m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
@@ -446,10 +448,8 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
     // If the client hasn't provided its own grid, adjust the snap
     // based on the modifier keys.  This is for the main window.
     if (usingDefaultGrid) {
-        // If the ctrl key is pressed, enable snap to beat
+        // If the ctrl key is pressed, enable snap to unit
         if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
-            m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
-        else if ((mouseEvent->modifiers() & Qt::AltModifier) != 0)
             m_defaultGrid.setSnapTime(SnapGrid::SnapToUnit);
         else
             m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
@@ -471,7 +471,7 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 
     if (usingDefaultGrid  &&  m_mainWindow)
         m_mainWindow->statusBar()->showMessage(
-                tr("Hold Ctrl to snap to beat, Alt to snap to unit."), 10000);
+                tr("Hold Ctrl to snap to unit."), 10000);
 
 }
 

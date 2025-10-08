@@ -115,7 +115,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
             m_resizeStart ? CompositionModelImpl::ChangeResizeFromStart :
                             CompositionModelImpl::ChangeResizeFromEnd);
 
-        setSnapTime(e, SnapGrid::SnapToBeat);
+        setSnapTime(e, SnapGrid::SnapToUnit);
     }
 
     setContextHelp2(e->modifiers());
@@ -323,7 +323,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
 
     QRect oldRect = getChangingSegment()->rect();
 
-    setSnapTime(e, SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToUnit);
 
     // Convert X coord to time
     timeT time = m_canvas->grid().snapX(pos.x());
