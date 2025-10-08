@@ -4944,10 +4944,6 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
         return;
 
     const timeT targetTime = selection->getStartTime();
-
-    // ??? This is odd.  It gets the staff above/below the current cursor
-    //     position.  I would expect that each event would be moved to
-    //     the staff above/below *itself*.
     NotationStaff *targetStaff = upStaff ? scene->getStaffAbove(targetTime) :
                                            scene->getStaffBelow(targetTime);
     if (!targetStaff)

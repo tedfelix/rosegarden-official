@@ -28,14 +28,10 @@
     <Action name="general_paste" text="Pa&amp;ste..." shortcut="Alt+Shift+V" />
     <Action name="delete" text="De&amp;lete" shortcut="Delete" />
   <Separator/>
-    <Action name="move_events_up_staff"
-            text="&amp;Move to Staff Above" />
-    <Action name="general_move_events_up_staff"
-            text="&amp;Move to Staff Above..." />
-    <Action name="move_events_down_staff"
-            text="Move to Staff &amp;Below" />
-    <Action name="general_move_events_down_staff"
-            text="Move to Staff &amp;Below..." />
+    <Action name="move_events_up_staff" text="&amp;Move to Staff Above Cursor" />
+    <Action name="general_move_events_up_staff" text="&amp;Move to Staff Above Cursor..." />
+    <Action name="move_events_down_staff" text="Move to Staff &amp;Below Cursor" />
+    <Action name="general_move_events_down_staff" text="Move to Staff &amp;Below Cursor..." />
   <Separator/>
     <Action name="select_from_start" text="Select from Sta&amp;rt" />
     <Action name="select_to_end" text="Select to &amp;End" />
