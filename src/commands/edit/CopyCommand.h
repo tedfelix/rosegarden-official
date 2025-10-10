@@ -46,7 +46,7 @@ public:
      * ??? selection should be a const &.  It is copied.  Ownership is
      *     not transferred.
      */
-    CopyCommand(EventSelection *selection,
+    CopyCommand(const EventSelection *selection,
                 Clipboard *clipboard);
 
     CopyCommand(EventSelection *selection1,

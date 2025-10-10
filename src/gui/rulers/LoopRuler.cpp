@@ -27,11 +27,13 @@
 #include "document/RosegardenDocument.h"
 #include "misc/Preferences.h"
 
-#include <QPainter>
-#include <QRect>
-#include <QPaintEvent>
-#include <QMouseEvent>
 #include <QBrush>
+#include <QMainWindow>
+#include <QMouseEvent>
+#include <QPainter>
+#include <QPaintEvent>
+#include <QRect>
+#include <QStatusBar>
 
 #include <utility>  // std::swap()
 
@@ -272,6 +274,14 @@ double
 LoopRuler::mouseEventToSceneX(QMouseEvent *mouseEvent)
 {
     double x = mouseEvent->pos().x() - m_currentXOffset;
+    if (x < 0)
+        x = 0;
+
+    Composition &composition = m_doc->getComposition();
+    double xCompEnd = m_rulerScale->getXForTime(composition.getEndMarker());
+    //RG_DEBUG << "mouseEventToSceneX" << x << xCompEnd;
+    if (x > xCompEnd) x = xCompEnd;
+
     return x;
 }
 
@@ -304,12 +314,16 @@ LoopRuler::mousePressEvent(QMouseEvent *mouseEvent)
     // Left button pointer drag
     if (leftButton) {
 
-        // If we are still using the default grid, that means we are being
-        // used by the TrackEditor (instead of the MatrixEditor).
+        // If the client hasn't provided its own grid, adjust the snap
+        // based on the modifier keys.  This is for the main window.
         if (m_grid == &m_defaultGrid) {
-            // If the ctrl key is pressed, enable snap to beat
+            // If the ctrl key is pressed, enable snap to unit.
+            // ??? This is inconsistent with moving things.  There we
+            //     assume snap unless shift is pressed.  See SegmentMover
+            //     and SegmentPencil.  Not sure how much pain it would cause
+            //     to sync all this up to one standard.
             if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
-                m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+                m_defaultGrid.setSnapTime(SnapGrid::SnapToUnit);
             else
                 m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
         }
@@ -406,14 +420,18 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
         if (m_autoScroller)
             m_autoScroller->stop();
     }
+
+    // The main window uses the default grid.
+    const bool usingDefaultGrid = (m_grid == &m_defaultGrid);
+    if (usingDefaultGrid  &&  m_mainWindow)
+        m_mainWindow->statusBar()->clearMessage();
+
 }
 
 void
 LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 {
-    double x = mouseEventToSceneX(mE);
-    if (x < 0)
-        x = 0;
+    const double x = mouseEventToSceneX(mE);
 
     RG_DEBUG << "LoopRuler::mouseDoubleClickEvent: x = " << x << ", looping = " << m_loopDrag;
 
@@ -422,21 +440,22 @@ LoopRuler::mouseDoubleClickEvent(QMouseEvent *mE)
 }
 
 void
-LoopRuler::mouseMoveEvent(QMouseEvent *mE)
+LoopRuler::mouseMoveEvent(QMouseEvent *mouseEvent)
 {
-    // If we are still using the default grid, that means we are being
-    // used by the TrackEditor (instead of the MatrixEditor).
-    if (m_grid == &m_defaultGrid) {
-        // If the ctrl key is pressed, enable snap to beat
-        if ((mE->modifiers() & Qt::ControlModifier) != 0)
-            m_defaultGrid.setSnapTime(SnapGrid::SnapToBeat);
+    // The main window uses the default grid.
+    const bool usingDefaultGrid = (m_grid == &m_defaultGrid);
+
+    // If the client hasn't provided its own grid, adjust the snap
+    // based on the modifier keys.  This is for the main window.
+    if (usingDefaultGrid) {
+        // If the ctrl key is pressed, enable snap to unit
+        if ((mouseEvent->modifiers() & Qt::ControlModifier) != 0)
+            m_defaultGrid.setSnapTime(SnapGrid::SnapToUnit);
         else
             m_defaultGrid.setSnapTime(SnapGrid::NoSnap);
     }
 
-    double x = mouseEventToSceneX(mE);
-    if (x < 0)
-        x = 0;
+    const double x = mouseEventToSceneX(mouseEvent);
 
     if (m_loopDrag) {
         if (m_loopGrid->snapX(x) != m_endDrag) {
@@ -449,6 +468,11 @@ LoopRuler::mouseMoveEvent(QMouseEvent *mE)
         m_lastMouseXPos = x;
 
     }
+
+    if (usingDefaultGrid  &&  m_mainWindow)
+        m_mainWindow->statusBar()->showMessage(
+                tr("Hold Ctrl to snap to unit."), 10000);
+
 }
 
 void LoopRuler::slotLoopChanged()

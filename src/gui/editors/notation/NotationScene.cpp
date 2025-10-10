@@ -534,25 +534,25 @@ NotationScene::getStaffForSceneCoords(double x, int y) const
 }
 
 NotationStaff *
-NotationScene::getStaffAbove(timeT t)
+NotationScene::getStaffAbove(timeT t) const
 {
     return getNextStaffVertically(-1, t);
 }
 
 NotationStaff *
-NotationScene::getStaffBelow(timeT t)
+NotationScene::getStaffBelow(timeT t) const
 {
     return getNextStaffVertically(1, t);
 }
 
 NotationStaff *
-NotationScene::getPriorStaffOnTrack()
+NotationScene::getPriorStaffOnTrack() const
 {
     return getNextStaffHorizontally(-1, false);
 }
 
 NotationStaff *
-NotationScene::getNextStaffOnTrack()
+NotationScene::getNextStaffOnTrack() const
 {
     return getNextStaffHorizontally(1, false);
 }
@@ -571,7 +571,7 @@ NotationScene::getStaffBySegmentMarking(const QString& marking) const
 }
 
 NotationStaff *
-NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
+NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime) const
 {
     // Prepare a fallback: If this is the right track but no staff
     // includes time t, we'll return the fallback instead.  We
@@ -608,7 +608,7 @@ NotationScene::getStaffbyTrackAndTime(const Track *track, timeT targetTime)
 // lower-numbered ones are.
 // t is a time that the found staff should contain if possible.
 NotationStaff *
-NotationScene::getNextStaffVertically(int direction, timeT t)
+NotationScene::getNextStaffVertically(int direction, timeT t) const
 {
     if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return nullptr;
 
@@ -630,7 +630,7 @@ NotationScene::getNextStaffVertically(int direction, timeT t)
 }
 
 NotationStaff *
-NotationScene::getNextStaffHorizontally(int direction, bool cycle)
+NotationScene::getNextStaffHorizontally(int direction, bool cycle) const
 {
     if (m_staffs.size() < 2 || m_currentStaff >= (int)m_staffs.size()) return nullptr;
 

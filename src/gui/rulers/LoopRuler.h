@@ -28,6 +28,7 @@
 
 class QPaintEvent;
 class QPainter;
+class QMainWindow;
 class QMouseEvent;
 
 
@@ -62,6 +63,10 @@ public:
 
     void setAutoScroller(QPointer<AutoScroller> autoScroller)
             { m_autoScroller = autoScroller; }
+
+    /// For status text.
+    void setMainWindow(QPointer<QMainWindow> mainWindow)
+            { m_mainWindow = mainWindow; }
 
     void setSnapGrid(const SnapGrid *grid);
 
@@ -113,6 +118,7 @@ private slots:
 
 private:
 
+    QMainWindow *m_mainWindow{nullptr};
     RosegardenDocument *m_doc;
 
     /**
@@ -141,8 +147,10 @@ private:
     RulerScale *m_rulerScale;
     void drawBarSections(QPainter *);
 
+    // Default grid in case the client doesn't supply one.
     SnapGrid m_defaultGrid;
     SnapGrid *m_loopGrid;
+    // Grid sent in by the client via setSnapGrid().
     const SnapGrid *m_grid;
 
     /// Whether we are dragging and drawing a loop.

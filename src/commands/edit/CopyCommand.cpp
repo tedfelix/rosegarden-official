@@ -32,7 +32,7 @@
 namespace Rosegarden
 {
 
-CopyCommand::CopyCommand(EventSelection *selection,
+CopyCommand::CopyCommand(const EventSelection *selection,
                          Clipboard *clipboard) :
         NamedCommand(getGlobalName()),
         m_targetClipboard(clipboard)

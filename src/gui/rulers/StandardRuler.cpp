@@ -108,8 +108,8 @@ void StandardRuler::setMainWindow(QPointer<QMainWindow> mainWindow)
 {
     if (m_markerRuler)
         m_markerRuler->setMainWindow(mainWindow);
-    //if (m_loopRuler)
-    //    m_loopRuler->setMainWindow(mainWindow);
+    if (m_loopRuler)
+        m_loopRuler->setMainWindow(mainWindow);
 }
 
 void StandardRuler::setDocument(RosegardenDocument *doc)

@@ -16,8 +16,8 @@
   <Action name="collapse_notes" text="Collapse Notes" />
   <Action name="interpret" text="Interpret" />
 <Separator />
-  <Action name="move_events_up_staff" text="Move to Staff Above" />
-  <Action name="move_events_down_staff" text="Move to Staff Below" />
+  <Action name="move_events_up_staff" text="Move to Staff Above Cursor" />
+  <Action name="move_events_down_staff" text="Move to Staff Below Cursor" />
 <Separator />
   <Action name="make_invisible" text="Make Invisible" />
   <Action name="make_visible" text="Make Visible" />

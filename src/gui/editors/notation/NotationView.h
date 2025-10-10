@@ -426,6 +426,15 @@ private:
      */
     Device *getCurrentDevice();
 
+    /// Move the selected events to another staff
+    /**
+     * @param upStaff
+     *   if true, move them to the staff above this one, otherwise to the
+     *   staff below.
+     * @param useDialog
+     *   Whether to use a dialog, otherwise use default values and no
+     *   interaction.
+     */
     void generalMoveEventsToStaff(bool upStaff, bool useDialog);
 
     /**

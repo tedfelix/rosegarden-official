@@ -4896,63 +4896,64 @@ NotationView::slotStepByStepTargetRequested(QObject *obj)
 
 void
 NotationView::slotMoveEventsUpStaffInteractive()
-{ generalMoveEventsToStaff(true, true); }
+{
+    generalMoveEventsToStaff(true,  // upStaff
+                             true);  // useDialog
+}
 
 void
 NotationView::slotMoveEventsDownStaffInteractive()
-{ generalMoveEventsToStaff(false, true); }
+{
+    generalMoveEventsToStaff(false,  // upStaff
+                             true);  // useDialog
+}
 
 void
 NotationView::slotMoveEventsUpStaff()
-{ generalMoveEventsToStaff(true, false); }
+{
+    generalMoveEventsToStaff(true,  // upStaff
+                             false);  // useDialog
+}
 
 void
 NotationView::slotMoveEventsDownStaff()
-{ generalMoveEventsToStaff(false, false); }
+{
+    generalMoveEventsToStaff(false,  // upStaff
+                             false);  // useDialog
+}
 
-// Move the selected events to another staff
-// @param upStaff
-// if true, move them to the staff above this one, otherwise to the
-// staff below.
-// @param useDialog
-// Whether to use a dialog, otherwise use default values and no
-// interaction.
 void
 NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
 {
     EventSelection *selection = getSelection();
-    if (!selection) return;
-
-    NotationScene *scene = m_notationWidget->getScene();
-    if (!scene) return;
-    timeT targetTime = selection->getStartTime();
+    if (!selection)
+        return;
 
     PasteEventsCommand::PasteType type;
-
     if (useDialog) {
         PasteNotationDialog dialog(this);
-        if (dialog.exec() != QDialog::Accepted) { return; }
+        if (dialog.exec() != QDialog::Accepted)
+            return;
         type = dialog.getPasteType();
     } else {
         type = PasteEventsCommand::NoteOverlay;
     }
 
-    NotationStaff *target_staff =
-        upStaff ?
-        scene->getStaffAbove(targetTime) :
-        scene->getStaffBelow(targetTime);
-    QString commandName =
-        upStaff ?
-        tr("Move Events to Staff Above") :
-        tr("Move Events to Staff Below");
+    const NotationScene *scene = m_notationWidget->getScene();
+    if (!scene)
+        return;
 
-    if (!target_staff) return;
+    const timeT targetTime = selection->getStartTime();
+    NotationStaff *targetStaff = upStaff ? scene->getStaffAbove(targetTime) :
+                                           scene->getStaffBelow(targetTime);
+    if (!targetStaff)
+        return;
 
-    Segment *segment = &target_staff->getSegment();
+    Segment *targetSegment = &targetStaff->getSegment();
 
+    const QString commandName = upStaff ? tr("Move Events to Staff Above") :
+                                          tr("Move Events to Staff Below");
     MacroCommand *command = new MacroCommand(commandName);
-
-    timeT insertionTime = selection->getStartTime();
 
     // Temporary clipboard to hold the notes we are moving.
     Clipboard clipboard;
@@ -4964,9 +4965,11 @@ NotationView::generalMoveEventsToStaff(bool upStaff, bool useDialog)
     // Erase from the source.
     command->addCommand(new EraseCommand(selection));
 
+    const timeT insertionTime = selection->getStartTime();
+
     // Paste into the destination.
     command->addCommand(new PasteEventsCommand(
-            *segment, &clipboard, insertionTime, type));
+            *targetSegment, &clipboard, insertionTime, type));
 
     CommandHistory::getInstance()->addCommand(command);
 }

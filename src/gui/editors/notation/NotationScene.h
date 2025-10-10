@@ -94,10 +94,10 @@ public:
     /// Set current staff to the staff nearest time t.
     void setCurrentStaff(timeT t);
 
-    NotationStaff *getStaffAbove(timeT t);
-    NotationStaff *getStaffBelow(timeT t);
-    NotationStaff *getPriorStaffOnTrack();
-    NotationStaff *getNextStaffOnTrack();
+    NotationStaff *getStaffAbove(timeT t) const;
+    NotationStaff *getStaffBelow(timeT t) const;
+    NotationStaff *getPriorStaffOnTrack() const;
+    NotationStaff *getNextStaffOnTrack() const;
 
     NotationStaff *getStaffBySegmentMarking(const QString& marking) const;
 
@@ -300,9 +300,9 @@ protected:
 
 private:
     void setNotePixmapFactories(QString fontName = "", int size = -1);
-    NotationStaff *getNextStaffVertically(int direction, timeT t);
-    NotationStaff *getNextStaffHorizontally(int direction, bool cycle);
-    NotationStaff *getStaffbyTrackAndTime(const Track *track, timeT targetTime);
+    NotationStaff *getNextStaffVertically(int direction, timeT t) const;
+    NotationStaff *getNextStaffHorizontally(int direction, bool cycle) const;
+    NotationStaff *getStaffbyTrackAndTime(const Track *track, timeT targetTime) const;
     void initCurrentStaffIndex();
     void processKeyboardEvent(QKeyEvent * keyEvent);
 

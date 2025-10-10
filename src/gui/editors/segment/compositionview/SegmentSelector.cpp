@@ -213,7 +213,7 @@ SegmentSelector::mousePressEvent(QMouseEvent *e)
 
         m_canvas->drawGuides(guideX, guideY);
 
-        setSnapTime(e, SnapGrid::SnapToBeat);
+        setSnapTime(e, SnapGrid::SnapToUnit);
 
     } else {  // the background was clicked
         if (ctrl) {
@@ -461,7 +461,7 @@ SegmentSelector::mouseMoveEvent(QMouseEvent *e)
 
     m_canvas->viewport()->setCursor(Qt::SizeAllCursor);
 
-    setSnapTime(e, SnapGrid::SnapToBeat);
+    setSnapTime(e, SnapGrid::SnapToUnit);
 
     // start move on selected items only once
 
