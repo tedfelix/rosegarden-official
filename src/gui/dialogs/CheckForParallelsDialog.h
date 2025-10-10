@@ -152,7 +152,7 @@ private:
     void addText(QString text);
 
     // check a set of transitions for parallels
-    void checkParallels(std::vector<Transition> &tSet);
+    void checkParallels(const std::vector<Transition> &tSet);
 
     // returns true if the transition set has parallels
     bool hasParallels(const std::vector<Transition> &tSet,

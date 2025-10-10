@@ -615,7 +615,7 @@ CheckForParallelsDialog::startCheck()
 }
 
 void
-CheckForParallelsDialog::checkParallels(std::vector<Transition> &tSet)
+CheckForParallelsDialog::checkParallels(const std::vector<Transition> &tSet)
 {
     ParallelSet p;
 
