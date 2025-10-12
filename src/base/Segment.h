@@ -834,7 +834,7 @@ public:
     /**
      * Return true if the given segment is linked to this.
      */
-    bool isLinkedTo(Segment *) const;
+    bool isLinkedTo(const Segment *) const;
 
     /**
      * Return true if the given segment is a plain link linked to the current

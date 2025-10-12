@@ -1102,6 +1102,72 @@ void RosegardenMainViewWidget::slotSelectAllSegments()
 }
 
 void
+RosegardenMainViewWidget::slotSelectRelatedSegments()
+{
+    const Composition &comp =
+        RosegardenDocument::currentDocument->getComposition();
+
+    SegmentSelection oldSelection =
+        m_trackEditor->getCompositionView()->getSelectedSegments();
+    if (oldSelection.empty()) {
+        // if nothing is selected then select all related segments
+        for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
+            oldSelection.insert(*i);
+        }
+    }
+
+    SegmentSelection segments; // new selection
+
+    // For each Segment in the Composition
+    for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
+        // Check if this segment is linked to a segment in the old selection
+        Segment* cseg = *i;
+        Segment::SegmentType csType = cseg->getType();
+        for(const Segment* selseg : oldSelection) {
+            Segment::SegmentType selsegType = selseg->getType();
+            if (csType == Segment::Audio && selsegType == Segment::Audio) {
+                if (cseg->getAudioFileId() == selseg->getAudioFileId()) {
+                    segments.insert(cseg);
+                }
+            } else {
+                if (cseg->isLinkedTo(selseg)) {
+                    segments.insert(cseg);
+                }
+            }
+        }
+    }
+
+    // Send this signal to the GUI to activate the correct tool
+    // on the toolbar so that we have a SegmentSelector object
+    // to write the Segments into
+    //
+    if (!segments.empty()) {
+        emit activateTool(SegmentSelector::ToolName());
+    }
+
+    // Send the segment list even if it's empty as we
+    // use that to clear any current selection
+    //
+    m_trackEditor->getCompositionView()->selectSegments(segments);
+
+    //!!! similarly, how to set no selected track?
+    //comp.setSelectedTrack(trackId);
+
+    if (!segments.empty()) {
+        emit stateChange("have_selection", true);
+        if (!hasNonAudioSegment(segments)) {
+            emit stateChange("audio_segment_selected", true);
+        }
+    } else {
+        emit stateChange("have_selection", false);
+    }
+
+    // inform
+    //!!! inform what? is this signal actually used?
+    emit segmentsSelected(segments);
+}
+
+void
 RosegardenMainViewWidget::updateMeters()
 {
     const int unknownState = 0, oldState = 1, newState = 2;

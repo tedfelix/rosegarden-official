@@ -851,6 +851,7 @@ RosegardenMainWindow::setupActions()
     createAction("erase_range_tempos", &RosegardenMainWindow::slotEraseRangeTempos);
     createAction("delete", &RosegardenMainWindow::slotDeleteSelectedSegments);
     createAction("select_all", &RosegardenMainWindow::slotSelectAll);
+    createAction("select_related", &RosegardenMainWindow::slotSelectRelatedSegments);
     createAction("add_tempo", &RosegardenMainWindow::slotEditTempo);
     createAction("change_composition_length", &RosegardenMainWindow::slotChangeCompositionLength);
     createAction("edit_markers", &RosegardenMainWindow::slotEditMarkers);
@@ -2560,6 +2561,12 @@ void
 RosegardenMainWindow::slotSelectAll()
 {
     m_view->slotSelectAllSegments();
+}
+
+void
+RosegardenMainWindow::slotSelectRelatedSegments()
+{
+    m_view->slotSelectRelatedSegments();
 }
 
 void
