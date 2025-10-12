@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -87,7 +87,7 @@ IntervalDialog::IntervalDialog(QWidget *parent, bool askChangeKey, bool askTrans
         m_transposeChangingKey = nullptr;
         m_transposeWithinKey = nullptr;
     }
-    
+
     if (askTransposeSegmentBack) {
         m_transposeSegmentBack = new QCheckBox(tr("Adjust segment transposition in opposite direction (maintain audible pitch)"), vBox );
         vBoxLayout->addWidget(m_transposeSegmentBack);
@@ -118,7 +118,7 @@ IntervalDialog::getOctaveDistance()
     return m_targetnote->getOctave() - m_referencenote->getOctave();
 }
 
-// chromatic distance between the steps, not taking account octaves or 
+// chromatic distance between the steps, not taking account octaves or
 // accidentals
 int
 IntervalDialog::getStepDistanceChromatic()
@@ -154,14 +154,14 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
     // set the boolean 'down' to true.
     int displayIntervalDiatonic = intervalDiatonic;
     int displayIntervalChromatic = intervalChromatic;
-    bool down = (intervalDiatonic < 0 || 
+    bool down = (intervalDiatonic < 0 ||
                  (intervalDiatonic == 0 &&
                   intervalChromatic < 0));
     if (down) {
         displayIntervalDiatonic = -displayIntervalDiatonic;
         displayIntervalChromatic = -displayIntervalChromatic;
     }
-    
+
     int octaves = displayIntervalDiatonic / 7;
     int deviation = displayIntervalChromatic % 12 - scale_Cmajor[displayIntervalDiatonic % 7];
     // Note (hjj):
@@ -178,15 +178,15 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 	// an augmented prime down, NOT a diminished prime down
 	deviation = -deviation;
     }
-    
-    // show the step for an unison only if the octave doesn't change, any other interval 
+
+    // show the step for an unison only if the octave doesn't change, any other interval
     //  always, and augmented/dimnished unisons (modulo octaves) always.
-    bool showStep = displayIntervalDiatonic == 0 || 
+    bool showStep = displayIntervalDiatonic == 0 ||
         displayIntervalDiatonic % 7 != 0 || deviation != 0;
-    
+
     QString textInterval = "";
-    QString textIntervalDeviated = "";
     if (showStep) {
+        QString textIntervalDeviated = "";
         switch (displayIntervalDiatonic % 7) {
         // First the diminished/perfect/augmented:
         case 0: // unison or octaves
@@ -279,7 +279,7 @@ IntervalDialog::getIntervalName(int intervalDiatonic, int intervalChromatic)
 	    textInterval += tr("%1").arg(textIntervalDeviated);
         }
     }
-    
+
     if (displayIntervalChromatic != 0 || displayIntervalDiatonic != 0) {
         if (!down) {
 	    if (octaves != 0) {
@@ -346,7 +346,7 @@ IntervalDialog::getTransposeSegmentBack()
     if (m_transposeSegmentBack == nullptr) {
         return false;
     } else {
-        return m_transposeSegmentBack->isChecked();	
+        return m_transposeSegmentBack->isChecked();
     }
 }
 

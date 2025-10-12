@@ -57,7 +57,7 @@ namespace Rosegarden
 // Let's try this:
 
 static bool
-codecPreserves(QTextCodec &codec, std::string encoded)
+codecPreserves(QTextCodec &codec, const std::string& encoded)
 {
     QString u = codec.toUnicode(encoded.c_str(), encoded.length());
     QByteArray d = codec.fromUnicode(u);
@@ -90,7 +90,6 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     QComboBox *codecs = new QComboBox;
     groupBoxLayout->addWidget(codecs);
 
-    QString defaultCodec;
     // QTextCodec *codec = 0;
 
     QMap<QString, QString> codecDescriptions;
@@ -241,6 +240,7 @@ IdentifyTextCodecDialog::IdentifyTextCodecDialog(QWidget *parent,
     // Update the example text.
     slotCodecSelected(bestCodecIndex);
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok);
     vboxLayout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

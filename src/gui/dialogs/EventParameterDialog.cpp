@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -52,6 +52,7 @@ EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
     boxLayout->addWidget(m_label);
 
     // SpinBox
+    // cppcheck-suppress [noCopyConstructor, noOperatorEq]
     m_spinBox = new QSpinBox;
     boxLayout->addWidget(m_spinBox);
 
@@ -110,12 +111,13 @@ EventParameterDialog::EventParameterDialog(
     explainLabel->setText(text);
     mainLayout->addWidget(explainLabel);
 
-    
+
     QWidget *patternBox = new QWidget;
     QHBoxLayout *patternBoxLayout = new QHBoxLayout;
     patternBox->setLayout(patternBoxLayout);
     mainLayout->addWidget(patternBox);
-    
+
+    // cppcheck-suppress constVariablePointer
     QLabel *child_10 = new QLabel(tr("Pattern"));
     m_patternCombo = new QComboBox;
     patternBoxLayout->addWidget(child_10);
@@ -133,7 +135,9 @@ EventParameterDialog::EventParameterDialog(
 
     slotPatternSelected(0);
 
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    // cppcheck-suppress constVariablePointer
+    QDialogButtonBox *buttonBox =
+        new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -184,7 +188,7 @@ EventParameterDialog::getBareParams()
 {
     ParameterPattern::BareParams result;
     for (int i = 0; i < m_NbParameters; ++i) {
-        ParamWidget &widgetBox = m_paramVec[i];
+        const ParamWidget &widgetBox = m_paramVec[i];
         result.push_back(widgetBox.getValue());
     }
     return result;
@@ -194,7 +198,7 @@ ParameterPattern::Result
 EventParameterDialog::getResult()
 {
     const int patternIndex = m_patternCombo->currentIndex();
-    return 
+    return
         ParameterPattern::Result(m_situation,
                                  getPattern(patternIndex),
                                  getBareParams());

@@ -38,8 +38,10 @@ class MakeOrnamentDialog : public QDialog
     Q_OBJECT
 
 public:
-    MakeOrnamentDialog(QWidget *parent, QString defaultName, int defaultBasePitch);
-    
+    MakeOrnamentDialog(QWidget *parent,
+                       const QString& defaultName,
+                       int defaultBasePitch);
+
     QString getName() const;
     int getBasePitch() const;
 

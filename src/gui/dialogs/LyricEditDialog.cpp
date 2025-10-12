@@ -67,7 +67,7 @@ LyricEditDialog::LyricEditDialog(QWidget *parent,
     if (segments.size() > 1) {
         m_segmentSelectMenu = new QMenu(this);
         m_menuActionsMap.clear();
-        Composition *comp = m_segment->getComposition();
+        const Composition *comp = m_segment->getComposition();
 
         // Associate a description with each segment and use a multimap
         // to sort them
@@ -205,7 +205,7 @@ void
 LyricEditDialog::showDescriptionOfSelectedSegment()
 {
     // Get selected segment characteristics
-    Composition *comp = m_segment->getComposition();
+    const Composition *comp = m_segment->getComposition();
     timeT segStart = m_segment->getStartTime();
     timeT segEnd = m_segment->getEndMarkerTime();
     int barStart = comp->getBarNumber(segStart) + 1;
@@ -353,7 +353,7 @@ LyricEditDialog::unparse()
 
     countVerses();
 
-    Composition *comp = m_segment->getComposition();
+    const Composition *comp = m_segment->getComposition();
 
     bool firstNote = true;
     timeT lastTime = m_segment->getStartTime();

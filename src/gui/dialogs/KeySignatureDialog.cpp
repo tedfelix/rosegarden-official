@@ -416,6 +416,7 @@ KeySignatureDialog::slotKeyNameChanged(int index)
 
         int space = name.find(' ');
         if (space > 0)
+            // cppcheck-suppress uselessCallsSubstr
             name = name.substr(0, space);
         m_keyCombo->setEditText(strtoqstr(name));
 

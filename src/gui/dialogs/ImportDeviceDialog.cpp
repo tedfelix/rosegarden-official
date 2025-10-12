@@ -369,16 +369,16 @@ ImportDeviceDialog::importFromRG(const QString& fileName)
 
     for (DeviceVector::iterator it = list->begin(); it != list->end(); ++it) {
 
-        MidiDevice *device = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice *device = dynamic_cast<MidiDevice*>(*it);
 
         if (device) {
-            std::vector<MidiBank> banks = device->getBanks();
+            const std::vector<MidiBank>& banks = device->getBanks();
 
             // DMM - check for controllers too, because some users have
             // created .rgd files that contain only controllers
             // see bug #1183522
             //
-            std::vector<ControlParameter> controllers =
+            const std::vector<ControlParameter>& controllers =
                 device->getControlParameters();
 
             // We've got a bank on a Device fom this file
@@ -404,9 +404,9 @@ ImportDeviceDialog::importFromSF2(const QString& fileName)
 
         // These exceptions shouldn't happen -- the isSF2File call before this
         // one should have weeded them out
-    } catch (SF2PatchExtractor::FileNotFoundException& e) {
+    } catch (const SF2PatchExtractor::FileNotFoundException& e) {
         return false;
-    } catch (SF2PatchExtractor::WrongFileFormatException& e) {
+    } catch (const SF2PatchExtractor::WrongFileFormatException& e) {
         return false;
     }
 

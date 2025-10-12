@@ -88,8 +88,8 @@ initializeCombos()
   for (iterator i = involvedSegments.begin();
        i != involvedSegments.end();
        ++i) {
-      Segment *s = i->first;
-      SegmentFigData &data = i->second;
+      const Segment *s = i->first;
+      const SegmentFigData &data = i->second;
       if (data.isa(SegmentFigData::FigurationSource)) {
           m_figSourcesBox->addItem (strtoqstr(s->getLabel()), data.getID());
       }
