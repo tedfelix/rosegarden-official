@@ -81,10 +81,7 @@ private:
 
 
 AudioFileManager::AudioFileManager(RosegardenDocument *doc) :
-    m_document(doc),
-    m_lastAudioFileID(0),
-    m_audioLocationConfirmed(false),
-    m_expectedSampleRate(0)
+    m_document(doc)
 {
     pthread_mutexattr_t attr;
     pthread_mutexattr_init(&attr);

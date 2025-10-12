@@ -111,6 +111,7 @@ public:
                     AudioFileId id);
     /// We have audio files at load time, assume user has set location.
     void setAudioLocationConfirmed()  { m_audioLocationConfirmed = true; }
+    bool getAudioLocationConfirmed() const  { return m_audioLocationConfirmed; }
 
     /// Does a specific file id exist?
     bool fileExists(AudioFileId id);
@@ -302,9 +303,9 @@ public:
     };
 
 private:
-    // Hide copy ctor and op=.
-    AudioFileManager(const AudioFileManager &aFM);
-    AudioFileManager &operator=(const AudioFileManager &);
+    // Delete copy ctor and op=.
+    AudioFileManager(const AudioFileManager &aFM) = delete;
+    AudioFileManager &operator=(const AudioFileManager &) = delete;
 
     // We can't use RosegardenDocument::currentDocument as it might
     // be pointing to the wrong document.
@@ -356,7 +357,7 @@ private:
     /// Fetch a new unique Audio File ID.
     AudioFileId getUniqueAudioFileID();
     /// Last Audio File ID that was handed out by getUniqueAudioFileID().
-    unsigned int m_lastAudioFileID;
+    unsigned int m_lastAudioFileID{0};
 
     /// Always in internal format with either a "." or a "~".
     /**
@@ -371,7 +372,7 @@ private:
     QString m_relativeAudioPath;
 
     /// Whether the user has confirmed the audio file path.
-    bool m_audioLocationConfirmed;
+    bool m_audioLocationConfirmed{false};
 
     void moveFiles(const QString &newPath);
 
@@ -384,7 +385,7 @@ private:
     std::set<AudioFile *> m_recordedAudioFiles;
     std::set<AudioFile *> m_derivedAudioFiles;
 
-    int m_expectedSampleRate;
+    int m_expectedSampleRate{0};
 
     /// Progress Dialog passed in by clients.
     QPointer<QProgressDialog> m_progressDialog;
@@ -393,4 +394,4 @@ private:
 
 }
 
-#endif // RG_AUDIOFILEMANAGER_H
+#endif

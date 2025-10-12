@@ -1458,6 +1458,7 @@ private:
     bool m_notPlaying{true};
     bool m_haveSelection{false};
     bool m_haveRange{false};
+    /// More complex action states than the .rc file can handle.
     void updateActions();
 
     RosegardenMainViewWidget *m_view{nullptr};

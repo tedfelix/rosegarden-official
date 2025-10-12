@@ -6398,6 +6398,11 @@ RosegardenMainWindow::slotStateChanged(const QString& s,
 void
 RosegardenMainWindow::updateActions()
 {
+    // Be sure to coordinate this with action states in the .rc file.  Not
+    // sure which will take precedence, but each action that needs to change
+    // should be handled either by this function or by the states in the .rc
+    // file.  Never both.
+
     QSettings settings;
     settings.beginGroup(GeneralOptionsConfigGroup);
     bool enableEditingDuringPlayback =
@@ -6410,7 +6415,8 @@ RosegardenMainWindow::updateActions()
             (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("edit_cut")->setEnabled(
             (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
-    // ??? This doesn't prevent Ctrl+Resize on the edges of a Segment.  CRASH.
+    // ??? CRASH: This doesn't prevent Ctrl+Resize on the edges of a Segment
+    //            from causing a CRASH.
     findAction("rescale")->setEnabled(m_notPlaying  &&  m_haveSelection);
     findAction("auto_split")->setEnabled(
             (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
@@ -6418,7 +6424,7 @@ RosegardenMainWindow::updateActions()
             (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("split_by_recording")->setEnabled(
             (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
-    // ??? This doesn't prevent the split tool from causing a CRASH.
+    // ??? CRASH: This doesn't prevent the split tool from causing a CRASH.
     findAction("split_at_time")->setEnabled(
             (enableEditingDuringPlayback || m_notPlaying)  &&  m_haveSelection);
     findAction("split_by_drum")->setEnabled(
@@ -6429,6 +6435,23 @@ RosegardenMainWindow::updateActions()
     // not_playing && have_range
 
     findAction("cut_range")->setEnabled(m_notPlaying  &&  m_haveRange);
+
+
+    // not_playing || has no audio files || has audio location
+
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+
+    if (doc)
+    {
+        const AudioFileManager &audioFileManager = doc->getAudioFileManager();
+
+        // Prevent a crash when saving while playing with audio files that
+        // have not been moved to their final destination.
+        findAction("file_save")->setEnabled(
+                m_notPlaying  ||  // always enabled if not playing
+                audioFileManager.empty()  ||  // no audio files
+                audioFileManager.getAudioLocationConfirmed());  // has audio file path
+    }
 }
 
 void
