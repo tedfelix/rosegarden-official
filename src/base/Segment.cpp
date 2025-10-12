@@ -288,7 +288,7 @@ Segment::isPlainlyLinked() const {
 }
 
 bool
-Segment::isLinkedTo(Segment * seg) const {
+Segment::isLinkedTo(const Segment * seg) const {
     if (!m_segmentLinker) return false;
 
     const SegmentLinker * otherSegmentLinker = seg->getLinker();

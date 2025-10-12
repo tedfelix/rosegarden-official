@@ -89,6 +89,7 @@
     <Action name="erase_range_tempos" text="Clear Range of Tempos" />
   <Separator/>
     <Action name="select_all" text="Select &amp;All Segments" shortcut="Ctrl+A" />
+    <Action name="select_related" text="Select Related Segments" />
   <Separator/>
     <Action name="options_configure" text="&amp;Preferences..." icon="configure" />
     <Action name="shortcuts_configure" text="Keyboard S&amp;hortcuts..." />

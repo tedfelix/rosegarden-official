@@ -640,6 +640,11 @@ public slots:
     void slotSelectAll();
 
     /**
+     * select all segments linked to selected segments
+     */
+    void slotSelectRelatedSegments();
+
+    /**
      * delete selected segments, duh
      */
     void slotDeleteSelectedSegments();
