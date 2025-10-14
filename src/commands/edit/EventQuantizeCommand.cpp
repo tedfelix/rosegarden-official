@@ -170,7 +170,7 @@ EventQuantizeCommand::modifySegment()
             const timeT endTime = rRange.second;
 
             if (makeViable)
-                helper.makeNotesViable(startTime, endTime, true);
+                helper.makeNotesViable(startTime, endTime);
 
             // Kick the event loop.
             qApp->processEvents();
@@ -192,7 +192,7 @@ EventQuantizeCommand::modifySegment()
         }
     } else {
         if (makeViable)
-            helper.makeNotesViable(getStartTime(), getEndTime(), true);
+            helper.makeNotesViable(getStartTime(), getEndTime());
 
         // Kick the event loop.
         qApp->processEvents();

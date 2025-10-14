@@ -96,7 +96,7 @@ AddDotCommand::modifySegment()
         // new ones.  actualEvent is always the first event timewise,
         // though it may be followed by tied notes.
         Event *actualEvent =
-            segmentNotationHelper.makeThisNoteViable(note, true);
+            segmentNotationHelper.makeThisNoteViable(note);
         m_selection->addEvent(actualEvent);
     }
 

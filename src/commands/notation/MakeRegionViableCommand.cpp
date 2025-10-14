@@ -34,7 +34,7 @@ MakeRegionViableCommand::modifySegment()
     if (segment.getType() != Segment::Internal) return;
     SegmentNotationHelper helper(segment);
 
-    helper.makeNotesViable(getStartTime(), getEndTime(), true);
+    helper.makeNotesViable(getStartTime(), getEndTime());
     segment.normalizeRests(getStartTime(), getEndTime());
 }
 

@@ -361,7 +361,7 @@ public:
      * Split a note or rest up into tied notes or shorter rests of
      * viable lengths (longest possible viable duration first, then
      * longest possible viable component of remainder &c).  Also
-     * optionally split a note or rest at barlines -- this is
+     * splits a note or rest at barlines -- this is
      * actually the most common user-visible use of this function.
      *
      * Note: no checks performed on validity of noteItr, use caution.
@@ -369,23 +369,16 @@ public:
      * Returns the original *noteItr Event if no split and tie occurs
      * or returns the first new event inserted if split and tie occurs
      */
-    Event * makeThisNoteViable(Segment::iterator noteItr, bool splitAtBars = true);
+    Event *makeThisNoteViable(Segment::iterator noteItr);
 
     /**
      * Split notes and rests up into tied notes or shorter rests of
      * viable lengths (longest possible viable duration first, then
      * longest possible viable component of remainder &c).  Also
-     * optionally splits notes and rests at barlines -- this is
+     * splits notes and rests at barlines -- this is
      * actually the most common user-visible use of this function.
      */
-    void makeNotesViable(Segment::iterator from, Segment::iterator to, bool splitAtBars = true);
-
-
-    /**
-     * As above but given a range in time rather than iterators.
-     */
-    void makeNotesViable(timeT startTime, timeT endTime,
-                         bool splitAtBars = true);
+    void makeNotesViable(timeT startTime, timeT endTime);
 
 
     /**
@@ -567,9 +560,10 @@ public:
      */
     void updateIndications(timeT startTime, timeT endTime);
 
-protected:
+private:
+
     const Quantizer &basicQuantizer();
-    const Quantizer &notationQuantizer();
+    //const Quantizer &notationQuantizer();
 
     /**
      * Collapse multiple consecutive rests into one, in preparation
@@ -636,6 +630,9 @@ protected:
 
     /// find border of tupled
     int findBorderTuplet(Segment::iterator, Segment::iterator &start, Segment::iterator &end);
+
+    void makeNotesViable(Segment::iterator from, Segment::iterator to);
+
 };
 
 }

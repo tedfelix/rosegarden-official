@@ -52,15 +52,16 @@ SegmentNotationHelper::basicQuantizer() {
     return *(segment().getComposition()->getBasicQuantizer());
 }
 
+#if 0
 const Quantizer &
 SegmentNotationHelper::notationQuantizer() {
     return *(segment().getComposition()->getNotationQuantizer());
 }
+#endif
 
-
-//!!! we need to go very carefully through this file and check calls
-//to getAbsoluteTime/getDuration -- the vast majority should almost
-//certainly now be using getNotationAbsoluteTime/getNotationDuration
+// !!! we need to go very carefully through this file and check calls
+// to getAbsoluteTime/getDuration -- the vast majority should almost
+// certainly now be using getNotationAbsoluteTime/getNotationDuration
 
 Segment::iterator
 SegmentNotationHelper::findNotationAbsoluteTime(timeT t)
@@ -664,7 +665,7 @@ SegmentNotationHelper::makeRestViable(Segment::iterator i)
 
 
 Event *
-SegmentNotationHelper::makeThisNoteViable(Segment::iterator noteItr, bool splitAtBars)
+SegmentNotationHelper::makeThisNoteViable(Segment::iterator noteItr)
 {
     // We don't use quantized values here; we want a precise division.
     // Even if it doesn't look precise on the score (because the score
@@ -702,15 +703,18 @@ SegmentNotationHelper::makeThisNoteViable(Segment::iterator noteItr, bool splitA
     // the duration list (dl).
     while (acc < required) {
         timeT remaining = required - acc;
-        if (splitAtBars) {
-            timeT thisNoteStart = qt + acc;
-            timeT toNextBar =
-                    segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
-            if (toNextBar > 0 && remaining > toNextBar)
-                remaining = toNextBar;
-        }
-        timeT component = Note::getNearestNote(remaining).getDuration();
-        timeT dur = (component > (required - acc) ? (required - acc) : component);
+
+        // Split at bar
+
+        const timeT thisNoteStart = qt + acc;
+        const timeT toNextBar =
+                segment().getBarEndForTime(thisNoteStart) - thisNoteStart;
+        if (toNextBar > 0 && remaining > toNextBar)
+            remaining = toNextBar;
+
+        const timeT component = Note::getNearestNote(remaining).getDuration();
+        const timeT dur =
+                (component > (required - acc) ? (required - acc) : component);
 
         // #1517: In the scenario where there is a whole note (4 beats) in a
         // single measure of 2/2, maxdur == dur and this is exactly as it should
@@ -821,8 +825,8 @@ SegmentNotationHelper::makeThisNoteViable(Segment::iterator noteItr, bool splitA
 }
 
 void
-SegmentNotationHelper::makeNotesViable(Segment::iterator from, Segment::iterator to,
-                                       bool splitAtBars)
+SegmentNotationHelper::makeNotesViable(
+        Segment::iterator from, Segment::iterator to)
 {
 //  std::vector<Event *> toInsert;
 
@@ -835,19 +839,18 @@ SegmentNotationHelper::makeNotesViable(Segment::iterator from, Segment::iterator
         // event that our iterator points to.
         ++j;
 
-        makeThisNoteViable(i, splitAtBars);
+        makeThisNoteViable(i);
     }
 
 }
 
 void
-SegmentNotationHelper::makeNotesViable(timeT startTime, timeT endTime,
-                                       bool splitAtBars)
+SegmentNotationHelper::makeNotesViable(timeT startTime, timeT endTime)
 {
     Segment::iterator from = segment().findTime(startTime);
     Segment::iterator to = segment().findTime(endTime);
 
-    makeNotesViable(from, to, splitAtBars);
+    makeNotesViable(from, to);
 }
 
 

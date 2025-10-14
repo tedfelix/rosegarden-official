@@ -45,11 +45,11 @@ MakeNotesViableCommand::modifySegment()
         EventSelection::RangeTimeList ranges(m_selection->getRangeTimes());
         for (EventSelection::RangeTimeList::iterator i = ranges.begin();
                 i != ranges.end(); ++i) {
-            helper.makeNotesViable(i->first, i->second, true);
+            helper.makeNotesViable(i->first, i->second);
             segment.normalizeRests(i->first, i->second);
         }
     } else {
-        helper.makeNotesViable(getStartTime(), getEndTime(), true);
+        helper.makeNotesViable(getStartTime(), getEndTime());
         segment.normalizeRests(getStartTime(), getEndTime());
     }
 }

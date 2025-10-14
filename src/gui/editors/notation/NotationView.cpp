@@ -817,6 +817,8 @@ NotationView::setupActions()
     //"transform_notes" subMenu
     createAction("collapse_notes", &NotationView::slotTransformsCollapseNotes);
     //Where are "make_notes_viable" & "de_counterpoint" created?
+    // See MakeNotesViableCommand::registerCommand() and other registerCommand()
+    // routines.
 
     //Quantitize subMenu
     createAction("quantize", &NotationView::slotTransformsQuantize);

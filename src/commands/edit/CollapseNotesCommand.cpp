@@ -93,9 +93,7 @@ CollapseNotesCommand::modifySegment()
         ++i;
     }
     if (m_makeViable) {
-        helper.makeNotesViable(m_selection->getStartTime(),
-                               endTime,
-                               true);
+        helper.makeNotesViable(m_selection->getStartTime(), endTime);
     }
     if (m_autoBeam && ! beamGroups.empty()) {
         RG_DEBUG << "before adjust" << start << end;
