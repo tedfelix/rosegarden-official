@@ -45,8 +45,17 @@ Included in this release...
   * Fix new MIDI ports called "unnamed" rather than "New Device".
     Bug #1710.  [2c18d18906]
   * Fix lilypond version issue.  Bug #1739.  [55ef24b9bf]
+  * Fix Feta.xml not found message.  Bug #1741.  [d24521621d]
+  * Fix "oops" message in logs.  Bug #1740.  [bb86de7422]
+  * Limit mouse position in LoopRuler.  Bug #1742.  [f7216033b9]
+  * Fix wrong codec selected in text codec dialog.  [6e7b2c2577]
+  * Use "snap to unit" for the tools and the LoopRuler to make it
+    easier to work in compound meters.  [be819c5265]
+  * Add "Cursor" to "Move to Staff Above/Below" menu items.
+    [a1823ca9f6]
+  * Fix a crash when saving during playback.  [e835e860b3]
 
-stopped at da0b1bbfbe
+stopped at 02d547b6a5
 
 ===== New Features =====
 
@@ -59,6 +68,8 @@ stopped at da0b1bbfbe
     [00eb33ffa7] [8f334a5dbf]
   * Double-click to rename a marker.  Feature Request #535
     [3973fdf484]
+  * Edit > Select Related Segments feature.  Feature Request #534.
+    [d289dc4005]
 
 ===== General Improvements =====
 
