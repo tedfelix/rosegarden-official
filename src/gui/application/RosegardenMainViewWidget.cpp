@@ -1109,14 +1109,15 @@ RosegardenMainViewWidget::slotSelectRelatedSegments()
 
     SegmentSelection oldSelection =
         m_trackEditor->getCompositionView()->getSelectedSegments();
+    SegmentSelection segments; // new selection
     if (oldSelection.empty()) {
         // if nothing is selected then select all related segments
         for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
             oldSelection.insert(*i);
         }
+    } else {
+        segments = oldSelection; // maintain old selected segments
     }
-
-    SegmentSelection segments; // new selection
 
     // For each Segment in the Composition
     for (Composition::iterator i = comp.begin(); i != comp.end(); ++i) {
