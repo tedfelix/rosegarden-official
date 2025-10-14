@@ -73,6 +73,7 @@
 namespace Rosegarden
 {
 
+
 NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
                              SnapGrid *snapGrid, int id,
                              NotePixmapFactory *normalFactory,
@@ -86,17 +87,7 @@ NotationStaff::NotationStaff(NotationScene *scene, Segment *segment,
         ),
     m_notePixmapFactory(normalFactory),
     m_graceNotePixmapFactory(smallFactory),
-    m_previewItem(nullptr),
-    m_staffName(nullptr),
     m_notationScene(scene),
-    m_legerLineCount(8),
-    m_barNumbersEvery(0),
-    m_colourQuantize(true),
-    m_showUnknowns(true),
-    m_showRanges(true),
-    m_showCollisions(true),
-    m_hideRedundance(true),
-    m_printPainter(nullptr),
     m_refreshStatusId(segment->getNewRefreshStatusId()),
     m_segmentMarking(segment->getMarking())
 {

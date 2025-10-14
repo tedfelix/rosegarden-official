@@ -421,7 +421,16 @@ protected:
 
     int m_generatedWidth;
     int m_generatedHeight;
-    bool m_inPrinterMethod;
+
+    /**
+     * This is usually false.  It is only set to true by drawText().  So
+     * the name is misleading.  I suspect it is more of a "m_invert" since
+     * that's what it is used for in the one place it is actually used.
+     * Feels like an abandoned native (non-lilypond) printing feature.
+     *
+     * ??? Clean this up.
+     */
+    bool m_inPrinterMethod{false};
 
     NotePixmapPainter *m_p;
 

@@ -26,6 +26,7 @@ namespace Rosegarden
 
 class ViewSegmentObserver;
 
+/// Base class for Segment view classes.
 /**
  * ViewSegment is the base class for classes which represent a Segment as an
  * on-screen graphic.  It manages the relationship between Segment/Event
@@ -35,6 +36,8 @@ class ViewSegmentObserver;
  * ViewElementsManager.  It was renamed from Staff to ViewSegment to
  * avoid confusion with classes that draw staff lines and other
  * surrounding context.  All this does is manage the view elements.
+ *
+ * NotationStaff and MatrixViewSegment derive from this class.
  */
 class ViewSegment : public SegmentObserver
 {

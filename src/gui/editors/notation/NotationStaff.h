@@ -51,6 +51,7 @@ class Event;
 class Clef;
 
 
+/// Draws a staff on a NotationScene.
 class NotationStaff : public QObject,  // Just for tr().  Could be cleaned up.
                       public ViewSegment,
                       public StaffLayout
@@ -356,12 +357,12 @@ protected:
 
     NotePixmapFactory *m_notePixmapFactory; // I do not own this
     NotePixmapFactory *m_graceNotePixmapFactory; // I do not own this
-    QGraphicsItem *m_previewItem;
-    QGraphicsItem *m_staffName;
+    QGraphicsItem *m_previewItem{nullptr};
+    QGraphicsItem *m_staffName{nullptr};
     std::string m_staffNameText;
     NotationScene *m_notationScene;
-    int m_legerLineCount;
-    int m_barNumbersEvery;
+    int m_legerLineCount{8};
+    int m_barNumbersEvery{0};
     bool m_colourQuantize;
     bool m_showUnknowns;
     bool m_showRanges;
@@ -370,7 +371,7 @@ protected:
     bool m_distributeVerses;
     int m_keySigCancelMode;
 
-    QPainter *m_printPainter;
+    QPainter *m_printPainter{nullptr};
 
     unsigned int m_refreshStatusId;
 

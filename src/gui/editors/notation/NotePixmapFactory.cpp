@@ -115,7 +115,6 @@ NotePixmapFactory::NotePixmapFactory(const QString& fontName, int size, int grac
     m_generatedPixmap(nullptr),
     m_generatedWidth( -1),
     m_generatedHeight( -1),
-    m_inPrinterMethod(false),
     m_p(new NotePixmapPainter())
 {
     init(fontName, size);
@@ -147,7 +146,6 @@ NotePixmapFactory::NotePixmapFactory(const NotePixmapFactory &npf) :
     m_generatedPixmap(nullptr),
     m_generatedWidth( -1),
     m_generatedHeight( -1),
-    m_inPrinterMethod(false),
     m_p(new NotePixmapPainter())
 {
     init(npf.m_font->getName(), npf.m_font->getSize());
