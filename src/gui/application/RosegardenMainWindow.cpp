@@ -6738,6 +6738,7 @@ RosegardenMainWindow::slotPlayAudioFile(unsigned int id,
     // Make sure id is valid.
     const AudioFile *aF = RosegardenDocument::currentDocument->
             getAudioFileManager().getAudioFile(id);
+    RG_DEBUG << "slotPlayAudioFile" << id << aF;
     if (!aF)
         return;
 

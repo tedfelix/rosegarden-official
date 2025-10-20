@@ -89,15 +89,15 @@ public:
 
     void setStartTime(const RealTime &time)
         { m_startTime = time; }
-    RealTime getStartTime() { return m_startTime; }
+    RealTime getStartTime() const { return m_startTime; }
 
     void setDuration(const RealTime &time)
         { m_duration = time; }
-    RealTime getDuration() { return m_duration; }
+    RealTime getDuration() const { return m_duration; }
 
     void setSegment(Segment *segment)
         { m_segment = segment; }
-    Segment *getSegment()  { return m_segment; }
+    Segment *getSegment() { return m_segment; }
     const Segment *getSegment() const  { return m_segment; }
 
 protected:

@@ -1,7 +1,7 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
 
 <kpartgui name="Rosegarden::AudioManagerDialog" version="1230">
-  
+
 <MenuBar>
   <Menu name="file">
     <text>&amp;File</text>
@@ -24,7 +24,6 @@
     <text>&amp;Action</text>
     <Action name="preview_audio" text="Play Preview" icon="transport-play" />
     <Action name="insert_audio" text="Insert into Selected Audio Track" icon="insert_audio_into_track" />
-    <Action name="distribute_audio" text="Distribute Audio on MIDI Segment"/>
   </Menu>
 
   <Menu name="help" append="about_merge">
@@ -57,9 +56,16 @@
   <enable>
     <Action name="export_audio"/>
     <Action name="remove_audio"/>
-    <Action name="rename_audio"/>
-    <Action name="distribute_audio"/>
   </enable>
+</State>
+
+<State name="have_multi_audio_selected">
+  <enable>
+    <Action name="remove_audio"/>
+  </enable>
+  <disable>
+    <Action name="preview_audio"/>
+  </disable>
 </State>
 
 <State name="have_audible_preview">

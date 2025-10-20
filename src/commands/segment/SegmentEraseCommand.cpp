@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[SegmentEraseCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "SegmentEraseCommand.h"
 
@@ -86,6 +87,7 @@ SegmentEraseCommand::unexecute()
     m_detached = false;
 
     // If we are bringing back an audio segment
+    RG_DEBUG << "unexecute" << m_segment->getType() << m_mgr << m_audioFileName;
     if (m_segment->getType() == Segment::Audio &&
             m_audioFileName != "" &&
             m_mgr) {
@@ -93,6 +95,7 @@ SegmentEraseCommand::unexecute()
         // The user may have deleted and re-added the audio file, which
         // would cause its ID to change.
         int id = m_mgr->fileExists(m_audioFileName);
+        RG_DEBUG << "unexecute fileExists id" << id;
 
         // If the audio file wasn't found, it may have been deleted
         // by the user.  Re-add it.
@@ -101,6 +104,7 @@ SegmentEraseCommand::unexecute()
         // In my testing, the audio file no longer plays after this.
         if (id == -1)
             id = (int)m_mgr->addFile(m_audioFileName);
+        RG_DEBUG << "unexecute addFile id" << id;
 
         m_segment->setAudioFileId(id);
     }

@@ -140,12 +140,6 @@ public slots:
 
     void slotClose();
 
-    /**
-     * Turn a MIDI segment into a set of audio segments triggered
-     * by the MIDI Note Ons
-     */
-    void slotDistributeOnMidiSegment();
-
 signals:
 
     // Control signals so we can tell the sequencer about our changes
@@ -180,7 +174,7 @@ protected:
     bool addFile(const QUrl& kurl);
     bool isSelectedTrackAudio();
     void selectFileListItemNoSignal(QTreeWidgetItem*);
-    void updateActionState(bool haveSelection);
+    void updateActionState(int numSelected);
 
     void closeEvent(QCloseEvent *) override;
 
