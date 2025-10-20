@@ -23,6 +23,8 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/Segment.h"
+#include "document/RosegardenDocument.h"
+#include "sequencer/RosegardenSequencer.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 
@@ -99,12 +101,18 @@ SegmentEraseCommand::unexecute()
 
         // If the audio file wasn't found, it may have been deleted
         // by the user.  Re-add it.
-        // (When some parts of a system use the command history and others
-        // don't (AudioFileManager), expect evil kludges such as this.)
-        // In my testing, the audio file no longer plays after this.
         if (id == -1)
             id = (int)m_mgr->addFile(m_audioFileName);
         RG_DEBUG << "unexecute addFile id" << id;
+
+        // we must go through the sequencer to insure the sound driver
+        // has the audio file
+        const AudioFile *aF = RosegardenDocument::currentDocument->
+            getAudioFileManager().getAudioFile(id);
+        if (aF) {
+            RosegardenSequencer::getInstance()->
+                addAudioFile(aF->getAbsoluteFilePath(), aF->getId());
+        }
 
         m_segment->setAudioFileId(id);
     }
