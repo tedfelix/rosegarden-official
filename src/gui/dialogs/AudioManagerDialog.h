@@ -75,12 +75,6 @@ public:
     //
     AudioFile* getCurrentSelection();
 
-    // Scroll and expand to show this selected item
-    //
-    void setSelected(AudioFileId id,
-                     const Segment *segment,
-                     bool propagate); // if true then we tell the segmentcanvas
-
     // Pop down playing dialog if it's currently up
     //
     void closePlayingDialog(AudioFileId id);
@@ -173,7 +167,6 @@ protected slots:
 protected:
     bool addFile(const QUrl& kurl);
     bool isSelectedTrackAudio();
-    void selectFileListItemNoSignal(QTreeWidgetItem*);
     void updateActionState(int numSelected);
 
     void closeEvent(QCloseEvent *) override;

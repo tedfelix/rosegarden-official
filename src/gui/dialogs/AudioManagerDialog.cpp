@@ -970,69 +970,6 @@ void AudioManagerDialog::slotSelectionChanged()
 }
 
 void
-AudioManagerDialog::setSelected(AudioFileId id,
-                                const Segment *segment,
-                                bool propagate)
-{
-    RG_DEBUG << "setSelected" << id << segment << propagate;
-    // note: this iterates over topLevelItems and childItems too.
-    // I hope that's what we want to do (?)
-    // otherwise re-code to iterate over topLevelItems only.
-    QTreeWidgetItemIterator treeItemIter(m_fileList,
-                                         QTreeWidgetItemIterator::All);
-
-    QTreeWidgetItem *treeItem = *treeItemIter;
-
-    while (treeItem) {
-
-        AudioListItem *audioItem = dynamic_cast<AudioListItem *>(treeItem);
-
-        if (audioItem) {
-            if ((audioItem->getId() == id)  &&
-                (audioItem->getSegment() == segment)) {
-
-                selectFileListItemNoSignal(treeItem);
-
-                // Only propagate to compositionview if asked to
-                if (propagate) {
-                    SegmentSelection selection;
-                    selection.insert(audioItem->getSegment());
-                    emit segmentsSelected(selection);
-                }
-
-                return;
-
-            }
-
-        }
-
-        ++treeItemIter;
-        treeItem = *treeItemIter;
-
-    }
-
-}
-
-
-void
-AudioManagerDialog::selectFileListItemNoSignal(QTreeWidgetItem* it)
-{
-    m_fileList->blockSignals(true);
-
-    if (it) {
-//        m_fileList->ensureItemVisible(it);
-        m_fileList->scrollToItem(it, QAbstractItemView::PositionAtTop);
-//        m_fileList->setSelected(it, true);
-        m_fileList->setCurrentItem(it);
-        updateActionState(1);
-    } else {
-        m_fileList->clearSelection();
-    }
-
-    m_fileList->blockSignals(false);
-}
-
-void
 AudioManagerDialog::slotCommandExecuted()
 {
     slotPopulateFileList();
