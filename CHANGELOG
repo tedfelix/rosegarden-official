@@ -54,8 +54,11 @@ Included in this release...
   * Add "Cursor" to "Move to Staff Above/Below" menu items.
     [a1823ca9f6]
   * Fix a crash when saving during playback.  [e835e860b3]
+  * Make notation quantization color brighter.  [5bf74aee5c]
+  * Fix undo after remove results in no audio in the Audio File
+    Manager.  Bug #1733.  [4f732e5c17]
 
-stopped at 02d547b6a5
+stopped at 25cd7e41f2
 
 ===== New Features =====
 
@@ -70,6 +73,8 @@ stopped at 02d547b6a5
     [3973fdf484]
   * Edit > Select Related Segments feature.  Feature Request #534.
     [d289dc4005]
+  * Audio File Manager: allow multi-select of entries in the list.
+    Feature Request #533.  [2368585756]
 
 ===== General Improvements =====
 
