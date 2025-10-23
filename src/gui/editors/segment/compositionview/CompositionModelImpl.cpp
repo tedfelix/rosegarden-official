@@ -340,6 +340,7 @@ void CompositionModelImpl::getSegmentQRect(
         width = lround(m_grid.getRulerScale()->getWidthForDuration(
                            startTime, endTime - startTime));
     }
+    if (width < 0) width = 0;
     rect.setWidth(width);
 }
 
@@ -347,6 +348,7 @@ void CompositionModelImpl::getSegmentRect(
         const Segment &segment, SegmentRect &segmentRect) const
 {
     getSegmentQRect(segment, segmentRect.rect);
+    RG_DEBUG << "getSegmentRect" << segmentRect.rect;
 
     QString label = strtoqstr(segment.getLabel());
     if (segment.isTrulyLinked()) {

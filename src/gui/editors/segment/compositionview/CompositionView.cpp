@@ -1116,9 +1116,13 @@ void CompositionView::drawCompRectLabel(
 void CompositionView::drawRect(QPainter *painter, const QRect &clipRect,
         const QRect &rect, bool isSelected, int intersectLvl)
 {
+    RG_DEBUG << "drawRect" << rect << clipRect;
     // If the rect isn't in the clip rect, bail.
     if (!rect.intersects(clipRect))
         return;
+
+    // ignore zero width rectangles
+    if (rect.width() == 0) return;
 
     painter->save();
 
