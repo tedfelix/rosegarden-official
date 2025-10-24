@@ -996,6 +996,9 @@ AudioManagerDialog::slotSegmentSelection(
         if (std::find(segments.begin(), segments.end(), segment) !=
             segments.end()) {
             (*it)->setSelected(true);
+            // make sure the parent is expanded
+            QTreeWidgetItem* parentItem = (*it)->parent();
+            if (parentItem) parentItem->setExpanded(true);
         } else {
             (*it)->setSelected(false);
         }
