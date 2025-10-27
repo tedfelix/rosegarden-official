@@ -981,6 +981,8 @@ AudioManagerDialog::slotSegmentSelection(
 {
     // suppress callbacks
     m_fileList->blockSignals(true);
+    QTreeWidgetItemIterator firstSelected(m_fileList);
+    bool selectionFound = false;
     QTreeWidgetItemIterator it(m_fileList);
     while (*it) {
         const AudioListItem *aItem = dynamic_cast<AudioListItem*>(*it);
@@ -996,10 +998,22 @@ AudioManagerDialog::slotSegmentSelection(
         if (std::find(segments.begin(), segments.end(), segment) !=
             segments.end()) {
             (*it)->setSelected(true);
+            // make sure the parent is expanded
+            QTreeWidgetItem* parentItem = (*it)->parent();
+            if (parentItem) parentItem->setExpanded(true);
+            if (! selectionFound) {
+                selectionFound = true;
+                firstSelected = it;
+            }
         } else {
             (*it)->setSelected(false);
         }
         ++it;
+    }
+    if (selectionFound) {
+        // scroll to first selected item
+        m_fileList->
+            scrollToItem(*firstSelected, QAbstractItemView::PositionAtTop);
     }
     m_fileList->blockSignals(false);
     updateActionState(m_fileList->selectedItems().size());
