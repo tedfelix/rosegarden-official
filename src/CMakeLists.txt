@@ -587,6 +587,7 @@ set(rg_CPPS
   sound/Resampler.cpp
   sound/ExternalController.cpp
   sound/KorgNanoKontrol2.cpp
+  sound/AkaiMPKmini4.cpp
   sound/WAVExporter.cpp
   commands/notation/ResetDisplacementsCommand.cpp
   commands/notation/RemoveNotationQuantizeCommand.cpp

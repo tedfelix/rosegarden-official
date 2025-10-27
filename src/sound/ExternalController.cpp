@@ -97,6 +97,8 @@ void ExternalController::setType(ControllerType controllerType)
 
     if (m_controllerType == CT_KorgNanoKontrol2)
         korgNanoKontrol2.init();
+    else if (m_controllerType == CT_AkaiMPKmini4)
+        akaiMPKmini4.init();
 }
 
 bool ExternalController::isEnabled()
@@ -135,6 +137,9 @@ void ExternalController::processEvent(const MappedEvent *event)
         break;
     case CT_KorgNanoKontrol2:
         korgNanoKontrol2.processEvent(event);
+        break;
+    case CT_AkaiMPKmini4:
+        akaiMPKmini4.processEvent(event);
         break;
     }
 }
@@ -183,6 +188,23 @@ void ExternalController::processRGNative(const MappedEvent *event)
         emit externalControllerAMW2(event);
         break;
     }
+}
+
+void ExternalController::sendNoteOn(
+        MidiByte channel, MidiByte NoteNumber, MidiByte velocity)
+{
+    // Not enabled?  Bail.
+    if (!isEnabled())
+        return;
+
+    MappedEvent event;
+    event.setType(MappedEvent::MidiNoteOneShot);
+    event.setData1(NoteNumber);
+    event.setData2(velocity);
+    event.setRecordedChannel(channel);
+    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+
+    RosegardenSequencer::getInstance()->processMappedEvent(event);
 }
 
 void ExternalController::send(
@@ -364,6 +386,9 @@ ExternalController::slotDocumentModified(bool)
     if (m_controllerType == CT_KorgNanoKontrol2) {
         korgNanoKontrol2.documentModified();
         return;
+    } else if (m_controllerType == CT_AkaiMPKmini4) {
+        akaiMPKmini4.documentModified();
+        return;
     }
 }
 
@@ -410,6 +435,14 @@ ExternalController::slotPlaying(bool checked)
         else if (!m_playing  &&  !m_recording)
             korgNanoKontrol2.stopped();
         return;
+    } else if (m_controllerType == CT_AkaiMPKmini4) {
+        if (m_playing)
+            akaiMPKmini4.playing();
+        else if (!m_playing && m_recording)
+            akaiMPKmini4.playing();
+        else if (!m_playing  &&  !m_recording)
+            akaiMPKmini4.stopped();
+        return;
     }
 }
 
@@ -417,6 +450,7 @@ void
 ExternalController::slotRecording(bool checked)
 {
     m_recording = checked;
+    //printf("ExternalController::slotRecording -> m_recording = %s\n", m_recording ? "true" : "false"); // debug
 
     if (m_controllerType == CT_KorgNanoKontrol2) {
         if (m_recording)
@@ -424,8 +458,13 @@ ExternalController::slotRecording(bool checked)
         else if (!m_playing  &&  !m_recording)
             korgNanoKontrol2.stopped();
         return;
+    } else if (m_controllerType == CT_AkaiMPKmini4) {
+        if (m_recording)
+            akaiMPKmini4.recording();
+        else
+            akaiMPKmini4.stopped();
+        return;
     }
 }
-
 
 }
