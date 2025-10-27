@@ -15,6 +15,7 @@
 
 #include "base/Instrument.h"
 #include "KorgNanoKontrol2.h"
+#include "AkaiMPKmini4.h"
 #include "base/MidiProgram.h"  // For MidiByte
 
 #include <QObject>
@@ -77,7 +78,7 @@ public:
 
     static bool isEnabled();
 
-    enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2 };
+    enum ControllerType { CT_RosegardenNative, CT_KorgNanoKontrol2, CT_AkaiMPKmini4 };
     void setType(ControllerType controllerType);
     ControllerType getType() const  { return m_controllerType; }
     bool isNative() const  { return m_controllerType == CT_RosegardenNative; }
@@ -113,6 +114,7 @@ public:
 
     /// Send a control change message out the external controller port.
     static void send(MidiByte channel, MidiByte controlNumber, MidiByte value);
+    static void sendNoteOn(MidiByte channel, MidiByte NoteNumber, MidiByte velocity);
     static void sendAllCCs(
             const Instrument *instrument, MidiByte channel = MidiMaxValue);
 
@@ -174,6 +176,7 @@ private:
     bool m_recording;
 
     KorgNanoKontrol2 korgNanoKontrol2;
+    AkaiMPKmini4 akaiMPKmini4;
 
 };
 
