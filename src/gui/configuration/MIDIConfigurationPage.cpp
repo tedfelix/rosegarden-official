@@ -144,7 +144,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_controllerType = new QComboBox;
     m_controllerType->addItem(tr("Rosegarden Native"));
     m_controllerType->addItem(tr("Korg nanoKONTROL2"));
-    m_controllerType->addItem(tr("Akai MPK Mini IV"));
+    m_controllerType->addItem(tr("Akai MPK Mini IV (experimental)"));
 
     int controllerType = settings.value("controller_type", 0).toInt();
     if (controllerType < 0  ||  controllerType > 2)

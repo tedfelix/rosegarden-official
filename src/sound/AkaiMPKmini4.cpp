@@ -136,7 +136,7 @@ void AkaiMPKmini4::init()
 
 void AkaiMPKmini4::documentModified()
 {
-    int dummy = 0;
+    //int dummy = 0;
     //refreshLEDs();
 }
 
