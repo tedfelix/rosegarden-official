@@ -56,9 +56,12 @@ Included in this release...
   * Fix a crash when saving during playback.  [e835e860b3]
   * Make notation quantization color brighter.  [5bf74aee5c]
   * Fix undo after remove results in no audio in the Audio File
-    Manager.  Bug #1733.  [4f732e5c17]
+    Manager.  Bug #1733.  [4f732e5c17] [36a6680ed9] [ab6b89453f]
+  * Fix problems when moving segments beyond composition end.
+    Bug #1744.  [b3cd66b800]
+  * Remove unnecessary logging.  Bug #1745.  [1cf772bf68]
 
-stopped at 25cd7e41f2
+stopped at 1cf772bf68
 
 ===== New Features =====
 
@@ -75,10 +78,15 @@ stopped at 25cd7e41f2
     [d289dc4005]
   * Audio File Manager: allow multi-select of entries in the list.
     Feature Request #533.  [2368585756]
+  * Support for Akai MPK Mini IV control surface.  Patch #83.
+    [35eec2215e]
 
 ===== General Improvements =====
 
   * Time widget rewrite and UI simplification.  [e91f8a73f0]
+  * MIDI Mixer Window review and simplification.  [887e2e1d71 etc...]
+  * Rotary widget (knob) review and simplification.
+    [eee2941115 etc...]
 
 ===== Additional Contributions =====
 
