@@ -992,6 +992,8 @@ AudioManagerDialog::slotSegmentSelection(
         }
         const Segment* segment = aItem->getSegment();
         if (! segment) {
+            // always deselect top level items if a segment selection changes
+            (*it)->setSelected(false);
             ++it;
             continue;
         }
