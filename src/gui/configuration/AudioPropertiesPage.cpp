@@ -177,10 +177,9 @@ AudioPropertiesPage::updateWidgets()
 
     struct statvfs buf;
 
-    // ??? Go with the drive the document is on.  Or do an AFM::toAbsolute()
-    //     on this path and use that.
+    // Get the info for the filesystem the document is on.
     if (statvfs(m_docAbsFilePath.toLocal8Bit().data(), &buf)) {
-        RG_WARNING << "statvfs(" << m_docAbsFilePath << ") failed.  errno:" << errno;
+        //RG_WARNING << "statvfs(" << m_docAbsFilePath << ") failed.  errno:" << errno;
         m_diskSpace->setText("----");
         m_minutesAtStereo->setText("----");
         return;
@@ -212,14 +211,14 @@ AudioPropertiesPage::updateWidgets()
         sampleRate = 48000;
 
     constexpr int numberOfChannels = 2;
-    constexpr int bytesPerSample = 2;  // 16-bits
+    constexpr int bytesPerSample = 4;  // 32-bit float
     constexpr double secondsToMinutes = 1/60.0;
 
     const double stereoMins =
             double(available / sampleRate / numberOfChannels / bytesPerSample) *
             secondsToMinutes;
 
-    m_minutesAtStereo->setText(tr("%1 minutes at %3Hz 16-bit stereo").
+    m_minutesAtStereo->setText(tr("%1 minutes at %3Hz 32-bit stereo").
             arg(QLocale().toString(stereoMins, 'f', 1)).
             arg(QLocale().toString((double)sampleRate, 'f', 0)));
 }

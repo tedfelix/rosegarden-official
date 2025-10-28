@@ -35,6 +35,9 @@ class LineEdit;
 
 
 /// Audio Properties page.  Document-wide settings.
+/**
+ * Composition > Edit Document Properties... > Audio
+ */
 class AudioPropertiesPage : public TabbedConfigurationPage
 {
     Q_OBJECT
