@@ -68,6 +68,12 @@
   </disable>
 </State>
 
+<State name="have_multi_audio_single_id_selected">
+  <enable>
+    <Action name="remove_audio"/>
+  </enable>
+</State>
+
 <State name="have_audible_preview">
   <enable>
     <Action name="preview_audio"/>

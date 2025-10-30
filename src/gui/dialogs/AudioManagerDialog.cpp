@@ -748,7 +748,7 @@ AudioManagerDialog::slotAdd()
 void
 AudioManagerDialog::updateActionState(int numSelected)
 {
-    RG_DEBUG << "updateActionState(" << numSelected;
+    RG_DEBUG << "updateActionState" << numSelected;
 
     if (m_doc->getAudioFileManager().cbegin() ==
             m_doc->getAudioFileManager().cend()) {
@@ -757,9 +757,16 @@ AudioManagerDialog::updateActionState(int numSelected)
         enterActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
     }
 
+    if (isSelectedTrackAudio()) {
+        enterActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+    } else {
+        leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+    }
+
     if (numSelected == 1) { // single item selected
 
         leaveActionState("have_multi audio_selected");
+        leaveActionState("have_multi_audio_single_id_selected");
         enterActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
 
         if (m_audiblePreview) {
@@ -768,19 +775,26 @@ AudioManagerDialog::updateActionState(int numSelected)
             leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         }
 
-        if (isSelectedTrackAudio()) {
-            enterActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
-        } else {
-            leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-        }
     } else if (numSelected > 1) { // multiselect
-        leaveActionState("have_audio_selected");
-        leaveActionState("have_audible_preview");
-        leaveActionState("have_audio_insertable");
-        enterActionState("have_multi_audio_selected");
+        // check for multi select with single id
+        AudioFileId id = 0;
+        bool singleId = singleIdSelected(id);
+        RG_DEBUG << "updateActionState singleId" << singleId << id;
+        if (singleId) {
+            leaveActionState("have_audio_selected");
+            leaveActionState("have_multi_audio_selected");
+            enterActionState("have_multi_audio_single_id_selected");
+        } else {
+            leaveActionState("have_audio_selected");
+            leaveActionState("have_multi_audio_single_id_selected");
+            leaveActionState("have_audible_preview");
+            leaveActionState("have_audio_insertable");
+            enterActionState("have_multi_audio_selected");
+        }
     } else {
         leaveActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         leaveActionState("have_multi audio_selected");
+        leaveActionState("have_multi audio_single_id_selected");
         leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     }
@@ -957,14 +971,52 @@ void AudioManagerDialog::slotSelectionChanged()
 {
     RG_DEBUG << "selectionChanged";
     SegmentSelection selection;
+    m_fileList->blockSignals(true); // avoid recursive calls
     QList<QTreeWidgetItem *> items = m_fileList->selectedItems();
+    // check for selection/deselection of top level elements
+    QTreeWidgetItemIterator it(m_fileList);
+    while (*it) {
+        AudioListItem *aItem = dynamic_cast<AudioListItem*>(*it);
+        if (aItem) {
+            if (! aItem->getSegment()) {
+                // Top level item
+                bool selectedNew = items.contains(aItem);
+                bool selectedOld = aItem->getSelected();
+                aItem->setSelected(selectedNew); // maintain memory
+                if (selectedNew) {
+                    // select all children
+                    for (int i = 0; i < (*it)->childCount (); i++) {
+                        QTreeWidgetItem *child = (*it)->child (i);
+                        child->setSelected(true);
+                    }
+                    // and expand
+                    (*it)->setExpanded(true);
+                } else { // no longer selected
+                    if (selectedOld) { // newly deselectd
+                        // deselect all children
+                        for (int i = 0; i < (*it)->childCount (); i++) {
+                            QTreeWidgetItem *child = (*it)->child (i);
+                            child->setSelected(false);
+                        }
+                    }
+                }
+            }
+        }
+        ++it;
+    }
+    // and now setup the selection
+    items = m_fileList->selectedItems();
     for(QTreeWidgetItem* item : items) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
-        if (aItem && aItem->getSegment()) {
-            // We have a segment
-            selection.insert(aItem->getSegment());
+        if (aItem) {
+            if (aItem->getSegment()) {
+                // We have a segment
+                selection.insert(aItem->getSegment());
+            } else {
+            }
         }
     }
+    m_fileList->blockSignals(false);
     emit segmentsSelected(selection);
     updateActionState(m_fileList->selectedItems().size());
 }
@@ -1223,4 +1275,30 @@ AudioManagerDialog::slotHelpAbout()
 {
     new AboutDialog(this);
 }
+
+bool AudioManagerDialog::singleIdSelected(AudioFileId& id) const
+{
+    QList<QTreeWidgetItem *> items = m_fileList->selectedItems();
+    bool singleId = false;
+    id = 0;
+    for(QTreeWidgetItem* item : items) {
+        AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
+        if (aItem) {
+            AudioFileId itemId = aItem->getId();
+            RG_DEBUG << "singleIdSelected" << singleId << id << itemId;
+            if (id == 0) {
+                id = itemId;
+                singleId = true;
+            } else {
+                if (itemId != id) {
+                    singleId = false;
+                    break;
+                }
+            }
+        }
+    }
+    return singleId;
+}
+
+
 }
