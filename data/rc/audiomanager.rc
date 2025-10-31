@@ -13,7 +13,7 @@
 
   <Menu name="edit">
     <text>&amp;Edit</text>
-    <Action name="remove_audio" text="&amp;Unload Audio File" icon="editdelete" />
+    <Action name="remove_audio" text="&amp;Unload selected Audio Files" icon="editdelete" />
     <Action name="remove_all_audio" text="Unload &amp;All Audio Files" />
     <Action name="remove_all_unused_audio" text="Unload All Unused Audio &amp;Files" />
   <Separator/>
@@ -61,6 +61,7 @@
 
 <State name="have_multi_audio_selected">
   <enable>
+    <Action name="export_audio"/>
     <Action name="remove_audio"/>
   </enable>
   <disable>
@@ -70,6 +71,7 @@
 
 <State name="have_multi_audio_single_id_selected">
   <enable>
+    <Action name="export_audio"/>
     <Action name="remove_audio"/>
   </enable>
 </State>

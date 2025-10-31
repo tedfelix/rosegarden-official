@@ -49,6 +49,7 @@ class RosegardenDocument;
 class RealTime;
 class AudioPlayingDialog;
 class AudioFile;
+class WAVAudioFile;
 class Command;
 
 /// Audio File Manager
@@ -188,7 +189,8 @@ protected:
     int                      m_sampleRate;
 
 private:
-    bool singleIdSelected(AudioFileId& id) const;
+    void getSelectedIds(std::set<AudioFileId>& ids) const;
+    void writeWavFile(const QString& destFileName, WAVAudioFile* sourceFile);
 
 };
 

@@ -484,90 +484,70 @@ AudioManagerDialog::getCurrentSelection()
 void
 AudioManagerDialog::slotExportAudio()
 {
-    WAVAudioFile *sourceFile =
-            dynamic_cast<WAVAudioFile *>(getCurrentSelection());
+    std::set<AudioFileId> ids;
+    getSelectedIds(ids);
 
-    if (!sourceFile)
-        return;
-
-    QList<QTreeWidgetItem *> selectedItems = m_fileList->selectedItems();
-
-    if (selectedItems.isEmpty()) {
-        RG_WARNING << "slotExportAudio() - nothing selected!";
-        return;
+    // check for valid ids and get WAVAudioFiles
+    std::set<WAVAudioFile*> WavAudioFiles;
+    for(AudioFileId id : ids) {
+        for (AudioFileVector::const_iterator it =
+                 m_doc->getAudioFileManager().cbegin();
+             it != m_doc->getAudioFileManager().cend();
+             ++it) {
+            // If we match then save the valid AudioFile
+            if ((*it)->getId() == id) {
+                AudioFile* audioFile = *it;
+                WAVAudioFile* wavFile = dynamic_cast<WAVAudioFile *>(audioFile);
+                if (wavFile) {
+                    WavAudioFiles.insert(wavFile);
+                    break;
+                }
+            }
+        }
     }
+    // WavAudioFiles now contains all valid wav audio files
 
-    // ??? All we ever look at is the first one.
-    AudioListItem *item = dynamic_cast<AudioListItem *>(selectedItems[0]);
+    if (WavAudioFiles.empty()) return;
 
-    if (!item)
-        return;
+    if (WavAudioFiles.size() == 1) {
+        // single file
+        WAVAudioFile* sourceFile = *(WavAudioFiles.begin());
 
-    const Segment *segment = item->getSegment();
+        QString destFileName =
+            FileDialog::getSaveFileName
+            (this,  // parent
+             tr("Save File As"),  // caption
+             QDir::currentPath(),  // dir
+             sourceFile->getAbsoluteFilePath(),  // defaultName
+             tr("*.wav|WAV files (*.wav)"));  // filter
 
-    QString destFileName =
-            FileDialog::getSaveFileName(
-                    this,  // parent
-                    tr("Save File As"),  // caption
-                    QDir::currentPath(),  // dir
-                    sourceFile->getAbsoluteFilePath(),  // defaultName
-                    tr("*.wav|WAV files (*.wav)"));  // filter
+        if (destFileName.isEmpty()) return;
 
-    if (destFileName.isEmpty())
-        return;
+        writeWavFile(destFileName, sourceFile);
+    } else {
+        // save multiple files
+        WAVAudioFile* firstFile = *(WavAudioFiles.begin());
+        QString fpath = firstFile->getAbsoluteFilePath();
+        QFileInfo fi(fpath);
+        QString defaultDir = fi.absolutePath();
+        QString destDir =
+            FileDialog::getExistingDirectory
+            (this,  // parent
+             tr("Save Files To"),  // caption
+             defaultDir);  // dir
 
-    // Check for a dot extension and append ".wav" if not found
-    // ??? Should use QFileInfo::suffix() to check for an extension.
-    if (destFileName.contains(".") == 0)
-        destFileName += ".wav";
+        if (destDir.isEmpty()) return;
 
-    // Progress Dialog
-    QProgressDialog progressDialog(
-            tr("Exporting audio file..."),  // labelText
-            tr("Cancel"),  // cancelButtonText
-            0, 0,  // min, max
-            this);  // parent
-    progressDialog.setWindowTitle(tr("Rosegarden"));
-    progressDialog.setWindowModality(Qt::WindowModal);
-    // We will close anyway when this object goes out of scope.
-    progressDialog.setAutoClose(false);
-    // No cancel button since appendSamples() doesn't support progress.
-    progressDialog.setCancelButton(nullptr);
-    // Just force the progress dialog up.
-    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
-    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
-    // based distros might lock up.  See Bug #1546.
-    progressDialog.show();
+        QDir qDestDir(destDir);
+        for(WAVAudioFile* wavFile : WavAudioFiles) {
+            QString filePath = wavFile->getAbsoluteFilePath();
+            QFileInfo fi(filePath);
+            QString fileName = fi.fileName();
+            QString destFileName = qDestDir.filePath(fileName);
 
-    RealTime clipStartTime;
-    RealTime clipDuration = sourceFile->getLength();
-
-    if (segment) {
-        clipStartTime = segment->getAudioStartTime();
-        clipDuration = segment->getAudioEndTime() - clipStartTime;
+            writeWavFile(destFileName, wavFile);
+        }
     }
-
-    WAVAudioFile destFile(
-            destFileName,
-            sourceFile->getChannels(),
-            sourceFile->getSampleRate(),
-            sourceFile->getBytesPerSecond(),
-            sourceFile->getBytesPerFrame(),
-            sourceFile->getBitsPerSample());
-
-    if (sourceFile->open() == false)
-        return;
-
-    destFile.write();
-
-    sourceFile->scanTo(clipStartTime);
-
-    // appendSamples() takes the longest.  Would be nice if it would
-    // take a progress dialog.
-    destFile.appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
-
-    destFile.close();
-    sourceFile->close();
 }
 
 void
@@ -777,8 +757,10 @@ AudioManagerDialog::updateActionState(int numSelected)
 
     } else if (numSelected > 1) { // multiselect
         // check for multi select with single id
-        AudioFileId id = 0;
-        bool singleId = singleIdSelected(id);
+        std::set<AudioFileId> ids;
+        getSelectedIds(ids);
+        bool singleId = (ids.size() == 1);
+        AudioFileId id = *(ids.begin());
         RG_DEBUG << "updateActionState singleId" << singleId << id;
         if (singleId) {
             leaveActionState("have_audio_selected");
@@ -1276,28 +1258,70 @@ AudioManagerDialog::slotHelpAbout()
     new AboutDialog(this);
 }
 
-bool AudioManagerDialog::singleIdSelected(AudioFileId& id) const
+void AudioManagerDialog::getSelectedIds(std::set<AudioFileId>& ids) const
 {
     QList<QTreeWidgetItem *> items = m_fileList->selectedItems();
-    bool singleId = false;
-    id = 0;
+    ids.clear();
     for(QTreeWidgetItem* item : items) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
         if (aItem) {
             AudioFileId itemId = aItem->getId();
-            RG_DEBUG << "singleIdSelected" << singleId << id << itemId;
-            if (id == 0) {
-                id = itemId;
-                singleId = true;
-            } else {
-                if (itemId != id) {
-                    singleId = false;
-                    break;
-                }
-            }
+            ids.insert(itemId);
         }
     }
-    return singleId;
+}
+
+void AudioManagerDialog::writeWavFile(const QString& destFileName,
+                                      WAVAudioFile* sourceFile)
+{
+    QString destFileName2 = destFileName;
+    // Check for a dot extension and append ".wav" if not found
+    // ??? Should use QFileInfo::suffix() to check for an extension.
+    if (destFileName2.contains(".") == 0)
+        destFileName2 += ".wav";
+
+    // Progress Dialog
+    QProgressDialog progressDialog
+        (tr("Exporting audio file..."),  // labelText
+         tr("Cancel"),  // cancelButtonText
+         0, 0,  // min, max
+         this);  // parent
+    progressDialog.setWindowTitle(tr("Rosegarden"));
+    progressDialog.setWindowModality(Qt::WindowModal);
+    // We will close anyway when this object goes out of scope.
+    progressDialog.setAutoClose(false);
+    // No cancel button since appendSamples() doesn't support progress.
+    progressDialog.setCancelButton(nullptr);
+    // Just force the progress dialog up.
+    // Both Qt4 and Qt5 have bugs related to delayed showing of progress
+    // dialogs.  In Qt4, the dialog sometimes won't show.  In Qt5, KDE
+    // based distros might lock up.  See Bug #1546.
+    progressDialog.show();
+
+    RealTime clipStartTime;
+    RealTime clipDuration = sourceFile->getLength();
+
+    WAVAudioFile destFile
+        (destFileName2,
+         sourceFile->getChannels(),
+         sourceFile->getSampleRate(),
+         sourceFile->getBytesPerSecond(),
+         sourceFile->getBytesPerFrame(),
+         sourceFile->getBitsPerSample());
+
+    if (sourceFile->open() == false)
+        return;
+
+    sourceFile->scanTo(clipStartTime);
+
+    destFile.write();
+
+    // appendSamples() takes the longest.  Would be nice if it would
+    // take a progress dialog.
+    destFile.appendSamples(sourceFile->getSampleFrameSlice(clipDuration));
+
+    destFile.close();
+    sourceFile->close();
 }
 
 

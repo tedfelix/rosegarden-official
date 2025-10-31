@@ -66,13 +66,21 @@ public:
                   const QStringList &strings,
                   AudioFileId id,
                   int type=Type ) :
-        QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
+        QTreeWidgetItem(parent, strings, type ),
+        m_id(id),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
     AudioListItem(AudioListItem *parent,
                   const QStringList &strings,
                   AudioFileId id,
                   int type=Type ) :
-        QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
+        QTreeWidgetItem(parent, strings, type ),
+        m_id(id),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
 
 
