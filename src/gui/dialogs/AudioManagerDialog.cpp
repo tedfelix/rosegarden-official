@@ -522,6 +522,10 @@ AudioManagerDialog::slotExportAudio()
              tr("*.wav|WAV files (*.wav)"));  // filter
 
         if (destFileName.isEmpty()) return;
+        // Check for a dot extension and append ".wav" if not found
+        // ??? Should use QFileInfo::suffix() to check for an extension.
+        if (destFileName.contains(".") == 0)
+            destFileName += ".wav";
 
         writeWavFile(destFileName, sourceFile);
     } else {
@@ -544,6 +548,26 @@ AudioManagerDialog::slotExportAudio()
             QFileInfo fi(filePath);
             QString fileName = fi.fileName();
             QString destFileName = qDestDir.filePath(fileName);
+            // Check for a dot extension and append ".wav" if not found
+            // ??? Should use QFileInfo::suffix() to check for an extension.
+            if (destFileName.contains(".") == 0)
+                destFileName += ".wav";
+
+            // check for overwrite
+            QFileInfo checkFile(destFileName);
+            // check if file exists
+            if (checkFile.exists()) {
+                QString question =
+                        tr("The file %1 already exists."
+                           " Do you wish to overwrite it?").arg(destFileName);
+                int reply = QMessageBox::warning
+                    (this,
+                     tr("Rosegarden"),
+                     question,
+                     QMessageBox::Yes | QMessageBox::Cancel,
+                     QMessageBox::Cancel);
+                if (reply != QMessageBox::Yes) continue;
+            }
 
             writeWavFile(destFileName, wavFile);
         }
@@ -1274,12 +1298,6 @@ void AudioManagerDialog::getSelectedIds(std::set<AudioFileId>& ids) const
 void AudioManagerDialog::writeWavFile(const QString& destFileName,
                                       WAVAudioFile* sourceFile)
 {
-    QString destFileName2 = destFileName;
-    // Check for a dot extension and append ".wav" if not found
-    // ??? Should use QFileInfo::suffix() to check for an extension.
-    if (destFileName2.contains(".") == 0)
-        destFileName2 += ".wav";
-
     // Progress Dialog
     QProgressDialog progressDialog
         (tr("Exporting audio file..."),  // labelText
@@ -1302,7 +1320,7 @@ void AudioManagerDialog::writeWavFile(const QString& destFileName,
     RealTime clipDuration = sourceFile->getLength();
 
     WAVAudioFile destFile
-        (destFileName2,
+        (destFileName,
          sourceFile->getChannels(),
          sourceFile->getSampleRate(),
          sourceFile->getBytesPerSecond(),
