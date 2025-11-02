@@ -564,9 +564,10 @@ AudioManagerDialog::slotExportAudio()
                     (this,
                      tr("Rosegarden"),
                      question,
-                     QMessageBox::Yes | QMessageBox::Cancel,
+                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                      QMessageBox::Cancel);
-                if (reply != QMessageBox::Yes) continue;
+                if (reply == QMessageBox::No) continue;
+                if (reply == QMessageBox::Cancel) return;
             }
 
             writeWavFile(destFileName, wavFile);
