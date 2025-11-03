@@ -770,7 +770,7 @@ AudioManagerDialog::updateActionState(int numSelected)
 
     if (numSelected == 1) { // single item selected
 
-        leaveActionState("have_multi audio_selected");
+        leaveActionState("have_multi_audio_selected");
         leaveActionState("have_multi_audio_single_id_selected");
         enterActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
 
@@ -800,8 +800,8 @@ AudioManagerDialog::updateActionState(int numSelected)
         }
     } else {
         leaveActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-        leaveActionState("have_multi audio_selected");
-        leaveActionState("have_multi audio_single_id_selected");
+        leaveActionState("have_multi_audio_selected");
+        leaveActionState("have_multi_audio_single_id_selected");
         leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
         leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
     }
