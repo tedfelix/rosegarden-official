@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -51,7 +51,7 @@ FileDialog::FileDialog(QWidget *parent,
 {
     setOptions(options);
 
-    // set up the sidebar stuff; the entire purpose of this class 
+    // set up the sidebar stuff; the entire purpose of this class
     QList<QUrl> urls;
 
 #if QT_VERSION >= 0x050000
@@ -200,7 +200,7 @@ FileDialog::getExistingDirectory(QWidget *parent,
                                  const QString &caption,
                                  const QString &dir)
 {
-    QFileDialog::Options options{};
+    QFileDialog::Options options{QFileDialog::ShowDirsOnly};
 
     if (!Preferences::getUseNativeFileDialogs())
         options |= QFileDialog::DontUseNativeDialog;
@@ -217,9 +217,8 @@ FileDialog::getExistingDirectory(QWidget *parent,
         return dialog.selectedFiles().value(0);
     }
 
-    return QString();    
+    return QString();
 }
 
 
 }
-

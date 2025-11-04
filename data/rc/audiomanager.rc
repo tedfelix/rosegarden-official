@@ -6,14 +6,14 @@
   <Menu name="file">
     <text>&amp;File</text>
     <Action name="add_audio" text="&amp;Add Audio File..." icon="fileopen" append="new_merge" />
-    <Action name="export_audio" text="&amp;Export Audio File..." icon="filesave" append="new_merge" />
+    <Action name="export_audio" text="&amp;Export Audio Files..." icon="filesave" append="new_merge" />
   <Separator/>
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
 
   <Menu name="edit">
     <text>&amp;Edit</text>
-    <Action name="remove_audio" text="&amp;Unload Audio File" icon="editdelete" />
+    <Action name="remove_audio" text="&amp;Unload Selected Audio Files" icon="editdelete" />
     <Action name="remove_all_audio" text="Unload &amp;All Audio Files" />
     <Action name="remove_all_unused_audio" text="Unload All Unused Audio &amp;Files" />
   <Separator/>
@@ -61,11 +61,19 @@
 
 <State name="have_multi_audio_selected">
   <enable>
+    <Action name="export_audio"/>
     <Action name="remove_audio"/>
   </enable>
   <disable>
     <Action name="preview_audio"/>
   </disable>
+</State>
+
+<State name="have_multi_audio_single_id_selected">
+  <enable>
+    <Action name="export_audio"/>
+    <Action name="remove_audio"/>
+  </enable>
 </State>
 
 <State name="have_audible_preview">

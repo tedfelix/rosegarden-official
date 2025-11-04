@@ -35,18 +35,30 @@ public:
     //    AudioListItem(QTreeWidget *parent):QTreeWidgetItem(), m_segment(0) {;}
     explicit AudioListItem(const QStringList &strings,
                            int type = Type ) :
-        QTreeWidgetItem(strings, type), m_id(0), m_segment(nullptr) {  }
+        QTreeWidgetItem(strings, type),
+        m_id(0),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
     // without m_id
     AudioListItem(QTreeWidget *parent,
                   const QStringList &strings,
                   int type=Type ) :
-        QTreeWidgetItem(parent, strings, type), m_id(0), m_segment(nullptr) {  }
+        QTreeWidgetItem(parent, strings, type),
+        m_id(0),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
     AudioListItem(AudioListItem *parent,
                   const QStringList &strings,
                   int type=Type ) :
-        QTreeWidgetItem(parent, strings, type), m_id(0), m_segment(nullptr) {  }
+        QTreeWidgetItem(parent, strings, type),
+        m_id(0),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
 
     // with m_id
@@ -54,13 +66,21 @@ public:
                   const QStringList &strings,
                   AudioFileId id,
                   int type=Type ) :
-        QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
+        QTreeWidgetItem(parent, strings, type ),
+        m_id(id),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
     AudioListItem(AudioListItem *parent,
                   const QStringList &strings,
                   AudioFileId id,
                   int type=Type ) :
-        QTreeWidgetItem(parent, strings, type ), m_id(id), m_segment(nullptr) {;}
+        QTreeWidgetItem(parent, strings, type ),
+        m_id(id),
+        m_segment(nullptr),
+        m_selected(false)
+    {  }
 
 
 
@@ -100,6 +120,9 @@ public:
     Segment *getSegment() { return m_segment; }
     const Segment *getSegment() const  { return m_segment; }
 
+    bool getSelected() const { return m_selected; }
+    void setSelected(bool s) { m_selected = s; };
+
 protected:
     AudioFileId m_id;
 
@@ -109,6 +132,8 @@ protected:
 
     // pointer to a segment
     Segment *m_segment;
+
+    bool m_selected; // memory for selection
 
 };
 

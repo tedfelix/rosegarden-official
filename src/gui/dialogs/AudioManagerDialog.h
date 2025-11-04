@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -50,6 +49,7 @@ class RosegardenDocument;
 class RealTime;
 class AudioPlayingDialog;
 class AudioFile;
+class WAVAudioFile;
 class Command;
 
 /// Audio File Manager
@@ -187,6 +187,14 @@ protected:
 
     bool                     m_audiblePreview;
     int                      m_sampleRate;
+
+private:
+    // get a list of audio file ids which are selected (either
+    // directly or by the selection of a segment).
+    void getSelectedIds(std::set<AudioFileId>& ids) const;
+
+    void writeWavFile(const QString& destFileName, WAVAudioFile* sourceFile);
+
 };
 
 
