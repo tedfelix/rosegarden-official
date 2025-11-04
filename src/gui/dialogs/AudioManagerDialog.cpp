@@ -195,7 +195,7 @@ AudioManagerDialog::AudioManagerDialog(QWidget *parent,
             this, &AudioManagerDialog::slotCancelPlayingAudio);
 
 
-    createMenusAndToolbars("audiomanager.rc"); //@@@ JAS orig. 0
+    createMenusAndToolbars("audiomanager.rc");
 
     updateActionState(0);
 
@@ -423,7 +423,7 @@ AudioManagerDialog::slotPopulateFileList()
         AudioFileId id = aItem->getId();
         const Segment *segment = aItem->getSegment();
         RG_DEBUG << "restore selection for" << id << segment;
-        for(const SelectData& sd : selectDataList) {
+        for (const SelectData& sd : selectDataList) {
             if (id == sd.id && segment == sd.segment) {
                 // should it be selected?
                 if (sd.selected) {
@@ -489,7 +489,7 @@ AudioManagerDialog::slotExportAudio()
 
     // check for valid ids and get WAVAudioFiles
     std::set<WAVAudioFile*> WavAudioFiles;
-    for(AudioFileId id : ids) {
+    for (AudioFileId id : ids) {
         for (AudioFileVector::const_iterator it =
                  m_doc->getAudioFileManager().cbegin();
              it != m_doc->getAudioFileManager().cend();
@@ -543,7 +543,7 @@ AudioManagerDialog::slotExportAudio()
         if (destDir.isEmpty()) return;
 
         QDir qDestDir(destDir);
-        for(WAVAudioFile* wavFile : WavAudioFiles) {
+        for (WAVAudioFile* wavFile : WavAudioFiles) {
             QString filePath = wavFile->getAbsoluteFilePath();
             QFileInfo fi(filePath);
             QString fileName = fi.fileName();
@@ -558,8 +558,8 @@ AudioManagerDialog::slotExportAudio()
             // check if file exists
             if (checkFile.exists()) {
                 QString question =
-                        tr("The file %1 already exists."
-                           " Do you wish to overwrite it?").arg(destFileName);
+                        tr("The file %1 already exists.  Do you wish to overwrite it?").
+                                arg(destFileName);
                 int reply = QMessageBox::warning
                     (this,
                      tr("Rosegarden"),
@@ -587,7 +587,7 @@ AudioManagerDialog::slotRemove()
 
     SegmentSelection selection;
     std::list<AudioFileId> toDelete;
-    for(QTreeWidgetItem* item : selectedTreeItems) {
+    for (QTreeWidgetItem* item : selectedTreeItems) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
         if (item) {
@@ -600,7 +600,7 @@ AudioManagerDialog::slotRemove()
     }
 
     Composition &comp = m_doc->getComposition();
-    for(AudioFileId id : toDelete) {
+    for (AudioFileId id : toDelete) {
         for (Composition::iterator it = comp.begin(); it != comp.end(); ++it) {
             if ((*it)->getType() == Segment::Audio &&
                 (*it)->getAudioFileId() == id)
@@ -629,7 +629,7 @@ AudioManagerDialog::slotRemove()
 
     emit deleteSegments(selection);
 
-    for(AudioFileId id : toDelete) {
+    for (AudioFileId id : toDelete) {
         m_doc->notifyAudioFileRemoval(id);
         m_doc->getAudioFileManager().removeFile(id);
 
@@ -757,27 +757,27 @@ AudioManagerDialog::updateActionState(int numSelected)
 
     if (m_doc->getAudioFileManager().cbegin() ==
             m_doc->getAudioFileManager().cend()) {
-        leaveActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        leaveActionState("have_audio_files");
     } else {
-        enterActionState("have_audio_files"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+        enterActionState("have_audio_files");
     }
 
     if (isSelectedTrackAudio()) {
-        enterActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+        enterActionState("have_audio_insertable");
     } else {
-        leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        leaveActionState("have_audio_insertable");
     }
 
     if (numSelected == 1) { // single item selected
 
         leaveActionState("have_multi_audio_selected");
         leaveActionState("have_multi_audio_single_id_selected");
-        enterActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+        enterActionState("have_audio_selected");
 
         if (m_audiblePreview) {
-            enterActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateNoReverse
+            enterActionState("have_audible_preview");
         } else {
-            leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+            leaveActionState("have_audible_preview");
         }
 
     } else if (numSelected > 1) { // multiselect
@@ -799,11 +799,11 @@ AudioManagerDialog::updateActionState(int numSelected)
             enterActionState("have_multi_audio_selected");
         }
     } else {
-        leaveActionState("have_audio_selected"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        leaveActionState("have_audio_selected");
         leaveActionState("have_multi_audio_selected");
         leaveActionState("have_multi_audio_single_id_selected");
-        leaveActionState("have_audio_insertable"); //@@@ JAS orig. KXMLGUIClient::StateReverse
-        leaveActionState("have_audible_preview"); //@@@ JAS orig. KXMLGUIClient::StateReverse
+        leaveActionState("have_audio_insertable");
+        leaveActionState("have_audible_preview");
     }
 }
 
@@ -1013,7 +1013,7 @@ void AudioManagerDialog::slotSelectionChanged()
     }
     // and now setup the selection
     items = m_fileList->selectedItems();
-    for(QTreeWidgetItem* item : items) {
+    for (QTreeWidgetItem* item : items) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
         if (aItem) {
             if (aItem->getSegment()) {
@@ -1179,7 +1179,7 @@ AudioManagerDialog::slotDropped(QDropEvent* /* event */, QTreeWidget*, const QLi
     if( sl.empty() ) return;
 
     // iterate over dropped URIs
-    for( int i=0; i<sl.count(); i++ ) {
+    for (int i=0; i<sl.count(); i++) {
         //RG_DEBUG << "slotDropped() - Adding DroppedFile " << sl.at(i);
         addFile( sl.at(i) );
     }
@@ -1287,7 +1287,7 @@ void AudioManagerDialog::getSelectedIds(std::set<AudioFileId>& ids) const
 {
     QList<QTreeWidgetItem *> items = m_fileList->selectedItems();
     ids.clear();
-    for(QTreeWidgetItem* item : items) {
+    for (QTreeWidgetItem* item : items) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
         if (aItem) {
             AudioFileId itemId = aItem->getId();
