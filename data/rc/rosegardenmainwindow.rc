@@ -8,7 +8,7 @@
     <Action name="file_new" text="&amp;New" icon="filenew" shortcut="Ctrl+N" />
     <!-- these two would like to be open_merge, but that sticks them at
 	 the very bottom in older KDE3 versions: -->
-    <Menu name="import" append="new_merge">
+    <Menu name="import">
       <text>&amp;Import</text>
       <Action name="file_import_project" text="Import Rosegarden &amp;Project File..." />
       <Separator/>
@@ -17,7 +17,7 @@
 <!--      <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." /> -->
       <Action name="file_import_musicxml" text="Import MusicXM&amp;L File..." />
     </Menu>
-    <Menu name="merge" append="new_merge">
+    <Menu name="merge">
       <text>&amp;Merge</text>
       <Action name="file_merge" text="Merge &amp;File(s)..." />
       <Action name="file_merge_midi" text="Merge &amp;MIDI File(s)..." />
@@ -27,7 +27,7 @@
     </Menu>
     <!-- this one would like to be save_merge, but that sticks it at
 	 the very bottom in older KDE3 versions: -->
-    <Menu name="export" append="new_merge">
+    <Menu name="export">
       <text>&amp;Export</text>
       <Action name="file_export_project" text="Export Rosegarden &amp;Project File..." />
       <Separator/>
@@ -55,8 +55,8 @@
     <Action name="file_save_as_template" text="Save as &amp;Template..." icon="filesaveas" />
     <Action name="file_revert" text="Re&amp;vert" icon="revert" />
   <Separator/>
-    <Action name="file_preview_lilypond" append="print_merge" text="Prin&amp;t Preview..." icon="filepreviewlily" />
-    <Action name="file_print_lilypond" append="print_merge" text="&amp;Print..." icon="fileprintlily" />
+    <Action name="file_preview_lilypond" text="Prin&amp;t Preview..." icon="filepreviewlily" />
+    <Action name="file_print_lilypond" text="&amp;Print..." icon="fileprintlily" />
   <Separator/>
     <Action name="audio_manager" text="Manage A&amp;udio Files" icon="manage-audio-segments" />
   <Separator/>
@@ -104,38 +104,38 @@
 
     <Separator/>
 
-    <Menu name="toolbars" append="show_merge">
+    <Menu name="toolbars">
       <text>&amp;Toolbars</text>
       <!-- JAS "show_stock_toolbar" is "options_show_toolbar" in matrix.rc and notation .rc -->
-      <Action name="show_stock_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
-      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
-      <Action name="show_tracks_toolbar" text="Show Trac&amp;ks Toolbar" checked="true" append="show_merge" />
-      <Action name="show_editors_toolbar" text="Show &amp;Editors Toolbar" checked="true" append="show_merge" />
-      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
-      <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" append="show_merge" />
+      <Action name="show_stock_toolbar" text="Show Main &amp;Toolbar" checked="true" />
+      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" />
+      <Action name="show_tracks_toolbar" text="Show Trac&amp;ks Toolbar" checked="true" />
+      <Action name="show_editors_toolbar" text="Show &amp;Editors Toolbar" checked="true" />
+      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" />
+      <Action name="show_zoom_toolbar" text="Show &amp;Zoom Toolbar" checked="true" />
       <!-- JAS "show_status_bar" is "options_show_statusbar" in matrix.rc and notation.rc -->
       <!-- JAS 'options_show_statusbar' determined by state -->
     </Menu>
-    <Menu name="rulers" append="show_merge">
+    <Menu name="rulers">
       <text>&amp;Rulers</text>
-      <Action name="show_rulers" text="Show Playback Position R&amp;uler" checked="true" append="show_merge" />
-      <Action name="show_chord_name_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" append="show_merge" />
-      <Action name="show_tempo_ruler" text="Show Te&amp;mpo Ruler" checked="true" append="show_merge" />
+      <Action name="show_rulers" text="Show Playback Position R&amp;uler" checked="true" />
+      <Action name="show_chord_name_ruler" text="Show Cho&amp;rd Name Ruler" checked="false" />
+      <Action name="show_tempo_ruler" text="Show Te&amp;mpo Ruler" checked="true" />
     </Menu>
 
-    <Separator append="show_merge" />
+    <Separator />
 
-    <Action name="show_transport" text="Show Tra&amp;nsport" checked="true" append="show_merge" shortcut="T" shortcut-context="application" />
+    <Action name="show_transport" text="Show Tra&amp;nsport" checked="true" shortcut="T" shortcut-context="application" />
     <!-- JAS "show_inst_segment_parameters" is state dependent but not checkable -->
-    <Action name="show_inst_segment_parameters" text="Show Special &amp;Parameters" shortcut="P" checked="true" append="show_merge" />
+    <Action name="show_inst_segment_parameters" text="Show Special &amp;Parameters" shortcut="P" checked="true" />
 
-    <Separator append="show_merge" />
+    <Separator />
 
-    <Action name="show_previews" text="Show Segment Pre&amp;views" checked="true" append="show_merge" />
-    <Action name="show_segment_labels" text="Sh&amp;ow Segment Labels" checked="true" append="show_merge" />
-    <Action name="show_tracklabels" text="Show Track &amp;Labels" checked="true" append="show_merge" />
-    <!-- Action name="toggle_all" append="show_merge" /> -->
-    <Action name="show_status_bar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
+    <Action name="show_previews" text="Show Segment Pre&amp;views" checked="true" />
+    <Action name="show_segment_labels" text="Sh&amp;ow Segment Labels" checked="true" />
+    <Action name="show_tracklabels" text="Show Track &amp;Labels" checked="true" />
+    <!-- Action name="toggle_all" /> -->
+    <Action name="show_status_bar" text="Show St&amp;atusbar" checked="true" />
 
     <separator />
 
@@ -285,7 +285,7 @@
     </Menu>
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
   <Separator/>

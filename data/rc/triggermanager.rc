@@ -25,7 +25,7 @@
     <Action name="time_raw" group="time_mode" checked="false" text="Ra&amp;w Times" icon="time-raw" />
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="trigger_help" text="&amp;Help" icon="wiki" shortcut="F1" />
   <Separator/>

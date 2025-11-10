@@ -5,8 +5,8 @@
 <MenuBar>
   <Menu name="file">
     <text>&amp;File</text>
-    <Action name="add_audio" text="&amp;Add Audio File..." icon="fileopen" append="new_merge" />
-    <Action name="export_audio" text="&amp;Export Audio Files..." icon="filesave" append="new_merge" />
+    <Action name="add_audio" text="&amp;Add Audio File..." icon="fileopen" />
+    <Action name="export_audio" text="&amp;Export Audio Files..." icon="filesave" />
   <Separator/>
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
@@ -26,7 +26,7 @@
     <Action name="insert_audio" text="Insert into Selected Audio Track" icon="insert_audio_into_track" />
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="audio_help" text="Help" icon="wiki" shortcut="F1" />
   <Separator/>

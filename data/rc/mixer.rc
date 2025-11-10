@@ -4,7 +4,7 @@
   
 <MenuBar>
 
-  <Menu name="file" append="new_merge">
+  <Menu name="file">
     <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
@@ -47,16 +47,16 @@
       <Action name="panlaw_3" text="&amp;Alternate -3dB Law (Constant Power, 0dB Center)" checked="false" group="pan_laws" />
     </Menu>
     <!-- JAS "show_midi" does not appear in pulldown menu. -->
-    <Action name="show_midi" append="show_merge" />
-    <Action name="show_audio_faders" text="Show &amp;Audio Faders" checked="true" append="show_merge" />
-    <Action name="show_synth_faders" text="Show &amp;Synth Faders" checked="true" append="show_merge" />
-    <Action name="show_audio_submasters" text="Show Audio Su&amp;bmasters" checked="true" append="show_merge" />
-    <Action name="show_plugin_buttons" text="Show &amp;Plugin Buttons" checked="true" append="show_merge" />
-  <Separator append="show_merge"/>
-    <Action name="show_unassigned_faders" text="Show &amp;Unassigned Faders" checked="false" append="show_merge" />
+    <Action name="show_midi" />
+    <Action name="show_audio_faders" text="Show &amp;Audio Faders" checked="true" />
+    <Action name="show_synth_faders" text="Show &amp;Synth Faders" checked="true" />
+    <Action name="show_audio_submasters" text="Show Audio Su&amp;bmasters" checked="true" />
+    <Action name="show_plugin_buttons" text="Show &amp;Plugin Buttons" checked="true" />
+  <Separator/>
+    <Action name="show_unassigned_faders" text="Show &amp;Unassigned Faders" checked="false" />
   </Menu> 
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="mixer_help" text="&amp;Help" icon="wiki" shortcut="F1" />
   <Separator/>
