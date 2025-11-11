@@ -17,6 +17,7 @@
 
 #include <QLabel>
 
+
 namespace Rosegarden
 {
 
@@ -43,12 +44,9 @@ class SqueezedLabelPrivate;
 class SqueezedLabel : public QLabel
 {
     Q_OBJECT
-    //Q_PROPERTY(Qt::TextElideMode textElideMode READ textElideMode WRITE setTextElideMode)
 
 public:
-    /**
-    * Default constructor.
-    */
+
     explicit SqueezedLabel(QWidget *parent = nullptr);
     explicit SqueezedLabel(const QString &text, QWidget *parent = nullptr);
 
@@ -56,77 +54,69 @@ public:
 
     QSize minimumSizeHint() const override;
     QSize sizeHint() const override;
-    /**
-    * Overridden for internal reasons; the API remains unaffected.
-    */
+
+    //void setTextElideMode(Qt::TextElideMode mode);
+    //Qt::TextElideMode textElideMode() const;
+
+    /// Overridden for internal reasons; the API remains unaffected.
     virtual void setAlignment(Qt::Alignment);
-
-    /**
-    *  Returns the text elide mode.
-    */
-    // unused Qt::TextElideMode textElideMode() const;
-
-    /**
-    * Sets the text elide mode.
-    * @param mode The text elide mode.
-    */
-    // unused void setTextElideMode(Qt::TextElideMode mode);
 
     /// Do not hijack the tool tip.  Let the client have control.
     void allowToolTip();
 
 signals:
+
     void clicked();
     void doubleClicked();
 
 public Q_SLOTS:
+
     /**
-    * Sets the text. Note that this is not technically a reimplementation of QLabel::setText(),
-    * which is not virtual (in Qt 4.3). Therefore, you may need to cast the object to
-    * SqueezedLabel in some situations:
-    * \Example
-    * \code
-    * SqueezedLabel* squeezed = new SqueezedLabel("text", parent);
-    * QLabel* label = squeezed;
-    * label->setText("new text");    // this will not work
-    * squeezed->setText("new text");    // works as expected
-    * // Dynamic downcast from QLabel to SqueezedLabel.
-    * SqueezedLabel *s2 = dynamic_cast<SqueezedLabel *>(label);
-    * if (s2) s2->setText("new text");    // works as expected
-    * \endcode
-    * @param mode The new text.
-    */
+     * Sets the text. Note that this is not technically a reimplementation of QLabel::setText(),
+     * which is not virtual (in Qt 4.3). Therefore, you may need to cast the object to
+     * SqueezedLabel in some situations:
+     * \Example
+     * \code
+     *     SqueezedLabel* squeezed = new SqueezedLabel("text", parent);
+     *     QLabel* label = squeezed;
+     *     label->setText("new text");    // this will not work
+     *     squeezed->setText("new text");    // works as expected
+     *     // Dynamic downcast from QLabel to SqueezedLabel.
+     *     SqueezedLabel *s2 = dynamic_cast<SqueezedLabel *>(label);
+     *     if (s2) s2->setText("new text");    // works as expected
+     * \endcode
+     *
+     * @param mode The new text.
+     */
     void setText(const QString &text);
-    /**
-    * Clears the text. Same remark as above.
-    *
-    */
+
+    /// Clears the text. Same remark as above.
     void clear();
 
 protected:
-    /**
-    * Called when widget is resized
-    */
-    void resizeEvent(QResizeEvent *) override;
-    /**
-    * \reimp
-    */
-    void contextMenuEvent(QContextMenuEvent*) override;
 
-    void mouseReleaseEvent(QMouseEvent * /*e*/) override
+    void resizeEvent(QResizeEvent *) override;
+
+    /**
+     * \reimp
+     */
+    void contextMenuEvent(QContextMenuEvent *) override;
+
+    void mouseReleaseEvent(QMouseEvent *) override
         { emit clicked(); }
 
-    void mouseDoubleClickEvent(QMouseEvent * /*e*/) override
+    void mouseDoubleClickEvent(QMouseEvent *) override
         { emit doubleClicked(); }
 
-    /**
-    * does the dirty work
-    */
+    /// does the dirty work
     void squeezeTextToLabel();
 
 private:
+
+    // Create a slot that is delegated to d.
     Q_PRIVATE_SLOT(d, void k_copyFullText())
     SqueezedLabelPrivate * const d;
+
 };
 
 
