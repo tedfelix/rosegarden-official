@@ -1012,8 +1012,8 @@ AudioFileManager::drawHighlightedPreview(AudioFileId id,
 
     if (!m_peakManager.hasValidPeaks(audioFile)) {
         RG_WARNING << "drawHighlightedPreview(): No peaks for audio file " << audioFile->getAbsoluteFilePath();
-        throw PeakFileManager::BadPeakFileException
-        (audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
+        throw PeakFileManager::BadPeakFileException(
+                audioFile->getAbsoluteFilePath(), __FILE__, __LINE__);
     }
 
     std::vector<float> values = m_peakManager.getPreview

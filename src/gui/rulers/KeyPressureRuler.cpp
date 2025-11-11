@@ -87,7 +87,7 @@ void KeyPressureRuler::setElementSelection
         EventControlItem *ecItem = dynamic_cast<EventControlItem*>(item);
         if (ecItem == nullptr) continue;
         Event* controlEvent = ecItem->getEvent();
-        long value;
+        long value{0};
         controlEvent->get<Rosegarden::Int>(Rosegarden::KeyPressure::PITCH,
                                            value);
         int cPitch = value;

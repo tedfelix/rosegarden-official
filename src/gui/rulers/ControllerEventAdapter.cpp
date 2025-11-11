@@ -50,7 +50,7 @@ bool ControllerEventAdapter::getValue(long& val)
     }
     else if (m_event->getType() == Rosegarden::ChannelPressure::EventType)
     {
-        long value;
+        long value{0};
         m_event->get<Rosegarden::Int>(Rosegarden::ChannelPressure::PRESSURE,
                                       value);
         val = value;
@@ -58,7 +58,7 @@ bool ControllerEventAdapter::getValue(long& val)
     }
     else if (m_event->getType() == Rosegarden::KeyPressure::EventType)
     {
-        long value;
+        long value{0};
         m_event->get<Rosegarden::Int>(Rosegarden::KeyPressure::PRESSURE,
                                       value);
         val = value;

@@ -98,9 +98,9 @@ public:
     class BadPeakFileException : public Exception
     {
     public:
-        explicit BadPeakFileException(const QString& path) :
-            Exception(QObject::tr("Bad peak file ") + path), m_path(path) { }
-        BadPeakFileException(const QString& path, const QString& file, int line) :
+        //explicit BadPeakFileException(const QString &path) :
+        //    Exception(QObject::tr("Bad peak file ") + path), m_path(path) { }
+        BadPeakFileException(const QString &path, const QString &file, int line) :
             Exception(QObject::tr("Bad peak file ") + path, file, line), m_path(path) { }
         explicit BadPeakFileException(const SoundFile::BadSoundFileException &e) :
             Exception(QObject::tr("Bad peak file (malformed audio?) ") + e.getPath()), m_path(e.getPath()) { }
