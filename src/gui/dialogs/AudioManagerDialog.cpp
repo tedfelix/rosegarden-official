@@ -509,6 +509,12 @@ AudioManagerDialog::slotExportAudio()
 
     if (WavAudioFiles.empty()) return;
 
+    // default save directory
+    QSettings settings;
+    settings.beginGroup(LastUsedPathsConfigGroup);
+    QString directory = settings.value("save_audio_file",
+                                       QDir::homePath()).toString();
+
     if (WavAudioFiles.size() == 1) {
         // single file
         WAVAudioFile* sourceFile = *(WavAudioFiles.begin());
@@ -517,8 +523,8 @@ AudioManagerDialog::slotExportAudio()
             FileDialog::getSaveFileName
             (this,  // parent
              tr("Save File As"),  // caption
-             QDir::currentPath(),  // dir
-             sourceFile->getAbsoluteFilePath(),  // defaultName
+             directory,
+             sourceFile->getFileName(),  // defaultName
              tr("*.wav|WAV files (*.wav)"));  // filter
 
         if (destFileName.isEmpty()) return;
@@ -528,21 +534,26 @@ AudioManagerDialog::slotExportAudio()
             destFileName += ".wav";
 
         writeWavFile(destFileName, sourceFile);
+        QFileInfo fi(destFileName);
+        QString destDir = fi.absolutePath();
+        settings.setValue("save_audio_file", destDir);
+
     } else {
         // save multiple files
         WAVAudioFile* firstFile = *(WavAudioFiles.begin());
         QString fpath = firstFile->getAbsoluteFilePath();
         QFileInfo fi(fpath);
-        QString defaultDir = fi.absolutePath();
         QString destDir =
             FileDialog::getExistingDirectory
             (this,  // parent
              tr("Save Files To"),  // caption
-             defaultDir);  // dir
+             directory);  // dir
 
         if (destDir.isEmpty()) return;
+        settings.setValue("save_audio_file", destDir);
 
         QDir qDestDir(destDir);
+        bool yesToAll = false;
         for (WAVAudioFile* wavFile : WavAudioFiles) {
             QString filePath = wavFile->getAbsoluteFilePath();
             QFileInfo fi(filePath);
@@ -556,7 +567,7 @@ AudioManagerDialog::slotExportAudio()
             // check for overwrite
             QFileInfo checkFile(destFileName);
             // check if file exists
-            if (checkFile.exists()) {
+            if (checkFile.exists() && ! yesToAll) {
                 QString question =
                         tr("The file %1 already exists.  Do you wish to overwrite it?").
                                 arg(destFileName);
@@ -564,15 +575,17 @@ AudioManagerDialog::slotExportAudio()
                     (this,
                      tr("Rosegarden"),
                      question,
-                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
+                     QMessageBox::YesToAll | QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel,
                      QMessageBox::Cancel);
                 if (reply == QMessageBox::No) continue;
                 if (reply == QMessageBox::Cancel) return;
+                if (reply == QMessageBox::YesToAll) yesToAll = true;
             }
 
             writeWavFile(destFileName, wavFile);
         }
     }
+    settings.endGroup();
 }
 
 void
