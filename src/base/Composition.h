@@ -192,7 +192,7 @@ public:
      * Detach a Track (revert ownership of the Track object to the
      * caller).
      */
-    bool detachTrack(Track *track);
+    bool detachTrack(const Track *track);
 
     /**
      * Get the highest running track id (generated and kept

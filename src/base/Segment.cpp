@@ -1433,35 +1433,50 @@ Segment::enforceBeginWithClefAndKey()
 timeT
 Segment::getRepeatEndTime() const
 {
-    timeT endMarker = getEndMarkerTime();
+    // End time of "this".
+    const timeT ourSegmentEndTime = getEndMarkerTime();
 
-    if (m_repeating && m_composition) {
-        timeT endTime = m_composition->getEndMarker();
+    if (!m_composition)
+        return ourSegmentEndTime;
+    if (!m_repeating)
+        return ourSegmentEndTime;
 
-        for (Composition::iterator i(m_composition->begin());
-             i != m_composition->end(); ++i) {
+    // Assume it goes all the way to the end.
+    timeT repeatEndTime = m_composition->getEndMarker();
 
-            if ((*i)->getTrack() != getTrack()) continue;
+    // See if there is another Segment on this Track that would stop
+    // the repeat.
 
-            timeT t1 = (*i)->getStartTime();
-            timeT t2 = (*i)->getEndMarkerTime();
+    // For each Segment in the Composition...
+    for (Composition::iterator segmentIter(m_composition->begin());
+         segmentIter != m_composition->end();
+         ++segmentIter) {
+        const Segment *currentSegment = *segmentIter;
 
-            if (t2 > endMarker) {
-                if (t1 < endTime) {
-                    if (t1 < endMarker) {
-                        endTime = endMarker;
-                        break;
-                    } else {
-                        endTime = t1;
-                    }
-                }
+        // Not on our Track?  Try the next.
+        if (currentSegment->getTrack() != getTrack())
+            continue;
+        // If the current Segment ends before or at our Segment, it cannot
+        // have any effect on our Segment's end time.  Try the next.
+        if (currentSegment->getEndMarkerTime() <= ourSegmentEndTime)
+            continue;
+
+        const timeT currentStartTime = currentSegment->getStartTime();
+
+        // If this Segment will affect the repeat end time...
+        if (currentStartTime < repeatEndTime) {
+            // If it is within our Segment, reduce it to zero repeats.
+            if (currentStartTime < ourSegmentEndTime) {
+                repeatEndTime = ourSegmentEndTime;
+                break;
+            } else {  // The current Segment start time is outside our Segment.
+                // Use it as the repeat end time.
+                repeatEndTime = currentStartTime;
             }
         }
-
-        return endTime;
     }
 
-    return endMarker;
+    return repeatEndTime;
 }
 
 void

@@ -150,10 +150,8 @@ namespace SystemExclusive
     /// Returned Event is on heap; caller takes responsibility for ownership.
     Event *makeEvent(timeT absoluteTime, const std::string &rawData);
 
-    // ??? rename: rawToHex()
-    std::string toHex(std::string rawData);
-    // ??? rename: hexToRaw()
-    std::string toRaw(std::string hexData);
+    std::string rawToHex(const std::string &rawData);
+    std::string hexToRaw(const std::string &hexData);
 }
 
 

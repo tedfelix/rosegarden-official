@@ -142,7 +142,7 @@ SysExWidget::slotLoadData()
     if (s.empty())
         QMessageBox::critical(this, tr("Rosegarden"), tr("Could not load SysEx file."));
 
-    m_dataEdit->setText(strtoqstr(SystemExclusive::toHex(s)));
+    m_dataEdit->setText(strtoqstr(SystemExclusive::rawToHex(s)));
 
     // Write the directory to the settings
     QDir d = QFileInfo(name).dir();
@@ -180,7 +180,7 @@ SysExWidget::slotSaveData()
     std::string datablock = qstrtostr(m_dataEdit->text());
     // Add SysEx and End SysEx status bytes.
     datablock = "F0 " + datablock + " F7";
-    datablock = SystemExclusive::toRaw(datablock);
+    datablock = SystemExclusive::hexToRaw(datablock);
     file.write(datablock.c_str(),
                static_cast<qint64>(datablock.length()));
 

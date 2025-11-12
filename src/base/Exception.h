@@ -38,7 +38,7 @@ public:
     Exception(const std::string &message, const std::string &file, int line);
 
     explicit Exception(const QString &message);
-    Exception(const QString &message, QString file, int line);
+    Exception(const QString &message, const QString &file, int line);
 
     ~Exception() throw () override  { }
 

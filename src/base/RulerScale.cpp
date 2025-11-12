@@ -15,9 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
-#include <cmath>
 #include "RulerScale.h"
+
 #include "Composition.h"
+
+#include <cmath>
+
 
 namespace Rosegarden {
 
@@ -247,7 +250,7 @@ SimpleRulerScale::getXForTime(timeT time) const
 //////////////////////////////////////////////////////////////////////
 
 SegmentsRulerScale::SegmentsRulerScale(Composition *composition,
-                                       SegmentSelection segments,
+                                       const SegmentSelection &segments,
                                        double origin, double ratio) :
     RulerScale(composition),
     m_origin(origin),

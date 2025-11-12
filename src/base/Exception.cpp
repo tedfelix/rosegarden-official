@@ -55,7 +55,7 @@ Exception::Exception(const QString &message) :
     RG_DEBUG << "Creating:" << message;
 }
 
-Exception::Exception(const QString &message, QString file, int line) :
+Exception::Exception(const QString &message, const QString &file, int line) :
     m_message(message.toUtf8().data())
 {
     RG_DEBUG << "Creating:" << message << "at" << file << ":" << line;
