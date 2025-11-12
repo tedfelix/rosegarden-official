@@ -22,7 +22,7 @@
 #include "misc/Debug.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
 
@@ -66,7 +66,7 @@ OpenOrCloseRangeCommand::~OpenOrCloseRangeCommand()
 void
 OpenOrCloseRangeCommand::execute()
 {
-    Profiler profiler("OpenOrCloseRangeCommand::execute()");
+    //Profiler profiler("OpenOrCloseRangeCommand::execute()");
     timeT offset = m_endTime - m_beginTime;
     if (!m_opening)
         offset = -offset;

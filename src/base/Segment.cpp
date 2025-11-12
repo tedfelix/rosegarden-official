@@ -21,7 +21,7 @@
 #include "base/BaseProperties.h"
 #include "Composition.h"
 #include "BasicQuantizer.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/SegmentLinker.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
@@ -574,7 +574,7 @@ Segment::getRawEndMarkerTime() const
 void
 Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
-    Profiler profiler("Segment::updateRefreshStatuses()");
+    //Profiler profiler("Segment::updateRefreshStatuses()");
 
     // For each observer, indicate that a refresh is needed for this time
     // span.
@@ -1475,7 +1475,7 @@ checkInsertAsClefKey(Event *e) const
 void
 Segment::notifyAdd(Event *e) const
 {
-    Profiler profiler("Segment::notifyAdd()");
+    //Profiler profiler("Segment::notifyAdd()");
     checkInsertAsClefKey(e);
 
     for (ObserverList::const_iterator i = m_observers.begin();
@@ -1488,7 +1488,7 @@ Segment::notifyAdd(Event *e) const
 void
 Segment::notifyRemove(Event *e) const
 {
-    Profiler profiler("Segment::notifyRemove()");
+    //Profiler profiler("Segment::notifyRemove()");
 
     if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
         ClefKeyList::iterator i;
@@ -1520,7 +1520,7 @@ Segment::notifyAppearanceChange() const
 void
 Segment::notifyStartChanged(timeT newTime)
 {
-    Profiler profiler("Segment::notifyStartChanged()");
+    //Profiler profiler("Segment::notifyStartChanged()");
     if (m_notifyResizeLocked) return;
 
     for (ObserverList::const_iterator i = m_observers.begin();
@@ -1537,7 +1537,7 @@ Segment::notifyStartChanged(timeT newTime)
 void
 Segment::notifyEndMarkerChange(bool shorten)
 {
-    Profiler profiler("Segment::notifyEndMarkerChange()");
+    //Profiler profiler("Segment::notifyEndMarkerChange()");
 
     if (m_notifyResizeLocked) return;
 
@@ -1806,7 +1806,7 @@ void
 SegmentObserver::
 allEventsChanged(const Segment *s)
 {
-    Profiler profiler("SegmentObserver::allEventsChanged");
+    //Profiler profiler("SegmentObserver::allEventsChanged");
     for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
         Event *e = *i;
         eventRemoved(s, e);

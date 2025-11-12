@@ -28,7 +28,7 @@
 #include "base/Segment.h"
 #include "base/TimeT.h"
 #include "base/MidiProgram.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <QtGlobal>
 
@@ -63,7 +63,7 @@ SegmentSplitByDrumCommand::~SegmentSplitByDrumCommand()
 void
 SegmentSplitByDrumCommand::execute()
 {
-    Profiler profiler("SplitByDrumCommand::execute", true);
+    //Profiler profiler("SplitByDrumCommand::execute", true);
     if (!m_newSegments.size()) {
 
         Segment *s = nullptr;

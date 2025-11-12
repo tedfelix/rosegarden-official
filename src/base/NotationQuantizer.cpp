@@ -20,7 +20,7 @@
 #include "Selection.h"
 #include "Composition.h"
 #include "Sets.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <iostream>
 #include <cmath>
@@ -266,7 +266,7 @@ NotationQuantizer::Impl::unsetProvisionalProperties(Event *e) const
 void
 NotationQuantizer::Impl::quantizeAbsoluteTime(Segment *s, Segment::iterator i) const
 {
-    Profiler profiler("NotationQuantizer::Impl::quantizeAbsoluteTime");
+    //Profiler profiler("NotationQuantizer::Impl::quantizeAbsoluteTime");
 
     const Composition *comp = s->getComposition();
 
@@ -402,7 +402,7 @@ NotationQuantizer::Impl::scoreAbsoluteTimeForBase(
         const Segment::iterator &nprime,
         bool &wantRight) const
 {
-    Profiler profiler("NotationQuantizer::Impl::scoreAbsoluteTimeForBase");
+    //Profiler profiler("NotationQuantizer::Impl::scoreAbsoluteTimeForBase");
 
     // Lower score is better.
 
@@ -492,7 +492,7 @@ void
 NotationQuantizer::Impl::quantizeDurationProvisional(Segment *, Segment::iterator i)
     const
 {
-    Profiler profiler("NotationQuantizer::Impl::quantizeDurationProvisional");
+    //Profiler profiler("NotationQuantizer::Impl::quantizeDurationProvisional");
 
     // Calculate a first guess at the likely notation duration based
     // only on its performed duration, without considering start time.
@@ -556,7 +556,7 @@ NotationQuantizer::Impl::quantizeDuration(Segment *s, Chord &c) const
     static int totalFracCount = 0;
     static float totalFrac = 0;
 
-    Profiler profiler("NotationQuantizer::Impl::quantizeDuration");
+    //Profiler profiler("NotationQuantizer::Impl::quantizeDuration");
 
 #ifdef DEBUG_NOTATION_QUANTIZER
     cout << "quantizeDuration: chord has " << c.size() << " notes" << endl;
@@ -740,7 +740,7 @@ NotationQuantizer::Impl::scanTupletsInBar(
         timeT wholeEnd,
         const std::vector<int> &divisions) const
 {
-    Profiler profiler("NotationQuantizer::Impl::scanTupletsInBar");
+    //Profiler profiler("NotationQuantizer::Impl::scanTupletsInBar");
 
     //!!! need to further constrain the area scanned so as to cope with
     // partial bars
@@ -818,7 +818,7 @@ NotationQuantizer::Impl::scanTupletsAt(
         timeT tupletStart,
         timeT tupletBase) const
 {
-    Profiler profiler("NotationQuantizer::Impl::scanTupletsAt");
+    //Profiler profiler("NotationQuantizer::Impl::scanTupletsAt");
 
     Segment::iterator j = i;
     timeT tupletEnd = tupletStart + base;
@@ -970,7 +970,7 @@ NotationQuantizer::Impl::isValidTupletAt(
         timeT sigTime,
         timeT tupletBase) const
 {
-    Profiler profiler("NotationQuantizer::Impl::isValidTupletAt");
+    //Profiler profiler("NotationQuantizer::Impl::isValidTupletAt");
 
     //!!! This is basically wrong; we need to be able to deal with groups
     // that contain e.g. a crotchet and a quaver, tripleted.
@@ -1029,7 +1029,7 @@ NotationQuantizer::Impl::quantizeRange(Segment *s,
                                        Segment::iterator from,
                                        Segment::iterator to) const
 {
-    Profiler profiler("NotationQuantizer::Impl::quantizeRange");
+    //Profiler profiler("NotationQuantizer::Impl::quantizeRange");
 
 /*
     clock_t start = clock();

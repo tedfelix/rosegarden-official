@@ -26,7 +26,7 @@
 #include "PluginFactory.h"
 #include "SequencerDataBlock.h"
 
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/AudioLevel.h"
 #include "sound/WAVExporter.h"
 #include "sequencer/RosegardenSequencer.h"
@@ -935,10 +935,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
 #ifdef DEBUG_JACK_PROCESS
-    Profiler profiler("jackProcess", true);
+    //Profiler profiler("jackProcess", true);
 #else
   #ifdef DEBUG_JACK_XRUN
-    Profiler profiler("jackProcess", false);
+    //Profiler profiler("jackProcess", false);
   #endif
 #endif
 
@@ -979,10 +979,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
 #ifdef DEBUG_JACK_PROCESS
-    Profiler profiler2("jackProcess post mix", true);
+    //Profiler profiler2("jackProcess post mix", true);
 #else
   #ifdef DEBUG_JACK_XRUN
-    Profiler profiler2("jackProcess post mix", false);
+    //Profiler profiler2("jackProcess post mix", false);
   #endif
 #endif
 
@@ -1109,10 +1109,10 @@ JackDriver::jackProcess(jack_nframes_t nframes)
     }
 
 #ifdef DEBUG_JACK_PROCESS
-    Profiler profiler3("jackProcess post transport", true);
+    //Profiler profiler3("jackProcess post transport", true);
 #else
   #ifdef DEBUG_JACK_XRUN
-    Profiler profiler3("jackProcess post transport", false);
+    //Profiler profiler3("jackProcess post transport", false);
   #endif
 #endif
 
@@ -1468,11 +1468,11 @@ JackDriver::jackProcessRecord(InstrumentId id,
                               bool clocksRunning)
 {
 #ifdef DEBUG_JACK_PROCESS
-    Profiler profiler("jackProcessRecord", true);
+    //Profiler profiler("jackProcessRecord", true);
 #else
 #ifdef DEBUG_JACK_XRUN
 
-    Profiler profiler("jackProcessRecord", false);
+    //Profiler profiler("jackProcessRecord", false);
 #endif
 #endif
 

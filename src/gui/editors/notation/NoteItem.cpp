@@ -19,7 +19,7 @@
 
 #include "NotePixmapFactory.h"
 #include "misc/Debug.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <QPainter>
 
@@ -76,7 +76,7 @@ NoteItem::paint(QPainter *painter,
 	getDimensions();
     }
 
-    Profiler profiler("NoteItem::paint");
+    //Profiler profiler("NoteItem::paint");
 
     QTransform t = painter->worldTransform();
 
@@ -119,7 +119,7 @@ NoteItem::paint(QPainter *painter,
 void
 NoteItem::getDimensions() const
 {
-    Profiler profiler("NoteItem::getDimensions");
+    //Profiler profiler("NoteItem::getDimensions");
 
     m_factory->getNoteDimensions(m_parameters, m_dimensions);
     m_offset = QPoint(-m_dimensions.left,

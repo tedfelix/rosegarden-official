@@ -22,7 +22,7 @@
 
 #include "misc/Strings.h"
 #include "base/Exception.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "gui/general/PixmapFunctions.h"
 #include "NoteCharacter.h"
 //#include "NoteFontMap.h"
@@ -270,7 +270,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
         return true;
     }
 
-    Profiler profiler("NoteFont::getPixmap: cache miss");
+    //Profiler profiler("NoteFont::getPixmap: cache miss");
 
     QString src;
     ok = false;
@@ -499,7 +499,7 @@ NoteFont::getCharacter(CharName charName,
                        NoteCharacter &character,
                        bool inverted) const
 {
-    Profiler profiler("NoteFont::getCharacter");
+    //Profiler profiler("NoteFont::getCharacter");
 
     QPixmap pixmap;
     if (!getPixmap(charName, pixmap, inverted))

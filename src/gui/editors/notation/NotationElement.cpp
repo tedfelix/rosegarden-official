@@ -26,7 +26,7 @@
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "base/ViewElement.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <QGraphicsItem>
 
@@ -124,7 +124,7 @@ NotationElement::isGrace() const
 void
 NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
-    Profiler p("NotationElement::setItem");
+    //Profiler p("NotationElement::setItem");
     removeItem();
     e->setCacheMode(QGraphicsItem::DeviceCoordinateCache);
     e->setData(NotationElementData, QVariant::fromValue((void *)this));
@@ -141,7 +141,7 @@ NotationElement::setItem(QGraphicsItem *e, double sceneX, double sceneY)
 void
 NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
 {
-    Profiler p("NotationElement::addItem");
+    //Profiler p("NotationElement::addItem");
 
     if (!m_item) {
         RG_WARNING << "addItem(): ERROR: Attempt to add extra scene item to element without main scene item:";
@@ -162,7 +162,7 @@ NotationElement::addItem(QGraphicsItem *e, double sceneX, double sceneY)
 void
 NotationElement::removeItem()
 {
-    Profiler p("NotationElement::removeItem");
+    //Profiler p("NotationElement::removeItem");
 
     m_recentlyRegenerated = false;
 
@@ -185,7 +185,7 @@ NotationElement::removeItem()
 void
 NotationElement::reposition(double sceneX, double sceneY)
 {
-    Profiler p("NotationElement::reposition");
+    //Profiler p("NotationElement::reposition");
 
     if (!m_item) return;
     if (sceneX == m_item->x() && sceneY == m_item->y()) return;

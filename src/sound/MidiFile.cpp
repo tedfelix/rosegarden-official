@@ -25,7 +25,7 @@
 #include "base/BaseProperties.h"
 #include "base/Instrument.h"
 #include "base/MidiTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/Studio.h"
 #include "base/Track.h"
 #include "document/RosegardenDocument.h"
@@ -594,7 +594,7 @@ MidiFile::parseTrack(std::ifstream *midiFile)
 bool
 MidiFile::convertToRosegarden(const QString &filename, RosegardenDocument *doc)
 {
-    Profiler profiler("MidiFile::convertToRosegarden");
+    //Profiler profiler("MidiFile::convertToRosegarden");
 
     // Read the MIDI file into m_midiComposition.
     if (!read(filename))

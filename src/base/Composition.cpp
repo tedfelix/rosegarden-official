@@ -22,7 +22,7 @@
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
 #include "base/BaseProperties.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
 #include "base/AudioLevel.h"
@@ -432,7 +432,7 @@ Composition::findSegment(const Segment *s)
 
 void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 {
-    Profiler profiler("Composition::setSegmentStartTime");
+    //Profiler profiler("Composition::setSegmentStartTime");
     // remove the segment from the multiset
     iterator i = findSegment(segment);
     if (i == end()) return;
@@ -457,7 +457,7 @@ Composition::clearVoiceCaches()
 void
 Composition::rebuildVoiceCaches() const
 {
-    Profiler profiler("Composition::rebuildVoiceCaches");
+    //Profiler profiler("Composition::rebuildVoiceCaches");
 
     // slow
 
@@ -500,7 +500,7 @@ Composition::rebuildVoiceCaches() const
 int
 Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
 {
-    Profiler profiler("Composition::getMaxContemporaneousSegmentsOnTrack");
+    //Profiler profiler("Composition::getMaxContemporaneousSegmentsOnTrack");
 
     if (m_trackVoiceCountCache.empty()) {
         rebuildVoiceCaches();

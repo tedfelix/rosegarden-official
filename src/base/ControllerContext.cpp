@@ -23,7 +23,7 @@
 #include "base/Controllable.h"
 #include "base/Instrument.h"
 #include "base/MidiTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/Segment.h"
 #include "gui/rulers/ControllerEventAdapter.h"
 #include "misc/Debug.h"
@@ -52,7 +52,7 @@ ControllerSearch::Maybe
 ControllerSearch::
 searchSegment(const Segment *s, timeT noEarlierThan, timeT noLaterThan) const
 {
-    Profiler profiler("ControllerSearch::searchSegment", false);
+    //Profiler profiler("ControllerSearch::searchSegment", false);
     if (!s)
         { return Maybe(false, ControllerSearchValue(0,0)); }
 
@@ -85,7 +85,7 @@ ControllerSearch::Maybe
 ControllerSearch::
 doubleSearch(const Segment *a, const Segment *b, timeT noLaterThan) const
 {
-    Profiler profiler("ControllerSearch::doubleSearch", false);
+    //Profiler profiler("ControllerSearch::doubleSearch", false);
     ControllerSearch::Maybe runningResult =
         searchSegment(a, std::numeric_limits<int>::min(),
                noLaterThan);
@@ -140,7 +140,7 @@ getControllerValue(const Instrument *instrument,
                    timeT searchTime, const std::string& eventType,
                    int controllerId)
 {
-    Profiler profiler("ControllerContextMap::getControllerValue", false);
+    //Profiler profiler("ControllerContextMap::getControllerValue", false);
 
     // Should only get these two types.
     Q_ASSERT_X((eventType == Controller::EventType) ||
@@ -261,7 +261,7 @@ ControllerContextMap::
 makeControlValueAbsolute(const Instrument *instrument, const Segment *a,
                          const Segment *b, Event *e, timeT at)
 {
-    Profiler profiler("ControllerContextMap::makeControlValueAbsolute", false);
+    //Profiler profiler("ControllerContextMap::makeControlValueAbsolute", false);
     const std::string eventType = e->getType();
     const int controllerId =
         e->has(Controller::NUMBER) ?
@@ -298,7 +298,7 @@ void
 ControllerContextMap::
 storeLatestValue(Event *e)
 {
-    Profiler profiler("ControllerContextMap::storeLatestValue", false);
+    //Profiler profiler("ControllerContextMap::storeLatestValue", false);
     timeT at = e->getAbsoluteTime();
     const std::string eventType = e->getType();
     const int controllerId =

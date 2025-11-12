@@ -28,7 +28,7 @@
 #include "base/NotationRules.h"
 #include "base/NotationTypes.h"
 #include "base/NotationQuantizer.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/ViewSegment.h"
 #include "gui/editors/guitar/Chord.h"
 #include "misc/ConfigGroups.h"
@@ -92,7 +92,7 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
 {
     // We actually always perform a full scan, for reasons of sheer laziness
 
-    Profiler profiler("NotationVLayout::scanViewSegment");
+    //Profiler profiler("NotationVLayout::scanViewSegment");
 
     NotationStaff &staff = dynamic_cast<NotationStaff &>(staffBase);
     NotationElementList *notes = staff.getViewElementList();
@@ -436,7 +436,7 @@ NotationVLayout::scanViewSegment(ViewSegment &staffBase, timeT, timeT, bool)
 void
 NotationVLayout::finishLayout(timeT, timeT, bool)
 {
-    Profiler profiler("NotationHLayout::finishLayout");
+    //Profiler profiler("NotationHLayout::finishLayout");
 
     for (SlurListMap::iterator mi = m_slurs.begin();
          mi != m_slurs.end(); ++mi) {

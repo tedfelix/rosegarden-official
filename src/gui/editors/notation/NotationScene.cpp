@@ -42,7 +42,7 @@
 #include "misc/ConfigGroups.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"

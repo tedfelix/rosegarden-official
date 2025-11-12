@@ -38,7 +38,7 @@
 #include "base/MidiProgram.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/RealTime.h"
 #include "base/RecordIn.h"
 #include "base/Segment.h"
@@ -1361,7 +1361,7 @@ bool RosegardenDocument::exportStudio(const QString &filename,
                                       QString &errMsg,
                                       const std::vector<DeviceId> &devices)
 {
-    Profiler profiler("RosegardenDocument::exportStudio");
+    //Profiler profiler("RosegardenDocument::exportStudio");
     RG_DEBUG << "RosegardenDocument::exportStudio(" << filename << ")";
 
     QString outText;
@@ -1808,7 +1808,7 @@ RosegardenDocument::xmlParse(const QString &fileContents,
 void
 RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 {
-    Profiler profiler("RosegardenDocument::insertRecordedMidi()");
+    //Profiler profiler("RosegardenDocument::insertRecordedMidi()");
 
     //RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events";
 
@@ -2132,7 +2132,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 void
 RosegardenDocument::updateRecordingMIDISegment()
 {
-    Profiler profiler("RosegardenDocument::updateRecordingMIDISegment()");
+    //Profiler profiler("RosegardenDocument::updateRecordingMIDISegment()");
 
 //    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment";
 
@@ -2230,7 +2230,7 @@ RosegardenDocument::NoteOnRecSet *
 RosegardenDocument::adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
-    Profiler profiler("RosegardenDocument::adjustEndTimes()");
+    //Profiler profiler("RosegardenDocument::adjustEndTimes()");
 
     // Create a vector to hold the new note-on events for return.
     NoteOnRecSet *new_vector = new NoteOnRecSet();
@@ -2309,7 +2309,7 @@ RosegardenDocument::storeNoteOnEvent(Segment *s, Segment::iterator it, int devic
 void
 RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool isNoteOn)
 {
-    Profiler profiler("RosegardenDocument::insertRecordedEvent()");
+    //Profiler profiler("RosegardenDocument::insertRecordedEvent()");
 
     Segment::iterator it;
     for ( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();

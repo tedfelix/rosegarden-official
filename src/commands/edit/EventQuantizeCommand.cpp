@@ -19,7 +19,7 @@
 #include "EventQuantizeCommand.h"
 
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/Quantizer.h"
 #include "base/BasicQuantizer.h"
 #include "base/LegatoQuantizer.h"
@@ -112,7 +112,7 @@ EventQuantizeCommand::getGlobalName(std::shared_ptr<Quantizer> quantizer)
 void
 EventQuantizeCommand::modifySegment()
 {
-    Profiler profiler("EventQuantizeCommand::modifySegment", true);
+    //Profiler profiler("EventQuantizeCommand::modifySegment", true);
 
     // Kick the event loop.
     qApp->processEvents();

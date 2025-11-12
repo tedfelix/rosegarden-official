@@ -23,7 +23,7 @@
 #include "base/Event.h"
 #include "base/LayoutEngine.h"
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/SnapGrid.h"
 #include "base/ViewElement.h"
 #include "base/ViewSegment.h"

@@ -33,7 +33,7 @@
 #include "ResourceFinder.h"
 #include "misc/Strings.h"
 #include "misc/Debug.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "document/CommandHistory.h"
 #include "document/io/XMLReader.h"
 #include "gui/general/ActionData.h"

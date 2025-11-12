@@ -21,7 +21,7 @@
 #include "Panned.h"
 
 #include "misc/Debug.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "gui/general/GUIPalette.h"
 
 #include <QPainter>
@@ -61,7 +61,7 @@ Panned::resizeEvent(QResizeEvent *ev)
 void
 Panned::paintEvent(QPaintEvent *e)
 {
-    Profiler profiler("Panned::paintEvent");
+    //Profiler profiler("Panned::paintEvent");
 
     QGraphicsView::paintEvent(e);
 }
@@ -99,7 +99,7 @@ void
 // cppcheck-suppress unusedFunction
 Panned::drawForeground(QPainter *paint, const QRectF &)
 {
-    Profiler profiler("Panned::drawForeground");
+    //Profiler profiler("Panned::drawForeground");
 
     // Detect viewport scrolling and emit appropriate signals
 
