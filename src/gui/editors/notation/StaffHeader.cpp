@@ -19,6 +19,7 @@
 */
 
 #define RG_MODULE_STRING "[StaffHeader]"
+#define RG_NO_DEBUG_PRINT
 
 #include "StaffHeader.h"
 
@@ -39,12 +40,6 @@
 #include "misc/Strings.h"
 #include "misc/Debug.h"
 
-#include <vector>
-#include <map>
-#include <set>
-#include <string>
-#include <utility>
-
 #include <QApplication>
 #include <QColor>
 #include <QSize>
@@ -61,6 +56,12 @@
 #include <QPainter>
 #include <QTimer>
 #include <QTextEdit>
+
+#include <vector>
+#include <map>
+#include <set>
+#include <string>
+#include <utility>
 
 
 namespace Rosegarden
@@ -917,7 +918,7 @@ StaffHeader::slotToolTip()
 //     if (event->y() > (h - offset)) {
 /// Here is a place to call a popup menu to select what segment is the current
 /// one when segments are overlapping.
-//         std::cerr << "START MENU\n";
+//         RG_DEBUG << "START MENU";
 //     }
 // }
 

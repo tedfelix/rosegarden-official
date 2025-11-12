@@ -16,8 +16,6 @@
 */
 
 #define RG_MODULE_STRING "[MIDIInstrumentParameterPanel]"
-// Warnings are currently done with std::cerr to make sure they appear
-// even in a release build.
 #define RG_NO_DEBUG_PRINT
 
 #include "MIDIInstrumentParameterPanel.h"
@@ -59,8 +57,10 @@
 #include <iostream>
 #include <cmath>
 
+
 namespace Rosegarden
 {
+
 
 MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     InstrumentParameterPanel(parent),
@@ -557,7 +557,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateBankComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
+        RG_WARNING << "WARNING: updateBankComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId();
         return;
     }
 
@@ -702,7 +702,7 @@ MIDIInstrumentParameterPanel::updateProgramComboBox()
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateProgramComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
+        RG_WARNING << "WARNING: updateProgramComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId();
         return;
     }
 
@@ -797,7 +797,7 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::updateVariationComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
+        RG_WARNING << "WARNING: updateVariationComboBox(): No MidiDevice for Instrument " << getSelectedInstrument()->getId();
         return;
     }
 
@@ -1069,7 +1069,7 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     MidiDevice *md =
             dynamic_cast<MidiDevice *>(getSelectedInstrument()->getDevice());
     if (!md) {
-        std::cerr << "WARNING: MIDIInstrumentParameterPanel::slotSelectBank(): No MidiDevice for Instrument " << getSelectedInstrument()->getId() << '\n';
+        RG_WARNING << "WARNING: slotSelectBank(): No MidiDevice for Instrument " << getSelectedInstrument()->getId();
         return;
     }
 
@@ -1326,7 +1326,7 @@ MIDIInstrumentParameterPanel::slotControllerChanged(int controllerNumber)
         value = static_cast<int>(std::floor(rotary->getPosition() + .5));
 
     if (value == -1) {
-        std::cerr << "MIDIInstrumentParameterPanel::slotControllerChanged(): Couldn't get value of rotary for controller " << controllerNumber << '\n';
+        RG_WARNING << "slotControllerChanged(): Couldn't get value of rotary for controller " << controllerNumber;
         return;
     }
 

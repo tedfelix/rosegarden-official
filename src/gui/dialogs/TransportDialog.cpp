@@ -66,8 +66,10 @@ namespace  // anonymous
     QColor ledBlue(192, 216, 255);
 }
 
+
 namespace Rosegarden
 {
+
 
 TransportDialog::TransportDialog(QWidget *parent):
     QDialog(parent),
@@ -1187,7 +1189,7 @@ TransportDialog::slotPanelOpenButtonClicked()
 //        ui->PanelOpenButton->setPixmap(m_panelClosed);
 //        adjustSize();
         setFixedSize(416, 87);
-//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+        //RG_DEBUG << "size hint: " << sizeHint().width() << "x" << sizeHint().height();
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = false;
@@ -1197,7 +1199,7 @@ TransportDialog::slotPanelOpenButtonClicked()
         ui->RecordingFrame->show();
 //        ui->PanelOpenButton->setPixmap(m_panelOpen);
 //        adjustSize();
-//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+        //RG_DEBUG << "size hint: " << sizeHint().width() << "x" << sizeHint().height();
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = true;
@@ -1215,7 +1217,7 @@ TransportDialog::slotPanelCloseButtonClicked()
 //        ui->PanelOpenButton->setPixmap(m_panelClosed);
         setFixedSize(416, 87);
 //        adjustSize();
-//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+        //RG_DEBUG << "size hint: " << sizeHint().width() << "x" << sizeHint().height();
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = false;

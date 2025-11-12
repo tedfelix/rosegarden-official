@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationHLayout]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "NotationHLayout.h"
 
@@ -715,15 +715,15 @@ NotationHLayout::scanChord(NotationElementList *notes,
             extraWidth = std::max(extraWidth, float(npf->getNoteBodyWidth()));
         }
     }
-/*!!!
+/* !!!
     if (grace) {
-        std::cerr << "Grace note: subordering " << chord.getSubOrdering();
+        RG_DEBUG << "Grace note: subordering " << chord.getSubOrdering();
         chunks.push_back(Chunk(-10 + graceCount,
                                extraWidth + npf->getNoteBodyWidth()));
         if (graceCount < 9) ++graceCount;
         return;
     } else {
-        std::cerr << "Non-grace note (grace count was " << graceCount << ")";
+        RG_DEBUG << "Non-grace note (grace count was " << graceCount << ")";
         graceCount = 0;
     }
 */

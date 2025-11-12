@@ -18,16 +18,20 @@
     COPYING included with this distribution for more information.
 */
 
-#include <limits>
+#define RG_MODULE_STRING "[HeadersGroup]"
+#define RG_NO_DEBUG_PRINT
 
 #include "HeadersGroup.h"
+
 #include "StaffHeader.h"
 #include "NotationWidget.h"
 #include "NotationScene.h"
 #include "NotationStaff.h"
 #include "NotationHLayout.h"
 #include "NotePixmapFactory.h"
+
 #include "document/RosegardenDocument.h"
+#include "misc/Debug.h"
 
 #include <QSize>
 #include <QWidget>
@@ -38,6 +42,8 @@
 #include <QEvent>
 #include <QResizeEvent>
 #include <QString>
+
+#include <limits>
 
 
 namespace Rosegarden
@@ -188,10 +194,10 @@ HeadersGroup::slotUpdateAllHeaders(int x, bool force)
         m_startOfView = nhl->getTimeForX(x);
         m_endOfView = nhl->getTimeForX(m_widget->getViewRightX());
 
-// int barStart = m_composition.getBarNumber(m_startOfView) + 1;
-// int barEnd = m_composition.getBarNumber(m_endOfView) + 1;
-// std::cerr << "XXX (" << m_startOfView << ", " << m_endOfView
-//           << "   ["<< barStart << ", " << barEnd << "]\n";
+        //int barStart = m_composition.getBarNumber(m_startOfView) + 1;
+        //int barEnd = m_composition.getBarNumber(m_endOfView) + 1;
+        //RG_DEBUG << "XXX (" << m_startOfView << ", " << m_endOfView
+        //         << "   ["<< barStart << ", " << barEnd << "]";
 
         // Pass 1 : get the max width needed
         for (i=m_headers.begin(); i!=m_headers.end(); ++i) {
