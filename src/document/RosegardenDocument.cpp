@@ -434,7 +434,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     for (size_t i = 0; i < derivedOrphans.size(); ++i) {
         QFile file(derivedOrphans[i]);
         if (!file.remove()) {
-            std::cerr << "WARNING: Failed to remove orphaned derived audio file \"" << derivedOrphans[i] << std::endl;
+            RG_WARNING << "WARNING: Failed to remove orphaned derived audio file \"" << derivedOrphans[i];
         }
         QFile peakFile(QString("%1.pk").arg(derivedOrphans[i]));
         peakFile.remove();
@@ -526,8 +526,7 @@ void RosegardenDocument::performAutoload()
     QFileInfo autoloadFileInfo(autoloadFile);
 
     if (autoloadFile == "" || !autoloadFileInfo.isReadable()) {
-        std::cerr << "WARNING: RosegardenDocument::performAutoload - "
-                  << "can't find autoload file - defaulting" << std::endl;
+        RG_WARNING << "WARNING: performAutoload() - can't find autoload file - defaulting";
         return ;
     }
 
@@ -2215,12 +2214,12 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
 
         // No pitch?  Warn the user.
         if (!event->has(PITCH)) {
-            std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment(): Note has no pitch!" << std::endl;
+            RG_WARNING << "WARNING! transposeRecordedSegment(): Note has no pitch!";
             continue;
         }
 
         const int pitch = event->get<Int>(PITCH) - semitones;
-        //std::cerr << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")" << std::endl;
+        //RG_DEBUG << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")";
         event->set<Int>(PITCH, pitch);
 
     }
@@ -2530,7 +2529,7 @@ void
 RosegardenDocument::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")";
-//    std::cerr << kdBacktrace() << std::endl;
+    //RG_DEBUG << kdBacktrace();
 
     Segment *recordMIDISegment;
 

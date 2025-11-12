@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPluginDialog]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioPluginDialog.h"
 
@@ -65,8 +65,10 @@
 
 #include <set>
 
+
 namespace Rosegarden
 {
+
 
 AudioPluginDialog::AudioPluginDialog(QWidget *parent,
                                      QSharedPointer<AudioPluginManager> aPM,
@@ -692,7 +694,7 @@ AudioPluginDialog::slotPluginSelected(int index)
                 //
                 if (audioPluginInstance->getPort(count) == nullptr) {
                     audioPluginInstance->addPort(count, (float)(*it)->getDefaultValue());
-//                    std::cerr << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue() << std::endl;
+                    //RG_DEBUG << "Plugin port name " << (*it)->getName() << ", default: " << (*it)->getDefaultValue();
                 }
 
             } else if ((*it)->getType() & PluginPort::Audio) {
@@ -756,7 +758,7 @@ AudioPluginDialog::slotPluginSelected(int index)
         // if it isn't even, make it so
         if (portCount % 2 != 0) {
             portCalc++;
-            //std::cout << "was: " << portCount << " now: " << portCalc << std::endl;
+            //RG_DEBUG << "was: " << portCount << " now: " << portCalc;
         }
 
         // balance by the smallest number of columns that suits
@@ -777,8 +779,8 @@ AudioPluginDialog::slotPluginSelected(int index)
         if (portCalc == 11) wrap = 4;
         if (portCalc == 12) wrap = 4;
 
-//        std::cout << "final wrap was " << wrap << " for " << portCount << " plugins." << std::endl;
-//        std::cout << "this equals " << (portCount / wrap) << " rows by " << wrap << " columns." << std::endl;
+        //RG_DEBUG << "final wrap was " << wrap << " for " << portCount << " plugins.";
+        //RG_DEBUG << "this equals " << (portCount / wrap) << " rows by " << wrap << " columns.";
 
 
         // Create the plugin controls, but only if they're going to be visible.
@@ -1080,8 +1082,7 @@ AudioPluginDialog::slotCopy()
             clipboard->m_configuration.clear();
         }
 
-        std::cout << "AudioPluginDialog::slotCopy - plugin number = " << number
-                  << std::endl;
+        RG_DEBUG << "slotCopy() - plugin number = " << number;
 
         if (m_programCombo && m_programCombo->currentIndex() > 0) {
             clipboard->m_program = qstrtostr(m_programCombo->currentText());
@@ -1092,8 +1093,7 @@ AudioPluginDialog::slotCopy()
         clipboard->m_controlValues.clear();
         std::vector<PluginControl*>::iterator it;
         for (it = m_pluginWidgets.begin(); it != m_pluginWidgets.end(); ++it) {
-            std::cout << "AudioPluginDialog::slotCopy - "
-                      << "value = " << (*it)->getValue() << std::endl;
+            RG_DEBUG << "slotCopy() - value = " << (*it)->getValue();
 
             clipboard->m_controlValues.push_back((*it)->getValue());
         }
@@ -1105,8 +1105,7 @@ AudioPluginDialog::slotPaste()
 {
     AudioPluginClipboard *clipboard = m_pluginManager->getPluginClipboard();
 
-    std::cout << "AudioPluginDialog::slotPaste - paste plugin id "
-              << clipboard->m_pluginNumber << std::endl;
+    RG_DEBUG << "slotPaste() - paste plugin id " << clipboard->m_pluginNumber;
 
     if (clipboard->m_pluginNumber != -1) {
         int count = 0;

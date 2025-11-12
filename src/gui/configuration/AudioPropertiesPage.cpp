@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPropertiesPage]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioPropertiesPage.h"
 
@@ -143,8 +144,7 @@ AudioPropertiesPage::updateWidgets()
         unsigned long long available = available1.QuadPart;
         unsigned long long total = total1.QuadPart;
     } else {
-        std::cerr << "WARNING: GetDiskFreeSpaceEx failed: error code "
-                  << GetLastError() << std::endl;
+        RG_WARNING << "WARNING: GetDiskFreeSpaceEx failed: error code " << GetLastError();
     }
 #endif
 
