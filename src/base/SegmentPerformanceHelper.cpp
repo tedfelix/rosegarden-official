@@ -13,11 +13,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include "base/SegmentPerformanceHelper.h"
+#define RG_MODULE_STRING "[SegmentPerformanceHelper]"
+#define RG_NO_DEBUG_PRINT
 
-#include "base/BaseProperties.h"
+#include "SegmentPerformanceHelper.h"
 
-#include <iostream>
+#include "BaseProperties.h"
+
+#include "misc/Debug.h"
 
 
 namespace Rosegarden
@@ -142,7 +145,7 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
         }
 
         if (firstHostNote == i) {
-            std::cerr << "SegmentPerformanceHelper::getGraceAndHostNotes: REMARK: Grace note at " << (*i)->getAbsoluteTime() << " has no host note" << std::endl;
+            RG_DEBUG << "getGraceAndHostNotes(): REMARK: Grace note at " << (*i)->getAbsoluteTime() << " has no host note";
             return false;
         }
     } else {
@@ -171,7 +174,7 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
     // was not a grace note).
 
     if ((*firstHostNote)->getSubOrdering() < 0) {
-        std::cerr << "SegmentPerformanceHelper::getGraceAndHostNotes: WARNING: Note at " << (*firstHostNote)->getAbsoluteTime() << " has subordering " << (*i)->getSubOrdering() << " but is not a grace note" << std::endl;
+        RG_WARNING << "getGraceAndHostNotes(): WARNING: Note at " << (*firstHostNote)->getAbsoluteTime() << " has subordering " << (*i)->getSubOrdering() << " but is not a grace note";
         return false;
     }
 
@@ -185,14 +188,14 @@ SegmentPerformanceHelper::getGraceAndHostNotes(Segment::iterator i,
         if (!(*j)->isa(Note::EventType)) continue;
         if (!(*j)->has(BaseProperties::IS_GRACE_NOTE)  ||
             !(*j)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
-            std::cerr << "SegmentPerformanceHelper::getGraceAndHostNotes: WARNING: Note at " << (*j)->getAbsoluteTime() << " (in trackback) has subordering " << (*j)->getSubOrdering() << " but is not a grace note" << std::endl;
+            RG_WARNING << "getGraceAndHostNotes(): WARNING: Note at " << (*j)->getAbsoluteTime() << " (in trackback) has subordering " << (*j)->getSubOrdering() << " but is not a grace note";
             break;
         }
         firstGraceNote = j;
     }
 
     if (firstGraceNote == firstHostNote) {
-        std::cerr << "SegmentPerformanceHelper::getGraceAndHostNotes: REMARK: Note at " << (*firstHostNote)->getAbsoluteTime() << " has no grace notes" << std::endl;
+        RG_DEBUG << "getGraceAndHostNotes(): REMARK: Note at " << (*firstHostNote)->getAbsoluteTime() << " has no grace notes";
         return false;
     }
 
@@ -231,16 +234,16 @@ SegmentPerformanceHelper::getSoundingAbsoluteTime(Segment::iterator i)
 
     timeT durationUnused;
 
-    //std::cerr << "SegmentPerformanceHelper::getSoundingAbsoluteTime at " << (*i)->getAbsoluteTime() << std::endl;
+    //RG_DEBUG << "getSoundingAbsoluteTime() at " << (*i)->getAbsoluteTime();
 
     if ((*i)->has(BaseProperties::IS_GRACE_NOTE)) {
-        //std::cerr << "it's a grace note" << std::endl;
+        //RG_DEBUG << "it's a grace note";
         if (getGraceNoteTimeAndDuration(i, t, durationUnused))
             return t;
     }
 
     if ((*i)->has(BaseProperties::MAY_HAVE_GRACE_NOTES)) {
-        //std::cerr << "it's a candidate host note" << std::endl;
+        //RG_DEBUG << "it's a candidate host note";
         if (getGraceNoteTimeAndDuration(i, t, durationUnused))
             return t;
     }
@@ -255,14 +258,14 @@ SegmentPerformanceHelper::getSoundingDuration(Segment::iterator i)
 
     timeT discard;
 
-//    std::cerr << "SegmentPerformanceHelper::getSoundingDuration at " << (*i)->getAbsoluteTime() << std::endl;
+    //RG_DEBUG << "getSoundingDuration() at " << (*i)->getAbsoluteTime();
 
     if ((*i)->has(BaseProperties::IS_GRACE_NOTE)) {
-//        std::cerr << "it's a grace note" << std::endl;
+        //RG_DEBUG << "it's a grace note";
         if (getGraceNoteTimeAndDuration(i, discard, d)) return d;
     }
     if ((*i)->has(BaseProperties::MAY_HAVE_GRACE_NOTES)) {
-//        std::cerr << "it's a candidate host note" << std::endl;
+        //RG_DEBUG << "it's a candidate host note";
         if (getGraceNoteTimeAndDuration(i, discard, d)) return d;
     }
 
@@ -379,7 +382,7 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(
     bool isHostNote;
 
     if (!getGraceAndHostNotes(eventIter, graceNotes, hostNotes, isHostNote)) {
-        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Note at " << (*eventIter)->getAbsoluteTime() << " is not a grace note, or has no grace notes" << std::endl;
+        RG_DEBUG << "getGraceNoteTimeAndDuration(): REMARK: Note at " << (*eventIter)->getAbsoluteTime() << " is not a grace note, or has no grace notes";
         return false;
     }
 
@@ -387,18 +390,18 @@ SegmentPerformanceHelper::getGraceNoteTimeAndDuration(
 
         if (!(*eventIter)->has(BaseProperties::IS_GRACE_NOTE)  ||
             !(*eventIter)->get<Bool>(BaseProperties::IS_GRACE_NOTE)) {
-            std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: WARNING: Note at " << (*eventIter)->getAbsoluteTime() << " is neither grace nor host note, but was reported as suitable by getGraceAndHostNotes" << std::endl;
+            RG_WARNING << "getGraceNoteTimeAndDuration(): WARNING: Note at " << (*eventIter)->getAbsoluteTime() << " is neither grace nor host note, but was reported as suitable by getGraceAndHostNotes";
             return false;
         }
     }
 
     if (hostNotes.empty()) {
-        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Grace note at " << (*eventIter)->getAbsoluteTime() << " has no host note" << std::endl;
+        RG_DEBUG << "getGraceNoteTimeAndDuration(): REMARK: Grace note at " << (*eventIter)->getAbsoluteTime() << " has no host note";
         return false;
     }
 
     if (graceNotes.empty()) {
-        std::cerr << "SegmentPerformanceHelper::getGraceNoteTimeAndDuration: REMARK: Note at " << (*eventIter)->getAbsoluteTime() << " has no grace notes" << std::endl;
+        RG_DEBUG << "getGraceNoteTimeAndDuration(): REMARK: Note at " << (*eventIter)->getAbsoluteTime() << " has no grace notes";
         return false;
     }
 

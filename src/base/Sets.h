@@ -376,12 +376,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
     if (e->isa(Note::EventType) || d > 0) {
         if (m_longest == getContainer().end() ||
             d > q.getQuantizedDuration(AbstractSet::getAsEvent(m_longest))) {
-//          std::cerr << "New longest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
+            //RG_DEBUG << "AbstractSet::sample(): New longest in set at duration " << d << " and time " << e->getAbsoluteTime();
             m_longest = i;
         }
         if (m_shortest == getContainer().end() ||
             d < q.getQuantizedDuration(AbstractSet::getAsEvent(m_shortest))) {
-//          std::cerr << "New shortest in set at duration " << d << " and time " << e->getAbsoluteTime() << std::endl;
+            //RG_DEBUG << "AbstractSet::sample(): New shortest in set at duration " << d << " and time " << e->getAbsoluteTime();
             m_shortest = i;
         }
     }
@@ -391,12 +391,12 @@ AbstractSet<Element, Container>::sample(const Iterator &i, bool)
 
         if (m_highest == getContainer().end() ||
             p > get__Int(AbstractSet::getAsEvent(m_highest), BaseProperties::PITCH)) {
-//          std::cerr << "New highest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
+            //RG_DEBUG << "AbstractSet::sample(): New highest in set at pitch " << p << " and time " << e->getAbsoluteTime();
             m_highest = i;
         }
         if (m_lowest == getContainer().end() ||
             p < get__Int(AbstractSet::getAsEvent(m_lowest), BaseProperties::PITCH)) {
-//          std::cerr << "New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime() << std::endl;
+            //RG_DEBUG << "AbstractSet::sample(): New lowest in set at pitch " << p << " and time " << e->getAbsoluteTime();
             m_lowest = i;
         }
     }
