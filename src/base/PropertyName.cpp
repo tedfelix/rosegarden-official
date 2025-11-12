@@ -13,8 +13,14 @@
     COPYING included with this distribution for more information.
 */
 
-#include "base/PropertyName.h"
-#include "base/Exception.h"
+#define RG_MODULE_STRING "[PropertyName]"
+#define RG_NO_DEBUG_PRINT
+
+#include "PropertyName.h"
+
+#include "Exception.h"
+
+#include "misc/Debug.h"
 
 #include <QtGlobal>  // For Q_ASSERT()
 
@@ -105,24 +111,22 @@ std::string PropertyName::getName() const
 #if 0
     // dump some informative data, even if we aren't in debug mode,
     // because this really shouldn't be happening
-    std::cerr << "ERROR: PropertyName::getName: ID corrupted!\n";
-    std::cerr << "PropertyName's internal ID is " << m_id << std::endl;
-    std::cerr << "Reverse interns are ";
+    RG_DEBUG << "ERROR: PropertyName::getName: ID corrupted!";
+    RG_DEBUG << "PropertyName's internal ID is " << m_id;
+    RG_DEBUG << "Reverse interns are ";
 
     i = a_idToNameMap->begin();
     if (i == a_idToNameMap->end()) {
-        std::cerr << "(none)";
+        RG_DEBUG << "(none)";
     } else {
         while (i != a_idToNameMap->end()) {
             if (i != a_idToNameMap->begin()) {
-                std::cerr << ", ";
+                RG_DEBUG << ", ";
             }
-            std::cerr << i->first << "=" << i->second;
+            RG_DEBUG << i->first << "=" << i->second;
             ++i;
         }
     }
-
-    std::cerr << std::endl;
 
     Q_ASSERT(0); // exit if debug is on
     throw Exception(

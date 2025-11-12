@@ -13,6 +13,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[NotationTypes]"
+#define RG_NO_DEBUG_PRINT
+
 #include "NotationTypes.h"
 
 #include "BaseProperties.h"
@@ -30,11 +33,6 @@
 namespace Rosegarden
 {
 
-using std::string;
-using std::vector;
-using std::cout;
-using std::cerr;
-using std::endl;
 
 // This is the fundamental definition of the resolution used throughout.
 // It must be a multiple of 16, and should ideally be a multiple of 96.
@@ -132,25 +130,25 @@ namespace Marks
     const Mark MordentLong = "mordent-long";
     const Mark MordentLongInverted = "mordent-long-inverted";
 
-    ROSEGARDENPRIVATE_EXPORT string getTextMark(const string& text) {
-        return string("text_") + text;
+    ROSEGARDENPRIVATE_EXPORT std::string getTextMark(const std::string &text) {
+        return std::string("text_") + text;
     }
 
     ROSEGARDENPRIVATE_EXPORT bool isTextMark(Mark mark) {
-        return string(mark).substr(0, 5) == "text_";
+        return std::string(mark).substr(0, 5) == "text_";
     }
 
-    ROSEGARDENPRIVATE_EXPORT string getTextFromMark(Mark mark) {
-        if (!isTextMark(mark)) return string();
-        else return string(mark).substr(5);
+    ROSEGARDENPRIVATE_EXPORT std::string getTextFromMark(Mark mark) {
+        if (!isTextMark(mark)) return std::string();
+        else return std::string(mark).substr(5);
     }
 
-    ROSEGARDENPRIVATE_EXPORT string getFingeringMark(const string& fingering) {
-        return string("finger_") + fingering;
+    ROSEGARDENPRIVATE_EXPORT std::string getFingeringMark(const std::string &fingering) {
+        return std::string("finger_") + fingering;
     }
 
     ROSEGARDENPRIVATE_EXPORT bool isFingeringMark(Mark mark) {
-        return string(mark).substr(0, 7) == "finger_";
+        return std::string(mark).substr(0, 7) == "finger_";
     }
 
     ROSEGARDENPRIVATE_EXPORT bool isApplicableToRests(const Mark& mark) {
@@ -159,9 +157,9 @@ namespace Marks
         return false;
     }
 
-    ROSEGARDENPRIVATE_EXPORT string getFingeringFromMark(Mark mark) {
-        if (!isFingeringMark(mark)) return string();
-        else return string(mark).substr(7);
+    ROSEGARDENPRIVATE_EXPORT std::string getFingeringFromMark(Mark mark) {
+        if (!isFingeringMark(mark)) return std::string();
+        else return std::string(mark).substr(7);
     }
 
     /* unused
@@ -312,21 +310,21 @@ using namespace Marks;
 // Clef
 //////////////////////////////////////////////////////////////////////
 
-const string Clef::EventType = "clefchange";
+const std::string Clef::EventType = "clefchange";
 const int Clef::EventSubOrdering = -250;
 const PropertyName Clef::ClefPropertyName("clef");
 const PropertyName Clef::OctaveOffsetPropertyName("octaveoffset");
-const string Clef::Treble = "treble";
-const string Clef::French = "french";
-const string Clef::Soprano = "soprano";
-const string Clef::Mezzosoprano = "mezzosoprano";
-const string Clef::Alto = "alto";
-const string Clef::Tenor = "tenor";
-const string Clef::Baritone = "baritone";
-const string Clef::Varbaritone = "varbaritone";
-const string Clef::Bass = "bass";
-const string Clef::Subbass = "subbass";
-const string Clef::TwoBar = "twobar";
+const std::string Clef::Treble = "treble";
+const std::string Clef::French = "french";
+const std::string Clef::Soprano = "soprano";
+const std::string Clef::Mezzosoprano = "mezzosoprano";
+const std::string Clef::Alto = "alto";
+const std::string Clef::Tenor = "tenor";
+const std::string Clef::Baritone = "baritone";
+const std::string Clef::Varbaritone = "varbaritone";
+const std::string Clef::Bass = "bass";
+const std::string Clef::Subbass = "subbass";
+const std::string Clef::TwoBar = "twobar";
 
 const Clef Clef::DefaultClef = Clef("treble");
 const Clef Clef::UndefinedClef = Clef("undefined");
@@ -336,9 +334,7 @@ Clef::Clef(const Event &e) :
     m_octaveOffset(0)
 {
     if (e.getType() != EventType) {
-        std::cerr << Event::BadType
-            ("Clef model event", EventType, e.getType()).getMessage()
-                  << std::endl;
+        RG_DEBUG << Event::BadType("Clef model event", EventType, e.getType()).getMessage();
         return;
     }
 
@@ -346,9 +342,8 @@ Clef::Clef(const Event &e) :
     e.get<String>(ClefPropertyName, s);
 
     if (s != Treble && s != Soprano && s != French && s != Mezzosoprano && s != Alto && s != Tenor && s != Baritone && s != Bass && s != Varbaritone && s != Subbass && s != TwoBar) {
-        std::cerr << BadClefName("No such clef as \"" + s + "\"").getMessage()
-                  << std::endl;
-            return;
+        RG_DEBUG << BadClefName("No such clef as \"" + s + "\"").getMessage();
+        return;
     }
 
     long octaveOffset = 0;
@@ -469,7 +464,7 @@ Event *Clef::getAsEvent(timeT absoluteTime) const
 
 Key::KeyDetailMap Key::m_keyDetailMap = Key::KeyDetailMap();
 
-const string Key::EventType = "keychange";
+const std::string Key::EventType = "keychange";
 const int Key::EventSubOrdering = -200;
 const PropertyName Key::KeyPropertyName("key");
 const Key Key::DefaultKey = Key("C major");
@@ -487,15 +482,12 @@ Key::Key(const Event &e) :
 {
     checkMap();
     if (e.getType() != EventType) {
-        std::cerr << Event::BadType
-            ("Key model event", EventType, e.getType()).getMessage()
-                  << std::endl;
+        RG_DEBUG << Event::BadType("Key model event", EventType, e.getType()).getMessage();
         return;
     }
     e.get<String>(KeyPropertyName, m_name);
     if (m_keyDetailMap.find(m_name) == m_keyDetailMap.end()) {
-        std::cerr << BadKeyName
-            ("No such key as \"" + m_name + "\"").getMessage() << std::endl;
+        RG_DEBUG << BadKeyName("No such key as \"" + m_name + "\"").getMessage();
         return;
     }
 }
@@ -641,11 +633,11 @@ Accidental Key::getAccidentalForStep(int steps) const
     return NoAccidental;
 }
 
-vector<int> Key::getAccidentalHeights(const Clef &clef) const
+std::vector<int> Key::getAccidentalHeights(const Clef &clef) const
 {
     // staff positions of accidentals
     checkAccidentalHeights();
-    vector<int> v(*m_accidentalHeights);
+    std::vector<int> v(*m_accidentalHeights);
     int offset = clef.getPitchOffset();
 
     for (unsigned int i = 0; i < v.size(); ++i) {
@@ -661,7 +653,7 @@ void Key::checkAccidentalHeights() const
     if (m_accidentalHeights)
         return;
 
-    m_accidentalHeights.reset(new vector<int>);
+    m_accidentalHeights.reset(new std::vector<int>);
 
     const bool sharp = isSharp();
     const int accidentals = getAccidentalCount();
@@ -1024,8 +1016,8 @@ Text::getAsEvent(timeT absoluteTime) const
 // Note
 //////////////////////////////////////////////////////////////////////
 
-const string Note::EventType = "note";
-const string Note::EventRestType = "rest";
+const std::string Note::EventType = "note";
+const std::string Note::EventRestType = "rest";
 const int Note::EventRestSubOrdering = 10;
 
 const timeT Note::m_shortestTime = basePPQ / 16;
@@ -1056,8 +1048,7 @@ Note Note::getNearestNote(timeT duration, int maxDots)
     timeT d(duration / m_shortestTime);
     while (d > 0) { ++tag; d /= 2; }
 
-//    cout << "Note::getNearestNote: duration " << duration <<
-//      " leading to tag " << tag << endl;
+    //RG_DEBUG << "Note::getNearestNote: duration " << duration << " leading to tag " << tag;
     if (tag < Shortest) return Note(Shortest);
     if (tag > Longest)  return Note(Longest, maxDots);
 
@@ -1071,7 +1062,7 @@ Note Note::getNearestNote(timeT duration, int maxDots)
         if (prospective > duration) return Note(tag, dots);
         extra /= 2;
         ++dots;
-//      cout << "added another dot okay" << endl;
+        //RG_DEBUG << "added another dot okay";
     }
 
     if (tag < Longest) return Note(tag + 1, 0);
@@ -1171,7 +1162,7 @@ AccidentalTable::processDisplayAccidental(const Accidental &displayAcc,
         }
     }
 
-//    std::cerr << "AccidentalTable::processDisplayAccidental: acc " << acc0 << ", h " << height << ", caut " << cautionary << ", ch " << canonicalHeight << ", keyacc " << keyAcc << " canacc " << canonicalAcc << " noracc " << normalAcc << " oct " << m_octaves << " barReset = " << m_barReset << " pbacc " << prevBarAcc << std::endl;
+    //RG_DEBUG << "AccidentalTable::processDisplayAccidental: acc " << acc0 << ", h " << height << ", caut " << cautionary << ", ch " << canonicalHeight << ", keyacc " << keyAcc << " canacc " << canonicalAcc << " noracc " << normalAcc << " oct " << m_octaves << " barReset = " << m_barReset << " pbacc " << prevBarAcc;
 
     if (acc == NoAccidental) acc = keyAcc;
 
