@@ -910,12 +910,12 @@ MusicXMLXMLHandler::endNoteData(const QString& qName)
 //         else
 //             accidental = Accidentals::NoAccidental;
 //         Pitch pitch(m_pitch, m_accidental);
-//         std::cerr << "<accidental> = \"" << m_characters << "\" (" << pitch.getAsString() << ")\n";
-//         std::cerr << "         accidental, m_accidental, pitch = \"" << accidental << "\", \"" << m_accidental << "\", " << m_pitch << std::endl;
-//         std::cerr << "         Pitch::getAccidental(key) = \""
-//                   << pitch.getAccidental(getSegment()->getKeyAtTime(getTime())) << "\"\n";
-//         std::cerr << "         Pitch::getDisplayAccidental(key) = \""
-//                   << pitch.getDisplayAccidental(getSegment()->getKeyAtTime(getTime())) << "\"\n";
+//         RG_DEBUG << "<accidental> = \"" << m_characters << "\" (" << pitch.getAsString() << ")";
+//         RG_DEBUG << "         accidental, m_accidental, pitch = \"" << accidental << "\", \"" << m_accidental << "\", " << m_pitch;
+//         RG_DEBUG << "         Pitch::getAccidental(key) = \""
+//                  << pitch.getAccidental(getSegment()->getKeyAtTime(getTime())) << "\"";
+//         RG_DEBUG << "         Pitch::getDisplayAccidental(key) = \""
+//                  << pitch.getDisplayAccidental(getSegment()->getKeyAtTime(getTime())) << "\"";
 //         //! NOTE getSegment() won't work here, staff is not known yet!
 //         if (m_characters.toStdString() == pitch.getAccidental(getSegment()->getKeyAtTime(getTime())))
 //             m_event->set<Bool>(NotationProperties::USE_CAUTIONARY_ACCIDENTAL, true);

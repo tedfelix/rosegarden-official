@@ -358,9 +358,7 @@ lilyHalfDuration(int noteType)
         break;
 
     default:
-        std::cerr << "ERROR: Unexpected note duration"
-                    << " value " << noteType << " : Can't"
-                    << " translate to LilyPond\n";
+        RG_WARNING << "ERROR: Unexpected note duration value " << noteType << " : Can't translate to LilyPond";
         return "256";   // Try this one, who knows ?
     }
 }
@@ -452,9 +450,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                         // (See LilyPond v2.22.2, Notation Reference §1.3.1)
 
                         if (!(*j)->isa(Note::EventType)) {
-                            std::cerr << "WARNING: a crescendo/decrescendo "
-                                      << "limited to a single event which is"
-                                      << " not a note has been found.\n";
+                            RG_WARNING << "WARNING: a crescendo/decrescendo limited to a single event which is not a note has been found.";
                         } else {
                             Note::Type type = (*j)->get<Int>(NOTE_TYPE);
                             Note::Type dots = (*j)->get<Int>(NOTE_DOTS);

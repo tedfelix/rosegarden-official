@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ModifyControlParameterCommand]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ModifyControlParameterCommand.h"
 
@@ -22,12 +24,14 @@
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
+#include "misc/Debug.h"
+
 #include <QString>
-#include <iostream>
 
 
 namespace Rosegarden
 {
+
 
 ModifyControlParameterCommand::~ModifyControlParameterCommand()
 {}
@@ -38,9 +42,7 @@ ModifyControlParameterCommand::execute()
     MidiDevice *md = dynamic_cast<MidiDevice *>
                      (m_studio->getDevice(m_device));
     if (!md) {
-        std::cerr << "WARNING: ModifyControlParameterCommand::execute: device "
-        << m_device << " is not a MidiDevice in current studio"
-        << std::endl;
+        RG_WARNING << "WARNING: execute(): device " << m_device << " is not a MidiDevice in current studio";
         return ;
     }
 
@@ -56,13 +58,12 @@ ModifyControlParameterCommand::unexecute()
     MidiDevice *md = dynamic_cast<MidiDevice *>
                      (m_studio->getDevice(m_device));
     if (!md) {
-        std::cerr << "WARNING: ModifyControlParameterCommand::execute: device "
-        << m_device << " is not a MidiDevice in current studio"
-        << std::endl;
+        RG_WARNING << "WARNING: execute(): device " << m_device << " is not a MidiDevice in current studio";
         return ;
     }
 
     md->modifyControlParameter(m_originalControl, m_id);
 }
+
 
 }

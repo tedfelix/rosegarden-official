@@ -28,7 +28,6 @@
 #include "gui/application/RosegardenMainWindow.h"
 
 #include <QString>
-#include <iostream>
 
 
 namespace Rosegarden
@@ -96,13 +95,13 @@ ModifyDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_device);
     if (!device) {
-        std::cerr << "ERROR: ModifyDeviceCommand::execute(): no such device as " << m_device << std::endl;
+        RG_WARNING << "ERROR: execute(): no such device as " << m_device;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        std::cerr << "ERROR: ModifyDeviceCommand::execute(): device " << m_device << " is not a MIDI device" << std::endl;
+        RG_WARNING << "ERROR: execute(): device " << m_device << " is not a MIDI device";
         return;
     }
 
@@ -222,13 +221,13 @@ ModifyDeviceCommand::unexecute()
 {
     Device *device = m_studio->getDevice(m_device);
     if (!device) {
-        std::cerr << "ERROR: ModifyDeviceCommand::unexecute(): no such device as " << m_device << std::endl;
+        RG_WARNING << "ERROR: unexecute(): no such device as " << m_device;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        std::cerr << "ERROR: ModifyDeviceCommand::unexecute(): device " << m_device << " is not a MIDI device" << std::endl;
+        RG_WARNING << "ERROR: unexecute(): device " << m_device << " is not a MIDI device";
         return;
     }
 
