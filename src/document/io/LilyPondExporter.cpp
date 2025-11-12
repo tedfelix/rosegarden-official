@@ -165,16 +165,21 @@ static bool canStartOrEndBeam(Event *event)
     return true;
 }
 
-Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const
+Event *LilyPondExporter::nextNoteInGroup(const Segment *s,
+                                         Segment::iterator it,
+                                         const std::string &groupType,
+                                         int barEnd) const
 {
     Event *event = *it;
     long currentGroupId = -1;
     event->get<Int>(BEAMED_GROUP_ID, currentGroupId);
     Q_ASSERT(currentGroupId != -1);
     const bool tuplet = groupType == GROUP_TYPE_TUPLED;
-    const bool graceNotesGroup = event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
-    timeT currentTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
-    int subOrdering = event->getSubOrdering();
+    const bool graceNotesGroup =
+            event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
+    const timeT currentTime =
+            m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
+    const int subOrdering = event->getSubOrdering();
 
     ++it;
     for ( ; s->isBeforeEndMarker(it) ; ++it ) {
@@ -203,7 +208,8 @@ Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it,
             continue;
 
         // Within a chord, keep moving ahead
-        const timeT eventTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
+        const timeT eventTime =
+                m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
         if (eventTime == currentTime && subOrdering == event->getSubOrdering()) {
             continue;
         }
@@ -622,7 +628,8 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
 }
 
 std::string
-LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNoteName(int pitch,
+                                             const Accidental &accidental,
                                              const Rosegarden::Key &key) const
 {
     Pitch p(pitch, accidental);
@@ -633,7 +640,8 @@ LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
 }
 
 std::string
-LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNote(int pitch,
+                                         const Accidental &accidental,
                                          const Rosegarden::Key &key) const
 {
     // calculate note name and write note
@@ -669,7 +677,7 @@ LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 }
 
 std::string
-LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
+LilyPondExporter::composeLilyMark(const std::string &eventMark, bool stemUp)
 {
 
     std::string inStr, outStr = "";
@@ -2413,8 +2421,8 @@ LilyPondExporter::writeBar(Segment *s,
 
     bool inBeamedGroup = false;
     bool startingBeamedGroup = false;
-    Event *nextBeamedNoteInGroup = nullptr;
-    Event *nextNoteInTuplet = nullptr;
+    const Event *nextBeamedNoteInGroup = nullptr;
+    const Event *nextNoteInTuplet = nullptr;
 
     while (s->isBeforeEndMarker(i)) {
 

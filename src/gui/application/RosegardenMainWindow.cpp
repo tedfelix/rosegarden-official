@@ -2188,8 +2188,8 @@ RosegardenMainWindow::slotFileSave()
 }
 
 QString
-RosegardenMainWindow::launchSaveAsDialog(QString filter,
-                                         QString label)
+RosegardenMainWindow::launchSaveAsDialog(const QString &filter,
+                                         const QString &label)
 {
 
     const QFileInfo originalFileInfo(
@@ -7559,7 +7559,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
         return ;
     }
 
-    PluginPortInstance *port = inst->getPort(portIndex);
+    const PluginPortInstance *port = inst->getPort(portIndex);
     if (!port) {
         RG_DEBUG << "slotPluginPortChanged - no port "
                  << portIndex;
@@ -7587,7 +7587,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
 void
 RosegardenMainWindow::slotChangePluginProgram(InstrumentId instrumentId,
         int pluginIndex,
-        QString program)
+        const QString &program)
 {
     const PluginContainer *container =
         RosegardenDocument::currentDocument->

@@ -1266,7 +1266,7 @@ RosegardenMainViewWidget::updateMeters()
 
                 InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
-                Instrument *selectedInstrument = nullptr;
+                const Instrument *selectedInstrument = nullptr;
 
                 if (selectedInstrumentId != NoInstrument) {
                     // ??? Performance: LINEAR SEARCH
@@ -1316,7 +1316,7 @@ RosegardenMainViewWidget::updateMonitorMeters()
 
     InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
-    Instrument *selectedInstrument = nullptr;
+    const Instrument *selectedInstrument = nullptr;
 
     if (selectedInstrumentId != NoInstrument) {
         // ??? Performance: LINEAR SEARCH

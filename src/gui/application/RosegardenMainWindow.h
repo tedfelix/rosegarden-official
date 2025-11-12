@@ -450,7 +450,7 @@ private:
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString launchSaveAsDialog(QString filter, QString label);
+    QString launchSaveAsDialog(const QString &filter, const QString &label);
 
     /**
      * Find any non-ASCII strings in a composition that has been
@@ -1355,7 +1355,7 @@ public slots:
      * An external GUI has requested a program change.
      */
     void slotChangePluginProgram(InstrumentId instrumentId,
-                                 int pluginIndex, QString program);
+                                 int pluginIndex, const QString &program);
 
     /**
      * Our internal GUI has made a program change -- the
