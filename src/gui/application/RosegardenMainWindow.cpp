@@ -112,7 +112,6 @@
 #include "gui/dialogs/CommentsPopupDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
-#include "gui/dialogs/DialogSuppressor.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"

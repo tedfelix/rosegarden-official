@@ -59,7 +59,6 @@ namespace Rosegarden
     extern const char* const WindowGeometryConfigGroup;
     extern const char* const TempDirectoryConfigGroup;
     extern const char* const NotationOptionsConfigGroup;
-    extern const char* const DialogSuppressorConfigGroup;
     extern const char* const RecentDirsConfigGroup;
     extern const char* const CollapsingFrameConfigGroup;
     extern const char* const PitchBendSequenceConfigGroup;

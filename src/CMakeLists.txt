@@ -119,7 +119,6 @@ set(rg_CPPS
   gui/dialogs/AudioPluginPresetDialog.cpp
   gui/dialogs/AudioPluginConnectionDialog.cpp
   gui/dialogs/ExportDeviceDialog.cpp
-  gui/dialogs/DialogSuppressor.cpp
   gui/dialogs/CountdownDialog.cpp
   gui/dialogs/LyricEditDialog.cpp
   gui/dialogs/CountdownBar.cpp

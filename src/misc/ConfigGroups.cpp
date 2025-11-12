@@ -52,7 +52,6 @@ namespace Rosegarden
     const char* const WindowGeometryConfigGroup = "Window_Geometry";
     const char* const TempDirectoryConfigGroup = "TempDirectory";
     const char* const NotationOptionsConfigGroup = "Notation_Options";
-    const char* const DialogSuppressorConfigGroup = "DialogSuppressor";
     const char* const RecentDirsConfigGroup = "RecentDirs";
     const char* const CollapsingFrameConfigGroup = "CollapsingFrame";
     const char* const PitchBendSequenceConfigGroup = "PitchBendSequence";
