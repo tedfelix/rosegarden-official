@@ -1778,11 +1778,11 @@ Segment::dumpObservers()
     }
     for (ObserverList::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
-        Segment *seg = dynamic_cast<Segment *>(*i);
+        const Segment *seg = dynamic_cast<const Segment *>(*i);
         if (seg)
             RG_DEBUG << "  " << (*i) << " ==> Segment " << seg;
 
-        StaffHeader *sh = dynamic_cast<StaffHeader *>(*i);
+        const StaffHeader *sh = dynamic_cast<const StaffHeader *>(*i);
         if (sh)
             RG_DEBUG << "  " << (*i) << " ==> StaffHeader " << sh;
     }
