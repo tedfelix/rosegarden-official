@@ -5,26 +5,26 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
 
-  This file is Copyright 2002
-  Hans Kieserman      <hkieserman@mail.com>
-  with heavy lifting from csoundio as it was on 13/5/2002.
+    This file is Copyright 2002
+    Hans Kieserman      <hkieserman@mail.com>
+    with heavy lifting from csoundio as it was on 13/5/2002.
 
-  Numerous additions and bug fixes by
-  Michael McIntyre    <dmmcintyr@users.sourceforge.net>
+    Numerous additions and bug fixes by
+    Michael McIntyre    <dmmcintyr@users.sourceforge.net>
 
-  Some restructuring by Chris Cannam.
+    Some restructuring by Chris Cannam.
 
-  Massive brain surgery, fixes, improvements, and additions by
-  Heikki Junes
+    Massive brain surgery, fixes, improvements, and additions by
+    Heikki Junes
 
-  Other copyrights also apply to some parts of this work.  Please
-  see the AUTHORS file and individual file headers for details.
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #define RG_MODULE_STRING "[LilyPondExporter]"
