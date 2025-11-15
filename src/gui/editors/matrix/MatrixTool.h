@@ -23,7 +23,10 @@
 #include "gui/general/ActionFileClient.h"
 #include "gui/general/AutoScroller.h"  // For FollowMode
 
+#include <QString>
+
 class QAction;
+class QKeyEvent;
 
 namespace Rosegarden
 {
