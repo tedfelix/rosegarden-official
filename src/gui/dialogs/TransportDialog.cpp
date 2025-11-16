@@ -359,19 +359,17 @@ void TransportDialog::init()
 std::string
 TransportDialog::getCurrentModeAsString()
 {
-    bool found = false;
     for (std::map<std::string, TimeDisplayMode>::iterator iter = m_modeMap.begin();
-         iter != m_modeMap.end() && !found;
+         iter != m_modeMap.end();
          ++iter)
     {
-        if (iter->second == m_currentMode) {
+        // Found it?  Return the string.
+        if (iter->second == m_currentMode)
             return iter->first;
-        }
     }
 
     // we shouldn't get here unless the map is not well-configured
-    RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode "
-             << m_currentMode << " to string.";
+    RG_DEBUG << "getCurrentModeAsString(): could not map current mode" << m_currentMode << "to string.";
     throw Exception("could not map current mode to string.");
 }
 
@@ -692,7 +690,6 @@ TransportDialog::displayFrameTime(const RealTime &rt)
     m_unitHours = frame % 10;
     frame /= 10;
     m_tenHours = frame % 10;
-    frame /= 10;
 
     updateTimeDisplay();
 }
@@ -1131,7 +1128,7 @@ void
 TransportDialog::slotLoopChanged()
 {
     RosegardenDocument *document = RosegardenDocument::currentDocument;
-    Composition &composition = document->getComposition();
+    const Composition &composition = document->getComposition();
 
     ui->LoopButton->setChecked(
             (composition.getLoopMode() != Composition::LoopOff));

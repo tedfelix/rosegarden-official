@@ -227,7 +227,7 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     KeyList ksOld = adata->getShortcuts(key);
     if (! ks.isEmpty()) {
         // check for duplicates
-        for (auto& kso : ksOld) {
+        for (const QKeySequence& kso : ksOld) {
             if (kso == ks) {
                 // duplicate - nothing to do
                 return;
@@ -276,11 +276,13 @@ void ShortcutDialog::setModelData(const QKeySequence ks,
     }
     ActionData::DuplicateData duplicates;
     if (m_warnType != None) {
+#if 0
         QString context = "";
         if (m_warnType == SameContext) {
             QStringList klist = key.split(":");
             context = klist[0];
         }
+#endif
         std::set<QString> keys;
         keys.insert(key);
         bool sameContext = (m_warnType == SameContext);
@@ -330,7 +332,7 @@ void ShortcutDialog::slotSelectionChanged(const QItemSelection&,
         m_proxyView->selectionModel()->selectedIndexes();
 
     m_editRows.clear();
-    std::set<int> selectedRows;
+    //std::set<int> selectedRows;
     foreach(auto index, indexes) {
         QModelIndex srcIndex = m_proxyModel->mapToSource(index);
         int row = srcIndex.row();
@@ -345,7 +347,6 @@ void ShortcutDialog::slotResetSelectedClicked(bool)
 {
     RG_DEBUG << "set shortcut to default";
     ActionData* adata = ActionData::getInstance();
-    std::set<QKeySequence> ksSet;
     ActionData::DuplicateData duplicates;
     std::set<QString> keys;
     foreach(auto row, m_editRows) {
@@ -353,7 +354,8 @@ void ShortcutDialog::slotResetSelectedClicked(bool)
         keys.insert(key);
     }
     if (m_warnType != None) {
-        QString context = "";
+        //QString context = "";
+        std::set<QKeySequence> ksSet;
         bool sameContext = (m_warnType == SameContext);
         adata->getDuplicateShortcuts(keys, ksSet, true,
                                      sameContext, duplicates);
@@ -367,16 +369,16 @@ void ShortcutDialog::slotResetSelectedClicked(bool)
             }
         }
     }
-    foreach(auto key, keys) {
+    for (const QString &key: keys) {
         adata->removeUserShortcuts(key);
         if (m_warnType != None) {
             // remove the duplicates
-            foreach(auto pair, duplicates) {
+            for (auto pair : duplicates) {
                 const ActionData::DuplicateDataForKey& ddatak = pair.second;
-                foreach(auto dpair, ddatak.duplicateMap) {
+                for (auto dpair : ddatak.duplicateMap) {
                     const QKeySequence& dks = dpair.first;
                     const ActionData::KeyDuplicates& kdups = dpair.second;
-                    foreach(auto kdup, kdups) {
+                    for (auto kdup : kdups) {
                         adata->removeUserShortcut(kdup.key, dks);
                     }
                 }
@@ -458,7 +460,7 @@ void ShortcutDialog::slotDataChanged(const QModelIndex& topLeft,
 void ShortcutDialog::editRow()
 {
     RG_DEBUG << "editRow:";
-    ActionData* adata = ActionData::getInstance();
+    const ActionData *adata = ActionData::getInstance();
     m_resetSelected->setEnabled(false);
     m_removeShortcuts->setEnabled(false);
 

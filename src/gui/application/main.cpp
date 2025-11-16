@@ -581,7 +581,7 @@ int main(int argc, char *argv[])
         QString name = QString("rg-rwb-rose3-%1x%2").arg(sizes[i]).arg(sizes[i]);
         QPixmap pixmap = IconLoader::loadPixmap(name);
         if (!pixmap.isNull()) {
-            RG_DEBUG << "Loaded application icon \"" << name << "\"";
+            RG_DEBUG << "Loaded application icon" << name;
             icon.addPixmap(pixmap);
         }
     }

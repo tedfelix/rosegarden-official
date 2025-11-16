@@ -39,6 +39,7 @@ ShortcutDelegate::~ShortcutDelegate()
 {
 }
 
+// It's an override which confuses cppcheck.
 // cppcheck-suppress unusedFunction
 QWidget* ShortcutDelegate::createEditor(QWidget *parent,
                                         const QStyleOptionViewItem&,

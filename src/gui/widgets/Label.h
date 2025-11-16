@@ -35,12 +35,14 @@ class Label : public QLabel
 {
     Q_OBJECT
 public:
-    explicit Label(const QString &text, QWidget *parent=nullptr, Qt::WindowFlags f=Qt::WindowFlags()) :
+    explicit Label(const QString &text,
+                   QWidget *parent = nullptr,
+                   Qt::WindowFlags f = Qt::WindowFlags()) :
         QLabel(text, parent, f)  { }
 
     // ??? Non-standard.  Used by Ui_RosegardenTransport.
-    Label(QWidget *parent = nullptr, const char *name=nullptr):
-        QLabel(name, parent) {;}
+    explicit Label(QWidget *parent = nullptr, const char *name = nullptr):
+        QLabel(name, parent)  { }
 
 signals:
     void clicked();

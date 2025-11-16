@@ -675,7 +675,7 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 // This method sounds much more dramatic than it actually is -
 // it could probably do with a rename.
 void
-Studio::unassignAllInstruments()
+Studio::unassignAllInstruments() const
 {
     // For each Device in the Studio...
     for (const Device *device : m_devices) {

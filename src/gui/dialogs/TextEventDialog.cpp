@@ -151,10 +151,17 @@ TextEventDialog::TextEventDialog(QWidget *parent,
         } else {
             // not tr()-able
 
+            // ??? This will never run.  See Text::getUserStyles().
+            //     All cases are covered above.
+            RG_WARNING << "ctor: Unexpected style" << style << ".  Not adding to combo.";
+
+#if 0
+            // Capitalize the first char.
             std::string styleName;
             styleName += (char)toupper(style[0]);
             styleName += style.substr(1);
 
+            // Replace a single underscore with a space.
             int uindex = styleName.find('_');
             if (uindex > 0) {
                 styleName =
@@ -163,6 +170,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
             }
 
             m_typeCombo->addItem(strtoqstr(styleName));
+#endif
         }
 
         if (style == defaultText.getTextType()) {
