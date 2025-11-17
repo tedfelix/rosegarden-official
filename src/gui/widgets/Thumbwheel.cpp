@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[Thumbwheel]"
+#define RG_NO_DEBUG_PRINT
 
 #include "Thumbwheel.h"
 
@@ -143,8 +144,7 @@ Thumbwheel::getDefaultValue() const
 void
 Thumbwheel::setValue(int value)
 {
-//    std::cerr << "Thumbwheel::setValue(" << value << ") (from " << m_value
-//              << ", rotation " << m_rotation << ")" << " (visible " << isVisible() << ")" << std::endl;
+    //RG_DEBUG << "setValue(" << value << ") (from" << m_value << ", rotation" << m_rotation << ") (visible" << isVisible() << ")";
 
     if (m_value != value) {
 
@@ -412,7 +412,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     float radians = m_rotation * 1.5f * M_PI;
 
-//    std::cerr << "value = " << m_value << ", min = " << m_min << ", max = " << m_max << ", rotation = " << rotation << std::endl;
+    //RG_DEBUG << "value =" << m_value << ", min =" << m_min << ", max =" << m_max << ", rotation =" << rotation;
 
     w = (m_orientation == Qt::Horizontal ? width() : height()) - bw*2;
 

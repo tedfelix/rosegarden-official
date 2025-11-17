@@ -15,9 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[BaseTextFloat]"
+#define RG_NO_DEBUG_PRINT
 
 #include "BaseTextFloat.h"
+
 #include "gui/general/GUIPalette.h"
+#include "misc/Debug.h"
 
 #include <QPaintEvent>
 #include <QApplication>
@@ -68,8 +72,7 @@ BaseTextFloat::reparent(QWidget *newParent)
 
     // But a (no null) parent had to be specified
     if (!newParent) {
-        std::cerr << "ERROR : "
-                     "BaseTextFloat::reparent(0) called while m_widget = 0\n";
+        RG_WARNING << "reparent(0): ERROR: called while m_widget = 0";
         m_totalPos = QPoint(0, 0);
         return;
     }

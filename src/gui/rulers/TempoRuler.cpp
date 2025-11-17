@@ -331,7 +331,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
                 return ;
         }
 
-        //    std::cerr << " -> " << newTime << std::endl;
+        //RG_DEBUG << " ->" << newTime;
 
         m_composition->removeTempoChange(tcn);
         m_composition->addTempoAtTime(newTime,
@@ -470,7 +470,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
-      //  std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
+    //RG_DEBUG << "cp =" << cp.x() << "," << cp.y() << ", tempo =" << qpm;
 
     QPoint offset = cp + QPoint(10, 25 - cp.y() - textFloat->height());
     textFloat->display(offset);

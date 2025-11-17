@@ -15,7 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[TempDirectory]"
+#define RG_NO_DEBUG_PRINT
+
 #include "TempDirectory.h"
+
+#include "misc/ConfigGroups.h"
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 
 #include <QDir>
@@ -26,19 +32,17 @@
 #include <iostream>
 
 #include <signal.h>
-
 #include <unistd.h>
 
-#include "misc/ConfigGroups.h"
 
 namespace Rosegarden
 {
 
+
 DirectoryCreationFailed::DirectoryCreationFailed(QString directory) throw() :
     m_directory(directory)
 {
-    std::cerr << "ERROR: Directory creation failed for directory: "
-              << qstrtostr( directory ) << std::endl;
+    RG_WARNING << "ERROR: Directory creation failed for directory: " << directory;
 }
 
 const char *
@@ -66,7 +70,7 @@ TempDirectory::TempDirectory() :
 
 TempDirectory::~TempDirectory()
 {
-    std::cerr << "TempDirectory::~TempDirectory" << std::endl;
+    RG_DEBUG << "dtor";
 
     cleanup();
 }
@@ -222,10 +226,7 @@ TempDirectory::cleanupDirectory(QString tmpdir)
             cleanupDirectory(fi.absoluteFilePath());
         } else {
             if (!QFile(fi.absoluteFilePath()).remove()) {
-                std::cerr << "WARNING: TempDirectory::cleanup: "
-                          << "Failed to unlink file \""
-                          << qstrtostr(fi.absoluteFilePath()) << "\""
-                          << std::endl;
+                RG_WARNING << "cleanupDirectory(): WARNING: Failed to unlink file" << fi.absoluteFilePath();
             }
         }
     }
@@ -233,15 +234,11 @@ TempDirectory::cleanupDirectory(QString tmpdir)
     QString dirname = dir.dirName();
     if (dirname != "") {
         if (!dir.cdUp()) {
-            std::cerr << "WARNING: TempDirectory::cleanup: "
-                      << "Failed to cd to parent directory of "
-					<< qstrtostr(tmpdir) << std::endl;
+            RG_WARNING << "cleanupDirectory(): WARNING: Failed to cd to parent directory of" << tmpdir;
             return;
         }
         if (!dir.rmdir(dirname)) {
-            std::cerr << "WARNING: TempDirectory::cleanup: "
-                      << "Failed to remove directory "
-					<< qstrtostr(dirname) << std::endl;
+            RG_WARNING << "cleanupDirectory(): WARNING: Failed to remove directory" << dirname;
         } 
     }
 
@@ -267,13 +264,9 @@ TempDirectory::cleanupAbandonedDirectories(QString rgDir)
             if (!ok) continue;
 
             if (kill(getpid(), 0) == 0 && kill(pid, 0) != 0) {
-                std::cerr << "INFO: Found abandoned temporary directory from "
-                          << "a previous, defunct process\n(pid=" << pid
-                          << ", directory=\""
-						<< qstrtostr( dir.filePath(dir[i]) )
-                          << "\").  Removing it..." << std::endl;
+                RG_DEBUG << "cleanupAbandonedDirectories(): INFO: Found abandoned temporary directory from a previous, defunct process\n(pid=" << pid << ", directory=" << dir.filePath(dir[i]) << ").  Removing it...";
                 cleanupDirectory(dir.filePath(dir[i]));
-                std::cerr << "...done." << std::endl;
+                RG_DEBUG << "...done.";
                 break;
             }
         }
