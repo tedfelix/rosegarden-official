@@ -185,7 +185,7 @@ int LV2Utils::getPortIndexFromSymbol(const QString& portSymbol,
     const LilvPort* port = lilv_plugin_get_port_by_symbol(plugin,
                                                           symNode);
 
-    lilv_free(symNode);
+    lilv_node_free(symNode);
     int index =  lilv_port_get_index(plugin, port);
     return index;
 }
@@ -436,6 +436,7 @@ void LV2Utils::setupPluginPresets
             pp.label = presetLabel;
             presets.push_back(pp);
         }
+    lilv_nodes_free(presetNodes);
     lilv_node_free(presetUri);
     lilv_node_free(labelUri);
     RG_DEBUG << "setupPluginPresets found" << presets.size();
