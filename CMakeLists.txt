@@ -171,7 +171,7 @@ endif()
 
 find_package(ZLIB REQUIRED)
 
-find_package(X11 REQUIRED) # for XSetErrorHandler & XGetErrorText
+#find_package(X11 REQUIRED) # for XSetErrorHandler & XGetErrorText
 
 pkg_check_modules(LIBLO REQUIRED liblo>=0.7)
 
