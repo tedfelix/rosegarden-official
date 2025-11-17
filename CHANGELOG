@@ -60,8 +60,13 @@ Included in this release...
   * Fix problems when moving segments beyond composition end.
     Bug #1744.  [b3cd66b800]
   * Remove unnecessary logging.  Bug #1745.  [1cf772bf68]
+  * Fix lv2 plugins not showing as lv2 plugins.  Feature Request #540.
+    [83c427819c]
+  * MatrixTool: Fix missing forward-decl for QKeyEvent.  Bug #1746.
+    [70307ab1ee]
+  * cmake: Remove X11 requirement.  Bug #1747.  [12a6aa65c9]
 
-stopped at f649fd5359
+stopped at 0c95ae3428
 
 ===== New Features =====
 
