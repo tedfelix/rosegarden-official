@@ -18,6 +18,7 @@
  */
 
 #define RG_MODULE_STRING "[AkaiMPKmini4]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AkaiMPKmini4.h"
 

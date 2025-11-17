@@ -14,6 +14,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioReadStreamFactory]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioReadStreamFactory.h"
 #include "AudioReadStream.h"
@@ -54,9 +56,7 @@ AudioReadStreamFactory::createReadStream(QString audioFileName)
     if (s && s->isOK() && s->getError() == "") {
         return s;
     } else if (s) {
-        std::cerr << "Error with recommended reader: \""
-                  << s->getError().toStdString() << "\""
-                  << std::endl;
+        RG_WARNING << "Error with recommended reader:" << s->getError();
     }
 
     delete s;

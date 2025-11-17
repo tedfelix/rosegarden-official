@@ -14,10 +14,14 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioReadStream]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioReadStream.h"
+
 #include "misc/Debug.h"
 #include "sound/Resampler.h"
+
 #include <cmath>
 
 namespace Rosegarden
@@ -26,7 +30,7 @@ namespace Rosegarden
 AudioReadStream::FileDRMProtected::FileDRMProtected(QString file) throw() :
     m_file(file)
 {
-    std::cerr << "ERROR: File is DRM protected: " << file.toStdString() << std::endl;
+    RG_WARNING << "ERROR: File is DRM protected: " << file.toStdString();
 }
 
 const char *

@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[WarningWidget]"
+#define RG_NO_DEBUG_PRINT
 
 #include "WarningWidget.h"
 
@@ -163,7 +164,7 @@ void
 WarningWidget::displayMessageQueue()
 {
     while (!m_queue.isEmpty()) {
-        std::cerr << " - emptying queue..." << std::endl;
+        RG_DEBUG << " - emptying queue...";
         m_warningDialog->addWarning(m_queue.dequeue());
     }
     m_warningDialog->show();

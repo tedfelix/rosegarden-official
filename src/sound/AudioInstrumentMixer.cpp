@@ -150,7 +150,7 @@ AudioInstrumentMixer::~AudioInstrumentMixer()
 
     aimInstance = nullptr;
 
-    //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer" << std::endl;
+    //RG_DEBUG << "dtor";
     // BufferRec dtor will handle the BufferMap
 
     removeAllPlugins();
@@ -163,7 +163,7 @@ AudioInstrumentMixer::~AudioInstrumentMixer()
         }
     }
 
-    //std::cerr << "AudioInstrumentMixer::~AudioInstrumentMixer exiting" << std::endl;
+    //RG_DEBUG << "dtor exiting";
 }
 
 AudioInstrumentMixer::BufferRec::~BufferRec()
@@ -181,7 +181,7 @@ AudioInstrumentMixer::setPlugin(
 {
     // Not RT safe
 
-    //std::cerr << "AudioInstrumentMixer::setPlugin(" << id << ", " << position << ", " << identifier << ")" << std::endl;
+    //RG_DEBUG << "setPlugin(" << id << "," << position << "," << identifier << ")";
 
     int channels = 2;
     if (m_bufferMap.find(instrumentId) != m_bufferMap.end()) {
@@ -200,14 +200,12 @@ AudioInstrumentMixer::setPlugin(
                                               channels,
                                               this);
         if (instance && !instance->isOK()) {
-            std::cerr << "AudioInstrumentMixer::setPlugin(" << instrumentId << ", " << pluginPosition
-                      << ": instance is not OK" << std::endl;
+            RG_WARNING << "setPlugin(" << instrumentId << ", " << pluginPosition << ": instance is not OK";
             delete instance;
             instance = nullptr;
         }
     } else {
-        std::cerr << "AudioInstrumentMixer::setPlugin: No factory for identifier "
-                  << identifier << std::endl;
+        RG_WARNING << "setPlugin(): No factory for identifier" << identifier;
     }
 
     RunnablePluginInstance *oldInstance = nullptr;
@@ -229,7 +227,7 @@ AudioInstrumentMixer::setPlugin(
                 // code added the necessary entries.  Problem with that
                 // is that it modifies a vector that is supposed to be
                 // fixed size so it is thread safe.
-                std::cerr << "AudioInstrumentMixer::setPlugin(): pluginPosition" << pluginPosition << "beyond plugin vector size" << pluginVector.size() << "for instrument ID" << instrumentId << '\n';
+                RG_WARNING << "setPlugin(): pluginPosition" << pluginPosition << "beyond plugin vector size" << pluginVector.size() << "for instrument ID" << instrumentId;
 
                 delete instance;
             } else {
@@ -238,7 +236,7 @@ AudioInstrumentMixer::setPlugin(
                 pluginVector[pluginPosition] = instance;
             }
         } else {
-            std::cerr << "AudioInstrumentMixer::setPlugin(): No pluginPosition " << pluginPosition << " for instrument " << instrumentId << '\n';
+            RG_WARNING << "setPlugin(): No pluginPosition" << pluginPosition << "for instrument" << instrumentId;
 
             delete instance;
         }
@@ -254,7 +252,7 @@ AudioInstrumentMixer::removePlugin(InstrumentId id, int position)
 {
     // Not RT safe
 
-    //std::cerr << "AudioInstrumentMixer::removePlugin(" << id << ", " << position << ")" << std::endl;
+    //RG_DEBUG << "removePlugin(" << id << ", " << position << ")";
 
     RunnablePluginInstance *oldInstance = nullptr;
 
@@ -285,7 +283,7 @@ AudioInstrumentMixer::removeAllPlugins()
 {
     // Not RT safe
 
-    //std::cerr << "AudioInstrumentMixer::removeAllPlugins" << std::endl;
+    //RG_DEBUG << "removeAllPlugins()";
 
     for (SynthPluginMap::iterator i = m_synths.begin();
             i != m_synths.end(); ++i) {
@@ -529,8 +527,9 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
     // activate/deactivate at the same time as run()
 
 #ifdef DEBUG_MIXER
-    std::cerr << "AudioInstrumentMixer::resetAllPlugins!" << std::endl;
-    if (discardEvents) std::cerr << "(discardEvents true)" << std::endl;
+    RG_DEBUG << "resetAllPlugins()!";
+    if (discardEvents)
+        RG_DEBUG << "(discardEvents true)";
 #endif
 
     getLock();
@@ -551,7 +550,7 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 
         if (instance) {
 #ifdef DEBUG_MIXER
-            std::cerr << "AudioInstrumentMixer::resetAllPlugins: (re)setting " << channels << " channels on synth for instrument " << id << std::endl;
+            RG_DEBUG << "resetAllPlugins(): (re)setting" << channels << "channels on synth for instrument" << id;
 #endif
 
             if (discardEvents)
@@ -577,7 +576,7 @@ AudioInstrumentMixer::resetAllPlugins(bool discardEvents)
 
             if (instance) {
 #ifdef DEBUG_MIXER
-                std::cerr << "AudioInstrumentMixer::resetAllPlugins: (re)setting " << channels << " channels on plugin for instrument " << id << std::endl;
+                RG_DEBUG << "resetAllPlugins(): (re)setting" << channels << "channels on plugin for instrument" << id;
 #endif
 
                 if (discardEvents)
@@ -604,7 +603,7 @@ AudioInstrumentMixer::destroyAllPlugins()
     // Delete immediately, as we're probably exiting here -- don't use
     // the scavenger.
 
-    //std::cerr << "AudioInstrumentMixer::destroyAllPlugins" << std::endl;
+    //RG_DEBUG << "destroyAllPlugins()";
 
     for (SynthPluginMap::iterator j = m_synths.begin();
             j != m_synths.end(); ++j) {
@@ -680,7 +679,7 @@ AudioInstrumentMixer::generateBuffers()
         bufferSamples = ((bufferSamples / m_blockSize) + 1) * m_blockSize;
 #ifdef DEBUG_MIXER
 
-        std::cerr << "AudioInstrumentMixer::generateBuffers: Buffer length is " << bufferLength << "; buffer samples " << bufferSamples << " (sample rate " << m_sampleRate << ")" << std::endl;
+        RG_DEBUG << "generateBuffers(): Buffer length is" << bufferLength << "; buffer samples" << bufferSamples << " (sample rate" << m_sampleRate << ")";
 #endif
 
     }
@@ -699,7 +698,7 @@ AudioInstrumentMixer::generateBuffers()
 
         if (!fader) {
 #ifdef DEBUG_MIXER
-            std::cerr << "AudioInstrumentMixer::generateBuffers: no fader for audio instrument " << id << std::endl;
+            RG_DEBUG << "generateBuffers(): no fader for audio instrument" << id;
 #endif
 
             continue;
@@ -751,7 +750,7 @@ AudioInstrumentMixer::generateBuffers()
                 new RingBuffer<sample_t, 2>(bufferSamples1);
 
             if (!rb->mlock()) {
-                //		std::cerr << "WARNING: AudioInstrumentMixer::generateBuffers: couldn't lock ring buffer into real memory, performance may be impaired" << std::endl;
+                //RG_WARNING << "generateBuffers(): WARNING: couldn't lock ring buffer into real memory, performance may be impaired";
             }
             rec.buffers.push_back(rb);
         }
@@ -789,8 +788,7 @@ AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
     getLock();
 
 #ifdef DEBUG_MIXER
-
-    std::cerr << "AudioInstrumentMixer::fillBuffers(" << currentTime << ")" << std::endl;
+    RG_DEBUG << "fillBuffers(" << currentTime << ")";
 #endif
 
     bool discard;
@@ -807,8 +805,7 @@ AudioInstrumentMixer::allocateBuffers()
     getLock();
 
 #ifdef DEBUG_MIXER
-
-    std::cerr << "AudioInstrumentMixer::allocateBuffers()" << std::endl;
+    RG_DEBUG << "allocateBuffers()";
 #endif
 
     generateBuffers();
@@ -824,8 +821,7 @@ AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
     getLock();
 
 #ifdef DEBUG_MIXER
-
-    std::cerr << "AudioInstrumentMixer::emptyBuffers(" << currentTime << ")" << std::endl;
+    RG_DEBUG << "emptyBuffers(" << currentTime << ")";
 #endif
 
     generateBuffers();
@@ -937,7 +933,7 @@ AudioInstrumentMixer::processBlocks(bool &readSomething)
 
 #ifdef DEBUG_MIXER
     if (m_driver->isPlaying())
-        std::cerr << "AudioInstrumentMixer::processBlocks" << std::endl;
+        RG_DEBUG << "processBlocks()";
 #endif
 
     const AudioPlayQueue *queue = m_driver->getAudioQueue();
@@ -1059,7 +1055,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #ifdef DEBUG_MIXER
     //    if (m_driver->isPlaying()) {
     if ((id % 100) == 0)
-        std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): buffer time is " << bufferTime << std::endl;
+        RG_DEBUG << "processBlock(" << id << "): buffer time is" << bufferTime;
     //    }
 #endif
 
@@ -1071,7 +1067,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     if (channels == 0) {
 #ifdef DEBUG_MIXER
         if ((id % 100) == 0)
-            std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): nominal channels " << rec.channels << ", ring buffers " << rec.buffers.size() << ", process buffers " << pBuf.size() << std::endl;
+            RG_DEBUG << "processBlock(" << id << "): nominal channels" << rec.channels << ", ring buffers" << rec.buffers.size() << ", process buffers" << pBuf.size();
 #endif
 
         return false; // buffers just haven't been set up yet
@@ -1090,7 +1086,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #ifdef DEBUG_MIXER
                 //		if (m_driver->isPlaying()) {
                 if ((id % 100) == 0)
-                    std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): only " << minWriteSpace << " write space on channel " << ch << " for block size " << m_blockSize << std::endl;
+                    RG_DEBUG << "processBlock(" << id << "): only" << minWriteSpace << "write space on channel" << ch << "for block size" << m_blockSize;
                 //		}
 #endif
 
@@ -1102,21 +1098,18 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     PluginList &plugins = m_plugins[id];
 
 #ifdef DEBUG_MIXER
-
     if ((id % 100) == 0 && m_driver->isPlaying())
-        std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): minWriteSpace is " << minWriteSpace << std::endl;
+        RG_DEBUG << "processBlock(" << id << "): minWriteSpace is" << minWriteSpace;
 #else
 #ifdef DEBUG_MIXER_LIGHTWEIGHT
-
     if ((id % 100) == 0 && m_driver->isPlaying())
-        std::cout << minWriteSpace << "/" << rec.buffers[0]->getSize() << std::endl;
+        RG_DEBUG << minWriteSpace << "/" << rec.buffers[0]->getSize();
 #endif
 #endif
 
 #ifdef DEBUG_MIXER
-
     if ((id % 100) == 0 && playCount > 0)
-        std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): " << playCount << " audio file(s) to consider" << std::endl;
+        RG_DEBUG << "processBlock(" << id << "):" << playCount << "audio file(s) to consider";
 #endif
 
     bool haveBlock = true;
@@ -1135,7 +1128,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
 #ifdef DEBUG_MIXER
             if ((id % 100) == 0)
-                std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): will be asking for more" << std::endl;
+                RG_DEBUG << "processBlock(" << id << "): will be asking for more";
 #endif
 
             haveMore = true;
@@ -1143,12 +1136,12 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
 #ifdef DEBUG_MIXER
         if ((id % 100) == 0)
-            std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): file has " << frames << " frames available" << std::endl;
+            RG_DEBUG << "processBlock(" << id << "): file has" << frames << "frames available";
 #endif
 
         if (!acceptable) {
 
-            //std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): file " << file->getAudioFile()->getFilename() << " has " << frames << " frames available, says isBuffered " << file->isBuffered() << std::endl;
+            //RG_DEBUG << "processBlock(" << id << "): file" << file->getAudioFile()->getFilename() << "has" << frames << "frames available, says isBuffered" << file->isBuffered();
 
             if (!m_driver->getLowLatencyMode()) {
 
@@ -1181,7 +1174,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #ifdef DEBUG_MIXER
     if (!haveMore) {
         if ((id % 100) == 0)
-            std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): won't be asking for more" << std::endl;
+            RG_DEBUG << "processBlock(" << id << "): won't be asking for more";
     }
 #endif
 
@@ -1226,8 +1219,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
                 else
                     blockSize = 0;
 #ifdef DEBUG_MIXER
-
-                std::cerr << "AudioInstrumentMixer::processBlock: file starts at offset " << offset << ", block size now " << blockSize << std::endl;
+                RG_DEBUG << "processBlock(): file starts at offset" << offset << ", block size now" << blockSize;
 #endif
 
             }
@@ -1283,8 +1275,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
         }
 
 #ifdef DEBUG_MIXER
-        std::cerr << "Running plugin with " << plugin->getAudioInputCount()
-        << " inputs, " << plugin->getAudioOutputCount() << " outputs" << std::endl;
+        RG_DEBUG << "Running plugin with" << plugin->getAudioInputCount() << "inputs," << plugin->getAudioOutputCount() << "outputs";
 #endif
 
         plugin->run(bufferTime);
@@ -1371,7 +1362,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 
 #ifdef DEBUG_MIXER
     if ((id % 100) == 0 && m_driver->isPlaying())
-        std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): setting dormant to " << dormant << std::endl;
+        RG_DEBUG << "processBlock(" << id << "): setting dormant to" << dormant;
 #endif
 
     rec.dormant = dormant;
@@ -1383,7 +1374,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
 #ifdef DEBUG_MIXER
 
     if ((id % 100) == 0)
-        std::cerr << "AudioInstrumentMixer::processBlock(" << id << "): done, returning " << haveMore << std::endl;
+        RG_DEBUG << "processBlock(" << id << "): done, returning" << haveMore;
 #endif
 
     return haveMore;
