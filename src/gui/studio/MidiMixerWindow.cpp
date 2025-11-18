@@ -213,9 +213,9 @@ MidiMixerWindow::setupTabs()
             const InstrumentId instrumentId = instrument->getId();
 
             // Add a new MidiStrip.
-            m_midiStrips.push_back(std::make_shared<MidiStrip>());
+            m_midiStrips.push_back(
+                    std::make_shared<MidiStrip>(tabFrame, instrumentId));
             std::shared_ptr<MidiStrip> midiStrip = m_midiStrips.back();
-            midiStrip->m_id = instrumentId;
             m_instrumentIDToStripIndex[instrumentId] = m_midiStrips.size() - 1;
 
             int row = 0;

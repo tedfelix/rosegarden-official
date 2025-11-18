@@ -19,10 +19,12 @@
 
 #include "AudioStrip.h"
 
-#include "base/AudioLevel.h"
 #include "AudioPlugin.h"
-#include "base/AudioPluginInstance.h"
 #include "AudioPluginManager.h"
+#include "StudioControl.h"
+
+#include "base/AudioLevel.h"
+#include "base/AudioPluginInstance.h"
 #include "gui/widgets/AudioRouteMenu.h"
 #include "gui/widgets/AudioVUMeter.h"
 #include "misc/Debug.h"
@@ -40,7 +42,6 @@
 #include "gui/seqmanager/SequenceManager.h"
 #include "sound/SequencerDataBlock.h"
 #include "base/Studio.h"
-#include "StudioControl.h"
 
 #include <QFont>
 #include <QGridLayout>
@@ -48,24 +49,16 @@
 
 #include "limits.h"
 
+
 namespace Rosegarden
 {
 
-const unsigned InvalidChannel = UINT_MAX;
+
+constexpr unsigned InvalidChannel = UINT_MAX;
 
 AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QWidget(parent),
-    m_id(NoInstrument),
     m_externalControllerChannel(InvalidChannel),
-    m_label(nullptr),
-    m_input(nullptr),
-    m_output(nullptr),
-    m_fader(nullptr),
-    m_meter(nullptr),
-    m_pan(nullptr),
-    m_stereoButton(nullptr),
-    m_stereo(false),
-    m_plugins(),
     m_layout(new QGridLayout(this))
 {
     QFont font;
@@ -92,11 +85,6 @@ AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
             this, &AudioStrip::slotUpdateMeter);
     // 20fps should be responsive enough.
     m_timer.start(50);
-}
-
-AudioStrip::~AudioStrip()
-{
-
 }
 
 void AudioStrip::setId(InstrumentId id)

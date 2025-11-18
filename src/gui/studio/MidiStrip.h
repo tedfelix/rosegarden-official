@@ -38,6 +38,8 @@ class Rotary;
 class MidiStrip
 {
 public:
+    MidiStrip(QWidget *parent, InstrumentId instrumentID);
+
     InstrumentId m_id{0};
 
     // Widgets
