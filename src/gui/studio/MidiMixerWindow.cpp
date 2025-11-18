@@ -200,11 +200,9 @@ MidiMixerWindow::setupTabs()
         // Add the tab to the QTabWidget.
         m_tabWidget->addTab(tabFrame, name);
 
-        QGridLayout *gridLayout = new QGridLayout(tabFrame);
+        QHBoxLayout *layout = new QHBoxLayout(tabFrame);
 
         QLabel *label;
-
-        int col = 0;
 
         int stripNum = 1;
 
@@ -213,12 +211,10 @@ MidiMixerWindow::setupTabs()
             const InstrumentId instrumentId = instrument->getId();
 
             // Add a new MidiStrip.
-            m_midiStrips.push_back(
-                    std::make_shared<MidiStrip>(tabFrame, instrumentId));
-            std::shared_ptr<MidiStrip> midiStrip = m_midiStrips.back();
+            m_midiStrips.push_back(new MidiStrip(tabFrame, instrumentId));
+            MidiStrip *midiStrip = m_midiStrips.back();
+            layout->addWidget(midiStrip);
             m_instrumentIDToStripIndex[instrumentId] = m_midiStrips.size() - 1;
-
-            int row = 0;
 
             // For each controller...
             for (size_t controllerIndex = 0;
@@ -232,14 +228,11 @@ MidiMixerWindow::setupTabs()
                 //     can handle it better.
                 QString controllerName = QObject::tr(
                         controls[controllerIndex].getName().c_str());
-                label = new QLabel(controllerName.left(3), tabFrame);
+                label = new QLabel(controllerName.left(3), midiStrip);
                 QFont font = label->font();
                 font.setPointSize((font.pointSize() * 8) / 10);
                 label->setFont(font);
-                //label->setAlignment(Qt::AlignHCenter);
-                gridLayout->addWidget(label, row, col, Qt::AlignHCenter | Qt::AlignBottom);
-
-                ++row;
+                midiStrip->m_layout->addWidget(label, 0, Qt::AlignHCenter | Qt::AlignBottom);
 
                 // Controller rotary
                 const MidiByte controllerNumber =
@@ -248,7 +241,7 @@ MidiMixerWindow::setupTabs()
                         (controls[controllerIndex].getDefault() == 64);
 
                 Rotary *rotary = new Rotary(
-                        tabFrame,  // parent
+                        midiStrip,  // parent
                         controls[controllerIndex].getMin(),  // minimum
                         controls[controllerIndex].getMax(),  // maximum
                         1.0,  // step
@@ -281,24 +274,19 @@ MidiMixerWindow::setupTabs()
                 connect(rotary, &Rotary::valueChanged,
                         this, &MidiMixerWindow::slotControllerChanged);
 
-                gridLayout->addWidget(
-                        rotary, row, col, Qt::AlignCenter);
+                midiStrip->m_layout->addWidget(rotary, 0, Qt::AlignCenter);
 
                 midiStrip->m_controllerRotaries.push_back(rotary);
-
-                ++row;
             }
 
             // VU meter
             MidiMixerVUMeter *meter = new MidiMixerVUMeter(
-                    tabFrame,  // parent
+                    midiStrip,  // parent
                     VUMeter::FixedHeightVisiblePeakHold,  // type
                     6,  // width
                     30);  // height
-            gridLayout->addWidget(meter, row, col, Qt::AlignCenter);
+            midiStrip->m_layout->addWidget(meter, 0, Qt::AlignCenter);
             midiStrip->m_vuMeter = meter;
-
-            ++row;
 
             // Volume
             Fader *fader = new Fader(
@@ -307,7 +295,7 @@ MidiMixerWindow::setupTabs()
                     100,  // i_default
                     20,  // i_width
                     80,  // i_height
-                    tabFrame);  // parent
+                    midiStrip);  // parent
             fader->setProperty("instrumentId", instrumentId);
             MidiByte volumeValue{0};
             if (instrument->hasController(MIDI_CONTROLLER_VOLUME))
@@ -316,25 +304,15 @@ MidiMixerWindow::setupTabs()
             fader->setFader(float(volumeValue));
             connect(fader, &Fader::faderChanged,
                     this, &MidiMixerWindow::slotFaderLevelChanged);
-            gridLayout->addWidget(
-                    fader, row, col, Qt::AlignCenter);
+            midiStrip->m_layout->addWidget(fader, 0, Qt::AlignCenter);
             midiStrip->m_volumeFader = fader;
-
-            ++row;
 
             // Instrument number
             QLabel *instrumentNumberLabel = new QLabel(
                     QString("%1").arg(stripNum++),
-                    tabFrame);
-            gridLayout->addWidget(
-                    instrumentNumberLabel,  // widget
-                    row,  // row
-                    col,  // column
-                    Qt::AlignCenter);  // alignment
-
-            ++row;
-
-            ++col;
+                    midiStrip);
+            midiStrip->m_layout->addWidget(
+                    instrumentNumberLabel, 0, Qt::AlignCenter);
         }
     }
 }
@@ -459,7 +437,7 @@ void
 MidiMixerWindow::updateMeters()
 {
     // For each strip...
-    for (std::shared_ptr<MidiStrip> midiStrip : m_midiStrips) {
+    for (MidiStrip *midiStrip : m_midiStrips) {
         LevelInfo info;
         if (!SequencerDataBlock::getInstance()->getInstrumentLevelForMixer(
                 midiStrip->m_id, info)) {

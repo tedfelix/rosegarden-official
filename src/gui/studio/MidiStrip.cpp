@@ -15,46 +15,24 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_MIDISTRIP_H
-#define RG_MIDISTRIP_H
+#define RG_MODULE_STRING "[MidiStrip]"
 
-#include "base/Instrument.h"
+#include "MidiStrip.h"
 
-#include <QWidget>
-
-class QVBoxLayout;
-
-#include <vector>
+#include <QVBoxLayout>
 
 
 namespace Rosegarden
 {
 
 
-class Fader;
-class MidiMixerVUMeter;
-class Rotary;
-
-
-/// A strip of controls on the MIDI Mixer window.
-// ??? Need to move functionality from MidiMixerWindow into here.
-//     See AudioStrip.
-class MidiStrip : public QWidget
+MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
+    QWidget(parent),
+    m_id(instrumentID),
+    m_layout(new QVBoxLayout(this))
 {
-public:
-    MidiStrip(QWidget *parent, InstrumentId instrumentID);
-
-    InstrumentId m_id{0};
-
-    // Widgets
-    MidiMixerVUMeter *m_vuMeter{nullptr};
-    Fader *m_volumeFader{nullptr};
-    std::vector<Rotary *> m_controllerRotaries;
-
-    QVBoxLayout *m_layout;
-};
+    m_layout->setContentsMargins(1,1,1,1);
+}
 
 
 }
-
-#endif

@@ -121,7 +121,7 @@ private:
      */
     void sendControllerRefresh();
 
-    typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
+    typedef std::vector<MidiStrip *> MidiStripVector;
     MidiStripVector m_midiStrips;
 
     typedef std::map<InstrumentId, int /*stripIndex*/> InstrumentIDToStripIndex;
