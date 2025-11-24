@@ -40,7 +40,7 @@ namespace Rosegarden
 {
 
 
-MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
+MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID, int stripNumber) :
     QWidget(parent),
     m_id(instrumentID),
     m_layout(new QVBoxLayout(this))
@@ -51,6 +51,8 @@ MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
                 &InstrumentStaticSignals::controlChange,
             this, &MidiStrip::slotControlChange);
 
+    createWidgets(stripNumber);
+
     // Meter timer.
     connect(&m_timer, &QTimer::timeout,
             this, &MidiStrip::slotUpdateMeter);
@@ -59,7 +61,7 @@ MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
 
 }
 
-void MidiStrip::createWidgets(int stripNum)
+void MidiStrip::createWidgets(int stripNumber)
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
@@ -169,7 +171,7 @@ void MidiStrip::createWidgets(int stripNum)
 
     // Instrument number
     QLabel *instrumentNumberLabel = new QLabel(
-            QString("%1").arg(stripNum),
+            QString("%1").arg(stripNumber),
             this);
     m_layout->addWidget(
             instrumentNumberLabel, 0, Qt::AlignCenter);

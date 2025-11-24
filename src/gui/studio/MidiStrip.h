@@ -44,9 +44,7 @@ class MidiStrip : public QWidget
 
 public:
 
-    MidiStrip(QWidget *parent, InstrumentId instrumentID);
-
-    void createWidgets(int stripNum);
+    MidiStrip(QWidget *parent, InstrumentId instrumentID, int stripNumber);
 
 private slots:
 
@@ -71,6 +69,8 @@ private:
     std::vector<Rotary *> m_controllerRotaries;
 
     QVBoxLayout *m_layout;
+
+    void createWidgets(int stripNumber);
 
     /// Meter update timer.
     QTimer m_timer;

@@ -200,12 +200,9 @@ MidiMixerWindow::setupTabs()
             const InstrumentId instrumentId = instrument->getId();
 
             // Add a new MidiStrip.
-            m_midiStrips.push_back(new MidiStrip(tabFrame, instrumentId));
+            m_midiStrips.push_back(new MidiStrip(tabFrame, instrumentId, stripNum++));
             MidiStrip *midiStrip = m_midiStrips.back();
             layout->addWidget(midiStrip);
-
-            midiStrip->createWidgets(stripNum++);
-
         }
     }
 }
