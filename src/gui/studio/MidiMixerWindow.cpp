@@ -40,7 +40,6 @@
 #include "gui/dialogs/AboutDialog.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "sound/MappedEvent.h"
-#include "sound/SequencerDataBlock.h"
 #include "sound/ExternalController.h"
 
 #include <QColor>
@@ -144,12 +143,6 @@ MidiMixerWindow::MidiMixerWindow() :
             RosegardenMainWindow::self(),
                     &RosegardenMainWindow::slotMidiMixerClosed);
 
-    // Meter timer.
-    connect(&m_timer, &QTimer::timeout,
-            this, &MidiMixerWindow::updateMeters);
-    // 20fps should be responsive enough.
-    m_timer.start(50);
-
     show();
 
     // Lock the window size.
@@ -210,27 +203,10 @@ MidiMixerWindow::setupTabs()
             m_midiStrips.push_back(new MidiStrip(tabFrame, instrumentId));
             MidiStrip *midiStrip = m_midiStrips.back();
             layout->addWidget(midiStrip);
-            m_instrumentIDToStripIndex[instrumentId] = m_midiStrips.size() - 1;
 
             midiStrip->createWidgets(stripNum++);
 
         }
-    }
-}
-
-void
-MidiMixerWindow::updateMeters()
-{
-    // For each strip...
-    for (MidiStrip *midiStrip : m_midiStrips) {
-        LevelInfo info;
-        if (!SequencerDataBlock::getInstance()->getInstrumentLevelForMixer(
-                midiStrip->m_id, info)) {
-            continue;
-        }
-
-        if (midiStrip->m_vuMeter)
-            midiStrip->m_vuMeter->setLevel(double(info.level / 127.0));
     }
 }
 

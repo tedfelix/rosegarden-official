@@ -27,8 +27,6 @@
 #include <utility>
 #include <vector>
 
-#include <QTimer>
-
 class QWidget;
 class QTabWidget;
 class QString;
@@ -88,11 +86,6 @@ private slots:
     /// File > Close
     void slotClose()  { close(); }
 
-    /**
-     * ??? Move this to MidiStrip.
-     */
-    void updateMeters();
-
 private:
 
     QTabWidget *m_tabWidget;
@@ -114,14 +107,6 @@ private:
 
     typedef std::vector<MidiStrip *> MidiStripVector;
     MidiStripVector m_midiStrips;
-
-    typedef std::map<InstrumentId, int /*stripIndex*/> InstrumentIDToStripIndex;
-    InstrumentIDToStripIndex m_instrumentIDToStripIndex;
-
-    /**
-     * ??? Move this to MidiStrip.
-     */
-    QTimer m_timer;
 
 };
 

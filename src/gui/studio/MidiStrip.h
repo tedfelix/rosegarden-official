@@ -18,9 +18,9 @@
 #ifndef RG_MIDISTRIP_H
 #define RG_MIDISTRIP_H
 
-#include "base/Controllable.h"
-#include "base/Instrument.h"
+#include "base/Instrument.h"  // InstrumentId
 
+#include <QTimer>
 #include <QWidget>
 
 class QVBoxLayout;
@@ -33,14 +33,11 @@ namespace Rosegarden
 
 
 class Fader;
-class MidiDevice;
 class MidiMixerVUMeter;
 class Rotary;
 
 
 /// A strip of controls on the MIDI Mixer window.
-// ??? Need to move functionality from MidiMixerWindow into here.
-//     See AudioStrip.
 class MidiStrip : public QWidget
 {
     Q_OBJECT
@@ -50,15 +47,6 @@ public:
     MidiStrip(QWidget *parent, InstrumentId instrumentID);
 
     void createWidgets(int stripNum);
-
-    InstrumentId m_id{0};
-
-    // Widgets
-    MidiMixerVUMeter *m_vuMeter{nullptr};
-    Fader *m_volumeFader{nullptr};
-    std::vector<Rotary *> m_controllerRotaries;
-
-    QVBoxLayout *m_layout;
 
 private slots:
 
@@ -71,7 +59,21 @@ private slots:
      */
     void slotControlChange(Instrument *instrument, const int controllerNumber);
 
+    void slotUpdateMeter();
+
 private:
+
+    InstrumentId m_id{0};
+
+    // Widgets
+    MidiMixerVUMeter *m_vuMeter{nullptr};
+    Fader *m_volumeFader{nullptr};
+    std::vector<Rotary *> m_controllerRotaries;
+
+    QVBoxLayout *m_layout;
+
+    /// Meter update timer.
+    QTimer m_timer;
 
 };
 

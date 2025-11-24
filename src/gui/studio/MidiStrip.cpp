@@ -19,15 +19,18 @@
 
 #include "MidiStrip.h"
 
-#include "MidiMixerWindow.h"
+//#include "MidiMixerWindow.h"
 #include "MidiMixerVUMeter.h"
 
+#include "base/Controllable.h"  // ControlList
 #include "base/MidiDevice.h"
+#include "base/Studio.h"
 #include "document/RosegardenDocument.h"
 #include "gui/widgets/Fader.h"
 #include "gui/widgets/Rotary.h"
 #include "sound/ExternalController.h"
 #include "sound/Midi.h"  // MIDI_CONTROLLER_VOLUME
+#include "sound/SequencerDataBlock.h"
 
 #include <QLabel>
 #include <QVBoxLayout>
@@ -47,6 +50,13 @@ MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
     connect(Instrument::getStaticSignals().data(),
                 &InstrumentStaticSignals::controlChange,
             this, &MidiStrip::slotControlChange);
+
+    // Meter timer.
+    connect(&m_timer, &QTimer::timeout,
+            this, &MidiStrip::slotUpdateMeter);
+    // 20fps should be responsive enough.
+    m_timer.start(50);
+
 }
 
 void MidiStrip::createWidgets(int stripNum)
@@ -274,6 +284,18 @@ MidiStrip::slotControlChange(
         }
 
     }
+}
+
+void MidiStrip::slotUpdateMeter()
+{
+    LevelInfo info;
+    if (!SequencerDataBlock::getInstance()->getInstrumentLevelForMixer(
+            m_id, info)) {
+        return;
+    }
+
+    if (m_vuMeter)
+        m_vuMeter->setLevel(double(info.level / 127.0));
 }
 
 
