@@ -163,8 +163,7 @@ public:
     //
     const ControlList &getControlParameters() const override { return m_controlList; }
 
-    // Only those on the IPB list
-    //
+    /// Only those on the InstrumentParameterBox list minus volume.
     ControlList getIPBControlParameters() const;
 
     // Access ControlParameters (read/write)

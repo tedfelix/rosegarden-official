@@ -67,8 +67,6 @@ private slots:
 
 private:
 
-    static ControlList getIPBControlParameters(const MidiDevice *dev);
-
 };
 
 

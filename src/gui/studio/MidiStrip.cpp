@@ -45,24 +45,6 @@ MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
     m_layout->setContentsMargins(1,1,1,1);
 }
 
-ControlList
-MidiStrip::getIPBControlParameters(const MidiDevice *dev)
-{
-    const ControlList allControllers = dev->getIPBControlParameters();
-    ControlList controllersFiltered;
-
-    // For each controller...
-    for (const ControlParameter &controller : allControllers)
-    {
-        // If it is visible and not volume, add to filtered vector.
-        if (controller.getIPBPosition() != -1  &&
-            controller.getControllerNumber() != MIDI_CONTROLLER_VOLUME)
-            controllersFiltered.push_back(controller);
-    }
-
-    return controllersFiltered;
-}
-
 void MidiStrip::createWidgets(int stripNum)
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
@@ -80,7 +62,7 @@ void MidiStrip::createWidgets(int stripNum)
 
     // Get the control parameters that are on the IPB (and hence can
     // be shown here too).
-    const ControlList controls = getIPBControlParameters(midiDevice);
+    const ControlList controls = midiDevice->getIPBControlParameters();
 
     // For each controller...
     for (size_t controllerIndex = 0;

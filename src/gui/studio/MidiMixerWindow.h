@@ -124,9 +124,6 @@ private:
     typedef std::map<InstrumentId, int /*stripIndex*/> InstrumentIDToStripIndex;
     InstrumentIDToStripIndex m_instrumentIDToStripIndex;
 
-    /// Get InstrumentParameterBox controllers and remove volume.
-    static ControlList getIPBControlParameters(const MidiDevice *);
-
     /**
      * ??? Move this to MidiStrip.
      */

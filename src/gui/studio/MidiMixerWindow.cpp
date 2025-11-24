@@ -97,7 +97,9 @@ MidiMixerWindow::MidiMixerWindow() :
     setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
 
     // ??? Inline this?  I think once we pull out MidiStrip like AudioStrip,
-    //     that will make a lot of sense.
+    //     that will make a lot of sense.  Then again, we need a way to
+    //     refresh the strips when things change.  So actually that probably
+    //     makes no sense at all.  See AudioMixerWindow2::updateStripCounts().
     setupTabs();
 
     createAction("file_close", &MidiMixerWindow::slotClose);
@@ -190,7 +192,7 @@ MidiMixerWindow::setupTabs()
 
         // Get the control parameters that are on the IPB (and hence can
         // be shown here too).
-        const ControlList controls = getIPBControlParameters(midiDevice);
+        const ControlList controls = midiDevice->getIPBControlParameters();
 
         QFrame *tabFrame = new QFrame(m_tabWidget);
         tabFrame->setContentsMargins(10, 10, 10, 10);
@@ -255,8 +257,12 @@ MidiMixerWindow::slotControlChange(
 
         // Update the appropriate Rotary.
 
-        const ControlList controls = getIPBControlParameters(
-                dynamic_cast<MidiDevice *>(instrument->getDevice()));
+        const MidiDevice *midiDevice =
+                dynamic_cast<const MidiDevice *>(instrument->getDevice());
+        if (!midiDevice)
+            return;
+
+        const ControlList controls = midiDevice->getIPBControlParameters();
 
         // For each controller...
         for (size_t controllerIndex = 0;
@@ -430,24 +436,6 @@ void
 MidiMixerWindow::slotHelpAbout()
 {
     new AboutDialog(this);
-}
-
-ControlList
-MidiMixerWindow::getIPBControlParameters(const MidiDevice *dev)
-{
-    const ControlList allControllers = dev->getIPBControlParameters();
-    ControlList controllersFiltered;
-
-    // For each controller...
-    for (const ControlParameter &controller : allControllers)
-    {
-        // If it is visible and not volume, add to filtered vector.
-        if (controller.getIPBPosition() != -1  &&
-            controller.getControllerNumber() != MIDI_CONTROLLER_VOLUME)
-            controllersFiltered.push_back(controller);
-    }
-
-    return controllersFiltered;
 }
 
 void

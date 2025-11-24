@@ -1022,17 +1022,18 @@ MidiDevice::removeControlFromInstrument(
 ControlList
 MidiDevice::getIPBControlParameters() const
 {
-    ControlList retList;
+    ControlList controllersFiltered;
 
-    for (ControlList::const_iterator it = m_controlList.begin();
-         it != m_controlList.end(); ++it)
+    // For each controller...
+    for (const ControlParameter &controller : m_controlList)
     {
-        if (it->getIPBPosition() != -1 &&
-            it->getControllerNumber() != MIDI_CONTROLLER_VOLUME)
-            retList.push_back(*it);
+        // If it is visible and not volume, add to filtered vector.
+        if (controller.getIPBPosition() != -1 &&
+            controller.getControllerNumber() != MIDI_CONTROLLER_VOLUME)
+            controllersFiltered.push_back(controller);
     }
 
-    return retList;
+    return controllersFiltered;
 }
 
 ControlParameter *
