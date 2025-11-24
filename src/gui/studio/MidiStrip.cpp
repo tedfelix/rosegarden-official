@@ -224,6 +224,8 @@ MidiStrip::slotControllerChanged(float value)
     const MidiByte controllerNumber = rotary->property("controllerNumber").toUInt();
 
     Instrument *instrument = studio.getInstrumentById(m_id);
+    if (!instrument)
+        return;
 
     instrument->setControllerValue(controllerNumber, MidiByte(value));
     Instrument::emitControlChange(instrument, controllerNumber);
