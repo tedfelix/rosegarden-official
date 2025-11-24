@@ -43,6 +43,10 @@ MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID) :
     m_layout(new QVBoxLayout(this))
 {
     m_layout->setContentsMargins(1,1,1,1);
+
+    connect(Instrument::getStaticSignals().data(),
+                &InstrumentStaticSignals::controlChange,
+            this, &MidiStrip::slotControlChange);
 }
 
 void MidiStrip::createWidgets(int stripNum)
@@ -222,6 +226,53 @@ MidiStrip::slotControllerChanged(float value)
                 instrument->getNaturalMidiChannel(),
                 controllerNumber,
                 MidiByte(value));
+    }
+}
+
+void
+MidiStrip::slotControlChange(
+        Instrument *instrument, const int controllerNumber)
+{
+    if (!instrument)
+        return;
+    // Not ours?  Bail.
+    if (instrument->getId() != m_id)
+        return;
+    //if (!instrument->hasController(controllerNumber))
+    //    return;
+
+    const MidiByte controllerValue = instrument->getControllerValue(
+            controllerNumber);
+
+    // Based on the controllerNumber, update the appropriate Fader or Rotary.
+
+    if (controllerNumber == MIDI_CONTROLLER_VOLUME) {
+
+        // Update the volume Fader.
+        m_volumeFader->setFader(controllerValue);
+
+    } else {
+
+        // Update the appropriate Rotary.
+
+        const MidiDevice *midiDevice =
+                dynamic_cast<const MidiDevice *>(instrument->getDevice());
+        if (!midiDevice)
+            return;
+
+        const ControlList controls = midiDevice->getIPBControlParameters();
+
+        // For each controller...
+        for (size_t controllerIndex = 0;
+             controllerIndex < controls.size();
+             ++controllerIndex) {
+            // If this is the one, set the rotary.
+            if (controllerNumber == controls[controllerIndex].getControllerNumber()) {
+                m_controllerRotaries[controllerIndex]->setPosition(controllerValue);
+                break;
+            }
+        }
+
     }
 }
 

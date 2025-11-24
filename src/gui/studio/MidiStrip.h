@@ -65,6 +65,12 @@ private slots:
     void slotFaderLevelChanged(float value);
     void slotControllerChanged(float value);
 
+    /// Update the strip to match changes to the Instrument.
+    /**
+     * Connected to InstrumentStaticSignals::controlChange().
+     */
+    void slotControlChange(Instrument *instrument, const int controllerNumber);
+
 private:
 
 };

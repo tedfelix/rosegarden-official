@@ -130,10 +130,6 @@ MidiMixerWindow::MidiMixerWindow() :
     enableAutoRepeat("Transport Toolbar", "playback_pointer_back_bar");
     enableAutoRepeat("Transport Toolbar", "playback_pointer_forward_bar");
 
-    connect(Instrument::getStaticSignals().data(),
-                &InstrumentStaticSignals::controlChange,
-            this, &MidiMixerWindow::slotControlChange);
-
     connect(&ExternalController::self(),
                 &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
@@ -219,63 +215,6 @@ MidiMixerWindow::setupTabs()
             midiStrip->createWidgets(stripNum++);
 
         }
-    }
-}
-
-void
-MidiMixerWindow::slotControlChange(
-        Instrument *instrument, const int controllerNumber)
-{
-    if (!instrument)
-        return;
-    if (!instrument->hasController(controllerNumber))
-        return;
-
-    const MidiByte controllerValue = instrument->getControllerValue(
-            controllerNumber);
-
-    // Find the appropriate strip index given the InstrumentId.
-
-    InstrumentIDToStripIndex::const_iterator iter =
-            m_instrumentIDToStripIndex.find(instrument->getId());
-    // Not found?  Bail.
-    if (iter == m_instrumentIDToStripIndex.end())
-        return;
-
-    const size_t stripIndex = iter->second;
-    if (stripIndex >= m_midiStrips.size())
-        return;
-
-    // Based on the controllerNumber, update the appropriate Fader or Rotary.
-
-    if (controllerNumber == MIDI_CONTROLLER_VOLUME) {
-
-        // Update the volume Fader.
-        m_midiStrips[stripIndex]->m_volumeFader->setFader(controllerValue);
-
-    } else {
-
-        // Update the appropriate Rotary.
-
-        const MidiDevice *midiDevice =
-                dynamic_cast<const MidiDevice *>(instrument->getDevice());
-        if (!midiDevice)
-            return;
-
-        const ControlList controls = midiDevice->getIPBControlParameters();
-
-        // For each controller...
-        for (size_t controllerIndex = 0;
-             controllerIndex < controls.size();
-             ++controllerIndex) {
-            // If this is the one, set the rotary.
-            if (controllerNumber == controls[controllerIndex].getControllerNumber()) {
-                m_midiStrips[stripIndex]->m_controllerRotaries[controllerIndex]->
-                        setPosition(controllerValue);
-                break;
-            }
-        }
-
     }
 }
 

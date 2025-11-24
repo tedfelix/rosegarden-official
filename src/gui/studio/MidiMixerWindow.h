@@ -68,12 +68,6 @@ public slots:
 
 private slots:
 
-    /// Update the strip to match changes to the Instrument.
-    /**
-     * Connected to InstrumentStaticSignals::controlChange().
-     */
-    void slotControlChange(Instrument *instrument, int controllerNumber);
-
     /// Calls sendControllerRefresh().
     void slotCurrentTabChanged(int);
 
