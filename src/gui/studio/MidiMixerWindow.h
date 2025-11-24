@@ -74,9 +74,6 @@ private slots:
      */
     void slotControlChange(Instrument *instrument, int controllerNumber);
 
-    void slotFaderLevelChanged(float value);
-    void slotControllerChanged(float value);
-
     /// Calls sendControllerRefresh().
     void slotCurrentTabChanged(int);
 
@@ -128,7 +125,7 @@ private:
     InstrumentIDToStripIndex m_instrumentIDToStripIndex;
 
     /// Get InstrumentParameterBox controllers and remove volume.
-    ControlList getIPBControlParameters(const MidiDevice *) const;
+    static ControlList getIPBControlParameters(const MidiDevice *);
 
     /**
      * ??? Move this to MidiStrip.

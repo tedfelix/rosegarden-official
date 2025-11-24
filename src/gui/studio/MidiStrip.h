@@ -18,6 +18,7 @@
 #ifndef RG_MIDISTRIP_H
 #define RG_MIDISTRIP_H
 
+#include "base/Controllable.h"
 #include "base/Instrument.h"
 
 #include <QWidget>
@@ -32,6 +33,7 @@ namespace Rosegarden
 
 
 class Fader;
+class MidiDevice;
 class MidiMixerVUMeter;
 class Rotary;
 
@@ -41,8 +43,13 @@ class Rotary;
 //     See AudioStrip.
 class MidiStrip : public QWidget
 {
+    Q_OBJECT
+
 public:
+
     MidiStrip(QWidget *parent, InstrumentId instrumentID);
+
+    void createWidgets(int stripNum);
 
     InstrumentId m_id{0};
 
@@ -52,6 +59,16 @@ public:
     std::vector<Rotary *> m_controllerRotaries;
 
     QVBoxLayout *m_layout;
+
+private slots:
+
+    void slotFaderLevelChanged(float value);
+    void slotControllerChanged(float value);
+
+private:
+
+    static ControlList getIPBControlParameters(const MidiDevice *dev);
+
 };
 
 

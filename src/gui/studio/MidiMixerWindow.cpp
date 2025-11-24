@@ -202,8 +202,6 @@ MidiMixerWindow::setupTabs()
 
         QHBoxLayout *layout = new QHBoxLayout(tabFrame);
 
-        QLabel *label;
-
         int stripNum = 1;
 
         // For each Instrument in this MidiDevice...
@@ -216,167 +214,9 @@ MidiMixerWindow::setupTabs()
             layout->addWidget(midiStrip);
             m_instrumentIDToStripIndex[instrumentId] = m_midiStrips.size() - 1;
 
-            // For each controller...
-            for (size_t controllerIndex = 0;
-                 controllerIndex < controls.size();
-                 ++controllerIndex) {
+            midiStrip->createWidgets(stripNum++);
 
-                // Controller name label
-                // ??? This is pretty odd looking.  We need to default to a
-                //     larger overall MMW size and get the label closer to each
-                //     Rotary.  Maybe even add a label feature to Rotary so it
-                //     can handle it better.
-                QString controllerName = QObject::tr(
-                        controls[controllerIndex].getName().c_str());
-                label = new QLabel(controllerName.left(3), midiStrip);
-                QFont font = label->font();
-                font.setPointSize((font.pointSize() * 8) / 10);
-                label->setFont(font);
-                midiStrip->m_layout->addWidget(label, 0, Qt::AlignHCenter | Qt::AlignBottom);
-
-                // Controller rotary
-                const MidiByte controllerNumber =
-                        controls[controllerIndex].getControllerNumber();
-                const bool centred =
-                        (controls[controllerIndex].getDefault() == 64);
-
-                Rotary *rotary = new Rotary(
-                        midiStrip,  // parent
-                        controls[controllerIndex].getMin(),  // minimum
-                        controls[controllerIndex].getMax(),  // maximum
-                        1.0,  // step
-                        5.0,  // pageStep
-                        controls[controllerIndex].getDefault(),  // initialPosition
-                        20,  // size
-                        Rotary::NoTicks,  // ticks
-                        centred,
-                        false);
-                rotary->setLabel(controllerName);
-
-                // Color
-                QColor knobColour = QColor(Qt::white);
-                if (controls[controllerIndex].getColourIndex() > 0) {
-                    knobColour = m_document->getComposition().
-                            getGeneralColourMap().getColour(
-                                    controls[controllerIndex].getColourIndex());
-                }
-                rotary->setKnobColour(knobColour);
-
-                rotary->setProperty("instrumentId", instrumentId);
-                rotary->setProperty("controllerNumber", controllerNumber);
-
-                float value{0};
-                if (instrument->hasController(controllerNumber))
-                    value = float(instrument->getControllerValue(
-                            controllerNumber));
-                rotary->setPosition(value);
-
-                connect(rotary, &Rotary::valueChanged,
-                        this, &MidiMixerWindow::slotControllerChanged);
-
-                midiStrip->m_layout->addWidget(rotary, 0, Qt::AlignCenter);
-
-                midiStrip->m_controllerRotaries.push_back(rotary);
-            }
-
-            // VU meter
-            MidiMixerVUMeter *meter = new MidiMixerVUMeter(
-                    midiStrip,  // parent
-                    VUMeter::FixedHeightVisiblePeakHold,  // type
-                    6,  // width
-                    30);  // height
-            midiStrip->m_layout->addWidget(meter, 0, Qt::AlignCenter);
-            midiStrip->m_vuMeter = meter;
-
-            // Volume
-            Fader *fader = new Fader(
-                    0,  // min
-                    127,  // max
-                    100,  // i_default
-                    20,  // i_width
-                    80,  // i_height
-                    midiStrip);  // parent
-            fader->setProperty("instrumentId", instrumentId);
-            MidiByte volumeValue{0};
-            if (instrument->hasController(MIDI_CONTROLLER_VOLUME))
-                volumeValue = instrument->
-                        getControllerValue(MIDI_CONTROLLER_VOLUME);
-            fader->setFader(float(volumeValue));
-            connect(fader, &Fader::faderChanged,
-                    this, &MidiMixerWindow::slotFaderLevelChanged);
-            midiStrip->m_layout->addWidget(fader, 0, Qt::AlignCenter);
-            midiStrip->m_volumeFader = fader;
-
-            // Instrument number
-            QLabel *instrumentNumberLabel = new QLabel(
-                    QString("%1").arg(stripNum++),
-                    midiStrip);
-            midiStrip->m_layout->addWidget(
-                    instrumentNumberLabel, 0, Qt::AlignCenter);
         }
-    }
-}
-
-void
-MidiMixerWindow::slotFaderLevelChanged(float value)
-{
-    const Fader * const fader = dynamic_cast<const Fader *>(sender());
-    if (!fader)
-        return;
-
-    // ??? Once we move all this to MidiStrip, we can store instrument ID
-    //     in MidiStrip as a member.
-    const InstrumentId instrumentId = fader->property("instrumentId").toUInt();
-
-    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
-    if (!instrument)
-        return;
-
-    instrument->setControllerValue(MIDI_CONTROLLER_VOLUME, MidiByte(value));
-    Instrument::emitControlChange(instrument, MIDI_CONTROLLER_VOLUME);
-
-    m_document->setModified();
-
-    // Check whether we need to send the update out the external controller port.
-    // ??? Would also be nice to check if anything is actually connected.
-    if (ExternalController::self().isNative()  &&
-        instrument->hasFixedChannel()) {
-        ExternalController::send(
-                instrument->getNaturalMidiChannel(),
-                MIDI_CONTROLLER_VOLUME,
-                MidiByte(value));
-    }
-}
-
-void
-MidiMixerWindow::slotControllerChanged(float value)
-{
-    const Rotary *rotary = dynamic_cast<const Rotary *>(sender());
-    if (!rotary)
-        return;
-
-    // ??? Once we move all this to MidiStrip, we can store instrument ID
-    //     and controller number in MidiStrip as a member.
-    const InstrumentId instrumentId = rotary->property("instrumentId").toUInt();
-    const MidiByte controllerNumber = rotary->property("controllerNumber").toUInt();
-
-    Instrument *instrument = m_studio->getInstrumentById(instrumentId);
-    if (!instrument)
-        return;
-
-    instrument->setControllerValue(controllerNumber, MidiByte(value));
-    Instrument::emitControlChange(instrument, controllerNumber);
-
-    m_document->setModified();
-
-    // Check whether we need to send the update out the external controller port.
-    // ??? Would also be nice to check if anything is actually connected.
-    if (ExternalController::self().isNative()  &&
-        instrument->hasFixedChannel()) {
-        ExternalController::send(
-                instrument->getNaturalMidiChannel(),
-                controllerNumber,
-                MidiByte(value));
     }
 }
 
@@ -593,7 +433,7 @@ MidiMixerWindow::slotHelpAbout()
 }
 
 ControlList
-MidiMixerWindow::getIPBControlParameters(const MidiDevice *dev) const
+MidiMixerWindow::getIPBControlParameters(const MidiDevice *dev)
 {
     const ControlList allControllers = dev->getIPBControlParameters();
     ControlList controllersFiltered;
