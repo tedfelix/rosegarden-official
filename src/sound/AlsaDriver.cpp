@@ -2512,6 +2512,7 @@ AlsaDriver::allNotesOff()
         delete(*it);
     }
 
+    // ??? clear()?
     m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
 
     //RG_DEBUG << "allNotesOff() - queue size = " << m_noteOffQueue.size();
@@ -4285,6 +4286,12 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         // Add note to note off stack
         //
         if (needNoteOff) {
+            // ??? MEMORY LEAK.  So m_noteOffQueue might not get
+            //     cleaned up.  m_recentNoteOffs does get cleaned up by the
+            //     dtor (clearRecentNoteOffs()), but m_noteOffQueue does not.
+            //     Need to dig a bit to make sure cleaning up m_noteOffQueue
+            //     in the dtor avoids double-frees.  shared_ptr should work
+            //     well here.
             NoteOffEvent *noteOffEvent =
                 new NoteOffEvent(outputStopTime,  // already calculated
                                  rgEvent->getPitch(),
