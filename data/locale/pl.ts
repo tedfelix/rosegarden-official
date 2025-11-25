@@ -11879,12 +11879,12 @@ Błąd: %2</translation>
     <message>
         <location line="+3"/>
         <source> Selected audio files will be unloaded and all associated segments deleted.</source>
-        <translation>Wybrane pliki dźwiękowe zostaną wyładowane, a wszystkie powiązane segmenty zostaną usunięte.</translation>
+        <translation> Wybrane pliki dźwiękowe zostaną wyładowane, a wszystkie powiązane segmenty zostaną usunięte.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source> Are you sure?</source>
-        <translation>Kontynuować?</translation>
+        <translation> Kontynuować?</translation>
     </message>
     <message>
         <location line="+685"/>
@@ -12133,13 +12133,15 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
         <location line="+369"/>
         <source>The following instruments are using inputs you are removing:
 </source>
-        <translation>Następujące instrumenty używają wyjść, które usuwasz:</translation>
+        <translation>Następujące instrumenty używają wyjść, które usuwasz:
+</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>  %1 : input %2
 </source>
-        <translation>  %1 : wejście %2</translation>
+        <translation>  %1 : wejście %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -12156,13 +12158,15 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
         <location line="-17"/>
         <source>The following instruments are using submasters you are removing:
 </source>
-        <translation>Następujące instrumenty używają szyn, które usuwasz:</translation>
+        <translation>Następujące instrumenty używają szyn, które usuwasz:
+</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>  %1 : submaster %2
 </source>
-        <translation>  %1 : szyna %2</translation>
+        <translation>  %1 : szyna %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -24524,7 +24528,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+2"/>
         <source>Hold Ctrl to rescale contents</source>
-        <translation>Przytrzymaj Shift, aby przeskalować zawartości</translation>
+        <translation>Przytrzymaj Ctrl, aby przeskalować zawartości</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -26058,7 +26062,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="vanished">%1.%2%3 QPM (%4.%5%6 BPM)</translation>
+        <translation type="vanished">%1.%2%3 QPM (%4.%5%6 BPM)   </translation>
     </message>
     <message>
         <source>Tempo   </source>
