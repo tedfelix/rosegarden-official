@@ -406,11 +406,6 @@ int main(int argc, char *argv[])
                 RG_DEBUG << "set XDG_SESSION_TYPE to x11";
                 qputenv("XDG_SESSION_TYPE", "x11");
             }
-            QString cd = QString(qgetenv("XDG_CURRENT_DESKTOP"));
-            if (cd != "KDE") {
-                RG_DEBUG << "set QT_QPA_PLATFORMTHEME to gtk2";
-                qputenv("QT_QPA_PLATFORMTHEME", "gtk2");
-            }
         }
 
 #ifdef HAVE_GTK2

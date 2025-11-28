@@ -55,14 +55,6 @@ if(ALSA_FOUND)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${ALSA_LIBRARIES})
 endif()
 
-find_package(GTK2)
-if(GTK2_FOUND)
-    include_directories(${GTK2_INCLUDE_DIRS})
-    link_directories(${GTK2_LIBRARY_DIRS})
-    add_definitions(-DHAVE_GTK2)
-    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${GTK2_LIBRARIES})
-endif()
-
 set(rg_CPPS
   document/GzipFile.cpp
   document/LinkedSegmentsCommand.cpp
