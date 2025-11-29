@@ -5343,7 +5343,7 @@
     <message>
         <source>Delete</source>
         <comment>keyboard shortcut</comment>
-        <translation type="vanished">Usuń</translation>
+        <translation type="vanished">Delete</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5687,7 +5687,7 @@
     <message>
         <location line="+1"/>
         <source>Insert Marker at Playback Position</source>
-        <translation>Ustaw znacznik w pozycji odtwarzania</translation>
+        <translation>Wstaw znacznik w miejscu odtwarzania</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -5757,13 +5757,13 @@
     <message>
         <source>Delete, Ctrl+D</source>
         <comment>keyboard shortcut</comment>
-        <translation type="vanished">Usuń, Ctrl+D</translation>
+        <translation type="vanished">Delete, Ctrl+D</translation>
     </message>
     <message>
         <location line="-965"/>
         <location line="+423"/>
         <source>Insert Pitch &amp;Bend Sequence...</source>
-        <translation>Wstaw sekwencję odchylenia stroju...</translation>
+        <translation>Wpisz sekwencję odchylenia stroju...</translation>
     </message>
     <message>
         <location line="-500"/>
@@ -6595,7 +6595,7 @@
     <message>
         <location line="+30"/>
         <source>&amp;Add Marker at Playback Position</source>
-        <translation>Dodaj znacznik w pozycji odtwarzania</translation>
+        <translation>Dodaj znacznik w miejscu odtwarzania</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7597,7 +7597,7 @@
         <location line="-277"/>
         <location line="+279"/>
         <source>Show &amp;Tempo Ruler</source>
-        <translation>Pokaż wykres zmian tempa</translation>
+        <translation>Pokaż wykres tempa</translation>
     </message>
     <message>
         <location line="-130"/>
@@ -7749,7 +7749,7 @@
         <location line="-1056"/>
         <location line="+60"/>
         <source>Preferences...</source>
-        <translation>Właściwości...</translation>
+        <translation>Ustawienia...</translation>
     </message>
     <message>
         <location line="+86"/>
@@ -7803,7 +7803,7 @@
         <location line="+5"/>
         <location line="+602"/>
         <source>&amp;Preferences...</source>
-        <translation>Właściwości...</translation>
+        <translation>Ustawienia...</translation>
     </message>
     <message>
         <location line="-600"/>
@@ -9611,7 +9611,7 @@
     <message>
         <location line="-8"/>
         <source>Show Playback Position R&amp;uler</source>
-        <translation>Pokaż oś czasu odtwarzania</translation>
+        <translation>Pokaż wykres miejsca odtwarzania</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -9723,12 +9723,12 @@
     <message>
         <location line="+37"/>
         <source>Insert Tempo Change</source>
-        <translation>Wstaw zmianę tempa</translation>
+        <translation>Wpisz zmianę tempa</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Insert Tempo Change at Playback Position</source>
-        <translation>Wstaw zmianę tempa w pozycji kursora</translation>
+        <translation>Wpisz zmianę tempa w miejscu odtwarzania</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9778,7 +9778,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Preferences</source>
-        <translation>Właściwości</translation>
+        <translation>Ustawienia</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -9923,7 +9923,7 @@
     <message>
         <location line="-27"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
-        <translation>Ustaw szybki znacznik na pozycji odtwarzania</translation>
+        <translation>Ustaw szybki znacznik w miejscu odtwarzania</translation>
     </message>
     <message>
         <location line="-388"/>
@@ -10783,7 +10783,7 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Clef inserter</source>
-        <translation>Wstawianie klucza</translation>
+        <translation>Wpisywanie klucza</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10798,7 +10798,7 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Guitar chord inserter</source>
-        <translation>Wstawianie akordu gitarowego</translation>
+        <translation>Wpisywanie akordu gitarowego</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10873,7 +10873,7 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Note/rest inserter</source>
-        <translation>Wstawianie nuty/pauzy</translation>
+        <translation>Wpisywanie nuty/pauzy</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10888,12 +10888,12 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Symbol inserter</source>
-        <translation>Wstawianie symbolu</translation>
+        <translation>Wpisywanie symbolu</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Tempo ruler</source>
-        <translation>Wykres temp</translation>
+        <translation>Wykres tempa</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10903,7 +10903,7 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Text inserter</source>
-        <translation>Wstawianie tekstu</translation>
+        <translation>Wpisywanie tekstu</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11745,12 +11745,12 @@ Błąd: %2</translation>
     <message>
         <location line="+7"/>
         <source>Failed to convert or resample audio file on import</source>
-        <translation>Nie udało się przekonwertować plik dźwiękowego do importu</translation>
+        <translation>Nie udało się zmienić próbkowania pliku dźwiękowego podczas importu</translation>
     </message>
     <message>
         <location line="+146"/>
         <source>Generating audio previews...</source>
-        <translation>Generowanie podglądu dźwięku...</translation>
+        <translation>Generowanie podglądów dźwięku...</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -11814,7 +11814,7 @@ Błąd: %2</translation>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Pliki dźwiękowe oznaczone gwiazdką (*) są kodowane przy innej częstotliwości próbkowania niż ta z serwera JACK Audio.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden będzie odtwarzać je z prawidłową prędkością, ale będą one brzmieć okropnie. Weź pod uwagę resampling tego pliku na zewnątrz lub wyregulowanie częstotliwości próbkowania serwera JACK.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Pliki dźwiękowe oznaczone gwiazdką (*) są kodowane przy innej częstotliwości próbkowania niż ta z serwera JACK Audio.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden będzie odtwarzać je z prawidłową prędkością, ale będą one brzmieć okropnie. Musisz rozważyć zmianę próbkowania tego pliku na zewnątrz lub wyregulowanie częstotliwości próbkowania serwera JACK.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -12005,7 +12005,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <message>
         <location line="+156"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation>importowane pliki dźwiękowe, które muszą być przekonwertowane lub resamplowane</translation>
+        <translation>importowanie pliku dźwiękowego, który musi być przekonwertowany lub mieć zmienione próbkowanie</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -13816,7 +13816,7 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="+78"/>
         <source>&lt;qt&gt;Notes inserted here will be stored in the .rg file along with the composition&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Notatki wstawione tutaj zostaną zapisane w pliku .rg wraz z utworem&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Notatki wpisane tutaj zostaną zapisane w pliku .rg wraz z utworem&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -13993,7 +13993,7 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location filename="../../src/gui/dialogs/ConfigureDialog.cpp" line="+47"/>
         <source>Rosegarden - Preferences</source>
-        <translation>Rosegarden - Właściwości</translation>
+        <translation>Rosegarden - Ustawienia</translation>
     </message>
 </context>
 <context>
@@ -14216,7 +14216,7 @@ Urządzenie docelowe ma już bank dla
     <name>Rosegarden::ControlRulerEventEraseCommand</name>
     <message>
         <source>Erase Controller Event(s)</source>
-        <translation type="vanished">Wymaż kontrolera przypadku(ów)</translation>
+        <translation type="vanished">Wymaż przypadek(i) kontrolera</translation>
     </message>
 </context>
 <context>
@@ -14224,7 +14224,7 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventInsertCommand.cpp" line="+28"/>
         <source>Insert Controller Event</source>
-        <translation>Wstaw kontrolera przypadków</translation>
+        <translation>Wstaw przypadek kontrolera</translation>
     </message>
 </context>
 <context>
@@ -16196,7 +16196,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     </message>
     <message>
         <source>&lt;qt&gt;When checked, Rosegarden will use the Thorn look and feel, otherwise default system preferences will be used the next time Rosegarden starts.&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;Po zaznaczeniu, Rosegarden użyje Thorna, inaczej domyślne preferencje systemowe zostaną wykorzystane przy następnym uruchomieniu Rosegarden.&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;Po zaznaczeniu, Rosegarden użyje Thorna, inaczej domyślne ustawienia systemowe zostaną wykorzystane przy następnym uruchomieniu Rosegarden.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+424"/>
@@ -16484,7 +16484,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location filename="../../src/commands/notation/GuitarChordInsertionCommand.cpp" line="+32"/>
         <source>Insert Guitar Chord</source>
-        <translation>Wstaw akord gitarowy</translation>
+        <translation>Wpisz akord gitarowy</translation>
     </message>
 </context>
 <context>
@@ -17960,7 +17960,7 @@ zamiast tego?</translation>
     <message>
         <location line="+51"/>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; External Applications&lt;/b&gt; and try again.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;LilyPond przetworzył plik pomyślnie, ale &lt;b&gt;%1&lt;/b&gt; nie działa!&lt;/p&gt;Musisz skonfigurować poprawnie %2 w &lt;b&gt;Edycja -&gt; Właściwości -&gt; Podstawowe -&gt; Aplikacje zewnętrzne&lt;/b&gt; i spróbować ponownie.&lt;/p&gt;&lt;p&gt;Przetwarzanie zakończone z powodu błędów krytycznych.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;LilyPond przetworzył plik pomyślnie, ale &lt;b&gt;%1&lt;/b&gt; nie działa!&lt;/p&gt;Musisz skonfigurować poprawnie %2 w &lt;b&gt;Edycja -&gt; Ustawienia -&gt; Podstawowe -&gt; Aplikacje zewnętrzne&lt;/b&gt; i spróbować ponownie.&lt;/p&gt;&lt;p&gt;Przetwarzanie zakończone z powodu błędów krytycznych.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-126"/>
@@ -18178,7 +18178,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="-242"/>
         <source>General</source>
-        <translation>Podstawowa</translation>
+        <translation>Podstawowy</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -18341,12 +18341,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+60"/>
         <source>sfxload path</source>
-        <translation>ścieżka sfxload</translation>
+        <translation>Ścieżka sfxload</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>Soundfont path</source>
-        <translation>ścieżka SoundFontów</translation>
+        <translation>Ścieżka SoundFontów</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -18880,7 +18880,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location filename="../../src/gui/configuration/MatrixConfigurationPage.cpp" line="+46"/>
         <source>General</source>
-        <translation>Podstawowa</translation>
+        <translation>Podstawowy</translation>
     </message>
 </context>
 <context>
@@ -18991,7 +18991,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location filename="../../src/commands/matrix/MatrixPercussionInsertionCommand.cpp" line="+40"/>
         <source>Insert Percussion Note</source>
-        <translation>Wpisz nutę dla perkusji</translation>
+        <translation>Wpisz nutę perkusji</translation>
     </message>
 </context>
 <context>
@@ -19968,7 +19968,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+10"/>
         <source>Auto-beam on insert when appropriate</source>
-        <translation>Autobelkowanie podczas wstawiania, kiedy dotyczy</translation>
+        <translation>Autobelkowanie podczas wpisywania, kiedy dotyczy</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -19993,7 +19993,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Jeśli zaznaczone, podgląd nuty lub pauzy będzie zawsze wyświetlany podczas wstawiania nut lub pauz za pomocą myszki&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Jeśli zaznaczone, podgląd nuty lub pauzy będzie zawsze wyświetlany podczas wpisywania nut lub pauz za pomocą myszki&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -20003,7 +20003,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+6"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Jeśli zaznaczone, następujące funkcje są dostępne podczas wstawiania nut za pomocą myszki:&lt;ul&gt;&lt;li&gt;Rolka myszki zaznacza wartość rytmiczną nuty.&lt;/li&gt;&lt;li&gt;Shift dodaje krzyżyk.&lt;/li&gt;&lt;li&gt;Ctrl dodaje bemol.&lt;/li&gt;&lt;li&gt;Shift+Ctrl dodaje nutę.&lt;/li&gt;&lt;li&gt;Kliknięcie środkowym przyciskiem myszki przełącza między nutami i pauzami.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Jeśli zaznaczone, następujące funkcje są dostępne podczas wpisywania nut za pomocą myszki:&lt;ul&gt;&lt;li&gt;Rolka myszki zaznacza wartość rytmiczną nuty.&lt;/li&gt;&lt;li&gt;Shift dodaje krzyżyk.&lt;/li&gt;&lt;li&gt;Ctrl dodaje bemol.&lt;/li&gt;&lt;li&gt;Shift+Ctrl dodaje nutę.&lt;/li&gt;&lt;li&gt;Kliknięcie środkowym przyciskiem myszki przełącza między nutami i pauzami.&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -21478,7 +21478,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+4"/>
         <source>None available (check preferences)</source>
-        <translation>Brak dostępnych (sprawdź właściwości)</translation>
+        <translation>Brak dostępnych (sprawdź ustawienia)</translation>
     </message>
 </context>
 <context>
@@ -21520,7 +21520,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+7"/>
         <source>General</source>
-        <translation>Podstawowe</translation>
+        <translation>Podstawowa</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -22680,7 +22680,7 @@ Wybierz te, które chcesz na zawsze usunąć z dysku twardego.
     </message>
     <message>
         <source>Generating audio previews...</source>
-        <translation type="obsolete">Generowanie podglądu dźwięku...</translation>
+        <translation type="obsolete">Generowanie podglądów dźwięku...</translation>
     </message>
     <message>
         <source>Merge</source>
@@ -22800,7 +22800,7 @@ możesz nacisnąć Ignoruj, aby otworzyć plik.
     <message>
         <location line="+11"/>
         <source>&lt;h3&gt;Inconsistent audio sample rates&lt;/h3&gt;&lt;p&gt;This composition contains audio files at more than one sample rate.&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but any audio files that were recorded or imported at rates different from the current JACK server sample rate (%1 Hz) will probably sound awful.&lt;/p&gt;&lt;p&gt;Please see the audio file manager dialog for more details, and consider resampling any files that are at the wrong rate.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Nieprawidłowa częstotliwość próbkowania dźwięku&lt;/h3&gt;&lt;p&gt;Ten utwór zawiera pliki dźwiękowe w więcej niż jednej częstotliwości próbkowania.&lt;/p&gt;&lt;p&gt;Rosegarden będzie odtwarzać ten utwór z prawidłową prędkością, ale wszystkie pliki dźwiękowe, które zostały nagrane lub zaimportowane w innej częstotliwości próbkowania z bieżącego serwera JACK o częstotliwości próbkowania (%1 Hz) będą brzmiały okropnie.&lt;/p&gt;&lt;p&gt;Zobacz okno menedżera plików dźwiękowych, aby uzyskać więcej szczegółów i rozważyć resampling plików, które są w nieprawidłowym próbkowaniu.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Nieprawidłowa częstotliwość próbkowania dźwięku&lt;/h3&gt;&lt;p&gt;Ten utwór zawiera pliki dźwiękowe w więcej niż jednej częstotliwości próbkowania.&lt;/p&gt;&lt;p&gt;Rosegarden będzie odtwarzać ten utwór z prawidłową prędkością, ale wszystkie pliki dźwiękowe, które zostały nagrane lub zaimportowane w innej częstotliwości próbkowania z bieżącego serwera JACK o częstotliwości próbkowania (%1 Hz) będą brzmiały okropnie.&lt;/p&gt;&lt;p&gt;Zobacz okno menedżera plików dźwiękowych, aby uzyskać więcej szczegółów i rozważyć zmianę próbkowania plików, które są w nieprawidłowym próbkowaniu.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>Inconsistent sample rates</source>
@@ -22883,7 +22883,7 @@ Zalecamy zapisać ten plik w tej wersji programu, aby zapewnić, że będzie go 
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Nie zdefiniowałeś/aś jeszcze edytora dźwięku dla Rosegarden.
-Zobacz Edytuj -&gt; Właściwości -&gt; Dźwięk.</translation>
+Zobacz Edytuj -&gt; Ustawienia -&gt; Dźwięk.</translation>
     </message>
     <message>
         <location line="+722"/>
@@ -22898,7 +22898,7 @@ Zobacz Edytuj -&gt; Właściwości -&gt; Dźwięk.</translation>
     <message>
         <location line="+19"/>
         <source>importing an audio file that needs to be converted or resampled</source>
-        <translation>importowane pliki dźwiękowe, które muszą być przekonwertowane lub resamplowane</translation>
+        <translation>importowanie pliku dźwiękowego, który musi być przekonwertowany lub mieć zmienione próbkowanie</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -23315,7 +23315,7 @@ Chcesz go otworzyć?</translation>
     </message>
     <message>
         <source>Insert Corrected Tempo and Time Signature</source>
-        <translation type="vanished">Wstaw prawidłowe tempo i oznaczenie metryczne</translation>
+        <translation type="vanished">Wpisz prawidłowe tempo i oznaczenie metryczne</translation>
     </message>
     <message>
         <source>Remove Original Tempo and Time Signature</source>
@@ -23369,7 +23369,7 @@ Chcesz go otworzyć?</translation>
     <message>
         <location line="+11"/>
         <source>Toggle the zoom toolbar...</source>
-        <translation>Przełącz pasek narzędzi powiększenia...</translation>
+        <translation>Przełącz pasek narzędzi powiększania...</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -25695,7 +25695,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location filename="../../src/commands/notation/SymbolInsertionCommand.cpp" line="+62"/>
         <source>Insert &amp;Symbol...</source>
-        <translation>Wstaw symbol...</translation>
+        <translation>Wpisz symbol...</translation>
     </message>
 </context>
 <context>
@@ -25879,7 +25879,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+57"/>
         <source>Insert Tempo Change</source>
-        <translation>Wstaw zmianę tempa</translation>
+        <translation>Wpisz zmianę tempa</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -26471,7 +26471,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location filename="../../src/commands/notation/TextInsertionCommand.cpp" line="+34"/>
         <source>Insert Text</source>
-        <translation>Wstaw tekst</translation>
+        <translation>Wpisz tekst</translation>
     </message>
 </context>
 <context>
@@ -26519,16 +26519,16 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>Insertion point is at start of measure %1.</source>
-        <translation type="vanished">Punkt wstawienia jest na początku taktu %1.</translation>
+        <translation type="vanished">Punkt wstawiania jest na początku taktu %1.</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Insertion point is in the middle of measure %1.</source>
-        <translation>Punkt wstawienia jest w środku taktu %1.</translation>
+        <translation>Punkt wstawiania jest w środku taktu %1.</translation>
     </message>
     <message>
         <source>Insertion point is at start of composition.</source>
-        <translation type="vanished">Punkt wstawienia jest na początku utworu.</translation>
+        <translation type="vanished">Punkt wstawiania jest na początku utworu.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -27051,7 +27051,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;New segments will be created with this clef inserted at the beginning&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Nowe segmenty będą tworzone z tym kluczem wstawionym na początku&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nowe segmenty będą tworzone z tym kluczem wpisanym na początku&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -27937,7 +27937,7 @@ Transponuj o półtony...</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Rosegarden is using safe graphics mode.  This provides the greatest stability, but graphics performance is very slow.&lt;/p&gt;&lt;p&gt;You may wish to visit &lt;b&gt;Edit -&gt; Preferences -&gt; Behavior -&gt; Graphics performance&lt;/b&gt; and try &quot;Normal&quot; or &quot;Fast&quot; for better performance.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Rosegarden używa bezpiecznego trybu graficznego. Zapewnia to największą stabilność, ale kosztem wydajności grafiki.&lt;/p&gt;&lt;p&gt;Idź do &lt;b&gt;Edycja -&gt; Właściwości -&gt; Zachowanie -&gt; Wydajność grafiki&lt;/b&gt; i spróbuj zmienić na &quot;Normalny&quot; lub &quot;Szybki&quot; dla lepszej wydajności.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Rosegarden używa bezpiecznego trybu graficznego. Zapewnia to największą stabilność, ale kosztem wydajności grafiki.&lt;/p&gt;&lt;p&gt;Idź do &lt;b&gt;Edycja -&gt; Ustawienia -&gt; Zachowanie -&gt; Wydajność grafiki&lt;/b&gt; i spróbuj zmienić na &quot;Normalny&quot; lub &quot;Szybki&quot; dla lepszej wydajności.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
