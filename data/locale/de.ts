@@ -2180,7 +2180,7 @@
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+33"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Kontroller-Ereignis(se) entfernen</translation>
+        <translation>Kontroller-Ereignis(se) entfernen</translation>
     </message>
 </context>
 <context>
@@ -4974,14 +4974,14 @@ a quarter sine wave contour</source>
         <translation>Synthesizer-Plugin </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1085"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+746"/>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1085"/>
         <location filename="../../src/base/Studio.cpp" line="+73"/>
         <source>Synth plugin</source>
         <translation>Synthesizer Plugin</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
         <translation>Audio</translation>
@@ -5695,22 +5695,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="-828"/>
         <source>Insert Marker</source>
-        <translation>Markierung einfügen</translation>
+        <translation>Marker einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Insert Marker at Playback Position</source>
-        <translation>Markierung an Wiedergabeposition einfügen</translation>
+        <translation>Marker an Wiedergabeposition einfügen</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Delete Marker</source>
-        <translation>Markierung löschen</translation>
+        <translation>Marker löschen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Edit Marker</source>
-        <translation>Markierung bearbeiten</translation>
+        <translation>Marker bearbeiten</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -5761,12 +5761,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="-136"/>
         <source>&amp;Export Audio Files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Audiodateien &amp;exportieren...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Unload Selected Audio Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgewählte Audiodateien herausnehmen</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -5884,24 +5884,24 @@ a quarter sine wave contour</source>
     <message>
         <location line="-47"/>
         <source>Rename Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Marker umbenennen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Manage Markers</source>
-        <translation type="unfinished">Markierungen verwalten</translation>
+        <translation>Marker verwalten</translation>
     </message>
     <message>
         <location line="+58"/>
         <location line="+279"/>
         <source>Show Key Pressure Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineal für Einzel-Tastennachdruck zeigen</translation>
     </message>
     <message>
         <location line="-278"/>
         <location line="+279"/>
         <source>Show Channel Pressure Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Lineal für Kanal-Tastennachdruck zeigen</translation>
     </message>
     <message>
         <location line="-274"/>
@@ -7008,22 +7008,22 @@ a quarter sine wave contour</source>
     <message>
         <location line="+96"/>
         <source>&amp;Move to Staff Above Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Positionszeiger im Notensyste&amp;m oberhalb verschieben</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Move to Staff Above Cursor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Positionszeiger im Notensyste&amp;m oberhalb verschieben...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff &amp;Below Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Positionszeiger im Notensyste&amp;m unterhalb verschieben</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff &amp;Below Cursor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Positionszeiger im Notensyste&amp;m unterhalb verschieben...</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -9341,7 +9341,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Select Related Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Verwandte Segmente auswählen</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -9381,7 +9381,7 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Edit Mar&amp;kers...</source>
-        <translation>Mar&amp;kierung bearbeiten...</translation>
+        <translation>Mar&amp;ker bearbeiten...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9416,13 +9416,13 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>&amp;Set Quick Marker at Playback Position</source>
-        <translation>&amp;Schnelle Markierung an der Wiedergabeposition setzen</translation>
+        <translation>&amp;Schnellen Marker an der Wiedergabeposition setzen</translation>
     </message>
     <message>
         <location line="-388"/>
         <location line="+389"/>
         <source>&amp;Jump to Quick Marker</source>
-        <translation>Zu schneller Markierung s&amp;pringen</translation>
+        <translation>Zu schnellem Marker s&amp;pringen</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9512,12 +9512,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="-139"/>
         <source>Move to Staff Above Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Positionszeiger im Notensystem oberhalb verschieben</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff Below Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Zum Positionszeiger im Notensystem unterhalb verschieben</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -10395,16 +10395,16 @@ a quarter sine wave contour</source>
         <translation type="obsolete">Rosegarden - ein Sequenzer und Notensatz-Editor</translation>
     </message>
     <message>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
         <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+420"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Warnung: Die LV2 GTK2-Plugins sind aktiv. Möglicherweise musst du das qt-gtk2-Plattform-Style Plugin installieren</translation>
     </message>
     <message>
         <location line="+374"/>
@@ -10817,14 +10817,14 @@ abgeschnitten</translation>
         <translation>Wechselnd - %1-Werte wechselnd auf Max und Min setzen</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Maximum</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Minimum</translation>
     </message>
@@ -10941,12 +10941,12 @@ a quarter sine wave contour</source>
     <message>
         <location line="+1"/>
         <source>Marker editor</source>
-        <translation>Markierungs-Editor</translation>
+        <translation>Marker-Editor</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Marker ruler</source>
-        <translation>Markierungs-Lineal</translation>
+        <translation>Marker-Lineal</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11099,8 +11099,8 @@ a quarter sine wave contour</source>
         <translation>Datei %1&apos; kann nicht geöffnet werden</translation>
     </message>
     <message>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
         <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+1"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
         <translation>Der verbundene Korg nanoKontrol2 ist nicht optimal konfiguriert für Rosegarden.  Ihn Rekonfigurieren wird alle mit dem nanoKontrol2 Editor gemachten eigenen Einstellungen verlieren.  Rekonfigurieren?</translation>
     </message>
@@ -11466,7 +11466,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location filename="../../src/commands/edit/AddMarkerCommand.h" line="+49"/>
         <source>&amp;Add Marker</source>
-        <translation>M&amp;arkierung hinzufügen</translation>
+        <translation>M&amp;arker hinzufügen</translation>
     </message>
 </context>
 <context>
@@ -11771,7 +11771,7 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
     <message>
         <location line="+55"/>
         <source>Pan</source>
-        <translation type="unfinished">Pan</translation>
+        <translation>Pan</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -11898,13 +11898,13 @@ von einem weltweiten Team von Freiwilligen entwickelt. Eine Liste der Beteiligte
         <location line="+48"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation type="unfinished">Kann Dokument nicht unter %1 sichern
+        <translation>Kann Dokument nicht unter %1 sichern
 Fehler war: %2</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished">Kann Dokument nicht unter %1 sichern</translation>
+        <translation>Kann Dokument nicht unter %1 sichern</translation>
     </message>
     <message>
         <location line="+206"/>
@@ -12044,27 +12044,27 @@ von der des JACK-Audio-Servers unterscheidet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosega
     <message>
         <location line="+21"/>
         <source>Save Files To</source>
-        <translation type="unfinished"></translation>
+        <translation>Dateien sichern nach</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>The file %1 already exists.  Do you wish to overwrite it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Datei %1 besteht bereits. Möchtest du diese überschreiben?</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>All selected segments will be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle ausgewählten Segmente werden gelöscht.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source> Selected audio files will be unloaded and all associated segments deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation> Ausgewählte Audiodateien werden entladen und alle zugehörigen Segmente gelöscht.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source> Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation> Bist du sicher?</translation>
     </message>
     <message>
         <location line="+685"/>
@@ -12323,42 +12323,46 @@ permission and re-add it</source>
         <location line="+369"/>
         <source>The following instruments are using inputs you are removing:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Folgende Instrumente verwenden Eingänge, die du entfernst:
+</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>  %1 : input %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  %1 : Eingang %2</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>These will be set to input 1.  Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Diese werden auf Eingang 1 gesetzt. Bist du sicher?</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+66"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="-17"/>
         <source>The following instruments are using submasters you are removing:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Folgende Instrumente verwenden Submaster, die du entfernst:
+</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>  %1 : submaster %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  %1 : Submaster %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Outputs will be set to master and inputs will be set to input 1.
 Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Ausgänge werden auf Master gestellt und die Eingänge auf Eingang 1.
+Bist du sicher?</translation>
     </message>
     <message>
         <location line="+99"/>
@@ -12882,7 +12886,7 @@ here.</source>
     <message>
         <location line="+22"/>
         <source>%1 minutes at %3Hz 32-bit stereo</source>
-        <translation type="unfinished">%1 Minuten bei %3Hz 16-bit-Stereo {1 ?} {3H?} {32-?}</translation>
+        <translation>%1 Minuten bei %3Hz 16-bit-Stereo {1 ?} {3H?} {32-?}</translation>
     </message>
     <message>
         <source>%1 minutes at %3Hz 16-bit stereo</source>
@@ -14189,7 +14193,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+16"/>
         <source>Change the start and end markers for the composition:</source>
-        <translation>Die Markierungen am Start und am Ende der Komposition verändern:</translation>
+        <translation>Die Marker am Start und am Ende der Komposition verändern:</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -14365,7 +14369,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/rulers/ControlMover.cpp" line="+120"/>
         <source>Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical</source>
-        <translation>Klicken und ziehe einen Wert. Hochstelltaste unterdrückt Einrasten am Gitter. Strg beschränkt auf horizontale oder vertikale Bewegung</translation>
+        <translation>Klicken und ziehe einen Wert. Umschalttaste unterdrückt Einrasten am Gitter. Strg beschränkt auf horizontale oder vertikale Bewegung</translation>
     </message>
 </context>
 <context>
@@ -14874,7 +14878,7 @@ last time apply was pressed)&lt;/qt&gt;</source>
     <message>
         <location line="+3"/>
         <source>Formal duration (to end marker):</source>
-        <translation>Formale Dauer (bis zur Ende-Markierung):</translation>
+        <translation>Formale Dauer (bis zum Ende-Marker):</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -16026,7 +16030,7 @@ Would you like to try and locate this file or skip it?</source>
     <message>
         <location line="+24"/>
         <source>Select a Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Verzeichnis wählen</translation>
     </message>
     <message>
         <source>Select an Audio File</source>
@@ -16518,12 +16522,12 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+305"/>
         <source>Setup LV2 Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>LV2-Umgebung einrichten</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If set, set environment variables for lv2 plugins on gnome and wayland. In Rosegarden the environment variable XDG_SESSION_TYPE will be set to x11 on wayland displays and QT_QPA_PLATFORMTHEME will be set to gtk2 on non kde desktops. If you don&apos;t want this behaviour switch this item off&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Wenn gesetzt, Umgebungsvariablen für Lv2-Plugins auf Gnome und Wayland einrichten. In Rosegarden wird die Umgebungsvariable XDG_SESSION_TYPE auf Wayland-Displays auf x11 gesetzt und QT_QPA_PLATFORMTHEME auf Nicht-KDE-Desktops auf gtk2. Wenn du dieses Verhalten nicht willst, schalte diesen Punkt aus&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+391"/>
@@ -18068,7 +18072,7 @@ prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+23"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Markierungen können auf dem &lt;b&gt;Markierungs-Lineal&lt;/b&gt; gefunden werden. Sie können als Text- oder als Probemarkierungen exportiert werden.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Marker können auf dem &lt;b&gt;Marker-Lineal&lt;/b&gt; gefunden werden. Sie können als Text- oder als Probemarker exportiert werden.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-50"/>
@@ -18139,7 +18143,7 @@ feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/inde
     <message>
         <location line="+10"/>
         <source>No markers</source>
-        <translation>Keine Markierungen</translation>
+        <translation>Keine Marker</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -18149,12 +18153,12 @@ feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/inde
     <message>
         <location line="+1"/>
         <source>Marker text</source>
-        <translation>Textmarkierungen</translation>
+        <translation>Textmarker</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Export markers</source>
-        <translation>Markierungen exportieren</translation>
+        <translation>Marker exportieren</translation>
     </message>
 </context>
 <context>
@@ -18337,7 +18341,7 @@ to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;<
     <message>
         <location line="+398"/>
         <source>Hold Ctrl to snap to unit.</source>
-        <translation type="unfinished"></translation>
+        <translation>Strg gedrückt halten, um an der Einheit auszurichten.</translation>
     </message>
 </context>
 <context>
@@ -18616,7 +18620,7 @@ need CCs in this range for other things.</source>
     <message>
         <location line="+39"/>
         <source>Akai MPK Mini IV (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akai MPK Mini IV (experimentell)</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -19006,7 +19010,7 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+73"/>
         <source>Manage Markers</source>
-        <translation>Markierungen verwalten</translation>
+        <translation>Marker verwalten</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -19067,22 +19071,22 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
     <message>
         <location line="-260"/>
         <source>Add a Marker</source>
-        <translation>Markierung hinzufügen</translation>
+        <translation>Marker hinzufügen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Delete a Marker</source>
-        <translation>Markierung löschen</translation>
+        <translation>Marker löschen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Delete All Markers</source>
-        <translation>Alle Markierungen löschen</translation>
+        <translation>Alle Marker löschen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Close the Marker Editor</source>
-        <translation>Markierungs-Editor schließen</translation>
+        <translation>Marker-Editor schließen</translation>
     </message>
     <message>
         <location line="+162"/>
@@ -19092,7 +19096,7 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
     <message>
         <location line="+20"/>
         <source>Remove all markers</source>
-        <translation>Alle Markierungen entfernen</translation>
+        <translation>Alle Marker entfernen</translation>
     </message>
     <message>
         <location line="+255"/>
@@ -19105,17 +19109,17 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="+66"/>
         <source>Edit Marker</source>
-        <translation>Markierung bearbeiten</translation>
+        <translation>Marker bearbeiten</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Marker Time</source>
-        <translation>Zeit der Markierung</translation>
+        <translation>Zeit des Markers</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Marker Properties</source>
-        <translation>Eigenschaften der Markierung</translation>
+        <translation>Eigenschaften des Markers</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -19145,34 +19149,38 @@ Click and drag a marker to move it.
 Shift-click to set a range between markers.
 Double-click to rename a marker.
 Right-click for context menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf einen Marker klicken, um den Wiedergabezeiger zu bewegen
+Auf einen Marker klicken und ziehen, um diesen zu verschieben.
+Bei gedrückter Umschalttaste klicken, um einen Bereich zwischen Marker festzulegen.
+Auf einen Marker doppelklicken, um diesen umzubenennen.
+Rechtsklicken, um das Kontextmenü zu öffnen.</translation>
     </message>
     <message>
         <location line="+48"/>
         <location line="+14"/>
         <source>new marker</source>
-        <translation type="unfinished">Neue Markierung</translation>
+        <translation>Neuer Marker</translation>
     </message>
     <message>
         <location line="-13"/>
         <location line="+14"/>
         <source>no description</source>
-        <translation type="unfinished">Keine Beschreibung</translation>
+        <translation>Keine Beschreibung</translation>
     </message>
     <message>
         <location line="+54"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new name:</source>
-        <translation type="unfinished">Neuen Namen eingeben:</translation>
+        <translation>Neuen Namen eingeben:</translation>
     </message>
     <message>
         <location line="+364"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten, um Ausrichtenen am Taktschlagraster zu vermeiden</translation>
     </message>
 </context>
 <context>
@@ -19244,7 +19252,7 @@ Right-click for context menu.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+225"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -19292,12 +19300,12 @@ Right-click for context menu.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+215"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
     <message>
         <location line="+129"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
-        <translation>Anklicken und ziehen um eine neue Note zu setzen. Hochstell-Taste halten um Einschnappen am Raster zu vermeiden</translation>
+        <translation>Klicken und ziehen um eine neue Note zu setzen. Umschalttaste halten um Ausrichten am Raster zu vermeiden</translation>
     </message>
     <message>
         <source>Click and drag to draw a note; Shift to avoid snapping to 
@@ -19323,7 +19331,7 @@ grid</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+123"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
     <message>
         <location line="+66"/>
@@ -19830,7 +19838,7 @@ zu ändern&lt;/qt&gt;</translation>
         <translation type="vanished">Instrument</translation>
     </message>
     <message>
-        <location line="+509"/>
+        <location line="+511"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
@@ -19955,7 +19963,7 @@ zu ändern&lt;/qt&gt;</translation>
     <message>
         <location filename="../../src/commands/edit/ModifyMarkerCommand.h" line="+51"/>
         <source>&amp;Modify Marker</source>
-        <translation>&amp;Markierung verändern</translation>
+        <translation>&amp;Marker verändern</translation>
     </message>
 </context>
 <context>
@@ -20499,7 +20507,7 @@ check transposing instruments carefully in both concert and notated pitch. When 
     <message>
         <location line="-344"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Falls ausgewählt, stehen folgende Möglichkeiten zur Verfügung, wenn Noten mit der Maus eingefügt werden:&lt;ul&gt;&lt;li&gt;das Mausrad wählt die Notendauer&lt;/li&gt;&lt;li&gt;die Hochstelltaste fügt ein Kreuz hinzu&lt;/li&gt;&lt;li&gt;die Steuerungtaste fügt ein B hinzu&lt;/li&gt;&lt;li&gt;die Hochstell- + Steuerungtaste fügt eine Natürliche hinzu&lt;/li&gt;&lt;li&gt;Ein Klick mit dem mittleren Mausknopf wechselt zwischen Noten- und Pauseneingabemodus&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Falls ausgewählt, stehen folgende Möglichkeiten zur Verfügung, wenn Noten mit der Maus eingefügt werden:&lt;ul&gt;&lt;li&gt;das Mausrad wählt die Notendauer&lt;/li&gt;&lt;li&gt;die Umschalttaste fügt ein Kreuz hinzu&lt;/li&gt;&lt;li&gt;die Steuerungtaste fügt ein B hinzu&lt;/li&gt;&lt;li&gt;die Umschalt- + Steuerungtaste fügt eine Natürliche hinzu&lt;/li&gt;&lt;li&gt;Ein Klick mit dem mittleren Mausknopf wechselt zwischen Noten- und Pauseneingabemodus&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+346"/>
@@ -22700,7 +22708,7 @@ Beispiel kann es sich dabei um eine Textdatei mit Erklärungen, ein Soundfont, e
     <message>
         <location filename="../../src/commands/edit/RemoveMarkerCommand.h" line="+45"/>
         <source>&amp;Remove Marker</source>
-        <translation>Ma&amp;rkierung entfernen</translation>
+        <translation>Ma&amp;rker entfernen</translation>
     </message>
 </context>
 <context>
@@ -24474,17 +24482,17 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="+616"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+172"/>
         <source>&lt;qt&gt;&lt;p&gt;%1: %2&lt;/p&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;%1: %2&lt;/p&gt;&lt;p&gt;Zum Ändern, klicken und nach oben und unten oder nach links und rechts ziehen.&lt;/p&gt;&lt;p&gt;Doppelklicken, um den Wert direkt zu bearbeiten.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.h" line="+126"/>
         <source>Value</source>
-        <translation type="unfinished">Wert</translation>
+        <translation>Wert</translation>
     </message>
 </context>
 <context>
@@ -24686,7 +24694,7 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
     <message>
         <location line="+169"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -24744,7 +24752,7 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
     <message>
         <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Verzögere die Wiedergabe aller ausgewählten Segmente um diese Anzahl von Millisekunden&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Rosegarden untersützt keine negativen Verzögerungen. Falls negative Verzögerungen benötigt werden, muss die Komposition vor Takt 1 starten und alle Segmente müssen nach links verschoben werden. Dies kann durch Halten der &lt;b&gt;Hochstell&lt;/b&gt;-Taste während der Feinkontrolle geschehen. Allerdings wird 
+        <translation>&lt;qt&gt;&lt;p&gt;Verzögere die Wiedergabe aller ausgewählten Segmente um diese Anzahl von Millisekunden&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Rosegarden untersützt keine negativen Verzögerungen. Falls negative Verzögerungen benötigt werden, muss die Komposition vor Takt 1 starten und alle Segmente müssen nach links verschoben werden. Dies kann durch Halten der &lt;b&gt;Umschalt&lt;/b&gt;-Taste während der Feinkontrolle geschehen. Allerdings wird 
 es seltsame Effekte auf die Darstellung der Noten im Notensatzeditor haben.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
@@ -24933,7 +24941,7 @@ entfernt werden, bevor eine neue Transponierung gesetzt werden kann.</translatio
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="+307"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation>Hochstell-Taste halten um Einrasten an Taktlinien zu 
+        <translation>Umschaltaste halten um Ausrichten an Taktlinien zu 
 vermeiden</translation>
     </message>
     <message>
@@ -25050,12 +25058,12 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+150"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden. Strg-Taste zusätzlich halten um Inhalte neu zu skalieren</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden. Strg-Taste zusätzlich halten um Inhalte neu zu skalieren</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -25090,7 +25098,7 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+312"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -25251,7 +25259,7 @@ it; Ctrl + Alt for a linked copy; double-click to edit</source>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+67"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
-        <translation>Segment anklicken um es in zwei zu trennen. Hochstell-Taste halten um Einschnappen am Taktschlagraster zu vermeiden</translation>
+        <translation>Segment anklicken um es in zwei zu trennen. Umschalttaste halten um Ausrichten am Taktschlagraster zu vermeiden</translation>
     </message>
 </context>
 <context>
@@ -25641,7 +25649,7 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location line="+16"/>
         <source>&lt;p&gt;Select an action in the table below then double click one of the four &lt;b&gt;Shortcut&lt;/b&gt; fields in the table.  Press the new shortcut key.  A shortcut can be removed by pressing Shift in the &lt;b&gt;Shortcut&lt;/b&gt; field.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Actions marked with a &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;light blue background&lt;/span&gt; are global and valid for all windows.&lt;/i&gt;&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Eine Maßnahme in der Tabelle unten wählen, dann Doppel-Klick auf eines der vier &lt;b&gt;Kürzel&lt;/b&gt; Tabellenfelder.  Drücken Sie die Taste des neuen Kürzels.  Ein Kürzel kann entfernt werden durch Drücken der Hochstelltaste im &lt;b&gt;Kürzel&lt;/b&gt; Feld.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Maßnahmen die mit einem &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;hellblauen Hintergrund&lt;/span&gt; gekennzeichnet sind, sind global zugeordnet und gelten in allen Fenstern.&lt;/i&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Eine Maßnahme in der Tabelle unten wählen, dann Doppelklick auf eines der vier &lt;b&gt;Kürzel&lt;/b&gt; Tabellenfelder.  Drücken Sie die Taste des neuen Kürzels.  Ein Kürzel kann entfernt werden durch Drücken der Umschalttaste im &lt;b&gt;Kürzel&lt;/b&gt; Feld.&lt;/p&gt;&lt;p&gt;&lt;i&gt;Maßnahmen die mit einem &lt;span style=&quot;background-color:cyan; color:black&quot;&gt;hellblauen Hintergrund&lt;/span&gt; gekennzeichnet sind, sind global zugeordnet und gelten in allen Fenstern.&lt;/i&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -27234,95 +27242,95 @@ server due to a problem with your configuration, your system installation, or bo
     <message>
         <location filename="../../src/gui/widgets/TimeWidget2.cpp" line="+50"/>
         <source>Out Of Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Außerhalb des Bereiches</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Note:</source>
-        <translation type="unfinished">Note:</translation>
+        <translation>Note:</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;inexact&gt;</source>
-        <translation type="unfinished">&lt;ungenau&gt;</translation>
+        <translation>&lt;ungenau&gt;</translation>
     </message>
     <message>
         <location line="+44"/>
         <location line="+133"/>
         <source>Ticks:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ticks:</translation>
     </message>
     <message>
         <location line="-109"/>
         <source>Measures:</source>
-        <translation type="unfinished">Takte:</translation>
+        <translation>Takte:</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Measure:</source>
-        <translation type="unfinished">Takt:</translation>
+        <translation>Takt:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>beats:</source>
-        <translation type="unfinished">Taktschläge:</translation>
+        <translation>Taktschläge:</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>beat:</source>
-        <translation type="unfinished">Taktschlag:</translation>
+        <translation>Taktschlag:</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>%1:</source>
-        <translation type="unfinished">%1:</translation>
+        <translation>%1:</translation>
     </message>
     <message>
         <location line="+22"/>
         <location line="+249"/>
         <source>(%1/%2 time)</source>
-        <translation type="unfinished">(%1/%2 Zeit)</translation>
+        <translation>(%1/%2 Zeit)</translation>
     </message>
     <message>
         <location line="-240"/>
         <source>Seconds:</source>
-        <translation type="unfinished">Sekunden:</translation>
+        <translation>Sekunden:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>msec:</source>
-        <translation type="unfinished">msec:</translation>
+        <translation>msec:</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>ticks</source>
-        <translation type="unfinished"></translation>
+        <translation>Ticks</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Begrenzung</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Adjust time to be within valid limits.</source>
-        <translation type="unfinished"></translation>
+        <translation>Zeit anpassen, um innerhalb gültiger Begrenzungen zu liegen.</translation>
     </message>
     <message>
         <location line="+60"/>
         <source>starting</source>
-        <translation type="unfinished"></translation>
+        <translation>beginnend</translation>
     </message>
     <message>
         <location line="+12"/>
         <location line="+10"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>bpm</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>qpm</source>
-        <translation type="unfinished"></translation>
+        <translation>qpm</translation>
     </message>
 </context>
 <context>
@@ -27407,7 +27415,7 @@ with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt
     <message>
         <location filename="../../src/gui/editors/segment/TrackLabel.cpp" line="+134"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to select all the segments on this track.&lt;/p&gt;&lt;p&gt;Shift+click to add to or to remove from the selection all the segments on this track.&lt;/p&gt;&lt;p&gt;Click and hold with either mouse button to assign this track to an instrument.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Anklicken um alle Segmente in dieser Spur auszuwählen.&lt;/p&gt;&lt;p&gt;Hochstell-Klicken um Segmente in dieser Spur zur Auswahl hinzuzufügen oder zu entfernen.&lt;/p&gt;&lt;p&gt;Anklicken und mit einem beliebigen Mausknopf festhalten um diese Spur einem Instrument zuzuweisen.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Anklicken um alle Segmente in dieser Spur auszuwählen.&lt;/p&gt;&lt;p&gt;Umschalttaste+Klicken um Segmente in dieser Spur zur Auswahl hinzuzufügen oder zu entfernen.&lt;/p&gt;&lt;p&gt;Anklicken und mit einem beliebigen Mausknopf festhalten um diese Spur einem Instrument zuzuweisen.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+123"/>
@@ -28112,7 +28120,7 @@ transpose property set&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+6"/>
         <source>Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Index</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -28750,7 +28758,7 @@ sich der Zeiger bereits hinter dem Ende des Stücks befindet, wird der Zeiger en
     <name>S:</name>
     <message>
         <source></source>
-        <comment>if the manual is translated into your language, you can</comment>
+        <comment>We recommend pointing help URLs to a wiki page in your native language.</comment>
         <translation></translation>
     </message>
 </context>
