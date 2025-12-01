@@ -2182,7 +2182,7 @@
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+33"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Wymaż kontrolera przypadku(ów)</translation>
+        <translation>Wymaż kontrolera przypadku(ów)</translation>
     </message>
 </context>
 <context>
@@ -2252,7 +2252,7 @@
     <message>
         <location line="-187"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Usuń zaznaczone urządzenie odtwarzające. Wszelkie zmiany programu lub banku w tych ścieżkach zostaną trwale usunięte&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Usuń wybrane urządzenie odtwarzające. Wszelkie zmiany programu lub banku w tych ścieżkach zostaną trwale usunięte&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2310,7 +2310,7 @@
     <message>
         <location line="+25"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Usuń zaznaczone urządzenie nagrywające&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Usuń wybrane urządzenie nagrywające&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -6638,12 +6638,12 @@
     <message>
         <location line="-365"/>
         <source>&amp;Export Audio Files...</source>
-        <translation type="unfinished"></translation>
+        <translation>Eksportuj plik dźwiękowy...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Unload Selected Audio Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyładuj wybrane pliki dźwiękowe</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -6653,24 +6653,24 @@
     <message>
         <location line="+67"/>
         <source>Rename Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień nazwę znacznika</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Manage Markers</source>
-        <translation type="unfinished">Zarządzaj znacznikami</translation>
+        <translation>Zarządzaj znacznikami</translation>
     </message>
     <message>
         <location line="+58"/>
         <location line="+279"/>
         <source>Show Key Pressure Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż wykres nacisku klawisza</translation>
     </message>
     <message>
         <location line="-278"/>
         <location line="+279"/>
         <source>Show Channel Pressure Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Pokaż wykres nacisku kanału</translation>
     </message>
     <message>
         <location line="-144"/>
@@ -6700,22 +6700,22 @@
     <message>
         <location line="+25"/>
         <source>&amp;Move to Staff Above Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejdź do pięciolinii powyżej kursora</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Move to Staff Above Cursor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejdź do pięciolinii powyżej kursora...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff &amp;Below Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejdź do pięciolinii poniżej kursora</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff &amp;Below Cursor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejdź do pięciolinii poniżej kursora...</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -6780,12 +6780,12 @@
     <message>
         <location line="+68"/>
         <source>Move to Staff Above Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejdź do pięciolinii powyżej kursora</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff Below Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Przejdź do pięciolinii poniżej kursora</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -6865,7 +6865,7 @@
     <message>
         <location line="+2"/>
         <source>Select Related Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Zaznacz powiązane segmenty</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -10315,7 +10315,7 @@
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+420"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Ostrzeżenie: Wtyczki LV2 GTK2 są aktywne. Być może musisz zainstalować wtyczkę na platformę QT GTK2</translation>
     </message>
     <message>
         <location line="+374"/>
@@ -10593,7 +10593,7 @@
         <location line="+2"/>
         <source>Harmonic Product Spectrum</source>
         <comment>Pitch determination (DSP)</comment>
-        <translation type="unfinished"></translation>
+        <translation>Widmo iloczynu harmonicznego</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/UpdateFigurationCommand.cpp" line="+27"/>
@@ -11592,7 +11592,7 @@ zamiast tego?</translation>
     <message>
         <location line="+55"/>
         <source>Pan</source>
-        <translation type="unfinished">Panorama</translation>
+        <translation>Panorama</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -11719,13 +11719,13 @@ zamiast tego?</translation>
         <location line="+48"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation type="unfinished">Nie można zapisać dokumentu na %1
+        <translation>Nie można zapisać dokumentu na %1
 Błąd: %2</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished">Nie można zapisać dokumentu na %1</translation>
+        <translation>Nie można zapisać dokumentu na %1</translation>
     </message>
     <message>
         <location line="+206"/>
@@ -11864,27 +11864,27 @@ Błąd: %2</translation>
     <message>
         <location line="+21"/>
         <source>Save Files To</source>
-        <translation type="unfinished"></translation>
+        <translation>Zapisz pliki do</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>The file %1 already exists.  Do you wish to overwrite it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Plik %1 już istnieje. Chcesz go zastąpić?</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>All selected segments will be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Wszystkie zaznaczone segmenty zostaną usunięte.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source> Selected audio files will be unloaded and all associated segments deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation> Wybrane pliki dźwiękowe zostaną wyładowane, a wszystkie powiązane segmenty zostaną usunięte.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source> Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation> Kontynuować?</translation>
     </message>
     <message>
         <location line="+685"/>
@@ -11984,7 +11984,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation>
-            <numerusform>&lt;qt&gt;Około %n plik dźwiękowy do usunięcia na zawsze z dysku twardego.&lt;br&gt;Tej czynności nie da się cofnąć i nie będzie można odzyskać plików.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Około %n plik dźwiękowy do usunięcia na zawsze z dysku twardego.&lt;br&gt;Tej czynności nie da się cofnąć i nie będzie można odzyskać pliku.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
             <numerusform>&lt;qt&gt;Około %n pliki dźwiękowe do usunięcia na zawsze z dysku twardego.&lt;br&gt;Tej czynności nie da się cofnąć i nie będzie można odzyskać plików.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
             <numerusform>&lt;qt&gt;Około %n plików dźwiękowych do usunięcia na zawsze z dysku twardego.&lt;br&gt;Tej czynności nie da się cofnąć i nie będzie można odzyskać plików.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
         </translation>
@@ -12133,42 +12133,47 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
         <location line="+369"/>
         <source>The following instruments are using inputs you are removing:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Następujące instrumenty używają wyjść, które usuwasz:
+</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>  %1 : input %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  %1 : wejście %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>These will be set to input 1.  Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Zostaną one ustawione na wejście 1. Kontynuować?</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+66"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="-17"/>
         <source>The following instruments are using submasters you are removing:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Następujące instrumenty używają szyn, które usuwasz:
+</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>  %1 : submaster %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  %1 : szyna %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Outputs will be set to master and inputs will be set to input 1.
 Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyjścia zostaną ustawione na główne, a wejścia na wejście 1.
+Kontynuować?</translation>
     </message>
     <message>
         <location line="+99"/>
@@ -12682,7 +12687,7 @@ Are you sure?</source>
     <message>
         <location line="+22"/>
         <source>%1 minutes at %3Hz 32-bit stereo</source>
-        <translation type="unfinished">%1 minut przy %3Hz 16-bitowym stereo {1 ?} {3H?} {32-?}</translation>
+        <translation>%1 minut przy %3Hz 32-bitowym stereo</translation>
     </message>
     <message>
         <source>%1 minutes at %3Hz 16-bit stereo</source>
@@ -13292,12 +13297,12 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location line="+15"/>
         <source>beat(s)</source>
-        <translation>miar(a)</translation>
+        <translation>miar(a/y)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>bar(s)</source>
-        <translation>takt(ów)</translation>
+        <translation>takt(y/ów)</translation>
     </message>
 </context>
 <context>
@@ -14924,7 +14929,7 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location line="+16"/>
         <source>%1%2 - %3 Segments - %4</source>
-        <translation>%1%2 - %3 Segmenty - %4</translation>
+        <translation>%1%2 - %3 segment(y/ów) - %4</translation>
     </message>
     <message>
         <source>%1%2 - Segment%3Track%4#%5 - %6</source>
@@ -14937,7 +14942,7 @@ Urządzenie docelowe ma już bank dla
     </message>
     <message>
         <source>%1%2 - %3 Segment(s) - %4</source>
-        <translation type="vanished">%1%2 - %3 segment(ów) - %4</translation>
+        <translation type="vanished">%1%2 - %3 segment(y/ów) - %4</translation>
     </message>
 </context>
 <context>
@@ -15142,7 +15147,7 @@ To może spowodować problemy, jeśli nadpisze się inne, później wyliczone wa
     <message>
         <location line="+2"/>
         <source>Use Notation Editor note durations, not actual</source>
-        <translation>Użyj wartości rytmicznej notacji edytora nutowego, nie aktualnej</translation>
+        <translation>Użyj wartości rytmicznych nut edytora nutowego, a nie rzeczywistych</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15698,7 +15703,7 @@ To może spowodować problemy, jeśli nadpisze się inne, później wyliczone wa
     </message>
     <message>
         <source>%1%2 - %3 Segments - Event List</source>
-        <translation type="vanished">%1%2 - %3 segmenty - Lista przypadków</translation>
+        <translation type="vanished">%1%2 - %3 segment(y/ów) - Lista przypadków</translation>
     </message>
     <message>
         <source>http://rosegardenmusic.com/wiki/doc:eventView-en</source>
@@ -15784,7 +15789,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+24"/>
         <source>Select a Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Wybierz katalog</translation>
     </message>
     <message>
         <source>Select an Audio File</source>
@@ -16079,12 +16084,12 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+72"/>
         <source>Setup LV2 Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Konfiguracja środowiska LV2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If set, set environment variables for lv2 plugins on gnome and wayland. In Rosegarden the environment variable XDG_SESSION_TYPE will be set to x11 on wayland displays and QT_QPA_PLATFORMTHEME will be set to gtk2 on non kde desktops. If you don&apos;t want this behaviour switch this item off&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Jeśli ustawione, ustaw zmienne środowiskowe dla wtyczek lv2 w Gnome i Wayland. W Rosegarden zmienna środowiskowa XDG_SESSION_TYPE będzie ustawiona na x11 na ekranach Wayland, a QT_QPA_PLATFORMTHEME będzie ustawiona na gtk2 na pulpitach innych niż KDE. Jeśli nie chcesz, aby tak się działo, wyłącz tę opcję.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+401"/>
@@ -17202,22 +17207,18 @@ Przykładowy tekst z pliku:</translation>
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
         <translation>
-            <numerusform>
-        </numerusform>
-            <numerusform>
-        </numerusform>
-            <numerusform>w górę o %n oktawę(y) i %1</numerusform>
+            <numerusform>w górę o %n oktawę i %1</numerusform>
+            <numerusform>w górę o %n oktawy i %1</numerusform>
+            <numerusform>w górę o %n oktaw i %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
         <translation>
-            <numerusform>
-        </numerusform>
-            <numerusform>
-        </numerusform>
-            <numerusform>w górę o %n oktawę(y)</numerusform>
+            <numerusform>w górę o %n oktawę</numerusform>
+            <numerusform>w górę o %n oktawy</numerusform>
+            <numerusform>w górę o %n oktaw</numerusform>
         </translation>
     </message>
     <message>
@@ -17229,22 +17230,18 @@ Przykładowy tekst z pliku:</translation>
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
         <translation>
-            <numerusform>
-        </numerusform>
-            <numerusform>
-        </numerusform>
-            <numerusform>w dół o %n oktawę(y) i %1</numerusform>
+            <numerusform>w dół o %n oktawę i %1</numerusform>
+            <numerusform>w dół o %n oktawy i %1</numerusform>
+            <numerusform>w dół o %n oktaw i %1</numerusform>
         </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
         <translation>
-            <numerusform>
-        </numerusform>
-            <numerusform>
-        </numerusform>
-            <numerusform>w dół o %n oktawę(y)</numerusform>
+            <numerusform>w dół o %n oktawę</numerusform>
+            <numerusform>w dół o %n oktawy</numerusform>
+            <numerusform>w dół o %n oktaw</numerusform>
         </translation>
     </message>
     <message>
@@ -17590,12 +17587,12 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Legal</source>
-        <translation>Legalny</translation>
+        <translation>Legal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>US Letter</source>
-        <translation>List US</translation>
+        <translation>US Letter</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -17610,12 +17607,12 @@ zamiast tego?</translation>
     <message>
         <location line="+2"/>
         <source>Landscape</source>
-        <translation>Pejzaż</translation>
+        <translation>Poziomy</translation>
     </message>
     <message>
         <location line="+76"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Klamry pięciolinii znajdują się w polu &lt;b&gt;Parametry ścieżki&lt;/b&gt; i mogą być używane do grupowania pięciolinii na różne sposoby&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Klamry znajdują się w polu &lt;b&gt;Parametry ścieżki&lt;/b&gt; i mogą być używane do grupowania pięciolinii na różne sposoby&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -17870,7 +17867,7 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>Marker text</source>
-        <translation>Znacznik tekstu</translation>
+        <translation>Tekst znacznika</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -18024,12 +18021,12 @@ zamiast tego?</translation>
     <name>Rosegarden::LoopRuler</name>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Shift-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Shift-click to clear the loop or range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Kliknij i przeciągnij, aby przesunąć kursor odtwarzania.&lt;/p&gt;&lt;p&gt;Kliknij z Shiftem i przeciągnij, aby ustawić zakres dla pętli lub edytowania.&lt;/p&gt;&lt;p&gt;Kliknij z Shiftem, aby wyczyścić pętlę lub zakres.&lt;/p&gt;&lt;p&gt;Kliknij i przeciągnij, aby przesunąć kursor odtwarzania do miary.&lt;/p&gt;&lt;p&gt;Kliknij dwukrotnie myszką, aby rozpocząć odtwarzanie.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Kliknij i przeciągnij, aby przesunąć kursor odtwarzania.&lt;/p&gt;&lt;p&gt;Kliknij z Shiftem i przeciągnij, aby ustawić zakres dla pętli lub edytowania.&lt;/p&gt;&lt;p&gt;Kliknij z Shiftem, aby wyczyścić pętlę lub zakres.&lt;/p&gt;&lt;p&gt;Kliknij z Ctrl i przeciągnij, aby przesunąć kursor odtwarzania do miary.&lt;/p&gt;&lt;p&gt;Kliknij dwukrotnie myszką, aby rozpocząć odtwarzanie.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+74"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to switch between loop range and loop all.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Kliknij i przeciągnij, aby przesunąć wskaźnik odtwarzania.&lt;/p&gt;&lt;p&gt;Kliknij prawym przyciskiem myszki i przeciągnij, aby ustawić zakres pętli lub edycji.&lt;/p&gt;&lt;p&gt;Kliknij prawym przyciskiem myszki, aby przełączać się między zakresem pętli a całą pętlą.&lt;/p&gt;&lt;p&gt;Kliknij z naciśniętym klawiszem Ctrl i przeciągnij, aby przesunąć wskaźnik odtwarzania z funkcją przyciągania do miary.&lt;/p&gt;&lt;p&gt;Kliknij dwukrotnie myszką, aby rozpocząć odtwarzanie.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Kliknij i przeciągnij, aby przesunąć wskaźnik odtwarzania.&lt;/p&gt;&lt;p&gt;Kliknij prawym przyciskiem myszki i przeciągnij, aby ustawić zakres pętli lub edycji.&lt;/p&gt;&lt;p&gt;Kliknij prawym przyciskiem myszki, aby przełączać się między zakresem pętli a całą pętlą.&lt;/p&gt;&lt;p&gt;Kliknij z Ctrl i przeciągnij, aby przesunąć wskaźnik odtwarzania z funkcją przyciągania do miary.&lt;/p&gt;&lt;p&gt;Kliknij dwukrotnie myszką, aby rozpocząć odtwarzanie.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -18039,7 +18036,7 @@ zamiast tego?</translation>
     <message>
         <location line="+398"/>
         <source>Hold Ctrl to snap to unit.</source>
-        <translation type="unfinished"></translation>
+        <translation>Przytrzymaj Ctrl, aby przyciągnąć do jednostki.</translation>
     </message>
 </context>
 <context>
@@ -18226,7 +18223,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
     <message>
         <location line="+1"/>
         <source>Akai MPK Mini IV (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akai MPK Mini IV (eksperymentalne)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -18825,34 +18822,38 @@ Click and drag a marker to move it.
 Shift-click to set a range between markers.
 Double-click to rename a marker.
 Right-click for context menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Kliknij na znacznik, aby przesunąć kursor odtwarzania.
+Kliknij i przeciągnij znacznik, aby go przesunąć.
+Kliknij z Shiftem, aby ustawić zakres między znacznikami.
+Kliknij dwukrotnie myszką, aby zmienić nazwę znacznika.
+Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     </message>
     <message>
         <location line="+48"/>
         <location line="+14"/>
         <source>new marker</source>
-        <translation type="unfinished">nowy znacznik</translation>
+        <translation>nowy znacznik</translation>
     </message>
     <message>
         <location line="-13"/>
         <location line="+14"/>
         <source>no description</source>
-        <translation type="unfinished">brak opisu</translation>
+        <translation>brak opisu</translation>
     </message>
     <message>
         <location line="+54"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new name:</source>
-        <translation type="unfinished">Wprowadź nową nazwę:</translation>
+        <translation>Wprowadź nową nazwę:</translation>
     </message>
     <message>
         <location line="+364"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
 </context>
 <context>
@@ -18924,7 +18925,7 @@ Right-click for context menu.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+225"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+141"/>
@@ -18949,7 +18950,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+118"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
-        <translation>Kliknij i przeciągnij, aby przesunąć nutę; przytrzymaj klawisz Ctrl, aby ją skopiować</translation>
+        <translation>Kliknij i przeciągnij, aby przesunąć nutę; przytrzymaj Ctrl, aby ją skopiować</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -18959,7 +18960,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+4"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation>Kliknij i przeciągnij, aby przesunąć zaznaczone nuty; przytrzymaj klawisz Ctrl, aby je skopiować</translation>
+        <translation>Kliknij i przeciągnij, aby przesunąć zaznaczone nuty; przytrzymaj Ctrl, aby je skopiować</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -18972,12 +18973,12 @@ Right-click for context menu.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+215"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+129"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
-        <translation>Kliknij i przeciągnij, aby narysować nutę; przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Kliknij i przeciągnij, aby narysować nutę; przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -18998,7 +18999,7 @@ Right-click for context menu.</source>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+123"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+66"/>
@@ -19042,7 +19043,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+5"/>
         <source>Click and drag to move selected notes; hold Ctrl as well to copy</source>
-        <translation>Kliknij i przeciągnij, aby przesunąć zaznaczone nuty; przytrzymaj klawisz Ctrl, aby je skopiować</translation>
+        <translation>Kliknij i przeciągnij, aby przesunąć zaznaczone nuty; przytrzymaj Ctrl, aby je skopiować</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19052,7 +19053,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+4"/>
         <source>Click and drag to move note; hold Ctrl as well to copy</source>
-        <translation>Kliknij i przeciągnij, aby przesunąć nutę; przytrzymaj klawisz Ctrl, aby ją skopiować</translation>
+        <translation>Kliknij i przeciągnij, aby przesunąć nutę; przytrzymaj Ctrl, aby ją skopiować</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19739,7 +19740,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;Track staff brackets are found in the &lt;b&gt;Track Parameters&lt;/b&gt; box, and may be used to group staffs in various ways&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Klamry pięciolinii znajdują się w polu &lt;b&gt;Parametry ścieżki&lt;/b&gt; i mogą być używane do grupowania pięciolinii na różne sposoby&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Klamry znajdują się w polu &lt;b&gt;Parametry ścieżki&lt;/b&gt; i mogą być używane do grupowania pięciolinii na różne sposoby&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -19779,7 +19780,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;Choose which bracket will create a grand staff system&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Wybierz, które klamry będą tworzyć system pięciolinii poł. akoladą&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Wybierz, która klamra będzie tworzyć system pięciolinii poł. akoladą&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -20396,7 +20397,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+127"/>
         <source>%1 ticks</source>
-        <translation>%1 tiki</translation>
+        <translation>%1 tyknięć</translation>
     </message>
 </context>
 <context>
@@ -20439,8 +20440,8 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <source>%n pixel(s)</source>
         <translation>
             <numerusform>%n piksel</numerusform>
+            <numerusform>%n piksele</numerusform>
             <numerusform>%n pikseli</numerusform>
-            <numerusform>%n piksel(e)</numerusform>
         </translation>
     </message>
     <message>
@@ -20575,9 +20576,9 @@ Jest to błąd (program would previously have crashed by now)</translation>
         <location line="+293"/>
         <source>  %n event(s) selected </source>
         <translation>
-            <numerusform>  %n zaznaczony</numerusform>
-            <numerusform>  %n zaznaczone</numerusform>
-            <numerusform>  %n zaznaczony(e)</numerusform>
+            <numerusform>  %n zaznaczony przypadek </numerusform>
+            <numerusform>  %n zaznaczone przypadki </numerusform>
+            <numerusform>  %n zaznaczonych przypadków </numerusform>
         </translation>
     </message>
     <message>
@@ -20623,7 +20624,7 @@ Jest to błąd (program would previously have crashed by now)</translation>
     <message>
         <location line="+2"/>
         <source>Ornament bar %1</source>
-        <translation>Ozdobnik takt %1</translation>
+        <translation>Ozdobnik taktu %1</translation>
     </message>
     <message>
         <location line="+40"/>
@@ -22617,11 +22618,9 @@ Może wystąpić pewien brak kompatybilności z tym formatem pliku.</translation
         <location line="-2585"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
-            <numerusform>
-</numerusform>
-            <numerusform>
-</numerusform>
-            <numerusform>Usunąć %n plik(i) dźwiękowy(e) nagrany(e) podczas niezapisanej sesji?</numerusform>
+            <numerusform>Usunąć %n plik dźwiękowy nagrany podczas niezapisanej sesji?</numerusform>
+            <numerusform>Usunąć %n pliki dźwiękowe nagrane podczas niezapisanej sesji?</numerusform>
+            <numerusform>Usunąć %n plików dźwiękowych nagranych podczas niezapisanej sesji?</numerusform>
         </translation>
     </message>
     <message>
@@ -22645,11 +22644,9 @@ Wybierz te, które chcesz na zawsze usunąć z dysku twardego.
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
         <translation>
-            <numerusform>
-        </numerusform>
-            <numerusform>
-        </numerusform>
-            <numerusform>&lt;qt&gt;Około %n plik(ów) dźwiękowy(ch) do usunięcia na zawsze z dysku twardego.&lt;br&gt;Nie będzie można odzyskać plik(ów).&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Około %n plik dźwiękowy do usunięcia na zawsze z dysku twardego.&lt;br&gt;Nie będzie można odzyskać pliku.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Około %n pliki dźwiękowe do usunięcia na zawsze z dysku twardego.&lt;br&gt;Nie będzie można odzyskać plików.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
+            <numerusform>&lt;qt&gt;Około %n plików dźwiękowych do usunięcia na zawsze z dysku twardego.&lt;br&gt;Nie będzie można odzyskać plików.&lt;br&gt;Kontynuować?&lt;/qt&gt;</numerusform>
         </translation>
     </message>
     <message>
@@ -23205,11 +23202,9 @@ Błąd: %2</translation>
         <location line="+36"/>
         <source>Split %n Segment(s) at Time</source>
         <translation>
-            <numerusform>
-        </numerusform>
-            <numerusform>
-        </numerusform>
-            <numerusform>Podziel %n segment(y) w czasie</numerusform>
+            <numerusform>Podziel %n segment w czasie</numerusform>
+            <numerusform>Podziel %n segmenty w czasie</numerusform>
+            <numerusform>Podziel %n segmentów w czasie</numerusform>
         </translation>
     </message>
     <message>
@@ -23995,17 +23990,17 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="+616"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+172"/>
         <source>&lt;qt&gt;&lt;p&gt;%1: %2&lt;/p&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;%1: %2&lt;/p&gt;&lt;p&gt;Kliknij i przeciągnij w górę i w dół lub w lewo i w prawo, aby zmienić.&lt;/p&gt;&lt;p&gt;Kliknij dwukrotnie myszką, aby bezpośrednio edytować wartość.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.h" line="+126"/>
         <source>Value</source>
-        <translation type="unfinished">Wartość</translation>
+        <translation>Wartość</translation>
     </message>
 </context>
 <context>
@@ -24196,7 +24191,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+169"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -24277,7 +24272,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+27"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Opóźnienie odtwarzania wszelkich zaznaczonych segmentów tej liczby milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;UWAGA: Rosegarden nie obsługuje negatywnego opóźnienia. Jeśli potrzebujesz negatywny efekt opóźnienia, ustaw utwór na początku przed pierwszym taktem i przenieść segmenty na lewo. Możesz przytrzymać klawisz &lt;b&gt;Shift&lt;/b&gt;, dopóki to robisz dla kontroli drobnoziarnistej, choć ten sposób będzie miał przykre skutki dla renderowania notacji muzycznej, jak oglądany w edytorze nutowym.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Opóźnienie odtwarzania wszelkich zaznaczonych segmentów tej liczby milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;UWAGA: Rosegarden nie obsługuje negatywnego opóźnienia. Jeśli potrzebujesz negatywny efekt opóźnienia, ustaw utwór na początku przed pierwszym taktem i przenieść segmenty na lewo. Możesz przytrzymać &lt;b&gt;Shift&lt;/b&gt;, dopóki to robisz dla kontroli drobnoziarnistej, choć ten sposób będzie miał przykre skutki dla renderowania notacji muzycznej, jak oglądany w edytorze nutowym.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+56"/>
@@ -24408,7 +24403,7 @@ zostać usunięte, zanim będzie można zastosować nową transpozycję.</transl
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="+307"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do kreski taktowej</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do kreski taktowej</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -24523,22 +24518,22 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+150"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Hold Shift to avoid snapping to beat grid; hold Ctrl as well to rescale contents</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki; przytrzymaj klawisz CTRL, aby przeskalować zawartości</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki; przytrzymaj Ctrl, aby przeskalować zawartości</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Hold Ctrl to rescale contents</source>
-        <translation>Przytrzymaj klawisz Shift, aby przeskalować zawartości</translation>
+        <translation>Przytrzymaj Ctrl, aby przeskalować zawartości</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation>Kliknij i przeciągnij, aby zmienić rozmiar segmentu; przytrzymaj klawisz Ctrl, aby przeskalować jego zawartości</translation>
+        <translation>Kliknij i przeciągnij, aby zmienić rozmiar segmentu; przytrzymaj Ctrl, aby przeskalować jego zawartości</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -24564,7 +24559,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+312"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation>Przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -24574,7 +24569,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+13"/>
         <source>Click and drag to resize a segment; hold Ctrl as well to rescale its contents</source>
-        <translation>Kliknij i przeciągnij, aby zmienić rozmiar segmentu; przytrzymaj klawisz Ctrl, aby go przeskalować</translation>
+        <translation>Kliknij i przeciągnij, aby zmienić rozmiar segmentu; przytrzymaj Ctrl, aby przeskalować jego zawartości</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -24584,12 +24579,12 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+5"/>
         <source>Click and drag to move segments; hold Ctrl as well to copy them; Ctrl + Alt for linked copies</source>
-        <translation>Kliknij i przeciągnij, aby przesunąć segmenty; przytrzymaj klawisz Ctrl, aby je skopiować; Ctrl+Alt, aby utworzyć powiązane kopie</translation>
+        <translation>Kliknij i przeciągnij, aby przesunąć segmenty; przytrzymaj Ctrl, aby je skopiować; Ctrl+Alt, aby utworzyć powiązane kopie</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Click and drag to move segment; hold Ctrl as well to copy it; Ctrl + Alt for a linked copy; double-click to edit</source>
-        <translation>Kliknij i przeciągnij, aby przesunąć segment; przytrzymaj klawisz Ctrl, aby go skopiować; Ctrl+Alt, aby utworzyć powiązaną kopię; kliknij dwukrotnie myszką, aby edytować</translation>
+        <translation>Kliknij i przeciągnij, aby przesunąć segment; przytrzymaj Ctrl, aby go skopiować; Ctrl+Alt, aby utworzyć powiązaną kopię; kliknij dwukrotnie myszką, aby edytować</translation>
     </message>
     <message>
         <location line="-4"/>
@@ -24722,7 +24717,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+67"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
-        <translation>Kliknij na segmencie, aby podzielić go na dwa; przytrzymaj klawisz Shift, aby przyciągnąć do siatki</translation>
+        <translation>Kliknij na segmencie, aby podzielić go na dwa; przytrzymaj Shift, aby przyciągnąć do siatki</translation>
     </message>
 </context>
 <context>
@@ -25851,7 +25846,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+10"/>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation>%1.%2%3 qpm (%4.%5%6 bpm)   </translation>
+        <translation>%1.%2%3 QPM (%4.%5%6 BPM)   </translation>
     </message>
     <message>
         <location line="+22"/>
@@ -25989,7 +25984,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+18"/>
         <source> bpm</source>
-        <translation> bpm</translation>
+        <translation> BPM</translation>
     </message>
     <message>
         <location line="+160"/>
@@ -26002,12 +25997,12 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+443"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
-        <translation>%1.%2%3 (%4.%5%6 bpm)</translation>
+        <translation>%1.%2%3 (%4.%5%6 BPM)</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>%1.%2%3 bpm</source>
-        <translation>%1.%2%3 bpm</translation>
+        <translation>%1.%2%3 BPM</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -26067,7 +26062,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>%1.%2%3 qpm (%4.%5%6 bpm)   </source>
-        <translation type="vanished">%1.%2%3 qpm (%4.%5%6 bpm)</translation>
+        <translation type="vanished">%1.%2%3 QPM (%4.%5%6 BPM)   </translation>
     </message>
     <message>
         <source>Tempo   </source>
@@ -26647,19 +26642,19 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>(starting %1.%2 qpm, %3.%4 bpm)</source>
-        <translation type="vanished">(rozpoczynanie %1.%2 qpm, %3.%4 bpm)</translation>
+        <translation type="vanished">(rozpoczynanie %1.%2 QPM, %3.%4 BPM)</translation>
     </message>
     <message>
         <source>(starting %1.%2 bpm)</source>
-        <translation type="vanished">(rozpoczynanie %1.%2 bpm)</translation>
+        <translation type="vanished">(rozpoczynanie %1.%2 BPM)</translation>
     </message>
     <message>
         <source>(%1.%2 qpm, %3.%4 bpm)</source>
-        <translation type="vanished">(%1.%2 qpm, %3.%4 bpm)</translation>
+        <translation type="vanished">(%1.%2 QPM, %3.%4 BPM)</translation>
     </message>
     <message>
         <source>(%1.%2 bpm)</source>
-        <translation type="vanished">(%1.%2 bpm)</translation>
+        <translation type="vanished">(%1.%2 BPM)</translation>
     </message>
 </context>
 <context>
@@ -26667,95 +26662,95 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location filename="../../src/gui/widgets/TimeWidget2.cpp" line="+50"/>
         <source>Out Of Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Poza zakresem</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Note:</source>
-        <translation type="unfinished">Nuta:</translation>
+        <translation>Nuta:</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;inexact&gt;</source>
-        <translation type="unfinished">&lt;niedokładne&gt;</translation>
+        <translation>&lt;niedokładne&gt;</translation>
     </message>
     <message>
         <location line="+44"/>
         <location line="+133"/>
         <source>Ticks:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tyknięcia:</translation>
     </message>
     <message>
         <location line="-109"/>
         <source>Measures:</source>
-        <translation type="unfinished">Takty:</translation>
+        <translation>Takty:</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Measure:</source>
-        <translation type="unfinished">Takt:</translation>
+        <translation>Takt:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>beats:</source>
-        <translation type="unfinished">miary:</translation>
+        <translation>miary:</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>beat:</source>
-        <translation type="unfinished">miara:</translation>
+        <translation>miara:</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>%1:</source>
-        <translation type="unfinished">%1:</translation>
+        <translation>%1:</translation>
     </message>
     <message>
         <location line="+22"/>
         <location line="+249"/>
         <source>(%1/%2 time)</source>
-        <translation type="unfinished">(%1/%2 czas)</translation>
+        <translation>(%1/%2 czas)</translation>
     </message>
     <message>
         <location line="-240"/>
         <source>Seconds:</source>
-        <translation type="unfinished">Sekundy:</translation>
+        <translation>Sekundy:</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>msec:</source>
-        <translation type="unfinished">msek.:</translation>
+        <translation>msek.:</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>ticks</source>
-        <translation type="unfinished"></translation>
+        <translation>tyknięcia</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Granica</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Adjust time to be within valid limits.</source>
-        <translation type="unfinished"></translation>
+        <translation>Dostosuj czas tak, aby mieścił się w prawidłowych granicach.</translation>
     </message>
     <message>
         <location line="+60"/>
         <source>starting</source>
-        <translation type="unfinished"></translation>
+        <translation>rozpoczynanie</translation>
     </message>
     <message>
         <location line="+12"/>
         <location line="+10"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translation>BPM</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>qpm</source>
-        <translation type="unfinished"></translation>
+        <translation>QPM</translation>
     </message>
 </context>
 <context>
@@ -26783,7 +26778,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+18"/>
         <source>Record on this track</source>
-        <translation>Nagrywaj na tę ścieżkę</translation>
+        <translation>Nagrywaj na tej ścieżce</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -26911,7 +26906,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to archive a track.  Archived tracks will not make sound.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Zaznacz to, aby zarchiwizować utwór. Zarchiwizowane utwory nie będą wydawać dźwięku.&lt;/qt&gt;&lt;/p&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Zaznacz to, aby zarchiwizować ścieżkę. Zarchiwizowane ścieżki nie będą wydawać dźwięku.&lt;/qt&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -26921,7 +26916,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+11"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected device, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Ten utwór nagra tylko dźwięk/MIDI z wybranego urządzenia, filtrując coś jeszcze na zewnątrz&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ta ścieżka nagra tylko dźwięk/MIDI z wybranego urządzenia, filtrując coś jeszcze na zewnątrz&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -27178,7 +27173,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+72"/>
         <source>&lt;qt&gt;&lt;p&gt;This track will only record Audio/MIDI from the selected channel, filtering anything else out&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Ten utwór nagra tylko dźwięk/MIDI z wybranego urządzenia, filtrując coś jeszcze na zewnątrz&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ta ścieżka nagra tylko dźwięk/MIDI z zaznaczonego kanału, filtrując coś jeszcze na zewnątrz&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+64"/>
@@ -27514,7 +27509,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+6"/>
         <source>Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Indeks</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -27587,7 +27582,7 @@ Transponuj o półtony...</translation>
         <translation>
             <numerusform>%1 w %n ścieżce</numerusform>
             <numerusform>%1 w %n ścieżkach</numerusform>
-            <numerusform>%1 w %n ścieżce(ach)</numerusform>
+            <numerusform>%1 w %n ścieżkach</numerusform>
         </translation>
     </message>
     <message>
