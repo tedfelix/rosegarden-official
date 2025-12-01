@@ -9182,18 +9182,6 @@
         <translation></translation>
     </message>
     <message>
-        <source>LilyPond does not allow spaces or backslashes in filenames.
-
-Would you like to use
-
- %1
-
- instead?</source>
-        <translation type="vanished">LilyPond does not allow spaces or backslashes in filenames.
-
-Would you like to use &quot;%1&quot; instead?</translation>
-    </message>
-    <message>
         <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+33"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
         <translation></translation>
@@ -12158,10 +12146,6 @@ Destination device already has a bank for
         <location line="+1"/>
         <source>&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</source>
         <translation></translation>
-    </message>
-    <message>
-        <source>&lt;qt&gt;If checked, these notes will pop up the nexttime the document is loaded&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;If checked, these notes will pop up the next time the document is loaded&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -16728,13 +16712,6 @@ Right-click for context menu.</source>
 </context>
 <context>
     <name>Rosegarden::MatrixView</name>
-    <message numerus="yes">
-        <source>%1%2 - %n Segment(s) - %3</source>
-        <translation type="vanished">
-            <numerusform>%1%2 - %n Segment - %3</numerusform>
-            <numerusform>%1%2 - %n Segments - %3</numerusform>
-        </translation>
-    </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+662"/>
         <source> Grid: </source>
@@ -18214,13 +18191,6 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <location line="+151"/>
         <source>Estimated time signature shown</source>
         <translation></translation>
-    </message>
-    <message numerus="yes">
-        <source>%1%2 - %n Segment(s) - Notation</source>
-        <translation type="vanished">
-            <numerusform>%1%2 - %n Segment - Notation</numerusform>
-            <numerusform>%1%2 - %n Segments - Notation</numerusform>
-        </translation>
     </message>
     <message>
         <location line="+298"/>
