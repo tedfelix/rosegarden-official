@@ -2180,7 +2180,7 @@
     <message>
         <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+33"/>
         <source>Erase Controller Event(s)</source>
-        <translation type="unfinished">Effacer le(s) événement(s) contrôleur(s)</translation>
+        <translation>Effacer le(s) événement(s) contrôleur(s)</translation>
     </message>
 </context>
 <context>
@@ -6863,12 +6863,12 @@
     <message>
         <location line="-551"/>
         <source>&amp;Export Audio Files...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Exporter les fichiers audio...</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Unload Selected Audio Files</source>
-        <translation type="unfinished"></translation>
+        <translation>Décharger les fichiers audio &amp;sélectionnés</translation>
     </message>
     <message>
         <location line="+32"/>
@@ -6878,24 +6878,24 @@
     <message>
         <location line="+67"/>
         <source>Rename Marker</source>
-        <translation type="unfinished"></translation>
+        <translation>Renommer marqueur</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Manage Markers</source>
-        <translation type="unfinished">Gérer les marqueurs</translation>
+        <translation>Gérer les marqueurs</translation>
     </message>
     <message>
         <location line="+58"/>
         <location line="+279"/>
         <source>Show Key Pressure Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la règlette de pression de touche</translation>
     </message>
     <message>
         <location line="-278"/>
         <location line="+279"/>
         <source>Show Channel Pressure Ruler</source>
-        <translation type="unfinished"></translation>
+        <translation>Afficher la règlette de pression de canal</translation>
     </message>
     <message>
         <location line="-275"/>
@@ -6911,22 +6911,22 @@
     <message>
         <location line="+96"/>
         <source>&amp;Move to Staff Above Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer sur la portée au de&amp;ssus du curseur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Move to Staff Above Cursor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer sur la portée au de&amp;ssus du curseur...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff &amp;Below Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer sur la portée au dess&amp;ous du curseur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff &amp;Below Cursor...</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer sur la portée au dess&amp;ous du curseur...</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -8835,12 +8835,12 @@
     <message>
         <location line="-139"/>
         <source>Move to Staff Above Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer sur la portée au dessus du curseur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Move to Staff Below Cursor</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer sur la portée au dessous du curseur</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -8875,7 +8875,7 @@
     <message>
         <location line="+31"/>
         <source>Select Related Segments</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionner les segments associés</translation>
     </message>
     <message>
         <location line="+63"/>
@@ -9324,7 +9324,7 @@
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+420"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
-        <translation type="unfinished"></translation>
+        <translation>Attention : Des greffons LV2 GTK2 sont actifs. Il peut être nécessaire d&apos;installer le greffon &quot;qt gtk2 platform style&quot;.</translation>
     </message>
     <message>
         <location line="+374"/>
@@ -10652,7 +10652,7 @@ Voulez-vous utiliser
     <message>
         <location line="+55"/>
         <source>Pan</source>
-        <translation type="unfinished">Balance</translation>
+        <translation>Balance</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -10779,13 +10779,13 @@ Voulez-vous utiliser
         <location line="+48"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation type="unfinished">Impossible de sauvegarder le document en %1
+        <translation>Impossible de sauvegarder le document en %1
 L&apos;erreur était : %2</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished">Impossible de sauvegarder le document en %1</translation>
+        <translation>Impossible de sauvegarder le document en %1</translation>
     </message>
     <message>
         <location line="+206"/>
@@ -10924,27 +10924,27 @@ L&apos;erreur était : %2</translation>
     <message>
         <location line="+21"/>
         <source>Save Files To</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrer les fichiers vers</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>The file %1 already exists.  Do you wish to overwrite it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier %1 existe. L&apos;écraser ?</translation>
     </message>
     <message>
         <location line="+55"/>
         <source>All selected segments will be deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les segments sélectionnés seront effacés.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source> Selected audio files will be unloaded and all associated segments deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation> Les fichiers audio sélectionnés seront déchargés et tous les segments associés seront effacés.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source> Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation> Etes-vous sûr ?</translation>
     </message>
     <message>
         <location line="+685"/>
@@ -11184,42 +11184,46 @@ Veuillez sélectionner ceux que vous souhaitez effacer définitivement du disque
         <location line="+369"/>
         <source>The following instruments are using inputs you are removing:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ces instruments utilisent les entrées qui vont être supprimées :
+</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>  %1 : input %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  %1 : entrée %2</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>These will be set to input 1.  Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ceci sera utilisé comme entrée 1.  Êtes vous sûr ?</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+66"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="-17"/>
         <source>The following instruments are using submasters you are removing:
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Ces instruments utilisent les groupes qui vont être supprimés :
+</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>  %1 : submaster %2
 </source>
-        <translation type="unfinished"></translation>
+        <translation>  %1 : groupe %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>Outputs will be set to master and inputs will be set to input 1.
 Are you sure?</source>
-        <translation type="unfinished"></translation>
+        <translation>Les sorties vont être associés au maître et les entrées à l&apos;entrée 1.
+Êtes vous sûr ?</translation>
     </message>
     <message>
         <location line="+99"/>
@@ -11733,7 +11737,7 @@ Are you sure?</source>
     <message>
         <location line="+22"/>
         <source>%1 minutes at %3Hz 32-bit stereo</source>
-        <translation type="unfinished">%1 minutes à %3 Hz, 16-bit stereo {1 ?} {3H?} {32-?}</translation>
+        <translation>%1 minutes à %3 Hz, 32-bits stéréo</translation>
     </message>
     <message>
         <source>%1 minutes at %3Hz 16-bit stereo</source>
@@ -14833,7 +14837,7 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+24"/>
         <source>Select a Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélection d&apos;un répertoire</translation>
     </message>
     <message>
         <source>Select an Audio File</source>
@@ -15101,12 +15105,12 @@ Voulez-vous essayer de localiser ce fichier?</translation>
     <message>
         <location line="+72"/>
         <source>Setup LV2 Environment</source>
-        <translation type="unfinished"></translation>
+        <translation>Définir un environnement LV2</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;If set, set environment variables for lv2 plugins on gnome and wayland. In Rosegarden the environment variable XDG_SESSION_TYPE will be set to x11 on wayland displays and QT_QPA_PLATFORMTHEME will be set to gtk2 on non kde desktops. If you don&apos;t want this behaviour switch this item off&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Si coché, des variables d&apos;environnement utilisées par les greffons LV2 pour Gnome et Wayland seront définies. Dans Rosegarden, XDG_SESSION_TYPE sera définie comme x11 dans le cas d&apos;un affichage Wayland et QT_QPA_PLATFORMTHEME sera définie comme gtk2 sur un bureau autre que KDE. Si ce n&apos;est pas le comportement souhaité, laisser cette case décochée.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+401"/>
@@ -17046,7 +17050,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+398"/>
         <source>Hold Ctrl to snap to unit.</source>
-        <translation type="unfinished"></translation>
+        <translation>Maintenir Ctrl pressé pour s&apos;accrocher aux temps.</translation>
     </message>
 </context>
 <context>
@@ -17177,7 +17181,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+1"/>
         <source>Akai MPK Mini IV (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Akai MPK Mini IV (expérimental)</translation>
     </message>
     <message>
         <location line="+16"/>
@@ -17824,34 +17828,38 @@ Click and drag a marker to move it.
 Shift-click to set a range between markers.
 Double-click to rename a marker.
 Right-click for context menu.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cliquer sur un marqueur pour y placer le pointeur d&apos;exécution.
+Cliquer et glisser pour déplacer un marqueur.
+Majuscules + cliquer pour définir une plage entre deux marqueurs.
+Double-cliquer pour renommer un marqueur.
+Cliquer avec le bouton droit pour un menu contextuel.</translation>
     </message>
     <message>
         <location line="+48"/>
         <location line="+14"/>
         <source>new marker</source>
-        <translation type="unfinished">nouveau marqueur</translation>
+        <translation>nouveau marqueur</translation>
     </message>
     <message>
         <location line="-13"/>
         <location line="+14"/>
         <source>no description</source>
-        <translation type="unfinished">pas de description</translation>
+        <translation>pas de description</translation>
     </message>
     <message>
         <location line="+54"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Enter new name:</source>
-        <translation type="unfinished">Entrer un nouveau nom:</translation>
+        <translation>Entrer un nouveau nom :</translation>
     </message>
     <message>
         <location line="+364"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
-        <translation type="unfinished">Maintenez enfoncé la touche &quot;Majuscules&quot; pour ne pas rester accroché à la grille des temps</translation>
+        <translation>Maintenir pressée la touche &quot;Majuscules&quot; pour ne pas rester accroché à la grille des temps</translation>
     </message>
 </context>
 <context>
@@ -18230,7 +18238,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+99"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Contrôleur %2 %3</translation>
+        <translation>%1 : Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+1155"/>
@@ -18283,7 +18291,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+837"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Contrôleur %2 %3</translation>
+        <translation>%1 : Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+342"/>
@@ -19636,7 +19644,7 @@ Ceci est un bogue (le programme aurait dû s&apos;arrêter anormalement)</transl
     <message>
         <location line="-2355"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Contrôleur %2 %3</translation>
+        <translation>%1 : Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+1184"/>
@@ -19821,7 +19829,7 @@ Veuillez vérifier que le périphérique est configuré correctement dans le dia
     <message>
         <location line="+1358"/>
         <source>%1 Controller %2 %3</source>
-        <translation>%1 Contrôleur %2 %3</translation>
+        <translation>%1 : Contrôleur %2 %3</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -22936,17 +22944,17 @@ Erreur obtenue : %2</translation>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="+616"/>
         <source>Rosegarden</source>
-        <translation type="unfinished">Rosegarden</translation>
+        <translation>Rosegarden</translation>
     </message>
     <message>
         <location line="+172"/>
         <source>&lt;qt&gt;&lt;p&gt;%1: %2&lt;/p&gt;&lt;p&gt;Click and drag up and down or left and right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;%1 : %2&lt;/p&gt;&lt;p&gt;Cliquer et glisser de haut en bas ou de droite à gauche pour modifier.&lt;/p&gt;&lt;p&gt;Double-cliquer pour éditer directement la valeur.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/widgets/Rotary.h" line="+126"/>
         <source>Value</source>
-        <translation type="unfinished">Valeur</translation>
+        <translation>Valeur</translation>
     </message>
 </context>
 <context>
@@ -25611,79 +25619,79 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location filename="../../src/gui/widgets/TimeWidget2.cpp" line="+50"/>
         <source>Out Of Range</source>
-        <translation type="unfinished"></translation>
+        <translation>Hors de la plage autorisée</translation>
     </message>
     <message>
         <location line="+51"/>
         <source>Note:</source>
-        <translation type="unfinished">Note:</translation>
+        <translation>Note :</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&lt;inexact&gt;</source>
-        <translation type="unfinished">&lt;inexacte&gt;</translation>
+        <translation>&lt;inexacte&gt;</translation>
     </message>
     <message>
         <location line="+44"/>
         <location line="+133"/>
         <source>Ticks:</source>
-        <translation type="unfinished"></translation>
+        <translation>Tics :</translation>
     </message>
     <message>
         <location line="-109"/>
         <source>Measures:</source>
-        <translation type="unfinished">Mesures:</translation>
+        <translation>Mesures :</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Measure:</source>
-        <translation type="unfinished">Mesure:</translation>
+        <translation>Mesure :</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>beats:</source>
-        <translation type="unfinished">pulsations:</translation>
+        <translation>pulsations :</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>beat:</source>
-        <translation type="unfinished">pulsation:</translation>
+        <translation>pulsation :</translation>
     </message>
     <message>
         <location line="+21"/>
         <source>%1:</source>
-        <translation type="unfinished">%1:</translation>
+        <translation>%1 :</translation>
     </message>
     <message>
         <location line="+22"/>
         <location line="+249"/>
         <source>(%1/%2 time)</source>
-        <translation type="unfinished">(%1/%2 temps)</translation>
+        <translation>(%1/%2 temps)</translation>
     </message>
     <message>
         <location line="-240"/>
         <source>Seconds:</source>
-        <translation type="unfinished">Secondes:</translation>
+        <translation>Secondes :</translation>
     </message>
     <message>
         <location line="+15"/>
         <source>msec:</source>
-        <translation type="unfinished">msec:</translation>
+        <translation>msec :</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>ticks</source>
-        <translation type="unfinished"></translation>
+        <translation>périodes d&apos;horloge</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Limit</source>
-        <translation type="unfinished"></translation>
+        <translation>Limite</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Adjust time to be within valid limits.</source>
-        <translation type="unfinished"></translation>
+        <translation>Maintient le temps entre des bornes valides.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -26385,7 +26393,7 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location line="+6"/>
         <source>Index</source>
-        <translation type="unfinished"></translation>
+        <translation>Indice</translation>
     </message>
     <message>
         <location line="+1"/>
