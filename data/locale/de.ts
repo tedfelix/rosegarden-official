@@ -12330,7 +12330,8 @@ permission and re-add it</source>
         <location line="+4"/>
         <source>  %1 : input %2
 </source>
-        <translation>  %1 : Eingang %2</translation>
+        <translation>  %1 : Eingang %2
+</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -12886,7 +12887,7 @@ here.</source>
     <message>
         <location line="+22"/>
         <source>%1 minutes at %3Hz 32-bit stereo</source>
-        <translation>%1 Minuten bei %3Hz 16-bit-Stereo {1 ?} {3H?} {32-?}</translation>
+        <translation>%1 Minuten bei %3Hz 32-bit-Stereo</translation>
     </message>
     <message>
         <source>%1 minutes at %3Hz 16-bit stereo</source>
@@ -24752,8 +24753,7 @@ right to modify.&lt;/p&gt;&lt;p&gt;Double click to edit value directly.&lt;/p&gt
     <message>
         <location line="+5"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Verzögere die Wiedergabe aller ausgewählten Segmente um diese Anzahl von Millisekunden&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Rosegarden untersützt keine negativen Verzögerungen. Falls negative Verzögerungen benötigt werden, muss die Komposition vor Takt 1 starten und alle Segmente müssen nach links verschoben werden. Dies kann durch Halten der &lt;b&gt;Umschalt&lt;/b&gt;-Taste während der Feinkontrolle geschehen. Allerdings wird 
-es seltsame Effekte auf die Darstellung der Noten im Notensatzeditor haben.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Verzögere die Wiedergabe aller ausgewählten Segmente um diese Anzahl von Millisekunden&lt;/p&gt;&lt;p&gt;&lt;i&gt;Achtung: Rosegarden untersützt keine negativen Verzögerungen. Falls negative Verzögerungen benötigt werden, muss die Komposition vor Takt 1 starten und alle Segmente müssen nach links verschoben werden. Dies kann durch Halten der &lt;b&gt;Umschalt&lt;/b&gt;-Taste während der Feinkontrolle geschehen. Allerdings wird es seltsame Effekte auf die Darstellung der Noten im Notensatzeditor haben.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+51"/>
@@ -24941,8 +24941,7 @@ entfernt werden, bevor eine neue Transponierung gesetzt werden kann.</translatio
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="+307"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation>Umschaltaste halten um Ausrichten an Taktlinien zu 
-vermeiden</translation>
+        <translation>Umschaltaste halten um Ausrichten an Taktlinien zu vermeiden</translation>
     </message>
     <message>
         <location line="+19"/>
