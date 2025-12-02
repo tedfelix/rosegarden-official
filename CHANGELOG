@@ -65,8 +65,10 @@ Included in this release...
   * MatrixTool: Fix missing forward-decl for QKeyEvent.  Bug #1746.
     [70307ab1ee]
   * cmake: Remove X11 requirement.  Bug #1747.  [12a6aa65c9]
+  * cmake: Fixed a build error.  [ff1fe47372]
+  * cmake: Make gtk2 optional.  [2364f701d6]
 
-stopped at 0c95ae3428
+stopped at 4d0e2192d9
 
 ===== New Features =====
 
