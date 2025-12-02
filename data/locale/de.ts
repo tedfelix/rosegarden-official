@@ -10402,7 +10402,7 @@ a quarter sine wave contour</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+420"/>
+        <location filename="../../src/gui/application/main.cpp" line="+422"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
         <translation>Warnung: Die LV2 GTK2-Plugins sind aktiv. Möglicherweise musst du das qt-gtk2-Plattform-Style Plugin installieren</translation>
     </message>
@@ -16513,7 +16513,7 @@ will always be the same as the track name.&lt;/p&gt;&lt;/qt&gt;</source>
     <message>
         <location line="+1"/>
         <source>xdg-open (recommended)</source>
-        <translation type="unfinished"></translation>
+        <translation>xdg-open (empfohlen)</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -17957,7 +17957,7 @@ wie Rosegarden Versetzungszeichen im Notensatz-Editor aufhebt.&lt;/qt&gt;</trans
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;When checked, LilyPond is allowed print fingerings inside the staff.  This can improve rendering in polyphonic scores with fingerings in different voices, and is on by default.&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Wenn diese Option aktiviert ist, darf LilyPond Fingersätze innerhalb des Notensystems ausgeben. Dies kann die Darstellung in polyphonen Partituren mit Fingersätzen in verschiedenen Stimmen verbessern und ist standardmäßig aktiviert.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+45"/>
@@ -18063,7 +18063,7 @@ you have a newer version of LilyPond, choose the highest version Rosegarden supp
     <message>
         <location line="+7"/>
         <source>&lt;qt&gt;Useful for large, complex scores, this prints the short name every time there is a line break in the score, making it easier to follow which line belongs to which instrument across pages; requires LilyPond 2.10 or higher&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;Diese Funktion ist besonders nützlich für große, komplexe Partituren, da sie bei jedem Zeilenumbruch den Kurznamen ausgibt und so die Zuordnung der Zeilen zu den einzelnen Instrumenten über die Seiten hinweg erleichtert. Erfordert LilyPond 2.10 oder höher.&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may 
@@ -18227,7 +18227,7 @@ feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/inde
     <message>
         <location line="+33"/>
         <source>&lt;p&gt;Ran &lt;b&gt;lilypond&lt;/b&gt; successfully, but it terminated with errors.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Startete &lt;b&gt;lilypond&lt;/b&gt; erfolgreich, wurde aber wegen Fehler abgebrochen.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -18242,7 +18242,7 @@ feature at http://www.rosegardenmusic.com/tutorials/supplemental/chordnames/inde
     <message>
         <location line="+3"/>
         <source>&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Die Verarbeitung wurde aufgrund schwerwiegender Fehler abgebrochen.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;LilyPond processed the file successfully, but &lt;b&gt;%1&lt;/b&gt; did not run!&lt;/p&gt;&lt;p&gt;Please configure a valid %2 under &lt;b&gt;Edit -&gt; Preferences -&gt; General -&gt; 
@@ -18355,7 +18355,7 @@ to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;<
     <message>
         <location line="+26"/>
         <source>Track %1, bar %2 to %3: &quot;%4&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>Spur %1, Takt %2 to %3: &quot;%4&quot;</translation>
     </message>
     <message>
         <location line="+39"/>
@@ -18395,7 +18395,7 @@ to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;<
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current segment lyrics have been modified.&lt;/p&gt;&lt;p&gt;The modifications will be lost if a new segment is selected.&lt;/p&gt;&lt;p&gt;Do you really want to select a new segment?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Der Text des aktuellen Segments wurde geändert.&lt;/p&gt;&lt;p&gt;Die Änderungen gehen verloren, wenn ein neues Segment ausgewählt wird.&lt;/p&gt;&lt;p&gt;Möchten Sie wirklich ein neues Segment auswählen?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+204"/>
@@ -18745,7 +18745,7 @@ es auf sämtliche Perkussion Tabellen und Schlagzeuge, die im Studio konfigurier
     <message>
         <location line="+11"/>
         <source>Auto</source>
-        <translation type="unfinished"></translation>
+        <translation>Auto</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -19003,7 +19003,7 @@ not heard unless you are working in compound time.)&lt;/qt&gt;</source>
     <message>
         <location filename="../../src/commands/notation/MarkParallelCommand.h" line="+45"/>
         <source>Mark Parallel</source>
-        <translation type="unfinished"></translation>
+        <translation>Parallel markieren</translation>
     </message>
 </context>
 <context>
@@ -20339,7 +20339,7 @@ check transposing instruments carefully in both concert and notated pitch. When 
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Wenn diese Option aktiviert ist, wird beim Einfügen von Noten oder Pausen mit der Maus immer eine Vorschau der Note oder Pause angezeigt.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -24941,7 +24941,7 @@ entfernt werden, bevor eine neue Transponierung gesetzt werden kann.</translatio
     <message>
         <location filename="../../src/gui/editors/segment/compositionview/SegmentPencil.cpp" line="+307"/>
         <source>Hold Shift to avoid snapping to bar lines</source>
-        <translation>Umschaltaste halten um Ausrichten an Taktlinien zu vermeiden</translation>
+        <translation>Umschalttaste halten um Ausrichten an Taktlinien zu vermeiden</translation>
     </message>
     <message>
         <location line="+19"/>
