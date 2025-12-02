@@ -14,15 +14,16 @@
     </provides>
     <launchable type="desktop-id">com.rosegardenmusic.rosegarden.desktop</launchable>
     <name>Rosegarden</name>
-    <name xml:lang="fr">Rosegarden</name>
-    <summary>MIDI and Audio Sequencer and Notation Editor</summary>
-    <summary xml:lang="fr">Séquenceur MIDI/audio et éditeur de partitions</summary>
-    <summary xml:lang="de">MIDI- und Audio-Sequencer und Notensatzprogramm</summary>
-    <summary xml:lang="es">Secuenciador de MIDI y de audio y editor de partitura</summary>
-    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор</summary>
+    <summary>MIDI Sequencer and Notation Editor with Audio Support</summary>
+    <summary xml:lang="es">Secuenciador de MIDI y editor de partitura con soporte de audio</summary>
+    <summary xml:lang="fr">Séquenceur MIDI et éditeur de partitions avec prise en charge audio</summary>
+    <summary xml:lang="de">MIDI-Sequencer und Notensatzprogramm mit Audiounterstützung</summary>
+    <summary xml:lang="ru">MIDI-секвенсер и нотный редактор с поддержкой аудио</summary>
+    <summary xml:lang="pl">Sekwencer MIDI i edytor partytury ze wsparciem audio</summary>
     <metadata_license>CC0</metadata_license>
     <project_license>GPL-2.0+</project_license>
     <content_rating type="oars-1.1" />
+    <!-- Deprecated, but keeping for older toolchains. -->
     <developer_name>Rosegarden development team</developer_name>
     <developer id="com.rosegardenmusic">
       <name>Rosegarden Development Team</name>
@@ -60,6 +61,65 @@
     </categories>
 
     <releases>
+
+      <release type="stable" version="25.12" date="2025-12-02">
+        <url>https://rosegardenmusic.com/wiki/dev:25.12</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>Fix tuplet of 7 in one beat leads to incorrect durations.  Bug #1464.  [ffe92b80a1]</li>
+            <li>Fix incorrect bpm on TimeWidget.  [d94e0e096c]</li>
+            <li>Fix occasional unwanted recovery prompt.  Bug #1725.  [b2ed6a748d]</li>
+            <li>Fix stuck lilypond preview dialog.  Bug #1726.  [5857468170]</li>
+            <li>Fix track buttons and segment canvas getting out of sync.  Bug #1728.  [b06a0cee07]</li>
+            <li>Fix main window losing focus when mouse leaves.  Bug #1728.  [c384771ccb]</li>
+            <li>Fix MIDI export problems with anacrusis and tempo changes.  Bug #1627.  [0683a0890d]</li>
+            <li>Fix undo anacrusis requiring three undos.  [c4d89ee242]</li>
+            <li>Fix undo for tempo changes losing ramp info.  [ea1982fdcf]</li>
+            <li>Fix adding and removing files in the Audio File Manager does not mark the document as modified.  [efc375058c]</li>
+            <li>Improve missing audio file handling.  Bug #1730.  [bdaf8dc014]</li>
+            <li>Fix audio directories being created unnecessarily.  Bug #1730.  [f7053b39dc]</li>
+            <li>Fix wait cursor during audio file location dialog.  [a915292fc0]</li>
+            <li>Use "open directory" dialog in file location dialog instead of broken "file open" dialog.  Bug #1730.  [6461bc9ce4]</li>
+            <li>Fix unnecessary error message box.  Bug #1730.  [c6ef6415c7]</li>
+            <li>Fix selection problems when closing the Audio File Manager.  Bug #1733.  [83fa32bdb2]</li>
+            <li>Fix cursor not returning to normal after using audio location dialog.  Bug #1736.  [0d38af676e]</li>
+            <li>Fix sfizz plugin UI not visible.  Bug #1738.  [090f160bce] [f908ea2646]</li>
+            <li>Fix instruments refering to invalid audio inputs and submasters.  Bug #1735.  [faa8e5186d] [722d5a2c67] [01b5e6d96f]</li>
+            <li>Fix LV2 crashes due to environment variables.  Bug #1737.  [58a2e3d9fe]</li>
+            <li>Fix new MIDI ports called "unnamed" rather than "New Device".  Bug #1710.  [2c18d18906]</li>
+            <li>Fix lilypond version issue.  Bug #1739.  [55ef24b9bf]</li>
+            <li>Fix Feta.xml not found message.  Bug #1741.  [d24521621d]</li>
+            <li>Fix "oops" message in logs.  Bug #1740.  [bb86de7422]</li>
+            <li>Limit mouse position in LoopRuler.  Bug #1742.  [f7216033b9]</li>
+            <li>Fix wrong codec selected in text codec dialog.  [6e7b2c2577]</li>
+            <li>Use "snap to unit" for the tools and the LoopRuler to make it easier to work in compound meters.  [be819c5265]</li>
+            <li>Add "Cursor" to "Move to Staff Above/Below" menu items.  [a1823ca9f6]</li>
+            <li>Fix a crash when saving during playback.  [e835e860b3]</li>
+            <li>Make notation quantization color brighter.  [5bf74aee5c]</li>
+            <li>Fix undo after remove results in no audio in the Audio File Manager.  Bug #1733.  [4f732e5c17] [36a6680ed9] [ab6b89453f]</li>
+            <li>Fix problems when moving segments beyond composition end.  Bug #1744.  [b3cd66b800]</li>
+            <li>Remove unnecessary logging.  Bug #1745.  [1cf772bf68]</li>
+            <li>Fix lv2 plugins not showing as lv2 plugins.  Feature Request #540.  [83c427819c]</li>
+            <li>MatrixTool: Fix missing forward-decl for QKeyEvent.  Bug #1746.  [70307ab1ee]</li>
+            <li>cmake: Remove X11 requirement.  Bug #1747.  [12a6aa65c9]</li>
+            <li>cmake: Fixed a build error.  [ff1fe47372]</li>
+            <li>cmake: Make gtk2 optional.  [2364f701d6]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>Rulers now support aftertouch, both channel and key.  Feature Request #527.  [5ee9c807d8]</li>
+            <li>Rotary (knob) widget now shows label (e.g. pan) and value in its tooltip.  [4c42d7dc4d]</li>
+            <li>Snap markers to beat.  Feature Request #537.  [6c69fa3354]</li>
+            <li>Move markers by dragging them.  Feature Request #536.  [66b9451054] [00eb33ffa7] [8f334a5dbf]</li>
+            <li>Double-click to rename a marker.  Feature Request #535.  [3973fdf484]</li>
+            <li>Edit > Select Related Segments feature.  Feature Request #534.  [d289dc4005]</li>
+            <li>Audio File Manager: allow multi-select of entries in the list.  Feature Request #533.  [2368585756]</li>
+            <li>Support for Akai MPK Mini IV control surface.  Patch #83.  [35eec2215e]</li>
+          </ul>
+        </description>
+      </release>
 
       <release type="stable" version="25.06" date="2025-06-04">
         <url>https://rosegardenmusic.com/wiki/dev:25.06</url>

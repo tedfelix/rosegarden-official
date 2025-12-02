@@ -68,8 +68,6 @@ Included in this release...
   * cmake: Fixed a build error.  [ff1fe47372]
   * cmake: Make gtk2 optional.  [2364f701d6]
 
-stopped at 4d0e2192d9
-
 ===== New Features =====
 
   * Rulers now support aftertouch, both channel and key.  Feature
@@ -94,8 +92,6 @@ stopped at 4d0e2192d9
   * MIDI Mixer Window review and simplification.  [887e2e1d71 etc...]
   * Rotary widget (knob) review and simplification.
     [eee2941115 etc...]
-
-===== Additional Contributions =====
 
 ====== ROSEGARDEN 25.06 RELEASED ======
 
