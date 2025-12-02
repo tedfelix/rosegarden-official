@@ -1,11 +1,5 @@
-Build Status
-============
-
-[![CI Ubuntu](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml)
-[![CI Windows](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml)
-
-Introduction
-============
+Rosegarden
+==========
 
 Rosegarden is a MIDI sequencer and musical notation editor for Linux.
 
@@ -194,7 +188,7 @@ data/appdata.  It is named rosegarden.appdata-old.xml.
 Old README.DEVELOPERS
 =====================
 
-#### Unit tests
+### Unit tests
 
 * They are compiled by default in debug mode (-DBUILD_TESTING=OFF to disable
   that - not recommended)
@@ -202,18 +196,18 @@ Old README.DEVELOPERS
 * They trigger the switch from static libs to shared libs for rosegarden's
   own code, to speed up linking.
 
-#### Shared libs
+### Shared libs
 
 Note that you can still run rosegarden uninstalled, even with shared libs,
 because cmake takes care of setting the RUNPATH in the rosegarden executable.
 So your uninstalled shared lib will be preferred over the installed one -
 unless you set $LD_LIBRARY_PATH to point to the installed one.
 
-#### Scripts
+### Scripts
 
 A number of scripts are available for maintenance during development work
 
-##### make-ts
+#### make-ts
 
 Update translation files.  Run before editing one of the .ts
 files so that is is up to date before you begin work.  Run
@@ -228,7 +222,7 @@ Run to clean up any old translations after making big string
 changes in the course of development.  (Probably a good idea
 to run this before a call to translators.)
 
-##### make-lrelease
+#### make-lrelease
 
 Release all translations.  Run after editing any of the .ts
 files or applying a patch from a translator.  Be sure to run
@@ -236,7 +230,7 @@ this before doing a release, because the .ts files don't get
 used directly.  They have to be converted into .qm files first
 by this script.
 
-##### rebuild-qrc
+#### rebuild-qrc
 
 Rebuild data/data.qrc to include all .pfa .png .qm .rc
 .rg .rgd .xml .xpm files under the data/ directory that have
@@ -248,7 +242,7 @@ difficult to commit a version of data.qrc that refers to files
 that only exist in the developer's local working copy, which
 breaks the repository for everyone else.)
 
-#### Compiling large files
+### Compiling large files
 
 data/data.cpp is quite large (25 megabytes at this writing) and may
 fail to compile on smaller systems.  It can't easily be split because
@@ -268,7 +262,7 @@ With data/data.o existing, `make' should now succeed without problems.
 
 NB, these parameter values are not tuned.
 
-#### Developing with emacs
+### Developing with emacs
 
 Developers who use emacs may want to use the auto-insert templates.
 
@@ -282,6 +276,15 @@ Developers who use emacs may want to use the auto-insert templates.
    auto-insert-rosegarden-templates.el.  The instructions in
    auto-insert-choose.el will work too.
 
+
+Build Status
+============
+
+We don't really use this.  Just keeping it here in case we ever decide to in
+the future.
+
+[![CI Ubuntu](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci.yml)
+[![CI Windows](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml/badge.svg)](https://github.com/tedfelix/rosegarden-official/actions/workflows/ci-windows.yml)
 
 
 Authors and Copyright

@@ -17,9 +17,9 @@
     <summary>MIDI Sequencer and Notation Editor with Audio Support</summary>
     <summary xml:lang="es">Secuenciador de MIDI y editor de partitura con soporte de audio</summary>
     <summary xml:lang="fr">Séquenceur MIDI et éditeur de partitions avec prise en charge audio</summary>
-    <summary xml:lang="de">MIDI-Sequencer und Notensatzprogramm mit Audiounterstützung</summary>
+    <summary xml:lang="de">MIDI-Sequenzer und Notensatzprogramm mit Audiounterstützung</summary>
     <summary xml:lang="ru">MIDI-секвенсер и нотный редактор с поддержкой аудио</summary>
-    <summary xml:lang="pl">Sekwencer MIDI i edytor partytury ze wsparciem audio</summary>
+    <summary xml:lang="pl">Sekwencer MIDI i edytor nutowy z obsługą dźwięku</summary>
     <metadata_license>CC0</metadata_license>
     <project_license>GPL-2.0+</project_license>
     <content_rating type="oars-1.1" />
