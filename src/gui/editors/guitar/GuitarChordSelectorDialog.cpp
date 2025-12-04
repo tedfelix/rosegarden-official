@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[GuitarChordSelectorDialog]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "GuitarChordSelectorDialog.h"
 #include "GuitarChordEditorDialog.h"

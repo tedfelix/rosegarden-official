@@ -383,6 +383,8 @@ MidiMixerWindow::slotControllerChanged(float value)
     const MidiByte controllerNumber = rotary->property("controllerNumber").toUInt();
 
     Instrument *instrument = m_studio->getInstrumentById(instrumentId);
+    if (!instrument)
+        return;
 
     instrument->setControllerValue(controllerNumber, MidiByte(value));
     Instrument::emitControlChange(instrument, controllerNumber);

@@ -507,6 +507,7 @@ AudioPluginDialog::populatePluginList()
         QString id = i->second.second->getIdentifier();
         QString type, soname, label, arch;
         PluginIdentifier::parseIdentifier(id, type, soname, label, arch);
+        if (arch == "lv2") type = "lv2";
 
         QString tname = type + ":" + name;
 

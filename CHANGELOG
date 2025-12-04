@@ -60,8 +60,13 @@ Included in this release...
   * Fix problems when moving segments beyond composition end.
     Bug #1744.  [b3cd66b800]
   * Remove unnecessary logging.  Bug #1745.  [1cf772bf68]
-
-stopped at f649fd5359
+  * Fix lv2 plugins not showing as lv2 plugins.  Feature Request #540.
+    [83c427819c]
+  * MatrixTool: Fix missing forward-decl for QKeyEvent.  Bug #1746.
+    [70307ab1ee]
+  * cmake: Remove X11 requirement.  Bug #1747.  [12a6aa65c9]
+  * cmake: Fixed a build error.  [ff1fe47372]
+  * cmake: Make gtk2 optional.  [2364f701d6]
 
 ===== New Features =====
 
@@ -87,8 +92,6 @@ stopped at f649fd5359
   * MIDI Mixer Window review and simplification.  [887e2e1d71 etc...]
   * Rotary widget (knob) review and simplification.
     [eee2941115 etc...]
-
-===== Additional Contributions =====
 
 ====== ROSEGARDEN 25.06 RELEASED ======
 

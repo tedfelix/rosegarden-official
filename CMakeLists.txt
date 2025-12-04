@@ -6,9 +6,8 @@ cmake_minimum_required(VERSION 3.5)
 project(rosegarden)
 
 # Version
-set(ROSEGARDEN_VERSION "25.12")
-set(ROSEGARDEN_CODENAME "Keepsake")
-#set(ROSEGARDEN_CODENAME "Let Freedom Ring")
+set(ROSEGARDEN_VERSION "26.06")
+set(ROSEGARDEN_CODENAME "Laura")
 #set(ROSEGARDEN_CODENAME "Mountain Music")
 #set(ROSEGARDEN_CODENAME "Night Owl")
 #set(ROSEGARDEN_CODENAME "Orange Flame")
@@ -171,7 +170,7 @@ endif()
 
 find_package(ZLIB REQUIRED)
 
-find_package(X11 REQUIRED) # for XSetErrorHandler & XGetErrorText
+#find_package(X11 REQUIRED) # for XSetErrorHandler & XGetErrorText
 
 pkg_check_modules(LIBLO REQUIRED liblo>=0.7)
 
@@ -255,7 +254,7 @@ set(CPPCHECK_OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cppcheck.out)
 #add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
 #  COMMAND cppcheck -I${CMAKE_CURRENT_SOURCE_DIR}/src --force --enable=all --inconclusive --std=c++14 --library=qt --inline-suppr --quiet --suppress=missingInclude --suppress=missingIncludeSystem ${CMAKE_CURRENT_SOURCE_DIR}/src >& ${CPPCHECK_OUTPUT})
 add_custom_command(OUTPUT ${CPPCHECK_OUTPUT} dummy_file
-  COMMAND $(CMAKE_SOURCE_DIR)/scripts/cppcheck-rg $(CMAKE_SOURCE_DIR)/src >& ${CPPCHECK_OUTPUT})
+  COMMAND ${CMAKE_SOURCE_DIR}/scripts/cppcheck-rg ${CMAKE_SOURCE_DIR}/src > ${CPPCHECK_OUTPUT} 2>&1)
 
 add_custom_target(cppcheck DEPENDS ${CPPCHECK_OUTPUT} dummy_file)
 #########################
