@@ -23229,7 +23229,7 @@ Virhe oli: %2</translation>
     </message>
     <message>
         <location line="+27"/>
-        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of milliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Siirrä valittujen osien toistoa tällä määrällä millisekunteja.&lt;/p&gt;&lt;p&gt;&lt;i&gt;HUOMIO: Rosegarden ei tue negatiivista viivettä.  Jos tarvitset negatiivisen viiveen, aseta sävellys alkamaan ennen tahtia 1 ja siirrä osia vasemmalle. Voit pitää &lt;b&gt;shift&lt;/b&gt;-näppäintä pohjassa hienosäätöä varten, joskin tämä vaikuttaa haitallisesti nuottien esitykseen nuottieditorissa.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>

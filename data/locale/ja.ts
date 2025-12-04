@@ -24178,7 +24178,7 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+27"/>
-        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of milliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;ここで指定したミリ秒単位で選択された任意のセグメントの再生を遅延します。&lt;/p&gt;&lt;p&gt;&lt;i&gt;注意: Rosegardenは負のディレイをサポートしません。  もしも、負のディレイ効果が必要ならば、第一小節の前にコンポジションを設定し,セグメントを左に移動します。きめの細かい制御をするのには&lt;b&gt;シフト&lt;/b&gt; キーを押しながら行います。これを行うと,譜面エディタ中で表示されるような、楽譜のレンダリングにおいて、ぎざぎざした効果が得られるでしょう。&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>

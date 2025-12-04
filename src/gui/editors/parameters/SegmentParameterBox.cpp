@@ -179,7 +179,7 @@ SegmentParameterBox::SegmentParameterBox(QWidget *parent) :
 
     m_delay = new QComboBox(this);
     m_delay->setFont(m_font);
-    m_delay->setToolTip(tr("<qt><p>Delay playback of any selected segments by this number of miliseconds</p><p><i>NOTE: "
+    m_delay->setToolTip(tr("<qt><p>Delay playback of any selected segments by this number of milliseconds</p><p><i>NOTE: "
                                 "Rosegarden does not support negative delay.  If you need a negative delay effect, set the   "
                                 "composition to start before bar 1, and move segments to the left.  You can hold <b>shift</b>"
                                 " while doing this for fine-grained control, though doing so will have harsh effects on music"
