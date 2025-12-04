@@ -2215,12 +2215,12 @@
     <message>
         <location line="-23"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Utwórz tutaj nowe urządzenia odtwarzające. Kliknij dwukrotnie myszką nazwę urządzenia, aby ją zmienić. Wybierz tutaj urządzenie i podłącz je do portu wyjścia MIDI, klikając na porcie na prawo.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Utwórz tutaj nowe urządzenia odtwarzające. Kliknij dwukrotnie myszką nazwę urządzenia, aby ją zmienić. Wybierz tutaj urządzenie i podłącz je do portu wyjścia MIDI, klikając na porcie po prawej.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+67"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Definicje banku pozwalają Ci poinformować Rosegarden o dostępnych programach lub poprawkach do zastosowania w sprzęcie (sprzęt lub syntezator programowy) podłączonego do tego urządzenia.&lt;/p&gt;&lt;p&gt;Musisz mieć coś zdefiniowane dla każdego programu lub zmian banku, jeśli chcesz poinformować Rosegarden, jak ma ukrywać wszystkie banki i numery programów, które są niezdefiniowane.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Definicje banku pozwalają Ci poinformować Rosegarden o dostępnych programach lub poprawkach do użycia w sprzęcie (sprzęt lub syntezator programowy) podłączonym do tego urządzenia.&lt;/p&gt;&lt;p&gt;Musisz mieć coś zdefiniowane dla każdego programu lub zmian banku, jeśli chcesz poinformować Rosegarden, jak ma ukrywać wszystkie banki i numery programów, które są niezdefiniowane.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -2346,7 +2346,7 @@
     <message>
         <location line="-4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Dostępne wejścia MIDI (sprzętu lub oprogramowania)&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Dostępne wejścia MIDI (sprzęt lub oprogramowanie)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
 </context>
 <context>
@@ -2397,7 +2397,7 @@
     </message>
     <message>
         <source>Setting Velocities...</source>
-        <translation type="obsolete">Ustawienia głośności...</translation>
+        <translation type="obsolete">Ustawianie głośności...</translation>
     </message>
 </context>
 <context>
@@ -7161,7 +7161,7 @@
     <message>
         <location line="-69"/>
         <source>&amp;Cycle Slashes</source>
-        <translation>Cykl tremolo</translation>
+        <translation>Cykl ukośników</translation>
     </message>
     <message>
         <source>/</source>
@@ -7378,7 +7378,7 @@
     <message>
         <location line="-950"/>
         <source>&amp;Convert</source>
-        <translation>Przekształć</translation>
+        <translation>Konwertuj</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -7611,7 +7611,7 @@
         <location line="+16"/>
         <location line="+767"/>
         <source>&amp;Record</source>
-        <translation>Nagraj</translation>
+        <translation>Nagrywaj</translation>
     </message>
     <message>
         <location line="-765"/>
@@ -7887,7 +7887,7 @@
     <message>
         <location line="+1"/>
         <source>Add Key Mapping</source>
-        <translation>Dodaj mapowanie klawisza</translation>
+        <translation>Dodaj mapowanie klawiszy</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -8313,7 +8313,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;Restore Tie Position</source>
-        <translation>Przywróć pozycję ligatury</translation>
+        <translation>Przywróć pozycje ligatur</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8498,7 +8498,7 @@
     <message>
         <location line="+11"/>
         <source>Convert</source>
-        <translation>Przekształć</translation>
+        <translation>Konwertuj</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -8605,7 +8605,7 @@
     <message>
         <location line="+31"/>
         <source>Solo the Active Track</source>
-        <translation>Solo aktywna ścieżka</translation>
+        <translation>Solo na aktywnej ścieżce</translation>
     </message>
     <message>
         <source>Scroll to Follow Playback</source>
@@ -9817,7 +9817,7 @@
     <message>
         <location line="+5"/>
         <source>&amp;Restore Slur Positions</source>
-        <translation>Przywróć pozycje łuku</translation>
+        <translation>Przywróć pozycje łuków</translation>
     </message>
     <message>
         <location line="+131"/>
@@ -10261,7 +10261,7 @@
     <message>
         <location line="+1"/>
         <source>&amp;lt;none&amp;gt;</source>
-        <translation>&amp;lt;żaden&amp;gt;</translation>
+        <translation>&amp;lt;brak&amp;gt;</translation>
     </message>
     <message>
         <location line="-188"/>
@@ -10425,7 +10425,7 @@
     <message>
         <location line="+144"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Nie można rozpocząć nagrywania dźwięku.&lt;/p&gt;&lt;p&gt;Upewnij się, że utwór został zapisany i sprawdź ścieżkę do pliku dźwiękowego w &lt;b&gt;Utwór -&gt; Edytuj właściwości dokumentu... -&gt; Dźwięk&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nie można rozpocząć nagrywania dźwięku.&lt;/p&gt;&lt;p&gt;Upewnij się, że utwór został zapisany i sprawdź ścieżkę pliku dźwiękowego w &lt;b&gt;Utwór -&gt; Edytuj właściwości dokumentu... -&gt; Dźwięk&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
@@ -10441,7 +10441,7 @@
     </message>
     <message>
         <source>End of MIDI file encountered while reading</source>
-        <translation type="vanished">Koniec pliku MIDI napotkał podczas czytania</translation>
+        <translation type="vanished">Podczas odczytu napotkano koniec pliku MIDI</translation>
     </message>
     <message>
         <source>Attempt to get more bytes than expected on Track</source>
@@ -10500,12 +10500,12 @@
         <location filename="../../src/sound/AudioFileManager.h" line="+291"/>
         <location line="+2"/>
         <source>Bad audio file path </source>
-        <translation>Zła ścieżka pliku dźwiękowego</translation>
+        <translation>Nieprawidłowa ścieżka pliku dźwiękowego</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad audio file path (malformed file?) </source>
-        <translation>Zła ścieżka pliku dźwiękowego (nieprawidłowo utworzony plik?)</translation>
+        <translation>Nieprawidłowa ścieżka pliku dźwiękowego (nieprawidłowo utworzony plik?)</translation>
     </message>
     <message>
         <source>Cancelled</source>
@@ -10544,19 +10544,19 @@
         <location filename="../../src/sound/PeakFileManager.h" line="+102"/>
         <location line="+2"/>
         <source>Bad peak file </source>
-        <translation>Zły plik szczytu</translation>
+        <translation>Nieprawidłowy plik peak</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Bad peak file (malformed audio?) </source>
-        <translation>Zły plik szczytu (nieprawidłowo utworzony plik?)</translation>
+        <translation>Nieprawidłowy plik peak (nieprawidłowo utworzony plik?)</translation>
     </message>
     <message>
         <location filename="../../src/sound/SoundFile.h" line="+49"/>
         <location line="+2"/>
         <location line="+2"/>
         <source>Bad sound file </source>
-        <translation>Zły plik dźwiękowy</translation>
+        <translation>Nieprawidłowy plik dźwiękowy</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+282"/>
@@ -11745,7 +11745,7 @@ Błąd: %2</translation>
     <message>
         <location line="+7"/>
         <source>Failed to convert or resample audio file on import</source>
-        <translation>Nie udało się zmienić próbkowania pliku dźwiękowego podczas importu</translation>
+        <translation>Nie udało się przekonwertować lub zmienić próbkowania pliku dźwiękowego podczas importu</translation>
     </message>
     <message>
         <location line="+146"/>
@@ -12031,7 +12031,7 @@ Zaznacz te, które mają być na zawsze usunięte z dysku twardego.
     <message>
         <location line="+9"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation>Spróbuj skopiować ten plik do katalogu, gdzie masz uprawnienia zapisu i dodaj go ponownie</translation>
+        <translation>Spróbuj skopiować ten plik do katalogu, w którym masz uprawnienia do zapisu i dodaj go ponownie</translation>
     </message>
     <message>
         <location line="+112"/>
@@ -12415,7 +12415,7 @@ Kontynuować?</translation>
     <message>
         <location line="+5"/>
         <source>This plugin does not have any controls that can be edited here.</source>
-        <translation>Ta wtyczka nie ma żadnych regulacji, które mogą być tutaj edytowane.</translation>
+        <translation>Ta wtyczka nie ma żadnych kontrolek, które mogą być tutaj edytowane.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -12891,7 +12891,7 @@ Kontynuować?</translation>
     <message>
         <location filename="../../src/gui/studio/AudioStrip.cpp" line="+165"/>
         <source>Record input source</source>
-        <translation>Nagraj źródło wejściowe</translation>
+        <translation>Źródło wejścia nagrywania</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -12999,7 +12999,7 @@ Kontynuować?</translation>
     </message>
     <message>
         <source>Add Key Mapping</source>
-        <translation type="vanished">Dodaj mapowanie klawisza</translation>
+        <translation type="vanished">Dodaj mapowanie klawiszy</translation>
     </message>
     <message>
         <source>Delete</source>
@@ -13015,15 +13015,15 @@ Kontynuować?</translation>
     </message>
     <message>
         <source>Add a Percussion Key Mapping to the current device</source>
-        <translation type="vanished">Dodaj mapowanie klawisza perkusji do bieżącego urządzenia</translation>
+        <translation type="vanished">Dodaj mapowanie klawiszy perkusji do bieżącego urządzenia</translation>
     </message>
     <message>
         <source>Delete the current Bank or Key Mapping</source>
-        <translation type="vanished">Usuń bieżący bank lub mapowanie klawisza</translation>
+        <translation type="vanished">Usuń bieżący bank lub mapowanie klawiszy</translation>
     </message>
     <message>
         <source>Delete all Banks and Key Mappings from the current Device</source>
-        <translation type="vanished">Usuń wszystkie banki i mapowania klawisza z bieżącego urządzenia</translation>
+        <translation type="vanished">Usuń wszystkie banki i mapowania klawiszy z bieżącego urządzenia</translation>
     </message>
     <message>
         <source>Import...</source>
@@ -13091,7 +13091,7 @@ Kontynuować?</translation>
     <message>
         <location line="+55"/>
         <source>Really delete this key mapping?</source>
-        <translation>Naprawdę usunąć to mapowanie klawisza?</translation>
+        <translation>Naprawdę usunąć to mapowanie klawiszy?</translation>
     </message>
     <message>
         <source>Really delete all banks for </source>
@@ -13173,7 +13173,7 @@ Kontynuować?</translation>
     <message>
         <location line="+44"/>
         <source>add Key Mapping</source>
-        <translation>dodaj mapowanie klawisza</translation>
+        <translation>dodaj mapowanie klawiszy</translation>
     </message>
     <message>
         <location line="+93"/>
@@ -13183,7 +13183,7 @@ Kontynuować?</translation>
     <message>
         <location line="+46"/>
         <source>delete Key Mapping</source>
-        <translation>usuń mapowanie klawisza</translation>
+        <translation>usuń mapowanie klawiszy</translation>
     </message>
     <message>
         <location line="+36"/>
@@ -13203,7 +13203,7 @@ Kontynuować?</translation>
     <message>
         <location line="+48"/>
         <source>rename Key Mapping</source>
-        <translation>zmień nazwę mapowania klawisza</translation>
+        <translation>zmień nazwę mapowania klawiszy</translation>
     </message>
     <message>
         <location line="+112"/>
@@ -14417,7 +14417,7 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location filename="../../src/commands/notation/CycleSlashesCommand.h" line="+38"/>
         <source>Cycle Slashes</source>
-        <translation>Cykl tremolo</translation>
+        <translation>Cykl ukośników</translation>
     </message>
 </context>
 <context>
@@ -15387,7 +15387,7 @@ To może spowodować problemy, jeśli nadpisze się inne, później wyliczone wa
     <message>
         <location line="+1"/>
         <source>End at same time as note</source>
-        <translation>Skończ w tym samym czasie co nuta</translation>
+        <translation>Zakończ w tym samym czasie co nuta</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15884,7 +15884,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location filename="../../src/gui/editors/guitar/Fingering.cpp" line="+135"/>
         <source>couldn&apos;t parse fingering &apos;%1&apos; in &apos;%2&apos;</source>
-        <translation>nie można analizować palcowania &apos;%1&apos; in &apos;%2&apos;</translation>
+        <translation>nie można analizować palcowania &apos;%1&apos; w &apos;%2&apos;</translation>
     </message>
 </context>
 <context>
@@ -16108,7 +16108,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+2"/>
         <source>Unknown</source>
-        <translation>Nieznane</translation>
+        <translation>Nieznany</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -16318,7 +16318,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+230"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Rosegarden opiera się na zewnętrznych aplikacjach w celu zapewnienia pewnych funkcji. Każda zaznaczona aplikacja musi być zainstalowana i dostępna w Twojej ścieżce. Przy wyborze aplikacji do użytku, należy upewnić się, że można ją uruchomić z &quot;polecenia Uruchom&quot; (zazwyczaj &lt;b&gt;Alt+F2&lt;/b&gt;), co powinno pozwolić Rosegarden skorzystać z niej w razie potrzeby.&lt;br&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Rosegarden opiera się na zewnętrznych aplikacjach w celu zapewnienia pewnych funkcji. Każda zaznaczona aplikacja musi być zainstalowana i dostępna w Twojej ścieżce. Wybierając aplikację, którą chcesz użyć, upewnij się, że można ją uruchomić z pola &quot;run command&quot; (zazwyczaj &lt;b&gt;Alt+F2&lt;/b&gt;), co powinno pozwolić Rosegarden skorzystać z niej w razie potrzeby.&lt;br&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -16626,7 +16626,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+4"/>
         <source>Tagline</source>
-        <translation>Linia tagów</translation>
+        <translation>Linia znaczników</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -16674,7 +16674,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+289"/>
         <source> imported from Hydrogen </source>
-        <translation>importowane z Hydrogen</translation>
+        <translation>zaimportowane z Hydrogen</translation>
     </message>
 </context>
 <context>
@@ -16692,7 +16692,7 @@ Chcesz spróbować go zlokalizować, czy go pominąć?</translation>
     <message>
         <location line="+7"/>
         <source>&lt;qt&gt;&lt;p&gt;This file contains text in an unknown language encoding.&lt;/p&gt;&lt;p&gt;Please select one of the following estimated text encodings for use with the text in this file:&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Plik zawiera tekst w nieznanym języku kodowania.&lt;/p&gt;&lt;p&gt;Wybierz jedno z następujących przybliżonych kodowań tekstu do użytku z tekstem w tym pliku:&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Ten plik zawiera tekst w nieznanym języku kodowania.&lt;/p&gt;&lt;p&gt;Wybierz jedno z następujących przybliżonych kodowań tekstu do użycia z tekstem w tym pliku:&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -16867,7 +16867,7 @@ Przykładowy tekst z pliku:</translation>
     <message>
         <location line="+2"/>
         <source>Import key mappings</source>
-        <translation>Importuj mapowania klawisza</translation>
+        <translation>Importuj mapowania klawiszy</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -17787,12 +17787,12 @@ zamiast tego?</translation>
     <message>
         <location line="+14"/>
         <source>&lt;qt&gt;&lt;p&gt;Useful for multi-page scores: this may prevent ugly final pages&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Przydatne dla wielostronicowych partytur: może to zapobiec brzydkim stronom końcowym&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Przydatne dla wielostronicowych partytur: może zapobiec powstawaniu nieestetycznych stron końcowych&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>&lt;qt&gt;Markers are found on the &lt;b&gt;Marker Ruler&lt;/b&gt;.  They may be exported as text, or as rehearsal marks.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Znaczniki znajdują się na &lt;b&gt;Wykresie znacznika&lt;/b&gt;. Mogą być eksportowane jako tekst lub jako znaki rewizyjne.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Znaczniki znajdują się na &lt;b&gt;Wykresie znaczników&lt;/b&gt;. Mogą być wyeksportowane jako tekst lub jako znaki rewizyjne.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-50"/>
@@ -17837,7 +17837,7 @@ zamiast tego?</translation>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;If checked, Rosegarden&apos;s beamings will be exported.  Otherwise, LilyPond will calculate beams automatically.&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;Jeśli zaznaczone, Rosegarden będzie eksportował belkowanie. W przeciwnym razie będzie ono automatycznie obliczane przez LilyPond.&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;Jeśli zaznaczone, belkowanie Rosegarden zostanie wyeksportowane. W przeciwnym razie będzie ono automatycznie obliczane przez LilyPond.&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -17965,12 +17965,12 @@ zamiast tego?</translation>
     <message>
         <location line="-126"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;convert-ly&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Nie można uruchomić &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Musisz zainstalować LilyPond i zapewnić, że polecenia &quot;convert-ly&quot; i &quot;lilypond&quot; są dostępne w Twojej ścieżce. Jeśli wykonasz &lt;b&gt;polecenie Uruchom&lt;/b&gt; (zazwyczaj &lt;b&gt;Alt+F2&lt;/b&gt;) i wpiszesz w pole &quot;convert-ly&quot;, nie powinieneś/aś otrzymać błędu &quot;command not found&quot;. Jeśli możesz to zrobić bez otrzymania błędu, ale nadal widzisz ten komunikat o błędzie, skontaktuj &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt;, aby uzyskać dodatkową pomoc.&lt;/p&gt;Przetwarzanie zakończone z powodu błędów krytycznych.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nie można uruchomić &lt;b&gt;convert-ly&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Musisz zainstalować LilyPond i zapewnić, że polecenia &quot;convert-ly&quot; i &quot;lilypond&quot; są dostępne w Twojej ścieżce. Jeśli wykonasz &lt;b&gt;Run Command&lt;/b&gt; (zazwyczaj &lt;b&gt;Alt+F2&lt;/b&gt;) i wpiszesz w pole &quot;convert-ly&quot;, nie powinieneś/aś otrzymać błędu &quot;command not found&quot;. Jeśli możesz to zrobić bez otrzymania błędu, ale nadal widzisz ten komunikat o błędzie, skontaktuj &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt;, aby uzyskać dodatkową pomoc.&lt;/p&gt;Przetwarzanie zakończone z powodu błędów krytycznych.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>&lt;qt&gt;&lt;p&gt;Could not run &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Please install LilyPond and ensure that the &quot;convert-ly&quot; and &quot;lilypond&quot; commands are available on your path.  If you perform a &lt;b&gt;Run Command&lt;/b&gt; (typically &lt;b&gt;Alt+F2&lt;/b&gt;) and type &quot;lilypond&quot; into the box, you should not get a &quot;command not found&quot; error.  If you can do that without getting an error, but still see this error message, please consult &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt; for additional help.&lt;/p&gt;&lt;p&gt;Processing terminated due to fatal errors.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Nie można uruchomić &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Musisz zainstalować LilyPond i zapewnić, że polecenia &quot;convert-ly&quot; i &quot;lilypond&quot; są dostępne w Twojej ścieżce. Jeśli wykonasz &lt;b&gt;polecenie Uruchom&lt;/b&gt; (zazwyczaj &lt;b&gt;Alt+F2&lt;/b&gt;) i wpiszesz w pole &quot;lilypond&quot;, nie powinieneś/aś otrzymać błędu &quot;command not found&quot;. Jeśli możesz to zrobić bez otrzymania błędu, ale nadal widzisz ten komunikat o błędzie, skontaktuj &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt;, aby uzyskać dodatkową pomoc.&lt;/p&gt;Przetwarzanie zakończone z powodu błędów krytycznych.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nie można uruchomić &lt;b&gt;lilypond&lt;/b&gt;!&lt;/p&gt;&lt;p&gt;Musisz zainstalować LilyPond i zapewnić, że polecenia &quot;convert-ly&quot; i &quot;lilypond&quot; są dostępne w Twojej ścieżce. Jeśli wykonasz &lt;b&gt;Run Command&lt;/b&gt; (zazwyczaj &lt;b&gt;Alt+F2&lt;/b&gt;) i wpiszesz w pole &quot;lilypond&quot;, nie powinieneś/aś otrzymać błędu &quot;command not found&quot;. Jeśli możesz to zrobić bez otrzymania błędu, ale nadal widzisz ten komunikat o błędzie, skontaktuj &lt;a style=&quot;color:gold&quot; href=&quot;mailto:rosegarden-user@lists.sourceforge.net&quot;&gt;rosegarden-user@lists.sourceforge.net&lt;/a&gt;, aby uzyskać dodatkową pomoc.&lt;/p&gt;Przetwarzanie zakończone z powodu błędów krytycznych.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+55"/>
@@ -18132,7 +18132,7 @@ zamiast tego?</translation>
         <source>Rosegarden can send all MIDI Controllers (Pan, Reverb etc) to all MIDI devices every
 time you hit play if you so wish.  Please note that this option will usually incur a
 delay at the start of playback due to the amount of data being transmitted.</source>
-        <translation type="obsolete">Rosegarden może wysyłać wszystkie kontrolery MIDI (panorama, pogłos itd.) do wszystkich urządzeń MIDI za każdym razem, kiedy naciśniesz odtwarzanie. Zauważ, że ta opcja powoduje opóźnienie na początku odtwarzania w wyniku transmisji dużej ilości danych.</translation>
+        <translation type="obsolete">Rosegarden może wysyłać wszystkie kontrolery MIDI (panorama, pogłos itd.) do wszystkich urządzeń MIDI za każdym razem, gdy naciśniesz odtwarzanie. Zauważ, że ta opcja powoduje opóźnienie na początku odtwarzania w wyniku transmisji dużej ilości danych.</translation>
     </message>
     <message>
         <location line="+91"/>
@@ -19238,7 +19238,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+1155"/>
         <source>Transpose</source>
-        <translation>Transpnuj</translation>
+        <translation>Transponuj</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -19344,7 +19344,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+11"/>
         <source>Key Mapping</source>
-        <translation>Mapowanie klawisza</translation>
+        <translation>Mapowanie klawiszy</translation>
     </message>
 </context>
 <context>
@@ -19362,7 +19362,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+19"/>
         <source>End of MIDI file encountered while reading</source>
-        <translation>Koniec pliku MIDI napotkał podczas czytania</translation>
+        <translation>Podczas odczytu napotkano koniec pliku MIDI</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -19477,12 +19477,12 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
         <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+55"/>
         <location line="+22"/>
         <source>Key Mapping details</source>
-        <translation>Szczegóły mapowania klawisza</translation>
+        <translation>Szczegóły mapowania klawiszy</translation>
     </message>
     <message>
         <location line="+114"/>
         <source>modify key mapping</source>
-        <translation>modyfikuj mapowanie klawisza</translation>
+        <translation>modyfikuj mapowanie klawiszy</translation>
     </message>
     <message>
         <source>Pitches</source>
@@ -19562,7 +19562,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+70"/>
         <source>Key Mapping: %1</source>
-        <translation>Mapowanie klawisza: %1</translation>
+        <translation>Mapowanie klawiszy: %1</translation>
     </message>
     <message>
         <location line="+82"/>
@@ -19572,12 +19572,12 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+28"/>
         <source>&lt;no key mapping&gt;</source>
-        <translation>&lt;brak mapowania klawisza&gt;</translation>
+        <translation>&lt;brak mapowania klawiszy&gt;</translation>
     </message>
     <message>
         <location line="+92"/>
         <source>change key mapping</source>
-        <translation>zmień mapowanie klawisza</translation>
+        <translation>zmień mapowanie klawiszy</translation>
     </message>
     <message>
         <location line="+90"/>
@@ -19790,7 +19790,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+6"/>
         <source>&lt;qt&gt;&lt;p&gt;Exporting percussion is still experimental.&lt;/p&gt;Percussion can be exported &amp;quot;as notes&amp;quot; or &amp;quot;as percussion.&amp;quot;  When exporting &amp;quot;as notes&amp;quot; a percussion track is handled as a normal track.&lt;/p&gt;&lt;p&gt;If a track is exported &amp;quot;as percussion&amp;quot; it will be exported as a MusicXML percussion part. Since Rosegarden doesn&apos;t have percussion notation, MusicXML Export tries to convert the percussion track to percussion notation. This option is still &lt;b&gt;experimental&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Eksportowanie perkusji jest nadal eksperymentalne.&lt;/p&gt;Perkusję można eksportować &amp;quot;jako nuty&amp;quot; lub &amp;quot;jako perkusję.&amp;quot;. Podczas eksportowania &amp;quot;jako nuty&amp;quot; ścieżka perkusji jest traktowana jak normalna ścieżka.&lt;/p&gt;&lt;p&gt;Jeśli ścieżka jest eksportowana &amp;quot;jako perkusja&amp;quot;, zostanie wyeksportowana jako część perkusyjna MusicXML. Ponieważ Rosegarden nie ma notacji perkusyjnej, Eksport MusicXML próbuje przekonwertować ścieżkę perkusji na notację perkusyjną. Ta opcja jest nadal &lt;b&gt;eksperymentalna&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Eksportowanie perkusji jest nadal eksperymentalne.&lt;/p&gt;Perkusję można wyeksportować &amp;quot;jako nuty&amp;quot; lub &amp;quot;jako perkusję.&amp;quot;. Podczas eksportowania &amp;quot;jako nuty&amp;quot; ścieżka perkusji jest traktowana jak normalna ścieżka.&lt;/p&gt;&lt;p&gt;Jeśli ścieżka jest eksportowana &amp;quot;jako perkusja&amp;quot;, zostanie wyeksportowana jako część perkusyjna MusicXML. Ponieważ Rosegarden nie ma notacji perkusyjnej, Eksport MusicXML próbuje przekonwertować ścieżkę perkusji na notację perkusyjną. Ta opcja jest nadal &lt;b&gt;eksperymentalna&lt;/b&gt;.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -19908,7 +19908,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
         <source>&quot;Always&quot; and &quot;Never&quot; mean what they usually mean
 &quot;When needed&quot; means &quot;when staves are too many to all fit in the current window&quot;</source>
         <translation>&quot;Zawsze&quot; i &quot;Nigdy&quot; znaczą to, co zwykle
-&quot;W razie potrzeby&quot; znaczy &quot;kiedy pięciolinii jest zbyt wiele, aby wszystkie zmieścić w bieżącym oknie&quot;</translation>
+&quot;W razie potrzeby&quot; znaczy &quot;gdy pięciolinii jest zbyt wiele, aby wszystkie zmieścić w bieżącym oknie&quot;</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -19968,7 +19968,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+10"/>
         <source>Auto-beam on insert when appropriate</source>
-        <translation>Autobelkowanie podczas wpisywania, kiedy dotyczy</translation>
+        <translation>Autobelkowanie podczas wpisywania, gdy dotyczy</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -20347,7 +20347,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+0"/>
         <source>whole</source>
-        <translation>całe nuta</translation>
+        <translation>cała nuta</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -20749,7 +20749,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+24"/>
         <source>Updated tags for aborted edit</source>
-        <translation>Zaktualizowano tagi dla przerwanej edycji</translation>
+        <translation>Zaktualizowano znaczniki dla przerwanej edycji</translation>
     </message>
     <message>
         <location line="+54"/>
@@ -21687,7 +21687,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+57"/>
         <source>Convert notation for...</source>
-        <translation>Konwertuj notację na...</translation>
+        <translation>Konwertuj notację do...</translation>
     </message>
     <message>
         <location line="+19"/>
@@ -21947,7 +21947,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+187"/>
         <source>&lt;qt&gt;&lt;p&gt;Unable to obtain list of files using tar.&lt;/p&gt;&lt;p&gt;Process exited with status code %1&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Nie można wyświetlić listy plików za pomocą tar.&lt;/p&gt;&lt;p&gt;Proces został z kodem stanu %1&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Nie można wyświetlić listy plików przy użyciu tar.&lt;/p&gt;&lt;p&gt;Proces zakończony z kodem stanu %1&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-39"/>
@@ -22448,7 +22448,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location line="+3"/>
         <source>Respell Accidentals &amp;Downward</source>
-        <translation>Zamień na znaki chromatyczne na bemole</translation>
+        <translation>Zamień znaki chromatyczne na bemole</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -22489,7 +22489,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location filename="../../src/commands/notation/RestoreSlursCommand.h" line="+39"/>
         <source>&amp;Restore Slur Positions</source>
-        <translation>Przywróć pozycje łuku</translation>
+        <translation>Przywróć pozycje łuków</translation>
     </message>
 </context>
 <context>
@@ -22505,7 +22505,7 @@ Sprawdź, czy urządzenie jest prawidłowo skonfigurowane w oknie Zarządzania u
     <message>
         <location filename="../../src/commands/notation/RestoreTiesCommand.h" line="+39"/>
         <source>&amp;Restore Tie Positions</source>
-        <translation>Przywróć pozycje ligatury</translation>
+        <translation>Przywróć pozycje ligatur</translation>
     </message>
 </context>
 <context>
@@ -22716,8 +22716,8 @@ Wybierz te, które chcesz na zawsze usunąć z dysku twardego.
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation>Ścieżka dźwięku nie istnieje lub nie jest przeznaczona do zapisu.
-Ustaw ścieżkę dźwięku do obowiązującego katalogu we Właściwościach dokumentu, zanim nagrasz dźwięk.
+        <translation>Ścieżka pliku dźwiękowego nie istnieje lub nie jest przeznaczona do zapisu.
+Musisz ustawić ścieżkę pliku dźwiękowego na prawidłowy katalog we Właściwościach dokumentu, zanim nagrasz dźwięk.
 Chcesz ją teraz ustawić?</translation>
     </message>
     <message>
@@ -22883,7 +22883,7 @@ Zalecamy zapisać ten plik w tej wersji programu, aby zapewnić, że będzie go 
         <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Nie zdefiniowałeś/aś jeszcze edytora dźwięku dla Rosegarden.
-Zobacz Edytuj -&gt; Ustawienia -&gt; Dźwięk.</translation>
+Zobacz Edycja -&gt; Ustawienia -&gt; Dźwięk.</translation>
     </message>
     <message>
         <location line="+722"/>
@@ -22923,7 +22923,7 @@ Zobacz Edytuj -&gt; Ustawienia -&gt; Dźwięk.</translation>
     <message>
         <location line="+9"/>
         <source>Try copying this file to a directory where you have write permission and re-add it</source>
-        <translation>Spróbuj skopiować ten plik do katalogu, gdzie masz uprawnienia zapisu i dodaj go ponownie</translation>
+        <translation>Spróbuj skopiować ten plik do katalogu, w którym masz uprawnienia do zapisu i dodaj go ponownie</translation>
     </message>
 </context>
 <context>
@@ -22979,7 +22979,7 @@ Zobacz Edytuj -&gt; Ustawienia -&gt; Dźwięk.</translation>
     <message>
         <location line="+10"/>
         <source>You do not have read permission for &quot;%1&quot;</source>
-        <translation>Nie masz uprawnień, aby czytać &quot;%1&quot;</translation>
+        <translation>Nie masz uprawnień do odczytu &quot;%1&quot;</translation>
     </message>
     <message>
         <location line="+115"/>
@@ -23519,7 +23519,7 @@ Zostaną wyeksportowane tylko ścieżki dźwiękowe i wtyczki syntezatora</trans
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;You will not be able to record audio or drag and drop audio files onto Rosegarden until you correct this in &lt;b&gt;View -&gt; Document Properties -&gt; Audio&lt;/b&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Nie będziesz w stanie nagrywać pliku dźwiękowego lub przeciągnąć i upuścić go do Rosegarden, dopóki go poprawisz tego w &lt;b&gt;Widok -&gt; Właściwości dokumentu -&gt; Dźwięk&lt;/b&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Nie będziesz w stanie nagrywać dźwięku ani przeciągać i upuszczać plików do Rosegarden, dopóki nie poprawisz tego w &lt;b&gt;Widok -&gt; Właściwości dokumentu -&gt; Dźwięk&lt;/b&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
@@ -23838,8 +23838,8 @@ Aby uzyskać wsparcie w konfiguracji dźwięku i MIDI, wejdź na stronę http://
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before recording audio.
 Would you like to set it now?</source>
-        <translation>Ścieżka dźwięku nie istnieje lub nie jest przeznaczona do zapisu.
-Ustaw ścieżkę dźwięku do obowiązującego katalogu we Właściwościach dokumentu, zanim nagrasz dźwięk.
+        <translation>Ścieżka pliku dźwiękowego nie istnieje lub nie jest przeznaczona do zapisu.
+Musisz ustawić ścieżkę pliku dźwiękowego na prawidłowy katalog we Właściwościach dokumentu, zanim nagrasz dźwięk.
 Chcesz ją teraz ustawić?</translation>
     </message>
     <message>
@@ -23852,8 +23852,8 @@ Chcesz ją teraz ustawić?</translation>
         <source>The audio file path does not exist or is not writable.
 Please set the audio file path to a valid directory in Document Properties before you start to record audio.
 Would you like to set it now?</source>
-        <translation>Ścieżka dźwięku nie istnieje lub nie jest przeznaczona do zapisu.
-Ustaw ścieżkę dźwięku do obowiązującego katalogu we Właściwościach dokumentu, zanim nagrasz dźwięk.
+        <translation>Ścieżka pliku dźwiękowego nie istnieje lub nie jest przeznaczona do zapisu.
+Musisz ustawić ścieżkę pliku dźwiękowego na prawidłowy katalog we Właściwościach dokumentu, zanim nagrasz dźwięk.
 Chcesz ją teraz ustawić?</translation>
     </message>
     <message>
@@ -23968,8 +23968,8 @@ Wystąpił błąd: %2</translation>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
-        <translation>Ścieżka dźwięku nie istnieje lub nie jest przeznaczona do zapisu.
-Ustaw ścieżkę dźwięku do obowiązującego katalogu we Właściwościach dokumentu, zanim %1.
+        <translation>Ścieżka pliku dźwiękowego nie istnieje lub nie jest przeznaczona do zapisu.
+Musisz ustawić ścieżkę pliku dźwiękowego na prawidłowy katalog we Właściwościach dokumentu, zanim %1.
 Chcesz ją teraz ustawić?</translation>
     </message>
 </context>
@@ -24218,18 +24218,18 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+19"/>
         <source>Repeat</source>
-        <translation>Powtórz</translation>
+        <translation>Repetycja</translation>
     </message>
     <message>
         <location line="+37"/>
         <source>Quantize</source>
-        <translation>Kwantyzuj</translation>
+        <translation>Kwantyzacja</translation>
     </message>
     <message>
         <location line="-21"/>
         <location line="+143"/>
         <source>Transpose</source>
-        <translation>Transponuj</translation>
+        <translation>Transpozycja</translation>
     </message>
     <message>
         <location line="-95"/>
@@ -24262,7 +24262,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+16"/>
         <source>&lt;qt&gt;&lt;p&gt;Raise or lower playback of any selected segments by this number of semitones&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: This control changes segments that already exist.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Use the transpose control in &lt;b&gt;Track Parameters&lt;/b&gt; under &lt;b&gt;Create segments with&lt;/b&gt; to pre-select this   setting before drawing or recording new segments.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Podwyższ lub obniż odtwarzanie zaznaczonych segmentów przez tę liczbę półtonów&lt;/p&gt;&lt;p&gt;&lt;i&gt;UWAGA: Ta kontrola zmienia segmenty, które już istnieją.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Użyj kontroli transpozycji w &lt;b&gt;Parametrach ścieżki&lt;/b&gt; i &lt;b&gt;Utwórz segmenty z&lt;/b&gt;, aby wstępnie wybrać to ustawienie przed rysowaniem lub nagrywaniem nowych segmentów.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Podwyższ lub obniż odtwarzanie zaznaczonych segmentów o określoną liczbę półtonów&lt;/p&gt;&lt;p&gt;&lt;i&gt;UWAGA: Ta kontrola zmienia segmenty, które już istnieją.&lt;/i&gt;&lt;/p&gt;&lt;p&gt;&lt;i&gt;Użyj kontroli transpozycji w &lt;b&gt;Parametrach ścieżki&lt;/b&gt; i &lt;b&gt;Utwórz segmenty z&lt;/b&gt;, aby wstępnie wybrać to ustawienie przed rysowaniem lub nagrywaniem nowych segmentów.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -24272,7 +24272,7 @@ Chcesz ją teraz ustawić?</translation>
     <message>
         <location line="+27"/>
         <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Opóźnienie odtwarzania wszelkich zaznaczonych segmentów tej liczby milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;UWAGA: Rosegarden nie obsługuje negatywnego opóźnienia. Jeśli potrzebujesz negatywny efekt opóźnienia, ustaw utwór na początku przed pierwszym taktem i przenieść segmenty na lewo. Możesz przytrzymać &lt;b&gt;Shift&lt;/b&gt;, dopóki to robisz dla kontroli drobnoziarnistej, choć ten sposób będzie miał przykre skutki dla renderowania notacji muzycznej, jak oglądany w edytorze nutowym.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Opóźnij odtwarzanie zaznaczonych segmentów o określoną liczbę milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;UWAGA: Rosegarden nie obsługuje negatywnego opóźnienia. Jeśli potrzebujesz negatywnego efektu opóźnienia, ustaw utwór tak, aby zaczynał się przed pierwszym taktem i przesuń segmenty w lewo. Możesz przytrzymać &lt;b&gt;Shift&lt;/b&gt; podczas wykonywania tej czynności, aby uzyskać szczegółową kontrolę, jednak będzie to miało negatywny wpływ na renderowanie notacji muzycznej wyświetlanej w edytorze nutowym.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+56"/>
@@ -24487,8 +24487,8 @@ zostać usunięte, zanim będzie można zastosować nową transpozycję.</transl
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before rescaling an audio file.
 Would you like to set it now?</source>
-        <translation>Ścieżka dźwięku nie istnieje lub nie jest przeznaczona do zapisu.
-Ustaw ścieżkę dźwięku do obowiązującego katalogu we Właściwościach dokumentu, zanim przeskalujesz plik dźwiękowy.
+        <translation>Ścieżka pliku dźwiękowego nie istnieje lub nie jest przeznaczona do zapisu.
+Musisz ustawić ścieżkę pliku dźwiękowego na prawidłowy katalog we Właściwościach dokumentu, zanim przeskalujesz plik dźwiękowy.
 Chcesz ją teraz ustawić?</translation>
     </message>
     <message>
@@ -24902,7 +24902,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="-118"/>
         <source>A serious error has occurred in the ALSA MIDI subsystem.  It may not be possible to continue sequencing.  Please check console output for more information.</source>
-        <translation>Poważny błąd pojawił się podsystemie ALSA/MIDI. Używanie sekwencera może być niemożliwe. Sprawdź komunikaty programu w konsoli, aby uzyskać więcej informacji.</translation>
+        <translation>Wystąpił poważny błąd w podsystemie ALSA MIDI. Używanie sekwencera może być niemożliwe. Sprawdź komunikaty programu w konsoli, aby uzyskać więcej informacji.</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -24912,17 +24912,17 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+18"/>
         <source>Failed to read audio data from disk in time to service the audio subsystem.</source>
-        <translation>Nie można odczytać danych dźwiękowych z dysku w czasie obsługi podsystemu dźwięku.</translation>
+        <translation>Nie udało się odczytać danych dźwiękowych z dysku w odpowiednim czasie, aby obsłużyć podsystem dźwięku.</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Failed to write audio data to disk fast enough to service the audio subsystem.</source>
-        <translation>Nie udało się zapisać danych dźwiękowych na dysk wystarczająco szybko do obsługi podsystemu dźwięku.</translation>
+        <translation>Nie udało się zapisać danych dźwiękowych na dysku wystarczająco szybko, aby obsłużyć podsystem dźwięku.</translation>
     </message>
     <message>
         <location line="+86"/>
         <source>&lt;h3&gt;System timer resolution is too low!&lt;/h3&gt;</source>
-        <translation>&lt;h3&gt;Regulator czasowy systemu jest zbyt niskiej rozdzielczości!&lt;/h3&gt;</translation>
+        <translation>&lt;h3&gt;Regulator czasowy systemu jest za niskiej rozdzielczości!&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -24931,7 +24931,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;This may mean you are using a Linux system with the kernel timer resolution set too low.  Please contact your Linux distributor for more information.&lt;/p&gt;&lt;p&gt;Some Linux distributors already provide low latency kernels, see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for instructions.&lt;/p&gt;</source>
-        <translation type="vanished">&lt;p&gt;Rosegarden nie był w stanie znaleźć źródła sygnału o wysokiej rozdzielczości odpowiedzialnego za wydajność MIDI.&lt;/p&gt;&lt;p&gt;Może to oznaczać, że używasz systemu Linux ze zbyt niską rozdzielczością zegara jądra. Musisz skontaktować się z dystrybutorem Linuksa, aby uzyskać więcej informacji na ten temat.&lt;/p&gt;&lt;p&gt;Niektóre dystrybucje Linuksa już zapewniają niską latencję jądra. Zobacz &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;, aby uzyskać instrukcje na ten temat.&lt;/p&gt;</translation>
+        <translation type="vanished">&lt;p&gt;Rosegarden nie był w stanie znaleźć źródła sygnału o wysokiej rozdzielczości odpowiedzialnego za wydajność MIDI.&lt;/p&gt;&lt;p&gt;Może to oznaczać, że używasz systemu Linux z za niską rozdzielczością zegara jądra. Musisz skontaktować się z dystrybutorem Linuksa, aby uzyskać więcej informacji na ten temat.&lt;/p&gt;&lt;p&gt;Niektóre dystrybucje Linuksa już zapewniają jądra o niskim opóźnieniu. Zobacz &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;, aby uzyskać instrukcje na ten temat.&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimized kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</source>
@@ -24988,7 +24988,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     </message>
     <message>
         <source>&lt;p&gt;The MIDI subsystem has failed to initialize.&lt;/p&gt;&lt;p&gt;You may continue without the sequencer, but we suggest closing Rosegarden, running &quot;modprobe snd-seq-midi&quot; as root, and starting Rosegarden again.  If you wish to run with no sequencer by design, then use &quot;rosegarden --nosequencer&quot; to avoid seeing this error in the future.&lt;/p&gt;</source>
-        <translation type="obsolete">&lt;p&gt;Nie udało się zainicjować podsystemu MIDI.&lt;/p&gt;&lt;p&gt;Możesz kontynuować bez sekwencera, ale proponujemy zamknięcie Rosegarden, uruchamianie &quot;modprobe snd-seq-midi&quot; jako root i ponowne uruchomienie programu. Jeśli chcesz umyślnie uruchomić bez sekwencera, użyj &quot;rosegarden --nosequencer&quot;, aby uniknąć tego błędu w przyszłości.&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p&gt;Nie udało się zainicjować podsystemu MIDI.&lt;/p&gt;&lt;p&gt;Możesz kontynuować bez sekwencera, ale proponujemy zamknięcie Rosegarden, uruchomienie &quot;modprobe snd-seq-midi&quot; jako root i ponowne uruchomienie programu. Jeśli chcesz umyślnie uruchomić bez sekwencera, użyj &quot;rosegarden --nosequencer&quot;, aby uniknąć tego błędu w przyszłości.&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -26573,12 +26573,12 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+112"/>
         <source>Display as common time</source>
-        <translation>Wyświetl skrót &quot;C&quot; zamiast 4/4</translation>
+        <translation>Wyświetl jako &quot;C&quot; zamiast 4/4</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Display as cut common time</source>
-        <translation>Wyświetl metrum jako alla breve</translation>
+        <translation>Wyświetl jako alla breve</translation>
     </message>
     <message>
         <location line="+46"/>
@@ -27183,7 +27183,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+65"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Załaduj parametry segmentu preset z naszej obszernej bazy danych instrumentów z całego świata.&lt;/p&gt;&lt;p&gt;Kiedy utworzysz nowe segmenty, będą one miały te parametry w chwili utworzenia. Aby używać tych parametrów na istniejących segmentach (np. aby zamienić istniejący wyciąg głosu do odtwarzania trąbki Bb bez transpozycji), użyj &lt;b&gt;Segmenty -&gt; Konwertuj notację do...&lt;/b&gt; w edytorze nutowym.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Załaduj parametry segmentu presetu z naszej obszernej bazy danych instrumentów z całego świata.&lt;/p&gt;&lt;p&gt;Gdy utworzysz nowe segmenty, będą one miały te parametry w chwili utworzenia. Aby używać tych parametrów na istniejących segmentach (np. aby przekonwertować istniejącą partię do odtwarzania trąbki Bb bez transpozycji), użyj &lt;b&gt;Segmenty -&gt; Konwertuj notację do...&lt;/b&gt; w edytorze nutowym.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>treble</source>
@@ -27486,7 +27486,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+1"/>
         <source>End at same time as note</source>
-        <translation>Skończ w tym samym czasie co nuta</translation>
+        <translation>Zakończ w tym samym czasie co nuta</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -27680,7 +27680,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+8"/>
         <source>Selected region:</source>
-        <translation>Zaznaczony region:</translation>
+        <translation>Zaznaczony obszar:</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -27854,7 +27854,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+1"/>
         <source>End at same time as note</source>
-        <translation>Skończ w tym samym czasie co nuta</translation>
+        <translation>Zakończ w tym samym czasie co nuta</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -27872,7 +27872,7 @@ Transponuj o półtony...</translation>
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="+48"/>
         <source>Performance Problems Detected</source>
-        <translation>Wykryto problemy wykonania</translation>
+        <translation>Wykryto problemy z wydajnością</translation>
     </message>
     <message>
         <location line="+27"/>
