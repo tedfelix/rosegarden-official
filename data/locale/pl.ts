@@ -10429,7 +10429,7 @@
     </message>
     <message>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Please set a valid recording path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Nie można uruchomić nagrywania dźwięku.&lt;/p&gt;&lt;p&gt;Ustaw poprawną ścieżkę do nagrywania w &lt;b&gt;Utwór -&gt; Edytuj właściwości dokumentu... -&gt; Dźwięk&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation type="vanished">&lt;qt&gt;&lt;p&gt;Nie można uruchomić nagrywania dźwięku.&lt;/p&gt;&lt;p&gt;Ustaw poprawną ścieżkę nagrywania w &lt;b&gt;Utwór -&gt; Edytuj właściwości dokumentu... -&gt; Dźwięk&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>Wrong length for long data in MIDI stream</source>
