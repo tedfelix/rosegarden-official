@@ -219,7 +219,7 @@ if(NOT LILV_INCLUDE_DIRS)
   message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
 endif()
 
-pkg_check_modules(LV2 lv2)
+pkg_check_modules(LV2 lv2>=1.18.0)
 if(LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
   set(LILV_FOUND TRUE)
 endif()
