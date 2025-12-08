@@ -126,7 +126,11 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     m_showAudioLocation = new QCheckBox();
     m_showAudioLocation->setChecked(!Preferences::getAudioFileLocationDlgDontShow());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_showAudioLocation, &QCheckBox::checkStateChanged,
+#else
     connect(m_showAudioLocation, &QCheckBox::stateChanged,
+#endif
             this, &AudioConfigurationPage::slotModified);
     layout->addWidget(m_showAudioLocation, row, 1);
 
@@ -211,7 +215,12 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.beginGroup( SequencerOptionsConfigGroup );
 
     m_createFaderOuts = new QCheckBox(tr("for individual audio instruments"), frame);
-    connect(m_createFaderOuts, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_createFaderOuts, &QCheckBox::checkStateChanged,
+#else
+    connect(m_createFaderOuts, &QCheckBox::stateChanged,
+#endif
+            this, &AudioConfigurationPage::slotModified);
     m_createFaderOuts->setChecked( qStrToBool( settings.value("audiofaderouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
@@ -219,7 +228,12 @@ AudioConfigurationPage::AudioConfigurationPage(
     ++row;
 
     m_createSubmasterOuts = new QCheckBox(tr("for submasters"), frame);
-    connect(m_createSubmasterOuts, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_createSubmasterOuts, &QCheckBox::checkStateChanged,
+#else
+    connect(m_createSubmasterOuts, &QCheckBox::stateChanged,
+#endif
+            this, &AudioConfigurationPage::slotModified);
     m_createSubmasterOuts->setChecked( qStrToBool( settings.value("audiosubmasterouts", "false" ) ) );
 
 //    layout->addWidget(label, row, 0, Qt::AlignRight);
@@ -237,20 +251,35 @@ AudioConfigurationPage::AudioConfigurationPage(
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     m_connectDefaultAudioOutputs = new QCheckBox(tr("audio outputs"));
-    connect(m_connectDefaultAudioOutputs, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_connectDefaultAudioOutputs, &QCheckBox::checkStateChanged,
+#else
+    connect(m_connectDefaultAudioOutputs, &QCheckBox::stateChanged,
+#endif
+            this, &AudioConfigurationPage::slotModified);
     m_connectDefaultAudioOutputs->setChecked(qStrToBool(settings.value("connect_default_jack_outputs", "true")));
     layout->addWidget(m_connectDefaultAudioOutputs, row, 1);
     ++row;
 
     m_connectDefaultAudioInputs = new QCheckBox(tr("audio inputs"));
-    connect(m_connectDefaultAudioInputs, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_connectDefaultAudioInputs, &QCheckBox::checkStateChanged,
+#else
+    connect(m_connectDefaultAudioInputs, &QCheckBox::stateChanged,
+#endif
+            this, &AudioConfigurationPage::slotModified);
     m_connectDefaultAudioInputs->setChecked(qStrToBool(settings.value("connect_default_jack_inputs", "true")));
     layout->addWidget(m_connectDefaultAudioInputs, row, 1);
     ++row;
 
     layout->addWidget(new QLabel(tr("Start JACK automatically"),frame), row, 0);
     m_autoStartJackServer = new QCheckBox();
-    connect(m_autoStartJackServer, &QCheckBox::stateChanged, this, &AudioConfigurationPage::slotModified);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_autoStartJackServer, &QCheckBox::checkStateChanged,
+#else
+    connect(m_autoStartJackServer, &QCheckBox::stateChanged,
+#endif
+            this, &AudioConfigurationPage::slotModified);
     m_autoStartJackServer->setChecked(settings.value("autostartjack", "true").toBool());
     layout->addWidget(m_autoStartJackServer, row, 1);
     ++row;
@@ -261,7 +290,11 @@ AudioConfigurationPage::AudioConfigurationPage(
             new QLabel(tr("Check for \"Out of processor power\""), frame),
             row, 0);
     m_outOfProcessorPower = new QCheckBox();
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_outOfProcessorPower, &QCheckBox::checkStateChanged,
+#else
     connect(m_outOfProcessorPower, &QCheckBox::stateChanged,
+#endif
             this, &AudioConfigurationPage::slotModified);
     m_outOfProcessorPower->setChecked(Preferences::getJACKLoadCheck());
     layout->addWidget(m_outOfProcessorPower, row, 1);
