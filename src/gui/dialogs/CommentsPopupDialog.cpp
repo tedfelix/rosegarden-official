@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -47,7 +47,7 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
 
     QString fileName = doc->getAbsFilePath();
     setWindowTitle(tr("Notes about %1").arg(fileName));
-    
+
     QVBoxLayout *mainLayout = new QVBoxLayout;
     setLayout(mainLayout);
 
@@ -86,7 +86,11 @@ CommentsPopupDialog::CommentsPopupDialog(RosegardenDocument *doc,
     checkBox->setToolTip(tr("<qt>If checked, these notes will pop up the next "
                             "time the document is loaded</qt>"));
     checkBox->setChecked(true);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(checkBox, &QCheckBox::checkStateChanged,
+#else
     connect(checkBox, &QCheckBox::stateChanged,
+#endif
             this, &CommentsPopupDialog::slotCheckChanged);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Close);
@@ -111,4 +115,3 @@ CommentsPopupDialog::slotCheckChanged(int state)
 }
 
 }
-

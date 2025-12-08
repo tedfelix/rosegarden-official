@@ -95,7 +95,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_useDefaultStudio = new QCheckBox;
     m_useDefaultStudio->setChecked(
             settings.value("alwaysusedefaultstudio", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useDefaultStudio, &QCheckBox::checkStateChanged,
+#else
     connect(m_useDefaultStudio, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_useDefaultStudio, row, 2);
 
@@ -113,7 +117,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_includeAlsaPortNumbersWhenMatching->setToolTip(toolTip);
     m_includeAlsaPortNumbersWhenMatching->setChecked(
             Preferences::getIncludeAlsaPortNumbersWhenMatching());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_includeAlsaPortNumbersWhenMatching, &QCheckBox::checkStateChanged,
+#else
     connect(m_includeAlsaPortNumbersWhenMatching, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_includeAlsaPortNumbersWhenMatching, row, 2);
 
@@ -130,7 +138,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_externalControllerPort->setToolTip(toolTip);
     m_externalControllerPort->setChecked(
             settings.value("external_controller", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_externalControllerPort, &QCheckBox::checkStateChanged,
+#else
     connect(m_externalControllerPort, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_externalControllerPort, row, 2);
 
@@ -170,7 +182,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     const bool acceptTransportCCs =
             settings.value("acceptTransportCCs", true).toBool();
     m_acceptTransportCCs->setChecked(acceptTransportCCs);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_acceptTransportCCs, &QCheckBox::checkStateChanged,
+#else
     connect(m_acceptTransportCCs, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_acceptTransportCCs, row, 2);
 
@@ -190,7 +206,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     const bool allowResetAllControllers =
             settings.value("allowresetallcontrollers", true).toBool();
     m_allowResetAllControllers->setChecked(allowResetAllControllers);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_allowResetAllControllers, &QCheckBox::checkStateChanged,
+#else
     connect(m_allowResetAllControllers, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_allowResetAllControllers, row, 2);
 
@@ -206,7 +226,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_sendProgramChangesWhenLooping->setToolTip(toolTip);
     m_sendProgramChangesWhenLooping->setChecked(
             Preferences::getSendProgramChangesWhenLooping());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_sendProgramChangesWhenLooping, &QCheckBox::checkStateChanged,
+#else
     connect(m_sendProgramChangesWhenLooping, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_sendProgramChangesWhenLooping, row, 2);
 
@@ -222,7 +246,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_sendControlChangesWhenLooping->setToolTip(toolTip);
     m_sendControlChangesWhenLooping->setChecked(
             Preferences::getSendControlChangesWhenLooping());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_sendControlChangesWhenLooping, &QCheckBox::checkStateChanged,
+#else
     connect(m_sendControlChangesWhenLooping, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     layout->addWidget(m_sendControlChangesWhenLooping, row, 2);
 
@@ -273,7 +301,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_loadSoundFont->setToolTip(toolTip);
     m_loadSoundFont->setChecked(
             settings.value("sfxloadenabled", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_loadSoundFont, &QCheckBox::checkStateChanged,
+#else
     connect(m_loadSoundFont, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
     connect(m_loadSoundFont, &QAbstractButton::clicked,
             this, &MIDIConfigurationPage::slotLoadSoundFontClicked);
@@ -413,7 +445,11 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
     m_autoConnectSyncOut->setChecked(
             settings.value("midisyncautoconnect", false).toBool());
 
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_autoConnectSyncOut, &QCheckBox::checkStateChanged,
+#else
     connect(m_autoConnectSyncOut, &QCheckBox::stateChanged,
+#endif
             this, &MIDIConfigurationPage::slotModified);
 
     layout->addWidget(m_autoConnectSyncOut, row, 1);

@@ -155,12 +155,20 @@ CommentsConfigurationPage::CommentsConfigurationPage(
     if (m_parentDialog) {
         connect(m_textEdit, &QPlainTextEdit::textChanged,
                 m_parentDialog, &ConfigureDialogBase::slotActivateApply);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+        connect(m_checkBox, &QCheckBox::checkStateChanged,
+#else
         connect(m_checkBox, &QCheckBox::stateChanged,
+#endif
                 m_parentDialog, &ConfigureDialogBase::slotActivateApply);
     }
 
-    connect (m_checkBox, &QCheckBox::stateChanged,
-             this, &CommentsConfigurationPage::slotShowPopupChanged);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+          connect(m_checkBox, &QCheckBox::checkStateChanged,
+#else
+          connect(m_checkBox, &QCheckBox::stateChanged,
+#endif
+                  this, &CommentsConfigurationPage::slotShowPopupChanged);
 
     connect(m_pageButton, &QAbstractButton::clicked, this, &CommentsConfigurationPage::slotShowPagesMenu);
 }

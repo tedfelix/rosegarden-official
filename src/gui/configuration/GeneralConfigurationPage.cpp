@@ -186,7 +186,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     // I traditionally had these turned off, and when they reappeared, I found
     // them incredibly annoying, so I'm making false the default:
     m_appendSuffixes->setChecked(settings.value("appendlabel", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_appendSuffixes, &QCheckBox::checkStateChanged,
+#else
     connect(m_appendSuffixes, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_appendSuffixes, row, 1, 1, 2);
 
@@ -204,7 +208,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_useTrackName->setToolTip(tipText);
     // Leaving unchecked by default to remain compatible with earlier behaviour
     m_useTrackName->setChecked(settings.value("usetrackname", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useTrackName, &QCheckBox::checkStateChanged,
+#else
     connect(m_useTrackName, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_useTrackName, row, 1, 1, 2);
 
@@ -224,7 +232,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_enableEditingDuringPlayback->setToolTip(tipText);
     m_enableEditingDuringPlayback->setChecked(
             settings.value("enableEditingDuringPlayback", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_enableEditingDuringPlayback, &QCheckBox::checkStateChanged,
+#else
     connect(m_enableEditingDuringPlayback, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_enableEditingDuringPlayback, row, 1, 1, 2);
 
@@ -246,7 +258,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_cleanRecentFilesList->setToolTip(tipText);
     m_cleanRecentFilesList->setChecked(
             settings.value("cleanRecentFilesList", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_cleanRecentFilesList, &QCheckBox::checkStateChanged,
+#else
     connect(m_cleanRecentFilesList, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_cleanRecentFilesList, row, 1, 1, 2);
 
@@ -269,7 +285,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_useJackTransport = new QCheckBox(frame);
     m_useJackTransport->setChecked(
             settings.value("jacktransport", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useJackTransport, &QCheckBox::checkStateChanged,
+#else
     connect(m_useJackTransport, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_useJackTransport, row, 1, 1, 2);
 
@@ -290,7 +310,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_jackStopAtAutoStop = new QCheckBox(frame);
     m_jackStopAtAutoStop->setToolTip(tipText);
     m_jackStopAtAutoStop->setChecked(Preferences::getJACKStopAtAutoStop());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_jackStopAtAutoStop, &QCheckBox::checkStateChanged,
+#else
     connect(m_jackStopAtAutoStop, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_jackStopAtAutoStop, row, 1, 1, 2);
 
@@ -302,7 +326,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
                                  frame), row, 0);
     m_stopPlaybackAtEnd = new QCheckBox(frame);
     m_stopPlaybackAtEnd->setChecked(Preferences::getStopAtSegmentEnd());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_stopPlaybackAtEnd, &QCheckBox::checkStateChanged,
+#else
     connect(m_stopPlaybackAtEnd, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_stopPlaybackAtEnd, row, 1, 1, 2);
@@ -313,7 +341,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
                                  frame), row, 0);
     m_jumpToLoop = new QCheckBox(frame);
     m_jumpToLoop->setChecked(Preferences::getJumpToLoop());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_jumpToLoop, &QCheckBox::checkStateChanged,
+#else
     connect(m_jumpToLoop, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_jumpToLoop, row, 1, 1, 2);
@@ -324,7 +356,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
                                  frame), row, 0);
     m_advancedLooping = new QCheckBox(frame);
     m_advancedLooping->setChecked(Preferences::getAdvancedLooping());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_advancedLooping, &QCheckBox::checkStateChanged,
+#else
     connect(m_advancedLooping, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_advancedLooping, row, 1, 1, 2);
@@ -335,7 +371,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
                                  frame), row, 0);
     m_autoChannels = new QCheckBox(frame);
     m_autoChannels->setChecked(Preferences::getAutoChannels());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_autoChannels, &QCheckBox::checkStateChanged,
+#else
     connect(m_autoChannels, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_autoChannels, row, 1, 1, 2);
@@ -346,7 +386,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
                                  frame), row, 0);
     m_lv2 = new QCheckBox(frame);
     m_lv2->setChecked(Preferences::getLV2());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_lv2, &QCheckBox::checkStateChanged,
+#else
     connect(m_lv2, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_lv2, row, 1, 1, 2);
@@ -363,7 +407,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_dynamicDrag = new QCheckBox(frame);
     m_dynamicDrag->setToolTip(tipText);
     m_dynamicDrag->setChecked(Preferences::getDynamicDrag());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_dynamicDrag, &QCheckBox::checkStateChanged,
+#else
     connect(m_dynamicDrag, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_dynamicDrag, row, 1, 1, 2);
@@ -378,7 +426,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_lv2Environment = new QCheckBox(frame);
     m_lv2Environment->setToolTip(tipText);
     m_lv2Environment->setChecked(Preferences::getLv2Environment());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_lv2Environment, &QCheckBox::checkStateChanged,
+#else
     connect(m_lv2Environment, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
 
     layout->addWidget(m_lv2Environment, row, 1, 1, 2);
@@ -477,7 +529,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_backgroundTextures = new QCheckBox(tr("Main window"), frame);
     m_backgroundTextures->setChecked(
             settings.value("backgroundtextures", true).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_backgroundTextures, &QCheckBox::checkStateChanged,
+#else
     connect(m_backgroundTextures, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_backgroundTextures, row, 1);
 
@@ -490,7 +546,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
             settings.value("backgroundtextures", true).toBool());
     settings.endGroup();
     settings.beginGroup(GeneralOptionsConfigGroup);
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_notationBackgroundTextures, &QCheckBox::checkStateChanged,
+#else
     connect(m_notationBackgroundTextures, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_notationBackgroundTextures, row, 2);
 
@@ -504,7 +564,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     m_longTitles = new QCheckBox;
     m_longTitles->setChecked(
             settings.value("long_window_titles", false).toBool());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_longTitles, &QCheckBox::checkStateChanged,
+#else
     connect(m_longTitles, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_longTitles, row, 1);
 
@@ -563,7 +627,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     m_useNativeFileDialogs = new QCheckBox;
     m_useNativeFileDialogs->setChecked(Preferences::getUseNativeFileDialogs());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useNativeFileDialogs, &QCheckBox::checkStateChanged,
+#else
     connect(m_useNativeFileDialogs, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_useNativeFileDialogs, row, 1);
 

@@ -379,7 +379,11 @@ LilyPondOptionsDialog::populateDefaultValues()
 
     // Paper size
     int defaultPaperSize = 1; // PAPER_A4
-    if (QLocale::system().country() == QLocale::UnitedStates) {
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 6, 0))
+   if (QLocale::system().territory() == QLocale::UnitedStates) {
+#else
+   if (QLocale::system().country() == QLocale::UnitedStates) {
+#endif
         defaultPaperSize = 5; // PAPER_LETTER
     }
     m_lilyPaperSize->setCurrentIndex(settings.value("lilypapersize", defaultPaperSize).toUInt());

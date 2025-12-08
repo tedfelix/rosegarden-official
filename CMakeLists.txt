@@ -1,6 +1,6 @@
 # CMake version required. This must be the very first line, because it sets
 # default policies affecting everything else.
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.10)
 
 # Project name
 project(rosegarden)
