@@ -129,13 +129,13 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
     RG_DEBUG << "ui uri:" << uiUris << m_uiType;
     const LilvNode* uib = lilv_ui_get_binary_uri(m_selectedUI);
     QString binary_uri = lilv_node_as_uri(uib);
-    QString bpath =
+    char* bpath =
         lilv_file_uri_parse(binary_uri.toStdString().c_str(), nullptr);
     RG_DEBUG << "ui binary:" << bpath;
 
     // Find the UI descriptor for uiUris.
 
-    m_uilib = dlopen(bpath.toStdString().c_str(), RTLD_LOCAL | RTLD_LAZY);
+    m_uilib = dlopen(bpath, RTLD_LOCAL | RTLD_LAZY);
     if (m_uilib) {
         void* vpdf = dlsym(m_uilib, "lv2ui_descriptor");
         if (vpdf) {
@@ -154,6 +154,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
             }
         }
     }
+    lilv_free(bpath);
 }
 
 AudioPluginLV2GUI::~AudioPluginLV2GUI()
