@@ -61,7 +61,6 @@ if (USE_GTK2)
     include_directories(${GTK2_INCLUDE_DIRS})
     link_directories(${GTK2_LIBRARY_DIRS})
     add_definitions(-DHAVE_GTK2)
-    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${GTK2_LIBRARIES})
   endif()
 endif()
 
@@ -850,6 +849,21 @@ add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
    ${localeqrc_outfile}
    ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
 )
+
+if(GTK2_FOUND)
+add_library(rosegardenGtk SHARED
+   gui/studio/LV2GtkImpl.cpp
+)
+
+target_link_libraries(rosegardenGtk
+  ${GTK2_LIBRARIES}
+)
+
+# Install shared lib
+install(TARGETS rosegardenGtk
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+endif()
 
 # If we've got cmake 3.16.0 or greater, use precompiled headers.
 # Cuts build time almost in half.
