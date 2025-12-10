@@ -201,7 +201,18 @@ AudioPluginLV2GUI::hasGUI() const
 void
 AudioPluginLV2GUI::showGui()
 {
+    RG_DEBUG << "showGui";
     if (! m_uidesc) return;
+    if (m_uiType == GTK) {
+        // check if gtk2 is available
+        RG_DEBUG << "showGui check gtk2";
+        LV2Gtk* lv2gtk = LV2Gtk::getInstance();
+        // lv2gtk may be zero if gtk is unavailable
+        if (! lv2gtk) {
+            RG_DEBUG << "gtk2 not available";
+            return;
+        }
+    }
     LV2Utils* lv2utils = LV2Utils::getInstance();
     if (! m_window) {
         // create the window now

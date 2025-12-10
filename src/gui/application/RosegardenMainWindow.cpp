@@ -633,6 +633,11 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete RosegardenDocument::currentDocument;
     RosegardenDocument::currentDocument = nullptr;
 
+#ifdef HAVE_GTK2
+    // clean up gtk if necessary
+    LV2Gtk::shutDown();
+#endif
+
     Profiles::getInstance()->dump();
 }
 
@@ -645,9 +650,6 @@ void RosegardenMainWindow::initStaticObjects()
     LV2World::get();
     LV2Utils::getInstance();
     LV2Worker::getInstance();
-#ifdef HAVE_GTK2
-    LV2Gtk::getInstance();
-#endif
 #endif
     RosegardenSequencer::getInstance();
 }
@@ -720,6 +722,7 @@ RosegardenMainWindow::signalAction(int fd)
 void
 RosegardenMainWindow::closeEvent(QCloseEvent *event)
 {
+    RG_DEBUG << "closeEvent";
     if (queryClose()) {
         // do some cleaning up
         emit documentAboutToChange();
@@ -757,6 +760,9 @@ RosegardenMainWindow::closeEvent(QCloseEvent *event)
 
         // Continue closing.
         event->accept();
+        // make sure the event loop terminates
+        RG_DEBUG << "closeEvent calling quit";
+        qApp->quit();
     } else {
         // Do not close.
         event->ignore();
