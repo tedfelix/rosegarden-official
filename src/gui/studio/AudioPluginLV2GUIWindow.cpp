@@ -369,8 +369,10 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
     if (m_parentWindow) m_parentWindow->setParent(nullptr);
 
 #ifdef HAVE_GTK2
-    LV2Gtk* lv2gtk = LV2Gtk::getInstance();
-    lv2gtk->deleteWidget(m_gwidget);
+    if (m_uiType == AudioPluginLV2GUI::GTK) {
+        LV2Gtk* lv2gtk = LV2Gtk::getInstance();
+        lv2gtk->deleteWidget(m_gwidget);
+    }
 #endif
 
     // this will cause this object to be deleted
