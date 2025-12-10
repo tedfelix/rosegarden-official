@@ -15,159 +15,191 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[LV2Gtk]"
+#define RG_NO_DEBUG_PRINT 1
+
 #include "LV2Gtk.h"
 
+#include <dlfcn.h>
+
+#include <QObject>
+#include <QMessageBox>
+#include <QCheckBox>
+
+#include "LV2GtkImpl.h"
+#include "misc/Debug.h"
+#include "misc/Preferences.h"
+
 #ifdef HAVE_GTK2
-
-// gtk can give warnings
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#include <gtk/gtk.h>
-#pragma GCC diagnostic pop
-
-#include <gdk/gdkx.h>
-
-//#define GTK_DEBUG true
-#define GTK_DEBUG false
-#define debug_print(...) \
-            do { if (GTK_DEBUG) fprintf(stderr, __VA_ARGS__); } while (0)
-
-namespace {
-    void size_request(GtkWidget*, GtkRequisition *req, gpointer user_data)
-    {
-        debug_print("size_request %d %d\n", req->width, req->height);
-        Rosegarden::LV2Gtk::SizeCallback* sizecb =
-            (Rosegarden::LV2Gtk::SizeCallback*)user_data;
-        sizecb->setSize(req->width, req->height, true);
-    }
-
-    void size_allocate(GtkWidget*, GdkRectangle *rect, gpointer user_data)
-    {
-        debug_print("size_allocate %d %d\n", rect->width, rect->height);
-        Rosegarden::LV2Gtk::SizeCallback* sizecb =
-            (Rosegarden::LV2Gtk::SizeCallback*)user_data;
-        sizecb->setSize(rect->width, rect->height, false);
-    }
-
-    gboolean delete_event(GtkWidget *,
-                          GdkEvent  *,
-                          gpointer   )
-    {
-        debug_print("gtk delete event occurred\n");
-
-        return FALSE;
-    }
-
-    static void destroy(GtkWidget *,
-                        gpointer   )
-    {
-        debug_print("gtk destroy\n");
-    }
-
-}
 
 namespace Rosegarden
 {
 
+LV2Gtk* LV2Gtk::m_instance = nullptr;
+
 LV2Gtk* LV2Gtk::getInstance()
 {
-    debug_print("LV2Gtk create instance\n");
-    static LV2Gtk instance;
-    return &instance;
+    if (m_instance == nullptr) {
+        RG_DEBUG << "creating instance";
+        // warn user
+        if (Preferences::getShowGtk2Warning()) {
+            QCheckBox *cb = new QCheckBox(tr("Do not show this again"));
+            QMessageBox msgbox;
+            msgbox.setText(tr("You are about to load the gtk2 infratructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:<br/>set QT_QPA_PLATFORMTHEME to gtk2 (and install the gtk2 style plugin or<br/>set XDG_SESSION_TYPE to unknown"));
+            msgbox.setIcon(QMessageBox::Icon::Question);
+            msgbox.addButton(QMessageBox::Ok);
+            msgbox.addButton(QMessageBox::Cancel);
+            msgbox.setDefaultButton(QMessageBox::Cancel);
+            msgbox.setCheckBox(cb);
+
+            int result = msgbox.exec();
+            if (result == QMessageBox::Cancel) return nullptr;
+            if (cb->isChecked()) {
+                Preferences::setShowGtk2Warning(false);
+            }
+        }
+        m_instance = new LV2Gtk;
+    }
+    return m_instance;
 }
 
-LV2Gtk::LV2Gtk() :
-    m_active(false),
-    m_argv(nullptr)
+LV2Gtk::LV2Gtk()
 {
-    debug_print("gtk constructor\n");
+
+    // load shared library
+    m_dlib = dlopen("librosegardenGtk.so", RTLD_LOCAL | RTLD_LAZY);
+    RG_DEBUG << "getInstance lib:" << m_dlib;
+    if (m_dlib) {
+        void (*createLV2GtkImplPtr)();
+        *(void **)(&createLV2GtkImplPtr) = dlsym(m_dlib, "createLV2GtkImpl");
+        RG_DEBUG << "getInstance implPtr:" << (void*)createLV2GtkImplPtr;
+        if (createLV2GtkImplPtr) {
+            createLV2GtkImplPtr();
+        } else {
+            RG_DEBUG << dlerror();
+        }
+    } else {
+        // warn user that lib not found
+        (void)QMessageBox::warning
+            (this,
+             QObject::tr("Rosegarden"),
+             QObject::tr("The rosegarden gtk2 library (librosegardenGtk.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable."),
+             QMessageBox::Ok);
+    }
 }
 
 LV2Gtk::~LV2Gtk()
 {
-    if (m_argv) {
-        int i = 0;
-        while (m_argv[i]) {
-            free(m_argv[i]);
-            i++;
-        }
-        delete[] m_argv;
-    }
+    RG_DEBUG << "dtor";
+    if (m_dlib) dlclose(m_dlib);
 }
-
-#if 0
-// this is never used but gtk seems to work ok anyway !
-void LV2Gtk::tick() const
-{
-    if (m_active) {
-        while (gtk_events_pending()) gtk_main_iteration();
-    }
-}
-#endif
 
 LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
                                        SizeCallback* sizecb)
 {
-    debug_print("gtk getWidget\n");
-    if (!m_active) {
-        // gtk start up on demand
-        //printf("starting gtk\n");
-        startUp();
-        m_active = true;
+    RG_DEBUG << "getWidget" << &lv2Widget << sizecb;
+    if (!m_dlib) {
+        LV2GtkWidget widget;
+        return widget;
     }
-    GtkWidget* wid = (GtkWidget*)lv2Widget;
-    GtkWidget* window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-    gtk_window_set_resizable(GTK_WINDOW(window), 0);
-    gtk_container_add (GTK_CONTAINER(window), wid);
-    gtk_widget_show_all(window);
-    g_signal_connect(G_OBJECT(window), "size-request",
-                     G_CALLBACK(size_request), sizecb);
-    g_signal_connect(G_OBJECT(window), "size-allocate",
-                     G_CALLBACK(size_allocate), sizecb);
-    g_signal_connect(G_OBJECT(window), "delete_event",
-                     G_CALLBACK(delete_event), NULL);
-    g_signal_connect(G_OBJECT(window), "destroy",
-                     G_CALLBACK(destroy), NULL);
-    LV2GtkWidget ret;
-    ret.window = window;
-    return ret;
+    LV2Gtk::LV2GtkWidget (*getWidgetPtr)(LV2UI_Widget lv2Widget,
+                                         LV2Gtk::SizeCallback* sizecb);
+    *(void **)(&getWidgetPtr) = dlsym(m_dlib, "getWidget");
+    if (getWidgetPtr) {
+        return getWidgetPtr(lv2Widget, sizecb);
+    } else {
+        RG_DEBUG << dlerror();
+    }
+
+    LV2Gtk::LV2GtkWidget widget;
+    return widget;
 }
 
 void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height) const
 {
-    debug_print("gtk getSize\n");
-    GtkAllocation alloc;
-    gtk_widget_get_allocation((GtkWidget*)(widget.window), &alloc);
-    width = alloc.width;
-    height = alloc.height;
-    //printf("getSize %d %d\n", width, height);
+    RG_DEBUG << "getSize" << &widget << width << height;
+    if (!m_dlib) {
+        width = 0;
+        height = 0;
+        return;
+    }
+    void (*getSizePtr)(const LV2GtkWidget& widget,
+                       int& width,
+                       int& height);
+    *(void **)(&getSizePtr) = dlsym(m_dlib, "getSize");
+    if (getSizePtr) {
+        getSizePtr(widget, width, height);
+        return;
+    } else {
+        RG_DEBUG << dlerror();
+    }
+
+    width = 0;
+    height = 0;
 }
 
 long int LV2Gtk::getWinId(const LV2GtkWidget& widget)
 {
-    debug_print("gtk getWinId\n");
-    unsigned long id = GDK_WINDOW_XWINDOW(((GtkWidget*)(widget.window))->window);
-    return id;
+    RG_DEBUG << "getWinId" << &widget;
+    if (!m_dlib) {
+        return 0;
+    }
+    int (*getWinIdPtr)(const LV2GtkWidget& widget);
+    *(void **)(&getWinIdPtr) = dlsym(m_dlib, "getWinId");
+    if (getWinIdPtr) {
+        return getWinIdPtr(widget);
+    } else {
+        RG_DEBUG << dlerror();
+    }
+
+    return 0;
 }
 
 void LV2Gtk::deleteWidget(const LV2GtkWidget& widget)
 {
-    debug_print("gtk deleteWidget\n");
-    if (widget.window) {
-        gtk_widget_destroy((GtkWidget*)(widget.window));
+    RG_DEBUG << "deleteWidget" << &widget;
+    if (!m_dlib) {
+        return;
+    }
+    void (*deleteWidgetPtr)(const LV2GtkWidget& widget);
+    *(void **)(&deleteWidgetPtr) = dlsym(m_dlib, "deleteWidget");
+    if (deleteWidgetPtr) {
+        deleteWidgetPtr(widget);
+        return;
+    } else {
+        RG_DEBUG << dlerror();
+    }
+
+}
+
+void LV2Gtk::shutDown()
+{
+    RG_DEBUG << "shutDown";
+    if (m_instance == nullptr) {
+        RG_DEBUG << "LV2Gtk not active";
+        return;
+    }
+    // instance exists
+    LV2Gtk* lv2gtk = LV2Gtk::getInstance();
+    lv2gtk->doShutDown();
+    delete lv2gtk;
+    m_instance = nullptr;
+}
+
+void LV2Gtk::doShutDown()
+{
+    if (!m_dlib) {
+        return;
+    }
+    void (*shutDownPtr)();
+    *(void **)(&shutDownPtr) = dlsym(m_dlib, "shutDown");
+    if (shutDownPtr) {
+        shutDownPtr();
+        return;
+    } else {
+        RG_DEBUG << dlerror();
     }
 }
-
-void LV2Gtk::startUp()
-{
-    debug_print("gtk startUp\n");
-    int argc = 1;
-    m_argv = new char*[2];
-    m_argv[0] = strdup("lv2gtk");
-    m_argv[1] = nullptr;
-    gtk_init (&argc, &m_argv);
-}
-
 
 }
 
@@ -182,21 +214,13 @@ LV2Gtk* LV2Gtk::getInstance()
     return nullptr;
 }
 
-LV2Gtk::LV2Gtk() :
-    m_active(false),
-    m_argv(nullptr)
+LV2Gtk::LV2Gtk()
 {
 }
 
 LV2Gtk::~LV2Gtk()
 {
 }
-
-#if 0
-void LV2Gtk::tick() const
-{
-}
-#endif
 
 LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget,
                                        SizeCallback*)
@@ -218,7 +242,7 @@ void LV2Gtk::deleteWidget(const LV2GtkWidget&)
 {
 }
 
-void LV2Gtk::startUp()
+void LV2Gtk::shutDown()
 {
 }
 

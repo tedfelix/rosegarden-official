@@ -142,6 +142,8 @@ namespace Preferences
     void setMatrixConstrainNotes(bool value);
     bool getMatrixConstrainNotes();
 
+    void setShowGtk2Warning(bool value);
+    bool getShowGtk2Warning();
 }
 
 

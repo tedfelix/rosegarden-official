@@ -348,6 +348,19 @@ bool Preferences::getMatrixConstrainNotes()
     return matrixConstrainNotes.get();
 }
 
+static PreferenceBool showGtk2Warning(
+        GeneralOptionsConfigGroup, "showGtk2Warning", true);
+
+void Preferences::setShowGtk2Warning(bool value)
+{
+    showGtk2Warning.set(value);
+}
+
+bool Preferences::getShowGtk2Warning()
+{
+    return showGtk2Warning.get();
+}
+
 static PreferenceInt pdfViewer(
         ExternalApplicationsConfigGroup,
         "pdfviewer",

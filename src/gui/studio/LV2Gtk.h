@@ -20,17 +20,20 @@
 
 #include <lv2/ui/ui.h>
 
+#include "ILV2Gtk.h"
+
+#include <QWidget>
 
 namespace Rosegarden
 {
-
 
 /// Wrapper around GTK that can be used for LV2 plugins that use GTK.
 /**
  * Singleton.
  */
-class LV2Gtk
+class LV2Gtk : public QWidget, public ILV2Gtk
 {
+    Q_OBJECT
 public:
     static LV2Gtk *getInstance();
 
@@ -42,42 +45,25 @@ public:
     ~LV2Gtk();
 
  public:
-    class SizeCallback
-    {
-    public:
-        virtual ~SizeCallback() {};
-        virtual void setSize(int width, int height, bool isRequest) = 0;
-    };
-
-    struct LV2GtkWidget
-    {
-        void* window;
-        LV2GtkWidget() {window = nullptr;}
-    };
-
-#if 0
-    // cppcheck-suppress functionStatic
-    void tick() const;
-#endif
-
     /// Get a widget for a GTK-based LV2 plugin to use for its main widget.
     /**
      * Wrapper around gtk_window_new().
      */
-    // cppcheck-suppress functionStatic
-    LV2GtkWidget getWidget(LV2UI_Widget lv2Widget, SizeCallback* sizecb);
+    LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
+                           SizeCallback* sizecb) override;
+    void getSize(const LV2GtkWidget& widget,
+                 int& width,
+                 int& height) const override;
+    long int getWinId(const LV2GtkWidget& widget) override;
+    void deleteWidget(const LV2GtkWidget& widget) override;
 
-    // cppcheck-suppress functionStatic
-    void getSize(const LV2GtkWidget& widget, int& width, int& height) const;
-    static long int getWinId(const LV2GtkWidget& widget);
-    static void deleteWidget(const LV2GtkWidget& widget);
+    static void shutDown();
+    void doShutDown();
 
 private:
-    // cppcheck-suppress functionStatic
-    void startUp();
+    static LV2Gtk* m_instance;
 
-    bool m_active;
-    char** m_argv;
+    void* m_dlib;
 };
 
 
