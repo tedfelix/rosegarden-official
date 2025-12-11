@@ -22,6 +22,8 @@
 
 #include <QMutexLocker>
 
+#define LOCKED QMutexLocker rg_SequencerDataBlock_locker(&m_mutex)
+
 namespace Rosegarden
 {
 
@@ -31,6 +33,19 @@ SequencerDataBlock::getInstance()
     static SequencerDataBlock *instance = nullptr;
     if (!instance) instance = new SequencerDataBlock();
     return instance;
+}
+
+RealTime SequencerDataBlock::getPositionPointer() const
+{
+    LOCKED;
+    return RealTime(m_positionSec, m_positionNsec);
+}
+
+void SequencerDataBlock::setPositionPointer(const RealTime &rt)
+{
+    LOCKED;
+    m_positionSec = rt.sec;
+    m_positionNsec = rt.nsec;
 }
 
 SequencerDataBlock::SequencerDataBlock()
