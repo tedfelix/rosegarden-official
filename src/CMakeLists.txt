@@ -347,6 +347,7 @@ set(rg_CPPS
   gui/configuration/HeadersConfigurationPage.cpp
   gui/configuration/CommentsConfigurationPage.cpp
   gui/configuration/GeneralConfigurationPage.cpp
+  gui/application/CompositionPosition.cpp
   gui/application/RosegardenApplication.cpp
   gui/application/TranzportClient.cpp
   gui/application/RosegardenMainViewWidget.cpp
