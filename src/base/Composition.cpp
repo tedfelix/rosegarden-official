@@ -26,6 +26,7 @@
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
 #include "base/AudioLevel.h"
+#include "gui/application/CompositionPosition.h"
 
 #include <algorithm>
 #include <cmath>
@@ -249,7 +250,6 @@ Composition::Composition() :
     m_tempoTimestampsNeedCalculating(true),
     m_basicQuantizer(new BasicQuantizer()),
     m_notationQuantizer(new NotationQuantizer()),
-    m_position(0),
     m_defaultTempo(getTempoForQpm(120.0)),
     m_minTempo(0),
     m_maxTempo(0),
@@ -770,7 +770,6 @@ Composition::clear()
     m_loopMode = LoopOff;
     m_loopStart = 0;
     m_loopEnd = 0;
-    m_position = 0;
     m_startMarker = 0;
     m_endMarker = getBarRange(defaultNumberOfBars).first;
     m_selectedTrackId = 0;
@@ -1124,6 +1123,12 @@ Composition::getTempoAtTime(timeT t) const
     RG_DEBUG << "getTempoAtTime(): Found tempo " << tempo << " at " << t;
 #endif
     return tempo;
+}
+
+tempoT
+Composition::getCurrentTempo() const
+{
+    return getTempoAtTime(CompositionPosition::getInstance()->getPosition());
 }
 
 int
@@ -1747,12 +1752,6 @@ Composition::getDurationForMusicalTime(timeT absTime,
     return t;
 }
 
-void
-Composition::setPosition(timeT position)
-{
-    m_position = position;
-}
-
 void Composition::setPlayMetronome(bool value)
 {
     m_playMetronome = value;
@@ -2091,7 +2090,8 @@ std::string Composition::toXmlString() const
         composition << trackPair.first;
     }
 
-    composition << "\" pointer=\"" << m_position;
+    composition << "\" pointer=\"" <<
+        CompositionPosition::getInstance()->getPosition();
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
                 << std::setprecision(4)

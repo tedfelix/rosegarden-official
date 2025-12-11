@@ -56,6 +56,7 @@
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/general/ClefIndex.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -306,7 +307,8 @@ RosegardenDocument::setQuickMarker()
 {
     RG_DEBUG << "RosegardenDocument::setQuickMarker";
 
-    m_quickMarkerTime = getComposition().getPosition();
+    m_quickMarkerTime = CompositionPosition::getInstance()->getPosition();
+
 }
 
 void
@@ -315,7 +317,7 @@ RosegardenDocument::jumpToQuickMarker()
     RG_DEBUG << "RosegardenDocument::jumpToQuickMarker";
 
     if (m_quickMarkerTime >= 0)
-        slotSetPointerPosition(m_quickMarkerTime);
+        CompositionPosition::getInstance()->slotSetPosition(m_quickMarkerTime);
 }
 
 QString RosegardenDocument::getAutoSaveFileName()
@@ -2158,7 +2160,9 @@ RosegardenDocument::updateRecordingMIDISegment()
                 NoteOnRecSet rec_vec = pitchIter->second;
                 if (rec_vec.size() > 0) {
                     NoteOnRecSet *newRecordSet =
-                            adjustEndTimes(rec_vec, m_composition.getPosition());
+                        adjustEndTimes
+                        (rec_vec,
+                         CompositionPosition::getInstance()->getPosition());
                     // Copy to tweakedNoteOnEvents.
                     tweakedNoteOnEvents
                         [deviceIter->first]
@@ -2343,7 +2347,7 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
 void
 RosegardenDocument::stopPlaying()
 {
-    emit pointerPositionChanged(m_composition.getPosition());
+    emit uiUpdateRequired();
 }
 
 void
@@ -2497,7 +2501,7 @@ RosegardenDocument::stopRecordingMidi()
 
     slotUpdateAllViews(nullptr);
 
-    emit pointerPositionChanged(m_composition.getPosition());
+    emit uiUpdateRequired();
 }
 
 void
@@ -2520,13 +2524,6 @@ RosegardenDocument::prepareAudio()
                      << (*it)->getAbsoluteFilePath() << "\"";
         }
     }
-}
-
-void
-RosegardenDocument::slotSetPointerPosition(timeT t)
-{
-    m_composition.setPosition(t);
-    emit pointerPositionChanged(t);
 }
 
 void
@@ -2693,9 +2690,9 @@ RosegardenDocument::updateRecordingAudioSegments()
                 }
 
                 recordSegment->setAudioEndTime(
-                    m_composition.getRealTimeDifference(recordSegment->getStartTime(),
-                                                        m_composition.getPosition()));
-
+                    m_composition.getRealTimeDifference
+                    (recordSegment->getStartTime(),
+                     CompositionPosition::getInstance()->getPosition()));
             } else {
                 //         RG_DEBUG << "RosegardenDocument::updateRecordingAudioSegments: no segment for instr "
                 //              << iid;
@@ -2720,8 +2717,9 @@ RosegardenDocument::stopRecordingAudio()
         // set the audio end time
         //
         recordSegment->setAudioEndTime(
-            m_composition.getRealTimeDifference(recordSegment->getStartTime(),
-                                                m_composition.getPosition()));
+            m_composition.getRealTimeDifference
+            (recordSegment->getStartTime(),
+             CompositionPosition::getInstance()->getPosition()));
 
         // now add the Segment
         RG_DEBUG << "RosegardenDocument::stopRecordingAudio - "
@@ -2764,7 +2762,7 @@ RosegardenDocument::stopRecordingAudio()
     }
     emit stoppedAudioRecording();
 
-    emit pointerPositionChanged(m_composition.getPosition());
+    emit uiUpdateRequired();
 }
 
 void
