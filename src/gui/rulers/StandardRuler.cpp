@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -27,6 +27,7 @@
 #include "base/RulerScale.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "document/RosegardenDocument.h"
@@ -112,7 +113,7 @@ void StandardRuler::setMainWindow(QPointer<QMainWindow> mainWindow)
         m_loopRuler->setMainWindow(mainWindow);
 }
 
-void StandardRuler::setDocument(RosegardenDocument *doc)
+void StandardRuler::setDocument(RosegardenDocument*)
 {
     //RG_DEBUG << "connectRulerToDocPointer()";
 
@@ -125,7 +126,7 @@ void StandardRuler::setDocument(RosegardenDocument *doc)
     //
     QObject::connect
     (m_loopRuler, &LoopRuler::setPointerPosition,
-     doc, &RosegardenDocument::slotSetPointerPosition);
+     CompositionPosition::getInstance(), &CompositionPosition::slotSetPosition);
 
     QObject::connect
     (m_loopRuler, &LoopRuler::dragPointerToPosition,

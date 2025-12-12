@@ -39,6 +39,7 @@
 #include "CompositionMapper.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
 #include "gui/dialogs/OutOfProcessorPower.h"
@@ -192,7 +193,8 @@ SequenceManager::play()
     preparePlayback();
 
     // Remember the last playback position so that we can return on stop.
-    m_lastTransportStartPosition = comp.getPosition();
+    m_lastTransportStartPosition =
+        CompositionPosition::getInstance()->getPosition();
 
     // Update play metronome status
     ControlBlock::getInstance()->setInstrumentForMetronome(
@@ -210,7 +212,8 @@ SequenceManager::play()
 
     setTempo(comp.getCurrentTempo());
 
-    RealTime startPos = comp.getElapsedRealTime(comp.getPosition());
+    RealTime startPos =
+        CompositionPosition::getInstance()->getPositionAsElapsedTime();
 
     // If we're looping then jump to loop start
     if (comp.getLoopMode() == Composition::LoopOn)
@@ -241,7 +244,8 @@ SequenceManager::stop(bool autoStop)
 
     // If the user presses stop while stopped, return to where we last started.
     if (m_transportStatus == STOPPED) {
-        m_doc->slotSetPointerPosition(m_lastTransportStartPosition);
+        CompositionPosition::getInstance()->slotSetPosition
+            (m_lastTransportStartPosition);
         return;
     }
 
@@ -309,7 +313,7 @@ SequenceManager::rewind()
 
     Composition &composition = m_doc->getComposition();
 
-    timeT position = composition.getPosition();
+    timeT position = CompositionPosition::getInstance()->getPosition();
 
     // Subtract one from position to make sure we go back one bar if we
     // are stopped and sitting at the beginning of a bar.
@@ -340,9 +344,11 @@ SequenceManager::rewind()
     }
 
     if (barRange.first < composition.getStartMarker()) {
-        m_doc->slotSetPointerPosition(composition.getStartMarker());
+        CompositionPosition::getInstance()->slotSetPosition
+            (composition.getStartMarker());
     } else {
-        m_doc->slotSetPointerPosition(barRange.first);
+        CompositionPosition::getInstance()->slotSetPosition
+            (barRange.first);
     }
 }
 
@@ -354,14 +360,14 @@ SequenceManager::fastforward()
 
     Composition &composition = m_doc->getComposition();
 
-    timeT position = composition.getPosition();
+    timeT position = CompositionPosition::getInstance()->getPosition();
     timeT newPosition = composition.getBarEndForTime(position);
 
     // Don't skip past end marker.
     if (newPosition > composition.getEndMarker())
         newPosition = composition.getEndMarker();
 
-    m_doc->slotSetPointerPosition(newPosition);
+    CompositionPosition::getInstance()->slotSetPosition(newPosition);
 }
 
 void
@@ -474,7 +480,8 @@ SequenceManager::record(bool countIn)
 
     } else {
 
-        m_lastTransportStartPosition = comp.getPosition();
+        m_lastTransportStartPosition =
+            CompositionPosition::getInstance()->getPosition();
 
 punchin:
 
@@ -531,20 +538,24 @@ punchin:
         // recording.
         //
         if (comp.getLoopMode() == Composition::LoopOn)
-            m_doc->slotSetPointerPosition(comp.getLoopStart());
+            CompositionPosition::getInstance()->slotSetPosition
+                (comp.getLoopStart());
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
-                int startBar = comp.getBarNumber(comp.getPosition());
+                int startBar = comp.getBarNumber
+                    (CompositionPosition::getInstance()->getPosition());
                 m_realRecordStart = comp.getElapsedRealTime(
                         comp.getBarRange(startBar).first);
                 startBar -= settings.value("countinbars", 0).toUInt();
-                m_doc->slotSetPointerPosition(comp.getBarRange(startBar).first);
+                CompositionPosition::getInstance()->slotSetPosition
+                    (comp.getBarRange(startBar).first);
             }
         }
 
         settings.endGroup();
 
-        m_doc->setRecordStartTime(m_doc->getComposition().getPosition());
+        m_doc->setRecordStartTime
+            (CompositionPosition::getInstance()->getPosition());
         m_doc->setPointerPositionBeforeRecord(m_lastTransportStartPosition);
 
         if (haveAudioInstrument) {
@@ -602,7 +613,7 @@ punchin:
         // we must being playing to record.
         //
         RealTime startPos =
-            comp.getElapsedRealTime(comp.getPosition());
+            CompositionPosition::getInstance()->getPositionAsElapsedTime();
 
         int result = RosegardenSequencer::getInstance()->record(
                 startPos,
@@ -617,7 +628,7 @@ punchin:
             // remaining.  (Note (dmm) this has changed, and it now reports
             // the time remaining during both MIDI and audio recording.)
             //
-            timeT p = comp.getPosition();
+            timeT p = CompositionPosition::getInstance()->getPosition();
             timeT d = comp.getEndMarker();
             // end marker less current position == available duration
             d -= p;
@@ -1015,7 +1026,8 @@ void
 SequenceManager::rewindToBeginning()
 {
     RG_DEBUG << "rewindToBeginning()";
-    m_doc->slotSetPointerPosition(m_doc->getComposition().getStartMarker());
+    CompositionPosition::getInstance()->slotSetPosition
+        (m_doc->getComposition().getStartMarker());
 }
 
 void
@@ -1023,7 +1035,7 @@ SequenceManager::fastForwardToEnd()
 {
     RG_DEBUG << "fastForwardToEnd()";
     Composition &comp = m_doc->getComposition();
-    m_doc->slotSetPointerPosition(comp.getEndMarker());
+    CompositionPosition::getInstance()->slotSetPosition(comp.getEndMarker());
 }
 
 void SequenceManager::slotLoopChanged()
@@ -1743,18 +1755,6 @@ void SequenceManager::tempoChanged(const Composition *c)
         // position in musical time (bars/beats).
 
         slotLoopChanged();
-
-    } else if (m_transportStatus == PLAYING) {
-
-        // ??? "else if" seems wrong here.  We probably want to adjust
-        //     the PPP regardless of whether looping is on?
-
-        // Tempo has changed during playback.
-
-        // Reset the playback position because the sequencer keeps track of
-        // position in real time (seconds) and we want to maintain the same
-        // position in musical time (bars/beats).
-        m_doc->slotSetPointerPosition(c->getPosition());
 
     }
 }

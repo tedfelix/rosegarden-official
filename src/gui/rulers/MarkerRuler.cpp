@@ -26,6 +26,7 @@
 #include "base/RulerScale.h"
 #include "base/SnapGrid.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/general/AutoScroller.h"
@@ -133,7 +134,7 @@ MarkerRuler::slotInsertMarkerHere()
 void
 MarkerRuler::slotInsertMarkerAtPointer()
 {
-    const timeT pointerTime = m_doc->getComposition().getPosition();
+    const timeT pointerTime = CompositionPosition::getInstance()->getPosition();
 
     AddMarkerCommand *command = new AddMarkerCommand(
             &RosegardenDocument::currentDocument->getComposition(),
@@ -528,7 +529,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
 
         // Left-click without modifiers, set pointer to clicked marker.
         if (clickedMarker) {
-            m_doc->slotSetPointerPosition(clickedMarker->getTime());
+            CompositionPosition::getInstance()->slotSetPosition
+                (clickedMarker->getTime());
             if (m_autoScroller) {
                 m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
                 m_autoScroller->start();

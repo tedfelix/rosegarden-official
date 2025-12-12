@@ -139,6 +139,7 @@
 #include "gui/rulers/ControlRulerWidget.h"
 #include "gui/widgets/TmpStatusMsg.h"
 
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 
@@ -2007,7 +2008,7 @@ NotationView::slotEditPaste()
         setSelection(new EventSelection(*segment, insertionTime, endTime),
                      false);
 //!!!        slotSetInsertCursorPosition(endTime, true, false);
-        RosegardenDocument::currentDocument->slotSetPointerPosition(endTime);
+        CompositionPosition::getInstance()->slotSetPosition(endTime);
     }
 }
 
@@ -2066,8 +2067,7 @@ NotationView::slotEditGeneralPaste()
             setSelection(new EventSelection(*segment, insertionTime, endTime),
                          false);
 //!!!            slotSetInsertCursorPosition(endTime, true, false);
-            RosegardenDocument::currentDocument->
-                slotSetPointerPosition(endTime);
+            CompositionPosition::getInstance()->slotSetPosition(endTime);
         }
     }
 }
@@ -2284,8 +2284,7 @@ NotationView::slotCurrentStaffUp()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition =
-        RosegardenDocument::currentDocument->getComposition().getPosition();
+    timeT pointerPosition = CompositionPosition::getInstance()->getPosition();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -2305,8 +2304,7 @@ NotationView::slotCurrentStaffDown()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition =
-        RosegardenDocument::currentDocument->getComposition().getPosition();
+    timeT pointerPosition = CompositionPosition::getInstance()->getPosition();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -4177,8 +4175,8 @@ NotationView::slotGroupTuplet(bool simple)
 
     if (!hasTimingAlready) {
 //        slotSetInsertCursorPosition(t + (unit * tupled), true, false);
-        RosegardenDocument::currentDocument->
-            slotSetPointerPosition(t + (unit * tupled));
+        CompositionPosition::getInstance()->slotSetPosition
+            (t + (unit * tupled));
     }
 }
 
@@ -4511,8 +4509,8 @@ NotationView::slotStepBackward()
         { --i; }
 
     if (i != segment->end()){
-        RosegardenDocument::currentDocument->
-            slotSetPointerPosition((*i)->getNotationAbsoluteTime());
+        CompositionPosition::getInstance()->
+            slotSetPosition((*i)->getNotationAbsoluteTime());
     }
 }
 
@@ -4530,11 +4528,12 @@ NotationView::slotStepForward()
             !isShowable(*i)))
         { ++i; }
 
-    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (i == segment->end()){
-        doc->slotSetPointerPosition(segment->getEndMarkerTime());
+        CompositionPosition::getInstance()->
+            slotSetPosition(segment->getEndMarkerTime());
     } else {
-        doc->slotSetPointerPosition((*i)->getNotationAbsoluteTime());
+        CompositionPosition::getInstance()->
+            slotSetPosition((*i)->getNotationAbsoluteTime());
     }
 }
 

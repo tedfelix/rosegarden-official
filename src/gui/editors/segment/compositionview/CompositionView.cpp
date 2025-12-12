@@ -34,6 +34,7 @@
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -1419,7 +1420,8 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
     if (!item) {
         const RulerScale *ruler = grid().getRulerScale();
         if (ruler)
-            emit setPointerPosition(ruler->getTimeForX(contentsPos.x()));
+            CompositionPosition::getInstance()->slotSetPosition
+                (ruler->getTimeForX(contentsPos.x()));
 
         return;
     }

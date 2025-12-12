@@ -32,6 +32,7 @@
 #include "gui/configuration/PitchTrackerConfigurationPage.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
+#include "gui/application/CompositionPosition.h"
 // to add PitchGraphWidget to display
 #include "gui/editors/notation/NotationWidget.h"
 // to get the notes in the composition
@@ -244,7 +245,8 @@ PitchTrackerView::setSegments(const std::vector<Segment *>& /* segments */)
 {
     // update GUI
 
-    connect(m_doc, &RosegardenDocument::pointerPositionChanged,
+    connect(CompositionPosition::getInstance(),
+            &CompositionPosition::pointerPositionChanged,
             this, &PitchTrackerView::slotUpdateValues);
 
     connect(this, &NotationView::play,

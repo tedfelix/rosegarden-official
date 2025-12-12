@@ -42,6 +42,7 @@
 #include "compositionview/CompositionView.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
 #include "gui/rulers/ChordNameRuler.h"
@@ -299,7 +300,8 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
     connect(CommandHistory::getInstance(), &CommandHistory::commandExecuted,
             this, &TrackEditor::slotCommandExecuted);
 
-    connect(m_doc, &RosegardenDocument::pointerPositionChanged,
+    connect(CompositionPosition::getInstance(),
+            &CompositionPosition::pointerPositionChanged,
             this, &TrackEditor::slotSetPointerPosition);
 
     // Top/Bottom ruler pointer drag.

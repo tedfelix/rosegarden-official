@@ -1040,9 +1040,9 @@ public slots:
     void slotMoveTrackDown();
 
     /**
-     * timeT version of the same
+     * update the ui
      */
-    void slotSetPointerPosition(timeT t);
+    void slotUpdateForPointerChange();
 
     /**
      * Set the pointer position and start playing (from LoopRuler)
@@ -1495,8 +1495,6 @@ private:
     // Audio file manager
     //
     AudioManagerDialog *m_audioManagerDialog{nullptr};
-
-    bool m_originatingJump{false};
 
     bool m_useSequencer;
 

@@ -30,6 +30,7 @@
 #include "base/SnapGrid.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/AutoScroller.h"
 #include "gui/general/GUIPalette.h"
@@ -826,7 +827,7 @@ TempoRuler::slotInsertTempoHere()
 void
 TempoRuler::slotInsertTempoAtPointer()
 {
-    timeT t = m_composition->getPosition();
+    timeT t = CompositionPosition::getInstance()->getPosition();
     tempoT tempo = Composition::getTempoForQpm(120.0);
 
     int tcn = m_composition->getTempoChangeNumberAt(t);

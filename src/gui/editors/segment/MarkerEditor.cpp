@@ -34,6 +34,7 @@
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
 #include "document/Command.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/dialogs/MarkerModifyDialog.h"
 #include "gui/dialogs/AboutDialog.h"
 
@@ -191,7 +192,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 void
 MarkerEditor::updatePosition()
 {
-    timeT pos = m_doc->getComposition().getPosition();
+    timeT pos = CompositionPosition::getInstance()->getPosition();
     m_absoluteTime->setText(QString("%1").arg(pos));
 
     RealTime rT = m_doc->getComposition().getElapsedRealTime(pos);
@@ -333,7 +334,7 @@ MarkerEditor::slotAdd()
 
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
-                             m_doc->getComposition().getPosition(),
+                             CompositionPosition::getInstance()->getPosition(),
                              std::string("new marker"),
                              std::string("no description"));
 

@@ -31,6 +31,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
@@ -336,7 +337,8 @@ void TransportDialog::init()
 
     setEnabled(true);
 
-    setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+    setTimeSignature(comp.getTimeSignatureAt
+                     (CompositionPosition::getInstance()->getPosition()));
 
     // bring the transport to the front
     raise();
@@ -1081,7 +1083,7 @@ TransportDialog::slotSetStartLoopingPointAtMarkerPos()
     RosegardenDocument *document = RosegardenDocument::currentDocument;
     Composition &composition = document->getComposition();
 
-    const timeT loopStart = composition.getPosition();
+    const timeT loopStart = CompositionPosition::getInstance()->getPosition();
     timeT loopEnd = composition.getLoopEnd();
 
     // Turn a backwards loop into an empty loop.
@@ -1106,7 +1108,7 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
     Composition &composition = document->getComposition();
 
     timeT loopStart = composition.getLoopStart();
-    const timeT loopEnd = composition.getPosition();
+    const timeT loopEnd = CompositionPosition::getInstance()->getPosition();
 
     // Turn a backwards loop into an empty loop.
     if (loopEnd < loopStart)
@@ -1230,7 +1232,7 @@ void
 TransportDialog::slotEditTempo()
 {
     const timeT atTime =
-            RosegardenDocument::currentDocument->getComposition().getPosition();
+        CompositionPosition::getInstance()->getPosition();
 
     EditTempoController::self()->editTempo(
             this,  // parent
@@ -1405,20 +1407,20 @@ void TransportDialog::keyPressEvent(QKeyEvent *keyEvent)
 }
 
 // Composition Observer
-void TransportDialog::timeSignatureChanged(const Composition *comp)
+void TransportDialog::timeSignatureChanged(const Composition*)
 {
     RG_DEBUG << "timeSignatureChanged";
-    // reset pointer position to recalculate display
+    // update the ui
     RosegardenMainWindow *rmw = RosegardenMainWindow::self();
-    rmw->slotSetPointerPosition(comp->getPosition());
+    rmw->slotUpdateForPointerChange();
 }
 
-void TransportDialog::tempoChanged(const Composition *comp)
+void TransportDialog::tempoChanged(const Composition*)
 {
     RG_DEBUG << "tempoChanged";
-    // reset pointer position to recalculate display
+    // update the ui
     RosegardenMainWindow *rmw = RosegardenMainWindow::self();
-    rmw->slotSetPointerPosition(comp->getPosition());
+    rmw->slotUpdateForPointerChange();
 }
 
 
