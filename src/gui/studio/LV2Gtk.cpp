@@ -94,16 +94,17 @@ LV2Gtk::~LV2Gtk()
     if (m_dlib) dlclose(m_dlib);
 }
 
-LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
-                                       SizeCallback* sizecb)
+LV2GtkTypes::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
+                                            LV2GtkTypes::SizeCallback* sizecb)
 {
     RG_DEBUG << "getWidget" << &lv2Widget << sizecb;
     if (!m_dlib) {
-        LV2GtkWidget widget;
+        LV2GtkTypes::LV2GtkWidget widget;
         return widget;
     }
-    LV2Gtk::LV2GtkWidget (*getWidgetPtr)(LV2UI_Widget lv2Widget,
-                                         LV2Gtk::SizeCallback* sizecb);
+    LV2GtkTypes::LV2GtkWidget
+        (*getWidgetPtr)(LV2UI_Widget lv2Widget,
+                        LV2GtkTypes::SizeCallback* sizecb);
     *(void **)(&getWidgetPtr) = dlsym(m_dlib, "getWidget");
     if (getWidgetPtr) {
         return getWidgetPtr(lv2Widget, sizecb);
@@ -111,11 +112,13 @@ LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget lv2Widget,
         RG_DEBUG << dlerror();
     }
 
-    LV2Gtk::LV2GtkWidget widget;
+    LV2GtkTypes::LV2GtkWidget widget;
     return widget;
 }
 
-void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height) const
+void LV2Gtk::getSize(const LV2GtkTypes::LV2GtkWidget& widget,
+                     int& width,
+                     int& height) const
 {
     RG_DEBUG << "getSize" << &widget << width << height;
     if (!m_dlib) {
@@ -123,7 +126,7 @@ void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height) const
         height = 0;
         return;
     }
-    void (*getSizePtr)(const LV2GtkWidget& widget,
+    void (*getSizePtr)(const LV2GtkTypes::LV2GtkWidget& widget,
                        int& width,
                        int& height);
     *(void **)(&getSizePtr) = dlsym(m_dlib, "getSize");
@@ -138,13 +141,13 @@ void LV2Gtk::getSize(const LV2GtkWidget& widget, int& width, int& height) const
     height = 0;
 }
 
-long int LV2Gtk::getWinId(const LV2GtkWidget& widget)
+long int LV2Gtk::getWinId(const LV2GtkTypes::LV2GtkWidget& widget)
 {
     RG_DEBUG << "getWinId" << &widget;
     if (!m_dlib) {
         return 0;
     }
-    int (*getWinIdPtr)(const LV2GtkWidget& widget);
+    int (*getWinIdPtr)(const LV2GtkTypes::LV2GtkWidget& widget);
     *(void **)(&getWinIdPtr) = dlsym(m_dlib, "getWinId");
     if (getWinIdPtr) {
         return getWinIdPtr(widget);
@@ -155,13 +158,13 @@ long int LV2Gtk::getWinId(const LV2GtkWidget& widget)
     return 0;
 }
 
-void LV2Gtk::deleteWidget(const LV2GtkWidget& widget)
+void LV2Gtk::deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget)
 {
     RG_DEBUG << "deleteWidget" << &widget;
     if (!m_dlib) {
         return;
     }
-    void (*deleteWidgetPtr)(const LV2GtkWidget& widget);
+    void (*deleteWidgetPtr)(const LV2GtkTypes::LV2GtkWidget& widget);
     *(void **)(&deleteWidgetPtr) = dlsym(m_dlib, "deleteWidget");
     if (deleteWidgetPtr) {
         deleteWidgetPtr(widget);

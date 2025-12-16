@@ -21,32 +21,23 @@
 namespace Rosegarden
 {
 
-/// Interface class for the GTK2 class.
+/// Declarations used in qt and gtk2 code.
 
-class ILV2Gtk
+namespace LV2GtkTypes
+{
+
+class SizeCallback
 {
 public:
-    class SizeCallback
-    {
-    public:
-        virtual ~SizeCallback() {};
-        virtual void setSize(int width, int height, bool isRequest) = 0;
-    };
+    virtual ~SizeCallback() {};
+    virtual void setSize(int width, int height, bool isRequest) = 0;
+};
 
-    struct LV2GtkWidget
-    {
-        void* window;
-        LV2GtkWidget() {window = nullptr;}
-    };
-
-    virtual ~ILV2Gtk() { }
-
-    virtual LV2GtkWidget getWidget
-    (LV2UI_Widget lv2Widget, SizeCallback* sizecb) = 0;
-    virtual void getSize
-    (const LV2GtkWidget& widget, int& width, int& height) const = 0;
-    virtual long int getWinId(const LV2GtkWidget& widget) = 0;
-    virtual void deleteWidget(const LV2GtkWidget& widget) = 0;
+struct LV2GtkWidget
+{
+    void* window;
+    LV2GtkWidget() {window = nullptr;}
+};
 
 };
 

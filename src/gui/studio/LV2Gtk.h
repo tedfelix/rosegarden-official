@@ -20,7 +20,7 @@
 
 #include <lv2/ui/ui.h>
 
-#include "ILV2Gtk.h"
+#include "LV2GtkTypes.h"
 
 #include <QWidget>
 
@@ -31,7 +31,7 @@ namespace Rosegarden
 /**
  * Singleton.
  */
-class LV2Gtk : public QWidget, public ILV2Gtk
+class LV2Gtk : public QWidget
 {
     Q_OBJECT
 public:
@@ -49,13 +49,13 @@ public:
     /**
      * Wrapper around gtk_window_new().
      */
-    LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
-                           SizeCallback* sizecb) override;
-    void getSize(const LV2GtkWidget& widget,
+    LV2GtkTypes::LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
+                                        LV2GtkTypes::SizeCallback* sizecb);
+    void getSize(const LV2GtkTypes::LV2GtkWidget& widget,
                  int& width,
-                 int& height) const override;
-    long int getWinId(const LV2GtkWidget& widget) override;
-    void deleteWidget(const LV2GtkWidget& widget) override;
+                 int& height) const;
+    long int getWinId(const LV2GtkTypes::LV2GtkWidget& widget);
+    void deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget);
 
     static void shutDown();
     void doShutDown();

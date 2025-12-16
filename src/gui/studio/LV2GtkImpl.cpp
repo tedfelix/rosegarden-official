@@ -34,16 +34,16 @@ namespace {
     void size_request(GtkWidget*, GtkRequisition *req, gpointer user_data)
     {
         debug_print("size_request %d %d\n", req->width, req->height);
-        Rosegarden::ILV2Gtk::SizeCallback* sizecb =
-            (Rosegarden::ILV2Gtk::SizeCallback*)user_data;
+        Rosegarden::LV2GtkTypes::SizeCallback* sizecb =
+            (Rosegarden::LV2GtkTypes::SizeCallback*)user_data;
         sizecb->setSize(req->width, req->height, true);
     }
 
     void size_allocate(GtkWidget*, GdkRectangle *rect, gpointer user_data)
     {
         debug_print("size_allocate %d %d\n", rect->width, rect->height);
-        Rosegarden::ILV2Gtk::SizeCallback* sizecb =
-            (Rosegarden::ILV2Gtk::SizeCallback*)user_data;
+        Rosegarden::LV2GtkTypes::SizeCallback* sizecb =
+            (Rosegarden::LV2GtkTypes::SizeCallback*)user_data;
         sizecb->setSize(rect->width, rect->height, false);
     }
 
@@ -79,8 +79,9 @@ void  LV2GtkImpl::createLV2GtkImpl()
     gtk_init (&argc, &m_argv);
 }
 
-ILV2Gtk::LV2GtkWidget LV2GtkImpl::getWidget(LV2UI_Widget lv2Widget,
-                                            ILV2Gtk::SizeCallback* sizecb)
+LV2GtkTypes::LV2GtkWidget LV2GtkImpl::getWidget
+(LV2UI_Widget lv2Widget,
+ LV2GtkTypes::SizeCallback* sizecb)
 {
     debug_print("gtk getWidget\n");
     GtkWidget* wid = (GtkWidget*)lv2Widget;
@@ -96,12 +97,12 @@ ILV2Gtk::LV2GtkWidget LV2GtkImpl::getWidget(LV2UI_Widget lv2Widget,
                      G_CALLBACK(delete_event), NULL);
     g_signal_connect(G_OBJECT(window), "destroy",
                      G_CALLBACK(destroy), NULL);
-    ILV2Gtk::LV2GtkWidget ret;
+    LV2GtkTypes::LV2GtkWidget ret;
     ret.window = window;
     return ret;
 }
 
-void LV2GtkImpl::getSize(const ILV2Gtk::LV2GtkWidget& widget,
+void LV2GtkImpl::getSize(const LV2GtkTypes::LV2GtkWidget& widget,
                          int& width,
                          int& height)
 {
@@ -113,14 +114,14 @@ void LV2GtkImpl::getSize(const ILV2Gtk::LV2GtkWidget& widget,
     //printf("getSize %d %d\n", width, height);
 }
 
-long int LV2GtkImpl::getWinId(const ILV2Gtk::LV2GtkWidget& widget)
+long int LV2GtkImpl::getWinId(const LV2GtkTypes::LV2GtkWidget& widget)
 {
     debug_print("gtk getWinId\n");
     unsigned long id = GDK_WINDOW_XWINDOW(((GtkWidget*)(widget.window))->window);
     return id;
 }
 
-void LV2GtkImpl::deleteWidget(const ILV2Gtk::LV2GtkWidget& widget)
+void LV2GtkImpl::deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget)
 {
     debug_print("gtk deleteWidget\n");
     if (widget.window) {

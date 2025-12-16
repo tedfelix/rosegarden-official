@@ -40,7 +40,7 @@ namespace Rosegarden
 /// The widget that holds the LV2 GUI.
 class AudioPluginLV2GUIWindow :
     public QWidget,
-    public LV2Gtk::SizeCallback
+    public LV2GtkTypes::SizeCallback
 {
     Q_OBJECT
 public:
@@ -105,7 +105,7 @@ private:
     LV2UI_Idle_Interface* m_lv2II;
     LV2UI_Handle m_handle;
 
-    LV2Gtk::LV2GtkWidget m_gwidget;
+    LV2GtkTypes::LV2GtkWidget m_gwidget;
     QWidget* m_containerWidget;
     QWindow* m_parentWindow;
     LV2UI_Widget m_widget;

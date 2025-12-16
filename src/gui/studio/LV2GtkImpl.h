@@ -20,7 +20,7 @@
 
 #include <lv2/ui/ui.h>
 
-#include "ILV2Gtk.h"
+#include "LV2GtkTypes.h"
 
 namespace Rosegarden
 {
@@ -33,17 +33,17 @@ extern "C" __attribute__((visibility("default")))
 void createLV2GtkImpl();
 
 extern "C" __attribute__((visibility("default")))
-ILV2Gtk::LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
-                                ILV2Gtk::SizeCallback* sizecb);
+LV2GtkTypes::LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
+                                    LV2GtkTypes::SizeCallback* sizecb);
 
 extern "C" __attribute__((visibility("default")))
-void getSize(const ILV2Gtk::LV2GtkWidget& widget,
+void getSize(const LV2GtkTypes::LV2GtkWidget& widget,
              int& width,
              int& height);
 extern "C" __attribute__((visibility("default")))
-long int getWinId(const ILV2Gtk::LV2GtkWidget& widget);
+long int getWinId(const LV2GtkTypes::LV2GtkWidget& widget);
 extern "C" __attribute__((visibility("default")))
-void deleteWidget(const ILV2Gtk::LV2GtkWidget& widget);
+void deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget);
 extern "C" __attribute__((visibility("default")))
 void shutDown();
 
