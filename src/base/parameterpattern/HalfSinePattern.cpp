@@ -25,6 +25,9 @@ namespace Rosegarden
 {
 
 
+HalfSinePattern HalfSinePattern::crescendo(false);
+HalfSinePattern HalfSinePattern::diminuendo(true);
+
 QString
 HalfSinePattern::getText(QString propertyName) const
 {
