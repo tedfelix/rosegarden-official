@@ -525,7 +525,7 @@ signals:
      * Emitted during playback, to suggest that views should track along,
      * as well as when pointer is moved via a click on the loop ruler.
      */
-    void uiUpdateRequired();
+    //void uiUpdateRequired();
 
     /**
      * Emitted during recording, to indicate that some new notes (it's

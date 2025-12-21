@@ -22,10 +22,12 @@
 
 class QTimer;
 
+
 namespace Rosegarden
 {
 
 
+/// The Playback Position Pointer (PPP).
 class ROSEGARDENPRIVATE_EXPORT CompositionPosition  : public QObject
 {
     Q_OBJECT
@@ -39,12 +41,9 @@ public:
 
 public slots:
     void slotSetPosition(timeT time);
-    void slotUpdate();
 
 signals:
-    /**
-     * Emitted whenver the pointer is changed
-     */
+    /// Emitted whenever the pointer is changed.
     void pointerPositionChanged(timeT);
 
 private:
@@ -56,7 +55,11 @@ private:
     timeT m_position;
     RealTime m_positionAsElapsedTime;
 
+private slots:
+    void slotUpdate();
+
 };
+
 
 }
 

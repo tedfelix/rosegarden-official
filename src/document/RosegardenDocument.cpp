@@ -2347,7 +2347,7 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
 void
 RosegardenDocument::stopPlaying()
 {
-    emit uiUpdateRequired();
+    //emit uiUpdateRequired();
 }
 
 void
@@ -2501,7 +2501,7 @@ RosegardenDocument::stopRecordingMidi()
 
     slotUpdateAllViews(nullptr);
 
-    emit uiUpdateRequired();
+    //emit uiUpdateRequired();
 }
 
 void
@@ -2762,7 +2762,7 @@ RosegardenDocument::stopRecordingAudio()
     }
     emit stoppedAudioRecording();
 
-    emit uiUpdateRequired();
+    //emit uiUpdateRequired();
 }
 
 void
