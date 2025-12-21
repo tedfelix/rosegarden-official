@@ -25,7 +25,10 @@
 namespace Rosegarden
 {
 
-/// Wrapper around GTK that can be used for LV2 plugins that use GTK.
+/// The shared object (librosegardenGtk.so) that wraps GTK2.
+/**
+ * This is used by LV2Gtk to get to GTK2 dynamically at runtime.
+ */
 namespace LV2GtkImpl
 {
 

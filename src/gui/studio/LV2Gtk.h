@@ -27,9 +27,18 @@
 namespace Rosegarden
 {
 
-/// Wrapper around GTK that can be used for LV2 plugins that use GTK.
+/// Singleton wrapper around GTK2.
 /**
- * Singleton.
+ * Rosegarden uses this to get to GTK2 without forcing a static dependency
+ * on GTK2.  GTK2 has proven to be problematic and isn't always included in
+ * distros nowadays.
+ *
+ * GTK2 is required by some LV2 plugins (e.g. Calf).
+ *
+ * See LV2GtkImpl which is the shared object (librosegardenGtk.so) that is
+ * loaded dynamically to provide the actual functionality for this wrapper.
+ * If it is not present or cannot be loaded due to gtk2 not being available,
+ * it will fail gracefully with pop-ups explaining the situation to the user.
  */
 class LV2Gtk : public QWidget
 {
