@@ -23618,7 +23618,7 @@ Chyba byla: %2</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="182"/>
-        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of milliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Zpozdit přehrávání všech částí o tento počet milisekund&lt;/p&gt;&lt;p&gt;&lt;i&gt;POZNÁMKA: Rosegarden nepodporuje záporné zpoždění. Pokud potřebujete účinek záporného zpoždění, nastavte začátek skladby před takt 1, a posuňte části doleva. Zatímco to budete provádět, můžete kvůli jemnému ovládání podržet &lt;b&gt;shift&lt;/b&gt;. Setkáte se ovšem se zvláštními účinky tohoto kroku na znázornění not v editoru notového zápisu .&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>

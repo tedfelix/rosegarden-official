@@ -23778,7 +23778,7 @@ L&apos;errore è: %2</translation>
     </message>
     <message>
         <location line="+27"/>
-        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of miliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
+        <source>&lt;qt&gt;&lt;p&gt;Delay playback of any selected segments by this number of milliseconds&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTE: Rosegarden does not support negative delay.  If you need a negative delay effect, set the   composition to start before bar 1, and move segments to the left.  You can hold &lt;b&gt;shift&lt;/b&gt; while doing this for fine-grained control, though doing so will have harsh effects on music notation rendering as viewed in the notation editor.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Ritarda la riproduzione di ogni segmento selezionato di questo numero di millisecondi&lt;/p&gt;&lt;p&gt;&lt;i&gt;NOTA: Rosegarden non supporta ritardi negativi.  Se avete bisogno di un effetto di ritardo negativo, impostate l&apos;inizio della composizione prima della battuta 1 e muovete i segmenti a sinistra.  Tenendo premuto &lt;b&gt;shift&lt;/b&gt; mentre fate questo avrete un controllo più fine, anche se questo vorrà dire avere strani effetti nella notazione, come vedrete nell&apos;editor di notazione.&lt;/i&gt;&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
