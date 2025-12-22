@@ -685,7 +685,7 @@ NotationScene::initCurrentStaffIndex()
     if (m_staffs.empty()) { return; }
 
     Composition &composition = m_document->getComposition();
-    timeT targetTime = CompositionPosition::getInstance()->getPosition();
+    timeT targetTime = CompositionPosition::getInstance()->get();
 
     // Try the globally selected track (which we may not even include
     // any segments from)
@@ -1119,7 +1119,7 @@ NotationScene::getInsertionTime(bool allowEndTime) const
 {
     if (!m_document) return 0;
     return snapTimeToNoteBoundary
-        (CompositionPosition::getInstance()->getPosition(),
+        (CompositionPosition::getInstance()->get(),
          allowEndTime);
 }
 

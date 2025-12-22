@@ -438,7 +438,7 @@ EventListEditor::EventListEditor(const std::vector<Segment *> &segments) :
     updateFilterCheckBoxes();
     updateTableWidget();
 
-    makeInitialSelection(CompositionPosition::getInstance()->getPosition());
+    makeInitialSelection(CompositionPosition::getInstance()->get());
 }
 
 EventListEditor::~EventListEditor()

@@ -375,7 +375,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 {
     if (m_document) {
         disconnect(CompositionPosition::getInstance(),
-                   &CompositionPosition::pointerPositionChanged,
+                   &CompositionPosition::changed,
                    this, &MatrixWidget::slotPointerPositionChanged);
     }
 
@@ -501,7 +501,7 @@ MatrixWidget::setSegments(RosegardenDocument *document,
 
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &MatrixWidget::slotPointerPositionChanged);
 
     m_chordNameRuler->setReady();
@@ -846,7 +846,7 @@ MatrixWidget::previousSegment()
     Segment *s = m_scene->getPriorSegment();
     if (s)
         m_scene->setCurrentSegment(s);
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
     updateSegmentChangerBackground();
 }
 
@@ -859,7 +859,7 @@ MatrixWidget::nextSegment()
     Segment *s = m_scene->getNextSegment();
     if (s)
         m_scene->setCurrentSegment(s);
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
     updateSegmentChangerBackground();
 }
 
@@ -1636,7 +1636,7 @@ MatrixWidget::showInitialPointer()
     if (!m_scene)
         return;
 
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 
     // QGraphicsView usually defaults to the center.  We want to
     // start at the left center.

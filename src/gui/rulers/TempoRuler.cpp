@@ -827,7 +827,7 @@ TempoRuler::slotInsertTempoHere()
 void
 TempoRuler::slotInsertTempoAtPointer()
 {
-    timeT t = CompositionPosition::getInstance()->getPosition();
+    const timeT t = CompositionPosition::getInstance()->get();
     tempoT tempo = Composition::getTempoForQpm(120.0);
 
     int tcn = m_composition->getTempoChangeNumberAt(t);

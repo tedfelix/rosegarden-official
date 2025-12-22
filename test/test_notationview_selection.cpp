@@ -132,12 +132,12 @@ void TestNotationViewSelection::testNavigate()
 {
     // Go right one note
     m_view->slotStepForward();
-    QCOMPARE(CompositionPosition::getInstance()->getPosition(),
+    QCOMPARE(CompositionPosition::getInstance()->get(),
              timeT(960)); // one quarter
 
     // Go to next bar
     m_seqManager.fastforward();
-    QCOMPARE(CompositionPosition::getInstance()->getPosition(),
+    QCOMPARE(CompositionPosition::getInstance()->get(),
              timeT(3840)); // one quarter
 
     QVector<timeT> expectedPositions;
@@ -160,7 +160,7 @@ void TestNotationViewSelection::testNavigate()
                          ;
     for (int i = 0 ; i < expectedPositions.size(); ++i) {
         m_view->slotStepForward();
-        QCOMPARE(CompositionPosition::getInstance()->getPosition(),
+        QCOMPARE(CompositionPosition::getInstance()->get(),
                  timeT(3840 + expectedPositions.at(i)));
     }
 }
@@ -246,7 +246,7 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
         QCOMPARE(selectedNotes(), expectedSelections.at(i));
     }
 
-    const int pos = CompositionPosition::getInstance()->getPosition();
+    const int pos = CompositionPosition::getInstance()->get();
 
     // unselect backward
     QStringList expectedSelectionsBack = expectedSelections;
@@ -265,7 +265,7 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
     for (int i = 0 ; i < expectedSelections.size(); ++i) {
         m_view->slotExtendSelectionBackward();
     }
-    QCOMPARE(CompositionPosition::getInstance()->getPosition(),
+    QCOMPARE(CompositionPosition::getInstance()->get(),
              timeT(3840)); // one quarter
     QCOMPARE(selectedNotes(), QString("GBCCBBGGGCCGDBDBGC")); // order of notes in the chords is reversed, doesn't matter
 }

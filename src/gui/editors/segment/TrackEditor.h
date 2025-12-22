@@ -149,7 +149,7 @@ private slots:
      * Scrolls as needed to keep the position pointer visible.
      *
      * init() connects this to
-     * CompositionPosition::pointerPositionChanged(timeT).
+     * CompositionPosition::changed(timeT).
      */
     void slotSetPointerPosition(timeT pointerTime);
 

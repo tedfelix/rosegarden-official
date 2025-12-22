@@ -301,7 +301,7 @@ TrackEditor::init(RosegardenMainViewWidget *mainViewWidget)
             this, &TrackEditor::slotCommandExecuted);
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &TrackEditor::slotSetPointerPosition);
 
     // Top/Bottom ruler pointer drag.

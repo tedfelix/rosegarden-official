@@ -898,7 +898,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
     // Redraw the playback position pointer.
     // Move these lines to a new CompositionView::redrawPointer()?
-    timeT pointerTime = CompositionPosition::getInstance()->getPosition();
+    timeT pointerTime = CompositionPosition::getInstance()->get();
     double pointerXPosition = compositionView->
         grid().getRulerScale()->getXForTime(pointerTime);
     compositionView->drawPointer(pointerXPosition);
@@ -1502,8 +1502,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
         if (instrument &&
                 instrument->getType() == Instrument::Audio) {
             slotAddAudioSegment(audioFileId, currentTrackId,
-                                CompositionPosition::getInstance()->
-                                getPosition(),
+                                CompositionPosition::getInstance()->get(),
                                 startTime, endTime);
             return ;
         }
@@ -1539,8 +1538,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 
             if (!haveSegment) { // perfect
                 slotAddAudioSegment(audioFileId, ti->first,
-                                    CompositionPosition::getInstance()->
-                                    getPosition(),
+                                    CompositionPosition::getInstance()->get(),
                                     startTime, endTime);
                 return ;
             }
@@ -1548,7 +1546,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
     }
 
     slotAddAudioSegment(audioFileId, bestSoFar,
-                        CompositionPosition::getInstance()->getPosition(),
+                        CompositionPosition::getInstance()->get(),
                         startTime, endTime);
     return ;
 }

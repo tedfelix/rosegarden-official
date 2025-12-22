@@ -109,7 +109,7 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
             this, &TranzportClient::slotDocumentLoaded);
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &TranzportClient::pointerPositionChanged);
 
     connect(m_rgDocument, &RosegardenDocument::loopChanged,
@@ -160,7 +160,7 @@ TranzportClient::slotDocumentLoaded(RosegardenDocument *doc)
     m_composition = &m_rgDocument->getComposition();
     m_composition->addObserver(this);
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &TranzportClient::pointerPositionChanged);
     connect(m_rgDocument, &RosegardenDocument::loopChanged,
             this, &TranzportClient::loopChanged);
@@ -302,7 +302,7 @@ TranzportClient::stateUpdate()
 
         int bar, beat, fraction, remainder;
         m_composition->getMusicalTimeForAbsoluteTime
-            (CompositionPosition::getInstance()->getPosition(),
+            (CompositionPosition::getInstance()->get(),
              bar, beat, fraction, remainder);
         std::stringstream ss;
         ss << bar+1 << ":" << beat;
@@ -472,7 +472,7 @@ TranzportClient::readData()
             } else {
                 AddMarkerCommand* cmd = new AddMarkerCommand
                     (m_composition,
-                     CompositionPosition::getInstance()->getPosition(),
+                     CompositionPosition::getInstance()->get(),
                      "tranzport",
                      "");
                 CommandHistory::getInstance()->addCommand(cmd);
@@ -486,7 +486,7 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 timeT currentTime =
-                    CompositionPosition::getInstance()->getPosition();
+                    CompositionPosition::getInstance()->get();
                 Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestPrevious = -1;
 
@@ -516,7 +516,7 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 timeT currentTime =
-                    CompositionPosition::getInstance()->getPosition();
+                    CompositionPosition::getInstance()->get();
                 Composition::MarkerVector& mc = m_composition->getMarkers();
                 timeT closestNext = std::numeric_limits<long>::max();
 
@@ -576,7 +576,7 @@ TranzportClient::readData()
             if (current_buttons & Shift) {
             } else {
                 loop_start_time =
-                    CompositionPosition::getInstance()->getPosition();
+                    CompositionPosition::getInstance()->get();
                 loop_end_time = loop_start_time;
             }
         }
@@ -659,14 +659,14 @@ TranzportClient::readData()
 
                 } else if(current_buttons & Shift) {
                     timeT here =
-                        CompositionPosition::getInstance()->getPosition();
+                        CompositionPosition::getInstance()->get();
                     here += datawheel * m_composition->getDurationForMusicalTime(here,0,0,1,0);
                     if (here <= m_composition->getEndMarker()) {
                         emit setPosition(here);
                     }
                 } else {
                     timeT here =
-                        CompositionPosition::getInstance()->getPosition();
+                        CompositionPosition::getInstance()->get();
                     here += datawheel * m_composition->getDurationForMusicalTime(here,0,1,0,0);
                     if (here <= m_composition->getEndMarker()) {
                         emit setPosition(here);
@@ -685,14 +685,14 @@ TranzportClient::readData()
 
                 if (current_buttons & Shift) {
                     timeT here =
-                        CompositionPosition::getInstance()->getPosition();
+                        CompositionPosition::getInstance()->get();
                     here -= DATAWHEEL_VALUE *  m_composition->getDurationForMusicalTime(here,0,0,1,0);
                     if (here >= m_composition->getStartMarker()) {
                         emit setPosition(here);
                     }
                 } else {
                     timeT here =
-                        CompositionPosition::getInstance()->getPosition();
+                        CompositionPosition::getInstance()->get();
                     here -= DATAWHEEL_VALUE *  m_composition->getDurationForMusicalTime(here,0,1,0,0);
                     if (here >= m_composition->getStartMarker()) {
                         emit setPosition(here);

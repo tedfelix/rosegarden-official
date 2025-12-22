@@ -134,7 +134,7 @@ MarkerRuler::slotInsertMarkerHere()
 void
 MarkerRuler::slotInsertMarkerAtPointer()
 {
-    const timeT pointerTime = CompositionPosition::getInstance()->getPosition();
+    const timeT pointerTime = CompositionPosition::getInstance()->get();
 
     AddMarkerCommand *command = new AddMarkerCommand(
             &RosegardenDocument::currentDocument->getComposition(),

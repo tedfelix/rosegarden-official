@@ -1296,7 +1296,7 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     // connect needed signals
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &RosegardenMainWindow::slotUpdateForPointerChange);
 
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
@@ -2408,8 +2408,7 @@ RosegardenMainWindow::slotEditPaste()
 
     // for now, but we could paste at the time of the first copied
     // segment and then do ghosting drag or something
-    timeT insertionTime =
-        CompositionPosition::getInstance()->getPosition();
+    const timeT insertionTime = CompositionPosition::getInstance()->get();
     CommandHistory::getInstance()->addCommand
     (new PasteSegmentsCommand(&RosegardenDocument::currentDocument->getComposition(),
                               m_clipboard, insertionTime,
@@ -2484,12 +2483,10 @@ RosegardenMainWindow::slotPasteRange()
     if (m_clipboard->isEmpty())
         return ;
 
-    CommandHistory::getInstance()->addCommand
-        (new PasteRangeCommand(&RosegardenDocument::currentDocument->
-                               getComposition(),
-                               m_clipboard,
-                               CompositionPosition::getInstance()->
-                               getPosition()));
+    CommandHistory::getInstance()->addCommand(new PasteRangeCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            m_clipboard,
+            CompositionPosition::getInstance()->get()));
 }
 
 void
@@ -2514,7 +2511,7 @@ RosegardenMainWindow::slotDeleteRange()
 void
 RosegardenMainWindow::slotInsertRange()
 {
-    timeT t0 = CompositionPosition::getInstance()->getPosition();
+    const timeT t0 = CompositionPosition::getInstance()->get();
     std::pair<timeT, timeT> r = RosegardenDocument::currentDocument->
             getComposition().getBarRangeForTime(t0);
 
@@ -2541,7 +2538,7 @@ RosegardenMainWindow::slotPasteConductorData()
         (new PasteConductorDataCommand
          (&RosegardenDocument::currentDocument->getComposition(),
           m_clipboard,
-          CompositionPosition::getInstance()->getPosition()));
+          CompositionPosition::getInstance()->get()));
 }
 
 void
@@ -3109,7 +3106,7 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
     if (selection.empty())
         return ;
 
-    timeT now = CompositionPosition::getInstance()->getPosition();
+    const timeT now = CompositionPosition::getInstance()->get();
 
     QString title = tr("Split %n Segment(s) at Time", "",
                          selection.size());
@@ -3613,7 +3610,7 @@ RosegardenMainWindow::slotEditInPitchTracker()
 void
 RosegardenMainWindow::slotEditTempos()
 {
-    slotEditTempos(CompositionPosition::getInstance()->getPosition());
+    slotEditTempos(CompositionPosition::getInstance()->get());
 }
 
 void
@@ -4955,7 +4952,7 @@ RosegardenMainWindow::slotUpdateForPointerChange()
 {
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
-    timeT compPos = CompositionPosition::getInstance()->getPosition();
+    const timeT compPos = CompositionPosition::getInstance()->get();
     if (m_seqManager) {
         // Normally we stop at composition end.
         timeT stopTime = comp.getEndMarker();
@@ -6248,7 +6245,7 @@ void
 RosegardenMainWindow::slotEditTempo(QWidget *parent)
 {
     slotEditTempo(parent,
-                  CompositionPosition::getInstance()->getPosition());
+                  CompositionPosition::getInstance()->get());
 }
 
 void
@@ -6277,7 +6274,7 @@ void
 RosegardenMainWindow::slotEditTimeSignature(QWidget *parent)
 {
     slotEditTimeSignature(parent,
-                          CompositionPosition::getInstance()->getPosition());
+                          CompositionPosition::getInstance()->get());
 }
 
 void
@@ -6299,7 +6296,7 @@ RosegardenMainWindow::slotEditTransportTime(QWidget *parent)
     TimeDialog dialog(
             parent,
             tr("Move playback pointer to time"),  // title
-            CompositionPosition::getInstance()->getPosition(), // defaultTime
+            CompositionPosition::getInstance()->get(), // defaultTime
             true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted) {
         CompositionPosition::getInstance()->slotSetPosition(dialog.getTime());
@@ -8344,7 +8341,7 @@ RosegardenMainWindow::slotAddMarker2()
 {
     AddMarkerCommand *command = new AddMarkerCommand(
             &RosegardenDocument::currentDocument->getComposition(),
-            CompositionPosition::getInstance()->getPosition(),
+            CompositionPosition::getInstance()->get(),
             "new marker",
             "no description");
 
@@ -8357,7 +8354,7 @@ RosegardenMainWindow::slotPreviousMarker()
     const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
-    timeT currentTime = CompositionPosition::getInstance()->getPosition();
+    const timeT currentTime = CompositionPosition::getInstance()->get();
     timeT time = currentTime;
 
     // For each marker...
@@ -8378,7 +8375,7 @@ RosegardenMainWindow::slotNextMarker()
     const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
-    timeT currentTime = CompositionPosition::getInstance()->getPosition();
+    const timeT currentTime = CompositionPosition::getInstance()->get();
     timeT time = currentTime;
 
     // For each marker...
@@ -8438,7 +8435,7 @@ void
 RosegardenMainWindow::slotAboutToExecuteCommand()
 {
     // save the pointer position to the command history
-    timeT pointerPos = CompositionPosition::getInstance()->getPosition();
+    const timeT pointerPos = CompositionPosition::getInstance()->get();
     RG_DEBUG << "about to execute a command" << pointerPos;
     CommandHistory::getInstance()->setPointerPosition(pointerPos);
 }
@@ -8465,7 +8462,7 @@ void
 RosegardenMainWindow::slotUpdatePosition()
 {
     // set the pointer position in the command history
-    timeT pointerPos = CompositionPosition::getInstance()->getPosition();
+    const timeT pointerPos = CompositionPosition::getInstance()->get();
     RG_DEBUG << "update position in command history" << pointerPos;
     CommandHistory::getInstance()->setPointerPositionForRedo(pointerPos);
 }

@@ -2284,7 +2284,7 @@ NotationView::slotCurrentStaffUp()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition = CompositionPosition::getInstance()->getPosition();
+    timeT pointerPosition = CompositionPosition::getInstance()->get();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;
@@ -2304,7 +2304,7 @@ NotationView::slotCurrentStaffDown()
 {
     NotationScene *scene = m_notationWidget->getScene();
     if (!scene) return;
-    timeT pointerPosition = CompositionPosition::getInstance()->getPosition();
+    timeT pointerPosition = CompositionPosition::getInstance()->get();
     // if the pointer has moved take that time
     if (pointerPosition != m_oldPointerPosition) {
         m_oldPointerPosition = pointerPosition;

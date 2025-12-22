@@ -307,7 +307,7 @@ RosegardenDocument::setQuickMarker()
 {
     RG_DEBUG << "RosegardenDocument::setQuickMarker";
 
-    m_quickMarkerTime = CompositionPosition::getInstance()->getPosition();
+    m_quickMarkerTime = CompositionPosition::getInstance()->get();
 
 }
 
@@ -2162,7 +2162,7 @@ RosegardenDocument::updateRecordingMIDISegment()
                     NoteOnRecSet *newRecordSet =
                         adjustEndTimes
                         (rec_vec,
-                         CompositionPosition::getInstance()->getPosition());
+                         CompositionPosition::getInstance()->get());
                     // Copy to tweakedNoteOnEvents.
                     tweakedNoteOnEvents
                         [deviceIter->first]
@@ -2692,7 +2692,7 @@ RosegardenDocument::updateRecordingAudioSegments()
                 recordSegment->setAudioEndTime(
                     m_composition.getRealTimeDifference
                     (recordSegment->getStartTime(),
-                     CompositionPosition::getInstance()->getPosition()));
+                     CompositionPosition::getInstance()->get()));
             } else {
                 //         RG_DEBUG << "RosegardenDocument::updateRecordingAudioSegments: no segment for instr "
                 //              << iid;
@@ -2719,7 +2719,7 @@ RosegardenDocument::stopRecordingAudio()
         recordSegment->setAudioEndTime(
             m_composition.getRealTimeDifference
             (recordSegment->getStartTime(),
-             CompositionPosition::getInstance()->getPosition()));
+             CompositionPosition::getInstance()->get()));
 
         // now add the Segment
         RG_DEBUG << "RosegardenDocument::stopRecordingAudio - "

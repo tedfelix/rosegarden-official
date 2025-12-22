@@ -193,8 +193,7 @@ SequenceManager::play()
     preparePlayback();
 
     // Remember the last playback position so that we can return on stop.
-    m_lastTransportStartPosition =
-        CompositionPosition::getInstance()->getPosition();
+    m_lastTransportStartPosition = CompositionPosition::getInstance()->get();
 
     // Update play metronome status
     ControlBlock::getInstance()->setInstrumentForMetronome(
@@ -313,7 +312,7 @@ SequenceManager::rewind()
 
     Composition &composition = m_doc->getComposition();
 
-    timeT position = CompositionPosition::getInstance()->getPosition();
+    const timeT position = CompositionPosition::getInstance()->get();
 
     // Subtract one from position to make sure we go back one bar if we
     // are stopped and sitting at the beginning of a bar.
@@ -360,7 +359,7 @@ SequenceManager::fastforward()
 
     Composition &composition = m_doc->getComposition();
 
-    timeT position = CompositionPosition::getInstance()->getPosition();
+    const timeT position = CompositionPosition::getInstance()->get();
     timeT newPosition = composition.getBarEndForTime(position);
 
     // Don't skip past end marker.
@@ -481,7 +480,7 @@ SequenceManager::record(bool countIn)
     } else {
 
         m_lastTransportStartPosition =
-            CompositionPosition::getInstance()->getPosition();
+            CompositionPosition::getInstance()->get();
 
 punchin:
 
@@ -543,7 +542,7 @@ punchin:
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber
-                    (CompositionPosition::getInstance()->getPosition());
+                    (CompositionPosition::getInstance()->get());
                 m_realRecordStart = comp.getElapsedRealTime(
                         comp.getBarRange(startBar).first);
                 startBar -= settings.value("countinbars", 0).toUInt();
@@ -554,8 +553,7 @@ punchin:
 
         settings.endGroup();
 
-        m_doc->setRecordStartTime
-            (CompositionPosition::getInstance()->getPosition());
+        m_doc->setRecordStartTime(CompositionPosition::getInstance()->get());
         m_doc->setPointerPositionBeforeRecord(m_lastTransportStartPosition);
 
         if (haveAudioInstrument) {
@@ -628,7 +626,7 @@ punchin:
             // remaining.  (Note (dmm) this has changed, and it now reports
             // the time remaining during both MIDI and audio recording.)
             //
-            timeT p = CompositionPosition::getInstance()->getPosition();
+            const timeT p = CompositionPosition::getInstance()->get();
             timeT d = comp.getEndMarker();
             // end marker less current position == available duration
             d -= p;

@@ -338,7 +338,7 @@ void TransportDialog::init()
     setEnabled(true);
 
     setTimeSignature(comp.getTimeSignatureAt
-                     (CompositionPosition::getInstance()->getPosition()));
+                     (CompositionPosition::getInstance()->get()));
 
     // bring the transport to the front
     raise();
@@ -1083,7 +1083,7 @@ TransportDialog::slotSetStartLoopingPointAtMarkerPos()
     RosegardenDocument *document = RosegardenDocument::currentDocument;
     Composition &composition = document->getComposition();
 
-    const timeT loopStart = CompositionPosition::getInstance()->getPosition();
+    const timeT loopStart = CompositionPosition::getInstance()->get();
     timeT loopEnd = composition.getLoopEnd();
 
     // Turn a backwards loop into an empty loop.
@@ -1108,7 +1108,7 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
     Composition &composition = document->getComposition();
 
     timeT loopStart = composition.getLoopStart();
-    const timeT loopEnd = CompositionPosition::getInstance()->getPosition();
+    const timeT loopEnd = CompositionPosition::getInstance()->get();
 
     // Turn a backwards loop into an empty loop.
     if (loopEnd < loopStart)
@@ -1232,7 +1232,7 @@ void
 TransportDialog::slotEditTempo()
 {
     const timeT atTime =
-        CompositionPosition::getInstance()->getPosition();
+        CompositionPosition::getInstance()->get();
 
     EditTempoController::self()->editTempo(
             this,  // parent

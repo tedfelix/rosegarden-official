@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionPosition]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionPosition.h"
 
@@ -49,7 +49,7 @@ CompositionPosition* CompositionPosition::getInstance()
     return &instance;
 }
 
-timeT CompositionPosition::getPosition() const
+timeT CompositionPosition::get() const
 {
     RG_DEBUG << "getPosition" << m_position;
     return m_position;
@@ -74,7 +74,7 @@ void CompositionPosition::slotSetPosition(timeT time)
     SequenceManager* sequenceManager = doc->getSequenceManager();
     sequenceManager->jumpTo(m_positionAsElapsedTime);
 
-    emit pointerPositionChanged(m_position);
+    emit changed(m_position);
 }
 
 void CompositionPosition::slotUpdate()
@@ -91,7 +91,7 @@ void CompositionPosition::slotUpdate()
         // a new position
         m_positionAsElapsedTime = position;
         m_position = comp.getElapsedTimeForRealTime(position);
-        emit pointerPositionChanged(m_position);
+        emit changed(m_position);
     }
 }
 

@@ -414,7 +414,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     }
 
     disconnect(CompositionPosition::getInstance(),
-               &CompositionPosition::pointerPositionChanged,
+               &CompositionPosition::changed,
                this, &NotationWidget::slotPointerPositionChanged);
 
     m_document = document;
@@ -541,7 +541,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &NotationWidget::slotPointerPositionChanged);
 
     m_chordNameRuler->setReady();
@@ -585,7 +585,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
     resumeLayoutUpdates();
 
     // Draw the pointer
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
     // And jump to where it is.
     // Note that calls to scrollToTopLeft() might override this.
     m_view->ensurePositionPointerInView(false);
@@ -716,7 +716,7 @@ NotationWidget::slotSetLinearMode()
     }
     m_scene->setPageMode(StaffLayout::LinearMode);
     hideOrShowRulers();
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 }
 
 void
@@ -727,7 +727,7 @@ NotationWidget::slotSetContinuousPageMode()
     locatePanner(true);
     m_scene->setPageMode(StaffLayout::ContinuousPageMode);
     hideOrShowRulers();
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 }
 
 void
@@ -739,7 +739,7 @@ NotationWidget::slotSetMultiPageMode()
     }
     m_scene->setPageMode(StaffLayout::MultiPageMode);
     hideOrShowRulers();
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 }
 
 void
@@ -761,7 +761,7 @@ NotationWidget::slotSetFontSize(int size)
     m_bottomStandardRuler->updateStandardRuler();
     m_topStandardRuler->updateStandardRuler();
 
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 }
 
 NotationTool *
@@ -895,7 +895,7 @@ NotationWidget::slotScrollToFollow()
 void
 NotationWidget::updatePointerPosition(bool moveView)
 {
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 
     if (moveView)
         m_view->ensurePositionPointerInView(false);  // page
@@ -1416,14 +1416,14 @@ NotationWidget::setPointerPosition(timeT t)
     // playback mode, allowing editing of a loop in real-time.
     // ??? A flag in RMW would be faster.  E.g. RMW::m_enableSetPointerPosition.
     disconnect(CompositionPosition::getInstance(),
-               &CompositionPosition::pointerPositionChanged,
+               &CompositionPosition::changed,
                RosegardenMainWindow::self(),
                &RosegardenMainWindow::slotUpdateForPointerChange);
 
     CompositionPosition::getInstance()->slotSetPosition(t);
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             RosegardenMainWindow::self(),
             &RosegardenMainWindow::slotUpdateForPointerChange);
 }
@@ -1741,7 +1741,7 @@ void
 NotationWidget::slotStaffChanged()
 {
     // Draw the pointer
-    updatePointer(CompositionPosition::getInstance()->getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
     // Make sure it's in view (if scrolling is not inhibited).
     if (!m_noScroll) m_view->ensurePositionPointerInView(false);
 }

@@ -246,7 +246,7 @@ PitchTrackerView::setSegments(const std::vector<Segment *>& /* segments */)
     // update GUI
 
     connect(CompositionPosition::getInstance(),
-            &CompositionPosition::pointerPositionChanged,
+            &CompositionPosition::changed,
             this, &PitchTrackerView::slotUpdateValues);
 
     connect(this, &NotationView::play,

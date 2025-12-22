@@ -952,7 +952,7 @@ MatrixView::getRulerSelection() const
 timeT
 MatrixView::getInsertionTime() const
 {
-    return CompositionPosition::getInstance()->getPosition();
+    return CompositionPosition::getInstance()->get();
 }
 
 const SnapGrid *

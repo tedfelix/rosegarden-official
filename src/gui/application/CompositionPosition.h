@@ -36,15 +36,15 @@ public:
     /// Singleton
     static CompositionPosition* getInstance();
 
-    timeT getPosition() const;
+    timeT get() const;
     RealTime getPositionAsElapsedTime() const;
 
 public slots:
     void slotSetPosition(timeT time);
 
 signals:
-    /// Emitted whenever the pointer is changed.
-    void pointerPositionChanged(timeT);
+    /// Emitted whenever the position is changed.
+    void changed(timeT);
 
 private:
     CompositionPosition();

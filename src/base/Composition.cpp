@@ -1128,7 +1128,7 @@ Composition::getTempoAtTime(timeT t) const
 tempoT
 Composition::getCurrentTempo() const
 {
-    return getTempoAtTime(CompositionPosition::getInstance()->getPosition());
+    return getTempoAtTime(CompositionPosition::getInstance()->get());
 }
 
 int
@@ -2091,7 +2091,7 @@ std::string Composition::toXmlString() const
     }
 
     composition << "\" pointer=\"" <<
-        CompositionPosition::getInstance()->getPosition();
+        CompositionPosition::getInstance()->get();
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
                 << std::setprecision(4)

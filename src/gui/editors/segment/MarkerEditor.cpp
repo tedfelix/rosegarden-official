@@ -192,7 +192,7 @@ MarkerEditor::MarkerEditor(QWidget *parent,
 void
 MarkerEditor::updatePosition()
 {
-    timeT pos = CompositionPosition::getInstance()->getPosition();
+    timeT pos = CompositionPosition::getInstance()->get();
     m_absoluteTime->setText(QString("%1").arg(pos));
 
     RealTime rT = m_doc->getComposition().getElapsedRealTime(pos);
@@ -334,7 +334,7 @@ MarkerEditor::slotAdd()
 
     AddMarkerCommand *command =
         new AddMarkerCommand(&m_doc->getComposition(),
-                             CompositionPosition::getInstance()->getPosition(),
+                             CompositionPosition::getInstance()->get(),
                              std::string("new marker"),
                              std::string("no description"));
 
