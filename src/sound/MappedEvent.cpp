@@ -84,7 +84,7 @@ MappedEvent::MappedEvent(const Event &e)
             m_data1 = MIDI_SYSTEM_EXCLUSIVE;
             std::string dataBlock;
             e.get<String>(SystemExclusive::DATABLOCK, dataBlock);
-            dataBlock = SystemExclusive::toRaw(dataBlock);
+            dataBlock = SystemExclusive::hexToRaw(dataBlock);
             DataBlockRepository::getInstance()->registerDataBlockForEvent(dataBlock, this);
         } else if (e.isa(Text::EventType)) {
             const Rosegarden::Text text(e);

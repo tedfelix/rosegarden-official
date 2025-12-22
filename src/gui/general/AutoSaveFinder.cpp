@@ -44,7 +44,7 @@ AutoSaveFinder::getAutoSavePath(QString filename)
 
     const QString autoSaveDir = getAutoSaveDir();
     if (autoSaveDir == "") {
-        std::cerr << "WARNING: AutoSaveFinder::getAutoSavePath: No auto-save location located!?" << std::endl;
+        RG_WARNING << "WARNING: getAutoSavePath(): No auto-save location located!?";
         return "";
     }
 

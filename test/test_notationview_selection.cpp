@@ -1,8 +1,11 @@
+/* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
+
 #include "base/NotationTypes.h"
 #include "base/Pitch.h"
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include <QTest>
+#include "gui/application/CompositionPosition.h"
 #include "gui/seqmanager/SequenceManager.h"
 #include "document/RosegardenDocument.h"
 #include "gui/editors/notation/NotationView.h"
@@ -122,18 +125,20 @@ void TestNotationViewSelection::init()
 {
     // Before each test, unselect all and go back to position 0
     m_view->setSelection(nullptr, false);
-    m_doc.slotSetPointerPosition(0);
+    CompositionPosition::getInstance()->slotSet(0);
 }
 
 void TestNotationViewSelection::testNavigate()
 {
     // Go right one note
     m_view->slotStepForward();
-    QCOMPARE(m_doc.getComposition().getPosition(), timeT(960)); // one quarter
+    QCOMPARE(CompositionPosition::getInstance()->get(),
+             timeT(960)); // one quarter
 
     // Go to next bar
     m_seqManager.fastforward();
-    QCOMPARE(m_doc.getComposition().getPosition(), timeT(3840)); // one quarter
+    QCOMPARE(CompositionPosition::getInstance()->get(),
+             timeT(3840)); // one quarter
 
     QVector<timeT> expectedPositions;
     expectedPositions << 960       // one quarter
@@ -155,7 +160,8 @@ void TestNotationViewSelection::testNavigate()
                          ;
     for (int i = 0 ; i < expectedPositions.size(); ++i) {
         m_view->slotStepForward();
-        QCOMPARE(m_doc.getComposition().getPosition(), timeT(3840 + expectedPositions.at(i)));
+        QCOMPARE(CompositionPosition::getInstance()->get(),
+                 timeT(3840 + expectedPositions.at(i)));
     }
 }
 
@@ -240,7 +246,7 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
         QCOMPARE(selectedNotes(), expectedSelections.at(i));
     }
 
-    const int pos = m_doc.getComposition().getPosition();
+    const int pos = CompositionPosition::getInstance()->get();
 
     // unselect backward
     QStringList expectedSelectionsBack = expectedSelections;
@@ -255,11 +261,12 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
     QCOMPARE(selectedNotes(), QString());
 
     // select everything backward, check at end
-    m_doc.slotSetPointerPosition(pos);
+    CompositionPosition::getInstance()->slotSet(pos);
     for (int i = 0 ; i < expectedSelections.size(); ++i) {
         m_view->slotExtendSelectionBackward();
     }
-    QCOMPARE(m_doc.getComposition().getPosition(), timeT(3840)); // one quarter
+    QCOMPARE(CompositionPosition::getInstance()->get(),
+             timeT(3840)); // one quarter
     QCOMPARE(selectedNotes(), QString("GBCCBBGGGCCGDBDBGC")); // order of notes in the chords is reversed, doesn't matter
 }
 

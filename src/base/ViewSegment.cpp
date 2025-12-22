@@ -14,10 +14,14 @@
 */
 
 #define RG_MODULE_STRING "[ViewSegment]"
+#define RG_NO_DEBUG_PRINT
 
 #include "ViewSegment.h"
 
+#include "misc/Debug.h"
+
 #include <QtGlobal>
+
 
 namespace Rosegarden
 {
@@ -135,8 +139,7 @@ ViewSegment::eventRemoved(const Segment *t, Event *e)
         return;
     }
 
-//    std::cerr << "Event at " << e->getAbsoluteTime() << ", notation time " << e->getNotationAbsoluteTime() << ", type " << e->getType()
-//              << " not found in ViewSegment" << std::endl;
+    //RG_DEBUG << "Event at " << e->getAbsoluteTime() << ", notation time " << e->getNotationAbsoluteTime() << ", type " << e->getType() << " not found in ViewSegment";
 }
 
 void
@@ -202,10 +205,7 @@ ViewSegment::segmentDeleted(const Segment *s)
     Q_ASSERT(s == &m_segment);
     (void)s; // avoid warnings
 
-    /*
-    std::cerr << "WARNING: ViewSegment notified of segment deletion: this is probably a bug "
-              << "(ViewSegment should have been deleted before Segment)" << std::endl;
-              */
+    //RG_WARNING << "WARNING: ViewSegment notified of segment deletion: this is probably a bug (ViewSegment should have been deleted before Segment)";
 }
 
 void

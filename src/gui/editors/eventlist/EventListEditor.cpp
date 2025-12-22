@@ -48,6 +48,7 @@
 #include "misc/ConfigGroups.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/dialogs/PitchDialog.h"
 #include "gui/editors/event/EditEvent.h"
 #include "gui/editors/event/EventTypeDialog.h"
@@ -437,7 +438,7 @@ EventListEditor::EventListEditor(const std::vector<Segment *> &segments) :
     updateFilterCheckBoxes();
     updateTableWidget();
 
-    makeInitialSelection(comp.getPosition());
+    makeInitialSelection(CompositionPosition::getInstance()->get());
 }
 
 EventListEditor::~EventListEditor()

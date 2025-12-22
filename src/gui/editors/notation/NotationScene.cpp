@@ -42,10 +42,11 @@
 #include "misc/ConfigGroups.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include "gui/studio/StudioControl.h"
 #include "sound/MappedEvent.h"
+#include "gui/application/CompositionPosition.h"
 
 #include <QApplication>
 #include <QSettings>
@@ -684,7 +685,7 @@ NotationScene::initCurrentStaffIndex()
     if (m_staffs.empty()) { return; }
 
     Composition &composition = m_document->getComposition();
-    timeT targetTime = composition.getPosition();
+    timeT targetTime = CompositionPosition::getInstance()->get();
 
     // Try the globally selected track (which we may not even include
     // any segments from)
@@ -1117,8 +1118,9 @@ timeT
 NotationScene::getInsertionTime(bool allowEndTime) const
 {
     if (!m_document) return 0;
-    return snapTimeToNoteBoundary(m_document->getComposition().getPosition(),
-                                  allowEndTime);
+    return snapTimeToNoteBoundary
+        (CompositionPosition::getInstance()->get(),
+         allowEndTime);
 }
 
 NotationScene::CursorCoordinates

@@ -450,7 +450,7 @@ private:
      * good and that (if it exists) the user agrees to overwrite.
      * Return a null string if the write should not go ahead.
      */
-    QString launchSaveAsDialog(QString filter, QString label);
+    QString launchSaveAsDialog(const QString &filter, const QString &label);
 
     /**
      * Find any non-ASCII strings in a composition that has been
@@ -1040,9 +1040,9 @@ public slots:
     void slotMoveTrackDown();
 
     /**
-     * timeT version of the same
+     * update the ui
      */
-    void slotSetPointerPosition(timeT t);
+    void slotUpdateForPointerChange();
 
     /**
      * Set the pointer position and start playing (from LoopRuler)
@@ -1355,7 +1355,7 @@ public slots:
      * An external GUI has requested a program change.
      */
     void slotChangePluginProgram(InstrumentId instrumentId,
-                                 int pluginIndex, QString program);
+                                 int pluginIndex, const QString &program);
 
     /**
      * Our internal GUI has made a program change -- the
@@ -1495,8 +1495,6 @@ private:
     // Audio file manager
     //
     AudioManagerDialog *m_audioManagerDialog{nullptr};
-
-    bool m_originatingJump{false};
 
     bool m_useSequencer;
 

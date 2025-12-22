@@ -5,14 +5,14 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
 
-  Other copyrights also apply to some parts of this work.  Please
-  see the AUTHORS file and individual file headers for details.
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #define RG_MODULE_STRING "[CompositionView]"
@@ -25,7 +25,7 @@
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SnapGrid.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
 #include "CompositionColourCache.h"
@@ -34,6 +34,7 @@
 #include "AudioPreviewPainter.h"
 #include "document/RosegardenDocument.h"
 #include "misc/ConfigGroups.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/general/RosegardenScrollView.h"
@@ -371,7 +372,7 @@ void CompositionView::slotExternalKeyReleaseEvent(QKeyEvent *e)
 
 void CompositionView::slotUpdateAll()
 {
-    Profiler profiler("CompositionView::slotUpdateAll()");
+    //Profiler profiler("CompositionView::slotUpdateAll()");
 
     // ??? This routine gets hit really hard when recording.
     //     Just holding down a single note results in 50 calls
@@ -412,7 +413,7 @@ void CompositionView::slotUpdateTimer()
 
 void CompositionView::updateAll2(const QRect &rect)
 {
-    Profiler profiler("CompositionView::updateAll2(rect)");
+    //Profiler profiler("CompositionView::updateAll2(rect)");
 
     //RG_DEBUG << "updateAll2() rect:" << rect << ", valid:" << rect.isValid();
 
@@ -441,7 +442,7 @@ void CompositionView::slotAllNeedRefresh(const QRect &rect)
         return;
 
     // This one gets hit pretty hard while recording.
-    Profiler profiler("CompositionView::slotAllNeedRefresh(const QRect &rect)");
+    //Profiler profiler("CompositionView::slotAllNeedRefresh(const QRect &rect)");
 
     // Note: This new approach normalizes the incoming rect.  This means
     //   that it will never trigger a full refresh given an invalid rect
@@ -503,7 +504,7 @@ void CompositionView::resizeEvent(QResizeEvent *e)
 
 void CompositionView::paintEvent(QPaintEvent *)
 {
-    Profiler profiler("CompositionView::paintEvent()");
+    //Profiler profiler("CompositionView::paintEvent()");
 
     // Just redraw the entire viewport.  Turns out that for the most
     // critical use case, recording, this is actually slightly faster
@@ -514,7 +515,7 @@ void CompositionView::paintEvent(QPaintEvent *)
 
 void CompositionView::drawAll()
 {
-    Profiler profiler("CompositionView::drawAll()");
+    //Profiler profiler("CompositionView::drawAll()");
 
     // Scroll and refresh the segments layer.
     scrollSegmentsLayer();
@@ -544,7 +545,7 @@ void CompositionView::drawAll()
 
 void CompositionView::scrollSegmentsLayer()
 {
-    Profiler profiler("CompositionView::scrollSegmentsLayer()");
+    //Profiler profiler("CompositionView::scrollSegmentsLayer()");
 
     // Portion of the segments layer that needs to be redrawn.
     QRect refreshRect = m_segmentsRefresh;
@@ -646,7 +647,7 @@ void CompositionView::scrollSegmentsLayer()
 
 void CompositionView::drawSegments(const QRect &clipRect)
 {
-    Profiler profiler("CompositionView::drawSegments(clipRect)");
+    //Profiler profiler("CompositionView::drawSegments(clipRect)");
 
     QPainter segmentsLayerPainter(&m_segmentsLayer);
     // Switch to contents coords.
@@ -780,7 +781,7 @@ void CompositionView::drawSegments(const QRect &clipRect)
 
 void CompositionView::drawArtifacts()
 {
-    Profiler profiler("CompositionView::drawArtifacts()");
+    //Profiler profiler("CompositionView::drawArtifacts()");
 
     // The entire viewport in contents coords.
     QRect viewportContentsRect(
@@ -981,7 +982,7 @@ void CompositionView::drawImage(
 void CompositionView::drawAudioPreviews(
         QPainter *segmentsLayerPainter, const QRect &clipRect)
 {
-    Profiler profiler("CompositionView::drawAudioPreviews");
+    //Profiler profiler("CompositionView::drawAudioPreviews");
 
     // for each audio preview
     for (CompositionModelImpl::AudioPreviews::const_iterator audioPreviewIter = m_audioPreview.begin();
@@ -1419,7 +1420,8 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
     if (!item) {
         const RulerScale *ruler = grid().getRulerScale();
         if (ruler)
-            emit setPointerPosition(ruler->getTimeForX(contentsPos.x()));
+            CompositionPosition::getInstance()->slotSet(
+                    ruler->getTimeForX(contentsPos.x()));
 
         return;
     }
@@ -1484,7 +1486,7 @@ void CompositionView::drawPointer(int pos)
     if (m_pointerPos == pos)
         return;
 
-    Profiler profiler("CompositionView::drawPointer()");
+    //Profiler profiler("CompositionView::drawPointer()");
 
     const int oldPos = m_pointerPos;
     m_pointerPos = pos;

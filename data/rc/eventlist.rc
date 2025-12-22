@@ -4,13 +4,13 @@
 
 <MenuBar>
 
-  <Menu name="file" append="new_merge">
+  <Menu name="file">
     <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
 
-  <Menu name="edit" append="new_merge">
+  <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
@@ -40,7 +40,7 @@
     <Action name="time_real" text="&amp;Real Times" icon="time-real" />
     <Action name="time_raw" text="Ra&amp;w Times" icon="time-raw" />
     <Separator/>
-    <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
+    <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" />
     <!-- JAS 'options_show_statusbar' determined by state -->
     <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true"/>
   </Menu>
@@ -55,7 +55,7 @@
     </Menu>
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="event_help" text="&amp;Help" icon="wiki" shortcut="F1" />
   <Separator/>

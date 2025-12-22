@@ -14,16 +14,18 @@
 */
 
 #define RG_MODULE_STRING "[Instrument]"
+#define RG_NO_DEBUG_PRINT
 
 #include "Instrument.h"
 
-#include "base/AllocateChannels.h"
-#include "base/AudioLevel.h"
-#include "base/AudioPluginInstance.h"
+#include "AllocateChannels.h"
+#include "AudioLevel.h"
+#include "AudioPluginInstance.h"
+#include "MidiDevice.h"
+
 #include "sound/ControlBlock.h"
 #include "misc/Debug.h"
 #include "sound/Midi.h"  // for MIDI_CONTROLLER_VOLUME, etc...
-#include "MidiDevice.h"
 #include "gui/studio/StudioControl.h"
 
 #include <ostream>  // for std::endl
@@ -31,6 +33,7 @@
 #include <utility>  // for std::pair
 
 #include <QtGlobal>  // for Q_ASSERT()
+
 
 namespace Rosegarden
 {
@@ -593,11 +596,13 @@ Instrument::removeStaticController(MidiByte controllerNumber)
 const MidiKeyMapping *
 Instrument::getKeyMapping() const
 {
-    MidiDevice *md = dynamic_cast<MidiDevice*>(m_device);
-    if (!md) return nullptr;
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
+    if (!md)
+        return nullptr;
 
     const MidiKeyMapping *mkm = md->getKeyMappingForProgram(m_program);
-    if (mkm) return mkm;
+    if (mkm)
+        return mkm;
 
     if (isPercussion()) { // if any key mapping is available, use it
         const KeyMappingList &kml = md->getKeyMappings();

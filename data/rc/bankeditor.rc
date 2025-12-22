@@ -27,7 +27,7 @@
     <Action name="edit_delete_all" text="Delete All" shortcut="Ctrl+Del"/>
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="bank_help" text="&amp;Help" icon="wiki" shortcut="F1" />
   <Separator/>

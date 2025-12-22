@@ -47,8 +47,7 @@ namespace Rosegarden
 
 static void osc_error(int num, const char *msg, const char *path)
 {
-    std::cerr << "Rosegarden: ERROR: liblo server error " << num
-              << " in path " << path << ": " << msg << std::endl;
+    RG_WARNING << "osc_error(): ERROR: liblo server error" << num << "in path" << path << ":" << msg;
 }
 
 static int osc_message_handler(const char *path, const char *types, lo_arg **argv,

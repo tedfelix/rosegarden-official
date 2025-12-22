@@ -48,6 +48,7 @@
 #include "base/Track.h"
 #include "base/TriggerSegment.h"
 #include "gui/application/RosegardenMainWindow.h"
+#include "gui/application/CompositionPosition.h"
 #include "sequencer/RosegardenSequencer.h"
 #include "gui/dialogs/FileLocateDialog.h"
 #include "gui/widgets/StartupLogo.h"
@@ -637,7 +638,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             position = positionStr.toInt();
         }
 
-        getComposition().setPosition(position);
+        CompositionPosition::getInstance()->slotSet(position);
 
 
         // Get and (eventually) set the default tempo.

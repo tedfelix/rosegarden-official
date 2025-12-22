@@ -118,7 +118,6 @@ set(rg_CPPS
   gui/dialogs/AudioPluginPresetDialog.cpp
   gui/dialogs/AudioPluginConnectionDialog.cpp
   gui/dialogs/ExportDeviceDialog.cpp
-  gui/dialogs/DialogSuppressor.cpp
   gui/dialogs/CountdownDialog.cpp
   gui/dialogs/LyricEditDialog.cpp
   gui/dialogs/CountdownBar.cpp
@@ -346,6 +345,7 @@ set(rg_CPPS
   gui/configuration/HeadersConfigurationPage.cpp
   gui/configuration/CommentsConfigurationPage.cpp
   gui/configuration/GeneralConfigurationPage.cpp
+  gui/application/CompositionPosition.cpp
   gui/application/RosegardenApplication.cpp
   gui/application/TranzportClient.cpp
   gui/application/RosegardenMainViewWidget.cpp
@@ -443,6 +443,7 @@ set(rg_CPPS
   gui/studio/RemapInstrumentDialog.cpp
   gui/studio/MidiMixerVUMeter.cpp
   gui/studio/AudioStrip.cpp
+  gui/studio/MidiStrip.cpp
   gui/seqmanager/MetronomeMapper.cpp
   gui/seqmanager/TempoSegmentMapper.cpp
   gui/seqmanager/MappedEventBuffer.cpp

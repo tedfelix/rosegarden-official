@@ -19,7 +19,7 @@
 #include "misc/Debug.h"
 #include "Event.h"
 #include "Selection.h"  // For EventSelection
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <algorithm>  // for std::min/std::max
 #include <utility>  // for std::pair
@@ -302,7 +302,7 @@ Quantizer::unquantize(EventSelection *selection) const
 timeT
 Quantizer::getFromSource(Event *e, ValueType v) const
 {
-    Profiler profiler("Quantizer::getFromSource");
+    //Profiler profiler("Quantizer::getFromSource");
 
 //    RG_DEBUG << "getFromSource(): source is \"" << m_source << "\"";
 
@@ -340,7 +340,7 @@ Quantizer::getFromSource(Event *e, ValueType v) const
 timeT
 Quantizer::getFromTarget(Event *e, ValueType v) const
 {
-    Profiler profiler("Quantizer::getFromTarget");
+    //Profiler profiler("Quantizer::getFromTarget");
 
     if (m_target == RawEventData) {
 
@@ -365,7 +365,7 @@ void
 Quantizer::setToTarget(Segment *segment, Segment::iterator segmentIter,
                        timeT absTime, timeT duration) const
 {
-    Profiler profiler("Quantizer::setToTarget");
+    //Profiler profiler("Quantizer::setToTarget");
 
     //RG_DEBUG << "setToTarget(): target is \"" << m_target << "\", absTime is " << absTime << ", duration is " << duration << " (unit is " << m_unit << ", original values are absTime " << (*i)->getAbsoluteTime() << ", duration " << (*i)->getDuration() << ")";
 

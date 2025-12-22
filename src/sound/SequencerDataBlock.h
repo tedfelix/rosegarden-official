@@ -21,7 +21,6 @@
 
 #include <QMutex>
 
-
 namespace Rosegarden
 {
 
@@ -95,14 +94,10 @@ public:
     static SequencerDataBlock *getInstance();
 
     /// Called by the UI.
-    RealTime getPositionPointer() const {
-        return RealTime(m_positionSec, m_positionNsec);
-    }
+    RealTime getPositionPointer() const;
+
     /// Called by the sequencer.
-    void setPositionPointer(const RealTime &rt) {
-        m_positionSec = rt.sec;
-        m_positionNsec = rt.nsec;
-    }
+    void setPositionPointer(const RealTime &rt);
 
     /// Get the MIDI OUT event to show on the transport during playback.
     bool getVisual(MappedEvent &ev);
@@ -212,6 +207,10 @@ protected:
     // ??? Thread-safe?
     int m_masterLevelUpdateIndex;
     LevelInfo m_masterLevel;
+
+private:
+    mutable QMutex m_mutex;
+
 };
 
 

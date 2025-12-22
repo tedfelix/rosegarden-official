@@ -15,8 +15,13 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[IconStackedWidget]"
+#define RG_NO_DEBUG_PRINT
+
 #include "IconStackedWidget.h"
 #include "IconButton.h"
+
+#include "misc/Debug.h"
 
 #include <QWidget>
 #include <QLabel>
@@ -137,7 +142,7 @@ IconStackedWidget::slotPageSelect()
 void
 IconStackedWidget::setPageByIndex(int index)
 {
-    std::cerr << "IconStackedWidget setting index to " << index << std::endl;
+    RG_DEBUG << "setPageByIndex() setting index to" << index;
 
     // I originally tried just m_pagePanel->setCurrentIndex(index) here, and it
     // didn't work at all.  Rather than try to deciper that, I came up with this

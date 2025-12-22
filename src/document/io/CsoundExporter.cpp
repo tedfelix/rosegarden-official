@@ -15,6 +15,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CsoundExporter]"
+#define RG_NO_DEBUG_PRINT
+
 #include "CsoundExporter.h"
 
 #include "base/Event.h"
@@ -23,6 +26,7 @@
 #include "base/NotationTypes.h"
 #include "base/Segment.h"
 #include "base/Track.h"
+#include "misc/Debug.h"
 
 #include <QObject>
 
@@ -31,6 +35,7 @@
 
 namespace Rosegarden
 {
+
 
 CsoundExporter::CsoundExporter(QObject * /*parent*/,
                                Composition *composition,
@@ -57,7 +62,7 @@ CsoundExporter::write()
 {
     std::ofstream str(m_fileName.c_str(), std::ios::out);
     if (!str) {
-        //std::cerr << "CsoundExporter::write() - can't write file" << std::endl;
+        //RG_DEBUG << "write() - can't write file";
         return false;
     }
 
@@ -142,5 +147,6 @@ CsoundExporter::write()
     str.close();
     return true;
 }
+
 
 }

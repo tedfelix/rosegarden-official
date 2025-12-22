@@ -41,6 +41,11 @@ public:
         LinearParameterPattern(isDiminuendo)
     {}
 
+    // cppcheck-suppress duplInheritedMember
+    static QuarterSinePattern crescendo;
+    // cppcheck-suppress duplInheritedMember
+    static QuarterSinePattern diminuendo;
+
 };
 
 

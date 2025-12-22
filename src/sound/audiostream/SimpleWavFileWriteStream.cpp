@@ -14,15 +14,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[SimpleWavFileWriteStream]"
+#define RG_NO_DEBUG_PRINT
 
 #include "SimpleWavFileWriteStream.h"
 
 #ifndef HAVE_LIBSNDFILE
 
+#include "misc/Debug.h"
+
 #include <iostream>
 
-using std::cerr;
-using std::endl;
 
 namespace Rosegarden
 {
@@ -60,7 +62,7 @@ SimpleWavFileWriteStream::SimpleWavFileWriteStream(Target target) :
     if (!*m_file) {
         delete m_file;
         m_file = 0;
-        cerr << "SimpleWavFileWriteStream: Failed to open output file for writing" << endl;
+        RG_WARNING << "ctor: Failed to open output file for writing";
         m_error = QString("Failed to open audio file '") +
             getPath() + "' for writing";
         m_target.invalidate();

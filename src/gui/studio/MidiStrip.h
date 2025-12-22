@@ -18,7 +18,12 @@
 #ifndef RG_MIDISTRIP_H
 #define RG_MIDISTRIP_H
 
-#include "base/Instrument.h"
+#include "base/Instrument.h"  // InstrumentId
+
+#include <QTimer>
+#include <QWidget>
+
+class QVBoxLayout;
 
 #include <vector>
 
@@ -33,17 +38,43 @@ class Rotary;
 
 
 /// A strip of controls on the MIDI Mixer window.
-// ??? Need to move functionality from MidiMixerWindow into here.
-//     See AudioStrip.
-class MidiStrip
+class MidiStrip : public QWidget
 {
+    Q_OBJECT
+
 public:
+
+    MidiStrip(QWidget *parent, InstrumentId instrumentID, int stripNumber);
+
+private slots:
+
+    void slotFaderLevelChanged(float value);
+    void slotControllerChanged(float value);
+
+    /// Update the strip to match changes to the Instrument.
+    /**
+     * Connected to InstrumentStaticSignals::controlChange().
+     */
+    void slotControlChange(Instrument *instrument, const int controllerNumber);
+
+    void slotUpdateMeter();
+
+private:
+
     InstrumentId m_id{0};
 
     // Widgets
     MidiMixerVUMeter *m_vuMeter{nullptr};
     Fader *m_volumeFader{nullptr};
     std::vector<Rotary *> m_controllerRotaries;
+
+    QVBoxLayout *m_layout;
+
+    void createWidgets(int stripNumber);
+
+    /// Meter update timer.
+    QTimer m_timer;
+
 };
 
 

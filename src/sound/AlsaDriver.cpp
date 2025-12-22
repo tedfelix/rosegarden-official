@@ -6,11 +6,11 @@
     Copyright 2000-2025 the Rosegarden development team.
     See the AUTHORS file for more details.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #ifdef __GNUG__
@@ -2512,6 +2512,7 @@ AlsaDriver::allNotesOff()
         delete(*it);
     }
 
+    // ??? clear()?
     m_noteOffQueue.erase(m_noteOffQueue.begin(), m_noteOffQueue.end());
 
     //RG_DEBUG << "allNotesOff() - queue size = " << m_noteOffQueue.size();
@@ -4285,6 +4286,12 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         // Add note to note off stack
         //
         if (needNoteOff) {
+            // ??? MEMORY LEAK.  So m_noteOffQueue might not get
+            //     cleaned up.  m_recentNoteOffs does get cleaned up by the
+            //     dtor (clearRecentNoteOffs()), but m_noteOffQueue does not.
+            //     Need to dig a bit to make sure cleaning up m_noteOffQueue
+            //     in the dtor avoids double-frees.  shared_ptr should work
+            //     well here.
             NoteOffEvent *noteOffEvent =
                 new NoteOffEvent(outputStopTime,  // already calculated
                                  rgEvent->getPitch(),

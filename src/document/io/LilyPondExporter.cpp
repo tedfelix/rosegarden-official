@@ -5,26 +5,26 @@
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
 
-  This file is Copyright 2002
-  Hans Kieserman      <hkieserman@mail.com>
-  with heavy lifting from csoundio as it was on 13/5/2002.
+    This file is Copyright 2002
+    Hans Kieserman      <hkieserman@mail.com>
+    with heavy lifting from csoundio as it was on 13/5/2002.
 
-  Numerous additions and bug fixes by
-  Michael McIntyre    <dmmcintyr@users.sourceforge.net>
+    Numerous additions and bug fixes by
+    Michael McIntyre    <dmmcintyr@users.sourceforge.net>
 
-  Some restructuring by Chris Cannam.
+    Some restructuring by Chris Cannam.
 
-  Massive brain surgery, fixes, improvements, and additions by
-  Heikki Junes
+    Massive brain surgery, fixes, improvements, and additions by
+    Heikki Junes
 
-  Other copyrights also apply to some parts of this work.  Please
-  see the AUTHORS file and individual file headers for details.
+    Other copyrights also apply to some parts of this work.  Please
+    see the AUTHORS file and individual file headers for details.
 
-  This program is free software; you can redistribute it and/or
-  modify it under the terms of the GNU General Public License as
-  published by the Free Software Foundation; either version 2 of the
-  License, or (at your option) any later version.  See the file
-  COPYING included with this distribution for more information.
+    This program is free software; you can redistribute it and/or
+    modify it under the terms of the GNU General Public License as
+    published by the Free Software Foundation; either version 2 of the
+    License, or (at your option) any later version.  See the file
+    COPYING included with this distribution for more information.
 */
 
 #define RG_MODULE_STRING "[LilyPondExporter]"
@@ -165,16 +165,21 @@ static bool canStartOrEndBeam(Event *event)
     return true;
 }
 
-Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it, const std::string &groupType, int barEnd) const
+Event *LilyPondExporter::nextNoteInGroup(const Segment *s,
+                                         Segment::iterator it,
+                                         const std::string &groupType,
+                                         int barEnd) const
 {
     Event *event = *it;
     long currentGroupId = -1;
     event->get<Int>(BEAMED_GROUP_ID, currentGroupId);
     Q_ASSERT(currentGroupId != -1);
     const bool tuplet = groupType == GROUP_TYPE_TUPLED;
-    const bool graceNotesGroup = event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
-    timeT currentTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
-    int subOrdering = event->getSubOrdering();
+    const bool graceNotesGroup =
+            event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
+    const timeT currentTime =
+            m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
+    const int subOrdering = event->getSubOrdering();
 
     ++it;
     for ( ; s->isBeforeEndMarker(it) ; ++it ) {
@@ -203,7 +208,8 @@ Event *LilyPondExporter::nextNoteInGroup(const Segment *s, Segment::iterator it,
             continue;
 
         // Within a chord, keep moving ahead
-        const timeT eventTime = m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
+        const timeT eventTime =
+                m_composition->getNotationQuantizer()->getQuantizedAbsoluteTime(event);
         if (eventTime == currentTime && subOrdering == event->getSubOrdering()) {
             continue;
         }
@@ -358,9 +364,7 @@ lilyHalfDuration(int noteType)
         break;
 
     default:
-        std::cerr << "ERROR: Unexpected note duration"
-                    << " value " << noteType << " : Can't"
-                    << " translate to LilyPond\n";
+        RG_WARNING << "ERROR: Unexpected note duration value " << noteType << " : Can't translate to LilyPond";
         return "256";   // Try this one, who knows ?
     }
 }
@@ -452,9 +456,7 @@ LilyPondExporter::handleStartingPostEvents(eventstartlist &postEventsToStart,
                         // (See LilyPond v2.22.2, Notation Reference §1.3.1)
 
                         if (!(*j)->isa(Note::EventType)) {
-                            std::cerr << "WARNING: a crescendo/decrescendo "
-                                      << "limited to a single event which is"
-                                      << " not a note has been found.\n";
+                            RG_WARNING << "WARNING: a crescendo/decrescendo limited to a single event which is not a note has been found.";
                         } else {
                             Note::Type type = (*j)->get<Int>(NOTE_TYPE);
                             Note::Type dots = (*j)->get<Int>(NOTE_DOTS);
@@ -626,7 +628,8 @@ LilyPondExporter::handleEndingPostEvents(eventendlist &postEventsInProgress,
 }
 
 std::string
-LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNoteName(int pitch,
+                                             const Accidental &accidental,
                                              const Rosegarden::Key &key) const
 {
     Pitch p(pitch, accidental);
@@ -637,7 +640,8 @@ LilyPondExporter::convertPitchToLilyNoteName(int pitch, Accidental accidental,
 }
 
 std::string
-LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
+LilyPondExporter::convertPitchToLilyNote(int pitch,
+                                         const Accidental &accidental,
                                          const Rosegarden::Key &key) const
 {
     // calculate note name and write note
@@ -673,7 +677,7 @@ LilyPondExporter::convertPitchToLilyNote(int pitch, Accidental accidental,
 }
 
 std::string
-LilyPondExporter::composeLilyMark(std::string eventMark, bool stemUp)
+LilyPondExporter::composeLilyMark(const std::string &eventMark, bool stemUp)
 {
 
     std::string inStr, outStr = "";
@@ -2417,8 +2421,8 @@ LilyPondExporter::writeBar(Segment *s,
 
     bool inBeamedGroup = false;
     bool startingBeamedGroup = false;
-    Event *nextBeamedNoteInGroup = nullptr;
-    Event *nextNoteInTuplet = nullptr;
+    const Event *nextBeamedNoteInGroup = nullptr;
+    const Event *nextNoteInTuplet = nullptr;
 
     while (s->isBeforeEndMarker(i)) {
 

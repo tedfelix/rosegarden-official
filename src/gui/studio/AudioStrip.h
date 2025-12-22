@@ -47,7 +47,7 @@ class AudioStrip : public QWidget
 
 public:
     AudioStrip(QWidget *parent, InstrumentId id = NoInstrument);
-    ~AudioStrip() override;
+    ~AudioStrip() override  { }
 
     void setId(InstrumentId id);
     InstrumentId getId() const  { return m_id; }
@@ -91,7 +91,7 @@ private slots:
 
 private:
     /// Buss/Instrument ID.
-    InstrumentId m_id;
+    InstrumentId m_id{NoInstrument};
 
     bool isMaster() const  { return (m_id == 0); }
     bool isSubmaster() const
@@ -103,18 +103,18 @@ private:
 
     // Widgets
 
-    Label *m_label;
-    AudioRouteMenu *m_input;
-    AudioRouteMenu *m_output;
-    Fader *m_fader;
-    AudioVUMeter *m_meter;
-    Rotary *m_pan;
+    Label *m_label{nullptr};
+    AudioRouteMenu *m_input{nullptr};
+    AudioRouteMenu *m_output{nullptr};
+    Fader *m_fader{nullptr};
+    AudioVUMeter *m_meter{nullptr};
+    Rotary *m_pan{nullptr};
 
     QPixmap m_monoPixmap;
     QPixmap m_stereoPixmap;
-    QPushButton *m_stereoButton;
+    QPushButton *m_stereoButton{nullptr};
     // Cache for updateInputMeter().
-    bool m_stereo;
+    bool m_stereo{false};
 
     std::vector<PluginPushButton *> m_plugins;
 

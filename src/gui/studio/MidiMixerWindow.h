@@ -27,8 +27,6 @@
 #include <utility>
 #include <vector>
 
-#include <QTimer>
-
 class QWidget;
 class QTabWidget;
 class QString;
@@ -68,15 +66,6 @@ public slots:
 
 private slots:
 
-    /// Update the strip to match changes to the Instrument.
-    /**
-     * Connected to InstrumentStaticSignals::controlChange().
-     */
-    void slotControlChange(Instrument *instrument, int controllerNumber);
-
-    void slotFaderLevelChanged(float value);
-    void slotControllerChanged(float value);
-
     /// Calls sendControllerRefresh().
     void slotCurrentTabChanged(int);
 
@@ -97,11 +86,6 @@ private slots:
     /// File > Close
     void slotClose()  { close(); }
 
-    /**
-     * ??? Move this to MidiStrip.
-     */
-    void updateMeters();
-
 private:
 
     QTabWidget *m_tabWidget;
@@ -121,19 +105,8 @@ private:
      */
     void sendControllerRefresh();
 
-    typedef std::vector<std::shared_ptr<MidiStrip>> MidiStripVector;
+    typedef std::vector<MidiStrip *> MidiStripVector;
     MidiStripVector m_midiStrips;
-
-    typedef std::map<InstrumentId, int /*stripIndex*/> InstrumentIDToStripIndex;
-    InstrumentIDToStripIndex m_instrumentIDToStripIndex;
-
-    /// Get InstrumentParameterBox controllers and remove volume.
-    ControlList getIPBControlParameters(const MidiDevice *) const;
-
-    /**
-     * ??? Move this to MidiStrip.
-     */
-    QTimer m_timer;
 
 };
 

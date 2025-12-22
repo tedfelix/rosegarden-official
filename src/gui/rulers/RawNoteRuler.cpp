@@ -22,7 +22,6 @@
 
 #include "DefaultVelocityColour.h"
 
-#include "misc/Debug.h"
 #include "base/BaseProperties.h"
 #include "base/Composition.h"
 #include "base/NotationTypes.h"
@@ -31,6 +30,7 @@
 #include "base/Segment.h"
 #include "gui/general/GUIPalette.h"
 #include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <QColor>
 #include <QPainter>
@@ -39,6 +39,8 @@
 #include <QSize>
 #include <QToolTip>
 #include <QWidget>
+
+#include <sstream>
 
 
 namespace Rosegarden
@@ -261,18 +263,25 @@ RawNoteRuler::dumpSubtree(const EventTreeNode *node, int depth)
     if (!node)
         return ;
 
+    std::stringstream stringStream;
+
     for (int i = 0; i < depth; ++i)
-        std::cerr << "  ";
+        stringStream << "  ";
+
     if (depth > 0)
-        std::cerr << "->";
-    std::cerr << (*node->eventIter)->getAbsoluteTime() << "," << (*node->eventIter)->getDuration() << " [";
+        stringStream << "->";
+
+    stringStream << (*node->eventIter)->getAbsoluteTime() << "," << (*node->eventIter)->getDuration() << " [";
     long pitch = 0;
     if ((*node->eventIter)->get<Int>(BaseProperties::PITCH, pitch)) {
-        std::cerr << pitch << "]" << std::endl;
+        stringStream << pitch << "]\n";
     }
     else {
-        std::cerr << "no-pitch]" << std::endl;
+        stringStream << "no-pitch]\n";
     }
+
+    RG_DEBUG << stringStream.str();
+
     for (const EventTreeNode *node2 : node->children) {
         dumpSubtree(node2, depth + 1);
     }
@@ -281,14 +290,14 @@ RawNoteRuler::dumpSubtree(const EventTreeNode *node, int depth)
 void
 RawNoteRuler::dumpForest(const EventTreeNodeList *forest)
 {
-    std::cerr << "\nFOREST:\n" << std::endl;
+    RG_DEBUG << "\nFOREST:";
 
     for (unsigned int i = 0; i < forest->size(); ++i) {
-        std::cerr << "\nTREE " << i << ":\n" << std::endl;
+        RG_DEBUG << "TREE " << i << ":\n";
         dumpSubtree((*forest)[i], 0);
     }
 
-    std::cerr << std::endl;
+    RG_DEBUG << "";
 }
 
 int

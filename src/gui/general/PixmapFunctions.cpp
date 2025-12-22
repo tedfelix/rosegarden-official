@@ -15,8 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[PixmapFunctions]"
+#define RG_NO_DEBUG_PRINT
 
 #include "PixmapFunctions.h"
+
+#include "misc/Debug.h"
 
 #include <QBitmap>
 #include <QColor>
@@ -117,10 +121,7 @@ PixmapFunctions::colourPixmap(const QPixmap &map, int hue, int minimum, int satu
 
             if (oldHue >= 0) {
                 if (!warned) {
-                    std::cerr << "PixmapFunctions::recolour: Not a greyscale pixmap "
-                              << "(found rgb value " << oldColour.red() << ","
-                              << oldColour.green() << "," << oldColour.blue()
-                              << "), hoping for the best" << std::endl;
+                    RG_WARNING << "colourPixmap(): Not a greyscale pixmap (found rgb value " << oldColour.red() << "," << oldColour.green() << "," << oldColour.blue() << "), hoping for the best";
                     warned = true;
                 }
                 newHue = hue;

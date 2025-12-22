@@ -3,7 +3,7 @@
 <kpartgui name="Rosegarden::Notation" version="1501">
 
 <MenuBar>
-  <Menu name="file" append="new_merge">
+  <Menu name="file">
     <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
   <Separator/>
@@ -90,24 +90,24 @@
     <Action name="lyric_editor" text="Open L&amp;yric Editor" />
   <Separator/>
     <!-- JAS 'show_track_headers' is determined by states -->
-    <Menu name="toolbars" append="show_merge">
+    <Menu name="toolbars">
       <text>&amp;Toolbars</text>
-      <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" append="show_merge" />
-      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" append="show_merge" />
-      <Action name="show_accidentals_toolbar" text="Show &amp;Accidentals Toolbar" icon="palette-accidentals" checked="true" append="show_merge" />
-      <Action name="show_clefs_toolbar" text="Show Cle&amp;fs Toolbar" icon="palette-clefs" checked="true" append="show_merge" />
-      <Action name="show_marks_toolbar" text="Show &amp;Marks Toolbar" icon="palette-marks" checked="true" append="show_merge" />
-      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked="true" append="show_merge" />
-      <Action name="show_symbol_toolbar" text="Show &amp;Symbols Toolbar" icon="palette-symbol" checked="true" append="show_merge" />
-      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" append="show_merge" />
-      <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="true" append="show_merge" />
-      <Action name="show_layer_toolbar" text="Show La&amp;yer Toolbar" checked="true" append="show_merge" />
-      <Action name="show_rulers_toolbar" text="Show &amp;Rulers Toolbar" checked="true" append="show_merge" />
-      <Action name="show_duration_toolbar" text="Show &amp;Duration Toolbar" checked="true" append="show_merge" />
-      <Action name="show_interpret_toolbar" text="Show &amp;Interpret Toolbar" checked="true" append="show_merge" />
-      <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" append="show_merge" />
+      <Action name="options_show_toolbar" text="Show Main &amp;Toolbar" checked="true" />
+      <Action name="show_tools_toolbar" text="Show T&amp;ools Toolbar" checked="true" />
+      <Action name="show_accidentals_toolbar" text="Show &amp;Accidentals Toolbar" icon="palette-accidentals" checked="true" />
+      <Action name="show_clefs_toolbar" text="Show Cle&amp;fs Toolbar" icon="palette-clefs" checked="true" />
+      <Action name="show_marks_toolbar" text="Show &amp;Marks Toolbar" icon="palette-marks" checked="true" />
+      <Action name="show_group_toolbar" text="Show &amp;Group Toolbar" icon="palette-group" checked="true" />
+      <Action name="show_symbol_toolbar" text="Show &amp;Symbols Toolbar" icon="palette-symbol" checked="true" />
+      <Action name="show_transport_toolbar" text="Show Trans&amp;port Toolbar" checked="true" />
+      <Action name="show_layout_toolbar" text="Show &amp;Layout Toolbar" checked="true" />
+      <Action name="show_layer_toolbar" text="Show La&amp;yer Toolbar" checked="true" />
+      <Action name="show_rulers_toolbar" text="Show &amp;Rulers Toolbar" checked="true" />
+      <Action name="show_duration_toolbar" text="Show &amp;Duration Toolbar" checked="true" />
+      <Action name="show_interpret_toolbar" text="Show &amp;Interpret Toolbar" checked="true" />
+      <Action name="options_show_statusbar" text="Show St&amp;atusbar" checked="true" />
     </Menu>
-    <Menu name="rulers" append="show_merge">
+    <Menu name="rulers">
       <text>&amp;Rulers</text>
         <Action name="show_chords_ruler" text="Show Ch&amp;ord Name Ruler" checked="false" />
         <Action name="show_raw_note_ruler" text="Show Ra&amp;w Note Ruler" checked="false" />
@@ -119,10 +119,10 @@
       <Action name="toggle_channelpressure_ruler" text="Show Channel Pressure Ruler" icon="ruler-channel-pressure" checked="false" />
       <Action name="add_control_ruler" text="Add &amp;Control Ruler" icon="ruler-controller" checked="false" />
     </Menu>
-  <Separator append="show_merge" />
+  <Separator />
     <Action name="show_track_headers" text="Show &amp;Track Headers" checked="false" />
-    <Action name="show_annotations" text="Show &amp;Annotations" checked="true" append="show_merge" />
-    <Action name="show_lilypond_directives" text="Show Lily&amp;Pond Directives" checked="true" append="show_merge" />
+    <Action name="show_annotations" text="Show &amp;Annotations" checked="true" />
+    <Action name="show_lilypond_directives" text="Show Lily&amp;Pond Directives" checked="true" />
 
   <!-- YG - Only for debug
   <Separator/>
@@ -614,7 +614,7 @@
     <Action name="toggle_step_by_step" text="Ste&amp;p Recording" icon="step_by_step" checked="false" />
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
   <Separator/>

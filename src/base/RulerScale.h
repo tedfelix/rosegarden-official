@@ -174,7 +174,8 @@ public:
      * Construct a SegmentsRulerScale for the given set of segments
      * in the given composition.
      */
-    SegmentsRulerScale(Composition *composition, SegmentSelection segments,
+    SegmentsRulerScale(Composition *composition,
+                       const SegmentSelection &segments,
                        double origin, double ratio);
     ~SegmentsRulerScale() override;
 

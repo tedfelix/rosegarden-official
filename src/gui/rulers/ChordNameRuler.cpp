@@ -28,7 +28,7 @@
 #include "base/CompositionTimeSliceAdapter.h"
 #include "base/Instrument.h"
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/PropertyName.h"
 #include "base/NotationQuantizer.h"
 #include "base/RefreshStatus.h"
@@ -232,7 +232,7 @@ ChordNameRuler::recalculate(timeT from, timeT to)
     if (!m_ready)
         return ;
 
-    Profiler profiler("ChordNameRuler::recalculate");
+    //Profiler profiler("ChordNameRuler::recalculate");
     RG_DEBUG << "recalculate(" << this << ")";
 
     bool regetSegments = false;
@@ -435,7 +435,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
 
     RG_DEBUG << "paintEvent()";
 
-    Profiler profiler1("ChordNameRuler::paintEvent (whole)");
+    //Profiler profiler1("ChordNameRuler::paintEvent (whole)");
 
     QPainter paint(this);
 
@@ -462,7 +462,7 @@ ChordNameRuler::paintEvent(QPaintEvent* e)
     if (!m_chordSegment)
         return ;
 
-    Profiler profiler2("ChordNameRuler::paintEvent (paint)");
+    //Profiler profiler2("ChordNameRuler::paintEvent (paint)");
 
     QRect boundsForHeight = m_fontMetrics.boundingRect("^j|lM");
     int fontHeight = boundsForHeight.height();

@@ -3,13 +3,13 @@
 <kpartgui name="ControlEditor" version="1230">
 
 <MenuBar>
-  <Menu name="file" append="new_merge">
+  <Menu name="file">
     <text>&amp;File</text>
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
   </Menu>
 
-  <Menu name="edit" append="new_merge">
+  <Menu name="edit">
     <text>&amp;Edit</text>
     <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
     <Action name="edit_undo"/>
@@ -20,7 +20,7 @@
     <Action name="remove_all_from_ip" text="Remove All From Instrument Panel" />
   </Menu>
 
-  <Menu name="help" append="about_merge">
+  <Menu name="help">
     <text>&amp;Help</text>
     <Action name="control_help" text="&amp;Help" icon="wiki" shortcut="F1" />
 

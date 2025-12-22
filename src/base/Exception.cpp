@@ -13,75 +13,53 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[Exception]"
+
 #include "base/Exception.h"
 
-#include <iostream>
+#include "misc/Debug.h"
+
 
 namespace Rosegarden {
+
 
 Exception::Exception(const char *message) :
     m_message(message)
 {
-#ifndef NDEBUG
-    std::cerr << "WARNING: Rosegarden::Exception: \""
-	      << message << "\"" << std::endl;
-#endif
+    RG_DEBUG << "Creating:" << message;
 }
 
 Exception::Exception(const char *message, const char *file, int line) :
     m_message(message)
 {
-    // Fix compiler warning.
-    (void)file;
-    (void)line;
-#ifndef NDEBUG
-    std::cerr << "WARNING: Rosegarden::Exception: \""
-	      << message << "\" at " << file << ":" << line << std::endl;
-#endif
+    RG_DEBUG << "Creating:" << message << "at" << file << ":" << line;
 }
 
-Exception::Exception(const std::string& message) :
+Exception::Exception(const std::string &message) :
     m_message(message)
 {
-#ifndef NDEBUG
-    std::cerr << "WARNING: Rosegarden::Exception: \""
-	      << message << "\"" << std::endl;
-#endif
+    RG_DEBUG << "Creating:" << message;
 }
 
-Exception::Exception(const std::string& message,
-                     const std::string& file,
+Exception::Exception(const std::string &message,
+                     const std::string &file,
                      int line) :
     m_message(message)
 {
-    // Fix compiler warning.
-    (void)file;
-    (void)line;
-#ifndef NDEBUG
-    std::cerr << "WARNING: Rosegarden::Exception: \""
-	      << message << "\" at " << file << ":" << line << std::endl;
-#endif
+    RG_DEBUG << "Creating:" << message << "at" << file << ":" << line;
 }
 
-Exception::Exception(const QString& message) :
+Exception::Exception(const QString &message) :
     m_message(message.toUtf8().data())
 {
-#ifndef NDEBUG
-    std::cerr << "WARNING: Rosegarden::Exception: \""
-	      << m_message << "\"" << std::endl;
-#endif
+    RG_DEBUG << "Creating:" << message;
 }
 
-Exception::Exception(const QString& message, QString file, int line) :
+Exception::Exception(const QString &message, const QString &file, int line) :
     m_message(message.toUtf8().data())
 {
-    // Fix compiler warning.
-    (void)file;
-    (void)line;
-#ifndef NDEBUG
-    std::cerr << "WARNING: Rosegarden::Exception: \""
-	      << m_message << "\" at " << file.toLocal8Bit().data() << ":" << line << std::endl;
-#endif
+    RG_DEBUG << "Creating:" << message << "at" << file << ":" << line;
 }
+
 
 }

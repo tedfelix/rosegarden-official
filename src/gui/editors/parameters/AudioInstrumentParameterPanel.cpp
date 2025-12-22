@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioInstrumentParameterPanel]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioInstrumentParameterPanel.h"
 
@@ -55,8 +56,10 @@
 #include <QSignalMapper>
 #include <QApplication>
 
+
 namespace Rosegarden
 {
+
 
 AudioInstrumentParameterPanel::AudioInstrumentParameterPanel(QWidget *parent) :
     InstrumentParameterPanel(parent)
@@ -170,8 +173,7 @@ AudioInstrumentParameterPanel::slotSelectAudioRecordLevel(float dB)
     if (getSelectedInstrument() == nullptr)
         return ;
 
-    //    std::cerr << "AudioInstrumentParameterPanel::slotSelectAudioRecordLevel("
-    //          << dB << ")" << std::endl;
+    //RG_DEBUG << "slotSelectAudioRecordLevel(" << dB << ")";
 
     if (getSelectedInstrument()->getType() == Instrument::Audio) {
         getSelectedInstrument()->setRecordLevel(dB);

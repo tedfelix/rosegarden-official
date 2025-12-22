@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationHLayout]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "NotationHLayout.h"
 
@@ -25,7 +25,7 @@
 #include "base/NotationQuantizer.h"
 #include "base/NotationTypes.h"
 #include "base/Pitch.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/RulerScale.h"
 #include "base/Segment.h"
 #include "base/SegmentNotationHelper.h"
@@ -186,7 +186,7 @@ NotationHLayout::scanViewSegment(ViewSegment &staff, timeT startTime,
                                  timeT endTime, bool full)
 {
     //throwIfCancelled();
-    Profiler profiler("NotationHLayout::scanViewSegment");
+    //Profiler profiler("NotationHLayout::scanViewSegment");
 
     Segment &segment(staff.getSegment());
     timeT segStartTime = segment.getStartTime();
@@ -715,15 +715,15 @@ NotationHLayout::scanChord(NotationElementList *notes,
             extraWidth = std::max(extraWidth, float(npf->getNoteBodyWidth()));
         }
     }
-/*!!!
+/* !!!
     if (grace) {
-        std::cerr << "Grace note: subordering " << chord.getSubOrdering();
+        RG_DEBUG << "Grace note: subordering " << chord.getSubOrdering();
         chunks.push_back(Chunk(-10 + graceCount,
                                extraWidth + npf->getNoteBodyWidth()));
         if (graceCount < 9) ++graceCount;
         return;
     } else {
-        std::cerr << "Non-grace note (grace count was " << graceCount << ")";
+        RG_DEBUG << "Non-grace note (grace count was " << graceCount << ")";
         graceCount = 0;
     }
 */
@@ -1022,7 +1022,7 @@ NotationHLayout::getMaxRepeatedClefAndKeyWidth(int barNo)
 void
 NotationHLayout::reconcileBarsLinear()
 {
-    Profiler profiler("NotationHLayout::reconcileBarsLinear");
+    //Profiler profiler("NotationHLayout::reconcileBarsLinear");
 
     // Ensure that concurrent bars on all staffs have the same width,
     // which for now we make the maximum width required for this bar
@@ -1103,7 +1103,7 @@ NotationHLayout::reconcileBarsLinear()
 void
 NotationHLayout::reconcileBarsPage()
 {
-    Profiler profiler("NotationHLayout::reconcileBarsPage");
+    //Profiler profiler("NotationHLayout::reconcileBarsPage");
 
     int barNo = getFirstVisibleBar();
     int barNoThisRow = 0;
@@ -1295,7 +1295,7 @@ NotationHLayout::reconcileBarsPage()
 void
 NotationHLayout::finishLayout(timeT startTime, timeT endTime, bool full)
 {
-    Profiler profiler("NotationHLayout::finishLayout");
+    //Profiler profiler("NotationHLayout::finishLayout");
     m_barPositions.clear();
 
     if (m_pageMode && (m_pageWidth > 0.1)) reconcileBarsPage();
@@ -1337,7 +1337,7 @@ void
 NotationHLayout::layout(BarDataMap::iterator i, timeT startTime, timeT endTime,
                         bool full)
 {
-    Profiler profiler("NotationHLayout::layout");
+    //Profiler profiler("NotationHLayout::layout");
 
     ViewSegment &staff = *(i->first);
     NotationElementList *notes = staff.getViewElementList();

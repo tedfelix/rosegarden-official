@@ -71,6 +71,8 @@
 #include "commands/notation/KeyInsertionCommand.h"
 #include "commands/notation/MultiKeyInsertionCommand.h"
 
+#include "gui/application/CompositionPosition.h"
+
 #include "gui/editors/notation/NotationStrings.h"
 #include "gui/editors/notation/NotePixmapFactory.h"
 
@@ -950,9 +952,7 @@ MatrixView::getRulerSelection() const
 timeT
 MatrixView::getInsertionTime() const
 {
-    RosegardenDocument* doc = RosegardenDocument::currentDocument;
-    if (!doc) return 0;
-    return doc->getComposition().getPosition();
+    return CompositionPosition::getInstance()->get();
 }
 
 const SnapGrid *
@@ -1846,11 +1846,10 @@ MatrixView::slotStepBackward()
 
     time = getSnapGrid()->snapTime(time - 1, SnapGrid::SnapLeft);
 
-    RosegardenDocument* doc = RosegardenDocument::currentDocument;
-    if (time < segment->getStartTime()){
-        doc->slotSetPointerPosition(segment->getStartTime());
+    if (time < segment->getStartTime()) {
+        CompositionPosition::getInstance()->slotSet(segment->getStartTime());
     } else {
-        doc->slotSetPointerPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
     }
 }
 
@@ -1873,11 +1872,11 @@ MatrixView::stepForward(bool force)
 
     time = getSnapGrid()->snapTime(time + 1, SnapGrid::SnapRight);
 
-    RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (!force && (time > segment->getEndMarkerTime())){
-        doc->slotSetPointerPosition(segment->getEndMarkerTime());
+        CompositionPosition::getInstance()->slotSet(
+                segment->getEndMarkerTime());
     } else {
-        doc->slotSetPointerPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
     }
 }
 
@@ -1986,9 +1985,8 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     CommandHistory::getInstance()->addCommand(command);
 
-    if (!m_inChordMode) {
-        RosegardenDocument::currentDocument->slotSetPointerPosition(endTime);
-    }
+    if (!m_inChordMode)
+        CompositionPosition::getInstance()->slotSet(endTime);
 }
 
 void
@@ -2105,9 +2103,8 @@ MatrixView::slotInsertNoteFromAction()
 
     CommandHistory::getInstance()->addCommand(command);
 
-    if (!m_inChordMode) {
-        RosegardenDocument::currentDocument->slotSetPointerPosition(endTime);
-    }
+    if (!m_inChordMode)
+        CompositionPosition::getInstance()->slotSet(endTime);
 
     emit noteInsertedFromKeyboard(segment, pitch);
     //  ==> MatrixWidget::slotPlayPreviewNote() ==> MatrixScene::playNote()

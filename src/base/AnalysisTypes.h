@@ -19,9 +19,9 @@
 #ifndef RG_ANALYSISTYPES_H
 #define RG_ANALYSISTYPES_H
 
-#include <string>
 #include <map>
 #include <set>
+#include <string>
 #include <vector>
 
 #include "base/TimeSignature.h"

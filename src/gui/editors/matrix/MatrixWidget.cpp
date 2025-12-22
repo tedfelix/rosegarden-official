@@ -36,6 +36,8 @@
 
 #include "document/RosegardenDocument.h"
 
+#include "gui/application/CompositionPosition.h"
+
 #include "gui/widgets/Panner.h"
 #include "gui/widgets/Panned.h"
 #include "gui/widgets/Thumbwheel.h"
@@ -372,7 +374,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
                           std::vector<Segment *> segments)
 {
     if (m_document) {
-        disconnect(m_document, &RosegardenDocument::pointerPositionChanged,
+        disconnect(CompositionPosition::getInstance(),
+                   &CompositionPosition::changed,
                    this, &MatrixWidget::slotPointerPositionChanged);
     }
 
@@ -497,7 +500,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_layout->addWidget(m_bottomStandardRuler, BOTTOMRULER_ROW, MAIN_COL, 1, 1);
 
 
-    connect(m_document, &RosegardenDocument::pointerPositionChanged,
+    connect(CompositionPosition::getInstance(),
+            &CompositionPosition::changed,
             this, &MatrixWidget::slotPointerPositionChanged);
 
     m_chordNameRuler->setReady();
@@ -842,7 +846,7 @@ MatrixWidget::previousSegment()
     Segment *s = m_scene->getPriorSegment();
     if (s)
         m_scene->setCurrentSegment(s);
-    updatePointer(m_document->getComposition().getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
     updateSegmentChangerBackground();
 }
 
@@ -855,7 +859,7 @@ MatrixWidget::nextSegment()
     Segment *s = m_scene->getNextSegment();
     if (s)
         m_scene->setCurrentSegment(s);
-    updatePointer(m_document->getComposition().getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
     updateSegmentChangerBackground();
 }
 
@@ -1632,7 +1636,7 @@ MatrixWidget::showInitialPointer()
     if (!m_scene)
         return;
 
-    updatePointer(m_document->getComposition().getPosition());
+    updatePointer(CompositionPosition::getInstance()->get());
 
     // QGraphicsView usually defaults to the center.  We want to
     // start at the left center.

@@ -15,6 +15,8 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AudioConfigurationPage]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioConfigurationPage.h"
 
@@ -180,7 +182,7 @@ AudioConfigurationPage::AudioConfigurationPage(
 
     QString defaultAudioEditor = getBestAvailableAudioEditor();
 
-    std::cerr << "defaultAudioEditor = " << defaultAudioEditor << std::endl;
+    RG_DEBUG << "defaultAudioEditor = " << defaultAudioEditor;
 
     QString externalAudioEditor = settings.value("externalaudioeditor",
                                   defaultAudioEditor).toString() ;

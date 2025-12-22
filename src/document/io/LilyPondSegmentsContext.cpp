@@ -15,19 +15,22 @@
     COPYING included with this distribution for more information.
 */
 
-
+#define RG_MODULE_STRING "[LilyPondSegmentsContext]"
+#define RG_NO_DEBUG_PRINT
 
 #include "LilyPondSegmentsContext.h"
+
 #include "base/Composition.h"
 #include "base/Segment.h"
 
 #include <map>
 #include <set>
 #include <sstream>
-#include <iostream>
+
 
 namespace Rosegarden
 {
+
 
 int LilyPondSegmentsContext::m_nextRepeatId = 1;
 
@@ -1257,12 +1260,9 @@ LilyPondSegmentsContext::sortAndGatherAlt(SegmentDataList & repeatList)
             (*it)->sortedAltChain->push_back((*(*it)->rawAltChain)[0]);
         } else {
             // DON'T CRASH...
-            std::cerr << "###############################"
-                      << "############################################\n";
-            std::cerr << "LilyPondSegmentsContext::sortAndGatherAlt:"
-                      << " rawAltChain = 0 : THIS IS A BUG\n";
-            std::cerr << "###############################"
-                      << "############################################\n";
+            RG_WARNING << "###################################################";
+            RG_WARNING << "sortAndGatherAlt(): rawAltChain = 0 : THIS IS A BUG";
+            RG_WARNING << "###################################################";
             return;
         }
     }

@@ -16,32 +16,38 @@
 #ifndef RG_EXCEPTION_H
 #define RG_EXCEPTION_H
 
-#include <string>
 #include <QString>
+
+#include <string>
 #include <exception>
 
 #include <rosegardenprivate_export.h>
 
+
 namespace Rosegarden {
+
 
 class ROSEGARDENPRIVATE_EXPORT Exception : public virtual std::exception
 {
 public:
+
     explicit Exception(const char *message);
     Exception(const char *message, const char *file, int line);
 
-    explicit Exception(const std::string& message);
-    Exception(const std::string& message, const std::string& file, int line);
+    explicit Exception(const std::string &message);
+    Exception(const std::string &message, const std::string &file, int line);
 
-    explicit Exception(const QString& message);
-    Exception(const QString& message, QString file, int line);
+    explicit Exception(const QString &message);
+    Exception(const QString &message, const QString &file, int line);
 
-    ~Exception() throw () override {}
+    ~Exception() throw () override  { }
 
-    std::string getMessage() const { return m_message; }
+    std::string getMessage() const  { return m_message; }
 
 private:
+
     std::string m_message;
+
 };
 
 

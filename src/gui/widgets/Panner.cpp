@@ -22,7 +22,7 @@
 
 #include "gui/general/GUIPalette.h"
 #include "misc/Debug.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <QColor>
 #include <QGraphicsScene>
@@ -134,7 +134,7 @@ Panner::paintEvent(QPaintEvent *e)
     RG_DEBUG << "paintEvent()";
     RG_DEBUG << "  region bounding rect:" << e->region().boundingRect();
 
-    Profiler profiler("Panner::paintEvent");
+    //Profiler profiler("Panner::paintEvent");
 
     QPaintEvent *e2 = new QPaintEvent(e->region().boundingRect());
     QGraphicsView::paintEvent(e2);
@@ -195,7 +195,7 @@ Panner::drawItems(QPainter *painter, int numItems,
 {
     RG_DEBUG << "drawItems()";
 
-    Profiler profiler("Panner::drawItems");
+    //Profiler profiler("Panner::drawItems");
 
     if (m_cache.size() != viewport()->size()) {
 

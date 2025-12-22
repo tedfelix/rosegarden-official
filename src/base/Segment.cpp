@@ -14,14 +14,14 @@
 */
 
 #define RG_MODULE_STRING "[Segment]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "base/Segment.h"
 #include "base/NotationTypes.h"
 #include "base/BaseProperties.h"
 #include "Composition.h"
 #include "BasicQuantizer.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/SegmentLinker.h"
 #include "document/RosegardenDocument.h"
 #include "gui/general/GUIPalette.h"
@@ -40,10 +40,12 @@
 // YG: Only for debug (dumpObservers)
 #include "gui/editors/notation/StaffHeader.h"
 
+
 namespace Rosegarden
 {
-using std::string;
 
+
+// Don't forget to comment out RG_NO_DEBUG_PRINT above.
 //#define DEBUG_NORMALIZE_RESTS 1
 
 static int g_runtimeSegmentId = 0;
@@ -574,7 +576,7 @@ Segment::getRawEndMarkerTime() const
 void
 Segment::updateRefreshStatuses(timeT startTime, timeT endTime)
 {
-    Profiler profiler("Segment::updateRefreshStatuses()");
+    //Profiler profiler("Segment::updateRefreshStatuses()");
 
     // For each observer, indicate that a refresh is needed for this time
     // span.
@@ -803,9 +805,9 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     if (restDuration <= 0) return;
 
 #ifdef DEBUG_NORMALIZE_RESTS
-    cerr << "fillWithRests (" << startTime << "->" << endTime << "), composition "
+    RG_DEBUG << "fillWithRests (" << startTime << "->" << endTime << "), composition "
          << (getComposition() ? "exists" : "does not exist") << ", sigTime "
-         << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration << endl;
+         << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration;
 #endif
 
     DurationList dl;
@@ -828,13 +830,13 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     //Profiler profiler("Segment::normalizeRests");
 
 #ifdef DEBUG_NORMALIZE_RESTS
-    cerr << "normalizeRests (" << startTime << "->" << endTime << "), segment starts at " << m_startTime << endl;
+    RG_DEBUG << "normalizeRests (" << startTime << "->" << endTime << "), segment starts at " << m_startTime;
 #endif
 
     if (startTime < m_startTime) {
 #ifdef DEBUG_NORMALIZE_RESTS
-        cerr << "normalizeRests: pulling start time back from "
-             << m_startTime << " to " << startTime << endl;
+        RG_DEBUG << "normalizeRests: pulling start time back from "
+             << m_startTime << " to " << startTime;
 #endif
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
         else m_startTime = startTime;
@@ -853,7 +855,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
                 composition->getTimeSignatureChange(timeSigNo + 1).first;
             if (nextSigTime < endTime) {
 #ifdef DEBUG_NORMALIZE_RESTS
-                cerr << "normalizeRests: divide-and-conquer on timesig at " << nextSigTime << endl;
+                RG_DEBUG << "normalizeRests: divide-and-conquer on timesig at " << nextSigTime;
 #endif
                 normalizeRests(startTime, nextSigTime);
                 normalizeRests(nextSigTime, endTime);
@@ -877,7 +879,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     if (ia == end()) ia = begin();
     if (ia == end()) { // the segment is empty
 #ifdef DEBUG_NORMALIZE_RESTS
-        cerr << "normalizeRests: empty segment" << endl;
+        RG_DEBUG << "normalizeRests: empty segment";
 #endif
         fillWithRests(startTime, endTime);
         return;
@@ -931,7 +933,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
                 startTime) {
                 startTime = (*scooter)->getNotationAbsoluteTime();
 #ifdef DEBUG_NORMALIZE_RESTS
-                cerr << "normalizeRests: scooting back to " << startTime << endl;
+                RG_DEBUG << "normalizeRests: scooting back to " << startTime;
 #endif
                 ia = scooter;
             }
@@ -946,7 +948,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE) &&
             !(*i)->has(BaseProperties::INVISIBLE)) {
 #ifdef DEBUG_NORMALIZE_RESTS
-            cerr << "normalizeRests: erasing rest at " << (*i)->getAbsoluteTime() << endl;
+            RG_DEBUG << "normalizeRests: erasing rest at " << (*i)->getAbsoluteTime();
 #endif
             erase(i);
         }
@@ -957,7 +959,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     if (endTime < segmentEndTime && m_endTime < segmentEndTime) {
 #ifdef DEBUG_NORMALIZE_RESTS
-        cerr << "normalizeRests: new end time " << m_endTime << " is earlier than previous segment end time " << segmentEndTime << ", extending our working end time again" << endl;
+        RG_DEBUG << "normalizeRests: new end time " << m_endTime << " is earlier than previous segment end time " << segmentEndTime << ", extending our working end time again";
 #endif
         endTime = segmentEndTime;
     }
@@ -1007,9 +1009,9 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
         timeT thisNoteStarts = (*i)->getNotationAbsoluteTime();
 
 #ifdef DEBUG_NORMALIZE_RESTS
-        cerr << "normalizeRests: scanning: thisNoteStarts " << thisNoteStarts
+        RG_DEBUG << "normalizeRests: scanning: thisNoteStarts " << thisNoteStarts
              << ", lastNoteStarts " << lastNoteStarts
-             << ", lastNoteEnds " << lastNoteEnds << endl;
+             << ", lastNoteEnds " << lastNoteEnds;
 #endif
 
         /* BR #988185: "Notation: Rest can be simultaneous with note but follow it"
@@ -1030,7 +1032,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
         if (thisNoteStarts > lastNoteEnds) {
 #ifdef DEBUG_NORMALIZE_RESTS
-            cerr << "normalizeRests: found gap between note/text/rest events from " << lastNoteEnds << " to " << thisNoteStarts << endl;
+            RG_DEBUG << "normalizeRests: found gap between note/text/rest events from " << lastNoteEnds << " to " << thisNoteStarts;
 #endif
             gaps.push_back(std::pair<timeT, timeT>
                            (lastNoteEnds,
@@ -1043,7 +1045,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
 
     if (endTime > lastNoteEnds) {
 #ifdef DEBUG_NORMALIZE_RESTS
-        cerr << "normalizeRests: need to fill up gap from last note/text/rest event end at " << lastNoteEnds << " to normalize end time at " << endTime << endl;
+        RG_DEBUG << "normalizeRests: need to fill up gap from last note/text/rest event end at " << lastNoteEnds << " to normalize end time at " << endTime;
 #endif
         gaps.push_back(std::pair<timeT, timeT>
                        (lastNoteEnds, endTime - lastNoteEnds));
@@ -1053,7 +1055,7 @@ Segment::normalizeRests(timeT startTime, timeT endTime)
     for (size_t gi = 0; gi < gaps.size(); ++gi) {
 
 #ifdef DEBUG_NORMALIZE_RESTS
-        cerr << "normalizeRests: gap " << gi << ": " << gaps[gi].first << " -> " << (gaps[gi].first + gaps[gi].second) << endl;
+        RG_DEBUG << "normalizeRests: gap " << gi << ": " << gaps[gi].first << " -> " << (gaps[gi].first + gaps[gi].second);
 #endif
 
         startTime = gaps[gi].first;
@@ -1431,35 +1433,50 @@ Segment::enforceBeginWithClefAndKey()
 timeT
 Segment::getRepeatEndTime() const
 {
-    timeT endMarker = getEndMarkerTime();
+    // End time of "this".
+    const timeT ourSegmentEndTime = getEndMarkerTime();
 
-    if (m_repeating && m_composition) {
-        timeT endTime = m_composition->getEndMarker();
+    if (!m_composition)
+        return ourSegmentEndTime;
+    if (!m_repeating)
+        return ourSegmentEndTime;
 
-        for (Composition::iterator i(m_composition->begin());
-             i != m_composition->end(); ++i) {
+    // Assume it goes all the way to the end.
+    timeT repeatEndTime = m_composition->getEndMarker();
 
-            if ((*i)->getTrack() != getTrack()) continue;
+    // See if there is another Segment on this Track that would stop
+    // the repeat.
 
-            timeT t1 = (*i)->getStartTime();
-            timeT t2 = (*i)->getEndMarkerTime();
+    // For each Segment in the Composition...
+    for (Composition::iterator segmentIter(m_composition->begin());
+         segmentIter != m_composition->end();
+         ++segmentIter) {
+        const Segment *currentSegment = *segmentIter;
 
-            if (t2 > endMarker) {
-                if (t1 < endTime) {
-                    if (t1 < endMarker) {
-                        endTime = endMarker;
-                        break;
-                    } else {
-                        endTime = t1;
-                    }
-                }
+        // Not on our Track?  Try the next.
+        if (currentSegment->getTrack() != getTrack())
+            continue;
+        // If the current Segment ends before or at our Segment, it cannot
+        // have any effect on our Segment's end time.  Try the next.
+        if (currentSegment->getEndMarkerTime() <= ourSegmentEndTime)
+            continue;
+
+        const timeT currentStartTime = currentSegment->getStartTime();
+
+        // If this Segment will affect the repeat end time...
+        if (currentStartTime < repeatEndTime) {
+            // If it is within our Segment, reduce it to zero repeats.
+            if (currentStartTime < ourSegmentEndTime) {
+                repeatEndTime = ourSegmentEndTime;
+                break;
+            } else {  // The current Segment start time is outside our Segment.
+                // Use it as the repeat end time.
+                repeatEndTime = currentStartTime;
             }
         }
-
-        return endTime;
     }
 
-    return endMarker;
+    return repeatEndTime;
 }
 
 void
@@ -1475,7 +1492,7 @@ checkInsertAsClefKey(Event *e) const
 void
 Segment::notifyAdd(Event *e) const
 {
-    Profiler profiler("Segment::notifyAdd()");
+    //Profiler profiler("Segment::notifyAdd()");
     checkInsertAsClefKey(e);
 
     for (ObserverList::const_iterator i = m_observers.begin();
@@ -1488,7 +1505,7 @@ Segment::notifyAdd(Event *e) const
 void
 Segment::notifyRemove(Event *e) const
 {
-    Profiler profiler("Segment::notifyRemove()");
+    //Profiler profiler("Segment::notifyRemove()");
 
     if (m_clefKeyList && (e->isa(Clef::EventType) || e->isa(Key::EventType))) {
         ClefKeyList::iterator i;
@@ -1520,7 +1537,7 @@ Segment::notifyAppearanceChange() const
 void
 Segment::notifyStartChanged(timeT newTime)
 {
-    Profiler profiler("Segment::notifyStartChanged()");
+    //Profiler profiler("Segment::notifyStartChanged()");
     if (m_notifyResizeLocked) return;
 
     for (ObserverList::const_iterator i = m_observers.begin();
@@ -1537,7 +1554,7 @@ Segment::notifyStartChanged(timeT newTime)
 void
 Segment::notifyEndMarkerChange(bool shorten)
 {
-    Profiler profiler("Segment::notifyEndMarkerChange()");
+    //Profiler profiler("Segment::notifyEndMarkerChange()");
 
     if (m_notifyResizeLocked) return;
 
@@ -1761,11 +1778,11 @@ Segment::dumpObservers()
     }
     for (ObserverList::const_iterator i = m_observers.begin();
           i != m_observers.end(); ++i) {
-        Segment *seg = dynamic_cast<Segment *>(*i);
+        const Segment *seg = dynamic_cast<const Segment *>(*i);
         if (seg)
             RG_DEBUG << "  " << (*i) << " ==> Segment " << seg;
 
-        StaffHeader *sh = dynamic_cast<StaffHeader *>(*i);
+        const StaffHeader *sh = dynamic_cast<const StaffHeader *>(*i);
         if (sh)
             RG_DEBUG << "  " << (*i) << " ==> StaffHeader " << sh;
     }
@@ -1806,7 +1823,7 @@ void
 SegmentObserver::
 allEventsChanged(const Segment *s)
 {
-    Profiler profiler("SegmentObserver::allEventsChanged");
+    //Profiler profiler("SegmentObserver::allEventsChanged");
     for (Segment::iterator i = s->begin(); i != s->end(); ++i) {
         Event *e = *i;
         eventRemoved(s, e);

@@ -30,6 +30,7 @@
 #include "base/SnapGrid.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/dialogs/TempoDialog.h"
 #include "gui/general/AutoScroller.h"
 #include "gui/general/GUIPalette.h"
@@ -330,7 +331,7 @@ TempoRuler::mouseMoveEvent(QMouseEvent *e)
                 return ;
         }
 
-        //    std::cerr << " -> " << newTime << std::endl;
+        //RG_DEBUG << " ->" << newTime;
 
         m_composition->removeTempoChange(tcn);
         m_composition->addTempoAtTime(newTime,
@@ -469,7 +470,7 @@ TempoRuler::showTextFloat(tempoT tempo, tempoT target,
     }
 
     QPoint cp = mapFromGlobal(QPoint(QCursor::pos()));
-      //  std::cerr << "cp = " << cp.x() << "," << cp.y() << ", tempo = " << qpm << std::endl;
+    //RG_DEBUG << "cp =" << cp.x() << "," << cp.y() << ", tempo =" << qpm;
 
     QPoint offset = cp + QPoint(10, 25 - cp.y() - textFloat->height());
     textFloat->display(offset);
@@ -826,7 +827,7 @@ TempoRuler::slotInsertTempoHere()
 void
 TempoRuler::slotInsertTempoAtPointer()
 {
-    timeT t = m_composition->getPosition();
+    const timeT t = CompositionPosition::getInstance()->get();
     tempoT tempo = Composition::getTempoForQpm(120.0);
 
     int tcn = m_composition->getTempoChangeNumberAt(t);

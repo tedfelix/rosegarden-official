@@ -15,7 +15,7 @@
 #define RG_MODULE_STRING "[Resampler]"
 
 #include "Resampler.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 #include <cstdlib>
 #include <cmath>
@@ -247,7 +247,7 @@ Resampler::resample(const float *const *const in,
                     float *const *const out,
                     int incount, float ratio, bool final)
 {
-    Profiler profiler("Resampler::resample");
+    //Profiler profiler("Resampler::resample");
     return d->resample(in, out, incount, ratio, final);
 }
 
@@ -256,7 +256,7 @@ Resampler::resampleInterleaved(const float *const in,
                                float *const out,
                                int incount, float ratio, bool final)
 {
-    Profiler profiler("Resampler::resample");
+    //Profiler profiler("Resampler::resample");
     return d->resampleInterleaved(in, out, incount, ratio, final);
 }
 

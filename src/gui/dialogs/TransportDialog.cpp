@@ -31,6 +31,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/SequencerDataBlock.h"
 #include "gui/application/TransportStatus.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/general/EditTempoController.h"
 #include "gui/general/IconLoader.h"
 #include "gui/studio/StudioControl.h"
@@ -65,8 +66,10 @@ namespace  // anonymous
     QColor ledBlue(192, 216, 255);
 }
 
+
 namespace Rosegarden
 {
+
 
 TransportDialog::TransportDialog(QWidget *parent):
     QDialog(parent),
@@ -336,7 +339,8 @@ void TransportDialog::init()
 
     setEnabled(true);
 
-    setTimeSignature(comp.getTimeSignatureAt(comp.getPosition()));
+    setTimeSignature(comp.getTimeSignatureAt
+                     (CompositionPosition::getInstance()->get()));
 
     // bring the transport to the front
     raise();
@@ -355,19 +359,17 @@ void TransportDialog::init()
 std::string
 TransportDialog::getCurrentModeAsString()
 {
-    bool found = false;
     for (std::map<std::string, TimeDisplayMode>::iterator iter = m_modeMap.begin();
-         iter != m_modeMap.end() && !found;
+         iter != m_modeMap.end();
          ++iter)
     {
-        if (iter->second == m_currentMode) {
+        // Found it?  Return the string.
+        if (iter->second == m_currentMode)
             return iter->first;
-        }
     }
 
     // we shouldn't get here unless the map is not well-configured
-    RG_DEBUG << "TransportDialog::getCurrentModeAsString: could not map current mode "
-             << m_currentMode << " to string.";
+    RG_DEBUG << "getCurrentModeAsString(): could not map current mode" << m_currentMode << "to string.";
     throw Exception("could not map current mode to string.");
 }
 
@@ -688,7 +690,6 @@ TransportDialog::displayFrameTime(const RealTime &rt)
     m_unitHours = frame % 10;
     frame /= 10;
     m_tenHours = frame % 10;
-    frame /= 10;
 
     updateTimeDisplay();
 }
@@ -1081,7 +1082,7 @@ TransportDialog::slotSetStartLoopingPointAtMarkerPos()
     RosegardenDocument *document = RosegardenDocument::currentDocument;
     Composition &composition = document->getComposition();
 
-    const timeT loopStart = composition.getPosition();
+    const timeT loopStart = CompositionPosition::getInstance()->get();
     timeT loopEnd = composition.getLoopEnd();
 
     // Turn a backwards loop into an empty loop.
@@ -1106,7 +1107,7 @@ TransportDialog::slotSetStopLoopingPointAtMarkerPos()
     Composition &composition = document->getComposition();
 
     timeT loopStart = composition.getLoopStart();
-    const timeT loopEnd = composition.getPosition();
+    const timeT loopEnd = CompositionPosition::getInstance()->get();
 
     // Turn a backwards loop into an empty loop.
     if (loopEnd < loopStart)
@@ -1127,7 +1128,7 @@ void
 TransportDialog::slotLoopChanged()
 {
     RosegardenDocument *document = RosegardenDocument::currentDocument;
-    Composition &composition = document->getComposition();
+    const Composition &composition = document->getComposition();
 
     ui->LoopButton->setChecked(
             (composition.getLoopMode() != Composition::LoopOff));
@@ -1185,7 +1186,7 @@ TransportDialog::slotPanelOpenButtonClicked()
 //        ui->PanelOpenButton->setPixmap(m_panelClosed);
 //        adjustSize();
         setFixedSize(416, 87);
-//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+        //RG_DEBUG << "size hint: " << sizeHint().width() << "x" << sizeHint().height();
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = false;
@@ -1195,7 +1196,7 @@ TransportDialog::slotPanelOpenButtonClicked()
         ui->RecordingFrame->show();
 //        ui->PanelOpenButton->setPixmap(m_panelOpen);
 //        adjustSize();
-//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+        //RG_DEBUG << "size hint: " << sizeHint().width() << "x" << sizeHint().height();
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = true;
@@ -1213,7 +1214,7 @@ TransportDialog::slotPanelCloseButtonClicked()
 //        ui->PanelOpenButton->setPixmap(m_panelClosed);
         setFixedSize(416, 87);
 //        adjustSize();
-//        cerr << "size hint: " << sizeHint().width() << "x" << sizeHint().height() << endl;
+        //RG_DEBUG << "size hint: " << sizeHint().width() << "x" << sizeHint().height();
 //        setFixedSize(sizeHint());
 //        setMinimumSize(sizeHint());
         m_isExpanded = false;
@@ -1230,7 +1231,7 @@ void
 TransportDialog::slotEditTempo()
 {
     const timeT atTime =
-            RosegardenDocument::currentDocument->getComposition().getPosition();
+        CompositionPosition::getInstance()->get();
 
     EditTempoController::self()->editTempo(
             this,  // parent
@@ -1405,20 +1406,20 @@ void TransportDialog::keyPressEvent(QKeyEvent *keyEvent)
 }
 
 // Composition Observer
-void TransportDialog::timeSignatureChanged(const Composition *comp)
+void TransportDialog::timeSignatureChanged(const Composition*)
 {
     RG_DEBUG << "timeSignatureChanged";
-    // reset pointer position to recalculate display
+    // update the ui
     RosegardenMainWindow *rmw = RosegardenMainWindow::self();
-    rmw->slotSetPointerPosition(comp->getPosition());
+    rmw->slotUpdateForPointerChange();
 }
 
-void TransportDialog::tempoChanged(const Composition *comp)
+void TransportDialog::tempoChanged(const Composition*)
 {
     RG_DEBUG << "tempoChanged";
-    // reset pointer position to recalculate display
+    // update the ui
     RosegardenMainWindow *rmw = RosegardenMainWindow::self();
-    rmw->slotSetPointerPosition(comp->getPosition());
+    rmw->slotUpdateForPointerChange();
 }
 
 

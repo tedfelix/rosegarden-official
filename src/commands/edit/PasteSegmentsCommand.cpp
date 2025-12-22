@@ -23,6 +23,7 @@
 #include "base/Segment.h"
 #include "base/Track.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/CompositionPosition.h"
 
 #include <QString>
 
@@ -143,7 +144,7 @@ PasteSegmentsCommand::execute()
 
     timeT pasteEndTime = m_pasteTime + (latestEndTime - earliestStartTime);
 
-    m_composition->setPosition(pasteEndTime);
+    CompositionPosition::getInstance()->slotSet(pasteEndTime);
 
     if (m_composition->autoExpandEnabled()) {
         // If the composition needs expanding, do so...

@@ -19,7 +19,7 @@
 
 #include "MappedBufMetaIterator.h"
 
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "misc/Debug.h"
 #include "sound/MappedInserterBase.h"
 #include "gui/seqmanager/MEBIterator.h"
@@ -139,7 +139,7 @@ MappedBufMetaIterator::fetchEvents(MappedInserterBase &inserter,
                                    const RealTime &startTime,
                                    const RealTime &endTime)
 {
-    Profiler profiler("MappedBufMetaIterator::fetchEvents", false);
+    //Profiler profiler("MappedBufMetaIterator::fetchEvents", false);
 
 #ifdef DEBUG_META_ITERATOR
     RG_DEBUG << "fetchEvents() " << startTime << " -> " << endTime;
@@ -221,7 +221,7 @@ fetchEventsNoncompeting(MappedInserterBase &inserter,
     RG_DEBUG << "fetchEventsNoncompeting() " << startTime << " -> " << endTime;
 #endif
 
-    Profiler profiler("MappedBufMetaIterator::fetchEventsNoncompeting", false);
+    //Profiler profiler("MappedBufMetaIterator::fetchEventsNoncompeting", false);
 
     m_currentTime = endTime;
     

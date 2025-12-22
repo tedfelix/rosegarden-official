@@ -38,7 +38,7 @@
 #include "base/MidiProgram.h"
 #include "base/MidiTypes.h"
 #include "base/NotationTypes.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/RealTime.h"
 #include "base/RecordIn.h"
 #include "base/Segment.h"
@@ -56,6 +56,7 @@
 #include "gui/editors/segment/TrackEditor.h"
 #include "gui/editors/segment/TrackButtons.h"
 #include "gui/general/ClefIndex.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/TransportStatus.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "gui/application/RosegardenMainViewWidget.h"
@@ -306,7 +307,8 @@ RosegardenDocument::setQuickMarker()
 {
     RG_DEBUG << "RosegardenDocument::setQuickMarker";
 
-    m_quickMarkerTime = getComposition().getPosition();
+    m_quickMarkerTime = CompositionPosition::getInstance()->get();
+
 }
 
 void
@@ -315,7 +317,7 @@ RosegardenDocument::jumpToQuickMarker()
     RG_DEBUG << "RosegardenDocument::jumpToQuickMarker";
 
     if (m_quickMarkerTime >= 0)
-        slotSetPointerPosition(m_quickMarkerTime);
+        CompositionPosition::getInstance()->slotSet(m_quickMarkerTime);
 }
 
 QString RosegardenDocument::getAutoSaveFileName()
@@ -432,7 +434,7 @@ RosegardenDocument::deleteOrphanedAudioFiles(bool documentWillNotBeSaved)
     for (size_t i = 0; i < derivedOrphans.size(); ++i) {
         QFile file(derivedOrphans[i]);
         if (!file.remove()) {
-            std::cerr << "WARNING: Failed to remove orphaned derived audio file \"" << derivedOrphans[i] << std::endl;
+            RG_WARNING << "WARNING: Failed to remove orphaned derived audio file \"" << derivedOrphans[i];
         }
         QFile peakFile(QString("%1.pk").arg(derivedOrphans[i]));
         peakFile.remove();
@@ -524,8 +526,7 @@ void RosegardenDocument::performAutoload()
     QFileInfo autoloadFileInfo(autoloadFile);
 
     if (autoloadFile == "" || !autoloadFileInfo.isReadable()) {
-        std::cerr << "WARNING: RosegardenDocument::performAutoload - "
-                  << "can't find autoload file - defaulting" << std::endl;
+        RG_WARNING << "WARNING: performAutoload() - can't find autoload file - defaulting";
         return ;
     }
 
@@ -1359,7 +1360,7 @@ bool RosegardenDocument::exportStudio(const QString &filename,
                                       QString &errMsg,
                                       const std::vector<DeviceId> &devices)
 {
-    Profiler profiler("RosegardenDocument::exportStudio");
+    //Profiler profiler("RosegardenDocument::exportStudio");
     RG_DEBUG << "RosegardenDocument::exportStudio(" << filename << ")";
 
     QString outText;
@@ -1806,7 +1807,7 @@ RosegardenDocument::xmlParse(const QString &fileContents,
 void
 RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 {
-    Profiler profiler("RosegardenDocument::insertRecordedMidi()");
+    //Profiler profiler("RosegardenDocument::insertRecordedMidi()");
 
     //RG_DEBUG << "RosegardenDocument::insertRecordedMidi: " << mC.size() << " events";
 
@@ -2130,7 +2131,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
 void
 RosegardenDocument::updateRecordingMIDISegment()
 {
-    Profiler profiler("RosegardenDocument::updateRecordingMIDISegment()");
+    //Profiler profiler("RosegardenDocument::updateRecordingMIDISegment()");
 
 //    RG_DEBUG << "RosegardenDocument::updateRecordingMIDISegment";
 
@@ -2158,7 +2159,9 @@ RosegardenDocument::updateRecordingMIDISegment()
                 NoteOnRecSet rec_vec = pitchIter->second;
                 if (rec_vec.size() > 0) {
                     NoteOnRecSet *newRecordSet =
-                            adjustEndTimes(rec_vec, m_composition.getPosition());
+                        adjustEndTimes
+                        (rec_vec,
+                         CompositionPosition::getInstance()->get());
                     // Copy to tweakedNoteOnEvents.
                     tweakedNoteOnEvents
                         [deviceIter->first]
@@ -2211,12 +2214,12 @@ RosegardenDocument::transposeRecordedSegment(Segment *s)
 
         // No pitch?  Warn the user.
         if (!event->has(PITCH)) {
-            std::cerr << "WARNING! RosegardenDocument::transposeRecordedSegment(): Note has no pitch!" << std::endl;
+            RG_WARNING << "WARNING! transposeRecordedSegment(): Note has no pitch!";
             continue;
         }
 
         const int pitch = event->get<Int>(PITCH) - semitones;
-        //std::cerr << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")" << std::endl;
+        //RG_DEBUG << "pitch = " << pitch << " after transpose = " << semitones << " (for track " << s->getTrack() << ")";
         event->set<Int>(PITCH, pitch);
 
     }
@@ -2226,7 +2229,7 @@ RosegardenDocument::NoteOnRecSet *
 RosegardenDocument::adjustEndTimes(const NoteOnRecSet &rec_vec, timeT endTime)
 {
     // Not too keen on profilers, but I'll give it a shot for fun...
-    Profiler profiler("RosegardenDocument::adjustEndTimes()");
+    //Profiler profiler("RosegardenDocument::adjustEndTimes()");
 
     // Create a vector to hold the new note-on events for return.
     NoteOnRecSet *new_vector = new NoteOnRecSet();
@@ -2305,7 +2308,7 @@ RosegardenDocument::storeNoteOnEvent(Segment *s, Segment::iterator it, int devic
 void
 RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool isNoteOn)
 {
-    Profiler profiler("RosegardenDocument::insertRecordedEvent()");
+    //Profiler profiler("RosegardenDocument::insertRecordedEvent()");
 
     Segment::iterator it;
     for ( RecordingSegmentMap::const_iterator i = m_recordMIDISegments.begin();
@@ -2343,7 +2346,7 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
 void
 RosegardenDocument::stopPlaying()
 {
-    emit pointerPositionChanged(m_composition.getPosition());
+    //emit uiUpdateRequired();
 }
 
 void
@@ -2497,7 +2500,7 @@ RosegardenDocument::stopRecordingMidi()
 
     slotUpdateAllViews(nullptr);
 
-    emit pointerPositionChanged(m_composition.getPosition());
+    //emit uiUpdateRequired();
 }
 
 void
@@ -2523,17 +2526,10 @@ RosegardenDocument::prepareAudio()
 }
 
 void
-RosegardenDocument::slotSetPointerPosition(timeT t)
-{
-    m_composition.setPosition(t);
-    emit pointerPositionChanged(t);
-}
-
-void
 RosegardenDocument::addRecordMIDISegment(TrackId tid)
 {
     RG_DEBUG << "RosegardenDocument::addRecordMIDISegment(" << tid << ")";
-//    std::cerr << kdBacktrace() << std::endl;
+    //RG_DEBUG << kdBacktrace();
 
     Segment *recordMIDISegment;
 
@@ -2693,9 +2689,9 @@ RosegardenDocument::updateRecordingAudioSegments()
                 }
 
                 recordSegment->setAudioEndTime(
-                    m_composition.getRealTimeDifference(recordSegment->getStartTime(),
-                                                        m_composition.getPosition()));
-
+                    m_composition.getRealTimeDifference
+                    (recordSegment->getStartTime(),
+                     CompositionPosition::getInstance()->get()));
             } else {
                 //         RG_DEBUG << "RosegardenDocument::updateRecordingAudioSegments: no segment for instr "
                 //              << iid;
@@ -2720,8 +2716,9 @@ RosegardenDocument::stopRecordingAudio()
         // set the audio end time
         //
         recordSegment->setAudioEndTime(
-            m_composition.getRealTimeDifference(recordSegment->getStartTime(),
-                                                m_composition.getPosition()));
+            m_composition.getRealTimeDifference
+            (recordSegment->getStartTime(),
+             CompositionPosition::getInstance()->get()));
 
         // now add the Segment
         RG_DEBUG << "RosegardenDocument::stopRecordingAudio - "
@@ -2764,7 +2761,7 @@ RosegardenDocument::stopRecordingAudio()
     }
     emit stoppedAudioRecording();
 
-    emit pointerPositionChanged(m_composition.getPosition());
+    //emit uiUpdateRequired();
 }
 
 void

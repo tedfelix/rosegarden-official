@@ -192,7 +192,7 @@ public:
      * Detach a Track (revert ownership of the Track object to the
      * caller).
      */
-    bool detachTrack(Track *track);
+    bool detachTrack(const Track *track);
 
     /**
      * Get the highest running track id (generated and kept
@@ -587,7 +587,7 @@ public:
     /**
      * Return the tempo in effect at the current playback position.
      */
-    tempoT getCurrentTempo() const { return getTempoAtTime(getPosition()); }
+    tempoT getCurrentTempo() const;
 
     /**
      * Set a default tempo for the composition.  This will be
@@ -755,19 +755,6 @@ public:
     QString makeDurationString(timeT time, timeT duration, TimeMode timeMode) const;
     /// Convert MIDI ticks to a QVariant suitable for a table key column.
     QVariant makeTimeVariant(timeT midiTicks, TimeMode timeMode) const;
-
-
-    /**
-     * Get the current playback position.
-     */
-    timeT getPosition() const { return m_position; }
-
-    /**
-     * Set the current playback position.
-     */
-    void setPosition(timeT position);
-
-
 
     //////
     //
@@ -1128,7 +1115,6 @@ protected:
     BasicQuantizer                   *m_basicQuantizer;
     NotationQuantizer                *m_notationQuantizer;
 
-    timeT                             m_position;
     tempoT                            m_defaultTempo;
     tempoT                            m_minTempo; // cached from tempo segment
     tempoT                            m_maxTempo; // cached from tempo segment

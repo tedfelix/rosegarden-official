@@ -174,30 +174,31 @@ private:
                                         const Segment *seg,
                                         const Segment::iterator &j,
                                         std::ofstream &str);
-    void handleEndingPreEvents(eventendlist &preEventsInProgress,
-                               const Segment::iterator &j,
-                               std::ofstream &str);
+    static void handleEndingPreEvents(eventendlist &preEventsInProgress,
+                                      const Segment::iterator &j,
+                                      std::ofstream &str);
     void handleStartingPostEvents(eventstartlist &postEventsToStart,
                                   const Segment *seg,
                                   const Segment::iterator &j,
                                   std::ofstream &str);
-    void handleEndingPostEvents(eventendlist &postEventsInProgress,
-                                const Segment *seg,
-                                const Segment::iterator &j,
-                                std::ofstream &str);
+    static void handleEndingPostEvents(eventendlist &postEventsInProgress,
+                                       const Segment *seg,
+                                       const Segment::iterator &j,
+                                       std::ofstream &str);
 
     // convert note pitch into LilyPond format note name string
     std::string convertPitchToLilyNoteName(int pitch,
-                                           Accidental accidental,
+                                           const Accidental &accidental,
                                            const Rosegarden::Key &key) const;
 
     // convert note pitch into LilyPond format note name string with octavation
     std::string convertPitchToLilyNote(int pitch,
-                                       Accidental accidental,
+                                       const Accidental &accidental,
                                        const Rosegarden::Key &key) const;
 
     // compose an appropriate LilyPond representation for various Marks
-    static std::string composeLilyMark(std::string eventMark, bool stemUp);
+    static std::string composeLilyMark(const std::string &eventMark,
+                                       bool stemUp);
 
     // find/protect illegal characters in user-supplied strings
     static std::string protectIllegalChars(const std::string& inStr);

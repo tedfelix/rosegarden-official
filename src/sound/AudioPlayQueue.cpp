@@ -19,7 +19,7 @@
 
 #include "misc/Debug.h"
 #include "PlayableAudioFile.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 
 //#define DEBUG_AUDIO_PLAY_QUEUE 1
 //#define FINE_DEBUG_AUDIO_PLAY_QUEUE 1
@@ -234,7 +234,7 @@ AudioPlayQueue::getPlayingFiles(const RealTime &sliceStart,
                                 const RealTime &sliceDuration,
                                 FileSet &playing) const
 {
-    //    Profiler profiler("AudioPlayQueue::getPlayingFiles");
+    //Profiler profiler("AudioPlayQueue::getPlayingFiles");
 
     // This one needs to be quick.
 
@@ -290,7 +290,7 @@ AudioPlayQueue::getPlayingFilesForInstrument(const RealTime &sliceStart,
 {
 #ifdef FINE_DEBUG_AUDIO_PLAY_QUEUE
     bool printed = false;
-    Profiler profiler("AudioPlayQueue::getPlayingFilesForInstrument", true);
+    //Profiler profiler("AudioPlayQueue::getPlayingFilesForInstrument", true);
 #endif
 
     // This one needs to be quick.

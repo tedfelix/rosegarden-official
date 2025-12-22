@@ -34,7 +34,7 @@
 #include "base/Event.h"
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 #include "base/RulerScale.h"
@@ -162,7 +162,7 @@ void CompositionModelImpl::getSegmentRects(
         NotationPreviewRanges *notationPreviewRanges,
         AudioPreviews *audioPreviews)
 {
-    Profiler profiler("CompositionModelImpl::getSegmentRects()");
+    //Profiler profiler("CompositionModelImpl::getSegmentRects()");
 
     // Start with a clean slate.
     segmentRects->clear();
@@ -577,7 +577,7 @@ void CompositionModelImpl::slotAudioFileFinalized(Segment *s)
 
 void CompositionModelImpl::slotUpdateTimer()
 {
-    Profiler profiler("CompositionModelImpl::slotUpdateTimer()");
+    //Profiler profiler("CompositionModelImpl::slotUpdateTimer()");
 
     // For each recording segment, delete the preview cache to make sure
     // it is regenerated with the latest events.
@@ -750,7 +750,7 @@ void CompositionModelImpl::makeNotationPreviewRange(
         QPoint basePoint, const Segment *segment,
         const QRect &clipRect, NotationPreviewRanges *ranges)
 {
-    Profiler profiler("CompositionModelImpl::makeNotationPreviewRange");
+    //Profiler profiler("CompositionModelImpl::makeNotationPreviewRange");
 
     if (!ranges)
         return;
@@ -882,7 +882,7 @@ CompositionModelImpl::NotationPreview *
 CompositionModelImpl::makeNotationPreview(
         const Segment *segment) const
 {
-    Profiler profiler("CompositionModelImpl::makeNotationPreview()");
+    //Profiler profiler("CompositionModelImpl::makeNotationPreview()");
 
     // ??? This routine is called 50 times a second when recording and
     //     a single key is held down.
@@ -993,7 +993,7 @@ void CompositionModelImpl::makeAudioPreview(
         const Segment *segment, const SegmentRect &segmentRect,
         AudioPreviews *audioPreviews)
 {
-    Profiler profiler("CompositionModelImpl::makeAudioPreview");
+    //Profiler profiler("CompositionModelImpl::makeAudioPreview");
 
     if (!audioPreviews)
         return;
@@ -1023,7 +1023,7 @@ void CompositionModelImpl::makeAudioPreview(
 
 void CompositionModelImpl::updateAudioPeaksCache(const Segment *segment)
 {
-    Profiler profiler("CompositionModelImpl::updateAudioPeaksCache");
+    //Profiler profiler("CompositionModelImpl::updateAudioPeaksCache");
 
     // We must use find() because C++ makes no guarantee that a new
     // map element is zeroed out.  IOW, m_audioPeaksCache[segment] may be

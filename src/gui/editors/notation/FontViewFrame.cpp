@@ -15,10 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[FontViewFrame]"
+#define RG_NO_DEBUG_PRINT
 
 #include "FontViewFrame.h"
-#include <QApplication>
 
+#include "misc/Debug.h"
+#include "misc/Strings.h"
+
+#include <QApplication>
 #include <QMessageBox>
 #include <QFontMetrics>
 #include <QFrame>
@@ -28,12 +33,10 @@
 #include <QPainter>
 #include <QChar>
 
-#include "misc/Strings.h"
-
-#include <iostream>
 
 namespace Rosegarden
 {
+
 
 FontViewFrame::FontViewFrame( int pixelSize, QWidget* parent) :
     QFrame(parent),
@@ -70,7 +73,7 @@ FontViewFrame::loadFont()
     qf->setWeight(QFont::Normal);
     qf->setItalic(false);
     QFontInfo fi(*qf);
-    std::cerr << "Loaded Qt font \"" << fi.family() << "\" (exactMatch = " << (fi.exactMatch() ? "true" : "false") << ")" << std::endl;
+    RG_DEBUG << "Loaded Qt font \"" << fi.family() << "\" (exactMatch = " << (fi.exactMatch() ? "true" : "false") << ")";
     m_tableFont = qf;
 
     m_ascent = QFontMetrics(font()).ascent(); // ascent of numbering font, not notation font

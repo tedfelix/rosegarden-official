@@ -2,7 +2,9 @@
 
 /*
     Rosegarden
-    A MIDI and audio sequencer and musical notation editor.
+    A sequencer and musical notation editor.
+    Copyright 2000-2025 the Rosegarden development team.
+    See the AUTHORS file for more details.
 
     This program is Copyright 2000-2007
         Guillaume Laurent   <glaurent@telegraph-road.org>,
@@ -12,9 +14,6 @@
     The moral rights of Guillaume Laurent, Chris Cannam, and Richard
     Bown to claim authorship of this work have been asserted.
 
-    Other copyrights also apply to some parts of this work.  Please
-    see the AUTHORS file and individual file headers for details.
-
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -22,18 +21,24 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[CommandRegistry]"
+#define RG_NO_DEBUG_PRINT
+
 #include "CommandRegistry.h"
+
+#include "Command.h"
+
+#include "misc/Strings.h"
+#include "misc/Debug.h"
 
 #include <QIcon>
 #include <QPixmap>
 #include <QFile>
 #include <QAction>
 
-#include "document/Command.h"
-#include <misc/Strings.h>
-#include <iostream>
 
 namespace Rosegarden {
+
 
 AbstractCommandBuilder::~AbstractCommandBuilder()
 {
@@ -58,8 +63,7 @@ CommandRegistry::slotInvokeCommand()
     QString actionName = s->objectName();
     
     if (m_builders.find(actionName) == m_builders.end()) {
-        std::cerr << "CommandRegistry::slotInvokeCommand: Unknown actionName \""
-                  << qStrToStrLocal8(actionName) << "\"" << std::endl;
+        RG_WARNING << "slotInvokeCommand(): Unknown actionName" << actionName;
         return;
     }
 
@@ -70,6 +74,5 @@ CommandArgumentQuerier::~CommandArgumentQuerier()
 {
 }
 
+
 }
-
-

@@ -176,9 +176,8 @@ public:
     //
     std::string getSegmentName(InstrumentId id);
 
-    // Clear down all the ProgramChange flags in all MIDI Instruments
-    //
-    void unassignAllInstruments();
+    /// Reset all instruments to defaults.
+    void unassignAllInstruments() const;
 
     // Clear down all MIDI banks and programs on all MidiDevices
     // prior to reloading.  The Instruments and Devices are generated

@@ -56,15 +56,9 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
         m_composition(composition),
         m_timeSignature(defaultSig),
         m_time(insertionTime),
-        m_numLabel(nullptr),
-        m_denomLabel(nullptr),
         m_explanatoryLabel(nullptr),
-        m_commonTimeButton(nullptr),
-        m_hideSignatureButton(nullptr),
-        m_normalizeRestsButton(nullptr),
         m_asGivenButton(nullptr),
-        m_startOfBarButton(nullptr),
-        m_timeWidget(nullptr)
+        m_startOfBarButton(nullptr)
 {
     setModal(true);
     setWindowTitle(tr("Time Signature"));
@@ -245,21 +239,12 @@ TimeSignatureDialog::getTimeSignature() const
     settings.setValue("timesigdialognormalize",
             m_normalizeRestsButton->isChecked());
 
-    // ??? m_hideSignatureButton cannot be disabled or nullptr.  Just call
-    //     isChecked().
-    // ??? m_hideBarsButton cannot be disabled or nullptr.  Just call
-    //     isChecked().
     TimeSignature ts(m_timeSignature.getNumerator(),  // numerator
                      m_timeSignature.getDenominator(),  // denominator
-                     (m_commonTimeButton  &&
-                         m_commonTimeButton->isEnabled()  &&
+                     (m_commonTimeButton->isEnabled()  &&
                          m_commonTimeButton->isChecked()),  // preferCommon
-                     (m_hideSignatureButton  &&
-                         m_hideSignatureButton->isEnabled()  &&
-                         m_hideSignatureButton->isChecked()),  // hidden
-                     (m_hideBarsButton  &&
-                         m_hideBarsButton->isEnabled()  &&
-                         m_hideBarsButton->isChecked()));  // hiddenBars
+                     m_hideSignatureButton->isChecked(),  // hidden
+                     m_hideBarsButton->isChecked());  // hiddenBars
 
     settings.endGroup();
 

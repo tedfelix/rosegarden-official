@@ -30,6 +30,7 @@
 #include "base/BaseProperties.h"
 #include "gui/widgets/FileDialog.h"
 #include "misc/ConfigGroups.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/editors/notation/NotationView.h"
 #include "gui/editors/notation/NotationScene.h"
 #include "gui/editors/notation/NotationStaff.h"
@@ -173,7 +174,8 @@ CheckForParallelsDialog::onTextBrowserclicked()
             // at least this should not crash, as the list of segments was updated at the beginning of the function.
 
             notationScene->setCurrentStaff(locationForLine[currentLine].staff);
-            document->slotSetPointerPosition(locationForLine[currentLine].time);
+            CompositionPosition::getInstance()->slotSet(
+                    locationForLine[currentLine].time);
         }
 }
 

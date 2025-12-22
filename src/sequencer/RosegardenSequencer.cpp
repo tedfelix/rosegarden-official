@@ -1292,7 +1292,7 @@ RosegardenSequencer::keepPlaying()
 void
 RosegardenSequencer::updateClocks()
 {
-    Profiler profiler("RosegardenSequencer::updateClocks");
+    //Profiler profiler("RosegardenSequencer::updateClocks");
 
     m_driver->runTasks();
 

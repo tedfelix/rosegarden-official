@@ -29,6 +29,7 @@
 #include <QDesktopWidget>
 #endif
 
+
 namespace Rosegarden
 {
 
@@ -36,16 +37,11 @@ namespace Rosegarden
 class SqueezedLabelPrivate
 {
 public:
-    SqueezedLabelPrivate() :
-        elideMode(Qt::ElideMiddle),
-        allowToolTip(false)
-    {
-    }
 
     QString fullText;
-    Qt::TextElideMode elideMode;
+    Qt::TextElideMode elideMode{Qt::ElideMiddle};
     // Set to true to let the client set the tooltip.
-    bool allowToolTip;
+    bool allowToolTip{false};
 
 public slots:
 

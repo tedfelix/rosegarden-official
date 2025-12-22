@@ -16,6 +16,9 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[AnalysisTypes]"
+#define RG_NO_DEBUG_PRINT
+
 #include "AnalysisTypes.h"
 
 #include "NotationTypes.h"
@@ -28,25 +31,19 @@
 #include "Sets.h"
 #include "Quantizer.h"
 
+#include "misc/Debug.h"
 #include "misc/Strings.h"
 
-#include <assert.h>
-#include <iostream>
-#include <string>
-#include <map>
 #include <algorithm>
+#include <iostream>
+
+#include <assert.h>
 #include <cmath> // fabs, pow
 
 
 namespace Rosegarden
 {
 
-using std::string;
-using std::cerr;
-using std::endl;
-using std::multimap;
-using std::vector;
-using std::partial_sort_copy;
 
 ///////////////////////////////////////////////////////////////////////////
 // Miscellany (doesn't analyze anything)
@@ -92,7 +89,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
 
         timeT time = (*i)->getAbsoluteTime();
 
-        //std::cerr << "AnalysisHelper::labelChords: time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")" << std::endl;
+        //RG_DEBUG << "labelChords(): time is " << time << ", type is " << (*i)->getType() << ", event is " << *i << " (itr is " << &i << ")";
 
         if ((*i)->isa(Key::EventType)) {
             key = Key(**i);
@@ -128,7 +125,7 @@ AnalysisHelper::labelChords(CompositionTimeSliceAdapter &c, Segment &s,
 
             if (ch.isValid())
             {
-                //std::cerr << ch.getName(key) << " at time " << time << std::endl;
+                //RG_DEBUG << ch.getName(key) << " at time " << time;
 
                 Text text(ch.getName(key), Text::ChordName);
                 s.insert(text.getAsEvent(time));
@@ -360,7 +357,7 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
                     delta[pitch % 12] += 1 << int(emphasis);
                     ++noteCount;
                 } catch (...) {
-                    std::cerr << "No pitch for note at " << time << "!" << std::endl;
+                    RG_DEBUG << "No pitch for note at " << time << "!";
                 }
             }
         }
@@ -413,20 +410,19 @@ AnalysisHelper::makeHarmonyGuessList(CompositionTimeSliceAdapter &c,
                           smallerGuess.end(),
                           cp_less());
 
-#ifdef  GIVE_HARMONYGUESS_DETAILS
-        std::cerr << "Time: " << time << std::endl;
+#ifdef GIVE_HARMONYGUESS_DETAILS
+        RG_DEBUG << "Time: " << time;
 
-        std::cerr << "Profile: ";
+        RG_DEBUG << "Profile: ";
         for (int k = 0; k < 12; ++k)
-               std::cerr << np[k] << " ";
-        std::cerr << std::endl;
+               RG_DEBUG << np[k] << " ";
 
-        std::cerr << "Best guesses: " << std::endl;
+        RG_DEBUG << "Best guesses: ";
         for (HarmonyGuess::iterator debugi = smallerGuess.begin();
              debugi != smallerGuess.end();
              ++debugi)
         {
-            std::cerr << debugi->first << ": " << debugi->second.getName(Key()) << std::endl;
+            RG_DEBUG << debugi->first << ": " << debugi->second.getName(Key());
         }
 #endif
 
@@ -487,7 +483,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
             {
                 // Print the guess being processed:
 
-                //    std::cerr << k->second.getName(Key()) << "->" << l->second.getName(Key()) << std::endl;
+                //RG_DEBUG << k->second.getName(Key()) << "->" << l->second.getName(Key());
 
                 // For a first approximation, let's say the probability that
                 // a chord guess is correct is proportional to its score. Then
@@ -497,7 +493,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                 double currentScore;
                 currentScore = harmonyIter1->first * harmonyIter2->first;
 
-                //    std::cerr << currentScore << std::endl;
+                //RG_DEBUG << currentScore;
 
                 // Is this a familiar progression? Bonus if so.
 
@@ -521,7 +517,7 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
                     // key doesn't have operator== defined
                     if (key.getName() == pmi->homeKey.getName())
                     {
-//                        std::cerr << k->second.getName(Key()) << "->" << l->second.getName(Key()) << " is familiar" << std::endl;
+                        //RG_DEBUG << k->second.getName(Key()) << "->" << l->second.getName(Key()) << " is familiar";
                         isFamiliar = true;
                         break;
                     }
@@ -545,11 +541,11 @@ AnalysisHelper::refineHarmonyGuessList(CompositionTimeSliceAdapter &/* c */,
         }
 
         // Since we're not returning any results right now, print them
-        std::cerr << "Time: " << j->first << std::endl;
-        std::cerr << "Best chords: "
+        RG_DEBUG << "Time: " << j->first;
+        RG_DEBUG << "Best chords: "
           << bestGuessForFirstChord.getName(Key()) << ", "
-          << bestGuessForSecondChord.getName(Key()) << std::endl;
-        std::cerr << "Best score: " << highestScore << std::endl;
+          << bestGuessForSecondChord.getName(Key());
+        RG_DEBUG << "Best score: " << highestScore;
 
         // Using the best pair of chords:
 
@@ -661,7 +657,7 @@ AnalysisHelper::checkProgressionMap()
         // Add the common progressions
         for (int j = 0; j < 9; ++j)
         {
-            std::cerr << majorProgressionFirsts[j] << ", " << majorProgressionSeconds[j] << std::endl;
+            RG_DEBUG << majorProgressionFirsts[j] << ", " << majorProgressionSeconds[j];
             addProgressionToMap(k,
                                 majorProgressionFirsts[j],
                                 majorProgressionSeconds[j]);
@@ -865,7 +861,7 @@ AnalysisHelper::guessTimeSignature(const CompositionTimeSliceAdapter &c)
     //    to be a common note length, and beat boundaries should be likely
     //    to have notes starting on them.
 
-    vector<int> beatScores(4, 0);
+    std::vector<int> beatScores(4, 0);
 
     // durations of quaver, dotted quaver, crotchet, dotted crotchet:
     static const int commonBeatDurations[4] = {48, 72, 96, 144};
@@ -925,7 +921,7 @@ AnalysisHelper::guessTimeSignature(const CompositionTimeSliceAdapter &c)
     //    measure length should make notes rarely cross barlines and have a
     //    high average length for notes at the start of bars.
 
-    vector<int> measureLengthScores(5, 0);
+    std::vector<int> measureLengthScores(5, 0);
 
     for (CompositionTimeSliceAdapter::iterator i = c.begin();
          i != c.end() && iterations < 100;
@@ -1020,7 +1016,7 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
     //    more often have greater emphasis, and pitches that occur
     //    at stronger points in the bar have greater emphasis.
 
-    vector<int> weightedNoteCount(12, 0);
+    std::vector<int> weightedNoteCount(12, 0);
     TimeSignature timeSig;
     timeT timeSigTime = 0;
     timeT nextSigTime = (*c.begin())->getAbsoluteTime();
@@ -1059,7 +1055,7 @@ AnalysisHelper::guessKey(CompositionTimeSliceAdapter &c)
             weightedNoteCount[pitch] += emphasis;
 
         } catch (...) {
-            std::cerr << "No pitch for note at " << time << "!" << std::endl;
+            RG_DEBUG << "No pitch for note at " << time << "!";
         }
     }
 

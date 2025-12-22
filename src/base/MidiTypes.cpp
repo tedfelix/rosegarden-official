@@ -260,13 +260,13 @@ Event *
 SystemExclusive::makeEvent(timeT absoluteTime, const std::string &rawData)
 {
     Event *e = new Event(EventType, absoluteTime, 0, EventSubOrdering);
-    e->set<String>(DATABLOCK, toHex(rawData));
+    e->set<String>(DATABLOCK, rawToHex(rawData));
 
     return e;
 }
 
 std::string
-SystemExclusive::toHex(std::string rawData)
+SystemExclusive::rawToHex(const std::string &rawData)
 {
     static const char hexchars[] = "0123456789ABCDEF";
     std::string h;
@@ -282,7 +282,7 @@ SystemExclusive::toHex(std::string rawData)
 }
 
 std::string
-SystemExclusive::toRaw(std::string hexData)
+SystemExclusive::hexToRaw(const std::string &hexData)
 {
     std::string h;
 

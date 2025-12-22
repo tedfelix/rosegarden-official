@@ -22,10 +22,11 @@
 #include "base/Segment.h"
 #include "base/SegmentLinker.h"
 #include "base/BaseProperties.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "BasicQuantizer.h"
 #include "NotationQuantizer.h"
 #include "base/AudioLevel.h"
+#include "gui/application/CompositionPosition.h"
 
 #include <algorithm>
 #include <cmath>
@@ -249,7 +250,6 @@ Composition::Composition() :
     m_tempoTimestampsNeedCalculating(true),
     m_basicQuantizer(new BasicQuantizer()),
     m_notationQuantizer(new NotationQuantizer()),
-    m_position(0),
     m_defaultTempo(getTempoForQpm(120.0)),
     m_minTempo(0),
     m_maxTempo(0),
@@ -432,7 +432,7 @@ Composition::findSegment(const Segment *s)
 
 void Composition::setSegmentStartTime(Segment *segment, timeT startTime)
 {
-    Profiler profiler("Composition::setSegmentStartTime");
+    //Profiler profiler("Composition::setSegmentStartTime");
     // remove the segment from the multiset
     iterator i = findSegment(segment);
     if (i == end()) return;
@@ -457,7 +457,7 @@ Composition::clearVoiceCaches()
 void
 Composition::rebuildVoiceCaches() const
 {
-    Profiler profiler("Composition::rebuildVoiceCaches");
+    //Profiler profiler("Composition::rebuildVoiceCaches");
 
     // slow
 
@@ -500,7 +500,7 @@ Composition::rebuildVoiceCaches() const
 int
 Composition::getMaxContemporaneousSegmentsOnTrack(TrackId track) const
 {
-    Profiler profiler("Composition::getMaxContemporaneousSegmentsOnTrack");
+    //Profiler profiler("Composition::getMaxContemporaneousSegmentsOnTrack");
 
     if (m_trackVoiceCountCache.empty()) {
         rebuildVoiceCaches();
@@ -770,7 +770,6 @@ Composition::clear()
     m_loopMode = LoopOff;
     m_loopStart = 0;
     m_loopEnd = 0;
-    m_position = 0;
     m_startMarker = 0;
     m_endMarker = getBarRange(defaultNumberOfBars).first;
     m_selectedTrackId = 0;
@@ -1124,6 +1123,12 @@ Composition::getTempoAtTime(timeT t) const
     RG_DEBUG << "getTempoAtTime(): Found tempo " << tempo << " at " << t;
 #endif
     return tempo;
+}
+
+tempoT
+Composition::getCurrentTempo() const
+{
+    return getTempoAtTime(CompositionPosition::getInstance()->get());
 }
 
 int
@@ -1747,12 +1752,6 @@ Composition::getDurationForMusicalTime(timeT absTime,
     return t;
 }
 
-void
-Composition::setPosition(timeT position)
-{
-    m_position = position;
-}
-
 void Composition::setPlayMetronome(bool value)
 {
     m_playMetronome = value;
@@ -1909,24 +1908,25 @@ void Composition::deleteTrack(Rosegarden::TrackId track)
 }
 #endif
 
-bool Composition::detachTrack(Rosegarden::Track *track)
+bool Composition::detachTrack(const Track *track)
 {
-    TrackMap::iterator it = m_tracks.begin();
+    TrackMap::iterator trackIter = m_tracks.begin();
 
-    for (; it != m_tracks.end(); ++it)
+    for (; trackIter != m_tracks.end(); ++trackIter)
     {
-        if ((*it).second == track)
+        if (trackIter->second == track)
             break;
     }
 
-    if (it == m_tracks.end()) {
+    if (trackIter == m_tracks.end()) {
         RG_DEBUG << "detachTrack() : no such track " << track;
-        throw Exception("track id not found");
+        throw Exception("track pointer not found");
     }
 
-    ((*it).second)->setOwningComposition(nullptr);
+    trackIter->second->setOwningComposition(nullptr);
 
-    m_tracks.erase(it);
+    m_tracks.erase(trackIter);
+
     updateRefreshStatuses();
     checkSelectedAndRecordTracks();
 
@@ -2091,7 +2091,8 @@ std::string Composition::toXmlString() const
         composition << trackPair.first;
     }
 
-    composition << "\" pointer=\"" << m_position;
+    composition << "\" pointer=\"" <<
+        CompositionPosition::getInstance()->get();
     composition << "\" defaultTempo=\"";
     composition << std::setiosflags(std::ios::fixed)
                 << std::setprecision(4)

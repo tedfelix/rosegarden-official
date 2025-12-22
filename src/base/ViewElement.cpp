@@ -13,13 +13,17 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ViewElement]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ViewElement.h"
-#include <iostream>
 
 #include <QtGlobal>
 
+
 namespace Rosegarden
 {
+
 
 extern const int MIN_SUBORDERING;
 
@@ -44,20 +48,20 @@ operator<(const ViewElement &a, const ViewElement &b)
     timeT at = a.getViewAbsoluteTime(), bt = b.getViewAbsoluteTime();
 /*
     if (at < bt) {
-	if (!(*(a.event()) < *(b.event()))) {
-	    std::cerr << "    types: a: " << a.event()->getType() << " b: " << b.event()->getType() << std::endl;
-	    std::cerr << "performed: a: " << a.event()->getAbsoluteTime() << " b: " << b.event()->getAbsoluteTime() << std::endl;
-	    std::cerr << "  notated: a: " << a.getViewAbsoluteTime() << " b: " << b.getViewAbsoluteTime() << std::endl;
-//	assert(*(a.event()) < *(b.event()));
-	}
+        if (!(*(a.event()) < *(b.event()))) {
+            RG_DEBUG << "    types: a: " << a.event()->getType() << " b: " << b.event()->getType();
+            RG_DEBUG << "performed: a: " << a.event()->getAbsoluteTime() << " b: " << b.event()->getAbsoluteTime();
+            RG_DEBUG << "  notated: a: " << a.getViewAbsoluteTime() << " b: " << b.getViewAbsoluteTime();
+//        assert(*(a.event()) < *(b.event()));
+        }
     }
     else if (at > bt) {
-	if (*(a.event()) < *(b.event())) {
-	    std::cerr << "    types: a: " << a.event()->getType() << " b: " << b.event()->getType() << std::endl;
-	    std::cerr << "performed: a: " << a.event()->getAbsoluteTime() << " b: " << b.event()->getAbsoluteTime() << std::endl;
-	    std::cerr << "  notated: a: " << a.getViewAbsoluteTime() << " b: " << b.getViewAbsoluteTime() << std::endl;
-//	    assert(!(*(a.event()) < *(b.event())));
-	}
+        if (*(a.event()) < *(b.event())) {
+            RG_DEBUG << "    types: a: " << a.event()->getType() << " b: " << b.event()->getType();
+            RG_DEBUG << "performed: a: " << a.event()->getAbsoluteTime() << " b: " << b.event()->getAbsoluteTime();
+            RG_DEBUG << "  notated: a: " << a.getViewAbsoluteTime() << " b: " << b.getViewAbsoluteTime();
+//            assert(!(*(a.event()) < *(b.event())));
+        }
     }
 */
     if (at == bt) return *(a.event()) < *(b.event());
@@ -157,8 +161,8 @@ ViewElementList::findNearestTime(timeT time)
 {
     iterator i = findTime(time);
     if (i == end() || (*i)->getViewAbsoluteTime() > time) {
-	if (i == begin()) return end();
-	else --i;
+        if (i == begin()) return end();
+        else --i;
     }
     return i;
 }

@@ -14,13 +14,15 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[WavFileReadStream]"
+#define RG_NO_DEBUG_PRINT
 
 #ifdef HAVE_LIBSNDFILE
 
 #include "WavFileReadStream.h"
 
-
 #include "misc/Debug.h"
+
 
 namespace Rosegarden
 {
@@ -84,18 +86,16 @@ WavFileReadStream::WavFileReadStream(QString path) :
     m_file = sf_open(m_path.toLocal8Bit().data(), SFM_READ, &m_fileInfo);
 
     if (!m_file || m_fileInfo.frames <= 0 || m_fileInfo.channels <= 0) {
-	std::cerr << "WavFileReadStream::initialize: Failed to open file \""
-                  << path.toStdString() << "\" ("
-		  << sf_strerror(m_file) << ")" << std::endl;
+        RG_WARNING << "ctor: Failed to open file" << path << "(" << sf_strerror(m_file) << ")";
 
-	if (m_file) {
-	    m_error = QString("Couldn't load audio file '") +
+        if (m_file) {
+            m_error = QString("Couldn't load audio file '") +
                 m_path + "':\n" + sf_strerror(m_file);
-	} else {
-	    m_error = QString("Failed to open audio file '") +
-		m_path + "'";
-	}
-	return;
+        } else {
+            m_error = QString("Failed to open audio file '") +
+                m_path + "'";
+        }
+        return;
     }
 
     m_channelCount = m_fileInfo.channels;
@@ -116,7 +116,7 @@ WavFileReadStream::getFrames(size_t count, float *frames)
     if (count == 0) return 0;
 
     if ((long)m_offset >= m_fileInfo.frames) {
-	return 0;
+        return 0;
     }
 
     sf_count_t readCount = 0;

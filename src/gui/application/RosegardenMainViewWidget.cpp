@@ -45,6 +45,7 @@
 #include "commands/segment/SegmentSingleRepeatToCopyCommand.h"
 #include "document/CommandHistory.h"
 #include "document/RosegardenDocument.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
@@ -152,10 +153,6 @@ RosegardenMainViewWidget::RosegardenMainViewWidget(bool showTrackLabels,
     connect(m_trackEditor->getCompositionView(),
             &CompositionView::editRepeat,
             this, &RosegardenMainViewWidget::slotEditRepeat);
-
-    connect(m_trackEditor->getCompositionView(),
-            &CompositionView::setPointerPosition,
-            doc, &RosegardenDocument::slotSetPointerPosition);
 
     connect(m_trackEditor, &TrackEditor::droppedDocument,
             parent, &RosegardenMainWindow::slotOpenDroppedURL);
@@ -901,7 +898,7 @@ void RosegardenMainViewWidget::setZoomSize(double size)
 
     // Redraw the playback position pointer.
     // Move these lines to a new CompositionView::redrawPointer()?
-    timeT pointerTime = RosegardenDocument::currentDocument->getComposition().getPosition();
+    timeT pointerTime = CompositionPosition::getInstance()->get();
     double pointerXPosition = compositionView->
         grid().getRulerScale()->getXForTime(pointerTime);
     compositionView->drawPointer(pointerXPosition);
@@ -1269,7 +1266,7 @@ RosegardenMainViewWidget::updateMeters()
 
                 InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
-                Instrument *selectedInstrument = nullptr;
+                const Instrument *selectedInstrument = nullptr;
 
                 if (selectedInstrumentId != NoInstrument) {
                     // ??? Performance: LINEAR SEARCH
@@ -1319,7 +1316,7 @@ RosegardenMainViewWidget::updateMonitorMeters()
 
     InstrumentId selectedInstrumentId = comp.getSelectedInstrumentId();
 
-    Instrument *selectedInstrument = nullptr;
+    const Instrument *selectedInstrument = nullptr;
 
     if (selectedInstrumentId != NoInstrument) {
         // ??? Performance: LINEAR SEARCH
@@ -1505,7 +1502,8 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
         if (instrument &&
                 instrument->getType() == Instrument::Audio) {
             slotAddAudioSegment(audioFileId, currentTrackId,
-                                comp.getPosition(), startTime, endTime);
+                                CompositionPosition::getInstance()->get(),
+                                startTime, endTime);
             return ;
         }
     }
@@ -1540,14 +1538,16 @@ RosegardenMainViewWidget::slotAddAudioSegmentDefaultPosition(AudioFileId audioFi
 
             if (!haveSegment) { // perfect
                 slotAddAudioSegment(audioFileId, ti->first,
-                                    comp.getPosition(), startTime, endTime);
+                                    CompositionPosition::getInstance()->get(),
+                                    startTime, endTime);
                 return ;
             }
         }
     }
 
     slotAddAudioSegment(audioFileId, bestSoFar,
-                        comp.getPosition(), startTime, endTime);
+                        CompositionPosition::getInstance()->get(),
+                        startTime, endTime);
     return ;
 }
 

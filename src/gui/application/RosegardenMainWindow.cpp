@@ -24,6 +24,7 @@
 #include "gui/editors/segment/TrackButtons.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
+#include "gui/application/CompositionPosition.h"
 #include "gui/application/TransportStatus.h"
 #include "base/AnalysisTypes.h"
 #include "base/AudioPluginInstance.h"
@@ -111,7 +112,6 @@
 #include "gui/dialogs/CommentsPopupDialog.h"
 #include "gui/dialogs/ConfigureDialog.h"
 #include "gui/dialogs/CountdownDialog.h"
-#include "gui/dialogs/DialogSuppressor.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/dialogs/FileMergeDialog.h"
 #include "gui/dialogs/IdentifyTextCodecDialog.h"
@@ -652,6 +652,7 @@ void RosegardenMainWindow::initStaticObjects()
     LV2Worker::getInstance();
 #endif
     RosegardenSequencer::getInstance();
+    CompositionPosition::getInstance();
 }
 
 int RosegardenMainWindow::sigpipe[2];
@@ -1148,10 +1149,6 @@ RosegardenMainWindow::initView()
     m_seqManager->setTempo(comp.getCurrentTempo());
 
 
-    // set the pointer position
-    //
-    slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
-
     // !!! The call to setCentralWidget() below will delete oldView.
     m_view = swapView;
 
@@ -1303,8 +1300,9 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
 
     // connect needed signals
 
-    connect(RosegardenDocument::currentDocument, &RosegardenDocument::pointerPositionChanged,
-            this, &RosegardenMainWindow::slotSetPointerPosition);
+    connect(CompositionPosition::getInstance(),
+            &CompositionPosition::changed,
+            this, &RosegardenMainWindow::slotUpdateForPointerChange);
 
     connect(RosegardenDocument::currentDocument, &RosegardenDocument::documentModified,
             this, &RosegardenMainWindow::slotDocumentModified);
@@ -2196,8 +2194,8 @@ RosegardenMainWindow::slotFileSave()
 }
 
 QString
-RosegardenMainWindow::launchSaveAsDialog(QString filter,
-                                         QString label)
+RosegardenMainWindow::launchSaveAsDialog(const QString &filter,
+                                         const QString &label)
 {
 
     const QFileInfo originalFileInfo(
@@ -2415,15 +2413,13 @@ RosegardenMainWindow::slotEditPaste()
 
     // for now, but we could paste at the time of the first copied
     // segment and then do ghosting drag or something
-    timeT insertionTime = RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT insertionTime = CompositionPosition::getInstance()->get();
     CommandHistory::getInstance()->addCommand
     (new PasteSegmentsCommand(&RosegardenDocument::currentDocument->getComposition(),
                               m_clipboard, insertionTime,
                               RosegardenDocument::currentDocument->getComposition().getSelectedTrack(),
                               false));
 
-    // User preference? Update song pointer position on paste
-    RosegardenDocument::currentDocument->slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
 }
 
 /* unused
@@ -2492,9 +2488,10 @@ RosegardenMainWindow::slotPasteRange()
     if (m_clipboard->isEmpty())
         return ;
 
-    CommandHistory::getInstance()->addCommand
-    (new PasteRangeCommand(&RosegardenDocument::currentDocument->getComposition(), m_clipboard,
-                           RosegardenDocument::currentDocument->getComposition().getPosition()));
+    CommandHistory::getInstance()->addCommand(new PasteRangeCommand(
+            &RosegardenDocument::currentDocument->getComposition(),
+            m_clipboard,
+            CompositionPosition::getInstance()->get()));
 }
 
 void
@@ -2519,7 +2516,7 @@ RosegardenMainWindow::slotDeleteRange()
 void
 RosegardenMainWindow::slotInsertRange()
 {
-    timeT t0 = RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT t0 = CompositionPosition::getInstance()->get();
     std::pair<timeT, timeT> r = RosegardenDocument::currentDocument->
             getComposition().getBarRangeForTime(t0);
 
@@ -2543,8 +2540,10 @@ RosegardenMainWindow::slotPasteConductorData()
         return ;
 
     CommandHistory::getInstance()->addCommand
-    (new PasteConductorDataCommand(&RosegardenDocument::currentDocument->getComposition(), m_clipboard,
-                                   RosegardenDocument::currentDocument->getComposition().getPosition()));
+        (new PasteConductorDataCommand
+         (&RosegardenDocument::currentDocument->getComposition(),
+          m_clipboard,
+          CompositionPosition::getInstance()->get()));
 }
 
 void
@@ -3112,7 +3111,7 @@ RosegardenMainWindow::slotSplitSelectionAtTime()
     if (selection.empty())
         return ;
 
-    timeT now = RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT now = CompositionPosition::getInstance()->get();
 
     QString title = tr("Split %n Segment(s) at Time", "",
                          selection.size());
@@ -3616,7 +3615,7 @@ RosegardenMainWindow::slotEditInPitchTracker()
 void
 RosegardenMainWindow::slotEditTempos()
 {
-    slotEditTempos(RosegardenDocument::currentDocument->getComposition().getPosition());
+    slotEditTempos(CompositionPosition::getInstance()->get());
 }
 
 void
@@ -4876,28 +4875,6 @@ RosegardenMainWindow::slotUpdateUI()
     bool haveEvent = SequencerDataBlock::getInstance()->getVisual(ev);
     if (haveEvent) getTransport()->slotMidiOutLabel(&ev);
 
-
-    // Update the playback position pointer
-
-    RealTime position = SequencerDataBlock::getInstance()->getPositionPointer();
-    const Composition &comp =
-        RosegardenDocument::currentDocument->getComposition();
-    timeT elapsedTime = comp.getElapsedTimeForRealTime(position);
-
-    // We don't want slotSetPointerPosition() to affect the sequencer.
-    // Setting m_originatingJump to true causes slotSetPointerPosition()
-    // to not tell the sequencer to jump to this new position.  This
-    // might be renamed m_seqJump and reverse its value.
-    // ??? This should just be an argument to slotSetPointerPosition().
-    //   slotSetPointerPosition(elapsedTime, bool jumpSequencer = true);
-    //   (Can we have default args in a slot?  Seems unlikely.)
-    m_originatingJump = true;
-    // Move the pointer to the current position.
-    RosegardenDocument::currentDocument->slotSetPointerPosition(elapsedTime);
-    // Future moves (jumps) won't be coming from here.
-    m_originatingJump = false;
-
-
     // Update the VU meters
     if (m_view) m_view->updateMeters();
 }
@@ -4976,10 +4953,11 @@ RosegardenMainWindow::slotUpdateMonitoring()
 }
 
 void
-RosegardenMainWindow::slotSetPointerPosition(timeT t)
+RosegardenMainWindow::slotUpdateForPointerChange()
 {
     Composition &comp = RosegardenDocument::currentDocument->getComposition();
 
+    const timeT compPos = CompositionPosition::getInstance()->get();
     if (m_seqManager) {
         // Normally we stop at composition end.
         timeT stopTime = comp.getEndMarker();
@@ -4992,25 +4970,25 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 
         // If we're playing and we're past the end...
         if (m_seqManager->getTransportStatus() == PLAYING  &&
-            t > stopTime) {
+            compPos > stopTime) {
 
             // Stop - automatic stop - not triggered by the user
             doStop(true);
 
             // Limit the end to the end of the composition.
             // RECURSION: Causes this method to be re-invoked.
-            RosegardenDocument::currentDocument->
-                slotSetPointerPosition(stopTime);
+            CompositionPosition::getInstance()->slotSet(stopTime);
 
             return;
 
         }
         // If we're recording and we're near the end...
         if (m_seqManager->getTransportStatus() == RECORDING  &&
-            t > comp.getEndMarker() - timebase) {
+            compPos > comp.getEndMarker() - timebase) {
 
             // Compute bar duration
-            std::pair<timeT, timeT> timeRange = comp.getBarRangeForTime(t);
+            std::pair<timeT, timeT> timeRange =
+                comp.getBarRangeForTime(compPos);
             const timeT barDuration = timeRange.second - timeRange.first;
 
             // Add on ten bars.
@@ -5023,22 +5001,13 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
 
         }
 
-        // cc 20050520 - jump at the sequencer even if we're not playing,
-        // because we might be a transport master of some kind
-        try {
-            if (!m_originatingJump) {
-                m_seqManager->jumpTo(comp.getElapsedRealTime(t));
-            }
-        } catch (const QString &s) {
-            QMessageBox::critical(this, tr("Rosegarden"), s);
-        }
     }
 
     // set the time sig
-    getTransport()->setTimeSignature(comp.getTimeSignatureAt(t));
+    getTransport()->setTimeSignature(comp.getTimeSignatureAt(compPos));
 
     // and the tempo
-    m_seqManager->setTempo(comp.getTempoAtTime(t));
+    m_seqManager->setTempo(comp.getTempoAtTime(compPos));
 
     // and the time
     //
@@ -5048,11 +5017,11 @@ RosegardenMainWindow::slotSetPointerPosition(timeT t)
     if (mode == TransportDialog::BarMode ||
             mode == TransportDialog::BarMetronomeMode) {
 
-        displayBarTime(t);
+        displayBarTime(compPos);
 
     } else {
 
-        RealTime rT(comp.getElapsedRealTime(t));
+        RealTime rT(comp.getElapsedRealTime(compPos));
 
         if (getTransport()->isShowingTimeToEnd()) {
             rT = rT - comp.getElapsedRealTime(comp.getDuration());
@@ -5116,7 +5085,7 @@ RosegardenMainWindow::slotRefreshTimeDisplay()
             m_seqManager->getTransportStatus() == RECORDING) {
         return ; // it'll be refreshed in a moment anyway
     }
-    slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
+    slotUpdateForPointerChange();
 }
 
 void
@@ -5736,7 +5705,7 @@ RosegardenMainWindow::slotSetPlayPosition(timeT time)
     if (m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
-    RosegardenDocument::currentDocument->slotSetPointerPosition(time);
+    CompositionPosition::getInstance()->slotSet(time);
 
     if (m_seqManager->getTransportStatus() == PLAYING)
         return ;
@@ -5937,7 +5906,7 @@ RosegardenMainWindow::slotJumpToTime(RealTime rt)
     const Composition *comp =
         &RosegardenDocument::currentDocument->getComposition();
     timeT t = comp->getElapsedTimeForRealTime(rt);
-    RosegardenDocument::currentDocument->slotSetPointerPosition(t);
+    CompositionPosition::getInstance()->slotSet(t);
 }
 
 void
@@ -6280,7 +6249,8 @@ RosegardenMainWindow::slotEditTempo(timeT atTime)
 void
 RosegardenMainWindow::slotEditTempo(QWidget *parent)
 {
-    slotEditTempo(parent, RosegardenDocument::currentDocument->getComposition().getPosition());
+    slotEditTempo(parent,
+                  CompositionPosition::getInstance()->get());
 }
 
 void
@@ -6308,7 +6278,8 @@ RosegardenMainWindow::slotEditTimeSignature(timeT atTime)
 void
 RosegardenMainWindow::slotEditTimeSignature(QWidget *parent)
 {
-    slotEditTimeSignature(parent, RosegardenDocument::currentDocument->getComposition().getPosition());
+    slotEditTimeSignature(parent,
+                          CompositionPosition::getInstance()->get());
 }
 
 void
@@ -6330,10 +6301,10 @@ RosegardenMainWindow::slotEditTransportTime(QWidget *parent)
     TimeDialog dialog(
             parent,
             tr("Move playback pointer to time"),  // title
-            RosegardenDocument::currentDocument->getComposition().getPosition(),  // defaultTime
+            CompositionPosition::getInstance()->get(), // defaultTime
             true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted) {
-        RosegardenDocument::currentDocument->slotSetPointerPosition(dialog.getTime());
+        CompositionPosition::getInstance()->slotSet(dialog.getTime());
     }
 }
 
@@ -7204,7 +7175,8 @@ RosegardenMainWindow::slotEditMarkers()
             this, &RosegardenMainWindow::slotMarkerEditorClosed);
 
     connect(m_markerEditor, &MarkerEditor::jumpToMarker,
-            RosegardenDocument::currentDocument, &RosegardenDocument::slotSetPointerPosition);
+            CompositionPosition::getInstance(),
+            &CompositionPosition::slotSet);
 
     m_markerEditor->show();
 }
@@ -7593,7 +7565,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
         return ;
     }
 
-    PluginPortInstance *port = inst->getPort(portIndex);
+    const PluginPortInstance *port = inst->getPort(portIndex);
     if (!port) {
         RG_DEBUG << "slotPluginPortChanged - no port "
                  << portIndex;
@@ -7621,7 +7593,7 @@ RosegardenMainWindow::slotPluginPortChanged(InstrumentId instrumentId,
 void
 RosegardenMainWindow::slotChangePluginProgram(InstrumentId instrumentId,
         int pluginIndex,
-        QString program)
+        const QString &program)
 {
     const PluginContainer *container =
         RosegardenDocument::currentDocument->
@@ -8374,7 +8346,7 @@ RosegardenMainWindow::slotAddMarker2()
 {
     AddMarkerCommand *command = new AddMarkerCommand(
             &RosegardenDocument::currentDocument->getComposition(),
-            RosegardenDocument::currentDocument->getComposition().getPosition(),
+            CompositionPosition::getInstance()->get(),
             "new marker",
             "no description");
 
@@ -8387,7 +8359,7 @@ RosegardenMainWindow::slotPreviousMarker()
     const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
-    timeT currentTime = RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT currentTime = CompositionPosition::getInstance()->get();
     timeT time = currentTime;
 
     // For each marker...
@@ -8399,7 +8371,7 @@ RosegardenMainWindow::slotPreviousMarker()
 
     // If a jump is needed, jump.
     if (time != currentTime)
-        RosegardenDocument::currentDocument->slotSetPointerPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
 }
 
 void
@@ -8408,7 +8380,7 @@ RosegardenMainWindow::slotNextMarker()
     const Composition::MarkerVector &markers =
             RosegardenDocument::currentDocument->getComposition().getMarkers();
 
-    timeT currentTime = RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT currentTime = CompositionPosition::getInstance()->get();
     timeT time = currentTime;
 
     // For each marker...
@@ -8421,7 +8393,7 @@ RosegardenMainWindow::slotNextMarker()
 
     // If a jump is needed, jump.
     if (time != currentTime)
-        RosegardenDocument::currentDocument->slotSetPointerPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
 }
 
 void
@@ -8468,8 +8440,7 @@ void
 RosegardenMainWindow::slotAboutToExecuteCommand()
 {
     // save the pointer position to the command history
-    timeT pointerPos =
-        RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT pointerPos = CompositionPosition::getInstance()->get();
     RG_DEBUG << "about to execute a command" << pointerPos;
     CommandHistory::getInstance()->setPointerPosition(pointerPos);
 }
@@ -8480,7 +8451,7 @@ RosegardenMainWindow::slotCommandUndone()
     // reset the pointer position from the command history
     timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
     RG_DEBUG << "command undone" << pointerPos;
-    RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
+    CompositionPosition::getInstance()->slotSet(pointerPos);
 }
 
 void
@@ -8489,15 +8460,14 @@ RosegardenMainWindow::slotCommandRedone()
     // reset the pointer position from the command history
     timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
     RG_DEBUG << "command redone" << pointerPos;
-    RosegardenDocument::currentDocument->slotSetPointerPosition(pointerPos);
+    CompositionPosition::getInstance()->slotSet(pointerPos);
 }
 
 void
 RosegardenMainWindow::slotUpdatePosition()
 {
     // set the pointer position in the command history
-    timeT pointerPos =
-        RosegardenDocument::currentDocument->getComposition().getPosition();
+    const timeT pointerPos = CompositionPosition::getInstance()->get();
     RG_DEBUG << "update position in command history" << pointerPos;
     CommandHistory::getInstance()->setPointerPositionForRedo(pointerPos);
 }

@@ -16,17 +16,20 @@
 */
 
 #define RG_MODULE_STRING "[NoteFont]"
+#define RG_NO_DEBUG_PRINT
 
 #include "NoteFont.h"
-#include "misc/Debug.h"
 
-#include "misc/Strings.h"
-#include "base/Exception.h"
-#include "base/Profiler.h"
-#include "gui/general/PixmapFunctions.h"
 #include "NoteCharacter.h"
 //#include "NoteFontMap.h"
 #include "SystemFont.h"
+
+#include "misc/Debug.h"
+#include "misc/Strings.h"
+#include "base/Exception.h"
+//#include "base/Profiler.h"
+#include "gui/general/PixmapFunctions.h"
+
 #include <QBitmap>
 #include <QImage>
 #include <QPainter>
@@ -36,8 +39,10 @@
 #include <QStringList>
 #include <iostream>
 
+
 namespace Rosegarden
 {
+
 
 NoteFont::FontPixmapMap *NoteFont::m_fontPixmapMap = nullptr;
 
@@ -270,7 +275,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
         return true;
     }
 
-    Profiler profiler("NoteFont::getPixmap: cache miss");
+    //Profiler profiler("NoteFont::getPixmap: cache miss");
 
     QString src;
     ok = false;
@@ -289,7 +294,7 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
             return true;
         }
 
-        std::cerr << "NoteFont::getPixmap: Warning: Unable to read pixmap file " << src << std::endl;
+        RG_WARNING << "getPixmap(): Warning: Unable to read pixmap file " << src;
     } else {
 
         int code = -1;
@@ -301,9 +306,9 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
         else m_fontMap.getInversionGlyph(m_size, charName, glyph);
 
         if (code < 0 && glyph < 0) {
-            std::cerr << "NoteFont::getPixmap: Warning: No pixmap, code, or glyph for character \""
-                      << charName << "\"" << (inverted ? " (inverted)" : "")
-                      << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
+            RG_WARNING << "getPixmap(): Warning: No pixmap, code, or glyph for character \""
+                       << charName << "\"" << (inverted ? " (inverted)" : "")
+                       << " in font \"" << m_fontMap.getName() << "\"";
             add(charName, inverted, nullptr);
             pixmap = *m_blankPixmap;
             return false;
@@ -323,9 +328,9 @@ NoteFont::getPixmap(CharName charName, QPixmap &pixmap, bool inverted) const
                 return true;
             }
 
-            std::cerr << "NoteFont::getPixmap: Warning: No system font for character \""
-                      << charName << "\"" << (inverted ? " (inverted)" : "")
-                      << " in font \"" << m_fontMap.getName() << "\"" << std::endl;
+            RG_WARNING << "getPixmap(): Warning: No system font for character \""
+                       << charName << "\"" << (inverted ? " (inverted)" : "")
+                       << " in font \"" << m_fontMap.getName() << "\"";
 
             add(charName, inverted, nullptr);
             pixmap = *m_blankPixmap;
@@ -499,7 +504,7 @@ NoteFont::getCharacter(CharName charName,
                        NoteCharacter &character,
                        bool inverted) const
 {
-    Profiler profiler("NoteFont::getCharacter");
+    //Profiler profiler("NoteFont::getCharacter");
 
     QPixmap pixmap;
     if (!getPixmap(charName, pixmap, inverted))

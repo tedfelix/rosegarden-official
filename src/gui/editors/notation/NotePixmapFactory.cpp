@@ -31,7 +31,7 @@
 #include "base/Exception.h"
 #include "base/NotationTypes.h"
 #include "base/Pitch.h"
-#include "base/Profiler.h"
+//#include "base/Profiler.h"
 #include "base/TimeSignature.h"
 #include "gui/editors/guitar/Fingering.h"
 #include "gui/editors/guitar/FingeringBox.h"
@@ -322,7 +322,7 @@ NotePixmapFactory::dumpStats(std::ostream &s)
 QGraphicsItem *
 NotePixmapFactory::makeNote(const NotePixmapParameters &params)
 {
-    Profiler profiler("NotePixmapFactory::makeNote");
+    //Profiler profiler("NotePixmapFactory::makeNote");
 
     ++makeNotesCount;
 
@@ -360,7 +360,7 @@ NotePixmapFactory::drawNoteForItem(const NotePixmapParameters &params,
 QGraphicsPixmapItem *
 NotePixmapFactory::makeNotePixmapItem(const NotePixmapParameters &params)
 {
-    Profiler profiler("NotePixmapFactory::makeNotePixmapItem");
+    //Profiler profiler("NotePixmapFactory::makeNotePixmapItem");
 
     calculateNoteDimensions(params);
     drawNoteAux(params, nullptr, 0, 0);
@@ -394,7 +394,7 @@ void
 NotePixmapFactory::drawNote(const NotePixmapParameters &params,
                             QPainter &painter, int x, int y)
 {
-    Profiler profiler("NotePixmapFactory::drawNote");
+    //Profiler profiler("NotePixmapFactory::drawNote");
     m_inPrinterMethod = true;
     calculateNoteDimensions(params);
     drawNoteAux(params, &painter, x, y);
@@ -1767,7 +1767,7 @@ QGraphicsItem *
 NotePixmapFactory::makeRest(const NotePixmapParameters &params)
 {
     ++makeRestsCount;
-    Profiler profiler("NotePixmapFactory::makeRest");
+    //Profiler profiler("NotePixmapFactory::makeRest");
 
     CharName charName(m_style->getRestCharName(params.m_noteType,
                                                params.m_restOutsideStave));
@@ -1806,7 +1806,7 @@ void
 NotePixmapFactory::drawRest(const NotePixmapParameters &params,
                             QPainter &painter, int x, int y)
 {
-    Profiler profiler("NotePixmapFactory::drawRest");
+    //Profiler profiler("NotePixmapFactory::drawRest");
     m_inPrinterMethod = true;
     QPoint hotspot; // unused
     drawRestAux(params, hotspot, &painter, x, y);
@@ -1911,7 +1911,7 @@ NotePixmapFactory::drawRestAux(const NotePixmapParameters &params,
 QGraphicsPixmapItem *
 NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
 {
-    Profiler profiler("NotePixmapFactory::makeClef");
+    //Profiler profiler("NotePixmapFactory::makeClef");
 
     NoteCharacter plainCharacter = getCharacter(m_style->getClefCharName(clef),
                                        colourType, false);
@@ -1992,7 +1992,7 @@ NotePixmapFactory::makeClef(const Clef &clef, const ColourType colourType)
 QGraphicsPixmapItem *
 NotePixmapFactory::makeSymbol(const Symbol &symbol, const ColourType colourType)
 {
-    Profiler profiler("NotePixmapFactory::makeSymbol");
+    //Profiler profiler("NotePixmapFactory::makeSymbol");
 
     NoteCharacter plain = getCharacter(m_style->getSymbolCharName(symbol),
                                        colourType, false);
@@ -2016,7 +2016,7 @@ NotePixmapFactory::makePedalUp()
 QGraphicsPixmapItem *
 NotePixmapFactory::makeUnknown()
 {
-    Profiler profiler("NotePixmapFactory::makeUnknown");
+    //Profiler profiler("NotePixmapFactory::makeUnknown");
     return getCharacter(NoteCharacterNames::UNKNOWN, PlainColour, false)
         .makeItem();
 }
@@ -2088,7 +2088,7 @@ NotePixmapFactory::makeKey(const Key &key,
 //              << previousKey.getName() <<  ", colType: " << (int)colourType
 //              << ")";
 
-    Profiler profiler("NotePixmapFactory::makeKey");
+    //Profiler profiler("NotePixmapFactory::makeKey");
 
     std::vector<int> ah0 = previousKey.getAccidentalHeights(clef);
     std::vector<int> ah1 = key.getAccidentalHeights(clef);
@@ -2589,7 +2589,7 @@ NotePixmapFactory::makePitchDisplayPixmap(int p, const Clef &clef,
 QGraphicsPixmapItem *
 NotePixmapFactory::makeHairpin(int length, bool isCrescendo)
 {
-    Profiler profiler("NotePixmapFactory::makeHairpin");
+    //Profiler profiler("NotePixmapFactory::makeHairpin");
     drawHairpinAux(length, isCrescendo, nullptr, 0, 0);
     return makeItem(QPoint(0, m_generatedHeight / 2));
 }
@@ -2599,7 +2599,7 @@ void
 NotePixmapFactory::drawHairpin(int length, bool isCrescendo,
                                QPainter &painter, int x, int y)
 {
-    Profiler profiler("NotePixmapFactory::drawHairpin");
+    //Profiler profiler("NotePixmapFactory::drawHairpin");
     m_inPrinterMethod = true;
     drawHairpinAux(length, isCrescendo, &painter, x, y);
     m_inPrinterMethod = false;
@@ -2659,7 +2659,7 @@ NotePixmapFactory::drawHairpinAux(int length, bool isCrescendo,
 QGraphicsPixmapItem *
 NotePixmapFactory::makeSlur(int length, int dy, bool above, bool phrasing)
 {
-    Profiler profiler("NotePixmapFactory::makeSlur");
+    //Profiler profiler("NotePixmapFactory::makeSlur");
 
     //!!! could remove "height > 5" requirement if we did a better job of
     // sizing so that any horizontal part was rescaled down to exactly
@@ -2704,7 +2704,7 @@ void
 NotePixmapFactory::drawSlur(int length, int dy, bool above, bool phrasing,
                             QPainter &painter, int x, int y)
 {
-    Profiler profiler("NotePixmapFactory::drawSlur");
+    //Profiler profiler("NotePixmapFactory::drawSlur");
     QPoint hotspot;
     m_inPrinterMethod = true;
     if (length < getNoteBodyWidth()*2)
@@ -2895,7 +2895,7 @@ NotePixmapFactory::drawSlurAux(int length, int dy, bool above,
 QGraphicsPixmapItem *
 NotePixmapFactory::makeOttava(int length, int octavesUp)
 {
-    Profiler profiler("NotePixmapFactory::makeOttava");
+    //Profiler profiler("NotePixmapFactory::makeOttava");
     m_inPrinterMethod = false;
     drawOttavaAux(length, octavesUp, nullptr, 0, 0);
     return makeItem(QPoint(0, m_generatedHeight - 1));
@@ -2906,7 +2906,7 @@ void
 NotePixmapFactory::drawOttava(int length, int octavesUp,
                               QPainter &painter, int x, int y)
 {
-    Profiler profiler("NotePixmapFactory::drawOttava");
+    //Profiler profiler("NotePixmapFactory::drawOttava");
     m_inPrinterMethod = true;
     drawOttavaAux(length, octavesUp, &painter, x, y);
     m_inPrinterMethod = false;
@@ -3127,7 +3127,7 @@ NotePixmapFactory::drawBracket(int length, bool left, bool /*curly*/, int x, int
 QGraphicsPixmapItem *
 NotePixmapFactory::makeTimeSig(const TimeSignature& sig)
 {
-    Profiler profiler("NotePixmapFactory::makeTimeSig");
+    //Profiler profiler("NotePixmapFactory::makeTimeSig");
 
     if (sig.isCommon()) {
 
@@ -3391,7 +3391,7 @@ NotePixmapFactory::makeTextPixmap(const Text &text)
 QGraphicsPixmapItem *
 NotePixmapFactory::makeText(const Text &text)
 {
-    Profiler profiler("NotePixmapFactory::makeText");
+    //Profiler profiler("NotePixmapFactory::makeText");
 
     std::string type(text.getTextType());
 
@@ -3410,7 +3410,7 @@ NotePixmapFactory::makeGuitarChord(const Guitar::Fingering &fingering,
                                    int y)
 {
     using namespace Guitar;
-    Profiler profiler("NotePixmapFactory::makeGuitarChord");
+    //Profiler profiler("NotePixmapFactory::makeGuitarChord");
 
     int guitarChordWidth = getLineSpacing() * 6;
     int guitarChordHeight = getLineSpacing() * 6;
@@ -3435,7 +3435,7 @@ void
 NotePixmapFactory::drawText(const Text &text,
                             QPainter &painter, int x, int y)
 {
-    Profiler profiler("NotePixmapFactory::drawText");
+    //Profiler profiler("NotePixmapFactory::drawText");
 
     //     NOTATION_DEBUG << "NotePixmapFactory::drawText() " << text.getText().c_str()
     //                    << " - type : " << text.getTextType().c_str();

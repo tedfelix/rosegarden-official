@@ -295,19 +295,6 @@ signals:
      */
     void editRepeat(Segment *, timeT);
 
-    /// Signal emitted when a double-click occurs on the background.
-    /**
-     * Causes the pointer to move to where the user double-clicked.
-     *
-     * Connected to RosegardenDocument::slotSetPointerPosition().
-     * Connection is made by the RosegardenMainViewWidget ctor.
-     *
-     * @see drawPointer()
-     *
-     * rename: backgroundDoubleClicked()?
-     */
-    void setPointerPosition(timeT);
-
     /// Signal emitted when the context help needs to change.
     /**
      * The context help is displayed in the status bar at the bottom

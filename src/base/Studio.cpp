@@ -674,57 +674,55 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
 //
 // This method sounds much more dramatic than it actually is -
 // it could probably do with a rename.
-//
-//
 void
-Studio::unassignAllInstruments()
+Studio::unassignAllInstruments() const
 {
-    AudioDevice *audioDevice;
-    std::vector<Device*>::iterator it;
-    Rosegarden::InstrumentVector::iterator iit;
-    Rosegarden::InstrumentVector instList;
-    int channel = 0;
+    // For each Device in the Studio...
+    for (const Device *device : m_devices) {
 
-    for (it = m_devices.begin(); it != m_devices.end(); ++it)
-    {
-        const MidiDevice* midiDevice = dynamic_cast<MidiDevice*>(*it);
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
 
-        if (midiDevice)
-        {
-            instList = (*it)->getPresentationInstruments();
+        // If we have a MIDI device...
+        if (midiDevice) {
+            const InstrumentVector instruments =
+                    midiDevice->getPresentationInstruments();
 
-            for (iit = instList.begin(); iit != instList.end(); ++iit)
-            {
-                // Only for true MIDI Instruments - not System ones
-                //
-                if ((*iit)->getId() >= MidiInstrumentBase)
-                {
-                    (*iit)->setSendBankSelect(false);
-                    (*iit)->setSendProgramChange(false);
-                    (*iit)->setNaturalMidiChannel(channel);
-                    channel = ( channel + 1 ) % 16;
-                    (*iit)->setFixedChannel();
-                    // ??? This is a "reset" of the instrument.  It doesn't
-                    //     seem to make sense that we should send out the
-                    //     default values.
-                    //(*iit)->sendChannelSetup();
+            int channel = 0;
 
-                    (*iit)->setPan(MidiMidValue);
-                    (*iit)->setVolume(100);
+            // For each Instrument in this Device...
+            for (Instrument *instrument : instruments) {
 
-                }
+                // Skip system instruments.
+                if (instrument->getId() < MidiInstrumentBase)
+                    continue;
+
+                instrument->setSendBankSelect(false);
+                instrument->setSendProgramChange(false);
+                instrument->setNaturalMidiChannel(channel);
+                channel = ( channel + 1 ) % 16;
+                instrument->setFixedChannel();
+                instrument->setPan(MidiMidValue);
+                instrument->setVolume(100);
+
+                // ??? This is a "reset" of the instrument.  It doesn't
+                //     seem to make sense that we should send out the
+                //     default values.
+                //instrument->sendChannelSetup();
+
             }
-        }
-        else
-        {
-            audioDevice = dynamic_cast<AudioDevice*>(*it);
+        } else {
+            const AudioDevice *audioDevice =
+                    dynamic_cast<const AudioDevice *>(device);
 
-            if (audioDevice)
-            {
-                instList = (*it)->getPresentationInstruments();
+            // If we have an audio device...
+            if (audioDevice) {
+                const InstrumentVector instruments =
+                        audioDevice->getPresentationInstruments();
 
-                for (iit = instList.begin(); iit != instList.end(); ++iit)
-                    (*iit)->emptyPlugins();
+                // For each Instrument in this Device...
+                for (Instrument *instrument : instruments) {
+                    instrument->emptyPlugins();
+                }
             }
         }
     }
