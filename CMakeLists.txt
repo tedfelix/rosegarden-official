@@ -213,14 +213,15 @@ if(NOT DISABLE_LIRC)
 endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
-# lilv for lv2 plugins
+# Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
 pkg_check_modules(LILV lilv-0)
 if(NOT LILV_INCLUDE_DIRS)
   message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
 endif()
 
 pkg_check_modules(LV2 lv2>=1.18.0)
-if(LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
+set(LILV_FOUND FALSE)
+if(NOT DISABLE_LILV AND LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
   set(LILV_FOUND TRUE)
 endif()
 add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
