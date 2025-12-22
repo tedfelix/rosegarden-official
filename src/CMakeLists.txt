@@ -55,13 +55,11 @@ if(ALSA_FOUND)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${ALSA_LIBRARIES})
 endif()
 
-if (USE_GTK2)
-  find_package(GTK2)
-  if(GTK2_FOUND)
-    include_directories(${GTK2_INCLUDE_DIRS})
-    link_directories(${GTK2_LIBRARY_DIRS})
-    add_definitions(-DHAVE_GTK2)
-  endif()
+find_package(GTK2)
+if(GTK2_FOUND)
+  include_directories(${GTK2_INCLUDE_DIRS})
+  link_directories(${GTK2_LIBRARY_DIRS})
+  add_definitions(-DHAVE_GTK2)
 endif()
 
 set(rg_CPPS

@@ -225,23 +225,23 @@ LV2Gtk::~LV2Gtk()
 {
 }
 
-LV2Gtk::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget,
-                                       SizeCallback*)
+LV2GtkTypes::LV2GtkWidget LV2Gtk::getWidget(LV2UI_Widget,
+                                            LV2GtkTypes::SizeCallback*)
 {
-    LV2GtkWidget ret;
+    LV2GtkTypes::LV2GtkWidget ret;
     return ret;
 }
 
-void LV2Gtk::getSize(const LV2GtkWidget&, int&, int&) const
+void LV2Gtk::getSize(const LV2GtkTypes::LV2GtkWidget&, int&, int&) const
 {
 }
 
-long int LV2Gtk::getWinId(const LV2GtkWidget&)
+long int LV2Gtk::getWinId(const LV2GtkTypes::LV2GtkWidget&)
 {
     return 0;
 }
 
-void LV2Gtk::deleteWidget(const LV2GtkWidget&)
+void LV2Gtk::deleteWidget(const LV2GtkTypes::LV2GtkWidget&)
 {
 }
 
