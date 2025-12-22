@@ -210,7 +210,7 @@ A number of scripts are available for maintenance during development work
 #### make-ts
 
 Update translation files.  Run before editing one of the .ts
-files so that is is up to date before you begin work.  Run
+files so that it is up to date before you begin work.  Run
 after a string freeze when making a call to translators to
 begin work in preparation for a release.  (Runs menu-ts
 instruments-ts and autoload-ts automatically to extract
