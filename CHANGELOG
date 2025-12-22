@@ -1,3 +1,29 @@
+====== ROSEGARDEN 26.06 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 26.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * LV2: Fix memory leaks.  Bug #1748.  [8139069f92]
+  * cmake: Set LV2 minimum version to 1.18.0.  [e78887fc13]
+  * LV2: Improved handling of GTK2 plugins.  Feature Request #541.
+    [6c6b5e39ba]
+  * Fix duplicate menu items in "Set Entry Velocities" window.
+    Bug #1752.  [95e52f0e64]
+
+Done to: 2e15980fc6
+
+===== New Features =====
+
+===== General Improvements =====
+
+
 ====== ROSEGARDEN 25.12 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 25.12
