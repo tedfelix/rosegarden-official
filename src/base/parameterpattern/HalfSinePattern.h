@@ -40,6 +40,10 @@ public:
         LinearParameterPattern(isDiminuendo)
     {}
 
+    // cppcheck-suppress duplInheritedMember
+    static HalfSinePattern crescendo;
+    // cppcheck-suppress duplInheritedMember
+    static HalfSinePattern diminuendo;
 };
 
 }
