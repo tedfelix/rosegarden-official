@@ -529,8 +529,8 @@ MarkerRuler::mousePressEvent(QMouseEvent *mouseEvent)
 
         // Left-click without modifiers, set pointer to clicked marker.
         if (clickedMarker) {
-            CompositionPosition::getInstance()->slotSetPosition
-                (clickedMarker->getTime());
+            CompositionPosition::getInstance()->slotSet(
+                    clickedMarker->getTime());
             if (m_autoScroller) {
                 m_autoScroller->setFollowMode(FOLLOW_HORIZONTAL);
                 m_autoScroller->start();

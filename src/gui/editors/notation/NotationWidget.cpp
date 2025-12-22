@@ -1420,7 +1420,7 @@ NotationWidget::setPointerPosition(timeT t)
                RosegardenMainWindow::self(),
                &RosegardenMainWindow::slotUpdateForPointerChange);
 
-    CompositionPosition::getInstance()->slotSetPosition(t);
+    CompositionPosition::getInstance()->slotSet(t);
 
     connect(CompositionPosition::getInstance(),
             &CompositionPosition::changed,

@@ -174,8 +174,8 @@ CheckForParallelsDialog::onTextBrowserclicked()
             // at least this should not crash, as the list of segments was updated at the beginning of the function.
 
             notationScene->setCurrentStaff(locationForLine[currentLine].staff);
-            CompositionPosition::getInstance()->slotSetPosition
-                (locationForLine[currentLine].time);
+            CompositionPosition::getInstance()->slotSet(
+                    locationForLine[currentLine].time);
         }
 }
 

@@ -4972,7 +4972,7 @@ RosegardenMainWindow::slotUpdateForPointerChange()
 
             // Limit the end to the end of the composition.
             // RECURSION: Causes this method to be re-invoked.
-            CompositionPosition::getInstance()->slotSetPosition(stopTime);
+            CompositionPosition::getInstance()->slotSet(stopTime);
 
             return;
 
@@ -5700,7 +5700,7 @@ RosegardenMainWindow::slotSetPlayPosition(timeT time)
     if (m_seqManager->getTransportStatus() == RECORDING)
         return ;
 
-    CompositionPosition::getInstance()->slotSetPosition(time);
+    CompositionPosition::getInstance()->slotSet(time);
 
     if (m_seqManager->getTransportStatus() == PLAYING)
         return ;
@@ -5901,7 +5901,7 @@ RosegardenMainWindow::slotJumpToTime(RealTime rt)
     const Composition *comp =
         &RosegardenDocument::currentDocument->getComposition();
     timeT t = comp->getElapsedTimeForRealTime(rt);
-    CompositionPosition::getInstance()->slotSetPosition(t);
+    CompositionPosition::getInstance()->slotSet(t);
 }
 
 void
@@ -6299,7 +6299,7 @@ RosegardenMainWindow::slotEditTransportTime(QWidget *parent)
             CompositionPosition::getInstance()->get(), // defaultTime
             true);  // constrainToCompositionDuration
     if (dialog.exec() == QDialog::Accepted) {
-        CompositionPosition::getInstance()->slotSetPosition(dialog.getTime());
+        CompositionPosition::getInstance()->slotSet(dialog.getTime());
     }
 }
 
@@ -7171,7 +7171,7 @@ RosegardenMainWindow::slotEditMarkers()
 
     connect(m_markerEditor, &MarkerEditor::jumpToMarker,
             CompositionPosition::getInstance(),
-            &CompositionPosition::slotSetPosition);
+            &CompositionPosition::slotSet);
 
     m_markerEditor->show();
 }
@@ -8366,7 +8366,7 @@ RosegardenMainWindow::slotPreviousMarker()
 
     // If a jump is needed, jump.
     if (time != currentTime)
-        CompositionPosition::getInstance()->slotSetPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
 }
 
 void
@@ -8388,7 +8388,7 @@ RosegardenMainWindow::slotNextMarker()
 
     // If a jump is needed, jump.
     if (time != currentTime)
-        CompositionPosition::getInstance()->slotSetPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
 }
 
 void
@@ -8446,7 +8446,7 @@ RosegardenMainWindow::slotCommandUndone()
     // reset the pointer position from the command history
     timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
     RG_DEBUG << "command undone" << pointerPos;
-    CompositionPosition::getInstance()->slotSetPosition(pointerPos);
+    CompositionPosition::getInstance()->slotSet(pointerPos);
 }
 
 void
@@ -8455,7 +8455,7 @@ RosegardenMainWindow::slotCommandRedone()
     // reset the pointer position from the command history
     timeT pointerPos = CommandHistory::getInstance()->getPointerPosition();
     RG_DEBUG << "command redone" << pointerPos;
-    CompositionPosition::getInstance()->slotSetPosition(pointerPos);
+    CompositionPosition::getInstance()->slotSet(pointerPos);
 }
 
 void

@@ -211,8 +211,7 @@ SequenceManager::play()
 
     setTempo(comp.getCurrentTempo());
 
-    RealTime startPos =
-        CompositionPosition::getInstance()->getPositionAsElapsedTime();
+    RealTime startPos = CompositionPosition::getInstance()->getElapsedTime();
 
     // If we're looping then jump to loop start
     if (comp.getLoopMode() == Composition::LoopOn)
@@ -243,8 +242,8 @@ SequenceManager::stop(bool autoStop)
 
     // If the user presses stop while stopped, return to where we last started.
     if (m_transportStatus == STOPPED) {
-        CompositionPosition::getInstance()->slotSetPosition
-            (m_lastTransportStartPosition);
+        CompositionPosition::getInstance()->slotSet(
+                m_lastTransportStartPosition);
         return;
     }
 
@@ -343,11 +342,10 @@ SequenceManager::rewind()
     }
 
     if (barRange.first < composition.getStartMarker()) {
-        CompositionPosition::getInstance()->slotSetPosition
-            (composition.getStartMarker());
+        CompositionPosition::getInstance()->slotSet(
+                composition.getStartMarker());
     } else {
-        CompositionPosition::getInstance()->slotSetPosition
-            (barRange.first);
+        CompositionPosition::getInstance()->slotSet(barRange.first);
     }
 }
 
@@ -366,7 +364,7 @@ SequenceManager::fastforward()
     if (newPosition > composition.getEndMarker())
         newPosition = composition.getEndMarker();
 
-    CompositionPosition::getInstance()->slotSetPosition(newPosition);
+    CompositionPosition::getInstance()->slotSet(newPosition);
 }
 
 void
@@ -537,8 +535,7 @@ punchin:
         // recording.
         //
         if (comp.getLoopMode() == Composition::LoopOn)
-            CompositionPosition::getInstance()->slotSetPosition
-                (comp.getLoopStart());
+            CompositionPosition::getInstance()->slotSet(comp.getLoopStart());
         else {
             if (m_transportStatus != RECORDING_ARMED && punchIn == false) {
                 int startBar = comp.getBarNumber
@@ -546,8 +543,8 @@ punchin:
                 m_realRecordStart = comp.getElapsedRealTime(
                         comp.getBarRange(startBar).first);
                 startBar -= settings.value("countinbars", 0).toUInt();
-                CompositionPosition::getInstance()->slotSetPosition
-                    (comp.getBarRange(startBar).first);
+                CompositionPosition::getInstance()->slotSet(
+                        comp.getBarRange(startBar).first);
             }
         }
 
@@ -610,8 +607,8 @@ punchin:
         // The arguments for the Sequencer - record is similar to playback,
         // we must being playing to record.
         //
-        RealTime startPos =
-            CompositionPosition::getInstance()->getPositionAsElapsedTime();
+        const RealTime startPos =
+            CompositionPosition::getInstance()->getElapsedTime();
 
         int result = RosegardenSequencer::getInstance()->record(
                 startPos,
@@ -1024,8 +1021,8 @@ void
 SequenceManager::rewindToBeginning()
 {
     RG_DEBUG << "rewindToBeginning()";
-    CompositionPosition::getInstance()->slotSetPosition
-        (m_doc->getComposition().getStartMarker());
+    CompositionPosition::getInstance()->slotSet(
+            m_doc->getComposition().getStartMarker());
 }
 
 void
@@ -1033,7 +1030,7 @@ SequenceManager::fastForwardToEnd()
 {
     RG_DEBUG << "fastForwardToEnd()";
     Composition &comp = m_doc->getComposition();
-    CompositionPosition::getInstance()->slotSetPosition(comp.getEndMarker());
+    CompositionPosition::getInstance()->slotSet(comp.getEndMarker());
 }
 
 void SequenceManager::slotLoopChanged()

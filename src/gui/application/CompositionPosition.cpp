@@ -55,13 +55,13 @@ timeT CompositionPosition::get() const
     return m_position;
 }
 
-RealTime CompositionPosition::getPositionAsElapsedTime() const
+RealTime CompositionPosition::getElapsedTime() const
 {
     RG_DEBUG << "getPositionAsElapsedTime";
     return m_positionAsElapsedTime;
 }
 
-void CompositionPosition::slotSetPosition(timeT time)
+void CompositionPosition::slotSet(timeT time)
 {
     RG_DEBUG << "slotSetPosition" << time;
     RosegardenDocument* doc = RosegardenDocument::currentDocument;

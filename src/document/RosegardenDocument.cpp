@@ -317,7 +317,7 @@ RosegardenDocument::jumpToQuickMarker()
     RG_DEBUG << "RosegardenDocument::jumpToQuickMarker";
 
     if (m_quickMarkerTime >= 0)
-        CompositionPosition::getInstance()->slotSetPosition(m_quickMarkerTime);
+        CompositionPosition::getInstance()->slotSet(m_quickMarkerTime);
 }
 
 QString RosegardenDocument::getAutoSaveFileName()

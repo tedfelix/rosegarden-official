@@ -1847,11 +1847,9 @@ MatrixView::slotStepBackward()
     time = getSnapGrid()->snapTime(time - 1, SnapGrid::SnapLeft);
 
     if (time < segment->getStartTime()) {
-        CompositionPosition::getInstance()->
-            slotSetPosition(segment->getStartTime());
+        CompositionPosition::getInstance()->slotSet(segment->getStartTime());
     } else {
-        CompositionPosition::getInstance()->
-            slotSetPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
     }
 }
 
@@ -1875,11 +1873,10 @@ MatrixView::stepForward(bool force)
     time = getSnapGrid()->snapTime(time + 1, SnapGrid::SnapRight);
 
     if (!force && (time > segment->getEndMarkerTime())){
-        CompositionPosition::getInstance()->
-            slotSetPosition(segment->getEndMarkerTime());
+        CompositionPosition::getInstance()->slotSet(
+                segment->getEndMarkerTime());
     } else {
-        CompositionPosition::getInstance()->
-            slotSetPosition(time);
+        CompositionPosition::getInstance()->slotSet(time);
     }
 }
 
@@ -1988,9 +1985,8 @@ MatrixView::slotInsertableNoteEventReceived(int pitch, int velocity, bool noteOn
 
     CommandHistory::getInstance()->addCommand(command);
 
-    if (!m_inChordMode) {
-        CompositionPosition::getInstance()->slotSetPosition(endTime);
-    }
+    if (!m_inChordMode)
+        CompositionPosition::getInstance()->slotSet(endTime);
 }
 
 void
@@ -2107,9 +2103,8 @@ MatrixView::slotInsertNoteFromAction()
 
     CommandHistory::getInstance()->addCommand(command);
 
-    if (!m_inChordMode) {
-        CompositionPosition::getInstance()->slotSetPosition(endTime);
-    }
+    if (!m_inChordMode)
+        CompositionPosition::getInstance()->slotSet(endTime);
 
     emit noteInsertedFromKeyboard(segment, pitch);
     //  ==> MatrixWidget::slotPlayPreviewNote() ==> MatrixScene::playNote()

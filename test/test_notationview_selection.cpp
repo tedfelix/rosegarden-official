@@ -125,7 +125,7 @@ void TestNotationViewSelection::init()
 {
     // Before each test, unselect all and go back to position 0
     m_view->setSelection(nullptr, false);
-    CompositionPosition::getInstance()->slotSetPosition(0);
+    CompositionPosition::getInstance()->slotSet(0);
 }
 
 void TestNotationViewSelection::testNavigate()
@@ -261,7 +261,7 @@ void TestNotationViewSelection::testSelectForwardAndBackward()
     QCOMPARE(selectedNotes(), QString());
 
     // select everything backward, check at end
-    CompositionPosition::getInstance()->slotSetPosition(pos);
+    CompositionPosition::getInstance()->slotSet(pos);
     for (int i = 0 ; i < expectedSelections.size(); ++i) {
         m_view->slotExtendSelectionBackward();
     }

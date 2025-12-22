@@ -2008,7 +2008,7 @@ NotationView::slotEditPaste()
         setSelection(new EventSelection(*segment, insertionTime, endTime),
                      false);
 //!!!        slotSetInsertCursorPosition(endTime, true, false);
-        CompositionPosition::getInstance()->slotSetPosition(endTime);
+        CompositionPosition::getInstance()->slotSet(endTime);
     }
 }
 
@@ -2067,7 +2067,7 @@ NotationView::slotEditGeneralPaste()
             setSelection(new EventSelection(*segment, insertionTime, endTime),
                          false);
 //!!!            slotSetInsertCursorPosition(endTime, true, false);
-            CompositionPosition::getInstance()->slotSetPosition(endTime);
+            CompositionPosition::getInstance()->slotSet(endTime);
         }
     }
 }
@@ -4175,8 +4175,8 @@ NotationView::slotGroupTuplet(bool simple)
 
     if (!hasTimingAlready) {
 //        slotSetInsertCursorPosition(t + (unit * tupled), true, false);
-        CompositionPosition::getInstance()->slotSetPosition
-            (t + (unit * tupled));
+        CompositionPosition::getInstance()->slotSet(
+                t + (unit * tupled));
     }
 }
 
@@ -4509,8 +4509,8 @@ NotationView::slotStepBackward()
         { --i; }
 
     if (i != segment->end()){
-        CompositionPosition::getInstance()->
-            slotSetPosition((*i)->getNotationAbsoluteTime());
+        CompositionPosition::getInstance()->slotSet(
+                (*i)->getNotationAbsoluteTime());
     }
 }
 
@@ -4529,11 +4529,11 @@ NotationView::slotStepForward()
         { ++i; }
 
     if (i == segment->end()){
-        CompositionPosition::getInstance()->
-            slotSetPosition(segment->getEndMarkerTime());
+        CompositionPosition::getInstance()->slotSet(
+                segment->getEndMarkerTime());
     } else {
-        CompositionPosition::getInstance()->
-            slotSetPosition((*i)->getNotationAbsoluteTime());
+        CompositionPosition::getInstance()->slotSet(
+                (*i)->getNotationAbsoluteTime());
     }
 }
 

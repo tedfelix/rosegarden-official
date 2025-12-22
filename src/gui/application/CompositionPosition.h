@@ -37,10 +37,10 @@ public:
     static CompositionPosition* getInstance();
 
     timeT get() const;
-    RealTime getPositionAsElapsedTime() const;
+    RealTime getElapsedTime() const;
 
 public slots:
-    void slotSetPosition(timeT time);
+    void slotSet(timeT time);
 
 signals:
     /// Emitted whenever the position is changed.

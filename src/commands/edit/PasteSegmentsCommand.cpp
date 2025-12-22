@@ -144,7 +144,7 @@ PasteSegmentsCommand::execute()
 
     timeT pasteEndTime = m_pasteTime + (latestEndTime - earliestStartTime);
 
-    CompositionPosition::getInstance()->slotSetPosition(pasteEndTime);
+    CompositionPosition::getInstance()->slotSet(pasteEndTime);
 
     if (m_composition->autoExpandEnabled()) {
         // If the composition needs expanding, do so...

@@ -123,7 +123,7 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
 
     connect(this, &TranzportClient::setPosition,
             CompositionPosition::getInstance(),
-            &CompositionPosition::slotSetPosition);
+            &CompositionPosition::slotSet);
 
     m_composition->addObserver(this);
     m_socketWriteNotifier->setEnabled(false);
@@ -166,7 +166,7 @@ TranzportClient::slotDocumentLoaded(RosegardenDocument *doc)
             this, &TranzportClient::loopChanged);
     connect(this, &TranzportClient::setPosition,
             CompositionPosition::getInstance(),
-            &CompositionPosition::slotSetPosition);
+            &CompositionPosition::slotSet);
 
     while (not commands.empty()) {
         commands.pop();

@@ -1420,8 +1420,8 @@ void CompositionView::mouseDoubleClickEvent(QMouseEvent *e)
     if (!item) {
         const RulerScale *ruler = grid().getRulerScale();
         if (ruler)
-            CompositionPosition::getInstance()->slotSetPosition
-                (ruler->getTimeForX(contentsPos.x()));
+            CompositionPosition::getInstance()->slotSet(
+                    ruler->getTimeForX(contentsPos.x()));
 
         return;
     }

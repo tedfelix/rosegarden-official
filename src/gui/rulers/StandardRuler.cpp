@@ -124,9 +124,9 @@ void StandardRuler::setDocument(RosegardenDocument*)
     // pointer and loop drag signals are specific to the current view,
     // so they are re-emitted from the loop ruler by this widget
     //
-    QObject::connect
-    (m_loopRuler, &LoopRuler::setPointerPosition,
-     CompositionPosition::getInstance(), &CompositionPosition::slotSetPosition);
+    QObject::connect(
+            m_loopRuler, &LoopRuler::setPointerPosition,
+            CompositionPosition::getInstance(), &CompositionPosition::slotSet);
 
     QObject::connect
     (m_loopRuler, &LoopRuler::dragPointerToPosition,
