@@ -183,6 +183,8 @@ AudioPluginLV2GUI::~AudioPluginLV2GUI()
         m_window = nullptr;
     }
     lilv_uis_free(m_uis);
+
+    if (m_uilib) dlclose(m_uilib);
 }
 
 QString
