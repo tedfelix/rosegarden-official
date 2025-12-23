@@ -26,6 +26,8 @@
 #include "misc/Debug.h"
 #include "misc/Preferences.h"
 
+#include <QObject>
+
 #include <vector>
 
 //dmm This will make everything excruciatingly slow if defined:

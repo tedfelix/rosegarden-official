@@ -22,8 +22,6 @@
 
 #include <QString>
 
-#include <string>
-
 
 namespace Rosegarden
 {
