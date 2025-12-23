@@ -83,6 +83,9 @@ void Profiles::dump() const
 {
 #ifndef NO_TIMING
 
+    if (m_profiles.empty())
+        return;
+
     qDebug("----------------------------------------------------");
     qDebug("Profiling points:");
     qDebug(" ");
