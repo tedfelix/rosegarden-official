@@ -4793,24 +4793,31 @@ RosegardenMainWindow::slotHandleInputs()
         case RosegardenSequencer::TransportNoChange:
             break;
         case RosegardenSequencer::TransportStop:
+            RG_DEBUG << "transport request stop";
             slotStop();
             break;
         case RosegardenSequencer::TransportStart:
+            RG_DEBUG << "transport request start";
             slotPlay();
             break;
         case RosegardenSequencer::TransportPlay:
+            RG_DEBUG << "transport request play";
             slotPlay();
             break;
         case RosegardenSequencer::TransportRecord:
+            RG_DEBUG << "transport request record";
             slotToggleRecord();
             break;
         case RosegardenSequencer::TransportJumpToTime:
+            RG_DEBUG << "transport request jump";
             slotJumpToTime(rt);
             break;
         case RosegardenSequencer::TransportStartAtTime:
+            RG_DEBUG << "transport request start at";
             slotStartAtTime(rt);
             break;
         case RosegardenSequencer::TransportStopAtTime:
+            RG_DEBUG << "transport request stop at";
             slotStop();
             slotJumpToTime(rt);
             break;

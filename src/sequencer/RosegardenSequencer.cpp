@@ -259,7 +259,7 @@ RosegardenSequencer::record(const RealTime &time,
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
         SEQUENCER_DEBUG << "RosegardenSequencer::record()"
-                        << " - starting to record" << endl;
+                        << " - starting to record";
 #endif
         // This function is (now) called synchronously from the GUI
         // thread, which is why we needed to obtain the sequencer lock
@@ -523,7 +523,7 @@ RosegardenSequencer::processMappedEvent(const MappedEvent &mE)
     QMutexLocker locker(&m_asyncQueueMutex);
     m_asyncOutQueue.push_back(new MappedEvent(mE));
 //    SEQUENCER_DEBUG << "processMappedEvent: Have " << m_asyncOutQueue.size()
-//                    << " events in async out queue" << endl;
+//                    << " events in async out queue";
 }
 
 bool
@@ -717,7 +717,7 @@ RosegardenSequencer::setMappedProperty(int id,
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "setProperty: id = " << id
                     << " : property = \"" << property << "\""
-                    << ", value = " << value << endl;
+                    << ", value = " << value;
 #endif
     MappedObject *object = m_studio->getObjectById(id);
 
@@ -733,7 +733,7 @@ RosegardenSequencer::setMappedPropertyList(int id, const QString &property,
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "setPropertyList: id = " << id
                     << " : property list size = \"" << values.size()
-                    << "\"" << endl;
+                    << "\"";
 #endif
     MappedObject *object = m_studio->getObjectById(id);
 
@@ -794,7 +794,7 @@ RosegardenSequencer::getPropertyList(int id,
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "getPropertyList - return " << list.size()
-                    << " items" << endl;
+                    << " items";
 #endif
     return list;
 }
@@ -913,7 +913,7 @@ RosegardenSequencer::createMappedObject(int type)
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
         SEQUENCER_DEBUG << "createMappedObject - type = "
                         << type << ", object id = "
-                        << object->getId() << endl;
+                        << object->getId();
 #endif
         return object->getId();
     }
@@ -1007,7 +1007,7 @@ RosegardenSequencer::setQuarterNoteLength(RealTime rt)
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::setQuarterNoteLength"
-                    << rt << endl;
+                    << rt;
 #endif
     m_driver->setMIDIClockInterval(rt / 24);
 }
@@ -1384,7 +1384,7 @@ RosegardenSequencer::processRecordedMidi()
     routeEvents(&thruList, true);
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
-    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << mC.size() << " events";
+    SEQUENCER_DEBUG << "RosegardenSequencer::processRecordedMidi: have " << recordList.size() << " events";
 #endif
 
     // Remove events that match the record filter

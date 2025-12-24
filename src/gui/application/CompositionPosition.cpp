@@ -67,7 +67,8 @@ void CompositionPosition::slotSet(timeT time)
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
 
-    if (time == m_position) return; // no change
+    // even if the time has not changed pass it on otherwise it may
+    // mess up the trensport request system
     Composition& comp = doc->getComposition();
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
