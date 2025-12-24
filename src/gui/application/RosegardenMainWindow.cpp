@@ -633,9 +633,11 @@ RosegardenMainWindow::~RosegardenMainWindow()
     delete RosegardenDocument::currentDocument;
     RosegardenDocument::currentDocument = nullptr;
 
+#ifdef HAVE_LILV
 #ifdef HAVE_GTK2
     // clean up gtk if necessary
     LV2Gtk::shutDown();
+#endif
 #endif
 
     Profiles::getInstance()->dump();
