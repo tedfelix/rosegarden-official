@@ -15,15 +15,15 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_ILV2GTK_H
-#define RG_ILV2GTK_H
+#ifndef RG_LV2GTK2TYPES_H
+#define RG_LV2GTK2TYPES_H
 
 namespace Rosegarden
 {
 
 /// Declarations used in qt and gtk2 code.
 
-namespace LV2GtkTypes
+namespace LV2Gtk2Types
 {
 
 class SizeCallback
@@ -33,10 +33,10 @@ public:
     virtual void setSize(int width, int height, bool isRequest) = 0;
 };
 
-struct LV2GtkWidget
+struct LV2Gtk2Widget
 {
     void* window;
-    LV2GtkWidget() {window = nullptr;}
+    LV2Gtk2Widget() {window = nullptr;}
 };
 
 };

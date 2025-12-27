@@ -773,9 +773,9 @@ if (LILV_FOUND)
     gui/studio/AudioPluginLV2GUIManager.cpp
     gui/studio/AudioPluginLV2GUI.cpp
     gui/studio/AudioPluginLV2GUIWindow.cpp
-    gui/studio/LV2Gtk.cpp
+    gui/studio/LV2Gtk2.cpp
   )
-  set_source_files_properties(gui/studio/LV2Gtk.cpp
+  set_source_files_properties(gui/studio/LV2Gtk2.cpp
     PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 endif()
 
@@ -850,16 +850,16 @@ add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
 )
 
 if(GTK2_FOUND)
-add_library(rosegardenGtk SHARED
-   gui/studio/LV2GtkImpl.cpp
+add_library(rosegardenGtk2 SHARED
+   gui/studio/LV2Gtk2So.cpp
 )
 
-target_link_libraries(rosegardenGtk
+target_link_libraries(rosegardenGtk2
   ${GTK2_LIBRARIES}
 )
 
 # Install shared lib
-install(TARGETS rosegardenGtk
+install(TARGETS rosegardenGtk2
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 endif()

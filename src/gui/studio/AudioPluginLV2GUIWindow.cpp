@@ -24,7 +24,7 @@
 #include "AudioPluginLV2GUI.h"
 #include "sound/LV2PluginInstance.h"
 #include "sound/LV2URIDMapper.h"
-#include "LV2Gtk.h"
+#include "LV2Gtk2.h"
 #include "gui/application/RosegardenMainWindow.h"
 
 #include <QTimer>
@@ -230,13 +230,13 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
     RG_DEBUG << "handle:" << m_handle << "widget:" << m_widget;
 
 #ifdef HAVE_GTK2
-    if (m_uiType == AudioPluginLV2GUI::GTK) {
-        LV2Gtk* lv2gtk = LV2Gtk::getInstance();
-        m_gwidget = lv2gtk->getWidget(m_widget, this);
+    if (m_uiType == AudioPluginLV2GUI::GTK2) {
+        LV2Gtk2* lv2gtk2 = LV2Gtk2::getInstance();
+        m_gwidget = lv2gtk2->getWidget(m_widget, this);
         int width;
         int height;
-        lv2gtk->getSize(m_gwidget, width, height);
-        RG_DEBUG << "gtk got size" << width << height;
+        lv2gtk2->getSize(m_gwidget, width, height);
+        RG_DEBUG << "gtk2 got size" << width << height;
         // If scaling is being used the window size must be reduced
         // here because qt will scale it up again. I believe this
         // applies for all plugins whether they support the
@@ -244,24 +244,24 @@ AudioPluginLV2GUIWindow::AudioPluginLV2GUIWindow
         float scaleFactor =
             Rosegarden::RosegardenMainWindow::self()->
             screen()->devicePixelRatio();
-        RG_DEBUG << "gtk resize adjust for scaleFactor" << scaleFactor;
+        RG_DEBUG << "gtk2 resize adjust for scaleFactor" << scaleFactor;
         width /= scaleFactor;
         height /= scaleFactor;
-        RG_DEBUG << "gtk resize adjusted size" << width << height;
+        RG_DEBUG << "gtk2 resize adjusted size" << width << height;
         resize(width, height);
 
-        const WId wid = (WId)(lv2gtk->getWinId(m_gwidget));
+        const WId wid = (WId)(lv2gtk2->getWinId(m_gwidget));
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 15, 0))
-        RG_DEBUG << "create gtk window from" << Qt::hex << wid;
+        RG_DEBUG << "create gtk2 window from" << Qt::hex << wid;
 #else
-        RG_DEBUG << "create gtk window from" << hex << wid;
+        RG_DEBUG << "create gtk2 window from" << hex << wid;
 #endif
         m_parentWindow = QWindow::fromWinId(wid);
         m_parentWindow->setFlags(Qt::FramelessWindowHint);
         m_containerWidget = QWidget::createWindowContainer(m_parentWindow);
         m_containerWidget->setMinimumSize(QSize(width, height));
         m_containerWidget->setParent(this);
-        RG_DEBUG << "got gtk window" << m_parentWindow <<
+        RG_DEBUG << "got gtk2 window" << m_parentWindow <<
             m_parentWindow->parent();
     }
 #else
@@ -369,9 +369,9 @@ void AudioPluginLV2GUIWindow::closeEvent(QCloseEvent* event)
     if (m_parentWindow) m_parentWindow->setParent(nullptr);
 
 #ifdef HAVE_GTK2
-    if (m_uiType == AudioPluginLV2GUI::GTK) {
-        LV2Gtk* lv2gtk = LV2Gtk::getInstance();
-        lv2gtk->deleteWidget(m_gwidget);
+    if (m_uiType == AudioPluginLV2GUI::GTK2) {
+        LV2Gtk2* lv2gtk2 = LV2Gtk2::getInstance();
+        lv2gtk2->deleteWidget(m_gwidget);
     }
 #endif
 

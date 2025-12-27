@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#include "LV2GtkImpl.h"
+#include "LV2Gtk2So.h"
 
 // gtk can give warnings
 #pragma GCC diagnostic push
@@ -34,16 +34,16 @@ namespace {
     void size_request(GtkWidget*, GtkRequisition *req, gpointer user_data)
     {
         debug_print("size_request %d %d\n", req->width, req->height);
-        Rosegarden::LV2GtkTypes::SizeCallback* sizecb =
-            (Rosegarden::LV2GtkTypes::SizeCallback*)user_data;
+        Rosegarden::LV2Gtk2Types::SizeCallback* sizecb =
+            (Rosegarden::LV2Gtk2Types::SizeCallback*)user_data;
         sizecb->setSize(req->width, req->height, true);
     }
 
     void size_allocate(GtkWidget*, GdkRectangle *rect, gpointer user_data)
     {
         debug_print("size_allocate %d %d\n", rect->width, rect->height);
-        Rosegarden::LV2GtkTypes::SizeCallback* sizecb =
-            (Rosegarden::LV2GtkTypes::SizeCallback*)user_data;
+        Rosegarden::LV2Gtk2Types::SizeCallback* sizecb =
+            (Rosegarden::LV2Gtk2Types::SizeCallback*)user_data;
         sizecb->setSize(rect->width, rect->height, false);
     }
 
@@ -69,7 +69,7 @@ namespace {
 namespace Rosegarden
 {
 
-void  LV2GtkImpl::createLV2GtkImpl()
+void  LV2Gtk2So::createLV2Gtk2So()
 {
     debug_print("gtk startUp\n");
     int argc = 1;
@@ -79,9 +79,9 @@ void  LV2GtkImpl::createLV2GtkImpl()
     gtk_init (&argc, &m_argv);
 }
 
-LV2GtkTypes::LV2GtkWidget LV2GtkImpl::getWidget
+LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2So::getWidget
 (LV2UI_Widget lv2Widget,
- LV2GtkTypes::SizeCallback* sizecb)
+ LV2Gtk2Types::SizeCallback* sizecb)
 {
     debug_print("gtk getWidget\n");
     GtkWidget* wid = (GtkWidget*)lv2Widget;
@@ -97,14 +97,14 @@ LV2GtkTypes::LV2GtkWidget LV2GtkImpl::getWidget
                      G_CALLBACK(delete_event), NULL);
     g_signal_connect(G_OBJECT(window), "destroy",
                      G_CALLBACK(destroy), NULL);
-    LV2GtkTypes::LV2GtkWidget ret;
+    LV2Gtk2Types::LV2Gtk2Widget ret;
     ret.window = window;
     return ret;
 }
 
-void LV2GtkImpl::getSize(const LV2GtkTypes::LV2GtkWidget& widget,
-                         int& width,
-                         int& height)
+void LV2Gtk2So::getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
+                       int& width,
+                       int& height)
 {
     debug_print("gtk getSize\n");
     GtkAllocation alloc;
@@ -114,14 +114,14 @@ void LV2GtkImpl::getSize(const LV2GtkTypes::LV2GtkWidget& widget,
     //printf("getSize %d %d\n", width, height);
 }
 
-long int LV2GtkImpl::getWinId(const LV2GtkTypes::LV2GtkWidget& widget)
+long int LV2Gtk2So::getWinId(const LV2Gtk2Types::LV2Gtk2Widget& widget)
 {
     debug_print("gtk getWinId\n");
     unsigned long id = GDK_WINDOW_XWINDOW(((GtkWidget*)(widget.window))->window);
     return id;
 }
 
-void LV2GtkImpl::deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget)
+void LV2Gtk2So::deleteWidget(const LV2Gtk2Types::LV2Gtk2Widget& widget)
 {
     debug_print("gtk deleteWidget\n");
     if (widget.window) {
@@ -129,7 +129,7 @@ void LV2GtkImpl::deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget)
     }
 }
 
-void LV2GtkImpl::shutDown()
+void LV2Gtk2So::shutDown()
 {
     debug_print("gtk shutdown\n");
     int i = 0;
