@@ -15,12 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_LV2GTKIMPL_H
-#define RG_LV2GTKIMPL_H
+#ifndef RG_LV2GTKSO_H
+#define RG_LV2GTKSO_H
 
 #include <lv2/ui/ui.h>
 
-#include "LV2GtkTypes.h"
+#include "LV2Gtk2Types.h"
 
 namespace Rosegarden
 {
@@ -29,24 +29,24 @@ namespace Rosegarden
 /**
  * This is used by LV2Gtk to get to GTK2 dynamically at runtime.
  */
-namespace LV2GtkImpl
+namespace LV2Gtk2So
 {
 
 extern "C" __attribute__((visibility("default")))
-void createLV2GtkImpl();
+void createLV2Gtk2So();
 
 extern "C" __attribute__((visibility("default")))
-LV2GtkTypes::LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
-                                    LV2GtkTypes::SizeCallback* sizecb);
+LV2Gtk2Types::LV2Gtk2Widget getWidget(LV2UI_Widget lv2Widget,
+                                      LV2Gtk2Types::SizeCallback* sizecb);
 
 extern "C" __attribute__((visibility("default")))
-void getSize(const LV2GtkTypes::LV2GtkWidget& widget,
+void getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
              int& width,
              int& height);
 extern "C" __attribute__((visibility("default")))
-long int getWinId(const LV2GtkTypes::LV2GtkWidget& widget);
+long int getWinId(const LV2Gtk2Types::LV2Gtk2Widget& widget);
 extern "C" __attribute__((visibility("default")))
-void deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget);
+void deleteWidget(const LV2Gtk2Types::LV2Gtk2Widget& widget);
 extern "C" __attribute__((visibility("default")))
 void shutDown();
 

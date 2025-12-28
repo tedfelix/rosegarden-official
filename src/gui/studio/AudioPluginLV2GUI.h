@@ -51,7 +51,7 @@ public:
                       AudioPluginLV2GUIManager* manager);
     ~AudioPluginLV2GUI();
 
-    enum UIType {X11, GTK, KX, NONE};
+    enum UIType {X11, GTK2, KX, NONE};
 
     // copy constructor not used
     AudioPluginLV2GUI(const AudioPluginInstance&) = delete;

@@ -184,7 +184,7 @@
 #include "sound/LV2World.h"
 #include "sound/LV2Utils.h"
 #include "sound/LV2Worker.h"
-#include "gui/studio/LV2Gtk.h"
+#include "gui/studio/LV2Gtk2.h"
 #endif
 #include "sound/MappedCommon.h"
 #include "sound/MappedEventList.h"
@@ -636,7 +636,7 @@ RosegardenMainWindow::~RosegardenMainWindow()
 #ifdef HAVE_LILV
 #ifdef HAVE_GTK2
     // clean up gtk if necessary
-    LV2Gtk::shutDown();
+    LV2Gtk2::shutDown();
 #endif
 #endif
 

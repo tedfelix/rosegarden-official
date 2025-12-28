@@ -106,7 +106,7 @@ AudioPluginLV2GUI::AudioPluginLV2GUI(AudioPluginInstance *instance,
 #ifdef HAVE_GTK2
         if (lilv_ui_is_a(ui, gtkUI)) {
             m_selectedUI = ui;
-            m_uiType = GTK;
+            m_uiType = GTK2;
             break;
         }
 #endif
@@ -205,12 +205,12 @@ AudioPluginLV2GUI::showGui()
 {
     RG_DEBUG << "showGui";
     if (! m_uidesc) return;
-    if (m_uiType == GTK) {
+    if (m_uiType == GTK2) {
         // check if gtk2 is available
         RG_DEBUG << "showGui check gtk2";
-        LV2Gtk* lv2gtk = LV2Gtk::getInstance();
-        // lv2gtk may be zero if gtk is unavailable
-        if (! lv2gtk) {
+        LV2Gtk2* lv2gtk2 = LV2Gtk2::getInstance();
+        // lv2gtk2 may be zero if gtk2 is unavailable
+        if (! lv2gtk2) {
             RG_DEBUG << "gtk2 not available";
             return;
         }

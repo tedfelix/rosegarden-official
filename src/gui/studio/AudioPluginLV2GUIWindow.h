@@ -19,7 +19,7 @@
 #define RG_AUDIOPLUGINLV2GUIWINDOW_H
 
 #include "AudioPluginLV2GUI.h"
-#include "LV2Gtk.h"
+#include "LV2Gtk2.h"
 
 #include <lilv/lilv.h>
 #include <lv2/ui/ui.h>
@@ -40,7 +40,7 @@ namespace Rosegarden
 /// The widget that holds the LV2 GUI.
 class AudioPluginLV2GUIWindow :
     public QWidget,
-    public LV2GtkTypes::SizeCallback
+    public LV2Gtk2Types::SizeCallback
 {
     Q_OBJECT
 public:
@@ -105,7 +105,7 @@ private:
     LV2UI_Idle_Interface* m_lv2II;
     LV2UI_Handle m_handle;
 
-    LV2GtkTypes::LV2GtkWidget m_gwidget;
+    LV2Gtk2Types::LV2Gtk2Widget m_gwidget;
     QWidget* m_containerWidget;
     QWindow* m_parentWindow;
     LV2UI_Widget m_widget;

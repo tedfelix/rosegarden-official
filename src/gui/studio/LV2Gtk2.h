@@ -15,12 +15,12 @@
     COPYING included with this distribution for more information.
 */
 
-#ifndef RG_LV2GTK_H
-#define RG_LV2GTK_H
+#ifndef RG_LV2GTK2_H
+#define RG_LV2GTK2_H
 
 #include <lv2/ui/ui.h>
 
-#include "LV2GtkTypes.h"
+#include "LV2Gtk2Types.h"
 
 #include <QWidget>
 
@@ -35,42 +35,42 @@ namespace Rosegarden
  *
  * GTK2 is required by some LV2 plugins (e.g. Calf).
  *
- * See LV2GtkImpl which is the shared object (librosegardenGtk.so) that is
+ * See LV2Gtk2So which is the shared object (librosegardenGtk2.so) that is
  * loaded dynamically to provide the actual functionality for this wrapper.
  * If it is not present or cannot be loaded due to gtk2 not being available,
  * it will fail gracefully with pop-ups explaining the situation to the user.
  */
-class LV2Gtk : public QWidget
+class LV2Gtk2 : public QWidget
 {
     Q_OBJECT
 public:
-    static LV2Gtk *getInstance();
+    static LV2Gtk2 *getInstance();
 
-    LV2Gtk(LV2Gtk &other) = delete;
-    void operator=(const LV2Gtk &) = delete;
+    LV2Gtk2(LV2Gtk2 &other) = delete;
+    void operator=(const LV2Gtk2 &) = delete;
 
  private:
-    LV2Gtk();
-    ~LV2Gtk();
+    LV2Gtk2();
+    ~LV2Gtk2();
 
  public:
     /// Get a widget for a GTK-based LV2 plugin to use for its main widget.
     /**
      * Wrapper around gtk_window_new().
      */
-    LV2GtkTypes::LV2GtkWidget getWidget(LV2UI_Widget lv2Widget,
-                                        LV2GtkTypes::SizeCallback* sizecb);
-    void getSize(const LV2GtkTypes::LV2GtkWidget& widget,
+    LV2Gtk2Types::LV2Gtk2Widget getWidget(LV2UI_Widget lv2Widget,
+                                          LV2Gtk2Types::SizeCallback* sizecb);
+    void getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
                  int& width,
                  int& height) const;
-    long int getWinId(const LV2GtkTypes::LV2GtkWidget& widget);
-    void deleteWidget(const LV2GtkTypes::LV2GtkWidget& widget);
+    long int getWinId(const LV2Gtk2Types::LV2Gtk2Widget& widget);
+    void deleteWidget(const LV2Gtk2Types::LV2Gtk2Widget& widget);
 
     static void shutDown();
     void doShutDown();
 
 private:
-    static LV2Gtk* m_instance;
+    static LV2Gtk2* m_instance;
 
     void* m_dlib;
 };
