@@ -77,18 +77,18 @@ enable_testing()
 # We'll set it to OFF in release mode, and let users (developers) choose in debug mode.
 # include(CTest) would make it ON by default in all cases, so we don't use that
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    option(BUILD_TESTING "Build the testing tree." OFF)
-else()
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     option(BUILD_TESTING "Build the testing tree." ON)
+else()
+    option(BUILD_TESTING "Build the testing tree." OFF)
 endif()
 
 # Compiler defines
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_definitions(-DNDEBUG -DBUILD_RELEASE -DNO_TIMING)
-else()
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_definitions(-DDEBUG -DBUILD_DEBUG -DWANT_TIMING)
+else()
+    add_definitions(-DNDEBUG -DBUILD_RELEASE -DNO_TIMING)
 endif()
 
 add_definitions(-DQT_NO_URL_CAST_FROM_STRING)
