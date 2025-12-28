@@ -150,6 +150,7 @@ void AudioPluginGUIManager::getParameters
 #ifdef HAVE_LILV
     m_lv2Manager->getParameters(instrument, position, params);
 #else
+    (void)params;
     return;
 #endif
 }
@@ -166,6 +167,8 @@ void AudioPluginGUIManager::updatePluginParameter
 #ifdef HAVE_LILV
     m_lv2Manager->updatePluginParameter(instrument, position, paramId, param);
 #else
+    (void)paramId;
+    (void)param;
     return;
 #endif
 }
@@ -201,6 +204,8 @@ void AudioPluginGUIManager::setPreset
     if (arch != LV2) return;
 #ifdef HAVE_LILV
     m_lv2Manager->setPreset(instrument, position, uri);
+#else
+    (void)uri;
 #endif
 }
 
@@ -212,6 +217,8 @@ void AudioPluginGUIManager::loadPreset
     if (arch != LV2) return;
 #ifdef HAVE_LILV
     m_lv2Manager->loadPreset(instrument, position, file);
+#else
+    (void)file;
 #endif
 }
 
@@ -223,6 +230,8 @@ void AudioPluginGUIManager::savePreset
     if (arch != LV2) return;
 #ifdef HAVE_LILV
     m_lv2Manager->savePreset(instrument, position, file);
+#else
+    (void)file;
 #endif
 }
 
