@@ -388,8 +388,10 @@ SequencerDataBlock::setMasterLevel(const LevelInfo &info)
 void
 SequencerDataBlock::clearTemporaries()
 {
-    m_positionSec = 0;
-    m_positionNsec = 0;
+    // m_position... is not temporary. It should always reflect the
+    // sequencer song position.
+    //m_positionSec = 0;
+    //m_positionNsec = 0;
 
     m_setVisualIndex = 0;
     m_getVisualIndex = 0;
