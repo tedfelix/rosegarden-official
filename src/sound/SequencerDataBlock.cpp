@@ -50,6 +50,8 @@ void SequencerDataBlock::setPositionPointer(const RealTime &rt)
 
 SequencerDataBlock::SequencerDataBlock()
 {
+    m_positionSec = 0;
+    m_positionNsec = 0;
     clearTemporaries();
 }
 
