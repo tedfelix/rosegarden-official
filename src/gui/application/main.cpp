@@ -396,9 +396,12 @@ int main(int argc, char *argv[])
         // and application here as QApplication is not yet
         // initialized.
 
+        // Specify names since Qt isn't fully up yet.
         QSettings settings(organizationName, applicationName);
         settings.beginGroup(GeneralOptionsConfigGroup);
-        bool changeEnv = settings.value("Lv2Environment", true).toBool();
+        // Note that we cannot use Preferences::getLv2Environment() since
+        // Qt is not fully up yet.
+        const bool changeEnv = settings.value("Lv2Environment", true).toBool();
         if (changeEnv) {
             RG_DEBUG << "check and update lv2 environment variables";
             QString st = QString(qgetenv("XDG_SESSION_TYPE"));
@@ -410,6 +413,11 @@ int main(int argc, char *argv[])
             QString cd = QString(qgetenv("XDG_CURRENT_DESKTOP"));
             if (cd != "KDE") {
                 RG_DEBUG << "set QT_QPA_PLATFORMTHEME to gtk2";
+                // ??? This causes a lot of memory leaks inside Qt (v5 anyway).
+                //     Recommend setting Lv2Environment to false in the config
+                //     to avoid.  That will break gtk2 plugins and maybe
+                //     others, but will make it easier to track down memory
+                //     leaks elsewhere.
                 qputenv("QT_QPA_PLATFORMTHEME", "gtk2");
             }
 #endif
