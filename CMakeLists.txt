@@ -182,9 +182,11 @@ pkg_check_modules(SAMPLERATE REQUIRED samplerate>=0.1.2)
 
 # Optional dependencies ---------------------------------------
 
+# SNDFILE
 pkg_check_modules(SNDFILE sndfile>=1.0.16)
 add_feature_info(SNDFILE SNDFILE_FOUND "Better support for WAV files")
 
+# JACK
 pkg_check_modules(PC_JACK jack)
 # Use find_library to turn it into a full path
 find_library(JACK_LIBRARIES NAMES ${PC_JACK_LIBRARIES} jack PATHS ${PC_JACK_LIBRARY_DIRS})
@@ -213,14 +215,27 @@ if(NOT DISABLE_LIRC)
 endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
-# Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
+# LILV
 pkg_check_modules(LILV lilv-0)
 if(NOT LILV_INCLUDE_DIRS)
   message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
 endif()
+if(NOT LILV_LIBRARIES)
+  message(WARNING "Failed to find Lilv library for lv2 plugins")
+endif()
 
+# LV2
 pkg_check_modules(LV2 lv2>=1.18.0)
+if(NOT LV2_INCLUDE_DIRS)
+  message(WARNING "Failed to find lv2 headers for lv2 plugins")
+endif()
+if(DISABLE_LV2)
+  message(WARNING "lv2 has been disabled via DISABLE_LV2")
+endif()
+
+# LILV_FOUND
 set(LILV_FOUND FALSE)
+# Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
 if(NOT DISABLE_LV2 AND LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
   set(LILV_FOUND TRUE)
 endif()
