@@ -226,6 +226,10 @@ endif()
 
 # LV2
 pkg_check_modules(LV2 lv2>=1.18.0)
+# run cmake with --log-level=VERBOSE to see these:
+message(VERBOSE "LV2_FOUND: '${LV2_FOUND}'")
+message(VERBOSE "LV2_INCLUDE_DIRS: '${LV2_INCLUDE_DIRS}'")
+message(VERBOSE "LV2_LIBRARY_DIRS: '${LV2_LIBRARY_DIRS}'")
 if(NOT LV2_INCLUDE_DIRS)
   message(WARNING "Failed to find lv2 headers for lv2 plugins")
 endif()
