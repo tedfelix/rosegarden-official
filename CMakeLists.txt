@@ -217,10 +217,7 @@ add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remot
 
 # LILV
 pkg_check_modules(LILV lilv-0)
-if(NOT LILV_INCLUDE_DIRS)
-  message(WARNING "Failed to find Lilv header lilv/lilv.h for lv2 plugins")
-endif()
-if(NOT LILV_LIBRARIES)
+if(NOT LILV_FOUND)
   message(WARNING "Failed to find Lilv library for lv2 plugins")
 endif()
 
@@ -230,7 +227,7 @@ pkg_check_modules(LV2 lv2>=1.18.0)
 message(VERBOSE "LV2_FOUND: '${LV2_FOUND}'")
 message(VERBOSE "LV2_INCLUDE_DIRS: '${LV2_INCLUDE_DIRS}'")
 message(VERBOSE "LV2_LIBRARY_DIRS: '${LV2_LIBRARY_DIRS}'")
-if(NOT LV2_INCLUDE_DIRS)
+if(NOT LV2_FOUND)
   message(WARNING "Failed to find lv2 headers for lv2 plugins")
 endif()
 if(DISABLE_LV2)
@@ -238,10 +235,13 @@ if(DISABLE_LV2)
 endif()
 
 # LILV_FOUND
-set(LILV_FOUND FALSE)
-# Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
-if(NOT DISABLE_LV2 AND LILV_INCLUDE_DIRS AND LILV_LIBRARIES AND LV2_INCLUDE_DIRS)
-  set(LILV_FOUND TRUE)
+if(LILV_FOUND)
+  # Make sure we have everything else we need for lv2.
+  set(LILV_FOUND FALSE)
+  # Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
+  if(NOT DISABLE_LV2 AND LV2_FOUND)
+    set(LILV_FOUND TRUE)
+  endif()
 endif()
 add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
 

@@ -49,6 +49,13 @@ if(LILV_FOUND)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LILV_LIBRARIES})
 endif()
 
+if(LV2_FOUND)
+    include_directories(${LV2_INCLUDE_DIRS})
+    # Use HAVE_LILV to detect the presence of LV2 in the code.
+    #add_definitions(-DHAVE_LV2)
+    set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LV2_LIBRARIES})
+endif()
+
 if(ALSA_FOUND)
     include_directories(${ALSA_INCLUDE_DIR})
     add_definitions(-DHAVE_ALSA)
