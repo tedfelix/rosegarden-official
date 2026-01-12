@@ -45,15 +45,21 @@ endif()
 
 if(LILV_FOUND)
     include_directories(${LILV_INCLUDE_DIRS})
-    add_definitions(-DHAVE_LILV)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LILV_LIBRARIES})
 endif()
 
 if(LV2_FOUND)
     include_directories(${LV2_INCLUDE_DIRS})
-    # Use HAVE_LILV to detect the presence of LV2 in the code.
-    #add_definitions(-DHAVE_LV2)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LV2_LIBRARIES})
+endif()
+
+if(NOT DISABLE_LV2)
+    if(LILV_FOUND  AND  LV2_FOUND)
+        # Enable Lv2 in the code since we have everything we need.
+        add_definitions(-DHAVE_LILV)
+    else()
+        message(WARNING "lv2 support has been disabled due to lilv and/or lv2 missing")
+    endif()
 endif()
 
 if(ALSA_FOUND)

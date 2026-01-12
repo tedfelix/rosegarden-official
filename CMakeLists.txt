@@ -215,35 +215,22 @@ if(NOT DISABLE_LIRC)
 endif()
 add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
-# LILV
-pkg_check_modules(LILV lilv-0)
-if(NOT LILV_FOUND)
-  message(WARNING "Failed to find Lilv library for lv2 plugins")
-endif()
-
-# LV2
-pkg_check_modules(LV2 lv2>=1.18.0)
-# run cmake with --log-level=VERBOSE to see these:
-message(VERBOSE "LV2_FOUND: '${LV2_FOUND}'")
-message(VERBOSE "LV2_INCLUDE_DIRS: '${LV2_INCLUDE_DIRS}'")
-message(VERBOSE "LV2_LIBRARY_DIRS: '${LV2_LIBRARY_DIRS}'")
-if(NOT LV2_FOUND)
-  message(WARNING "Failed to find lv2 headers for lv2 plugins")
-endif()
 if(DISABLE_LV2)
-  message(WARNING "lv2 has been disabled via DISABLE_LV2")
+    message("lv2 support has been disabled via DISABLE_LV2")
+else()
+    # LILV
+    pkg_check_modules(LILV lilv-0)
+    add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
+
+    # LV2
+    pkg_check_modules(LV2 lv2>=1.18.0)
+    # run cmake with --log-level=VERBOSE to see these:
+    message(VERBOSE "LV2_FOUND: '${LV2_FOUND}'")
+    message(VERBOSE "LV2_INCLUDE_DIRS: '${LV2_INCLUDE_DIRS}'")
+    message(VERBOSE "LV2_LIBRARY_DIRS: '${LV2_LIBRARY_DIRS}'")
+    add_feature_info(LV2 LV2_FOUND "The Lv2 library, for lv2 plugins")
 endif()
 
-# LILV_FOUND
-if(LILV_FOUND)
-  # Make sure we have everything else we need for lv2.
-  set(LILV_FOUND FALSE)
-  # Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
-  if(NOT DISABLE_LV2  AND  LV2_FOUND)
-    set(LILV_FOUND TRUE)
-  endif()
-endif()
-add_feature_info(LILV LILV_FOUND "The Lilv library, for lv2 plugins")
 
 # --------------------------------------------------------
 
