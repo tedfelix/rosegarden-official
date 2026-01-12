@@ -856,7 +856,7 @@ add_library(rosegardenprivate ${RG_LIBRARY_TYPE}
    ${CMAKE_CURRENT_BINARY_DIR}/svnversion.h
 )
 
-if(GTK2_FOUND)
+if(GTK2_FOUND  AND  LILV_FOUND)
 add_library(rosegardenGtk2 SHARED
    gui/studio/LV2Gtk2So.cpp
 )

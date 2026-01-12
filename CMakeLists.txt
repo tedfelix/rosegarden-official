@@ -239,7 +239,7 @@ if(LILV_FOUND)
   # Make sure we have everything else we need for lv2.
   set(LILV_FOUND FALSE)
   # Build with lv2 plugins support if lilv/lv2 detected, unless DISABLE_LV2 is set
-  if(NOT DISABLE_LV2 AND LV2_FOUND)
+  if(NOT DISABLE_LV2  AND  LV2_FOUND)
     set(LILV_FOUND TRUE)
   endif()
 endif()
