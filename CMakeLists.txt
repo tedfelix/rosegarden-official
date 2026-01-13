@@ -187,19 +187,11 @@ pkg_check_modules(SNDFILE sndfile>=1.0.16)
 add_feature_info(SNDFILE SNDFILE_FOUND "Better support for WAV files")
 
 # JACK
-pkg_check_modules(PC_JACK jack)
-# Use find_library to turn it into a full path
-# This will transform "jack" into something like
-# "/usr/lib/x86_64-linux-gnu/libjack.so".
-find_library(JACK_LIBRARIES NAMES ${PC_JACK_LIBRARIES} jack PATHS ${PC_JACK_LIBRARY_DIRS})
-if(JACK_LIBRARIES)
-    set(JACK_FOUND TRUE)
+pkg_check_modules(JACK jack)
+if(NOT JACK_FOUND)
+    message(WARNING "WARNING: the library for accessing the JACK server (http://jackaudio.org) was not found. Audio will be unavailable!")
 endif()
-if(JACK_FOUND)
-    add_feature_info(JACK JACK_FOUND "Library for accessing the JACK server (http://jackaudio.org).")
-else()
-    add_feature_info(JACK JACK_FOUND "WARNING: the library for accessing the JACK server (http://jackaudio.org) was not found. Audio will be unavailable!")
-endif()
+add_feature_info(JACK JACK_FOUND "Library for accessing the JACK server (http://jackaudio.org).")
 
 # Build with LIRC support if LIRC detected, unless DISABLE_LIRC is set
 if(NOT DISABLE_LIRC)
