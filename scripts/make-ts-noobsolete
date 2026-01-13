@@ -1,22 +1,40 @@
 #!/bin/bash
 
+# make-ts-noobsolete - Remove obsolete and vanished translations.
+
+# Example usage:
+#   scripts/make-ts-noobsolete data/locale/pl.ts
+
 PERL=perl
 
-$PERL scripts/extract_instrument_tr_strings.pl data/presets/presets.xml > data/InstrumentStrings.cpp
+# Get strings from presets.xml
+$PERL scripts/extract_instrument_tr_strings.pl data/presets/presets.xml \
+      >data/InstrumentStrings.cpp
 
-$PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc > data/QMenuStrings.cpp
+# Get strings from the .rc files.
+$PERL scripts/extract_menu_tr_strings.pl data/rc/*.rc >data/QMenuStrings.cpp
 
+# Get strings from autoload.rg
 gunzip -c data/autoload/autoload.rg > data/autoload/autoload.xml
-$PERL scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml > data/AutoloadStrings.cpp
+$PERL scripts/extract_autoload_tr_strings.pl data/autoload/autoload.xml \
+      >data/AutoloadStrings.cpp
 rm -f data/autoload/autoload.xml
 
 # Lazy hack copy of the script to clean up obsolete translations on the actively
 # maintained languages to prevent them from bloating.  We want to leave the
 # obsolete translations on the inactive/abandoned languages, in case they are
 # ever useful to someone catching up those translations.
-TRANSLATIONS='data/locale/en_GB.ts  data/locale/en.ts  data/locale/en_US.ts data/locale/es.ts data/locale/fr.ts'
+#TRANSLATIONS='data/locale/en_GB.ts  data/locale/en.ts  data/locale/en_US.ts data/locale/es.ts data/locale/fr.ts'
 
 NOOBSOPT="-noobsolete"
 
-lupdate $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` data/QMenuStrings.cpp data/InstrumentStrings.cpp data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts $TRANSLATIONS
+LUPDATE=lupdate
+
+# Update the .ts files.
+$LUPDATE $NOOBSOPT `find src -name '*.ui' -o -name '*.cpp' -o -name '*.h'` \
+        data/QMenuStrings.cpp data/InstrumentStrings.cpp \
+        data/AutoloadStrings.cpp -ts data/locale/rosegarden.ts \
+        $@
+
+# Display statistics.
 scripts/ts-stats
