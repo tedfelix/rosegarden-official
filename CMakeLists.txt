@@ -193,8 +193,10 @@ if(NOT JACK_FOUND)
 endif()
 add_feature_info(JACK JACK_FOUND "Library for accessing the JACK server (http://jackaudio.org).")
 
-# Build with LIRC support if LIRC detected, unless DISABLE_LIRC is set
-if(NOT DISABLE_LIRC)
+# Build with LIRC support only if USE_LIRC defined.
+# LIRC is pretty rare these days.  Make it default to off.
+option(USE_LIRC "Compile with LIRC for remote control support." OFF)
+if(USE_LIRC)
     find_path(LIRCCLIENT_INCLUDE_DIR lirc/lirc_client.h)
     if(NOT LIRCCLIENT_INCLUDE_DIR)
         message(WARNING "Failed to find LIRC header lirc/lirc_client.h")
@@ -206,8 +208,8 @@ if(NOT DISABLE_LIRC)
     if(LIRCCLIENT_INCLUDE_DIR AND LIRCCLIENT_LIBRARY)
         set(LIRCCLIENT_FOUND TRUE)
     endif()
+    add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 endif()
-add_feature_info(LIRCCLIENT LIRCCLIENT_FOUND "The LIRC client library, for remote control support")
 
 if(DISABLE_LV2)
     message("lv2 support has been disabled via DISABLE_LV2")

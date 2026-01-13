@@ -39,7 +39,9 @@ endif()
 if(LIRCCLIENT_FOUND)
     include_directories(${LIRCCLIENT_INCLUDE_DIR})
     add_definitions(-DHAVE_LIRC)
-    set(CMAKE_AUTOMOC_MOC_OPTIONS ${CMAKE_AUTOMOC_MOC_OPTIONS} -DHAVE_LIRC) # for cmake 2.8.12, fixed in 2.8.12.1 (https://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=a1b9465b)
+    # for cmake 2.8.12, fixed in 2.8.12.1
+    # (https://cmake.org/gitweb?p=cmake.git;a=commitdiff;h=a1b9465b)
+    set(CMAKE_AUTOMOC_MOC_OPTIONS ${CMAKE_AUTOMOC_MOC_OPTIONS} -DHAVE_LIRC)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${LIRCCLIENT_LIBRARY})
 endif()
 
