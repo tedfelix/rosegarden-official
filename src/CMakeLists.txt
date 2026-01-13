@@ -31,7 +31,7 @@ if(SNDFILE_FOUND)
 endif()
 
 if(JACK_FOUND)
-    include_directories(${JACK_INCLUDE_DIRS})
+    include_directories(${PC_JACK_INCLUDE_DIRS})
     add_definitions(-DHAVE_LIBJACK)
     set(rg_OPTIONAL_LIBS ${rg_OPTIONAL_LIBS} ${JACK_LIBRARIES})
 endif()

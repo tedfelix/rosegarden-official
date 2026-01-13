@@ -189,6 +189,8 @@ add_feature_info(SNDFILE SNDFILE_FOUND "Better support for WAV files")
 # JACK
 pkg_check_modules(PC_JACK jack)
 # Use find_library to turn it into a full path
+# This will transform "jack" into something like
+# "/usr/lib/x86_64-linux-gnu/libjack.so".
 find_library(JACK_LIBRARIES NAMES ${PC_JACK_LIBRARIES} jack PATHS ${PC_JACK_LIBRARY_DIRS})
 if(JACK_LIBRARIES)
     set(JACK_FOUND TRUE)
