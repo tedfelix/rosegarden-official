@@ -10316,7 +10316,7 @@
     <message>
         <location line="+1"/>
         <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Biblioteka Rosegarden GTK2 (librosegardenGtk2.so) nie została znaleziona. Upewnij się, że biblioteka znajduje się w standardowej lokalizacji lub można ją znaleźć za pomocą zmiennej środowiskowej LD_LIBRARY_PATH.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+430"/>
@@ -17415,12 +17415,12 @@ Przykładowy tekst z pliku:</translation>
     <message>
         <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="-40"/>
         <source>Do not show this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie pokazuj ponownie</translation>
     </message>
     <message>
         <location line="+2"/>
-        <source>You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:&lt;br/&gt;set QT_QPA_PLATFORMTHEME to gtk2 (and install the gtk2 style plugin or&lt;br/&gt;set XDG_SESSION_TYPE to unknown</source>
-        <translation type="unfinished"></translation>
+        <source>You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:&lt;br/&gt;set QT_QPA_PLATFORMTHEME to gtk2 and install the gtk2 style plugin or&lt;br/&gt;set XDG_SESSION_TYPE to unknown</source>
+        <translation>Zamierzasz załadować infrastrukturę gtk2. Wiadomo, że powoduje to awarie w niektórych systemach. Możliwe obejścia to ustawienie zmiennych środowiskowych dla programu Rosegarden:&lt;br/&gt;ustaw QT_QPA_PLATFORMTHEME na gtk2 i zainstaluj wtyczkę w stylu gtk2 lub&lt;br/&gt;ustaw XDG_SESSION_TYPE na nieznany.</translation>
     </message>
 </context>
 <context>

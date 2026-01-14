@@ -45,7 +45,7 @@ LV2Gtk2* LV2Gtk2::getInstance()
         if (Preferences::getShowGtk2Warning()) {
             QCheckBox *cb = new QCheckBox(tr("Do not show this again"));
             QMessageBox msgbox;
-            msgbox.setText(tr("You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:<br/>set QT_QPA_PLATFORMTHEME to gtk2 (and install the gtk2 style plugin or<br/>set XDG_SESSION_TYPE to unknown"));
+            msgbox.setText(tr("You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:<br/>set QT_QPA_PLATFORMTHEME to gtk2 and install the gtk2 style plugin or<br/>set XDG_SESSION_TYPE to unknown"));
             msgbox.setIcon(QMessageBox::Icon::Question);
             msgbox.addButton(QMessageBox::Ok);
             msgbox.addButton(QMessageBox::Cancel);
