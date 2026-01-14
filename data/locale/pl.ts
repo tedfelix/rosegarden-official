@@ -6680,22 +6680,22 @@
     <message>
         <location line="+68"/>
         <source>&amp;0dB Law (Basic Balance Control)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zasada 0 dB (podstawowa kontrola balansu)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;3dB Law (Constant Power)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zasada 3 dB (stała moc)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>-&amp;6dB Law (Reduced Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zasada 6 dB (zredukowany środek)</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Alternate -3dB Law (Constant Power, 0dB Center)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alternatywna zasada -3 dB (stała moc, środek 0 dB)</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -10007,11 +10007,11 @@
     </message>
     <message>
         <source>Detuned EP 1</source>
-        <translation type="obsolete">Przestrojony EP 1</translation>
+        <translation type="obsolete">Rozstrojony EP 1</translation>
     </message>
     <message>
         <source>Detuned EP 2</source>
-        <translation type="obsolete">Przestrojony EP 2</translation>
+        <translation type="obsolete">Rozstrojony EP 2</translation>
     </message>
     <message>
         <source>Coupled Harpsichord</source>
@@ -10023,11 +10023,11 @@
     </message>
     <message>
         <source>Detuned Organ 1</source>
-        <translation type="obsolete">Przestrojone organy 1</translation>
+        <translation type="obsolete">Rozstrojone organy 1</translation>
     </message>
     <message>
         <source>Detuned Organ 2</source>
-        <translation type="obsolete">Przestrojone organy 2</translation>
+        <translation type="obsolete">Rozstrojone organy 2</translation>
     </message>
     <message>
         <source>Church Organ 2</source>
@@ -10461,7 +10461,7 @@
     </message>
     <message>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation type="vanished">Rosegarden obsługuje obecnie tylko 16- lub 32-bitowe PCM lub IEEE zmiennoprzecinkowych plików RIFF</translation>
+        <translation type="vanished">Rosegarden obecnie obsługuje tylko 16- lub 32-bitowe zmiennoprzecinkowe PCM lub IEEE w plikach RIFF do zapisu</translation>
     </message>
     <message>
         <source>Can&apos;t find RIFF identifier</source>
@@ -10477,7 +10477,7 @@
     </message>
     <message>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation type="vanished">Rosegarden obsługuje obecnie tylko PCM lub IEEE zmiennoprzecinkowych plików RIFF</translation>
+        <translation type="vanished">Rosegarden obecnie obsługuje tylko zmiennoprzecinkowe PCM lub IEEE w plikach RIFF</translation>
     </message>
     <message>
         <source>Unsupported number of channels</source>
@@ -10485,11 +10485,11 @@
     </message>
     <message>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation type="vanished">Rosegarden obsługuje obecnie tylko 8-, 16- lub 24-bitowe PCM w plikach RIFF</translation>
+        <translation type="vanished">Rosegarden obecnie obsługuje tylko 8-, 16- lub 24-bitowe PCM w plikach RIFF</translation>
     </message>
     <message>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation type="vanished">Rosegarden obsługuje obecnie tylko 32-bitowe zmiennoprzecinkowe w plikach RIFF</translation>
+        <translation type="vanished">Rosegarden obecnie obsługuje tylko 32-bitowe zmiennoprzecinkowe w plikach RIFF</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/TranzportClient.cpp" line="+62"/>
@@ -11445,7 +11445,7 @@ zamiast tego?</translation>
     <message>
         <location line="+1"/>
         <source>32-bit float WAV format (higher quality)</source>
-        <translation>32-bitowy format float WAV (lepsza jakość)</translation>
+        <translation>32-bitowy zmiennoprzecinkowy format WAV (lepsza jakość)</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -21679,7 +21679,7 @@ Upewnij się, że urządzenie jest prawidłowo skonfigurowane w oknie Zarządzan
     <message>
         <location line="+33"/>
         <source>Can&apos;t open preset file %1</source>
-        <translation>Nie można otworzyć pliku presetu %1</translation>
+        <translation>Nie można otworzyć pliku preseta %1</translation>
     </message>
 </context>
 <context>
@@ -21692,12 +21692,12 @@ Upewnij się, że urządzenie jest prawidłowo skonfigurowane w oknie Zarządzan
     <message>
         <location line="+19"/>
         <source>Load track parameters preset</source>
-        <translation>Załaduj ustawienia parametrów ścieżki</translation>
+        <translation>Załaduj preset parametrów ścieżki</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Select preset track parameters for:</source>
-        <translation>Zaznacz ustawienia parametrów ścieżki dla:</translation>
+        <translation>Zaznacz preset parametrów ścieżki dla:</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -22171,7 +22171,7 @@ Upewnij się, że urządzenie jest prawidłowo skonfigurowane w oknie Zarządzan
     <message>
         <location filename="../../src/sound/RIFFAudioFile.cpp" line="+63"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
-        <translation>Rosegarden obsługuje obecnie tylko 16- lub 32-bitowe PCM lub IEEE zmiennoprzecinkowych plików RIFF</translation>
+        <translation>Rosegarden obecnie obsługuje tylko 16- lub 32-bitowe zmiennoprzecinkowe PCM lub IEEE w plikach RIFF do zapisu</translation>
     </message>
     <message>
         <location line="+311"/>
@@ -22191,7 +22191,7 @@ Upewnij się, że urządzenie jest prawidłowo skonfigurowane w oknie Zarządzan
     <message>
         <location line="+50"/>
         <source>Rosegarden currently only supports PCM or IEEE floating-point RIFF files</source>
-        <translation>Rosegarden obsługuje obecnie tylko PCM lub IEEE zmiennoprzecinkowych plików RIFF</translation>
+        <translation>Rosegarden obecnie obsługuje tylko zmiennoprzecinkowe PCM lub IEEE w plikach RIFF</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -22201,12 +22201,12 @@ Upewnij się, że urządzenie jest prawidłowo skonfigurowane w oknie Zarządzan
     <message>
         <location line="+14"/>
         <source>Rosegarden currently only supports 8-, 16- or 24-bit PCM in RIFF files</source>
-        <translation>Rosegarden obsługuje obecnie tylko 8-, 16- lub 24-bitowe PCM w plikach RIFF</translation>
+        <translation>Rosegarden obecnie obsługuje tylko 8-, 16- lub 24-bitowe PCM w plikach RIFF</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Rosegarden currently only supports 32-bit floating-point in RIFF files</source>
-        <translation>Rosegarden obsługuje obecnie tylko 32-bitowe zmiennoprzecinkowe w plikach RIFF</translation>
+        <translation>Rosegarden obecnie obsługuje tylko 32-bitowe zmiennoprzecinkowe w plikach RIFF</translation>
     </message>
 </context>
 <context>
@@ -23727,7 +23727,7 @@ Wyjdź i zrestartuj Rosegarden, aby przywrócić funkcje dźwiękowe.</translati
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegarden nie mógł wystartować, więc dźwięk i nagrywanie będą niedostępne dla tej sesji.
-Aby uzyskać wsparcie w konfiguracji dźwięku i MIDI, wejdź na stronę http://rosegardenmusic.com.</translation>
+Aby uzyskać pomoc dotyczącą prawidłowej konfiguracji dźwięku i MIDI, wejdź na stronę http://rosegardenmusic.com.</translation>
     </message>
     <message>
         <location line="+12"/>
@@ -27183,7 +27183,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+65"/>
         <source>&lt;qt&gt;&lt;p&gt;Load a segment parameters preset from our comprehensive database of real-world instruments.&lt;/p&gt;&lt;p&gt;When you create new segments, they will have these parameters at the moment of creation.  To use these parameters on existing segments (eg. to convert an existing part in concert pitch for playback on a Bb trumpet) use &lt;b&gt;Segments -&gt; Convert notation for&lt;/b&gt; in the notation editor.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Załaduj parametry segmentu presetu z naszej obszernej bazy danych instrumentów z całego świata.&lt;/p&gt;&lt;p&gt;Gdy utworzysz nowe segmenty, będą one miały te parametry w chwili utworzenia. Aby używać tych parametrów na istniejących segmentach (np. aby przekonwertować istniejącą partię do odtwarzania trąbki Bb bez transpozycji), użyj &lt;b&gt;Segmenty -&gt; Konwertuj notację do...&lt;/b&gt; w edytorze nutowym.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Załaduj preset parametrów segmentu z naszej obszernej bazy danych instrumentów z całego świata.&lt;/p&gt;&lt;p&gt;Gdy utworzysz nowe segmenty, będą one miały te parametry w chwili utworzenia. Aby używać tych parametrów na istniejących segmentach (np. aby przekonwertować istniejącą partię do odtwarzania trąbki Bb bez transpozycji), użyj &lt;b&gt;Segmenty -&gt; Konwertuj notację do...&lt;/b&gt; w edytorze nutowym.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <source>treble</source>
@@ -27670,7 +27670,7 @@ Transponuj o półtony...</translation>
     <message>
         <location line="-25"/>
         <source>Timing is already correct: update display only</source>
-        <translation>Czas jest prawidłowy: aktualizuj tylko wyświetlanie</translation>
+        <translation>Czas jest już prawidłowy: zaktualizuj tylko wyświetlacz</translation>
     </message>
     <message>
         <location line="+37"/>
@@ -28021,17 +28021,17 @@ Transponuj o półtony...</translation>
     <message>
         <location line="+3"/>
         <source>Mutes all but the currently selected track</source>
-        <translation>Wycisza wszystkie ścieżki oprócz bieżącej</translation>
+        <translation>Wycisza wszystkie ścieżki oprócz obecnie zaznaczonej</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>Start loop or range here</source>
-        <translation>Ustal tutaj początkowy zakres pętli</translation>
+        <translation>Rozpocznij pętlę lub zakres tutaj</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>End loop or range here</source>
-        <translation>Ustal tutaj końcowy zakres pętli</translation>
+        <translation>Zakończ pętlę lub zakres tutaj</translation>
     </message>
     <message>
         <location line="+1031"/>
