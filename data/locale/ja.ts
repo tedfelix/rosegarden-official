@@ -4967,7 +4967,7 @@
         <translation type="unfinished">オーディオ</translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1085"/>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1086"/>
         <source>&lt;new bank&gt;</source>
         <translation type="unfinished">&lt;新しいバンク&gt;</translation>
     </message>
@@ -9929,7 +9929,7 @@
         <translation>新しいトリガーセグメントで貼り付け(&amp;s)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+58"/>
+        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+63"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation>フォント&quot;%1&quot;のサイズが一覧にない</translation>
     </message>
@@ -9951,7 +9951,7 @@
         <translation>Db</translation>
     </message>
     <message>
-        <location filename="../../src/base/Pitch.cpp" line="+46"/>
+        <location filename="../../src/base/Pitch.cpp" line="+48"/>
         <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>Eb</source>
         <comment>note name</comment>
@@ -10287,14 +10287,20 @@
         <translation type="obsolete">Rosegarden - シーケンサと譜面エディタ</translation>
     </message>
     <message>
+        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+85"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+98"/>
         <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+420"/>
+        <location line="+1"/>
+        <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="+430"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10394,17 +10400,17 @@
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+404"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+407"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>オーディオサブシステムが無効   オーディオを録音できません</translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+108"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;どのとラックも録音のために有効化されていません。&lt;/p&gt;&lt;p&gt;録音LEDのどれかを少なくとも有効にして&lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; 再度実行してください。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+144"/>
+        <location line="+146"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10480,7 +10486,7 @@
         <translation type="vanished">Rosegardenは、現在RIFFファイル中で,32ビット浮動小数点のみをサポートしています</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/TranzportClient.cpp" line="+62"/>
+        <location filename="../../src/gui/application/TranzportClient.cpp" line="+63"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
         <translation>tranzportデバイス /dev/tranzport0 をオープンするのに失敗しました</translation>
     </message>
@@ -10500,8 +10506,7 @@
         <translation type="obsolete">キャンセルしました</translation>
     </message>
     <message>
-        <location filename="../../src/sound/PeakFileManager.h" line="+102"/>
-        <location line="+2"/>
+        <location filename="../../src/sound/PeakFileManager.h" line="+104"/>
         <source>Bad peak file </source>
         <translation>不正なピークファイル</translation>
     </message>
@@ -10670,7 +10675,7 @@ Would you like to use
         <translation type="obsolete">警告: 音符が足りないので休符で埋めます</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+33"/>
+        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+36"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10680,7 +10685,7 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+33"/>
+        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+36"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11427,7 +11432,7 @@ Would you like to use
         <translation>オーディオの設定</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+88"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+90"/>
         <source>Audio preview scale</source>
         <translation>オーディオプレビューレベル</translation>
     </message>
@@ -11462,7 +11467,7 @@ Would you like to use
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>Default audio location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11517,12 +11522,12 @@ Would you like to use
         <translation>個々のオーディオインストゥルメント</translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+13"/>
         <source>for submasters</source>
         <translation>サブマスタ用</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>Make default JACK connections for</source>
         <translation>既定値のJACKの接続先</translation>
     </message>
@@ -11532,22 +11537,22 @@ Would you like to use
         <translation>オーディオ出力</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>audio inputs</source>
         <translation>オーディオ入力</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Start JACK automatically</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+15"/>
         <source>Check for &quot;Out of processor power&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
@@ -11785,12 +11790,12 @@ Error was : %2</source>
         <translation type="vanished">このインストゥルメントを改名するために、最下部の上をクリック</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+85"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+88"/>
         <source>Click to rename this instrument.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+135"/>
+        <location line="+134"/>
         <location line="+176"/>
         <source>&lt;no synth&gt;</source>
         <translation>&lt;シンセサイザー無し&gt;</translation>
@@ -12242,7 +12247,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+90"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+92"/>
         <source>Audio Plugin</source>
         <translation>オーディオプラグイン</translation>
     </message>
@@ -12450,7 +12455,7 @@ Are you sure?</source>
         <translation>&lt;未選択&gt;</translation>
     </message>
     <message>
-        <location line="+163"/>
+        <location line="+160"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-ja</translation>
     </message>
@@ -12466,7 +12471,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginOSCGUIManager</name>
     <message>
-        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+414"/>
+        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+413"/>
         <source>Rosegarden Plugin</source>
         <translation>Rosegardenプラグイン</translation>
     </message>
@@ -12626,7 +12631,7 @@ Are you sure?</source>
         <translation type="vanished">選択...</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+63"/>
+        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+64"/>
         <source>Audio file location:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12677,7 +12682,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+79"/>
         <source>%1 MiB out of %2 MiB (%3% used)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12701,7 +12706,7 @@ Are you sure?</source>
         <translation type="vanished">16ビットステレオの時分と同一:</translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-134"/>
         <source>Modify audio path</source>
         <translation>パスの変更</translation>
     </message>
@@ -12878,7 +12883,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioStrip</name>
     <message>
-        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+165"/>
+        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+153"/>
         <source>Record input source</source>
         <translation type="unfinished">録音入力ソース</translation>
     </message>
@@ -13382,7 +13387,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CheckForParallelsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="+67"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="+68"/>
         <source>Check for Parallels</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13417,7 +13422,7 @@ Destination device already has a bank for
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+208"/>
+        <location line="+209"/>
         <location line="+184"/>
         <source>bar</source>
         <translation type="unfinished"></translation>
@@ -13821,23 +13826,23 @@ Destination device already has a bank for
     </message>
     <message>
         <location line="+2"/>
-        <location line="+57"/>
+        <location line="+65"/>
         <source>&lt;h3&gt;Main page&lt;/h3&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-56"/>
-        <location line="+60"/>
+        <location line="-64"/>
+        <location line="+68"/>
         <source>Change page</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-59"/>
+        <location line="-67"/>
         <source>&lt;p&gt;Display another existing page or create a new one.&lt;/p&gt;&lt;p&gt;If the page name is a language code name (as &quot;es&quot; or &quot;de&quot;) the page should be a translation of the main page and may be displayed at startup if matching the local language.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+44"/>
         <location line="+40"/>
         <source>Create a new page</source>
         <translation type="unfinished"></translation>
@@ -13965,7 +13970,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+313"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+314"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -15200,7 +15205,7 @@ This could cause problems if it overrides a different computed value later on.</
 <context>
     <name>Rosegarden::EventListEditor</name>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+195"/>
+        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+196"/>
         <source>Event filters</source>
         <translation type="unfinished">イベントフィルタ</translation>
     </message>
@@ -15818,8 +15823,8 @@ Would you like to try and locate this file or skip it?</source>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+104"/>
-        <location line="+81"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+109"/>
+        <location line="+80"/>
         <location line="+31"/>
         <source>Unsupported scheme in URL</source>
         <translation></translation>
@@ -15829,7 +15834,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="obsolete">%1 をダウンロード中...</translation>
     </message>
     <message>
-        <location line="+551"/>
+        <location line="+543"/>
         <source>Download cancelled</source>
         <translation>ダウンロードがキャンセルされた</translation>
     </message>
@@ -15993,7 +15998,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>セグメントラベルにサフィックスを追加</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Use track name for new segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16003,7 +16008,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+23"/>
         <source>Enable editing during playback</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16013,7 +16018,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+25"/>
         <source>Clean recent files list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16023,12 +16028,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+26"/>
         <source>Use JACK transport</source>
         <translation>JACKトランスポートを使用</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+24"/>
         <source>JACK stop at auto stop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16038,17 +16043,17 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+22"/>
         <source>Stop playback at end of last segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+60"/>
         <source>LV2 Plugin Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>Drag with dynamic modifiers (main/matrix)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16058,7 +16063,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+20"/>
         <source>Setup LV2 Environment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16068,7 +16073,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+25"/>
         <source>Sequencer status</source>
         <translation>シーケンサステータス</translation>
     </message>
@@ -16103,7 +16108,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>詳細...</translation>
     </message>
     <message>
-        <location line="+101"/>
+        <location line="+113"/>
         <source>Extra Large</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16138,7 +16143,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-512"/>
+        <location line="-576"/>
         <source>Okular (KDE)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16148,7 +16153,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+702"/>
+        <location line="+770"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16158,7 +16163,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-685"/>
+        <location line="-753"/>
         <source>Behavior</source>
         <translation>振る舞い</translation>
     </message>
@@ -16171,12 +16176,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">&lt;qt&gt;チェックすると、次回Rosegardenを起動したとき、RosegardenはThornのルックアンドフィールを使い、それ以外は、既定値のシステム設定を使います。&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+411"/>
+        <location line="+471"/>
         <source>Show full path in window titles</source>
         <translation>ウィンドウタイトル中にフルパスで表示</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Track size</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16197,7 +16202,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-468"/>
+        <location line="-532"/>
         <source>MuPDF</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16216,7 +16221,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">HPLIP (Qt 4)</translation>
     </message>
     <message>
-        <location line="+705"/>
+        <location line="+773"/>
         <location line="+5"/>
         <location line="+5"/>
         <location line="+5"/>
@@ -16233,7 +16238,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>表示形式の変更を反映させるためにはRosegardenを再起動する必要がある。</translation>
     </message>
     <message>
-        <location line="-307"/>
+        <location line="-323"/>
         <source>Note name style</source>
         <translation>音符名スタイル</translation>
     </message>
@@ -16274,22 +16279,22 @@ Would you like to try and locate this file or skip it?</source>
         <translation>メインウィンドウ</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+11"/>
         <source>Notation</source>
         <translation>譜面</translation>
     </message>
     <message>
-        <location line="-50"/>
+        <location line="-54"/>
         <source>Presentation</source>
         <translation>プレゼンテーション</translation>
     </message>
     <message>
-        <location line="-111"/>
+        <location line="-131"/>
         <source>Advanced Looping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+264"/>
+        <location line="+300"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;Rosegardenは特定の機能を提供するための外部アプリケーションに依存しています。  各アプリケーションはインストール済みで,使用しているパス上で有効でなければなりません。  アプリケーションを使うために選択するとき、Rosegardenが必要時にそれを使うことができるよう、通常(&lt;b&gt;Alt+F2&lt;/b&gt;)である&quot;コマンド実行&quot;ボックスから動作させることができるようにしておいてください。&lt;br&gt;&lt;/qt&gt;</translation>
     </message>
@@ -16303,7 +16308,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="vanished">Okular (KDE 4.x)</translation>
     </message>
     <message>
-        <location line="-545"/>
+        <location line="-613"/>
         <source>Evince (GNOME)</source>
         <translation>Evince (GNOME)</translation>
     </message>
@@ -16313,22 +16318,22 @@ Would you like to try and locate this file or skip it?</source>
         <translation>Adobe Acrobat Reader (自由ではない)</translation>
     </message>
     <message>
-        <location line="+545"/>
+        <location line="+613"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>生成されたLilyPond出力をプレビューするのに使用</translation>
     </message>
     <message>
-        <location line="-284"/>
+        <location line="-324"/>
         <source>Jump to loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+30"/>
         <source>Auto Channels (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+108"/>
+        <location line="+124"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16348,12 +16353,12 @@ Would you like to try and locate this file or skip it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+166"/>
+        <location line="+182"/>
         <source>Command-line file printing utility</source>
         <translation>コマンドラインファイル印刷ユーティリティ</translation>
     </message>
     <message>
-        <location line="-549"/>
+        <location line="-617"/>
         <source>Gtk-LP (GNOME)</source>
         <translation>Gtk-LP (GNOME)</translation>
     </message>
@@ -16368,7 +16373,7 @@ Would you like to try and locate this file or skip it?</source>
         <translation>lp (非GUI)</translation>
     </message>
     <message>
-        <location line="+549"/>
+        <location line="+617"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation>プレビューなしで生成されたLilyPond出力を印刷するのに使う</translation>
     </message>
@@ -17351,6 +17356,19 @@ Example text from file:</source>
     </message>
 </context>
 <context>
+    <name>Rosegarden::LV2Gtk2</name>
+    <message>
+        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="-40"/>
+        <source>Do not show this again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:&lt;br/&gt;set QT_QPA_PLATFORMTHEME to gtk2 (and install the gtk2 style plugin or&lt;br/&gt;set XDG_SESSION_TYPE to unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::LibrarianDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/LibrarianDialog.cpp" line="+36"/>
@@ -17371,7 +17389,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+829"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+833"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -18074,7 +18092,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 遅れることになることに注意。</translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+107"/>
         <source>Allow Reset All Controllers (CC 121)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18084,7 +18102,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+60"/>
         <source>Sequencer timing source</source>
         <translation>シーケンサタイミングのソース</translation>
     </message>
@@ -18099,7 +18117,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>これをチェックすると、Rosegardenの起動時にEMU10Kベースのカード上にサウンドフォントをロードします</translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+22"/>
         <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
         <translation>&apos;asfxload&apos;又は&apos;sfxload&apos;コマンドのパス</translation>
     </message>
@@ -18115,12 +18133,12 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation>サウンドフォント</translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-274"/>
         <source>General</source>
         <translation>一般</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+52"/>
         <source>Match ALSA port numbers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18130,7 +18148,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+20"/>
         <source>External controller port</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18140,7 +18158,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Controller type</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18175,7 +18193,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+44"/>
         <source>Send program changes when looping</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18185,7 +18203,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Send control changes when looping</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18195,7 +18213,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+106"/>
         <source>PPQN/Division for MIDI File Export</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18278,7 +18296,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+64"/>
         <source>sfxload path</source>
         <translation>sfxload パス</translation>
     </message>
@@ -18620,7 +18638,7 @@ delay at the start of playback due to the amount of data being transmitted.</sou
 <context>
     <name>Rosegarden::MarkerEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+73"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+74"/>
         <source>Manage Markers</source>
         <translation>マーカーの管理</translation>
     </message>
@@ -18755,7 +18773,7 @@ Double-click to open the marker editor.</source>
 マーカエディタを開くためにはダブルクリック。</translation>
     </message>
     <message>
-        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+79"/>
+        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+80"/>
         <source>Click on a marker to move the playback pointer.
 Click and drag a marker to move it.
 Shift-click to set a range between markers.
@@ -18786,7 +18804,7 @@ Right-click for context menu.</source>
         <translation type="unfinished">新しい名前を入力:</translation>
     </message>
     <message>
-        <location line="+364"/>
+        <location line="+365"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished">SHIFTキーを押しながらで拍グリッドにスナップを無効にできます</translation>
     </message>
@@ -19044,7 +19062,7 @@ Right-click for context menu.</source>
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2090"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+2088"/>
         <source>Unknown note insert action %1</source>
         <translation>不明な音符の挿入動作 %1</translation>
     </message>
@@ -19067,7 +19085,7 @@ Right-click for context menu.</source>
         </translation>
     </message>
     <message>
-        <location line="-1428"/>
+        <location line="-1424"/>
         <source> Grid: </source>
         <translation>グリッド:</translation>
     </message>
@@ -19117,7 +19135,7 @@ Right-click for context menu.</source>
         <translation>Off</translation>
     </message>
     <message>
-        <location line="+485"/>
+        <location line="+483"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19138,7 +19156,7 @@ Right-click for context menu.</source>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+235"/>
+        <location line="+233"/>
         <location line="+64"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
@@ -19149,17 +19167,17 @@ Right-click for context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+459"/>
+        <location line="+458"/>
         <source>Estimated key signature shown</source>
         <translation>おおよその調号の表示</translation>
     </message>
     <message>
-        <location line="-929"/>
+        <location line="-926"/>
         <source>Estimated time signature shown</source>
         <translation>おおよその拍子を表示</translation>
     </message>
     <message>
-        <location line="-1166"/>
+        <location line="-1164"/>
         <source>Preserves precise horizontal and vertical position when moving a note.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19169,7 +19187,7 @@ Right-click for context menu.</source>
         <translation type="unfinished">%1 コントローラ %2 %3</translation>
     </message>
     <message>
-        <location line="+1155"/>
+        <location line="+1153"/>
         <source>Transpose</source>
         <translation>移調</translation>
     </message>
@@ -19189,7 +19207,7 @@ Right-click for context menu.</source>
         <translation>トリガの削除</translation>
     </message>
     <message>
-        <location line="-927"/>
+        <location line="-925"/>
         <source>Matrix</source>
         <translation>マトリクス</translation>
     </message>
@@ -19197,7 +19215,7 @@ Right-click for context menu.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+221"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -19217,7 +19235,7 @@ Right-click for context menu.</source>
         <translation>ズームをリセット</translation>
     </message>
     <message>
-        <location line="+837"/>
+        <location line="+839"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 コントローラ %2 %3</translation>
     </message>
@@ -19232,7 +19250,7 @@ Right-click for context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1257"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;アクティブなセグメントを変更するためにホイールを回転&lt;/qt&gt;</translation>
     </message>
@@ -19425,7 +19443,7 @@ Right-click for context menu.</source>
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+96"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+95"/>
         <source>MIDI Mixer</source>
         <translation>MIDIミキサ</translation>
     </message>
@@ -19438,7 +19456,7 @@ Right-click for context menu.</source>
         <translation type="vanished">楽器</translation>
     </message>
     <message>
-        <location line="+509"/>
+        <location line="+248"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</translation>
     </message>
@@ -19849,32 +19867,32 @@ Right-click for context menu.</source>
         <translation>非ノーテーションイベントを?で表示</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Show notation-quantized notes in a different color</source>
         <translation>記譜ごとにクォンタイズされた音符を別の色で表示</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Show &quot;invisible&quot; events in grey</source>
         <translation>&quot;見えない&quot;イベントを灰色で表示</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Show notes outside suggested playable range in red</source>
         <translation>推奨される演奏可能な範囲外の音符は赤で表示されます</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Highlight superimposed notes with a halo effect</source>
         <translation>スーパーインポーズされた音符を光輪効果でハイライト</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+19"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
         <translation>MIDIを録音中、小節線で長い音は分割され、タイで結ばれます</translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+21"/>
         <source>Layout</source>
         <translation>レイアウト</translation>
     </message>
@@ -19904,17 +19922,17 @@ Right-click for context menu.</source>
         <translation>適切に自動連桁</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+18"/>
         <source>Tie notes at barlines automatically</source>
         <translation>小節線で音符を自動的につなげる</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+19"/>
         <source>Collapse rests after erase</source>
         <translation>削除後休符をつなげる</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>Default paste type</source>
         <translation>既定の貼り付けタイプ</translation>
     </message>
@@ -19924,7 +19942,7 @@ Right-click for context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19934,7 +19952,7 @@ Right-click for context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20068,22 +20086,22 @@ Right-click for context menu.</source>
         <translation type="unfinished">繰り返しセグメントを表示</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Allow direct edition of repeated segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Hide redundant clefs and keys</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Distribute verses among repeated segments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Segments</source>
         <translation>セグメント</translation>
     </message>
@@ -20353,7 +20371,7 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1192"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1193"/>
         <source>Note &amp;Font</source>
         <translation>音符フォント(&amp;F)</translation>
     </message>
@@ -20400,7 +20418,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation> 選択なし </translation>
     </message>
     <message>
-        <location line="+2850"/>
+        <location line="+2847"/>
         <source>Chord</source>
         <translation>コード</translation>
     </message>
@@ -20417,7 +20435,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>%1 %2</translation>
     </message>
     <message>
-        <location line="-2377"/>
+        <location line="-2374"/>
         <source>Unknown spacing action %1</source>
         <translation>不明な間隔操作 %1</translation>
     </message>
@@ -20472,15 +20490,15 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+25"/>
         <location line="+140"/>
         <location line="+59"/>
-        <location line="+880"/>
+        <location line="+877"/>
         <location line="+81"/>
         <location line="+751"/>
-        <location line="+1095"/>
+        <location line="+1096"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3170"/>
+        <location line="-3168"/>
         <source>Printing with LilyPond...</source>
         <translation>LilyPondで印刷中...</translation>
     </message>
@@ -20512,12 +20530,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>この位置で貼り付けできません。</translation>
     </message>
     <message>
-        <location line="+2900"/>
+        <location line="+2898"/>
         <source>Move Events to Staff Above</source>
         <translation>イベントを上の五線に移動</translation>
     </message>
     <message>
-        <location line="-2732"/>
+        <location line="-2731"/>
         <source>Raising velocities...</source>
         <translation>ベロシティの増加中...</translation>
     </message>
@@ -20527,12 +20545,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>ベロシティの低減中...</translation>
     </message>
     <message>
-        <location line="+1862"/>
+        <location line="+1860"/>
         <source>Notation</source>
         <translation type="unfinished">譜面</translation>
     </message>
     <message>
-        <location line="+998"/>
+        <location line="+999"/>
         <source>Edit Text Event</source>
         <translation>テキストイベントを編集</translation>
     </message>
@@ -20547,7 +20565,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>音符をつなげる...</translation>
     </message>
     <message>
-        <location line="-2144"/>
+        <location line="-2145"/>
         <source>Unknown note insert action %1</source>
         <translation>不明な音符の挿入動作 %1</translation>
     </message>
@@ -20557,28 +20575,28 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>音符の挿入</translation>
     </message>
     <message>
-        <location line="+2324"/>
+        <location line="+2325"/>
         <location line="+10"/>
         <source>Adding dot...</source>
         <translation>符点を追加...</translation>
     </message>
     <message>
-        <location line="-1928"/>
+        <location line="-1929"/>
         <source>Ornament track %1 bar %2</source>
         <translation>オルナメントトラック %1 bar %2</translation>
     </message>
     <message>
-        <location line="-2355"/>
+        <location line="-2352"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 コントローラ %2 %3</translation>
     </message>
     <message>
-        <location line="+1184"/>
+        <location line="+1183"/>
         <source>Set Controller Values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+681"/>
+        <location line="+679"/>
         <source>Please select a control ruler first.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20664,7 +20682,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>半音の数で: </translation>
     </message>
     <message>
-        <location line="+358"/>
+        <location line="+359"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation>時間: %1 (%2.%3秒)</translation>
     </message>
@@ -20727,7 +20745,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+235"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+236"/>
         <source>Zoom</source>
         <translation>ズーム</translation>
     </message>
@@ -20752,7 +20770,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>トラックヘッダのクローズ</translation>
     </message>
     <message>
-        <location line="+1358"/>
+        <location line="+1360"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished">%1 コントローラ %2 %3</translation>
     </message>
@@ -21469,7 +21487,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation type="unfinished">オクターブの誤りを無視</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Algorithm</source>
         <translation>アルゴリズム</translation>
     </message>
@@ -21497,7 +21515,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchTrackerView</name>
     <message>
-        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+147"/>
+        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+148"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
         <translation>jackに接続できない！jackサーバをきちんと動かし、他のトラッカークライアントがオープンしないようにする。</translation>
     </message>
@@ -22156,7 +22174,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+457"/>
+        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+466"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
         <translation>トラック #%1, セグメント&quot;%2&quot; (runtime id %3)</translation>
     </message>
@@ -22453,7 +22471,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+299"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+300"/>
         <source>Reading file...</source>
         <translation type="unfinished">ファイルを読み込み中...</translation>
     </message>
@@ -22517,8 +22535,8 @@ There may be some incompatibilities with the file format.</source>
 (%2)</translation>
     </message>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+496"/>
-        <location line="+64"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+498"/>
+        <location line="+63"/>
         <location line="+12"/>
         <location line="+66"/>
         <location line="+34"/>
@@ -22530,7 +22548,7 @@ There may be some incompatibilities with the file format.</source>
         <location line="+11"/>
         <location line="+23"/>
         <location line="+13"/>
-        <location line="+1002"/>
+        <location line="+998"/>
         <location line="+16"/>
         <location line="+223"/>
         <source>Rosegarden</source>
@@ -22541,7 +22559,7 @@ There may be some incompatibilities with the file format.</source>
         <translation type="obsolete">ドキュメントを %1 に保存できません</translation>
     </message>
     <message numerus="yes">
-        <location line="-2585"/>
+        <location line="-2580"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>未保存のセッション中で録音された %n オーディオファイルを削除しますか?</numerusform>
@@ -22581,7 +22599,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>未タイトル</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+41"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
         <translation>&apos;%1&apos;ファイルが開けません</translation>
     </message>
@@ -22628,7 +22646,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>一時出力ファイル &apos;%1&apos; を目的のファイル &apos;%2&apos; に改名するのに失敗しました</translation>
     </message>
     <message>
-        <location line="+1759"/>
+        <location line="+1755"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
@@ -22673,18 +22691,18 @@ editing this file, you may press Ignore to open the file.
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-1688"/>
+        <location line="-1684"/>
         <source>Error while writing on &apos;%1&apos;</source>
         <translation>&apos;%1&apos;に書き込み中にエラー</translation>
     </message>
     <message>
         <location line="-771"/>
-        <location line="+2224"/>
+        <location line="+2220"/>
         <source>Cancel</source>
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location line="-2159"/>
+        <location line="-2155"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22741,12 +22759,12 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 将来のバージョンで再ロードできることを確実にするために、このバージョン のRosegardenで再セーブすることを推奨する。</translation>
     </message>
     <message>
-        <location line="+677"/>
+        <location line="+679"/>
         <source>Insert Recorded MIDI</source>
         <translation>録音したMIDIを挿入</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+91"/>
         <location line="+80"/>
         <source>(recorded)</source>
         <translation>(録音済)</translation>
@@ -22759,7 +22777,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+235"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+232"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>オーディオまたは非オーディオセグメントのみ選択してください</translation>
     </message>
@@ -22770,7 +22788,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <location line="+39"/>
         <location line="+112"/>
         <location line="+83"/>
-        <location line="+722"/>
+        <location line="+725"/>
         <location line="+3"/>
         <location line="+30"/>
         <location line="+31"/>
@@ -22780,7 +22798,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1303"/>
+        <location line="-1306"/>
         <location line="+118"/>
         <location line="+152"/>
         <location line="+39"/>
@@ -22801,7 +22819,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
 編集 -&gt; 設定 -&gt; オーディオを参照してください。</translation>
     </message>
     <message>
-        <location line="+722"/>
+        <location line="+725"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation>ドロップしたファイルをついか出来ない。  JACKオーディオサーバは無効。</translation>
     </message>
@@ -22873,7 +22891,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>起動...</translation>
     </message>
     <message>
-        <location line="+515"/>
+        <location line="+524"/>
         <source>  Zoom:  </source>
         <translation>  ズーム:</translation>
     </message>
@@ -22882,7 +22900,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation type="obsolete">%1 - %2</translation>
     </message>
     <message>
-        <location line="+465"/>
+        <location line="+462"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation>ファイル &quot;%1&quot;がありません</translation>
     </message>
@@ -22904,13 +22922,13 @@ Do you want to open it instead ?</source>
 こちらをオープンしますか?</translation>
     </message>
     <message>
-        <location line="+4921"/>
+        <location line="+4901"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation>未タイトル</translation>
     </message>
     <message>
-        <location line="-4391"/>
+        <location line="-4371"/>
         <location line="+138"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -22920,7 +22938,7 @@ Error was : %2</source>
     <message>
         <location line="-135"/>
         <location line="+138"/>
-        <location line="+6386"/>
+        <location line="+6365"/>
         <source>Could not save document at %1</source>
         <translation>%1 にドキュメントをセーブできません</translation>
     </message>
@@ -22929,7 +22947,7 @@ Error was : %2</source>
         <translation type="obsolete">新しいアプリケーションウィンドウをオープン...</translation>
     </message>
     <message>
-        <location line="-6842"/>
+        <location line="-6821"/>
         <source>Creating new document...</source>
         <translation>新しいドキュメントを作成...</translation>
     </message>
@@ -22948,12 +22966,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-101"/>
-        <location line="+6088"/>
+        <location line="+6069"/>
         <source>All supported files</source>
         <translation>すべてのサポートされているファイル</translation>
     </message>
     <message>
-        <location line="-6087"/>
+        <location line="-6068"/>
         <location line="+74"/>
         <location line="+175"/>
         <source>Rosegarden files</source>
@@ -22961,16 +22979,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-248"/>
-        <location line="+2109"/>
+        <location line="+2110"/>
         <location line="+23"/>
         <source>MIDI files</source>
         <translation>MIDIファイル</translation>
     </message>
     <message>
-        <location line="-2131"/>
+        <location line="-2132"/>
         <location line="+73"/>
         <location line="+179"/>
-        <location line="+1818"/>
+        <location line="+1819"/>
         <location line="+39"/>
         <location line="+23"/>
         <location line="+257"/>
@@ -22979,18 +22997,18 @@ Error was : %2</source>
         <location line="+20"/>
         <location line="+74"/>
         <location line="+22"/>
-        <location line="+594"/>
+        <location line="+571"/>
         <location line="+40"/>
         <location line="+53"/>
         <location line="+59"/>
         <location line="+55"/>
         <location line="+127"/>
-        <location line="+2556"/>
+        <location line="+2559"/>
         <source>All files</source>
         <translation>すべてのファイル</translation>
     </message>
     <message>
-        <location line="-6090"/>
+        <location line="-6071"/>
         <source>Open File</source>
         <translation>ファイルのオープン</translation>
     </message>
@@ -23072,12 +23090,12 @@ Error was : %2</source>
         <translation>クリップボードの内容を挿入...</translation>
     </message>
     <message>
-        <location line="+113"/>
+        <location line="+112"/>
         <source>Duration of empty range to insert</source>
         <translation>挿入するための、空白のレンジのデュレーション</translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+119"/>
         <location line="+17"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation>この機能は、選択のために、2つ以上のセグメントは必要としない。</translation>
@@ -23103,12 +23121,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2918"/>
+        <location line="+2895"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location line="-2917"/>
+        <location line="-2894"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -23235,7 +23253,7 @@ Would you like to set it now?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1126"/>
+        <location line="+1103"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegardenプロジェクトファイル</translation>
     </message>
@@ -23244,7 +23262,7 @@ Would you like to set it now?</source>
         <translation type="vanished">入力</translation>
     </message>
     <message>
-        <location line="+1679"/>
+        <location line="+1681"/>
         <source>Transpose</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23254,13 +23272,13 @@ Would you like to set it now?</source>
         <translation type="unfinished">半音の数で: </translation>
     </message>
     <message>
-        <location line="+1012"/>
+        <location line="+1013"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation>http://rosegardenmusic.com/wiki/doc:manual-ja</translation>
     </message>
     <message>
-        <location line="-7539"/>
-        <location line="+1118"/>
+        <location line="-7526"/>
+        <location line="+1124"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -23273,7 +23291,7 @@ Would you like to set it now?</source>
         <location line="+71"/>
         <location line="+64"/>
         <location line="+3"/>
-        <location line="+321"/>
+        <location line="+322"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
@@ -23290,8 +23308,7 @@ Would you like to set it now?</source>
         <location line="+19"/>
         <location line="+77"/>
         <location line="+19"/>
-        <location line="+356"/>
-        <location line="+176"/>
+        <location line="+509"/>
         <location line="+4"/>
         <location line="+34"/>
         <location line="+43"/>
@@ -23315,22 +23332,22 @@ Would you like to set it now?</source>
         <location line="+79"/>
         <location line="+2"/>
         <location line="+41"/>
-        <location line="+586"/>
+        <location line="+588"/>
         <location line="+101"/>
         <location line="+117"/>
         <location line="+13"/>
-        <location line="+1159"/>
+        <location line="+1160"/>
         <location line="+111"/>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+618"/>
+        <location line="+616"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1848"/>
+        <location line="-1847"/>
         <source>Relabel Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23340,7 +23357,7 @@ Would you like to set it now?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1065"/>
+        <location line="+1066"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
@@ -23355,7 +23372,7 @@ Would you like to set it now?</source>
         <translation>&lt;p&gt;%1.というバージョンを使用しています  バージョン %2 が新たに公開されています。&lt;/p&gt;&lt;p&gt;&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden webサイト&lt;/a&gt;により詳細な情報がありますのでそちらを見てください。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4228"/>
+        <location line="-4208"/>
         <source>Open MIDI File</source>
         <translation>MIDIファイルのオープン</translation>
     </message>
@@ -23400,7 +23417,7 @@ Would you like to set it now?</source>
         <translation>ファイルが壊れているのでX11 Rosegardenファイルはロードできません。</translation>
     </message>
     <message>
-        <location line="+1007"/>
+        <location line="+984"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPondエクスポートのための一時ファイルをオープンするのに失敗しました。&lt;/p&gt;&lt;p&gt;これはおそらく&lt;pre&gt;%1&lt;/pre&gt;上のディスクスペースがないことを意味しています。&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -23412,7 +23429,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 Rosegardenを再起動してサウンド機能を有効にしてください。</translation>
     </message>
     <message>
-        <location line="-4855"/>
+        <location line="-4839"/>
         <source>Starting sequencer...</source>
         <translation>シーケンサを起動中...</translation>
     </message>
@@ -23423,7 +23440,7 @@ Do you want to open it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1162"/>
+        <location line="+1168"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23444,12 +23461,12 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+156"/>
-        <location line="+2529"/>
+        <location line="+2530"/>
         <source>Select File(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-2358"/>
+        <location line="-2359"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>新しいファイル名%1 でファイルを保存...</translation>
@@ -23460,7 +23477,7 @@ Do you want to open it?</source>
         <translation>テンプレートとして</translation>
     </message>
     <message>
-        <location line="+434"/>
+        <location line="+435"/>
         <source>Can&apos;t expand Audio segments with figuration</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23470,7 +23487,7 @@ Do you want to open it?</source>
         <location line="+190"/>
         <location line="+94"/>
         <location line="+96"/>
-        <location line="+632"/>
+        <location line="+609"/>
         <location line="+57"/>
         <location line="+54"/>
         <location line="+125"/>
@@ -23479,7 +23496,7 @@ Do you want to open it?</source>
         <translation type="unfinished">キャンセル</translation>
     </message>
     <message>
-        <location line="-2471"/>
+        <location line="-2448"/>
         <source>Split time is not within a selected segment.
 No segment will be split.</source>
         <translation type="unfinished"></translation>
@@ -23534,7 +23551,7 @@ No segment will be split.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+631"/>
+        <location line="+608"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegardenのシーケンサを起動できませんでした。セッションのサウンドや録音したものは使うことができません。
@@ -23638,14 +23655,14 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
         <translation>MusicXMLファイルをエクスポート...</translation>
     </message>
     <message>
-        <location line="-947"/>
+        <location line="-924"/>
         <location line="+22"/>
-        <location line="+928"/>
+        <location line="+905"/>
         <source>XML files</source>
         <translation>XMLファイル</translation>
     </message>
     <message numerus="yes">
-        <location line="-2387"/>
+        <location line="-2364"/>
         <location line="+55"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation type="unfinished">
@@ -23675,7 +23692,7 @@ http://rosegardenmusic.com を参照してオーディオとMIDIの設定を修�
 </translation>
     </message>
     <message>
-        <location line="+909"/>
+        <location line="+886"/>
         <source>Unable to export WAV without JACK running.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23716,7 +23733,7 @@ Would you like to set it now?</source>
 今すぐ設定しますか?</translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+494"/>
         <source>Move playback pointer to time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23777,7 +23794,7 @@ Would you like to set it now?</source>
         <translation type="vanished">新しいラベルを入力</translation>
     </message>
     <message>
-        <location line="+1095"/>
+        <location line="+1096"/>
         <source>Play List</source>
         <translation>プレイリスト</translation>
     </message>
@@ -23828,7 +23845,7 @@ Error was : %2</source>
         <translation>スタジオのインポート</translation>
     </message>
     <message>
-        <location line="+413"/>
+        <location line="+411"/>
         <source>Interpret segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -24827,7 +24844,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="vanished">&lt;p&gt;Rosegardenは、MIDIパフォーマンスのための高解像度タイミングソースを見つけられませんでした。&lt;/p&gt;&lt;p&gt;この問題を解決するために、RTCタイマkernelモジュールをロードすることができます。これを行うために、ターミナルウィンドウ中で &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt;を実行することを試し、Rosegardenを再起動する事を試してください。&lt;/p&gt;&lt;p&gt;その代わりに,使用しているディストリビュータが、マルチメディアに最適化されたkernelを提供しているかを確認してください。この件に関しては、&lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden webサイト&lt;/a&gt;を見てください。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+144"/>
+        <location line="+145"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;シーケンサエンジンが無効!&lt;/h3&gt;</translation>
     </message>
@@ -24861,7 +24878,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;p&gt;RosegardenはJACKオーディオサーバに接続できませんでした。これは、設定の問題で、Rosegardenがオーディオサーバを起動できなかったか、システムのインストールの問題か、あるいは両方であることを意味します。&lt;/p&gt;&lt;p&gt;もしも、オーディオファイルの録音再生か、プラグインを使いたい場合、Rosegardenを終了し,JACK制御ユーティリティ(qjackctl)を使って、JACKが起動できる設定になるまで、設定を変更してみることを推奨します。また、リアルタイムkernelをインストールしたり、システムセキュリティの設定を変更したりなどをしてもよいでしょう。残念なことに、これはとても複雑です。&lt;/p&gt;&lt;p&gt;一度JACKが動く設定ができれば、Rosegardenはその先自動的にオーディオサーバを起動出来るようになります。&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-254"/>
+        <location line="-255"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>オーディオミキシングサブシステムが起動に失敗した。</translation>
     </message>
@@ -25032,7 +25049,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+197"/>
+        <location line="+199"/>
         <source>Rosegarden</source>
         <translation type="unfinished">Rosegarden</translation>
     </message>
@@ -25371,7 +25388,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SqueezedLabel</name>
     <message>
-        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+201"/>
+        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+197"/>
         <source>&amp;Copy Full Text</source>
         <translation>全部のテキストをコピー(&amp;C)</translation>
     </message>
@@ -25379,7 +25396,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+148"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+149"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation type="unfinished">トラック %1 : &quot;%2&quot;</translation>
     </message>
@@ -25880,7 +25897,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+443"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+444"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation>%1.%2%3 (%4.%5%6 bpm)</translation>
     </message>
@@ -26051,7 +26068,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Lilypondディレクティブ</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+32"/>
         <source>Verse:  </source>
         <translation>歌詞:   </translation>
     </message>
@@ -26383,7 +26400,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TimeSignatureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="+70"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="+64"/>
         <source>Time Signature</source>
         <translation>拍子</translation>
     </message>
@@ -26456,7 +26473,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>以降の小節の長さを直す</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+103"/>
         <source>Display as common time</source>
         <translation>コモンで表記</translation>
     </message>
@@ -26674,7 +26691,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+353"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+355"/>
         <source>Delete Tracks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27250,12 +27267,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+117"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+120"/>
         <source>Rosegarden Transport</source>
         <translation>Rosegardenトランスポート</translation>
     </message>
     <message>
-        <location line="+774"/>
+        <location line="+772"/>
         <location line="+96"/>
         <source>PITCH WHEEL</source>
         <translation>PITCH WHEEL</translation>
@@ -27779,7 +27796,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::WarningWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+67"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+68"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;パフォーマンスの問題が検出されました!&lt;/p&gt;&lt;p&gt;詳細を表示するためにクリックしてください&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>

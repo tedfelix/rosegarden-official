@@ -4901,7 +4901,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1085"/>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1086"/>
         <source>&lt;new bank&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8820,7 +8820,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+58"/>
+        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+63"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation></translation>
     </message>
@@ -8842,7 +8842,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/base/Pitch.cpp" line="+46"/>
+        <location filename="../../src/base/Pitch.cpp" line="+48"/>
         <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>Eb</source>
         <comment>note name</comment>
@@ -8922,14 +8922,20 @@
         <translation></translation>
     </message>
     <message>
+        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+85"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+98"/>
         <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
         <source>Rosegarden</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+420"/>
+        <location line="+1"/>
+        <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/gui/application/main.cpp" line="+430"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9024,22 +9030,22 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+404"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+407"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+108"/>
         <source>&lt;qt&gt;&lt;p&gt;No tracks were armed for recording.&lt;/p&gt;&lt;p&gt;Please arm at least one of the recording LEDs &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; and try again&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+144"/>
+        <location line="+146"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/TranzportClient.cpp" line="+62"/>
+        <location filename="../../src/gui/application/TranzportClient.cpp" line="+63"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
         <translation></translation>
     </message>
@@ -9107,8 +9113,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/sound/PeakFileManager.h" line="+102"/>
-        <location line="+2"/>
+        <location filename="../../src/sound/PeakFileManager.h" line="+104"/>
         <source>Bad peak file </source>
         <translation></translation>
     </message>
@@ -9194,7 +9199,7 @@ Would you like to use
 Would you like to use &quot;%1&quot; instead?</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+33"/>
+        <location filename="../../src/base/parameterpattern/QuarterSinePattern.cpp" line="+36"/>
         <source>Quarter-wave diminuendo - set %1 falling from max to min in a quarter sine wave contour</source>
         <translation></translation>
     </message>
@@ -9204,7 +9209,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+33"/>
+        <location filename="../../src/base/parameterpattern/HalfSinePattern.cpp" line="+36"/>
         <source>Half-wave diminuendo - set %1 falling from max to min in a half sine wave contour</source>
         <translation></translation>
     </message>
@@ -9903,7 +9908,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+88"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+90"/>
         <source>Audio preview scale</source>
         <translation></translation>
     </message>
@@ -9938,7 +9943,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>Default audio location</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9993,12 +9998,12 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+13"/>
         <source>for submasters</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>Make default JACK connections for</source>
         <translation></translation>
     </message>
@@ -10008,22 +10013,22 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>audio inputs</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>Start JACK automatically</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+15"/>
         <source>Check for &quot;Out of processor power&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>General</source>
         <translation></translation>
     </message>
@@ -10248,12 +10253,12 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+85"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+88"/>
         <source>Click to rename this instrument.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+135"/>
+        <location line="+134"/>
         <location line="+176"/>
         <source>&lt;no synth&gt;</source>
         <translation></translation>
@@ -10602,7 +10607,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+90"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+92"/>
         <source>Audio Plugin</source>
         <translation></translation>
     </message>
@@ -10810,7 +10815,7 @@ Are you sure?</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+163"/>
+        <location line="+160"/>
         <source>http://rosegardenmusic.com/wiki/doc:audioPluginDialog-en</source>
         <translation></translation>
     </message>
@@ -10826,7 +10831,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginOSCGUIManager</name>
     <message>
-        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+414"/>
+        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+413"/>
         <source>Rosegarden Plugin</source>
         <translation></translation>
     </message>
@@ -10978,7 +10983,7 @@ Are you sure?</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+63"/>
+        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+64"/>
         <source>Audio file location:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11029,7 +11034,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+79"/>
         <source>%1 MiB out of %2 MiB (%3% used)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11049,7 +11054,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-134"/>
         <source>Modify audio path</source>
         <translation></translation>
     </message>
@@ -11218,7 +11223,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioStrip</name>
     <message>
-        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+165"/>
+        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+153"/>
         <source>Record input source</source>
         <translation></translation>
     </message>
@@ -11627,7 +11632,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CheckForParallelsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="+67"/>
+        <location filename="../../src/gui/dialogs/CheckForParallelsDialog.cpp" line="+68"/>
         <source>Check for Parallels</source>
         <translation></translation>
     </message>
@@ -11662,7 +11667,7 @@ Destination device already has a bank for
         <translation></translation>
     </message>
     <message>
-        <location line="+208"/>
+        <location line="+209"/>
         <location line="+184"/>
         <source>bar</source>
         <translation></translation>
@@ -12047,23 +12052,23 @@ Destination device already has a bank for
     </message>
     <message>
         <location line="+2"/>
-        <location line="+57"/>
+        <location line="+65"/>
         <source>&lt;h3&gt;Main page&lt;/h3&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-56"/>
-        <location line="+60"/>
+        <location line="-64"/>
+        <location line="+68"/>
         <source>Change page</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-59"/>
+        <location line="-67"/>
         <source>&lt;p&gt;Display another existing page or create a new one.&lt;/p&gt;&lt;p&gt;If the page name is a language code name (as &quot;es&quot; or &quot;de&quot;) the page should be a translation of the main page and may be displayed at startup if matching the local language.&lt;/p&gt;</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+36"/>
+        <location line="+44"/>
         <location line="+40"/>
         <source>Create a new page</source>
         <translation></translation>
@@ -12195,7 +12200,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+313"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+314"/>
         <source>Rosegarden</source>
         <translation></translation>
     </message>
@@ -13309,7 +13314,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
 <context>
     <name>Rosegarden::EventListEditor</name>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+195"/>
+        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+196"/>
         <source>Event filters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13710,14 +13715,14 @@ Removing necessary properties may cause unexpected behaviour.</translation>
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+104"/>
-        <location line="+81"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+109"/>
+        <location line="+80"/>
         <location line="+31"/>
         <source>Unsupported scheme in URL</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+551"/>
+        <location line="+543"/>
         <source>Download cancelled</source>
         <translation></translation>
     </message>
@@ -13862,7 +13867,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Use track name for new segments</source>
         <translation></translation>
     </message>
@@ -13872,7 +13877,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+23"/>
         <source>Enable editing during playback</source>
         <translation></translation>
     </message>
@@ -13882,7 +13887,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+25"/>
         <source>Clean recent files list</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13892,12 +13897,12 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+26"/>
         <source>Use JACK transport</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+24"/>
         <source>JACK stop at auto stop</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13907,17 +13912,17 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+22"/>
         <source>Stop playback at end of last segment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+60"/>
         <source>LV2 Plugin Support</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+15"/>
         <source>Drag with dynamic modifiers (main/matrix)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13927,7 +13932,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+20"/>
         <source>Setup LV2 Environment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13937,7 +13942,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+21"/>
+        <location line="+25"/>
         <source>Sequencer status</source>
         <translation></translation>
     </message>
@@ -13972,7 +13977,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+101"/>
+        <location line="+113"/>
         <source>Extra Large</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14007,7 +14012,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-512"/>
+        <location line="-576"/>
         <source>Okular (KDE)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14017,7 +14022,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+702"/>
+        <location line="+770"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation></translation>
     </message>
@@ -14027,22 +14032,22 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-685"/>
+        <location line="-753"/>
         <source>Behavior</source>
         <translation>Behaviour</translation>
     </message>
     <message>
-        <location line="+222"/>
+        <location line="+250"/>
         <source>Jump to loop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+30"/>
         <source>Auto Channels (experimental)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+208"/>
         <source>Track size</source>
         <translation></translation>
     </message>
@@ -14063,7 +14068,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="-468"/>
+        <location line="-532"/>
         <source>MuPDF</source>
         <translation></translation>
     </message>
@@ -14078,22 +14083,22 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+711"/>
+        <location line="+779"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-307"/>
+        <location line="-323"/>
         <source>Note name style</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-135"/>
+        <location line="-155"/>
         <source>Advanced Looping</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+119"/>
+        <location line="+139"/>
         <source>Theme</source>
         <translation type="unfinished"></translation>
     </message>
@@ -14133,22 +14138,22 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+11"/>
         <source>Notation</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+21"/>
         <source>Show full path in window titles</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-67"/>
+        <location line="-75"/>
         <source>Presentation</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+153"/>
+        <location line="+169"/>
         <source>&lt;qt&gt;Rosegarden relies on external applications to provide certain features.  Each selected application must be installed and available on your path.  When choosing an application to use, please ensure that it can run from a &quot;run command&quot; box (typically &lt;b&gt;Alt+F2&lt;/b&gt;) which should allow Rosegarden to make use of it when necessary.&lt;br&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -14158,7 +14163,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="-545"/>
+        <location line="-613"/>
         <source>Evince (GNOME)</source>
         <translation></translation>
     </message>
@@ -14168,7 +14173,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+545"/>
+        <location line="+613"/>
         <source>Used to preview generated LilyPond output</source>
         <translation></translation>
     </message>
@@ -14178,7 +14183,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="-549"/>
+        <location line="-617"/>
         <source>Gtk-LP (GNOME)</source>
         <translation></translation>
     </message>
@@ -14193,7 +14198,7 @@ Removing necessary properties may cause unexpected behaviour.</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+549"/>
+        <location line="+617"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation></translation>
     </message>
@@ -15161,6 +15166,19 @@ Example text from file:</source>
     </message>
 </context>
 <context>
+    <name>Rosegarden::LV2Gtk2</name>
+    <message>
+        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="-40"/>
+        <source>Do not show this again</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:&lt;br/&gt;set QT_QPA_PLATFORMTHEME to gtk2 (and install the gtk2 style plugin or&lt;br/&gt;set XDG_SESSION_TYPE to unknown</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Rosegarden::LibrarianDialog</name>
     <message>
         <location filename="../../src/gui/dialogs/LibrarianDialog.cpp" line="+36"/>
@@ -15181,7 +15199,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+829"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+833"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15800,7 +15818,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Match ALSA port numbers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15810,7 +15828,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+20"/>
         <source>External controller port</source>
         <translation></translation>
     </message>
@@ -15820,7 +15838,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Controller type</source>
         <translation></translation>
     </message>
@@ -15855,7 +15873,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+23"/>
         <source>Allow Reset All Controllers (CC 121)</source>
         <translation></translation>
     </message>
@@ -15865,7 +15883,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+20"/>
         <source>Send program changes when looping</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15875,7 +15893,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Send control changes when looping</source>
         <translation type="unfinished"></translation>
     </message>
@@ -15885,7 +15903,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Sequencer timing source</source>
         <translation></translation>
     </message>
@@ -15900,7 +15918,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+22"/>
         <source>Path to &apos;asfxload&apos; or &apos;sfxload&apos; command</source>
         <translation></translation>
     </message>
@@ -15916,12 +15934,12 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="-242"/>
+        <location line="-274"/>
         <source>General</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+283"/>
+        <location line="+315"/>
         <source>MIDI Clock and System messages</source>
         <translation></translation>
     </message>
@@ -15988,7 +16006,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
         <translation></translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+64"/>
         <source>sfxload path</source>
         <translation></translation>
     </message>
@@ -16330,7 +16348,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
 <context>
     <name>Rosegarden::MarkerEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+73"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+74"/>
         <source>Manage Markers</source>
         <translation></translation>
     </message>
@@ -16457,7 +16475,7 @@ Would you like to use &quot;%1&quot; instead?</translation>
 <context>
     <name>Rosegarden::MarkerRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+79"/>
+        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+80"/>
         <source>Click on a marker to move the playback pointer.
 Click and drag a marker to move it.
 Shift-click to set a range between markers.
@@ -16488,7 +16506,7 @@ Right-click for context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+364"/>
+        <location line="+365"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16749,7 +16767,7 @@ Right-click for context menu.</source>
         </translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+662"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+664"/>
         <source> Grid: </source>
         <translation></translation>
     </message>
@@ -16799,7 +16817,7 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+485"/>
+        <location line="+483"/>
         <source>Set Controller Values</source>
         <translation></translation>
     </message>
@@ -16820,7 +16838,7 @@ Right-click for context menu.</source>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+235"/>
+        <location line="+233"/>
         <location line="+64"/>
         <source>Rosegarden</source>
         <translation></translation>
@@ -16836,17 +16854,17 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+396"/>
+        <location line="+395"/>
         <source>Estimated key signature shown</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-929"/>
+        <location line="-926"/>
         <source>Estimated time signature shown</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1166"/>
+        <location line="-1164"/>
         <source>Preserves precise horizontal and vertical position when moving a note.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16856,7 +16874,7 @@ Right-click for context menu.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1155"/>
+        <location line="+1153"/>
         <source>Transpose</source>
         <translation></translation>
     </message>
@@ -16876,7 +16894,7 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-927"/>
+        <location line="-925"/>
         <source>Matrix</source>
         <translation></translation>
     </message>
@@ -16884,7 +16902,7 @@ Right-click for context menu.</source>
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+219"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+221"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
@@ -16904,7 +16922,7 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+837"/>
+        <location line="+839"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16919,7 +16937,7 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1255"/>
+        <location line="-1257"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -17100,12 +17118,12 @@ Right-click for context menu.</source>
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+96"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+95"/>
         <source>MIDI Mixer</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+509"/>
+        <location line="+248"/>
         <source>http://rosegardenmusic.com/wiki/doc:midiMixerWindow-en</source>
         <translation></translation>
     </message>
@@ -17491,32 +17509,32 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Show notation-quantized notes in a different color</source>
         <translation>Show notation-quantized notes in a different colour</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Show &quot;invisible&quot; events in grey</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Show notes outside suggested playable range in red</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+16"/>
         <source>Highlight superimposed notes with a halo effect</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+19"/>
         <source>When recording MIDI, split-and-tie long notes at barlines</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+21"/>
         <source>Layout</source>
         <translation></translation>
     </message>
@@ -17546,17 +17564,17 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+18"/>
         <source>Tie notes at barlines automatically</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+19"/>
         <source>Collapse rests after erase</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+17"/>
         <source>Default paste type</source>
         <translation></translation>
     </message>
@@ -17566,7 +17584,7 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+10"/>
         <source>&lt;p&gt;If checked, a preview of the note or rest is always displayed when inserting notes or rests with the mouse&lt;/p&gt;</source>
         <translation></translation>
     </message>
@@ -17576,7 +17594,7 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+11"/>
         <source>&lt;p&gt;If checked, the following features are usable while inserting notes with the mouse:&lt;ul&gt;&lt;li&gt;The mouse wheel selects the note duration&lt;/li&gt;&lt;li&gt;Shift adds a sharp&lt;/li&gt;&lt;li&gt;Ctrl adds a flat&lt;/li&gt;&lt;li&gt;Shift + Ctrl adds a natural&lt;/li&gt;&lt;li&gt;A mouse mid button click switches between notes and rests&lt;/li&gt;&lt;/ul&gt;&lt;/p&gt;</source>
         <translation></translation>
     </message>
@@ -17706,22 +17724,22 @@ Right-click for context menu.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Allow direct edition of repeated segments</source>
         <translation>Allow direct editing of repeated segments</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Hide redundant clefs and keys</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Distribute verses among repeated segments</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Segments</source>
         <translation></translation>
     </message>
@@ -17979,7 +17997,7 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1192"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1193"/>
         <source>Note &amp;Font</source>
         <translation></translation>
     </message>
@@ -18030,7 +18048,7 @@ This is a bug (the program would previously have crashed by now)</source>
         </translation>
     </message>
     <message>
-        <location line="+2734"/>
+        <location line="+2731"/>
         <source>Notation</source>
         <translation type="unfinished"></translation>
     </message>
@@ -18045,7 +18063,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-2362"/>
+        <location line="-2359"/>
         <source>Unknown spacing action %1</source>
         <translation></translation>
     </message>
@@ -18088,15 +18106,15 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+25"/>
         <location line="+140"/>
         <location line="+59"/>
-        <location line="+880"/>
+        <location line="+877"/>
         <location line="+81"/>
         <location line="+751"/>
-        <location line="+1095"/>
+        <location line="+1096"/>
         <source>Rosegarden</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-3170"/>
+        <location line="-3168"/>
         <source>Printing with LilyPond...</source>
         <translation></translation>
     </message>
@@ -18143,7 +18161,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+858"/>
+        <location line="+857"/>
         <source>Raising velocities...</source>
         <translation></translation>
     </message>
@@ -18158,7 +18176,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+681"/>
+        <location line="+679"/>
         <source>Please select a control ruler first.</source>
         <translation></translation>
     </message>
@@ -18258,7 +18276,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation></translation>
     </message>
     <message>
-        <location line="+358"/>
+        <location line="+359"/>
         <source>Time: %1 (%2.%3s)</source>
         <translation></translation>
     </message>
@@ -18347,7 +18365,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+235"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+236"/>
         <source>Zoom</source>
         <translation></translation>
     </message>
@@ -18372,7 +18390,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation></translation>
     </message>
     <message>
-        <location line="+1358"/>
+        <location line="+1360"/>
         <source>%1 Controller %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -19085,7 +19103,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+17"/>
         <source>Algorithm</source>
         <translation></translation>
     </message>
@@ -19113,7 +19131,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchTrackerView</name>
     <message>
-        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+147"/>
+        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+148"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
         <translation></translation>
     </message>
@@ -19761,7 +19779,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+457"/>
+        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+466"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
         <translation></translation>
     </message>
@@ -20058,7 +20076,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+299"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+300"/>
         <source>Reading file...</source>
         <translation></translation>
     </message>
@@ -20099,8 +20117,8 @@ There may be some incompatibilities with the file format.</source>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+496"/>
-        <location line="+64"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+498"/>
+        <location line="+63"/>
         <location line="+12"/>
         <location line="+66"/>
         <location line="+34"/>
@@ -20112,14 +20130,14 @@ There may be some incompatibilities with the file format.</source>
         <location line="+11"/>
         <location line="+23"/>
         <location line="+13"/>
-        <location line="+1002"/>
+        <location line="+998"/>
         <location line="+16"/>
         <location line="+223"/>
         <source>Rosegarden</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location line="-2585"/>
+        <location line="-2580"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>Delete the audio file recorded during the unsaved session?</numerusform>
@@ -20156,7 +20174,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation></translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+41"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
         <translation></translation>
     </message>
@@ -20238,7 +20256,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
         <translation></translation>
     </message>
     <message>
-        <location line="+1180"/>
+        <location line="+1176"/>
         <source>Warning</source>
         <translation></translation>
     </message>
@@ -20281,23 +20299,23 @@ editing this file, you may press Ignore to open the file.
         <translation></translation>
     </message>
     <message>
-        <location line="-562"/>
+        <location line="-556"/>
         <source>Insert Recorded MIDI</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1897"/>
-        <location line="+2224"/>
+        <location line="-1899"/>
+        <location line="+2220"/>
         <source>Cancel</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-2159"/>
+        <location line="-2155"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1930"/>
+        <location line="+1925"/>
         <location line="+80"/>
         <source>(recorded)</source>
         <translation></translation>
@@ -20306,7 +20324,7 @@ editing this file, you may press Ignore to open the file.
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+235"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+232"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation></translation>
     </message>
@@ -20317,7 +20335,7 @@ editing this file, you may press Ignore to open the file.
         <location line="+39"/>
         <location line="+112"/>
         <location line="+83"/>
-        <location line="+722"/>
+        <location line="+725"/>
         <location line="+3"/>
         <location line="+30"/>
         <location line="+31"/>
@@ -20327,7 +20345,7 @@ editing this file, you may press Ignore to open the file.
         <translation></translation>
     </message>
     <message>
-        <location line="-1303"/>
+        <location line="-1306"/>
         <location line="+118"/>
         <location line="+152"/>
         <location line="+39"/>
@@ -20347,7 +20365,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+722"/>
+        <location line="+725"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
         <translation></translation>
     </message>
@@ -20411,12 +20429,12 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+515"/>
+        <location line="+524"/>
         <source>  Zoom:  </source>
         <translation></translation>
     </message>
     <message>
-        <location line="+465"/>
+        <location line="+462"/>
         <source>File &quot;%1&quot; does not exist</source>
         <translation></translation>
     </message>
@@ -20437,13 +20455,13 @@ Do you want to open it instead ?</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+4921"/>
+        <location line="+4901"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-4391"/>
+        <location line="-4371"/>
         <location line="+138"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -20452,12 +20470,12 @@ Error was : %2</source>
     <message>
         <location line="-135"/>
         <location line="+138"/>
-        <location line="+6386"/>
+        <location line="+6365"/>
         <source>Could not save document at %1</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-6842"/>
+        <location line="-6821"/>
         <source>Creating new document...</source>
         <translation></translation>
     </message>
@@ -20475,12 +20493,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-101"/>
-        <location line="+6088"/>
+        <location line="+6069"/>
         <source>All supported files</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-6087"/>
+        <location line="-6068"/>
         <location line="+74"/>
         <location line="+175"/>
         <source>Rosegarden files</source>
@@ -20488,16 +20506,16 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-248"/>
-        <location line="+2109"/>
+        <location line="+2110"/>
         <location line="+23"/>
         <source>MIDI files</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-2131"/>
+        <location line="-2132"/>
         <location line="+73"/>
         <location line="+179"/>
-        <location line="+1818"/>
+        <location line="+1819"/>
         <location line="+39"/>
         <location line="+23"/>
         <location line="+257"/>
@@ -20506,18 +20524,18 @@ Error was : %2</source>
         <location line="+20"/>
         <location line="+74"/>
         <location line="+22"/>
-        <location line="+594"/>
+        <location line="+571"/>
         <location line="+40"/>
         <location line="+53"/>
         <location line="+59"/>
         <location line="+55"/>
         <location line="+127"/>
-        <location line="+2556"/>
+        <location line="+2559"/>
         <source>All files</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-6090"/>
+        <location line="-6071"/>
         <source>Open File</source>
         <translation></translation>
     </message>
@@ -20587,12 +20605,12 @@ Error was : %2</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+113"/>
+        <location line="+112"/>
         <source>Duration of empty range to insert</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+117"/>
+        <location line="+119"/>
         <location line="+17"/>
         <source>This function needs no more than one segment to be selected.</source>
         <translation></translation>
@@ -20619,12 +20637,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2918"/>
+        <location line="+2895"/>
         <source>Warning</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-2846"/>
+        <location line="-2823"/>
         <source>Jog Selection</source>
         <translation></translation>
     </message>
@@ -20655,13 +20673,13 @@ No segment will be split.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-3005"/>
+        <location line="-3012"/>
         <source>An auto-save file for an unsaved document has been found.
 Do you want to open it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1162"/>
+        <location line="+1168"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation></translation>
     </message>
@@ -20682,7 +20700,7 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+156"/>
-        <location line="+2529"/>
+        <location line="+2530"/>
         <source>Select File(s)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20692,7 +20710,7 @@ Do you want to open it?</source>
         <location line="+190"/>
         <location line="+94"/>
         <location line="+96"/>
-        <location line="+632"/>
+        <location line="+609"/>
         <location line="+57"/>
         <location line="+54"/>
         <location line="+125"/>
@@ -20701,7 +20719,7 @@ Do you want to open it?</source>
         <translation></translation>
     </message>
     <message numerus="yes">
-        <location line="-2455"/>
+        <location line="-2432"/>
         <location line="+55"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation>
@@ -20806,12 +20824,12 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1126"/>
+        <location line="+1103"/>
         <source>Rosegarden Project files</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1065"/>
+        <location line="-1042"/>
         <source>Select MIDI File(s)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20853,7 +20871,7 @@ Do you want to open it?</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+909"/>
+        <location line="+886"/>
         <source>Unable to export WAV without JACK running.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20871,7 +20889,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+957"/>
+        <location line="+959"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -20886,7 +20904,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1012"/>
+        <location line="+1013"/>
         <source>http://rosegardenmusic.com/wiki/doc:manual-en</source>
         <translation></translation>
     </message>
@@ -20896,7 +20914,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+640"/>
+        <location line="+638"/>
         <source>Interpret segments</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20947,8 +20965,8 @@ Only audio and synth plugin tracks will be exported</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-8326"/>
-        <location line="+1118"/>
+        <location line="-8311"/>
+        <location line="+1124"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -20961,7 +20979,7 @@ Only audio and synth plugin tracks will be exported</source>
         <location line="+71"/>
         <location line="+64"/>
         <location line="+3"/>
-        <location line="+321"/>
+        <location line="+322"/>
         <location line="+17"/>
         <location line="+24"/>
         <location line="+25"/>
@@ -20978,8 +20996,7 @@ Only audio and synth plugin tracks will be exported</source>
         <location line="+19"/>
         <location line="+77"/>
         <location line="+19"/>
-        <location line="+356"/>
-        <location line="+176"/>
+        <location line="+509"/>
         <location line="+4"/>
         <location line="+34"/>
         <location line="+43"/>
@@ -21003,22 +21020,22 @@ Only audio and synth plugin tracks will be exported</source>
         <location line="+79"/>
         <location line="+2"/>
         <location line="+41"/>
-        <location line="+586"/>
+        <location line="+588"/>
         <location line="+101"/>
         <location line="+117"/>
         <location line="+13"/>
-        <location line="+1159"/>
+        <location line="+1160"/>
         <location line="+111"/>
         <location line="+18"/>
         <location line="+3"/>
         <location line="+10"/>
-        <location line="+618"/>
+        <location line="+616"/>
         <location line="+2"/>
         <source>Rosegarden</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-1848"/>
+        <location line="-1847"/>
         <source>Relabel Segment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21028,7 +21045,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1505"/>
+        <location line="+1506"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation></translation>
     </message>
@@ -21038,7 +21055,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-4228"/>
+        <location line="-4208"/>
         <source>Open MIDI File</source>
         <translation></translation>
     </message>
@@ -21079,7 +21096,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1007"/>
+        <location line="+984"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -21090,12 +21107,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-4855"/>
+        <location line="-4839"/>
         <source>Starting sequencer...</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1921"/>
+        <location line="+1927"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation></translation>
@@ -21106,7 +21123,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+997"/>
+        <location line="+998"/>
         <source>&lt;qt&gt;&lt;p&gt;In order to create anacrusis, at least one of the segments in your selection must start at the beginning of the composition.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
@@ -21121,7 +21138,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1917"/>
+        <location line="+1894"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation></translation>
@@ -21224,9 +21241,9 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation></translation>
     </message>
     <message>
-        <location line="-947"/>
+        <location line="-924"/>
         <location line="+22"/>
-        <location line="+928"/>
+        <location line="+905"/>
         <source>XML files</source>
         <translation></translation>
     </message>
@@ -21250,7 +21267,7 @@ Would you like to set it now?</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+492"/>
+        <location line="+494"/>
         <source>Move playback pointer to time</source>
         <translation></translation>
     </message>
@@ -21270,7 +21287,7 @@ Would you like to set it now?</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+1095"/>
+        <location line="+1096"/>
         <source>Play List</source>
         <translation></translation>
     </message>
@@ -21316,7 +21333,7 @@ Error was : %2</source>
         <translation></translation>
     </message>
     <message>
-        <location line="-5286"/>
+        <location line="-5266"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -22196,7 +22213,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="vanished">&lt;p&gt;Rosegarden was unable to find a high-resolution timing source for MIDI performance.&lt;/p&gt;&lt;p&gt;You may be able to solve this problem by loading the RTC timer kernel module.  To do this, try running &lt;b&gt;sudo modprobe snd-rtctimer&lt;/b&gt; in a terminal window and then restarting Rosegarden.&lt;/p&gt;&lt;p&gt;Alternatively, check whether your Linux distributor provides a multimedia-optimised kernel.  See the &lt;a style=&quot;color:gold&quot;  href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden website&lt;/a&gt; for notes about this.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+144"/>
+        <location line="+145"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation></translation>
     </message>
@@ -22226,7 +22243,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation></translation>
     </message>
     <message>
-        <location line="-254"/>
+        <location line="-255"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation></translation>
     </message>
@@ -22386,7 +22403,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+197"/>
+        <location line="+199"/>
         <source>Rosegarden</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22530,7 +22547,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SqueezedLabel</name>
     <message>
-        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+201"/>
+        <location filename="../../src/gui/widgets/SqueezedLabel.cpp" line="+197"/>
         <source>&amp;Copy Full Text</source>
         <translation></translation>
     </message>
@@ -22538,7 +22555,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+148"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+149"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation></translation>
     </message>
@@ -23039,7 +23056,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+443"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+444"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation></translation>
     </message>
@@ -23135,7 +23152,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+32"/>
         <source>Verse:  </source>
         <translation></translation>
     </message>
@@ -23467,7 +23484,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TimeSignatureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="+70"/>
+        <location filename="../../src/gui/dialogs/TimeSignatureDialog.cpp" line="+64"/>
         <source>Time Signature</source>
         <translation></translation>
     </message>
@@ -23536,7 +23553,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>Correct the durations of following bars</translation>
     </message>
     <message>
-        <location line="+112"/>
+        <location line="+103"/>
         <source>Display as common time</source>
         <translation></translation>
     </message>
@@ -23694,7 +23711,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+353"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+355"/>
         <source>Delete Tracks</source>
         <translation></translation>
     </message>
@@ -24184,12 +24201,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+117"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+120"/>
         <source>Rosegarden Transport</source>
         <translation></translation>
     </message>
     <message>
-        <location line="+774"/>
+        <location line="+772"/>
         <location line="+96"/>
         <source>PITCH WHEEL</source>
         <translation></translation>
@@ -24708,7 +24725,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::WarningWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+67"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+68"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation></translation>
     </message>
