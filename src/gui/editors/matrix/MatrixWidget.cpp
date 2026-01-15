@@ -515,6 +515,11 @@ MatrixWidget::setSegments(RosegardenDocument *document,
         m_changerWidget->hide();
     }
 
+    // ??? Interim workaround for #1761?  Obnoxious, but at least it avoids
+    //     the potential crash.
+    if (segments[0]->matrixHZoomFactor > 10)
+        segments[0]->matrixHZoomFactor = 10;
+
     // Go with zoom factors from the first Segment.
     setHorizontalZoomFactor(segments[0]->matrixHZoomFactor);
     setVerticalZoomFactor(segments[0]->matrixVZoomFactor);
@@ -668,11 +673,36 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     // about the only sensible thing we can do is keep the keyboard scaled at
     // 1.0 horizontally, and only scale it vertically.  Git'r done.
 
+    RG_DEBUG << "setHorizontalZoomFactor():" << factor;
+    RG_DEBUG << "  MatrixView geo before:" << parentWidget()->geometry();
+    // This shows a suspicious massive min size when there is trouble.
+    // MatrixView min before: QSize(1726, 337)
+    RG_DEBUG << "  MatrixView min before:" << parentWidget()->minimumSize();
+    RG_DEBUG << "  MatrixWidget geo before:" << geometry();
+    RG_DEBUG << "  MatrixWidget min before:" << minimumSize();
+    RG_DEBUG << "  MatrixWidget layout geo before:" << m_layout->geometry();
+    // This shows a suspicious massive min size when there is trouble.
+    // MatrixWidget layout min before: QSize(1726, 229)
+    RG_DEBUG << "  MatrixWidget layout min before:" << m_layout->minimumSize();
+    RG_DEBUG << "  Panned geo before:" << m_view->geometry();
+    RG_DEBUG << "  Panned min before:" << m_view->minimumSize();
+
     m_hZoomFactor = factor;
     if (m_referenceScale)
         m_referenceScale->setXZoomFactor(m_hZoomFactor);
     m_view->resetTransform();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
+
+    // These are never different from the befores above.
+    RG_DEBUG << "  MatrixView geo after:" << parentWidget()->geometry();
+    RG_DEBUG << "  MatrixView min after:" << parentWidget()->minimumSize();
+    RG_DEBUG << "  MatrixWidget geo after:" << geometry();
+    RG_DEBUG << "  MatrixWidget min after:" << minimumSize();
+    RG_DEBUG << "  MatrixWidget layout geo after:" << m_layout->geometry();
+    RG_DEBUG << "  MatrixWidget layout min after:" << m_layout->minimumSize();
+    RG_DEBUG << "  Panned geo after:" << m_view->geometry();
+    RG_DEBUG << "  Panned min after:" << m_view->minimumSize();
+
     // Only vertical zoom factor is applied to pitch ruler
     QTransform m;
     m.scale(1.0, m_vZoomFactor);
@@ -916,7 +946,7 @@ MatrixWidget::slotDispatchMouseMove(const MatrixMouseEvent *e)
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
-    RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
+    //RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
     m_autoScroller.setFollowMode(followMode);
 }
 
