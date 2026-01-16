@@ -366,8 +366,8 @@ RosegardenSequencer::stop(bool autoStop)
     // the Sequencer doesn't need to know these once
     // we've stopped.
     //
-    m_songPosition.sec = 0;
-    m_songPosition.nsec = 0;
+    //m_songPosition.sec = 0;
+    //m_songPosition.nsec = 0;
     m_lastFetchSongPosition.sec = 0;
     m_lastFetchSongPosition.nsec = 0;
 

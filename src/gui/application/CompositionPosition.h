@@ -26,6 +26,7 @@ class QTimer;
 namespace Rosegarden
 {
 
+class RosegardenDocument;
 
 /// The Playback Position Pointer (PPP).
 class ROSEGARDENPRIVATE_EXPORT CompositionPosition  : public QObject
@@ -46,6 +47,10 @@ signals:
     /// Emitted whenever the position is changed.
     void changed(timeT);
 
+public slots:
+    void documentAboutToChange();
+    void documentLoaded(RosegardenDocument* doc);
+
 private:
     CompositionPosition();
 
@@ -57,7 +62,6 @@ private:
 
 private slots:
     void slotUpdate();
-
 };
 
 
