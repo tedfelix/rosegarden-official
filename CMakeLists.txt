@@ -188,10 +188,13 @@ add_feature_info(SNDFILE SNDFILE_FOUND "Better support for WAV files")
 
 # JACK
 pkg_check_modules(PC_JACK jack)
-# Use find_library to turn it into a full path
-# This will transform "jack" into something like
-# "/usr/lib/x86_64-linux-gnu/libjack.so".
-# note - this will also find the pipewire jack library
+# In most cases, the above will find JACK.  Especially if the JACK development
+# package (libs and headers) is installed.  Just in case the JACK headers and
+# libs are not installed, but pipewire's JACK *is* installed, we do one more
+# attempt at finding JACK using the more generic find_library().
+# ISTM that we should do something more direct, like checking for a pipewire
+# .cmake or .pc file.  But maybe there is no such thing?  Anyway, this needs
+# to be here and has worked for years as was proven by bug #1762.
 find_library(JACK_LIBRARIES NAMES ${PC_JACK_LIBRARIES} jack PATHS ${PC_JACK_LIBRARY_DIRS})
 if(JACK_LIBRARIES)
     set(JACK_FOUND TRUE)
