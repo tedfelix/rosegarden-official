@@ -1435,6 +1435,8 @@ Composition::calculateTempoTimestamps() const
                 time2RealTime((*i)->getAbsoluteTime() - lastTimeT, tempo);
         }
 
+        // If we are before time 0 ie. composition start - use time 0
+        if (myTime < RealTime::zero()) myTime = RealTime::zero();
         setTempoTimestamp(*i, myTime);
 
 #ifdef DEBUG_TEMPO_STUFF
