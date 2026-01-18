@@ -638,7 +638,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             position = positionStr.toInt();
         }
 
-        CompositionPosition::getInstance()->slotSet(position);
+        CompositionPosition::getInstance()->setPositionForNewDocument(position);
 
 
         // Get and (eventually) set the default tempo.

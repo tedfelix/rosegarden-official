@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionPosition]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionPosition.h"
 
@@ -33,10 +33,10 @@ namespace Rosegarden
 
 CompositionPosition::CompositionPosition():
     m_position(0),
-    m_positionAsElapsedTime(RealTime::zero())
+    m_positionAsElapsedTime(RealTime::zero()),
+    m_documentPosition(0)
 {
     RG_DEBUG << "ctor";
-
     m_updateTimer = new QTimer(this);
     connect(m_updateTimer, &QTimer::timeout,
             this, &CompositionPosition::slotUpdate);
@@ -62,6 +62,13 @@ RealTime CompositionPosition::getElapsedTime() const
     return m_positionAsElapsedTime;
 }
 
+void CompositionPosition::setPositionForNewDocument(timeT time)
+{
+    // We cannot set the position immediately as the new document has
+    // not been properly loaded yet. Park it here
+    m_documentPosition = time;
+}
+
 void CompositionPosition::slotSet(timeT time)
 {
     RG_DEBUG << "slotSet" << m_position << "->" << time;
@@ -78,6 +85,12 @@ void CompositionPosition::slotSet(timeT time)
     sequenceManager->jumpTo(m_positionAsElapsedTime);
 
     emit changed(m_position);
+}
+
+void CompositionPosition::slotSetDocumentTime()
+{
+    // now set the time from the loaded document
+    slotSet(m_documentPosition);
 }
 
 void CompositionPosition::slotUpdate()
@@ -99,18 +112,11 @@ void CompositionPosition::slotUpdate()
     }
 }
 
-void CompositionPosition::documentAboutToChange()
-{
-    RG_DEBUG << "documentAboutToChange";
-}
-
 void CompositionPosition::documentLoaded(RosegardenDocument* doc)
 {
     RG_DEBUG << "documentLoaded" << doc;
-    // refresh the times
-    m_positionAsElapsedTime = RealTime(-1, 0);
-    // the slotUpdate call must be delayed
-    QTimer::singleShot(0, this, &CompositionPosition::slotUpdate);
+    // Nw we can set the document position
+    QTimer::singleShot(0, this, &CompositionPosition::slotSetDocumentTime);
 }
 
 

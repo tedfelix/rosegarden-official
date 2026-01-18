@@ -40,15 +40,17 @@ public:
     timeT get() const;
     RealTime getElapsedTime() const;
 
+    void setPositionForNewDocument(timeT time);
+
 public slots:
     void slotSet(timeT time);
+    void slotSetDocumentTime();
 
 signals:
     /// Emitted whenever the position is changed.
     void changed(timeT);
 
 public slots:
-    void documentAboutToChange();
     void documentLoaded(RosegardenDocument* doc);
 
 private:
@@ -60,8 +62,12 @@ private:
     timeT m_position;
     RealTime m_positionAsElapsedTime;
 
+    // the new position from a loaded document
+    timeT m_documentPosition;
+
 private slots:
     void slotUpdate();
+
 };
 
 

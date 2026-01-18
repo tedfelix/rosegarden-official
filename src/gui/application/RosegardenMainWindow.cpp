@@ -330,10 +330,6 @@ RosegardenMainWindow::RosegardenMainWindow(
     m_myself = this;
 
     connect(this,
-            &RosegardenMainWindow::documentAboutToChange,
-            CompositionPosition::getInstance(),
-            &CompositionPosition::documentAboutToChange);
-    connect(this,
             &RosegardenMainWindow::documentLoaded,
             CompositionPosition::getInstance(),
             &CompositionPosition::documentLoaded);
