@@ -16,14 +16,16 @@ Included in this release...
     [6c6b5e39ba]
   * Fix duplicate menu items in "Set Entry Velocities" window.
     Bug #1752.  [95e52f0e64]
-  * Fix empty profile dump with no profiling.  Bug #1755  [90d2c00a16]
+  * Fix empty profile dump with no profiling.  Bug #1755.  [90d2c00a16]
   * Add missing #include <QObject>.  Bug #1746  [b714afbaa4]
   * cmake: Make lv2 optional.  Patch #84.  [c519c57ab2]
   * cmake: Rename DISABLE_LILV -> DISABLE_LV2.  [2d2824cc84]
   * cmake: Add DISABLE_PCH.  [04e36f6ea4]
   * cmake: Fix broken CMAKE_BUILD_TYPE.  [c149ea9a66]
+  * matrix: Fixed crash on large horizontal zoom.  Bug #1761.
+    [853313edcf]
 
-Done to: 3e4efb9bec
+Done to: 943d95d282
 
 ===== New Features =====
 
