@@ -115,7 +115,15 @@ void CompositionPosition::slotUpdate()
 void CompositionPosition::documentLoaded(RosegardenDocument* doc)
 {
     RG_DEBUG << "documentLoaded" << doc;
-    // Nw we can set the document position
+
+    // Set the PPP on the message queue (using QTimer) to make sure everything
+    // is ready.  If we don't do this, we crash when we send out a changed()
+    // notification which eventually gets to Composition and is looking at the
+    // old freed Composition.
+    // ??? Can this be reorganized and simplified?  E.g. can we avoid sending
+    //     out the notification for this case and have
+    //     RosegardenMainWindow::setDocument() ask for the position when the
+    //     new document is ready for it?
     QTimer::singleShot(0, this, &CompositionPosition::slotSetDocumentTime);
 }
 
