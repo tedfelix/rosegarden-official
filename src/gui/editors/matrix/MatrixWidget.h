@@ -406,17 +406,17 @@ private:
     // Zoom Area (to the right of the Panner)
 
     /// The big zoom wheel.
-    Thumbwheel *m_HVzoom;
+    Thumbwheel *m_hvZoom;
     /// Used to compute how far the big zoom wheel has moved.
-    int m_lastHVzoomValue;
+    int m_lastHVZoomValue;
     /// Which zoom factor to use.  For the pitch ruler.
     bool m_lastZoomWasHV;
     /// Thin horizontal zoom wheel under the big zoom wheel.
-    Thumbwheel *m_Hzoom;
+    Thumbwheel *m_hZoom;
     /// Used to compute how far the horizontal zoom wheel has moved.
     int m_lastH;
     /// Thin vertical zoom wheel to the right of the big zoom wheel.
-    Thumbwheel *m_Vzoom;
+    Thumbwheel *m_vZoom;
     /// Used to compute how far the vertical zoom wheel has moved.
     int m_lastV;
     /// Small reset button to the lower right of the big zoom wheel.

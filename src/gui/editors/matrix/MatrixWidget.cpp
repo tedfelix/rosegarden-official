@@ -215,44 +215,44 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     controlsLayout->setContentsMargins(0, 0, 0, 0);
     controls->setLayout(controlsLayout);
 
-    m_HVzoom = new Thumbwheel(Qt::Vertical);
-    m_HVzoom->setFixedSize(QSize(40, 40));
-    m_HVzoom->setToolTip(tr("Zoom"));
+    m_hvZoom = new Thumbwheel(Qt::Vertical);
+    m_hvZoom->setFixedSize(QSize(40, 40));
+    m_hvZoom->setToolTip(tr("Zoom"));
 
     // +/- 20 clicks seems to be the reasonable limit
-    m_HVzoom->setMinimumValue(-20);
-    m_HVzoom->setMaximumValue(20);
-    m_HVzoom->setDefaultValue(0);
-    m_HVzoom->setBright(true);
-    m_HVzoom->setShowScale(true);
-    m_lastHVzoomValue = m_HVzoom->getValue();
-    controlsLayout->addWidget(m_HVzoom, 0, 0, Qt::AlignCenter);
+    m_hvZoom->setMinimumValue(-20);
+    m_hvZoom->setMaximumValue(20);
+    m_hvZoom->setDefaultValue(0);
+    m_hvZoom->setBright(true);
+    m_hvZoom->setShowScale(true);
+    m_lastHVZoomValue = m_hvZoom->getValue();
+    controlsLayout->addWidget(m_hvZoom, 0, 0, Qt::AlignCenter);
 
-    connect(m_HVzoom, &Thumbwheel::valueChanged, this,
+    connect(m_hvZoom, &Thumbwheel::valueChanged, this,
             &MatrixWidget::slotPrimaryThumbwheelMoved);
 
-    m_Hzoom = new Thumbwheel(Qt::Horizontal);
-    m_Hzoom->setFixedSize(QSize(50, 16));
-    m_Hzoom->setToolTip(tr("Horizontal Zoom"));
+    m_hZoom = new Thumbwheel(Qt::Horizontal);
+    m_hZoom->setFixedSize(QSize(50, 16));
+    m_hZoom->setToolTip(tr("Horizontal Zoom"));
 
-    m_Hzoom->setMinimumValue(-25);
-    m_Hzoom->setMaximumValue(60);
-    m_Hzoom->setDefaultValue(0);
-    m_Hzoom->setBright(false);
-    controlsLayout->addWidget(m_Hzoom, 1, 0);
-    connect(m_Hzoom, &Thumbwheel::valueChanged, this,
+    m_hZoom->setMinimumValue(-25);
+    m_hZoom->setMaximumValue(60);
+    m_hZoom->setDefaultValue(0);
+    m_hZoom->setBright(false);
+    controlsLayout->addWidget(m_hZoom, 1, 0);
+    connect(m_hZoom, &Thumbwheel::valueChanged, this,
             &MatrixWidget::slotHorizontalThumbwheelMoved);
 
-    m_Vzoom = new Thumbwheel(Qt::Vertical);
-    m_Vzoom->setFixedSize(QSize(16, 50));
-    m_Vzoom->setToolTip(tr("Vertical Zoom"));
-    m_Vzoom->setMinimumValue(-25);
-    m_Vzoom->setMaximumValue(60);
-    m_Vzoom->setDefaultValue(0);
-    m_Vzoom->setBright(false);
-    controlsLayout->addWidget(m_Vzoom, 0, 1, Qt::AlignRight);
+    m_vZoom = new Thumbwheel(Qt::Vertical);
+    m_vZoom->setFixedSize(QSize(16, 50));
+    m_vZoom->setToolTip(tr("Vertical Zoom"));
+    m_vZoom->setMinimumValue(-25);
+    m_vZoom->setMaximumValue(60);
+    m_vZoom->setDefaultValue(0);
+    m_vZoom->setBright(false);
+    controlsLayout->addWidget(m_vZoom, 0, 1, Qt::AlignRight);
 
-    connect(m_Vzoom, &Thumbwheel::valueChanged, this,
+    connect(m_vZoom, &Thumbwheel::valueChanged, this,
             &MatrixWidget::slotVerticalThumbwheelMoved);
 
     // a blank QPushButton forced square looks better than the tool button did
@@ -1290,10 +1290,10 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
         v = -20;
     if (v > 20)
         v = 20;
-    if (m_lastHVzoomValue < -20)
-        m_lastHVzoomValue = -20;
-    if (m_lastHVzoomValue > 20)
-        m_lastHVzoomValue = 20;
+    if (m_lastHVZoomValue < -20)
+        m_lastHVZoomValue = -20;
+    if (m_lastHVZoomValue > 20)
+        m_lastHVZoomValue = 20;
 
     // When dragging the wheel up and down instead of mouse wheeling it, it
     // steps according to its speed.  I don't see a sure way (and after all
@@ -1302,18 +1302,18 @@ MatrixWidget::slotPrimaryThumbwheelMoved(int v)
     // zoomInFromPanner() here, so we will look at the number of steps
     // between the old value and the last one, and call the slot that many times
     // in order to enforce the 1:1 relationship.
-    int steps = v - m_lastHVzoomValue;
+    int steps = v - m_lastHVZoomValue;
     if (steps < 0)
         steps *= -1;
 
     for (int i = 0; i < steps; ++i) {
-        if (v < m_lastHVzoomValue)
+        if (v < m_lastHVZoomValue)
             zoomInFromPanner();
-        else if (v > m_lastHVzoomValue)
+        else if (v > m_lastHVZoomValue)
             zoomOutFromPanner();
     }
 
-    m_lastHVzoomValue = v;
+    m_lastHVZoomValue = v;
     m_lastZoomWasHV = true;
 }
 
@@ -1341,10 +1341,10 @@ MatrixWidget::slotResetZoomClicked()
     slotScrollRulers();
 
     // scale factor 1.0 = 100% zoom
-    m_Hzoom->setValue(1);
-    m_Vzoom->setValue(1);
-    m_HVzoom->setValue(0);
-    m_lastHVzoomValue = 0;
+    m_hZoom->setValue(1);
+    m_vZoom->setValue(1);
+    m_hvZoom->setValue(0);
+    m_lastHVZoomValue = 0;
     m_lastH = 0;
     m_lastV = 0;
 
@@ -1358,18 +1358,18 @@ MatrixWidget::slotResetZoomClicked()
 void
 MatrixWidget::slotSyncPannerZoomIn()
 {
-    int v = m_lastHVzoomValue - 1;
+    int v = m_lastHVZoomValue - 1;
 
-    m_HVzoom->setValue(v);
+    m_hvZoom->setValue(v);
     slotPrimaryThumbwheelMoved(v);
 }
 
 void
 MatrixWidget::slotSyncPannerZoomOut()
 {
-    int v = m_lastHVzoomValue + 1;
+    int v = m_lastHVZoomValue + 1;
 
-    m_HVzoom->setValue(v);
+    m_hvZoom->setValue(v);
     slotPrimaryThumbwheelMoved(v);
 }
 
@@ -1694,7 +1694,7 @@ MatrixWidget::slotZoomIn()
 {
     int v = m_lastH - 1;
 
-    m_Hzoom->setValue(v);
+    m_hZoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
 }
 
@@ -1703,7 +1703,7 @@ MatrixWidget::slotZoomOut()
 {
     int v = m_lastH + 1;
 
-    m_Hzoom->setValue(v);
+    m_hZoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
 }
 
