@@ -52,13 +52,13 @@ CompositionPosition* CompositionPosition::getInstance()
 
 timeT CompositionPosition::get() const
 {
-    RG_DEBUG << "getPosition" << m_position;
+    RG_DEBUG << "get" << m_position;
     return m_position;
 }
 
 RealTime CompositionPosition::getElapsedTime() const
 {
-    RG_DEBUG << "getPositionAsElapsedTime" << m_positionAsElapsedTime;
+    RG_DEBUG << "getElapsedTime" << m_positionAsElapsedTime;
     return m_positionAsElapsedTime;
 }
 
@@ -91,6 +91,8 @@ void CompositionPosition::slotSetDocumentTime()
 {
     // now set the time from the loaded document
     slotSet(m_documentPosition);
+    // and reset the document memory
+    m_documentPosition = 0;
 }
 
 void CompositionPosition::slotUpdate()
