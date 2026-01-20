@@ -1148,29 +1148,8 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
         v = m_vZoom->getMinimumValue();
     if (v > m_vZoom->getMaximumValue())
         v = m_vZoom->getMaximumValue();
-    if (m_lastV < m_vZoom->getMinimumValue())
-        m_lastV = m_vZoom->getMinimumValue();
-    if (m_lastV > m_vZoom->getMaximumValue())
-        m_lastV = m_vZoom->getMaximumValue();
 
-    int steps = v - m_lastV;
-    if (steps < 0)
-        steps *= -1;
-
-    bool zoomingIn = (v > m_lastV);
-    double newZoom = m_vZoomFactor;
-
-    for (int i = 0; i < steps; ++i) {
-        if (zoomingIn)
-            newZoom *= 1.1;
-        else
-            newZoom /= 1.1;
-    }
-
-    //RG_DEBUG << "slotVerticalThumbwheelMoved(): v is: " << v << " z zoom factor was: " << m_lastV << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
-
-    setVerticalZoomFactor(newZoom);
-    m_lastV = v;
+    setVerticalZoomFactor(pow(1.1, v));
 }
 
 void
@@ -1278,7 +1257,6 @@ MatrixWidget::slotResetZoomClicked()
     m_vZoom->setValue(0);
     m_hvZoom->setValue(0);
     m_lastHVZoomValue = 0;
-    m_lastV = 0;
 
     // Store in Segment(s) for next time.
     if (m_scene) {

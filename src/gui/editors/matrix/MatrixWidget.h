@@ -419,8 +419,6 @@ private:
 
     /// Thin vertical zoom wheel to the right of the big zoom wheel.
     Thumbwheel *m_vZoom;
-    /// Used to compute how far the vertical zoom wheel has moved.
-    int m_lastV{0};
 
     /// Small reset button to the lower right of the big zoom wheel.
     QPushButton *m_reset;
