@@ -85,6 +85,9 @@
 #include <QPushButton>
 #include <QRegularExpression>
 
+#include <math.h>
+
+
 namespace Rosegarden
 {
 
@@ -524,13 +527,18 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     // Go with zoom factors from the first Segment (segments[0]).
 
     // Compute wheel position for H zoom factor.
-    int hPosition = log(segments[0]->matrixHZoomFactor) / log(1.1);
+    const int hPosition =
+            lround(log(segments[0]->matrixHZoomFactor) / log(1.1));
     // Move the wheel there.
     m_hZoom->setValue(hPosition);
     slotHorizontalThumbwheelMoved(hPosition);
 
-    // ??? Should do the same here.  This is wrong.
-    setVerticalZoomFactor(segments[0]->matrixVZoomFactor);
+    // Compute wheel position for V zoom factor.
+    const int vPosition =
+            lround(log(segments[0]->matrixVZoomFactor) / log(1.1));
+    // Move the wheel there.
+    m_vZoom->setValue(vPosition);
+    slotVerticalThumbwheelMoved(vPosition);
 }
 
 void
