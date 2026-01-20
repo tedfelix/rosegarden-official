@@ -286,11 +286,11 @@ private slots:
     /// Reset the zoom to 100% and reset the zoomy wheels
     void slotResetZoomClicked();
 
-    /// Trap a zoom in from the panner and sync it to the HV thumb wheel
-    void slotSyncPannerZoomIn();
+    /// Adjust HV thumb wheel based on panner zoom in.
+    void slotPannerZoomIn();
 
-    /// Trap a zoom out from the panner and sync it to the HV thumb wheel
-    void slotSyncPannerZoomOut();
+    /// Adjust HV thumb wheel based on panner zoom out.
+    void slotPannerZoomOut();
 
     /// The Segment control thumbwheel moved, display a different Segment.
     void slotSegmentChangerMoved(int);
@@ -409,9 +409,7 @@ private:
     /// The big zoom wheel.
     Thumbwheel *m_hvZoom;
     /// Used to compute how far the big zoom wheel has moved.
-    int m_lastHVZoomValue;
-    /// Which zoom factor to use.  For the pitch ruler.
-    bool m_lastZoomWasHV{true};
+    int m_lastHVZoomValue{0};
 
     /// Thin horizontal zoom wheel under the big zoom wheel.
     Thumbwheel *m_hZoom;

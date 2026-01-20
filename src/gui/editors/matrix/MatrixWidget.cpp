@@ -203,7 +203,6 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_hvZoom->setDefaultValue(0);
     m_hvZoom->setBright(true);
     m_hvZoom->setShowScale(true);
-    m_lastHVZoomValue = m_hvZoom->getValue();
     controlsLayout->addWidget(m_hvZoom, 0, 0, Qt::AlignCenter);
 
     connect(m_hvZoom, &Thumbwheel::valueChanged, this,
@@ -285,10 +284,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
             this, &MatrixWidget::slotScrollRulers);
 
     connect(m_panner, &Panner::zoomIn,
-            this, &MatrixWidget::slotSyncPannerZoomIn);
+            this, &MatrixWidget::slotPannerZoomIn);
 
     connect(m_panner, &Panner::zoomOut,
-            this, &MatrixWidget::slotSyncPannerZoomOut);
+            this, &MatrixWidget::slotPannerZoomOut);
 
     connect(m_pianoView, &Panned::wheelEventReceived,
             m_view, &Panned::slotEmulateWheelEvent);
@@ -613,26 +612,11 @@ MatrixWidget::generatePitchRuler()
     //    vertical scroll. I have no idea from where they come from.
 
 
-    // Apply current zoom to the new pitch ruler
-    if (m_lastZoomWasHV) {
-        // Set the view's matrix.
-        // ??? Why?  Why only in this case?  Why not in the other case?
-        //     Why isn't this handled elsewhere?  Is it?
-        QTransform m;
-        m.scale(m_hZoomFactor, m_vZoomFactor);
-        m_view->setTransform(m);
-        // Only vertical zoom factor is applied to pitch ruler
-        QTransform m2;
-        m2.scale(1, m_vZoomFactor);
-        m_pianoView->setTransform(m2);
-        m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    } else {
-        // Only vertical zoom factor is applied to pitch ruler
-        QTransform m;
-        m.scale(1.0, m_vZoomFactor);
-        m_pianoView->setTransform(m);
-        m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    }
+    // Apply current vertical zoom to the new pitch ruler.
+    QTransform pianoTransform;
+    pianoTransform.scale(1.0, m_vZoomFactor);
+    m_pianoView->setTransform(pianoTransform);
+    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
 
     // Move vertically the pianoView scene to fit the matrix scene.
     QRect mr = m_view->rect();
@@ -656,13 +640,6 @@ MatrixWidget::segmentsContainNotes() const
 void
 MatrixWidget::setHorizontalZoomFactor(double factor)
 {
-    // NOTE: scaling the keyboard up and down works well for the HV zoom
-    // because it maintains the same aspect ratio for each step.  I tried a few
-    // different ways to deal with this before deciding that since
-    // independent-axis zoom is a separate and mutually exclusive subsystem,
-    // about the only sensible thing we can do is keep the keyboard scaled at
-    // 1.0 horizontally, and only scale it vertically.  Git'r done.
-
     m_hZoomFactor = factor;
     // We need to do a show() here at startup to make sure things don't get
     // badly hosed.  See bug #1761.  But this is overkill.  Calling show()
@@ -674,11 +651,7 @@ MatrixWidget::setHorizontalZoomFactor(double factor)
     m_view->resetTransform();
     m_view->scale(m_hZoomFactor, m_vZoomFactor);
 
-    // Only vertical zoom factor is applied to pitch ruler
-    QTransform m;
-    m.scale(1.0, m_vZoomFactor);
-    m_pianoView->setTransform(m);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
+    // ??? Necessary?
     slotScrollRulers();
 
     // Store in Segment(s) for next time.
@@ -1245,7 +1218,6 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 
     setHorizontalZoomFactor(newZoom);
     m_lastH = v;
-    m_lastZoomWasHV = false;
 }
 
 void
@@ -1279,7 +1251,6 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
 
     setVerticalZoomFactor(newZoom);
     m_lastV = v;
-    m_lastZoomWasHV = false;
 }
 
 void
@@ -1315,7 +1286,6 @@ MatrixWidget::slotHVThumbwheelMoved(int v)
     }
 
     m_lastHVZoomValue = v;
-    m_lastZoomWasHV = true;
 }
 
 void
@@ -1323,6 +1293,7 @@ MatrixWidget::slotResetZoomClicked()
 {
     //RG_DEBUG << "slotResetZoomClicked()";
 
+    // scale factor 1.0 = 100% zoom
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
     if (m_referenceScale) {
@@ -1341,9 +1312,8 @@ MatrixWidget::slotResetZoomClicked()
     m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
     slotScrollRulers();
 
-    // scale factor 1.0 = 100% zoom
-    m_hZoom->setValue(1);
-    m_vZoom->setValue(1);
+    m_hZoom->setValue(0);
+    m_vZoom->setValue(0);
     m_hvZoom->setValue(0);
     m_lastHVZoomValue = 0;
     m_lastH = 0;
@@ -1357,7 +1327,7 @@ MatrixWidget::slotResetZoomClicked()
 }
 
 void
-MatrixWidget::slotSyncPannerZoomIn()
+MatrixWidget::slotPannerZoomIn()
 {
     int v = m_lastHVZoomValue - 1;
 
@@ -1366,7 +1336,7 @@ MatrixWidget::slotSyncPannerZoomIn()
 }
 
 void
-MatrixWidget::slotSyncPannerZoomOut()
+MatrixWidget::slotPannerZoomOut()
 {
     int v = m_lastHVZoomValue + 1;
 
