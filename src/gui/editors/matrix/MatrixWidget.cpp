@@ -1229,40 +1229,14 @@ MatrixWidget::slotHVThumbwheelMoved(int v)
 void
 MatrixWidget::slotResetZoomClicked()
 {
-    //RG_DEBUG << "slotResetZoomClicked()";
-
-    // ??? Lots of redundant code here.  Can't we just set the wheels to
-    //     0 and call the *ThumbwheelMoved() routines?
-
-    // scale factor 1.0 = 100% zoom
-    m_hZoomFactor = 1.0;
-    m_vZoomFactor = 1.0;
-    if (m_referenceScale) {
-        m_referenceScale->setXZoomFactor(m_hZoomFactor);
-        m_referenceScale->setYZoomFactor(m_vZoomFactor);
-    }
-    m_view->resetTransform();
-    QTransform m;
-    m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setTransform(m);
-    m_view->scale(m_hZoomFactor, m_vZoomFactor);
-    // Only vertical zoom factor is applied to pitch ruler
-    QTransform m2;
-    m2.scale(1, m_vZoomFactor);
-    m_pianoView->setTransform(m2);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotScrollRulers();
-
     m_hZoom->setValue(0);
+    slotHorizontalThumbwheelMoved(0);
+
     m_vZoom->setValue(0);
+    slotVerticalThumbwheelMoved(0);
+
     m_hvZoom->setValue(0);
     m_lastHVZoomValue = 0;
-
-    // Store in Segment(s) for next time.
-    if (m_scene) {
-        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
-        m_scene->setVerticalZoomFactor(m_vZoomFactor);
-    }
 }
 
 void
