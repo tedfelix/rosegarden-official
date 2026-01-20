@@ -218,11 +218,13 @@ void LV2Gtk2::doShutDown()
 
 }
 
-#else
 
-// no gtk2 - dummy versions
+#else  // no gtk2 - dummy versions
+
+
 namespace Rosegarden
 {
+
 
 LV2Gtk2* LV2Gtk2::getInstance()
 {
@@ -262,5 +264,7 @@ void LV2Gtk2::shutDown()
 {
 }
 
+
 }
+
 #endif

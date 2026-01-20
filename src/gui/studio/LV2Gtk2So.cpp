@@ -25,6 +25,10 @@
 
 #include <gdk/gdkx.h>
 
+#include <glib.h>
+
+#include <stdio.h>
+
 //#define GTK_DEBUG true
 #define GTK_DEBUG false
 #define debug_print(...) \
@@ -58,13 +62,13 @@ namespace
         return FALSE;
     }
 
-    static void destroy(GtkWidget *,
-                        gpointer   )
+    void destroy(GtkWidget *,
+                 gpointer   )
     {
         debug_print("gtk destroy\n");
     }
 
-    static char** m_argv;
+    char** m_argv;
 
 }
 
@@ -83,9 +87,9 @@ void LV2Gtk2So::createLV2Gtk2So()
     gtk_init (&argc, &m_argv);
 }
 
-LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2So::getWidget
-(LV2UI_Widget lv2Widget,
- LV2Gtk2Types::SizeCallback* sizecb)
+LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2So::getWidget(
+        LV2UI_Widget lv2Widget,
+        LV2Gtk2Types::SizeCallback* sizecb)
 {
     debug_print("gtk getWidget\n");
     GtkWidget* wid = (GtkWidget*)lv2Widget;
@@ -107,8 +111,8 @@ LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2So::getWidget
 }
 
 void LV2Gtk2So::getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
-                       int& width,
-                       int& height)
+                        int& width,
+                        int& height)
 {
     debug_print("gtk getSize\n");
     GtkAllocation alloc;
