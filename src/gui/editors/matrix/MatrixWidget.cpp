@@ -679,54 +679,6 @@ MatrixWidget::setVerticalZoomFactor(double factor)
 }
 
 void
-MatrixWidget::zoomInFromPanner()
-{
-    m_hZoomFactor /= 1.1;
-    m_vZoomFactor /= 1.1;
-    if (m_referenceScale)
-        m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    QTransform m;
-    m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setTransform(m);
-    // Only vertical zoom factor is applied to pitch ruler
-    QTransform m2;
-    m2.scale(1, m_vZoomFactor);
-    m_pianoView->setTransform(m2);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotScrollRulers();
-
-    // Store in Segment(s) for next time.
-    if (m_scene) {
-        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
-        m_scene->setVerticalZoomFactor(m_vZoomFactor);
-    }
-}
-
-void
-MatrixWidget::zoomOutFromPanner()
-{
-    m_hZoomFactor *= 1.1;
-    m_vZoomFactor *= 1.1;
-    if (m_referenceScale)
-        m_referenceScale->setXZoomFactor(m_hZoomFactor);
-    QTransform m;
-    m.scale(m_hZoomFactor, m_vZoomFactor);
-    m_view->setTransform(m);
-    // Only vertical zoom factor is applied to pitch ruler
-    QTransform m2;
-    m2.scale(1, m_vZoomFactor);
-    m_pianoView->setTransform(m2);
-    m_pianoView->setFixedWidth(m_pitchRuler->sizeHint().width());
-    slotScrollRulers();
-
-    // Store in Segment(s) for next time.
-    if (m_scene) {
-        m_scene->setHorizontalZoomFactor(m_hZoomFactor);
-        m_scene->setVerticalZoomFactor(m_vZoomFactor);
-    }
-}
-
-void
 MatrixWidget::slotScrollRulers()
 {
     // Get time of the window left
@@ -1256,33 +1208,72 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
 void
 MatrixWidget::slotHVThumbwheelMoved(int v)
 {
-    // little bit of kludge work to deal with value manipulations that are
-    // outside of the constraints imposed by the hv zoom wheel itself
-    if (v < -20)
-        v = -20;
-    if (v > 20)
-        v = 20;
-    if (m_lastHVZoomValue < -20)
-        m_lastHVZoomValue = -20;
-    if (m_lastHVZoomValue > 20)
-        m_lastHVZoomValue = 20;
+    // ??? HV wheel should be effectively infinite.  Only its delta movement
+    //     should be used.  Does ThumbWheel support infinite?
+
+    // Enforce limits.
+    // ??? Shouldn't be necessary if the rest of the code is doing its job.
+    if (v < m_hvZoom->getMinimumValue())
+        v = m_hvZoom->getMinimumValue();
+    if (v > m_hvZoom->getMaximumValue())
+        v = m_hvZoom->getMaximumValue();
+    if (m_lastHVZoomValue < m_hvZoom->getMinimumValue())
+        m_lastHVZoomValue = m_hvZoom->getMinimumValue();
+    if (m_lastHVZoomValue > m_hvZoom->getMaximumValue())
+        m_lastHVZoomValue = m_hvZoom->getMaximumValue();
 
     // When dragging the wheel up and down instead of mouse wheeling it, it
     // steps according to its speed.  I don't see a sure way (and after all
     // there are no docs!) to make sure dragging results in a smooth 1:1
-    // relationship when compared with mouse wheeling, and we are just hijacking
-    // zoomInFromPanner() here, so we will look at the number of steps
+    // relationship when compared with mouse wheeling, so we will look at the
+    // number of steps
     // between the old value and the last one, and call the slot that many times
     // in order to enforce the 1:1 relationship.
-    int steps = v - m_lastHVZoomValue;
-    if (steps < 0)
-        steps *= -1;
+    int steps = abs(v - m_lastHVZoomValue);
+
+    // ??? See if we can ever get steps > 1.  Grab the wheel and wing it around.
 
     for (int i = 0; i < steps; ++i) {
-        if (v < m_lastHVZoomValue)
-            zoomInFromPanner();
-        else if (v > m_lastHVZoomValue)
-            zoomOutFromPanner();
+        // Decreasing value is zooming out.
+        if (v < m_lastHVZoomValue) {
+
+            // Zoom Out
+
+            int hZoomValue = m_hZoom->getValue();
+            // If the H wheel position is at its min, bail.
+            if (hZoomValue == m_hZoom->getMinimumValue())
+                return;
+            int vZoomValue = m_vZoom->getValue();
+            // If the V wheel position is at its min, bail.
+            if (vZoomValue == m_vZoom->getMinimumValue())
+                return;
+            // Zoom out one step on the H.
+            m_hZoom->setValue(hZoomValue - 1);
+            slotHorizontalThumbwheelMoved(hZoomValue - 1);
+            // Zoom out one step on the V.
+            m_vZoom->setValue(vZoomValue - 1);
+            slotVerticalThumbwheelMoved(vZoomValue - 1);
+
+        } else if (v > m_lastHVZoomValue) {  // Increasing is zooming in.
+
+            // Zoom In
+
+            int hZoomValue = m_hZoom->getValue();
+            // If the H wheel position is at its max, bail.
+            if (hZoomValue == m_hZoom->getMaximumValue())
+                return;
+            int vZoomValue = m_vZoom->getValue();
+            // If the V wheel position is at its max, bail.
+            if (vZoomValue == m_vZoom->getMaximumValue())
+                return;
+            // Zoom in one step on the H.
+            m_hZoom->setValue(hZoomValue + 1);
+            slotHorizontalThumbwheelMoved(hZoomValue + 1);
+            // Zoom in one step on the V.
+            m_vZoom->setValue(vZoomValue + 1);
+            slotVerticalThumbwheelMoved(vZoomValue + 1);
+
+        }
     }
 
     m_lastHVZoomValue = v;
@@ -1329,7 +1320,9 @@ MatrixWidget::slotResetZoomClicked()
 void
 MatrixWidget::slotPannerZoomIn()
 {
-    int v = m_lastHVZoomValue - 1;
+    const int v = m_lastHVZoomValue - 1;
+    if (v < m_hvZoom->getMinimumValue())
+        return;
 
     m_hvZoom->setValue(v);
     slotHVThumbwheelMoved(v);
@@ -1338,7 +1331,9 @@ MatrixWidget::slotPannerZoomIn()
 void
 MatrixWidget::slotPannerZoomOut()
 {
-    int v = m_lastHVZoomValue + 1;
+    const int v = m_lastHVZoomValue + 1;
+    if (v > m_hvZoom->getMaximumValue())
+        return;
 
     m_hvZoom->setValue(v);
     slotHVThumbwheelMoved(v);
@@ -1663,7 +1658,7 @@ MatrixWidget::slotDocumentModified(bool)
 void
 MatrixWidget::slotZoomIn()
 {
-    int v = m_lastH - 1;
+    const int v = m_lastH - 1;
 
     m_hZoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
@@ -1672,7 +1667,7 @@ MatrixWidget::slotZoomIn()
 void
 MatrixWidget::slotZoomOut()
 {
-    int v = m_lastH + 1;
+    const int v = m_lastH + 1;
 
     m_hZoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);

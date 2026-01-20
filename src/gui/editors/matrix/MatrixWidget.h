@@ -195,6 +195,7 @@ public:
                         double& verticalZoomFactor) const;
 
 signals:
+
     void toolChanged(QString);
 
     /**
@@ -227,6 +228,7 @@ signals:
     void showContextHelp(const QString &);
 
 public slots:
+
     /// Velocity combo box.
     void slotSetCurrentVelocity(int velocity)  { m_currentVelocity = velocity; }
 
@@ -234,17 +236,19 @@ public slots:
     void slotPlayPreviewNote(Segment *segment, int pitch);
 
 protected:
+
     // QWidget Override
     /// Make sure the rulers are in sync when we are shown.
     void showEvent(QShowEvent *event) override;
 
 private slots:
+
     /// Called when the document is modified in some way.
     void slotDocumentModified(bool);
 
-    /// Connected to Panned::zoomIn() for ctrl+wheel.
+    /// Connected to Panned::zoomIn() for Ctrl+mouse wheel.
     void slotZoomIn();
-    /// Connected to Panned::zoomOut() for ctrl+wheel.
+    /// Connected to Panned::zoomOut() for Ctrl+mouse wheel.
     void slotZoomOut();
 
     /// Scroll rulers to sync up with view.
@@ -302,6 +306,7 @@ private slots:
     void slotInstrumentGone();
 
 private:
+
     // ??? Instead of storing the document, which can change, get the
     //     document as needed via RosegardenDocument::currentDocument.
     RosegardenDocument *m_document{nullptr};
@@ -338,8 +343,6 @@ private:
 
     /// Navigation area under the main view.
     Panner *m_panner;
-    void zoomInFromPanner();
-    void zoomOutFromPanner();
 
     void keyPressEvent(QKeyEvent *e) override;
     void keyReleaseEvent(QKeyEvent *e) override;

@@ -91,14 +91,6 @@ Thumbwheel::setMinimumValue(int min)
     update();
 }
 
-/* unused
-int
-Thumbwheel::getMinimumValue() const
-{
-    return m_min;
-}
-*/
-
 void
 Thumbwheel::setMaximumValue(int max)
 {
@@ -112,14 +104,6 @@ Thumbwheel::setMaximumValue(int max)
     m_rotation = float(m_value - m_min) / float(m_max - m_min);
     update();
 }
-
-/* unused
-int
-Thumbwheel::getMaximumValue() const
-{
-    return m_max;
-}
-*/
 
 void
 Thumbwheel::setDefaultValue(int deft)

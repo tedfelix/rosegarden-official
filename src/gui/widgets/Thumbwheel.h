@@ -34,8 +34,9 @@ public:
     Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = nullptr);
     ~Thumbwheel() override;
 
-    // unused int getMinimumValue() const;
-    // unused int getMaximumValue() const;
+    int getMinimumValue() const  { return m_min; }
+    int getMaximumValue() const  { return m_max; }
+
     int getDefaultValue() const;
     // unused float getSpeed() const;
     // unused bool getTracking() const;
