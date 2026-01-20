@@ -520,10 +520,17 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     // Fix for bug #1761.  See setHorizontalZoomFactor() for more.
     show();
 
-    // Go with zoom factors from the first Segment.
-    setHorizontalZoomFactor(segments[0]->matrixHZoomFactor);
-    setVerticalZoomFactor(segments[0]->matrixVZoomFactor);
 
+    // Go with zoom factors from the first Segment (segments[0]).
+
+    // Compute wheel position for H zoom factor.
+    int hPosition = log(segments[0]->matrixHZoomFactor) / log(1.1);
+    // Move the wheel there.
+    m_hZoom->setValue(hPosition);
+    slotHorizontalThumbwheelMoved(hPosition);
+
+    // ??? Should do the same here.  This is wrong.
+    setVerticalZoomFactor(segments[0]->matrixVZoomFactor);
 }
 
 void
@@ -1233,6 +1240,16 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
     bool zoomingIn = (v > m_lastH);
     double newZoom = m_hZoomFactor;
 
+    // ??? But this is just pow(1.1, v).  Recommend storing the wheel position
+    //     in the wheel itself.  Then have all other zoom modifiers (the hv
+    //     wheel, the panner, and the mouse wheel) modify the wheel position
+    //     (and zoom factor) via this routine.  Then this routine can just use
+    //     pow(1.1, v) without worrying about accumulating zoom values from the
+    //     other zoom modifiers.
+    //
+    //     See setSegments() which first moves the wheel via setValue() then
+    //     calls this routine.
+
     for (int i = 0; i < steps; ++i) {
         if (zoomingIn)
             newZoom *= 1.1;
@@ -1241,6 +1258,7 @@ MatrixWidget::slotHorizontalThumbwheelMoved(int v)
     }
 
     //RG_DEBUG << "slotHorizontalThumbwheelMoved(): v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
+    //RG_DEBUG << "  1.1^v:" << pow(1.1, v);
 
     setHorizontalZoomFactor(newZoom);
     m_lastH = v;
