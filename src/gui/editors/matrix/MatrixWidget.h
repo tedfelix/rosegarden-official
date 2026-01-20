@@ -280,16 +280,16 @@ private slots:
     /// The vertical zoom thumbwheel moved
     void slotVerticalThumbwheelMoved(int);
 
-    /// The primary (combined axes) thumbwheel moved
-    void slotPrimaryThumbwheelMoved(int);
+    /// The HV (combined axes) thumbwheel moved
+    void slotHVThumbwheelMoved(int);
 
     /// Reset the zoom to 100% and reset the zoomy wheels
     void slotResetZoomClicked();
 
-    /// Trap a zoom in from the panner and sync it to the primary thumb wheel
+    /// Trap a zoom in from the panner and sync it to the HV thumb wheel
     void slotSyncPannerZoomIn();
 
-    /// Trap a zoom out from the panner and sync it to the primary thumb wheel
+    /// Trap a zoom out from the panner and sync it to the HV thumb wheel
     void slotSyncPannerZoomOut();
 
     /// The Segment control thumbwheel moved, display a different Segment.
@@ -304,28 +304,28 @@ private slots:
 private:
     // ??? Instead of storing the document, which can change, get the
     //     document as needed via RosegardenDocument::currentDocument.
-    RosegardenDocument *m_document; // I do not own this
+    RosegardenDocument *m_document{nullptr};
 
-    QGridLayout *m_layout; // I own this
+    QGridLayout *m_layout;
 
 
     // View
 
     /// QGraphicsScene holding the note Events.
-    MatrixScene *m_scene; // I own this
+    MatrixScene *m_scene{nullptr};
 
     /// The main view of the MatrixScene (m_scene).
-    Panned *m_view; // I own this
+    Panned *m_view;
 
     /// Whether the view will scroll along with the playback position pointer.
-    bool m_playTracking;
+    bool m_playTracking{true};
 
     /// View horizontal zoom factor.
-    double m_hZoomFactor;
+    double m_hZoomFactor{1.0};
     void setHorizontalZoomFactor(double factor);
 
     /// View vertical zoom factor.
-    double m_vZoomFactor;
+    double m_vZoomFactor{1.0};
     void setVerticalZoomFactor(double factor);
 
 
@@ -337,7 +337,7 @@ private:
     // Panner (Navigation Area below the matrix)
 
     /// Navigation area under the main view.
-    Panner *m_panner; // I own this
+    Panner *m_panner;
     void zoomInFromPanner();
     void zoomOutFromPanner();
 
@@ -353,19 +353,19 @@ private:
     // Pitch Ruler
 
     // This can be nullptr.  It tracks what pitchruler corresponds to.
-    Instrument *m_instrument; // Studio owns this (TBC)
+    Instrument *m_instrument{nullptr}; // Studio owns this (TBC)
     /// Key mapping from the Instrument.
     QSharedPointer<MidiKeyMapping> m_localMapping;
     /// Either a PercussionPitchRuler or a PianoKeyboard object.
-    PitchRuler *m_pitchRuler; // I own this
+    PitchRuler *m_pitchRuler{nullptr};
     /// (Re)generate the pitch ruler (useful when key mapping changed)
     void generatePitchRuler();
     /// Contains m_pitchRuler.
-    QGraphicsScene *m_pianoScene; // I own this
+    QGraphicsScene *m_pianoScene{nullptr};
     /// Contains m_pianoScene.
-    Panned *m_pianoView; // I own this
+    Panned *m_pianoView;
     /// All Segments only have key mappings.  Use a PercussionPitchRuler.
-    bool m_onlyKeyMapping;
+    bool m_onlyKeyMapping{false};
     /// Percussion matrix editor?
     /**
      * For the Percussion matrix editor, we ignore key release events from
@@ -374,33 +374,34 @@ private:
     bool m_drumMode;
     // For determining if pitch ruler needs to be regenerated when
     // changing segments.
-    enum class PrevPitchRulerType {NONE, PIANO, PERCUSSION} m_prevPitchRulerType;
+    enum class PrevPitchRulerType {NONE, PIANO, PERCUSSION}
+            m_prevPitchRulerType{PrevPitchRulerType::NONE};
 
     /// First note selected when doing a run up/down the keyboard.
     /**
      * Used to allow selection of a range of pitches by shift-clicking a
      * note on the pitch ruler then dragging up or down to another note.
      */
-    MidiByte m_firstNote;
+    MidiByte m_firstNote{0};
 
     /// Last note selected when doing a run up/down the keyboard.
     /**
      * Used to prevent redundant note on/offs when doing a run up/down the
      * pitch ruler.
      */
-    MidiByte m_lastNote;
+    MidiByte m_lastNote{0};
 
     /// Hide pitch ruler highlight when mouse move is not related to a pitch change.
-    bool m_highlightVisible;
+    bool m_highlightVisible{true};
 
 
     // Tools
 
     QSharedPointer<MatrixToolBox> m_toolBox;
-    MatrixTool *m_currentTool; // Toolbox owns this
+    MatrixTool *m_currentTool{nullptr};
     void setTool(QString name);
     /// Used by the MatrixMover and MatrixPainter tools for preview notes.
-    int m_currentVelocity;
+    int m_currentVelocity{100};
 
 
     // Zoom Area (to the right of the Panner)
@@ -410,33 +411,36 @@ private:
     /// Used to compute how far the big zoom wheel has moved.
     int m_lastHVZoomValue;
     /// Which zoom factor to use.  For the pitch ruler.
-    bool m_lastZoomWasHV;
+    bool m_lastZoomWasHV{true};
+
     /// Thin horizontal zoom wheel under the big zoom wheel.
     Thumbwheel *m_hZoom;
     /// Used to compute how far the horizontal zoom wheel has moved.
-    int m_lastH;
+    int m_lastH{0};
+
     /// Thin vertical zoom wheel to the right of the big zoom wheel.
     Thumbwheel *m_vZoom;
     /// Used to compute how far the vertical zoom wheel has moved.
-    int m_lastV;
+    int m_lastV{0};
+
     /// Small reset button to the lower right of the big zoom wheel.
     QPushButton *m_reset;
 
 
     // Rulers
 
-    ChordNameRuler *m_chordNameRuler; // I own this
-    TempoRuler *m_tempoRuler; // I own this
-    StandardRuler *m_topStandardRuler; // I own this
-    StandardRuler *m_bottomStandardRuler; // I own this
+    ChordNameRuler *m_chordNameRuler{nullptr};
+    TempoRuler *m_tempoRuler{nullptr};
+    StandardRuler *m_topStandardRuler{nullptr};
+    StandardRuler *m_bottomStandardRuler{nullptr};
     // ??? Rename: m_controlRuler
-    ControlRulerWidget *m_controlsWidget; // I own this
+    ControlRulerWidget *m_controlsWidget;
 
     /// Used by all rulers to make sure they are all zoomed to the same scale.
     /**
      * See MatrixScene::getReferenceScale().
      */
-    ZoomableRulerScale *m_referenceScale;  // Owned by MatrixScene
+    ZoomableRulerScale *m_referenceScale{nullptr};
 
 
     // Auto-scroll

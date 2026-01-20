@@ -112,32 +112,7 @@ enum {
 };
 
 MatrixWidget::MatrixWidget(bool drumMode) :
-    m_document(nullptr),
-    m_scene(nullptr),
-    m_view(nullptr),
-    m_playTracking(true),
-    m_hZoomFactor(1.0),
-    m_vZoomFactor(1.0),
-    m_instrument(nullptr),
-    m_localMapping(nullptr),
-    m_pitchRuler(nullptr),
-    m_pianoScene(nullptr),
-    m_pianoView(nullptr),
-    m_onlyKeyMapping(false),
     m_drumMode(drumMode),
-    m_prevPitchRulerType(PrevPitchRulerType::NONE),
-    m_firstNote(0),
-    m_lastNote(0),
-    m_highlightVisible(true),
-    m_currentTool(nullptr),
-    m_currentVelocity(100),
-    m_lastZoomWasHV(true),
-    m_lastH(0),
-    m_lastV(0),
-    m_chordNameRuler(nullptr),
-    m_tempoRuler(nullptr),
-    m_topStandardRuler(nullptr),
-    m_bottomStandardRuler(nullptr),
     m_referenceScale(nullptr)
 {
     //RG_DEBUG << "ctor";
@@ -232,7 +207,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     controlsLayout->addWidget(m_hvZoom, 0, 0, Qt::AlignCenter);
 
     connect(m_hvZoom, &Thumbwheel::valueChanged, this,
-            &MatrixWidget::slotPrimaryThumbwheelMoved);
+            &MatrixWidget::slotHVThumbwheelMoved);
 
     m_hZoom = new Thumbwheel(Qt::Horizontal);
     m_hZoom->setFixedSize(QSize(50, 16));
@@ -681,7 +656,7 @@ MatrixWidget::segmentsContainNotes() const
 void
 MatrixWidget::setHorizontalZoomFactor(double factor)
 {
-    // NOTE: scaling the keyboard up and down works well for the primary zoom
+    // NOTE: scaling the keyboard up and down works well for the HV zoom
     // because it maintains the same aspect ratio for each step.  I tried a few
     // different ways to deal with this before deciding that since
     // independent-axis zoom is a separate and mutually exclusive subsystem,
@@ -1308,10 +1283,10 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
 }
 
 void
-MatrixWidget::slotPrimaryThumbwheelMoved(int v)
+MatrixWidget::slotHVThumbwheelMoved(int v)
 {
     // little bit of kludge work to deal with value manipulations that are
-    // outside of the constraints imposed by the primary zoom wheel itself
+    // outside of the constraints imposed by the hv zoom wheel itself
     if (v < -20)
         v = -20;
     if (v > 20)
@@ -1387,7 +1362,7 @@ MatrixWidget::slotSyncPannerZoomIn()
     int v = m_lastHVZoomValue - 1;
 
     m_hvZoom->setValue(v);
-    slotPrimaryThumbwheelMoved(v);
+    slotHVThumbwheelMoved(v);
 }
 
 void
@@ -1396,13 +1371,13 @@ MatrixWidget::slotSyncPannerZoomOut()
     int v = m_lastHVZoomValue + 1;
 
     m_hvZoom->setValue(v);
-    slotPrimaryThumbwheelMoved(v);
+    slotHVThumbwheelMoved(v);
 }
 
 void
 MatrixWidget::slotSegmentChangerMoved(int v)
 {
-    // see comments in slotPrimaryThumbWheelMoved() for an explanation of that
+    // see comments in slotHVThumbWheelMoved() for an explanation of that
     // mechanism, which is repurposed and simplified here
 
     if (v < -120)
