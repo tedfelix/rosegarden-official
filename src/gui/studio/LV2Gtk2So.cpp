@@ -30,7 +30,9 @@
 #define debug_print(...) \
             do { if (GTK_DEBUG) fprintf(stderr, __VA_ARGS__); } while (0)
 
-namespace {
+namespace
+{
+
     void size_request(GtkWidget*, GtkRequisition *req, gpointer user_data)
     {
         debug_print("size_request %d %d\n", req->width, req->height);
@@ -66,10 +68,12 @@ namespace {
 
 }
 
+
 namespace Rosegarden
 {
 
-void  LV2Gtk2So::createLV2Gtk2So()
+
+void LV2Gtk2So::createLV2Gtk2So()
 {
     debug_print("gtk startUp\n");
     int argc = 1;
@@ -139,5 +143,6 @@ void LV2Gtk2So::shutDown()
     }
     delete[] m_argv;
 }
+
 
 }

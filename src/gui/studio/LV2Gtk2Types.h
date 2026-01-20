@@ -18,28 +18,28 @@
 #ifndef RG_LV2GTK2TYPES_H
 #define RG_LV2GTK2TYPES_H
 
+
 namespace Rosegarden
 {
 
-/// Declarations used in qt and gtk2 code.
 
+/// Declarations used in qt and gtk2 code.
 namespace LV2Gtk2Types
 {
 
 class SizeCallback
 {
 public:
-    virtual ~SizeCallback() {};
+    virtual ~SizeCallback()  { }
     virtual void setSize(int width, int height, bool isRequest) = 0;
 };
 
 struct LV2Gtk2Widget
 {
-    void* window;
-    LV2Gtk2Widget() {window = nullptr;}
+    void *window{nullptr};
 };
 
-};
+}
 
 
 }

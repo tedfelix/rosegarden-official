@@ -24,8 +24,10 @@
 
 #include <QWidget>
 
+
 namespace Rosegarden
 {
+
 
 /// Singleton wrapper around GTK2.
 /**
@@ -46,10 +48,11 @@ class LV2Gtk2 : public QWidget
 public:
     static LV2Gtk2 *getInstance();
 
-    LV2Gtk2(LV2Gtk2 &other) = delete;
+    LV2Gtk2(LV2Gtk2 &) = delete;
     void operator=(const LV2Gtk2 &) = delete;
 
  private:
+    // Singleton.
     LV2Gtk2();
     ~LV2Gtk2();
 
@@ -59,19 +62,24 @@ public:
      * Wrapper around gtk_window_new().
      */
     LV2Gtk2Types::LV2Gtk2Widget getWidget(LV2UI_Widget lv2Widget,
-                                          LV2Gtk2Types::SizeCallback* sizecb);
+                                          LV2Gtk2Types::SizeCallback* sizecb) const;
+    /// gtk_widget_get_allocation()
     void getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
                  int& width,
                  int& height) const;
+    /// GDK_WINDOW_XWINDOW()
     long int getWinId(const LV2Gtk2Types::LV2Gtk2Widget& widget);
+    /// gtk_widget_destroy()
     void deleteWidget(const LV2Gtk2Types::LV2Gtk2Widget& widget);
 
     static void shutDown();
     void doShutDown();
 
 private:
+    // The Singleton instance.
     static LV2Gtk2* m_instance;
 
+    // The .so shared library file.
     void* m_dlib;
 };
 

@@ -16,24 +16,27 @@
 */
 
 #define RG_MODULE_STRING "[LV2Gtk2]"
-#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "LV2Gtk2.h"
 
-#include <dlfcn.h>
+#include "LV2Gtk2So.h"
+
+#include "misc/Debug.h"
+#include "misc/Preferences.h"
 
 #include <QObject>
 #include <QMessageBox>
 #include <QCheckBox>
 
-#include "LV2Gtk2So.h"
-#include "misc/Debug.h"
-#include "misc/Preferences.h"
+#include <dlfcn.h>
 
 #ifdef HAVE_GTK2
 
+
 namespace Rosegarden
 {
+
 
 LV2Gtk2* LV2Gtk2::m_instance = nullptr;
 
@@ -52,7 +55,7 @@ LV2Gtk2* LV2Gtk2::getInstance()
             msgbox.setDefaultButton(QMessageBox::Cancel);
             msgbox.setCheckBox(cb);
 
-            int result = msgbox.exec();
+            const int result = msgbox.exec();
             if (result == QMessageBox::Cancel) return nullptr;
             if (cb->isChecked()) {
                 Preferences::setShowGtk2Warning(false);
@@ -65,7 +68,6 @@ LV2Gtk2* LV2Gtk2::getInstance()
 
 LV2Gtk2::LV2Gtk2()
 {
-
     // load shared library
     m_dlib = dlopen("librosegardenGtk2.so", RTLD_LOCAL | RTLD_LAZY);
     RG_DEBUG << "getInstance lib:" << m_dlib;
@@ -94,32 +96,31 @@ LV2Gtk2::~LV2Gtk2()
     if (m_dlib) dlclose(m_dlib);
 }
 
-LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2::getWidget
-(LV2UI_Widget lv2Widget,
- LV2Gtk2Types::SizeCallback* sizecb)
+LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2::getWidget(
+        LV2UI_Widget lv2Widget,
+        LV2Gtk2Types::SizeCallback* sizecb) const
 {
     RG_DEBUG << "getWidget" << &lv2Widget << sizecb;
-    if (!m_dlib) {
-        LV2Gtk2Types::LV2Gtk2Widget widget;
-        return widget;
-    }
+    if (!m_dlib)
+        return LV2Gtk2Types::LV2Gtk2Widget();
+
+    // Get the function pointer.
     LV2Gtk2Types::LV2Gtk2Widget
         (*getWidgetPtr)(LV2UI_Widget lv2Widget,
                         LV2Gtk2Types::SizeCallback* sizecb);
     *(void **)(&getWidgetPtr) = dlsym(m_dlib, "getWidget");
-    if (getWidgetPtr) {
-        return getWidgetPtr(lv2Widget, sizecb);
-    } else {
+    if (!getWidgetPtr) {
         RG_DEBUG << dlerror();
+        return LV2Gtk2Types::LV2Gtk2Widget();
     }
 
-    LV2Gtk2Types::LV2Gtk2Widget widget;
-    return widget;
+    // Call it.
+    return getWidgetPtr(lv2Widget, sizecb);
 }
 
 void LV2Gtk2::getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
-                     int& width,
-                     int& height) const
+                      int& width,
+                      int& height) const
 {
     RG_DEBUG << "getSize" << &widget << width << height;
     if (!m_dlib) {
@@ -127,83 +128,93 @@ void LV2Gtk2::getSize(const LV2Gtk2Types::LV2Gtk2Widget& widget,
         height = 0;
         return;
     }
+
+    // Get the function pointer.
     void (*getSizePtr)(const LV2Gtk2Types::LV2Gtk2Widget& widget,
                        int& width,
                        int& height);
     *(void **)(&getSizePtr) = dlsym(m_dlib, "getSize");
-    if (getSizePtr) {
-        getSizePtr(widget, width, height);
-        return;
-    } else {
+    if (!getSizePtr) {
         RG_DEBUG << dlerror();
+        width = 0;
+        height = 0;
+        return;
     }
 
-    width = 0;
-    height = 0;
+    // Call it.
+    getSizePtr(widget, width, height);
 }
 
 long int LV2Gtk2::getWinId(const LV2Gtk2Types::LV2Gtk2Widget& widget)
 {
     RG_DEBUG << "getWinId" << &widget;
-    if (!m_dlib) {
+    if (!m_dlib)
         return 0;
-    }
+
+    // Get the function pointer.
     int (*getWinIdPtr)(const LV2Gtk2Types::LV2Gtk2Widget& widget);
     *(void **)(&getWinIdPtr) = dlsym(m_dlib, "getWinId");
-    if (getWinIdPtr) {
-        return getWinIdPtr(widget);
-    } else {
+    if (!getWinIdPtr) {
         RG_DEBUG << dlerror();
+        return 0;
     }
 
-    return 0;
+    // Call it.
+    return getWinIdPtr(widget);
 }
 
 void LV2Gtk2::deleteWidget(const LV2Gtk2Types::LV2Gtk2Widget& widget)
 {
     RG_DEBUG << "deleteWidget" << &widget;
-    if (!m_dlib) {
+    if (!m_dlib)
         return;
-    }
+
+    // Get the function pointer.
     void (*deleteWidgetPtr)(const LV2Gtk2Types::LV2Gtk2Widget& widget);
     *(void **)(&deleteWidgetPtr) = dlsym(m_dlib, "deleteWidget");
-    if (deleteWidgetPtr) {
-        deleteWidgetPtr(widget);
-        return;
-    } else {
+    if (!deleteWidgetPtr) {
         RG_DEBUG << dlerror();
+        return;
     }
 
+    // Call it.
+    deleteWidgetPtr(widget);
 }
 
 void LV2Gtk2::shutDown()
 {
     RG_DEBUG << "shutDown";
-    if (m_instance == nullptr) {
+    // Check m_instance directly to avoid getInstance() which will create
+    // it.
+    if (!m_instance) {
         RG_DEBUG << "LV2Gtk2 not active";
         return;
     }
+
     // instance exists
-    LV2Gtk2* lv2gtk2 = LV2Gtk2::getInstance();
-    lv2gtk2->doShutDown();
-    delete lv2gtk2;
+
+    m_instance->doShutDown();
+    delete m_instance;
     m_instance = nullptr;
 }
 
 void LV2Gtk2::doShutDown()
 {
-    if (!m_dlib) {
+    if (!m_dlib)
         return;
-    }
+
+    // Get the function pointer.
     void (*shutDownPtr)();
     *(void **)(&shutDownPtr) = dlsym(m_dlib, "shutDown");
-    if (shutDownPtr) {
-        shutDownPtr();
-        return;
-    } else {
+    if (!shutDownPtr) {
         RG_DEBUG << dlerror();
+        return;
     }
+
+    // Call it.
+    shutDownPtr();
 }
+
 
 }
 
