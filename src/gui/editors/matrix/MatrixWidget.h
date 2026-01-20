@@ -416,8 +416,6 @@ private:
 
     /// Thin horizontal zoom wheel under the big zoom wheel.
     Thumbwheel *m_hZoom;
-    /// Used to compute how far the horizontal zoom wheel has moved.
-    int m_lastH{0};
 
     /// Thin vertical zoom wheel to the right of the big zoom wheel.
     Thumbwheel *m_vZoom;

@@ -1131,59 +1131,27 @@ MatrixWidget::showEvent(QShowEvent * event)
 void
 MatrixWidget::slotHorizontalThumbwheelMoved(int v)
 {
-    // limits sanity check
-    if (v < -25)
-        v = -25;
-    if (v > 60)
-        v = 60;
-    if (m_lastH < -25)
-        m_lastH = -25;
-    if (m_lastH > 60)
-        m_lastH = 60;
+    // Enforce limits.
+    if (v < m_hZoom->getMinimumValue())
+        v = m_hZoom->getMinimumValue();
+    if (v > m_hZoom->getMaximumValue())
+        v = m_hZoom->getMaximumValue();
 
-    int steps = v - m_lastH;
-    if (steps < 0)
-        steps *= -1;
-
-    bool zoomingIn = (v > m_lastH);
-    double newZoom = m_hZoomFactor;
-
-    // ??? But this is just pow(1.1, v).  Recommend storing the wheel position
-    //     in the wheel itself.  Then have all other zoom modifiers (the hv
-    //     wheel, the panner, and the mouse wheel) modify the wheel position
-    //     (and zoom factor) via this routine.  Then this routine can just use
-    //     pow(1.1, v) without worrying about accumulating zoom values from the
-    //     other zoom modifiers.
-    //
-    //     See setSegments() which first moves the wheel via setValue() then
-    //     calls this routine.
-
-    for (int i = 0; i < steps; ++i) {
-        if (zoomingIn)
-            newZoom *= 1.1;
-        else
-            newZoom /= 1.1;
-    }
-
-    //RG_DEBUG << "slotHorizontalThumbwheelMoved(): v is: " << v << " h zoom factor was: " << m_lastH << " now: " << newZoom << " zooming " << (zoomingIn ? "IN" : "OUT");
-    //RG_DEBUG << "  1.1^v:" << pow(1.1, v);
-
-    setHorizontalZoomFactor(newZoom);
-    m_lastH = v;
+    setHorizontalZoomFactor(pow(1.1, v));
 }
 
 void
 MatrixWidget::slotVerticalThumbwheelMoved(int v)
 {
     // limits sanity check
-    if (v < -25)
-        v = -25;
-    if (v > 60)
-        v = 60;
-    if (m_lastV < -25)
-        m_lastV = -25;
-    if (m_lastV > 60)
-        m_lastV = 60;
+    if (v < m_vZoom->getMinimumValue())
+        v = m_vZoom->getMinimumValue();
+    if (v > m_vZoom->getMaximumValue())
+        v = m_vZoom->getMaximumValue();
+    if (m_lastV < m_vZoom->getMinimumValue())
+        m_lastV = m_vZoom->getMinimumValue();
+    if (m_lastV > m_vZoom->getMaximumValue())
+        m_lastV = m_vZoom->getMaximumValue();
 
     int steps = v - m_lastV;
     if (steps < 0)
@@ -1284,6 +1252,9 @@ MatrixWidget::slotResetZoomClicked()
 {
     //RG_DEBUG << "slotResetZoomClicked()";
 
+    // ??? Lots of redundant code here.  Can't we just set the wheels to
+    //     0 and call the *ThumbwheelMoved() routines?
+
     // scale factor 1.0 = 100% zoom
     m_hZoomFactor = 1.0;
     m_vZoomFactor = 1.0;
@@ -1307,7 +1278,6 @@ MatrixWidget::slotResetZoomClicked()
     m_vZoom->setValue(0);
     m_hvZoom->setValue(0);
     m_lastHVZoomValue = 0;
-    m_lastH = 0;
     m_lastV = 0;
 
     // Store in Segment(s) for next time.
@@ -1658,7 +1628,7 @@ MatrixWidget::slotDocumentModified(bool)
 void
 MatrixWidget::slotZoomIn()
 {
-    const int v = m_lastH - 1;
+    const int v = m_hZoom->getValue() - 1;
 
     m_hZoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
@@ -1667,7 +1637,7 @@ MatrixWidget::slotZoomIn()
 void
 MatrixWidget::slotZoomOut()
 {
-    const int v = m_lastH + 1;
+    const int v = m_hZoom->getValue() + 1;
 
     m_hZoom->setValue(v);
     slotHorizontalThumbwheelMoved(v);
