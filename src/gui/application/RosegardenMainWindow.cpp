@@ -2445,14 +2445,14 @@ RosegardenMainWindow::slotEditPasteAsLinks()
 
     // for now, but we could paste at the time of the first copied
     // segment and then do ghosting drag or something
-    timeT insertionTime = RosegardenDocument::currentDocument->getComposition().getPosition();
+    timeT insertionTime = CompositionPosition::getInstance()->get();
     CommandHistory::getInstance()->addCommand
     (new PasteSegmentsAsLinksCommand(&RosegardenDocument::currentDocument->getComposition(),
                                      m_clipboard, insertionTime,
                                      RosegardenDocument::currentDocument->getComposition().getSelectedTrack(),
                                      false));
     // User preference? Update song pointer position on paste
-    RosegardenDocument::currentDocument->slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition());
+    RosegardenDocument::currentDocument->slotSetPointerPosition(CompositionPosition::getInstance()->get());
     */ /*
 }
 */
@@ -3176,7 +3176,7 @@ RosegardenMainWindow::slotSplitSelectionByDrum()
     SegmentSelection selection = m_view->getSelection();
     if (selection.empty()) return;
 
-//    timeT now = RosegardenDocument::currentDocument->getComposition().getPosition();
+//    timeT now = CompositionPosition::getInstance()->get();
 
     QString title = tr("Split %n Segment(s) by Drum", "", selection.size());
 
@@ -8914,8 +8914,7 @@ RosegardenMainWindow::slotCommandExecuted()
     // See Bug #1723.
     // ??? This breaks the matrix editor.  When adding notes, the note previews
     //     last a very long time with this in place.
-    //slotSetPointerPosition(
-    //        RosegardenDocument::currentDocument->getComposition().getPosition());
+    //slotSetPointerPosition(CompositionPosition::getInstance()->get());
 }
 
 

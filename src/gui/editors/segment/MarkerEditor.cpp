@@ -225,7 +225,7 @@ MarkerEditor::updatePosition()
     // at the current position.
     //
     if (m_doc->getComposition().
-            isMarkerAtPosition(m_doc->getComposition().getPosition()))
+            isMarkerAtPosition(CompositionPosition::getInstance()->get()))
         m_addButton->setEnabled(false);
     else
         m_addButton->setEnabled(true);

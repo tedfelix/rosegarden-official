@@ -1096,7 +1096,7 @@ NotationScene::setPageMode(StaffLayout::PageMode mode)
     if (!m_printMode) {
         updateView();
         slotSetInsertCursorPosition(getInsertionTime(), false, false);
-        slotSetPointerPosition(RosegardenDocument::currentDocument->getComposition().getPosition(), false);
+        slotSetPointerPosition(CompositionPosition::getInstance()->get(), false);
     }
 */
 }

@@ -1087,7 +1087,7 @@ void
 MatrixWidget::slotPointerPositionChanged(timeT t)
 {
     // ??? We don't really need "t".  We could just use
-    //     m_document->getComposition().getPosition().
+    //     CompositionPosition::getInstance()->get().
 
     updatePointer(t);
 
@@ -1159,7 +1159,6 @@ MatrixWidget::slotHVThumbwheelMoved(int v)
     //     should be used.  Does ThumbWheel support infinite?
 
     // Enforce limits.
-    // ??? Shouldn't be necessary if the rest of the code is doing its job.
     if (v < m_hvZoom->getMinimumValue())
         v = m_hvZoom->getMinimumValue();
     if (v > m_hvZoom->getMaximumValue())

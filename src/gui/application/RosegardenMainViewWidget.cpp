@@ -1459,7 +1459,7 @@ RosegardenMainViewWidget::slotAddAudioSegmentCurrentPosition(AudioFileId audioFi
     AudioSegmentInsertCommand *command =
         new AudioSegmentInsertCommand(RosegardenDocument::currentDocument,
                                       comp.getSelectedTrack(),
-                                      comp.getPosition(),
+                                      CompositionPosition::getInstance()->get(),
                                       audioFileId,
                                       startTime,
                                       endTime);
