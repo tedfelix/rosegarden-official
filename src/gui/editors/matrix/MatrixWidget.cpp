@@ -197,12 +197,15 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_hvZoom->setFixedSize(QSize(40, 40));
     m_hvZoom->setToolTip(tr("Zoom"));
 
-    // +/- 20 clicks seems to be the reasonable limit
-    m_hvZoom->setMinimumValue(-20);
-    m_hvZoom->setMaximumValue(20);
+    // Practically infinite.
+    m_hvZoom->setMinimumValue(-1000);
+    m_hvZoom->setMaximumValue(1000);
+    // Have to slow it down for a 2000 range.
+    m_hvZoom->setSpeed(.02);
     m_hvZoom->setDefaultValue(0);
     m_hvZoom->setBright(true);
-    m_hvZoom->setShowScale(true);
+    // Relative, so no scale needed.
+    m_hvZoom->setShowScale(false);
     controlsLayout->addWidget(m_hvZoom, 0, 0, Qt::AlignCenter);
 
     connect(m_hvZoom, &Thumbwheel::valueChanged, this,
@@ -1155,9 +1158,6 @@ MatrixWidget::slotVerticalThumbwheelMoved(int v)
 void
 MatrixWidget::slotHVThumbwheelMoved(int v)
 {
-    // ??? HV wheel should be effectively infinite.  Only its delta movement
-    //     should be used.  Does ThumbWheel support infinite?
-
     // Enforce limits.
     if (v < m_hvZoom->getMinimumValue())
         v = m_hvZoom->getMinimumValue();
