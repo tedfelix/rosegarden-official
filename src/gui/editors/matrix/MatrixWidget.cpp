@@ -1168,59 +1168,35 @@ MatrixWidget::slotHVThumbwheelMoved(int v)
     if (m_lastHVZoomValue > m_hvZoom->getMaximumValue())
         m_lastHVZoomValue = m_hvZoom->getMaximumValue();
 
-    // When dragging the wheel up and down instead of mouse wheeling it, it
-    // steps according to its speed.  I don't see a sure way (and after all
-    // there are no docs!) to make sure dragging results in a smooth 1:1
-    // relationship when compared with mouse wheeling, so we will look at the
-    // number of steps
-    // between the old value and the last one, and call the slot that many times
-    // in order to enforce the 1:1 relationship.
-    int steps = abs(v - m_lastHVZoomValue);
+    // Start with the amount of zoom delta requested by the user.
+    int limitedDelta = v - m_lastHVZoomValue;
 
-    // ??? See if we can ever get steps > 1.  Grab the wheel and wing it around.
+    int newHZoom = m_hZoom->getValue() + limitedDelta;
+    // Would this be too much for H?  Reduce if so.
+    if (newHZoom > m_hZoom->getMaximumValue())
+        limitedDelta = m_hZoom->getMaximumValue() - m_hZoom->getValue();
+    if (newHZoom < m_hZoom->getMinimumValue())
+        limitedDelta = m_hZoom->getMinimumValue() - m_hZoom->getValue();
 
-    for (int i = 0; i < steps; ++i) {
-        // Decreasing value is zooming out.
-        if (v < m_lastHVZoomValue) {
+    int newVZoom = m_vZoom->getValue() + limitedDelta;
+    // Would this be too much for V?  Reduce if so.
+    if (newVZoom > m_vZoom->getMaximumValue())
+        limitedDelta = m_vZoom->getMaximumValue() - m_vZoom->getValue();
+    if (newVZoom < m_vZoom->getMinimumValue())
+        limitedDelta = m_vZoom->getMinimumValue() - m_vZoom->getValue();
 
-            // Zoom Out
+    // At this point, limitedDelta is the max amount of zoom change that
+    // can occur without changing the hZoom/vZoom aspect ratio.
 
-            int hZoomValue = m_hZoom->getValue();
-            // If the H wheel position is at its min, bail.
-            if (hZoomValue == m_hZoom->getMinimumValue())
-                return;
-            int vZoomValue = m_vZoom->getValue();
-            // If the V wheel position is at its min, bail.
-            if (vZoomValue == m_vZoom->getMinimumValue())
-                return;
-            // Zoom out one step on the H.
-            m_hZoom->setValue(hZoomValue - 1);
-            slotHorizontalThumbwheelMoved(hZoomValue - 1);
-            // Zoom out one step on the V.
-            m_vZoom->setValue(vZoomValue - 1);
-            slotVerticalThumbwheelMoved(vZoomValue - 1);
+    // Compute H zoom and apply.
+    newHZoom = m_hZoom->getValue() + limitedDelta;
+    m_hZoom->setValue(newHZoom);
+    slotHorizontalThumbwheelMoved(newHZoom);
 
-        } else if (v > m_lastHVZoomValue) {  // Increasing is zooming in.
-
-            // Zoom In
-
-            int hZoomValue = m_hZoom->getValue();
-            // If the H wheel position is at its max, bail.
-            if (hZoomValue == m_hZoom->getMaximumValue())
-                return;
-            int vZoomValue = m_vZoom->getValue();
-            // If the V wheel position is at its max, bail.
-            if (vZoomValue == m_vZoom->getMaximumValue())
-                return;
-            // Zoom in one step on the H.
-            m_hZoom->setValue(hZoomValue + 1);
-            slotHorizontalThumbwheelMoved(hZoomValue + 1);
-            // Zoom in one step on the V.
-            m_vZoom->setValue(vZoomValue + 1);
-            slotVerticalThumbwheelMoved(vZoomValue + 1);
-
-        }
-    }
+    // Compute V zoom and apply.
+    newVZoom = m_vZoom->getValue() + limitedDelta;
+    m_vZoom->setValue(newVZoom);
+    slotVerticalThumbwheelMoved(newVZoom);
 
     m_lastHVZoomValue = v;
 }
