@@ -191,8 +191,8 @@ Old README.DEVELOPERS
 ### Unit tests
 
 * They are compiled by default in debug mode (-DBUILD_TESTING=OFF to disable
-  that - not recommended)
-* Run them all with `make test`
+  that - not recommended).
+* Run them all with `make test`.
 * They trigger the switch from static libs to shared libs for rosegarden's
   own code, to speed up linking.
 
@@ -205,7 +205,7 @@ unless you set $LD_LIBRARY_PATH to point to the installed one.
 
 ### Scripts
 
-A number of scripts are available for maintenance during development work
+A number of scripts are available for maintenance during development work.
 
 #### make-ts
 
@@ -215,7 +215,7 @@ after a string freeze when making a call to translators to
 begin work in preparation for a release.  (Runs menu-ts
 instruments-ts and autoload-ts automatically to extract
 strings from autoload.rg, the menus, and presets.xml for
-translation)
+translation.)
 
 When NOOBSOLETE=1 is set, make-ts drops obsolete translations.
 Run to clean up any old translations after making big string
@@ -290,7 +290,7 @@ the future.
 Authors and Copyright
 =====================
 
-Rosegarden is Copyright 2000-2025 The Rosegarden Development Team
+Rosegarden is Copyright 2000-2026 The Rosegarden Development Team
 
 See http://rosegardenmusic.com/resources/authors/ for a complete list of
 developers past and present, and to learn something about the history of our
