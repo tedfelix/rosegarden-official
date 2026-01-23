@@ -97,7 +97,7 @@ Support for LIRC (Linux Infrared Remote Control) can be disabled using:
     -DDISABLE_LIRC=1
 
 New starting with 10.02, most of the application data files are bundled in the
-rosegarden binary.  The install process will only copy a few files to various
+Rosegarden binary.  The install process will only copy a few files to various
 directories under CMAKE_INSTALL_PREFIX ([PREFIX]):
 
     [PREFIX]/bin                                   application binary
@@ -152,13 +152,13 @@ In addition to the unit tests, a specific test tool is build with:
 This tool, which is independent of the unit tests and is run separately, is
 only useful if several versions of LilyPond are available on the same system.
 
-Please, see the README file in the test/lilypond directory for more details.
+Please see the README file in the test/lilypond directory for more details.
 
 
 User documentation
 ==================
 
-Please see rosegardenmusic.com
+Please see https://rosegardenmusic.com/.
 
 
 SPECIAL NOTES FOR PACKAGE MAINTAINERS
@@ -193,13 +193,13 @@ Old README.DEVELOPERS
 * They are compiled by default in debug mode (-DBUILD_TESTING=OFF to disable
   that - not recommended).
 * Run them all with `make test`.
-* They trigger the switch from static libs to shared libs for rosegarden's
+* They trigger the switch from static libs to shared libs for Rosegarden's
   own code, to speed up linking.
 
 ### Shared libs
 
-Note that you can still run rosegarden uninstalled, even with shared libs,
-because cmake takes care of setting the RUNPATH in the rosegarden executable.
+Note that you can still run Rosegarden uninstalled, even with shared libs,
+because cmake takes care of setting the RUNPATH in the Rosegarden executable.
 So your uninstalled shared lib will be preferred over the installed one -
 unless you set $LD_LIBRARY_PATH to point to the installed one.
 
@@ -290,9 +290,9 @@ the future.
 Authors and Copyright
 =====================
 
-Rosegarden is Copyright 2000-2026 The Rosegarden Development Team
+Rosegarden is Copyright 2000-2026 The Rosegarden Development Team.
 
-See http://rosegardenmusic.com/resources/authors/ for a complete list of
+See https://rosegardenmusic.com/resources/authors/ for a complete list of
 developers past and present, and to learn something about the history of our
 project.
 
