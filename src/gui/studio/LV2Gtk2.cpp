@@ -241,7 +241,7 @@ LV2Gtk2::~LV2Gtk2()
 }
 
 LV2Gtk2Types::LV2Gtk2Widget LV2Gtk2::getWidget(LV2UI_Widget,
-                                               LV2Gtk2Types::SizeCallback*)
+                                               LV2Gtk2Types::SizeCallback*) const
 {
     LV2Gtk2Types::LV2Gtk2Widget ret;
     return ret;
