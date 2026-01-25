@@ -23,7 +23,6 @@
 #include "gui/general/AutoScroller.h"
 #include "base/NotationTypes.h"
 #include "gui/general/SelectionManager.h"
-#include "gui/widgets/Thumbwheel.h"
 
 #include <QWidget>
 #include <QPushButton>
@@ -62,6 +61,7 @@ class ChordNameRuler;
 class RawNoteRuler;
 class ControlRulerWidget;
 class HeadersGroup;
+class Thumbwheel;
 
 
 /// QWidget that fills the notation editor's (NotationView) client area.

@@ -40,6 +40,11 @@ public:
     void setRed(bool red)  { m_red = red; }
     void setShowScale(bool showScale)  { m_showScale = showScale; }
 
+    void setSpeed(float speed)  { m_speed = speed; }
+
+
+    // Value
+
     void setMinimumValue(int min);
     int getMinimumValue() const  { return m_min; }
 
@@ -52,11 +57,8 @@ public:
     void setValue(int value);
     int getValue() const  { return m_value; }
 
-    //void scroll(bool up);
 
-    void setSpeed(float speed);
-    //float getSpeed() const  { return m_speed; }
-
+    /// Let layouts know our favorite size.
     QSize sizeHint() const override;
 
 signals:

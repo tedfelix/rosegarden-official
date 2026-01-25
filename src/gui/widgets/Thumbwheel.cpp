@@ -20,8 +20,6 @@
 
 #include "Thumbwheel.h"
 
-//#include "base/Profiler.h"
-#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "gui/general/ThornStyle.h"
 
@@ -32,8 +30,7 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <cmath>
-#include <iostream>
+#include <math.h>
 
 
 namespace Rosegarden
@@ -55,29 +52,21 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
 void
 Thumbwheel::setMinimumValue(int min)
 {
-    if (m_min == min) return;
-
     m_min = min;
-    if (m_max <= m_min) m_max = m_min + 1;
-    if (m_value < m_min) m_value = m_min;
-    if (m_value > m_max) m_value = m_max;
 
+    // ??? Since m_rotation can easily and cheaply be computed from
+    //     value/min/max, why even keep it?
     m_rotation = float(m_value - m_min) / float(m_max - m_min);
-    update();
 }
 
 void
 Thumbwheel::setMaximumValue(int max)
 {
-    if (m_max == max) return;
-
     m_max = max;
-    if (m_min >= m_max) m_min = m_max - 1;
-    if (m_value < m_min) m_value = m_min;
-    if (m_value > m_max) m_value = m_max;
 
+    // ??? Since m_rotation can easily and cheaply be computed from
+    //     value/min/max, why even keep it?
     m_rotation = float(m_value - m_min) / float(m_max - m_min);
-    update();
 }
 
 void
@@ -92,11 +81,12 @@ Thumbwheel::setValue(int value)
 {
     //RG_DEBUG << "setValue(" << value << ") (from" << m_value << ", rotation" << m_rotation << ") (visible" << isVisible() << ")";
 
-    if (m_value != value) {
-        if (value < m_min) value = m_min;
-        if (value > m_max) value = m_max;
-        m_value = value;
-    }
+    if (value < m_min)
+        value = m_min;
+    if (value > m_max)
+        value = m_max;
+
+    m_value = value;
 
     m_rotation = float(m_value - m_min) / float(m_max - m_min);
 
@@ -111,7 +101,7 @@ void
 Thumbwheel::resetToDefault()
 {
     // Already there?  Bail.
-    if (m_default == m_value)
+    if (m_value == m_default)
         return;
 
     setValue(m_default);
@@ -119,32 +109,9 @@ Thumbwheel::resetToDefault()
     // Clear the cache.
     // ??? But setValue() already did this and potentially redrew it.  Why
     //     lose the work that it did?
-    m_cache = QImage();
+    //m_cache = QImage();
 
-    emit valueChanged(getValue());
-}
-
-#if 0
-void
-Thumbwheel::scroll(bool up)
-{
-    int step = lrintf(m_speed);
-    if (step == 0) step = 1;
-
-    if (up) {
-        setValue(m_value + step);
-    } else {
-        setValue(m_value - step);
-    }
-
-    emit valueChanged(getValue());
-}
-#endif
-
-void
-Thumbwheel::setSpeed(float speed)
-{
-    m_speed = speed;
+    emit valueChanged(m_value);
 }
 
 void
@@ -173,7 +140,7 @@ Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
             this,
             tr("Enter new value"),
             tr("Enter a new value from %1 to %2:").arg(m_min).arg(m_max),
-            getValue(),
+            m_value,
             m_min,
             m_max,
             1,  // step
@@ -182,10 +149,9 @@ Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
     if (ok) {
         setValue(newValue);
         // Let everyone know.
-        emit valueChanged(getValue());
+        emit valueChanged(m_value);
     }
 }
-
 
 void
 Thumbwheel::mouseMoveEvent(QMouseEvent *e)
@@ -201,26 +167,22 @@ Thumbwheel::mouseMoveEvent(QMouseEvent *e)
     else
         dist = e->pos().y() - m_clickPos.y();
 
-    // Compute the "rotation".  What is this?
-    float rotation = m_clickRotation + (m_speed * dist) / 100;
+    // Compute the new wheel rotation position.
+    // ??? Computing the new value would be simpler.  Then we could
+    //     make rotation solely dependent on value and get rid of all
+    //     the rotation caching.  Just compute rotation when needed.
+    //     The only real user of m_rotation is paintEvent().
+    float newRotation = m_clickRotation + (m_speed * dist) / 100;
 
     // Limit to [0,1].
-    if (rotation < 0)
-        rotation = 0;
-    if (rotation > 1)
-        rotation = 1;
+    if (newRotation < 0)
+        newRotation = 0;
+    if (newRotation > 1)
+        newRotation = 1;
 
-    const int value = lrintf(m_min + (m_max - m_min) * m_rotation);
-
-    if (value != m_value) {
-        // Use setValue() to benefit from limit checking.
-        setValue(value);
-        emit valueChanged(m_value);
-        m_rotation = rotation;
-    } else if (fabsf(rotation - m_rotation) > 0.001) {
-        m_rotation = rotation;
-        repaint();
-    }
+    const int newValue = lround(m_min + (m_max - m_min) * newRotation);
+    setValue(newValue);
+    emit valueChanged(m_value);
 }
 
 void
@@ -252,16 +214,12 @@ Thumbwheel::wheelEvent(QWheelEvent *e)
 void
 Thumbwheel::paintEvent(QPaintEvent *)
 {
-    //Profiler profiler("Thumbwheel::paintEvent");
-
     // Cache available?  Use it.
     if (!m_cache.isNull()) {
         QPainter paint(this);
         paint.drawImage(0, 0, m_cache);
         return;
     }
-
-    //Profiler profiler2("Thumbwheel::paintEvent (no cache)");
 
     m_cache = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     m_cache.fill(Qt::transparent);
@@ -277,7 +235,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     QPainter paint(&m_cache);
     paint.setClipRect(rect());
-    QColor bg = (ThornStyle::isEnabled() ? QColor(0xED, 0xED, 0xFF) : palette().window().color());
+    QColor bg = (ThornStyle::isEnabled() ?
+            QColor(0xED, 0xED, 0xFF) : palette().window().color());
     if (!m_bright)
         bg = bg.darker(125);
     paint.fillRect(subclip, bg);
