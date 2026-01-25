@@ -41,11 +41,9 @@ namespace Rosegarden
 
 
 Thumbwheel::Thumbwheel(Qt::Orientation orientation,
-                       bool useRed,
                        QWidget *parent) :
     QWidget(parent),
-    m_orientation(orientation),
-    m_useRed(useRed)
+    m_orientation(orientation)
 {
     // NOTE: we should avoid using highlight() and mid() and so on, even though
     // they happen to produce nice results on my everyday setup, because these
@@ -150,12 +148,6 @@ Thumbwheel::setSpeed(float speed)
 }
 
 void
-Thumbwheel::setShowScale(bool showScale)
-{
-    m_showScale = showScale;
-}
-
-void
 Thumbwheel::mousePressEvent(QMouseEvent *e)
 {
     if (e->button() == Qt::MiddleButton ||
@@ -163,7 +155,7 @@ Thumbwheel::mousePressEvent(QMouseEvent *e)
          (e->modifiers() & Qt::ControlModifier))) {
         resetToDefault();
     } else if (e->button() == Qt::LeftButton) {
-        m_clicked = true;
+        m_leftButtonPressed = true;
         m_clickPos = e->pos();
         m_clickRotation = m_rotation;
     }
@@ -172,20 +164,20 @@ Thumbwheel::mousePressEvent(QMouseEvent *e)
 void
 Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 {
-    //!!! needs a common base class with AudioDial (and Panner?)
-
-    if (mouseEvent->button() != Qt::LeftButton) {
+    if (mouseEvent->button() != Qt::LeftButton)
         return;
-    }
 
     bool ok = false;
 
-    int newValue = QInputDialog::getInt
-        (this,
-         tr("Enter new value"),
-         tr("Enter a new value from %1 to %2:")
-         .arg(m_min).arg(m_max),
-         getValue(), m_min, m_max, 1, &ok);
+    const int newValue = QInputDialog::getInt(
+            this,
+            tr("Enter new value"),
+            tr("Enter a new value from %1 to %2:").arg(m_min).arg(m_max),
+            getValue(),
+            m_min,
+            m_max,
+            1,  // step
+            &ok);
 
     if (ok) {
         setValue(newValue);
@@ -198,7 +190,7 @@ Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 void
 Thumbwheel::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_clicked)
+    if (!m_leftButtonPressed)
         return;
 
     // Compute the distance the mouse has moved in the relevant direction
@@ -223,8 +215,7 @@ Thumbwheel::mouseMoveEvent(QMouseEvent *e)
     if (value != m_value) {
         // Use setValue() to benefit from limit checking.
         setValue(value);
-        if (m_tracking)
-            emit valueChanged(m_value);
+        emit valueChanged(m_value);
         m_rotation = rotation;
     } else if (fabsf(rotation - m_rotation) > 0.001) {
         m_rotation = rotation;
@@ -233,14 +224,12 @@ Thumbwheel::mouseMoveEvent(QMouseEvent *e)
 }
 
 void
-Thumbwheel::mouseReleaseEvent(QMouseEvent *e)
+Thumbwheel::mouseReleaseEvent(QMouseEvent * /*e*/)
 {
-    if (!m_clicked) return;
-    bool reallyTracking = m_tracking;
-    m_tracking = true;
-    mouseMoveEvent(e);
-    m_tracking = reallyTracking;
-    m_clicked = false;
+    if (!m_leftButtonPressed)
+        return;
+
+    m_leftButtonPressed = false;
 }
 
 void
@@ -367,7 +356,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
         QColor fc = QColor(grey, grey, grey);
         QColor oc = (ThornStyle::isEnabled() ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
-        if (m_useRed)
+        if (m_red)
             oc = Qt::red;
         if (!m_bright)
             oc = oc.darker(125);
@@ -417,13 +406,6 @@ Thumbwheel::sizeHint() const
     } else {
         return QSize(12, 80);
     }
-}
-
-void
-Thumbwheel::setBright(const bool bright)
-{
-    m_bright = bright;
-    update();
 }
 
 

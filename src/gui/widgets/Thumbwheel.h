@@ -32,11 +32,13 @@ class Thumbwheel : public QWidget
 
 public:
 
-    // ??? Break useRed out into member setter.  Majority of callers do
-    //     not use it.
     Thumbwheel(Qt::Orientation orientation,
-               bool useRed = false,
                QWidget *parent = nullptr);
+
+    // Appearance routines.
+    void setBright(bool bright)  { m_bright = bright; }
+    void setRed(bool red)  { m_red = red; }
+    void setShowScale(bool showScale)  { m_showScale = showScale; }
 
     void setMinimumValue(int min);
     int getMinimumValue() const  { return m_min; }
@@ -47,12 +49,6 @@ public:
     void setDefaultValue(int defaultValue);
     int getDefaultValue() const  { return m_default; }
 
-    //void setTracking(bool tracking)  { m_tracking = tracking; }
-    //bool getTracking() const  { return m_tracking; }
-
-    void setShowScale(bool showScale);
-    //bool getShowScale() const  { return m_showScale; }
-
     void setValue(int value);
     int getValue() const  { return m_value; }
 
@@ -60,8 +56,6 @@ public:
 
     void setSpeed(float speed);
     //float getSpeed() const  { return m_speed; }
-
-    void setBright(bool bright);
 
     QSize sizeHint() const override;
 
@@ -81,25 +75,21 @@ protected:
 
 private:
 
+    // Configuration
+
     Qt::Orientation m_orientation;
+    /// Brighten parts of the widget.
+    bool m_bright{true};
     /// Red for the Segment changer.
-    bool m_useRed;
+    bool m_red{false};
+    bool m_showScale{true};
+    float m_speed{1};
 
     int m_min{0};
     int m_max{100};
     int m_default{50};
     void resetToDefault();
 
-    /// Send value changed while the thumb wheel is moving.
-    /**
-     * Otherwise only send on mouse release.
-     *
-     * ??? This is never set to anything other than true.  Get rid of
-     *     this and just do tracking always.
-     */
-    bool m_tracking{true};
-
-    bool m_showScale{true};
 
     // Current value.
     int m_value{50};
@@ -112,15 +102,10 @@ private:
     /// Position of the wheel when it was clicked.  See m_rotation.
     float m_clickRotation{0};
 
-    float m_speed{1};
-
-    bool m_clicked{false};
+    bool m_leftButtonPressed{false};
 
     /// Cache to speed up paintEvent().
     QImage m_cache;
-
-    /// Brighten parts of the widget.
-    bool m_bright{true};
 
 };
 

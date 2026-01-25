@@ -160,10 +160,10 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     QVBoxLayout *changerWidgetLayout = new QVBoxLayout;
     m_changerWidget->setLayout(changerWidgetLayout);
 
-    bool useRed = true;
-    m_segmentChanger = new Thumbwheel(Qt::Vertical, useRed);
+    m_segmentChanger = new Thumbwheel(Qt::Vertical);
     m_segmentChanger->setToolTip(tr("<qt>Rotate wheel to change the active segment</qt>"));
     m_segmentChanger->setFixedWidth(32); // was 18, widen to make easier to grab
+    m_segmentChanger->setRed(true);
     m_segmentChanger->setMinimumValue(-120);
     m_segmentChanger->setMaximumValue(120);
     m_segmentChanger->setDefaultValue(60);

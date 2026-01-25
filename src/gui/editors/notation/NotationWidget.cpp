@@ -184,9 +184,9 @@ NotationWidget::NotationWidget() :
     QVBoxLayout *changerWidgetLayout = new QVBoxLayout;
     m_changerWidget->setLayout(changerWidgetLayout);
 
-    bool useRed = true;
-    m_HsegmentChanger = new Thumbwheel(Qt::Vertical, useRed);
+    m_HsegmentChanger = new Thumbwheel(Qt::Vertical);
     m_HsegmentChanger->setFixedWidth(18);
+    m_HsegmentChanger->setRed(true);
     m_HsegmentChanger->setMinimumValue(-120);
     m_HsegmentChanger->setMaximumValue(120);
     m_HsegmentChanger->setDefaultValue(0);
@@ -200,8 +200,9 @@ NotationWidget::NotationWidget() :
             &NotationWidget::slotSegmentChangerMoved);
     changerWidgetLayout->addWidget(m_HsegmentChanger);
 
-    m_VsegmentChanger = new Thumbwheel(Qt::Horizontal, useRed);
+    m_VsegmentChanger = new Thumbwheel(Qt::Horizontal);
     m_VsegmentChanger->setFixedHeight(18);
+    m_VsegmentChanger->setRed(true);
     m_VsegmentChanger->setMinimumValue(-120);
     m_VsegmentChanger->setMaximumValue(120);
     m_VsegmentChanger->setDefaultValue(0);
