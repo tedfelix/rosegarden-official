@@ -31,7 +31,12 @@ class Thumbwheel : public QWidget
     Q_OBJECT
 
 public:
-    Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = nullptr);
+
+    // ??? Break useRed out into member setter.  Majority of callers do
+    //     not use it.
+    Thumbwheel(Qt::Orientation orientation,
+               bool useRed = false,
+               QWidget *parent = nullptr);
 
     void setMinimumValue(int min);
     int getMinimumValue() const  { return m_min; }
@@ -41,16 +46,21 @@ public:
 
     void setDefaultValue(int deft);
     int getDefaultValue() const;
-    // unused float getSpeed() const;
-    // unused bool getTracking() const;
-    // unused bool getShowScale() const;
+
+    //void setTracking(bool tracking)  { m_tracking = tracking; }
+    //bool getTracking() const  { return m_tracking; }
+
+    void setShowScale(bool showScale);
+    //bool getShowScale() const  { return m_showScale; }
+
+    void setValue(int value);
     int getValue() const;
+    //void scroll(bool up);
 
     void setSpeed(float speed);
+    //float getSpeed() const  { return m_speed; }
 
     void setBright(const bool v);
-
-    // unused void setShowToolTip(bool show);
 
     QSize sizeHint() const override;
 
@@ -58,30 +68,15 @@ signals:
 
     void valueChanged(int value);
 
-    void mouseEntered();
-    void mouseLeft();
-
-public slots:
-
-    void setTracking(bool tracking);
-    void setShowScale(bool showScale);
-    void setValue(int value);
-    //void scroll(bool up);
-    void resetToDefault();
-
 protected:
+
+    // QWidget overrides.
     void mousePressEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void enterEvent(QEnterEvent *) override;
-#else
-    void enterEvent(QEvent *) override;
-#endif
-    void leaveEvent(QEvent *) override;
 
 private:
 
@@ -92,6 +87,7 @@ private:
     int m_min{0};
     int m_max{100};
     int m_default{50};
+    void resetToDefault();
 
     // Current value.
     int m_value{50};
@@ -105,11 +101,17 @@ private:
     float m_clickRotation{0};
 
     float m_speed{1};
+    /// Send value changed while the thumb wheel is moving.
+    /**
+     * Otherwise only send on mouse release.
+     *
+     * ??? This is never set to anything other than true.  Get rid of
+     *     this and just do tracking always.
+     */
     bool m_tracking{true};
     bool m_showScale{true};
     bool m_clicked{false};
     bool m_atDefault{true};
-    bool m_showTooltip{true};
     QImage m_cache;
     bool m_bright{true};
 

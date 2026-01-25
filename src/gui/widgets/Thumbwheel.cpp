@@ -52,14 +52,6 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
     // and Fader code, and anywhere else it appears.)
 }
 
-/* unused
-void
-Thumbwheel::setShowToolTip(bool show)
-{
-    m_showTooltip = show;
-}
-*/
-
 void
 Thumbwheel::setMinimumValue(int min)
 {
@@ -166,56 +158,10 @@ Thumbwheel::setSpeed(float speed)
     m_speed = speed;
 }
 
-/* unused
-float
-Thumbwheel::getSpeed() const
-{
-    return m_speed;
-}
-*/
-
-void
-Thumbwheel::setTracking(bool tracking)
-{
-    m_tracking = tracking;
-}
-
-/* unused
-bool
-Thumbwheel::getTracking() const
-{
-    return m_tracking;
-}
-*/
-
 void
 Thumbwheel::setShowScale(bool showScale)
 {
     m_showScale = showScale;
-}
-
-/* unused
-bool
-Thumbwheel::getShowScale() const
-{
-    return m_showScale;
-}
-*/
-
-void
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-Thumbwheel::enterEvent(QEnterEvent *)
-#else
-Thumbwheel::enterEvent(QEvent *)
-#endif
-{
-    emit mouseEntered();
-}
-
-void
-Thumbwheel::leaveEvent(QEvent *)
-{
-    emit mouseLeft();
 }
 
 void
