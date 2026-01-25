@@ -42,20 +42,7 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
                        bool useRed,
                        QWidget *parent) :
     QWidget(parent),
-    m_min(0),
-    m_max(100),
-    m_default(50),
-    m_value(50),
-    m_rotation(0.5),
     m_orientation(orientation),
-    m_speed(1.0),
-    m_tracking(true),
-    m_showScale(true),
-    m_clicked(false),
-    m_atDefault(true),
-    m_clickRotation(m_rotation),
-    m_showTooltip(true),
-    m_bright(true),
     m_useRed(useRed)
 {
     // NOTE: we should avoid using highlight() and mid() and so on, even though
@@ -63,10 +50,6 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
     // will change according to external color preferences, and can produce
     // horrible results with the Thorn style.  (I need to fix this in the Rotary
     // and Fader code, and anywhere else it appears.)
-}
-
-Thumbwheel::~Thumbwheel()
-{
 }
 
 /* unused
@@ -160,6 +143,7 @@ Thumbwheel::getValue() const
     return m_value;
 }
 
+#if 0
 void
 Thumbwheel::scroll(bool up)
 {
@@ -174,6 +158,7 @@ Thumbwheel::scroll(bool up)
 
     emit valueChanged(getValue());
 }
+#endif
 
 void
 Thumbwheel::setSpeed(float speed)
@@ -276,21 +261,33 @@ Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 void
 Thumbwheel::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_clicked) return;
-    int dist = 0;
-    if (m_orientation == Qt::Horizontal) {
-        dist = e->pos().x() - m_clickPos.x();
-    } else {
-        dist = e->pos().y() - m_clickPos.y();
-    }
+    if (!m_clicked)
+        return;
 
+    // Compute the distance the mouse has moved in the relevant direction
+    // in pixels.
+    int dist = 0;
+    if (m_orientation == Qt::Horizontal)
+        dist = e->pos().x() - m_clickPos.x();
+    else
+        dist = e->pos().y() - m_clickPos.y();
+
+    // Compute the "rotation".  What is this?
     float rotation = m_clickRotation + (m_speed * dist) / 100;
-    if (rotation < 0.f) rotation = 0.f;
-    if (rotation > 1.f) rotation = 1.f;
-    int value = lrintf(m_min + (m_max - m_min) * m_rotation);
+
+    // Limit to [0,1].
+    if (rotation < 0)
+        rotation = 0;
+    if (rotation > 1)
+        rotation = 1;
+
+    const int value = lrintf(m_min + (m_max - m_min) * m_rotation);
+
     if (value != m_value) {
+        // Use setValue() to benefit from limit checking.
         setValue(value);
-        if (m_tracking) emit valueChanged(getValue());
+        if (m_tracking)
+            emit valueChanged(m_value);
         m_rotation = rotation;
     } else if (fabsf(rotation - m_rotation) > 0.001) {
         m_rotation = rotation;

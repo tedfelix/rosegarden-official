@@ -32,16 +32,22 @@ class Thumbwheel : public QWidget
 
 public:
     Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = nullptr);
-    ~Thumbwheel() override;
 
+    void setMinimumValue(int min);
     int getMinimumValue() const  { return m_min; }
+
+    void setMaximumValue(int max);
     int getMaximumValue() const  { return m_max; }
 
+    void setDefaultValue(int deft);
     int getDefaultValue() const;
     // unused float getSpeed() const;
     // unused bool getTracking() const;
     // unused bool getShowScale() const;
     int getValue() const;
+
+    void setSpeed(float speed);
+
     void setBright(const bool v);
 
     // unused void setShowToolTip(bool show);
@@ -49,20 +55,18 @@ public:
     QSize sizeHint() const override;
 
 signals:
-    void valueChanged(int);
+
+    void valueChanged(int value);
 
     void mouseEntered();
     void mouseLeft();
 
 public slots:
-    void setMinimumValue(int min);
-    void setMaximumValue(int max);
-    void setDefaultValue(int deft);
-    void setSpeed(float speed);
+
     void setTracking(bool tracking);
     void setShowScale(bool showScale);
     void setValue(int value);
-    void scroll(bool up);
+    //void scroll(bool up);
     void resetToDefault();
 
 protected:
@@ -79,32 +83,36 @@ protected:
 #endif
     void leaveEvent(QEvent *) override;
 
-    int m_min;
-    int m_max;
-    int m_default;
-    int m_value;
-    float m_rotation;
-    Qt::Orientation m_orientation;
-    float m_speed;
-    bool m_tracking;
-    bool m_showScale;
-    bool m_clicked;
-    bool m_atDefault;
-    QPoint m_clickPos;
-    float m_clickRotation;
-    bool m_showTooltip;
-    QImage m_cache;
-    bool m_bright;
+private:
 
-    // I wanted a red wheel for the segment changer.  It would be much nicer to
-    // step back and build some quality mechanism for setting the color of the
-    // wheel from the outside, but it's more of a refactoring project than I
-    // wanted to do today just to get a red wheel, so I used a cheap hack this
-    // time.  If we ever want to have a green wheel and so on, or for making
-    // this wheel generally more useful to other Qt projects, it would be nice
-    // to do something more involved with this at a later time, and replace this
-    // cheap hack with that much nicer mechanism.
+    Qt::Orientation m_orientation;
+    /// Red for the Segment changer.
     bool m_useRed;
+
+    int m_min{0};
+    int m_max{100};
+    int m_default{50};
+
+    // Current value.
+    int m_value{50};
+
+    /// Normalized [0,1] current position of the wheel.
+    float m_rotation{.5};
+
+    /// Position of the mouse when the wheel was clicked.
+    QPoint m_clickPos;
+    /// Position of the wheel when it was clicked.  See m_rotation.
+    float m_clickRotation{0};
+
+    float m_speed{1};
+    bool m_tracking{true};
+    bool m_showScale{true};
+    bool m_clicked{false};
+    bool m_atDefault{true};
+    bool m_showTooltip{true};
+    QImage m_cache;
+    bool m_bright{true};
+
 };
 
 }
