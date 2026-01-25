@@ -35,8 +35,10 @@
 #include <cmath>
 #include <iostream>
 
+
 namespace Rosegarden
 {
+
 
 Thumbwheel::Thumbwheel(Qt::Orientation orientation,
                        bool useRed,
@@ -81,23 +83,10 @@ Thumbwheel::setMaximumValue(int max)
 }
 
 void
-Thumbwheel::setDefaultValue(int deft)
+Thumbwheel::setDefaultValue(int defaultValue)
 {
-    if (m_default == deft) return;
-
-    m_default = deft;
-    if (m_atDefault) {
-        setValue(m_default);
-        m_atDefault = true; // setValue unsets this
-        m_cache = QImage();
-        emit valueChanged(getValue());
-    }
-}
-
-int
-Thumbwheel::getDefaultValue() const
-{
-    return m_default;
+    m_default = defaultValue;
+    setValue(m_default);
 }
 
 void
@@ -106,33 +95,35 @@ Thumbwheel::setValue(int value)
     //RG_DEBUG << "setValue(" << value << ") (from" << m_value << ", rotation" << m_rotation << ") (visible" << isVisible() << ")";
 
     if (m_value != value) {
-
-        m_atDefault = false;
-
         if (value < m_min) value = m_min;
         if (value > m_max) value = m_max;
         m_value = value;
     }
 
     m_rotation = float(m_value - m_min) / float(m_max - m_min);
+
+    // Clear the cache.
     m_cache = QImage();
-    if (isVisible()) update();
+
+    if (isVisible())
+        update();
 }
 
 void
 Thumbwheel::resetToDefault()
 {
-    if (m_default == m_value) return;
-    setValue(m_default);
-    m_atDefault = true;
-    m_cache = QImage();
-    emit valueChanged(getValue());
-}
+    // Already there?  Bail.
+    if (m_default == m_value)
+        return;
 
-int
-Thumbwheel::getValue() const
-{
-    return m_value;
+    setValue(m_default);
+
+    // Clear the cache.
+    // ??? But setValue() already did this and potentially redrew it.  Why
+    //     lose the work that it did?
+    m_cache = QImage();
+
+    emit valueChanged(getValue());
 }
 
 #if 0
@@ -274,6 +265,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
 {
     //Profiler profiler("Thumbwheel::paintEvent");
 
+    // Cache available?  Use it.
     if (!m_cache.isNull()) {
         QPainter paint(this);
         paint.drawImage(0, 0, m_cache);
@@ -297,7 +289,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
     QPainter paint(&m_cache);
     paint.setClipRect(rect());
     QColor bg = (ThornStyle::isEnabled() ? QColor(0xED, 0xED, 0xFF) : palette().window().color());
-    if (!m_bright) bg = bg.darker(125);
+    if (!m_bright)
+        bg = bg.darker(125);
     paint.fillRect(subclip, bg);
 
     paint.setRenderHint(QPainter::Antialiasing, true);
@@ -374,8 +367,10 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
         QColor fc = QColor(grey, grey, grey);
         QColor oc = (ThornStyle::isEnabled() ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
-        if (m_useRed) oc = Qt::red;
-        if (!m_bright) oc = oc.darker(125);
+        if (m_useRed)
+            oc = Qt::red;
+        if (!m_bright)
+            oc = oc.darker(125);
 
         paint.setPen(fc);
 
@@ -425,9 +420,9 @@ Thumbwheel::sizeHint() const
 }
 
 void
-Thumbwheel::setBright(const bool v)
+Thumbwheel::setBright(const bool bright)
 {
-    m_bright = v;
+    m_bright = bright;
     update();
 }
 

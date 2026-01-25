@@ -18,13 +18,13 @@
 #ifndef RG_THUMBWHEEL_H
 #define RG_THUMBWHEEL_H
 
-#include <QWidget>
 #include <QImage>
+#include <QWidget>
 
-#include <map>
 
 namespace Rosegarden
 {
+
 
 class Thumbwheel : public QWidget
 {
@@ -44,8 +44,8 @@ public:
     void setMaximumValue(int max);
     int getMaximumValue() const  { return m_max; }
 
-    void setDefaultValue(int deft);
-    int getDefaultValue() const;
+    void setDefaultValue(int defaultValue);
+    int getDefaultValue() const  { return m_default; }
 
     //void setTracking(bool tracking)  { m_tracking = tracking; }
     //bool getTracking() const  { return m_tracking; }
@@ -54,13 +54,14 @@ public:
     //bool getShowScale() const  { return m_showScale; }
 
     void setValue(int value);
-    int getValue() const;
+    int getValue() const  { return m_value; }
+
     //void scroll(bool up);
 
     void setSpeed(float speed);
     //float getSpeed() const  { return m_speed; }
 
-    void setBright(const bool v);
+    void setBright(bool bright);
 
     QSize sizeHint() const override;
 
@@ -89,6 +90,17 @@ private:
     int m_default{50};
     void resetToDefault();
 
+    /// Send value changed while the thumb wheel is moving.
+    /**
+     * Otherwise only send on mouse release.
+     *
+     * ??? This is never set to anything other than true.  Get rid of
+     *     this and just do tracking always.
+     */
+    bool m_tracking{true};
+
+    bool m_showScale{true};
+
     // Current value.
     int m_value{50};
 
@@ -101,21 +113,17 @@ private:
     float m_clickRotation{0};
 
     float m_speed{1};
-    /// Send value changed while the thumb wheel is moving.
-    /**
-     * Otherwise only send on mouse release.
-     *
-     * ??? This is never set to anything other than true.  Get rid of
-     *     this and just do tracking always.
-     */
-    bool m_tracking{true};
-    bool m_showScale{true};
+
     bool m_clicked{false};
-    bool m_atDefault{true};
+
+    /// Cache to speed up paintEvent().
     QImage m_cache;
+
+    /// Brighten parts of the widget.
     bool m_bright{true};
 
 };
+
 
 }
 

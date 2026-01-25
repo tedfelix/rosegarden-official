@@ -166,8 +166,9 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     m_segmentChanger->setFixedWidth(32); // was 18, widen to make easier to grab
     m_segmentChanger->setMinimumValue(-120);
     m_segmentChanger->setMaximumValue(120);
-    m_segmentChanger->setDefaultValue(0);
+    m_segmentChanger->setDefaultValue(60);
     m_segmentChanger->setShowScale(true);
+    // ??? Why?
     m_segmentChanger->setValue(60);
     m_segmentChanger->setSpeed(0.05);
     m_lastSegmentChangerValue = m_segmentChanger->getValue();

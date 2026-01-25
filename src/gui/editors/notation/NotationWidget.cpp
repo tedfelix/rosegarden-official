@@ -191,6 +191,7 @@ NotationWidget::NotationWidget() :
     m_HsegmentChanger->setMaximumValue(120);
     m_HsegmentChanger->setDefaultValue(0);
     m_HsegmentChanger->setShowScale(true);
+    // ??? Why?
     m_HsegmentChanger->setValue(60);
     m_HsegmentChanger->setSpeed(0.05);
 
@@ -205,6 +206,7 @@ NotationWidget::NotationWidget() :
     m_VsegmentChanger->setMaximumValue(120);
     m_VsegmentChanger->setDefaultValue(0);
     m_VsegmentChanger->setShowScale(true);
+    // ??? Why?
     m_VsegmentChanger->setValue(60);
     m_VsegmentChanger->setSpeed(0.05);
     m_lastSegmentChangerValue = m_VsegmentChanger->getValue();
