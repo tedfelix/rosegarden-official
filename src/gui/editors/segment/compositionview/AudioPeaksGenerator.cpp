@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[AudioPeaksGenerator]"
+#define RG_NO_DEBUG_PRINT
 
 #include "AudioPeaksGenerator.h"
 #include "AudioPeaksThread.h"
