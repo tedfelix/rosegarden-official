@@ -40,7 +40,7 @@ public:
     void setRed(bool red)  { m_red = red; }
     void setShowScale(bool showScale)  { m_showScale = showScale; }
 
-    void setSpeed(float speed)  { m_speed = speed; }
+    void setSpeed(double speed)  { m_speed = speed; }
 
 
     // Value
@@ -85,7 +85,7 @@ private:
     /// Red for the Segment changer.
     bool m_red{false};
     bool m_showScale{true};
-    float m_speed{1};
+    double m_speed{1};
 
     int m_min{0};
     int m_max{100};
@@ -96,13 +96,9 @@ private:
     // Current value.
     int m_value{50};
 
-    /// Normalized [0,1] current position of the wheel.
-    float m_rotation{.5};
-
     /// Position of the mouse when the wheel was clicked.
     QPoint m_clickPos;
-    /// Position of the wheel when it was clicked.  See m_rotation.
-    float m_clickRotation{0};
+    int m_clickValue{0};
 
     bool m_leftButtonPressed{false};
 

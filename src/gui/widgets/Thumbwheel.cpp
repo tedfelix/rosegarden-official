@@ -53,20 +53,12 @@ void
 Thumbwheel::setMinimumValue(int min)
 {
     m_min = min;
-
-    // ??? Since m_rotation can easily and cheaply be computed from
-    //     value/min/max, why even keep it?
-    m_rotation = float(m_value - m_min) / float(m_max - m_min);
 }
 
 void
 Thumbwheel::setMaximumValue(int max)
 {
     m_max = max;
-
-    // ??? Since m_rotation can easily and cheaply be computed from
-    //     value/min/max, why even keep it?
-    m_rotation = float(m_value - m_min) / float(m_max - m_min);
 }
 
 void
@@ -79,16 +71,12 @@ Thumbwheel::setDefaultValue(int defaultValue)
 void
 Thumbwheel::setValue(int value)
 {
-    //RG_DEBUG << "setValue(" << value << ") (from" << m_value << ", rotation" << m_rotation << ") (visible" << isVisible() << ")";
-
     if (value < m_min)
         value = m_min;
     if (value > m_max)
         value = m_max;
 
     m_value = value;
-
-    m_rotation = float(m_value - m_min) / float(m_max - m_min);
 
     // Clear the cache.
     m_cache = QImage();
@@ -124,7 +112,7 @@ Thumbwheel::mousePressEvent(QMouseEvent *e)
     } else if (e->button() == Qt::LeftButton) {
         m_leftButtonPressed = true;
         m_clickPos = e->pos();
-        m_clickRotation = m_rotation;
+        m_clickValue = m_value;
     }
 }
 
@@ -161,26 +149,15 @@ Thumbwheel::mouseMoveEvent(QMouseEvent *e)
 
     // Compute the distance the mouse has moved in the relevant direction
     // in pixels.
-    int dist = 0;
+    double dist = 0;
     if (m_orientation == Qt::Horizontal)
         dist = e->pos().x() - m_clickPos.x();
     else
         dist = e->pos().y() - m_clickPos.y();
 
-    // Compute the new wheel rotation position.
-    // ??? Computing the new value would be simpler.  Then we could
-    //     make rotation solely dependent on value and get rid of all
-    //     the rotation caching.  Just compute rotation when needed.
-    //     The only real user of m_rotation is paintEvent().
-    float newRotation = m_clickRotation + (m_speed * dist) / 100;
+    const int newValue = m_clickValue +
+            lround(dist * m_speed * double(m_max - m_min) / 100.0);
 
-    // Limit to [0,1].
-    if (newRotation < 0)
-        newRotation = 0;
-    if (newRotation > 1)
-        newRotation = 1;
-
-    const int newValue = lround(m_min + (m_max - m_min) * newRotation);
     setValue(newValue);
     emit valueChanged(m_value);
 }
@@ -200,7 +177,7 @@ Thumbwheel::wheelEvent(QWheelEvent *e)
     // We'll handle this.  Don't pass to parent.
     e->accept();
 
-    int step = lrintf(m_speed);
+    int step = lround(m_speed);
     if (step == 0) step = 1;
 
     if (e->angleDelta().y() > 0)
@@ -243,13 +220,13 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     paint.setRenderHint(QPainter::Antialiasing, true);
 
-    float w  = width();
-    float w0 = 0.5;
-    float w1 = w - 0.5;
+    double w  = width();
+    double w0 = 0.5;
+    double w1 = w - 0.5;
 
-    float h  = height();
-    float h0 = 0.5;
-    float h1 = h - 0.5;
+    double h  = height();
+    double h0 = 0.5;
+    double h1 = h - 0.5;
 
     for (int i = bw-1; i >= 0; --i) {
 
@@ -278,7 +255,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     paint.setClipRect(subclip);
 
-    float radians = m_rotation * 1.5f * M_PI;
+    double rotation = double(m_value - m_min) / double(m_max - m_min);
+    double radians = rotation * 1.5 * M_PI;
 
     //RG_DEBUG << "value =" << m_value << ", min =" << m_min << ", max =" << m_max << ", rotation =" << rotation;
 
@@ -292,16 +270,16 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     for (int i = 0; i < notches; ++i) {
 
-        float a0 = (2.f * M_PI * i) / notches + radians;
-        float a1 = a0 + M_PI / (notches * 2);
-        float a2 = (2.f * M_PI * (i + 1)) / notches + radians;
+        double a0 = (2.f * M_PI * i) / notches + radians;
+        double a1 = a0 + M_PI / (notches * 2);
+        double a2 = (2.f * M_PI * (i + 1)) / notches + radians;
 
-        float depth = cosf((a0 + a2) / 2);
+        double depth = cos((a0 + a2) / 2);
         if (depth < 0) continue;
 
-        float x0 = radius * sinf(a0) + w/2;
-        float x1 = radius * sinf(a1) + w/2;
-        float x2 = radius * sinf(a2) + w/2;
+        double x0 = radius * sin(a0) + w/2;
+        double x1 = radius * sin(a1) + w/2;
+        double x2 = radius * sin(a2) + w/2;
         if (x2 < 0 || x0 > w) continue;
 
         if (x0 < 0) x0 = 0;
@@ -311,7 +289,7 @@ Thumbwheel::paintEvent(QPaintEvent *)
         x1 += bw;
         x2 += bw;
 
-        int grey = lrintf(120 * depth);
+        int grey = lround(120 * depth);
 
         QColor fc = QColor(grey, grey, grey);
         QColor oc = (ThornStyle::isEnabled() ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
@@ -326,9 +304,9 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
             paint.setBrush(oc);
 
-            float prop;
+            double prop;
             if (i >= notches / 4) {
-                prop = float(notches - (((i - float(notches) / 4.f) * 4.f) / 3.f))
+                prop = double(notches - (((i - double(notches) / 4.f) * 4.f) / 3.f))
                     / notches;
             } else {
                 prop = 0.f;
