@@ -52,6 +52,7 @@ OutOfProcessorPower::OutOfProcessorPower(QWidget *parent) :
     layout->addWidget(m_dontShow);
 
     // Button Box
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox =
             new QDialogButtonBox(QDialogButtonBox::Ok);
 

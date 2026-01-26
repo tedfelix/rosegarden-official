@@ -77,7 +77,7 @@ void CompositionPosition::slotSet(timeT time)
 
     // even if the time has not changed pass it on otherwise it may
     // mess up the trensport request system
-    Composition& comp = doc->getComposition();
+    const Composition& comp = doc->getComposition();
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
     RG_DEBUG << "slotSet" << m_positionAsElapsedTime;
@@ -100,7 +100,7 @@ void CompositionPosition::slotUpdate()
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
 
-    Composition& comp = doc->getComposition();
+    const Composition& comp = doc->getComposition();
     RealTime position =
         SequencerDataBlock::getInstance()->getPositionPointer();
     if (position != m_positionAsElapsedTime) {

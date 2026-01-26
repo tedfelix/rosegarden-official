@@ -96,7 +96,7 @@ ManageMetronomeDialog::ManageMetronomeDialog(QWidget *parent,
     Studio &studio = m_doc->getStudio();
     DeviceId deviceId = studio.getMetronomeDevice();
 
-    for (it = devices->begin(); it != devices->end(); it++) {
+    for (it = devices->begin(); it != devices->end(); ++it) {
 
         Device *dev = *it;
         bool hasConnection = false;
@@ -253,7 +253,7 @@ ManageMetronomeDialog::populate(int deviceIndex)
     int deviceCount = 0;
     Device *dev = nullptr;
 
-    for (it = devices->begin(); it != devices->end(); it++) {
+    for (it = devices->begin(); it != devices->end(); ++it) {
 
         dev = *it;
         if (!isSuitable(dev)) continue;
@@ -381,7 +381,7 @@ ManageMetronomeDialog::slotApply()
     int count = 0;
     Device *dev = nullptr;
 
-    for (it = devices->begin(); it != devices->end(); it++) {
+    for (it = devices->begin(); it != devices->end(); ++it) {
 
         dev = *it;
         if (!isSuitable(dev)) continue;
@@ -452,7 +452,7 @@ ManageMetronomeDialog::slotPreviewPitch(int pitch)
     int count = 0;
     Device *dev = nullptr;
 
-    for (it = devices->begin(); it != devices->end(); it++) {
+    for (it = devices->begin(); it != devices->end(); ++it) {
 
         dev = *it;
         if (!isSuitable(dev)) continue;
@@ -509,7 +509,7 @@ ManageMetronomeDialog::slotPitchSelectorChanged(int selection)
 bool
 ManageMetronomeDialog::isSuitable(Device *dev, bool *hasConnectionReturn)
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
     if (md && md->getDirection() == MidiDevice::Play) {
         if (hasConnectionReturn) {
             QString conn = RosegardenSequencer::getInstance()->getConnection
@@ -544,11 +544,11 @@ ManageMetronomeDialog::setMetronome(Device *dev, const MidiMetronome &metronome)
 const MidiMetronome *
 ManageMetronomeDialog::getMetronome(Device *dev)
 {
-    MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
+    const MidiDevice *md = dynamic_cast<MidiDevice *>(dev);
     if (md) {
         return md->getMetronome();
     }
-    SoftSynthDevice *ssd = dynamic_cast<SoftSynthDevice *>(dev);
+    const SoftSynthDevice *ssd = dynamic_cast<SoftSynthDevice *>(dev);
     if (ssd) {
         return ssd->getMetronome();
     }

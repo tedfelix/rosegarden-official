@@ -443,6 +443,7 @@ PitchBendSequenceDialog::PitchBendSequenceDialog(
     // --------------------------------------
     // OK/Cancel/Help
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok |
                 QDialogButtonBox::Cancel |
