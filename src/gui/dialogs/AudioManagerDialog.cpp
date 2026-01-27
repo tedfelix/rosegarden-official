@@ -245,19 +245,21 @@ AudioManagerDialog::slotPopulateFileList()
         bool selected;
     };
     std::list<SelectData> selectDataList;
-    QTreeWidgetItemIterator it(m_fileList);
-    while (*it) {
-        const AudioListItem *aItem = dynamic_cast<AudioListItem*>(*it);
-        if (! aItem) continue;
+    // For each file on the UI, add to selectDataList.
+    for (QTreeWidgetItemIterator itemIter(m_fileList); *itemIter; ++itemIter) {
+        const AudioListItem *aItem = dynamic_cast<AudioListItem *>(*itemIter);
+        if (!aItem)
+            continue;
+
         SelectData sd;
         sd.id = aItem->getId();
         sd.segment = aItem->getSegment();
         sd.selected = false;
         sd.expanded = false;
-        if ((*it)->isSelected()) sd.selected = true;
-        if ((*it)->isExpanded()) sd.expanded = true;
+        if ((*itemIter)->isSelected()) sd.selected = true;
+        if ((*itemIter)->isExpanded()) sd.expanded = true;
+
         selectDataList.push_back(sd);
-        ++it;
     }
 
     // We don't want the selection changes to be propagated
