@@ -18,94 +18,95 @@
 #ifndef RG_THUMBWHEEL_H
 #define RG_THUMBWHEEL_H
 
-#include <QWidget>
 #include <QImage>
+#include <QWidget>
 
-#include <map>
 
 namespace Rosegarden
 {
+
 
 class Thumbwheel : public QWidget
 {
     Q_OBJECT
 
 public:
-    Thumbwheel(Qt::Orientation orientation, bool useRed = false, QWidget *parent = nullptr);
-    ~Thumbwheel() override;
 
+    Thumbwheel(Qt::Orientation orientation,
+               QWidget *parent = nullptr);
+
+    // Appearance routines.
+    void setBright(bool bright)  { m_bright = bright; }
+    void setRed(bool red)  { m_red = red; }
+    void setShowScale(bool showScale)  { m_showScale = showScale; }
+
+    void setSpeed(double speed)  { m_speed = speed; }
+
+
+    // Value
+
+    void setMinimumValue(int min);
     int getMinimumValue() const  { return m_min; }
+
+    void setMaximumValue(int max);
     int getMaximumValue() const  { return m_max; }
 
-    int getDefaultValue() const;
-    // unused float getSpeed() const;
-    // unused bool getTracking() const;
-    // unused bool getShowScale() const;
-    int getValue() const;
-    void setBright(const bool v);
+    void setDefaultValue(int defaultValue);
+    int getDefaultValue() const  { return m_default; }
 
-    // unused void setShowToolTip(bool show);
+    void setValue(int value);
+    int getValue() const  { return m_value; }
 
+
+    /// Let layouts know our favorite size.
     QSize sizeHint() const override;
 
 signals:
-    void valueChanged(int);
 
-    void mouseEntered();
-    void mouseLeft();
-
-public slots:
-    void setMinimumValue(int min);
-    void setMaximumValue(int max);
-    void setDefaultValue(int deft);
-    void setSpeed(float speed);
-    void setTracking(bool tracking);
-    void setShowScale(bool showScale);
-    void setValue(int value);
-    void scroll(bool up);
-    void resetToDefault();
+    void valueChanged(int value);
 
 protected:
+
+    // QWidget overrides.
     void mousePressEvent(QMouseEvent *e) override;
     void mouseDoubleClickEvent(QMouseEvent *mouseEvent) override;
     void mouseMoveEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
     void wheelEvent(QWheelEvent *e) override;
     void paintEvent(QPaintEvent *e) override;
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-    void enterEvent(QEnterEvent *) override;
-#else
-    void enterEvent(QEvent *) override;
-#endif
-    void leaveEvent(QEvent *) override;
 
-    int m_min;
-    int m_max;
-    int m_default;
-    int m_value;
-    float m_rotation;
+private:
+
+    // Configuration
+
     Qt::Orientation m_orientation;
-    float m_speed;
-    bool m_tracking;
-    bool m_showScale;
-    bool m_clicked;
-    bool m_atDefault;
-    QPoint m_clickPos;
-    float m_clickRotation;
-    bool m_showTooltip;
-    QImage m_cache;
-    bool m_bright;
+    /// Brighten parts of the widget.
+    bool m_bright{true};
+    /// Red for the Segment changer.
+    bool m_red{false};
+    bool m_showScale{true};
+    double m_speed{1};
 
-    // I wanted a red wheel for the segment changer.  It would be much nicer to
-    // step back and build some quality mechanism for setting the color of the
-    // wheel from the outside, but it's more of a refactoring project than I
-    // wanted to do today just to get a red wheel, so I used a cheap hack this
-    // time.  If we ever want to have a green wheel and so on, or for making
-    // this wheel generally more useful to other Qt projects, it would be nice
-    // to do something more involved with this at a later time, and replace this
-    // cheap hack with that much nicer mechanism.
-    bool m_useRed;
+    int m_min{0};
+    int m_max{100};
+    int m_default{50};
+    void resetToDefault();
+
+
+    // Current value.
+    int m_value{50};
+
+    /// Position of the mouse when the wheel was clicked.
+    QPoint m_clickPos;
+    int m_clickValue{0};
+
+    bool m_leftButtonPressed{false};
+
+    /// Cache to speed up paintEvent().
+    QImage m_cache;
+
 };
+
 
 }
 

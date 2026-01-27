@@ -20,8 +20,6 @@
 
 #include "Thumbwheel.h"
 
-//#include "base/Profiler.h"
-#include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
 #include "gui/general/ThornStyle.h"
 
@@ -32,31 +30,17 @@
 #include <QPainter>
 #include <QPainterPath>
 
-#include <cmath>
-#include <iostream>
+#include <math.h>
+
 
 namespace Rosegarden
 {
 
+
 Thumbwheel::Thumbwheel(Qt::Orientation orientation,
-                       bool useRed,
                        QWidget *parent) :
     QWidget(parent),
-    m_min(0),
-    m_max(100),
-    m_default(50),
-    m_value(50),
-    m_rotation(0.5),
-    m_orientation(orientation),
-    m_speed(1.0),
-    m_tracking(true),
-    m_showScale(true),
-    m_clicked(false),
-    m_atDefault(true),
-    m_clickRotation(m_rotation),
-    m_showTooltip(true),
-    m_bright(true),
-    m_useRed(useRed)
+    m_orientation(orientation)
 {
     // NOTE: we should avoid using highlight() and mid() and so on, even though
     // they happen to produce nice results on my everyday setup, because these
@@ -65,172 +49,57 @@ Thumbwheel::Thumbwheel(Qt::Orientation orientation,
     // and Fader code, and anywhere else it appears.)
 }
 
-Thumbwheel::~Thumbwheel()
-{
-}
-
-/* unused
-void
-Thumbwheel::setShowToolTip(bool show)
-{
-    m_showTooltip = show;
-}
-*/
-
 void
 Thumbwheel::setMinimumValue(int min)
 {
-    if (m_min == min) return;
-
     m_min = min;
-    if (m_max <= m_min) m_max = m_min + 1;
-    if (m_value < m_min) m_value = m_min;
-    if (m_value > m_max) m_value = m_max;
-
-    m_rotation = float(m_value - m_min) / float(m_max - m_min);
-    update();
 }
 
 void
 Thumbwheel::setMaximumValue(int max)
 {
-    if (m_max == max) return;
-
     m_max = max;
-    if (m_min >= m_max) m_min = m_max - 1;
-    if (m_value < m_min) m_value = m_min;
-    if (m_value > m_max) m_value = m_max;
-
-    m_rotation = float(m_value - m_min) / float(m_max - m_min);
-    update();
 }
 
 void
-Thumbwheel::setDefaultValue(int deft)
+Thumbwheel::setDefaultValue(int defaultValue)
 {
-    if (m_default == deft) return;
-
-    m_default = deft;
-    if (m_atDefault) {
-        setValue(m_default);
-        m_atDefault = true; // setValue unsets this
-        m_cache = QImage();
-        emit valueChanged(getValue());
-    }
-}
-
-int
-Thumbwheel::getDefaultValue() const
-{
-    return m_default;
+    m_default = defaultValue;
+    setValue(m_default);
 }
 
 void
 Thumbwheel::setValue(int value)
 {
-    //RG_DEBUG << "setValue(" << value << ") (from" << m_value << ", rotation" << m_rotation << ") (visible" << isVisible() << ")";
+    if (value < m_min)
+        value = m_min;
+    if (value > m_max)
+        value = m_max;
 
-    if (m_value != value) {
+    m_value = value;
 
-        m_atDefault = false;
-
-        if (value < m_min) value = m_min;
-        if (value > m_max) value = m_max;
-        m_value = value;
-    }
-
-    m_rotation = float(m_value - m_min) / float(m_max - m_min);
+    // Clear the cache.
     m_cache = QImage();
-    if (isVisible()) update();
+
+    if (isVisible())
+        update();
 }
 
 void
 Thumbwheel::resetToDefault()
 {
-    if (m_default == m_value) return;
+    // Already there?  Bail.
+    if (m_value == m_default)
+        return;
+
     setValue(m_default);
-    m_atDefault = true;
-    m_cache = QImage();
-    emit valueChanged(getValue());
-}
 
-int
-Thumbwheel::getValue() const
-{
-    return m_value;
-}
+    // Clear the cache.
+    // ??? But setValue() already did this and potentially redrew it.  Why
+    //     lose the work that it did?
+    //m_cache = QImage();
 
-void
-Thumbwheel::scroll(bool up)
-{
-    int step = lrintf(m_speed);
-    if (step == 0) step = 1;
-
-    if (up) {
-        setValue(m_value + step);
-    } else {
-        setValue(m_value - step);
-    }
-
-    emit valueChanged(getValue());
-}
-
-void
-Thumbwheel::setSpeed(float speed)
-{
-    m_speed = speed;
-}
-
-/* unused
-float
-Thumbwheel::getSpeed() const
-{
-    return m_speed;
-}
-*/
-
-void
-Thumbwheel::setTracking(bool tracking)
-{
-    m_tracking = tracking;
-}
-
-/* unused
-bool
-Thumbwheel::getTracking() const
-{
-    return m_tracking;
-}
-*/
-
-void
-Thumbwheel::setShowScale(bool showScale)
-{
-    m_showScale = showScale;
-}
-
-/* unused
-bool
-Thumbwheel::getShowScale() const
-{
-    return m_showScale;
-}
-*/
-
-void
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
-Thumbwheel::enterEvent(QEnterEvent *)
-#else
-Thumbwheel::enterEvent(QEvent *)
-#endif
-{
-    emit mouseEntered();
-}
-
-void
-Thumbwheel::leaveEvent(QEvent *)
-{
-    emit mouseLeft();
+    emit valueChanged(m_value);
 }
 
 void
@@ -241,72 +110,65 @@ Thumbwheel::mousePressEvent(QMouseEvent *e)
          (e->modifiers() & Qt::ControlModifier))) {
         resetToDefault();
     } else if (e->button() == Qt::LeftButton) {
-        m_clicked = true;
+        m_leftButtonPressed = true;
         m_clickPos = e->pos();
-        m_clickRotation = m_rotation;
+        m_clickValue = m_value;
     }
 }
 
 void
 Thumbwheel::mouseDoubleClickEvent(QMouseEvent *mouseEvent)
 {
-    //!!! needs a common base class with AudioDial (and Panner?)
-
-    if (mouseEvent->button() != Qt::LeftButton) {
+    if (mouseEvent->button() != Qt::LeftButton)
         return;
-    }
 
     bool ok = false;
 
-    int newValue = QInputDialog::getInt
-        (this,
-         tr("Enter new value"),
-         tr("Enter a new value from %1 to %2:")
-         .arg(m_min).arg(m_max),
-         getValue(), m_min, m_max, 1, &ok);
+    const int newValue = QInputDialog::getInt(
+            this,
+            tr("Enter new value"),
+            tr("Enter a new value from %1 to %2:").arg(m_min).arg(m_max),
+            m_value,
+            m_min,
+            m_max,
+            1,  // step
+            &ok);
 
     if (ok) {
         setValue(newValue);
         // Let everyone know.
-        emit valueChanged(getValue());
+        emit valueChanged(m_value);
     }
 }
-
 
 void
 Thumbwheel::mouseMoveEvent(QMouseEvent *e)
 {
-    if (!m_clicked) return;
-    int dist = 0;
-    if (m_orientation == Qt::Horizontal) {
-        dist = e->pos().x() - m_clickPos.x();
-    } else {
-        dist = e->pos().y() - m_clickPos.y();
-    }
+    if (!m_leftButtonPressed)
+        return;
 
-    float rotation = m_clickRotation + (m_speed * dist) / 100;
-    if (rotation < 0.f) rotation = 0.f;
-    if (rotation > 1.f) rotation = 1.f;
-    int value = lrintf(m_min + (m_max - m_min) * m_rotation);
-    if (value != m_value) {
-        setValue(value);
-        if (m_tracking) emit valueChanged(getValue());
-        m_rotation = rotation;
-    } else if (fabsf(rotation - m_rotation) > 0.001) {
-        m_rotation = rotation;
-        repaint();
-    }
+    // Compute the distance the mouse has moved in the relevant direction
+    // in pixels.
+    double dist = 0;
+    if (m_orientation == Qt::Horizontal)
+        dist = e->pos().x() - m_clickPos.x();
+    else
+        dist = e->pos().y() - m_clickPos.y();
+
+    const int newValue = m_clickValue +
+            lround(dist * m_speed * double(m_max - m_min) / 100.0);
+
+    setValue(newValue);
+    emit valueChanged(m_value);
 }
 
 void
-Thumbwheel::mouseReleaseEvent(QMouseEvent *e)
+Thumbwheel::mouseReleaseEvent(QMouseEvent * /*e*/)
 {
-    if (!m_clicked) return;
-    bool reallyTracking = m_tracking;
-    m_tracking = true;
-    mouseMoveEvent(e);
-    m_tracking = reallyTracking;
-    m_clicked = false;
+    if (!m_leftButtonPressed)
+        return;
+
+    m_leftButtonPressed = false;
 }
 
 void
@@ -315,7 +177,7 @@ Thumbwheel::wheelEvent(QWheelEvent *e)
     // We'll handle this.  Don't pass to parent.
     e->accept();
 
-    int step = lrintf(m_speed);
+    int step = lround(m_speed);
     if (step == 0) step = 1;
 
     if (e->angleDelta().y() > 0)
@@ -329,15 +191,12 @@ Thumbwheel::wheelEvent(QWheelEvent *e)
 void
 Thumbwheel::paintEvent(QPaintEvent *)
 {
-    //Profiler profiler("Thumbwheel::paintEvent");
-
+    // Cache available?  Use it.
     if (!m_cache.isNull()) {
         QPainter paint(this);
         paint.drawImage(0, 0, m_cache);
         return;
     }
-
-    //Profiler profiler2("Thumbwheel::paintEvent (no cache)");
 
     m_cache = QImage(size(), QImage::Format_ARGB32_Premultiplied);
     m_cache.fill(Qt::transparent);
@@ -353,19 +212,21 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     QPainter paint(&m_cache);
     paint.setClipRect(rect());
-    QColor bg = (ThornStyle::isEnabled() ? QColor(0xED, 0xED, 0xFF) : palette().window().color());
-    if (!m_bright) bg = bg.darker(125);
+    QColor bg = (ThornStyle::isEnabled() ?
+            QColor(0xED, 0xED, 0xFF) : palette().window().color());
+    if (!m_bright)
+        bg = bg.darker(125);
     paint.fillRect(subclip, bg);
 
     paint.setRenderHint(QPainter::Antialiasing, true);
 
-    float w  = width();
-    float w0 = 0.5;
-    float w1 = w - 0.5;
+    double w  = width();
+    double w0 = 0.5;
+    double w1 = w - 0.5;
 
-    float h  = height();
-    float h0 = 0.5;
-    float h1 = h - 0.5;
+    double h  = height();
+    double h0 = 0.5;
+    double h1 = h - 0.5;
 
     for (int i = bw-1; i >= 0; --i) {
 
@@ -394,7 +255,8 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     paint.setClipRect(subclip);
 
-    float radians = m_rotation * 1.5f * M_PI;
+    double rotation = double(m_value - m_min) / double(m_max - m_min);
+    double radians = rotation * 1.5 * M_PI;
 
     //RG_DEBUG << "value =" << m_value << ", min =" << m_min << ", max =" << m_max << ", rotation =" << rotation;
 
@@ -408,16 +270,16 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
     for (int i = 0; i < notches; ++i) {
 
-        float a0 = (2.f * M_PI * i) / notches + radians;
-        float a1 = a0 + M_PI / (notches * 2);
-        float a2 = (2.f * M_PI * (i + 1)) / notches + radians;
+        double a0 = (2.f * M_PI * i) / notches + radians;
+        double a1 = a0 + M_PI / (notches * 2);
+        double a2 = (2.f * M_PI * (i + 1)) / notches + radians;
 
-        float depth = cosf((a0 + a2) / 2);
+        double depth = cos((a0 + a2) / 2);
         if (depth < 0) continue;
 
-        float x0 = radius * sinf(a0) + w/2;
-        float x1 = radius * sinf(a1) + w/2;
-        float x2 = radius * sinf(a2) + w/2;
+        double x0 = radius * sin(a0) + w/2;
+        double x1 = radius * sin(a1) + w/2;
+        double x2 = radius * sin(a2) + w/2;
         if (x2 < 0 || x0 > w) continue;
 
         if (x0 < 0) x0 = 0;
@@ -427,12 +289,14 @@ Thumbwheel::paintEvent(QPaintEvent *)
         x1 += bw;
         x2 += bw;
 
-        int grey = lrintf(120 * depth);
+        int grey = lround(120 * depth);
 
         QColor fc = QColor(grey, grey, grey);
         QColor oc = (ThornStyle::isEnabled() ? QColor(0xAA, 0xAA, 0xFF) : palette().highlight().color());
-        if (m_useRed) oc = Qt::red;
-        if (!m_bright) oc = oc.darker(125);
+        if (m_red)
+            oc = Qt::red;
+        if (!m_bright)
+            oc = oc.darker(125);
 
         paint.setPen(fc);
 
@@ -440,9 +304,9 @@ Thumbwheel::paintEvent(QPaintEvent *)
 
             paint.setBrush(oc);
 
-            float prop;
+            double prop;
             if (i >= notches / 4) {
-                prop = float(notches - (((i - float(notches) / 4.f) * 4.f) / 3.f))
+                prop = double(notches - (((i - double(notches) / 4.f) * 4.f) / 3.f))
                     / notches;
             } else {
                 prop = 0.f;
@@ -479,13 +343,6 @@ Thumbwheel::sizeHint() const
     } else {
         return QSize(12, 80);
     }
-}
-
-void
-Thumbwheel::setBright(const bool v)
-{
-    m_bright = v;
-    update();
 }
 
 
