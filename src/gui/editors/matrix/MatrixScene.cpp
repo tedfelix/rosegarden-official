@@ -1143,10 +1143,40 @@ MatrixScene::setExtraPreviewEvents(const EventWithSegmentMap& events)
         if (e->get<Int>(BaseProperties::PITCH, pitch)) {
             long velocity = -1;
             (void)(e->get<Int>(BaseProperties::VELOCITY, velocity));
-            if (!(e->has(BaseProperties::TIED_BACKWARD) &&
-                  e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
-                playNote(*segment, pitch, velocity);
+            // if this is a tied note we need the velocity of the initial event
+            if ((e->has(BaseProperties::TIED_BACKWARD) &&
+                 e->get<Bool>(BaseProperties::TIED_BACKWARD))) {
+                RG_DEBUG << "setExtraPreviewEvents get tie velocity";
+                timeT t = e->getNotationAbsoluteTime();
+                Segment::iterator it = segment->findSingle(e);
+                Segment::iterator j(it);
+                while (j != segment->begin()) {
+                    --j;
+                    if (!(*j)->isa(Note::EventType)) continue;
+                    Event* eloop = *j;
+
+                    timeT t2 = eloop->getNotationAbsoluteTime() +
+                        eloop->getNotationDuration();
+                    if (t2 < t) break;
+
+                    if (t2 > t || !eloop->has(BaseProperties::PITCH) ||
+                        eloop->get<Int>(BaseProperties::PITCH) != pitch)
+                        continue;
+
+                    bool tiedForward = false;
+                    (void)eloop->get<Bool>(BaseProperties::TIED_FORWARD,
+                                           tiedForward);
+                    if (tiedForward) {
+                        // found the start of the tie
+                        (void)(eloop->get<Int>
+                               (BaseProperties::VELOCITY, velocity));
+                        RG_DEBUG << "setExtraPreviewEvents tie velicoty" <<
+                            velocity;
+                    }
+                }
             }
+            RG_DEBUG << "setExtraPreviewEvents playNote" << pitch << velocity;
+            playNote(*segment, pitch, velocity);
         }
     }
     m_additionalPreviewEvents = events;
