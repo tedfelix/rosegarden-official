@@ -144,6 +144,10 @@ namespace Preferences
 
     void setShowGtk2Warning(bool value);
     bool getShowGtk2Warning();
+
+    void setUseJackTransport(bool value);
+    bool getUseJackTransport();
+
 }
 
 

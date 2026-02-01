@@ -391,5 +391,18 @@ int Preferences::getFilePrinter()
     return filePrinter.get();
 }
 
+static PreferenceBool useJackTransport(
+        SequencerOptionsConfigGroup, "jacktransport", false);
+
+void Preferences::setUseJackTransport(bool value)
+{
+    useJackTransport.set(value);
+}
+
+bool Preferences::getUseJackTransport()
+{
+    return useJackTransport.get();
+}
+
 
 }

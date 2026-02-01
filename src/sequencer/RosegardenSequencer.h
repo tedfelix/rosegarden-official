@@ -442,6 +442,7 @@ public:
 
     void installExporter(WAVExporter* wavExporter);
 
+    RealTime getSongPosition();
 
     // --------- Transport Interface --------
     //

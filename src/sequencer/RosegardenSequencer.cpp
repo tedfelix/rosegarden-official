@@ -130,7 +130,7 @@ RosegardenSequencer::getInstance()
 {
     // Guaranteed in C++11 to be lazy initialized and thread-safe.
     // See ISO/IEC 14882:2011 6.7(4).
-    RG_DEBUG << "create instance";
+    //RG_DEBUG << "create instance";
     static RosegardenSequencer instance;
 
     // ??? To avoid the static destruction order fiasco, we might want to
@@ -366,10 +366,11 @@ RosegardenSequencer::stop(bool autoStop)
     // the Sequencer doesn't need to know these once
     // we've stopped.
     //
-    //m_songPosition.sec = 0;
-    //m_songPosition.nsec = 0;
     m_lastFetchSongPosition.sec = 0;
     m_lastFetchSongPosition.nsec = 0;
+    // the song position should always be correct
+    //m_songPosition.sec = 0;
+    //m_songPosition.nsec = 0;
 
 //    cleanupMmapData();
 
@@ -1529,6 +1530,13 @@ RosegardenSequencer::installExporter(WAVExporter* wavExporter)
 {
     m_driver->installExporter(wavExporter);
 }
+
+RealTime
+RosegardenSequencer::getSongPosition()
+{
+    return m_songPosition;
+}
+
 
 void
 RosegardenSequencer::checkForNewClients()
