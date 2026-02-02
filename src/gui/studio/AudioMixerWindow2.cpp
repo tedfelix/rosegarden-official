@@ -63,9 +63,6 @@ AudioMixerWindow2::AudioMixerWindow2() :
     setAttribute(Qt::WA_DeleteOnClose);
 
     // Connect for RosegardenDocument changes.
-    // ??? If the doc changes, this will get disconnected.  Who do we have
-    //     to connect to to get wind of document changes?
-    //     RMW::documentAboutToChange()?
     connect(RosegardenDocument::currentDocument,
                 &RosegardenDocument::documentModified,
             this, &AudioMixerWindow2::slotDocumentModified);
@@ -646,12 +643,10 @@ AudioMixerWindow2::slotExternalController(const MappedEvent *event)
         }
 
     case MIDI_CONTROLLER_PAN:
-        {
-            m_inputStrips[channel]->panChanged(
-                    static_cast<float>(AudioLevel::AudioPanD(value) - 100.0));
+        m_inputStrips[channel]->panChanged(
+                static_cast<float>(AudioLevel::AudioPanD(value) - 100.0));
 
-            break;
-        }
+        break;
 
     default:
         break;

@@ -57,10 +57,6 @@ namespace Rosegarden
 {
 
 
-// ??? Use QObject properties to eliminate loops in MMW.
-
-// ??? Use QObject properties to eliminate loops in AMW2.
-
 namespace
 {
 
@@ -79,6 +75,10 @@ namespace
                 continue;
             if (midiDevice->isInput())
                 continue;
+            // Don't include devices without instruments.
+            // ??? Is this even possible?
+            if (midiDevice->getPresentationInstruments().size() == 0)
+                continue;
 
             devices.push_back(midiDevice);
         }
@@ -95,10 +95,13 @@ MidiMixerWindow::MidiMixerWindow() :
     setWindowTitle(tr("MIDI Mixer"));
     setWindowIcon(IconLoader::loadPixmap("window-midimixer"));
 
-    // ??? Inline this?  I think once we pull out MidiStrip like AudioStrip,
-    //     that will make a lot of sense.  Then again, we need a way to
-    //     refresh the strips when things change.  So actually that probably
-    //     makes no sense at all.  See AudioMixerWindow2::updateStripCounts().
+    // Tab widget
+    m_tabWidget = new QTabWidget(this);
+    connect(m_tabWidget, &QTabWidget::currentChanged,
+            this, &MidiMixerWindow::slotCurrentTabChanged);
+    m_tabWidget->setTabPosition(QTabWidget::South);
+    setCentralWidget(m_tabWidget);
+
     setupTabs();
 
     createAction("file_close", &MidiMixerWindow::slotClose);
@@ -133,6 +136,11 @@ MidiMixerWindow::MidiMixerWindow() :
                 &ExternalController::externalControllerMMW,
             this, &MidiMixerWindow::slotExternalController);
 
+    // Connect for RosegardenDocument changes.
+    connect(RosegardenDocument::currentDocument,
+                    &RosegardenDocument::documentModified,
+            this, &MidiMixerWindow::slotDocumentModified);
+
     // Make sure we close if the document is changing.
     connect(RosegardenMainWindow::self(),
                     &RosegardenMainWindow::documentAboutToChange,
@@ -156,12 +164,6 @@ MidiMixerWindow::MidiMixerWindow() :
 void
 MidiMixerWindow::setupTabs()
 {
-    // Tab widget
-    m_tabWidget = new QTabWidget(this);
-    connect(m_tabWidget, &QTabWidget::currentChanged,
-            this, &MidiMixerWindow::slotCurrentTabChanged);
-    m_tabWidget->setTabPosition(QTabWidget::South);
-    setCentralWidget(m_tabWidget);
 
     // ??? This is done only once.  But the number of devices is dynamic and
     //     can change during a run.  We need to monitor for changes to the
@@ -175,23 +177,21 @@ MidiMixerWindow::setupTabs()
     // For each MidiDevice in the Studio...
     for (const MidiDevice *midiDevice : devices) {
         InstrumentVector instruments = midiDevice->getPresentationInstruments();
-        // Don't add a frame for empty devices
-        if (!instruments.size())
-            continue;
 
         // Get the control parameters that are on the IPB (and hence can
         // be shown here too).
         const ControlList controls = midiDevice->getIPBControlParameters();
 
-        QFrame *tabFrame = new QFrame(m_tabWidget);
-        tabFrame->setContentsMargins(10, 10, 10, 10);
+        QFrame *page = new QFrame(m_tabWidget);
+        page->setProperty("deviceID", midiDevice->getId());
+        page->setContentsMargins(10, 10, 10, 10);
         const QString name = QString("%1 (%2)").
                 arg(QObject::tr(midiDevice->getName().c_str())).
                 arg(deviceCount++);
-        // Add the tab to the QTabWidget.
-        m_tabWidget->addTab(tabFrame, name);
+        // Add the page to the QTabWidget.
+        m_tabWidget->addTab(page, name);
 
-        QHBoxLayout *layout = new QHBoxLayout(tabFrame);
+        QHBoxLayout *layout = new QHBoxLayout(page);
 
         int stripNum = 1;
 
@@ -200,8 +200,7 @@ MidiMixerWindow::setupTabs()
             const InstrumentId instrumentId = instrument->getId();
 
             // Add a new MidiStrip.
-            m_midiStrips.push_back(new MidiStrip(tabFrame, instrumentId, stripNum++));
-            MidiStrip *midiStrip = m_midiStrips.back();
+            MidiStrip *midiStrip = new MidiStrip(page, instrumentId, stripNum++);
             layout->addWidget(midiStrip);
         }
     }
@@ -319,20 +318,6 @@ MidiMixerWindow::sendControllerRefresh()
 }
 
 void
-MidiMixerWindow::slotSynchronise()
-{
-    RG_DEBUG << "slotSynchronise()";
-
-    // This is connected to DeviceManagerDialog::deviceNamesChanged() but it
-    // does nothing.
-
-    // ??? We should probably connect to document changed and refresh
-    //     everything.  See AudioMixerWindow2::slotDocumentModified().
-
-    //setupTabs();
-}
-
-void
 MidiMixerWindow::slotHelpRequested()
 {
     // TRANSLATORS: if the manual is translated into your language, you can
@@ -373,6 +358,51 @@ MidiMixerWindow::changeEvent(QEvent *event)
             ExternalController::MidiMixer;
 
     sendControllerRefresh();
+}
+
+void MidiMixerWindow::slotDocumentModified(bool /*modified*/)
+{
+    // Count number of devices in studio that would be tabs.
+    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+    const size_t studioDeviceCount = devices.size();
+
+    const size_t tabCount = m_tabWidget->count();
+
+    // No change in the number of devices?
+    if (studioDeviceCount == tabCount) {
+        int tabIndex = 0;
+
+        // For each device in the studio, fix the tab name if needed.
+        for (const MidiDevice *device : devices) {
+            const QString deviceName = QString("%1 (%2)").
+                    arg(QObject::tr(device->getName().c_str())).
+                    arg(tabIndex + 1);
+
+            // Make sure the device's name matches the name on its tab.
+            if (m_tabWidget->tabText(tabIndex) != deviceName)
+                m_tabWidget->setTabText(tabIndex, deviceName);
+
+            ++tabIndex;
+        }
+
+        return;
+    }
+
+    // Number of devices has changed.  Recreate all tabs.
+
+    // Works, but leaks at runtime.  Pages are not deleted.
+    //m_tabWidget->clear();
+
+    // While there are still tab pages, delete the first.
+    while (m_tabWidget->count() != 0) {
+        QWidget *page = m_tabWidget->widget(0);
+        m_tabWidget->removeTab(0);
+        // QTabWidget::clear() does not delete the pages, so we have to roll
+        // our own clear loop.  Otherwise we leak at runtime.
+        delete page;
+    }
+
+    setupTabs();
 }
 
 

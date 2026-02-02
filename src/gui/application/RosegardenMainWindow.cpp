@@ -6980,11 +6980,6 @@ RosegardenMainWindow::slotManageMIDIDevices()
     connect(this, &RosegardenMainWindow::documentAboutToChange,
             m_deviceManager.data(), &DeviceManagerDialog::slotCloseButtonPress);
 
-    if (m_midiMixer) {
-         connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
-                 m_midiMixer, &MidiMixerWindow::slotSynchronise);
-    }
-
     connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
                  m_trackParameterBox, &TrackParameterBox::devicesChanged);
 
