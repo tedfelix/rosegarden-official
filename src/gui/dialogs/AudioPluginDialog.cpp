@@ -35,6 +35,7 @@
 #include "sequencer/RosegardenSequencer.h"
 #include "sound/MappedStudio.h"
 #include "sound/PluginIdentifier.h"
+#include "sound/SoundDriver.h"
 #include "gui/dialogs/AudioPluginParameterDialog.h"
 #include "gui/dialogs/AudioPluginPresetDialog.h"
 #include "gui/dialogs/AudioPluginConnectionDialog.h"
@@ -242,18 +243,21 @@ AudioPluginDialog::AudioPluginDialog(QWidget *parent,
     connect(m_paramsButton, &QAbstractButton::clicked,
             this, &AudioPluginDialog::slotParameters);
     m_paramsButton->setEnabled(false);
+
     m_presetButton = new QPushButton(tr("Presets"));
     buttonBox->addButton(m_presetButton, QDialogButtonBox::ActionRole);
     connect(m_presetButton, &QAbstractButton::clicked,
             this, &AudioPluginDialog::slotPresets);
     m_presetButton->setEnabled(false);
+
     m_editConnectionsButton = new QPushButton(tr("Edit connections"));
     buttonBox->addButton(m_editConnectionsButton, QDialogButtonBox::ActionRole);
     connect(m_editConnectionsButton, &QAbstractButton::clicked,
             this, &AudioPluginDialog::slotEditConnections);
     m_editConnectionsButton->setEnabled(false);
+
+    // Editor
     m_editorButton = new QPushButton(tr("Editor"));
-    //RG_DEBUG << "ctor - created Editor button";
     buttonBox->addButton(m_editorButton, QDialogButtonBox::ActionRole);
     connect(m_editorButton, &QAbstractButton::clicked,
             this, &AudioPluginDialog::slotEditor);
@@ -832,37 +836,38 @@ AudioPluginDialog::slotPluginSelected(int index)
     }
 
     if (audioPlugin) {
-        bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
 
-        // original comment is below. The hasGui function seems to work for me
+        // Editor button
+        SoundDriverStatus soundDriverStatus =
+                RosegardenSequencer::getInstance()->getSoundDriverStatus();
+        const bool audioOK = ((soundDriverStatus & AUDIO_OK) != 0);
+        const bool hasGui = m_pluginGUIManager->hasGUI(m_containerId, m_index);
+        m_editorButton->setEnabled(hasGui && audioOK);
+        if (hasGui && !audioOK)
+            m_editorButton->setToolTip(tr("JACK Audio subsystem not available."));
+        else if (!hasGui)
+            m_editorButton->setToolTip(tr("Plugin editor not available."));
+        else
+            m_editorButton->setToolTip("");
 
-        //!!!  I can't get to the bottom of this in a reasonable
-        // amount of time.  m_containerId is always 10013, and m_index
-        // is either 0 (LADSPA plugin) or 999 (DSSI plugin) with no
-        // variation, and hasGUI() always tests false.  This means the
-        // editor button is never enabled, and this is unacceptable
-        // for plugins that have no controls that can be edited from
-        // within Rosegarden.  I'm hacking the button always enabled,
-        // even if no GUI is available.  This seems to fail silently
-        // until the user randomly switches to a plugin that does have
-        // a GUI, in which case its GUI pops up, even though they're
-        // five plugins away from the one where the pushed the button
-        // originally.  Compared with never making it available, this
-        // is tolerable.
-        m_editorButton->setEnabled(hasGui);
-        bool canEditConnections =
-            m_pluginGUIManager->canEditConnections(m_containerId, m_index);
+        const bool canEditConnections =
+                m_pluginGUIManager->canEditConnections(m_containerId, m_index);
         m_editConnectionsButton->setEnabled(canEditConnections);
-        bool hasParameters =
-            m_pluginGUIManager->hasParameters(m_containerId, m_index);
+
+        const bool hasParameters =
+                m_pluginGUIManager->hasParameters(m_containerId, m_index);
         m_paramsButton->setEnabled(hasParameters);
-        bool canUsePresets =
-            m_pluginGUIManager->canUsePresets(m_containerId, m_index);
+
+        const bool canUsePresets =
+                m_pluginGUIManager->canUsePresets(m_containerId, m_index);
         m_presetButton->setEnabled(canUsePresets);
+
     } else {
+
         m_editorButton->setEnabled(false);
         m_presetButton->setEnabled(false);
         m_editConnectionsButton->setEnabled(false);
+
     }
 
     adjustSize();
