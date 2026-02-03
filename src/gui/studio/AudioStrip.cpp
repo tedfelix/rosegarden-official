@@ -58,8 +58,7 @@ constexpr unsigned InvalidChannel = UINT_MAX;
 
 AudioStrip::AudioStrip(QWidget *parent, InstrumentId id) :
     QWidget(parent),
-    m_externalControllerChannel(InvalidChannel),
-    m_layout(new QGridLayout(this))
+    m_externalControllerChannel(InvalidChannel)
 {
     QFont font;
     font.setPointSize(6);
@@ -262,43 +261,45 @@ void AudioStrip::createWidgets()
 
     // Layout
 
+    QGridLayout *gridLayout{new QGridLayout(this)};
+
     // Give the parent control over spacing between strips.
-    m_layout->setContentsMargins(0,0,0,0);
+    gridLayout->setContentsMargins(0,0,0,0);
 
     // Keep the widgets close together.
     const int spacing = 2;
-    m_layout->setSpacing(spacing);
+    gridLayout->setSpacing(spacing);
 
-    m_layout->addWidget(m_label, 0, 0, 1, 2);
+    gridLayout->addWidget(m_label, 0, 0, 1, 2);
 
     if (m_input)
-        m_layout->addWidget(m_input->getWidget(), 1, 0, 1, 2);
+        gridLayout->addWidget(m_input->getWidget(), 1, 0, 1, 2);
     else
-        m_layout->setRowMinimumHeight(1, 15 + spacing);
+        gridLayout->setRowMinimumHeight(1, 15 + spacing);
 
     if (m_output)
-        m_layout->addWidget(m_output->getWidget(), 2, 0, 1, 2);
+        gridLayout->addWidget(m_output->getWidget(), 2, 0, 1, 2);
     else
-        m_layout->setRowMinimumHeight(2, 15 + spacing);
+        gridLayout->setRowMinimumHeight(2, 15 + spacing);
 
-    m_layout->addWidget(m_fader, 3, 0);
-    m_layout->addWidget(m_meter, 3, 1);
+    gridLayout->addWidget(m_fader, 3, 0);
+    gridLayout->addWidget(m_meter, 3, 1);
 
     if (m_pan)
-        m_layout->addWidget(m_pan, 4, 0);
+        gridLayout->addWidget(m_pan, 4, 0);
     else
-        m_layout->setRowMinimumHeight(4, 20 + spacing);
+        gridLayout->setRowMinimumHeight(4, 20 + spacing);
 
     if (m_stereoButton)
-        m_layout->addWidget(m_stereoButton, 4, 1);
+        gridLayout->addWidget(m_stereoButton, 4, 1);
 
     // For each plugin push button
     for (size_t i = 0; i < numberOfPlugins; ++i) {
         // If there's a plugin push button for this spot
         if (i < m_plugins.size())
-            m_layout->addWidget(m_plugins[i], 5+i, 0, 1, 2);
+            gridLayout->addWidget(m_plugins[i], 5+i, 0, 1, 2);
         else  // No button, just put in a spacer.
-            m_layout->setRowMinimumHeight(5+i, 15 + spacing);
+            gridLayout->setRowMinimumHeight(5+i, 15 + spacing);
     }
 }
 

@@ -68,8 +68,6 @@ private:
     Fader *m_volumeFader{nullptr};
     std::vector<Rotary *> m_controllerRotaries;
 
-    QVBoxLayout *m_layout;
-
     void createWidgets(int stripNumber);
 
     /// Meter update timer.
