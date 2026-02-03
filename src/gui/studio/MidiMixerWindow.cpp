@@ -164,11 +164,23 @@ MidiMixerWindow::MidiMixerWindow() :
 void
 MidiMixerWindow::setupTabs()
 {
+    // Clear
 
-    // ??? This is done only once.  But the number of devices is dynamic and
-    //     can change during a run.  We need to monitor for changes to the
-    //     Studio and update this display to match.  AudioMixerWindow2 does
-    //     this.  See AudioMixerWindow2::updateWidgets().
+    // Works, but leaks at runtime.  Pages are not deleted.
+    //m_tabWidget->clear();
+
+    // While there are still tab pages, delete the first.
+    while (m_tabWidget->count() != 0) {
+        QWidget *page = m_tabWidget->widget(0);
+        m_tabWidget->removeTab(0);
+        // QTabWidget::clear() does not delete the pages, so we have to roll
+        // our own clear loop.  Otherwise we leak at runtime.
+        delete page;
+    }
+
+    m_controlsCache.clear();
+
+    // Fill
 
     const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
 
@@ -178,9 +190,9 @@ MidiMixerWindow::setupTabs()
     for (const MidiDevice *midiDevice : devices) {
         InstrumentVector instruments = midiDevice->getPresentationInstruments();
 
-        // Get the control parameters that are on the IPB (and hence can
-        // be shown here too).
-        const ControlList controls = midiDevice->getIPBControlParameters();
+        // Cache the control parameters so we can detect changes.
+        m_controlsCache[midiDevice->getId()] =
+                midiDevice->getIPBControlParameters();
 
         QFrame *page = new QFrame(m_tabWidget);
         page->setProperty("deviceID", midiDevice->getId());
@@ -370,37 +382,47 @@ void MidiMixerWindow::slotDocumentModified(bool /*modified*/)
 
     // No change in the number of devices?
     if (studioDeviceCount == tabCount) {
-        int tabIndex = 0;
 
-        // For each device in the studio, fix the tab name if needed.
-        for (const MidiDevice *device : devices) {
-            const QString deviceName = QString("%1 (%2)").
-                    arg(QObject::tr(device->getName().c_str())).
-                    arg(tabIndex + 1);
+        // Check the controllers for changes.
 
-            // Make sure the device's name matches the name on its tab.
-            if (m_tabWidget->tabText(tabIndex) != deviceName)
-                m_tabWidget->setTabText(tabIndex, deviceName);
+        bool controllersMatch = true;
 
-            ++tabIndex;
+        // For each device
+        for (const MidiDevice *midiDevice : devices) {
+
+            const ControlList controls = midiDevice->getIPBControlParameters();
+
+            // If the controllers don't match the cached versions
+            if (controls != m_controlsCache[midiDevice->getId()]) {
+                // Indicate mismatch.
+                controllersMatch = false;
+                break;
+            }
         }
 
-        return;
+        // If no changes to the controllers...
+        if (controllersMatch) {
+            int tabIndex = 0;
+
+            // For each device in the studio, fix the tab name if needed.
+            for (const MidiDevice *device : devices) {
+                const QString deviceName = QString("%1 (%2)").
+                        arg(QObject::tr(device->getName().c_str())).
+                        arg(tabIndex + 1);
+
+                // Make sure the device's name matches the name on its tab.
+                if (m_tabWidget->tabText(tabIndex) != deviceName)
+                    m_tabWidget->setTabText(tabIndex, deviceName);
+
+                ++tabIndex;
+            }
+
+            return;
+        }
     }
 
-    // Number of devices has changed.  Recreate all tabs.
-
-    // Works, but leaks at runtime.  Pages are not deleted.
-    //m_tabWidget->clear();
-
-    // While there are still tab pages, delete the first.
-    while (m_tabWidget->count() != 0) {
-        QWidget *page = m_tabWidget->widget(0);
-        m_tabWidget->removeTab(0);
-        // QTabWidget::clear() does not delete the pages, so we have to roll
-        // our own clear loop.  Otherwise we leak at runtime.
-        delete page;
-    }
+    // Number of devices has changed, or controllers have changed.
+    // Recreate all tabs.
 
     setupTabs();
 }

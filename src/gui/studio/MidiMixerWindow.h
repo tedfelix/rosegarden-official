@@ -20,11 +20,11 @@
 
 #include "MixerWindow.h"
 
+#include "base/Controllable.h"
+#include "base/Device.h"
 #include "gui/general/ActionFileClient.h"
 
-#include <memory>
-#include <utility>
-#include <vector>
+#include <map>
 
 class QWidget;
 class QTabWidget;
@@ -89,6 +89,9 @@ private:
      * sync with whichever Mixer window is active.
      */
     void sendControllerRefresh();
+
+    // Cache to detect changes to controllers so we can refresh when needed.
+    std::map<DeviceId, ControlList> m_controlsCache;
 
 };
 

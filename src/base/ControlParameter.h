@@ -51,7 +51,6 @@ public:
     //     has no dtor.  Implementation is bitwise.  This can *just go away*!
     ControlParameter& operator=(const ControlParameter &control);
 
-    // ??? Appears to be unused.  Confirm and remove.
     bool operator==(const ControlParameter &control) const;
 
     // ??? Appears to be unused.  Confirm and remove.
