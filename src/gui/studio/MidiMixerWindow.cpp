@@ -57,37 +57,6 @@ namespace Rosegarden
 {
 
 
-namespace
-{
-
-    typedef std::vector<MidiDevice *> MidiDeviceVector;
-
-    // ??? Studio member function candidate.
-    MidiDeviceVector getMidiOutputDevices(const Studio *studio)
-    {
-        MidiDeviceVector devices;
-
-        // For each Device in the Studio...
-        for (Device *device : studio->getDevicesRef()) {
-            MidiDevice *midiDevice =
-                    dynamic_cast<MidiDevice *>(device);
-            if (!midiDevice)
-                continue;
-            if (midiDevice->isInput())
-                continue;
-            // Don't include devices without instruments.
-            // ??? Is this even possible?
-            if (midiDevice->getPresentationInstruments().size() == 0)
-                continue;
-
-            devices.push_back(midiDevice);
-        }
-
-        return devices;
-    }
-
-}
-
 MidiMixerWindow::MidiMixerWindow() :
     MixerWindow(RosegardenMainWindow::self(),
                 RosegardenDocument::currentDocument)
@@ -194,7 +163,7 @@ MidiMixerWindow::setupTabs()
 
     // Fill
 
-    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+    const MidiDeviceVector devices = m_studio->getMidiOutputDevices();
 
     int deviceCount = 1;
 
@@ -260,7 +229,7 @@ MidiMixerWindow::slotExternalController(const MappedEvent *event)
 
     // Get the MidiDevice for the current tab.
 
-    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+    const MidiDeviceVector devices = m_studio->getMidiOutputDevices();
 
     const size_t currentTabIndex = m_tabWidget->currentIndex();
     if (currentTabIndex >= devices.size())
@@ -329,7 +298,7 @@ MidiMixerWindow::sendControllerRefresh()
 
     // Get the MidiDevice for the current tab.
 
-    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+    const MidiDeviceVector devices = m_studio->getMidiOutputDevices();
 
     const size_t currentTabIndex = m_tabWidget->currentIndex();
     if (currentTabIndex >= devices.size())
@@ -398,7 +367,7 @@ MidiMixerWindow::changeEvent(QEvent *event)
 void MidiMixerWindow::slotDocumentModified(bool /*modified*/)
 {
     // Count number of devices in studio that would be tabs.
-    const MidiDeviceVector devices = getMidiOutputDevices(m_studio);
+    const MidiDeviceVector devices = m_studio->getMidiOutputDevices();
     const size_t studioDeviceCount = devices.size();
 
     const size_t tabCount = m_tabWidget->count();
