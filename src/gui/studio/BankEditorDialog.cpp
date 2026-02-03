@@ -180,7 +180,7 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
 
     setupActions();
 
-    if (defaultDevice != Device::NO_DEVICE)
+    if (defaultDevice != NO_DEVICE)
         setCurrentDevice(defaultDevice);
 
     // Restore window geometry and header state.
@@ -789,7 +789,7 @@ BankEditorDialog::slotDelete()
             // Clear the clipboard to avoid pasting a non-existent bank.
             findAction("edit_paste")->setEnabled(false);
             m_clipboard.itemType = ItemType::NONE;
-            m_clipboard.deviceId = Device::NO_DEVICE;
+            m_clipboard.deviceId = NO_DEVICE;
             m_clipboard.bank = -1;
             m_clipboard.keymapName = "";
         }
@@ -893,7 +893,7 @@ BankEditorDialog::slotDeleteAll()
     if (m_clipboard.deviceId == device->getId()) {
         findAction("edit_paste")->setEnabled(false);
         m_clipboard.itemType = ItemType::NONE;
-        m_clipboard.deviceId = Device::NO_DEVICE;
+        m_clipboard.deviceId = NO_DEVICE;
         m_clipboard.bank = -1;
         m_clipboard.keymapName = "";
     }

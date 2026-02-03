@@ -1505,7 +1505,7 @@ RosegardenSequencer::applyFiltering(MappedEventList *mC,
         // If this event matches the filter, erase it from the list
         if (((*j)->getType() & filter) ||
                 (filterControlDevice && ((*j)->getRecordedDevice() ==
-                                         Device::EXTERNAL_CONTROLLER))) {
+                                         EXTERNAL_CONTROLLER))) {
             mC->erase(j);
         }
     }

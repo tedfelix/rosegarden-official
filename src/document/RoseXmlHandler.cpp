@@ -237,7 +237,7 @@ RoseXmlHandler::RoseXmlHandler(RosegardenDocument *doc,
     m_foundTempo(false),
     m_section(NoSection),
     m_device(nullptr),
-    m_deviceRunningId(Device::NO_DEVICE),
+    m_deviceRunningId(NO_DEVICE),
     m_deviceInstrumentBase(MidiInstrumentBase),
     m_deviceReadInstrumentBase(0),
     m_percussion(false),
@@ -2724,7 +2724,7 @@ RoseXmlHandler::skipToNextPlayDevice()
         MidiDevice *md = dynamic_cast<MidiDevice *>(*i);
 
         if (md && md->getDirection() == MidiDevice::Play) {
-            if (m_deviceRunningId == Device::NO_DEVICE ||
+            if (m_deviceRunningId == NO_DEVICE ||
                 md->getId() > m_deviceRunningId) {
 
                 RG_DEBUG << "skipToNextPlayDevice(): found next device: id " << md->getId();

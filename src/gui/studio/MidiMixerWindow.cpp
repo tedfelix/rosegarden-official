@@ -166,7 +166,7 @@ MidiMixerWindow::setupTabs()
 {
     // Preserve selected tab's device ID.
 
-    DeviceId selectedDeviceId = Device::NO_DEVICE;
+    DeviceId selectedDeviceId = NO_DEVICE;
     const int currentIndex = m_tabWidget->currentIndex();
 
     if (currentIndex != -1) {

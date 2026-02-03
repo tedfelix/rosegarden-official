@@ -292,7 +292,7 @@ ControlBlock::getTrackDeviceFilter(TrackId trackId) const
 {
     if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
         return m_trackInfo[trackId].m_deviceFilter;
-    return Device::ALL_DEVICES;
+    return ALL_DEVICES;
 }
 #endif
 
@@ -375,7 +375,7 @@ getInstAndChanForEvent(bool recording, DeviceId deviceId, char channel)
             continue;
 
         bool deviceMatch =
-                (track.m_deviceFilter == Device::ALL_DEVICES  ||
+                (track.m_deviceFilter == ALL_DEVICES  ||
                  track.m_deviceFilter == deviceId);
         bool channelMatch =
                 (track.m_channelFilter == -1  ||  // all channels

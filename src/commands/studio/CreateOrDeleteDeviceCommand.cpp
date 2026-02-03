@@ -54,7 +54,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(
     m_type(type),
     m_direction(direction),
     m_connection(connection),
-    m_deviceId(Device::NO_DEVICE),
+    m_deviceId(NO_DEVICE),
     m_baseInstrumentId(MidiInstrumentBase),
     m_deviceCreated(false),
     m_withData(withData),
@@ -186,7 +186,7 @@ CreateOrDeleteDeviceCommand::execute()
         // Delete the device from the Studio.
         m_studio->removeDevice(m_deviceId);
 
-        m_deviceId = Device::NO_DEVICE;
+        m_deviceId = NO_DEVICE;
 
         m_deviceCreated = false;
     }

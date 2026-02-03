@@ -1871,7 +1871,7 @@ RosegardenDocument::insertRecordedMidi(const MappedEventList &mC)
         // ??? Is this how we handle external controller events during record?
         //     Or is this unnecessary?  Need to remove and see if it affects
         //     external controller functionality during record.
-        if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
+        if ((*i)->getRecordedDevice() == EXTERNAL_CONTROLLER) {
 
             ExternalController::self().processEvent(*i);
 
@@ -2323,7 +2323,7 @@ RosegardenDocument::insertRecordedEvent(Event *ev, int device, int channel, bool
             int dev_filter = track->getMidiInputDevice();
 
             if (((chan_filter < 0) || (chan_filter == channel)) &&
-                ((dev_filter == int(Device::ALL_DEVICES)) || (dev_filter == device))) {
+                ((dev_filter == int(ALL_DEVICES)) || (dev_filter == device))) {
 
                 // Insert the event into the segment.
                 it = recordMIDISegment->insert(new Event(*ev));

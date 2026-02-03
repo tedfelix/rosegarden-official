@@ -21,7 +21,7 @@ namespace Rosegarden
 
 MappedDevice::MappedDevice():
     std::vector<MappedInstrument*>(),
-    m_id(Device::NO_DEVICE),
+    m_id(NO_DEVICE),
     m_type(Device::Midi),
     m_name("Unconfigured device"),
     m_connection(""),
