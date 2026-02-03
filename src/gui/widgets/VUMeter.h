@@ -113,8 +113,8 @@ private slots:
 private:
 
     // Hide copy ctor and op= due to non-trivial dtor.
-    VUMeter(const VUMeter &);
-    VUMeter &operator=(const VUMeter &);
+    VUMeter(const VUMeter &) = delete;
+    VUMeter &operator=(const VUMeter &) = delete;
 
     const VUMeterType m_type;
     const VUAlignment m_alignment;

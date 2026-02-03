@@ -349,13 +349,14 @@ VUMeter::setLevel(double leftLeveldB, double rightLeveldB, bool record)
 void
 VUMeter::paintEvent(QPaintEvent *e)
 {
-//    RG_DEBUG << "VUMeter::paintEvent - height = " << height();
+
+    //RG_DEBUG << "VUMeter::paintEvent - height = " << height();
     QPainter paint(this);
 
     paint.setRenderHint(QPainter::Antialiasing, false);
 
-    int w = width();
-    int h = height();
+    const int w = width();
+    const int h = height();
 
     if (m_type == VUMeter::AudioPeakHoldShort ||
         m_type == VUMeter::AudioPeakHoldLong ||
@@ -369,28 +370,34 @@ VUMeter::paintEvent(QPaintEvent *e)
         paint.drawPoint(w, 0);
         paint.drawPoint(0, h - 1);
         paint.drawPoint(w, h - 1);
+
     } else if (m_type == VUMeter::FixedHeightVisiblePeakHold) {
-        if (m_decayTimerLeft->isActive())
-            drawMeterLevel(&paint);
-        else {
-            meterStop();
-//&&            drawFrame(&paint);  //Q3Support -- not needed?
-            paint.end();
-            QLabel::paintEvent(e);
-        }
-    } else {
+
         if (m_decayTimerLeft->isActive()) {
             drawMeterLevel(&paint);
         } else {
             meterStop();
-            QColor background = palette().color(backgroundRole());
+            const QColor background = palette().color(backgroundRole());
+            paint.fillRect(0, 0, w, h, background);
+            paint.end();
+            QLabel::paintEvent(e);
+        }
+
+    } else {
+
+        if (m_decayTimerLeft->isActive()) {
+            drawMeterLevel(&paint);
+        } else {
+            meterStop();
+            const QColor background = palette().color(backgroundRole());
             // Fill with background grey so the black text (QLabel track
             // number) will be visible.
             paint.fillRect(0, 0, w, h, background);
             paint.end();
             // Let QLabel draw the track number text.
             QLabel::paintEvent(e);			
-	}
+        }
+
     }
 }
 
