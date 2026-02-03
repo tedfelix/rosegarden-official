@@ -164,6 +164,18 @@ MidiMixerWindow::MidiMixerWindow() :
 void
 MidiMixerWindow::setupTabs()
 {
+    // Preserve selected tab's device ID.
+
+    DeviceId selectedDeviceId = Device::NO_DEVICE;
+    const int currentIndex = m_tabWidget->currentIndex();
+
+    if (currentIndex != -1) {
+        QWidget *currentPage = m_tabWidget->widget(currentIndex);
+        selectedDeviceId = currentPage->property("deviceID").toUInt();
+    }
+
+    int selectedIndex = -1;
+
     // Clear
 
     // Works, but leaks at runtime.  Pages are not deleted.
@@ -188,7 +200,10 @@ MidiMixerWindow::setupTabs()
 
     // For each MidiDevice in the Studio...
     for (const MidiDevice *midiDevice : devices) {
-        InstrumentVector instruments = midiDevice->getPresentationInstruments();
+
+        // Found the one that was selected before?  Remember the index.
+        if (selectedDeviceId == midiDevice->getId())
+            selectedIndex = deviceCount - 1;
 
         // Cache the control parameters so we can detect changes.
         m_controlsCache[midiDevice->getId()] =
@@ -206,6 +221,8 @@ MidiMixerWindow::setupTabs()
         QHBoxLayout *layout = new QHBoxLayout(page);
 
         int stripNum = 1;
+        const InstrumentVector instruments =
+                midiDevice->getPresentationInstruments();
 
         // For each Instrument in this MidiDevice...
         for (const Instrument *instrument : instruments) {
@@ -215,7 +232,13 @@ MidiMixerWindow::setupTabs()
             MidiStrip *midiStrip = new MidiStrip(page, instrumentId, stripNum++);
             layout->addWidget(midiStrip);
         }
+
     }
+
+    // Restore selected tab
+
+    if (selectedIndex != -1)
+        m_tabWidget->setCurrentIndex(currentIndex);
 }
 
 void
