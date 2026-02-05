@@ -18,45 +18,44 @@
 
 #include "XmlExportable.h"
 #include "Instrument.h"
+
 #include <string>
 #include <vector>
 #include <list>
 
-// A Device can query underlying hardware/sound APIs to
-// generate a list of Instruments.
-//
 
 namespace Rosegarden
 {
 
 
 class Composition;
-class Instrument;
 class Controllable;
 class AllocateChannels;
 class DeviceObserver;
 
 typedef unsigned int DeviceId;
+constexpr DeviceId NO_DEVICE = 10000;
+constexpr DeviceId ALL_DEVICES = 10001;
+// The "external controller" ALSA port that we create.
+constexpr DeviceId EXTERNAL_CONTROLLER = 10002;
+
 typedef std::vector<Instrument *> InstrumentVector;
 
+
+/// Abstract Base Class for AudioDevice, MidiDevice, and SoftSynthDevice.
 class Device : public XmlExportable
 {
 public:
-    typedef enum
+
+    enum DeviceType
     {
         Midi,
         Audio,
         SoftSynth
-    } DeviceType;
+    };
 
-    // special device ids
-    static const DeviceId NO_DEVICE;
-    static const DeviceId ALL_DEVICES;
-    // The "external controller" ALSA port that we create.
-    static const DeviceId EXTERNAL_CONTROLLER;
-
-    Device(DeviceId id, const std::string &name, DeviceType type):
-      m_name(name), m_type(type), m_id(id), m_notificationsBlocked(false) { }
+    Device(DeviceId id, const std::string &name, DeviceType type) :
+            m_name(name), m_type(type), m_id(id)  { }
 
     ~Device() override;
 
@@ -118,31 +117,38 @@ public:
     virtual void blockNotify(bool block);
 
 protected:
+
     virtual void addInstrument(Instrument *) = 0;
     virtual void renameInstruments() = 0;
 
     void notifyDeviceModified();
 
-    InstrumentVector     m_instruments;
-    std::string        m_name;
-    DeviceType         m_type;
-    DeviceId           m_id;
+    std::string m_name;
+    DeviceType m_type;
+    DeviceId m_id;
 
-    bool m_notificationsBlocked;
+    InstrumentVector m_instruments;
+
+    bool m_notificationsBlocked{false};
 
  private:
+
     typedef std::list<DeviceObserver *> ObserverList;
     ObserverList m_observers;
+
 };
+
 
 class DeviceObserver
 {
- public:
-    virtual ~DeviceObserver() {}
+public:
 
-    virtual void deviceModified(Device*) { }
+    virtual ~DeviceObserver()  { }
+
+    virtual void deviceModified(Device *)  { }
 
 };
+
 
 }
 

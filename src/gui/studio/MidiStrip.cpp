@@ -19,7 +19,6 @@
 
 #include "MidiStrip.h"
 
-//#include "MidiMixerWindow.h"
 #include "MidiMixerVUMeter.h"
 
 #include "base/Controllable.h"  // ControlList
@@ -42,11 +41,8 @@ namespace Rosegarden
 
 MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID, int stripNumber) :
     QWidget(parent),
-    m_id(instrumentID),
-    m_layout(new QVBoxLayout(this))
+    m_id(instrumentID)
 {
-    m_layout->setContentsMargins(1,1,1,1);
-
     connect(Instrument::getStaticSignals().data(),
                 &InstrumentStaticSignals::controlChange,
             this, &MidiStrip::slotControlChange);
@@ -76,6 +72,9 @@ void MidiStrip::createWidgets(int stripNumber)
     if (!midiDevice)
         return;
 
+    QVBoxLayout *vBoxLayout{new QVBoxLayout(this)};
+    vBoxLayout->setContentsMargins(1,1,1,1);
+
     // Get the control parameters that are on the IPB (and hence can
     // be shown here too).
     const ControlList controls = midiDevice->getIPBControlParameters();
@@ -96,7 +95,7 @@ void MidiStrip::createWidgets(int stripNumber)
         QFont font = label->font();
         font.setPointSize((font.pointSize() * 8) / 10);
         label->setFont(font);
-        m_layout->addWidget(label, 0, Qt::AlignHCenter | Qt::AlignBottom);
+        vBoxLayout->addWidget(label, 0, Qt::AlignHCenter | Qt::AlignBottom);
 
         // Controller rotary
         const MidiByte controllerNumber =
@@ -137,7 +136,7 @@ void MidiStrip::createWidgets(int stripNumber)
         connect(rotary, &Rotary::valueChanged,
                 this, &MidiStrip::slotControllerChanged);
 
-        m_layout->addWidget(rotary, 0, Qt::AlignCenter);
+        vBoxLayout->addWidget(rotary, 0, Qt::AlignCenter);
 
         m_controllerRotaries.push_back(rotary);
     }
@@ -148,7 +147,7 @@ void MidiStrip::createWidgets(int stripNumber)
             VUMeter::FixedHeightVisiblePeakHold,  // type
             6,  // width
             30);  // height
-    m_layout->addWidget(meter, 0, Qt::AlignCenter);
+    vBoxLayout->addWidget(meter, 0, Qt::AlignCenter);
     m_vuMeter = meter;
 
     // Volume
@@ -166,14 +165,14 @@ void MidiStrip::createWidgets(int stripNumber)
     fader->setFader(float(volumeValue));
     connect(fader, &Fader::faderChanged,
             this, &MidiStrip::slotFaderLevelChanged);
-    m_layout->addWidget(fader, 0, Qt::AlignCenter);
+    vBoxLayout->addWidget(fader, 0, Qt::AlignCenter);
     m_volumeFader = fader;
 
     // Instrument number
     QLabel *instrumentNumberLabel = new QLabel(
             QString("%1").arg(stripNumber),
             this);
-    m_layout->addWidget(
+    vBoxLayout->addWidget(
             instrumentNumberLabel, 0, Qt::AlignCenter);
 }
 

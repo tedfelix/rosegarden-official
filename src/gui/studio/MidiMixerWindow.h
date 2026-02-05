@@ -21,29 +21,21 @@
 #include "MixerWindow.h"
 
 #include "base/Controllable.h"
+#include "base/Device.h"
 #include "gui/general/ActionFileClient.h"
 
-#include <memory>
-#include <utility>
-#include <vector>
+#include <map>
 
 class QWidget;
 class QTabWidget;
-class QString;
-class QFrame;
 
 
 namespace Rosegarden
 {
 
 
-class Fader;
 class MappedEvent;
-class MidiDevice;
-class MidiMixerVUMeter;
 class MidiStrip;
-class RosegardenDocument;
-class Rotary;
 
 
 /// The MIDI Mixer.
@@ -55,16 +47,9 @@ public:
 
     MidiMixerWindow();
 
-public slots:
-
-    /// Used by DeviceManagerDialog to update Device names.
-    /**
-     * ??? I think this is going away.  We need to handle document modified
-     *     and refresh like AMW2 does.  See AudioMixerWindow2::updateWidgets().
-     */
-    void slotSynchronise();
-
 private slots:
+
+    void slotDocumentModified(bool modified);
 
     /// Calls sendControllerRefresh().
     void slotCurrentTabChanged(int);
@@ -105,8 +90,8 @@ private:
      */
     void sendControllerRefresh();
 
-    typedef std::vector<MidiStrip *> MidiStripVector;
-    MidiStripVector m_midiStrips;
+    // Cache to detect changes to controllers so we can refresh when needed.
+    std::map<DeviceId, ControlList> m_controlsCache;
 
 };
 

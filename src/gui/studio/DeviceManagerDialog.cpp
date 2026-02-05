@@ -389,7 +389,7 @@ DeviceManagerDialog::updateDevicesList
      * in_out_direction must be MidiDevice::Play or MidiDevice::Record
      **/
 //         * col: the column in the treeWidget to show the connection-name (port)
-    DeviceId devId = Device::NO_DEVICE;
+    DeviceId devId = NO_DEVICE;
     MidiDevice *mdev;
     QString outPort;
     QList < MidiDevice * >midiDevices;
@@ -856,7 +856,7 @@ DeviceManagerDialog::slotDeletePlaybackDevice()
         return;
 
     const DeviceId deviceID = mdev->getId();
-    if (deviceID == Device::NO_DEVICE)
+    if (deviceID == NO_DEVICE)
         return;
 
     // Make sure the Device is not being used by a Track.
@@ -929,7 +929,7 @@ DeviceManagerDialog::slotDeleteRecordDevice()
         return;
     DeviceId id = mdev->getId();
 
-    if (id == Device::NO_DEVICE)
+    if (id == NO_DEVICE)
         return;
     CreateOrDeleteDeviceCommand *command =
             new CreateOrDeleteDeviceCommand(m_studio, id);
@@ -949,7 +949,7 @@ DeviceManagerDialog::slotManageBanksOfPlaybackDevice()
     if (!mdev)
         return;
     DeviceId devId = mdev->getId();
-    if (devId == Device::NO_DEVICE)
+    if (devId == NO_DEVICE)
         return;
 
     emit editBanks(devId);
@@ -966,7 +966,7 @@ DeviceManagerDialog::slotEditControllerDefinitions()
     if (!mdev)
         return;
     DeviceId devId = mdev->getId();
-    if (devId == Device::NO_DEVICE)
+    if (devId == NO_DEVICE)
         return;
 
     emit editControllers(devId);

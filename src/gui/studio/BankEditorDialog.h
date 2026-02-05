@@ -195,7 +195,7 @@ private:
     struct Clipboard
     {
         ItemType itemType{ItemType::NONE};
-        DeviceId deviceId{Device::NO_DEVICE};
+        DeviceId deviceId{NO_DEVICE};
         int bank{-1};
         QString keymapName;
     };

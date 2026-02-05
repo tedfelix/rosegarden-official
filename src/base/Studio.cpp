@@ -1177,5 +1177,29 @@ Studio::fixSubmasters(int count)
     }
 }
 
+MidiDeviceVector
+Studio::getMidiOutputDevices() const
+{
+    MidiDeviceVector devices;
+
+    // For each Device in the Studio...
+    for (Device *device : m_devices) {
+        MidiDevice *midiDevice =
+                dynamic_cast<MidiDevice *>(device);
+        if (!midiDevice)
+            continue;
+        if (midiDevice->isInput())
+            continue;
+        // Don't include devices without instruments.
+        // ??? Is this even possible?
+        if (midiDevice->getPresentationInstruments().size() == 0)
+            continue;
+
+        devices.push_back(midiDevice);
+    }
+
+    return devices;
+}
+
 
 }

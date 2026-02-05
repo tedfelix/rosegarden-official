@@ -18,21 +18,17 @@
 
 #include "Device.h"
 
-#include "base/Controllable.h"
-#include "base/MidiDevice.h"
-#include "base/SoftSynthDevice.h"
+#include "Composition.h"
+#include "Controllable.h"
+#include "MidiDevice.h"
+#include "SoftSynthDevice.h"
+
 #include "misc/Debug.h"
 #include "document/RosegardenDocument.h"
-#include "base/Composition.h"
+
 
 namespace Rosegarden
 {
-
-
-const DeviceId Device::NO_DEVICE = 10000;
-const DeviceId Device::ALL_DEVICES = 10001;
-// "external controller" port.
-const DeviceId Device::EXTERNAL_CONTROLLER = 10002;
 
 
 Device::~Device()
@@ -130,9 +126,16 @@ void Device::removeObserver(DeviceObserver *obs)
 
 void Device::notifyDeviceModified()
 {
-    if (m_notificationsBlocked) return;
-    for(ObserverList::iterator i = m_observers.begin();
-        i != m_observers.end(); ++i) {
+    if (m_notificationsBlocked)
+        return;
+
+    // ??? CRASH: This will crash if the observer removes itself while
+    //            handling a notification.  Need to use the "increment before
+    //            use" idiom.
+
+    for (ObserverList::iterator i = m_observers.begin();
+         i != m_observers.end();
+         ++i) {
         (*i)->deviceModified(this);
     }
 

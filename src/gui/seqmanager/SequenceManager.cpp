@@ -737,7 +737,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
          it != mC.end();
          ++it) {
         // Skip events destined for the "external controller" port.
-        if ((*it)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER)
+        if ((*it)->getRecordedDevice() == EXTERNAL_CONTROLLER)
             continue;
 
         // Skip events that are filtered.
@@ -1010,7 +1010,7 @@ SequenceManager::processAsynchronousMidi(const MappedEventList &mC,
                 }
             }
         }
-        if ((*i)->getRecordedDevice() == Device::EXTERNAL_CONTROLLER) {
+        if ((*i)->getRecordedDevice() == EXTERNAL_CONTROLLER) {
             RG_DEBUG << "processAsynchronousMidi(): Calling ExternalController::processEvent()...";
             ExternalController::self().processEvent(*i);
         }

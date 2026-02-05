@@ -44,6 +44,7 @@ typedef std::vector<Instrument *> InstrumentVector;
 typedef std::vector<Buss *> BussVector;
 typedef std::vector<RecordIn *> RecordInVector;
 typedef std::vector<Device *> DeviceVector;
+typedef std::vector<MidiDevice *> MidiDeviceVector;
 
 
 /// Holds Device objects.
@@ -193,12 +194,12 @@ public:
     //
     const MidiMetronome* getMetronomeFromDevice(DeviceId id) const;
 
-    // Return the device list
-    //
+    /// Return the device list
     DeviceVector *getDevices()  { return &m_devices; }
     const DeviceVector *getDevices() const  { return &m_devices; }
     DeviceVector &getDevicesRef()  { return m_devices; }
     const DeviceVector &getDevicesRef() const  { return m_devices; }
+    MidiDeviceVector getMidiOutputDevices() const;
 
     /// Get an available Instrument on the first MIDI Device.
     /**

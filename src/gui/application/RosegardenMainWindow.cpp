@@ -6980,11 +6980,6 @@ RosegardenMainWindow::slotManageMIDIDevices()
     connect(this, &RosegardenMainWindow::documentAboutToChange,
             m_deviceManager.data(), &DeviceManagerDialog::slotCloseButtonPress);
 
-    if (m_midiMixer) {
-         connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
-                 m_midiMixer, &MidiMixerWindow::slotSynchronise);
-    }
-
     connect(m_deviceManager.data(), &DeviceManagerDialog::deviceNamesChanged,
                  m_trackParameterBox, &TrackParameterBox::devicesChanged);
 
@@ -7106,14 +7101,14 @@ RosegardenMainWindow::slotEditControlParameters(DeviceId device)
 void
 RosegardenMainWindow::slotEditBanks()
 {
-    slotEditBanks(Device::NO_DEVICE);
+    slotEditBanks(NO_DEVICE);
 }
 
 void
 RosegardenMainWindow::slotEditBanks(DeviceId device)
 {
     if (m_bankEditor) {
-        if (device != Device::NO_DEVICE)
+        if (device != NO_DEVICE)
             m_bankEditor->setCurrentDevice(device);
         m_bankEditor->show();
         m_bankEditor->raise();

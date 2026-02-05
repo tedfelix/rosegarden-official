@@ -245,19 +245,21 @@ AudioManagerDialog::slotPopulateFileList()
         bool selected;
     };
     std::list<SelectData> selectDataList;
-    QTreeWidgetItemIterator it(m_fileList);
-    while (*it) {
-        const AudioListItem *aItem = dynamic_cast<AudioListItem*>(*it);
-        if (! aItem) continue;
+    // For each file on the UI, add to selectDataList.
+    for (QTreeWidgetItemIterator itemIter(m_fileList); *itemIter; ++itemIter) {
+        const AudioListItem *aItem = dynamic_cast<AudioListItem *>(*itemIter);
+        if (!aItem)
+            continue;
+
         SelectData sd;
         sd.id = aItem->getId();
         sd.segment = aItem->getSegment();
         sd.selected = false;
         sd.expanded = false;
-        if ((*it)->isSelected()) sd.selected = true;
-        if ((*it)->isExpanded()) sd.expanded = true;
+        if ((*itemIter)->isSelected()) sd.selected = true;
+        if ((*itemIter)->isExpanded()) sd.expanded = true;
+
         selectDataList.push_back(sd);
-        ++it;
     }
 
     // We don't want the selection changes to be propagated
@@ -290,10 +292,10 @@ AudioManagerDialog::slotPopulateFileList()
     //
     std::vector<Segment*> segments;
 
-    for (Composition::iterator it = m_doc->getComposition().begin();
-            it != m_doc->getComposition().end(); ++it) {
-        if ((*it)->getType() == Segment::Audio)
-            segments.push_back(*it);
+    for (Composition::iterator it2 = m_doc->getComposition().begin();
+            it2 != m_doc->getComposition().end(); ++it2) {
+        if ((*it2)->getType() == Segment::Audio)
+            segments.push_back(*it2);
     }
 
     RealTime segmentDuration;
@@ -540,9 +542,8 @@ AudioManagerDialog::slotExportAudio()
 
     } else {
         // save multiple files
-        WAVAudioFile* firstFile = *(WavAudioFiles.begin());
+        const WAVAudioFile* firstFile = *(WavAudioFiles.begin());
         QString fpath = firstFile->getAbsoluteFilePath();
-        QFileInfo fi(fpath);
         QString destDir =
             FileDialog::getExistingDirectory
             (this,  // parent
@@ -664,7 +665,7 @@ AudioManagerDialog::slotPlayPreview()
         RG_WARNING << "AudioManagerDialog::slotPlayPreview() - nothing selected!";
         return;
     }
-    AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
+    const AudioListItem *item = dynamic_cast<AudioListItem*>(til[0]);
 
     if (item == nullptr || audioFile == nullptr)
         return ;
@@ -1301,7 +1302,7 @@ void AudioManagerDialog::getSelectedIds(std::set<AudioFileId>& ids) const
     QList<QTreeWidgetItem *> items = m_fileList->selectedItems();
     ids.clear();
     for (QTreeWidgetItem* item : items) {
-        AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
+        const AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
         if (aItem) {
             AudioFileId itemId = aItem->getId();
             ids.insert(itemId);

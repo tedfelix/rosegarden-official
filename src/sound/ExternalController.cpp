@@ -202,7 +202,7 @@ void ExternalController::sendNoteOn(
     event.setData1(NoteNumber);
     event.setData2(velocity);
     event.setRecordedChannel(channel);
-    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+    event.setRecordedDevice(EXTERNAL_CONTROLLER);
 
     RosegardenSequencer::getInstance()->processMappedEvent(event);
 }
@@ -219,7 +219,7 @@ void ExternalController::send(
     event.setData1(controlNumber);
     event.setData2(value);
     event.setRecordedChannel(channel);
-    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+    event.setRecordedDevice(EXTERNAL_CONTROLLER);
 
     RosegardenSequencer::getInstance()->processMappedEvent(event);
 }
@@ -301,7 +301,7 @@ ExternalController::sendSysExRaw(const std::string &rawString)
     MappedEvent event(NoInstrument,  // instrumentId is ignored
                       MappedEvent::MidiSystemMessage,
                       MIDI_SYSTEM_EXCLUSIVE);
-    event.setRecordedDevice(Device::EXTERNAL_CONTROLLER);
+    event.setRecordedDevice(EXTERNAL_CONTROLLER);
     event.setDataBlock(rawString);
 
     // Send it out.

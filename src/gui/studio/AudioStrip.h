@@ -118,8 +118,6 @@ private:
 
     std::vector<PluginPushButton *> m_plugins;
 
-    QGridLayout *m_layout;
-
     void createWidgets();
 
     // Timer for updating the meters.

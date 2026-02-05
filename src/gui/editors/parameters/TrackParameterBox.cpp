@@ -1155,7 +1155,7 @@ TrackParameterBox::updateRecordingDevice(DeviceId deviceId)
     std::vector<DeviceId> recordingDeviceIds;
     QStringList recordingDeviceNames;
 
-    recordingDeviceIds.push_back(Device::ALL_DEVICES);
+    recordingDeviceIds.push_back(ALL_DEVICES);
     recordingDeviceNames.push_back(tr("All"));
 
     // For each Device

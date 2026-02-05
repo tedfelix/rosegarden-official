@@ -2725,10 +2725,10 @@ AlsaDriver::getMappedEventList(MappedEventList &mappedEventList)
                 (event->dest.client == m_client  &&
                  event->dest.port == m_externalControllerPort);
 
-        unsigned int deviceId = Device::NO_DEVICE;
+        unsigned int deviceId = NO_DEVICE;
 
         if (fromExternalController) {
-            deviceId = Device::EXTERNAL_CONTROLLER;
+            deviceId = EXTERNAL_CONTROLLER;
         } else {
             for (MappedDeviceList::iterator i = m_devices.begin();
                  i != m_devices.end(); ++i) {
@@ -3845,7 +3845,7 @@ AlsaDriver::processMidiOut(const MappedEventList &rgEventList,
         snd_seq_ev_clear(&alsaEvent);
 
         const bool isExternalController =
-                (rgEvent->getRecordedDevice() == Device::EXTERNAL_CONTROLLER);
+                (rgEvent->getRecordedDevice() == EXTERNAL_CONTROLLER);
 
         const bool isSoftSynth =
                 (!isExternalController  &&

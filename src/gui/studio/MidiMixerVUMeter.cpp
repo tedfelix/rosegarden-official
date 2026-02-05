@@ -25,6 +25,7 @@
 namespace Rosegarden
 {
 
+
 MidiMixerVUMeter::MidiMixerVUMeter(QWidget *parent,
                                    VUMeterType type,
                                    int width,

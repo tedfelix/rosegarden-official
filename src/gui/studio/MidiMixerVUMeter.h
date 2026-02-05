@@ -29,10 +29,12 @@ namespace Rosegarden
 {
 
 
-
 class MidiMixerVUMeter : public VUMeter
 {
 public:
+
+    // ??? type is always VUMeter::FixedHeightVisiblePeakHold.  Why take
+    //     it as a parameter?
     MidiMixerVUMeter(QWidget *parent,
                      VUMeterType type,
                      int width,
