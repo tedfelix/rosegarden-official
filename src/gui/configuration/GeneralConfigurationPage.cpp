@@ -283,8 +283,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     //       - Sync, and offer timebase master
     //     Not sure whether those are still relevant.  Capturing here in case.
     m_useJackTransport = new QCheckBox(frame);
-    m_useJackTransport->setChecked(
-            settings.value("jacktransport", false).toBool());
+    m_useJackTransport->setChecked(Preferences::getUseJackTransport());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
     connect(m_useJackTransport, &QCheckBox::checkStateChanged,
 #else
@@ -781,6 +780,7 @@ void GeneralConfigurationPage::apply()
     Preferences::setLV2(m_lv2->isChecked());
     Preferences::setDynamicDrag(m_dynamicDrag->isChecked());
     Preferences::setLv2Environment(m_lv2Environment->isChecked());
+    Preferences::setUseJackTransport(m_useJackTransport->isChecked());
 
     // Presentation tab
 

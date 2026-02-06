@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[SequenceManager]"
-#define RG_NO_DEBUG_PRINT 1
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "SequenceManager.h"
 
@@ -48,6 +48,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/WarningWidget.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "sequencer/TransportControl.h"
 #include "MarkerMapper.h"
 #include "MetronomeMapper.h"
 #include "TempoSegmentMapper.h"
@@ -174,6 +175,7 @@ SequenceManager::setDocument(RosegardenDocument *doc)
 void
 SequenceManager::play()
 {
+    RG_DEBUG << "play";
     if (!m_doc)
         return;
 
@@ -217,7 +219,7 @@ SequenceManager::play()
     if (comp.getLoopMode() == Composition::LoopOn)
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    int result = RosegardenSequencer::getInstance()->play(startPos);
+    int result = TransportControl::getInstance()->play(startPos);
 
     // Failed?  Bail.
     if (!result) {
@@ -273,7 +275,7 @@ SequenceManager::stop(bool autoStop)
     // response - then we can fiddle about with the audio file
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
-    RosegardenSequencer::getInstance()->stop(autoStop);
+    TransportControl::getInstance()->stop(autoStop);
 
     // restore
     QApplication::restoreOverrideCursor();
@@ -370,7 +372,7 @@ SequenceManager::fastforward()
 void
 SequenceManager::jumpTo(const RealTime &time)
 {
-    RosegardenSequencer::getInstance()->jumpTo(time);
+    TransportControl::getInstance()->jumpTo(time);
 }
 
 void

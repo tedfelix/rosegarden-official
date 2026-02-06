@@ -130,6 +130,10 @@ void TransportControl::jumpTo(RealTime time)
     RG_DEBUG << "jumpTo" << time;
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport()) {
+        unsigned int sampleRate =
+            RosegardenSequencer::getInstance()->getSampleRate();
+        long frame = RealTime::realTime2Frame(time, sampleRate);
+        jack_transport_locate(m_client, frame);
     } else {
         RG_DEBUG << "jumpTo internal" << time;
         RosegardenSequencer::getInstance()->jumpTo(time);

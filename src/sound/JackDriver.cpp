@@ -42,14 +42,13 @@
 #ifdef HAVE_LIBJACK
 
 //#define DEBUG_JACK_DRIVER
-//#define DEBUG_JACK_TRANSPORT
 //#define DEBUG_JACK_PROCESS
 //#define DEBUG_JACK_XRUN
 
 namespace Rosegarden
 {
 
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
 static unsigned long framesThisPlay = 0;
 static RealTime startTime;
 #endif
@@ -59,12 +58,6 @@ JackDriver::JackDriver(AlsaDriver *alsaDriver) :
         m_bufferSize(0),
         m_sampleRate(0),
         m_tempOutBuffer(nullptr),
-        m_jackTransportEnabled(false),
-        m_jackTransportSource(false),
-        m_waiting(false),
-        m_waitingState(JackTransportStopped),
-        m_waitingToken(0),
-        m_ignoreProcessTransportCount(0),
         m_bussMixer(nullptr),
         m_instrumentMixer(nullptr),
         m_fileReader(nullptr),
@@ -264,7 +257,6 @@ JackDriver::initialise(bool reinitialise)
     jack_set_sample_rate_callback(m_client, jackSampleRate, this);
     jack_on_shutdown(m_client, jackShutdown, this);
     jack_set_xrun_callback(m_client, jackXRun, this);
-    jack_set_sync_callback(m_client, jackSyncCallback, this);
 
     // get and report the sample rate and buffer size
     //
@@ -986,125 +978,44 @@ JackDriver::jackProcess(jack_nframes_t nframes)
   #endif
 #endif
 
-    jack_position_t position;
-    jack_transport_state_t state = JackTransportRolling;
     bool doneRecord = false;
-
-    int ignoreCount = m_ignoreProcessTransportCount;
-    if (ignoreCount > 0)
-        --m_ignoreProcessTransportCount;
 
     InstrumentId audioInstrumentBase;
     int audioInstruments;
     m_alsaDriver->getAudioInstrumentNumbers(audioInstrumentBase, audioInstruments);
 
-    if (m_jackTransportEnabled) {
-        state = jack_transport_query(m_client, &position);
-
+    if (!clocksRunning) {
 #ifdef DEBUG_JACK_PROCESS
-        RG_DEBUG << "jackProcess(): JACK transport state is " << state;
+        RG_DEBUG << "jackProcess(): clocks stopped";
 #endif
 
-        if (state == JackTransportStopped) {
-            if (playing && clocksRunning && !m_waiting) {
-                RosegardenSequencer *sequencer =
-                        RosegardenSequencer::getInstance();
-                if (sequencer) {
-#ifdef DEBUG_JACK_TRANSPORT
-                    RG_DEBUG << "jackProcess(): JACK transport stopped externally at " << position.frame;
-#endif
+        return jackProcessEmpty(nframes);
 
-                    m_waitingToken = sequencer->transportJump(
-                            RosegardenSequencer::TransportStopAtTime,
-                            RealTime::frame2RealTime(position.frame,
-                                                     position.frame_rate));
-                }
-            } else if (clocksRunning) {
-                if (!asyncAudio) {
+    } else if (!playing) {
 #ifdef DEBUG_JACK_PROCESS
-                    RG_DEBUG << "jackProcess(): no interesting async events";
-#endif
-                    // do this before record monitor, otherwise we lose monitor out
-                    jackProcessEmpty(nframes);
-                }
-
-                // for monitoring:
-                int rv = 0;
-                for (InstrumentId id = audioInstrumentBase;
-                        id < audioInstrumentBase + audioInstruments; ++id) {
-                    int irv = jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
-                    if (irv != 0)
-                        rv = irv;
-                }
-                doneRecord = true;
-
-                if (!asyncAudio) {
-                    return rv;
-                }
-
-            } else {
-                return jackProcessEmpty(nframes);
-            }
-        } else if (state == JackTransportStarting) {
-            return jackProcessEmpty(nframes);
-        } else if (state != JackTransportRolling) {
-            RG_WARNING << "jackProcess(): WARNING: unexpected JACK transport state " << state;
-        }
-    }
-
-    if (state == JackTransportRolling) { // also covers not-on-transport case
-        if (m_waiting) {
-            if (ignoreCount > 0) {
-#ifdef DEBUG_JACK_TRANSPORT
-                RG_DEBUG << "jackProcess(): transport rolling, but we're ignoring it (count = " << ignoreCount << ")";
-#endif
-            } else {
-#ifdef DEBUG_JACK_TRANSPORT
-                RG_DEBUG << "jackProcess(): transport rolling, telling ALSA driver to go!";
+        RG_DEBUG << "jackProcess(): not playing";
 #endif
 
-                m_alsaDriver->startClocksApproved();
-                m_waiting = false;
-            }
+        if (!asyncAudio) {
+#ifdef DEBUG_JACK_PROCESS
+            RG_DEBUG << "jackProcess(): no interesting async events";
+#endif
+            // do this before record monitor, otherwise we lose monitor out
+            jackProcessEmpty(nframes);
         }
 
-#ifdef DEBUG_JACK_PROCESS
-        RG_DEBUG << "jackProcess(): (rolling or not on JACK transport)";
-#endif
+        // for monitoring:
+        int rv = 0;
+        for (InstrumentId id = audioInstrumentBase;
+             id < audioInstrumentBase + audioInstruments; ++id) {
+            int irv = jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
+            if (irv != 0)
+                rv = irv;
+        }
+        doneRecord = true;
 
-        if (!clocksRunning) {
-#ifdef DEBUG_JACK_PROCESS
-            RG_DEBUG << "jackProcess(): clocks stopped";
-#endif
-
-            return jackProcessEmpty(nframes);
-
-        } else if (!playing) {
-#ifdef DEBUG_JACK_PROCESS
-            RG_DEBUG << "jackProcess(): not playing";
-#endif
-
-            if (!asyncAudio) {
-#ifdef DEBUG_JACK_PROCESS
-                RG_DEBUG << "jackProcess(): no interesting async events";
-#endif
-                // do this before record monitor, otherwise we lose monitor out
-                jackProcessEmpty(nframes);
-            }
-
-            // for monitoring:
-            int rv = 0;
-            for (InstrumentId id = audioInstrumentBase;
-                    id < audioInstrumentBase + audioInstruments; ++id) {
-                int irv = jackProcessRecord(id, nframes, nullptr, nullptr, clocksRunning);
-                if (irv != 0)
-                    rv = irv;
-            }
-            doneRecord = true;
-
-            if (!asyncAudio) {
-                return rv;
-            }
+        if (!asyncAudio) {
+            return rv;
         }
     }
 
@@ -1386,7 +1297,7 @@ JackDriver::jackProcess(jack_nframes_t nframes)
 
     m_framesProcessed += nframes;
 
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
     framesThisPlay += nframes; //!!!
 #endif
 
@@ -1449,7 +1360,7 @@ JackDriver::jackProcessEmpty(jack_nframes_t nframes)
 
     m_framesProcessed += nframes;
 
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
+#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS))
 
     framesThisPlay += nframes;
 #endif
@@ -1655,325 +1566,6 @@ JackDriver::jackProcessRecord(InstrumentId id,
 
     return 0;
 }
-
-#ifdef DEBUG_JACK_TRANSPORT
-static QString transportStateToString(jack_transport_state_t state)
-{
-    static std::vector<QString> states{
-        "Stopped", "Rolling", "Looping", "Starting", "NetStarting"};
-
-    if (state < 0  ||  state >= states.size())
-        return "???";
-
-    return states[state];
-}
-#endif
-
-int
-JackDriver::jackSyncCallback(jack_transport_state_t state,
-                             jack_position_t *position,
-                             void *arg)
-{
-    JackDriver *jackDriver = static_cast<JackDriver *>(arg);
-    if (!jackDriver)
-        return true;
-
-    jackDriver->m_alsaDriver->checkTimerSync(0); // reset, as not processing
-
-    if (!jackDriver->m_jackTransportEnabled)
-        return true;
-
-    RosegardenSequencer *sequencer =
-            RosegardenSequencer::getInstance();
-    if (!sequencer)
-        return true;
-
-#ifdef DEBUG_JACK_TRANSPORT
-
-    RG_DEBUG << "jackSyncCallback() ----------";
-    RG_DEBUG << "    state:" << state << transportStateToString(state);
-    RG_DEBUG << "    frame_rate:" << position->frame_rate << "| frame:" << position->frame << "| frame secs:" << (double)position->frame / (double)position->frame_rate;
-    //RG_DEBUG << "    usecs:" << position->usecs;  // Free-rolling timestamp.  Not very useful.
-    if (position->valid & JackPositionBBT)
-        RG_DEBUG << "    bar:" << position->bar << "| beat:" << position->beat << "| tick:" << position->tick << "| bpm:" << position->beats_per_minute;
-    if (position->unique_1 != position->unique_2)
-        RG_DEBUG << "    INCONSISTENT! unique_1:" << position->unique_1 << "| unique_2:" << position->unique_2;
-    RG_DEBUG << "    ALSA playing:" << jackDriver->m_alsaDriver->isPlaying();
-    RG_DEBUG << "    m_waiting:" << jackDriver->m_waiting << "| m_waitingState:" << jackDriver->m_waitingState << transportStateToString(jackDriver->m_waitingState);
-
-#endif
-
-    // Infer the transport request from the ALSA play state and the
-    // incoming JACK transport state.
-
-    RosegardenSequencer::TransportRequest request =
-            RosegardenSequencer::TransportNoChange;
-
-    if (jackDriver->m_alsaDriver->isPlaying()) {
-
-        if (state == JackTransportStarting) {
-            request = RosegardenSequencer::TransportJumpToTime;
-        } else if (state == JackTransportStopped) {
-            request = RosegardenSequencer::TransportStop;
-        }
-
-    } else {  // ALSA is stopped.
-
-        if (state == JackTransportStarting) {
-            request = RosegardenSequencer::TransportStartAtTime;
-        } else if (state == JackTransportStopped) {
-            // ??? Not necessarily.  If the position has changed, we probably
-            //     want to seek to that new position.  Since we are stopped and
-            //     these requests come in extremely rarely, we should probably
-            //     just assume that we need to do a position update.
-            request = RosegardenSequencer::TransportNoChange;
-            // ??? But this results in an endless loop.  I'm guessing it is
-            //     because we send out a transport jump to JACK which then
-            //     sends another to us.
-            //request = RosegardenSequencer::TransportJumpToTime;
-        }
-    }
-
-#ifdef DEBUG_JACK_TRANSPORT
-    RG_DEBUG << "    inferred request:" << request << RosegardenSequencer::transportRequestToString(request);
-#endif
-
-    // If we aren't waiting, or the state has changed...
-    if (!jackDriver->m_waiting  ||  jackDriver->m_waitingState != state) {
-
-        if (request == RosegardenSequencer::TransportJumpToTime ||
-                request == RosegardenSequencer::TransportStartAtTime) {
-
-            RealTime rt = RealTime::frame2RealTime(position->frame,
-                                                   position->frame_rate);
-
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    Requesting jump to " << rt;
-#endif
-
-            jackDriver->m_waitingToken = sequencer->transportJump(request, rt);
-
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
-#endif
-
-        } else if (request == RosegardenSequencer::TransportStop) {
-
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    Requesting state change to " << request;
-#endif
-
-            jackDriver->m_waitingToken = sequencer->transportChange(request);
-
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
-#endif
-
-        } else if (request == RosegardenSequencer::TransportNoChange) {
-
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    Requesting no state change!";
-#endif
-
-            // ??? Why are we requesting a token for no change?  Why
-            //     don't we just return true?
-            jackDriver->m_waitingToken = sequencer->transportChange(request);
-
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    My token is " << jackDriver->m_waitingToken;
-#endif
-
-        }
-
-        jackDriver->m_waiting = true;
-        jackDriver->m_waitingState = state;
-
-#ifdef DEBUG_JACK_TRANSPORT
-        RG_DEBUG << "    Setting m_waiting to true and waiting state to" << jackDriver->m_waitingState << transportStateToString(jackDriver->m_waitingState) << "(request was" << request << ")";
-#endif
-
-        // Not done.  We need another call to confirm transport sync.
-        return false;
-
-    } else {  // waiting and the state has not changed
-
-        if (sequencer->isTransportSyncComplete(jackDriver->m_waitingToken)) {
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    RG transport sync complete";
-#endif
-
-            // Done.  We have confirmed transport is ready.
-            return true;
-        } else {
-#ifdef DEBUG_JACK_TRANSPORT
-            RG_DEBUG << "    RG transport sync not complete";
-#endif
-
-            // Not done.  We need another call to confirm transport sync.
-            return false;
-        }
-    }
-}
-
-bool
-JackDriver::relocateTransportInternal(bool alsoStart)
-{
-    if (!m_client)
-        return true;
-
-#ifdef DEBUG_JACK_TRANSPORT
-    const char *fn = (alsoStart ?
-                      "JackDriver::startTransport()" :
-                      "JackDriver::relocateTransport()");
-#endif
-
-#ifdef DEBUG_JACK_TRANSPORT
-    RG_DEBUG << "relocateTransportInternal(): called by " << fn;
-#else
-#ifdef DEBUG_JACK_DRIVER
-    RG_DEBUG << "relocateTransportInternal()";
-#endif
-#endif
-
-    // m_waiting is true if we are waiting for the JACK transport
-    // to finish a change of state.
-
-    if (m_jackTransportEnabled) {
-
-        // If on the transport, we never return true here -- instead
-        // the JACK process calls startClocksApproved() to signal to
-        // the ALSA driver that it's time to go.  But we do use this
-        // to manage our JACK transport state requests.
-
-        // Where did this request come from?  Are we just responding
-        // to an external sync?
-
-        RosegardenSequencer *sequencer =
-                RosegardenSequencer::getInstance();
-
-        if (sequencer) {
-            if (sequencer->isTransportSyncComplete(m_waitingToken)) {
-
-                // Nope, this came from Rosegarden
-
-#ifdef DEBUG_JACK_TRANSPORT
-                RG_DEBUG << "relocateTransportInternal(): called by " << fn << ": asking JACK transport to start, setting wait state";
-#endif
-
-                m_waiting = true;
-                m_waitingState = JackTransportStarting;
-
-                long frame = RealTime::realTime2Frame
-                             (m_alsaDriver->getSequencerTime(), m_sampleRate);
-
-                if (frame < 0) {
-                    // JACK Transport doesn't support preroll and
-                    // can't set transport position to before zero
-                    // (frame count is unsigned), so there's no very
-                    // satisfactory fix for what to do for count-in
-                    // bars.  Let's just start at zero instead.
-                    jack_transport_locate(m_client, 0);
-                } else {
-                    jack_transport_locate(m_client, frame);
-                }
-
-                if (alsoStart) {
-                    jack_transport_start(m_client);
-                    m_ignoreProcessTransportCount = 1;
-                } else {
-                    m_ignoreProcessTransportCount = 2;
-                }
-            } else {
-#ifdef DEBUG_JACK_TRANSPORT
-                RG_DEBUG << "relocateTransportInternal(): called by " << fn << ": waiting already";
-#endif
-
-            }
-        }
-        return false;
-    }
-
-#if (defined(DEBUG_JACK_DRIVER) || defined(DEBUG_JACK_PROCESS) || defined(DEBUG_JACK_TRANSPORT))
-    framesThisPlay = 0; //!!!
-    struct timeval tv;
-    (void)gettimeofday(&tv, 0);
-    startTime = RealTime(tv.tv_sec, tv.tv_usec * 1000); //!!!
-#endif
-#ifdef DEBUG_JACK_TRANSPORT
-
-    RG_DEBUG << "relocateTransportInternal(): called by " << fn << ": not on JACK transport, accepting right away";
-#endif
-
-    return true;
-}
-
-bool
-JackDriver::startTransport()
-{
-    return relocateTransportInternal(true);
-}
-
-bool
-JackDriver::relocateTransport()
-{
-
-    return relocateTransportInternal(false);
-}
-
-void
-JackDriver::stopTransport()
-{
-    if (!m_client)
-        return ;
-
-    RG_DEBUG << "stopTransport(): resetting m_haveAsyncAudioEvent";
-
-    m_haveAsyncAudioEvent = false;
-
-#ifdef DEBUG_JACK_TRANSPORT
-
-    struct timeval tv;
-    (void)gettimeofday(&tv, 0);
-    RealTime endTime = RealTime(tv.tv_sec, tv.tv_usec * 1000); //!!!
-    RG_DEBUG << "stopTransport(): frames this play: " << framesThisPlay << ", elapsed " << (endTime - startTime);
-#endif
-
-    if (m_jackTransportEnabled) {
-
-        // Where did this request come from?  Is this a result of our
-        // sync to a transport that has in fact already stopped?
-
-        RosegardenSequencer *sequencer =
-                RosegardenSequencer::getInstance();
-
-        if (sequencer) {
-            if (sequencer->isTransportSyncComplete(m_waitingToken)) {
-
-                // No, we have no outstanding external requests; this
-                // must have genuinely been requested from within
-                // Rosegarden, so:
-
-#ifdef DEBUG_JACK_TRANSPORT
-                RG_DEBUG << "stopTransport(): internal request, asking JACK transport to stop";
-#endif
-
-                jack_transport_stop(m_client);
-
-            } else {
-                // Nothing to do
-
-#ifdef DEBUG_JACK_TRANSPORT
-                RG_DEBUG << "stopTransport(): external request, JACK transport is already stopped";
-#endif
-
-            }
-        }
-    }
-
-    if (m_instrumentMixer)
-        m_instrumentMixer->resetAllPlugins(true); // discard events too
-}
-
 
 // Pick up any change of buffer size
 //

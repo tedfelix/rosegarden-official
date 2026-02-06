@@ -48,22 +48,6 @@ public:
 
     bool isOK() const { return m_ok; }
 
-    bool isTransportEnabled() const { return m_jackTransportEnabled; }
-    bool isTransportSource () const { return m_jackTransportSource; }
-
-    void setTransportEnabled(bool e) { m_jackTransportEnabled = e; }
-    void setTransportSource (bool m) { m_jackTransportSource  = m; }
-
-    // These methods call back on the sound driver if necessary to
-    // establish the current transport location to start at or
-    // relocate to.  startTransport and relocateTransport return true
-    // if they have completed and the sound driver can safely call
-    // startClocks; false if the sound driver should wait for the JACK
-    // driver to call back on startClocksApproved before starting.
-    bool startTransport();
-    bool relocateTransport();
-    void stopTransport();
-
     RealTime getAudioPlayLatency() const;
     RealTime getAudioRecordLatency() const;
     RealTime getInstrumentPlayLatency(InstrumentId) const;
@@ -206,15 +190,6 @@ private:
     static void  jackShutdown(void *arg);
     static int   jackXRun(void *);
 
-    // static JACK transport callbacks
-    static int   jackSyncCallback(jack_transport_state_t,
-                                  jack_position_t *, void *);
-//    static int   jackTimebaseCallback(jack_transport_state_t,
-//                                      jack_nframes_t,
-//                                      jack_position_t *,
-//                                      int,
-//                                      void *);
-
     // jackProcessStatic delegates to this
     int          jackProcess(jack_nframes_t nframes);
 
@@ -246,8 +221,6 @@ private:
      */
     bool createRecordInputs(int newPairs);
 
-    bool relocateTransportInternal(bool alsoStart);
-
     // data members:
 
     // Client handle from jack_client_open()
@@ -263,14 +236,6 @@ private:
     jack_nframes_t               m_sampleRate;
 
     sample_t                    *m_tempOutBuffer;
-
-    bool                         m_jackTransportEnabled;
-    bool                         m_jackTransportSource;
-
-    bool                         m_waiting;
-    jack_transport_state_t       m_waitingState;
-    unsigned long m_waitingToken;
-    int                          m_ignoreProcessTransportCount;
 
     AudioBussMixer              *m_bussMixer;
     AudioInstrumentMixer        *m_instrumentMixer;
