@@ -42,6 +42,9 @@ public:
 
     void setPositionForNewDocument(timeT time);
 
+    // for the case with no running sequencer eg. unit tests
+    void withSequencer(bool b = true);
+
 public slots:
     void slotSet(timeT time);
     void slotSetDocumentTime();
@@ -64,6 +67,9 @@ private:
 
     // the new position from a loaded document
     timeT m_documentPosition;
+
+    // is the sequncer running
+    bool m_withSequencer;
 
 private slots:
     void slotUpdate();

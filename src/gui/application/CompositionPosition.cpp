@@ -34,7 +34,8 @@ namespace Rosegarden
 CompositionPosition::CompositionPosition():
     m_position(0),
     m_positionAsElapsedTime(RealTime::zero()),
-    m_documentPosition(0)
+    m_documentPosition(0),
+    m_withSequencer(true)
 {
     RG_DEBUG << "ctor";
     m_updateTimer = new QTimer(this);
@@ -69,22 +70,34 @@ void CompositionPosition::setPositionForNewDocument(timeT time)
     m_documentPosition = time;
 }
 
+void CompositionPosition::withSequencer(bool b)
+{
+    m_withSequencer = b;
+}
+
 void CompositionPosition::slotSet(timeT time)
 {
     RG_DEBUG << "slotSet" << m_position << "->" << time;
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
 
+    const Composition& comp = doc->getComposition();
+    // without sequencer just store the value
+    if (! m_withSequencer) {
+        m_position = time;
+        m_positionAsElapsedTime = comp.getElapsedRealTime(time);
+        return;
+    }
+
     // even if the time has not changed pass it on otherwise it may
     // mess up the trensport request system
-    const Composition& comp = doc->getComposition();
-    m_position = time;
-    m_positionAsElapsedTime = comp.getElapsedRealTime(time);
-    RG_DEBUG << "slotSet" << m_positionAsElapsedTime;
+    RealTime positionAsElapsedTime = comp.getElapsedRealTime(time);
+    RG_DEBUG << "slotSet" << positionAsElapsedTime;
     SequenceManager* sequenceManager = doc->getSequenceManager();
-    sequenceManager->jumpTo(m_positionAsElapsedTime);
-
-    emit changed(m_position);
+    sequenceManager->jumpTo(positionAsElapsedTime);
+    // m_position and m_positionAsElapsedTime are not set here. When
+    // the sequencer sends the new time these variables will update in
+    // slotUpdate.
 }
 
 void CompositionPosition::slotSetDocumentTime()
