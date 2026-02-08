@@ -21,10 +21,13 @@
 
 #include "AudioManagerDialog.h"
 
+#include "AboutDialog.h"
+#include "AudioPlayingDialog.h"
+#include "UnusedAudioSelectionDialog.h"
+
 #include "base/Event.h"
 #include "misc/Debug.h"
 #include "misc/Strings.h"
-#include "AudioPlayingDialog.h"
 #include "base/Composition.h"
 #include "base/Exception.h"
 #include "base/Instrument.h"
@@ -47,11 +50,9 @@
 #include "gui/widgets/InputDialog.h"
 #include "gui/widgets/WarningGroupBox.h"
 #include "gui/general/IconLoader.h"
-#include "gui/dialogs/AboutDialog.h"
 #include "sound/AudioFile.h"
 #include "sound/AudioFileManager.h"
 #include "sound/WAVAudioFile.h"
-#include "UnusedAudioSelectionDialog.h"
 #include "document/Command.h"
 #include "gui/widgets/FileDialog.h"
 
@@ -62,8 +63,6 @@
 #include <QTreeWidgetItemIterator>
 #include <QMessageBox>
 #include <QAction>
-#include <QByteArray>
-#include <QDataStream>
 #include <QDialog>
 #include <QFile>
 #include <QFileInfo>
@@ -78,23 +77,27 @@
 #include <QWidget>
 #include <QVBoxLayout>
 #include <QUrl>
-#include <QKeySequence>
 #include <QSettings>
 #include <QDrag>
 #include <QDropEvent>
-#include <QMimeData>
 #include <QDesktopServices>
-#include <QPointer>
 
-
+#include <algorithm>
+#include <list>
+#include <map>
+#include <memory>
+#include <set>
+#include <vector>
 
 
 namespace Rosegarden
 {
 
+
 const int AudioManagerDialog::m_maxPreviewWidth            = 100;
 const int AudioManagerDialog::m_previewHeight              = 30;
 const char* const AudioManagerDialog::m_listViewLayoutName = "AudioManagerDialog Layout";
+
 
 AudioManagerDialog::AudioManagerDialog(QWidget *parent,
                                        RosegardenDocument *doc):
@@ -600,36 +603,36 @@ AudioManagerDialog::slotRemove()
     if (selectedTreeItems.isEmpty())
         return;
 
-    SegmentSelection selection;
-    std::list<AudioFileId> toDelete;
+    SegmentSelection segmentsToDelete;
+    std::vector<AudioFileId> audioFilesToDelete;
     for (QTreeWidgetItem* item : selectedTreeItems) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
         if (aItem) {
             if (aItem->getSegment()) {
-                selection.insert(aItem->getSegment());
+                segmentsToDelete.insert(aItem->getSegment());
             } else {
-                toDelete.push_back(aItem->getId());
+                audioFilesToDelete.push_back(aItem->getId());
             }
         }
     }
 
     Composition &comp = m_doc->getComposition();
-    for (AudioFileId id : toDelete) {
+    for (AudioFileId id : audioFilesToDelete) {
         for (Composition::iterator it = comp.begin(); it != comp.end(); ++it) {
             if ((*it)->getType() == Segment::Audio &&
                 (*it)->getAudioFileId() == id)
                 // remove segments along with audio file
-                selection.insert(*it);
+                segmentsToDelete.insert(*it);
         }
     }
 
     QString question;
-    if (! selection.empty()) {
+    if (! segmentsToDelete.empty()) {
         question += tr("All selected segments will be deleted.");
     }
 
-    if (! toDelete.empty()) {
+    if (! audioFilesToDelete.empty()) {
         question += tr(" Selected audio files will be unloaded and all associated segments deleted.");
     }
     question += tr(" Are you sure?");
@@ -643,9 +646,9 @@ AudioManagerDialog::slotRemove()
 
     if (reply != QMessageBox::Yes) return;
 
-    emit deleteSegments(selection);
+    emit deleteSegments(segmentsToDelete);
 
-    for (AudioFileId id : toDelete) {
+    for (AudioFileId id : audioFilesToDelete) {
         m_doc->notifyAudioFileRemoval(id);
         m_doc->getAudioFileManager().removeFile(id);
 
