@@ -97,6 +97,7 @@ Instrument::Instrument(const Instrument &ins):
     m_type(ins.getType()),
     m_midiChannel(ins.getNaturalMidiChannel()),
     m_program(ins.getProgram()),
+    m_bankSelectType(ins.m_bankSelectType),
     m_transpose(ins.getMidiTranspose()),
     m_pan(ins.getPan()),
     m_volume(ins.getVolume()),

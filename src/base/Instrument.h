@@ -171,13 +171,22 @@ public:
 
     void setSendBankSelect(bool value) {
         m_sendBankSelect = value;
-        if (value) { emit changedChannelSetup(); }
+        if (value)
+            emit changedChannelSetup();
     }
     bool sendsBankSelect() const { return m_sendBankSelect; }
 
+    enum class BankSelectType {
+        Normal,  // Modern, send BS as usual, CC0 and CC32.
+        PC100Plus,  // TG77, etc...
+        CC31  // Matrix-1000
+    };
+    BankSelectType getBankSelectType() const  { return m_bankSelectType; }
+
     void setSendProgramChange(bool value) {
         m_sendProgramChange = value;
-        if (value) { emit changedChannelSetup(); }
+        if (value)
+            emit changedChannelSetup();
     }
     bool sendsProgramChange() const;
 
@@ -324,11 +333,13 @@ private:
     InstrumentType  m_type;
 
     // Standard MIDI controllers and parameters
-    MidiByte        m_midiChannel;
-    MidiProgram     m_program;
-    MidiByte        m_transpose;
-    MidiByte        m_pan;  // required by audio
-    MidiByte        m_volume;
+    MidiByte m_midiChannel;
+    /// Bank Select and Program Change
+    MidiProgram m_program;
+    BankSelectType m_bankSelectType{BankSelectType::Normal};
+    MidiByte m_transpose;
+    MidiByte m_pan;  // required by audio
+    MidiByte m_volume;
 
     // Whether this instrument uses a fixed channel.
     // "fixed==false" mode is experimental and usually disabled.
@@ -344,12 +355,8 @@ private:
 
     Device         *m_device;
 
-    // Do we send at this intrument or do we leave these
-    // things up to the parent device and God?  These are
-    // directly relatable to GUI elements
-    //
-    bool             m_sendBankSelect;
-    bool             m_sendProgramChange;
+    bool m_sendBankSelect;
+    bool m_sendProgramChange;
 
     // Instruments are directly related to faders for volume
     // control.  Here we can store the remote fader id.
