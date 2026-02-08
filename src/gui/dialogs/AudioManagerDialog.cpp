@@ -593,6 +593,7 @@ void
 AudioManagerDialog::slotRemove()
 {
     QList<QTreeWidgetItem *> selectedTreeItems = m_fileList->selectedItems();
+    RG_DEBUG << "slotRemove" << selectedTreeItems.size();
 
     // If nothing is selected, bail.
     // This should never happen as remove is disabled without selection.
@@ -604,7 +605,7 @@ AudioManagerDialog::slotRemove()
     for (QTreeWidgetItem* item : selectedTreeItems) {
         AudioListItem *aItem = dynamic_cast<AudioListItem*>(item);
 
-        if (item) {
+        if (aItem) {
             if (aItem->getSegment()) {
                 selection.insert(aItem->getSegment());
             } else {
@@ -623,9 +624,10 @@ AudioManagerDialog::slotRemove()
         }
     }
 
-    if (selection.empty()) return;
-
-    QString question = tr("All selected segments will be deleted.");
+    QString question;
+    if (! selection.empty()) {
+        question += tr("All selected segments will be deleted.");
+    }
 
     if (! toDelete.empty()) {
         question += tr(" Selected audio files will be unloaded and all associated segments deleted.");
