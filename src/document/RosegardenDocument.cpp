@@ -1135,12 +1135,20 @@ void RosegardenDocument::setSequenceManager(SequenceManager *sm)
 // When updating major, reset minor to zero; when updating minor,
 // reset point to zero.
 //
-int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
-int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 6;
-// Version 10 introduces LV2 plugins and provides values that
+// Version 1.6.10 introduces LV2 plugins and provides values that
 // older versions will interpret as plugins that weren't found.
 // Older versions will issue helpful "plugin not found" messages.
-int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 10;
+//
+// Version 1.7.0 introduces "bankselecttype" support to allow proper
+// bank selects for older synths like the TG77 and Matrix-1000.
+// This changes the <device> tag.  Older versions of rg will not
+// see this and lose this on save which will require re-setting
+// if loaded again by a newer rg.  This will only affect .rg files
+// that use the new TG77 and Matrix-1000 bank select support.  All
+// other files will load/save without problems.
+int RosegardenDocument::FILE_FORMAT_VERSION_MAJOR = 1;
+int RosegardenDocument::FILE_FORMAT_VERSION_MINOR = 7;
+int RosegardenDocument::FILE_FORMAT_VERSION_POINT = 0;
 
 bool RosegardenDocument::saveDocument(const QString &filename,
                                       QString &errMsg,

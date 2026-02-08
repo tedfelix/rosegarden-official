@@ -22,9 +22,10 @@
 
 #include "base/AllocateChannels.h"
 #include "base/Composition.h"
+#include "base/Instrument.h"
+#include "base/MidiDevice.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
-#include "base/Instrument.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/Midi.h"
@@ -181,8 +182,16 @@ void ChannelManager::insertChannelSetup(
 
         if (!instrument->hasFixedChannel()  ||
             instrument->sendsBankSelect()) {
-            switch (instrument->getBankSelectType()) {
-            case Instrument::BankSelectType::Normal:
+
+            MidiDevice *midiDevice =
+                    dynamic_cast<MidiDevice *>(instrument->getDevice());
+            MidiDevice::BankSelectType bankSelectType{
+                    MidiDevice::BankSelectType::Normal};
+            if (midiDevice)
+                bankSelectType = midiDevice->getBankSelectType();
+
+            switch (bankSelectType) {
+            case MidiDevice::BankSelectType::Normal:
                 {
                     // Bank Select MSB
                     MappedEvent mE;
@@ -209,7 +218,7 @@ void ChannelManager::insertChannelSetup(
                 }
                 break;
 
-            case Instrument::BankSelectType::PC100Plus:
+            case MidiDevice::BankSelectType::PC100Plus:
                 {
                     // Send the BS LSB (if between 100 and 127) as a PC.
                     const MidiByte bankSelectLSB = instrument->getBankSelectLSB();
@@ -227,7 +236,7 @@ void ChannelManager::insertChannelSetup(
                 }
                 break;
 
-            case Instrument::BankSelectType::CC31:
+            case MidiDevice::BankSelectType::CC31:
                 // Send CC31:127
                 {
                     MappedEvent mE;

@@ -176,13 +176,6 @@ public:
     }
     bool sendsBankSelect() const { return m_sendBankSelect; }
 
-    enum class BankSelectType {
-        Normal,  // Modern, send BS as usual, CC0 and CC32.
-        PC100Plus,  // TG77, etc...
-        CC31  // Matrix-1000
-    };
-    BankSelectType getBankSelectType() const  { return m_bankSelectType; }
-
     void setSendProgramChange(bool value) {
         m_sendProgramChange = value;
         if (value)
@@ -336,7 +329,6 @@ private:
     MidiByte m_midiChannel;
     /// Bank Select and Program Change
     MidiProgram m_program;
-    BankSelectType m_bankSelectType{BankSelectType::Normal};
     MidiByte m_transpose;
     MidiByte m_pan;  // required by audio
     MidiByte m_volume;

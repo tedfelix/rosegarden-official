@@ -91,6 +91,7 @@ MidiDevice::MidiDevice(DeviceId id,
     m_metronome(0),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
+    m_bankSelectType(dev.getBankSelectType()),  ???
     m_librarian(dev.getLibrarian()),
     m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
@@ -123,6 +124,7 @@ MidiDevice::MidiDevice(const MidiDevice &dev) :
     m_metronome(nullptr),
     m_direction(dev.getDirection()),
     m_variationType(dev.getVariationType()),
+    m_bankSelectType(dev.getBankSelectType()),
     m_librarian(dev.getLibrarian()),
     m_allocator(new AllocateChannels(ChannelSetup::MIDI))
 {
@@ -165,6 +167,7 @@ MidiDevice::operator=(const MidiDevice &dev)
     m_controlList = dev.getControlParameters();
     m_direction = dev.getDirection();
     m_variationType = dev.getVariationType();
+    m_bankSelectType = dev.getBankSelectType();  ???
 
     // clear down instruments list
     m_instruments.clear();
@@ -534,7 +537,8 @@ MidiDevice::toXmlString() const
                                            m_variationType == VariationFromMSB ?
                                            "MSB" : "")
                << "\" connection=\""   << encode(m_userConnection)
-               << "\" type=\"midi\">"  << std::endl << std::endl;
+               << "\" bankselecttype=\"" << (int)m_bankSelectType
+               << "\" type=\"midi\">\n\n";
 
     midiDevice << "        <librarian name=\"" << encode(m_librarian.first)
                << "\" email=\"" << encode(m_librarian.second)
