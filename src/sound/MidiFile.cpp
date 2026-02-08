@@ -1280,8 +1280,8 @@ void MidiFile::configureInstrument(
     // If we have both msb and lsb for bank select
     if (msbIter != segment->end()  &&  lsbIter != segment->end()) {
         // Configure the Instrument
-        instrument->setMSB((*msbIter)->get<Int>(Controller::VALUE));
-        instrument->setLSB((*lsbIter)->get<Int>(Controller::VALUE));
+        instrument->setBankSelectMSB((*msbIter)->get<Int>(Controller::VALUE));
+        instrument->setBankSelectLSB((*lsbIter)->get<Int>(Controller::VALUE));
         instrument->setSendBankSelect(true);
 
         // Remove the events.

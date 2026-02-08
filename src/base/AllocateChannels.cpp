@@ -386,7 +386,7 @@ reallocateToFit(Instrument& instrument, ChannelInterval &ci,
         << (instrument.isPercussion() ? "percussion" : "non-percussion")
         << instrument.getName() << instrument.getId()
         << "on bank"
-        << (int)instrument.getMSB() << ":" << (int)instrument.getLSB()
+        << (int)instrument.getBankSelectMSB() << ":" << (int)instrument.getBankSelectLSB()
         << "channel "
         << ci.getChannelId();
     // If we already have a channel but it's the wrong type or it

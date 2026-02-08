@@ -189,7 +189,7 @@ void ChannelManager::insertChannelSetup(
                     mE.setType(MappedEvent::MidiController);
                     mE.setInstrumentId(instrument->getId());
                     mE.setData1(MIDI_CONTROLLER_BANK_MSB);
-                    mE.setData2(instrument->getMSB());
+                    mE.setData2(instrument->getBankSelectMSB());
                     mE.setRecordedChannel(channel);
                     mE.setEventTime(insertTime);
                     mE.setTrackId(trackId);
@@ -201,7 +201,7 @@ void ChannelManager::insertChannelSetup(
                     mE.setType(MappedEvent::MidiController);
                     mE.setInstrumentId(instrument->getId());
                     mE.setData1(MIDI_CONTROLLER_BANK_LSB);
-                    mE.setData2(instrument->getLSB());
+                    mE.setData2(instrument->getBankSelectLSB());
                     mE.setRecordedChannel(channel);
                     mE.setEventTime(insertTime);
                     mE.setTrackId(trackId);
@@ -212,7 +212,7 @@ void ChannelManager::insertChannelSetup(
             case Instrument::BankSelectType::PC100Plus:
                 {
                     // Send the BS LSB (if between 100 and 127) as a PC.
-                    const MidiByte bankSelectLSB = instrument->getLSB();
+                    const MidiByte bankSelectLSB = instrument->getBankSelectLSB();
                     if (bankSelectLSB >= 100  &&  bankSelectLSB <= 127)
                     {
                         MappedEvent mE;
@@ -242,7 +242,7 @@ void ChannelManager::insertChannelSetup(
                 }
                 // Send BS LSB as PC.
                 {
-                    const MidiByte bankSelectLSB = instrument->getLSB();
+                    const MidiByte bankSelectLSB = instrument->getBankSelectLSB();
                     MappedEvent mE;
                     mE.setInstrumentId(instrument->getId());
                     mE.setType(MappedEvent::MidiProgramChange);

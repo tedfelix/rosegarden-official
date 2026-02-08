@@ -294,7 +294,7 @@ Instrument::getProgramChange() const
 }
 
 void
-Instrument::setMSB(MidiByte msb)
+Instrument::setBankSelectMSB(MidiByte msb)
 {
     setProgram(MidiProgram(MidiBank(m_program.getBank().isPercussion(),
                                     msb,
@@ -303,13 +303,13 @@ Instrument::setMSB(MidiByte msb)
 }
 
 MidiByte
-Instrument::getMSB() const
+Instrument::getBankSelectMSB() const
 {
     return m_program.getBank().getMSB();
 }
 
 void
-Instrument::setLSB(MidiByte lsb)
+Instrument::setBankSelectLSB(MidiByte lsb)
 {
     setProgram(MidiProgram(MidiBank(m_program.getBank().isPercussion(),
                                     m_program.getBank().getMSB(),
@@ -318,7 +318,7 @@ Instrument::setLSB(MidiByte lsb)
 }
 
 MidiByte
-Instrument::getLSB() const
+Instrument::getBankSelectLSB() const
 {
     return m_program.getBank().getLSB();
 }
@@ -436,8 +436,8 @@ Instrument::toXmlString() const
         instrument << "            <bank send=\""
                    << (m_sendBankSelect ? "true" : "false") << "\" percussion=\""
                    << (isPercussion() ? "true" : "false") << "\" msb=\""
-                   << (int)getMSB()
-                   << "\" lsb=\"" << (int)getLSB() << "\"/>" << std::endl;
+                   << (int)getBankSelectMSB()
+                   << "\" lsb=\"" << (int)getBankSelectLSB() << "\"/>" << std::endl;
 
         instrument << "            <program id=\""
                    << (int)getProgramChange() << "\" send=\""

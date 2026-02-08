@@ -1511,8 +1511,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 {
                     if (m_instrument) {
                         m_instrument->setPercussion(m_percussion);
-                        m_instrument->setMSB(m_msb);
-                        m_instrument->setLSB(m_lsb);
+                        m_instrument->setBankSelectMSB(m_msb);
+                        m_instrument->setBankSelectLSB(m_lsb);
                         m_instrument->setSendBankSelect(m_sendBankSelect);
                     }
                 }

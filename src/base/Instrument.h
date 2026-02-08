@@ -204,11 +204,11 @@ public:
     void setProgramChange(MidiByte program);
     MidiByte getProgramChange() const;
 
-    void setMSB(MidiByte msb);
-    MidiByte getMSB() const;
+    void setBankSelectMSB(MidiByte msb);
+    MidiByte getBankSelectMSB() const;
 
-    void setLSB(MidiByte lsb);
-    MidiByte getLSB() const;
+    void setBankSelectLSB(MidiByte lsb);
+    MidiByte getBankSelectLSB() const;
 
     /// Pick the first valid program in the connected Device.
     void pickFirstProgram(bool percussion);
