@@ -119,8 +119,9 @@ ModifyDeviceCommand::execute()
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
     m_oldBankSelectType = midiDevice->getBankSelectType();
+
     InstrumentVector instruments = midiDevice->getAllInstruments();
-    for (size_t i = 0; i < instruments.size(); ++i) {
+    for (const Instrument *instrument : instruments) {
         // ??? Preserving just the programs isn't enough.  We need
         //     to preserve the rest of the Instrument as well.  However,
         //     the auto/fixed channel feature has made it impossible
@@ -129,7 +130,7 @@ ModifyDeviceCommand::execute()
         //     that we either need to introduce some sort of copyForUndo()
         //     hack to each object, or develop a set of standards for coding
         //     objects that are undo-safe.  Sounds like a pretty big project.
-        m_oldInstrumentPrograms.push_back(instruments[i]->getProgram());
+        m_oldInstrumentPrograms.push_back(instrument->getProgram());
     }
 
     // Make the Changes
@@ -176,7 +177,7 @@ ModifyDeviceCommand::execute()
         if (m_rename)
             midiDevice->setName(m_deviceName);
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
-    } else {
+    } else {  // Do not overwrite.
         if (m_changeBanks)
             midiDevice->mergeBankList(m_bankList);
         if (m_changePrograms)
@@ -237,10 +238,14 @@ ModifyDeviceCommand::unexecute()
     if (m_changeBankSelectType)
         midiDevice->setBankSelectType(m_oldBankSelectType);
 
-    InstrumentVector instruments = midiDevice->getAllInstruments();
-    for (size_t i = 0; i < instruments.size(); ++i) {
-        instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
-        instruments[i]->sendChannelSetup();
+    // Put back the MidiProgram for each Instrument.
+    const InstrumentVector instruments = midiDevice->getAllInstruments();
+    for (size_t instrumentIndex = 0;
+         instrumentIndex < instruments.size();
+         ++instrumentIndex) {
+        instruments[instrumentIndex]->setProgram(
+                m_oldInstrumentPrograms[instrumentIndex]);
+        instruments[instrumentIndex]->sendChannelSetup();
     }
 
     // unblock notifications. This will trigger a notification

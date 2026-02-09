@@ -18,9 +18,9 @@
 #ifndef RG_MODIFYDEVICECOMMAND_H
 #define RG_MODIFYDEVICECOMMAND_H
 
-#include "base/Device.h"
+#include "base/Device.h"  // DeviceId
 #include "base/MidiDevice.h"
-#include "document/Command.h"
+#include "document/Command.h"  // NamedCommand
 
 #include <QString>
 #include <QCoreApplication>
@@ -48,14 +48,16 @@ public:
                         const std::string &librarianEmail,
                         const QString &commandName = "");
 
+    void setRename(bool rename)  { m_rename = rename; }
     void setVariation(MidiDevice::VariationType variationType);
     void setBankSelectType(MidiDevice::BankSelectType bankSelectType);
     void setBankList(const BankList &bankList);
     void setProgramList(const ProgramList &programList);
     void setControlList(const ControlList &controlList);
     void setKeyMappingList(const KeyMappingList &keyMappingList);
+
+    /// Overwrite or merge bank list, program list, and key mappings.
     void setOverwrite(bool overwrite)  { m_overwrite = overwrite; }
-    void setRename(bool rename)  { m_rename = rename; }
 
     static QString getGlobalName()  { return tr("Modify &MIDI Bank"); }
 
@@ -67,6 +69,24 @@ private:
     Studio *m_studio;
     DeviceId m_deviceID;
 
+    // Name
+    std::string m_oldName;
+    bool m_rename{true};
+    std::string m_deviceName;
+
+    // Librarian Name
+    std::string m_oldLibrarianName;
+    std::string m_librarianName;
+
+    // Librarian email
+    std::string m_oldLibrarianEmail;
+    std::string m_librarianEmail;
+
+    // Variation Type
+    MidiDevice::VariationType m_oldVariationType{MidiDevice::NoVariations};
+    bool m_changeVariation{false};
+    MidiDevice::VariationType m_variationType{MidiDevice::NoVariations};
+
     // Bank Select Type
     MidiDevice::BankSelectType m_oldBankSelectType{
             MidiDevice::BankSelectType::Normal};
@@ -74,32 +94,31 @@ private:
     MidiDevice::BankSelectType m_bankSelectType{
             MidiDevice::BankSelectType::Normal};
 
-    std::string                m_deviceName;
-    std::string                m_librarianName;
-    std::string                m_librarianEmail;
-    MidiDevice::VariationType  m_variationType{MidiDevice::NoVariations};
-    BankList                   m_bankList;
-    ProgramList                m_programList;
-    ControlList                m_controlList;
-    KeyMappingList             m_keyMappingList;
+    // Bank List
+    BankList m_oldBankList;
+    bool m_changeBanks{false};
+    BankList m_bankList;
 
-    std::string                m_oldName;
-    std::string                m_oldLibrarianName;
-    std::string                m_oldLibrarianEmail;
-    MidiDevice::VariationType  m_oldVariationType{MidiDevice::NoVariations};
-    BankList                   m_oldBankList;
-    ProgramList                m_oldProgramList;
-    ControlList                m_oldControlList;
-    KeyMappingList             m_oldKeyMappingList;
-    ProgramList                m_oldInstrumentPrograms;
+    // Program List
+    ProgramList m_oldProgramList;
+    bool m_changePrograms{false};
+    ProgramList m_programList;
 
-    bool                       m_overwrite{true};
-    bool                       m_rename{true};
-    bool                       m_changeVariation{false};
-    bool                       m_changeBanks{false};
-    bool                       m_changePrograms{false};
-    bool                       m_changeControls{false};
-    bool                       m_changeKeyMappings{false};
+    // Programs for each Instrument.  These are always saved and restored.
+    // ??? Why?  This command cannot change them.
+    ProgramList m_oldInstrumentPrograms;
+
+    // Controller List
+    ControlList m_oldControlList;
+    bool m_changeControls{false};
+    ControlList m_controlList;
+
+    // Key Mapping List
+    KeyMappingList m_oldKeyMappingList;
+    bool m_changeKeyMappings{false};
+    KeyMappingList m_keyMappingList;
+
+    bool m_overwrite{true};
 
 };
 
