@@ -42,6 +42,7 @@
 
 #include <QAction>
 #include <QComboBox>
+#include <QLabel>
 #include <QTreeWidget>
 #include <QMainWindow>
 #include <QMessageBox>
@@ -142,13 +143,13 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     m_optionBox = new QGroupBox(tr("Options"), m_rightSide);
     mainLayout->addWidget(m_optionBox, 1, 1);
 
-    QHBoxLayout *variationBoxLayout = new QHBoxLayout(m_optionBox);
+    QGridLayout *optionsGridLayout = new QGridLayout(m_optionBox);
 
     // Variation Check Box
     m_variationCheckBox = new QCheckBox(tr("Show Variation list based on "), m_optionBox);
     connect(m_variationCheckBox, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotVariationToggled);
-    variationBoxLayout->addWidget(m_variationCheckBox);
+    optionsGridLayout->addWidget(m_variationCheckBox, 0, 0);
 
     // Variation Combo Box
     m_variationCombo = new QComboBox(m_optionBox);
@@ -157,7 +158,18 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     connect(m_variationCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &BankEditorDialog::slotVariationChanged);
-    variationBoxLayout->addWidget(m_variationCombo);
+    optionsGridLayout->addWidget(m_variationCombo, 0, 1);
+
+    // Bank Select Type
+    optionsGridLayout->addWidget(new QLabel(tr("Bank Select Type"), m_optionBox), 1, 0);
+    m_bankSelectTypeCombo = new QComboBox(m_optionBox);
+    m_bankSelectTypeCombo->addItem(tr("Normal"));
+    m_bankSelectTypeCombo->addItem(tr("PC100+ (TG77, etc...)"));
+    m_bankSelectTypeCombo->addItem(tr("CC31 (Matrix-1000)"));
+    connect(m_bankSelectTypeCombo,
+                static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
+            this, &BankEditorDialog::slotBankSelectTypeChanged);
+    optionsGridLayout->addWidget(m_bankSelectTypeCombo, 1, 1);
 
     // Button box.  Close button.
 
@@ -518,6 +530,9 @@ void BankEditorDialog::updateEditor(QTreeWidgetItem *item)
     m_variationType = device->getVariationType();
     m_variationCombo->setCurrentIndex(
             m_variationType == MidiDevice::VariationFromLSB ? 0 : 1);
+
+    m_bankSelectType = device->getBankSelectType();
+    m_bankSelectTypeCombo->setCurrentIndex((int)m_bankSelectType);
 
     // Key Map Selected
 
@@ -1179,6 +1194,22 @@ BankEditorDialog::slotVariationChanged(int index)
     if (!command)
         return;
     command->setVariation(variation);
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
+BankEditorDialog::slotBankSelectTypeChanged(int index)
+{
+    // No change?  Bail.
+    if (index == (int)m_bankSelectType)
+        return;
+
+    m_bankSelectType = static_cast<MidiDevice::BankSelectType>(index);
+
+    ModifyDeviceCommand *command = makeCommand(tr("bank select type changed"));
+    if (!command)
+        return;
+    command->setBankSelectType(m_bankSelectType);
     CommandHistory::getInstance()->addCommand(command);
 }
 

@@ -134,6 +134,9 @@ private slots:
     /// "Show Variation list based on" combo box handler.
     void slotVariationChanged(int index);
 
+    /// "Bank Select Type" combo box handler.
+    void slotBankSelectTypeChanged(int index);
+
     /// Help > Help
     void slotHelpRequested();
     /// Help > About Rosegarden
@@ -170,12 +173,20 @@ private:
 
     // Options
     QGroupBox *m_optionBox;
+
     // Show Variation list based on
     QCheckBox *m_variationCheckBox;
     // Show Variation list based on
     QComboBox *m_variationCombo;
     // Cache to detect changes.
     MidiDevice::VariationType m_variationType;
+
+    // Bank Select Type
+    QComboBox *m_bankSelectTypeCombo;
+    // Cache to detect changes.
+    MidiDevice::BankSelectType m_bankSelectType{
+            MidiDevice::BankSelectType::Normal};
+
 
     QPushButton *m_closeButton;
 
