@@ -8132,7 +8132,7 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &filename)
     if (!success)
         return;
 
-    MacroCommand *command = new MacroCommand(tr("Import Studio"));
+    MacroCommand *macroCommand = new MacroCommand(tr("Import Studio"));
 
     // We only copy across MIDI play devices...
     std::vector<DeviceId> destDeviceIDs;
@@ -8153,72 +8153,80 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &filename)
     // For each Device in the import source Studio...
     for (const Device *device : srcStudio.getDevicesRef()) {
 
-        const MidiDevice *md = dynamic_cast<const MidiDevice *>(device);
+        const MidiDevice *midiDevice = dynamic_cast<const MidiDevice *>(device);
 
         // Not a MidiDevice or not a playback MidiDevice?  Try the next.
-        if (!md  ||  md->getDirection() != MidiDevice::Play)
+        if (!midiDevice  ||  midiDevice->getDirection() != MidiDevice::Play)
             continue;
 
-        RG_DEBUG << "  srcStudio device" << md->getName();
+        RG_DEBUG << "  srcStudio device" << midiDevice->getName();
 
+        // If we haven't used up the Device IDs in the destination, clobber
+        // the current one.
         if (deviceIDIter != destDeviceIDs.end()) {
 
             RG_DEBUG << "  dest device ID to clobber" << *deviceIDIter;
 
-            // ??? Why cache these?  They do not change.
-            MidiDevice::VariationType variation(md->getVariationType());
-            BankList bl(md->getBanks());
-            ProgramList pl(md->getPrograms());
-            ControlList cl(md->getControlParameters());
-
             ModifyDeviceCommand *mdCommand = new ModifyDeviceCommand(
                     &destStudio,  // studio
                     *deviceIDIter,  // deviceID
-                    md->getName(),
-                    md->getLibrarianName(),
-                    md->getLibrarianEmail());
-            mdCommand->setVariation(variation);
-            mdCommand->setBankList(bl);
-            mdCommand->setProgramList(pl);
-            mdCommand->setControlList(cl);
+                    midiDevice->getName(),  // name
+                    midiDevice->getLibrarianName(),  // librarianName
+                    midiDevice->getLibrarianEmail());  // librarianEmail
+            mdCommand->setVariation(midiDevice->getVariationType());
+            mdCommand->setBankSelectType(midiDevice->getBankSelectType());
+            mdCommand->setBankList(midiDevice->getBanks());
+            mdCommand->setProgramList(midiDevice->getPrograms());
+            mdCommand->setControlList(midiDevice->getControlParameters());
             mdCommand->setOverwrite(true);
-            mdCommand->setRename(md->getName() != "");
+            mdCommand->setRename(midiDevice->getName() != "");
 
-            command->addCommand(mdCommand);
+            macroCommand->addCommand(mdCommand);
+
             ++deviceIDIter;
+
         } else {
-            RG_DEBUG << "new device" << md->getName();
-            command->addCommand(new CreateOrDeleteDeviceCommand(
+
+            RG_DEBUG << "  creating new device";
+
+            macroCommand->addCommand(new CreateOrDeleteDeviceCommand(
                     &destStudio,
-                    md->getName(),
-                    md->getType(),
-                    md->getDirection(),
+                    midiDevice->getName(),
+                    midiDevice->getType(),
+                    midiDevice->getDirection(),
                     "",  // connection
                     true,  // withData
-                    md->getLibrarianName(),
-                    md->getLibrarianEmail(),
-                    md->getVariationType(),
-                    md->getBanks(),  // bankList
-                    md->getPrograms(),  // programList
-                    md->getControlParameters(),  // controlList
-                    md->getKeyMappings()));  // keyMappingList
+                    midiDevice->getLibrarianName(),
+                    midiDevice->getLibrarianEmail(),
+                    midiDevice->getVariationType(),
+                    midiDevice->getBankSelectType(),
+                    midiDevice->getBanks(),  // bankList
+                    midiDevice->getPrograms(),  // programList
+                    midiDevice->getControlParameters(),  // controlList
+                    midiDevice->getKeyMappings()));  // keyMappingList
+
         }
 
     }
 
+    // Delete any remaining devices in the destination doc.
     while (deviceIDIter != destDeviceIDs.end()) {
         RG_DEBUG << "add device" << *deviceIDIter;
-        command->addCommand(new CreateOrDeleteDeviceCommand
+        macroCommand->addCommand(new CreateOrDeleteDeviceCommand
                             (&destStudio,
                              *deviceIDIter));
         ++deviceIDIter;
     }
 
+    // Copy the filters.
     destStudio.setMIDIThruFilter(srcStudio.getMIDIThruFilter());
     destStudio.setMIDIRecordFilter(srcStudio.getMIDIRecordFilter());
 
-    CommandHistory::getInstance()->addCommand(command);
-    RosegardenDocument::currentDocument->initialiseStudio(); // The other document will have reset it
+    CommandHistory::getInstance()->addCommand(macroCommand);
+
+    // Make sure the Studio is in sync with the new Devices.
+    // ??? Why?  Aren't the commands enough?
+    RosegardenDocument::currentDocument->initialiseStudio();
 
     if (m_view) {
         // ??? Can't just remove this when the time comes.
@@ -8227,8 +8235,8 @@ RosegardenMainWindow::slotImportStudioFromFile(const QString &filename)
         //     would be better if the various boxes responded to
         //     RosegardenDocument::documentModified() which should
         //     have already been emitted.
-        m_view->slotSelectTrackSegments
-            (RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
+        m_view->slotSelectTrackSegments(
+                RosegardenDocument::currentDocument->getComposition().getSelectedTrack());
     }
 }
 

@@ -54,6 +54,8 @@ public:
             const std::string &librarianName = "",
             const std::string &librarianEmail = "",
             MidiDevice::VariationType variationType = MidiDevice::NoVariations,
+            MidiDevice::BankSelectType bankSelectType =
+                    MidiDevice::BankSelectType::Normal,
             const BankList &bankList = BankList(),
             const ProgramList &programList = ProgramList(),
             const ControlList &controlList = ControlList(),
@@ -88,6 +90,7 @@ private:
     std::string m_librarianName;
     std::string m_librarianEmail;
     MidiDevice::VariationType m_variationType;
+    MidiDevice::BankSelectType m_bankSelectType;
     BankList m_bankList;
     ProgramList m_programList;
     ControlList m_controlList;
