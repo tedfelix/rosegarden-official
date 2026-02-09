@@ -36,14 +36,14 @@ namespace Rosegarden
 
 ModifyDeviceCommand::ModifyDeviceCommand(
         Studio *studio,
-        DeviceId device,
+        DeviceId deviceID,
         const std::string &name,
         const std::string &librarianName,
         const std::string &librarianEmail,
         const QString &commandName) :
     NamedCommand(getGlobalName()),
     m_studio(studio),
-    m_device(device),
+    m_deviceID(deviceID),
     m_deviceName(name),
     m_librarianName(librarianName),
     m_librarianEmail(librarianEmail),
@@ -102,15 +102,15 @@ void ModifyDeviceCommand::setKeyMappingList(const KeyMappingList &keyMappingList
 void
 ModifyDeviceCommand::execute()
 {
-    Device *device = m_studio->getDevice(m_device);
+    Device *device = m_studio->getDevice(m_deviceID);
     if (!device) {
-        RG_WARNING << "ERROR: execute(): no such device as " << m_device;
+        RG_WARNING << "ERROR: execute(): no such device as " << m_deviceID;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        RG_WARNING << "ERROR: execute(): device " << m_device << " is not a MIDI device";
+        RG_WARNING << "ERROR: execute(): device " << m_deviceID << " is not a MIDI device";
         return;
     }
 
@@ -231,15 +231,15 @@ ModifyDeviceCommand::execute()
 void
 ModifyDeviceCommand::unexecute()
 {
-    Device *device = m_studio->getDevice(m_device);
+    Device *device = m_studio->getDevice(m_deviceID);
     if (!device) {
-        RG_WARNING << "ERROR: unexecute(): no such device as " << m_device;
+        RG_WARNING << "ERROR: unexecute(): no such device as " << m_deviceID;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        RG_WARNING << "ERROR: unexecute(): device " << m_device << " is not a MIDI device";
+        RG_WARNING << "ERROR: unexecute(): device " << m_deviceID << " is not a MIDI device";
         return;
     }
 

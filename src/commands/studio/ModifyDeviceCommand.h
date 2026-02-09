@@ -42,7 +42,7 @@ class ModifyDeviceCommand : public NamedCommand
 
 public:
     ModifyDeviceCommand(Studio *studio,
-                        DeviceId device,
+                        DeviceId deviceID,
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail,
@@ -68,7 +68,7 @@ public:
 protected:
 
     Studio                    *m_studio;
-    int                        m_device;
+    int                        m_deviceID;
 
     // Bank Select Type
     MidiDevice::BankSelectType m_oldBankSelectType{
