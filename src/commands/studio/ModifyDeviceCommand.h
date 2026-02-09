@@ -104,8 +104,14 @@ private:
     bool m_changePrograms{false};
     ProgramList m_programList;
 
-    // Programs for each Instrument.  These are always saved and restored.
-    // ??? Why?  This command cannot change them.
+    /// Programs for each Instrument.  These are always saved and restored.
+    /**
+     * We preserve these to handle the case where the user changes a device
+     * then changes the programs on the instruments, then decides to undo.
+     * Instead of showing the modified programs in the old device, the
+     * programs that were selected before are restored.  It's a partial
+     * undo for Instrument program selections.
+     */
     ProgramList m_oldInstrumentPrograms;
 
     // Controller List

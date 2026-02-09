@@ -21,13 +21,11 @@
 #include "ModifyDeviceCommand.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/Strings.h"  // strtoqstr()
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
 #include "gui/application/RosegardenMainWindow.h"
-
-#include <QString>
 
 
 namespace Rosegarden
@@ -94,13 +92,13 @@ ModifyDeviceCommand::execute()
 {
     Device *device = m_studio->getDevice(m_deviceID);
     if (!device) {
-        RG_WARNING << "ERROR: execute(): no such device as " << m_deviceID;
+        RG_WARNING << "execute(): WARNING: no such device as " << m_deviceID;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        RG_WARNING << "ERROR: execute(): device " << m_deviceID << " is not a MIDI device";
+        RG_WARNING << "execute(): ERROR: device " << m_deviceID << " is not a MIDI device";
         return;
     }
 
@@ -137,6 +135,7 @@ ModifyDeviceCommand::execute()
 
     if (m_changeVariation)
         midiDevice->setVariationType(m_variationType);
+
     if (m_changeBankSelectType)
         midiDevice->setBankSelectType(m_bankSelectType);
 
@@ -176,28 +175,29 @@ ModifyDeviceCommand::execute()
 
         if (m_rename)
             midiDevice->setName(m_deviceName);
+
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
-    } else {  // Do not overwrite.
+
+    } else {  // Do not overwrite.  Merge.
+
         if (m_changeBanks)
             midiDevice->mergeBankList(m_bankList);
         if (m_changePrograms)
             midiDevice->mergeProgramList(m_programList);
-
-        if (m_changeKeyMappings) {
+        if (m_changeKeyMappings)
             midiDevice->mergeKeyMappingList(m_keyMappingList);
-        }
 
         if (m_rename) {
             std::string mergeName = midiDevice->getName() +
                                     std::string("/") + m_deviceName;
             midiDevice->setName(mergeName);
         }
+
     }
 
-    //!!! merge option?
-    if (m_changeControls) {
+    // ??? Would merge be helpful?
+    if (m_changeControls)
         midiDevice->replaceControlParameters(m_controlList);
-    }
 
     // unblock notifications. This will trigger a notification
     midiDevice->blockNotify(false);
@@ -213,13 +213,13 @@ ModifyDeviceCommand::unexecute()
 {
     Device *device = m_studio->getDevice(m_deviceID);
     if (!device) {
-        RG_WARNING << "ERROR: unexecute(): no such device as " << m_deviceID;
+        RG_WARNING << "unexecute(): WARNING: no such device as " << m_deviceID;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        RG_WARNING << "ERROR: unexecute(): device " << m_deviceID << " is not a MIDI device";
+        RG_WARNING << "unexecute(): WARNING: device " << m_deviceID << " is not a MIDI device";
         return;
     }
 
