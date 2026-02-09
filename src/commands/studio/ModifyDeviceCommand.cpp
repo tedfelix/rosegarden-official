@@ -46,17 +46,7 @@ ModifyDeviceCommand::ModifyDeviceCommand(
     m_deviceID(deviceID),
     m_deviceName(name),
     m_librarianName(librarianName),
-    m_librarianEmail(librarianEmail),
-    m_variationType(MidiDevice::NoVariations),
-    m_oldVariationType(MidiDevice::NoVariations),
-    m_overwrite(true),
-    m_rename(true),
-    m_changeVariation(false),
-    m_changeBanks(false),
-    m_changePrograms(false),
-    m_changeControls(false),
-    m_changeKeyMappings(false),
-    m_clearBankAndProgramList(false)
+    m_librarianEmail(librarianEmail)
 {
     if (commandName != "")
         setName(commandName);
@@ -150,37 +140,31 @@ ModifyDeviceCommand::execute()
         midiDevice->setBankSelectType(m_bankSelectType);
 
     if (m_overwrite) {
-        if (m_clearBankAndProgramList) {
-            midiDevice->clearBankList();
-            midiDevice->clearProgramList();
-            midiDevice->clearKeyMappingList();
-        } else {
-            if (m_changeBanks)
-                midiDevice->replaceBankList(m_bankList);
-            if (m_changePrograms)
-                midiDevice->replaceProgramList(m_programList);
-            if (m_changeBanks || m_changePrograms) {
-                // Make sure the instruments make sense.
-                for (size_t i = 0; i < instruments.size(); ++i) {
-                    bool programOK = false;
-                    const MidiProgram& program = instruments[i]->getProgram();
-                    if (program.getBank().isPercussion()) continue;
-                    for(const MidiProgram& lprogram : m_programList) {
-                        RG_DEBUG << "compare program" <<
+        if (m_changeBanks)
+            midiDevice->replaceBankList(m_bankList);
+        if (m_changePrograms)
+            midiDevice->replaceProgramList(m_programList);
+        if (m_changeBanks || m_changePrograms) {
+            // Make sure the instruments make sense.
+            for (size_t i = 0; i < instruments.size(); ++i) {
+                bool programOK = false;
+                const MidiProgram& program = instruments[i]->getProgram();
+                if (program.getBank().isPercussion()) continue;
+                for(const MidiProgram& lprogram : m_programList) {
+                    RG_DEBUG << "compare program" <<
+                        strtoqstr(lprogram.getName());
+                    if (program.partialCompare(lprogram)) {
+                        RG_DEBUG << "found program" <<
                             strtoqstr(lprogram.getName());
-                        if (program.partialCompare(lprogram)) {
-                            RG_DEBUG << "found program" <<
-                                strtoqstr(lprogram.getName());
-                            programOK = true;
-                            break;
-                        }
+                        programOK = true;
+                        break;
                     }
-                    if (! programOK) {
-                        RG_DEBUG << "resetting instrument" << i;
-                        instruments[i]->
-                            pickFirstProgram(midiDevice->isPercussionNumber(i));
-                        instruments[i]->sendChannelSetup();
-                    }
+                }
+                if (! programOK) {
+                    RG_DEBUG << "resetting instrument" << i;
+                    instruments[i]->
+                        pickFirstProgram(midiDevice->isPercussionNumber(i));
+                    instruments[i]->sendChannelSetup();
                 }
             }
         }
@@ -193,15 +177,10 @@ ModifyDeviceCommand::execute()
             midiDevice->setName(m_deviceName);
         midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
     } else {
-        if (m_clearBankAndProgramList) {
-            midiDevice->clearBankList();
-            midiDevice->clearProgramList();
-        } else {
-            if (m_changeBanks)
-                midiDevice->mergeBankList(m_bankList);
-            if (m_changePrograms)
-                midiDevice->mergeProgramList(m_programList);
-        }
+        if (m_changeBanks)
+            midiDevice->mergeBankList(m_bankList);
+        if (m_changePrograms)
+            midiDevice->mergeProgramList(m_programList);
 
         if (m_changeKeyMappings) {
             midiDevice->mergeKeyMappingList(m_keyMappingList);

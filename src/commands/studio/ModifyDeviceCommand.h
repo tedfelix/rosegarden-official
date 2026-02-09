@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -21,17 +20,17 @@
 
 #include "base/Device.h"
 #include "base/MidiDevice.h"
-#include <string>
 #include "document/Command.h"
+
 #include <QString>
 #include <QCoreApplication>
 
-
-class Modify;
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 
@@ -41,6 +40,7 @@ class ModifyDeviceCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyDeviceCommand)
 
 public:
+
     ModifyDeviceCommand(Studio *studio,
                         DeviceId deviceID,
                         const std::string &name,
@@ -57,18 +57,15 @@ public:
     void setOverwrite(bool overwrite)  { m_overwrite = overwrite; }
     void setRename(bool rename)  { m_rename = rename; }
 
-    /// supersedes setBankList() and setProgramList()
-    void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
-
-    static QString getGlobalName() { return tr("Modify &MIDI Bank"); }
+    static QString getGlobalName()  { return tr("Modify &MIDI Bank"); }
 
     void execute() override;
     void unexecute() override;
 
-protected:
+private:
 
-    Studio                    *m_studio;
-    int                        m_deviceID;
+    Studio *m_studio;
+    DeviceId m_deviceID;
 
     // Bank Select Type
     MidiDevice::BankSelectType m_oldBankSelectType{
@@ -80,7 +77,7 @@ protected:
     std::string                m_deviceName;
     std::string                m_librarianName;
     std::string                m_librarianEmail;
-    MidiDevice::VariationType  m_variationType;
+    MidiDevice::VariationType  m_variationType{MidiDevice::NoVariations};
     BankList                   m_bankList;
     ProgramList                m_programList;
     ControlList                m_controlList;
@@ -89,21 +86,20 @@ protected:
     std::string                m_oldName;
     std::string                m_oldLibrarianName;
     std::string                m_oldLibrarianEmail;
-    MidiDevice::VariationType  m_oldVariationType;
+    MidiDevice::VariationType  m_oldVariationType{MidiDevice::NoVariations};
     BankList                   m_oldBankList;
     ProgramList                m_oldProgramList;
     ControlList                m_oldControlList;
     KeyMappingList             m_oldKeyMappingList;
     ProgramList                m_oldInstrumentPrograms;
 
-    bool                       m_overwrite;
-    bool                       m_rename;
-    bool                       m_changeVariation;
-    bool                       m_changeBanks;
-    bool                       m_changePrograms;
-    bool                       m_changeControls;
-    bool                       m_changeKeyMappings;
-    bool                       m_clearBankAndProgramList;
+    bool                       m_overwrite{true};
+    bool                       m_rename{true};
+    bool                       m_changeVariation{false};
+    bool                       m_changeBanks{false};
+    bool                       m_changePrograms{false};
+    bool                       m_changeControls{false};
+    bool                       m_changeKeyMappings{false};
 
 };
 
