@@ -1288,8 +1288,10 @@ BankEditorDialog::slotImport()
                 librarianEmail,
                 tr("import device"));  // commandName
 
-        if (dialog->shouldOverwriteBanks())
+        if (dialog->shouldOverwriteBanks()) {
             command->setVariation(dialog->getVariationType());
+            command->setBankSelectType(dialog->getBankSelectType());
+        }
         if (dialog->shouldImportBanks()) {
             command->setBankList(dialog->getBanks());
             command->setProgramList(dialog->getPrograms());

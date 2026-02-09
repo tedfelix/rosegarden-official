@@ -33,37 +33,46 @@
 namespace Rosegarden
 {
 
+
 ModifyDeviceCommand::ModifyDeviceCommand(
-    Studio *studio,
-    DeviceId device,
-    const std::string &name,
-    const std::string &librarianName,
-    const std::string &librarianEmail,
-    const QString& commandName) :
-        NamedCommand(getGlobalName()),
-        m_studio(studio),
-        m_device(device),
-        m_deviceName(name),
-        m_librarianName(librarianName),
-        m_librarianEmail(librarianEmail),
-        m_variationType(MidiDevice::NoVariations),
-        m_oldVariationType(MidiDevice::NoVariations),
-        m_overwrite(true),
-        m_rename(true),
-        m_changeVariation(false),
-        m_changeBanks(false),
-        m_changePrograms(false),
-        m_changeControls(false),
-        m_changeKeyMappings(false),
-        m_clearBankAndProgramList(false)
+        Studio *studio,
+        DeviceId device,
+        const std::string &name,
+        const std::string &librarianName,
+        const std::string &librarianEmail,
+        const QString &commandName) :
+    NamedCommand(getGlobalName()),
+    m_studio(studio),
+    m_device(device),
+    m_deviceName(name),
+    m_librarianName(librarianName),
+    m_librarianEmail(librarianEmail),
+    m_variationType(MidiDevice::NoVariations),
+    m_oldVariationType(MidiDevice::NoVariations),
+    m_overwrite(true),
+    m_rename(true),
+    m_changeVariation(false),
+    m_changeBanks(false),
+    m_changePrograms(false),
+    m_changeControls(false),
+    m_changeKeyMappings(false),
+    m_clearBankAndProgramList(false)
 {
-    if (commandName != "") setName(commandName);
+    if (commandName != "")
+        setName(commandName);
 }
 
 void ModifyDeviceCommand::setVariation(MidiDevice::VariationType variationType)
 {
     m_variationType = variationType;
     m_changeVariation = true;
+}
+
+void ModifyDeviceCommand::setBankSelectType(
+        MidiDevice::BankSelectType bankSelectType)
+{
+    m_bankSelectType = bankSelectType;
+    m_changeBankSelectType = true;
 }
 
 void ModifyDeviceCommand::setBankList(const BankList &bankList)
@@ -119,6 +128,7 @@ ModifyDeviceCommand::execute()
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
+    m_oldBankSelectType = midiDevice->getBankSelectType();
     InstrumentVector instruments = midiDevice->getAllInstruments();
     for (size_t i = 0; i < instruments.size(); ++i) {
         // ??? Preserving just the programs isn't enough.  We need
@@ -136,6 +146,8 @@ ModifyDeviceCommand::execute()
 
     if (m_changeVariation)
         midiDevice->setVariationType(m_variationType);
+    if (m_changeBankSelectType)
+        midiDevice->setBankSelectType(m_bankSelectType);
 
     if (m_overwrite) {
         if (m_clearBankAndProgramList) {
@@ -207,7 +219,7 @@ ModifyDeviceCommand::execute()
         midiDevice->replaceControlParameters(m_controlList);
     }
 
-    // unblock notifactaions. This will trigger a notification
+    // unblock notifications. This will trigger a notification
     midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -231,7 +243,7 @@ ModifyDeviceCommand::unexecute()
         return;
     }
 
-    // block notifactaions to avoid multiple updates
+    // block notifications to avoid multiple updates
     midiDevice->blockNotify(true);
 
     if (m_rename)
@@ -243,6 +255,8 @@ ModifyDeviceCommand::unexecute()
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
     if (m_changeVariation)
         midiDevice->setVariationType(m_oldVariationType);
+    if (m_changeBankSelectType)
+        midiDevice->setBankSelectType(m_oldBankSelectType);
 
     InstrumentVector instruments = midiDevice->getAllInstruments();
     for (size_t i = 0; i < instruments.size(); ++i) {
@@ -250,7 +264,7 @@ ModifyDeviceCommand::unexecute()
         instruments[i]->sendChannelSetup();
     }
 
-    // unblock notifactaions. This will trigger a notification
+    // unblock notifications. This will trigger a notification
     midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -258,5 +272,6 @@ ModifyDeviceCommand::unexecute()
     //     would update themselves.
     RosegardenMainWindow::self()->uiUpdateKludge();
 }
+
 
 }

@@ -41,22 +41,21 @@ class ModifyDeviceCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyDeviceCommand)
 
 public:
-    // Any of the arguments passed by pointer may be null (except for
-    // the Studio) -- in which case they will not be changed in the device.
     ModifyDeviceCommand(Studio *studio,
                         DeviceId device,
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail,
-                        const QString& commandName = "");
+                        const QString &commandName = "");
 
-    void setVariation  (MidiDevice::VariationType variationType);
-    void setBankList   (const BankList    &bankList);
+    void setVariation(MidiDevice::VariationType variationType);
+    void setBankSelectType(MidiDevice::BankSelectType bankSelectType);
+    void setBankList(const BankList &bankList);
     void setProgramList(const ProgramList &programList);
     void setControlList(const ControlList &controlList);
     void setKeyMappingList(const KeyMappingList &keyMappingList);
-    void setOverwrite  (bool overwrite) { m_overwrite = overwrite; }
-    void setRename     (bool rename)    { m_rename = rename; }
+    void setOverwrite(bool overwrite)  { m_overwrite = overwrite; }
+    void setRename(bool rename)  { m_rename = rename; }
 
     /// supersedes setBankList() and setProgramList()
     void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
@@ -70,6 +69,13 @@ protected:
 
     Studio                    *m_studio;
     int                        m_device;
+
+    // Bank Select Type
+    MidiDevice::BankSelectType m_oldBankSelectType{
+            MidiDevice::BankSelectType::Normal};
+    bool m_changeBankSelectType{false};
+    MidiDevice::BankSelectType m_bankSelectType{
+            MidiDevice::BankSelectType::Normal};
 
     std::string                m_deviceName;
     std::string                m_librarianName;
