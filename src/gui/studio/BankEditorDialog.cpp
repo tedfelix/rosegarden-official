@@ -175,9 +175,14 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
             this, &BankEditorDialog::slotBankSelectTypeChanged);
     optionsGridLayout->addWidget(m_bankSelectTypeCombo, 1, 1);
 
-    // Button box.  Close button.
+    // Button box.  Help/Close buttons.
 
-    QDialogButtonBox *btnBox = new QDialogButtonBox(QDialogButtonBox::Close);
+    QDialogButtonBox *btnBox = new QDialogButtonBox(
+            QDialogButtonBox::Close | QDialogButtonBox::Help);
+    // Otherwise Help button is smashed against the left side.
+    btnBox->setContentsMargins(10, 0, 0, 0);
+    connect(btnBox, &QDialogButtonBox::helpRequested,
+            this, &BankEditorDialog::slotHelpRequested);
     m_closeButton = btnBox->button(QDialogButtonBox::Close);
     connect(m_closeButton, &QAbstractButton::clicked,
             this, &BankEditorDialog::slotFileClose);
