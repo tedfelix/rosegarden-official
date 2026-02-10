@@ -161,11 +161,15 @@ BankEditorDialog::BankEditorDialog(QWidget *parent,
     optionsGridLayout->addWidget(m_variationCombo, 0, 1);
 
     // Bank Select Type
-    optionsGridLayout->addWidget(new QLabel(tr("Bank Select Type"), m_optionBox), 1, 0);
+    QLabel *label = new QLabel(tr("Bank Select Type"), m_optionBox);
+    QString toolTip2 = tr("<qt><p><b>Normal</b> sends bank select MSB/LSB and program change.</p><p><b>PC100+</b> uses program changes 100-127 as bank selects.  Yamaha TG77 and others.</p><p><b>CC31</b> uses control change 31 value 127 and a program change as a bank select.  Oberheim Matrix-1000.</p></qt>");
+    label->setToolTip(toolTip2);
+    optionsGridLayout->addWidget(label);
     m_bankSelectTypeCombo = new QComboBox(m_optionBox);
     m_bankSelectTypeCombo->addItem(tr("Normal"));
-    m_bankSelectTypeCombo->addItem(tr("PC100+ (TG77, etc...)"));
-    m_bankSelectTypeCombo->addItem(tr("CC31 (Matrix-1000)"));
+    m_bankSelectTypeCombo->addItem(tr("PC100+"));
+    m_bankSelectTypeCombo->addItem(tr("CC31"));
+    m_bankSelectTypeCombo->setToolTip(toolTip2);
     connect(m_bankSelectTypeCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &BankEditorDialog::slotBankSelectTypeChanged);
