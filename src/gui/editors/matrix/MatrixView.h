@@ -262,6 +262,10 @@ protected:
     const SnapGrid *getSnapGrid() const;
     void insertControllerSequence(const ControlParameter &controlParameter);
 
+private slots:
+
+    void slotVelocityChanged(int velocity);
+
 private:
     MatrixWidget *m_matrixWidget;
     QSharedPointer<CommandRegistry> m_commandRegistry;

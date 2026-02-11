@@ -719,11 +719,13 @@ MatrixView::initActionsToolbar()
     for (int i = 0; i <= 127; ++i) {
         m_velocityCombo->addItem(QString("%1").arg(i));
     }
-    // ??? Would be nice to persist this on a segment-by-segment basis.
-    m_velocityCombo->setCurrentIndex(100);
+    if (m_segments[0]) {
+        m_velocityCombo->setCurrentIndex(m_segments[0]->matrixVelocity);
+        m_matrixWidget->setCurrentVelocity(m_segments[0]->matrixVelocity);
+    }
     connect(m_velocityCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
-            m_matrixWidget, &MatrixWidget::slotSetCurrentVelocity);
+            this, &MatrixView::slotVelocityChanged);
 
     // Quantize combo
     //
@@ -1665,15 +1667,15 @@ void MatrixView::slotDiatonicTranspose()
     EventSelection *selection = getSelection();
     if (!selection) return;
 
-    QSettings settings;
-    settings.beginGroup(MatrixViewConfigGroup);
+    //QSettings settings;
+    //settings.beginGroup(MatrixViewConfigGroup);
 
     IntervalDialog intervalDialog(this);
     int ok = intervalDialog.exec();
     //int dialogDefault = settings.value("lasttransposition", 0).toInt() ;
     int semitones = intervalDialog.getChromaticDistance();
     int steps = intervalDialog.getDiatonicDistance();
-    settings.endGroup();
+    //settings.endGroup();
 
     if (!ok || (semitones == 0 && steps == 0)) return;
 
@@ -2546,6 +2548,16 @@ MatrixView::slotJogRight()
                                               Note(Note::Demisemiquaver).getDuration(),
                                               useNotationTimings,
                                               *selection));
+}
+
+void MatrixView::slotVelocityChanged(int velocity)
+{
+    for (Segment *segment : m_segments)
+    {
+        segment->matrixVelocity = velocity;
+    }
+
+    m_matrixWidget->setCurrentVelocity(velocity);
 }
 
 

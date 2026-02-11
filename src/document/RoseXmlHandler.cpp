@@ -1165,6 +1165,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_currentSegment && m_inMatrix)
             m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
 
+    } else if (lcName == "velocity") {  // <velocity>
+
+        if (m_currentSegment && m_inMatrix)
+            m_currentSegment->matrixVelocity = atts.value("value").toUInt();
+
     } else if (lcName == "ruler") {  // <ruler>
 
         if (m_currentSegment && m_inMatrix) {

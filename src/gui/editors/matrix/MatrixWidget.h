@@ -132,6 +132,9 @@ public:
     /// Show the highlight on the piano/percussion rulers.
     void showHighlight(bool visible);
 
+    /// Velocity combo box.
+    void setCurrentVelocity(int velocity)  { m_currentVelocity = velocity; }
+
 
     // SelectionManager interface.
 
@@ -228,9 +231,6 @@ signals:
     void showContextHelp(const QString &);
 
 public slots:
-
-    /// Velocity combo box.
-    void slotSetCurrentVelocity(int velocity)  { m_currentVelocity = velocity; }
 
     /// Plays the preview note when using the computer keyboard to enter notes.
     void slotPlayPreviewNote(Segment *segment, int pitch);
