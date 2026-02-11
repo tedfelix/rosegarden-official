@@ -36,7 +36,7 @@ class QDropEvent;
 class QCloseEvent;
 class QUrl;
 
-//class KURL;
+#include <set>
 
 
 namespace Rosegarden

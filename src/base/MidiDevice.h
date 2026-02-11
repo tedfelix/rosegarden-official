@@ -151,6 +151,14 @@ public:
     VariationType getVariationType() const { return m_variationType; }
     void setVariationType(VariationType v) { m_variationType = v; notifyDeviceModified(); }
 
+    enum class BankSelectType {
+        Normal,  // Modern, send BS as usual, CC0 and CC32.
+        PC100Plus,  // TG77, etc...
+        CC31  // Matrix-1000
+    };
+    void setBankSelectType(BankSelectType type)  { m_bankSelectType = type; }
+    BankSelectType getBankSelectType() const  { return m_bankSelectType; }
+
     // Controllers - for mapping Controller names to values for use in
     // the InstrumentParameterBoxes (IPBs) and Control rulers.
     //
@@ -251,19 +259,18 @@ protected:
     //     copying of MidiDevice.
     MidiMetronome *m_metronome;
 
-    // used when we're presenting the instruments
+    /// used when we're presenting the instruments
     InstrumentVector  m_presentationInstrumentList;
 
-    // Is this device Play or Record?
-    //
+    /// Is this device Play or Record?
     DeviceDirection m_direction;
 
-    // Should we present LSB or MSB of bank info as a Variation number?
-    //
+    /// Should we present LSB or MSB of bank info as a Variation number?
     VariationType m_variationType;
 
-    // Librarian contact details
-    //
+    BankSelectType m_bankSelectType{BankSelectType::Normal};
+
+    /// Librarian contact details
     std::pair<std::string, std::string> m_librarian; // name. email
 
     // The channel allocator.
@@ -272,7 +279,7 @@ protected:
 
 private:
     // not used
-    MidiDevice &operator=(const MidiDevice &);
+    MidiDevice &operator=(const MidiDevice &) = delete;
 };
 
 }

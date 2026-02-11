@@ -616,8 +616,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
                 if ((*iit)->sendsProgramChange() &&
                     (*iit)->getProgramChange() == program &&
                     (!needBank || ((*iit)->sendsBankSelect() &&
-                                   (*iit)->getMSB() == msb &&
-                                   (*iit)->getLSB() == lsb &&
+                                   (*iit)->getBankSelectMSB() == msb &&
+                                   (*iit)->getBankSelectLSB() == lsb &&
                                    (*iit)->isPercussion() == percussion)))
                 {
                     return (*iit);
@@ -657,8 +657,8 @@ Studio::assignMidiProgramToInstrument(MidiByte program,
         if (needBank) {
             newInstrument->setSendBankSelect(true);
             newInstrument->setPercussion(percussion);
-            newInstrument->setMSB(msb);
-            newInstrument->setLSB(lsb);
+            newInstrument->setBankSelectMSB(msb);
+            newInstrument->setBankSelectLSB(lsb);
         }
     }
     else // Otherwise we just reuse the first Instrument we found

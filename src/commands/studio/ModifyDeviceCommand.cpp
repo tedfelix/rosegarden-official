@@ -21,49 +21,46 @@
 #include "ModifyDeviceCommand.h"
 
 #include "misc/Debug.h"
-#include "misc/Strings.h"
+#include "misc/Strings.h"  // strtoqstr()
 #include "base/Device.h"
 #include "base/MidiDevice.h"
 #include "base/Studio.h"
 #include "gui/application/RosegardenMainWindow.h"
 
-#include <QString>
-
 
 namespace Rosegarden
 {
 
+
 ModifyDeviceCommand::ModifyDeviceCommand(
-    Studio *studio,
-    DeviceId device,
-    const std::string &name,
-    const std::string &librarianName,
-    const std::string &librarianEmail,
-    const QString& commandName) :
-        NamedCommand(getGlobalName()),
-        m_studio(studio),
-        m_device(device),
-        m_deviceName(name),
-        m_librarianName(librarianName),
-        m_librarianEmail(librarianEmail),
-        m_variationType(MidiDevice::NoVariations),
-        m_oldVariationType(MidiDevice::NoVariations),
-        m_overwrite(true),
-        m_rename(true),
-        m_changeVariation(false),
-        m_changeBanks(false),
-        m_changePrograms(false),
-        m_changeControls(false),
-        m_changeKeyMappings(false),
-        m_clearBankAndProgramList(false)
+        Studio *studio,
+        DeviceId deviceID,
+        const std::string &name,
+        const std::string &librarianName,
+        const std::string &librarianEmail,
+        const QString &commandName) :
+    NamedCommand(getGlobalName()),
+    m_studio(studio),
+    m_deviceID(deviceID),
+    m_deviceName(name),
+    m_librarianName(librarianName),
+    m_librarianEmail(librarianEmail)
 {
-    if (commandName != "") setName(commandName);
+    if (commandName != "")
+        setName(commandName);
 }
 
 void ModifyDeviceCommand::setVariation(MidiDevice::VariationType variationType)
 {
     m_variationType = variationType;
     m_changeVariation = true;
+}
+
+void ModifyDeviceCommand::setBankSelectType(
+        MidiDevice::BankSelectType bankSelectType)
+{
+    m_bankSelectType = bankSelectType;
+    m_changeBankSelectType = true;
 }
 
 void ModifyDeviceCommand::setBankList(const BankList &bankList)
@@ -93,15 +90,15 @@ void ModifyDeviceCommand::setKeyMappingList(const KeyMappingList &keyMappingList
 void
 ModifyDeviceCommand::execute()
 {
-    Device *device = m_studio->getDevice(m_device);
+    Device *device = m_studio->getDevice(m_deviceID);
     if (!device) {
-        RG_WARNING << "ERROR: execute(): no such device as " << m_device;
+        RG_WARNING << "execute(): WARNING: no such device as " << m_deviceID;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        RG_WARNING << "ERROR: execute(): device " << m_device << " is not a MIDI device";
+        RG_WARNING << "execute(): ERROR: device " << m_deviceID << " is not a MIDI device";
         return;
     }
 
@@ -119,8 +116,10 @@ ModifyDeviceCommand::execute()
     m_oldLibrarianName = midiDevice->getLibrarianName();
     m_oldLibrarianEmail = midiDevice->getLibrarianEmail();
     m_oldVariationType = midiDevice->getVariationType();
+    m_oldBankSelectType = midiDevice->getBankSelectType();
+
     InstrumentVector instruments = midiDevice->getAllInstruments();
-    for (size_t i = 0; i < instruments.size(); ++i) {
+    for (const Instrument *instrument : instruments) {
         // ??? Preserving just the programs isn't enough.  We need
         //     to preserve the rest of the Instrument as well.  However,
         //     the auto/fixed channel feature has made it impossible
@@ -129,7 +128,7 @@ ModifyDeviceCommand::execute()
         //     that we either need to introduce some sort of copyForUndo()
         //     hack to each object, or develop a set of standards for coding
         //     objects that are undo-safe.  Sounds like a pretty big project.
-        m_oldInstrumentPrograms.push_back(instruments[i]->getProgram());
+        m_oldInstrumentPrograms.push_back(instrument->getProgram());
     }
 
     // Make the Changes
@@ -137,38 +136,35 @@ ModifyDeviceCommand::execute()
     if (m_changeVariation)
         midiDevice->setVariationType(m_variationType);
 
+    if (m_changeBankSelectType)
+        midiDevice->setBankSelectType(m_bankSelectType);
+
     if (m_overwrite) {
-        if (m_clearBankAndProgramList) {
-            midiDevice->clearBankList();
-            midiDevice->clearProgramList();
-            midiDevice->clearKeyMappingList();
-        } else {
-            if (m_changeBanks)
-                midiDevice->replaceBankList(m_bankList);
-            if (m_changePrograms)
-                midiDevice->replaceProgramList(m_programList);
-            if (m_changeBanks || m_changePrograms) {
-                // Make sure the instruments make sense.
-                for (size_t i = 0; i < instruments.size(); ++i) {
-                    bool programOK = false;
-                    const MidiProgram& program = instruments[i]->getProgram();
-                    if (program.getBank().isPercussion()) continue;
-                    for(const MidiProgram& lprogram : m_programList) {
-                        RG_DEBUG << "compare program" <<
+        if (m_changeBanks)
+            midiDevice->replaceBankList(m_bankList);
+        if (m_changePrograms)
+            midiDevice->replaceProgramList(m_programList);
+        if (m_changeBanks || m_changePrograms) {
+            // Make sure the instruments make sense.
+            for (size_t i = 0; i < instruments.size(); ++i) {
+                bool programOK = false;
+                const MidiProgram& program = instruments[i]->getProgram();
+                if (program.getBank().isPercussion()) continue;
+                for(const MidiProgram& lprogram : m_programList) {
+                    RG_DEBUG << "compare program" <<
+                        strtoqstr(lprogram.getName());
+                    if (program.partialCompare(lprogram)) {
+                        RG_DEBUG << "found program" <<
                             strtoqstr(lprogram.getName());
-                        if (program.partialCompare(lprogram)) {
-                            RG_DEBUG << "found program" <<
-                                strtoqstr(lprogram.getName());
-                            programOK = true;
-                            break;
-                        }
+                        programOK = true;
+                        break;
                     }
-                    if (! programOK) {
-                        RG_DEBUG << "resetting instrument" << i;
-                        instruments[i]->
-                            pickFirstProgram(midiDevice->isPercussionNumber(i));
-                        instruments[i]->sendChannelSetup();
-                    }
+                }
+                if (! programOK) {
+                    RG_DEBUG << "resetting instrument" << i;
+                    instruments[i]->
+                        pickFirstProgram(midiDevice->isPercussionNumber(i));
+                    instruments[i]->sendChannelSetup();
                 }
             }
         }
@@ -179,35 +175,31 @@ ModifyDeviceCommand::execute()
 
         if (m_rename)
             midiDevice->setName(m_deviceName);
-        midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
-    } else {
-        if (m_clearBankAndProgramList) {
-            midiDevice->clearBankList();
-            midiDevice->clearProgramList();
-        } else {
-            if (m_changeBanks)
-                midiDevice->mergeBankList(m_bankList);
-            if (m_changePrograms)
-                midiDevice->mergeProgramList(m_programList);
-        }
 
-        if (m_changeKeyMappings) {
+        midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
+
+    } else {  // Do not overwrite.  Merge.
+
+        if (m_changeBanks)
+            midiDevice->mergeBankList(m_bankList);
+        if (m_changePrograms)
+            midiDevice->mergeProgramList(m_programList);
+        if (m_changeKeyMappings)
             midiDevice->mergeKeyMappingList(m_keyMappingList);
-        }
 
         if (m_rename) {
             std::string mergeName = midiDevice->getName() +
                                     std::string("/") + m_deviceName;
             midiDevice->setName(mergeName);
         }
+
     }
 
-    //!!! merge option?
-    if (m_changeControls) {
+    // ??? Would merge be helpful?
+    if (m_changeControls)
         midiDevice->replaceControlParameters(m_controlList);
-    }
 
-    // unblock notifactaions. This will trigger a notification
+    // unblock notifications. This will trigger a notification
     midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -219,19 +211,19 @@ ModifyDeviceCommand::execute()
 void
 ModifyDeviceCommand::unexecute()
 {
-    Device *device = m_studio->getDevice(m_device);
+    Device *device = m_studio->getDevice(m_deviceID);
     if (!device) {
-        RG_WARNING << "ERROR: unexecute(): no such device as " << m_device;
+        RG_WARNING << "unexecute(): WARNING: no such device as " << m_deviceID;
         return;
     }
 
     MidiDevice *midiDevice = dynamic_cast<MidiDevice *>(device);
     if (!midiDevice) {
-        RG_WARNING << "ERROR: unexecute(): device " << m_device << " is not a MIDI device";
+        RG_WARNING << "unexecute(): WARNING: device " << m_deviceID << " is not a MIDI device";
         return;
     }
 
-    // block notifactaions to avoid multiple updates
+    // block notifications to avoid multiple updates
     midiDevice->blockNotify(true);
 
     if (m_rename)
@@ -243,14 +235,20 @@ ModifyDeviceCommand::unexecute()
     midiDevice->setLibrarian(m_oldLibrarianName, m_oldLibrarianEmail);
     if (m_changeVariation)
         midiDevice->setVariationType(m_oldVariationType);
+    if (m_changeBankSelectType)
+        midiDevice->setBankSelectType(m_oldBankSelectType);
 
-    InstrumentVector instruments = midiDevice->getAllInstruments();
-    for (size_t i = 0; i < instruments.size(); ++i) {
-        instruments[i]->setProgram(m_oldInstrumentPrograms[i]);
-        instruments[i]->sendChannelSetup();
+    // Put back the MidiProgram for each Instrument.
+    const InstrumentVector instruments = midiDevice->getAllInstruments();
+    for (size_t instrumentIndex = 0;
+         instrumentIndex < instruments.size();
+         ++instrumentIndex) {
+        instruments[instrumentIndex]->setProgram(
+                m_oldInstrumentPrograms[instrumentIndex]);
+        instruments[instrumentIndex]->sendChannelSetup();
     }
 
-    // unblock notifactaions. This will trigger a notification
+    // unblock notifications. This will trigger a notification
     midiDevice->blockNotify(false);
 
     // ??? Instead of this kludge, we should be calling a Studio::hasChanged()
@@ -258,5 +256,6 @@ ModifyDeviceCommand::unexecute()
     //     would update themselves.
     RosegardenMainWindow::self()->uiUpdateKludge();
 }
+
 
 }

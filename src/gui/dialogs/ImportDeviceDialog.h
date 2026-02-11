@@ -69,6 +69,7 @@ public:
     std::string getLibrarianName() const;
     std::string getLibrarianEmail() const;
     MidiDevice::VariationType getVariationType() const;
+    MidiDevice::BankSelectType getBankSelectType() const;
 
 public slots:
     void accept() override;

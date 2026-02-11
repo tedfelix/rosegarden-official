@@ -49,7 +49,6 @@
 #include "gui/configuration/GeneralConfigurationPage.h"
 #include "gui/configuration/AudioConfigurationPage.h"
 #include "gui/dialogs/AudioSplitDialog.h"
-#include "gui/dialogs/AudioManagerDialog.h"
 #include "gui/dialogs/DocumentConfigureDialog.h"
 #include "gui/editors/eventlist/EventListEditor.h"
 #include "gui/editors/matrix/MatrixView.h"

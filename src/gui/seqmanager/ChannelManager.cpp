@@ -22,9 +22,10 @@
 
 #include "base/AllocateChannels.h"
 #include "base/Composition.h"
+#include "base/Instrument.h"
+#include "base/MidiDevice.h"
 #include "misc/ConfigGroups.h"
 #include "misc/Debug.h"
-#include "base/Instrument.h"
 #include "sound/MappedEvent.h"
 #include "sound/MappedInserterBase.h"
 #include "sound/Midi.h"
@@ -181,29 +182,98 @@ void ChannelManager::insertChannelSetup(
 
         if (!instrument->hasFixedChannel()  ||
             instrument->sendsBankSelect()) {
-            {
-                // Bank Select MSB
-                MappedEvent mE;
-                mE.setType(MappedEvent::MidiController);
-                mE.setInstrumentId(instrument->getId());
-                mE.setData1(MIDI_CONTROLLER_BANK_MSB);
-                mE.setData2(instrument->getMSB());
-                mE.setRecordedChannel(channel);
-                mE.setEventTime(insertTime);
-                mE.setTrackId(trackId);
-                inserter.insertCopy(mE);
-            }
-            {
-                // Bank Select LSB
-                MappedEvent mE;
-                mE.setType(MappedEvent::MidiController);
-                mE.setInstrumentId(instrument->getId());
-                mE.setData1(MIDI_CONTROLLER_BANK_LSB);
-                mE.setData2(instrument->getLSB());
-                mE.setRecordedChannel(channel);
-                mE.setEventTime(insertTime);
-                mE.setTrackId(trackId);
-                inserter.insertCopy(mE);
+
+            MidiDevice *midiDevice =
+                    dynamic_cast<MidiDevice *>(instrument->getDevice());
+            MidiDevice::BankSelectType bankSelectType{
+                    MidiDevice::BankSelectType::Normal};
+            if (midiDevice)
+                bankSelectType = midiDevice->getBankSelectType();
+
+            switch (bankSelectType) {
+            case MidiDevice::BankSelectType::Normal:
+                {
+                    // Bank Select MSB
+                    MappedEvent mE;
+                    mE.setType(MappedEvent::MidiController);
+                    mE.setInstrumentId(instrument->getId());
+                    mE.setData1(MIDI_CONTROLLER_BANK_MSB);
+                    mE.setData2(instrument->getBankSelectMSB());
+                    mE.setRecordedChannel(channel);
+                    mE.setEventTime(insertTime);
+                    mE.setTrackId(trackId);
+                    inserter.insertCopy(mE);
+                }
+                {
+                    // Bank Select LSB
+                    MappedEvent mE;
+                    mE.setType(MappedEvent::MidiController);
+                    mE.setInstrumentId(instrument->getId());
+                    mE.setData1(MIDI_CONTROLLER_BANK_LSB);
+                    mE.setData2(instrument->getBankSelectLSB());
+                    mE.setRecordedChannel(channel);
+                    mE.setEventTime(insertTime);
+                    mE.setTrackId(trackId);
+                    inserter.insertCopy(mE);
+                }
+                break;
+
+            case MidiDevice::BankSelectType::PC100Plus:
+                {
+                    // Send the BS LSB (if between 100 and 127) as a PC.
+                    const MidiByte bankSelectLSB = instrument->getBankSelectLSB();
+                    if (bankSelectLSB >= 100  &&  bankSelectLSB <= 127)
+                    {
+                        MappedEvent mE;
+                        mE.setInstrumentId(instrument->getId());
+                        mE.setType(MappedEvent::MidiProgramChange);
+                        mE.setData1(bankSelectLSB);
+                        mE.setRecordedChannel(channel);
+                        mE.setEventTime(insertTime);
+                        mE.setTrackId(trackId);
+                        inserter.insertCopy(mE);
+                    }
+                }
+                break;
+
+            case MidiDevice::BankSelectType::CC31:
+                // Send CC31:127
+                {
+                    MappedEvent mE;
+                    mE.setInstrumentId(instrument->getId());
+                    mE.setType(MappedEvent::MidiController);
+                    mE.setData1(31);  // CC31
+                    mE.setData2(127);
+                    mE.setRecordedChannel(channel);
+                    mE.setEventTime(insertTime);
+                    mE.setTrackId(trackId);
+                    inserter.insertCopy(mE);
+                }
+                // Send BS LSB as PC.
+                {
+                    const MidiByte bankSelectLSB = instrument->getBankSelectLSB();
+                    MappedEvent mE;
+                    mE.setInstrumentId(instrument->getId());
+                    mE.setType(MappedEvent::MidiProgramChange);
+                    mE.setData1(bankSelectLSB);
+                    mE.setRecordedChannel(channel);
+                    mE.setEventTime(insertTime);
+                    mE.setTrackId(trackId);
+                    inserter.insertCopy(mE);
+                }
+                // Send CC31:0
+                {
+                    MappedEvent mE;
+                    mE.setInstrumentId(instrument->getId());
+                    mE.setType(MappedEvent::MidiController);
+                    mE.setData1(31);  // CC31
+                    mE.setData2(0);
+                    mE.setRecordedChannel(channel);
+                    mE.setEventTime(insertTime);
+                    mE.setTrackId(trackId);
+                    inserter.insertCopy(mE);
+                }
+                break;
             }
         }
 

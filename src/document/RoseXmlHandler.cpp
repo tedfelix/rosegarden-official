@@ -1165,6 +1165,11 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         if (m_currentSegment && m_inMatrix)
             m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
 
+    } else if (lcName == "velocity") {  // <velocity>
+
+        if (m_currentSegment && m_inMatrix)
+            m_currentSegment->matrixVelocity = atts.value("value").toUInt();
+
     } else if (lcName == "ruler") {  // <ruler>
 
         if (m_currentSegment && m_inMatrix) {
@@ -1393,7 +1398,9 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         //int id = idString.toInt();
 
         if (type == "midi") {
-            QString direction = atts.value("direction").toString().toLower();
+
+            // direction
+            const QString direction = atts.value("direction").toString().toLower();
 
             if (direction.isNull() ||
                 direction == "" ||
@@ -1415,11 +1422,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 }
             }
 
-            QString connection = atts.value("connection").toString();
+            // connection
+            const QString connection = atts.value("connection").toString();
             if (m_createDevices  &&  m_device  &&  !connection.isEmpty())
                 setMIDIDeviceConnection(connection);
 
-            QString vstr = atts.value("variation").toString().toLower();
+            // variation
+            const QString vstr = atts.value("variation").toString().toLower();
             MidiDevice::VariationType variation =
                 MidiDevice::NoVariations;
             if (!vstr.isNull()) {
@@ -1432,9 +1441,16 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 }
             }
             MidiDevice *md = dynamic_cast<MidiDevice *>(m_device);
-            if (md) {
+            if (md)
                 md->setVariationType(variation);
-            }
+
+            // bankselecttype
+            const MidiDevice::BankSelectType bankSelectType =
+                    static_cast<MidiDevice::BankSelectType>(
+                            atts.value("bankselecttype").toString().toInt());
+            if (md)
+                md->setBankSelectType(bankSelectType);
+
         } else if (type == "softsynth") {
             m_device = getStudio().getSoftSynthDevice();
             if (m_device && m_device->getType() == Device::SoftSynth) {
@@ -1511,8 +1527,8 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
                 {
                     if (m_instrument) {
                         m_instrument->setPercussion(m_percussion);
-                        m_instrument->setMSB(m_msb);
-                        m_instrument->setLSB(m_lsb);
+                        m_instrument->setBankSelectMSB(m_msb);
+                        m_instrument->setBankSelectLSB(m_lsb);
                         m_instrument->setSendBankSelect(m_sendBankSelect);
                     }
                 }
@@ -1614,7 +1630,7 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         }
 
         if (!m_device) {
-            //!!! ach no, we can't give this warning -- we might be in a <device> elt
+            // !!! ach no, we can't give this warning -- we might be in a <device> elt
             // but have no sequencer support, for example.  we need a separate m_inDevice
             // flag
             //        m_deprecation = true;

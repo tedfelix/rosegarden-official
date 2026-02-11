@@ -54,6 +54,7 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     EventContainer(),
     matrixHZoomFactor(1.0),
     matrixVZoomFactor(1.0),
+    matrixVelocity(100),
     matrixRulers(new RulerSet),
     notationRulers(new RulerSet),
     m_composition(nullptr),

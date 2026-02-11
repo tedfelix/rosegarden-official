@@ -171,13 +171,15 @@ public:
 
     void setSendBankSelect(bool value) {
         m_sendBankSelect = value;
-        if (value) { emit changedChannelSetup(); }
+        if (value)
+            emit changedChannelSetup();
     }
     bool sendsBankSelect() const { return m_sendBankSelect; }
 
     void setSendProgramChange(bool value) {
         m_sendProgramChange = value;
-        if (value) { emit changedChannelSetup(); }
+        if (value)
+            emit changedChannelSetup();
     }
     bool sendsProgramChange() const;
 
@@ -195,11 +197,11 @@ public:
     void setProgramChange(MidiByte program);
     MidiByte getProgramChange() const;
 
-    void setMSB(MidiByte msb);
-    MidiByte getMSB() const;
+    void setBankSelectMSB(MidiByte msb);
+    MidiByte getBankSelectMSB() const;
 
-    void setLSB(MidiByte lsb);
-    MidiByte getLSB() const;
+    void setBankSelectLSB(MidiByte lsb);
+    MidiByte getBankSelectLSB() const;
 
     /// Pick the first valid program in the connected Device.
     void pickFirstProgram(bool percussion);
@@ -324,11 +326,12 @@ private:
     InstrumentType  m_type;
 
     // Standard MIDI controllers and parameters
-    MidiByte        m_midiChannel;
-    MidiProgram     m_program;
-    MidiByte        m_transpose;
-    MidiByte        m_pan;  // required by audio
-    MidiByte        m_volume;
+    MidiByte m_midiChannel;
+    /// Bank Select and Program Change
+    MidiProgram m_program;
+    MidiByte m_transpose;
+    MidiByte m_pan;  // required by audio
+    MidiByte m_volume;
 
     // Whether this instrument uses a fixed channel.
     // "fixed==false" mode is experimental and usually disabled.
@@ -344,12 +347,8 @@ private:
 
     Device         *m_device;
 
-    // Do we send at this intrument or do we leave these
-    // things up to the parent device and God?  These are
-    // directly relatable to GUI elements
-    //
-    bool             m_sendBankSelect;
-    bool             m_sendProgramChange;
+    bool m_sendBankSelect;
+    bool m_sendProgramChange;
 
     // Instruments are directly related to faders for volume
     // control.  Here we can store the remote fader id.

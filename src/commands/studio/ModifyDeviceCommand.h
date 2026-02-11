@@ -1,4 +1,3 @@
-
 /* -*- c-basic-offset: 4 indent-tabs-mode: nil -*- vi:set ts=8 sts=4 sw=4: */
 
 /*
@@ -19,19 +18,19 @@
 #ifndef RG_MODIFYDEVICECOMMAND_H
 #define RG_MODIFYDEVICECOMMAND_H
 
-#include "base/Device.h"
+#include "base/Device.h"  // DeviceId
 #include "base/MidiDevice.h"
-#include <string>
-#include "document/Command.h"
+#include "document/Command.h"  // NamedCommand
+
 #include <QString>
 #include <QCoreApplication>
 
-
-class Modify;
+#include <string>
 
 
 namespace Rosegarden
 {
+
 
 class Studio;
 
@@ -41,63 +40,91 @@ class ModifyDeviceCommand : public NamedCommand
     Q_DECLARE_TR_FUNCTIONS(Rosegarden::ModifyDeviceCommand)
 
 public:
-    // Any of the arguments passed by pointer may be null (except for
-    // the Studio) -- in which case they will not be changed in the device.
+
     ModifyDeviceCommand(Studio *studio,
-                        DeviceId device,
+                        DeviceId deviceID,
                         const std::string &name,
                         const std::string &librarianName,
                         const std::string &librarianEmail,
-                        const QString& commandName = "");
+                        const QString &commandName = "");
 
-    void setVariation  (MidiDevice::VariationType variationType);
-    void setBankList   (const BankList    &bankList);
+    void setRename(bool rename)  { m_rename = rename; }
+    void setVariation(MidiDevice::VariationType variationType);
+    void setBankSelectType(MidiDevice::BankSelectType bankSelectType);
+    void setBankList(const BankList &bankList);
     void setProgramList(const ProgramList &programList);
     void setControlList(const ControlList &controlList);
     void setKeyMappingList(const KeyMappingList &keyMappingList);
-    void setOverwrite  (bool overwrite) { m_overwrite = overwrite; }
-    void setRename     (bool rename)    { m_rename = rename; }
 
-    /// supersedes setBankList() and setProgramList()
-    void clearBankAndProgramList() { m_clearBankAndProgramList = true; }
+    /// Overwrite or merge bank list, program list, and key mappings.
+    void setOverwrite(bool overwrite)  { m_overwrite = overwrite; }
 
-    static QString getGlobalName() { return tr("Modify &MIDI Bank"); }
+    static QString getGlobalName()  { return tr("Modify &MIDI Bank"); }
 
     void execute() override;
     void unexecute() override;
 
-protected:
+private:
 
-    Studio                    *m_studio;
-    int                        m_device;
+    Studio *m_studio;
+    DeviceId m_deviceID;
 
-    std::string                m_deviceName;
-    std::string                m_librarianName;
-    std::string                m_librarianEmail;
-    MidiDevice::VariationType  m_variationType;
-    BankList                   m_bankList;
-    ProgramList                m_programList;
-    ControlList                m_controlList;
-    KeyMappingList             m_keyMappingList;
+    // Name
+    std::string m_oldName;
+    bool m_rename{true};
+    std::string m_deviceName;
 
-    std::string                m_oldName;
-    std::string                m_oldLibrarianName;
-    std::string                m_oldLibrarianEmail;
-    MidiDevice::VariationType  m_oldVariationType;
-    BankList                   m_oldBankList;
-    ProgramList                m_oldProgramList;
-    ControlList                m_oldControlList;
-    KeyMappingList             m_oldKeyMappingList;
-    ProgramList                m_oldInstrumentPrograms;
+    // Librarian Name
+    std::string m_oldLibrarianName;
+    std::string m_librarianName;
 
-    bool                       m_overwrite;
-    bool                       m_rename;
-    bool                       m_changeVariation;
-    bool                       m_changeBanks;
-    bool                       m_changePrograms;
-    bool                       m_changeControls;
-    bool                       m_changeKeyMappings;
-    bool                       m_clearBankAndProgramList;
+    // Librarian email
+    std::string m_oldLibrarianEmail;
+    std::string m_librarianEmail;
+
+    // Variation Type
+    MidiDevice::VariationType m_oldVariationType{MidiDevice::NoVariations};
+    bool m_changeVariation{false};
+    MidiDevice::VariationType m_variationType{MidiDevice::NoVariations};
+
+    // Bank Select Type
+    MidiDevice::BankSelectType m_oldBankSelectType{
+            MidiDevice::BankSelectType::Normal};
+    bool m_changeBankSelectType{false};
+    MidiDevice::BankSelectType m_bankSelectType{
+            MidiDevice::BankSelectType::Normal};
+
+    // Bank List
+    BankList m_oldBankList;
+    bool m_changeBanks{false};
+    BankList m_bankList;
+
+    // Program List
+    ProgramList m_oldProgramList;
+    bool m_changePrograms{false};
+    ProgramList m_programList;
+
+    /// Programs for each Instrument.  These are always saved and restored.
+    /**
+     * We preserve these to handle the case where the user changes a device
+     * then changes the programs on the instruments, then decides to undo.
+     * Instead of showing the modified programs in the old device, the
+     * programs that were selected before are restored.  It's a partial
+     * undo for Instrument program selections.
+     */
+    ProgramList m_oldInstrumentPrograms;
+
+    // Controller List
+    ControlList m_oldControlList;
+    bool m_changeControls{false};
+    ControlList m_controlList;
+
+    // Key Mapping List
+    KeyMappingList m_oldKeyMappingList;
+    bool m_changeKeyMappings{false};
+    KeyMappingList m_keyMappingList;
+
+    bool m_overwrite{true};
 
 };
 

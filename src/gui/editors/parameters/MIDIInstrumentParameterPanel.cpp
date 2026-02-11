@@ -619,7 +619,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
                 if (bl.size() == 0)
                     continue;
-                if (getSelectedInstrument()->getMSB() == bytes[i]) {
+                if (getSelectedInstrument()->getBankSelectMSB() == bytes[i]) {
                     currentBank = banks.size();
                 }
                 banks.push_back(bl[0]);
@@ -633,7 +633,7 @@ MIDIInstrumentParameterPanel::updateBankComboBox()
 
                 if (bl.size() == 0)
                     continue;
-                if (getSelectedInstrument()->getLSB() == bytes[i]) {
+                if (getSelectedInstrument()->getBankSelectLSB() == bytes[i]) {
                     currentBank = banks.size();
                 }
                 banks.push_back(bl[0]);
@@ -814,13 +814,13 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
     MidiByteList variationBanks;
 
     if (useMSB) {
-        MidiByte lsb = getSelectedInstrument()->getLSB();
+        MidiByte lsb = getSelectedInstrument()->getBankSelectLSB();
         variationBanks = md->getDistinctMSBs(getSelectedInstrument()->isPercussion(),
                                          lsb);
         RG_DEBUG << "updateVariationComboBox(): Have " << variationBanks.size() << " variations for LSB " << lsb;
 
     } else {
-        MidiByte msb = getSelectedInstrument()->getMSB();
+        MidiByte msb = getSelectedInstrument()->getBankSelectMSB();
         variationBanks = md->getDistinctLSBs(getSelectedInstrument()->isPercussion(),
                                          msb);
 
@@ -838,10 +838,10 @@ MIDIInstrumentParameterPanel::updateVariationComboBox()
         if (useMSB) {
             bank = MidiBank(getSelectedInstrument()->isPercussion(),
                             variationBanks[i],
-                            getSelectedInstrument()->getLSB());
+                            getSelectedInstrument()->getBankSelectLSB());
         } else {
             bank = MidiBank(getSelectedInstrument()->isPercussion(),
-                            getSelectedInstrument()->getMSB(),
+                            getSelectedInstrument()->getBankSelectMSB(),
                             variationBanks[i]);
         }
         MidiProgram program(bank, getSelectedInstrument()->getProgramChange());
@@ -1078,14 +1078,14 @@ MIDIInstrumentParameterPanel::slotSelectBank(int index)
     bool change = false;
 
     if (md->getVariationType() != MidiDevice::VariationFromLSB) {
-        if (getSelectedInstrument()->getLSB() != bank.getLSB()) {
-            getSelectedInstrument()->setLSB(bank.getLSB());
+        if (getSelectedInstrument()->getBankSelectLSB() != bank.getLSB()) {
+            getSelectedInstrument()->setBankSelectLSB(bank.getLSB());
             change = true;
         }
     }
     if (md->getVariationType() != MidiDevice::VariationFromMSB) {
-        if (getSelectedInstrument()->getMSB() != bank.getMSB()) {
-            getSelectedInstrument()->setMSB(bank.getMSB());
+        if (getSelectedInstrument()->getBankSelectMSB() != bank.getMSB()) {
+            getSelectedInstrument()->setBankSelectMSB(bank.getMSB());
             change = true;
         }
     }
@@ -1180,8 +1180,8 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(
     // MSB Bank Select
     if (bankMSB >= 0) {  // &&  md->getVariationType() != MidiDevice::VariationFromMSB ) {
         // If the MSB is changing
-        if (getSelectedInstrument()->getMSB() != bankMSB) {
-            getSelectedInstrument()->setMSB(bankMSB);
+        if (getSelectedInstrument()->getBankSelectMSB() != bankMSB) {
+            getSelectedInstrument()->setBankSelectMSB(bankMSB);
             bankChanged = true;
         }
     }
@@ -1189,8 +1189,8 @@ MIDIInstrumentParameterPanel::slotExternalProgramChange(
     // LSB Bank Select
     if (bankLSB >= 0) { // &&  md->getVariationType() != MidiDevice::VariationFromLSB) {
         // If the LSB is changing
-        if (getSelectedInstrument()->getLSB() != bankLSB) {
-            getSelectedInstrument()->setLSB(bankLSB);
+        if (getSelectedInstrument()->getBankSelectLSB() != bankLSB) {
+            getSelectedInstrument()->setBankSelectLSB(bankLSB);
             bankChanged = true;
         }
     }
@@ -1255,7 +1255,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
                 getSelectedInstrument()->isPercussion(), bank.getLSB());
         if (!bankList.empty()) {
             // Pick the first MSB variation
-            getSelectedInstrument()->setMSB(bankList.front().getMSB());
+            getSelectedInstrument()->setBankSelectMSB(bankList.front().getMSB());
         }
     }
     if (md->getVariationType() == MidiDevice::VariationFromLSB) {
@@ -1265,7 +1265,7 @@ MIDIInstrumentParameterPanel::slotSelectProgram(int index)
                 getSelectedInstrument()->isPercussion(), bank.getMSB());
         if (!bankList.empty()) {
             // Pick the first LSB variation
-            getSelectedInstrument()->setLSB(bankList.front().getLSB());
+            getSelectedInstrument()->setBankSelectLSB(bankList.front().getLSB());
         }
     }
 
@@ -1289,12 +1289,12 @@ MIDIInstrumentParameterPanel::slotSelectVariation(int index)
     bool changed = false;
 
     // Update bank MSB/LSB as needed.
-    if (getSelectedInstrument()->getMSB() != newBank.getMSB()) {
-        getSelectedInstrument()->setMSB(newBank.getMSB());
+    if (getSelectedInstrument()->getBankSelectMSB() != newBank.getMSB()) {
+        getSelectedInstrument()->setBankSelectMSB(newBank.getMSB());
         changed = true;
     }
-    if (getSelectedInstrument()->getLSB() != newBank.getLSB()) {
-        getSelectedInstrument()->setLSB(newBank.getLSB());
+    if (getSelectedInstrument()->getBankSelectLSB() != newBank.getLSB()) {
+        getSelectedInstrument()->setBankSelectLSB(newBank.getLSB());
         changed = true;
     }
 

@@ -44,6 +44,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(
         const std::string &librarianName,
         const std::string &librarianEmail,
         MidiDevice::VariationType variationType,
+        MidiDevice::BankSelectType bankSelectType,
         const BankList &bankList,
         const ProgramList &programList,
         const ControlList &controlList,
@@ -61,6 +62,7 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(
     m_librarianName(librarianName),
     m_librarianEmail(librarianEmail),
     m_variationType(variationType),
+    m_bankSelectType(bankSelectType),
     m_bankList(bankList),
     m_programList(programList),
     m_controlList(controlList),
@@ -76,7 +78,8 @@ CreateOrDeleteDeviceCommand::CreateOrDeleteDeviceCommand(Studio *studio,
     m_baseInstrumentId(0),
     m_deviceCreated(true),  // We are doing delete.
     m_withData(false),
-    m_variationType(MidiDevice::NoVariations)
+    m_variationType(MidiDevice::NoVariations),
+    m_bankSelectType(MidiDevice::BankSelectType::Normal)
 {
     RG_DEBUG << "ctor" << m_deviceName << m_type << m_direction;
     Device *device = m_studio->getDevice(m_deviceId);
@@ -150,6 +153,7 @@ CreateOrDeleteDeviceCommand::execute()
                 if (m_withData) {
                     midiDevice->setLibrarian(m_librarianName, m_librarianEmail);
                     midiDevice->setVariationType(m_variationType);
+                    midiDevice->setBankSelectType(m_bankSelectType);
                     midiDevice->clearBankList();
                     for(const MidiBank& bank : m_bankList) {
                         midiDevice->addBank(bank);

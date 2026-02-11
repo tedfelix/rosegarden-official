@@ -318,6 +318,12 @@ ImportDeviceDialog::getVariationType() const
     return m_device->getVariationType();
 }
 
+MidiDevice::BankSelectType
+ImportDeviceDialog::getBankSelectType() const
+{
+    return m_device->getBankSelectType();
+}
+
 bool
 ImportDeviceDialog::shouldImportBanks() const
 {
