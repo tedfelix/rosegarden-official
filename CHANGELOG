@@ -24,10 +24,30 @@ Included in this release...
   * cmake: Fix broken CMAKE_BUILD_TYPE.  [c149ea9a66]
   * matrix: Fixed crash on large horizontal zoom.  Bug #1761.
     [853313edcf]
+  * matrix: Fixed horizonatal zoom range issue.  Bug #1761.
+    [4a34375a33]
+  * matrix: Fix vertical zoom range issue.  [807cd89374]
+  * matrix: Improve HV wheel behavior.  [0ef1e21deb] [566f984873]
+  * matrix: Fix preview play for tied notes.  Bug #1764.  [e9ed4f1221]
+  * AudioPluginDialog: Improve Editor button behavior.  Editor button
+    is now disabled if JACK isn't up.  An error message is provided via
+    the button's tooltip when it is disabled.  [fbaa3ec6b1]
+  * MIDI Mixer: Handle changes to the number of devices without closing
+    the window.  [520641f59c]
+  * MIDI Mixer: Fix garbage in meters.  [254e75a45f]
+  * MIDI Mixer: Handle changes to the number of controllers.
+    [faeb4238be]
+  * Audio File Manager: Fix unload not working on selected WAV files.
+    Bug #1766.  [8626e2ec58]
 
-Done to: 943d95d282
+Done to: 7e3ecfa101
 
 ===== New Features =====
+
+  * rgd: Added support for alternative bank select approaches for
+    synths like the Yamaha TG77 and Oberheim Matrix-1000.  Feature
+    Request #542.  [b9c94293c5] [5b03a6285c]
+  * matrix: Remember velocity for each segment.  [7e3ecfa101]
 
 ===== General Improvements =====
 
