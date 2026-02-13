@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TransportControl]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "TransportControl.h"
 #include "RosegardenSequencer.h"
@@ -86,7 +86,7 @@ TransportControl::~TransportControl()
 int TransportControl::play(RealTime startPos)
 {
 #ifdef HAVE_LIBJACK
-    int result = 0;
+    int result = true;
     if (Preferences::getUseJackTransport()) {
         RG_DEBUG << "play jackTransport" << startPos;
         unsigned int sampleRate =
@@ -172,19 +172,27 @@ void TransportControl::tick()
     RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
     RealTime songPosition =
         RosegardenSequencer::getInstance()->getSongPosition();
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    if (! doc) return;
+    const Composition& comp = doc->getComposition();
+    timeT endTime = comp.getEndMarker();
+    // If "stop at end of last Segment" is enabled, use the latest
+    // Segment end time.
+    if (Preferences::getStopAtSegmentEnd())
+        endTime = comp.getDuration(true);
+    RealTime compEndTime =
+        comp.getElapsedRealTime(endTime);
     RealTime delta = jackTime - songPosition;
+    RG_DEBUG << "delta" << jackTime << songPosition <<
+        compEndTime << delta;
     if (delta > m_allowedDelta || delta < -m_allowedDelta) {
-        RosegardenDocument* doc = RosegardenDocument::currentDocument;
-        if (! doc) return;
-        const Composition& comp = doc->getComposition();
-        RealTime compEndTime =
-            comp.getElapsedRealTime(comp.getEndMarker());
         if (jackTime <= compEndTime) {
             RG_DEBUG << "jump" << jackTime << songPosition <<
                 compEndTime << delta;
             RosegardenSequencer::getInstance()->jumpTo(jackTime);
         }
     }
+    //RG_DEBUG << "tick" << state << m_oldState;
     if (state != m_oldState) {
         QString sstr("unknown");
         if (state == JackTransportStopped) sstr = "stopped";
@@ -192,7 +200,10 @@ void TransportControl::tick()
         if (state == JackTransportStarting) sstr = "starting";
         RG_DEBUG << "jack state change" << sstr;
         if (state == JackTransportRolling) {
-            RosegardenSequencer::getInstance()->play(jackTime);
+            // no start if we are after composition end
+            if (jackTime < compEndTime) {
+                RosegardenSequencer::getInstance()->play(jackTime);
+            }
         }
         if (state == JackTransportStopped) {
             RosegardenSequencer::getInstance()->stop(false);

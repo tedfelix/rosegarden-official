@@ -5939,6 +5939,7 @@ RosegardenMainWindow::slotStop()
 void
 RosegardenMainWindow::doStop(bool autoStop)
 {
+    RG_DEBUG << "doStop" << autoStop;
     if (m_seqManager &&
         m_seqManager->getCountdownDialog()) {
         disconnect(m_seqManager->getCountdownDialog(), &CountdownDialog::stopped,
