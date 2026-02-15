@@ -34,6 +34,7 @@ public:
     TransportControl& operator=(const TransportControl&) = delete;
 
     int play(RealTime startPos);
+    void playingStarted();
     void stop(bool autoStop);
     void jumpTo(RealTime time);
     int record();
@@ -42,7 +43,7 @@ public:
 
 #ifdef HAVE_LIBJACK
     int syncCallback(jack_transport_state_t state,
-                     jack_position_t *pos);
+                     const jack_position_t *pos) const;
 #endif
 
 private:
@@ -53,6 +54,7 @@ private:
     jack_client_t* m_client;
     jack_transport_state_t m_oldState;
     RealTime m_allowedDelta;
+    bool m_waitingForStart;
 #endif
 };
 

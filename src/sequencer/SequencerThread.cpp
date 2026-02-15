@@ -66,6 +66,8 @@ SequencerThread::run()
                 seq.setStatus(STOPPING);
             } else {
                 seq.setStatus(PLAYING);
+                // tell TransportControl that we are really running
+                TransportControl::getInstance()->playingStarted();
             }
             break;
 

@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[TransportControl]"
-#define RG_NO_DEBUG_PRINT
+//#define RG_NO_DEBUG_PRINT
 
 #include "TransportControl.h"
 #include "RosegardenSequencer.h"
@@ -57,11 +57,11 @@ TransportControl* TransportControl::getInstance()
 
 TransportControl::TransportControl()
 #ifdef HAVE_LIBJACK
-    : m_oldState(JackTransportStopped)
+    : m_oldState(JackTransportStopped),
+      m_allowedDelta(RealTime::fromSeconds(0.02))
 #endif
 {
 #ifdef HAVE_LIBJACK
-    m_allowedDelta = RealTime::fromSeconds(0.03);
     RG_DEBUG << "ctor";
     jack_status_t status;
     m_client = jack_client_open("RosegardenTransportClient",
@@ -71,7 +71,7 @@ TransportControl::TransportControl()
     Q_ASSERT(m_client != nullptr);
     jack_activate(m_client);
     jack_set_sync_callback(m_client, syncCallbackC, this);
-
+    m_waitingForStart = false;
 #endif
 }
 
@@ -88,12 +88,13 @@ int TransportControl::play(RealTime startPos)
 #ifdef HAVE_LIBJACK
     int result = true;
     if (Preferences::getUseJackTransport()) {
-        RG_DEBUG << "play jackTransport" << startPos;
         unsigned int sampleRate =
             RosegardenSequencer::getInstance()->getSampleRate();
         long frame = RealTime::realTime2Frame(startPos, sampleRate);
+        RG_DEBUG << "play jackTransport" << startPos << sampleRate << frame;
         jack_transport_locate(m_client, frame);
         jack_transport_start(m_client);
+        m_waitingForStart = true;
     } else {
         RG_DEBUG << "play internal" << startPos;
         result = RosegardenSequencer::getInstance()->play(startPos);
@@ -102,6 +103,12 @@ int TransportControl::play(RealTime startPos)
 #else
     return RosegardenSequencer::getInstance()->play(startPos);
 #endif
+}
+
+void TransportControl::playingStarted()
+{
+    RG_DEBUG << "playingStarted";
+    m_waitingForStart = false;
 }
 
 void TransportControl::stop(bool autoStop)
@@ -151,10 +158,12 @@ int TransportControl::record()
 
 #ifdef HAVE_LIBJACK
 int TransportControl::syncCallback(jack_transport_state_t state,
-                                   jack_position_t *pos)
+                                   const jack_position_t *pos) const
 {
-    RG_DEBUG << "syncCallback" << state << pos->usecs;
-    // not used at present
+    RG_DEBUG << "syncCallback" << state << pos->usecs << m_waitingForStart;
+
+    if (m_waitingForStart) return 0;
+
     return 1;
 }
 
@@ -199,7 +208,7 @@ void TransportControl::tick()
         if (state == JackTransportRolling) sstr = "rolling";
         if (state == JackTransportStarting) sstr = "starting";
         RG_DEBUG << "jack state change" << sstr;
-        if (state == JackTransportRolling) {
+        if (state == JackTransportStarting) {
             // no start if we are after composition end
             if (jackTime < compEndTime) {
                 RosegardenSequencer::getInstance()->play(jackTime);
