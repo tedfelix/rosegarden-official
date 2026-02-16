@@ -39,9 +39,8 @@ public:
     void jumpTo(RealTime time);
     int record();
 
-    void tick();
-
 #ifdef HAVE_LIBJACK
+    int processCallback(jack_nframes_t nframes);
     int syncCallback(jack_transport_state_t state,
                      const jack_position_t *pos) const;
 #endif
@@ -52,7 +51,7 @@ private:
 #ifdef HAVE_LIBJACK
     // TransportControl has its own jack client.
     jack_client_t* m_client;
-    jack_transport_state_t m_oldState;
+    jack_transport_state_t m_state;
     RealTime m_allowedDelta;
     bool m_waitingForStart;
 #endif

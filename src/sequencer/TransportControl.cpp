@@ -30,6 +30,13 @@
 namespace
 {
 
+    int processCallbackC(jack_nframes_t nframes, void *arg)
+    {
+        Rosegarden::TransportControl* tc =
+            static_cast<Rosegarden::TransportControl*>(arg);
+        return tc->processCallback(nframes);
+    }
+
     int syncCallbackC(jack_transport_state_t state,
                       jack_position_t *pos,
                       void *arg)
@@ -57,8 +64,8 @@ TransportControl* TransportControl::getInstance()
 
 TransportControl::TransportControl()
 #ifdef HAVE_LIBJACK
-    : m_oldState(JackTransportStopped),
-      m_allowedDelta(RealTime::fromSeconds(0.02))
+    : m_state(JackTransportStopped),
+      m_allowedDelta(RealTime::fromSeconds(0.05))
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -69,8 +76,10 @@ TransportControl::TransportControl()
                                 &status,
                                 nullptr);
     Q_ASSERT(m_client != nullptr);
-    jack_activate(m_client);
+    jack_set_process_callback(m_client, processCallbackC, this);
     jack_set_sync_callback(m_client, syncCallbackC, this);
+    jack_set_sync_timeout(m_client, 2000000);
+    jack_activate(m_client);
     m_waitingForStart = false;
 #endif
 }
@@ -160,7 +169,11 @@ int TransportControl::record()
 int TransportControl::syncCallback(jack_transport_state_t state,
                                    const jack_position_t *pos) const
 {
-    RG_DEBUG << "syncCallback" << state << pos->usecs << m_waitingForStart;
+    static bool waiting = false;
+    if (m_waitingForStart != waiting) {
+        RG_DEBUG << "syncCallback" << state << pos->usecs << m_waitingForStart;
+        waiting = m_waitingForStart;
+    }
 
     if (m_waitingForStart) return 0;
 
@@ -169,9 +182,10 @@ int TransportControl::syncCallback(jack_transport_state_t state,
 
 #endif
 
-void TransportControl::tick()
-{
 #ifdef HAVE_LIBJACK
+int TransportControl::processCallback(jack_nframes_t)
+{
+    //RG_DEBUG << "processCallback";
     jack_position_t pos ;
     jack_transport_state_t state = jack_transport_query(m_client, &pos);
 
@@ -182,7 +196,7 @@ void TransportControl::tick()
     RealTime songPosition =
         RosegardenSequencer::getInstance()->getSongPosition();
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
-    if (! doc) return;
+    if (! doc) return 0;
     const Composition& comp = doc->getComposition();
     timeT endTime = comp.getEndMarker();
     // If "stop at end of last Segment" is enabled, use the latest
@@ -192,8 +206,8 @@ void TransportControl::tick()
     RealTime compEndTime =
         comp.getElapsedRealTime(endTime);
     RealTime delta = jackTime - songPosition;
-    RG_DEBUG << "delta" << jackTime << songPosition <<
-        compEndTime << delta;
+    //RG_DEBUG << "delta" << jackTime << songPosition <<
+    //  compEndTime << delta;
     if (delta > m_allowedDelta || delta < -m_allowedDelta) {
         if (jackTime <= compEndTime) {
             RG_DEBUG << "jump" << jackTime << songPosition <<
@@ -201,8 +215,8 @@ void TransportControl::tick()
             RosegardenSequencer::getInstance()->jumpTo(jackTime);
         }
     }
-    //RG_DEBUG << "tick" << state << m_oldState;
-    if (state != m_oldState) {
+    //RG_DEBUG << "processCallback state" << state << m_state;
+    if (state != m_state) {
         QString sstr("unknown");
         if (state == JackTransportStopped) sstr = "stopped";
         if (state == JackTransportRolling) sstr = "rolling";
@@ -218,11 +232,11 @@ void TransportControl::tick()
             RosegardenSequencer::getInstance()->stop(false);
         }
 
-        m_oldState = state;
+        m_state = state;
     }
-
-#endif
+    return 0;
 }
+#endif
 
 
 }

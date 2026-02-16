@@ -48,8 +48,6 @@ SequencerThread::run()
 
     while (!exiting) {
 
-        TransportControl::getInstance()->tick();
-
         bool atLeisure = true;
 
         //RG_DEBUG << "run(): Sequencer status is " << seq.getStatus();
