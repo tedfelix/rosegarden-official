@@ -35,7 +35,7 @@ CompositionPosition::CompositionPosition():
     m_position(0),
     m_positionAsElapsedTime(RealTime::zero()),
     m_documentPosition(0),
-    m_withSequencer(true)
+    m_oldPosition(0)
 {
     RG_DEBUG << "ctor";
     m_updateTimer = new QTimer(this);
@@ -70,11 +70,6 @@ void CompositionPosition::setPositionForNewDocument(timeT time)
     m_documentPosition = time;
 }
 
-void CompositionPosition::withSequencer(bool b)
-{
-    m_withSequencer = b;
-}
-
 void CompositionPosition::slotSet(timeT time)
 {
     RG_DEBUG << "slotSet" << m_position << "->" << time;
@@ -82,12 +77,10 @@ void CompositionPosition::slotSet(timeT time)
     if (! doc) return;
 
     const Composition& comp = doc->getComposition();
-    // without sequencer just store the value
-    if (! m_withSequencer) {
-        m_position = time;
-        m_positionAsElapsedTime = comp.getElapsedRealTime(time);
-        return;
-    }
+    // note old position ..
+    m_oldPosition = m_position;
+    m_position = time;
+    m_positionAsElapsedTime = comp.getElapsedRealTime(time);
 
     // even if the time has not changed pass it on otherwise it may
     // mess up the trensport request system
@@ -95,9 +88,7 @@ void CompositionPosition::slotSet(timeT time)
     RG_DEBUG << "slotSet" << positionAsElapsedTime;
     SequenceManager* sequenceManager = doc->getSequenceManager();
     sequenceManager->jumpTo(positionAsElapsedTime);
-    // m_position and m_positionAsElapsedTime are not set here. When
-    // the sequencer sends the new time these variables will update in
-    // slotUpdate.
+    emit changed(m_position);
 }
 
 void CompositionPosition::slotSetDocumentTime()
@@ -116,6 +107,13 @@ void CompositionPosition::slotUpdate()
     const Composition& comp = doc->getComposition();
     RealTime position =
         SequencerDataBlock::getInstance()->getPositionPointer();
+    timeT tmpPos = comp.getElapsedTimeForRealTime(position);
+    //RG_DEBUG << "slotUpdate" << tmpPos << m_oldPosition;
+    if (tmpPos == m_oldPosition) {
+        RG_DEBUG << "slotUpdate avoid jump bak to old position";
+        return;
+    }
+
     if (position != m_positionAsElapsedTime) {
         RG_DEBUG << "slotUpdate new position" << m_positionAsElapsedTime <<
             "->" << position;
