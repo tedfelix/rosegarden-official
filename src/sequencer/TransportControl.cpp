@@ -65,7 +65,9 @@ TransportControl* TransportControl::getInstance()
 TransportControl::TransportControl()
 #ifdef HAVE_LIBJACK
     : m_state(JackTransportStopped),
-      m_allowedDelta(RealTime::fromSeconds(0.05))
+      m_allowedDelta(RealTime::fromSeconds(0.05)),
+      m_waitingForStart(false),
+      m_waitingForStartJack(false)
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -80,7 +82,6 @@ TransportControl::TransportControl()
     jack_set_sync_callback(m_client, syncCallbackC, this);
     jack_set_sync_timeout(m_client, 2000000);
     jack_activate(m_client);
-    m_waitingForStart = false;
 #endif
 }
 
@@ -90,6 +91,40 @@ TransportControl::~TransportControl()
 #ifdef HAVE_LIBJACK
     jack_client_close(m_client);
 #endif
+}
+
+void TransportControl::tick()
+{
+    //RG_DEBUG << "tick";
+    RosegardenSequencer* seq = RosegardenSequencer::getInstance();
+    switch (seq->getStatus()) {
+    case STARTING_TO_PLAY:
+        if (Preferences::getUseJackTransport()) {
+            // the sequncer is ready to play but we cannot set the
+            // state to PLAYING yet because there may be a slow
+            // starter. Wait for jack rooling
+            m_waitingForStartJack = true;
+            sequencerPlayReady();
+        } else {
+            if (!seq->startPlaying()) {
+                // send result failed and stop Sequencer
+                seq->setStatus(STOPPING);
+            } else {
+                seq->setStatus(PLAYING);
+            }
+        }
+        break;
+    case QUIT:
+    case PLAYING:
+    case STARTING_TO_RECORD:
+    case RECORDING:
+    case STOPPING:
+    case RECORDING_ARMED:
+    case STOPPED:
+    default:
+        break;
+    }
+
 }
 
 int TransportControl::play(RealTime startPos)
@@ -114,9 +149,9 @@ int TransportControl::play(RealTime startPos)
 #endif
 }
 
-void TransportControl::playingStarted()
+void TransportControl::sequencerPlayReady()
 {
-    RG_DEBUG << "playingStarted";
+    RG_DEBUG << "sequencerPlayReady";
     m_waitingForStart = false;
 }
 
@@ -189,12 +224,12 @@ int TransportControl::processCallback(jack_nframes_t)
     jack_position_t pos ;
     jack_transport_state_t state = jack_transport_query(m_client, &pos);
 
+    RosegardenSequencer* seq = RosegardenSequencer::getInstance();
+
     int frame = pos.frame;
-    unsigned int sampleRate =
-        RosegardenSequencer::getInstance()->getSampleRate();
+    unsigned int sampleRate = seq->getSampleRate();
     RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
-    RealTime songPosition =
-        RosegardenSequencer::getInstance()->getSongPosition();
+    RealTime songPosition = seq->getSongPosition();
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return 0;
     const Composition& comp = doc->getComposition();
@@ -212,10 +247,22 @@ int TransportControl::processCallback(jack_nframes_t)
         if (jackTime <= compEndTime) {
             RG_DEBUG << "jump" << jackTime << songPosition <<
                 compEndTime << delta;
-            RosegardenSequencer::getInstance()->jumpTo(jackTime);
+            seq->jumpTo(jackTime);
         }
     }
     //RG_DEBUG << "processCallback state" << state << m_state;
+
+    if (m_waitingForStartJack && state == JackTransportRolling) {
+        // now we are ready to play and everyone else too
+        if (!seq->startPlaying()) {
+            // send result failed and stop Sequencer
+            seq->setStatus(STOPPING);
+        } else {
+            seq->setStatus(PLAYING);
+        }
+        m_waitingForStartJack = false;
+    }
+
     if (state != m_state) {
         QString sstr("unknown");
         if (state == JackTransportStopped) sstr = "stopped";
@@ -225,11 +272,11 @@ int TransportControl::processCallback(jack_nframes_t)
         if (state == JackTransportStarting) {
             // no start if we are after composition end
             if (jackTime < compEndTime) {
-                RosegardenSequencer::getInstance()->play(jackTime);
+                seq->play(jackTime);
             }
         }
         if (state == JackTransportStopped) {
-            RosegardenSequencer::getInstance()->stop(false);
+            seq->stop(false);
         }
 
         m_state = state;

@@ -48,6 +48,8 @@ SequencerThread::run()
 
     while (!exiting) {
 
+        TransportControl::getInstance()->tick();
+
         bool atLeisure = true;
 
         //RG_DEBUG << "run(): Sequencer status is " << seq.getStatus();
@@ -59,14 +61,6 @@ SequencerThread::run()
             break;
 
         case STARTING_TO_PLAY:
-            if (!seq.startPlaying()) {
-                // send result failed and stop Sequencer
-                seq.setStatus(STOPPING);
-            } else {
-                seq.setStatus(PLAYING);
-                // tell TransportControl that we are really running
-                TransportControl::getInstance()->playingStarted();
-            }
             break;
 
         case PLAYING:

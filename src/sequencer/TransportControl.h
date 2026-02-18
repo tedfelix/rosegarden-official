@@ -33,8 +33,10 @@ public:
     TransportControl(const TransportControl&) = delete;
     TransportControl& operator=(const TransportControl&) = delete;
 
+    void tick();
+
     int play(RealTime startPos);
-    void playingStarted();
+    void sequencerPlayReady();
     void stop(bool autoStop);
     void jumpTo(RealTime time);
     int record();
@@ -54,6 +56,7 @@ private:
     jack_transport_state_t m_state;
     RealTime m_allowedDelta;
     bool m_waitingForStart;
+    bool m_waitingForStartJack;
 #endif
 };
 
