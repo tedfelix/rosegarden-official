@@ -134,7 +134,7 @@ int TransportControl::play(RealTime startPos)
     if (Preferences::getUseJackTransport()) {
         unsigned int sampleRate =
             RosegardenSequencer::getInstance()->getSampleRate();
-        long frame = RealTime::realTime2Frame(startPos, sampleRate);
+        unsigned long frame = RealTime::realTime2Frame(startPos, sampleRate);
         RG_DEBUG << "play jackTransport" << startPos << sampleRate << frame;
         jack_transport_locate(m_client, frame);
         jack_transport_start(m_client);
@@ -181,10 +181,21 @@ void TransportControl::jumpTo(RealTime time)
     RG_DEBUG << "jumpTo" << time;
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport()) {
-        unsigned int sampleRate =
-            RosegardenSequencer::getInstance()->getSampleRate();
-        long frame = RealTime::realTime2Frame(time, sampleRate);
-        jack_transport_locate(m_client, frame);
+        // if we are in record count in the time may be 0. We cannot
+        // use -ve time in jack so we have to set zero here but still
+        // tell the sequencer to go to the -ve time.
+        if (time < RealTime::zero()) {
+            // tell jack to go to zero
+            jack_transport_locate(m_client, 0);
+            // tell the sequencer to go to the -ve time
+            RosegardenSequencer::getInstance()->jumpTo(time);
+        } else {
+            unsigned int sampleRate =
+                RosegardenSequencer::getInstance()->getSampleRate();
+            unsigned long frame = RealTime::realTime2Frame(time, sampleRate);
+            RG_DEBUG << "jack_transport_locate" << frame;
+            jack_transport_locate(m_client, frame);
+        }
     } else {
         RG_DEBUG << "jumpTo internal" << time;
         RosegardenSequencer::getInstance()->jumpTo(time);
@@ -226,7 +237,7 @@ int TransportControl::processCallback(jack_nframes_t)
 
     RosegardenSequencer* seq = RosegardenSequencer::getInstance();
 
-    int frame = pos.frame;
+    unsigned int frame = pos.frame;
     unsigned int sampleRate = seq->getSampleRate();
     RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
     RealTime songPosition = seq->getSongPosition();
@@ -246,7 +257,7 @@ int TransportControl::processCallback(jack_nframes_t)
     if (delta > m_allowedDelta || delta < -m_allowedDelta) {
         if (jackTime <= compEndTime) {
             RG_DEBUG << "jump" << jackTime << songPosition <<
-                compEndTime << delta;
+                compEndTime << delta << frame << sampleRate;
             seq->jumpTo(jackTime);
         }
     }
