@@ -39,7 +39,9 @@ namespace Rosegarden
 {
 
 
-MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID, int stripNumber) :
+MidiStrip::MidiStrip(QWidget *parent,
+                     const InstrumentId instrumentID,
+                     const int stripNumber) :
     QWidget(parent),
     m_id(instrumentID)
 {
@@ -57,7 +59,7 @@ MidiStrip::MidiStrip(QWidget *parent, InstrumentId instrumentID, int stripNumber
 
 }
 
-void MidiStrip::createWidgets(int stripNumber)
+void MidiStrip::createWidgets(const int stripNumber)
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
@@ -177,7 +179,7 @@ void MidiStrip::createWidgets(int stripNumber)
 }
 
 void
-MidiStrip::slotFaderLevelChanged(float value)
+MidiStrip::slotFaderLevelChanged(const float value)
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
@@ -209,7 +211,7 @@ MidiStrip::slotFaderLevelChanged(float value)
 }
 
 void
-MidiStrip::slotControllerChanged(float value)
+MidiStrip::slotControllerChanged(const float value)
 {
     RosegardenDocument *doc = RosegardenDocument::currentDocument;
     if (!doc)
@@ -220,7 +222,8 @@ MidiStrip::slotControllerChanged(float value)
     if (!rotary)
         return;
 
-    const MidiByte controllerNumber = rotary->property("controllerNumber").toUInt();
+    const MidiByte controllerNumber =
+            rotary->property("controllerNumber").toUInt();
 
     Instrument *instrument = studio.getInstrumentById(m_id);
     if (!instrument)
@@ -298,7 +301,7 @@ void MidiStrip::slotUpdateMeter()
     }
 
     if (m_vuMeter)
-        m_vuMeter->setLevel(double(info.level / 127.0));
+        m_vuMeter->setLevel(double(info.level) / 127.0);
 }
 
 
