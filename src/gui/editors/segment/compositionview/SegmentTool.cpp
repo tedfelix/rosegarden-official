@@ -47,12 +47,15 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
 
     // Set up the actions for the right-click context menu.  Note that
     // all of these end up simply delegating to RosegardenMainWindow.
+
     createAction("edit_default", &SegmentTool::slotEdit);
+
     createAction("edit_matrix", &SegmentTool::slotEditInMatrix);
     createAction("edit_percussion_matrix", &SegmentTool::slotEditInPercussionMatrix);
     createAction("edit_notation", &SegmentTool::slotEditAsNotation);
     createAction("edit_event_list", &SegmentTool::slotEditInEventList);
     createAction("edit_pitch_tracker", &SegmentTool::slotEditInPitchTracker);
+
     // Can we get some of the following connectionless mojo for some
     // of these others too?
     // The undo and redo actions are available globally through
@@ -62,23 +65,32 @@ SegmentTool::SegmentTool(CompositionView* canvas, RosegardenDocument *doc)
     // idea to introduce a global QAction repository for all QAction
     // objects.  RosegardenMainWindow might suffice.  This would also
     // simplify the implementation of a shortcut manager.
+
     //createAction("edit_undo", ...);  // handled by CommandHistory
     //createAction("edit_redo", ...);  // handled by CommandHistory
+
     createAction("edit_cut", &SegmentTool::slotEditCut);
     createAction("edit_copy", &SegmentTool::slotEditCopy);
     createAction("edit_paste", &SegmentTool::slotEditPaste);
+
     createAction("delete", &SegmentTool::slotDeleteSelectedSegments);
     createAction("join_segments", &SegmentTool::slotJoinSegments);
+
     createAction("quantize_selection", &SegmentTool::slotQuantizeSelection);
     createAction("repeat_quantize", &SegmentTool::slotRepeatQuantizeSelection);
     createAction("relabel_segment", &SegmentTool::slotRelabelSegments);
     createAction("transpose", &SegmentTool::slotTransposeSegments);
+
     createAction("select", &SegmentTool::slotPointerSelected);
-    createAction("move", &SegmentTool::slotMoveSelected);
     createAction("draw", &SegmentTool::slotDrawSelected);
     createAction("erase", &SegmentTool::slotEraseSelected);
+    createAction("move", &SegmentTool::slotMoveSelected);
     createAction("resize", &SegmentTool::slotResizeSelected);
     createAction("split", &SegmentTool::slotSplitSelected);
+
+    // ??? What about join?
+    //createAction("join", &RosegardenMainWindow::slotJoinSelected);
+
 }
 
 SegmentTool::~SegmentTool()
@@ -93,7 +105,8 @@ void SegmentTool::ready()
 void
 SegmentTool::mousePressEvent(QMouseEvent *e)
 {
-    // We only care about the right button.
+    // We only care about the right button for displaying the context
+    // menu that is common to all derived tools.
     if (e->button() != Qt::RightButton)
         return;
 
@@ -241,29 +254,89 @@ void SegmentTool::slotTransposeSegments()
 {
     RosegardenMainWindow::self()->slotTransposeSegments();
 }
+
 void SegmentTool::slotPointerSelected()
 {
-    RosegardenMainWindow::self()->slotPointerSelected();
+    // Since these tool actions can be checked/unchecked, we can't just
+    // simply call their slots in RMW.  We have to Trigger them or
+    // else the toolbar buttons will not be pressed/unpressed properly.
+
+    // Get the action from RMW.
+    QAction *action =
+            RosegardenMainWindow::self()->findAction("select");
+    // Trigger it.
+    if (action)
+        action->activate(QAction::Trigger);
 }
-void SegmentTool::slotMoveSelected()
-{
-    RosegardenMainWindow::self()->slotMoveSelected();
-}
+
 void SegmentTool::slotDrawSelected()
 {
-    RosegardenMainWindow::self()->slotDrawSelected();
+    // Since these tool actions can be checked/unchecked, we can't just
+    // simply call their slots in RMW.  We have to Trigger them or
+    // else the toolbar buttons will not be pressed/unpressed properly.
+
+    // Get the action from RMW.
+    QAction *action =
+            RosegardenMainWindow::self()->findAction("draw");
+    // Trigger it.
+    if (action)
+        action->activate(QAction::Trigger);
 }
+
 void SegmentTool::slotEraseSelected()
 {
-    RosegardenMainWindow::self()->slotEraseSelected();
+    // Since these tool actions can be checked/unchecked, we can't just
+    // simply call their slots in RMW.  We have to Trigger them or
+    // else the toolbar buttons will not be pressed/unpressed properly.
+
+    // Get the action from RMW.
+    QAction *action =
+            RosegardenMainWindow::self()->findAction("erase");
+    // Trigger it.
+    if (action)
+        action->activate(QAction::Trigger);
 }
+
+void SegmentTool::slotMoveSelected()
+{
+    // Since these tool actions can be checked/unchecked, we can't just
+    // simply call their slots in RMW.  We have to Trigger them or
+    // else the toolbar buttons will not be pressed/unpressed properly.
+
+    // Get the action from RMW.
+    QAction *action =
+            RosegardenMainWindow::self()->findAction("move");
+    // Trigger it.
+    if (action)
+        action->activate(QAction::Trigger);
+}
+
 void SegmentTool::slotResizeSelected()
 {
-    RosegardenMainWindow::self()->slotResizeSelected();
+    // Since these tool actions can be checked/unchecked, we can't just
+    // simply call their slots in RMW.  We have to Trigger them or
+    // else the toolbar buttons will not be pressed/unpressed properly.
+
+    // Get the action from RMW.
+    QAction *action =
+            RosegardenMainWindow::self()->findAction("resize");
+    // Trigger it.
+    if (action)
+        action->activate(QAction::Trigger);
 }
+
 void SegmentTool::slotSplitSelected()
 {
-    RosegardenMainWindow::self()->slotSplitSelected();
+    // Since these tool actions can be checked/unchecked, we can't just
+    // simply call their slots in RMW.  We have to Trigger them or
+    // else the toolbar buttons will not be pressed/unpressed properly.
+
+    // Get the action from RMW.
+    QAction *action =
+            RosegardenMainWindow::self()->findAction("split");
+    // Trigger it.
+    if (action)
+        action->activate(QAction::Trigger);
 }
 
 

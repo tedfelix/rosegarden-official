@@ -47,6 +47,7 @@ class SegmentTool : public BaseTool, public ActionFileClient
     Q_OBJECT
 
 public:
+
     ~SegmentTool() override;
 
     /**
@@ -68,6 +69,7 @@ public:
     virtual void keyReleaseEvent(QKeyEvent *)  { }
 
 protected:
+
     /// Protected since a SegmentTool isn't very useful on its own.
     SegmentTool(CompositionView *, RosegardenDocument *);
 
@@ -86,6 +88,7 @@ protected:
     void setSnapTime(QMouseEvent *e, timeT snapTime);
 
 private:
+
     /// Right-click context menu.
     void createMenu() override;
     bool hasMenu() override { return true; }
@@ -93,30 +96,38 @@ private:
     ChangingSegmentPtr m_changingSegment;
 
 private slots:
+
     // This is just a mess of forwarding functions to RosegardenMainWindow.
     // Is there a better way to get the menu items to appear and to go to
     // RosegardenMainWindow?
+
     void slotEdit();
+
     void slotEditInMatrix();
     void slotEditInPercussionMatrix();
     void slotEditAsNotation();
     void slotEditInEventList();
     void slotEditInPitchTracker();
+
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
+
     void slotDeleteSelectedSegments();
     void slotJoinSegments();
+
     void slotQuantizeSelection();
     void slotRepeatQuantizeSelection();
     void slotRelabelSegments();
     void slotTransposeSegments();
+
     void slotPointerSelected();
-    void slotMoveSelected();
     void slotDrawSelected();
     void slotEraseSelected();
+    void slotMoveSelected();
     void slotResizeSelected();
     void slotSplitSelected();
+
 };
 
 

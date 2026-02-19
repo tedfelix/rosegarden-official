@@ -6,34 +6,46 @@
 <!-- These need to be synced up with the ones in rosegardenmainwindow.rc -->
 <Menu name="SegmentTool">
   <Action name="edit_default" text="Open in &amp;Default Editor" shortcut="Return" />
-<Separator/>
+
+  <Separator/>
+
   <Action name="edit_matrix" text="Open in Matri&amp;x Editor" icon="matrix" shortcut="M" />
   <Action name="edit_percussion_matrix" text="Open in &amp;Percussion Matrix Editor" icon="matrix-percussion" shortcut="D" />
   <Action name="edit_notation" text="Open in &amp;Notation Editor" icon="notation" shortcut="N" />
   <Action name="edit_event_list" text="Open in &amp;Event List Editor" icon="eventlist" shortcut="E" />
   <Action name="edit_pitch_tracker" text="Open in &amp;Pitch Tracker" icon="pitchtracker" shortcut="I" />
-<Separator/>
-    <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
-    <Action name="edit_undo"/>
-    <Action name="edit_redo"/>
-<Separator/>
+
+  <Separator/>
+
+  <!-- 'Undo' and 'Redo' use dynamic text. Do not provide data here. -->
+  <Action name="edit_undo"/>
+  <Action name="edit_redo"/>
+
+  <Separator/>
+
   <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
   <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
   <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
   <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
-<Separator/>
+
+  <Separator/>
+
   <Action name="delete" text="&amp;Delete" shortcut="Delete" />
   <Action name="join_segments" text="Join" icon="join" shortcut="Ctrl+J" />
-<Separator/>
+
+  <Separator/>
+
   <Action name="quantize_selection" text="&amp;Quantize..." icon="quantize" shortcut="=" />
   <Action name="repeat_quantize" text="Repe&amp;at Last Quantize" shortcut="+" />
   <Action name="relabel_segment" text="R&amp;elabel..." icon="text" />
   <Action name="transpose" text="Transpose by &amp;Interval..." />
-<Separator/>
+
+  <Separator/>
+
   <Action name="select" text="&amp;Select and Edit" icon="select" shortcut="F2" group="tools_segment" checked="true" />
-  <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
   <Action name="draw" text="&amp;Draw" icon="pencil" shortcut="F3" group="tools_segment" checked="false" />
   <Action name="erase" text="&amp;Erase" icon="eraser" shortcut="F4" group="tools_segment" checked="false" />
+  <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
   <Action name="resize" text="&amp;Resize" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
   <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" />
 </Menu>
