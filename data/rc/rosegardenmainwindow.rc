@@ -11,10 +11,12 @@
     <Menu name="import">
       <text>&amp;Import</text>
       <Action name="file_import_project" text="Import Rosegarden &amp;Project File..." />
+
       <Separator/>
+
       <Action name="file_import_midi" text="Import &amp;MIDI File..." />
       <Action name="file_import_rg21" text="Import &amp;X11 Rosegarden File..." />
-<!--      <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." /> -->
+      <!-- <Action name="file_import_hydrogen" text="Import &amp;Hydrogen file..." /> -->
       <Action name="file_import_musicxml" text="Import MusicXM&amp;L File..." />
     </Menu>
     <Menu name="merge">
@@ -22,7 +24,7 @@
       <Action name="file_merge" text="Merge &amp;File(s)..." />
       <Action name="file_merge_midi" text="Merge &amp;MIDI File(s)..." />
       <Action name="file_merge_rg21" text="Merge &amp;X11 Rosegarden File(s)..." />
-<!--      <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file(s)..." /> -->
+      <!-- <Action name="file_merge_hydrogen" text="Merge &amp;Hydrogen file(s)..." /> -->
       <Action name="file_merge_musicxml" text="Merge MusicXM&amp;L File(s)..." />
     </Menu>
     <!-- this one would like to be save_merge, but that sticks it at
@@ -30,15 +32,23 @@
     <Menu name="export">
       <text>&amp;Export</text>
       <Action name="file_export_project" text="Export Rosegarden &amp;Project File..." />
+
       <Separator/>
+
       <Action name="file_export_lilypond" text="Export &amp;LilyPond File..." />
+
       <Separator/>
+
       <Action name="file_export_midi" text="Export &amp;MIDI File..." />
+
       <Separator/>
+
       <Action name="file_export_csound" text="Export &amp;Csound Score File..." />
       <Action name="file_export_mup" text="Export M&amp;up File..." />
       <Action name="file_export_musicxml" text="Export Music&amp;XML File..." />
+
       <Separator/>
+
       <Action name="file_export_wav" text="Export &amp;WAV File..." />
     </Menu>
     <Action name="file_open" text="&amp;Open..." icon="fileopen" shortcut="Ctrl+O" />
@@ -49,21 +59,33 @@
       <Action name="file_open_most_recent" text="Open most recent file" shortcut="Ctrl+R" />
       <!-- JAS custom coded menu -->
     </Menu>
+
     <Separator/>
+
     <Action name="file_save" text="&amp;Save" icon="filesave" shortcut="Ctrl+S" />
     <Action name="file_save_as" text="Save &amp;as..." icon="filesaveas" shortcut="Ctrl+Shift+S" />
     <Action name="file_save_as_template" text="Save as &amp;Template..." icon="filesaveas" />
     <Action name="file_revert" text="Re&amp;vert" icon="revert" />
+
     <Separator/>
+
     <Action name="file_preview_lilypond" text="Prin&amp;t Preview..." icon="filepreviewlily" />
     <Action name="file_print_lilypond" text="&amp;Print..." icon="fileprintlily" />
+
     <Separator/>
+
     <Action name="audio_manager" text="Manage A&amp;udio Files" icon="manage-audio-segments" />
+
     <Separator/>
+
     <Action name="file_show_playlist" text="Play&amp;list" />
+
     <Separator/>
+
     <Action name="file_close" text="&amp;Close" icon="fileclose" shortcut="Ctrl+W" />
+
     <Separator/>
+
     <Action name="file_quit" text="&amp;Quit" icon="exit" shortcut="Ctrl+Q" />
   </Menu>
 
@@ -72,34 +94,42 @@
     <!-- 'Undo' and 'Redo' use dynamic text.  Put default text for new project in. -->
     <Action name="edit_undo" text="&amp;Nothing to Undo" icon="undo" shortcut="Ctrl+Z" shortcut-context="application" />
     <Action name="edit_redo" text="N&amp;othing to Redo" icon="redo" shortcut="Ctrl+Shift+Z" shortcut-context="application" />
+
     <Separator/>
+
     <!-- JAS use multiple shorcuts found in QT reference for gnome/KDE -->
     <Action name="edit_cut" text="Cu&amp;t" icon="editcut" shortcut="Ctrl+X, F20, Shift+Del" />
     <Action name="edit_copy" text="&amp;Copy" icon="editcopy" shortcut="Ctrl+C, F16, Ctrl+Ins" />
     <Action name="edit_paste" text="&amp;Paste" icon="editpaste" shortcut="Ctrl+V, F18, Shift+Ins" />
     <Action name="edit_paste_as_links" text="Paste as &amp;Links" icon="editpaste" shortcut="Ctrl+Alt+V" />
+
     <Separator/>
+
     <Action name="delete" text="&amp;Delete" shortcut="Delete" />
+
     <Separator/>
+
     <Action name="cut_range" text="Cut &amp;Range" shortcut="Ctrl+Shift+X" />
     <Action name="copy_range" text="Cop&amp;y Range" shortcut="Ctrl+Shift+C" />
     <Action name="paste_range" text="Pa&amp;ste Range" shortcut="Ctrl+Shift+V" />
     <Action name="insert_range" text="&amp;Insert Range..." shortcut="Ctrl+Shift+Ins" />
     <Action name="paste_conductor_data" text="Paste Tempos and Time Signatures" />
     <Action name="erase_range_tempos" text="Clear Range of Tempos" />
+
     <Separator/>
+
     <Action name="select_all" text="Select &amp;All Segments" shortcut="Ctrl+A" />
     <Action name="select_related" text="Select Related Segments" />
+
     <Separator/>
+
     <Action name="options_configure" text="&amp;Preferences..." icon="configure" />
     <Action name="shortcuts_configure" text="Keyboard S&amp;hortcuts..." />
   </Menu>
 
   <Menu name="settings">
     <text>&amp;View</text>
-    <!--
-    <Action name="debug_dump_segments" text="Dump segments" />
-    -->
+    <!-- <Action name="debug_dump_segments" text="Dump segments" /> -->
     <Action name="view_doc_properties" text="Document P&amp;roperties..." />
 
     <Separator/>
@@ -147,16 +177,24 @@
     <Action name="add_tempo" text="Add Te&amp;mpo Change..." icon="event-insert-tempo" />
     <Action name="add_time_signature" text="Add Time Si&amp;gnature Change..." icon="event-insert-timesig" />
     <Action name="edit_tempos" text="&amp;Open Tempo and Time Signature Editor" />
+
     <Separator/>
+
     <Action name="set_tempo_to_segment_length" text="Set &amp;Tempo to Audio Segment Duration" />
     <Action name="groove_quantize" text="Set Tempos from &amp;Beat Segment" />
     <Action name="fit_beats" text="Fit Existing Beats to Beat Segment" />
+
     <Separator/>
+
     <Action name="change_composition_length" text="Change &amp;Composition Start and End..." />
+
     <Separator/>
+
     <Action name="edit_markers" text="Edit Mar&amp;kers..." shortcut="Ctrl+K" />
     <Action name="edit_doc_properties" text="Edit Document P&amp;roperties..." />
+
     <Separator/>
+
     <Action name="add_marker" text="&amp;Add Marker at Playback Position" shortcut="Shift+M" />
     <Action name="previous_marker" text="Jump to &amp;Previous Marker" shortcut="Ctrl+," />
     <Action name="next_marker" text="Jump to &amp;Next Marker" shortcut="Ctrl+." />
@@ -168,15 +206,23 @@
     <text>&amp;Studio</text>
     <Action name="audio_mixer" text="&amp;Audio Mixer" icon="mixer" />
     <Action name="midi_mixer" text="MIDI Mi&amp;xer" icon="midimixer" />
+
     <Separator/>
+
     <Action name="manage_midi_devices" text="Manage MIDI &amp;Devices" icon="manage-midi-devices" />
     <Action name="manage_synths" text="Manage S&amp;ynth Plugins" icon="manage-synth-plugins" />
     <Action name="manage_metronome" text="Manage &amp;Metronome" />
+
     <Separator/>
+
     <Action name="modify_midi_filters" text="Modify MIDI &amp;Filters" icon="filter" />
+
     <Separator/>
+
     <Action name="reset_midi_network" text="&amp;Reset MIDI Network" />
+
     <Separator/>
+
     <Action name="load_studio" text="Im&amp;port Studio from File..." />
     <Action name="load_default_studio" text="&amp;Import Default Studio" />
     <Action name="save_default_studio" text="&amp;Save Current Document as Default Studio" />
@@ -199,7 +245,9 @@
       <Action name="edit_event_list" text="Open in &amp;Event List Editor" icon="eventlist" shortcut="E" />
       <Action name="edit_pitch_tracker" text="Open in &amp;Pitch Tracker" icon="pitchtracker" shortcut="I" />
     </Menu>
+
     <Separator/>
+
     <Action name="relabel_segment" text="R&amp;elabel..." icon="text" />
     <Action name="quantize_selection" text="&amp;Quantize..." icon="quantize" shortcut="=" />
     <Action name="repeat_quantize" text="Repe&amp;at Last Quantize" shortcut="+" />
@@ -207,15 +255,21 @@
     <Action name="transpose_semitones" text="Transpos&amp;e by Semitones..." />
     <Action name="switch_preset" text="&amp;Convert Notation for..." />
     <Action name="interpret" text="Interpret..." />
+
     <Separator/>
+
     <Action name="rescale" text="Stretch &amp;or Squash..." />
     <Action name="create_anacrusis" text="Create &amp;Anacrusis..." />
     <Action name="set_segment_start" text="Set Start &amp;Time..." />
     <Action name="set_segment_duration" text="Set &amp;Duration..." />
+
     <Separator/>
+
     <Action name="jog_left" text="Jog &amp;Left" shortcut="Alt+Left" />
     <Action name="jog_right" text="Jog &amp;Right" shortcut="Alt+Right" />
+
     <Separator/>
+
     <Action name="join_segments" text="Join" icon="join" shortcut="Ctrl+J" />
     <Menu name="split">
       <text>&amp;Split</text>
@@ -227,10 +281,14 @@
     </Menu>
     <Action name="repeats_to_real_copies" text="Turn Re&amp;peats into Copies" />
     <Action name="links_to_real_copies" text="Turn Li&amp;nks into Copies" />
+
     <Separator/>
+
     <Action name="expand_figuration" text="E&amp;xpand Block Chord Segments by Figuration" />
     <Action name="update_figurations" text="&amp;Update all Figurations" />
+
     <Separator/>
+
     <Action name="manage_trigger_segments" text="Manage Tri&amp;ggered Segments" />
   </Menu>
 
@@ -239,20 +297,30 @@
     <Action name="add_track" text="Add &amp;Track" icon="add_tracks" shortcut="Ctrl+T" />
     <Action name="add_tracks" text="&amp;Add Tracks..." shortcut="Ctrl+Shift+T" />
     <Action name="delete_track" text="D&amp;elete Track" icon="delete_track" shortcut="Ctrl+D" />
+
     <Separator/>
+
     <Action name="move_track_down" text="Move Track &amp;Down" icon="move_track_down" shortcut="Shift+Down" />
     <Action name="move_track_up" text="Mo&amp;ve Track Up" icon="move_track_up" shortcut="Shift+Up" />
+
     <Separator/>
+
     <Action name="select_next_track" text="Select &amp;Next Track" shortcut="Down" />
     <Action name="select_previous_track" text="Select &amp;Previous Track" shortcut="Up" />
+
     <Separator/>
+
     <Action name="toggle_mute_track" text="Mute or Unmute Tra&amp;ck" shortcut="U" />
     <Action name="toggle_arm_track" text="Arm &amp;or Un-arm Track for Record" shortcut="R" />
     <Action name="toggle_solo_track" text="&amp;Solo or Un-solo Track" shortcut="S" />
+
     <Separator/>
+
     <Action name="unmute_all_tracks" text="&amp;Unmute all Tracks" icon="un-mute-all" />
     <Action name="mute_all_tracks" text="&amp;Mute all Tracks" icon="mute-all" />
+
     <Separator/>
+
     <Menu name="set_track_instrument">
       <text>Set &amp;Instrument</text>
     </Menu>
@@ -267,7 +335,9 @@
     <Action name="move" text="&amp;Move" icon="move" shortcut="F5" group="tools_segment" checked="false" />
     <Action name="resize" text="&amp;Resize" icon="resize" shortcut="F6" group="tools_segment" checked="false" />
     <Action name="split" text="S&amp;plit" icon="split" shortcut="F7" group="tools_segment" checked="false" />
+
     <Separator/>
+
     <Menu name="Transport">
       <text>T&amp;ransport</text>
       <!-- JAS need to know how to add Qt::KeypadModifier in Human Readable shortcut for Play 'KP_Enter'-->
@@ -290,14 +360,17 @@
     <Action name="manual" text="Rosegarden &amp;Manual" icon="wiki" shortcut="F1" />
 
     <Separator/>
+
     <Action name="tutorial" text="&amp;Rosegarden Tutorials" />
     <Action name="guidelines" text="&amp;Bug Reporting Guidelines" />
 
     <Separator/>
+
     <Action name="help_about_app" text="&amp;About Rosegarden" icon="rg-rwb-rose3-16x16" />
     <Action name="help_about_qt" text="About &amp;Qt" />
 
     <Separator/>
+
     <Action name="donate" text="&amp;Support Rosegarden" icon="donate" />
   </Menu>
 
@@ -312,6 +385,7 @@
   <Action name="file_print_lilypond"/>
 
   <Separator/>
+
   <Action name="edit_undo"/>
   <Action name="edit_redo"/>
   <Action name="edit_cut"/>
@@ -329,6 +403,7 @@
   <Action name="split" />
 
   <Separator/>
+
   <Action name="split_by_pitch"/>
   <Action name="join_segments"/>
   <Action name="quantize_selection" />
@@ -342,6 +417,7 @@
   <Action name="move_track_down" />
 
   <Separator/>
+
   <Action name="mute_all_tracks" />
   <Action name="unmute_all_tracks" />
 
@@ -363,6 +439,7 @@
   <Action name="audio_manager" />
 
   <Separator/>
+
   <Action name="manage_midi_devices" />
   <Action name="manage_synths" />
   <Action name="midi_mixer" />
@@ -381,10 +458,12 @@
   <Action name="loop" />
 
   <Separator/>
+
   <Action name="scroll_to_follow" />
   <Action name="toggle_metronome" />
 
   <Separator/>
+
   <Action name="panic" />
 </ToolBar>
 
