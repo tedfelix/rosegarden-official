@@ -296,6 +296,9 @@ TransportDialog::TransportDialog(QWidget *parent):
     // No improvement.
     //m_metronomeTimer.setTimerType(Qt::PreciseTimer);
 
+    connect(ui->MetronomeButton, &QAbstractButton::clicked,
+            this, &TransportDialog::slotMetronomeButtonClicked);
+
     // Performance Testing
 
     QSettings settings;
@@ -346,7 +349,7 @@ void TransportDialog::init()
     raise();
 
     // set the play metronome button
-    MetronomeButton()->setChecked(comp.usePlayMetronome());
+    ui->MetronomeButton->setChecked(comp.usePlayMetronome());
 
     // set the transport mode found in the configuration
     const std::string transportMode =
@@ -1072,6 +1075,14 @@ TransportDialog::closeEvent(QCloseEvent * /*closeEvent*/)
 void
 TransportDialog::slotLoopButtonClicked()
 {
+    // ??? Why doesn't this just Trigger RMW's "loop" action?  See
+    //     slotMetronomeButtonClicked().
+    // ??? This shouldn't work but it does.  It shouldn't have an effect on
+    //     the toolbar loop button's toggle state.  But it does.  That implies
+    //     there might be excessive complexity covering all the various problem
+    //     cases.  Need to review loopButton() and all the routines it calls.
+    //     Should be able to make some simplifications.
+
     RosegardenDocument::currentDocument->loopButton(
             ui->LoopButton->isChecked());
 }
@@ -1420,6 +1431,17 @@ void TransportDialog::tempoChanged(const Composition*)
     // update the ui
     RosegardenMainWindow *rmw = RosegardenMainWindow::self();
     rmw->slotUpdateForPointerChange();
+}
+
+void
+TransportDialog::slotMetronomeButtonClicked()
+{
+    // Get the "toggle_metronome" action from RMW.
+    QAction *toggleMetronome =
+            RosegardenMainWindow::self()->findAction("toggle_metronome");
+    // Trigger it.
+    if (toggleMetronome)
+        toggleMetronome->activate(QAction::Trigger);
 }
 
 

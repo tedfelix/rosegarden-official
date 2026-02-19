@@ -432,7 +432,7 @@ RosegardenMainWindow::RosegardenMainWindow(
     initZoomToolbar();
 
     // ??? TransportDialog should connect itself to SequenceManager.  Move
-    //     all of this into TransportDialog.
+    //     all of this into TransportDialog if possible.
     Q_ASSERT(m_transport);
     connect(m_seqManager, &SequenceManager::signalTempoChanged,
             m_transport, &TransportDialog::slotTempoChanged);
@@ -457,10 +457,10 @@ RosegardenMainWindow::RosegardenMainWindow(
     emit startupStatusMessage(tr("Starting sequence manager..."));
     m_seqManager->setDocument(RosegardenDocument::currentDocument);
 
-    connect(m_seqManager,
-            &SequenceManager::sendWarning,
-            this,
-            &RosegardenMainWindow::slotDisplayWarning);
+    connect(m_seqManager, &SequenceManager::sendWarning,
+            this, &RosegardenMainWindow::slotDisplayWarning);
+    connect(m_seqManager, &SequenceManager::signalMetronomeActivated,
+            this, &RosegardenMainWindow::slotMetronomeActivated);
 
     connect(CommandHistory::getInstance(),
             &CommandHistory::aboutToExecuteCommand,
@@ -2997,11 +2997,6 @@ RosegardenMainWindow::createAndSetupTransport()
             &QAbstractButton::clicked,
             this,
             &RosegardenMainWindow::slotFastForwardToEnd);
-
-    connect(m_transport->MetronomeButton(),
-            &QAbstractButton::clicked,
-            this,
-            &RosegardenMainWindow::slotToggleMetronome);
 
     connect(m_transport->SoloButton(),
             &QAbstractButton::clicked,
@@ -8923,6 +8918,15 @@ RosegardenMainWindow::slotCommandExecuted()
     // ??? This breaks the matrix editor.  When adding notes, the note previews
     //     last a very long time with this in place.
     //slotSetPointerPosition(CompositionPosition::getInstance()->get());
+}
+
+void
+RosegardenMainWindow::slotMetronomeActivated(bool active)
+{
+    // Update the toolbar appropriately.
+    QAction *action = findAction("toggle_metronome");
+    if (action)
+        action->setChecked(active);
 }
 
 
