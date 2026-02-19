@@ -48,7 +48,7 @@ class SegmentTool : public BaseTool, public ActionFileClient
 
 public:
 
-    ~SegmentTool() override;
+    virtual ~SegmentTool() override  { }
 
     /**
      * Is called by the parent View (e.g. CompositionView) when

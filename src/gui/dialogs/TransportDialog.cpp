@@ -1441,7 +1441,7 @@ TransportDialog::slotMetronomeButtonClicked()
             RosegardenMainWindow::self()->findAction("toggle_metronome");
     // Trigger it.
     if (toggleMetronome)
-        toggleMetronome->activate(QAction::Trigger);
+        toggleMetronome->trigger();
 }
 
 
