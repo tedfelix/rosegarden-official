@@ -612,7 +612,7 @@ punchin:
         const RealTime startPos =
             CompositionPosition::getInstance()->getElapsedTime();
 
-        int result = RosegardenSequencer::getInstance()->record(
+        int result = TransportControl::getInstance()->record(
                 startPos,
                 STARTING_TO_RECORD);  // recordMode
 

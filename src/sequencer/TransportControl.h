@@ -39,7 +39,7 @@ public:
     void sequencerPlayReady();
     void stop(bool autoStop);
     void jumpTo(RealTime time);
-    int record();
+    int record(const RealTime &time, long recordMode);
 
 #ifdef HAVE_LIBJACK
     int processCallback(jack_nframes_t nframes);

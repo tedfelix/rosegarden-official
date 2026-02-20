@@ -76,7 +76,7 @@ public:
     bool play(const RealTime &time);
 
     /// Record from a given time with given parameters.
-    bool record(const RealTime &time, long recordMode);
+    bool record(const RealTime &time, long recordMode, bool& playRequested);
 
     /// Punch out from recording to playback
     /**

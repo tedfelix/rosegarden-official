@@ -229,7 +229,8 @@ RosegardenSequencer::play(const RealTime &time)
 
 bool
 RosegardenSequencer::record(const RealTime &time,
-                            long recordMode)
+                            long recordMode,
+                            bool& playRequested)
 {
     LOCKED;
 
@@ -239,7 +240,7 @@ RosegardenSequencer::record(const RealTime &time,
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
-    SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus;
+    SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus << time;
 #endif
     // punch in recording
     if (m_transportStatus == PLAYING) {
@@ -342,7 +343,8 @@ RosegardenSequencer::record(const RealTime &time,
         //
         m_driver->initialisePlayback(m_songPosition);
 
-        return play(time);
+        playRequested = true;
+        return 0;
     }
 }
 

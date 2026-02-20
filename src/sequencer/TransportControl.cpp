@@ -95,14 +95,14 @@ TransportControl::~TransportControl()
 
 void TransportControl::tick()
 {
-    //RG_DEBUG << "tick";
     RosegardenSequencer* seq = RosegardenSequencer::getInstance();
+    RG_DEBUG << "tick" << seq->getStatus();
     switch (seq->getStatus()) {
     case STARTING_TO_PLAY:
         if (Preferences::getUseJackTransport()) {
             // the sequncer is ready to play but we cannot set the
             // state to PLAYING yet because there may be a slow
-            // starter. Wait for jack rooling
+            // starter. Wait for jack rolling
             m_waitingForStartJack = true;
             sequencerPlayReady();
         } else {
@@ -205,10 +205,17 @@ void TransportControl::jumpTo(RealTime time)
 #endif
 }
 
-int TransportControl::record()
+int TransportControl::record(const RealTime &time, long recordMode)
 {
-    RG_DEBUG << "record";
-    return 0;
+    RG_DEBUG << "record" << time << recordMode;
+    bool playRequested = false;
+    int ret = 0;
+    RosegardenSequencer::getInstance()->record(time, recordMode, playRequested);
+    if (playRequested) {
+        RG_DEBUG << "record - play requested";
+        ret = play(time);
+    }
+    return ret;
 }
 
 #ifdef HAVE_LIBJACK

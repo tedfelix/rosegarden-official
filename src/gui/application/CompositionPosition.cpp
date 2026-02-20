@@ -110,7 +110,7 @@ void CompositionPosition::slotUpdate()
     timeT tmpPos = comp.getElapsedTimeForRealTime(position);
     //RG_DEBUG << "slotUpdate" << tmpPos << m_oldPosition;
     if (tmpPos == m_oldPosition) {
-        RG_DEBUG << "slotUpdate avoid jump bak to old position";
+        RG_DEBUG << "slotUpdate avoid jump back to old position";
         return;
     }
 
