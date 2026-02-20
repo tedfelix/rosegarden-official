@@ -445,32 +445,60 @@ ManageMetronomeDialog::slotApply()
 void
 ManageMetronomeDialog::slotPreviewPitch(int pitch)
 {
-    RG_DEBUG << "ManageMetronomeDialog::slotPreviewPitch";
+    RG_DEBUG << "slotPreviewPitch()";
 
-    DeviceVector *devices = m_doc->getStudio().getDevices();
-    DeviceVector::const_iterator it;
+    // Find the device associated with the m_metronomeDevice combo box's
+    // current selection.
+
+    // ??? Pull out a routine that returns a list of only the suitable
+    //     devices.  That will simplify all this.  And it looks like it
+    //     can be used four times throughout this class.
+    //       DeviceVector devices = getSuitableDevices();
+
+    const DeviceVector *devices = m_doc->getStudio().getDevices();
     int count = 0;
     Device *dev = nullptr;
 
-    for (it = devices->begin(); it != devices->end(); ++it) {
-
+    for (DeviceVector::const_iterator it = devices->begin();
+         it != devices->end();
+         ++it) {
         dev = *it;
-        if (!isSuitable(dev)) continue;
+        if (!isSuitable(dev))
+            continue;
 
-        if (count == m_metronomeDevice->currentIndex()) break;
-        count++;
+        // Found it?
+        if (count == m_metronomeDevice->currentIndex())
+            break;
+
+        ++count;
     }
 
-    if (!dev || !isSuitable(dev)) return;
+    // Device not found?  Bail.
+    // ??? Not exactly true.  It will likely return the last device if none
+    //     is found.  Probably need to simplify this so it does what it seems
+    //     to be doing.  First step would be to implement a getSuitablDevices().
+    //     See above.
+    if (!dev || !isSuitable(dev))
+        return;
 
+    // ??? Why are we doing this?  We don't use it.
     const MidiMetronome *metronome = getMetronome(dev);
-    if (metronome == nullptr) return;
+    if (!metronome)
+        return;
 
-    InstrumentVector list = dev->getPresentationInstruments();
+    // Get the instrument selected in the m_metronomeInstrument combo box.
+    const InstrumentVector instruments = dev->getPresentationInstruments();
+    Instrument *inst = instruments[m_metronomeInstrument->currentIndex()];
 
-    Instrument *inst =
-        list[m_metronomeInstrument->currentIndex()];
-    StudioControl::playPreviewNote(inst, pitch, MidiMaxValue, RealTime(0, 10000000));
+    // Get the velocity from the m_metronomeBarVely combo box.
+    const MidiByte velocity = m_metronomeBarVely->value();
+
+    // Play the preview.
+    StudioControl::playPreviewNote(
+            inst,  // instrument
+            pitch,
+            velocity,
+            RealTime::fromSeconds(.01));  // duration, .01 seconds
 }
 
 void
