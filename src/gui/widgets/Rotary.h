@@ -169,6 +169,8 @@ private:
 
     void profile();
 
+    QString m_toolTip;
+
 };
 
 
