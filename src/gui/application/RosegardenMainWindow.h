@@ -1690,6 +1690,9 @@ private slots:
      * Let the user select a MusicXML file for merge
      */
     void slotMergeMusicXML();
+
+    void slotMetronomeActivated(bool active);
+
 };
 
 

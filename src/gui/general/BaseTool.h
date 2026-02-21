@@ -42,21 +42,21 @@ class BaseTool : public QObject
 
 public:
 
-    ~BaseTool() override;
+    virtual ~BaseTool() override  { }
 
     /**
      * Is called by the parent View (EditView or SegmentCanvas) when
      * the tool is set as current.
      * Add any setup here (e.g. setting the mouse cursor shape)
      */
-    virtual void ready();
+    virtual void ready()  { }
 
     /**
      * Is called by the parent View (EditView or SegmentCanvas) after
      * the tool is put away.
      * Add any cleanup here
      */
-    virtual void stow();
+    virtual void stow()  { }
 
     /**
      * Show the menu if there is one
@@ -88,7 +88,7 @@ protected:
     //--------------- Data members ---------------------------------
 
     QString m_menuName;
-    QMenu *m_menu;
+    QMenu *m_menu{nullptr};
 
     QString m_contextHelp;
 };

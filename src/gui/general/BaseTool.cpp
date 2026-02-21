@@ -30,22 +30,12 @@
 namespace Rosegarden
 {
 
-BaseTool::BaseTool(const QString& menuName, QObject* parent)
-        : QObject(parent),
-        m_menuName(menuName),
-        m_menu(nullptr)
-{}
 
-BaseTool::~BaseTool()
+BaseTool::BaseTool(const QString& menuName, QObject* parent) :
+    QObject(parent),
+    m_menuName(menuName)
 {
-    //RG_DEBUG << "BaseTool::~BaseTool()";
 }
-
-void BaseTool::ready()
-{}
-
-void BaseTool::stow()
-{}
 
 void BaseTool::showMenu()
 {
@@ -73,5 +63,6 @@ void BaseTool::setContextHelp(const QString &help)
     m_contextHelp = help;
     emit showContextHelp(m_contextHelp);
 }
+
 
 }

@@ -174,6 +174,7 @@ private slots:
     void slotLoopChanged();
 
     void slotMetronomeTimer();
+    void slotMetronomeButtonClicked();
 
 private:
 
