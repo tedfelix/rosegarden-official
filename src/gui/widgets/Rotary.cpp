@@ -789,15 +789,20 @@ Rotary::updateToolTip()
     QString toolTip = tr("<qt><p>%1: %2</p><p>Click and drag up and down or left and right to modify.</p><p>Double click to edit value directly.</p></qt>").
             arg(m_label).
             arg(value);
-    QString oldText = QToolTip::text();
-    bool isThis = (oldText == m_toolTip); // tooltip is showing for this widget
+
+    // tooltip is showing for this widget
+    const bool thisTooltipIsShowing = (QToolTip::text() == m_toolTip);
     m_toolTip = toolTip;
+
     setToolTip(toolTip);
 
     // live update
-    if (!QToolTip::isVisible()) return;
-    if (isThis) {
-        QToolTip::showText(QCursor::pos(), toolTip, nullptr, QRect(), 100000);
+    if (QToolTip::isVisible()  &&  thisTooltipIsShowing) {
+        QToolTip::showText(QCursor::pos(),  // pos
+                           toolTip,  // text
+                           nullptr,  // w (widget)
+                           QRect(),  // rect
+                           100000);  // msecsShowTime (100 seconds)
     }
 }
 

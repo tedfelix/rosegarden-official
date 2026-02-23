@@ -169,6 +169,8 @@ private:
 
     void profile();
 
+    // Cache to hold current tool tip text so we can make sure our tool
+    // tip is currently being displayed.
     QString m_toolTip;
 
 };
