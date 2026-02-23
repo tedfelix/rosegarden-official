@@ -95,9 +95,9 @@ TransportControl::~TransportControl()
 
 void TransportControl::tick()
 {
-    RosegardenSequencer* seq = RosegardenSequencer::getInstance();
-    RG_DEBUG << "tick" << seq->getStatus();
-    switch (seq->getStatus()) {
+    RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
+    //RG_DEBUG << "tick" << seq.getStatus();
+    switch (seq.getStatus()) {
     case STARTING_TO_PLAY:
         if (Preferences::getUseJackTransport()) {
             // the sequncer is ready to play but we cannot set the
@@ -106,17 +106,32 @@ void TransportControl::tick()
             m_waitingForStartJack = true;
             sequencerPlayReady();
         } else {
-            if (!seq->startPlaying()) {
+            if (!seq.startPlaying()) {
                 // send result failed and stop Sequencer
-                seq->setStatus(STOPPING);
+                seq.setStatus(STOPPING);
             } else {
-                seq->setStatus(PLAYING);
+                seq.setStatus(PLAYING);
             }
         }
         break;
     case QUIT:
     case PLAYING:
     case STARTING_TO_RECORD:
+        if (Preferences::getUseJackTransport()) {
+            // the sequncer is ready to record but we cannot set the
+            // state to RECORDING yet because there may be a slow
+            // starter. Wait for jack rolling
+            m_waitingForStartJack = true;
+            sequencerPlayReady();
+        } else {
+            if (!seq.startPlaying()) {
+                seq.setStatus(STOPPING);
+            } else {
+                seq.setStatus(RECORDING);
+            }
+        }
+        break;
+
     case RECORDING:
     case STOPPING:
     case RECORDING_ARMED:
@@ -209,8 +224,8 @@ int TransportControl::record(const RealTime &time, long recordMode)
 {
     RG_DEBUG << "record" << time << recordMode;
     bool playRequested = false;
-    int ret = 0;
-    RosegardenSequencer::getInstance()->record(time, recordMode, playRequested);
+    int ret = RosegardenSequencer::getInstance()->record
+        (time, recordMode, playRequested);
     if (playRequested) {
         RG_DEBUG << "record - play requested";
         ret = play(time);
@@ -239,15 +254,16 @@ int TransportControl::syncCallback(jack_transport_state_t state,
 int TransportControl::processCallback(jack_nframes_t)
 {
     //RG_DEBUG << "processCallback";
+    if (!Preferences::getUseJackTransport()) return 0;
     jack_position_t pos ;
     jack_transport_state_t state = jack_transport_query(m_client, &pos);
 
-    RosegardenSequencer* seq = RosegardenSequencer::getInstance();
+    RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
 
     unsigned int frame = pos.frame;
-    unsigned int sampleRate = seq->getSampleRate();
+    unsigned int sampleRate = seq.getSampleRate();
     RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
-    RealTime songPosition = seq->getSongPosition();
+    RealTime songPosition = seq.getSongPosition();
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return 0;
     const Composition& comp = doc->getComposition();
@@ -265,18 +281,27 @@ int TransportControl::processCallback(jack_nframes_t)
         if (jackTime <= compEndTime) {
             RG_DEBUG << "jump" << jackTime << songPosition <<
                 compEndTime << delta << frame << sampleRate;
-            seq->jumpTo(jackTime);
+            seq.jumpTo(jackTime);
         }
     }
     //RG_DEBUG << "processCallback state" << state << m_state;
 
     if (m_waitingForStartJack && state == JackTransportRolling) {
-        // now we are ready to play and everyone else too
-        if (!seq->startPlaying()) {
-            // send result failed and stop Sequencer
-            seq->setStatus(STOPPING);
-        } else {
-            seq->setStatus(PLAYING);
+        // now we are ready to play or record and everyone else too
+        if (seq.getStatus() == STARTING_TO_PLAY) {
+            if (!seq.startPlaying()) {
+                // send result failed and stop Sequencer
+                seq.setStatus(STOPPING);
+            } else {
+                seq.setStatus(PLAYING);
+            }
+        }
+        if (seq.getStatus() == STARTING_TO_RECORD) {
+            if (!seq.startPlaying()) {
+                seq.setStatus(STOPPING);
+            } else {
+                seq.setStatus(RECORDING);
+            }
         }
         m_waitingForStartJack = false;
     }
@@ -290,11 +315,11 @@ int TransportControl::processCallback(jack_nframes_t)
         if (state == JackTransportStarting) {
             // no start if we are after composition end
             if (jackTime < compEndTime) {
-                seq->play(jackTime);
+                seq.play(jackTime);
             }
         }
         if (state == JackTransportStopped) {
-            seq->stop(false);
+            seq.stop(false);
         }
 
         m_state = state;

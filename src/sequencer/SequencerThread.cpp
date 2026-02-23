@@ -76,13 +76,6 @@ SequencerThread::run()
             break;
 
         case STARTING_TO_RECORD:
-            if (!seq.startPlaying()) {
-                seq.setStatus(STOPPING);
-            } else {
-                seq.setStatus(RECORDING);
-            }
-            break;
-
         case RECORDING:
             if (!seq.keepPlaying()) {
                 // there's a problem or the piece has
