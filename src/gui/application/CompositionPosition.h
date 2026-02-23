@@ -66,6 +66,7 @@ private:
     timeT m_documentPosition;
 
     timeT m_oldPosition;
+    int m_oldPositionCycles;
 
 private slots:
     void slotUpdate();

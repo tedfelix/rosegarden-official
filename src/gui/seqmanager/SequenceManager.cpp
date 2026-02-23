@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[SequenceManager]"
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT 1
 
 #include "SequenceManager.h"
 
@@ -72,6 +72,7 @@
 #include <QElapsedTimer>
 
 #include <utility>  // For std::pair.
+#include <unistd.h>
 
 namespace Rosegarden
 {
@@ -276,6 +277,14 @@ SequenceManager::stop(bool autoStop)
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
     TransportControl::getInstance()->stop(autoStop);
+
+    // if we are using jack transport the stop will come
+    // asynchronously so wait for it here
+    while (RosegardenSequencer::getInstance()->getStatus() != STOPPED) {
+        RG_DEBUG << "stop waiting for stop" <<
+            RosegardenSequencer::getInstance()->getStatus();
+        usleep(10000);
+    }
 
     // restore
     QApplication::restoreOverrideCursor();

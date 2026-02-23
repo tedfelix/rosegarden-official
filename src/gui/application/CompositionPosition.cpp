@@ -16,7 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[CompositionPosition]"
-//#define RG_NO_DEBUG_PRINT
+#define RG_NO_DEBUG_PRINT
 
 #include "CompositionPosition.h"
 
@@ -35,7 +35,8 @@ CompositionPosition::CompositionPosition():
     m_position(0),
     m_positionAsElapsedTime(RealTime::zero()),
     m_documentPosition(0),
-    m_oldPosition(0)
+    m_oldPosition(0),
+    m_oldPositionCycles(0)
 {
     RG_DEBUG << "ctor";
     m_updateTimer = new QTimer(this);
@@ -79,6 +80,7 @@ void CompositionPosition::slotSet(timeT time)
     const Composition& comp = doc->getComposition();
     // note old position ..
     m_oldPosition = m_position;
+    m_oldPositionCycles = 3;
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
 
@@ -109,8 +111,10 @@ void CompositionPosition::slotUpdate()
         SequencerDataBlock::getInstance()->getPositionPointer();
     timeT tmpPos = comp.getElapsedTimeForRealTime(position);
     //RG_DEBUG << "slotUpdate" << tmpPos << m_oldPosition;
-    if (tmpPos == m_oldPosition) {
-        RG_DEBUG << "slotUpdate avoid jump back to old position";
+    if (tmpPos == m_oldPosition && m_oldPositionCycles > 0) {
+        RG_DEBUG << "slotUpdate avoid jump back to old position" <<
+            m_oldPosition;
+        m_oldPositionCycles--;
         return;
     }
 
@@ -119,6 +123,7 @@ void CompositionPosition::slotUpdate()
             "->" << position;
         // a new position
         m_positionAsElapsedTime = position;
+        m_oldPosition = m_position;
         m_position = comp.getElapsedTimeForRealTime(position);
         RG_DEBUG << "slotUpdate new position position" << m_position;
         emit changed(m_position);

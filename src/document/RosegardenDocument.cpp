@@ -2409,6 +2409,7 @@ RosegardenDocument::stopRecordingMidi()
     }
 
     for (size_t i = 0; i < toErase.size(); ++i) {
+        RG_DEBUG << "erasing segment" << i;
         m_recordMIDISegments.erase(toErase[i]);
     }
 
