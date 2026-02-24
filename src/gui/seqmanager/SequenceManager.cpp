@@ -1029,8 +1029,19 @@ void
 SequenceManager::fastForwardToEnd()
 {
     RG_DEBUG << "fastForwardToEnd()";
+
     Composition &comp = m_doc->getComposition();
-    CompositionPosition::getInstance()->slotSet(comp.getEndMarker());
+    CompositionPosition *pos = CompositionPosition::getInstance();
+
+    const timeT currentTime = pos->get();
+    const timeT duration = comp.getDuration(true);
+
+    // If we are at the end of the segments, jump to the end of the
+    // composition.  Otherwise jump to the end of the segments.
+    if (currentTime == duration)
+        pos->slotSet(comp.getEndMarker());
+    else
+        pos->slotSet(duration);
 }
 
 void SequenceManager::slotLoopChanged()
