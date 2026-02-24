@@ -39,8 +39,16 @@ Included in this release...
     [faeb4238be]
   * Audio File Manager: Fix unload not working on selected WAV files.
     Bug #1766.  [8626e2ec58]
+  * main window: Fix toolbar tool buttons not responding to tool
+    changes via the context menu.  [6d33d9d5ed]
+  * main window: Fix context menu tool items enabled at the wrong time.
+    [212f1ba128]
+  * main window: Disable VU meters on muted and archived tracks.
+    Bug #1767.  [1ff36b47e4] [5ed9c5248c]
+  * main window: Make rotary tooltip dynamic.  Bug #1768.  [d39555d401]
+  * metronome: Use bar velocity for preview.  [3f773b79b0]
 
-Done to: 7e3ecfa101
+Done to: 3f773b79b0
 
 ===== New Features =====
 
@@ -48,6 +56,8 @@ Done to: 7e3ecfa101
     synths like the Yamaha TG77 and Oberheim Matrix-1000.  Feature
     Request #542.  [b9c94293c5] [5b03a6285c]
   * matrix: Remember velocity for each segment.  [7e3ecfa101]
+  * main window toolbar: Added metronome button to the transport
+    toolbar.  [2fcbb1426f]
 
 ===== General Improvements =====
 

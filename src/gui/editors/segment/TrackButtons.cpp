@@ -694,6 +694,14 @@ TrackButtons::slotSetTrackMeter(float value, int position)
     if (position < 0  ||  position >= m_tracks)
         return;
 
+    Composition &comp = RosegardenDocument::currentDocument->getComposition();
+    Track *track = comp.getTrackByPosition(position);
+
+    if (track->isMuted())
+        return;
+    if (track->isArchived())
+        return;
+
     m_trackMeters[position]->setLevel(value);
 }
 
@@ -706,7 +714,8 @@ TrackButtons::slotSetMetersByInstrument(float value,
     for (int i = 0; i < m_tracks; ++i) {
         Track *track = comp.getTrackByPosition(i);
 
-        if (track  &&  track->getInstrument() == id) {
+        if (track  &&  track->getInstrument() == id  &&
+            !track->isMuted()  &&  !track->isArchived()) {
             m_trackMeters[i]->setLevel(value);
         }
     }
