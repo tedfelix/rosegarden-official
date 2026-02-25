@@ -169,7 +169,12 @@ MusicXMLImportHelper::insertKey(const Key &key, int number)
         RG_WARNING << "Different keys on multistaff systems not supported yet.";
     } else {
         for (TrackMap::iterator i = m_tracks.begin(); i != m_tracks.end(); ++i) {
-            m_segments[(*i).first+"/"+m_mainVoice[m_staff]]->insert(key.getAsEvent(m_curTime));
+            Segment *segment = m_segments[(*i).first+"/"+m_mainVoice[m_staff]];
+            if (segment == nullptr) {
+                RG_WARNING << "No segment for staff " << (*i).first << " and voice " << m_mainVoice[m_staff];
+                continue;
+            }
+            segment->insert(key.getAsEvent(m_curTime));
         }
     }
     return true;
