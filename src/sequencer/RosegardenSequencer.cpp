@@ -228,7 +228,7 @@ RosegardenSequencer::play(const RealTime &time)
 }
 
 bool
-RosegardenSequencer::record(const RealTime &time,
+RosegardenSequencer::record(const RealTime &,
                             long recordMode,
                             bool& playRequested)
 {
@@ -240,7 +240,7 @@ RosegardenSequencer::record(const RealTime &time,
     TransportStatus localRecordMode = (TransportStatus) recordMode;
 
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
-    SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus << time;
+    SEQUENCER_DEBUG << "RosegardenSequencer::record - recordMode is " << recordMode << ", transport status is " << m_transportStatus;
 #endif
     // punch in recording
     if (m_transportStatus == PLAYING) {
