@@ -76,36 +76,8 @@ SequencerThread::run()
             break;
 
         case STARTING_TO_RECORD:
+            break;
         case RECORDING:
-            if (!seq.keepPlaying()) {
-                // there's a problem or the piece has
-                // finished - so stop playing
-                seq.setStatus(STOPPING);
-            } else {
-                // Now process any incoming MIDI events
-                // and return them to the gui
-                //
-                seq.processRecordedMidi();
-
-                // Now process any incoming audio
-                // and return it to the gui
-                //
-                seq.processRecordedAudio();
-
-                // Still process these so we can send up
-                // audio levels as MappedEvents
-                //
-                // Bug #1348 MIDI Recording Drops Notes (was #3542166).
-                // This line can occasionally steal MIDI
-                // events that are needed by processRecordedMidi().
-                // Need to track down what the above "audio levels" comment
-                // means and whether it is a serious issue.  If so, we need
-                // to address it in a different way.  This line probably
-                // never did anything as by the time it was run,
-                // processRecordedMidi() would have cleaned out all the
-                // incoming events.
-                //seq.processAsynchronousEvents();
-            }
             break;
 
         case STOPPING:

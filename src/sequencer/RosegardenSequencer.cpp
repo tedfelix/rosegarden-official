@@ -41,7 +41,7 @@
 
 #include <QVector>
 
-#define DEBUG_ROSEGARDEN_SEQUENCER
+//#define DEBUG_ROSEGARDEN_SEQUENCER
 
 //#define LOCKED QMutexLocker rgseq_locker(&m_mutex); SEQUENCER_DEBUG << "Locked in " << __PRETTY_FUNCTION__ << " at " << __LINE__
 #define LOCKED QMutexLocker rgseq_locker(&m_mutex)

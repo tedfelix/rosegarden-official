@@ -57,6 +57,7 @@ private:
     RealTime m_allowedDelta;
     bool m_waitingForStart;
     bool m_waitingForStartJack;
+    bool m_countIn;
 #endif
 };
 

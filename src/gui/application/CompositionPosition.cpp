@@ -80,7 +80,7 @@ void CompositionPosition::slotSet(timeT time)
     const Composition& comp = doc->getComposition();
     // note old position ..
     m_oldPosition = m_position;
-    m_oldPositionCycles = 3;
+    m_oldPositionCycles = 4;
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
 

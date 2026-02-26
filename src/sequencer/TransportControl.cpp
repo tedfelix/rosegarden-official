@@ -25,6 +25,7 @@
 #include "document/RosegardenDocument.h"
 #include "misc/Debug.h"
 #include "misc/Preferences.h"
+#include "sound/SequencerDataBlock.h"
 
 #ifdef HAVE_LIBJACK
 namespace
@@ -67,7 +68,8 @@ TransportControl::TransportControl()
     : m_state(JackTransportStopped),
       m_allowedDelta(RealTime::fromSeconds(0.05)),
       m_waitingForStart(false),
-      m_waitingForStartJack(false)
+      m_waitingForStartJack(false),
+      m_countIn(false)
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -115,14 +117,25 @@ void TransportControl::tick()
         }
         break;
     case QUIT:
+        break;
     case PLAYING:
+        break;
     case STARTING_TO_RECORD:
         if (Preferences::getUseJackTransport()) {
-            // the sequncer is ready to record but we cannot set the
-            // state to RECORDING yet because there may be a slow
-            // starter. Wait for jack rolling
-            m_waitingForStartJack = true;
-            sequencerPlayReady();
+            if (m_countIn) {
+                // just go to recording
+                if (!seq.startPlaying()) {
+                    seq.setStatus(STOPPING);
+                } else {
+                    seq.setStatus(RECORDING);
+                }
+            } else {
+                // the sequncer is ready to record but we cannot set the
+                // state to RECORDING yet because there may be a slow
+                // starter. Wait for jack rolling
+                m_waitingForStartJack = true;
+                sequencerPlayReady();
+            }
         } else {
             if (!seq.startPlaying()) {
                 seq.setStatus(STOPPING);
@@ -133,6 +146,51 @@ void TransportControl::tick()
         break;
 
     case RECORDING:
+        if (Preferences::getUseJackTransport()) {
+            RG_DEBUG << "recording" << m_countIn <<
+                SequencerDataBlock::getInstance()->getPositionPointer();
+            if (m_countIn) {
+                // if the time is (just before) 0 start jack rolling
+                RealTime position =
+                    SequencerDataBlock::getInstance()->getPositionPointer();
+                if (position >= RealTime(0, -500000))
+                    {
+                        RG_DEBUG << "count in end - starting jack";
+                        jack_transport_start(m_client);
+                        m_countIn = false;
+                    }
+            }
+        }
+        if (!seq.keepPlaying()) {
+            // there's a problem or the piece has
+            // finished - so stop playing
+            seq.setStatus(STOPPING);
+        } else {
+            // Now process any incoming MIDI events
+            // and return them to the gui
+            //
+            seq.processRecordedMidi();
+
+            // Now process any incoming audio
+            // and return it to the gui
+            //
+            seq.processRecordedAudio();
+
+            // Still process these so we can send up
+            // audio levels as MappedEvents
+            //
+            // Bug #1348 MIDI Recording Drops Notes (was #3542166).
+            // This line can occasionally steal MIDI
+            // events that are needed by processRecordedMidi().
+            // Need to track down what the above "audio levels" comment
+            // means and whether it is a serious issue.  If so, we need
+            // to address it in a different way.  This line probably
+            // never did anything as by the time it was run,
+            // processRecordedMidi() would have cleaned out all the
+            // incoming events.
+            //seq.processAsynchronousEvents();
+        }
+        break;
     case STOPPING:
     case RECORDING_ARMED:
     case STOPPED:
@@ -149,11 +207,23 @@ int TransportControl::play(RealTime startPos)
     if (Preferences::getUseJackTransport()) {
         unsigned int sampleRate =
             RosegardenSequencer::getInstance()->getSampleRate();
-        unsigned long frame = RealTime::realTime2Frame(startPos, sampleRate);
-        RG_DEBUG << "play jackTransport" << startPos << sampleRate << frame;
-        jack_transport_locate(m_client, frame);
-        jack_transport_start(m_client);
-        m_waitingForStart = true;
+        if (startPos < RealTime::zero()) {
+            // This is a tricky case - it happens if we are recording
+            // from near the beginning of the piece with count in. We
+            // must start without jack and try to start jack rolling
+            // when the time gets to 0
+            RG_DEBUG << "play start time -ve play inetrnal";
+            m_countIn = true;
+            result = RosegardenSequencer::getInstance()->play(startPos);
+        } else {
+            // start using jack transport
+            unsigned long frame =
+                RealTime::realTime2Frame(startPos, sampleRate);
+            RG_DEBUG << "play jackTransport" << startPos << sampleRate << frame;
+            jack_transport_locate(m_client, frame);
+            jack_transport_start(m_client);
+            m_waitingForStart = true;
+        }
     } else {
         RG_DEBUG << "play internal" << startPos;
         result = RosegardenSequencer::getInstance()->play(startPos);
@@ -174,13 +244,20 @@ void TransportControl::stop(bool autoStop)
 {
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport()) {
-        bool jackStopAtAutoStop = Preferences::getJACKStopAtAutoStop();
-        RG_DEBUG << "stop jackTransport" << autoStop << jackStopAtAutoStop;
-        if (jackStopAtAutoStop || ! autoStop) {
-            jack_transport_stop(m_client);
-        } else {
-            // let jack continue running but still tell the sequnecer to stop
+        if (m_countIn) {
+            // we are still in the count in and jack is not rolling
             RosegardenSequencer::getInstance()->stop(autoStop);
+            m_countIn = false;
+        } else {
+            bool jackStopAtAutoStop = Preferences::getJACKStopAtAutoStop();
+            RG_DEBUG << "stop jackTransport" << autoStop << jackStopAtAutoStop;
+            if (jackStopAtAutoStop || ! autoStop) {
+                jack_transport_stop(m_client);
+            } else {
+                // let jack continue running but still tell the
+                // sequnecer to stop
+                RosegardenSequencer::getInstance()->stop(autoStop);
+            }
         }
     } else {
         RG_DEBUG << "stop internal" << autoStop;
@@ -259,6 +336,7 @@ int TransportControl::processCallback(jack_nframes_t)
     jack_transport_state_t state = jack_transport_query(m_client, &pos);
 
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
+    TransportStatus seqStatus = seq.getStatus();
 
     unsigned int frame = pos.frame;
     unsigned int sampleRate = seq.getSampleRate();
@@ -277,18 +355,19 @@ int TransportControl::processCallback(jack_nframes_t)
     RealTime delta = jackTime - songPosition;
     //RG_DEBUG << "delta" << jackTime << songPosition <<
     //  compEndTime << delta;
-    if (delta > m_allowedDelta || delta < -m_allowedDelta) {
-        if (jackTime <= compEndTime) {
+    if ((delta > m_allowedDelta || delta < -m_allowedDelta) && // out of sync
+        seqStatus != STARTING_TO_RECORD &&
+        seqStatus != RECORDING && // not recording
+        (jackTime <= compEndTime)) { // within composition
             RG_DEBUG << "jump" << jackTime << songPosition <<
                 compEndTime << delta << frame << sampleRate;
             seq.jumpTo(jackTime);
         }
-    }
     //RG_DEBUG << "processCallback state" << state << m_state;
 
     if (m_waitingForStartJack && state == JackTransportRolling) {
         // now we are ready to play or record and everyone else too
-        if (seq.getStatus() == STARTING_TO_PLAY) {
+        if (seqStatus == STARTING_TO_PLAY) {
             if (!seq.startPlaying()) {
                 // send result failed and stop Sequencer
                 seq.setStatus(STOPPING);
@@ -296,7 +375,7 @@ int TransportControl::processCallback(jack_nframes_t)
                 seq.setStatus(PLAYING);
             }
         }
-        if (seq.getStatus() == STARTING_TO_RECORD) {
+        if (seqStatus == STARTING_TO_RECORD) {
             if (!seq.startPlaying()) {
                 seq.setStatus(STOPPING);
             } else {
@@ -314,7 +393,7 @@ int TransportControl::processCallback(jack_nframes_t)
         RG_DEBUG << "jack state change" << sstr;
         if (state == JackTransportStarting) {
             // no start if we are after composition end
-            if (jackTime < compEndTime) {
+            if (seqStatus == STOPPED && jackTime < compEndTime) {
                 seq.play(jackTime);
             }
         }
