@@ -65,8 +65,7 @@ private:
     // the new position from a loaded document
     timeT m_documentPosition;
 
-    timeT m_oldPosition;
-    int m_oldPositionCycles;
+    int m_blockUpdateCycles;
 
 private slots:
     void slotUpdate();

@@ -35,8 +35,7 @@ CompositionPosition::CompositionPosition():
     m_position(0),
     m_positionAsElapsedTime(RealTime::zero()),
     m_documentPosition(0),
-    m_oldPosition(0),
-    m_oldPositionCycles(0)
+    m_blockUpdateCycles(0)
 {
     RG_DEBUG << "ctor";
     m_updateTimer = new QTimer(this);
@@ -78,9 +77,9 @@ void CompositionPosition::slotSet(timeT time)
     if (! doc) return;
 
     const Composition& comp = doc->getComposition();
-    // note old position ..
-    m_oldPosition = m_position;
-    m_oldPositionCycles = 4;
+    // After a set we blockupdates for a few cycles to give time for
+    // the sequencer to accept the new value.
+    m_blockUpdateCycles = 4;
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
 
@@ -106,24 +105,20 @@ void CompositionPosition::slotUpdate()
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
 
-    const Composition& comp = doc->getComposition();
-    RealTime position =
-        SequencerDataBlock::getInstance()->getPositionPointer();
-    timeT tmpPos = comp.getElapsedTimeForRealTime(position);
-    //RG_DEBUG << "slotUpdate" << tmpPos << m_oldPosition;
-    if (tmpPos == m_oldPosition && m_oldPositionCycles > 0) {
-        RG_DEBUG << "slotUpdate avoid jump back to old position" <<
-            m_oldPosition;
-        m_oldPositionCycles--;
+    if (m_blockUpdateCycles > 0) {
+        RG_DEBUG << "slotUpdate avoid jump back to old position";
+        m_blockUpdateCycles--;
         return;
     }
 
+    const Composition& comp = doc->getComposition();
+    RealTime position =
+        SequencerDataBlock::getInstance()->getPositionPointer();
     if (position != m_positionAsElapsedTime) {
         RG_DEBUG << "slotUpdate new position" << m_positionAsElapsedTime <<
             "->" << position;
         // a new position
         m_positionAsElapsedTime = position;
-        m_oldPosition = m_position;
         m_position = comp.getElapsedTimeForRealTime(position);
         RG_DEBUG << "slotUpdate new position position" << m_position;
         emit changed(m_position);
