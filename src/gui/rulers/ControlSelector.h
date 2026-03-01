@@ -19,50 +19,39 @@
 #define RG_CONTROLSELECTOR_H
 
 #include "ControlMover.h"
-#include "ControlItem.h"
 
 #include <QString>
-
-class QRectF;
-class QPoint;
 
 
 namespace Rosegarden
 {
 
 
-class Event;
+class ControlMouseEvent;
 class ControlRuler;
 
 
+/// Selection tool for ControlRuler.
+/**
+ * Handles click-drag rubber band selection of events in a ControlRuler.
+ */
 class ControlSelector : public ControlMover
 {
     Q_OBJECT
 
-    friend class ControlToolBox;
-
 public:
-    void handleLeftButtonPress(const ControlMouseEvent *) override;
-    FollowMode handleMouseMove(const ControlMouseEvent *) override;
-    void handleMouseRelease(const ControlMouseEvent *) override;
 
-    /**
-     * Respond to an event being deleted -- it may be the one the tool
-     * is remembering as the current event.
-     */
-//    virtual void handleEventRemoved(Event *event);
+    ControlSelector(ControlRuler *parent);
 
-    static QString ToolName();
+    // ControlTool overrides
+    void handleLeftButtonPress(const ControlMouseEvent *e) override;
+    FollowMode handleMouseMove(const ControlMouseEvent *e) override;
+    void handleMouseRelease(const ControlMouseEvent *e) override;
 
-signals:
-//    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
+    static QString ToolName()  { return "selector"; }
 
-protected slots:
-//    void slotMatrixScrolled(int x, int y); //!!! do we need this? probably not
-
-protected:
-    ControlSelector(ControlRuler *);
 };
+
 
 }
 

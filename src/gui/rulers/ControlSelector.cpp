@@ -15,52 +15,33 @@
     COPYING included with this distribution for more information.
 */
 
+#define RG_MODULE_STRING "[ControlSelector]"
+#define RG_NO_DEBUG_PRINT
+
 #include "ControlSelector.h"
 
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-//#include "commands/matrix/MatrixModifyCommand.h"
-//#include "commands/matrix/MatrixInsertionCommand.h"
-//#include "commands/notation/NormalizeRestsCommand.h"
-#include "document/CommandHistory.h"
-#include "ControlItem.h"
-#include "EventControlItem.h"
-#include "ControllerEventsRuler.h"
-#include "ControlTool.h"
 #include "ControlMouseEvent.h"
-#include "misc/Debug.h"
+#include "ControlRuler.h"
 
-#include <QCursor>
 #include <QRectF>
 
-#include <cmath>
-
-#define CONTROL_SMALL_DISTANCE 10
 
 namespace Rosegarden
 {
 
+
 ControlSelector::ControlSelector(ControlRuler *parent) :
-    ControlMover(parent,"ControlSelector")
+    ControlMover(parent, "ControlSelector")
 {
-//    createAction("select", &ControlSelector::slotSelectSelected);
-//    createAction("draw", &ControlSelector::slotDrawSelected);
-//    createAction("erase", &ControlSelector::slotEraseSelected);
-//    createAction("resize", &ControlSelector::slotResizeSelected);
-//
-//    createMenu();
 }
 
 void
 ControlSelector::handleLeftButtonPress(const ControlMouseEvent *e)
 {
-    if (!(e->itemList.size())) {
+    // If nothing is under the cursor...
+    if (e->itemList.empty()) {
         // Start selection rectangle
-        m_ruler->setSelectionRect(new QRectF(e->x,e->y,0.0,0.0));
+        m_ruler->setSelectionRect(new QRectF(e->x, e->y, 0.0, 0.0));
 
         // Clear the added items list because we have yet to add any
         m_addedItems.clear();
@@ -73,29 +54,31 @@ FollowMode
 ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 {
     QRectF *pRectF = m_ruler->getSelectionRectangle();
+
+    // If selection drag is in progress...
     if (pRectF) {
-        // Selection drag is in progress
         // Clear the list of items that this tool has added
-        for (ControlItemList::iterator it = m_addedItems.begin(); it != m_addedItems.end(); ++it) {
+        for (ControlItemList::iterator it = m_addedItems.begin();
+             it != m_addedItems.end();
+             ++it) {
             (*it)->setSelected(false);
         }
         m_addedItems.clear();
 
         // Update selection rectangle
-        pRectF->setBottomRight(QPointF(e->x,e->y));
+        pRectF->setBottomRight(QPointF(e->x, e->y));
 
         // Find items within the range of the new rectangle
-        ControlItemMap::iterator itmin =
-            m_ruler->findControlItem(std::min(pRectF->left(),
-                pRectF->right()));
-        ControlItemMap::iterator itmax =
-            m_ruler->findControlItem(std::max(pRectF->left(),
-                pRectF->right()));
+        ControlItemMap::iterator iterMin = m_ruler->findControlItem(
+                std::min(pRectF->left(), pRectF->right()));
+        const ControlItemMap::iterator iterMax = m_ruler->findControlItem(
+                std::max(pRectF->left(), pRectF->right()));
 
-        // Add them if they're within the rectangle
-        for (ControlItemMap::iterator it = itmin; it != itmax; ++it) {
-            if (pRectF->contains(it->second->boundingRect().center()) &&
-                (*it).second->active()) {
+        // For each item...
+        for (ControlItemMap::iterator it = iterMin; it != iterMax; ++it) {
+            // If this item is within the rubber-band rectangle....
+            if (pRectF->contains(it->second->boundingRect().center())  &&
+                it->second->active()) {
                 m_addedItems.push_back(it->second);
                 it->second->setSelected(true);
             }
@@ -109,13 +92,17 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 void
 ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
 {
+    // Selection drag is now complete
+
     QRectF *pRectF = m_ruler->getSelectionRectangle();
+
+    // If we had a rubber-band rect...
     if (pRectF) {
-        // Selection drag is now complete
+        // Delete it.
         delete pRectF;
         m_ruler->setSelectionRect(nullptr);
 
-        // Add the selected items to the current selection
+        // Add the selected items to the current selection.
         for (ControlItemList::iterator it = m_addedItems.begin();
              it != m_addedItems.end();
              ++it) {
@@ -126,6 +113,5 @@ ControlSelector::handleMouseRelease(const ControlMouseEvent *e)
     ControlMover::handleMouseRelease(e);
 }
 
-QString ControlSelector::ToolName() { return "selector"; }
 
 }
