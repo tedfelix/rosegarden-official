@@ -20,40 +20,24 @@
 
 #include "ControlMover.h"
 
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-#include "document/CommandHistory.h"
-#include "ControlItem.h"
 #include "EventControlItem.h"
-#include "ControlRuler.h"
-#include "ControllerEventsRuler.h"
-#include "ControlTool.h"
+#include "ControlItem.h"
 #include "ControlMouseEvent.h"
+#include "ControlRuler.h"
+
+#include "base/SnapGrid.h"
+#include "base/RulerScale.h"
 #include "misc/Debug.h"
 
-#include <QCursor>
-#include <QRectF>
+#include <math.h>
 
-#include <cmath>
-
-#define CONTROL_SMALL_DISTANCE 10
 
 namespace Rosegarden
 {
 
+
 ControlMover::ControlMover(ControlRuler *parent, const QString& menuName) :
     ControlTool("", menuName, parent),
-    m_overCursor(Qt::OpenHandCursor),
-    m_notOverCursor(Qt::ArrowCursor),
-    m_mouseStartX(0.0),
-    m_mouseStartY(0.0),
-    m_lastDScreenX(0.0),
-    m_lastDScreenY(0.0),
-    m_selectionRect(nullptr),
     m_snapGrid(parent->getSnapGrid()),
     m_rulerScale(parent->getRulerScale())
 {
@@ -137,6 +121,8 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         if (e->modifiers & Qt::ControlModifier) {
             // If the control key is held down, restrict movement to either horizontal or vertical
             //    depending on the direction the item has been moved
+
+            constexpr int CONTROL_SMALL_DISTANCE{10};
 
             // For small displacements from the starting position, use the direction of this movement
             //    rather than the actual displacement - makes dragging through the original position
