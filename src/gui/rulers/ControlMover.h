@@ -60,9 +60,6 @@ public:
 
 protected:
 
-    // ??? This is only used by ControlSelector.  Move it there.
-    ControlItemList m_addedItems;
-
     /// Hover cursor.
     QCursor m_overCursor{Qt::OpenHandCursor};
     /// Normal, not hovering cursor.

@@ -50,6 +50,10 @@ public:
 
     static QString ToolName()  { return "selector"; }
 
+private:
+
+    ControlItemList m_addedItems;
+
 };
 
 
