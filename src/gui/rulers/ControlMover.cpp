@@ -36,7 +36,7 @@ namespace Rosegarden
 {
 
 
-ControlMover::ControlMover(ControlRuler *parent, const QString& menuName) :
+ControlMover::ControlMover(ControlRuler *parent, const QString &menuName) :
     ControlTool("", menuName, parent),
     m_snapGrid(parent->getSnapGrid()),
     m_rulerScale(parent->getRulerScale())
@@ -47,51 +47,66 @@ void
 ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (m_overItem) {
+
+        // Hide the cursor.
         m_ruler->setCursor(Qt::BlankCursor);
 
-        bool activeFound = false;
-        ControlItemVector::const_iterator controlItemIter1 = e->itemList.begin();
-        while (controlItemIter1 != e->itemList.end()) {
-            if ((*controlItemIter1)->active()) {
-                activeFound = true;
+        // Find the ControlItem that was clicked if any.
+
+        QSharedPointer<ControlItem> controlItem;
+
+        // For each ControlItem in the item list...
+        for (QSharedPointer<ControlItem> controlItemLoop : e->itemList) {
+            // If this one is active, go with it.
+            if (controlItemLoop->active()) {
+                controlItem = controlItemLoop;
                 break;
             }
-            controlItemIter1++;
         }
-        if (! activeFound) {
-            if (!(e->modifiers & (Qt::ShiftModifier))) {
-                // No add to selection modifiers so clear the current selection
+
+        if (!controlItem) {
+            // If the user is not holding down Shift for "Add to selection",
+            // clear the current selection.
+            if (!(e->modifiers & Qt::ShiftModifier))
                 m_ruler->clearSelectedItems();
-            }
             return;
         }
 
-        if ((*controlItemIter1)->isSelected()) {
-            if (e->modifiers & (Qt::ShiftModifier))
-                m_ruler->removeFromSelection(*controlItemIter1);
-        } else {
-            if (!(e->modifiers & (Qt::ShiftModifier))) {
-                // No add to selection modifiers so clear the current selection
+        // Already selected?  Toggle it.
+        if (controlItem->isSelected()) {
+            if (e->modifiers & Qt::ShiftModifier)
+                m_ruler->removeFromSelection(controlItem);
+        } else {  // Not selected.
+            // If the user is not holding down Shift for "Add to selection",
+            // clear the current selection.
+            if (!(e->modifiers & Qt::ShiftModifier))
                 m_ruler->clearSelectedItems();
-            }
 
-            m_ruler->addToSelection(*controlItemIter1);
+            m_ruler->addToSelection(controlItem);
         }
+
+        // Build the start point list.
 
         m_startPointList.clear();
+
         ControlItemList *selected = m_ruler->getSelectedItems();
-        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-            m_startPointList.push_back(QPointF((*it)->xStart(),(*it)->y()));
+        // For each selected it, add its position to m_startPointList.
+        for (QSharedPointer<ControlItem> controlItem : *selected) {
+            m_startPointList.push_back(
+                    QPointF(controlItem->xStart(), controlItem->y()));
         }
-    } else {
-        if (!(e->modifiers & (Qt::ShiftModifier))) {
-            // No add to selection modifiers so clear the current selection
+
+    } else {  // Not over an item.
+        // If the user is not holding down Shift for "Add to selection",
+        // clear the current selection.
+        if (!(e->modifiers & Qt::ShiftModifier))
             m_ruler->clearSelectedItems();
-        }
     }
 
+    // Track the mouse click point.
     m_mouseStartX = e->x;
     m_mouseStartY = e->y;
+
     m_lastDScreenX = 0.0f;
     m_lastDScreenY = 0.0f;
 
@@ -103,40 +118,44 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
 {
     emit showContextHelp(tr("Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical"));
 
-    if (e->buttons == Qt::NoButton) {
-        // No button pressed, set cursor style
+    // No button pressed?  Set appropriate cursor.
+    if (e->buttons == Qt::NoButton)
         setCursor(e);
-    }
 
-    if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A drag action is in progress
+    // If a drag action is in progress...
+    if ((e->buttons & Qt::LeftButton)  &&  m_overItem) {
+
         float deltaX = (e->x-m_mouseStartX);
         float deltaY = (e->y-m_mouseStartY);
 
-        double xscale = m_ruler->getXScale();
-        double yscale = m_ruler->getYScale();
+        const double xscale = m_ruler->getXScale();
+        const double yscale = m_ruler->getYScale();
+
         float dScreenX = deltaX / xscale;
         float dScreenY = deltaY / yscale;
 
+        // If the control key is held down, restrict movement to either
+        // horizontal or vertical depending on the direction the item has
+        // been moved.
         if (e->modifiers & Qt::ControlModifier) {
-            // If the control key is held down, restrict movement to either horizontal or vertical
-            //    depending on the direction the item has been moved
 
             constexpr int CONTROL_SMALL_DISTANCE{10};
 
-            // For small displacements from the starting position, use the direction of this movement
-            //    rather than the actual displacement - makes dragging through the original position
-            //    less likely to switch constraint axis
-            if ((fabs(dScreenX) < CONTROL_SMALL_DISTANCE) && (fabs(dScreenY) < CONTROL_SMALL_DISTANCE)) {
-                dScreenX = dScreenX-m_lastDScreenX;
-                dScreenY = dScreenY-m_lastDScreenY;
+            // For small displacements from the starting position, use the
+            // direction of this movement rather than the actual displacement.
+            // Makes dragging through the original position less likely to
+            // switch constraint axis.
+            if ((fabs(dScreenX) < CONTROL_SMALL_DISTANCE)  &&
+                (fabs(dScreenY) < CONTROL_SMALL_DISTANCE)) {
+                dScreenX = dScreenX - m_lastDScreenX;
+                dScreenY = dScreenY - m_lastDScreenY;
             }
 
-            if (fabs(dScreenX) > fabs(dScreenY)) {
+            if (fabs(dScreenX) > fabs(dScreenY))
                 deltaY = 0;
-            } else {
+            else
                 deltaX = 0;
-            }
+
         }
 
         m_lastDScreenX = dScreenX;
@@ -147,31 +166,48 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
         for (ControlItemList::iterator it = selected->begin();
              it != selected->end();
              ++it) {
-            // Downcast required to call reconfigure(float,float).
+
+            // Downcast required to call EventControlItem::reconfigure().
             QSharedPointer<EventControlItem> item =
                     qSharedPointerDynamicCast<EventControlItem>(*it);
+            if (!item)
+                continue;
+
+            // Compute x
 
             float x = pIt->x() + deltaX;
+
             RG_DEBUG << "handleMouseMove" << x << pIt->x() << deltaX;
-            // snap only if shift is not pressed
-            if (! (e->modifiers & Qt::ShiftModifier)) {
-                timeT et = m_rulerScale->getTimeForX(x / xscale);
-                timeT etSnap = m_snapGrid->snapTime(et);
-                x =  m_rulerScale->getXForTime(etSnap) * xscale;
+
+            // If shift is not pressed, snap the x.
+            if (!(e->modifiers & Qt::ShiftModifier)) {
+
+                const timeT et = m_rulerScale->getTimeForX(x / xscale);
+                const timeT etSnap = m_snapGrid->snapTime(et);
+                x = m_rulerScale->getXForTime(etSnap) * xscale;
+
                 RG_DEBUG << "handleMouseMove snap" << et << etSnap << x;
             }
-            float xmin = m_ruler->getXMin() * xscale;
-            float xmax = (m_ruler->getXMax() - 1) * xscale;
-            x = std::max(x,xmin);
-            x = std::min(x,xmax);
 
+            // Limit x
+            const float xmin = m_ruler->getXMin() * xscale;
+            const float xmax = (m_ruler->getXMax() - 1) * xscale;
+            x = std::max(x, xmin);
+            x = std::min(x, xmax);
+
+            // Compute y
             float y = pIt->y()+deltaY;
-            y = std::max(y,0.0f);
-            y = std::min(y,1.0f);
-            if (item) item->reconfigure(x,y);
+            y = std::max(y, 0.0f);
+            y = std::min(y, 1.0f);
+
+            // Move the item.
+            item->reconfigure(x, y);
+
             ++pIt;
         }
+
         return FOLLOW_HORIZONTAL;
+
     }
 
     m_ruler->update();

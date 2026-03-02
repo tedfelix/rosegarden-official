@@ -95,8 +95,8 @@ void EventControlItem::reconfigure()
 void EventControlItem::reconfigure(float x, float y)
 {
     // Need to calculate the symbol each time to keep it the same size as we zoom
-    double xscale = m_controlRuler->getXScale();
-    double yscale = m_controlRuler->getYScale();
+    const double xscale = m_controlRuler->getXScale();
+    const double yscale = m_controlRuler->getYScale();
 
     // Clear the current polygon
     this->clear();

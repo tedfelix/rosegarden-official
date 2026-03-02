@@ -61,9 +61,12 @@ public:
 
 protected:
 
+    // ??? This is only used by ControlSelector.  Move it there.
     ControlItemList m_addedItems;
 
+    /// Hover cursor.
     QCursor m_overCursor{Qt::OpenHandCursor};
+    /// Normal, not hovering cursor.
     QCursor m_notOverCursor{Qt::ArrowCursor};
 
 private:
@@ -74,11 +77,14 @@ private:
     /// Set the cursor to m_overCursor or m_notOverCursor as appropriate.
     void setCursor(const ControlMouseEvent *e);
 
+    // Starting point for each selected item.
+    std::vector <QPointF> m_startPointList;
+    // Mouse click point for start of drag.
     float m_mouseStartX{0};
     float m_mouseStartY{0};
+    // Previous position used for drag hysteresis.
     float m_lastDScreenX{0};
     float m_lastDScreenY{0};
-    std::vector <QPointF> m_startPointList;
 
 };
 
