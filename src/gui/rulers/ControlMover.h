@@ -53,11 +53,10 @@ public:
     FollowMode handleMouseMove(const ControlMouseEvent *e) override;
     void handleMouseRelease(const ControlMouseEvent *e) override;
 
-    // BaseTool overrides.
+    // BaseTool override.
     void ready() override;
-    void stow() override;
 
-    static QString ToolName();
+    static QString ToolName()  { return "mover"; }
 
 protected:
 
@@ -82,7 +81,7 @@ private:
     // Mouse click point for start of drag.
     float m_mouseStartX{0};
     float m_mouseStartY{0};
-    // Previous position used for drag hysteresis.
+    // Previous position used for Ctrl constrained axis drag.
     float m_lastDScreenX{0};
     float m_lastDScreenY{0};
 
