@@ -59,7 +59,10 @@ class ViewSegment;
 class SnapGrid;
 
 
-/// Base class for control rulers.
+/// Abstract base class for control rulers.
+/**
+ * ??? rename: ControlRulerBase
+ */
 class ControlRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT

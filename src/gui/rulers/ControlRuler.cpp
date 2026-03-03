@@ -770,6 +770,9 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
     if (e->button() == Qt::LeftButton) {
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleLeftButtonPress(&controlMouseEvent);
+    } else if (e->button() == Qt::MidButton) {
+        ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+        m_currentTool->handleMidButtonPress(&controlMouseEvent);
     } else if (e->button() == Qt::RightButton) {
         if (!m_rulerMenu)
             createRulerMenu();
@@ -794,7 +797,7 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
     if (!m_currentTool)
         return;
 
-    if (e->button() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton  ||  e->button() == Qt::MidButton) {
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMouseRelease(&controlMouseEvent);
     }
