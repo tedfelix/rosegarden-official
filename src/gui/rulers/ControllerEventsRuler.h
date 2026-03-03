@@ -108,8 +108,6 @@ public:
 
     void setTool(const QString &name) override;
 
-    virtual void createRulerMenu() override;
-
     virtual bool allowSimultaneousEvents() override;
 
     // for key pressure
@@ -117,7 +115,16 @@ public:
 
     virtual void getLimits(float& xmin, float& xmax);
 
+public slots:
+
+    void slotSetToDefault();
+
 protected:
+
+    // ControlRuler overrides.
+    void createRulerMenu() override;
+    void updateRulerMenu() override;
+
     virtual void init();
     virtual bool isOnThisRuler(Event *);
 
@@ -130,12 +137,13 @@ protected:
     //--------------- Data members ---------------------------------
     int  m_defaultItemWidth;
 
-    ControlParameter  *m_controller;
+    ControlParameter *m_controller;
     QRectF m_lastDrawnRect;
     // ??? See if we can remove this.
     bool m_moddingSegment;
     QLineF *m_rubberBand;
     bool m_rubberBandVisible;
+
 };
 
 

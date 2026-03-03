@@ -50,6 +50,7 @@ public:
 
     // ControlTool overrides.
     void handleLeftButtonPress(const ControlMouseEvent *e) override;
+    void handleMidButtonPress(const ControlMouseEvent *e) override;
     FollowMode handleMouseMove(const ControlMouseEvent *e) override;
     void handleMouseRelease(const ControlMouseEvent *e) override;
 

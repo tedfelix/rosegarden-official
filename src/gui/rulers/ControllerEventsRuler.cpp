@@ -85,6 +85,8 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         m_controller = nullptr;
     }
 
+    createAction("set_to_default", &ControllerEventsRuler::slotSetToDefault);
+
     RG_DEBUG << "ctor";
     if (controller)
         RG_DEBUG << "  Controller name:" << controller->getName();
@@ -592,11 +594,23 @@ void ControllerEventsRuler::createRulerMenu()
 {
     createMenusAndToolbars("controlruler.rc");
 
+#ifndef NDEBUG
     m_rulerMenu = findChild<QMenu *>("control_ruler_menu");
-
     if (!m_rulerMenu) {
         RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
     }
+#endif
+}
+
+void ControllerEventsRuler::updateRulerMenu()
+{
+    // Let base class have a shot.
+    ControlRuler::updateRulerMenu();
+
+    // Enable Set to Default if something is selected.
+    QAction *setToDefault = findChild<QAction *>("set_to_default");
+    if (setToDefault)
+        setToDefault->setEnabled(!m_selectedItems.empty());
 }
 
 bool ControllerEventsRuler::allowSimultaneousEvents()
@@ -707,5 +721,34 @@ Event* ControllerEventsRuler::getNewEvent(timeT time, long value) const
 {
     return m_controller->newEvent(time, value);
 }
+
+void ControllerEventsRuler::slotSetToDefault()
+{
+    // Nothing selected?  Bail.
+    if (m_selectedItems.empty())
+        return;
+
+    // Get the default value for this controller and convert to y coord.
+    const float yDefault =
+            float(m_controller->getDefault()) / float(m_controller->getMax());
+
+    // For each selected item...
+    for (QSharedPointer<ControlItem> item : m_selectedItems)
+    {
+        // Downcast required to call EventControlItem::reconfigure().
+        QSharedPointer<EventControlItem> eventControlItem =
+                qSharedPointerDynamicCast<EventControlItem>(item);
+        if (!eventControlItem)
+            continue;
+
+        // Set the y coord to the default value.
+        eventControlItem->reconfigure(eventControlItem->xStart(), yDefault);
+    }
+
+    // Update Segment to reflect ControlItem changes.  Commit to command
+    // history.
+    updateSegment();
+}
+
 
 }

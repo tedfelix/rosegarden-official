@@ -3,6 +3,10 @@
 <kpartgui name="Rosegarden::ControlRuler" version="1501">
 
 <Menu name="control_ruler_menu">
+  <action name="set_to_default" text="Set to &amp;Default" />
+
+  <separator />
+
   <Action name="snap_none" text="&amp;No Snap" checked="false" group="ruler_snap" />
   <Action name="snap_editor" text="From &amp;Editor" checked="false" group="ruler_snap" />
   <Action name="snap_unit" text="&amp;Unit" checked="false" group="ruler_snap" />

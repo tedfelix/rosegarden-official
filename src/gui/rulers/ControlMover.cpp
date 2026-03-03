@@ -24,6 +24,7 @@
 #include "ControlItem.h"
 #include "ControlMouseEvent.h"
 #include "ControlRuler.h"
+#include "ControllerEventsRuler.h"
 
 #include "base/SnapGrid.h"
 #include "base/RulerScale.h"
@@ -111,6 +112,17 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
     m_lastDScreenY = 0.0f;
 
     m_ruler->update();
+}
+
+void
+ControlMover::handleMidButtonPress(const ControlMouseEvent * /*e*/)
+{
+    ControllerEventsRuler *controllerEventsRuler =
+            dynamic_cast<ControllerEventsRuler *>(m_ruler);
+    if (!controllerEventsRuler)
+        return;
+
+    controllerEventsRuler->slotSetToDefault();
 }
 
 FollowMode

@@ -768,18 +768,23 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         return;
 
     if (e->button() == Qt::LeftButton) {
+        // Delegate left button to tool.
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleLeftButtonPress(&controlMouseEvent);
     } else if (e->button() == Qt::MidButton) {
+        // Delegate middle button to tool.
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMidButtonPress(&controlMouseEvent);
     } else if (e->button() == Qt::RightButton) {
+        // Right button is context menu.
         if (!m_rulerMenu)
             createRulerMenu();
         if (m_rulerMenu) {
             QAction* setAction = findAction(m_snapName);
             RG_DEBUG << "set checked" << m_snapName;
             setAction->setChecked(true);
+            // Let derivers update the menu as needed.
+            updateRulerMenu();
             m_rulerMenu->exec(QCursor::pos());
         }
     }
@@ -824,6 +829,8 @@ void
 ControlRuler::wheelEvent(QWheelEvent * /*e*/)
 {
     // not sure what to do yet
+    // ??? It would be really nice if this would gently move the selected
+    //     items up/down by one.  This would provide precision adjustment.
 
 }
 

@@ -173,6 +173,7 @@ public slots:
     void slotSnap();
 
 protected:
+
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
@@ -214,7 +215,11 @@ protected:
     QPointF mapWidgetToItem(QPoint*);
     // unused QColor valueToColour(int max, int val);
     void updateSelection();
+
     virtual void createRulerMenu();
+    // Derivers can override to enable/disable menu items before the menu is
+    // displayed.
+    virtual void updateRulerMenu()  { }
 
 //    EditViewBase*               m_parentEditView;
 //    QScrollBar*                 m_mainHorizontalScrollBar;
@@ -279,10 +284,12 @@ protected:
     typedef std::list<Event *> SelectionSet;
     SelectionSet m_selectedEvents;
 
- private:
+private:
+
     void setSnapTimeFromActionName(const QString& actionName);
 
     QPointer<AutoScroller> m_autoScroller;
+
 };
 
 
