@@ -234,6 +234,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
     }
 }
 
+#if 0
 void ControlRuler::removeControlItem(ControlItem* item)
 {
     // Remove control item by item pointer
@@ -254,6 +255,7 @@ void ControlRuler::removeControlItem(const Event *event)
         removeControlItem(it);
     }
 }
+#endif
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
@@ -623,12 +625,6 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     }
 }
 
-/* unused
-void ControlRuler::slotScrollHorizSmallSteps(int)
-{
-}
-*/
-
 int ControlRuler::mapXToWidget(float x)
 {
     return (0.5+(m_xOffset+x-m_pannedRect.left()) / m_xScale);
@@ -672,7 +668,7 @@ QPointF ControlRuler::mapWidgetToItem(QPoint *point)
     return newpoint;
 }
 
-void ControlRuler::slotSetPannedRect(QRectF pr)
+void ControlRuler::setPannedRect(QRectF pr)
 {
     if (pr.isNull())
         RG_WARNING << "slotSetPannedRect(): WARNING: Rect is null.";
@@ -718,7 +714,7 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     // Note slotSetPannedRect is called (from ControlRulerWidget::slotSetPannedRect)
     //   on a resize event. However, this call is too early and width() has not been
     //   updated. This event handler patches that problem. Could be more efficient.
-    slotSetPannedRect(m_pannedRect);
+    setPannedRect(m_pannedRect);
 }
 
 ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
@@ -981,11 +977,6 @@ long ControlRuler::yToValue(float y)
     // this is returning very reasonable numbers, which get mangled elsewhere
 
     return (long)(y * (m_maxItemValue - m_minItemValue)) + m_minItemValue;
-}
-
-SnapGrid* ControlRuler::getSnapGrid() const
-{
-    return m_snapGrid;
 }
 
 void ControlRuler::setSnapFromEditor(timeT snapSetting, bool forceFromEditor)

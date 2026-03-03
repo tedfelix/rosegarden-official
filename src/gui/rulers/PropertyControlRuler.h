@@ -85,12 +85,13 @@ public:
 
     void setTool(const QString &name) override;
 
-    virtual bool allowSimultaneousEvents() override;
-
 public slots:
     void slotHoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);
 
 protected:
+
+    virtual bool allowSimultaneousEvents() override  { return true; }
+
     void addControlItem2(ViewElement *);
 
     void mousePressEvent(QMouseEvent*) override;

@@ -615,11 +615,6 @@ void ControllerEventsRuler::updateRulerMenu()
         setToDefault->setEnabled(!m_selectedItems.empty());
 }
 
-bool ControllerEventsRuler::allowSimultaneousEvents()
-{
-    return false;
-}
-
 void ControllerEventsRuler::getLimits(float& xmin, float& xmax)
 {
     // no limit

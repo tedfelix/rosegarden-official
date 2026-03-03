@@ -108,8 +108,6 @@ public:
 
     void setTool(const QString &name) override;
 
-    virtual bool allowSimultaneousEvents() override;
-
     // for key pressure
     virtual int getPitch() const {return 0;}
 
@@ -120,6 +118,8 @@ public slots:
     void slotSetToDefault();
 
 protected:
+
+    virtual bool allowSimultaneousEvents() override  { return false; }
 
     // ControlRuler overrides.
     void createRulerMenu() override;

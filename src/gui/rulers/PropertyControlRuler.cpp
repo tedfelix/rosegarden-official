@@ -181,31 +181,6 @@ void PropertyControlRuler::addControlItem2(ViewElement *el)
 //    m_controlItemList.push_back(controlItem);
 }
 
-//void PropertyControlRuler::addControlItem(Event *event)
-//{
-//    if (event->getType()!="note")
-//        return;
-//
-//    RG_DEBUG << "addControlItem(): Event Type: " << event->getType();
-//    RG_DEBUG << "  Event absolute time: " << event->getAbsoluteTime();
-//
-//    double x1 = m_rulerScale->getXForTime(event->getAbsoluteTime());
-//    double x2 = m_rulerScale->getXForTime(event->getAbsoluteTime()+event->getDuration());
-//    long val = 0;
-//    event->get<Rosegarden::Int>(getPropertyName(), val);
-//    double y = (double) val / MIDI_CONTROL_MAX_VALUE;
-//
-//    ControlItem *controlItem = new ControlItem(this, event, QPolygonF(QRectF(x1,0,x2-x1,y)));
-//    m_controlItemList.push_back(controlItem);
-//    //        m_controlItemList.push_back(new ControlItem(this, (*it), QPolygonF(QRectF(x1,y,x2-x1,y))));
-//
-////        new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x + m_viewSegmentOffset),
-////                        int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
-////                                                      (*i)->getViewDuration()) - x));
-//
-//    update();
-//}
-//
 void PropertyControlRuler::init()
 {
     // Clear Control Item list
@@ -304,11 +279,6 @@ void PropertyControlRuler::setTool(const QString & /* name */)
 
     m_currentTool = tool;
     m_currentTool->ready();
-}
-
-bool PropertyControlRuler::allowSimultaneousEvents()
-{
-    return true;
 }
 
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)

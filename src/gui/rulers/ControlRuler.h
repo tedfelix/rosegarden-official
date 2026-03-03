@@ -123,11 +123,10 @@ public:
     ControlItemMap::iterator findControlItem(float x);
     void moveItem(ControlItem *item);
 
-    SnapGrid* getSnapGrid() const;
-
+    SnapGrid *getSnapGrid() const  { return m_snapGrid; }
     void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
 
-    virtual bool allowSimultaneousEvents() = 0;
+    void setPannedRect(QRectF);
 
 signals:
 
@@ -144,46 +143,40 @@ signals:
     void showContextHelp(const QString &);
 
 public slots:
-//    virtual void slotUpdateElementsHPos();
-    // unused virtual void slotScrollHorizSmallSteps(int);
-    virtual void slotSetPannedRect(QRectF);
-//    virtual void slotSetScale(double);
 
+    /// Handles snap duration changes.
     void slotSnap();
 
 protected:
 
-    // QWidget override
-    void paintEvent(QPaintEvent *) override;
-
-    void mousePressEvent(QMouseEvent*) override;
-    void mouseReleaseEvent(QMouseEvent*) override;
-    void mouseMoveEvent(QMouseEvent*) override;
-    void contextMenuEvent(QContextMenuEvent*) override;
-    void wheelEvent(QWheelEvent*) override;
-    void resizeEvent(QResizeEvent *) override;
+    virtual bool allowSimultaneousEvents() = 0;
 
     void setMinItemValue(long val)  { m_minItemValue = val; }
     void setMaxItemValue(long val)  { m_maxItemValue = val; }
 
-    virtual ControlMouseEvent createControlMouseEvent(QMouseEvent* e);
+    // QWidget overrides
+    void paintEvent(QPaintEvent *) override;
+    void mousePressEvent(QMouseEvent *) override;
+    void mouseReleaseEvent(QMouseEvent *) override;
+    void mouseMoveEvent(QMouseEvent *) override;
+    void contextMenuEvent(QContextMenuEvent *) override;
+    void wheelEvent(QWheelEvent *) override;
+    void resizeEvent(QResizeEvent *) override;
 
-//    virtual QScrollBar* getMainHorizontalScrollBar();
+    void addControlItem(QSharedPointer<ControlItem>);
+    void eraseControlItem(const Event *);
+    void eraseControlItem(const ControlItemMap::iterator &);
 
-//    virtual void computeViewSegmentOffset() {};
-
-//    virtual void layoutItem(ControlItem*);
-    virtual ControlItemMap::iterator findControlItem(const ControlItem*);
-    virtual ControlItemMap::iterator findControlItem(const Event*);
-    virtual void addControlItem(QSharedPointer<ControlItem>);
-    virtual void addCheckVisibleLimits(ControlItemMap::iterator);
-    virtual void removeControlItem(ControlItem*);
-    virtual void removeControlItem(const Event*);
-    virtual void removeControlItem(const ControlItemMap::iterator&);
-    virtual void removeCheckVisibleLimits(const ControlItemMap::iterator&);
-    virtual void eraseControlItem(const Event*);
-    virtual void eraseControlItem(const ControlItemMap::iterator&);
-    virtual int visiblePosition(QSharedPointer<ControlItem>);
+private:
+    ControlItemMap::iterator findControlItem(const ControlItem *);
+    ControlItemMap::iterator findControlItem(const Event *);
+    void addCheckVisibleLimits(ControlItemMap::iterator);
+    //void removeControlItem(ControlItem *);
+    //void removeControlItem(const Event *);
+    void removeControlItem(const ControlItemMap::iterator &);
+    void removeCheckVisibleLimits(const ControlItemMap::iterator &);
+    int visiblePosition(QSharedPointer<ControlItem>);
+protected:
 
     void clear();
 
@@ -268,7 +261,9 @@ protected:
 
 private:
 
-    void setSnapTimeFromActionName(const QString& actionName);
+    ControlMouseEvent createControlMouseEvent(QMouseEvent *e);
+
+    void setSnapTimeFromActionName(const QString &actionName);
 
     QPointer<AutoScroller> m_autoScroller;
 
