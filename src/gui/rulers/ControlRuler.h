@@ -18,25 +18,21 @@
 #ifndef RG_CONTROLRULER_H
 #define RG_CONTROLRULER_H
 
-#include "ControlItem.h"
+#include "ControlItem.h"  // ControlItemMap
+#include "ControlMouseEvent.h"
 
-#include "gui/general/AutoScroller.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
+#include "base/TimeT.h"
 #include "gui/general/ActionFileClient.h"
 
-#include <QColor>
 #include <QPoint>
 #include <QPointer>
 #include <QString>
 #include <QWidget>
 
-#include <utility>
+#include <list>
 
-//class QWidget;
 class QMenu;
 class QWheelEvent;
-class QScrollBar;
 class QMouseEvent;
 class QContextMenuEvent;
 
@@ -46,17 +42,15 @@ namespace Rosegarden
 
 
 class AutoScroller;
+class ControlSelector;
 class ControlTool;
 class ControlToolBox;
-class ControlSelector;
-class ControlMouseEvent;
-class Segment;
-class RulerScale;
 class EventSelection;
-class EditViewBase;
 class NotationStaff;
-class ViewSegment;
+class RulerScale;
+class Segment;
 class SnapGrid;
+class ViewSegment;
 
 
 /// Abstract base class for control rulers.
@@ -67,36 +61,22 @@ class ControlRuler : public QWidget, public ActionFileClient
 {
     Q_OBJECT
 
-    friend class ControlItem;
-
 public:
-    ControlRuler(ViewSegment*,
-                 RulerScale*,
-                 QWidget* parent = nullptr);
+
+    ControlRuler(RulerScale *rulerScale, QWidget *parent);
     ~ControlRuler() override;
 
     void setAutoScroller(QPointer<AutoScroller> autoScroller)
             { m_autoScroller = autoScroller; }
 
-    virtual QString getName() = 0;
+    //virtual QString getName() = 0;
 
-    QSize sizeHint() const override { return QSize(1,100); }
+    // QWidget override
+    QSize sizeHint() const override  { return QSize(1,100); }
 
-    void paintEvent(QPaintEvent *) override;
+    virtual void setTool(const QString & /*name*/)  { }
 
-    long getMaxItemValue() const { return m_maxItemValue; }
-    void setMaxItemValue(long val) { m_maxItemValue = val; }
-
-    long getMinItemValue() const { return m_minItemValue; }
-    void setMinItemValue(long val) { m_minItemValue = val; }
-
-    void clear();
-
-    //void setControlTool(ControlTool *);
-    //int applyTool(double x, int val);
-    virtual void setTool(const QString &name);
-
-    ControlItemList *getSelectedItems() { return &m_selectedItems; }
+    ControlItemList *getSelectedItems()  { return &m_selectedItems; }
 
     QRectF* getSelectionRectangle() { return m_selectionRect; }
     void setSelectionRect(QRectF *rect) { m_selectionRect = rect; }
@@ -174,12 +154,18 @@ public slots:
 
 protected:
 
+    // QWidget override
+    void paintEvent(QPaintEvent *) override;
+
     void mousePressEvent(QMouseEvent*) override;
     void mouseReleaseEvent(QMouseEvent*) override;
     void mouseMoveEvent(QMouseEvent*) override;
     void contextMenuEvent(QContextMenuEvent*) override;
     void wheelEvent(QWheelEvent*) override;
     void resizeEvent(QResizeEvent *) override;
+
+    void setMinItemValue(long val)  { m_minItemValue = val; }
+    void setMaxItemValue(long val)  { m_maxItemValue = val; }
 
     virtual ControlMouseEvent createControlMouseEvent(QMouseEvent* e);
 
@@ -199,6 +185,8 @@ protected:
     virtual void eraseControlItem(const Event*);
     virtual void eraseControlItem(const ControlItemMap::iterator&);
     virtual int visiblePosition(QSharedPointer<ControlItem>);
+
+    void clear();
 
     // Stacking of the SegmentItems on the canvas
     //
@@ -281,8 +269,8 @@ protected:
     timeT m_snapTimeFromEditor;
 
     // ??? Rename: SelectionList
-    typedef std::list<Event *> SelectionSet;
-    SelectionSet m_selectedEvents;
+    //typedef std::list<Event *> SelectionSet;
+    //SelectionSet m_selectedEvents;
 
 private:
 

@@ -60,8 +60,7 @@
 namespace Rosegarden
 {
 
-ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
-                           RulerScale *rulerScale,
+ControlRuler::ControlRuler(RulerScale *rulerScale,
                            QWidget *parent) :
     QWidget(parent),
     m_rulerScale(rulerScale),
@@ -722,10 +721,6 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     slotSetPannedRect(m_pannedRect);
 }
 
-void ControlRuler::setTool(const QString & /*name*/)
-{
-}
-
 ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
 {
     ControlMouseEvent controlMouseEvent;
@@ -977,17 +972,15 @@ void ControlRuler::clear()
 
 float ControlRuler::valueToY(long val)
 {
-    float y = (float)(val-getMinItemValue())
-            /(float)(getMaxItemValue()-getMinItemValue());
-    return y;
+    return float(val - m_minItemValue) / float(m_maxItemValue - m_minItemValue);
 }
 
 long ControlRuler::yToValue(float y)
 {
     // NOTE: while debugging #1451 I had debug output here and it confirmed that
-    // value is returning very reasonable numbers, which get mangled elsewhere
-    long value = (long)(y*(getMaxItemValue()-getMinItemValue()))+getMinItemValue();
-    return value;
+    // this is returning very reasonable numbers, which get mangled elsewhere
+
+    return (long)(y * (m_maxItemValue - m_minItemValue)) + m_minItemValue;
 }
 
 /* unused

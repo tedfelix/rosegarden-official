@@ -68,13 +68,13 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         RulerScale* rulerScale,
         QWidget* parent,
         const ControlParameter *controller,
-        const char* /* name */) //, WFlags f)
-        : ControlRuler(segment, rulerScale, parent), // name, f),
-        m_defaultItemWidth(20),
-        m_lastDrawnRect(QRectF(0,0,0,0)),
-        m_moddingSegment(false),
-        m_rubberBand(new QLineF(0,0,0,0)),
-        m_rubberBandVisible(false)
+        const char* /* name */) : //, WFlags f)
+    ControlRuler(rulerScale, parent), // name, f),
+    m_defaultItemWidth(20),
+    m_lastDrawnRect(QRectF(0,0,0,0)),
+    m_moddingSegment(false),
+    m_rubberBand(new QLineF(0,0,0,0)),
+    m_rubberBandVisible(false)
 {
     // Make a copy of the ControlParameter if we have one
     //
@@ -342,6 +342,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     drawRubberBand(painter);
 }
 
+#if 0
 QString ControllerEventsRuler::getName()
 {
     if (m_controller) {
@@ -362,6 +363,7 @@ QString ControllerEventsRuler::getName()
     } else
         return tr("Controller Events");
 }
+#endif
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 {
@@ -729,8 +731,9 @@ void ControllerEventsRuler::slotSetToDefault()
         return;
 
     // Get the default value for this controller and convert to y coord.
-    const float yDefault =
-            float(m_controller->getDefault()) / float(m_controller->getMax());
+    //const float yDefault =
+    //        float(m_controller->getDefault()) / float(m_controller->getMax());
+    const float yDefault = valueToY(m_controller->getDefault());
 
     // For each selected item...
     for (QSharedPointer<ControlItem> item : m_selectedItems)

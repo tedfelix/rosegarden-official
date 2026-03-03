@@ -60,7 +60,7 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
-    QString getName() override;
+    //QString getName();
 
     const PropertyName &getPropertyName()     { return m_propertyName; }
 

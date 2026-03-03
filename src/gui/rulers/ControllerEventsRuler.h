@@ -50,7 +50,7 @@ class ControllerEventsRuler : public ControlRuler, public SegmentObserver
     Q_OBJECT
 
 public:
-    ControllerEventsRuler(ViewSegment *,
+    ControllerEventsRuler(ViewSegment *,  // ??? appears UNUSED.  Remove?
                           RulerScale *,
                           QWidget *parent = nullptr,
                           const ControlParameter *controller = nullptr,
@@ -60,7 +60,7 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
-    QString getName() override;
+    //QString getName();
     int getDefaultItemWidth() { return m_defaultItemWidth; }
 
     // Allow something external to reset the selection of Events

@@ -54,7 +54,7 @@ PropertyControlRuler::PropertyControlRuler(const PropertyName& propertyName,
                                            ViewSegment *viewSegment,
                                            RulerScale *rulerScale,
                                            QWidget *parent) :
-    ControlRuler(viewSegment, rulerScale, parent),
+    ControlRuler(rulerScale, parent),
     m_propertyName(propertyName)
 {
     setViewSegment(viewSegment);
@@ -154,10 +154,12 @@ PropertyControlRuler::setViewSegment(ViewSegment *segment)
     init();
 }
 
+#if 0
 QString PropertyControlRuler::getName()
 {
     return strtoqstr(getPropertyName());
 }
+#endif
 
 void PropertyControlRuler::addControlItem2(ViewElement *el)
 {
