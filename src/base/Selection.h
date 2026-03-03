@@ -32,6 +32,7 @@ class Event;
 class EventSelection;
 
 
+// ??? This appears to be unused.
 class EventSelectionObserver {
 public:
     virtual ~EventSelectionObserver();

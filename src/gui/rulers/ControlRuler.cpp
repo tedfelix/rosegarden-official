@@ -983,51 +983,6 @@ long ControlRuler::yToValue(float y)
     return (long)(y * (m_maxItemValue - m_minItemValue)) + m_minItemValue;
 }
 
-/* unused
-QColor ControlRuler::valueToColour(int max, int val)
-{
-    int maxDefault = DefaultVelocityColour::getInstance()->getMaxValue();
-
-    int value = val;
-
-    // Scale value accordingly
-    //
-    if (maxDefault != max)
-        value = int(double(maxDefault) * double(val) / double(max));
-
-    return DefaultVelocityColour::getInstance()->getColour(value);
-}
-*/
-
-/* unused
-void ControlRuler::flipForwards()
-{
-    ///CJ Expect to drop tghis with a better way of ordering bars
-    // std::pair<int, int> minMax = getZMinMax();
-
-}
-*/
-
-/* unused
-void ControlRuler::flipBackwards()
-{
-    ///CJ Expect to drop tghis with a better way of ordering bars
-    // std::pair<int, int> minMax = getZMinMax();
-
-}
-*/
-
-/* unused
-std::pair<int, int> ControlRuler::getZMinMax()
-{
-    std::vector<int> zList;
-
-    std::sort(zList.begin(), zList.end());
-
-    return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
-}
-*/
-
 SnapGrid* ControlRuler::getSnapGrid() const
 {
     return m_snapGrid;

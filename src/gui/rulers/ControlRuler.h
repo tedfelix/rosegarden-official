@@ -69,6 +69,9 @@ public:
     void setAutoScroller(QPointer<AutoScroller> autoScroller)
             { m_autoScroller = autoScroller; }
 
+    void setRulerScale(RulerScale *rulerscale)  { m_rulerScale = rulerscale; }
+    RulerScale *getRulerScale()  { return m_rulerScale; }
+
     //virtual QString getName() = 0;
 
     // QWidget override
@@ -78,51 +81,47 @@ public:
 
     ControlItemList *getSelectedItems()  { return &m_selectedItems; }
 
-    QRectF* getSelectionRectangle() { return m_selectionRect; }
-    void setSelectionRect(QRectF *rect) { m_selectionRect = rect; }
+    // For ControlSelector tool.
+    void setSelectionRect(QRectF *rect)  { m_selectionRect = rect; }
+    QRectF *getSelectionRectangle()  { return m_selectionRect; }
 
     virtual void setSegment(Segment *);
     virtual void setViewSegment(ViewSegment *);
-    Segment* getSegment() { return m_segment; }
 
+    /// Copy screen to document.  Uses a command for undo.
+    /**
+     * ??? rename: updateDocument()?
+     */
     void updateSegment();
 
-    virtual void notationLayoutUpdated(timeT,timeT);
+    // ??? endTime is unused.  Remove it.
+    void notationLayoutUpdated(timeT startTime, timeT endTime);
 
-    void setRulerScale(RulerScale *rulerscale) { m_rulerScale = rulerscale; }
-    RulerScale* getRulerScale() { return m_rulerScale; }
-
-    void setXOffset(int offset) { m_xOffset = offset; }
+    void setXOffset(int offset)  { m_xOffset = offset; }
 
     float valueToY(long val);
     long yToValue(float y);
 
-    double getXScale() const { return m_xScale; }
-    double getYScale() const { return m_yScale; }
+    double getXScale() const  { return m_xScale; }
+    double getYScale() const  { return m_yScale; }
     float getXMax();
     float getXMin();
 
-    void clearSelectedItems();
+
+    // Selection
+
     void addToSelection(QSharedPointer<ControlItem>);
     void removeFromSelection(QSharedPointer<ControlItem>);
-    EventSelection *getEventSelection()
-    { return m_eventSelection; }
+    /// Deselect all selected items.
+    /**
+     * ??? rename: removeAllFromSelection()
+     */
+    void clearSelectedItems();
+    EventSelection *getEventSelection()  { return m_eventSelection; }
 
-    virtual ControlItemMap::iterator findControlItem(float x);
-    virtual void moveItem(ControlItem*);
 
-    /// EventSelectionObserver
-//    virtual void eventSelected(EventSelection *,Event *);
-//    virtual void eventDeselected(EventSelection *,Event *);
-//    virtual void eventSelectionDestroyed(EventSelection *);
-
-//    void assignEventSelection(EventSelection *);
-
-    // SegmentObserver interface
-//    virtual void viewSegmentDeleted(const ViewSegment *);
-
-    // unused void flipForwards();
-    // unused void flipBackwards();
+    ControlItemMap::iterator findControlItem(float x);
+    void moveItem(ControlItem *item);
 
     SnapGrid* getSnapGrid() const;
 
@@ -188,10 +187,6 @@ protected:
 
     void clear();
 
-    // Stacking of the SegmentItems on the canvas
-    //
-    // unused std::pair<int, int> getZMinMax();
-
 //    virtual void init();
 //virtual void drawBackground() = 0;
 
@@ -201,7 +196,6 @@ protected:
     QRect mapRectToWidget(QRectF *);
     QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
     QPointF mapWidgetToItem(QPoint*);
-    // unused QColor valueToColour(int max, int val);
     void updateSelection();
 
     virtual void createRulerMenu();
