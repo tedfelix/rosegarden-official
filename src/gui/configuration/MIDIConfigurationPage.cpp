@@ -271,7 +271,7 @@ MIDIConfigurationPage::MIDIConfigurationPage(QWidget *parent):
         QString timer = RosegardenSequencer::getInstance()->getTimer(i);
 
         // Skip the HR timer which causes a hard-lock of the computer.
-        if (timer == "HR timer")
+        if (timer == "HR timer"  &&  !Preferences::getHRTimer())
             continue;
 
         m_sequencerTimingSource->addItem(timer);
