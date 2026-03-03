@@ -308,7 +308,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
-    lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
+    lastX = m_rulerScale->getXForTime(m_segment->getStartTime()) * getXScale();
 
     if (m_nextItemLeft != m_controlItemMap.end()) {
         lastY = m_nextItemLeft->second->y();
@@ -333,9 +333,11 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         }
     }
 
-    painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
-            mapYToWidget(lastY));
+    painter.drawLine(mapXToWidget(lastX),
+                     mapYToWidget(lastY),
+                     mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime()) *
+                                  getXScale()),
+                     mapYToWidget(lastY));
 
     drawItems(painter, pen, brush);
     drawSelectionRect(painter, pen, brush);
@@ -618,14 +620,14 @@ void ControllerEventsRuler::updateRulerMenu()
 void ControllerEventsRuler::getLimits(float& xmin, float& xmax)
 {
     // no limit
-    xmin = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
-    xmax = m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale;
+    xmin = m_rulerScale->getXForTime(m_segment->getStartTime()) * getXScale();
+    xmax = m_rulerScale->getXForTime(m_segment->getEndTime()) * getXScale();
 }
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
     RG_DEBUG << "insertEvent" << x << y << m_controller->getType();
-    timeT insertTime = m_rulerScale->getTimeForX(x/m_xScale);
+    timeT insertTime = m_rulerScale->getTimeForX(x / getXScale());
 
     Event* controllerEvent = new Event(m_controller->getType(), insertTime);
 

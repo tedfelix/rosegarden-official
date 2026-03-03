@@ -42,7 +42,6 @@ namespace Rosegarden
 
 
 class AutoScroller;
-class ControlSelector;
 class ControlTool;
 class ControlToolBox;
 class EventSelection;
@@ -71,8 +70,6 @@ public:
 
     void setRulerScale(RulerScale *rulerscale)  { m_rulerScale = rulerscale; }
     RulerScale *getRulerScale()  { return m_rulerScale; }
-
-    //virtual QString getName() = 0;
 
     // QWidget override
     QSize sizeHint() const override  { return QSize(1,100); }
@@ -163,6 +160,8 @@ protected:
     void mousePressEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
+    // ??? Do we need this?  It's empty.  Does it break the context menu if
+    //     we remove it?
     void contextMenuEvent(QContextMenuEvent *) override;
     void wheelEvent(QWheelEvent *) override;
     void resizeEvent(QResizeEvent *) override;
@@ -196,7 +195,7 @@ protected:
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
     //   to the left of the screen but end on screen. For this reason, the
-    //   m_visibleItems list all includes items that are actually visible.
+    //   m_visibleItems list includes all items that are actually visible.
     ControlItemMap::iterator m_firstVisibleItem;
     ControlItemMap::iterator m_lastVisibleItem;
     ControlItemMap::iterator m_nextItemLeft;
@@ -204,48 +203,28 @@ protected:
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
-    ControlItem *m_currentIndex{nullptr};
-
     ControlTool *m_currentTool{nullptr};
     ControlToolBox *m_toolBox;
-    QString m_currentToolName;
 
     QRectF m_pannedRect;
-    double m_xScale{1};
-    double m_yScale{1};
+
+    QRectF *m_selectionRect{nullptr};
+
+    QMenu *m_rulerMenu{nullptr};
+
+private:
 
     long m_maxItemValue{127};
     long m_minItemValue{0};
 
-    double m_viewSegmentOffset{0};
+    double m_xScale{1};
+    double m_yScale{1};
 
     int m_xOffset{0};
-
-    double m_currentX{0};
-
-    QPoint m_lastEventPos;
-    bool m_itemMoved{false};
-
-    bool m_selecting{false};
-    ControlSelector *m_selector{nullptr};
-    QRectF *m_selectionRect{nullptr};
-
-    QMenu *m_rulerMenu{nullptr};
-    SnapGrid *m_snapGrid;
-    QString m_snapName;
-    timeT m_snapTimeFromEditor;
-
-    // ??? Rename: SelectionList
-    //typedef std::list<Event *> SelectionSet;
-    //SelectionSet m_selectedEvents;
-
-private:
 
     ControlItemMap::iterator findControlItem(const ControlItem *);
     ControlItemMap::iterator findControlItem(const Event *);
     void addCheckVisibleLimits(ControlItemMap::iterator);
-    //void removeControlItem(ControlItem *);
-    //void removeControlItem(const Event *);
     void removeControlItem(const ControlItemMap::iterator &);
     void removeCheckVisibleLimits(const ControlItemMap::iterator &);
     int visiblePosition(QSharedPointer<ControlItem>);
@@ -254,6 +233,9 @@ private:
 
     ControlMouseEvent createControlMouseEvent(QMouseEvent *e);
 
+    SnapGrid *m_snapGrid;
+    QString m_snapName;
+    timeT m_snapTimeFromEditor;
     void setSnapTimeFromActionName(const QString &actionName);
 
     QPointer<AutoScroller> m_autoScroller;

@@ -20,45 +20,41 @@
 
 #include "ControlRuler.h"
 
-#include "base/Event.h"
-#include "misc/Debug.h"
-#include "base/RulerScale.h"
-#include "base/SnapGrid.h"
-#include "document/Command.h"
-#include "commands/notation/NormalizeRestsCommand.h"
-#include "gui/editors/notation/NotationStaff.h"
-#include "ControlMouseEvent.h"
-#include "ControlItem.h"
-#include "ControlSelector.h"
 #include "ControlTool.h"
 #include "ControlToolBox.h"
 #include "ControlChangeCommand.h"
-#include "DefaultVelocityColour.h"
+
+#include "base/Event.h"
+#include "base/Selection.h"  // EventSelection
+#include "base/RulerScale.h"
+#include "base/SnapGrid.h"
+#include "document/Command.h"  // MacroCommand
 #include "document/CommandHistory.h"
 #include "base/ViewSegment.h"
 #include "misc/ConfigGroups.h"
 #include "commands/edit/EraseCommand.h"
+#include "misc/Debug.h"
 
-#include <algorithm>
-#include <cfloat>
-
-#include <QMainWindow>
-#include <QColor>
-#include <QPoint>
-#include <QPolygonF>
-#include <QPolygon>
-#include <QMenu>
-#include <QString>
-#include <QWidget>
-#include <QMouseEvent>
-#include <QContextMenuEvent>
-#include <QPainter>
+//#include <QContextMenuEvent>
 #include <QBrush>
+#include <QColor>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QPen>
+#include <QPolygon>
+#include <QPolygonF>
 #include <QSettings>
+
+//#include <algorithm>
+#include <memory>
+
+#include <float.h>  // FLT_MAX
+
 
 namespace Rosegarden
 {
+
 
 ControlRuler::ControlRuler(RulerScale *rulerScale,
                            QWidget *parent) :
@@ -876,7 +872,7 @@ void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
     settings.endGroup();
 }
 
-void ControlRuler::contextMenuEvent(QContextMenuEvent*)
+void ControlRuler::contextMenuEvent(QContextMenuEvent *)
 {
 }
 
