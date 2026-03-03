@@ -706,9 +706,9 @@ void ControllerEventsRuler::eraseControllerEvent()
     // This command uses the SegmentObserver mechanism to bring the control item list up to date
     ControlRulerEventEraseCommand* command =
         new ControlRulerEventEraseCommand(m_selectedItems,
-                                        *m_segment,
-                                        m_eventSelection->getStartTime(),
-                                        m_eventSelection->getEndTime());
+                                          *m_segment,
+                                          getEventSelection()->getStartTime(),
+                                          getEventSelection()->getEndTime());
     CommandHistory::getInstance()->addCommand(command);
     m_selectedItems.clear();
     updateSelection();

@@ -149,6 +149,10 @@ public slots:
 
 protected:
 
+    RulerScale *m_rulerScale;
+
+    void clear();
+
     virtual bool allowSimultaneousEvents() = 0;
 
     void setMinItemValue(long val)  { m_minItemValue = val; }
@@ -167,49 +171,25 @@ protected:
     void eraseControlItem(const Event *);
     void eraseControlItem(const ControlItemMap::iterator &);
 
-private:
-    ControlItemMap::iterator findControlItem(const ControlItem *);
-    ControlItemMap::iterator findControlItem(const Event *);
-    void addCheckVisibleLimits(ControlItemMap::iterator);
-    //void removeControlItem(ControlItem *);
-    //void removeControlItem(const Event *);
-    void removeControlItem(const ControlItemMap::iterator &);
-    void removeCheckVisibleLimits(const ControlItemMap::iterator &);
-    int visiblePosition(QSharedPointer<ControlItem>);
-protected:
+    int mapXToWidget(float x);
+    int mapYToWidget(float y);
+    QRect mapRectToWidget(QRectF *rect);
+    QPolygon mapItemToWidget(QSharedPointer<ControlItem> controlItem);
 
-    void clear();
-
-//    virtual void init();
-//virtual void drawBackground() = 0;
-
-    int xMapToWidget(double x) {return (x-m_pannedRect.left())*width()/m_pannedRect.width();};
-    int mapXToWidget(float);
-    int mapYToWidget(float);
-    QRect mapRectToWidget(QRectF *);
-    QPolygon mapItemToWidget(QSharedPointer<ControlItem>);
-    QPointF mapWidgetToItem(QPoint*);
+    /// Copies from m_selectedItems to m_eventSelection.
+    /**
+     * ??? rename: UpdateEventSelection()
+     */
     void updateSelection();
 
-    virtual void createRulerMenu();
-    // Derivers can override to enable/disable menu items before the menu is
-    // displayed.
+    /// Derivers override to create a right-click context menu for display.
+    virtual void createRulerMenu()  { }
+    /// Derivers override to enable/disable right-click context menu items.
     virtual void updateRulerMenu()  { }
 
-//    EditViewBase*               m_parentEditView;
-//    QScrollBar*                 m_mainHorizontalScrollBar;
-    RulerScale*     m_rulerScale;
-    EventSelection *m_eventSelection{nullptr}; //,*m_assignedEventSelection;
-
-//    MatrixScene *m_scene;
-
     ViewSegment *m_viewSegment{nullptr};
-    NotationStaff *m_notationStaff{nullptr};
     Segment *m_segment{nullptr};
 
-    // ??? MEMORY LEAK.
-    //     This map stores pointers and never deletes them.
-    //     Recommend switching to QSharedPointer.
     ControlItemMap m_controlItemMap;
 
     // Iterators to the first visible and the last visible item
@@ -261,11 +241,24 @@ protected:
 
 private:
 
+    ControlItemMap::iterator findControlItem(const ControlItem *);
+    ControlItemMap::iterator findControlItem(const Event *);
+    void addCheckVisibleLimits(ControlItemMap::iterator);
+    //void removeControlItem(ControlItem *);
+    //void removeControlItem(const Event *);
+    void removeControlItem(const ControlItemMap::iterator &);
+    void removeCheckVisibleLimits(const ControlItemMap::iterator &);
+    int visiblePosition(QSharedPointer<ControlItem>);
+
+    QPointF mapWidgetToItem(QPoint *point);
+
     ControlMouseEvent createControlMouseEvent(QMouseEvent *e);
 
     void setSnapTimeFromActionName(const QString &actionName);
 
     QPointer<AutoScroller> m_autoScroller;
+
+    EventSelection *m_eventSelection{nullptr};
 
 };
 

@@ -232,7 +232,7 @@ void PropertyControlRuler::updateSelection(
             if (item  &&  item->getElement() == element) {
                 item->setSelected(true);
                 m_selectedItems.push_back(item);
-                m_eventSelection->addEvent(item->getEvent());
+                getEventSelection()->addEvent(item->getEvent());
 
                 // Move on to the next selected item.
                 break;

@@ -123,11 +123,6 @@ void ControlRuler::setViewSegment(ViewSegment *viewSegment)
 {
     m_viewSegment = viewSegment;
 
-    // If this ruler is connected to a NotationStaff then this will return a valid pointer
-    //   otherwise, it will return zero. This can be used to check whether we're connected
-    //   to a matrix or notation editor later
-    m_notationStaff = dynamic_cast <NotationStaff *> (viewSegment);
-
     setSegment(&m_viewSegment->getSegment());
 }
 
@@ -645,12 +640,13 @@ QRect ControlRuler::mapRectToWidget(QRectF *rect)
     return newrect;
 }
 
-QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> poly)
+QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> controlItem)
 {
 
     QPolygon newpoly;
     QPoint newpoint;
-    for (QPolygonF::iterator it = poly->begin(); it != poly->end(); ++it) {
+    // For each point in the ControlItem (it's a QPolygonF)...
+    for (QPolygonF::iterator it = controlItem->begin(); it != controlItem->end(); ++it) {
         newpoint.setX(mapXToWidget((*it).x()));
         newpoint.setY(mapYToWidget((*it).y()));
         newpoly.push_back(newpoint);
@@ -782,10 +778,6 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
 
     if (m_autoScroller)
         m_autoScroller->start();
-}
-
-void ControlRuler::createRulerMenu()
-{
 }
 
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
