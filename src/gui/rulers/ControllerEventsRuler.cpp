@@ -68,13 +68,13 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
         RulerScale* rulerScale,
         QWidget* parent,
         const ControlParameter *controller,
-        const char* /* name */) //, WFlags f)
-        : ControlRuler(segment, rulerScale, parent), // name, f),
-        m_defaultItemWidth(20),
-        m_lastDrawnRect(QRectF(0,0,0,0)),
-        m_moddingSegment(false),
-        m_rubberBand(new QLineF(0,0,0,0)),
-        m_rubberBandVisible(false)
+        const char* /* name */) : //, WFlags f)
+    ControlRuler(rulerScale, parent), // name, f),
+    m_defaultItemWidth(20),
+    m_lastDrawnRect(QRectF(0,0,0,0)),
+    m_moddingSegment(false),
+    m_rubberBand(new QLineF(0,0,0,0)),
+    m_rubberBandVisible(false)
 {
     // Make a copy of the ControlParameter if we have one
     //
@@ -84,6 +84,8 @@ ControllerEventsRuler::ControllerEventsRuler(ViewSegment *segment,
     else {
         m_controller = nullptr;
     }
+
+    createAction("set_to_default", &ControllerEventsRuler::slotSetToDefault);
 
     RG_DEBUG << "ctor";
     if (controller)
@@ -306,7 +308,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
 
     ControlItemMap::iterator mapIt;
     float lastX, lastY;
-    lastX = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
+    lastX = m_rulerScale->getXForTime(m_segment->getStartTime()) * getXScale();
 
     if (m_nextItemLeft != m_controlItemMap.end()) {
         lastY = m_nextItemLeft->second->y();
@@ -331,15 +333,18 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         }
     }
 
-    painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
-            mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale),
-            mapYToWidget(lastY));
+    painter.drawLine(mapXToWidget(lastX),
+                     mapYToWidget(lastY),
+                     mapXToWidget(m_rulerScale->getXForTime(m_segment->getEndTime()) *
+                                  getXScale()),
+                     mapYToWidget(lastY));
 
     drawItems(painter, pen, brush);
     drawSelectionRect(painter, pen, brush);
     drawRubberBand(painter);
 }
 
+#if 0
 QString ControllerEventsRuler::getName()
 {
     if (m_controller) {
@@ -360,6 +365,7 @@ QString ControllerEventsRuler::getName()
     } else
         return tr("Controller Events");
 }
+#endif
 
 void ControllerEventsRuler::eventAdded(const Segment*, Event *event)
 {
@@ -592,29 +598,36 @@ void ControllerEventsRuler::createRulerMenu()
 {
     createMenusAndToolbars("controlruler.rc");
 
+#ifndef NDEBUG
     m_rulerMenu = findChild<QMenu *>("control_ruler_menu");
-
     if (!m_rulerMenu) {
         RG_DEBUG << "ControlRuler::createRulerMenu() failed\n";
     }
+#endif
 }
 
-bool ControllerEventsRuler::allowSimultaneousEvents()
+void ControllerEventsRuler::updateRulerMenu()
 {
-    return false;
+    // Let base class have a shot.
+    ControlRuler::updateRulerMenu();
+
+    // Enable Set to Default if something is selected.
+    QAction *setToDefault = findChild<QAction *>("set_to_default");
+    if (setToDefault)
+        setToDefault->setEnabled(!m_selectedItems.empty());
 }
 
 void ControllerEventsRuler::getLimits(float& xmin, float& xmax)
 {
     // no limit
-    xmin = m_rulerScale->getXForTime(m_segment->getStartTime())*m_xScale;
-    xmax = m_rulerScale->getXForTime(m_segment->getEndTime())*m_xScale;
+    xmin = m_rulerScale->getXForTime(m_segment->getStartTime()) * getXScale();
+    xmax = m_rulerScale->getXForTime(m_segment->getEndTime()) * getXScale();
 }
 
 Event *ControllerEventsRuler::insertEvent(float x, float y)
 {
     RG_DEBUG << "insertEvent" << x << y << m_controller->getType();
-    timeT insertTime = m_rulerScale->getTimeForX(x/m_xScale);
+    timeT insertTime = m_rulerScale->getTimeForX(x / getXScale());
 
     Event* controllerEvent = new Event(m_controller->getType(), insertTime);
 
@@ -695,9 +708,9 @@ void ControllerEventsRuler::eraseControllerEvent()
     // This command uses the SegmentObserver mechanism to bring the control item list up to date
     ControlRulerEventEraseCommand* command =
         new ControlRulerEventEraseCommand(m_selectedItems,
-                                        *m_segment,
-                                        m_eventSelection->getStartTime(),
-                                        m_eventSelection->getEndTime());
+                                          *m_segment,
+                                          getEventSelection()->getStartTime(),
+                                          getEventSelection()->getEndTime());
     CommandHistory::getInstance()->addCommand(command);
     m_selectedItems.clear();
     updateSelection();
@@ -707,5 +720,35 @@ Event* ControllerEventsRuler::getNewEvent(timeT time, long value) const
 {
     return m_controller->newEvent(time, value);
 }
+
+void ControllerEventsRuler::slotSetToDefault()
+{
+    // Nothing selected?  Bail.
+    if (m_selectedItems.empty())
+        return;
+
+    // Get the default value for this controller and convert to y coord.
+    //const float yDefault =
+    //        float(m_controller->getDefault()) / float(m_controller->getMax());
+    const float yDefault = valueToY(m_controller->getDefault());
+
+    // For each selected item...
+    for (QSharedPointer<ControlItem> item : m_selectedItems)
+    {
+        // Downcast required to call EventControlItem::reconfigure().
+        QSharedPointer<EventControlItem> eventControlItem =
+                qSharedPointerDynamicCast<EventControlItem>(item);
+        if (!eventControlItem)
+            continue;
+
+        // Set the y coord to the default value.
+        eventControlItem->reconfigure(eventControlItem->xStart(), yDefault);
+    }
+
+    // Update Segment to reflect ControlItem changes.  Commit to command
+    // history.
+    updateSegment();
+}
+
 
 }

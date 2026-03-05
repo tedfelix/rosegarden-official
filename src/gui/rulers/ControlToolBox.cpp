@@ -63,12 +63,6 @@ ControlToolBox::createTool(QString toolName)
 
     m_tools.insert(toolName, tool);
 
-//    if (m_scene) {
-//        tool->setScene(m_scene);
-//        connect(m_scene, &Scene::eventRemoved(Event *),
-//                tool, &ControlTool::handleEventRemoved(Event *));
-//    }
-
     return tool;
 }
 

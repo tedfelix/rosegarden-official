@@ -42,9 +42,12 @@ public:
     void setY(float y);
     void updateSegment() override;
     void reconfigure() override;
-    void reconfigure(float x,float y);
+
+    /// Move the item to a new location.
+    void reconfigure(float x, float y);
 
 protected:
+
     void setEvent(Event*);
 
     //--------------- Data members ---------------------------------

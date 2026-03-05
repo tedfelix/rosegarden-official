@@ -54,7 +54,7 @@ PropertyControlRuler::PropertyControlRuler(const PropertyName& propertyName,
                                            ViewSegment *viewSegment,
                                            RulerScale *rulerScale,
                                            QWidget *parent) :
-    ControlRuler(viewSegment, rulerScale, parent),
+    ControlRuler(rulerScale, parent),
     m_propertyName(propertyName)
 {
     setViewSegment(viewSegment);
@@ -154,10 +154,12 @@ PropertyControlRuler::setViewSegment(ViewSegment *segment)
     init();
 }
 
+#if 0
 QString PropertyControlRuler::getName()
 {
     return strtoqstr(getPropertyName());
 }
+#endif
 
 void PropertyControlRuler::addControlItem2(ViewElement *el)
 {
@@ -179,31 +181,6 @@ void PropertyControlRuler::addControlItem2(ViewElement *el)
 //    m_controlItemList.push_back(controlItem);
 }
 
-//void PropertyControlRuler::addControlItem(Event *event)
-//{
-//    if (event->getType()!="note")
-//        return;
-//
-//    RG_DEBUG << "addControlItem(): Event Type: " << event->getType();
-//    RG_DEBUG << "  Event absolute time: " << event->getAbsoluteTime();
-//
-//    double x1 = m_rulerScale->getXForTime(event->getAbsoluteTime());
-//    double x2 = m_rulerScale->getXForTime(event->getAbsoluteTime()+event->getDuration());
-//    long val = 0;
-//    event->get<Rosegarden::Int>(getPropertyName(), val);
-//    double y = (double) val / MIDI_CONTROL_MAX_VALUE;
-//
-//    ControlItem *controlItem = new ControlItem(this, event, QPolygonF(QRectF(x1,0,x2-x1,y)));
-//    m_controlItemList.push_back(controlItem);
-//    //        m_controlItemList.push_back(new ControlItem(this, (*it), QPolygonF(QRectF(x1,y,x2-x1,y))));
-//
-////        new ControlItem(this, new ViewElementAdapter(*i, getPropertyName()), int(x + m_viewSegmentOffset),
-////                        int(m_rulerScale->getXForTime((*i)->getViewAbsoluteTime() +
-////                                                      (*i)->getViewDuration()) - x));
-//
-//    update();
-//}
-//
 void PropertyControlRuler::init()
 {
     // Clear Control Item list
@@ -255,7 +232,7 @@ void PropertyControlRuler::updateSelection(
             if (item  &&  item->getElement() == element) {
                 item->setSelected(true);
                 m_selectedItems.push_back(item);
-                m_eventSelection->addEvent(item->getEvent());
+                getEventSelection()->addEvent(item->getEvent());
 
                 // Move on to the next selected item.
                 break;
@@ -302,11 +279,6 @@ void PropertyControlRuler::setTool(const QString & /* name */)
 
     m_currentTool = tool;
     m_currentTool->ready();
-}
-
-bool PropertyControlRuler::allowSimultaneousEvents()
-{
-    return true;
 }
 
 void PropertyControlRuler::elementAdded(const ViewSegment *, ViewElement *el)
@@ -380,8 +352,8 @@ PropertyControlRuler::mousePressEvent(QMouseEvent *e)
 {
     RG_DEBUG << "mousePressEvent()";
 
-    if (e->button() == Qt::MiddleButton)
-        m_lastEventPos = e->pos();
+    //if (e->button() == Qt::MiddleButton)
+    //    m_lastEventPos = e->pos();
 
     ControlRuler::mousePressEvent(e); // send super
 
@@ -419,7 +391,7 @@ PropertyControlRuler::mouseMoveEvent(QMouseEvent *e)
     // Don't send super if we're using the middle button
     //
     if (e->button() == Qt::MiddleButton) {
-        m_lastEventPos = e->pos();
+        //m_lastEventPos = e->pos();
         return;
     }
 

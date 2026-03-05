@@ -50,7 +50,7 @@ class ControllerEventsRuler : public ControlRuler, public SegmentObserver
     Q_OBJECT
 
 public:
-    ControllerEventsRuler(ViewSegment *,
+    ControllerEventsRuler(ViewSegment *,  // ??? appears UNUSED.  Remove?
                           RulerScale *,
                           QWidget *parent = nullptr,
                           const ControlParameter *controller = nullptr,
@@ -60,7 +60,7 @@ public:
 
     void paintEvent(QPaintEvent *) override;
 
-    QString getName() override;
+    //QString getName();
     int getDefaultItemWidth() { return m_defaultItemWidth; }
 
     // Allow something external to reset the selection of Events
@@ -108,16 +108,23 @@ public:
 
     void setTool(const QString &name) override;
 
-    virtual void createRulerMenu() override;
-
-    virtual bool allowSimultaneousEvents() override;
-
     // for key pressure
     virtual int getPitch() const {return 0;}
 
     virtual void getLimits(float& xmin, float& xmax);
 
+public slots:
+
+    void slotSetToDefault();
+
 protected:
+
+    virtual bool allowSimultaneousEvents() override  { return false; }
+
+    // ControlRuler overrides.
+    void createRulerMenu() override;
+    void updateRulerMenu() override;
+
     virtual void init();
     virtual bool isOnThisRuler(Event *);
 
@@ -130,12 +137,13 @@ protected:
     //--------------- Data members ---------------------------------
     int  m_defaultItemWidth;
 
-    ControlParameter  *m_controller;
+    ControlParameter *m_controller;
     QRectF m_lastDrawnRect;
     // ??? See if we can remove this.
     bool m_moddingSegment;
     QLineF *m_rubberBand;
     bool m_rubberBandVisible;
+
 };
 
 

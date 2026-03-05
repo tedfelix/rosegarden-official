@@ -244,6 +244,13 @@ bool Preferences::getMusewhirl()
     return musewhirl.get();
 }
 
+static PreferenceBool hrTimer(ExperimentalConfigGroup, "hrTimer", false);
+
+bool Preferences::getHRTimer()
+{
+    return hrTimer.get();
+}
+
 static PreferenceBool lv2(ExperimentalConfigGroup, "lv2-b", true);
 
 void Preferences::setLV2(bool value)

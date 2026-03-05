@@ -436,7 +436,7 @@ ControlRulerWidget::addRuler(ControlRuler *controlRuler, QString name)
         RG_WARNING << "addRuler(): WARNING: Panned rect is null.";
 
     // Configure the ruler.
-    controlRuler->slotSetPannedRect(m_pannedRect);
+    controlRuler->setPannedRect(m_pannedRect);
     slotSetTool(m_currentToolName);
 
     Segment::Ruler segmentRuler = getSegmentRuler(controlRuler);
@@ -542,7 +542,7 @@ ControlRulerWidget::slotSetPannedRect(QRectF pannedRect)
 
     // For each ruler, pass on the panned rect.
     for (ControlRuler *ruler : m_controlRulerList) {
-        ruler->slotSetPannedRect(pannedRect);
+        ruler->setPannedRect(pannedRect);
     }
 
     update();

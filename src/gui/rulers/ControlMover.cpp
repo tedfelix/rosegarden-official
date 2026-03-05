@@ -20,40 +20,25 @@
 
 #include "ControlMover.h"
 
-#include "base/BaseProperties.h"
-#include "base/Event.h"
-#include "base/Segment.h"
-#include "base/Selection.h"
-#include "base/SnapGrid.h"
-#include "base/ViewElement.h"
-#include "document/CommandHistory.h"
-#include "ControlItem.h"
 #include "EventControlItem.h"
+#include "ControlItem.h"
+#include "ControlMouseEvent.h"
 #include "ControlRuler.h"
 #include "ControllerEventsRuler.h"
-#include "ControlTool.h"
-#include "ControlMouseEvent.h"
+
+#include "base/SnapGrid.h"
+#include "base/RulerScale.h"
 #include "misc/Debug.h"
 
-#include <QCursor>
-#include <QRectF>
+#include <math.h>
 
-#include <cmath>
-
-#define CONTROL_SMALL_DISTANCE 10
 
 namespace Rosegarden
 {
 
-ControlMover::ControlMover(ControlRuler *parent, const QString& menuName) :
+
+ControlMover::ControlMover(ControlRuler *parent, const QString &menuName) :
     ControlTool("", menuName, parent),
-    m_overCursor(Qt::OpenHandCursor),
-    m_notOverCursor(Qt::ArrowCursor),
-    m_mouseStartX(0.0),
-    m_mouseStartY(0.0),
-    m_lastDScreenX(0.0),
-    m_lastDScreenY(0.0),
-    m_selectionRect(nullptr),
     m_snapGrid(parent->getSnapGrid()),
     m_rulerScale(parent->getRulerScale())
 {
@@ -63,55 +48,81 @@ void
 ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
 {
     if (m_overItem) {
+
+        // Hide the cursor.
         m_ruler->setCursor(Qt::BlankCursor);
 
-        bool activeFound = false;
-        ControlItemVector::const_iterator controlItemIter1 = e->itemList.begin();
-        while (controlItemIter1 != e->itemList.end()) {
-            if ((*controlItemIter1)->active()) {
-                activeFound = true;
+        // Find the ControlItem that was clicked if any.
+
+        QSharedPointer<ControlItem> controlItem;
+
+        // For each ControlItem in the item list...
+        for (QSharedPointer<ControlItem> controlItemLoop : e->itemList) {
+            // If this one is active, go with it.
+            if (controlItemLoop->active()) {
+                controlItem = controlItemLoop;
                 break;
             }
-            controlItemIter1++;
         }
-        if (! activeFound) {
-            if (!(e->modifiers & (Qt::ShiftModifier))) {
-                // No add to selection modifiers so clear the current selection
+
+        if (!controlItem) {
+            // If the user is not holding down Shift for "Add to selection",
+            // clear the current selection.
+            if (!(e->modifiers & Qt::ShiftModifier))
                 m_ruler->clearSelectedItems();
-            }
             return;
         }
 
-        if ((*controlItemIter1)->isSelected()) {
-            if (e->modifiers & (Qt::ShiftModifier))
-                m_ruler->removeFromSelection(*controlItemIter1);
-        } else {
-            if (!(e->modifiers & (Qt::ShiftModifier))) {
-                // No add to selection modifiers so clear the current selection
+        // Already selected?  Toggle it.
+        if (controlItem->isSelected()) {
+            if (e->modifiers & Qt::ShiftModifier)
+                m_ruler->removeFromSelection(controlItem);
+        } else {  // Not selected.
+            // If the user is not holding down Shift for "Add to selection",
+            // clear the current selection.
+            if (!(e->modifiers & Qt::ShiftModifier))
                 m_ruler->clearSelectedItems();
-            }
 
-            m_ruler->addToSelection(*controlItemIter1);
+            m_ruler->addToSelection(controlItem);
         }
+
+        // Build the start point list.
 
         m_startPointList.clear();
+
         ControlItemList *selected = m_ruler->getSelectedItems();
-        for (ControlItemList::iterator it = selected->begin(); it != selected->end(); ++it) {
-            m_startPointList.push_back(QPointF((*it)->xStart(),(*it)->y()));
+        // For each selected it, add its position to m_startPointList.
+        for (QSharedPointer<ControlItem> controlItem : *selected) {
+            m_startPointList.push_back(
+                    QPointF(controlItem->xStart(), controlItem->y()));
         }
-    } else {
-        if (!(e->modifiers & (Qt::ShiftModifier))) {
-            // No add to selection modifiers so clear the current selection
+
+    } else {  // Not over an item.
+        // If the user is not holding down Shift for "Add to selection",
+        // clear the current selection.
+        if (!(e->modifiers & Qt::ShiftModifier))
             m_ruler->clearSelectedItems();
-        }
     }
 
+    // Track the mouse click point.
     m_mouseStartX = e->x;
     m_mouseStartY = e->y;
+
     m_lastDScreenX = 0.0f;
     m_lastDScreenY = 0.0f;
 
     m_ruler->update();
+}
+
+void
+ControlMover::handleMidButtonPress(const ControlMouseEvent * /*e*/)
+{
+    ControllerEventsRuler *controllerEventsRuler =
+            dynamic_cast<ControllerEventsRuler *>(m_ruler);
+    if (!controllerEventsRuler)
+        return;
+
+    controllerEventsRuler->slotSetToDefault();
 }
 
 FollowMode
@@ -119,73 +130,100 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
 {
     emit showContextHelp(tr("Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical"));
 
-    if (e->buttons == Qt::NoButton) {
-        // No button pressed, set cursor style
+    // No button pressed?  Set appropriate cursor.
+    if (e->buttons == Qt::NoButton)
         setCursor(e);
-    }
 
-    if ((e->buttons & Qt::LeftButton) && m_overItem) {
-        // A drag action is in progress
+    // If a drag action is in progress...
+    if ((e->buttons & Qt::LeftButton)  &&  m_overItem) {
+
         float deltaX = (e->x-m_mouseStartX);
         float deltaY = (e->y-m_mouseStartY);
 
-        double xscale = m_ruler->getXScale();
-        double yscale = m_ruler->getYScale();
+        const double xscale = m_ruler->getXScale();
+        const double yscale = m_ruler->getYScale();
+
         float dScreenX = deltaX / xscale;
         float dScreenY = deltaY / yscale;
 
+        // If the control key is held down, restrict movement to either
+        // horizontal or vertical depending on the direction the item has
+        // been moved.
         if (e->modifiers & Qt::ControlModifier) {
-            // If the control key is held down, restrict movement to either horizontal or vertical
-            //    depending on the direction the item has been moved
 
-            // For small displacements from the starting position, use the direction of this movement
-            //    rather than the actual displacement - makes dragging through the original position
-            //    less likely to switch constraint axis
-            if ((fabs(dScreenX) < CONTROL_SMALL_DISTANCE) && (fabs(dScreenY) < CONTROL_SMALL_DISTANCE)) {
-                dScreenX = dScreenX-m_lastDScreenX;
-                dScreenY = dScreenY-m_lastDScreenY;
+            constexpr int CONTROL_SMALL_DISTANCE{10};
+
+            // For small displacements from the starting position, use the
+            // direction of this movement rather than the actual displacement.
+            // Makes dragging through the original position less likely to
+            // switch constraint axis.
+            if ((fabs(dScreenX) < CONTROL_SMALL_DISTANCE)  &&
+                (fabs(dScreenY) < CONTROL_SMALL_DISTANCE)) {
+                dScreenX = dScreenX - m_lastDScreenX;
+                dScreenY = dScreenY - m_lastDScreenY;
             }
 
-            if (fabs(dScreenX) > fabs(dScreenY)) {
+            if (fabs(dScreenX) > fabs(dScreenY))
                 deltaY = 0;
-            } else {
+            else
                 deltaX = 0;
-            }
+
         }
 
         m_lastDScreenX = dScreenX;
         m_lastDScreenY = dScreenY;
 
-        ControlItemList *selected = m_ruler->getSelectedItems();
-        std::vector<QPointF>::iterator pIt = m_startPointList.begin();
-        for (ControlItemList::iterator it = selected->begin();
-             it != selected->end();
-             ++it) {
-            // Downcast required to call reconfigure(float,float).
-            QSharedPointer<EventControlItem> item =
-                    qSharedPointerDynamicCast<EventControlItem>(*it);
+        // Move the items.
 
-            float x = pIt->x() + deltaX;
-            RG_DEBUG << "handleMouseMove" << x << pIt->x() << deltaX;
-            // snap only if shift is not pressed
-            if (! (e->modifiers & Qt::ShiftModifier)) {
-                timeT et = m_rulerScale->getTimeForX(x / xscale);
-                timeT etSnap = m_snapGrid->snapTime(et);
-                x =  m_rulerScale->getXForTime(etSnap) * xscale;
+        ControlItemList *selected = m_ruler->getSelectedItems();
+        std::vector<QPointF>::const_iterator startPointIter =
+                m_startPointList.cbegin();
+        // For each selected item...
+        for (QSharedPointer<ControlItem> controlItem : *selected) {
+
+            // Downcast required to call EventControlItem::reconfigure().
+            QSharedPointer<EventControlItem> item =
+                    qSharedPointerDynamicCast<EventControlItem>(controlItem);
+            if (!item)
+                continue;
+
+            const QPointF &startPoint = *startPointIter;
+
+            // Compute x
+
+            float x = startPoint.x() + deltaX;
+
+            RG_DEBUG << "handleMouseMove" << x << startPoint.x() << deltaX;
+
+            // If shift is not pressed, snap the x.
+            if (!(e->modifiers & Qt::ShiftModifier)) {
+
+                const timeT et = m_rulerScale->getTimeForX(x / xscale);
+                const timeT etSnap = m_snapGrid->snapTime(et);
+                x = m_rulerScale->getXForTime(etSnap) * xscale;
+
                 RG_DEBUG << "handleMouseMove snap" << et << etSnap << x;
             }
-            float xmin = m_ruler->getXMin() * xscale;
-            float xmax = (m_ruler->getXMax() - 1) * xscale;
-            x = std::max(x,xmin);
-            x = std::min(x,xmax);
 
-            float y = pIt->y()+deltaY;
-            y = std::max(y,0.0f);
-            y = std::min(y,1.0f);
-            if (item) item->reconfigure(x,y);
-            ++pIt;
+            // Limit x
+            const float xmin = m_ruler->getXMin() * xscale;
+            const float xmax = (m_ruler->getXMax() - 1) * xscale;
+            x = std::max(x, xmin);
+            x = std::min(x, xmax);
+
+            // Compute y
+            float y = startPoint.y() + deltaY;
+            y = std::max(y, 0.0f);
+            y = std::min(y, 1.0f);
+
+            // Move the item.
+            item->reconfigure(x, y);
+
+            ++startPointIter;
         }
+
         return FOLLOW_HORIZONTAL;
+
     }
 
     m_ruler->update();
@@ -196,16 +234,17 @@ ControlMover::handleMouseMove(const ControlMouseEvent *e)
 void
 ControlMover::handleMouseRelease(const ControlMouseEvent *e)
 {
+    // If this is the end of a drag...
     if (m_overItem) {
-        // This is the end of a drag event
         // Update the segment to reflect changes
         m_ruler->updateSegment();
 
-        // Reset the cursor to the state that it started
+        // Reset the cursor to its hover state.
         m_ruler->setCursor(m_overCursor);
     }
 
-    // May have moved off the item during a drag so use setCursor to correct its state
+    // May have moved off the item during a drag so use setCursor to correct
+    // its state.
     setCursor(e);
 
     m_ruler->update();
@@ -215,26 +254,24 @@ void ControlMover::setCursor(const ControlMouseEvent *e)
 {
     bool isOverItem = false;
 
-    ControlItemVector::const_iterator it = e->itemList.begin();
-    while (it != e->itemList.end()) {
-        if ((*it)->active()) {
+    // Check whether any of the items we are over is active.
+    for (QSharedPointer<const ControlItem> controlItem : e->itemList) {
+        if (controlItem->active()) {
             isOverItem = true;
             break;
         }
-        it++;
     }
 
-    if (!m_overItem) {
-        if (isOverItem) {
-            m_ruler->setCursor(m_overCursor);
-            m_overItem = true;
-        }
-    } else {
-        if (!isOverItem) {
-            m_ruler->setCursor(m_notOverCursor);
-            m_overItem = false;
-        }
-    }
+    // No change?  Bail.
+    if (m_overItem == isOverItem)
+        return;
+
+    if (isOverItem)
+        m_ruler->setCursor(m_overCursor);
+    else
+        m_ruler->setCursor(m_notOverCursor);
+
+    m_overItem = isOverItem;
 }
 
 void ControlMover::ready()
@@ -243,9 +280,5 @@ void ControlMover::ready()
     m_overItem = false;
 }
 
-void ControlMover::stow()
-{
-}
 
-QString ControlMover::ToolName() { return "mover"; }
 }

@@ -18,58 +18,73 @@
 #ifndef RG_CONTROLMOVER_H
 #define RG_CONTROLMOVER_H
 
+#include "ControlItem.h"  // ControlItemList
 #include "ControlTool.h"
-#include "ControlItem.h"
-#include <QCursor>
 
-class QRectF;
-class QPoint;
+#include <QCursor>
+#include <QPointF>
+#include <QString>
+
+#include <vector>
+
 
 namespace Rosegarden
 {
 
-class Event;
+
+class ControlMouseEvent;
 class ControlRuler;
 class SnapGrid;
 class RulerScale;
 
+
+/// Move tool for ControlRuler.
 class ControlMover : public ControlTool
 {
     Q_OBJECT
 
-    friend class ControlToolBox;
-
 public:
+
     ControlMover(ControlRuler *parent,
-                 const QString& menuName = "ControlMover");
-    void handleLeftButtonPress(const ControlMouseEvent *) override;
-    FollowMode handleMouseMove(const ControlMouseEvent *) override;
-    void handleMouseRelease(const ControlMouseEvent *) override;
+                 const QString &menuName = "ControlMover");
 
+    // ControlTool overrides.
+    void handleLeftButtonPress(const ControlMouseEvent *e) override;
+    void handleMidButtonPress(const ControlMouseEvent *e) override;
+    FollowMode handleMouseMove(const ControlMouseEvent *e) override;
+    void handleMouseRelease(const ControlMouseEvent *e) override;
+
+    // BaseTool override.
     void ready() override;
-    void stow() override;
 
-    static QString ToolName();
-
-signals:
-
-protected slots:
+    static QString ToolName()  { return "mover"; }
 
 protected:
-    void setCursor(const ControlMouseEvent *);
-    QCursor m_overCursor;
-    QCursor m_notOverCursor;
 
-    float m_mouseStartX;
-    float m_mouseStartY;
-    float m_lastDScreenX;
-    float m_lastDScreenY;
-    QRectF *m_selectionRect;
-    ControlItemList m_addedItems;
+    /// Hover cursor.
+    QCursor m_overCursor{Qt::OpenHandCursor};
+    /// Normal, not hovering cursor.
+    QCursor m_notOverCursor{Qt::ArrowCursor};
+
+private:
+
+    SnapGrid *m_snapGrid;
+    RulerScale *m_rulerScale;
+
+    /// Set the cursor to m_overCursor or m_notOverCursor as appropriate.
+    void setCursor(const ControlMouseEvent *e);
+
+    // Starting point for each selected item.
     std::vector <QPointF> m_startPointList;
-    SnapGrid* m_snapGrid;
-    RulerScale* m_rulerScale;
+    // Mouse click point for start of drag.
+    float m_mouseStartX{0};
+    float m_mouseStartY{0};
+    // Previous position used for Ctrl constrained axis drag.
+    float m_lastDScreenX{0};
+    float m_lastDScreenY{0};
+
 };
+
 
 }
 

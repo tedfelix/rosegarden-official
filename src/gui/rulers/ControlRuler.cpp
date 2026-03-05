@@ -20,48 +20,43 @@
 
 #include "ControlRuler.h"
 
-#include "base/Event.h"
-#include "misc/Debug.h"
-#include "base/RulerScale.h"
-#include "base/SnapGrid.h"
-#include "document/Command.h"
-#include "commands/notation/NormalizeRestsCommand.h"
-#include "gui/editors/notation/NotationStaff.h"
-#include "ControlMouseEvent.h"
-#include "ControlItem.h"
-#include "ControlSelector.h"
 #include "ControlTool.h"
 #include "ControlToolBox.h"
 #include "ControlChangeCommand.h"
-#include "DefaultVelocityColour.h"
+
+#include "base/Event.h"
+#include "base/Selection.h"  // EventSelection
+#include "base/RulerScale.h"
+#include "base/SnapGrid.h"
+#include "document/Command.h"  // MacroCommand
 #include "document/CommandHistory.h"
 #include "base/ViewSegment.h"
 #include "misc/ConfigGroups.h"
 #include "commands/edit/EraseCommand.h"
+#include "misc/Debug.h"
 
-#include <algorithm>
-#include <cfloat>
-
-#include <QMainWindow>
-#include <QColor>
-#include <QPoint>
-#include <QPolygonF>
-#include <QPolygon>
-#include <QMenu>
-#include <QString>
-#include <QWidget>
-#include <QMouseEvent>
-#include <QContextMenuEvent>
-#include <QPainter>
+//#include <QContextMenuEvent>
 #include <QBrush>
+#include <QColor>
+#include <QMenu>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QPen>
+#include <QPolygon>
+#include <QPolygonF>
 #include <QSettings>
+
+//#include <algorithm>
+#include <memory>
+
+#include <float.h>  // FLT_MAX
+
 
 namespace Rosegarden
 {
 
-ControlRuler::ControlRuler(ViewSegment * /*viewsegment*/,
-                           RulerScale *rulerScale,
+
+ControlRuler::ControlRuler(RulerScale *rulerScale,
                            QWidget *parent) :
     QWidget(parent),
     m_rulerScale(rulerScale),
@@ -123,11 +118,6 @@ void ControlRuler::setSegment(Segment *segment)
 void ControlRuler::setViewSegment(ViewSegment *viewSegment)
 {
     m_viewSegment = viewSegment;
-
-    // If this ruler is connected to a NotationStaff then this will return a valid pointer
-    //   otherwise, it will return zero. This can be used to check whether we're connected
-    //   to a matrix or notation editor later
-    m_notationStaff = dynamic_cast <NotationStaff *> (viewSegment);
 
     setSegment(&m_viewSegment->getSegment());
 }
@@ -235,6 +225,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
     }
 }
 
+#if 0
 void ControlRuler::removeControlItem(ControlItem* item)
 {
     // Remove control item by item pointer
@@ -255,6 +246,7 @@ void ControlRuler::removeControlItem(const Event *event)
         removeControlItem(it);
     }
 }
+#endif
 
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
@@ -624,12 +616,6 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     }
 }
 
-/* unused
-void ControlRuler::slotScrollHorizSmallSteps(int)
-{
-}
-*/
-
 int ControlRuler::mapXToWidget(float x)
 {
     return (0.5+(m_xOffset+x-m_pannedRect.left()) / m_xScale);
@@ -650,12 +636,13 @@ QRect ControlRuler::mapRectToWidget(QRectF *rect)
     return newrect;
 }
 
-QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> poly)
+QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> controlItem)
 {
 
     QPolygon newpoly;
     QPoint newpoint;
-    for (QPolygonF::iterator it = poly->begin(); it != poly->end(); ++it) {
+    // For each point in the ControlItem (it's a QPolygonF)...
+    for (QPolygonF::iterator it = controlItem->begin(); it != controlItem->end(); ++it) {
         newpoint.setX(mapXToWidget((*it).x()));
         newpoint.setY(mapYToWidget((*it).y()));
         newpoly.push_back(newpoint);
@@ -673,7 +660,7 @@ QPointF ControlRuler::mapWidgetToItem(QPoint *point)
     return newpoint;
 }
 
-void ControlRuler::slotSetPannedRect(QRectF pr)
+void ControlRuler::setPannedRect(QRectF pr)
 {
     if (pr.isNull())
         RG_WARNING << "slotSetPannedRect(): WARNING: Rect is null.";
@@ -719,11 +706,7 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     // Note slotSetPannedRect is called (from ControlRulerWidget::slotSetPannedRect)
     //   on a resize event. However, this call is too early and width() has not been
     //   updated. This event handler patches that problem. Could be more efficient.
-    slotSetPannedRect(m_pannedRect);
-}
-
-void ControlRuler::setTool(const QString & /*name*/)
-{
+    setPannedRect(m_pannedRect);
 }
 
 ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
@@ -768,15 +751,23 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         return;
 
     if (e->button() == Qt::LeftButton) {
+        // Delegate left button to tool.
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleLeftButtonPress(&controlMouseEvent);
+    } else if (e->button() == Qt::MidButton) {
+        // Delegate middle button to tool.
+        ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
+        m_currentTool->handleMidButtonPress(&controlMouseEvent);
     } else if (e->button() == Qt::RightButton) {
+        // Right button is context menu.
         if (!m_rulerMenu)
             createRulerMenu();
         if (m_rulerMenu) {
             QAction* setAction = findAction(m_snapName);
             RG_DEBUG << "set checked" << m_snapName;
             setAction->setChecked(true);
+            // Let derivers update the menu as needed.
+            updateRulerMenu();
             m_rulerMenu->exec(QCursor::pos());
         }
     }
@@ -785,16 +776,12 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         m_autoScroller->start();
 }
 
-void ControlRuler::createRulerMenu()
-{
-}
-
 void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
 {
     if (!m_currentTool)
         return;
 
-    if (e->button() == Qt::LeftButton) {
+    if (e->button() == Qt::LeftButton  ||  e->button() == Qt::MidButton) {
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMouseRelease(&controlMouseEvent);
     }
@@ -821,6 +808,8 @@ void
 ControlRuler::wheelEvent(QWheelEvent * /*e*/)
 {
     // not sure what to do yet
+    // ??? It would be really nice if this would gently move the selected
+    //     items up/down by one.  This would provide precision adjustment.
 
 }
 
@@ -883,7 +872,7 @@ void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
     settings.endGroup();
 }
 
-void ControlRuler::contextMenuEvent(QContextMenuEvent*)
+void ControlRuler::contextMenuEvent(QContextMenuEvent *)
 {
 }
 
@@ -967,67 +956,15 @@ void ControlRuler::clear()
 
 float ControlRuler::valueToY(long val)
 {
-    float y = (float)(val-getMinItemValue())
-            /(float)(getMaxItemValue()-getMinItemValue());
-    return y;
+    return float(val - m_minItemValue) / float(m_maxItemValue - m_minItemValue);
 }
 
 long ControlRuler::yToValue(float y)
 {
     // NOTE: while debugging #1451 I had debug output here and it confirmed that
-    // value is returning very reasonable numbers, which get mangled elsewhere
-    long value = (long)(y*(getMaxItemValue()-getMinItemValue()))+getMinItemValue();
-    return value;
-}
+    // this is returning very reasonable numbers, which get mangled elsewhere
 
-/* unused
-QColor ControlRuler::valueToColour(int max, int val)
-{
-    int maxDefault = DefaultVelocityColour::getInstance()->getMaxValue();
-
-    int value = val;
-
-    // Scale value accordingly
-    //
-    if (maxDefault != max)
-        value = int(double(maxDefault) * double(val) / double(max));
-
-    return DefaultVelocityColour::getInstance()->getColour(value);
-}
-*/
-
-/* unused
-void ControlRuler::flipForwards()
-{
-    ///CJ Expect to drop tghis with a better way of ordering bars
-    // std::pair<int, int> minMax = getZMinMax();
-
-}
-*/
-
-/* unused
-void ControlRuler::flipBackwards()
-{
-    ///CJ Expect to drop tghis with a better way of ordering bars
-    // std::pair<int, int> minMax = getZMinMax();
-
-}
-*/
-
-/* unused
-std::pair<int, int> ControlRuler::getZMinMax()
-{
-    std::vector<int> zList;
-
-    std::sort(zList.begin(), zList.end());
-
-    return std::pair<int, int>(zList[0], zList[zList.size() - 1]);
-}
-*/
-
-SnapGrid* ControlRuler::getSnapGrid() const
-{
-    return m_snapGrid;
+    return (long)(y * (m_maxItemValue - m_minItemValue)) + m_minItemValue;
 }
 
 void ControlRuler::setSnapFromEditor(timeT snapSetting, bool forceFromEditor)
