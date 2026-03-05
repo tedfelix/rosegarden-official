@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -31,7 +31,9 @@ namespace Rosegarden
 
 // We keep the parent parameter here, because parents control the location at
 // which a dialog pops up, and they influence style inheritance.
-PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString text) :
+PitchPickerDialog::PitchPickerDialog(QWidget *parent,
+                                     int initialPitch,
+                                     const QString& text) :
         QDialog(parent)
 {
     setModal(true);
@@ -53,7 +55,9 @@ PitchPickerDialog::PitchPickerDialog(QWidget *parent, int initialPitch, QString 
 
     // Since we're stacking this in a VBox, we can just stack the button box on
     // the bottom layer of the main layout, without any top level grid.
-    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    // cppcheck-suppress constVariablePointer
+    QDialogButtonBox *buttonBox =
+        new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     vBoxLayout->addWidget(buttonBox);
 
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

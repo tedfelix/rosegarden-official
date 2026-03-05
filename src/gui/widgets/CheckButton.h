@@ -53,7 +53,9 @@ public:
      * Buttons that don't take the memory effect are always created in a checked
      * state initially.
      */
-    CheckButton(QString iconName, bool wantsMemory = true,  QWidget *parent = nullptr);
+    explicit CheckButton(QString iconName,
+                         bool wantsMemory = true,
+                         QWidget *parent = nullptr);
 
     ~CheckButton() override;
 };

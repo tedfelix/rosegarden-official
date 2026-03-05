@@ -545,8 +545,6 @@ AudioManagerDialog::slotExportAudio()
 
     } else {
         // save multiple files
-        const WAVAudioFile* firstFile = *(WavAudioFiles.begin());
-        QString fpath = firstFile->getAbsoluteFilePath();
         QString destDir =
             FileDialog::getExistingDirectory
             (this,  // parent

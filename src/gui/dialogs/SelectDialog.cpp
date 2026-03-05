@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -81,6 +81,7 @@ SelectDialog::SelectDialog(QWidget *parent) :
     layout->addWidget(m_addToExistingSelection);
 
     // primary buttons
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok | QDialogButtonBox::Cancel |
             QDialogButtonBox::Help);
@@ -401,7 +402,7 @@ SelectDialog::makeDurationTab()
     m_include_longer_performance_durations = new QCheckBox();
     grid->addWidget(m_include_longer_performance_durations, 10, 8);
 
-    
+
 
     // memory for the widgets who don't manage their own
     QSettings settings;
@@ -428,7 +429,7 @@ SelectDialog::makeDurationTab()
     connect(m_use_all_double_dotted_rests, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllRestDoubleDotted);
     connect(m_use_all_rest_tuplets, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllRestTuplet);
     connect(m_use_all_duration, &QAbstractButton::toggled, this, &SelectDialog::slotUseAllDuration);
-  
+
 }
 
 void
@@ -690,7 +691,7 @@ SelectDialog::makeSpecialTab()
     // pad the grid a slight amount horizontally so the labels don't get cut off
     grid->setHorizontalSpacing(15);
     m_specialTab->setLayout(grid);
-    
+
     // row 1 buttons
     m_useTenuto = new CheckButton("tenuto");
     grid->addWidget(m_useTenuto, 1, 1);
@@ -883,13 +884,13 @@ SelectDialog::makeSpecialTab()
 void
 SelectDialog::slotUseRow1(bool state)
 {
-    m_useTenuto->setChecked(state);       
-    m_useStaccato->setChecked(state);     
+    m_useTenuto->setChecked(state);
+    m_useStaccato->setChecked(state);
     m_useStaccatissimo->setChecked(state);
-    m_useMarcato->setChecked(state);      
-    m_useOpen->setChecked(state);         
-    m_useStopped->setChecked(state);      
-    m_useHarmonic->setChecked(state);     
+    m_useMarcato->setChecked(state);
+    m_useOpen->setChecked(state);
+    m_useStopped->setChecked(state);
+    m_useHarmonic->setChecked(state);
 }
 
 
@@ -991,4 +992,3 @@ SelectDialog::makeAdvancedTab()
 }
 
 } // namespace
-
