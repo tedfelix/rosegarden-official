@@ -59,7 +59,11 @@ namespace Preferences
     void setSendControlChangesWhenLooping(bool value);
     bool getSendControlChangesWhenLooping();
 
-    // ??? Move ChannelManager.cpp:allowReset() and forceChannelSetups() here.
+    void setAllowresetallcontrollers(bool value);
+    bool getAllowresetallcontrollers();
+
+    void setForceChannelSetups(bool value);
+    bool getForceChannelSetups();
 
     void setUseNativeFileDialogs(bool value);
     bool getUseNativeFileDialogs();

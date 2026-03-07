@@ -33,74 +33,6 @@
 #include "document/RosegardenDocument.h"
 #include "gui/application/RosegardenMainWindow.h"
 
-#include <QSettings>
-
-namespace
-{
-    bool allowReset()
-    {
-        static bool available = false;
-        static bool allowReset = true;
-
-        // Read only once when needed since QSettings is very slow.
-        // See bug #1589.
-
-        if (available)
-            return allowReset;
-
-        // Delayed read.  We can't do this in the ChannelManager ctor
-        // because there is a static instance in StudioControl and
-        // QSettings doesn't work right at static construction time.
-
-        QSettings settings;
-        settings.beginGroup(Rosegarden::SequencerOptionsConfigGroup);
-
-        // Allow CC 121 to be sent out to clear out CCs.
-        // Edit > Preferences... > MIDI > General > Allow Reset All Controllers
-        allowReset =
-                settings.value("allowresetallcontrollers", "true").toBool();
-        // Write back out so it is easy to find.
-        settings.setValue("allowresetallcontrollers", allowReset);
-
-        RG_DEBUG << "getSettings(): allowReset: " << allowReset;
-
-        available = true;
-
-        return allowReset;
-    }
-
-    bool forceChannelSetups()
-    {
-        static bool available = false;
-        static bool forceChannelSetups = false;
-
-        // Read only once when needed since QSettings is very slow.
-        // See bug #1589.
-
-        if (available)
-            return forceChannelSetups;
-
-        // Delayed read.  We can't do this in the ChannelManager ctor
-        // because there is a static instance in StudioControl and
-        // QSettings doesn't work right at static construction time.
-
-        QSettings settings;
-        settings.beginGroup(Rosegarden::SequencerOptionsConfigGroup);
-
-        // Related to Bug #1560
-        // When set to true, this causes MIPP channel setups to be sent at the
-        // beginning of each Segment for fixed channel Segments.
-        forceChannelSetups =
-                settings.value("forceChannelSetups", "false").toBool();
-        // Write back out so it is easy to find.
-        settings.setValue("forceChannelSetups", forceChannelSetups);
-
-        available = true;
-
-        return forceChannelSetups;
-    }
-}
-
 namespace Rosegarden
 {
 
@@ -116,9 +48,7 @@ ChannelManager::ChannelManager(Instrument *instrument) :
     m_triedToGetChannel(false),
     m_ready(false)
 {
-    // call Preferences get here to setup the cache
-    (void)Preferences::getSendProgramChangesWhenLooping();
-    (void)Preferences::getSendControlChangesWhenLooping();
+    RG_DEBUG << "ctor";
     // Safe even for nullptr.
     connectInstrument(instrument);
 }
@@ -128,6 +58,9 @@ ChannelManager::connectInstrument(Instrument *instrument)
 {
     if (!instrument)
         return;
+
+    // setup the Preferences
+    setupPreferences();
 
     // Disconnect the old instrument, if any.
     if (m_instrument)
@@ -302,7 +235,7 @@ void ChannelManager::insertChannelSetup(
     const StaticControllers &ccVector = controllerAndPBList.m_controllers;
 
     // If reset allowed and there are some CCs to send out
-    if (allowReset()  &&  !ccVector.empty()) {
+    if (Preferences::getAllowresetallcontrollers()  &&  !ccVector.empty()) {
         // In case some controllers are on that we don't know about, turn
         // all controllers off.  (Reset All Controllers)
         try {
@@ -433,7 +366,8 @@ bool ChannelManager::makeReady(
 
     // If this instrument is in auto channels mode or we are starting
     // in the middle of a Segment.
-    if (!m_instrument->hasFixedChannel()  ||  forceChannelSetups()  ||
+    if (!m_instrument->hasFixedChannel()  ||
+        Preferences::getForceChannelSetups()  ||
         startingInMiddle) {
 
         bool looping = false;
@@ -721,6 +655,16 @@ ChannelManager::slotInstrumentChanged()
 
     // The above code won't always set dirty flag, so set it now.
     m_ready = false;
+}
+
+void ChannelManager::setupPreferences()
+{
+    RG_DEBUG << "setupPreferences";
+    // call Preferences get here to setup the cache
+    (void)Preferences::getSendProgramChangesWhenLooping();
+    (void)Preferences::getSendControlChangesWhenLooping();
+    (void)Preferences::getAllowresetallcontrollers();
+    (void)Preferences::getForceChannelSetups();
 }
 
 

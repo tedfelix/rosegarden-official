@@ -354,6 +354,8 @@ private:
      */
     void setAllocationMode(Instrument *instrument);
 
+    void setupPreferences();
+
     // *** Channel Setup
 
     /// Whether the output channel has been set up for m_channelInterval.

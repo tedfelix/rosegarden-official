@@ -87,6 +87,31 @@ bool Preferences::getSendControlChangesWhenLooping()
     return sendControlChangesWhenLooping.get();
 }
 
+static PreferenceBool allowresetallcontrollers(                                         SequencerOptionsConfigGroup, "allowresetallcontroller", true);
+
+void Preferences::setAllowresetallcontrollers(bool value)
+{
+    allowresetallcontrollers.set(value);
+}
+
+bool Preferences::getAllowresetallcontrollers()
+{
+    return allowresetallcontrollers.get();
+}
+
+static PreferenceBool forceChannelSetups(
+        SequencerOptionsConfigGroup, "forceChannelSetups", false);
+
+void Preferences::setForceChannelSetups(bool value)
+{
+    forceChannelSetups.set(value);
+}
+
+bool Preferences::getForceChannelSetups()
+{
+    return forceChannelSetups.get();
+}
+
 static PreferenceBool useNativeFileDialogs(
         "FileDialog", "useNativeFileDialogs", true);
 
