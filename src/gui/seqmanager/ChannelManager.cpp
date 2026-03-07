@@ -116,6 +116,9 @@ ChannelManager::ChannelManager(Instrument *instrument) :
     m_triedToGetChannel(false),
     m_ready(false)
 {
+    // call Preferences get here to setup the cache
+    (void)Preferences::getSendProgramChangesWhenLooping();
+    (void)Preferences::getSendControlChangesWhenLooping();
     // Safe even for nullptr.
     connectInstrument(instrument);
 }
@@ -444,15 +447,13 @@ bool ChannelManager::makeReady(
         // with synths that can't handle program changes immediately prior
         // to notes coming in.
         const bool sendBSPC =
-                (Preferences::getSendProgramChangesWhenLooping()  ||
-                 !looping);
+            (Preferences::getSendProgramChangesWhenLooping() || !looping);
 
         // This is for those who use looping as a compositional tool along
         // with synths that can't handle control changes immediately prior
         // to notes coming in.
         const bool sendCCs =
-                (Preferences::getSendControlChangesWhenLooping()  ||
-                 !looping);
+            (Preferences::getSendControlChangesWhenLooping() || !looping);
 
         insertChannelSetup(
                 trackId,
