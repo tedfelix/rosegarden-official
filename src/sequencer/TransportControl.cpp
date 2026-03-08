@@ -63,13 +63,14 @@ TransportControl* TransportControl::getInstance()
     return &instance;
 }
 
-TransportControl::TransportControl()
+    TransportControl::TransportControl()
 #ifdef HAVE_LIBJACK
-    : m_state(JackTransportStopped),
-      m_allowedDelta(RealTime::fromSeconds(0.05)),
-      m_waitingForStart(false),
-      m_waitingForStartJack(false),
-      m_countIn(false)
+        :
+        m_state(JackTransportStopped),
+        m_allowedDelta(RealTime::fromSeconds(0.05)),
+        m_waitingForStart(false),
+        m_waitingForStartJack(false),
+        m_countIn(false)
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -99,29 +100,22 @@ void TransportControl::tick()
 {
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     //RG_DEBUG << "tick" << seq.getStatus();
-    switch (seq.getStatus()) {
-    case STARTING_TO_PLAY:
-        if (Preferences::getUseJackTransport()) {
+#ifdef HAVE_LIBJACK
+    if (Preferences::getUseJackTransport()) {
+        // logic with hack transport
+        switch (seq.getStatus()) {
+        case STARTING_TO_PLAY:
             // the sequncer is ready to play but we cannot set the
             // state to PLAYING yet because there may be a slow
             // starter. Wait for jack rolling
             m_waitingForStartJack = true;
             sequencerPlayReady();
-        } else {
-            if (!seq.startPlaying()) {
-                // send result failed and stop Sequencer
-                seq.setStatus(STOPPING);
-            } else {
-                seq.setStatus(PLAYING);
-            }
-        }
-        break;
-    case QUIT:
-        break;
-    case PLAYING:
-        break;
-    case STARTING_TO_RECORD:
-        if (Preferences::getUseJackTransport()) {
+            break;
+        case QUIT:
+            break;
+        case PLAYING:
+            break;
+        case STARTING_TO_RECORD:
             if (m_countIn) {
                 // just go to recording
                 if (!seq.startPlaying()) {
@@ -136,17 +130,9 @@ void TransportControl::tick()
                 m_waitingForStartJack = true;
                 sequencerPlayReady();
             }
-        } else {
-            if (!seq.startPlaying()) {
-                seq.setStatus(STOPPING);
-            } else {
-                seq.setStatus(RECORDING);
-            }
-        }
-        break;
+            break;
 
-    case RECORDING:
-        if (Preferences::getUseJackTransport()) {
+        case RECORDING:
             RG_DEBUG << "recording" << m_countIn <<
                 SequencerDataBlock::getInstance()->getPositionPointer();
             if (m_countIn) {
@@ -160,44 +146,110 @@ void TransportControl::tick()
                         m_countIn = false;
                     }
             }
-        }
-        if (!seq.keepPlaying()) {
-            // there's a problem or the piece has
-            // finished - so stop playing
-            seq.setStatus(STOPPING);
-        } else {
-            // Now process any incoming MIDI events
-            // and return them to the gui
-            //
-            seq.processRecordedMidi();
+            if (!seq.keepPlaying()) {
+                // there's a problem or the piece has
+                // finished - so stop playing
+                seq.setStatus(STOPPING);
+            } else {
+                // Now process any incoming MIDI events
+                // and return them to the gui
+                //
+                seq.processRecordedMidi();
 
-            // Now process any incoming audio
-            // and return it to the gui
-            //
-            seq.processRecordedAudio();
+                // Now process any incoming audio
+                // and return it to the gui
+                //
+                seq.processRecordedAudio();
 
-            // Still process these so we can send up
-            // audio levels as MappedEvents
-            //
-            // Bug #1348 MIDI Recording Drops Notes (was #3542166).
-            // This line can occasionally steal MIDI
-            // events that are needed by processRecordedMidi().
-            // Need to track down what the above "audio levels" comment
-            // means and whether it is a serious issue.  If so, we need
-            // to address it in a different way.  This line probably
-            // never did anything as by the time it was run,
-            // processRecordedMidi() would have cleaned out all the
-            // incoming events.
-            //seq.processAsynchronousEvents();
+                // Still process these so we can send up
+                // audio levels as MappedEvents
+                //
+                // Bug #1348 MIDI Recording Drops Notes (was #3542166).
+                // This line can occasionally steal MIDI
+                // events that are needed by processRecordedMidi().
+                // Need to track down what the above "audio levels" comment
+                // means and whether it is a serious issue.  If so, we need
+                // to address it in a different way.  This line probably
+                // never did anything as by the time it was run,
+                // processRecordedMidi() would have cleaned out all the
+                // incoming events.
+                //seq.processAsynchronousEvents();
+            }
+            break;
+        case STOPPING:
+        case RECORDING_ARMED:
+        case STOPPED:
+        default:
+            break;
         }
-        break;
-    case STOPPING:
-    case RECORDING_ARMED:
-    case STOPPED:
-    default:
-        break;
     }
+#endif // HAVE_LIBJACK
 
+    bool withJackTransport = false;
+#ifdef HAVE_LIBJACK
+    withJackTransport = Preferences::getUseJackTransport();
+#endif
+    if (! withJackTransport) {
+        // logic without jack transport
+        switch (seq.getStatus()) {
+        case STARTING_TO_PLAY:
+            if (!seq.startPlaying()) {
+                // send result failed and stop Sequencer
+                seq.setStatus(STOPPING);
+            } else {
+                seq.setStatus(PLAYING);
+            }
+            break;
+        case QUIT:
+            break;
+        case PLAYING:
+            break;
+        case STARTING_TO_RECORD:
+            if (!seq.startPlaying()) {
+                seq.setStatus(STOPPING);
+            } else {
+                seq.setStatus(RECORDING);
+            }
+            break;
+
+        case RECORDING:
+            if (!seq.keepPlaying()) {
+                // there's a problem or the piece has
+                // finished - so stop playing
+                seq.setStatus(STOPPING);
+            } else {
+                // Now process any incoming MIDI events
+                // and return them to the gui
+                //
+                seq.processRecordedMidi();
+
+                // Now process any incoming audio
+                // and return it to the gui
+                //
+                seq.processRecordedAudio();
+
+                // Still process these so we can send up
+                // audio levels as MappedEvents
+                //
+                // Bug #1348 MIDI Recording Drops Notes (was #3542166).
+                // This line can occasionally steal MIDI
+                // events that are needed by processRecordedMidi().
+                // Need to track down what the above "audio levels" comment
+                // means and whether it is a serious issue.  If so, we need
+                // to address it in a different way.  This line probably
+                // never did anything as by the time it was run,
+                // processRecordedMidi() would have cleaned out all the
+                // incoming events.
+                //seq.processAsynchronousEvents();
+            }
+            break;
+        case STOPPING:
+        case RECORDING_ARMED:
+        case STOPPED:
+        default:
+            break;
+        }
+    }
 }
 
 int TransportControl::play(RealTime startPos)
@@ -237,7 +289,9 @@ int TransportControl::play(RealTime startPos)
 void TransportControl::sequencerPlayReady()
 {
     RG_DEBUG << "sequencerPlayReady";
+#ifdef HAVE_LIBJACK
     m_waitingForStart = false;
+#endif
 }
 
 void TransportControl::stop(bool autoStop)

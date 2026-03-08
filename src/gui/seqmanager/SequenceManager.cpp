@@ -1133,16 +1133,10 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     if (!warnUser)
         return;
 
-#ifdef HAVE_LIBJACK
     // Audio and MIDI ok?  Bail.
     if ((m_soundDriverStatus & AUDIO_OK)  &&
         (m_soundDriverStatus & MIDI_OK))
         return;
-#else
-    // MIDI ok?  Bail.
-    if (m_soundDriverStatus & MIDI_OK)
-        return;
-#endif
 
     // Either MIDI or Audio are not ok...
 
@@ -1162,28 +1156,20 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         return;
     }
 
-#ifdef HAVE_LIBJACK
     // If audio driver is not ok...
     if (!(m_soundDriverStatus & AUDIO_OK)) {
-        // This is to avoid us ever showing the same dialog more than
-        // once during a single run of the program -- it's quite
-        // separate from the suppression function
-        // ??? But this routine is only ever called once.  From
-        //     RMW's ctor.  There is no need for this.  Plus the warning dialogs
-        //     are now hidden in the warning button in the WarningWidget in
-        //     the status bar.
-        static bool showJackWarning = true;
-
-        if (showJackWarning) {
-            emit sendWarning(
+#ifdef HAVE_LIBJACK
+        emit sendWarning(
                     WarningWidget::Audio,
                     tr("<h3>Audio sequencing and synth plugins unavailable!</h3>"),
                     tr("<p>Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.</p><p>If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.</p><p> Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.</p>"));
-
-            showJackWarning = false;
-        }
-    }
+#else
+        emit sendWarning(
+                    WarningWidget::Audio,
+                    tr("<h3>Audio sequencing and synth plugins unavailable!</h3>"),
+                    tr("<p>Rosegarden has been compiled without jack support.</p>"));
 #endif
+    }
 }
 
 void
