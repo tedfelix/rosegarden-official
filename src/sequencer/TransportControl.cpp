@@ -102,7 +102,7 @@ void TransportControl::tick()
     //RG_DEBUG << "tick" << seq.getStatus();
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport()) {
-        // logic with hack transport
+        // logic with jack transport
         switch (seq.getStatus()) {
         case STARTING_TO_PLAY:
             // the sequncer is ready to play but we cannot set the
