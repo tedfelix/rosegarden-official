@@ -63,21 +63,8 @@ class MappedEventList;
  * reflects that history, though nowadays it is a simple singleton
  * class.
  *
- * Examples of some of the shared memory related design decisions:
- * Position is represented as two ints (m_positionSec and m_positionNsec)
- * rather than a RealTime, as the RealTime default ctor
- * initialises the space & so can't be used from the GUI's
- * placement-new ctor (which has no write access and doesn't want
- * it anyway).  Likewise we use char[] instead of MappedEvents
- * for m_visualEvent and m_recordBuffer.
- *
- * Since shared memory is no longer used,
- * it should be possible to change this from being a fixed-layout
- * C-style struct to something more "C++" (e.g. std::vector<MappedEvent>
- * instead of char[sizeof(MappedEvent*CAPACITY_MAX)], RealTime instead of
- * ints, etc...).  We would need to investigate each of the users to make
- * sure things like placement new were replaced with conventional new.
- * From a maintenance standpoint, this should improve the code significantly.
+ * The position is still represented as two ints (m_positionSec and
+ * m_positionNsec) rather than a RealTime, as a leftover from that history.
  *
  * RosegardenMainWindow::slotHandleInputs() supports communication between
  * the Sequencer and GUI threads using RosegardenSequencer::m_transportRequests.
@@ -157,12 +144,7 @@ protected:
     int m_getVisualIndex;
     bool m_haveVisualEvent;
     /// MIDI OUT event for display on the transport during playback.
-    /**
-     * ??? This is a character buffer because this used to be shared memory.
-     *     Now that it isn't, we should be able to make this a MappedEvent
-     *     object.
-     */
-    char m_visualEvent[sizeof(MappedEvent)]{};
+    MappedEvent m_visualEvent{};
 
     /// Index of the next available position in m_recordBuffer.
     /**
@@ -180,13 +162,7 @@ protected:
      */
     int m_readIndex;
     /// Ring buffer of recorded MIDI events.
-    /**
-     * This should probably be volatile for thread-safety, but that means
-     * the memset() call would need to be rewritten as a loop.  Or the
-     * volatile could be cast away.
-     */
-    char m_recordBuffer[sizeof(MappedEvent) *
-                        SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE];
+    MappedEvent m_recordBuffer[SEQUENCER_DATABLOCK_RECORD_BUFFER_SIZE]{};
 
     // ??? Thread-safe?
     InstrumentId m_knownInstruments[SEQUENCER_DATABLOCK_MAX_NB_INSTRUMENTS];
