@@ -706,6 +706,11 @@ private:
     QLockFile *m_lockFile;
 
     /**
+     * the Studio
+     */
+    Studio m_studio;
+
+    /**
      * the composition this document is wrapping
      */
     Composition m_composition;
@@ -753,11 +758,6 @@ private:
      * in here
      */
     NoteOnMap m_noteOnEvents;
-
-    /**
-     * the Studio
-     */
-    Studio m_studio;
 
     /**
      * A configuration object
