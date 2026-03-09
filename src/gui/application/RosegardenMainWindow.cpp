@@ -1110,9 +1110,6 @@ RosegardenMainWindow::initView()
         comp.setEndMarker(endMarker);
     }
 
-    // The plan is to set the new central view via setCentralWidget() in
-    // a moment, which schedules the old one for deletion later via
-    // QObject::deleteLater().
     RosegardenMainViewWidget *oldView = m_view;
 
     // We need to make sure the parameter boxes don't send any
@@ -1203,7 +1200,6 @@ RosegardenMainWindow::initView()
     delete m_triggerSegmentManager;
     m_triggerSegmentManager = nullptr;
 
-    // !!! This also deletes oldView (via QObject::deleteLater()).
     setCentralWidget(m_view);
 
     // set the highlighted track
@@ -1358,6 +1354,8 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
         newDocument->initialiseStudio();
     }
 
+    RosegardenMainViewWidget *oldView = m_view;
+
     // Create a new RosegardenMainViewWidget and set it as the central
     // widget.  The old RMVW instance will be scheduled for deletion later.
     initView();
@@ -1365,6 +1363,11 @@ RosegardenMainWindow::setDocument(RosegardenDocument *newDocument)
     // This will delete all edit views.
     delete oldDoc;
     oldDoc = nullptr;
+
+    // Delete the old view now (rather than the deleteLater done by setCentralWidget())
+    // Otherwise its widgets might still do things (e.g. due to single shot timers),
+    // on top of a deleted document.
+    delete oldView;
 
     // Make sure the view and the new document match.
     m_view->slotSynchroniseWithComposition();
