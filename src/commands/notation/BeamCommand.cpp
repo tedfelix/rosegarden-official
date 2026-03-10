@@ -38,16 +38,42 @@ BeamCommand::registerCommand(CommandRegistry *r)
 void
 BeamCommand::modifySegment()
 {
-    int id = getSegment().getNextId();
+    // If the selection contains notes from a tupled group, we want to
+    // preserve the tuplet.  Find the tupled group ID if any, and use
+    // it as the shared group ID so that non-tupled notes join the same
+    // group rather than a new one that would overwrite the tuplet type.
+    int id = -1;
+    for (EventContainer::iterator i =
+                m_selection->getSegmentEvents().begin();
+            i != m_selection->getSegmentEvents().end(); ++i) {
+        std::string t;
+        if ((*i)->get<String>(BaseProperties::BEAMED_GROUP_TYPE, t)  &&
+            t == BaseProperties::GROUP_TYPE_TUPLED) {
+            long tupledId = -1;
+            (*i)->get<Int>(BaseProperties::BEAMED_GROUP_ID, tupledId);
+            id = static_cast<int>(tupledId);
+            break;
+        }
+    }
+    if (id < 0)
+        id = getSegment().getNextId();
 
     for (EventContainer::iterator i =
                 m_selection->getSegmentEvents().begin();
             i != m_selection->getSegmentEvents().end(); ++i) {
 
         if ((*i)->isa(Note::EventType)) {
-            (*i)->set<Int>(BaseProperties::BEAMED_GROUP_ID, id);
-            (*i)->set<String>(BaseProperties::BEAMED_GROUP_TYPE,
-                              BaseProperties::GROUP_TYPE_BEAMED);
+            std::string t;
+            if ((*i)->get<String>(BaseProperties::BEAMED_GROUP_TYPE, t)  &&
+                t == BaseProperties::GROUP_TYPE_TUPLED) {
+                // Preserve the tuplet group: reassign to the shared ID
+                // but keep GROUP_TYPE_TUPLED so the bracket still renders.
+                (*i)->set<Int>(BaseProperties::BEAMED_GROUP_ID, id);
+            } else {
+                (*i)->set<Int>(BaseProperties::BEAMED_GROUP_ID, id);
+                (*i)->set<String>(BaseProperties::BEAMED_GROUP_TYPE,
+                                  BaseProperties::GROUP_TYPE_BEAMED);
+            }
         }
     }
 }
