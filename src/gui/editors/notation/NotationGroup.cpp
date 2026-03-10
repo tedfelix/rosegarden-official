@@ -134,7 +134,8 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     }
 
     if (t == BaseProperties::GROUP_TYPE_BEAMED) {
-        m_type = Beamed;
+        if (m_type != Tupled)  // don't downgrade a tupled group
+            m_type = Beamed;
     } else if (t == BaseProperties::GROUP_TYPE_TUPLED) {
         m_type = Tupled;
     } else if (t == BaseProperties::GROUP_TYPE_GRACE) {
