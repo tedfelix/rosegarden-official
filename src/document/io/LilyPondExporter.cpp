@@ -228,6 +228,17 @@ Event *LilyPondExporter::nextNoteInGroup(const Segment *s,
             return nullptr;
         }
 
+        // For tupled groups, the next note must also be tupled (a note with
+        // the same group ID but a different type, e.g. GROUP_TYPE_BEAMED,
+        // is a beam extension that does not belong to the tuplet bracket).
+        if (tuplet) {
+            std::string nextGroupType;
+            if (!event->get<String>(BEAMED_GROUP_TYPE, nextGroupType) ||
+                nextGroupType != GROUP_TYPE_TUPLED) {
+                return nullptr;
+            }
+        }
+
         // Part of the group.
         return event;
     }
