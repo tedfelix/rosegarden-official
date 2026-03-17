@@ -177,6 +177,7 @@ ShortcutDialog::ShortcutDialog(QWidget *parent) :
     line->setFrameShape(QFrame::HLine);
     line->setFrameShadow(QFrame::Sunken);
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox =
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     QObject::connect(buttonBox, &QDialogButtonBox::accepted,

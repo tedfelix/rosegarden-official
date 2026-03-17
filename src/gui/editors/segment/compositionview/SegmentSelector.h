@@ -49,7 +49,7 @@ public:
 
     /// Called when this tool becomes the active tool.
     void ready() override;
-    void stow()  override { }
+    //void stow()  override { }
 
     void mousePressEvent(QMouseEvent *) override;
     int mouseMoveEvent(QMouseEvent *) override;

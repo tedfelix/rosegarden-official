@@ -41,11 +41,11 @@ class PitchPickerDialog : public QDialog
 
 public:
 
-    PitchPickerDialog(QWidget* parent, int initialPitch, QString text);
+    PitchPickerDialog(QWidget* parent, int initialPitch, const QString& text);
     ~PitchPickerDialog() override;
 
     int getPitch() { return m_pitch->getPitch(); }
-    
+
 private:
     PitchChooser* m_pitch;
 };
