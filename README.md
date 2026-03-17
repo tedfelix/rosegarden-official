@@ -96,6 +96,12 @@ Support for LIRC (Linux Infrared Remote Control) can be disabled using:
 
     -DDISABLE_LIRC=1
 
+By default, support for Frontier Design Group's TranzPort(TM) remote control
+is not enabled.  We are planning on removing support completely for 28.06.
+Please contact us if you use this and want us to keep it.  To re-enable for now:
+
+    cmake .. -DCMAKE_CXX_FLAGS="-DTRANZPORT"
+
 New starting with 10.02, most of the application data files are bundled in the
 Rosegarden binary.  The install process will only copy a few files to various
 directories under CMAKE_INSTALL_PREFIX ([PREFIX]):
