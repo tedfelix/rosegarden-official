@@ -537,6 +537,12 @@ RosegardenMainWindow::RosegardenMainWindow(
     }
 #endif
 
+#ifdef TRANZPORT
+    // See the README for how to re-enable this.  Removing this for 26.06 as we
+    // suspect no one is using it anymore.  Recommend removing TranzportClient
+    // completely for 28.06.  Please contact us if you would like us to continue
+    // supporting Frontier Design Group's Tranzport.
+
     // Tranzport
     try
     {
@@ -547,6 +553,7 @@ RosegardenMainWindow::RosegardenMainWindow(
         m_tranzport = nullptr;
         //RG_DEBUG << e.getMessage().c_str();
     }
+#endif
 
     // Virtual functions do not work at construction time since the vtable is
     // not complete.  Specify the exact function to make that clear.
