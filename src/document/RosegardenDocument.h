@@ -705,13 +705,20 @@ private:
     /// Lock file to prevent multiple users editing at the same time.
     QLockFile *m_lockFile;
 
+    /// The Studio
     /**
-     * the Studio
+     * This must come before m_composition to make sure m_composition is
+     * destroyed before m_studio.  TrackButtons is informed that m_composition
+     * is being destroyed and it calls TrackButtons::updateUI() which calls
+     * getStudio().
      */
     Studio m_studio;
 
+    /// The composition this document is wrapping.
     /**
-     * the composition this document is wrapping
+     * This must come after m_studio so that m_studio exists at m_composition
+     * destruction time.  TrackButtons is informed that m_composition is being
+     * destroyed and it calls TrackButtons::updateUI() which calls getStudio().
      */
     Composition m_composition;
 
