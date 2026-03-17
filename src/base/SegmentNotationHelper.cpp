@@ -923,6 +923,15 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
     Segment::iterator i, j;
     segment().getTimeSlice(absoluteTime, i, j);
 
+    // ignore non notes/rests at the given time
+    while(true) {
+        if (i == end()) break;
+        if ((*i)->isa(Note::EventType)) break;
+        if ((*i)->isa(Note::EventRestType)) break;
+        if ((*i)->getAbsoluteTime() != absoluteTime) break;
+        ++i;
+    }
+
     //!!! Deal with end-of-bar issues!
 
     timeT duration(note.getDuration());
