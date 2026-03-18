@@ -499,7 +499,24 @@ public:
      * quite careful about making sure the given range doesn't overlap
      * any notes.
      */
-    void fillWithRests(timeT startTime, timeT endTime);
+    void fillWithRests(timeT startTime,
+                       timeT endTime);
+
+    /**
+     * Fill up a section within a segment with tupled rests, from the
+     * startTime given to the endTime given.  This may be useful if
+     * you have a pathological segment that contains notes already but
+     * not rests, but it is is likely to be dangerous unless you're
+     * quite careful about making sure the given range doesn't overlap
+     * any notes.
+     */
+    void fillWithRestsTupled(timeT startTime,
+                             timeT endTime,
+                             timeT tupletStart,
+                             timeT tupletEnd,
+                             int tupledCount,
+                             int untupledCount,
+                             int groupId);
 
     /**
      * For each series of contiguous rests found between the start and
@@ -942,6 +959,27 @@ private:
      * Used by getVerseCount().
      */
     void countVerses();
+
+    /**
+     * return true if there is a tuplet at the given time, Returns the
+     * tuplet data.
+     */
+    bool getTupletAt(timeT time,
+                     timeT& tupletStart,
+                     timeT& tupletEnd,
+                     int& tupledCount,
+                     int& untupledCount,
+                     int& groupId);
+
+    /**
+     * get tuplet data at the given iterator
+     */
+    void getTupletData(const iterator it,
+                       timeT& tupletStart,
+                       timeT& tupletEnd,
+                       int& tupledCount,
+                       int& untupledCount,
+                       int& groupId);
 
     Composition *m_composition; // owns me, if it exists
 

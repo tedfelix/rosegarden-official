@@ -787,8 +787,12 @@ Segment::fillWithRests(timeT endTime)
 
 
 void
-Segment::fillWithRests(timeT startTime, timeT endTime)
+Segment::fillWithRests(timeT startTime,
+                       timeT endTime)
 {
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "fillWithRests" << startTime << endTime;
+#endif
     if (startTime < m_startTime) {
         if (m_composition) m_composition->setSegmentStartTime(this, startTime);
         else m_startTime = startTime;
@@ -805,8 +809,73 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
     timeT restDuration = endTime - startTime;
     if (restDuration <= 0) return;
 
+    // check for tuplet at start
+    timeT tupletStart;
+    timeT tupletEnd;
+    int tupledCount;
+    int untupledCount;
+    int groupId;
+    bool inTuplet = getTupletAt(startTime,
+                                tupletStart,
+                                tupletEnd,
+                                tupledCount,
+                                untupledCount,
+                                groupId);
+    if (inTuplet) {
+        // the rests must be inserted into the tuplet
+        timeT tupletRestEnd = tupletEnd;
+        if (endTime < tupletRestEnd) tupletRestEnd = endTime;
+        fillWithRestsTupled(startTime,
+                            tupletRestEnd,
+                            tupletStart,
+                            tupletEnd,
+                            tupledCount,
+                            untupledCount,
+                            groupId);
 #ifdef DEBUG_NORMALIZE_RESTS
-    RG_DEBUG << "fillWithRests (" << startTime << "->" << endTime << "), composition "
+        RG_DEBUG << "fillWithRests adjust start" << startTime << tupletEnd;
+#endif
+        startTime = tupletEnd;
+        if (startTime > endTime) startTime = endTime;
+        restDuration = endTime - startTime;
+#ifdef DEBUG_NORMALIZE_RESTS
+        RG_DEBUG << "fillWithRests remaining duration" << restDuration;
+#endif
+        if (restDuration <= 0) return;
+    }
+    // and check for tuplet at end
+    inTuplet = getTupletAt(endTime,
+                           tupletStart,
+                           tupletEnd,
+                           tupledCount,
+                           untupledCount,
+                           groupId);
+    if (inTuplet) {
+        // the rests must be inserted into the tuplet
+        timeT tupletRestStart = tupletStart;
+        if (startTime > tupletRestStart) tupletRestStart = startTime;
+        fillWithRestsTupled(tupletRestStart,
+                            endTime,
+                            tupletStart,
+                            tupletEnd,
+                            tupledCount,
+                            untupledCount,
+                            groupId);
+#ifdef DEBUG_NORMALIZE_RESTS
+        RG_DEBUG << "fillWithRests adjust end" << endTime << tupletStart;
+#endif
+        endTime = tupletStart;
+        if (startTime > endTime) endTime = startTime;
+        restDuration = endTime - startTime;
+#ifdef DEBUG_NORMALIZE_RESTS
+        RG_DEBUG << "fillWithRests remaining duration" << restDuration;
+#endif
+        if (restDuration <= 0) return;
+    }
+
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "fillWithRests (" <<
+        startTime << "->" << endTime << "), composition "
          << (getComposition() ? "exists" : "does not exist") << ", sigTime "
          << sigTime << ", timeSig duration " << ts.getBarDuration() << ", restDuration " << restDuration;
 #endif
@@ -821,6 +890,71 @@ Segment::fillWithRests(timeT startTime, timeT endTime)
                              Note::EventRestSubOrdering);
         insert(e);
         acc += *i;
+    }
+}
+
+
+void
+Segment::fillWithRestsTupled(timeT startTime,
+                             timeT endTime,
+                             timeT tupletStart,
+                             timeT tupletEnd,
+                             int tupledCount,
+                             int untupledCount,
+                             int groupId)
+{
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "fillWithRestsTupled" << startTime << endTime <<
+        tupletStart << tupletEnd <<
+        tupledCount << untupledCount << groupId;
+#endif
+    if (startTime < m_startTime) {
+        if (m_composition) m_composition->setSegmentStartTime(this, startTime);
+        else m_startTime = startTime;
+        notifyStartChanged(m_startTime);
+    }
+
+    timeT restDuration = endTime - startTime;
+    if (restDuration <= 0) return;
+    restDuration = restDuration;
+
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "fillWithRestsTupled (" <<
+        startTime << "->" << endTime << ", restDuration " << restDuration;
+#endif
+
+    // start with a tupled beat and halve from there
+    timeT crotchetTime = timebase;
+    timeT restLength = crotchetTime * tupledCount / untupledCount;
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "restLength initial" << restLength;
+#endif
+
+    timeT unit = (tupletEnd - tupletStart) / tupledCount;
+    timeT acc = startTime;
+    while(true) {
+        if (restLength <= restDuration) {
+#ifdef DEBUG_NORMALIZE_RESTS
+            RG_DEBUG << "fillWithRestsTupled add rest of length" <<
+                restLength << unit;
+#endif
+            Event *e = new Event(Note::EventRestType, acc, restLength,
+                                 Note::EventRestSubOrdering);
+            e->set<String>(BaseProperties::BEAMED_GROUP_TYPE,
+                           BaseProperties::GROUP_TYPE_TUPLED);
+            e->set<Int>(BaseProperties::BEAMED_GROUP_TUPLET_BASE, unit);
+            e->set<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT,
+                        tupledCount);
+            e->set<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT,
+                        untupledCount);
+            e->set<Int>(BaseProperties::BEAMED_GROUP_ID, groupId);
+            insert(e);
+            acc += restLength;
+            restDuration -= restLength;
+        } else {
+            restLength /= 2;
+            if (restLength < Note(Note::Shortest).getDuration()) break;
+        }
     }
 }
 
@@ -1689,6 +1823,107 @@ Segment::countVerses()
             }
         }
     }
+}
+
+bool Segment::getTupletAt(timeT time,
+                          timeT& tupletStart,
+                          timeT& tupletEnd,
+                          int& tupledCount,
+                          int& untupledCount,
+                          int& groupId)
+{
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "getTupletAt" << time;
+#endif
+    iterator it = findTime(time);
+    if (it == end()) {
+        if (it == begin()) return false;
+        --it;
+    }
+    while(it != begin()) {
+        // first note or rest before time
+        if (((*it)->isa(Note::EventType) ||
+            (*it)->isa(Note::EventRestType)) &&
+            (*it)->getAbsoluteTime() <= time) {
+            // first note or rest before time
+            if ((*it)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                // there is a tuplet immediately before time
+#ifdef DEBUG_NORMALIZE_RESTS
+                RG_DEBUG << "found tuplet before";
+#endif
+                getTupletData(it,
+                              tupletStart,
+                              tupletEnd,
+                              tupledCount,
+                              untupledCount,
+                              groupId);
+                if (time >= tupletStart && time < tupletEnd) return true;
+                break;
+            }
+            break;
+        }
+        --it;
+    }
+    // now search forwards
+    while(it != end()) {
+        // first note or rest after time
+        if (((*it)->isa(Note::EventType) ||
+             (*it)->isa(Note::EventRestType)) &&
+            (*it)->getAbsoluteTime() >= time) {
+            // first note or rest before time
+            if ((*it)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                // there is a tuplet immediately after time
+#ifdef DEBUG_NORMALIZE_RESTS
+                RG_DEBUG << "found tuplet after";
+#endif
+                getTupletData(it,
+                              tupletStart,
+                              tupletEnd,
+                              tupledCount,
+                              untupledCount,
+                              groupId);
+                if (time >= tupletStart && time < tupletEnd) return true;
+                break;
+            }
+            break;
+        }
+        ++it;
+    }
+    return false;
+}
+
+void Segment::getTupletData(const iterator it,
+                            timeT& tupletStart,
+                            timeT& tupletEnd,
+                            int& tupledCount,
+                            int& untupledCount,
+                            int& groupId)
+{
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "getTupletData";
+#endif
+    tupletStart = 0;
+    tupletEnd = 0;
+    tupledCount = 0;
+    untupledCount = 0;
+    groupId = 0;
+    Event* event = *it;
+    if (! event->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) return;
+    timeT unit = event->get<Int>(BaseProperties::BEAMED_GROUP_TUPLET_BASE);
+    tupledCount =
+        event->get<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
+    untupledCount =
+        event->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
+    groupId =
+        event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
+    timeT size = unit * tupledCount;
+    tupletStart = (event->getAbsoluteTime() / size) * size;
+    tupletEnd = tupletStart + size;
+#ifdef DEBUG_NORMALIZE_RESTS
+    RG_DEBUG << "getTupletData" << tupledCount << untupledCount <<
+        unit << size << tupletStart << tupletEnd <<
+        groupId;
+#endif
 }
 
 int
