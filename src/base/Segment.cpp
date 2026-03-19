@@ -778,6 +778,13 @@ int Segment::getNextId() const
     return m_id++;
 }
 
+void Segment::idUsed(int id)
+{
+    if (m_id <= id) {
+        // m_id should always be bigger than this id
+        m_id = id + 1;
+    }
+}
 
 void
 Segment::fillWithRests(timeT endTime)

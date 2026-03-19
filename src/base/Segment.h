@@ -222,6 +222,12 @@ public:
     int getNextId() const;
 
     /**
+     * Indicates that an id is used. getNextId will then always return
+     * a value greater than that given here
+     */
+    void idUsed(int id);
+
+    /**
      * Returns a MIDI pitch representing the highest suggested playable note for
      * notation contained in this segment, as a convenience reminder to composers.
      *
