@@ -1678,12 +1678,12 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
             std::string(QFile::encodeName(file)),  // fileName
             this);  // parent
 
-    if (!e.write()) {
-        QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
-        return false;
-    }
+    bool success = e.write();
 
-    return true;
+    if (!e.getMessage().isEmpty())
+        QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
+
+    return success;
 }
 
 void

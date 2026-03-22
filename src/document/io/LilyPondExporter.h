@@ -165,6 +165,7 @@ private:
 
     timeT calculateDuration(Segment *s,
                                         const Segment::iterator &i,
+                                        int barNo,
                                         timeT barEnd,
                                         timeT &soundingDuration,
                                         const std::pair<int, int> &tupletRatio,
