@@ -1180,9 +1180,7 @@ bool RosegardenDocument::saveDocument(const QString &filename,
     temp.setAutoRemove(false);
 
     // Create the file and open it atomically.
-    temp.open();
-
-    if (temp.error()) {
+    if (!temp.open()) {
         errMsg = tr("Could not create temporary file in directory of '%1': %2").
                 arg(filename).arg(temp.errorString());
         return false;

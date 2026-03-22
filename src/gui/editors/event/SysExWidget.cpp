@@ -121,7 +121,10 @@ SysExWidget::slotLoadData()
         return;
 
     QFile file(name);
-    file.open(QIODevice::ReadOnly);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Could not load SysEx file."));
+        return;
+    }
     std::string s;
     char c;
 
@@ -175,7 +178,10 @@ SysExWidget::slotSaveData()
         name += ".syx";
 
     QFile file(name);
-    file.open(QIODevice::WriteOnly);
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(this, tr("Rosegarden"), tr("Could not save SysEx file."));
+        return;
+    }
 
     std::string datablock = qstrtostr(m_dataEdit->text());
     // Add SysEx and End SysEx status bytes.
