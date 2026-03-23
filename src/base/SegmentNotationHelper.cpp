@@ -924,7 +924,7 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
     segment().getTimeSlice(absoluteTime, i, j);
 
     // ignore non notes/rests at the given time
-    while(true) {
+    while (true) {
         if (i == end()) break;
         if ((*i)->isa(Note::EventType)) break;
         if ((*i)->isa(Note::EventRestType)) break;
