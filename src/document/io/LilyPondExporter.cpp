@@ -2687,8 +2687,7 @@ LilyPondExporter::writeBar(Segment *s,
                 str << "\\unHideNotes ";
             }
 
-            if (m_exportBeams && startingBeamedGroup && nextBeamedNoteInGroup && canStartOrEndBeam(event)) {
-                // starting a beamed group
+            if (m_exportBeams && startingBeamedGroup && nextBeamedNoteInGroup && canStartOrEndBeam(event) && isGrace == 0) {
                 str << "[ ";
                 startingBeamedGroup = false;
                 inBeamedGroup = true;
