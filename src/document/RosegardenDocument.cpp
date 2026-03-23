@@ -1554,14 +1554,17 @@ void RosegardenDocument::saveSegment(QTextStream &outStream,
 
         // <matrix>
 
-        outStream << "  <matrix>\n";
+        outStream << "  <matrix";
+        // Going with an attribute of <matrix> due to a conflict with
+        // other <velocity> tag handling that causes forward compatibility
+        // issues.
+        outStream << " velocity=\"" << segment->matrixVelocity << "\"";
+        outStream << ">\n";
 
         // Zoom factors
         outStream << "    <hzoom factor=\"" << segment->matrixHZoomFactor <<
                      "\" />\n";
         outStream << "    <vzoom factor=\"" << segment->matrixVZoomFactor <<
-                     "\" />\n";
-        outStream << "    <velocity value=\"" << segment->matrixVelocity <<
                      "\" />\n";
 
         // For each matrix ruler...

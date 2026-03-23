@@ -1152,8 +1152,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "matrix") {  // <matrix>
 
         // If we're in a <segment>, <matrix> is valid.
-        if (m_currentSegment)
+        if (m_currentSegment) {
             m_inMatrix = true;
+            m_currentSegment->matrixVelocity = atts.value("velocity").toUInt();
+        }
 
     } else if (lcName == "notation") {  // <notation>
 
@@ -1170,11 +1172,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_currentSegment && m_inMatrix)
             m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
-
-    } else if (lcName == "velocity") {  // <velocity>
-
-        if (m_currentSegment && m_inMatrix)
-            m_currentSegment->matrixVelocity = atts.value("value").toUInt();
 
     } else if (lcName == "ruler") {  // <ruler>
 
