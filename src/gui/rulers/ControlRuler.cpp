@@ -754,7 +754,7 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         // Delegate left button to tool.
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleLeftButtonPress(&controlMouseEvent);
-    } else if (e->button() == Qt::MidButton) {
+    } else if (e->button() == Qt::MiddleButton) {
         // Delegate middle button to tool.
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMidButtonPress(&controlMouseEvent);
@@ -781,7 +781,7 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
     if (!m_currentTool)
         return;
 
-    if (e->button() == Qt::LeftButton  ||  e->button() == Qt::MidButton) {
+    if (e->button() == Qt::LeftButton  ||  e->button() == Qt::MiddleButton) {
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMouseRelease(&controlMouseEvent);
     }

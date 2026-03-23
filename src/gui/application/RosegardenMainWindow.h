@@ -909,7 +909,7 @@ public slots:
     /**
      * Import Studio from File
      */
-    void slotImportStudioFromFile(const QString &file);
+    void slotImportStudioFromFile(const QString &filename);
 
     /**
      * Send MIDI_RESET to all MIDI devices

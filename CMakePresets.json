@@ -1,0 +1,41 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "dev",
+            "description": "Simple development preset",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build-${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+                "USE_QT6": "ON"
+            }
+        },
+        {
+            "name": "dev-clang",
+            "inherits": "dev",
+            "description": "Development preset using Clang",
+            "environment": {
+                "CC": "clang",
+                "CXX": "clang++"
+            }
+        },
+        {
+            "name": "dev-asan",
+            "inherits": "dev",
+            "description": "Simple development preset with sanitizers",
+            "cacheVariables": {
+                "CMAKE_CXX_FLAGS": "-fsanitize=address,undefined"
+            }
+        },
+        {
+            "name": "dev-profiling",
+            "inherits": "dev",
+            "description": "Simple development preset with optimizations and debug symbols",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo"
+            }
+        }
+    ]
+}
