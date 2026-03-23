@@ -403,6 +403,12 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             RG_DEBUG << "RoseXmlHandler::startElement: Warning: Found property outside of event at time " << m_currentTime << ", ignoring";
         } else {
             m_currentEvent->setPropertyFromAttributes(atts, true);
+            if (m_currentEvent->has(BEAMED_GROUP_ID)) {
+                // update the segment so this id will not be used again
+                int groupId = m_currentEvent->get<Int>(BEAMED_GROUP_ID);
+                RG_DEBUG << "startElement update segment id" << groupId;
+                m_currentSegment->idUsed(groupId);
+            }
         }
 
     } else if (lcName == "nproperty") {
