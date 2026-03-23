@@ -41,7 +41,7 @@ PasteEventsCommand::PasteEventsCommand(Segment &segment,
                                        timeT pasteTime,
                                        PasteType pasteType) :
     BasicCommand(getGlobalName(), segment, pasteTime,
-                 getEffectiveEndTime(segment, clipboard, pasteTime)),
+                 getEffectiveEndTime(segment, clipboard, pasteTime, pasteType)),
     m_relayoutEndTime(getEndTime()),
     m_clipboard(new Clipboard(*clipboard)),
     m_pasteType(pasteType)
@@ -133,7 +133,8 @@ PasteEventsCommand::getPasteTypes()
 timeT
 PasteEventsCommand::getEffectiveEndTime(Segment &segment,
                                         const Clipboard *clipboard,
-                                        timeT pasteTime) const
+                                        timeT pasteTime,
+                                        PasteType pasteType)
 {
     if (!clipboard->isSingleSegment()) {
         RG_DEBUG << "PasteEventsCommand::getEffectiveEndTime: not single segment";
@@ -148,7 +149,7 @@ PasteEventsCommand::getEffectiveEndTime(Segment &segment,
     timeT d = clipboard->getSingleSegment()->getEndTime() -
               clipboard->getSingleSegment()->getStartTime();
 
-    if (m_pasteType == OpenAndPaste) {
+    if (pasteType == OpenAndPaste) {
         return segment.getEndTime() + d;
     } else {
         Segment::iterator i = segment.findTime(pasteTime + d);

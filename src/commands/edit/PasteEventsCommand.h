@@ -98,9 +98,10 @@ public:
 
 protected:
     void modifySegment() override;
-    timeT getEffectiveEndTime(Segment &,
-                              const Clipboard *,
-                              timeT) const;
+    static timeT getEffectiveEndTime(Segment &,
+                                     const Clipboard *,
+                                     timeT pasteTime,
+                                     PasteType);
     timeT m_relayoutEndTime;
     Clipboard *m_clipboard;
     PasteType m_pasteType;
