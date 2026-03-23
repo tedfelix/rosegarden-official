@@ -1152,8 +1152,10 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
     } else if (lcName == "matrix") {  // <matrix>
 
         // If we're in a <segment>, <matrix> is valid.
-        if (m_currentSegment)
+        if (m_currentSegment) {
             m_inMatrix = true;
+            m_currentSegment->matrixVelocity = atts.value("velocity").toUInt();
+        }
 
     } else if (lcName == "notation") {  // <notation>
 
@@ -1170,11 +1172,6 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
 
         if (m_currentSegment && m_inMatrix)
             m_currentSegment->matrixVZoomFactor = atts.value("factor").toDouble();
-
-    } else if (lcName == "velocity") {  // <velocity>
-
-        if (m_currentSegment && m_inMatrix)
-            m_currentSegment->matrixVelocity = atts.value("value").toUInt();
 
     } else if (lcName == "ruler") {  // <ruler>
 
@@ -1813,31 +1810,28 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
             m_deprecation = true;
         }
 
-        if (m_section != InInstrument) {
-            m_errorString = "Found Volume outside Instrument";
-            return false;
-        }
+        if (m_section == InInstrument) {
+            MidiByte value = atts.value("value").toInt();
 
-        MidiByte value = atts.value("value").toInt();
-
-        if (m_instrument) {
-            if (m_instrument->getType() == Instrument::Midi) {
-                // If we've not encountered a volume CC, go with this.
-                if (!m_haveVolumeCC) {
-                    m_instrument->setControllerValue(
-                            MIDI_CONTROLLER_VOLUME, value);
+            if (m_instrument) {
+                if (m_instrument->getType() == Instrument::Midi) {
+                    // If we've not encountered a volume CC, go with this.
+                    if (!m_haveVolumeCC) {
+                        m_instrument->setControllerValue(
+                                MIDI_CONTROLLER_VOLUME, value);
+                    }
+                } else {
+                    // For Audio and SoftSynth Instruments, translate into level.
+                    // Backward compatibility: "volume" was in a 0-127
+                    // range and we now store "level" (float dB) instead.
+                    // Note that we have no such compatibility for
+                    // "recordLevel", whose range has changed silently.
+                    if (!m_deprecation)
+                        RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"volume\" for an audio instrument (now replaced by \"level\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
+                    m_deprecation = true;
+                    m_instrument->setLevel
+                        (AudioLevel::multiplier_to_dB(float(value) / 100.0));
                 }
-            } else {
-                // For Audio and SoftSynth Instruments, translate into level.
-                // Backward compatibility: "volume" was in a 0-127
-                // range and we now store "level" (float dB) instead.
-                // Note that we have no such compatibility for
-                // "recordLevel", whose range has changed silently.
-                if (!m_deprecation)
-                    RG_WARNING << "WARNING: This Rosegarden file uses the deprecated element \"volume\" for an audio instrument (now replaced by \"level\").  We recommend re-saving the file from this version of Rosegarden to assure your ability to re-load it in future versions";
-                m_deprecation = true;
-                m_instrument->setLevel
-                    (AudioLevel::multiplier_to_dB(float(value) / 100.0));
             }
         }
 
