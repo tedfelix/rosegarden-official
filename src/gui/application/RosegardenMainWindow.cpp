@@ -5529,16 +5529,15 @@ RosegardenMainWindow::exportLilyPondFile(const QString &file, bool forPreview)
 
     lilyPondExporter.setProgressDialog(&progressDialog);
 
-    if (!lilyPondExporter.write()) {
-        if (!progressDialog.wasCanceled()) {
-            QMessageBox::warning(this, tr("Rosegarden"),
-                    lilyPondExporter.getMessage());
-        }
+    bool success = lilyPondExporter.write();
 
-        return false;
+    if (!lilyPondExporter.getMessage().isEmpty() &&
+        !progressDialog.wasCanceled()) {
+        QMessageBox::warning(this, tr("Rosegarden"),
+                lilyPondExporter.getMessage());
     }
 
-    return true;
+    return success;
 }
 
 void

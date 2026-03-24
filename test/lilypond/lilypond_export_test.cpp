@@ -135,12 +135,14 @@ void TestLilypondExport::testExamples_data()
 {
     // Usually "examples", but one "regression".
     QTest::addColumn<QString>("baseDir");
+    // Expected warning message from the exporter (empty = no warning).
+    QTest::addColumn<QString>("expectedWarning");
 
-    QTest::newRow("aveverum") << "examples";
-    QTest::newRow("aylindaamiga") << "examples";
-    QTest::newRow("bogus-surf-jam") << "examples";
-    QTest::newRow("beaming") << "examples";
-    QTest::newRow("Brandenburg_No3-BWV_1048") << "examples";
+    QTest::newRow("aveverum") << "examples" << QString();
+    QTest::newRow("aylindaamiga") << "examples" << QString();
+    QTest::newRow("bogus-surf-jam") << "examples" << QString();
+    QTest::newRow("beaming") << "examples" << QString();
+    QTest::newRow("Brandenburg_No3-BWV_1048") << "examples" << QString();
 
     // ??? This one creates a directory in the user's home directory!?
     //     The directory's name is simply a space (' ').  Why?
@@ -149,49 +151,55 @@ void TestLilypondExport::testExamples_data()
     //     that was set to a single space.  I went through all of the examples
     //     and fixed these sorts of issues.  See [26b26e6e] from May 15, 2024.
     //     Feel free to re-enable this.
-    //QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples";
+    //QTest::newRow("bwv-1060-trumpet-duet-excerpt") << "examples" << QString();
 
-    QTest::newRow("children") << "examples";
-    QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples";
-    QTest::newRow("Djer-Fire") << "examples";
-    QTest::newRow("doodle-q") << "examples";
-    QTest::newRow("exercise_notation") << "examples";
-    QTest::newRow("glazunov-for-solo-and-piano-with-cue") << "examples";
-    QTest::newRow("glazunov") << "examples";
-    QTest::newRow("Hallelujah_Chorus_from_Messiah") << "examples";
-    QTest::newRow("headers-and-unicode-lyrics") << "examples";
-    QTest::newRow("himno_de_riego") << "examples";
-    QTest::newRow("interpretation-example") << "examples";
-    QTest::newRow("let-all-mortal-flesh") << "examples";
-    QTest::newRow("lilypond-alternative-endings_new-way") << "examples";
-    QTest::newRow("lilypond-alternative-endings") << "examples";
-    QTest::newRow("lilypond-directives") << "examples";
-    QTest::newRow("lilypond-up-down") << "examples";
-    QTest::newRow("lilypond-staff-groupings") << "examples";
-    QTest::newRow("lilypond-tied-grace-notes") << "examples";
-    QTest::newRow("logical-segments-4") << "examples";
-    QTest::newRow("mandolin-sonatina") << "examples";
-    QTest::newRow("marks-test") << "examples";
-    QTest::newRow("mozart-quartet") << "examples";
-    QTest::newRow("notation-for-string-orchestra-in-D-minor") << "examples";
-    QTest::newRow("perfect-moment") << "examples";
-    QTest::newRow("ravel-pc-gmaj-adagio") << "examples";
-    QTest::newRow("Romanza") << "examples";
+    QTest::newRow("children") << "examples"
+        << QStringLiteral("Bar 45 contains an event too short to represent in standard notation.\n"
+                          "This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.");
+    QTest::newRow("Chopin-Prelude-in-E-minor-Aere") << "examples" << QString();
+    QTest::newRow("Djer-Fire") << "examples" << QString();
+    QTest::newRow("doodle-q") << "examples" << QString();
+    QTest::newRow("exercise_notation") << "examples" << QString();
+    QTest::newRow("glazunov-for-solo-and-piano-with-cue") << "examples" << QString();
+    QTest::newRow("glazunov") << "examples" << QString();
+    QTest::newRow("Hallelujah_Chorus_from_Messiah") << "examples" << QString();
+    QTest::newRow("headers-and-unicode-lyrics") << "examples" << QString();
+    QTest::newRow("himno_de_riego") << "examples" << QString();
+    QTest::newRow("interpretation-example") << "examples" << QString();
+    QTest::newRow("let-all-mortal-flesh") << "examples" << QString();
+    QTest::newRow("lilypond-alternative-endings_new-way") << "examples" << QString();
+    QTest::newRow("lilypond-alternative-endings") << "examples" << QString();
+    QTest::newRow("lilypond-directives") << "examples" << QString();
+    QTest::newRow("lilypond-up-down") << "examples" << QString();
+    QTest::newRow("lilypond-staff-groupings") << "examples" << QString();
+    QTest::newRow("lilypond-tied-grace-notes") << "examples" << QString();
+    QTest::newRow("logical-segments-4") << "examples" << QString();
+    QTest::newRow("mandolin-sonatina") << "examples" << QString();
+    QTest::newRow("marks-test") << "examples" << QString();
+    QTest::newRow("mozart-quartet") << "examples" << QString();
+    QTest::newRow("notation-for-string-orchestra-in-D-minor") << "examples" << QString();
+    QTest::newRow("perfect-moment") << "examples" << QString();
+    QTest::newRow("ravel-pc-gmaj-adagio") << "examples" << QString();
+    QTest::newRow("Romanza") << "examples" << QString();
 
     // THIS ONE FAILS
     // sicut-locutus.ly:107:47: Erreur : syntax error, unexpected '}'
     //                 < f g > 2 _\markup { \italic  
     //                                               } _\markup { \italic Masked and substituted }  _~ f _~  |
-    //QTest::newRow("sicut-locutus") << "examples";
+    //QTest::newRow("sicut-locutus") << "examples" << QString();
 
-    QTest::newRow("stormy-riders") << "examples";
-    QTest::newRow("test_tuplets") << "examples";
-    QTest::newRow("the-rose-garden") << "examples";
-    QTest::newRow("vivaldi-cs3mv2") << "examples";
-    QTest::newRow("vivaldi_op44_11_1") << "examples";
+    QTest::newRow("stormy-riders") << "examples"
+        << QStringLiteral("Bar 30 contains an event too short to represent in standard notation.\n"
+                          "This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.");
+    QTest::newRow("test_tuplets") << "examples" << QString();
+    QTest::newRow("the-rose-garden") << "examples"
+        << QStringLiteral("Bar 130 contains an event too short to represent in standard notation.\n"
+                          "This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.");
+    QTest::newRow("vivaldi-cs3mv2") << "examples" << QString();
+    QTest::newRow("vivaldi_op44_11_1") << "examples" << QString();
 
     // data/regression
-    QTest::newRow("export_hidden_key_signatures") << "regression";
+    QTest::newRow("export_hidden_key_signatures") << "regression" << QString();
 }
 
 void TestLilypondExport::testExamples()
@@ -232,6 +240,8 @@ void TestLilypondExport::testExamples()
 
     // WHEN
     QVERIFY(exporter.write());
+    QFETCH(QString, expectedWarning);
+    QCOMPARE(exporter.getMessage(), expectedWarning);
 
     // THEN
 
