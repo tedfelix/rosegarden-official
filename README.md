@@ -84,7 +84,7 @@ tests in a Debug build.
 If you are a developer, it is recommended that you build with warnings as
 errors and Address Sanitizer (ASan) turned on:
 
-    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror -fsanitize=address -fno-omit-frame-pointer"
+    cmake .. -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_FLAGS="-Werror -fsanitize=address,undefined -fno-omit-frame-pointer"
 
 This will catch many potential C++ issues.
 
