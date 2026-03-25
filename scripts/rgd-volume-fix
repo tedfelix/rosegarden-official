@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Fix default volumes in Rosegarden's .rgd files.
+
+# We want to do this:
+
+#   s/default="0"/default="100"/
+
+# But only on '<control name="Volume"' lines.
+# How about:
+
+#   s/\(<control name="Volume".*default=\)"0"/\1"100"/
+
+# Yep, that works.  We use the parens \( and \) to store a part of
+# the search pattern, then put it back as "\1" on the rhs.
+
+for rgdfile in "$@"
+do
+    echo "--- $rgdfile ------------------------------------------"
+    # make a temporary copy
+    cp $rgdfile temp.xml.gz
+    gzip -d temp.xml.gz
+    sed 's/\(<control name="Volume".*default=\)"0"/\1"100"/' \
+        <temp.xml >temp2.xml
+    diff temp.xml temp2.xml
+    rm temp.xml
+    gzip temp2.xml
+    # Copy over original
+    mv -f temp2.xml.gz $rgdfile
+done
+
+

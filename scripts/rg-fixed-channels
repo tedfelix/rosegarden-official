@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# For each file
+for rgfile in "$@"
+do
+  # Copy to a temp.
+  cp $rgfile temp.xml.gz
+  gzip -d temp.xml.gz
+  # Search for 'fixed="false"'.
+  grep -q 'fixed="false"' temp.xml
+  # if none found
+  if [ $? -ne 0 ]
+  then
+    # delete .xml file and continue to next file
+    rm temp.xml
+    continue
+  fi
+  echo "Modifying $rgfile..."
+  # sed to modify
+  sed 's/fixed="false"/fixed="true"/' temp.xml >temp2.xml
+  # recompress to .gz
+  gzip temp2.xml
+  # copy over original file
+  cp temp2.xml.gz $rgfile
+  # Clean up
+  rm temp.xml temp2.xml.gz
+done
+
