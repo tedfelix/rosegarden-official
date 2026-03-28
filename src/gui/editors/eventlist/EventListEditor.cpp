@@ -818,8 +818,7 @@ EventListEditor::makeInitialSelection(timeT time)
 {
     const int itemCount = m_tableWidget->rowCount();
 
-    QTableWidgetItem *foundItem{nullptr};
-
+    int foundRow = -1;
     // For each row in the event list.
     for (int row = 0; row < itemCount; ++row) {
         QTableWidgetItem *item = m_tableWidget->item(row, 0);
@@ -837,25 +836,29 @@ EventListEditor::makeInitialSelection(timeT time)
             break;
 
         // Remember the last good item.
-        foundItem = item;
+        foundRow = row;
     }
 
     // Nothing found?  Bail.
-    if (!foundItem)
+    if (foundRow == -1)
         return;
 
-    // Make it current so the keyboard works correctly.
-    m_tableWidget->setCurrentItem(foundItem);
-
-    // Select the item
-    foundItem->setSelected(true);
+    // select the row
+    for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+        if (!item)
+            continue;
+        // Select it.
+        item->setSelected(true);
+    }
 
     // Yield to the event loop so that the UI will be rendered before calling
     // scrollToItem().
     qApp->processEvents();
 
     // Make sure the item is visible.
-    m_tableWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
+    m_tableWidget->scrollToItem(m_tableWidget->item(foundRow, 0),
+                                QAbstractItemView::PositionAtCenter);
 }
 
 void
@@ -1185,6 +1188,7 @@ EventListEditor::slotEditInsert()
 void
 EventListEditor::editItem(const QTableWidgetItem *item)
 {
+    RG_DEBUG << "editItem" << item;
     if (!item)
         return;
 
@@ -1192,6 +1196,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     // the dialog since item might become invalid.
     Segment *segment = static_cast<Segment *>(
             item->data(SegmentPtrRole).value<void *>());
+    RG_DEBUG << "editItem segment" << segment;
     if (!segment)
         return;
 
@@ -1199,6 +1204,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     // the dialog since item might become invalid.
     Event *event = static_cast<Event *>(
             item->data(EventPtrRole).value<void *>());
+    RG_DEBUG << "editItem event" << event;
     if (!event)
         return;
 
@@ -1242,11 +1248,13 @@ EventListEditor::editItem(const QTableWidgetItem *item)
 void
 EventListEditor::slotEditEvent()
 {
+    RG_DEBUG << "slotEditEvent";
     const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
     if (selection.isEmpty())
         return;
 
     const QTableWidgetItem *item = selection.first();
+    RG_DEBUG << "slotEditEvent item" << item;
     if (!item)
         return;
 
