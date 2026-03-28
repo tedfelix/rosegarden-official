@@ -42,7 +42,7 @@ namespace Rosegarden
 
 UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
         QString introductoryText,
-        std::vector<QString> fileNames
+        const std::vector<QString>& fileNames
        ) :
         QDialog(parent)
 {
@@ -90,6 +90,7 @@ UnusedAudioSelectionDialog::UnusedAudioSelectionDialog(QWidget *parent,
     m_listView->setSelectionBehavior(QAbstractItemView::SelectRows);
     m_listView->resizeColumnsToContents();
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     layout->addWidget(buttonBox);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);

@@ -923,7 +923,6 @@ Segment::fillWithRestsTupled(timeT startTime,
 
     timeT restDuration = endTime - startTime;
     if (restDuration <= 0) return;
-    restDuration = restDuration;
 
 #ifdef DEBUG_NORMALIZE_RESTS
     RG_DEBUG << "fillWithRestsTupled (" <<

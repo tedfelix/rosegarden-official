@@ -38,7 +38,7 @@ class UnusedAudioSelectionDialog : public QDialog
 public:
     UnusedAudioSelectionDialog(QWidget *,
                                QString introductoryText,
-                               std::vector<QString> fileNames);
+                               const std::vector<QString>& fileNames);
 
     ~UnusedAudioSelectionDialog();
     std::vector<QString> getSelectedAudioFileNames() const;

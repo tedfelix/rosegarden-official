@@ -94,8 +94,10 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     }
     groupBox->setLayout(groupBoxLayout);
 
+    // cppcheck-suppress constVariablePointer
     BigArrowButton *numDown = new BigArrowButton(Qt::LeftArrow);
     numBoxLayout->addWidget(numDown);
+    // cppcheck-suppress constVariablePointer
     BigArrowButton *denomDown = new BigArrowButton(Qt::LeftArrow);
     denomBoxLayout->addWidget(denomDown);
 
@@ -112,9 +114,11 @@ TimeSignatureDialog::TimeSignatureDialog(QWidget *parent,
     m_numLabel->setFont(*timeSigFont);
     m_denomLabel->setFont(*timeSigFont);
 
+    // cppcheck-suppress constVariablePointer
     BigArrowButton *numUp = new BigArrowButton(Qt::RightArrow);
     numBoxLayout->addWidget(numUp);
     numBox->setLayout(numBoxLayout);
+    // cppcheck-suppress constVariablePointer
     BigArrowButton *denomUp = new BigArrowButton(Qt::RightArrow);
     denomBoxLayout->addWidget(denomUp);
     denomBox->setLayout(denomBoxLayout);
