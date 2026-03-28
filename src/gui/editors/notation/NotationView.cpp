@@ -5235,8 +5235,10 @@ NotationView::slotExtendSelectionBackward(bool bar)
         es = new EventSelection(*segment);
 
     ViewElementList::iterator extendFrom = vel->findTime(oldTime);
-    if (extendFrom == vel->begin()) // shouldn't happen
+    if (extendFrom == vel->begin()) { // shouldn't happen
+        delete es;
         return;
+    }
     ViewElementList::iterator firstNote = extendFrom;
     --firstNote;
     const bool wasSelected = es->contains((*firstNote)->event());
@@ -5311,8 +5313,10 @@ NotationView::slotExtendSelectionForward(bool bar)
         es = new EventSelection(*segment);
 
     ViewElementList::iterator extendFrom = vel->findTime(oldTime);
-    if (extendFrom == vel->end()) // shouldn't happen
+    if (extendFrom == vel->end()) { // shouldn't happen
+        delete es;
         return;
+    }
     const bool wasSelected = es->contains((*extendFrom)->event());
 
     std::vector<Event *> eventVec;
