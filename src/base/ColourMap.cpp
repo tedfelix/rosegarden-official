@@ -34,7 +34,7 @@ ColourMap::ColourMap()
     //     RoseXmlHandler, so it's not needed.  Might be worth doing
     //     some comprehensive testing to see if removing this would
     //     make any difference.
-    colours[0] = Entry();
+    colours.emplace(0, Entry());
 }
 
 QColor
