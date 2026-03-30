@@ -427,10 +427,7 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
             if (m_playTracking) {
                 m_compositionView->scrollHoriz(newPosition);
             }
-        } else if (!m_compositionView->isAutoScrolling()) {
-            m_compositionView->scrollHoriz(newPosition);
         }
-
         m_compositionView->drawPointer(newPosition);
 
     }
@@ -453,6 +450,13 @@ TrackEditor::scrollToFollow()
     m_playTracking = !m_playTracking;
     Composition &comp = m_doc->getComposition();
     comp.setMainFollowPlayback(m_playTracking);
+
+    // if follow has been activated scroll to position pointer now
+    if (m_playTracking) {
+        timeT ppos = CompositionPosition::getInstance()->get();
+        double position = m_rulerScale->getXForTime(ppos);
+        m_compositionView->scrollHoriz(position);
+    }
 
 }
 
