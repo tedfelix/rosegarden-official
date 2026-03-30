@@ -94,6 +94,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event) :
     m_timeSpinBox->setMaximum(INT_MAX);
     m_timeSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     m_timeSpinBox->setValue(m_event.getAbsoluteTime());
+    m_timeSpinBox->selectAll();
     propertiesLayout->addWidget(m_timeSpinBox, row, 1);
 
     m_timeEditButton = new QPushButton(tr("edit"), propertiesGroup);
