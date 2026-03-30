@@ -134,7 +134,8 @@ NotationGroup::sample(const NELIterator &i, bool goingForwards)
     }
 
     if (t == BaseProperties::GROUP_TYPE_BEAMED) {
-        m_type = Beamed;
+        if (m_type != Tupled)  // don't downgrade a tupled group
+            m_type = Beamed;
     } else if (t == BaseProperties::GROUP_TYPE_TUPLED) {
         m_type = Tupled;
     } else if (t == BaseProperties::GROUP_TYPE_GRACE) {
@@ -858,18 +859,52 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         finalElement(getFinalElement());
 
     NELIterator initialNoteOrRest(initialElement);
-    NotationElement* initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
+    NotationElement* initialNoteOrRestEl =
+        static_cast<NotationElement*>(*initialNoteOrRest);
 
-    while (initialNoteOrRest != finalElement &&
-            !(initialNoteOrRestEl->isNote() ||
-              initialNoteOrRestEl->isRest())) {
+    // find initial note/rest with tuplet property. If the group is a
+    // mixed beam/tuplet group this may not be the first note/rest
+    bool isMixed = false;
+    while (true) {
+        if (initialNoteOrRest == finalElement) break;
+        if (initialNoteOrRestEl->isNote() ||
+            initialNoteOrRestEl->isRest()) {
+            // we have found a note - is it tupled
+            if (initialNoteOrRestEl->event()->has
+                (BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                // we have found the first triplet note/rest
+                break;
+            } else {
+                // a non tupled note - mixed beam/tuplet
+                isMixed = true;
+            }
+        }
         ++initialNoteOrRest;
         initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
     }
 
-    if (!initialNoteOrRestEl->isRest()) {
-        initialNoteOrRest = initialNote;
-        initialNoteOrRestEl = static_cast<NotationElement*>(*initialNoteOrRest);
+    NELIterator finalNoteOrRest(finalElement);
+    NotationElement* finalNoteOrRestEl =
+        static_cast<NotationElement*>(*finalNoteOrRest);
+
+    // find final note/rest with tuplet property. If the group is a
+    // mixed beam/tuplet group this may not be the last note/rest
+    while (true) {
+        if (finalNoteOrRest == initialElement) break;
+        if (finalNoteOrRestEl->isNote() ||
+            finalNoteOrRestEl->isRest()) {
+            // we have found a note - is it tupled
+            if (finalNoteOrRestEl->event()->has
+                (BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
+                // we have found the last triplet note/rest
+                break;
+            } else {
+                // a non tupled note - mixed beam/tuplet
+                isMixed = true;
+            }
+        }
+        --finalNoteOrRest;
+        finalNoteOrRestEl = static_cast<NotationElement*>(*finalNoteOrRest);
     }
 
     if (initialNoteOrRest == staff.getViewElementList()->end()) return;
@@ -884,10 +919,10 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
     //    RG_DEBUG << "applyTuplingLine: first element is " << (initialNoteOrRestEl->isNote() ? "Note" : "Non-Note") << ", last is " << (static_cast<NotationElement*>(*finalElement)->isNote() ? "Note" : "Non-Note");
 
     int initialX = (int)(*initialNoteOrRest)->getLayoutX();
-    int finalX = (int)(*finalElement)->getLayoutX();
+    int finalX = (int)(*finalNoteOrRest)->getLayoutX();
 
-    if (initialNote == staff.getViewElementList()->end() &&
-          finalNote == staff.getViewElementList()->end()) {
+    if (initialNoteOrRest == staff.getViewElementList()->end() &&
+        finalNoteOrRest == staff.getViewElementList()->end()) {
 
         Event *e = (*initialNoteOrRest)->event();
         e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y,
@@ -910,6 +945,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
             (beam.necessary &&
              (*initialNoteOrRest)->event()->isa(Note::EventType) &&
              (finalNote == finalElement));
+        if (isMixed) followBeam = false; // never for a mixed beam/tuplet
 
         int startY = (followBeam ? beam.startY :
                       initialY - (beam.startY - initialY));
@@ -964,6 +1000,7 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         }
 
         Event *e = (*initialNoteOrRest)->event();
+        RG_DEBUG << "applyTuplingLine set" << finalX - initialX;
         e->setMaybe<Int>(m_properties.TUPLING_LINE_MY_Y, startY);
         e->setMaybe<Int>(m_properties.TUPLING_LINE_WIDTH, finalX - initialX);
         e->setMaybe<Int>(m_properties.TUPLING_LINE_GRADIENT, beam.gradient);
