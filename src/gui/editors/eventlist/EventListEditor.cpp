@@ -847,8 +847,16 @@ EventListEditor::makeInitialSelection(timeT time)
     // Make it current so the keyboard works correctly.
     m_tableWidget->setCurrentItem(foundItem);
 
-    // Select the item
-    foundItem->setSelected(true);
+    const int foundRow = foundItem->row();
+
+    // Select the entire row or else pressing "E" to edit will not work.
+    for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+        if (!item)
+            continue;
+        // Select it.
+        item->setSelected(true);
+    }
 
     // Yield to the event loop so that the UI will be rendered before calling
     // scrollToItem().
@@ -1185,6 +1193,7 @@ EventListEditor::slotEditInsert()
 void
 EventListEditor::editItem(const QTableWidgetItem *item)
 {
+    RG_DEBUG << "editItem" << item;
     if (!item)
         return;
 
@@ -1192,6 +1201,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     // the dialog since item might become invalid.
     Segment *segment = static_cast<Segment *>(
             item->data(SegmentPtrRole).value<void *>());
+    RG_DEBUG << "editItem segment" << segment;
     if (!segment)
         return;
 
@@ -1199,6 +1209,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     // the dialog since item might become invalid.
     Event *event = static_cast<Event *>(
             item->data(EventPtrRole).value<void *>());
+    RG_DEBUG << "editItem event" << event;
     if (!event)
         return;
 
@@ -1242,11 +1253,13 @@ EventListEditor::editItem(const QTableWidgetItem *item)
 void
 EventListEditor::slotEditEvent()
 {
+    RG_DEBUG << "slotEditEvent";
     const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
     if (selection.isEmpty())
         return;
 
     const QTableWidgetItem *item = selection.first();
+    RG_DEBUG << "slotEditEvent item" << item;
     if (!item)
         return;
 
