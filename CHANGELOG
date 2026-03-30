@@ -47,8 +47,21 @@ Included in this release...
     Bug #1767.  [1ff36b47e4] [5ed9c5248c]
   * main window: Make rotary tooltip dynamic.  Bug #1768.  [d39555d401]
   * metronome: Use bar velocity for preview.  [3f773b79b0]
+  * MusicXML: Fix crash when importing MusicXML.  PR #32.  [92f9b3b426]
+  * Notation: Fix erasing triplet note.  Bug #1772.  [5a0d019c45]
+  * Tranzport: Disabled support for Frontier Design Group's
+    TranzPort DAW Control.  See README for instructions on re-enabling
+    and let us know if you are using this.  [44dab8314b]
+  * Notation: Fix select and delete notes in tuplets.  Bug #1772.
+    [ff57686630] [81541588f7]
+  * Notation: Fix inserting tuplet note at beginning.  Bug #1772.
+    [de410d7937]
+  * main window: Fix scroll to follow playback.  When it is off, the
+    display will not scroll.  Turn it on and the display will jump to
+    where the cursor is.  Bug #1774.  [254f9824ce]
+  * examples: Make all channels fixed.  PR #45.  [6b2824a52d]
 
-Done to: 3f773b79b0
+Done to: bbc0a4aa4c
 
 ===== New Features =====
 
@@ -58,6 +71,13 @@ Done to: 3f773b79b0
   * matrix: Remember velocity for each segment.  [7e3ecfa101]
   * main window toolbar: Added metronome button to the transport
     toolbar.  [2fcbb1426f]
+  * main window: Make "End" key jump to the end of the segments on
+    first press, and to the end of the composition on the second press.
+    [42ba3c6341]
+  * Rulers: Add "Set to Default" to context menu.  Also accessible via
+    middle mouse button in select and move tools.  [5a2efddfb3]
+  * lilypond: Add warning about too-short durations that will lead to
+    lilypond errors.  PR #44.  [a11a8343f8]
 
 ===== General Improvements =====
 
