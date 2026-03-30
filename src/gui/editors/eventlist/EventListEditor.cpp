@@ -818,7 +818,8 @@ EventListEditor::makeInitialSelection(timeT time)
 {
     const int itemCount = m_tableWidget->rowCount();
 
-    int foundRow = -1;
+    QTableWidgetItem *foundItem{nullptr};
+
     // For each row in the event list.
     for (int row = 0; row < itemCount; ++row) {
         QTableWidgetItem *item = m_tableWidget->item(row, 0);
@@ -836,14 +837,19 @@ EventListEditor::makeInitialSelection(timeT time)
             break;
 
         // Remember the last good item.
-        foundRow = row;
+        foundItem = item;
     }
 
     // Nothing found?  Bail.
-    if (foundRow == -1)
+    if (!foundItem)
         return;
 
-    // select the row
+    // Make it current so the keyboard works correctly.
+    m_tableWidget->setCurrentItem(foundItem);
+
+    const int foundRow = foundItem->row();
+
+    // Select the entire row or else pressing "E" to edit will not work.
     for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
         QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
         if (!item)
@@ -857,8 +863,7 @@ EventListEditor::makeInitialSelection(timeT time)
     qApp->processEvents();
 
     // Make sure the item is visible.
-    m_tableWidget->scrollToItem(m_tableWidget->item(foundRow, 0),
-                                QAbstractItemView::PositionAtCenter);
+    m_tableWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
 }
 
 void
