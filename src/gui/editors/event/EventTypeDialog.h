@@ -37,7 +37,7 @@ class EventTypeDialog : public QDialog
 
 public:
 
-    EventTypeDialog(QWidget *parent);
+    explicit EventTypeDialog(QWidget *parent);
 
     std::string getType() const;
 

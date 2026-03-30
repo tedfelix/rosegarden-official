@@ -43,7 +43,7 @@ public:
     // Factory
     static EventWidget *create(EditEvent *parent, const Event &event);
 
-    EventWidget(EditEvent *parent);
+    explicit EventWidget(EditEvent *parent);
 
     typedef std::set<PropertyName> PropertyNameSet;
     /// Set of properties this widget already displays.

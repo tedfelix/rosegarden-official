@@ -54,7 +54,9 @@ private:
 
     LineEdit *m_dataEdit;
 
+    // cppcheck-suppress unsafeClassCanLeak
     QPushButton *m_loadDataButton;
+    // cppcheck-suppress unsafeClassCanLeak
     QPushButton *m_saveDataButton;
 
 };

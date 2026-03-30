@@ -157,6 +157,7 @@ EditEvent::EditEvent(QWidget *parent, const Event &event) :
     advancedPropertiesLayout->setRowStretch(row, 1);
 
     // Button Box
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);
@@ -438,19 +439,19 @@ void EditEvent::slotContextMenu(const QPoint &pos)
         }
 
         // Add Integer
-        QAction *addIntegerAction = m_contextMenu->addAction(
+        const QAction *addIntegerAction = m_contextMenu->addAction(
                 tr("Add Integer Property"));
         connect(addIntegerAction, &QAction::triggered,
                 this, &EditEvent::slotAddInteger);
 
         // Add String
-        QAction *addStringAction = m_contextMenu->addAction(
+        const QAction *addStringAction = m_contextMenu->addAction(
                 tr("Add String Property"));
         connect(addStringAction, &QAction::triggered,
                 this, &EditEvent::slotAddString);
 
         // Add Boolean
-        QAction *addBooleanAction = m_contextMenu->addAction(
+        const QAction *addBooleanAction = m_contextMenu->addAction(
                 tr("Add Boolean Property"));
         connect(addBooleanAction, &QAction::triggered,
                 this, &EditEvent::slotAddBoolean);
@@ -458,7 +459,7 @@ void EditEvent::slotContextMenu(const QPoint &pos)
         m_contextMenu->addSeparator();
 
         // Delete
-        QAction *deleteAction = m_contextMenu->addAction(tr("Delete"));
+        const QAction *deleteAction = m_contextMenu->addAction(tr("Delete"));
         connect(deleteAction, &QAction::triggered,
                 this, &EditEvent::slotDelete);
     }
