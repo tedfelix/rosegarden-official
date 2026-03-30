@@ -828,8 +828,8 @@ NotationView::setupActions()
     createAction("interpret", &NotationView::slotTransformsInterpret);
 
     //"Rescale" subMenu
-    createAction("halve_durations", &NotationView::slotHalveDurations);
-    createAction("double_durations", &NotationView::slotDoubleDurations);
+    createAction("rescale_half", &NotationView::slotRescaleHalf);
+    createAction("rescale_double", &NotationView::slotRescaleDouble);
     createAction("rescale", &NotationView::slotRescale);
 
     //"Transpose" subMenu
@@ -4281,7 +4281,7 @@ NotationView::slotSymbolAction()
 }
 
 void
-NotationView::slotHalveDurations()
+NotationView::slotRescaleHalf()
 {
     if (!getSelection()) return ;
 
@@ -4291,7 +4291,7 @@ NotationView::slotHalveDurations()
 }
 
 void
-NotationView::slotDoubleDurations()
+NotationView::slotRescaleDouble()
 {
     if (!getSelection()) return ;
 

@@ -202,8 +202,8 @@ protected slots:
     void slotAddTimeSignature();
 
     // rescale
-    void slotHalveDurations();
-    void slotDoubleDurations();
+    void slotRescaleHalf();
+    void slotRescaleDouble();
     void slotRescale();
 
     // transpose

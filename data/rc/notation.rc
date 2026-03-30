@@ -370,8 +370,8 @@
     <Separator/>
     <Menu name="Rescale">
       <text>Rescale</text>
-      <Action name="halve_durations" text="&amp;Halve Durations" shortcut="Ctrl+H" />
-      <Action name="double_durations" text="&amp;Double Durations" shortcut="Ctrl+Shift+H" />
+      <Action name="rescale_half" text="&amp;Half" shortcut="Ctrl+H" />
+      <Action name="rescale_double" text="&amp;Double" shortcut="Ctrl+Shift+H" />
       <Separator/>
       <Action name="rescale" text="Stretch or S&amp;quash..." />
     </Menu>
@@ -995,8 +995,8 @@
     <Action name="invert"/>
     <Action name="retrograde"/>
     <Action name="retrograde_invert"/>
-    <Action name="halve_durations"/>
-    <Action name="double_durations"/>
+    <Action name="rescale_half"/>
+    <Action name="rescale_double"/>
     <Action name="rescale"/>
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>

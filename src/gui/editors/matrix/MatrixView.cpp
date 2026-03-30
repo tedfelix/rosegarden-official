@@ -448,8 +448,8 @@ MatrixView::setupActions()
     createAction("add_time_signature", &MatrixView::slotAddTimeSignature);
     createAction("add_key_signature", &MatrixView::slotEditAddKeySignature);
 
-    createAction("halve_durations", &MatrixView::slotHalveDurations);
-    createAction("double_durations", &MatrixView::slotDoubleDurations);
+    createAction("rescale_half", &MatrixView::slotRescaleHalf);
+    createAction("rescale_double", &MatrixView::slotRescaleDouble);
     createAction("rescale", &MatrixView::slotRescale);
     createAction("transpose_up", &MatrixView::slotTransposeUp);
     createAction("transpose_up_octave", &MatrixView::slotTransposeUpOctave);
@@ -1582,7 +1582,7 @@ void MatrixView::slotAddTimeSignature()
 
 
 
-void MatrixView::slotHalveDurations()
+void MatrixView::slotRescaleHalf()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
@@ -1594,7 +1594,7 @@ void MatrixView::slotHalveDurations()
                        );
 }
 
-void MatrixView::slotDoubleDurations()
+void MatrixView::slotRescaleDouble()
 {
     EventSelection *selection = getSelection();
     if (!selection) return;
