@@ -424,10 +424,15 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
         if (m_doc  &&  m_doc->getSequenceManager()  &&
             m_doc->getSequenceManager()->getTransportStatus() != STOPPED) {
 
-            if (m_playTracking) {
+            // We are playing.
+
+            if (m_playTracking)
                 m_compositionView->scrollHoriz(newPosition);
-            }
+
+        } else if (!m_compositionView->isAutoScrolling()  &&  m_playTracking) {
+            m_compositionView->scrollHoriz(newPosition);
         }
+
         m_compositionView->drawPointer(newPosition);
 
     }

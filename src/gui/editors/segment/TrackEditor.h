@@ -190,15 +190,16 @@ private:
     /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);
 
-    //--------------- Data members ---------------------------------
-
     RosegardenDocument      *m_doc;
     unsigned int             m_compositionRefreshStatusId;
 
     // Segment Canvas
     CompositionView         *m_compositionView;
     CompositionModelImpl    *m_compositionModel;
-    bool                     m_playTracking;
+
+    /// Scroll To Follow Playback
+    bool m_playTracking;
+
     int                      m_trackCellHeight;
 
     // Track Buttons to the left of the Segment Canvas
