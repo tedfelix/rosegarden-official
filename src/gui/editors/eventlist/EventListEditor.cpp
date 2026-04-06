@@ -49,10 +49,11 @@
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/application/CompositionPosition.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/dialogs/PitchDialog.h"
+#include "gui/dialogs/TimeDialog.h"
 #include "gui/editors/event/EditEvent.h"
 #include "gui/editors/event/EventTypeDialog.h"
-#include "gui/dialogs/AboutDialog.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/LineEdit.h"
@@ -1113,6 +1114,60 @@ EventListEditor::slotEditPaste()
 }
 
 void
+EventListEditor::slotEditPasteAt()
+{
+    // ??? This does nothing if a Segment or multiple Segments are
+    //     in the clipboard.  We should probably handle that better.
+    //     I assume PasteEventsCommand only handles the "partial
+    //     segment" clipboard mode?
+
+    TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
+
+    // Compute the insertion time.
+
+    timeT insertionTime = 0;
+
+    QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
+
+    if (!selection.empty()) {
+        // Go with the time of the first selected item.
+        QTableWidgetItem *item = selection.at(0);
+        if (item) {
+            const Event *event = static_cast<const Event *>(
+                    item->data(EventPtrRole).value<void *>());
+
+            if (event)
+                insertionTime = event->getAbsoluteTime();
+        }
+    }
+
+    // Get the time from the user.
+    TimeDialog dialog(this, // parent
+                      "", // title
+                      insertionTime,  // defaultTime
+                      true);  // constrainToCompositionDuration
+    if (dialog.exec() == QDialog::Rejected)
+        return;
+
+    insertionTime = dialog.getTime();
+
+    PasteEventsCommand *command = new PasteEventsCommand(
+            *m_segments[0],  // segment
+            Clipboard::mainClipboard(),  // clipboard
+            insertionTime,  // pasteTime
+            PasteEventsCommand::MatrixOverlay);  // pasteType
+
+    // Not possible?
+    if (!command->isPossible()) {
+        showStatusBarMessage(tr("Couldn't paste at this point"));
+        delete command;
+        return;
+    }
+
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
 EventListEditor::slotEditDelete()
 {
     QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
@@ -1306,6 +1361,7 @@ EventListEditor::setupActions()
     createAction("edit_cut", &EventListEditor::slotEditCut);
     createAction("edit_copy", &EventListEditor::slotEditCopy);
     createAction("edit_paste", &EventListEditor::slotEditPaste);
+    createAction("edit_paste_at", &EventListEditor::slotEditPasteAt);
 
     createAction("insert", &EventListEditor::slotEditInsert);
     createAction("delete", &EventListEditor::slotEditDelete);

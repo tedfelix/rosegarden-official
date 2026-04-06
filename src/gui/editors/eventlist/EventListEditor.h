@@ -85,6 +85,7 @@ private slots:
     void slotEditCut();
     void slotEditCopy();
     void slotEditPaste();
+    void slotEditPasteAt();
     void slotSelectAll();
     void slotClearSelection();
 
