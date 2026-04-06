@@ -440,6 +440,8 @@ EventListEditor::EventListEditor(const std::vector<Segment *> &segments) :
     updateTableWidget();
 
     makeInitialSelection(CompositionPosition::getInstance()->get());
+
+    m_tableWidget->setFocus();
 }
 
 EventListEditor::~EventListEditor()
