@@ -175,6 +175,7 @@ private:
     QAction *m_editTriggeredSegment{nullptr};
 
     void makeInitialSelection(timeT);
+    void selectEvent(const Event &event);
 
     bool m_isTriggerSegment{false};
     QLabel *m_triggerName{nullptr};
