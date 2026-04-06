@@ -113,7 +113,7 @@ TrackEditor::TrackEditor(RosegardenDocument *doc,
     updateCanvasSize();
 
     Composition &comp = m_doc->getComposition();
-    m_playTracking = comp.getMainFollowPlayback();
+    m_scrollToFollowPlayback = comp.getMainFollowPlayback();
 }
 
 void
@@ -426,10 +426,11 @@ TrackEditor::slotSetPointerPosition(timeT pointerTime)
 
             // We are playing.
 
-            if (m_playTracking)
+            if (m_scrollToFollowPlayback)
                 m_compositionView->scrollHoriz(newPosition);
 
-        } else if (!m_compositionView->isAutoScrolling()  &&  m_playTracking) {
+        } else if (!m_compositionView->isAutoScrolling()  &&
+                   m_scrollToFollowPlayback) {
             m_compositionView->scrollHoriz(newPosition);
         }
 
@@ -452,12 +453,12 @@ TrackEditor::slotPointerDraggedToPosition(timeT position)
 void
 TrackEditor::scrollToFollow()
 {
-    m_playTracking = !m_playTracking;
+    m_scrollToFollowPlayback = !m_scrollToFollowPlayback;
     Composition &comp = m_doc->getComposition();
-    comp.setMainFollowPlayback(m_playTracking);
+    comp.setMainFollowPlayback(m_scrollToFollowPlayback);
 
     // if follow has been activated scroll to position pointer now
-    if (m_playTracking) {
+    if (m_scrollToFollowPlayback) {
         timeT ppos = CompositionPosition::getInstance()->get();
         double position = m_rulerScale->getXForTime(ppos);
         m_compositionView->scrollHoriz(position);

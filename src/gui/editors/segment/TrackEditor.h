@@ -90,7 +90,7 @@ public:
     void updateRulers();
 
     /// Are we scrolling as we play?
-    bool isTracking() const { return m_playTracking; }
+    bool isTracking() const { return m_scrollToFollowPlayback; }
     /// Toggle playback scrolling.
     void scrollToFollow();
 
@@ -197,8 +197,7 @@ private:
     CompositionView         *m_compositionView;
     CompositionModelImpl    *m_compositionModel;
 
-    /// Scroll To Follow Playback
-    bool m_playTracking;
+    bool m_scrollToFollowPlayback;
 
     int                      m_trackCellHeight;
 
