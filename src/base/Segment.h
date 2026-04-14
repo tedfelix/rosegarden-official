@@ -1166,7 +1166,7 @@ public:
     virtual void segmentDeleted(const Segment *) = 0;
 };
 
-
+/// Base class for SegmentNotationHelper and SegmentPerformanceHelper.
 class ROSEGARDENPRIVATE_EXPORT SegmentHelper
 {
 protected:

@@ -247,16 +247,19 @@ PasteEventsCommand::modifySegment()
 
     RG_DEBUG << "pasteTime" << pasteTime << "origin" << origin;
 
+    // Remove rests at the paste destination.
+    // ??? Why?  We can just normalize rests after, can't we?  removeRests()
+    //     doesn't even work in most cases.  It stops removing rests the moment
+    //     it encounters a note.  I have a feeling this can safely be removed.
     SegmentNotationHelper helper(*destination);
     // removeRests() changes the duration destructively but the
     // variable "duration" is used by normalizeRests()
     timeT d = duration;
-    bool possible = helper.removeRests(pasteTime, d, true);
-    if (! possible) RG_WARNING << "pasting when not possible";
+    helper.removeRests(pasteTime, d, true);
 
     RG_DEBUG << "PasteEventsCommand::modifySegment() : paste type = "
-    << m_pasteType << " - pasteTime = "
-    << pasteTime << " - origin = " << origin;
+             << m_pasteType << " - pasteTime = "
+             << pasteTime << " - origin = " << origin;
 
     // First check for group IDs, which we want to make unique in the
     // copies in the destination segment
