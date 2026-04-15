@@ -182,7 +182,8 @@ setProperties(QMainWindow *parent,
     if (!selection) { return; }
 
     // situation will ultimately be owned by SelectionPropertyCommand via
-    // dialog result
+    // dialog result  [Apparently not.  It gets leaked.]
+    // ??? MEMORY LEAK: The SelectionSituation is leaked.
     setProperties(parent,
                   QObject::tr("Set Event Velocities"),
                   new SelectionSituation(eventType, selection, normValue),

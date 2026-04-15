@@ -1215,8 +1215,8 @@ MatrixView::slotVelocityDown()
 void
 MatrixView::slotSetVelocities()
 {
-    ParameterPattern::
-        setVelocities(this, getSelection(), getCurrentVelocity());
+    ParameterPattern::setVelocities(
+            this, getSelection(), getCurrentVelocity());
 }
 
 void

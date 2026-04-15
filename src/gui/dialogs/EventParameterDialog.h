@@ -84,16 +84,20 @@ private:
     // Initialize m_patternCombo.
     void initPatternCombo();
 
+    // cppcheck-suppress noCopyConstructor
     /// A QLabel and a QSpinBox.
     /**
+     * ??? The name ParameterWidget is misleading.  This is not a widget.
+     *     A QWidget is used in the ctor.  This should derive from QWidget
+     *     and act like one.  Then the name ParameterWidget makes sense.
+     *     See comments in the ctor.
+     *
      * @author Tom Breton (Tehom)
      */
-
-    // cppcheck-suppress noCopyConstructor
-    class ParamWidget
+    class ParameterWidget
     {
     public:
-        explicit ParamWidget(QLayout *parent);
+        explicit ParameterWidget(QLayout *parent);
 
         void showByArgs(const ParameterPattern::SliderSpec *args);
         void hide();
@@ -108,13 +112,13 @@ private:
         // cppcheck-suppress unsafeClassCanLeak
         QLabel *m_label;
     };
-    typedef std::vector<ParamWidget> ParamWidgetVec;
+    typedef std::vector<ParameterWidget> ParameterWidgetVector;
     // All the parameter widgets.  Not all are used with
     // all patterns.
-    ParamWidgetVec m_paramVec;
+    ParameterWidgetVector m_parameterWidgetVector;
     // Number of parameters currently in use.  Not always the same as
     // m_paramVec.size().
-    int m_NbParameters;
+    int m_numberOfParameters;
     // Get a vector of the current parameters.  This makes part of our
     // final result object.
     ParameterPattern::BareParams getBareParams();
