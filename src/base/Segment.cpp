@@ -54,7 +54,6 @@ Segment::Segment(SegmentType segmentType, timeT startTime) :
     EventContainer(),
     matrixHZoomFactor(1.0),
     matrixVZoomFactor(1.0),
-    matrixVelocity(100),
     matrixRulers(new RulerSet),
     notationRulers(new RulerSet),
     m_composition(nullptr),
@@ -102,6 +101,7 @@ Segment::Segment(const Segment &segment):
     EventContainer(),
     matrixHZoomFactor(segment.matrixHZoomFactor),
     matrixVZoomFactor(segment.matrixVZoomFactor),
+    matrixVelocity(segment.matrixVelocity),
     matrixRulers(new RulerSet(*segment.matrixRulers)),
     notationRulers(new RulerSet(*segment.notationRulers)),
     m_composition(nullptr), // Composition should decide what's in it and what's not

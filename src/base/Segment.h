@@ -752,7 +752,7 @@ public:
     /// Zoom factor for Matrix.
     double matrixVZoomFactor;
     /// Velocity for Matrix.
-    MidiByte matrixVelocity;
+    MidiByte matrixVelocity{100};
 
     struct Ruler
     {

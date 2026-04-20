@@ -1154,7 +1154,13 @@ RoseXmlHandler::startElement(const QString& namespaceURI,
         // If we're in a <segment>, <matrix> is valid.
         if (m_currentSegment) {
             m_inMatrix = true;
-            m_currentSegment->matrixVelocity = atts.value("velocity").toUInt();
+            if (atts.hasAttribute("velocity")) {
+                m_currentSegment->matrixVelocity =
+                        atts.value("velocity").toUInt();
+                // 0 is a note-off.  It makes little sense.
+                if (m_currentSegment->matrixVelocity == 0)
+                    m_currentSegment->matrixVelocity = 100;
+            }
         }
 
     } else if (lcName == "notation") {  // <notation>
