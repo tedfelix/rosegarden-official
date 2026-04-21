@@ -168,8 +168,8 @@ protected:
     void resizeEvent(QResizeEvent *) override;
 
     void addControlItem(QSharedPointer<ControlItem>);
+    void removeControlItem(const ControlItemMap::iterator &);
     void eraseControlItem(const Event *);
-    void eraseControlItem(const ControlItemMap::iterator &);
 
     int mapXToWidget(float x);
     int mapYToWidget(float y);
@@ -225,9 +225,23 @@ private:
 
     ControlItemMap::iterator findControlItem(const ControlItem *);
     ControlItemMap::iterator findControlItem(const Event *);
+
+    /**
+     * Update m_visibleItems, m_firstVisibleItem, m_lastVisibleItem, and
+     * m_nextItemLeft based on the item that was just added.
+     *
+     * See removeCheckVisibleLimits().
+     */
     void addCheckVisibleLimits(ControlItemMap::iterator);
-    void removeControlItem(const ControlItemMap::iterator &);
+
+    /**
+     * Update m_visibleItems, m_firstVisibleItem, m_lastVisibleItem, and
+     * m_nextItemLeft based on an item that is about to be removed.
+     *
+     * See addCheckVisibleLimits().
+     */
     void removeCheckVisibleLimits(const ControlItemMap::iterator &);
+
     int visiblePosition(QSharedPointer<ControlItem>);
 
     QPointF mapWidgetToItem(QPoint *point);

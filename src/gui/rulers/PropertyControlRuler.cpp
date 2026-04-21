@@ -319,7 +319,7 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 //                m_controlItemList.erase(it);
 //                m_selectedItems.remove(item);
 //                delete item;
-                eraseControlItem(it);
+                removeControlItem(it);
                 RG_DEBUG << "elementRemoved(): Control item erased";
                 break;
             }

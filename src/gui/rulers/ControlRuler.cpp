@@ -151,6 +151,7 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
     return iter;
 #else
     // Find the ControlItem for the given event.
+    // Not a fan of STL algorithms, just trying this one out.
     return std::find_if(m_controlItemMap.begin(),
                         m_controlItemMap.end(),
                         [event](const ControlItemMap::value_type &x)
@@ -187,89 +188,71 @@ ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem *item)
 
 void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
 {
-    // Add a ControlItem to the ruler
-
-    //RG_DEBUG << "addControlItem(): ControlItem added: " << hex << (long)item;
-
     // ControlItem may not have an assigned event but must have x position
     item->setXKey(item->xStart());
-    ControlItemMap::iterator it =
-            m_controlItemMap.insert(
-                    ControlItemMap::value_type(item->xStart(), item));
+
+    // Insert it.
+    ControlItemMap::iterator it = m_controlItemMap.insert(
+            ControlItemMap::value_type(item->xStart(), item));
 
     addCheckVisibleLimits(it);
 
     if (it->second->isSelected())
         m_selectedItems.push_back(it->second);
-
 }
 
 void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
 {
-    // Referenced item is has just been added to m_controlItemMap
+    // Referenced item has just been added to m_controlItemMap.
     // If it is visible, add it to the list and correct first/last
     // visible item iterators
-    QSharedPointer<ControlItem> item = it->second;
+    const QSharedPointer<ControlItem> item = it->second;
 
     // If this new item is visible
-    if (visiblePosition(item)==0) {
+    if (visiblePosition(item) == 0) {
         // put it in the visible list
         m_visibleItems.push_back(item);
-        // If there is no first visible item or this one is further left
-        if (m_firstVisibleItem == m_controlItemMap.end() ||
-                item->xStart() < m_firstVisibleItem->second->xStart()) {
+
+        // Update m_firstVisibleItem.
+
+        // If there is no first visible item or this one is farthest left
+        if (m_firstVisibleItem == m_controlItemMap.end()  ||
+            item->xStart() < m_firstVisibleItem->second->xStart()) {
             // make it the first visible item
             m_firstVisibleItem = it;
         }
 
-        // If there is no last visible item or this is further right
-        if (m_lastVisibleItem == m_controlItemMap.end() ||
-                item->xStart() >= m_lastVisibleItem->second->xStart()) {
+        // Update m_lastVisibleItem.
+
+        // If there is no last visible item or this is farthest right
+        if (m_lastVisibleItem == m_controlItemMap.end()  ||
+            item->xStart() >= m_lastVisibleItem->second->xStart()) {
             // make it the last visible item
             m_lastVisibleItem = it;
         }
     }
 
+    // Update m_nextItemLeft.
+
     // If the new item is invisible to the left
     if (visiblePosition(item) == -1) {
-        if (m_nextItemLeft == m_controlItemMap.end() ||
-                item->xStart() > m_nextItemLeft->second->xStart()) {
+        // If there is no "next item left" or this one is after the
+        // "next item left"...
+        if (m_nextItemLeft == m_controlItemMap.end()  ||
+            item->xStart() > m_nextItemLeft->second->xStart()) {
             // make it the next item to the left
             m_nextItemLeft = it;
         }
     }
 }
 
-#if 0
-void ControlRuler::removeControlItem(ControlItem* item)
-{
-    // Remove control item by item pointer
-    // No search by Value provided for std::multimap so find items with the requested item's
-    //  xstart position and sweep these for the correct entry
-    ControlItemMap::iterator it = findControlItem(item);
-
-    if (it != m_controlItemMap.end()) removeControlItem(it);
-}
-
-void ControlRuler::removeControlItem(const Event *event)
-{
-    // Remove the ControlItem matching the received event if one exists
-    ControlItemMap::iterator it = findControlItem(event);
-
-    if (it != m_controlItemMap.end()) {
-        RG_DEBUG << "removeControlItem(): at x = " << it->first;
-        removeControlItem(it);
-    }
-}
-#endif
-
 void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
 {
-    //RG_DEBUG << "removeControlItem(): iterator->item: " << hex << (long) it->second;
-    //RG_DEBUG << "  m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
+    if (it->second->isSelected())
+        m_selectedItems.remove(it->second);
 
-    if (it->second->isSelected()) m_selectedItems.remove(it->second);
     removeCheckVisibleLimits(it);
+
     m_controlItemMap.erase(it);
 }
 
@@ -281,6 +264,8 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
     // Note, we can't check if it _was_ visible. It may have just become invisible
     // Try to remove from list and check iterators.
     m_visibleItems.remove(it->second);
+
+    // Update m_firstVisibleItem.
 
     // If necessary, correct the first and lastVisibleItem iterators
     // If this was the first visible item
@@ -294,6 +279,8 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
             m_firstVisibleItem = m_controlItemMap.end();
     }
 
+    // Update m_lastVisibleItem.
+
     // If this was the last visible item
     if (it == m_lastVisibleItem) {
         // and not the first in the list
@@ -306,6 +293,8 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
         // if it's first in the list then there are no visible items
         else m_lastVisibleItem = m_controlItemMap.end();
     }
+
+    // Update m_nextItemLeft.
 
     // If this was the first invisible item left (could be part of a selection moved off screen)
     if (it == m_nextItemLeft) {
@@ -322,12 +311,8 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
 void ControlRuler::eraseControlItem(const Event *event)
 {
     ControlItemMap::iterator it = findControlItem(event);
-    if (it != m_controlItemMap.end()) eraseControlItem(it);
-}
-
-void ControlRuler::eraseControlItem(const ControlItemMap::iterator &it)
-{
-    removeControlItem(it);
+    if (it != m_controlItemMap.end())
+        removeControlItem(it);
 }
 
 void ControlRuler::moveItem(ControlItem *item)
