@@ -21,7 +21,7 @@
 
 #include "ControllerEventAdapter.h"
 #include "ControllerEventsRuler.h"
-#include "ControlRuler.h"
+//#include "ControlRuler.h"
 #include "base/BaseProperties.h"
 #include "misc/Debug.h"
 #include "base/Event.h"

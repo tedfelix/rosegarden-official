@@ -82,8 +82,9 @@ public:
     void setSelectionRect(QRectF *rect)  { m_selectionRect = rect; }
     QRectF *getSelectionRectangle()  { return m_selectionRect; }
 
-    virtual void setSegment(Segment *);
-    virtual void setViewSegment(ViewSegment *);
+    virtual void setSegment(Segment *segment);
+    /// Also performs a setSegment().
+    virtual void setViewSegment(ViewSegment *viewSegment);
 
     /// Copy screen to document.  Uses a command for undo.
     /**
@@ -117,7 +118,7 @@ public:
     EventSelection *getEventSelection()  { return m_eventSelection; }
 
 
-    ControlItemMap::iterator findControlItem(float x);
+    ControlItemMap::iterator findControlItem(double x);
     void moveItem(ControlItem *item);
 
     SnapGrid *getSnapGrid() const  { return m_snapGrid; }

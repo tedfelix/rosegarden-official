@@ -46,8 +46,9 @@
 #include <QPolygonF>
 #include <QSettings>
 
-//#include <algorithm>
+#include <algorithm>  // std::min(), std::max(), std::find()
 #include <memory>
+#include <utility>  // std::pair
 
 #include <float.h>  // FLT_MAX
 
@@ -60,7 +61,6 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
                            QWidget *parent) :
     QWidget(parent),
     m_rulerScale(rulerScale),
-    m_controlItemMap(),
     m_firstVisibleItem(m_controlItemMap.end()),
     m_lastVisibleItem(m_controlItemMap.end()),
     m_nextItemLeft(m_controlItemMap.end()),
@@ -70,9 +70,12 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
     setMouseTracking(true);
 
     m_toolBox = new ControlToolBox(this);
+    // Re-broadcast context help from the tools.  ControlRulerWidget connects
+    // for this.
     connect(m_toolBox, &BaseToolBox::showContextHelp,
             this, &ControlRuler::showContextHelp);
 
+    // Context menu actions.
     createAction("snap_none", &ControlRuler::slotSnap);
     createAction("snap_editor", &ControlRuler::slotSnap);
     createAction("snap_unit", &ControlRuler::slotSnap);
@@ -90,6 +93,7 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
     createAction("snap_beat", &ControlRuler::slotSnap);
     createAction("snap_bar", &ControlRuler::slotSnap);
 
+    // Snap
     m_snapGrid = new SnapGrid(m_rulerScale);
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
@@ -102,6 +106,8 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
 ControlRuler::~ControlRuler()
 {
     delete m_snapGrid;
+    m_snapGrid = nullptr;
+
     delete m_eventSelection;
     m_eventSelection = nullptr;
 }
@@ -110,8 +116,10 @@ void ControlRuler::setSegment(Segment *segment)
 {
     m_segment = segment;
 
-    if (m_eventSelection) delete m_eventSelection;
+    if (m_eventSelection)
+        delete m_eventSelection;
 
+    // Create a new EventSelection connected to the Segment.
     m_eventSelection = new EventSelection(*segment);
 }
 
@@ -122,52 +130,59 @@ void ControlRuler::setViewSegment(ViewSegment *viewSegment)
     setSegment(&m_viewSegment->getSegment());
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(float x)
+ControlItemMap::iterator ControlRuler::findControlItem(const double x)
 {
-    ControlItemMap::iterator it;
-    it = m_controlItemMap.upper_bound(x);
-    return it;
+    return m_controlItemMap.upper_bound(x);
 }
 
 ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
 {
-    // double xstart = getRulerScale()->getXForTime(event->getAbsoluteTime());
+#if 0
+    ControlItemMap::iterator iter;
 
-    ControlItemMap::iterator it;
-    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
-
-    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        if (it->second->getEvent() == event) break;
+    // For each controlItem, find the provided Event.
+    for (iter = m_controlItemMap.begin();
+         iter != m_controlItemMap.end();
+         ++iter) {
+        if (iter->second->getEvent() == event)
+            break;
     }
 
-    ///@TODO equal_range (above) is not behaving as expected - sort it out
-//    if (it != m_controlItemMap.end() && it->second->getEvent() != event) {
-//        it = m_controlItemMap.end();
-//    }
-
-    return it;
+    return iter;
+#else
+    // Find the ControlItem for the given event.
+    return std::find_if(m_controlItemMap.begin(),
+                        m_controlItemMap.end(),
+                        [event](const ControlItemMap::value_type &x)
+                            { return (x.second->getEvent() == event); });
+#endif
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
+ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem *item)
 {
-    double xstart = item->xKey();
+#if 0
+    const double xStart = item->xKey();
 
-    std::pair<ControlItemMap::iterator, ControlItemMap::iterator>
-        range = m_controlItemMap.equal_range(xstart);
+    // ??? Why equal_range()?  In a std::map there can only be exactly one
+    //     element with a specific key value.  Why not use find() instead?
+    const std::pair<ControlItemMap::iterator, ControlItemMap::iterator>
+            range = m_controlItemMap.equal_range(xStart);
+    // Not found?  Bail.
+    //if (range.first == m_controlItemMap.end())
+    //    return range.first;
 
     // now find in this range
-    if (range.first != m_controlItemMap.end()) {
-        for(ControlItemMap::iterator it = range.first;
-            it != range.second;
-            ++it) {
-            if (it->second == item) {
-                RG_DEBUG << "findControlItem equal_range1 found item";
-                return it;
-            }
-        }
+    for (ControlItemMap::iterator it = range.first;
+         it != range.second;
+         ++it) {
+        if (it->second == item)
+            return it;
     }
 
     return m_controlItemMap.end();
+#else
+    return m_controlItemMap.find(item->xKey());
+#endif
 }
 
 void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
@@ -919,9 +934,8 @@ void ControlRuler::updateSelection()
 
 void ControlRuler::addToSelection(QSharedPointer<ControlItem> item)
 {
-    ControlItemList::iterator found =
-        std::find (m_selectedItems.begin(),
-                   m_selectedItems.end(), item);
+    ControlItemList::iterator found = std::find(
+            m_selectedItems.begin(), m_selectedItems.end(), item);
 
     // If we already have this item, do nothing.
     if (found != m_selectedItems.end()) { return; }
