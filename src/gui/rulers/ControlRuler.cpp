@@ -317,16 +317,6 @@ void ControlRuler::eraseControlItem(const Event *event)
 
 void ControlRuler::moveItem(ControlItem *item)
 {
-    // ??? This is pretty ugly.  A naked pointer being used to find
-    //     a shared pointer.  It's as if the three callers of this
-    //     function also need to pass in the shared pointer.  That
-    //     would look a bit funny:
-    //
-    //         item->reconfigure(item);
-
-    // Move the item within m_controlItemMap
-    // Need to check changes in visibility
-    // DO NOT change isSelected or m_selectedItems as this is used to loop this
     ControlItemMap::iterator it = findControlItem(item);
     // Not found?  Bail.
     if (it == m_controlItemMap.end())
@@ -335,8 +325,11 @@ void ControlRuler::moveItem(ControlItem *item)
     // Copy the shared pointer so that the item isn't deleted.
     QSharedPointer<ControlItem> item2 = it->second;
 
+    // Remove the original.
     removeCheckVisibleLimits(it);
     m_controlItemMap.erase(it);
+
+    // Add the new.
     item2->setXKey(item2->xStart());
     it = m_controlItemMap.insert(
             ControlItemMap::value_type(item2->xStart(), item2));
@@ -345,13 +338,15 @@ void ControlRuler::moveItem(ControlItem *item)
 
 int ControlRuler::visiblePosition(QSharedPointer<ControlItem> item)
 {
-    // Check visibility of an item
-    // Returns: -1 - item is off screen left
-    //           0 - item is visible
-    //          +1 - item is off screen right
-    if (item->xEnd() < m_pannedRect.left()) return -1;
-    if (item->xStart() > m_pannedRect.right()) return 1;
+    // Off screen left?
+    if (item->xEnd() < m_pannedRect.left())
+        return -1;
 
+    // Off screen right?
+    if (item->xStart() > m_pannedRect.right())
+        return 1;
+
+    // On screen.
     return 0;
 }
 
@@ -376,20 +371,23 @@ void ControlRuler::updateSegment()
     //
     // Either run through the ruler's EventSelection, updating from each item
     //  or, if there isn't one, go through m_selectedItems
-    timeT start,end;
 
     QString commandLabel = "Adjust control/property";
 
     std::unique_ptr<MacroCommand> macro(new MacroCommand(commandLabel));
 
     // Find the extent of the selected items
-    float xmin=FLT_MAX,xmax=-1.0;
+    double xmin = FLT_MAX;
+    double xmax = -1.0;
 
-    // EventSelection::addEvent adds timeT(1) to its extentt for zero duration events so need to mimic this here
+    // EventSelection::addEvent() adds timeT(1) to its extent for zero duration
+    // events so need to mimic this here.
+
     timeT durationAdd = 0;
 
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-        if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
+        if ((*it)->xStart() < xmin)
+            xmin = (*it)->xStart();
         if ((*it)->xEnd() > xmax) {
             xmax = (*it)->xEnd();
             if ((*it)->xEnd() == (*it)->xStart())
@@ -399,12 +397,12 @@ void ControlRuler::updateSegment()
         }
     }
 
-    start = getRulerScale()->getTimeForX(xmin);
-    end = getRulerScale()->getTimeForX(xmax)+durationAdd;
+    timeT start = getRulerScale()->getTimeForX(xmin);
+    timeT end = getRulerScale()->getTimeForX(xmax) + durationAdd;
 
     RG_DEBUG << "updateSegment(): added events" << m_eventSelection->size();
 
-    if (m_eventSelection->size() == 0) {
+    if (m_eventSelection->empty()) {
         // We do not have a valid set of selected events to update
         if (m_selectedItems.empty())
             return;
@@ -415,13 +413,14 @@ void ControlRuler::updateSegment()
 
     } else {
         // Check for movement in time here and delete events if necessary
-        if (start != m_eventSelection->getStartTime() || end != m_eventSelection->getEndTime()) {
+        if (start != m_eventSelection->getStartTime()  ||
+            end != m_eventSelection->getEndTime()) {
             commandLabel = "Move control";
             macro->setName(commandLabel);
 
             // Get the limits of the change for undo
-            start = std::min(start,m_eventSelection->getStartTime());
-            end = std::max(end,m_eventSelection->getEndTime());
+            start = std::min(start, m_eventSelection->getStartTime());
+            end = std::max(end, m_eventSelection->getEndTime());
 
         }
     }
@@ -441,8 +440,9 @@ void ControlRuler::updateSegment()
                      m_controlItemMap.lower_bound(xItem);
                  otherItemIter != m_controlItemMap.end();
                  ++otherItemIter) {
-                // ignore inactive items
-                if (! otherItemIter->second->active()) continue;
+                // Item not active?  Try the next.
+                if (!otherItemIter->second->active())
+                    continue;
                 // If this is the same as the item we are checking,
                 // try the next.
                 if (cItem == otherItemIter->second) {
@@ -490,35 +490,45 @@ void ControlRuler::updateSegment()
 
 void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 {
-    // notationLayoutUpdated should be called after notation has adjusted the layout
-    // Clearly, for property control rulers, notes may have been moved so their position needs updating
-    // The rulers may also have changed so ControllerEventRulers also need updating
-    // Property control items may now need to be repositioned within the ControlItemMap
-    // as new items are all created with a zero x-position, and have now been put in place.
-    // For this reason, we need to collect items into a separate list otherwise we get the
-    // dreaded 'modifying a list within a loop of the list' problem which can take quite a long
-    // time to fix!
+    // notationLayoutUpdated() should be called after Notation has adjusted the
+    // layout.  Clearly, for property control rulers, notes may have been moved
+    // so their position needs updating.  The rulers may also have changed so
+    // ControllerEventRulers also need updating.  Property control items may
+    // now need to be repositioned within the ControlItemMap as new items are
+    // all created with a zero x-position, and have now been put in place.
+    // For this reason, we need to collect items into a separate list
+    // (itemsToUpdate) otherwise we get the dreaded 'modifying a list within a
+    // loop of the list' problem which can take quite a long time to fix!
+
     ControlItemVector itemsToUpdate;
+
     ControlItemMap::iterator it = m_controlItemMap.begin();
-    while (it != m_controlItemMap.end() && it->first == 0) {
+
+    // Add all new items (items at x position 0) to itemsToUpdate.
+    while (it != m_controlItemMap.end()  &&  it->first == 0) {
         itemsToUpdate.push_back(it->second);
         ++it;
     }
 
-    while (it != m_controlItemMap.end() && it->first < getRulerScale()->getXForTime(startTime)) ++it;
+    // Skip items up to the first whose x is at or after startTime.
+    while (it != m_controlItemMap.end()  &&
+           it->first < getRulerScale()->getXForTime(startTime)) {
+        ++it;
+    }
 
-    // Would like to only update in the defined region but, unfortunately, everything after this time
-    // may well have moved as well so we have to do everything after startTime
+    // Would like to only update in the defined region but, unfortunately,
+    // everything after this time may well have moved as well so we have to do
+    // everything after startTime.
+
+    // Copy all items up to the end to itemsToUpdate.
     while (it != m_controlItemMap.end()) {
         itemsToUpdate.push_back(it->second);
         ++it;
     }
 
-    for (ControlItemVector::iterator vit = itemsToUpdate.begin();
-         vit != itemsToUpdate.end();
-         ++vit) {
-        (*vit)->update();
-        //RG_DEBUG << "notationLayoutUpdated(): Updated item: " << hex << (long)(*vit);
+    // For each item to update, call the item's update().
+    for (QSharedPointer<ControlItem> controlItem : itemsToUpdate) {
+        controlItem->update();
     }
 
     update();
