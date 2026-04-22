@@ -536,91 +536,97 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 
 void ControlRuler::paintEvent(QPaintEvent * /*event*/)
 {
-    //RG_DEBUG << "paintEvent(): width()=" << width() << " height()=" << height();
+    // We just draw the background here.
 
     QPainter painter(this);
 
     QPen pen;
-    QBrush brush;
-
     pen.setStyle(Qt::NoPen);
     painter.setPen(pen);
 
+    QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::white);
     painter.setBrush(brush);
 
+    // Fill with white.
     painter.drawRect(0,0,width(),height());
 
-    double xstartUnscaled =
+    const double xStartUnscaled =
         m_rulerScale->getXForTime(m_segment->getStartTime());
-    double xendUnscaled =
+    const double xStart = mapXToWidget(xStartUnscaled * m_xScale);
+
+    const double xEndUnscaled =
         m_rulerScale->getXForTime(m_segment->getEndTime());
+    const double xEnd = mapXToWidget(xEndUnscaled * m_xScale);
 
-    double xstart = mapXToWidget(xstartUnscaled * m_xScale);
-    double xend = mapXToWidget(xendUnscaled * m_xScale);
-
-    //RG_DEBUG << "paintEvent(): xstart=" << xstart;
-
+    // Top/Middle/Bottom horizontal lines.
     painter.setPen(QColor(127, 127, 127));
-    painter.drawLine(xstart, mapYToWidget(0.0f), xend, mapYToWidget(0.0f));
-    painter.drawLine(xstart, mapYToWidget(0.5f), xend, mapYToWidget(0.5f));
-    painter.drawLine(xstart, mapYToWidget(1.0f), xend, mapYToWidget(1.0f));
+    painter.drawLine(xStart, mapYToWidget(0.0f), xEnd, mapYToWidget(0.0f));
+    painter.drawLine(xStart, mapYToWidget(0.5f), xEnd, mapYToWidget(0.5f));
+    painter.drawLine(xStart, mapYToWidget(1.0f), xEnd, mapYToWidget(1.0f));
 
+    // Quarter horizontal lines.
     painter.setPen(QColor(192, 192, 192));
-    painter.drawLine(xstart, mapYToWidget(0.25f), xend, mapYToWidget(0.25f));
-    painter.drawLine(xstart, mapYToWidget(0.75f), xend, mapYToWidget(0.75f));
+    painter.drawLine(xStart, mapYToWidget(0.25f), xEnd, mapYToWidget(0.25f));
+    painter.drawLine(xStart, mapYToWidget(0.75f), xEnd, mapYToWidget(0.75f));
 
     // vertical lines from snap grid
+
     timeT snaps = m_snapGrid->getSnapSetting();
     if (snaps != SnapGrid::NoSnap) {
         Composition *comp = m_rulerScale->getComposition();
-        double y0 = mapYToWidget(0.0f);
-        double y1 = mapYToWidget(1.0f);
 
-        timeT startt = m_segment->getStartTime();
-        timeT endt = m_segment->getEndMarkerTime();
-        int firstbar = comp->getBarNumber(startt);
-        int lastbar = comp->getBarNumber(endt);
+        const double yTop = mapYToWidget(0.0f);
+        const double yBottom = mapYToWidget(1.0f);
+        const double xLeft = geometry().left();
+        const double xRight = geometry().right();
 
-        for (int bar = firstbar; bar <= lastbar; ++bar) {
+        const int firstBar = comp->getBarNumber(m_segment->getStartTime());
+        const int lastBar = comp->getBarNumber(m_segment->getEndMarkerTime());
+
+        // For each bar in the Segment...
+        for (int bar = firstBar; bar <= lastBar; ++bar) {
             std::pair<timeT, timeT> range = comp->getBarRange(bar);
+            // ??? Why are these double when they are window coords?
+            const double x0 = m_rulerScale->getXForTime(range.first);
+            const double x1 = m_rulerScale->getXForTime(range.second);
+
+            // Bar is to the left of the viewport?  Try the next.
+            if (mapXToWidget(x1 * m_xScale) < xLeft) continue;
+            // Bar is to the right of the viewport?  We are done.
+            if (mapXToWidget(x0 * m_xScale) > xRight) break;
 
             bool newTimeSig = false;
             TimeSignature timeSig =
                 comp->getTimeSignatureInBar(bar, newTimeSig);
 
-            double x0 = m_rulerScale->getXForTime(range.first);
-            double x1 = m_rulerScale->getXForTime(range.second);
-            double width = x1 - x0;
-
-            double gridLines = double(timeSig.getBarDuration()) /
+            const double gridLines = double(timeSig.getBarDuration()) /
                 double(m_snapGrid->getSnapTimeForX(x0));
 
-            double dx = width / gridLines;
+            const double barWidth = x1 - x0;
+            const double dx = barWidth / gridLines;
             double x = x0;
 
-            for (int index = 0; index < gridLines; ++index) {
+            // For each grid line within the bar...
+            for (int index = 0; index < gridLines; ++index, x += dx) {
 
-                if (x < xstartUnscaled) {
-                    x += dx;
+                if (x < xStartUnscaled)
                     continue;
-                }
-
                 // Exit if we have passed the end of last segment end time.
-                if (x > xendUnscaled) {
+                if (x > xEndUnscaled)
                     break;
-                }
 
+                // If it's the bar line...
                 if (index == 0) {
-                    // index 0 is the bar line
+                    // Make it dark.
                     painter.setPen(QColor(127, 127, 127));
-                } else {
+                } else {  // Not the bar line, not so dark.
                     painter.setPen(QColor(192, 192, 192));
                 }
                 int xmap = mapXToWidget(x * m_xScale);
-                painter.drawLine(xmap, y0, xmap, y1);
-                x += dx;
+                painter.drawLine(xmap, yTop, xmap, yBottom);
+
             }
         }
     }
