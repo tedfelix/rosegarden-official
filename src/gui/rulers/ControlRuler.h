@@ -124,7 +124,7 @@ public:
     SnapGrid *getSnapGrid() const  { return m_snapGrid; }
     void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
 
-    void setPannedRect(QRectF);
+    void setPannedRect(const QRectF &pannedRect);
 
 signals:
 
@@ -171,14 +171,15 @@ protected:
     void removeControlItem(const ControlItemMap::iterator &);
     void eraseControlItem(const Event *);
 
-    int mapXToWidget(float x);
-    int mapYToWidget(float y);
-    QRect mapRectToWidget(QRectF *rect);
-    QPolygon mapItemToWidget(QSharedPointer<ControlItem> controlItem);
+    int mapXToWidget(float x) const;
+    int mapYToWidget(float y) const;
+    QRect mapRectToWidget(const QRectF *rect) const;
+    QPolygon mapItemToWidget(
+            QSharedPointer<const ControlItem> controlItem) const;
 
     /// Copies from m_selectedItems to m_eventSelection.
     /**
-     * ??? rename: UpdateEventSelection()
+     * ??? rename: updateEventSelection()
      */
     void updateSelection();
 
@@ -244,7 +245,7 @@ private:
 
     int visiblePosition(QSharedPointer<ControlItem>);
 
-    QPointF mapWidgetToItem(QPoint *point);
+    QPointF mapWidgetToItem(const QPoint *point) const;
 
     ControlMouseEvent createControlMouseEvent(QMouseEvent *e);
 

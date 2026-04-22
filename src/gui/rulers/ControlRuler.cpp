@@ -51,6 +51,7 @@
 #include <utility>  // std::pair
 
 #include <float.h>  // FLT_MAX
+#include <math.h>  // lround()
 
 
 namespace Rosegarden
@@ -537,6 +538,7 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 void ControlRuler::paintEvent(QPaintEvent * /*event*/)
 {
     // We just draw the background here.
+    // Derivers call this then draw the items.
 
     QPainter painter(this);
 
@@ -632,62 +634,62 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
     }
 }
 
-int ControlRuler::mapXToWidget(float x)
+int ControlRuler::mapXToWidget(float x) const
 {
-    return (0.5+(m_xOffset+x-m_pannedRect.left()) / m_xScale);
+    return lround((m_xOffset + x - m_pannedRect.left()) / m_xScale);
 }
 
-int ControlRuler::mapYToWidget(float y)
+int ControlRuler::mapYToWidget(float y) const
 {
-    return (0.5+(-y+1.0f) / m_yScale);
+    return lround((-y + 1.0) / m_yScale);
 }
 
-QRect ControlRuler::mapRectToWidget(QRectF *rect)
+QRect ControlRuler::mapRectToWidget(const QRectF *rect) const
 {
-    QRect newrect;
+    QRect widgetRect;
+    widgetRect.setLeft(mapXToWidget(rect->left()));
+    widgetRect.setTop(mapYToWidget(rect->top()));
+    widgetRect.setRight(mapXToWidget(rect->right()));
+    widgetRect.setBottom(mapYToWidget(rect->bottom()));
 
-    newrect.setTopLeft(QPoint(mapXToWidget(rect->left()),mapYToWidget(rect->top())));
-    newrect.setBottomRight(QPoint(mapXToWidget(rect->right()),mapYToWidget(rect->bottom())));
-
-    return newrect;
+    return widgetRect;
 }
 
-QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> controlItem)
+QPolygon ControlRuler::mapItemToWidget(
+        QSharedPointer<const ControlItem> controlItem) const
 {
-
     QPolygon newpoly;
-    QPoint newpoint;
+
     // For each point in the ControlItem (it's a QPolygonF)...
-    for (QPolygonF::iterator it = controlItem->begin(); it != controlItem->end(); ++it) {
-        newpoint.setX(mapXToWidget((*it).x()));
-        newpoint.setY(mapYToWidget((*it).y()));
-        newpoly.push_back(newpoint);
+    for (const QPointF &point : *controlItem) {
+        newpoly.push_back(QPoint{mapXToWidget(point.x()),
+                                 mapYToWidget(point.y())});
     }
 
     return newpoly;
 }
 
-QPointF ControlRuler::mapWidgetToItem(QPoint *point)
+QPointF ControlRuler::mapWidgetToItem(const QPoint *point) const
 {
-
     QPointF newpoint;
-    newpoint.setX(m_xScale*(point->x()) + m_pannedRect.left() - m_xOffset);
-    newpoint.setY(-m_yScale*(point->y()) + 1.0f);
+    newpoint.setX(m_xScale * point->x() + m_pannedRect.left() - m_xOffset);
+    newpoint.setY(-m_yScale * point->y() + 1.0);
+
     return newpoint;
 }
 
-void ControlRuler::setPannedRect(QRectF pr)
+void ControlRuler::setPannedRect(const QRectF &pannedRect)
 {
-    if (pr.isNull())
+    if (pannedRect.isNull())
         RG_WARNING << "slotSetPannedRect(): WARNING: Rect is null.";
 
-    m_pannedRect = pr;
-    m_xScale = (double) m_pannedRect.width() / (double) width();
-    m_yScale = 1.0f / (double) height();
-    RG_DEBUG << "slotSetPannedRect" << pr << width() << m_xScale;
+    m_pannedRect = pannedRect;
+
+    m_xScale = (double)m_pannedRect.width() / (double)width();
+    m_yScale = 1.0f / (double)height();
 
     // Create the visible items list
-    ///TODO Improve efficiency using xstart and xstop ordered lists of control items
+
     m_visibleItems.clear();
     bool anyVisibleYet = false;
 
@@ -695,12 +697,17 @@ void ControlRuler::setPannedRect(QRectF pr)
     m_firstVisibleItem = m_controlItemMap.end();
     m_lastVisibleItem = m_controlItemMap.end();
 
-    ControlItemMap::iterator it;
-    for (it = m_controlItemMap.begin();it != m_controlItemMap.end(); ++it) {
-        int visPos = visiblePosition(it->second);
+    // For each ControlItem...
+    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+         it != m_controlItemMap.end();
+         ++it) {
+        const int visPos = visiblePosition(it->second);
 
-        if (visPos == -1) m_nextItemLeft = it;
+        // To the left?  Remember as "next item left".
+        if (visPos == -1)
+            m_nextItemLeft = it;
 
+        // Within?  Add to visible items.
         if (visPos == 0) {
             if (!anyVisibleYet) {
                 m_firstVisibleItem = it;
@@ -711,10 +718,10 @@ void ControlRuler::setPannedRect(QRectF pr)
             m_lastVisibleItem = it;
         }
 
-        if (visPos == 1) break;
+        // To the right?  We're done.
+        if (visPos == 1)
+            break;
     }
-
-    //RG_DEBUG << "slotSetPannedRect() - visible items: " << m_visibleItems.size();
 }
 
 void ControlRuler::resizeEvent(QResizeEvent *)
