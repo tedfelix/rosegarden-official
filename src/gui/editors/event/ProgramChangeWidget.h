@@ -46,6 +46,7 @@ private:
 
     // Widgets
 
+    // cppcheck-suppress unsafeClassCanLeak
     QSpinBox *m_programSpinBox;
 
 };

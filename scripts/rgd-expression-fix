@@ -1,0 +1,36 @@
+#!/bin/bash
+
+# Fix default expression in Rosegarden's .rgd files.
+# Based on rgd-volume-fix.
+
+# This sed substitute commad will do it for any values that are
+# encountered:
+
+#   's/\(<control name="Expression".*default=\)"[[:digit:]]\{0,3\}"/\1"127"/'
+
+# We use the parens \( and \) to store a part of
+# the search pattern, then put it back as "\1" on the rhs.
+
+for rgdfile in "$@"
+do
+    echo "--- $rgdfile ------------------------------------------"
+    # make a temporary copy
+    cp $rgdfile temp.xml.gz
+    gzip -d temp.xml.gz
+
+    sed 's/\(<control name="Expression".*default=\)"[[:digit:]]\{0,3\}"/\1"127"/' \
+        <temp.xml >temp2.xml
+
+    diff temp.xml temp2.xml
+    # If there was a change, replace with the changed version.
+    if [ $? != "0" ]; then
+        gzip temp2.xml
+        # Copy over original
+        mv -f temp2.xml.gz $rgdfile
+    fi
+
+    # Clean up temporary file
+    rm temp.xml
+done
+
+

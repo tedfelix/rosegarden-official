@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -30,7 +30,7 @@ namespace Rosegarden
 
 
 TrackLabelDialog::TrackLabelDialog(QWidget *parent,
-                                   const QString &title,       
+                                   const QString &title,
                                    const QString &primaryLabel,
                                    const QString &primaryContents,
                                    const QString &primaryTooltip,
@@ -44,15 +44,18 @@ TrackLabelDialog::TrackLabelDialog(QWidget *parent,
 
     QVBoxLayout *layout = new QVBoxLayout;
 
+    // cppcheck-suppress constVariablePointer
     QLabel *primary = new QLabel(primaryLabel);
     m_primaryText = new LineEdit(primaryContents);
     m_primaryText->setToolTip(primaryTooltip);
     m_primaryText->selectAll();
 
+    // cppcheck-suppress constVariablePointer
     QLabel *secondary = new QLabel(secondaryLabel);
     m_secondaryText = new LineEdit(secondaryContents);
     m_secondaryText->setToolTip(secondaryTooltip);
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
     connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
@@ -79,4 +82,3 @@ TrackLabelDialog::getSecondaryText()
 
 
 } // namespace
-

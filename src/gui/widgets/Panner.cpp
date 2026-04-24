@@ -40,13 +40,6 @@
 namespace Rosegarden
 {
 
-
-class PannerScene : public QGraphicsScene
-{
-public:
-    friend class Panner;
-};
-
 Panner::Panner() :
     m_pointerHeight(0),
     m_pointerVisible(false),
@@ -201,15 +194,12 @@ Panner::drawItems(QPainter *painter, int numItems,
 
         QGraphicsScene *s = scene();
         if (!s) return;
-        PannerScene *ps = static_cast<PannerScene *>(s);
 
         m_cache = QPixmap(viewport()->size());
         m_cache.fill(Qt::transparent);
-        QPainter cachePainter;
-        cachePainter.begin(&m_cache);
+        QPainter cachePainter(&m_cache);
         cachePainter.setTransform(viewportTransform());
-        ps->drawItems(&cachePainter, numItems, items, options);
-        cachePainter.end();
+        QGraphicsView::drawItems(&cachePainter, numItems, items, options);
     }
 
     painter->save();

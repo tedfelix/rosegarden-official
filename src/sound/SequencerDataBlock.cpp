@@ -77,7 +77,7 @@ SequencerDataBlock::getVisual(MappedEvent &ev)
     //     worth worrying about.
 
     // Copy the event to the caller.
-    ev = *reinterpret_cast<MappedEvent *>(&m_visualEvent);
+    ev = m_visualEvent;
 
     // Remember where we were for next time.
     m_getVisualIndex = thisEventIndex;
@@ -93,7 +93,7 @@ SequencerDataBlock::setVisual(const MappedEvent *ev)
 
     if (ev) {
         // Save the visual event
-        *reinterpret_cast<MappedEvent *>(&m_visualEvent) = *ev;
+        m_visualEvent = *ev;
 
         // Indicate that it has changed and it is safe to read now.
         ++m_setVisualIndex;
@@ -110,7 +110,7 @@ SequencerDataBlock::getRecordedEvents(MappedEventList &mC)
     // changes it while we are working.
     int stopIndex = m_recordEventIndex;
 
-    MappedEvent *recordBuffer = reinterpret_cast<MappedEvent *>(m_recordBuffer);
+    MappedEvent *recordBuffer = m_recordBuffer;
 
     // While there are events in the record buffer, copy each event to
     // the user's list.
@@ -132,7 +132,7 @@ SequencerDataBlock::addRecordedEvents(MappedEventList *mC)
     // while the other thread is using it.
     int index = m_recordEventIndex;
 
-    MappedEvent *recordBuffer = reinterpret_cast<MappedEvent *>(m_recordBuffer);
+    MappedEvent *recordBuffer = m_recordBuffer;
 
     // Copy each incoming event into the ring buffer.
     for (MappedEventList::iterator i = mC->begin(); i != mC->end(); ++i) {
@@ -398,11 +398,11 @@ SequencerDataBlock::clearTemporaries()
     m_setVisualIndex = 0;
     m_getVisualIndex = 0;
     m_haveVisualEvent = false;
-    *reinterpret_cast<MappedEvent *>(&m_visualEvent) = MappedEvent();
+    m_visualEvent = MappedEvent();
 
     m_recordEventIndex = 0;
     m_readIndex = 0;
-    memset(m_recordBuffer, 0, sizeof(m_recordBuffer));
+    for (MappedEvent &e : m_recordBuffer) e = MappedEvent();
 
     memset(m_knownInstruments, 0, sizeof(m_knownInstruments));
     m_knownInstrumentCount = 0;

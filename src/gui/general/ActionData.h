@@ -133,12 +133,12 @@ public:
     };
     typedef std::map<int, KeyboardTranslation> KeyboardTranslations;
 
-    bool m_inMenuBar;
-    bool m_inText;
-    bool m_inEnable;
-    bool m_inDisable;
-    bool m_inVisible;  // Are we inside a State/visible tag?
-    bool m_inInvisible;  // Are we inside a State/invisible tag?
+    bool m_inMenuBar = false;
+    bool m_inText = false;
+    bool m_inEnable = false;
+    bool m_inDisable = false;
+    bool m_inVisible = false;  // Are we inside a State/visible tag?
+    bool m_inInvisible = false;  // Are we inside a State/invisible tag?
     QStringList m_currentMenus;
     QStringList m_currentMenuNames;
     QString m_currentToolbar;

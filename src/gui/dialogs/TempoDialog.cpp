@@ -360,7 +360,7 @@ TempoDialog::populateTempo()
 void
 TempoDialog::updateBeatLabels(double newTempo)
 {
-    Composition &comp = m_doc->getComposition();
+    const Composition &comp = m_doc->getComposition();
 
     // If the time signature's beat is not a crotchet, need to show
     // bpm separately

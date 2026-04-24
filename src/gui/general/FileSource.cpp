@@ -368,7 +368,8 @@ FileSource::init()
         QString resourceFileName = m_url.toString();
         resourceFileName.replace(QRegularExpression("^qrc:"), ":");
         QFile resourceFile(resourceFileName);
-        resourceFile.open(QFile::ReadOnly);
+        if (!resourceFile.open(QFile::ReadOnly))
+            return;
         QByteArray ba(resourceFile.readAll());
 
 #ifdef DEBUG_FILE_SOURCE

@@ -49,10 +49,11 @@
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
 #include "gui/application/CompositionPosition.h"
+#include "gui/dialogs/AboutDialog.h"
 #include "gui/dialogs/PitchDialog.h"
+#include "gui/dialogs/TimeDialog.h"
 #include "gui/editors/event/EditEvent.h"
 #include "gui/editors/event/EventTypeDialog.h"
-#include "gui/dialogs/AboutDialog.h"
 #include "gui/general/IconLoader.h"
 #include "gui/widgets/TmpStatusMsg.h"
 #include "gui/widgets/LineEdit.h"
@@ -439,6 +440,8 @@ EventListEditor::EventListEditor(const std::vector<Segment *> &segments) :
     updateTableWidget();
 
     makeInitialSelection(CompositionPosition::getInstance()->get());
+
+    m_tableWidget->setFocus();
 }
 
 EventListEditor::~EventListEditor()
@@ -847,8 +850,67 @@ EventListEditor::makeInitialSelection(timeT time)
     // Make it current so the keyboard works correctly.
     m_tableWidget->setCurrentItem(foundItem);
 
-    // Select the item
-    foundItem->setSelected(true);
+    const int foundRow = foundItem->row();
+
+    // Select the entire row or else pressing "E" to edit will not work.
+    for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+        if (!item)
+            continue;
+        // Select it.
+        item->setSelected(true);
+    }
+
+    // Yield to the event loop so that the UI will be rendered before calling
+    // scrollToItem().
+    qApp->processEvents();
+
+    // Make sure the item is visible.
+    m_tableWidget->scrollToItem(foundItem, QAbstractItemView::PositionAtCenter);
+}
+
+void
+EventListEditor::selectEvent(const Event &i_event)
+{
+    const int itemCount = m_tableWidget->rowCount();
+
+    QTableWidgetItem *foundItem{nullptr};
+
+    // For each row in the event list.
+    for (int row = 0; row < itemCount; ++row) {
+        QTableWidgetItem *item = m_tableWidget->item(row, 0);
+        if (!item)
+            continue;
+
+        const Event *tableEvent = static_cast<const Event *>(
+                item->data(EventPtrRole).value<void *>());
+        if (!tableEvent)
+            continue;
+
+        // Found it?
+        if (*tableEvent == i_event) {
+            foundItem = item;
+            break;
+        }
+    }
+
+    // Nothing found?  Bail.
+    if (!foundItem)
+        return;
+
+    // Make it current so the keyboard works correctly.
+    m_tableWidget->setCurrentItem(foundItem);
+
+    const int foundRow = foundItem->row();
+
+    // Select the entire row or else pressing "E" to edit will not work.
+    for (int col = 0; col < m_tableWidget->columnCount(); ++col) {
+        QTableWidgetItem *item = m_tableWidget->item(foundRow, col);
+        if (!item)
+            continue;
+        // Select it.
+        item->setSelected(true);
+    }
 
     // Yield to the event loop so that the UI will be rendered before calling
     // scrollToItem().
@@ -1105,6 +1167,60 @@ EventListEditor::slotEditPaste()
 }
 
 void
+EventListEditor::slotEditPasteAt()
+{
+    // ??? This does nothing if a Segment or multiple Segments are
+    //     in the clipboard.  We should probably handle that better.
+    //     I assume PasteEventsCommand only handles the "partial
+    //     segment" clipboard mode?
+
+    TmpStatusMsg msg(tr("Inserting clipboard contents..."), this);
+
+    // Compute the insertion time.
+
+    timeT insertionTime = 0;
+
+    QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
+
+    if (!selection.empty()) {
+        // Go with the time of the first selected item.
+        QTableWidgetItem *item = selection.at(0);
+        if (item) {
+            const Event *event = static_cast<const Event *>(
+                    item->data(EventPtrRole).value<void *>());
+
+            if (event)
+                insertionTime = event->getAbsoluteTime();
+        }
+    }
+
+    // Get the time from the user.
+    TimeDialog dialog(this, // parent
+                      "", // title
+                      insertionTime,  // defaultTime
+                      true);  // constrainToCompositionDuration
+    if (dialog.exec() == QDialog::Rejected)
+        return;
+
+    insertionTime = dialog.getTime();
+
+    PasteEventsCommand *command = new PasteEventsCommand(
+            *m_segments[0],  // segment
+            Clipboard::mainClipboard(),  // clipboard
+            insertionTime,  // pasteTime
+            PasteEventsCommand::MatrixOverlay);  // pasteType
+
+    // Not possible?
+    if (!command->isPossible()) {
+        showStatusBarMessage(tr("Couldn't paste at this point"));
+        delete command;
+        return;
+    }
+
+    CommandHistory::getInstance()->addCommand(command);
+}
+
+void
 EventListEditor::slotEditDelete()
 {
     QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
@@ -1144,7 +1260,7 @@ EventListEditor::slotEditInsert()
     // Get the type of the item the user wants to insert.
     EventTypeDialog eventTypeDialog(this);
     // Launch dialog.  Bail if canceled.
-    if (eventTypeDialog.exec() != QDialog::Accepted)
+    if (eventTypeDialog.exec() == QDialog::Rejected)
         return;
 
     std::string type = eventTypeDialog.getType();
@@ -1173,18 +1289,23 @@ EventListEditor::slotEditInsert()
     EditEvent dialog(this, event);
 
     // Launch dialog.  Bail if canceled.
-    if (dialog.exec() != QDialog::Accepted)
+    if (dialog.exec() == QDialog::Rejected)
         return;
+
+    Event newEvent = dialog.getEvent();
 
     CommandHistory::getInstance()->addCommand(
             new EventInsertionCommand(
                     *m_segments[0],
-                    new Event(dialog.getEvent())));
+                    new Event(newEvent)));
+
+    selectEvent(newEvent);
 }
 
 void
 EventListEditor::editItem(const QTableWidgetItem *item)
 {
+    RG_DEBUG << "editItem" << item;
     if (!item)
         return;
 
@@ -1192,6 +1313,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     // the dialog since item might become invalid.
     Segment *segment = static_cast<Segment *>(
             item->data(SegmentPtrRole).value<void *>());
+    RG_DEBUG << "editItem segment" << segment;
     if (!segment)
         return;
 
@@ -1199,6 +1321,7 @@ EventListEditor::editItem(const QTableWidgetItem *item)
     // the dialog since item might become invalid.
     Event *event = static_cast<Event *>(
             item->data(EventPtrRole).value<void *>());
+    RG_DEBUG << "editItem event" << event;
     if (!event)
         return;
 
@@ -1218,35 +1341,21 @@ EventListEditor::editItem(const QTableWidgetItem *item)
             event,  // eventToModify
             newEvent));  // newEvent
 
-    // ??? Would be nice if we could select the new item to make it clear to
-    //     the user where the new item is.  Especially if the item moves in
-    //     time.
-    //
-    //     Tried creating and storing a key to use to select the new item
-    //     in updateTableWidget().  However, the key used here is pretty
-    //     complicated and requires the use of
-    //     SegmentPerformanceHelper::getSoundingAbsoluteTime() which requires
-    //     an iterator which we do not have at this point in the code.
-    //     See TempoAndTimeSignatureEditor::m_newItemSelect which was the
-    //     inspiration for this.
-    //
-    //     Tried storing a copy of the Event so that updateTableWidget() could
-    //     find that event and select that item.  This introduced a memory
-    //     leak where newEvent is created, and updateTableWidget() couldn't
-    //     find a match for the copy anyway.
-    //
-    //     This is turning out to be more work than it is worth.  Maybe someone
-    //     else can see something that I cannot.  Good luck.
+    // Select the new item to make it clear to the user where the new item is.
+    // Especially helpful if the item moves in time.
+    selectEvent(newEvent);
 }
 
 void
 EventListEditor::slotEditEvent()
 {
+    RG_DEBUG << "slotEditEvent";
     const QList<QTableWidgetItem *> selection = m_tableWidget->selectedItems();
     if (selection.isEmpty())
         return;
 
     const QTableWidgetItem *item = selection.first();
+    RG_DEBUG << "slotEditEvent item" << item;
     if (!item)
         return;
 
@@ -1293,6 +1402,7 @@ EventListEditor::setupActions()
     createAction("edit_cut", &EventListEditor::slotEditCut);
     createAction("edit_copy", &EventListEditor::slotEditCopy);
     createAction("edit_paste", &EventListEditor::slotEditPaste);
+    createAction("edit_paste_at", &EventListEditor::slotEditPasteAt);
 
     createAction("insert", &EventListEditor::slotEditInsert);
     createAction("delete", &EventListEditor::slotEditDelete);

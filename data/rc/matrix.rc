@@ -145,8 +145,8 @@
     
     <Menu name="Rescale">
       <text>Resc&amp;ale</text>
-      <Action name="halve_durations" text="&amp;Halve Durations" shortcut="Ctrl+H" />
-      <Action name="double_durations" text="&amp;Double Durations" shortcut="Ctrl+Shift+H" />
+      <Action name="rescale_half" text="&amp;Half" shortcut="Ctrl+H" />
+      <Action name="rescale_double" text="&amp;Double" shortcut="Ctrl+Shift+H" />
       <Separator/>
       
       <!-- JAS '&amp;' before the 'o' in rosegardenui.rc -->
@@ -419,8 +419,8 @@
     <Action name="collapse_notes"/>
     <Action name="legatoize"/>
     <Action name="rescale"/>
-    <Action name="double_durations"/>
-    <Action name="halve_durations"/>
+    <Action name="rescale_double"/>
+    <Action name="rescale_half"/>
     <Action name="velocity_up"/>
     <Action name="velocity_down"/>
     <Action name="jog_left"/>

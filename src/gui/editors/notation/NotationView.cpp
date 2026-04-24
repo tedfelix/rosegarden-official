@@ -828,8 +828,8 @@ NotationView::setupActions()
     createAction("interpret", &NotationView::slotTransformsInterpret);
 
     //"Rescale" subMenu
-    createAction("halve_durations", &NotationView::slotHalveDurations);
-    createAction("double_durations", &NotationView::slotDoubleDurations);
+    createAction("rescale_half", &NotationView::slotRescaleHalf);
+    createAction("rescale_double", &NotationView::slotRescaleDouble);
     createAction("rescale", &NotationView::slotRescale);
 
     //"Transpose" subMenu
@@ -1678,12 +1678,12 @@ NotationView::exportLilyPondFile(QString file, bool forPreview)
             std::string(QFile::encodeName(file)),  // fileName
             this);  // parent
 
-    if (!e.write()) {
-        QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
-        return false;
-    }
+    bool success = e.write();
 
-    return true;
+    if (!e.getMessage().isEmpty())
+        QMessageBox::warning(this, tr("Rosegarden"), e.getMessage());
+
+    return success;
 }
 
 void
@@ -4281,7 +4281,7 @@ NotationView::slotSymbolAction()
 }
 
 void
-NotationView::slotHalveDurations()
+NotationView::slotRescaleHalf()
 {
     if (!getSelection()) return ;
 
@@ -4291,7 +4291,7 @@ NotationView::slotHalveDurations()
 }
 
 void
-NotationView::slotDoubleDurations()
+NotationView::slotRescaleDouble()
 {
     if (!getSelection()) return ;
 
@@ -5235,8 +5235,10 @@ NotationView::slotExtendSelectionBackward(bool bar)
         es = new EventSelection(*segment);
 
     ViewElementList::iterator extendFrom = vel->findTime(oldTime);
-    if (extendFrom == vel->begin()) // shouldn't happen
+    if (extendFrom == vel->begin()) { // shouldn't happen
+        delete es;
         return;
+    }
     ViewElementList::iterator firstNote = extendFrom;
     --firstNote;
     const bool wasSelected = es->contains((*firstNote)->event());
@@ -5311,8 +5313,10 @@ NotationView::slotExtendSelectionForward(bool bar)
         es = new EventSelection(*segment);
 
     ViewElementList::iterator extendFrom = vel->findTime(oldTime);
-    if (extendFrom == vel->end()) // shouldn't happen
+    if (extendFrom == vel->end()) { // shouldn't happen
+        delete es;
         return;
+    }
     const bool wasSelected = es->contains((*extendFrom)->event());
 
     std::vector<Event *> eventVec;

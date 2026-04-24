@@ -37,9 +37,10 @@
 namespace Rosegarden
 {
 
-    /******** Nested class EventParameterDialog::ParamWidget ********/
 
-EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
+/******** Nested class EventParameterDialog::ParamWidget ********/
+
+EventParameterDialog::ParameterWidget::ParameterWidget(QLayout *parent)
 {
     // ??? Derive from QWidget?  Might be clearer.
     QWidget *box = new QWidget;
@@ -60,13 +61,13 @@ EventParameterDialog::ParamWidget::ParamWidget(QLayout *parent)
 }
 
 int
-EventParameterDialog::ParamWidget::getValue() const
+EventParameterDialog::ParameterWidget::getValue() const
 {
     return m_spinBox->value();
 }
 
 void
-EventParameterDialog::ParamWidget::showByArgs(
+EventParameterDialog::ParameterWidget::showByArgs(
         const ParameterPattern::SliderSpec *args)
 {
     m_label->setText(args->m_label);
@@ -79,13 +80,13 @@ EventParameterDialog::ParamWidget::showByArgs(
 }
 
 void
-EventParameterDialog::ParamWidget::hide()
+EventParameterDialog::ParameterWidget::hide()
 {
     m_label->hide();
     m_spinBox->hide();
 }
 
-    /******** Main class EventParameterDialog ********/
+/******** Main class EventParameterDialog ********/
 
 EventParameterDialog::EventParameterDialog(
         QWidget *parent,
@@ -95,7 +96,7 @@ EventParameterDialog::EventParameterDialog(
     QDialog(parent),
     m_situation(situation),
     m_patterns(patterns),
-    m_NbParameters(0)
+    m_numberOfParameters(0)
 {
     setModal(true);
     setWindowTitle(name);
@@ -104,6 +105,7 @@ EventParameterDialog::EventParameterDialog(
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
     mainLayout->setSpacing(0);
 
+    // Set the ... property of the event selection
     QLabel *explainLabel = new QLabel;
     QString propertyName = m_situation->getPropertyNameQString();
     QString text = tr("Set the %1 property of the event selection:")
@@ -111,7 +113,7 @@ EventParameterDialog::EventParameterDialog(
     explainLabel->setText(text);
     mainLayout->addWidget(explainLabel);
 
-
+    // Pattern
     QWidget *patternBox = new QWidget;
     QHBoxLayout *patternBoxLayout = new QHBoxLayout;
     patternBox->setLayout(patternBoxLayout);
@@ -129,12 +131,17 @@ EventParameterDialog::EventParameterDialog(
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &EventParameterDialog::slotPatternSelected);
 
-    // Instead of looping for 2 we just call twice.
-    m_paramVec.push_back(ParamWidget(mainLayout));
-    m_paramVec.push_back(ParamWidget(mainLayout));
 
+    // Add two parameters.
+    m_parameterWidgetVector.push_back(ParameterWidget(mainLayout));
+    m_parameterWidgetVector.push_back(ParameterWidget(mainLayout));
+
+
+    // Select the first pattern.
     slotPatternSelected(0);
 
+
+    // ButtonBox
     // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox =
         new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -161,24 +168,32 @@ EventParameterDialog::initPatternCombo()
 void
 EventParameterDialog::slotPatternSelected(int value)
 {
-    ParameterPattern::SliderSpecVector sliderArgs =
-        getPattern(value)->getSliderSpec(m_situation);
-    typedef ParameterPattern::SliderSpecVector::const_iterator
-        ArgIterator;
+    const ParameterPattern::SliderSpecVector sliderArgs =
+            getPattern(value)->getSliderSpec(m_situation);
+    // More than 2 parameters?  Bail.
+    if (sliderArgs.size() > 2)
+        return;
 
-    // We don't try to handle more than 2 parameters.
-    if (sliderArgs.size() > 2) { return; }
-    m_NbParameters = sliderArgs.size();
-    ParamWidgetVec::iterator widgetBox = m_paramVec.begin();
-    for (ArgIterator i = sliderArgs.begin();
+    m_numberOfParameters = sliderArgs.size();
+
+    ParameterWidgetVector::iterator widgetIter =
+            m_parameterWidgetVector.begin();
+
+    // For each parameter...
+    for (ParameterPattern::SliderSpecVector::const_iterator i =
+             sliderArgs.begin();
          i != sliderArgs.end();
-         ++i, ++widgetBox) {
-        widgetBox->showByArgs(&*i);
+         ++i, ++widgetIter) {
+        // Show the parameter widgets.
+        widgetIter->showByArgs(&*i);
     }
 
-    // If not all widgets are being used, hide the rest.
-    for (;widgetBox != m_paramVec.end(); ++widgetBox)
-    { widgetBox->hide(); }
+    // For the rest of the widgets that aren't being used...
+    while (widgetIter != m_parameterWidgetVector.end()) {
+        // Hide the parameter widgets.
+        widgetIter->hide();
+        ++widgetIter;
+    }
 
     adjustSize();
 }
@@ -187,8 +202,8 @@ ParameterPattern::BareParams
 EventParameterDialog::getBareParams()
 {
     ParameterPattern::BareParams result;
-    for (int i = 0; i < m_NbParameters; ++i) {
-        const ParamWidget &widgetBox = m_paramVec[i];
+    for (int i = 0; i < m_numberOfParameters; ++i) {
+        const ParameterWidget &widgetBox = m_parameterWidgetVector[i];
         result.push_back(widgetBox.getValue());
     }
     return result;

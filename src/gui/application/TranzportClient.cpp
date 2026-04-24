@@ -49,10 +49,6 @@ namespace Rosegarden
 TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     QObject(),
     device_online(true),
-    previous_buttons(*reinterpret_cast<uint32_t*>(previousbuf+2)),
-    current_buttons(*reinterpret_cast<uint32_t*>(currentbuf+2)),
-    datawheel(currentbuf[6]),
-    status(currentbuf[1]),
     m_rgGUIApp(rgGUIApp),
     m_rgDocument(RosegardenDocument::currentDocument),
     m_composition(&m_rgDocument->getComposition())
@@ -62,9 +58,6 @@ TranzportClient::TranzportClient(RosegardenMainWindow* rgGUIApp) :
     if (m_descriptor < 0) {
         throw Exception(qstrtostr(QObject::tr("Failed to open tranzport device /dev/tranzport0")));
     }
-
-    bzero(currentbuf,8);
-    bzero(previousbuf,8);
 
     fcntl(m_descriptor,F_SETOWN, getpid());
     int socketFlags = fcntl(m_descriptor, F_GETFL, 0);
@@ -366,34 +359,21 @@ TranzportClient::write(uint64_t buf)
 void
 TranzportClient::LightOn(Light light)
 {
-    uint8_t cmd[8];
-
-    cmd[0] = 0x00;
-    cmd[1] = 0x00;
-    cmd[2] = light;
-    cmd[3] = 0x01;
-    cmd[4] = 0x00;
-    cmd[5] = 0x00;
-    cmd[6] = 0x00;
-    cmd[7] = 0x00;
-
-    write(*reinterpret_cast<uint64_t*>(cmd));
+    const uint8_t cmd[8] = {0x00, 0x00, static_cast<uint8_t>(light), 0x01,
+                            0x00, 0x00, 0x00, 0x00};
+    uint64_t cmd64;
+    memcpy(&cmd64, cmd, sizeof(cmd64));
+    write(cmd64);
 }
 
 void
 TranzportClient::LightOff(Light light)
 {
-    uint8_t cmd[8];
-
-    cmd[0] = 0x00;
-    cmd[1] = 0x00;
-    cmd[2] = light;
-    cmd[3] = 0x00;
-    cmd[4] = 0x00;
-    cmd[5] = 0x00;
-    cmd[6] = 0x00;
-    cmd[7] = 0x00;
-    write(*reinterpret_cast<uint64_t*>(cmd));
+    const uint8_t cmd[8] = {0x00, 0x00, static_cast<uint8_t>(light), 0x00,
+                            0x00, 0x00, 0x00, 0x00};
+    uint64_t cmd64;
+    memcpy(&cmd64, cmd, sizeof(cmd64));
+    write(cmd64);
 }
 
 void
@@ -421,20 +401,26 @@ TranzportClient::LCDWrite(const std::string& text,
         cmd[5] = str[i++];
         cmd[6] = str[i++];
         cmd[7] = 0x00;
-        write(*reinterpret_cast<uint64_t*>(cmd));
+        uint64_t cmd64;
+        memcpy(&cmd64, cmd, sizeof(cmd64));
+        write(cmd64);
     }
 }
 
 void
 TranzportClient::readData()
 {
-    memcpy(previousbuf, currentbuf, 8);
+    uint8_t buf[8];
+    m_previousButtons = m_currentButtons;
     ssize_t val;
     static timeT loop_start_time=0;
     static timeT loop_end_time=0;
 
-    while ((val=read(m_descriptor,currentbuf,8)) == 8) {
-        uint32_t new_buttons = current_buttons ^ previous_buttons;
+    while ((val=read(m_descriptor,buf,8)) == 8) {
+        memcpy(&m_currentButtons, buf + 2, sizeof(m_currentButtons));
+        const uint8_t status = buf[1];
+        const uint8_t datawheel = buf[6];
+        uint32_t new_buttons = m_currentButtons ^ m_previousButtons;
         if (status == 0x1) {
             RG_DEBUG << "TranzportClient: device just came online";
 
@@ -458,8 +444,8 @@ TranzportClient::readData()
         // Solo has moved to Track.
 #if 0
         if (new_buttons & TrackSolo  and
-            current_buttons & TrackSolo) {
-            if (current_buttons & Shift) {
+            m_currentButtons & TrackSolo) {
+            if (m_currentButtons & Shift) {
                 bool soloflag = m_composition->isSolo();
                 emit solo(not soloflag);
             }
@@ -467,8 +453,8 @@ TranzportClient::readData()
 #endif
 
         if (new_buttons & Add  and
-            current_buttons & Add) {
-            if (current_buttons & Shift) {
+            m_currentButtons & Add) {
+            if (m_currentButtons & Shift) {
             } else {
                 AddMarkerCommand* cmd = new AddMarkerCommand
                     (m_composition,
@@ -480,10 +466,10 @@ TranzportClient::readData()
         }
 
         if (new_buttons & Prev  and
-            current_buttons & Prev) {
+            m_currentButtons & Prev) {
             RG_DEBUG << "TranzportClient:: received marker previous";
 
-            if (current_buttons & Shift) {
+            if (m_currentButtons & Shift) {
             } else {
                 timeT currentTime =
                     CompositionPosition::getInstance()->get();
@@ -509,11 +495,11 @@ TranzportClient::readData()
         }
 
         if (new_buttons & Next  and
-            current_buttons & Next)
+            m_currentButtons & Next)
         {
             RG_DEBUG << "TranzportClient:: received marker next";
 
-            if (current_buttons & Shift) {
+            if (m_currentButtons & Shift) {
             } else {
                 timeT currentTime =
                     CompositionPosition::getInstance()->get();
@@ -539,8 +525,8 @@ TranzportClient::readData()
         }
 
         if (new_buttons & Undo  and
-            current_buttons & Undo) {
-            if (current_buttons & Shift) {
+            m_currentButtons & Undo) {
+            if (m_currentButtons & Shift) {
                 emit redo();
             } else {
                 emit undo();
@@ -548,32 +534,32 @@ TranzportClient::readData()
         }
 
         if (new_buttons & Play  and
-            current_buttons & Play) {
-            if (current_buttons & Shift) {
+            m_currentButtons & Play) {
+            if (m_currentButtons & Shift) {
             } else {
                 emit play();
             }
         }
 
         if (new_buttons & Stop  and
-            current_buttons & Stop) {
-            if (current_buttons & Shift) {
+            m_currentButtons & Stop) {
+            if (m_currentButtons & Shift) {
             } else {
                 emit stop();
             }
         }
 
         if (new_buttons & Record  and
-            current_buttons & Record) {
-            if (current_buttons & Shift) {
+            m_currentButtons & Record) {
+            if (m_currentButtons & Shift) {
             } else {
                 emit record();
             }
         }
 
         if (new_buttons & Loop  and
-            current_buttons & Loop) {
-            if (current_buttons & Shift) {
+            m_currentButtons & Loop) {
+            if (m_currentButtons & Shift) {
             } else {
                 loop_start_time =
                     CompositionPosition::getInstance()->get();
@@ -582,8 +568,8 @@ TranzportClient::readData()
         }
 
         if (new_buttons & Loop  and
-            (not (current_buttons & Loop))) {
-            if (current_buttons & Shift) {
+            (not (m_currentButtons & Loop))) {
+            if (m_currentButtons & Shift) {
             } else {
                 if (loop_start_time == loop_end_time) {
                     m_composition->setLoopMode(Composition::LoopOff);
@@ -596,8 +582,8 @@ TranzportClient::readData()
         }
 
         if (new_buttons& Rewind  and
-            current_buttons & Rewind) {
-            if (current_buttons&Shift) {
+            m_currentButtons & Rewind) {
+            if (m_currentButtons&Shift) {
                 emit rewindToBeginning();
             } else {
                 emit rewind();
@@ -605,8 +591,8 @@ TranzportClient::readData()
         }
 
         if (new_buttons & FastForward  and
-            current_buttons & FastForward) {
-            if (current_buttons & Shift) {
+            m_currentButtons & FastForward) {
+            if (m_currentButtons & Shift) {
                 emit fastForwardToEnd();
             } else {
                 emit fastForward();
@@ -614,32 +600,32 @@ TranzportClient::readData()
         }
 
         if (new_buttons & TrackRec  and
-            current_buttons & TrackRec) {
-            if (current_buttons & Shift) {
+            m_currentButtons & TrackRec) {
+            if (m_currentButtons & Shift) {
             } else {
                 emit trackRecord();
             }
         }
 
         if (new_buttons & TrackRight  and
-            current_buttons & TrackRight) {
-            if (current_buttons & Shift) {
+            m_currentButtons & TrackRight) {
+            if (m_currentButtons & Shift) {
             } else {
                 emit trackDown();
             }
         }
 
         if (new_buttons & TrackLeft  and
-            current_buttons & TrackLeft) {
-            if (current_buttons& Shift) {
+            m_currentButtons & TrackLeft) {
+            if (m_currentButtons& Shift) {
             } else {
                 emit trackUp();
             }
         }
 
         if (new_buttons & TrackMute  and
-            current_buttons & TrackMute) {
-            if (current_buttons & Shift) {
+            m_currentButtons & TrackMute) {
+            if (m_currentButtons & Shift) {
             } else {
                 emit trackMute();
             }
@@ -647,7 +633,7 @@ TranzportClient::readData()
 
         if (datawheel) {
             if (datawheel < 0x7F) {
-                if (current_buttons & Loop) {
+                if (m_currentButtons & Loop) {
 
                     loop_end_time += datawheel *
                         m_composition->getDurationForMusicalTime(loop_end_time, 0,1,0,0);
@@ -657,7 +643,7 @@ TranzportClient::readData()
                     m_composition->setLoopEnd(loop_end_time);
                     emit m_rgDocument->loopChanged();
 
-                } else if(current_buttons & Shift) {
+                } else if(m_currentButtons & Shift) {
                     timeT here =
                         CompositionPosition::getInstance()->get();
                     here += datawheel * m_composition->getDurationForMusicalTime(here,0,0,1,0);
@@ -674,7 +660,7 @@ TranzportClient::readData()
                 }
             } else {
 #define DATAWHEEL_VALUE (1 + (0xFF - (datawheel)))
-                if (current_buttons & Loop) {
+                if (m_currentButtons & Loop) {
                     loop_end_time -= (1 + (0xFF - datawheel)) *
                         RosegardenDocument::currentDocument->getComposition().getDurationForMusicalTime(loop_end_time, 0,1,0,0);
                     m_composition->setLoopMode(Composition::LoopOn);
@@ -683,7 +669,7 @@ TranzportClient::readData()
                     emit m_rgDocument->loopChanged();
                 }
 
-                if (current_buttons & Shift) {
+                if (m_currentButtons & Shift) {
                     timeT here =
                         CompositionPosition::getInstance()->get();
                     here -= DATAWHEEL_VALUE *  m_composition->getDurationForMusicalTime(here,0,0,1,0);
@@ -702,7 +688,7 @@ TranzportClient::readData()
             }
         }
 
-        memcpy(previousbuf, currentbuf, 8);
+        m_previousButtons = m_currentButtons;
     }
 
     if (val == -1) {

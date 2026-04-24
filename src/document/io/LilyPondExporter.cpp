@@ -228,6 +228,17 @@ Event *LilyPondExporter::nextNoteInGroup(const Segment *s,
             return nullptr;
         }
 
+        // For tupled groups, the next note must also be tupled (a note with
+        // the same group ID but a different type, e.g. GROUP_TYPE_BEAMED,
+        // is a beam extension that does not belong to the tuplet bracket).
+        if (tuplet) {
+            std::string nextGroupType;
+            if (!event->get<String>(BEAMED_GROUP_TYPE, nextGroupType) ||
+                nextGroupType != GROUP_TYPE_TUPLED) {
+                return nullptr;
+            }
+        }
+
         // Part of the group.
         return event;
     }
@@ -2181,6 +2192,7 @@ LilyPondExporter::write()
 timeT
 LilyPondExporter::calculateDuration(Segment *s,
                                     const Segment::iterator &i,
+                                    int barNo,
                                     timeT barEnd,
                                     timeT &soundingDuration,
                                     const std::pair<int, int> &tupletRatio,
@@ -2198,7 +2210,28 @@ LilyPondExporter::calculateDuration(Segment *s,
             // tuplet compensation, etc
             Note::Type type = (*i)->get<Int>(NOTE_TYPE);
             int dots = (*i)->get<Int>(NOTE_DOTS);
-            durationCorrection = Note(type, dots).getDuration() - duration;
+            timeT noteDuration = Note(type, dots).getDuration();
+            durationCorrection = noteDuration - duration;
+
+            // Warn about events whose notation duration is too short
+            // to represent as any standard note value (shorter than a
+            // 64th note) and are not part of a tuplet.  These get
+            // rounded up by the exporter, causing LilyPond barcheck
+            // failures.  We don't warn about zero-duration events
+            // (grace notes / boundary artifacts) as LilyPond handles
+            // those fine.
+            if (duration > 0 &&
+                duration < Note(Note::Shortest).getDuration() &&
+                !(*i)->has(BEAMED_GROUP_TUPLET_BASE)) {
+                if (m_warningMessage.isEmpty()) {
+                    m_warningMessage =
+                        tr("Bar %1 contains an event too short to "
+                           "represent in standard notation.\n"
+                           "This is probably due to a corrupt event in "
+                           "the file. Expect barcheck errors in "
+                           "LilyPond.").arg(barNo + 1);
+                }
+            }
         } catch (const Exception &e) { // no properties
         }
     }
@@ -2523,7 +2556,7 @@ LilyPondExporter::writeBar(Segment *s,
 
         timeT soundingDuration = -1;
         timeT duration = calculateDuration
-            (s, i, barEnd, soundingDuration, tupletRatio, overlong);
+            (s, i, barNo, barEnd, soundingDuration, tupletRatio, overlong);
 
         if (soundingDuration == -1) {
             soundingDuration = duration * tupletRatio.first / tupletRatio.second;

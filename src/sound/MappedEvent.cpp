@@ -395,8 +395,8 @@ void DataBlockFile::prepareToWrite()
  //   std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToWrite" << std::endl;
     if (!m_file.isWritable()) {
         m_file.close();
-        m_file.open(QIODevice::WriteOnly | QIODevice::Append);
-        Q_ASSERT(m_file.isWritable());
+        if (!m_file.open(QIODevice::WriteOnly | QIODevice::Append))
+            return;
     }
 }
 
@@ -405,8 +405,8 @@ void DataBlockFile::prepareToRead()
 //    std::cerr << "DataBlockFile[" << m_fileName << "]: prepareToRead" << std::endl;
     if (!m_file.isReadable()) {
         m_file.close();
-        m_file.open(QIODevice::ReadOnly);
-        Q_ASSERT(m_file.isReadable());
+        if (!m_file.open(QIODevice::ReadOnly))
+            return;
     }
 }
 

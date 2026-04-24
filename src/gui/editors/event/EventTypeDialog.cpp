@@ -73,6 +73,7 @@ EventTypeDialog::EventTypeDialog(QWidget *parent) :
     mainLayout->addWidget(m_typeCombo);
 
     // Button Box
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(
             QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
     mainLayout->addWidget(buttonBox);

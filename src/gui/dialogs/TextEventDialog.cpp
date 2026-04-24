@@ -402,6 +402,7 @@ TextEventDialog::TextEventDialog(QWidget *parent,
     // imagine would cost so much more.
     m_text->setText(strtoqstr(defaultText.getText()));
 
+    // cppcheck-suppress constVariablePointer
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Help);
     vboxLayout->addWidget(buttonBox, 1);
     //vboxLayout->setRowStretch(0, 10);

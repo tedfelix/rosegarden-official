@@ -251,8 +251,8 @@ protected slots:
     void slotUpdateInsertModeStatus();
     void slotUpdateInsertModeStatusTriplet();
     void slotUpdateInsertModeStatusTuplet();
-    void slotHalveDurations();
-    void slotDoubleDurations();
+    void slotRescaleHalf();
+    void slotRescaleDouble();
     void slotRescale();
     void slotTransposeUp();
     void slotTransposeDown();

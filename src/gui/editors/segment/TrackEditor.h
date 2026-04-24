@@ -90,7 +90,7 @@ public:
     void updateRulers();
 
     /// Are we scrolling as we play?
-    bool isTracking() const { return m_playTracking; }
+    bool isTracking() const { return m_scrollToFollowPlayback; }
     /// Toggle playback scrolling.
     void scrollToFollow();
 
@@ -190,15 +190,15 @@ private:
     /// Wrapper around CommandHistory::addCommand().
     void addCommandToHistory(Command *command);
 
-    //--------------- Data members ---------------------------------
-
     RosegardenDocument      *m_doc;
     unsigned int             m_compositionRefreshStatusId;
 
     // Segment Canvas
     CompositionView         *m_compositionView;
     CompositionModelImpl    *m_compositionModel;
-    bool                     m_playTracking;
+
+    bool m_scrollToFollowPlayback;
+
     int                      m_trackCellHeight;
 
     // Track Buttons to the left of the Segment Canvas

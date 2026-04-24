@@ -50,6 +50,7 @@ class ShortcutDelegate : public QStyledItemDelegate
     void ksEditFinished();
 
  private:
+    // cppcheck-suppress unsafeClassCanLeak
     mutable QKeySequenceEdit* m_editor;
     ShortcutDialog* m_dialog;
 };

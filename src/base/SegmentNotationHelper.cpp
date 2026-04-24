@@ -923,6 +923,15 @@ SegmentNotationHelper::insertRest(timeT absoluteTime, Note note)
     Segment::iterator i, j;
     segment().getTimeSlice(absoluteTime, i, j);
 
+    // ignore non notes/rests at the given time
+    while (true) {
+        if (i == end()) break;
+        if ((*i)->isa(Note::EventType)) break;
+        if ((*i)->isa(Note::EventRestType)) break;
+        if ((*i)->getAbsoluteTime() != absoluteTime) break;
+        ++i;
+    }
+
     //!!! Deal with end-of-bar issues!
 
     timeT duration(note.getDuration());
@@ -1915,14 +1924,16 @@ SegmentNotationHelper::guessClef(Segment::iterator from, Segment::iterator to)
 
 
 bool
-SegmentNotationHelper::removeRests(timeT time, timeT &duration, bool testOnly)
+SegmentNotationHelper::removeRests(const timeT time,
+                                   timeT &duration,
+                                   const bool testOnly)
 {
-    Event dummy("dummy", time, 0, MIN_SUBORDERING);
-
     RG_DEBUG << "SegmentNotationHelper::removeRests(" << time
-              << ", " << duration << ")";
+             << ", " << duration << ")";
 
-    Segment::iterator from = segment().lower_bound(&dummy);
+    // Create a temp for lower_bound().
+    Event startEvent("dummy", time, 0, MIN_SUBORDERING);
+    Segment::iterator from = segment().lower_bound(&startEvent);
 
     // ignore any number of zero-duration events at the start
     while (from != segment().end() &&

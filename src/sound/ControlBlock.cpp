@@ -344,7 +344,8 @@ setSelectedTrack(TrackId track)
 #endif
         TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
         oldTrack.m_selected = false;
-        oldTrack.conform(m_doc->getStudio());
+        if (m_doc)
+            oldTrack.conform(m_doc->getStudio());
     }
 
     // Set up the new selected track
@@ -355,7 +356,8 @@ setSelectedTrack(TrackId track)
 #endif
         TrackInfo &newTrack = m_trackInfo[track];
         newTrack.m_selected = true;
-        newTrack.conform(m_doc->getStudio());
+        if (m_doc)
+            newTrack.conform(m_doc->getStudio());
     }
     // What's selected is recorded both here and in the trackinfo
     // objects.

@@ -374,7 +374,7 @@ NoteRestInserter::setCursorShape()
 
         std::unique_ptr<QGraphicsPixmapItem> graphicsPixmapItem(
             dynamic_cast<QGraphicsPixmapItem *>(pixmapFactory->makeRest(params)));
-        NOTATION_DEBUG << "rest: graphicsPixmapItem =" << graphicsPixmapItem;
+        //NOTATION_DEBUG << "rest: graphicsPixmapItem =" << graphicsPixmapItem;
 
         QPixmap pixmap = graphicsPixmapItem->pixmap();
         QCursor cursor(pixmap);
@@ -1225,6 +1225,16 @@ NoteRestInserter::doAddCommand(Segment &segment, timeT time, timeT endTime,
 
     if (m_widget->isInTupletMode() && !m_widget->isInGraceMode()) {
         Segment::iterator i(segment.findTime(time));
+
+        // should be note or rest
+        while (true) {
+            if (i == segment.end()) break;
+            if ((*i)->isa(Note::EventType)) break;
+            if ((*i)->isa(Note::EventRestType)) break;
+            if ((*i)->getAbsoluteTime() != time) break;
+            ++i;
+        }
+
         if (i != segment.end() &&
             !(*i)->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) {
 

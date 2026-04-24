@@ -161,12 +161,8 @@ private:
 
     bool device_online;
 
-    uint8_t previousbuf[8];
-    uint8_t currentbuf[8];
-    volatile uint32_t& previous_buttons;
-    volatile uint32_t& current_buttons;
-    volatile uint8_t& datawheel;
-    volatile uint8_t& status;
+    uint32_t m_previousButtons{0};
+    uint32_t m_currentButtons{0};
 
     RosegardenMainWindow *m_rgGUIApp;
     RosegardenDocument *m_rgDocument;

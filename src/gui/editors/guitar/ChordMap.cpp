@@ -156,7 +156,8 @@ bool ChordMap::saveDocument(
     const QString& filename, bool userChordsOnly, QString& /*errMsg*/)
 {
     QFile file(filename);
-    file.open(QIODevice::WriteOnly);
+    if (!file.open(QIODevice::WriteOnly))
+        return false;
 
     QTextStream outStream(&file);
 

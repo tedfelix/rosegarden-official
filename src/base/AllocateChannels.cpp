@@ -51,12 +51,8 @@ allocateChannelInterval(RealTime startTime,
     if (!empty()) {
         RG_DEBUG << "Scanning for existing ChannelInterval";
 
-        // Initialize (leastOverflow, leastDuration) to longer than any
-        // interval can be.
+        // Initialize to longer than any real interval can be.
         RealTime leastDuration = ChannelInterval::m_afterLatestTime;
-        // leastDuration's overflow bit.  See comments on thisOverflow and
-        // thisDuration.
-        bool leastOverflow = true;
 
         ChannelInterval dummy(startTime);
         for (reverse_iterator i(upper_bound(dummy));
@@ -105,34 +101,36 @@ allocateChannelInterval(RealTime startTime,
                  ((cs.m_end - cs.m_marginAfter) < endTime)))
                 { continue; }
 
-            // We found an candidate, but is it the best so far?  Only
+            // We found a candidate, but is it the best so far?  Only
             // if it wastes less space than all others we've seen,
-            // which is true if it's smaller than them.
+            // which is true if its duration is smaller.
+            //
+            // Avoid computing cs.m_end - cs.m_start directly, as it
+            // can overflow when sentinel times (INT_MIN / INT_MAX)
+            // are involved.  Instead, skip sentinel-bounded intervals
+            // (they are never the tightest fit) and compare normally
+            // for the rest.
+            bool isSentinel =
+                cs.m_start <= ChannelInterval::m_earliestTime ||
+                cs.m_end >= ChannelInterval::m_latestTime;
 
-            // Be careful of overflow.  This calculation ranges from 0
-            // to twice the maximum RealTime can hold.  Overflow can
-            // cause us to see huge waste as negative waste, which
-            // results in very inefficient allocation.  To avoid this,
-            // we keep an overflow bit (thisOverflow and
-            // leastOverflow) and treat it as the most significant
-            // bit.
-            RealTime thisDuration = cs.m_end - cs.m_start;
-            bool thisOverflow = (thisDuration < RealTime::zero());
+            RealTime thisDuration;
+            if (isSentinel) {
+                // Treat sentinel intervals as infinitely large.
+                // They can only win if there's no real candidate yet.
+                thisDuration = ChannelInterval::m_latestTime;
+            } else {
+                thisDuration = cs.m_end - cs.m_start;
+            }
 
-            RG_DEBUG << "Found a candidate that takes"
-                     << (thisOverflow ? "the maximum plus" : "only")
-                     << thisDuration;
+            RG_DEBUG << "Found a candidate that takes" << thisDuration;
 
-            if (((! thisOverflow && leastOverflow)) ||
-                ((thisOverflow == leastOverflow) &&
-                 (thisDuration < leastDuration))) {
-
+            if (thisDuration < leastDuration) {
                 RG_DEBUG << "Best candidate so far";
                 // Decrement so forward iterator refers to the same
                 // element we examined.
                 bestMatch = --(i.base());
                 leastDuration = thisDuration;
-                leastOverflow = thisOverflow;
             }
         }
     }

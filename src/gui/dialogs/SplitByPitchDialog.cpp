@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2025 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -57,6 +57,7 @@ SplitByPitchDialog::SplitByPitchDialog(QWidget *parent) :
     layout->setSpacing(5);
 
     m_pitch = new PitchChooser(tr("Starting split pitch"), frame, 60);
+    // cppcheck-suppress duplicateExpression
     layout->addWidget(m_pitch, 0, 0, 0- 0+1, 2-0+ 1, Qt::AlignHCenter);
 
     m_strategy = new QComboBox(frame);
@@ -113,7 +114,7 @@ SplitByPitchDialog::getStrategy()
     case 4:
         return (int)SegmentSplitByPitchCommand::ChordToneOfInitialPitch;
     }
-    /* NOTREACHED */ 
+    /* NOTREACHED */
 }
 
 bool
