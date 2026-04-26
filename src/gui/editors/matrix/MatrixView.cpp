@@ -697,6 +697,11 @@ MatrixView::initActionsToolbar()
 
     m_snapGridCombo->setMaxVisibleItems(m_snapValues.size());
 
+    // Up the minimum for "Native (Light)" theme to make sure the contents
+    // are fully visible.
+    if (Preferences::getTheme() == Preferences::NativeTheme)
+        m_snapGridCombo->setMinimumWidth(90);
+
     connect(m_snapGridCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MatrixView::slotSetSnapFromIndex);
