@@ -1,0 +1,1472 @@
+/**
+ * PIANOMODE POST STYLES - VERSION CORRIGÉE
+ * Corrections : Take It Further doré pur + sticky, Newsletter composant séparé
+ */
+
+/* ===== VARIABLES CSS PIANOMODE ===== */
+:root {
+    --pianomode-primary-gold: #D7BF81;
+    --pianomode-primary-gold-dark: #B8860B;
+    --pianomode-primary-gold-light: rgba(197, 157, 58, 0.1);
+    --pianomode-text-dark: #1a1a1a;
+    --pianomode-text-medium: #666;
+    --pianomode-text-light: #888;
+    --pianomode-background-subtle: rgba(248, 249, 250, 0.5);
+    --pianomode-border-light: rgba(0, 0, 0, 0.08);
+    --pianomode-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --pianomode-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.15);
+    --pianomode-font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    --pianomode-transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===== ICÔNES SVG AMÉLIORÉES ===== */
+.pianomode-icon {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
+    stroke: white;
+    fill: none;
+    transition: var(--pianomode-transition-smooth);
+}
+
+.pianomode-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Icônes spéciales pour héro */
+.pianomode-hero-date .pianomode-icon,
+.pianomode-hero-reading-time .pianomode-icon {
+    stroke: white;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+
+/* ===== HÉRO MUSICAL AVEC TITRE BLANC ===== */
+.pianomode-post-hero {
+    height: 60vh;
+    min-height: 550px;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6), rgba(197,157,58,0.3)), 
+                var(--hero-bg-image) center/cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.pianomode-hero-content {
+    max-width: 800px;
+    padding: 0 2rem;
+    z-index: 2;
+    animation: pianomodeFadeInUp 0.8s ease-out;
+}
+
+.pianomode-hero-category {
+    background: rgba(197, 157, 58, 0.95);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 25px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    cursor: pointer;
+    transition: var(--pianomode-transition-smooth);
+    text-decoration: none;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-hero-category:hover {
+    background: rgba(197, 157, 58, 1);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(197, 157, 58, 0.4);
+    text-decoration: none;
+    color: white;
+}
+
+/* TITRE HÉRO EN BLANC */
+.pianomode-hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.8);
+    line-height: 1.1;
+    letter-spacing: -0.5px;
+    font-family: var(--pianomode-font-family);
+    color: #ffffff;
+}
+
+.pianomode-hero-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+    font-weight: 500;
+    font-family: var(--pianomode-font-family);
+    color: white;
+}
+
+.pianomode-hero-date,
+.pianomode-hero-reading-time {
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+/* Animation des notes flottantes */
+.pianomode-hero-floating-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.pianomode-hero-note {
+    position: absolute;
+    color: rgba(197, 157, 58, 0.3);
+    font-size: 2rem;
+    animation: pianomodeFloat 10s infinite linear;
+}
+
+@keyframes pianomodeFloat {
+    0% {
+        transform: translateY(110vh) rotate(0deg) scale(0.8);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.7;
+    }
+    90% {
+        opacity: 0.7;
+    }
+    100% {
+        transform: translateY(-10vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+    }
+}
+
+@keyframes pianomodeFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===== LAYOUT PRINCIPAL AVEC SIDEBAR ===== */
+.pianomode-post-layout {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 3rem;
+    align-items: start;
+    max-width: 1400px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.pianomode-post-main {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: var(--pianomode-shadow-light);
+}
+
+/* ===== SIDEBAR AVEC STICKY SEULEMENT SUR LE DERNIER ÉLÉMENT ===== */
+.pianomode-post-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    position: relative;
+}
+
+/* ✅ SEULEMENT LE DERNIER WIDGET EST STICKY */
+.pianomode-post-sidebar .pianomode-sidebar-widget:last-child {
+    position: sticky;
+    top: 2rem;
+    z-index: 10;
+}
+
+.pianomode-sidebar-widget {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: var(--pianomode-shadow-light);
+    transition: var(--pianomode-transition-smooth);
+}
+
+.pianomode-sidebar-widget:hover {
+    box-shadow: var(--pianomode-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.pianomode-widget-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--pianomode-text-dark);
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-widget-title .pianomode-icon {
+    stroke: var(--pianomode-text-dark);
+    margin-right: 12px;
+}
+
+/* ===== CONTENU AVEC DROP CAP ===== */
+.pianomode-post-content {
+    font-family: var(--pianomode-font-family);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--pianomode-text-medium);
+}
+
+.pianomode-first-paragraph p::first-letter {
+    font-family: var(--pianomode-font-family);
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--pianomode-primary-gold);
+    float: left;
+    line-height: 4rem;
+    padding-right: 12px;
+    margin-top: 6px;
+    margin-bottom: -6px;
+    text-shadow: 2px 2px 4px rgba(197, 157, 58, 0.3);
+}
+
+.pianomode-post-content h2 {
+    font-size: 2rem;
+    color: var(--pianomode-text-dark);
+    margin: 2.5rem 0 1.5rem 0;
+    font-weight: 700;
+    position: relative;
+    padding-left: 2rem;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-post-content h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2rem;
+    width: 18px;
+    height: 18px;
+    background: var(--pianomode-primary-gold);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2'%3E%3Cpath d='M9 18V5l12-2v13'/%3E%3Ccircle cx='6' cy='18' r='3'/%3E%3Ccircle cx='18' cy='16' r='3'/%3E%3C/svg%3E");
+    mask-size: contain;
+}
+
+.pianomode-post-content h3 {
+    font-size: 1.5rem;
+    color: var(--pianomode-text-dark);
+    margin: 2rem 0 1rem 0;
+    font-weight: 600;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-post-content p {
+    margin-bottom: 1.5rem;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-post-content img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    margin: 2rem 0rem;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* ===== TAKE IT FURTHER - CORRIGÉ SANS CADRE BLANC ===== */
+.pianomode-post-cta {
+    background: linear-gradient(135deg, var(--pianomode-primary-gold), var(--pianomode-primary-gold-dark));
+    color: white;
+    padding: 2rem;
+    border-radius: 16px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    /* ✅ SUPPRESSION du background et padding du widget blanc */
+    margin: 0 !important;
+}
+
+/* ✅ SUPPRESSION du .pianomode-sidebar-widget qui encapsulait le CTA */
+.pianomode-post-cta.pianomode-sidebar-widget {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+}
+
+/* Le CTA devient le widget lui-même */
+.pianomode-post-cta {
+    box-shadow: var(--pianomode-shadow-light);
+    transition: var(--pianomode-transition-smooth);
+}
+
+.pianomode-post-cta:hover {
+    box-shadow: var(--pianomode-shadow-hover);
+    transform: translateY(-2px);
+}
+
+.pianomode-cta-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="60" fill="rgba(255,255,255,0.05)">♪</text></svg>') repeat;
+    background-size: 80px 80px;
+    animation: pianomodeCTAPattern 15s linear infinite;
+}
+
+@keyframes pianomodeCTAPattern {
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(-80px) translateY(-80px); }
+}
+
+.pianomode-cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+.pianomode-cta-icon {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 1rem auto;
+    stroke: white;
+    fill: none;
+}
+
+.pianomode-cta-title {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 0.8rem;
+    line-height: 1.2;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-cta-subtitle {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    font-weight: 400;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    justify-content: center;
+}
+
+.pianomode-cta-button {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.8rem;
+    transition: var(--pianomode-transition-smooth);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.2);
+    position: relative;
+    overflow: hidden;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-cta-button:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    color: white;
+    text-decoration: none;
+}
+
+.pianomode-cta-button.primary {
+    background: white;
+    color: var(--pianomode-primary-gold);
+    border-color: white;
+}
+
+.pianomode-cta-button.primary:hover {
+    background: #f8f9fa;
+    color: var(--pianomode-primary-gold-dark);
+}
+
+/* ===== NEWSLETTER COMPOSANT SÉPARÉ - APRÈS L'ARTICLE ===== */
+.pianomode-post-newsletter-section {
+    max-width: 1300px;
+    margin: 4rem auto;
+    padding: 0 2rem;
+}
+
+.pianomode-newsletter-component {
+    background: linear-gradient(135deg, var(--pianomode-primary-gold), var(--pianomode-primary-gold-dark));
+    color: white;
+    padding: 3rem 2rem;
+    border-radius: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--pianomode-shadow-light);
+}
+
+.pianomode-newsletter-component::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="50" font-size="40" fill="rgba(255,255,255,0.05)">📧</text></svg>') repeat;
+    background-size: 100px 100px;
+    animation: newsletterPattern 20s linear infinite;
+    z-index: 1;
+}
+
+@keyframes newsletterPattern {
+    0% { transform: translateX(0) translateY(0); }
+    100% { transform: translateX(-100px) translateY(-100px); }
+}
+
+.pianomode-newsletter-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.pianomode-newsletter-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 1.5rem auto;
+    stroke: white;
+    fill: none;
+}
+
+.pianomode-newsletter-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-newsletter-description {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin-bottom: 2rem;
+    font-weight: 400;
+    font-family: var(--pianomode-font-family);
+    line-height: 1.6;
+}
+
+.pianomode-newsletter-form {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
+.pianomode-newsletter-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: 50px;
+    font-family: var(--pianomode-font-family);
+    font-size: 1rem;
+    background: rgba(255,255,255,0.95);
+    color: var(--pianomode-text-dark);
+    backdrop-filter: blur(10px);
+    transition: var(--pianomode-transition-smooth);
+}
+
+.pianomode-newsletter-input:focus {
+    outline: none;
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+}
+
+.pianomode-newsletter-input::placeholder {
+    color: var(--pianomode-text-light);
+}
+
+.pianomode-newsletter-button {
+    background: rgba(255,255,255,0.15);
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 50px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--pianomode-transition-smooth);
+    font-family: var(--pianomode-font-family);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255,255,255,0.2);
+    white-space: nowrap;
+}
+
+.pianomode-newsletter-button:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+}
+
+/* ===== PIANO INTERACTIF (CONDITIONNEL) ===== */
+.pianomode-piano-widget {
+    background: linear-gradient(135deg, #f8f9fa, #fff);
+    border: 3px solid var(--pianomode-primary-gold);
+    position: relative;
+    overflow: hidden;
+}
+
+.pianomode-piano-description {
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    color: var(--pianomode-text-medium);
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-piano-container {
+    margin: 1.5rem 0;
+    perspective: 1000px;
+}
+
+.pianomode-piano-keyboard {
+    display: flex;
+    height: 140px;
+    background: #2c2c2c;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: inset 0 5px 10px rgba(0,0,0,0.4);
+    position: relative;
+    transform: rotateX(12deg);
+}
+
+.pianomode-piano-key {
+    position: relative;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+    border-radius: 0 0 6px 6px;
+    font-family: var(--pianomode-font-family);
+}
+
+/* Touches blanches */
+.pianomode-white-key {
+    flex: 1;
+    background: linear-gradient(to bottom, #ffffff 0%, #f8f8f8 50%, #e8e8e8 100%);
+    border: 1px solid #ccc;
+    margin: 0 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--pianomode-text-medium);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+
+.pianomode-note-name {
+    margin-bottom: 3px;
+    font-weight: 700;
+}
+
+.pianomode-note-alt {
+    font-size: 0.55rem;
+    opacity: 0.7;
+}
+
+.pianomode-white-key:hover {
+    background: linear-gradient(to bottom, #f0f8ff 0%, #e6f3ff 50%, #ddeeff 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 12px rgba(0,0,0,0.3);
+}
+
+.pianomode-white-key.active {
+    background: linear-gradient(to bottom, var(--pianomode-primary-gold) 0%, var(--pianomode-primary-gold-dark) 100%);
+    color: white;
+    transform: translateY(3px);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Touches noires */
+.pianomode-black-key {
+    position: absolute;
+    width: 24px;
+    height: 85px;
+    background: linear-gradient(to bottom, #4a4a4a 0%, #2c2c2c 50%, #1a1a1a 100%);
+    border-radius: 0 0 5px 5px;
+    top: 10px;
+    z-index: 2;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding-bottom: 6px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: rgba(255,255,255,0.8);
+}
+
+.pianomode-black-key:hover {
+    background: linear-gradient(to bottom, #5a5a5a 0%, #3c3c3c 50%, #2a2a2a 100%);
+    transform: translateY(-1px);
+}
+
+.pianomode-black-key.active {
+    background: linear-gradient(to bottom, var(--pianomode-primary-gold) 0%, var(--pianomode-primary-gold-dark) 100%);
+    transform: translateY(2px);
+    color: white;
+}
+
+/* Positions des touches noires - 2 OCTAVES */
+.pianomode-black-key:nth-child(15) { left: 27px; }   /* C# */
+.pianomode-black-key:nth-child(16) { left: 60px; }   /* D# */
+.pianomode-black-key:nth-child(17) { left: 126px; }  /* F# */
+.pianomode-black-key:nth-child(18) { left: 159px; }  /* G# */
+.pianomode-black-key:nth-child(19) { left: 192px; }  /* A# */
+.pianomode-black-key:nth-child(20) { left: 258px; }  /* C# */
+.pianomode-black-key:nth-child(21) { left: 291px; }  /* D# */
+.pianomode-black-key:nth-child(22) { left: 357px; }  /* F# */
+.pianomode-black-key:nth-child(23) { left: 390px; }  /* G# */
+.pianomode-black-key:nth-child(24) { left: 423px; }  /* A# */
+
+.pianomode-chord-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+}
+
+.pianomode-chord-button {
+    background: var(--pianomode-primary-gold-light);
+    border: 2px solid var(--pianomode-primary-gold);
+    color: var(--pianomode-primary-gold);
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--pianomode-transition-smooth);
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-chord-button:hover {
+    background: var(--pianomode-primary-gold);
+    color: white;
+    transform: translateY(-1px);
+}
+
+.pianomode-chord-info {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: var(--pianomode-primary-gold-light);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--pianomode-text-dark);
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--pianomode-font-family);
+}
+
+/* ===== ARTICLES LIÉS ===== */
+.pianomode-related-article {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    transition: var(--pianomode-transition-smooth);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.pianomode-related-article:hover {
+    background: var(--pianomode-background-subtle);
+    transform: translateX(3px);
+    text-decoration: none;
+    color: inherit;
+}
+
+.pianomode-related-thumbnail {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    object-fit: cover;
+    flex-shrink: 0;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+}
+
+.pianomode-related-content h4 {
+    font-size: 0.9rem;
+    color: var(--pianomode-text-dark);
+    margin-bottom: 0.4rem;
+    font-weight: 600;
+    line-height: 1.3;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-related-meta {
+    font-size: 0.8rem;
+    color: var(--pianomode-text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-family: var(--pianomode-font-family);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    .pianomode-post-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    .pianomode-post-sidebar {
+        position: static;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 1.5rem;
+    }
+
+    /* ✅ STICKY DÉSACTIVÉ SUR TABLETTE */
+    .pianomode-post-sidebar .pianomode-sidebar-widget:last-child {
+        position: static;
+    }
+
+    .pianomode-newsletter-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pianomode-newsletter-input {
+        margin-bottom: 1rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .pianomode-hero-title {
+        font-size: 2.2rem;
+    }
+
+    .pianomode-post-main {
+        padding: 2rem;
+    }
+
+    .pianomode-first-paragraph p::first-letter {
+        font-size: 4rem;
+        line-height: 3.2rem;
+    }
+
+    .pianomode-hero-meta {
+        flex-direction: column;
+        gap: 0.8rem;
+    }
+
+    .pianomode-cta-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pianomode-piano-keyboard {
+        height: 120px;
+        transform: rotateX(8deg);
+    }
+
+    .pianomode-white-key {
+        font-size: 0.6rem;
+        padding-bottom: 8px;
+    }
+
+    .pianomode-black-key {
+        width: 20px;
+        height: 70px;
+        font-size: 0.5rem;
+    }
+
+    /* Ajustement positions mobile */
+    .pianomode-black-key:nth-child(15) { left: 22px; }
+    .pianomode-black-key:nth-child(16) { left: 48px; }
+    .pianomode-black-key:nth-child(17) { left: 100px; }
+    .pianomode-black-key:nth-child(18) { left: 126px; }
+    .pianomode-black-key:nth-child(19) { left: 152px; }
+    .pianomode-black-key:nth-child(20) { left: 204px; }
+    .pianomode-black-key:nth-child(21) { left: 230px; }
+    .pianomode-black-key:nth-child(22) { left: 282px; }
+    .pianomode-black-key:nth-child(23) { left: 308px; }
+    .pianomode-black-key:nth-child(24) { left: 334px; }
+
+    /* Sidebar mobile en colonnes */
+    .pianomode-post-sidebar {
+        grid-template-columns: 1fr;
+    }
+
+    /* Newsletter responsive */
+    .pianomode-newsletter-component {
+        padding: 2rem 1.5rem;
+    }
+
+    .pianomode-newsletter-title {
+        font-size: 1.6rem;
+    }
+
+    .pianomode-newsletter-description {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pianomode-post-layout {
+        padding: 0 1rem;
+    }
+
+    .pianomode-post-main {
+        padding: 1.5rem;
+    }
+
+    .pianomode-sidebar-widget {
+        padding: 1.5rem;
+    }
+
+    .pianomode-piano-keyboard {
+        height: 100px;
+    }
+
+    .pianomode-white-key {
+        font-size: 0.55rem;
+    }
+
+    .pianomode-black-key {
+        width: 16px;
+        height: 60px;
+        font-size: 0.45rem;
+    }
+
+    .pianomode-newsletter-component {
+        padding: 1.5rem 1rem;
+    }
+
+    .pianomode-newsletter-title {
+        font-size: 1.4rem;
+    }
+}
+
+/* ===== STYLES SPÉCIFIQUES AUX SCORES - À AJOUTER À pianomode-post-styles.css ===== */
+
+/* ✅ LEVEL AVEC MISE EN ÉVIDENCE SUPÉRIEURE DANS LA MÉTA */
+.pianomode-score-level-emphasis {
+    background: linear-gradient(135deg, var(--pianomode-primary-gold), var(--pianomode-primary-gold-dark));
+    color: white;
+    padding: 6px 14px;
+    border-radius: 16px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    text-decoration: none;
+    cursor: pointer;
+    transition: var(--pianomode-transition-smooth);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    font-family: var(--pianomode-font-family);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 
+        0 4px 16px rgba(197, 157, 58, 0.4),
+        0 2px 8px rgba(197, 157, 58, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.pianomode-score-level-emphasis:hover {
+    background: linear-gradient(135deg, var(--pianomode-primary-gold-dark), #A0751A);
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 8px 25px rgba(197, 157, 58, 0.6),
+        0 4px 12px rgba(197, 157, 58, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.25);
+    text-decoration: none;
+    color: white;
+}
+
+.pianomode-score-level-emphasis .pianomode-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 0;
+    stroke: white;
+    fill: none;
+}
+
+/* ✅ BOUTONS PDF STYLÉS */
+.pianomode-pdf-button {
+    background: linear-gradient(135deg, var(--pianomode-primary-gold), var(--pianomode-primary-gold-dark));
+    color: white;
+    padding: 14px 28px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-family: var(--pianomode-font-family);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: var(--pianomode-transition-smooth);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 
+        0 8px 25px rgba(197, 157, 58, 0.3),
+        0 4px 12px rgba(197, 157, 58, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    border: none;
+    min-width: 220px;
+    min-height: 52px;
+}
+
+.pianomode-pdf-classic {
+    background: linear-gradient(135deg, #8B4513, #654321);
+    box-shadow: 
+        0 8px 25px rgba(139, 69, 19, 0.4),
+        0 4px 12px rgba(139, 69, 19, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.pianomode-pdf-button:hover {
+    background: linear-gradient(135deg, var(--pianomode-primary-gold-dark), #A0751A);
+    transform: translateY(-3px);
+    box-shadow: 
+        0 12px 35px rgba(197, 157, 58, 0.4),
+        0 6px 18px rgba(197, 157, 58, 0.3),
+        inset 0 2px 0 rgba(255, 255, 255, 0.25);
+    text-decoration: none;
+    color: white;
+}
+
+.pianomode-pdf-classic:hover {
+    background: linear-gradient(135deg, #654321, #4A2C0A);
+    box-shadow: 
+        0 12px 35px rgba(139, 69, 19, 0.5),
+        0 6px 18px rgba(139, 69, 19, 0.4),
+        inset 0 2px 0 rgba(255, 255, 255, 0.25);
+}
+
+.pianomode-pdf-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.6s ease;
+    z-index: 1;
+}
+
+.pianomode-pdf-button:hover::before {
+    left: 100%;
+}
+
+.pianomode-pdf-icon {
+    width: 20px;
+    height: 20px;
+    stroke: white;
+    fill: none;
+    position: relative;
+    z-index: 2;
+}
+
+.pianomode-pdf-button span {
+    position: relative;
+    z-index: 2;
+}
+
+/* ✅ CONTAINER VIDÉO YOUTUBE */
+.pianomode-youtube-container {
+    margin: 3rem 0;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 
+        0 10px 30px rgba(0,0,0,0.2),
+        0 4px 15px rgba(0,0,0,0.1);
+}
+
+.pianomode-youtube-wrapper {
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%; /* 16:9 */
+    background: #000;
+}
+
+.pianomode-youtube-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ✅ BLOCS D'INFORMATIONS SCORE */
+.pianomode-score-info-block {
+    margin: 3rem 0;
+    padding: 2rem;
+    border-radius: 16px;
+    border-left: 4px solid var(--pianomode-primary-gold);
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    transition: var(--pianomode-transition-smooth);
+}
+
+.pianomode-score-info-block:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.pianomode-score-notes {
+    background: linear-gradient(135deg, #f0f8ff, #ffffff);
+    border-left-color: #4169E1;
+}
+
+.pianomode-playing-tips {
+    background: linear-gradient(135deg, #f8f9fa, #ffffff);
+    border-left-color: var(--pianomode-primary-gold);
+}
+
+.pianomode-difficulty {
+    background: linear-gradient(135deg, #fff3e0, #ffffff);
+    border-left-color: #FF8C00;
+}
+
+.pianomode-score-info-title {
+    margin: 0 0 1rem 0;
+    color: var(--pianomode-text-dark);
+    font-family: var(--pianomode-font-family);
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.pianomode-score-notes .pianomode-score-info-title {
+    color: #4169E1;
+}
+
+.pianomode-playing-tips .pianomode-score-info-title {
+    color: var(--pianomode-primary-gold);
+}
+
+.pianomode-difficulty .pianomode-score-info-title {
+    color: #FF8C00;
+}
+
+.pianomode-score-info-icon {
+    width: 24px;
+    height: 24px;
+    stroke: currentColor;
+    fill: none;
+}
+
+.pianomode-score-info-content {
+    color: var(--pianomode-text-medium);
+    line-height: 1.6;
+    font-family: var(--pianomode-font-family);
+    font-size: 1rem;
+}
+
+/* ✅ SCORES LIÉS AMÉLIORÉS */
+.pianomode-related-score-improved {
+    display: flex;
+    gap: 1rem;
+    padding: 1.2rem;
+    border-radius: 12px;
+    transition: var(--pianomode-transition-smooth);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid rgba(0,0,0,0.05);
+    margin-bottom: 0.8rem;
+}
+
+.pianomode-related-score-improved:last-child {
+    margin-bottom: 0;
+}
+
+.pianomode-related-score-improved:hover {
+    background: var(--pianomode-background-subtle);
+    transform: translateX(4px) translateY(-2px);
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 4px 16px rgba(197, 157, 58, 0.08);
+    border-color: rgba(197, 157, 58, 0.15);
+}
+
+/* COMPOSITEUR MIS EN VALEUR POUR SCORES */
+.pianomode-related-composer {
+    font-size: 0.9rem;
+    color: var(--pianomode-primary-gold);
+    font-weight: 700;
+    margin-bottom: 0.4rem;
+    font-family: var(--pianomode-font-family);
+    letter-spacing: 0.2px;
+}
+
+.pianomode-related-score-improved:hover .pianomode-related-composer {
+    color: var(--pianomode-primary-gold-dark);
+}
+
+/* ✅ RESPONSIVE POUR LES NOUVEAUX ÉLÉMENTS SCORES */
+
+@media (max-width: 768px) {
+    .pianomode-score-level-emphasis {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+        gap: 4px;
+    }
+    
+    .pianomode-score-level-emphasis .pianomode-icon {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .pianomode-pdf-button {
+        min-width: 180px;
+        min-height: 48px;
+        padding: 12px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .pianomode-pdf-icon {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .pianomode-youtube-container {
+        margin: 2rem 0;
+        border-radius: 12px;
+    }
+    
+    .pianomode-score-info-block {
+        margin: 2rem 0;
+        padding: 1.5rem;
+    }
+    
+    .pianomode-score-info-title {
+        font-size: 1.2rem;
+    }
+    
+    .pianomode-score-info-icon {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .pianomode-related-score-improved {
+        padding: 1rem;
+        gap: 0.8rem;
+    }
+    
+    .pianomode-related-composer {
+        font-size: 0.85rem;
+        margin-bottom: 0.3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .pianomode-score-level-emphasis {
+        padding: 3px 8px;
+        font-size: 0.7rem;
+    }
+    
+    .pianomode-pdf-button {
+        flex-direction: column;
+        gap: 6px;
+        min-width: 160px;
+        min-height: 60px;
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+    
+    .pianomode-score-info-block {
+        margin: 1.5rem 0;
+        padding: 1.2rem;
+    }
+    
+    .pianomode-score-info-title {
+        font-size: 1.1rem;
+        flex-direction: column;
+        gap: 0.3rem;
+        text-align: center;
+    }
+    
+    .pianomode-score-info-content {
+        font-size: 0.9rem;
+    }
+    
+    .pianomode-related-score-improved {
+        padding: 0.8rem;
+        gap: 0.6rem;
+    }
+    
+    .pianomode-related-composer {
+        font-size: 0.8rem;
+    }
+}
+
+/* ✅ CORRECTIONS MÉTA RESPONSIVE POUR SCORES */
+@media (max-width: 480px) {
+    .pianomode-hero-meta {
+        flex-direction: column;
+        gap: 0.8rem;
+        align-items: center;
+    }
+    
+    .pianomode-score-level-emphasis {
+        order: -1; /* Mettre le level en premier sur mobile */
+    }
+}
+
+/* ===== SCORES LIÉS AMÉLIORÉS ===== */
+.pianomode-related-score-improved {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: 12px;
+    transition: var(--pianomode-transition-smooth);
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    border: 1px solid transparent;
+}
+
+.pianomode-related-score-improved:hover {
+    background: var(--pianomode-background-subtle);
+    transform: translateX(3px);
+    text-decoration: none;
+    color: inherit;
+    border-color: rgba(197, 157, 58, 0.2);
+}
+
+.pianomode-related-title {
+    font-size: 0.9rem;
+    color: var(--pianomode-text-dark);
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    line-height: 1.3;
+    font-family: var(--pianomode-font-family);
+}
+
+.pianomode-related-composer {
+    font-size: 0.75rem;
+    color: var(--pianomode-primary-gold);
+    margin-bottom: 0.3rem;
+    font-weight: 500;
+    font-style: italic;
+}
+
+.pianomode-related-meta-small {
+    font-size: 0.7rem;
+    color: var(--pianomode-text-light);
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-family: var(--pianomode-font-family);
+}
+
+.level-small {
+    color: var(--pianomode-primary-gold);
+    font-weight: 600;
+}
+
+/* Single Post Favorites */
+.pianomode-single-favorite {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pianomode-favorite-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pianomode-favorite-btn:hover {
+    transform: scale(1.15);
+}
+
+.pianomode-favorite-icon {
+    width: 22px;
+    height: 22px;
+    fill: none;
+    stroke: #D7BF81;
+    stroke-width: 2px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pianomode-favorite-btn.is-favorited .pianomode-favorite-icon {
+    fill: #D7BF81;
+    stroke: #D7BF81;
+    animation: heartBeat 0.3s ease-out;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.3); }
+    50% { transform: scale(1.1); }
+    75% { transform: scale(1.2); }
+}
+
+.pianomode-like-count {
+    color: #D7BF81;
+    font-weight: 600;
+    font-size: 0.9rem;
+    min-width: 30px;
+    text-align: left;
+}
+}
+
+/* ============================================
+   TABLEAUX RESPONSIFS - Scores (pm-score-content)
+   Les posts utilisent les styles inline de single-post.php
+   ============================================ */
+
+/* Container scrollable */
+.pm-score-content .wp-block-table,
+.pm-score-content > table {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 2rem 0;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    position: relative;
+}
+
+.pm-score-content table {
+    width: 100%;
+    min-width: 500px;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: var(--pianomode-font-family);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* En-tête sombre doré */
+.pm-score-content table th {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    color: var(--pianomode-primary-gold);
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 13px 18px;
+    text-align: left;
+    white-space: normal;
+    word-wrap: break-word;
+    border-bottom: 2px solid var(--pianomode-primary-gold);
+}
+
+/* Cellules */
+.pm-score-content table td {
+    padding: 11px 18px;
+    color: var(--pianomode-text-dark);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    vertical-align: middle;
+}
+
+/* Zebra striping */
+.pm-score-content table tbody tr:nth-child(even) {
+    background: rgba(248, 249, 250, 0.5);
+}
+
+.pm-score-content table tbody tr:hover {
+    background: rgba(215, 191, 129, 0.07);
+}
+
+.pm-score-content table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.pm-score-content table td:first-child {
+    font-weight: 600;
+}
+
+/* Caption */
+.pm-score-content .wp-block-table figcaption {
+    font-size: 0.8rem;
+    color: var(--pianomode-text-light);
+    text-align: center;
+    margin-top: 0.75rem;
+    font-style: italic;
+}
+
+/* ===== SCORES TABLE RESPONSIVE ===== */
+@media (max-width: 800px) {
+    .pm-score-content table {
+        min-width: 520px;
+        font-size: 0.86rem;
+    }
+
+    .pm-score-content table th {
+        padding: 11px 14px;
+        font-size: 0.76rem;
+    }
+
+    .pm-score-content table td {
+        padding: 10px 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pm-score-content table {
+        min-width: 460px;
+        font-size: 0.82rem;
+    }
+
+    .pm-score-content table th {
+        padding: 10px 12px;
+        font-size: 0.73rem;
+    }
+
+    .pm-score-content table td {
+        padding: 9px 12px;
+    }
+}

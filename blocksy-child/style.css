@@ -1,0 +1,433 @@
+/*
+Theme Name:   PianoMode - Blocksy Child
+Description:  Thème enfant optimisé pour PianoMode basé sur Blocksy. Inclut des fonctionnalités avancées pour la musique et le piano : carrousel interactif, système de partitions, pages explorables, et design musical premium.
+Author:       PianoMode Team
+Template:     blocksy
+Version:      2.0.0
+Text Domain:  pianomode-child
+License:      GPL v2 or later
+License URI:  https://www.gnu.org/licenses/gpl-2.0.html
+Tags:         music, piano, education, interactive, modern
+*/
+
+/* Parent Blocksy loaded via wp_enqueue_style in functions.php */
+
+/* Montserrat font loaded via functions.php preload for better LCP */
+
+/* ===================================================
+   FORCE LIGHT MODE — No dark mode adaptation
+   PianoMode is designed as a light-theme site.
+   This prevents browsers (Brave, Safari, Firefox) from
+   applying dark mode overrides when the OS is in dark mode.
+   =================================================== */
+
+:root,
+html,
+html[data-theme="dark"],
+html.dark {
+    color-scheme: light only !important;
+}
+
+/* ===================================================
+   VARIABLES CSS GLOBALES PIANOMODE
+   =================================================== */
+
+:root {
+    /* Couleurs principales - Base: #D7BF81 = rgb(215, 191, 129) */
+    --pianomode-primary-gold: #D7BF81;
+    --pianomode-primary-gold-dark: #BEA86E;
+    --pianomode-primary-gold-light: rgba(215, 191, 129, 0.1);
+    --pianomode-primary-gold-border: rgba(215, 191, 129, 0.25);
+    
+    /* Couleurs de texte */
+    --pianomode-text-dark: #1a1a1a;
+    --pianomode-text-medium: #666;
+    --pianomode-text-light: #888;
+    
+    /* Arrière-plans */
+    --pianomode-background-subtle: rgba(248, 249, 250, 0.5);
+    --pianomode-background-white: #ffffff;
+    
+    /* Bordures et ombres */
+    --pianomode-border-light: rgba(0, 0, 0, 0.08);
+    --pianomode-shadow-light: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --pianomode-shadow-hover: 0 16px 48px rgba(0, 0, 0, 0.15);
+    
+    /* Transitions */
+    --pianomode-transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --pianomode-transition-fast: all 0.2s ease;
+    
+    /* Police */
+    --pianomode-font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    
+    /* Espacements */
+    --pianomode-spacing-xs: 0.5rem;
+    --pianomode-spacing-sm: 1rem;
+    --pianomode-spacing-md: 1.5rem;
+    --pianomode-spacing-lg: 2rem;
+    --pianomode-spacing-xl: 3rem;
+    
+    /* Border radius */
+    --pianomode-radius-sm: 8px;
+    --pianomode-radius-md: 12px;
+    --pianomode-radius-lg: 16px;
+    --pianomode-radius-xl: 20px;
+}
+
+/* ===================================================
+   CLASSES UTILITAIRES PIANOMODE
+   =================================================== */
+
+/* Police Montserrat forcée */
+.pianomode-font,
+.pianomode-element * {
+    font-family: var(--pianomode-font-family) !important;
+}
+
+/* Couleurs utilitaires */
+.pianomode-gold {
+    color: var(--pianomode-primary-gold) !important;
+}
+
+.pianomode-gold-bg {
+    background-color: var(--pianomode-primary-gold) !important;
+}
+
+.pianomode-text-dark {
+    color: var(--pianomode-text-dark) !important;
+}
+
+/* Espacements utilitaires */
+.pianomode-spacing-none { margin: 0 !important; padding: 0 !important; }
+.pianomode-spacing-xs { margin: var(--pianomode-spacing-xs) !important; }
+.pianomode-spacing-sm { margin: var(--pianomode-spacing-sm) !important; }
+.pianomode-spacing-md { margin: var(--pianomode-spacing-md) !important; }
+.pianomode-spacing-lg { margin: var(--pianomode-spacing-lg) !important; }
+
+/* Transitions utilitaires */
+.pianomode-transition {
+    transition: var(--pianomode-transition-smooth) !important;
+}
+
+.pianomode-transition-fast {
+    transition: var(--pianomode-transition-fast) !important;
+}
+
+/* ===================================================
+   OVERRIDE GLOBAL BLOCKSY POUR PIANOMODE
+   =================================================== */
+
+/* Brand name (replaces h1 to fix duplicate H1 issue) */
+.brand-text .brand-name {
+    display: block;
+}
+
+/* Force la police Montserrat sur les éléments clés */
+body,
+.ct-header,
+.ct-header *,
+h1, h2, h3, h4, h5, h6,
+.wp-block-heading,
+.stk-block-heading,
+button,
+.btn,
+input,
+textarea,
+select {
+    font-family: var(--pianomode-font-family) !important;
+}
+
+/* Amélioration de la lisibilité */
+body {
+    line-height: 1.6;
+    color: var(--pianomode-text-medium);
+}
+
+/* Styles pour les titres */
+h1, h2, h3, h4, h5, h6,
+.wp-block-heading,
+.stk-block-heading {
+    color: var(--pianomode-text-dark);
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+/* Amélioration des liens */
+a {
+    color: var(--pianomode-primary-gold);
+    text-decoration: none;
+    transition: var(--pianomode-transition-fast);
+}
+
+a:hover {
+    color: var(--pianomode-primary-gold-dark);
+    text-decoration: none;
+}
+
+/* ===================================================
+   BOUTONS GLOBAUX PIANOMODE
+   =================================================== */
+
+.pianomode-btn,
+.gold-button,
+.read-more-optimized,
+.get-pdf-optimized,
+.search-button-improved {
+    font-family: var(--pianomode-font-family) !important;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: var(--pianomode-radius-md);
+    transition: var(--pianomode-transition-smooth);
+    cursor: pointer;
+    border: none;
+    position: relative;
+    overflow: hidden;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.pianomode-btn:hover,
+.gold-button:hover,
+.read-more-optimized:hover,
+.get-pdf-optimized:hover,
+.search-button-improved:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--pianomode-shadow-hover);
+}
+
+/* ===================================================
+   ACCESSIBILITÉ AMÉLIORÉE
+   =================================================== */
+
+/* Focus visible pour l'accessibilité clavier (uniquement au clavier, pas au clic) */
+*:focus-visible {
+    outline: 2px solid var(--pianomode-primary-gold);
+    outline-offset: 2px;
+}
+*:focus:not(:focus-visible) {
+    outline: none;
+}
+
+/* Réduction de mouvement pour les utilisateurs sensibles */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Amélioration du contraste pour les textes */
+.text-low-contrast {
+    color: var(--pianomode-text-dark) !important;
+}
+
+/* ===================================================
+   RESPONSIVE GLOBAL PIANOMODE
+   =================================================== */
+
+/* Variables responsive */
+@media (max-width: 1024px) {
+    :root {
+        --pianomode-spacing-xs: 0.4rem;
+        --pianomode-spacing-sm: 0.8rem;
+        --pianomode-spacing-md: 1.2rem;
+        --pianomode-spacing-lg: 1.6rem;
+        --pianomode-spacing-xl: 2.4rem;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --pianomode-spacing-xs: 0.3rem;
+        --pianomode-spacing-sm: 0.6rem;
+        --pianomode-spacing-md: 1rem;
+        --pianomode-spacing-lg: 1.4rem;
+        --pianomode-spacing-xl: 2rem;
+    }
+    
+    /* Amélioration de la taille des boutons sur mobile */
+    .pianomode-btn,
+    .gold-button,
+    .read-more-optimized,
+    .get-pdf-optimized {
+        min-height: 44px;
+        min-width: 120px;
+        padding: 0.7rem 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    :root {
+        --pianomode-spacing-xs: 0.25rem;
+        --pianomode-spacing-sm: 0.5rem;
+        --pianomode-spacing-md: 0.8rem;
+        --pianomode-spacing-lg: 1.2rem;
+        --pianomode-spacing-xl: 1.8rem;
+    }
+}
+
+/* ===================================================
+   OPTIMISATIONS PERFORMANCE
+   =================================================== */
+
+/* Amélioration du rendu des polices */
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* Optimisation des transformations */
+.pianomode-optimized {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* Optimisation des images */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ===================================================
+   CLASSES D'ÉTAT PIANOMODE
+   =================================================== */
+
+/* États de chargement */
+.pianomode-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.pianomode-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--pianomode-primary-gold);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: pianomode-spin 1s linear infinite;
+}
+
+@keyframes pianomode-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* États d'erreur */
+.pianomode-error {
+    background-color: #fee;
+    border-left: 4px solid #e74c3c;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* États de succès */
+.pianomode-success {
+    background-color: #efe;
+    border-left: 4px solid #27ae60;
+    padding: 1rem;
+    margin: 1rem 0;
+}
+
+/* ===================================================
+   ANIMATIONS MUSICALES GLOBALES
+   =================================================== */
+
+/* Animation de note musicale */
+@keyframes pianomode-note-bounce {
+    0%, 100% { 
+        transform: translateY(0) scale(1);
+    }
+    50% { 
+        transform: translateY(-10px) scale(1.1);
+    }
+}
+
+.pianomode-note-animation {
+    animation: pianomode-note-bounce 2s ease-in-out infinite;
+}
+
+/* Animation de pulsation dorée */
+@keyframes pianomode-gold-pulse {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(215, 191, 129, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(215, 191, 129, 0);
+    }
+}
+
+.pianomode-pulse {
+    animation: pianomode-gold-pulse 2s infinite;
+}
+
+/* ===================================================
+   PRINT STYLES
+   =================================================== */
+
+@media print {
+    /* Optimisation pour l'impression */
+    .pianomode-no-print,
+    .share-section,
+    .comments-section,
+    .navigation {
+        display: none !important;
+    }
+    
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+        color: #000;
+        background: #fff;
+    }
+    
+    a {
+        color: #000;
+        text-decoration: underline;
+    }
+    
+    .score-content {
+        box-shadow: none;
+        border: 1px solid #ccc;
+    }
+}
+
+/* ===================================================
+   COMPATIBILITÉ BLOCKSY
+   =================================================== */
+
+/* Assurer la compatibilité avec les composants Blocksy existants */
+.ct-container {
+    font-family: var(--pianomode-font-family);
+}
+
+/* Override des styles Blocksy qui pourraient interférer */
+.wp-block-group,
+.wp-block-columns,
+.wp-block-column {
+    font-family: var(--pianomode-font-family);
+}
+
+/* Correction des marges Blocksy si nécessaire */
+.pianomode-reset-margins {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* ===================================================
+   DARK MODE SUPPORT — DISABLED
+   PianoMode forces light mode globally (see top of file).
+   All dark mode rules below have been removed.
+   =================================================== */

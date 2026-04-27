@@ -1,0 +1,258 @@
+/**
+ * Play Page Admin - PianoMode
+ * Styles for WordPress admin panel
+ */
+
+.pianomode-play-admin {
+    max-width: 100%;
+    box-sizing: border-box;
+    overflow-x: hidden;
+}
+.pianomode-play-admin * {
+    box-sizing: border-box;
+}
+.pianomode-play-admin table {
+    table-layout: auto;
+    max-width: 100%;
+}
+.pianomode-play-admin .form-table {
+    max-width: 100%;
+    overflow-x: auto;
+}
+.pianomode-play-admin .form-table input[type="text"],
+.pianomode-play-admin .form-table textarea {
+    max-width: 100%;
+}
+
+.pm-admin-section {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px 25px;
+    margin-bottom: 25px;
+}
+
+.pm-admin-section h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Game rows */
+.pm-game-row {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.2s ease;
+}
+
+.pm-game-row:hover {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+}
+
+.pm-game-row-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    cursor: pointer;
+}
+
+.pm-game-drag-handle {
+    color: #C59D3A;
+    cursor: grab;
+    font-size: 18px;
+}
+.pm-game-drag-handle:active { cursor: grabbing; }
+
+/* Sortable placeholder */
+.pm-game-sortable-placeholder {
+    background: #f0f6fc;
+    border: 2px dashed #C59D3A;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    min-height: 50px;
+    visibility: visible !important;
+}
+
+/* Order input */
+.pm-game-order-input {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    background: #fff;
+}
+.pm-game-order-input:focus {
+    border-color: #C59D3A;
+    box-shadow: 0 0 0 1px #C59D3A;
+    outline: none;
+}
+
+.pm-game-row-title {
+    flex: 1;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.pm-game-row-status {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+
+.pm-status-active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.pm-status-coming_soon {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.pm-status-hidden {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+.pm-game-row-body {
+    padding: 0 15px 15px;
+    border-top: 1px solid #eee;
+}
+
+.pm-game-row-body .form-table th {
+    width: 140px;
+    padding: 10px 10px 10px 0;
+    font-size: 13px;
+}
+
+.pm-game-row-body .form-table td {
+    padding: 10px 0;
+}
+
+/* Image upload field */
+.pm-image-field {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pm-image-preview {
+    width: 120px;
+    height: 68px;
+    background: #eee;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pm-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* === BADGES GRID === */
+.pm-admin-badges-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 12px;
+    margin-top: 15px;
+}
+.pm-admin-badge-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: #fafafa;
+    border: 1px solid #e8e8e8;
+    border-radius: 10px;
+    padding: 12px 16px;
+    transition: all 0.2s ease;
+}
+.pm-admin-badge-card:hover {
+    background: #f0f0f0;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.pm-admin-badge-card .pm-badge-svg {
+    flex-shrink: 0;
+    line-height: 0;
+}
+.pm-admin-badge-card .pm-badge-info {
+    flex: 1;
+    min-width: 0;
+}
+.pm-admin-badge-card .pm-badge-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: #222;
+    line-height: 1.3;
+}
+.pm-admin-badge-card .pm-badge-condition {
+    font-size: 11px;
+    color: #666;
+    margin-top: 2px;
+}
+.pm-admin-badge-card .pm-badge-meta {
+    display: flex;
+    gap: 8px;
+    margin-top: 4px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.pm-admin-badge-card .pm-badge-tier {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 2px 8px;
+    border-radius: 10px;
+    color: #fff;
+}
+.pm-admin-badge-card .pm-badge-category {
+    font-size: 10px;
+    color: #999;
+    font-weight: 500;
+}
+.pm-admin-badge-card .pm-badge-earned {
+    font-size: 10px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.pm-admin-cat-header {
+    grid-column: 1 / -1;
+    margin-top: 8px;
+    padding: 8px 14px;
+    background: linear-gradient(135deg, #1a1a2e, #0B0B0B);
+    color: #C59D3A;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    border-radius: 6px;
+}
+
+/* === SIGHTREADING ADMIN === */
+.srt-title-edit,
+.srt-composer-edit,
+.srt-diff-edit {
+    font-size: 13px;
+}
+
+/* === Challenge Types Table Fix === */
+#dcChallengeTypesTable {
+    table-layout: auto;
+}
+#dcChallengeTypesTable input,
+#dcChallengeTypesTable select {
+    max-width: 100%;
+}
