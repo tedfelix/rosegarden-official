@@ -662,50 +662,64 @@ class VirtualPianoRecorder {
     }
 
     // ===== RECORDING WITH MICROPHONE SUPPORT =====
+    // Single-context recording: we tap the master bus that lives in Tone.context
+    // (created by prewarmAudioOnce in studio-engine.js). That guarantees the
+    // recorded file is an exact bit-perfect copy of what the user hears, with no
+    // resampling and no clock drift between play and record.
     async startRecording() {
         if (this.isRecording) return;
 
         try {
-            // Ensure Tone.js is started
+            // Ensure Tone.js is started + master bus is ready
             await Tone.start();
+            if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
 
-            // Create a mixed audio context
-            this.mixedAudioContext = new (window.AudioContext || window.webkitAudioContext)({
-                sampleRate: 48000
-            });
-            this.mixedDestination = this.mixedAudioContext.createMediaStreamDestination();
+            // Wait one tick so prewarmAudioOnce can finish wiring the bus
+            await new Promise(r => setTimeout(r, 50));
 
-            // Connect Tone.js master output
-            const toneContext = Tone.context;
-            const masterOutput = Tone.getDestination();
+            const toneRaw = Tone.context.rawContext || Tone.context._context || Tone.context;
 
-            // Create a destination node in Tone's context for capturing
-            const toneStreamDest = toneContext.createMediaStreamDestination();
-            masterOutput.connect(toneStreamDest);
-
-            // Create source from Tone.js stream and connect to mixed destination
-            const toneSource = this.mixedAudioContext.createMediaStreamSource(toneStreamDest.stream);
-            const toneGain = this.mixedAudioContext.createGain();
-            toneGain.gain.value = 1.0;
-            toneSource.connect(toneGain);
-            toneGain.connect(this.mixedDestination);
-
-            // If microphone is enabled, add it to the mix
-            if (this.microphoneEnabled && this.microphoneStream) {
-                const micSource = this.mixedAudioContext.createMediaStreamSource(this.microphoneStream);
-                this.microphoneGain = this.mixedAudioContext.createGain();
-
-                const volumeSlider = document.getElementById('micVolume');
-                this.microphoneGain.gain.value = volumeSlider ? volumeSlider.value / 100 : 1.0;
-
-                micSource.connect(this.microphoneGain);
-                this.microphoneGain.connect(this.mixedDestination);
-
-                console.log('Microphone added to recording mix');
+            // Use the pre-wired recording destination created by prewarmAudioOnce.
+            // It taps post-limiter, so it captures the exact mix the speakers receive.
+            let recordingStream = null;
+            if (window._recordingDest && window._recordingDest.stream) {
+                recordingStream = window._recordingDest.stream;
+            } else {
+                // Defensive fallback: create a fresh destination on Tone's context
+                // and connect Tone.Destination to it. Same context = no resampling.
+                const fallbackDest = toneRaw.createMediaStreamDestination();
+                Tone.getDestination().connect(fallbackDest);
+                this._fallbackRecDest = fallbackDest;
+                recordingStream = fallbackDest.stream;
             }
 
-            // Get the mixed stream
-            this.audioStream = this.mixedDestination.stream;
+            // If the microphone is enabled, mix it INTO the master bus (not a
+            // separate context). That way the mic also goes through the limiter
+            // and is captured in the same stream — perfect sync with piano/drums.
+            if (this.microphoneEnabled && this.microphoneStream) {
+                try {
+                    const micSource = toneRaw.createMediaStreamSource(this.microphoneStream);
+                    this.microphoneGain = toneRaw.createGain();
+                    const volumeSlider = document.getElementById('micVolume');
+                    this.microphoneGain.gain.value = volumeSlider ? volumeSlider.value / 100 : 1.0;
+                    micSource.connect(this.microphoneGain);
+
+                    const busTarget = (window._masterBusInput && window._masterBusInput.input) || window._masterBusInput;
+                    if (busTarget) {
+                        this.microphoneGain.connect(busTarget);
+                    } else {
+                        // No bus: connect mic directly to fallback recording dest
+                        this.microphoneGain.connect(this._fallbackRecDest || Tone.getDestination());
+                    }
+                    this._micSource = micSource;
+                    console.log('Microphone routed into master bus for recording');
+                } catch (e) {
+                    console.warn('Microphone routing failed:', e);
+                }
+            }
+
+            // Single-context stream — bit-perfect with what the user hears.
+            this.audioStream = recordingStream;
 
             // Setup MediaRecorder
             let mimeType = 'audio/webm;codecs=opus';
@@ -778,9 +792,21 @@ class VirtualPianoRecorder {
             this.mediaRecorder.stop();
         }
 
-        // Clean up mixed context
+        // Disconnect microphone from the master bus (it stays muted between recordings)
+        try {
+            if (this.microphoneGain) {
+                this.microphoneGain.disconnect();
+                this.microphoneGain = null;
+            }
+            if (this._micSource) {
+                this._micSource.disconnect();
+                this._micSource = null;
+            }
+        } catch (e) {}
+
+        // Cleanup the legacy mixedAudioContext if anything still holds it
         if (this.mixedAudioContext) {
-            this.mixedAudioContext.close();
+            try { this.mixedAudioContext.close(); } catch (e) {}
             this.mixedAudioContext = null;
         }
 

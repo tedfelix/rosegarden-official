@@ -1,4 +1,7 @@
-// ===== PRÉ-CHAUFFAGE AUDIO / UNLOCK WEBAUDIO =====
+// ===== PRÉ-CHAUFFAGE AUDIO / UNIFIED MASTER BUS =====
+// Single-context architecture: every source feeds _masterBusInput which goes
+// through compressor → safety → limiter → tap → [speakers, recording].
+// Recording captures EXACTLY what the user hears (no resampling, same context).
 function prewarmAudioOnce() {
     if (prewarmAudioOnce._done) return;
     prewarmAudioOnce._done = true;
@@ -13,15 +16,17 @@ function prewarmAudioOnce() {
                 Tone.context.lookAhead = 0.01;
             }
             if (!window._masterLimiterInstalled) {
-                // Match OLD working code EXACTLY (lines 12582-12609)
+                // Master bus input — every audio source connects HERE, never to Tone.Destination directly
+                const masterBusInput = new Tone.Gain(1);
+
+                // Tightened compressor settings to tame piano peaks without pumping
                 const masterCompressor = new Tone.Compressor({
-                    threshold: -12,
-                    ratio: 3,
-                    attack: 0.002,
-                    release: 0.15,
-                    knee: 10
+                    threshold: -18,
+                    ratio: 4,
+                    attack: 0.003,
+                    release: 0.08,
+                    knee: 12
                 });
-                const masterLimiter = new Tone.Limiter(-0.3);
                 const safetyCompressor = new Tone.Compressor({
                     threshold: -3,
                     ratio: 20,
@@ -29,17 +34,33 @@ function prewarmAudioOnce() {
                     release: 0.05,
                     knee: 2
                 });
-                // OLD code chain: masterCompressor → safetyCompressor → masterLimiter → destination
+                const masterLimiter = new Tone.Limiter(-0.3);
+
+                // Tap point — single split between speakers and recording capture
+                const masterTap = new Tone.Gain(1);
+
+                masterBusInput.connect(masterCompressor);
                 masterCompressor.connect(safetyCompressor);
                 safetyCompressor.connect(masterLimiter);
-                masterLimiter.toDestination();
+                masterLimiter.connect(masterTap);
+                masterTap.toDestination();
+
+                // Recording destination lives in the SAME Tone.context, so recorder
+                // captures the exact post-limiter signal without cross-context resampling.
+                const recordingDest = Tone.context.createMediaStreamDestination();
+                masterTap.connect(recordingDest);
+
                 window._masterLimiterInstalled = true;
-                // window._masterCompressor must point to the REAL compressor (not a Gain node!)
+                window._masterBusInput = masterBusInput;
                 window._masterCompressor = masterCompressor;
                 window._masterSafetyCompressor = safetyCompressor;
                 window._masterLimiter = masterLimiter;
+                window._masterTap = masterTap;
+                window._recordingDest = recordingDest;
+
+                // If effects module already exists, route its output into the bus
                 if (window.effectsModule && window.effectsModule.updateOutputRouting) {
-                    window.effectsModule.updateOutputRouting(masterCompressor);
+                    window.effectsModule.updateOutputRouting(masterBusInput);
                 }
             }
             const hush = new Tone.Gain(0).toDestination();
@@ -56,6 +77,19 @@ function prewarmAudioOnce() {
         console.warn('Tone.js start error:', err);
     });
 }
+
+// Helper: returns the canonical audio entry point for any source.
+// Order: effects chain (if loaded) > master bus input > master compressor > Tone.Destination.
+// Sources should ALWAYS use this so they go through the limiter chain and get recorded.
+function getStudioAudioOutput() {
+    if (window.effectsModule && window.effectsModule.effectsChain) {
+        return window.effectsModule.effectsChain;
+    }
+    if (window._masterBusInput) return window._masterBusInput;
+    if (window._masterCompressor) return window._masterCompressor;
+    return Tone.getDestination();
+}
+window.getStudioAudioOutput = getStudioAudioOutput;
 
 // ===== HELPER FUNCTIONS =====
 function safeGetElement(id) {
@@ -365,10 +399,15 @@ class VirtualStudioPro {
         if (!this.isInitialized) return;
 
         try {
-            // Effects chain for instruments that need effects
-            const audioOutput = window.effectsModule && window.effectsModule.effectsChain
-                ? window.effectsModule.effectsChain
-                : Tone.getDestination();
+            // Always use the unified master bus when effects aren't loaded yet,
+            // never Tone.getDestination() directly (that bypasses the limiter).
+            prewarmAudioOnce();
+            const audioOutput = (typeof getStudioAudioOutput === 'function')
+                ? getStudioAudioOutput()
+                : (window.effectsModule && window.effectsModule.effectsChain)
+                    || window._masterBusInput
+                    || window._masterCompressor
+                    || Tone.getDestination();
 
 
             // PIANO - Salamander Grand Piano
@@ -568,9 +607,13 @@ class VirtualStudioPro {
 
     // Fallback piano if samples fail to load
     createFallbackPiano() {
-        const audioOutput = window.effectsModule && window.effectsModule.effectsChain
-            ? window.effectsModule.effectsChain
-            : (window._masterCompressor || Tone.getDestination());
+        prewarmAudioOnce();
+        const audioOutput = (typeof getStudioAudioOutput === 'function')
+            ? getStudioAudioOutput()
+            : (window.effectsModule && window.effectsModule.effectsChain)
+                || window._masterBusInput
+                || window._masterCompressor
+                || Tone.getDestination();
         this.synths.piano = new Tone.PolySynth(Tone.FMSynth, {
             maxPolyphony: 32,
             harmonicity: 3,
@@ -682,12 +725,17 @@ class VirtualStudioPro {
         if (!this.isInitialized) return;
 
         try {
-            // Route drums through effects chain if available
-            const audioOutput = window.effectsModule && window.effectsModule.effectsChain
-                ? window.effectsModule.effectsChain
-                : Tone.getDestination();
+            // Drums route through effects chain if loaded, otherwise unified master bus.
+            // Never Tone.getDestination() directly — that bypasses the master limiter.
+            prewarmAudioOnce();
+            const audioOutput = (typeof getStudioAudioOutput === 'function')
+                ? getStudioAudioOutput()
+                : (window.effectsModule && window.effectsModule.effectsChain)
+                    || window._masterBusInput
+                    || window._masterCompressor
+                    || Tone.getDestination();
 
-            // Create limiter to prevent clipping/distortion
+            // Per-bus limiter prevents drum stacking from triggering the master safety compressor
             this.drumLimiter = new Tone.Limiter(-3).connect(audioOutput);
 
             // High-Quality Synthesized Drum Sounds (all free for commercial use)
@@ -1718,6 +1766,19 @@ class VirtualStudioPro {
             if (window.recorderModule && window.recorderModule.isRecording) {
                 window.recorderModule.recordNoteOn(note, Math.round(vel * 127));
             }
+
+            // Public bridge — sight-reading trainer / OMR can listen
+            try {
+                window.dispatchEvent(new CustomEvent('pianomode:notePlay', {
+                    detail: {
+                        note,
+                        midi: this.noteToMIDI ? this.noteToMIDI(note) : null,
+                        velocity: vel,
+                        instrument: this.currentInstrument
+                    }
+                }));
+            } catch (e) {}
+
             if (!this.audioReady || (!this.isInitialized && !this.useFallbackAudio)) {
                 this.playBasicNote(note, noteStartTime);
                 return;
@@ -1806,6 +1867,13 @@ class VirtualStudioPro {
                 window.recorderModule.recordNoteOff(note);
             }
 
+            // Public bridge
+            try {
+                window.dispatchEvent(new CustomEvent('pianomode:noteStop', {
+                    detail: { note, midi: this.noteToMIDI ? this.noteToMIDI(note) : null }
+                }));
+            } catch (e) {}
+
             // Release the note (natural piano behavior)
             if (sound.type === 'tone' && sound.synth) {
                 sound.synth.triggerRelease(note);
@@ -1845,11 +1913,66 @@ class VirtualStudioPro {
         this.sustainActive = true;
         // Dispatch event for PianoSequencer to capture
         window.dispatchEvent(new CustomEvent('sustainOn'));
+
+        // Safety net: if the user holds the pedal but never releases (or forgets it
+        // while leaving the tab), force-release every sustained note after 30s.
+        // This kills the voice-stealing leak that used to silence the piano after
+        // a few minutes of heavy playing.
+        if (this._sustainPanicTimeout) clearTimeout(this._sustainPanicTimeout);
+        this._sustainPanicTimeout = setTimeout(() => {
+            if (this.sustainActive) {
+                console.warn('Sustain pedal held > 30s, panic-releasing notes');
+                this.panicReleaseAll();
+            }
+        }, 30000);
+    }
+
+    // Hard reset: release every active and sustained note across every synth.
+    // Called when the user switches instrument, panics, or stops the studio.
+    panicReleaseAll() {
+        try {
+            this.sustainedNotes.forEach((noteData, note) => {
+                try {
+                    if (noteData && noteData.synth && noteData.synth.triggerRelease) {
+                        noteData.synth.triggerRelease(note);
+                    }
+                } catch (e) {}
+            });
+            this.sustainedNotes.clear();
+
+            this.activeNotes.forEach((noteData, note) => {
+                try {
+                    if (noteData && noteData.synth && noteData.synth.triggerRelease) {
+                        noteData.synth.triggerRelease(note);
+                    } else if (noteData && noteData.player && noteData.player.stop) {
+                        noteData.player.stop();
+                        try { noteData.player.dispose(); } catch (e) {}
+                    }
+                } catch (e) {}
+                const keyEl = document.querySelector(`[data-note="${note}"]`);
+                if (keyEl) keyEl.classList.remove('active');
+            });
+            this.activeNotes.clear();
+
+            // Belt-and-suspenders: ask every PolySynth to release everything.
+            if (this.synths) {
+                Object.values(this.synths).forEach(s => {
+                    try { if (s && s.releaseAll) s.releaseAll(); } catch (e) {}
+                });
+            }
+        } catch (e) {
+            console.warn('panicReleaseAll error:', e);
+        }
     }
 
     // Deactivate sustain pedal and release all sustained notes
     deactivateSustain() {
         this.sustainActive = false;
+
+        if (this._sustainPanicTimeout) {
+            clearTimeout(this._sustainPanicTimeout);
+            this._sustainPanicTimeout = null;
+        }
 
         // Dispatch event for PianoSequencer to capture
         window.dispatchEvent(new CustomEvent('sustainOff'));
@@ -1876,9 +1999,12 @@ class VirtualStudioPro {
                 this.playBasicNote(note, startTime);
                 return;
             }
-            const audioOutput = window.effectsModule && window.effectsModule.effectsChain
-                ? window.effectsModule.effectsChain
-                : Tone.getDestination();
+            const audioOutput = (typeof getStudioAudioOutput === 'function')
+                ? getStudioAudioOutput()
+                : (window.effectsModule && window.effectsModule.effectsChain)
+                    || window._masterBusInput
+                    || window._masterCompressor
+                    || Tone.getDestination();
             const player = new Tone.Player(soundData.buffer).connect(audioOutput);
             const noteNumber = this.noteToMIDI(note);
             const basePitch = 60;
@@ -1913,16 +2039,24 @@ class VirtualStudioPro {
 
     playBasicNote(note, startTime) {
         try {
-            // Reuse existing AudioContext to prevent resource leaks
-            if (!this._fallbackAudioContext || this._fallbackAudioContext.state === 'closed') {
-                this._fallbackAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            const audioContext = this._fallbackAudioContext;
+            // Always use Tone's raw AudioContext so the basic-piano fallback
+            // shares the same clock and goes through the unified master bus.
+            prewarmAudioOnce();
+            if (typeof Tone === 'undefined' || !Tone.context) return;
+            const audioContext = Tone.context.rawContext || Tone.context._context || Tone.context;
+            this._fallbackAudioContext = audioContext;
             const frequency = this.noteToFrequency(note);
 
             // Create a more piano-like sound using multiple oscillators (additive synthesis)
             const masterGain = audioContext.createGain();
-            masterGain.connect(audioContext.destination);
+            const busTarget = (window._masterBusInput && window._masterBusInput.input)
+                || window._masterBusInput
+                || audioContext.destination;
+            try {
+                masterGain.connect(busTarget);
+            } catch (e) {
+                masterGain.connect(audioContext.destination);
+            }
 
             // Fundamental frequency with softer sine wave
             const osc1 = audioContext.createOscillator();
@@ -2030,7 +2164,9 @@ class VirtualStudioPro {
             if (this.customSamples.has(instrumentId)) {
                 const player = this.customSamples.get(instrumentId);
                 if (player && player.buffer && this.isInitialized) {
-                    const audioOut = window.effectsModule?.effectsChain || window._masterCompressor || Tone.getDestination();
+                    const audioOut = (typeof getStudioAudioOutput === 'function')
+                        ? getStudioAudioOutput()
+                        : (window.effectsModule?.effectsChain || window._masterBusInput || window._masterCompressor || Tone.getDestination());
                 const newPlayer = new Tone.Player(player.buffer).connect(audioOut);
                     newPlayer.volume.value = Tone.gainToDb(trackVolume * this.masterVolume);
                     newPlayer.start();
@@ -2151,7 +2287,9 @@ class VirtualStudioPro {
             const sample = this.uploadedSamples.get(sampleId);
             if (!sample || !sample.buffer || !this.isInitialized) return;
 
-            const audioOut = window.effectsModule?.effectsChain || window._masterCompressor || Tone.getDestination();
+            const audioOut = (typeof getStudioAudioOutput === 'function')
+                ? getStudioAudioOutput()
+                : (window.effectsModule?.effectsChain || window._masterBusInput || window._masterCompressor || Tone.getDestination());
             const player = new Tone.Player(sample.buffer).connect(audioOut);
             player.volume.value = Tone.gainToDb(volume * this.masterVolume);
             player.start();
@@ -2162,26 +2300,63 @@ class VirtualStudioPro {
     }
 
     // Initialize shared drum audio context (lazy loading)
-    // Uses Tone.js AudioContext when available so drum sounds get captured by master recording
+    // ALWAYS uses Tone.js raw AudioContext + routes through the unified master bus
+    // so basic-drum oscillators are limited/compressed and captured by the recorder.
     initDrumAudioContext() {
         if (!this.drumAudioContext) {
             try {
-                // Prefer Tone.js AudioContext so drums are captured by MediaRecorder
-                if (typeof Tone !== 'undefined' && Tone.context) {
-                    this.drumAudioContext = Tone.context.rawContext || Tone.context._context || Tone.context;
-                } else {
-                    this.drumAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+                if (typeof Tone === 'undefined' || !Tone.context) {
+                    console.warn('Tone.js context not ready, basic drums will be silent');
+                    return null;
                 }
+                prewarmAudioOnce();
+                this.drumAudioContext = Tone.context.rawContext || Tone.context._context || Tone.context;
 
-                // Create master gain node for drum machine volume control
+                // Master gain for drum-machine volume; feeds the unified bus, not destination.
                 this.drumMasterGain = this.drumAudioContext.createGain();
                 this.drumMasterGain.gain.value = this.masterVolume;
-                this.drumMasterGain.connect(this.drumAudioContext.destination);
+
+                this._connectDrumMasterToBus();
             } catch (error) {
                 console.error('Impossible de créer AudioContext pour drum machine:', error);
             }
         }
         return this.drumAudioContext;
+    }
+
+    // Connect drumMasterGain to the unified master bus. If the bus isn't ready yet,
+    // schedules a retry so basic-drum oscillators always end up routed correctly.
+    _connectDrumMasterToBus() {
+        if (!this.drumMasterGain) return;
+        const target = (window._masterBusInput && window._masterBusInput.input)
+            || window._masterBusInput
+            || (window._masterCompressor && window._masterCompressor.input)
+            || window._masterCompressor;
+
+        try {
+            this.drumMasterGain.disconnect();
+        } catch (e) {}
+
+        if (target && typeof this.drumMasterGain.connect === 'function') {
+            try {
+                this.drumMasterGain.connect(target);
+                return;
+            } catch (e) {
+                console.warn('drumMasterGain → master bus connect failed:', e);
+            }
+        }
+
+        // Bus not ready yet — retry shortly. As fallback, connect to destination
+        // so the user still hears something.
+        try {
+            this.drumMasterGain.connect(this.drumAudioContext.destination);
+        } catch (e) {}
+        if (!this._drumBusRetry) {
+            this._drumBusRetry = setTimeout(() => {
+                this._drumBusRetry = null;
+                this._connectDrumMasterToBus();
+            }, 250);
+        }
     }
 
     playBasicDrumSound(instrumentId, volume = 1) {
@@ -2849,9 +3024,12 @@ class VirtualStudioPro {
             if (this.isInitialized && Tone) {
                 // Reuse a single synth for metronome clicks (avoid creating/disposing every beat)
                 if (!this._metronomeSynth || this._metronomeSynth.disposed) {
-                    const audioOutput = window.effectsModule && window.effectsModule.effectsChain
-                        ? window.effectsModule.effectsChain
-                        : Tone.getDestination();
+                    const audioOutput = (typeof getStudioAudioOutput === 'function')
+                        ? getStudioAudioOutput()
+                        : (window.effectsModule && window.effectsModule.effectsChain)
+                            || window._masterBusInput
+                            || window._masterCompressor
+                            || Tone.getDestination();
 
                     this._metronomeSynth = new Tone.Synth({
                         oscillator: { type: "sine" },
@@ -5924,17 +6102,24 @@ class PianoSequencer {
     }
 
     startMetronome() {
-        if (!this.metronomeContext) {
-            this.metronomeContext = new (window.AudioContext || window.webkitAudioContext)();
+        prewarmAudioOnce();
+        if (typeof Tone !== 'undefined' && Tone.context) {
+            this.metronomeContext = Tone.context.rawContext || Tone.context._context || Tone.context;
         }
+        if (!this.metronomeContext) return;
 
+        // Beat counter for accent on beat 1 (Rosegarden-inspired)
+        this._metronomeBeat = 0;
+        const beatsPerBar = this._metronomeBeatsPerBar || 4;
         const beatInterval = (60 / this.tempo) * 1000;
 
         this.metronomeInterval = setInterval(() => {
-            this.playMetronomeClick();
+            this.playMetronomeClick(this._metronomeBeat % beatsPerBar === 0);
+            this._metronomeBeat++;
         }, beatInterval);
 
-        this.playMetronomeClick();
+        this.playMetronomeClick(true);
+        this._metronomeBeat = 1;
     }
 
     stopMetronome() {
@@ -5944,20 +6129,31 @@ class PianoSequencer {
         }
     }
 
-    playMetronomeClick() {
+    playMetronomeClick(accented = false) {
         if (!this.metronomeContext) return;
 
         const oscillator = this.metronomeContext.createOscillator();
         const gainNode = this.metronomeContext.createGain();
 
-        oscillator.frequency.value = 880;
+        // Beat 1 gets a higher pitch (1320 Hz) so the user hears the bar boundary.
+        oscillator.frequency.value = accented ? 1320 : 880;
         oscillator.type = 'sine';
 
-        gainNode.gain.setValueAtTime(0.3, this.metronomeContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, this.metronomeContext.currentTime + 0.1);
+        const peak = (this.metronomeVolume != null ? this.metronomeVolume : 0.3) * (accented ? 1 : 0.7);
+        gainNode.gain.setValueAtTime(peak, this.metronomeContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, this.metronomeContext.currentTime + 0.08);
 
         oscillator.connect(gainNode);
-        gainNode.connect(this.metronomeContext.destination);
+        // Route through the unified master bus so the metronome is included in
+        // recordings (only if user wants it — see recorder excludeMetronome flag).
+        const target = (window._masterBusInput && window._masterBusInput.input)
+            || window._masterBusInput
+            || this.metronomeContext.destination;
+        try {
+            gainNode.connect(target);
+        } catch (e) {
+            gainNode.connect(this.metronomeContext.destination);
+        }
 
         oscillator.start();
         oscillator.stop(this.metronomeContext.currentTime + 0.1);
@@ -6126,3 +6322,191 @@ if (document.readyState === 'loading') {
         }
     }, 100);
 }
+
+// =====================================================================
+// VirtualStudioAPI — public bridge between Virtual Studio, sight-reading
+// trainer, OMR scanner, and any future tool. Other pages dispatch events
+// or call methods on window.VirtualStudioAPI to import notes / MIDI /
+// MusicXML, or to listen to live note play.
+//
+// Events emitted (via window.dispatchEvent):
+//   pianomode:notePlay     { note, midi, velocity, duration, instrument }
+//   pianomode:noteStop     { note, midi }
+//   pianomode:transportPlay
+//   pianomode:transportStop
+//   pianomode:recordStart
+//   pianomode:recordStop   { duration, midiEvents, audioBlob? }
+//
+// Events consumed (window.addEventListener):
+//   pianomode:loadMidi     { arrayBuffer, fileName? }
+//   pianomode:loadMusicXml { xml, fileName? }
+//   pianomode:playNote     { midi | note, velocity?, duration? }
+//   pianomode:stopNote     { midi | note }
+// =====================================================================
+(function installVirtualStudioAPI() {
+    if (window.VirtualStudioAPI) return;
+
+    const midiToNoteName = (midi) => {
+        const names = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+        const octave = Math.floor(midi / 12) - 1;
+        return names[midi % 12] + octave;
+    };
+
+    const resolveNote = (payload) => {
+        if (!payload) return null;
+        if (payload.note) return payload.note;
+        if (typeof payload.midi === 'number') return midiToNoteName(payload.midi);
+        return null;
+    };
+
+    const API = {
+        version: '1.0',
+
+        // Live playback — used by sight-reading trainer to trigger notes from
+        // the score, and by OMR scanner playback to highlight the keyboard.
+        playNote(payload) {
+            const note = resolveNote(payload);
+            if (!note || !window.virtualStudio) return false;
+            const vel = payload && typeof payload.velocity === 'number'
+                ? Math.max(0, Math.min(1, payload.velocity > 1 ? payload.velocity / 127 : payload.velocity))
+                : 0.7;
+            try {
+                window.virtualStudio.playPianoNote(note, vel);
+                if (payload && payload.duration) {
+                    setTimeout(() => API.stopNote({ note }), payload.duration);
+                }
+                return true;
+            } catch (e) {
+                console.warn('VirtualStudioAPI.playNote error:', e);
+                return false;
+            }
+        },
+
+        stopNote(payload) {
+            const note = resolveNote(payload);
+            if (!note || !window.virtualStudio) return false;
+            try {
+                window.virtualStudio.stopPianoNote(note);
+                return true;
+            } catch (e) { return false; }
+        },
+
+        // Import a MIDI file (ArrayBuffer or Uint8Array). Forwarded to whatever
+        // import handler is registered (track-editor, recorder, etc.).
+        async importMIDI(buffer, opts = {}) {
+            if (!buffer) return false;
+            window.dispatchEvent(new CustomEvent('pianomode:loadMidi', {
+                detail: { arrayBuffer: buffer, fileName: opts.fileName || 'imported.mid' }
+            }));
+            // Also expose on a queue so a late-loading consumer can pick it up
+            window._pendingImports = window._pendingImports || [];
+            window._pendingImports.push({ kind: 'midi', buffer, fileName: opts.fileName });
+            return true;
+        },
+
+        // Import MusicXML — same pattern. The OMR scanner produces blob URLs;
+        // callers should pre-fetch text() and pass the string here.
+        async importMusicXML(xmlString, opts = {}) {
+            if (!xmlString) return false;
+            window.dispatchEvent(new CustomEvent('pianomode:loadMusicXml', {
+                detail: { xml: xmlString, fileName: opts.fileName || 'imported.musicxml' }
+            }));
+            window._pendingImports = window._pendingImports || [];
+            window._pendingImports.push({ kind: 'musicxml', xml: xmlString, fileName: opts.fileName });
+            return true;
+        },
+
+        // Recording control — sight-reading trainer can trigger record before
+        // a sight-reading exercise so the user's performance is captured.
+        startRecording() {
+            if (window.recorderModule && typeof window.recorderModule.startRecording === 'function') {
+                return window.recorderModule.startRecording();
+            }
+            return false;
+        },
+        stopRecording() {
+            if (window.recorderModule && typeof window.recorderModule.stopRecording === 'function') {
+                return window.recorderModule.stopRecording();
+            }
+            return false;
+        },
+
+        // Convenience: subscribe to live note play with a callback. The trainer
+        // uses this to compare what the user played vs the expected note.
+        onNotePlay(callback) {
+            if (typeof callback !== 'function') return () => {};
+            const handler = (e) => callback(e.detail);
+            window.addEventListener('pianomode:notePlay', handler);
+            return () => window.removeEventListener('pianomode:notePlay', handler);
+        },
+
+        // True when the audio engine is initialized — useful for the trainer
+        // to wait before sending notes.
+        isReady() {
+            return !!(window.virtualStudio && window.virtualStudio.isInitialized
+                && window._masterLimiterInstalled);
+        }
+    };
+
+    // Wire incoming events from other tools
+    window.addEventListener('pianomode:playNote', (e) => API.playNote(e.detail));
+    window.addEventListener('pianomode:stopNote', (e) => API.stopNote(e.detail));
+
+    window.VirtualStudioAPI = API;
+})();
+
+// =====================================================================
+// Rosegarden-inspired count-in: 1-bar of clicks before recording starts.
+// The trainer / OMR / drum sequencer can call window.studioCountIn(callback)
+// and a 4-beat count-in plays at the current tempo, then the callback fires.
+// =====================================================================
+window.studioCountIn = function studioCountIn(onComplete, opts = {}) {
+    try {
+        if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
+        const tempo = opts.tempo || (window.virtualStudio && window.virtualStudio.tempo) || 120;
+        const beats = opts.beats || 4;
+        const beatMs = (60 / tempo) * 1000;
+
+        const ctx = (typeof Tone !== 'undefined' && Tone.context)
+            ? (Tone.context.rawContext || Tone.context._context || Tone.context)
+            : null;
+        if (!ctx) {
+            if (typeof onComplete === 'function') onComplete();
+            return;
+        }
+
+        const target = (window._masterBusInput && window._masterBusInput.input)
+            || window._masterBusInput
+            || ctx.destination;
+
+        let beat = 0;
+        const click = () => {
+            const accent = (beat === 0);
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.frequency.value = accent ? 1320 : 880;
+            osc.type = 'sine';
+            const peak = accent ? 0.45 : 0.25;
+            gain.gain.setValueAtTime(peak, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+            osc.connect(gain);
+            try { gain.connect(target); } catch (e) { gain.connect(ctx.destination); }
+            osc.start();
+            osc.stop(ctx.currentTime + 0.1);
+            beat++;
+        };
+
+        click();
+        const id = setInterval(() => {
+            if (beat >= beats) {
+                clearInterval(id);
+                if (typeof onComplete === 'function') onComplete();
+                return;
+            }
+            click();
+        }, beatMs);
+    } catch (e) {
+        console.warn('studioCountIn error:', e);
+        if (typeof onComplete === 'function') onComplete();
+    }
+};

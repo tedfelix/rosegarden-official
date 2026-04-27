@@ -1243,3 +1243,186 @@
         opacity: 0;
     }
 }
+
+/* ===================================================
+   MOBILE DAW LAYER
+   Touch-first overrides — every control hits the 44px iOS target,
+   side-by-side panels stack, the transport floats above the keyboard,
+   and modals go full-screen on portrait phones. Layered LAST so it
+   wins over earlier media queries without !important on every rule.
+   =================================================== */
+
+/* Touch devices: enforce 44×44 minimum on every clickable control,
+   regardless of viewport width. Hover-capable mice get the compact UI. */
+@media (hover: none) and (pointer: coarse) {
+    .track-btn,
+    .preset-action-btn,
+    .modal-close,
+    .rec-btn,
+    .daw-transport-btn,
+    .hero-btn-v2,
+    .effect-toggle + span,
+    .preset-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .track-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 0.85rem;
+    }
+
+    .effect-toggle {
+        width: 22px;
+        height: 22px;
+        cursor: pointer;
+    }
+    /* Bigger hit zone around the checkbox label */
+    .effect-title {
+        padding: 0.5rem 0;
+        min-height: 44px;
+    }
+
+    /* Range sliders need a bigger thumb for fingers */
+    input[type="range"]::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+    }
+    input[type="range"]::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+    }
+}
+
+/* Portrait phones — the case the original CSS underserved.
+   Stacks every panel vertically, keeps modals readable at <360px wide. */
+@media (max-width: 540px) and (orientation: portrait) {
+    .recorder-section,
+    .effects-section,
+    .learning-mode-wrapper,
+    .presets-section {
+        margin: 0.75rem 0;
+        padding: 0.875rem 0.625rem;
+        border-radius: 10px;
+    }
+
+    .recorder-header,
+    .effects-header,
+    .presets-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    .recorder-header h3,
+    .effects-header h3,
+    .presets-header h3 {
+        font-size: 1.05rem;
+        flex: 1 1 auto;
+    }
+
+    .recorder-controls,
+    .download-buttons,
+    .preset-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .recorder-controls .rec-btn,
+    .download-buttons .download-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Side-by-side track strips become full-width rows */
+    .drum-track,
+    .timeline-track,
+    .audio-strip {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .track-controls {
+        width: 100%;
+        justify-content: flex-end;
+    }
+
+    /* Modal goes nearly full-screen */
+    .modal {
+        padding: 0.5rem;
+        align-items: flex-start;
+        padding-top: 12px;
+    }
+    .modal-content {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100vh - 24px);
+        margin: 0;
+        border-radius: 12px;
+    }
+    .modal-header h3 {
+        font-size: 1.05rem;
+    }
+    .modal-body {
+        padding: 0.875rem;
+        overflow-y: auto;
+    }
+
+    /* Effects: single-column control layout — labels above sliders */
+    .control-group {
+        grid-template-columns: 1fr;
+        gap: 0.35rem;
+    }
+    .control-group label {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    /* Sequencer / drum machine: scrollable horizontally with snap so the
+       grid never breaks the page layout */
+    .sequencer-container,
+    .drum-timeline-ruler-container {
+        overflow-x: auto;
+        scroll-snap-type: x proximity;
+        -webkit-overflow-scrolling: touch;
+    }
+    .sequencer-container > * {
+        scroll-snap-align: start;
+    }
+}
+
+/* Floating transport bar on touch devices < 768px wide.
+   Keeps Play / Stop / Record permanently within thumb reach so the user
+   never loses the controls when the keyboard or sequencer scrolls. */
+@media (max-width: 768px) and (hover: none) and (pointer: coarse) {
+    .daw-transport-section.daw-transport-floating,
+    .floating-transport {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9500;
+        padding: 0.5rem 0.75rem env(safe-area-inset-bottom, 0.5rem);
+        background: rgba(15, 15, 18, 0.92);
+        border-top: 1px solid var(--pm-border, rgba(245, 200, 66, 0.25));
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        justify-content: center;
+    }
+    body.has-floating-transport {
+        padding-bottom: 76px;
+    }
+}
+
+/* Reduce motion — respect user setting */
+@media (prefers-reduced-motion: reduce) {
+    .status-dot.recording,
+    .recorder-section,
+    .effects-section {
+        animation: none !important;
+        transition: none !important;
+    }
+}

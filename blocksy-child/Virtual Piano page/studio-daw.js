@@ -368,32 +368,36 @@ document.addEventListener('DOMContentLoaded', function() {
             this.bindEvents();
         }
 
-        // Connect backtrack Audio element to Tone.js so effects chain applies and master recording captures it
-        // IMPORTANT: createMediaElementSource() permanently hijacks audio from HTML5 output.
-        // Only call it if we have a COMPLETE routing chain to destination.
+        // Route the backtrack <audio> element into the unified master bus so
+        // effects, master limiter and recorder all see it.
+        // IMPORTANT: createMediaElementSource() permanently hijacks the HTML5
+        // output, so we only call it once the bus is fully wired.
         connectToToneJS() {
             if (this.audioSourceConnected) return true;
             try {
                 if (typeof Tone === 'undefined' || !Tone.context) return false;
-                // Don't route through Tone.js if context isn't running yet
                 const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
                 if (!rawCtx || rawCtx.state !== 'running') return false;
-                // Need at least one valid destination in the chain
-                const hasEffectsChain = window.effectsModule && window.effectsModule.effectsChain;
-                const hasMasterCompressor = window._masterCompressor;
-                if (!hasEffectsChain && !hasMasterCompressor) {
-                    // Chain not ready - DON'T hijack audio, let HTML5 Audio play directly
+
+                if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
+
+                const effectsInput = window.effectsModule && window.effectsModule.effectsChain
+                    && window.effectsModule.effectsChain.input;
+                const busInput = window._masterBusInput && (window._masterBusInput.input || window._masterBusInput);
+                const compInput = window._masterCompressor && window._masterCompressor.input;
+                const target = effectsInput || busInput || compInput;
+
+                if (!target) {
+                    // Bus not ready — leave the <audio> element playing through HTML5
+                    // (user still hears it, but the recorder cannot capture it yet).
                     return false;
                 }
+
                 if (rawCtx.createMediaElementSource) {
                     this.mediaSource = rawCtx.createMediaElementSource(this.audio);
                     const toneGainNode = rawCtx.createGain();
                     this.mediaSource.connect(toneGainNode);
-                    if (hasEffectsChain) {
-                        toneGainNode.connect(window.effectsModule.effectsChain.input);
-                    } else {
-                        toneGainNode.connect(hasMasterCompressor.input);
-                    }
+                    toneGainNode.connect(target);
                     this.btGainNode = toneGainNode;
                     this.audioSourceConnected = true;
                     return true;
@@ -486,11 +490,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.isPlaying = false;
                 this.cancelProgressUpdate();
             } else {
-                // Preview = pure HTML5 Audio. No Tone.js routing.
-                // createMediaElementSource permanently hijacks audio and breaks playback
-                // if the Tone.js chain isn't perfectly set up. For preview, just play directly.
+                // Try to route the backtrack through the unified master bus so the
+                // recorder, effects and limiter all see it. If routing fails, we
+                // fall back to direct HTML5 playback (user hears it but no record).
+                if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
+                const routed = this.connectToToneJS();
+
                 const volSlider = this.volumeSlider;
-                this.audio.volume = volSlider ? parseInt(volSlider.value) / 100 : 0.4;
+                const vol = volSlider ? parseInt(volSlider.value) / 100 : 0.4;
+                if (routed && this.btGainNode) {
+                    // Route via Tone — keep <audio>.volume at 1, Tone gain controls level
+                    this.audio.volume = 1;
+                    this.btGainNode.gain.value = vol;
+                } else {
+                    this.audio.volume = vol;
+                }
 
                 try {
                     await this.audio.play();
