@@ -1,0 +1,959 @@
+/**
+ * Search Page Styles - PianoMode
+ * @version 3.1.0 - Fix: hero like Play page, badges on images, column layout
+ */
+
+/* ===================================================
+   VARIABLES CSS - ALIGNED WITH PIANOMODE DESIGN SYSTEM
+   =================================================== */
+
+:root {
+    --search-gold: #D7BF81;
+    --search-gold-dark: #BEA86E;
+    --search-gold-light: #E6D4A8;
+    --search-gold-alpha-10: rgba(215, 191, 129, 0.1);
+    --search-gold-alpha-25: rgba(215, 191, 129, 0.25);
+    --search-gold-border: rgba(215, 191, 129, 0.3);
+
+    --search-black: #0a0a0a;
+    --search-black-medium: #1a1a1a;
+    --search-black-light: #2a2a2a;
+
+    --search-text-dark: #2c2c2c;
+    --search-text-medium: #666666;
+    --search-text-light: #999999;
+
+    --search-shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --search-shadow-gold: 0 8px 25px rgba(215, 191, 129, 0.18);
+    --search-border-light: rgba(0, 0, 0, 0.06);
+
+    --search-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --search-radius: 12px;
+}
+
+/* ===================================================
+   PAGE WRAPPER
+   =================================================== */
+
+.pianomode-search-page {
+    width: 100%;
+    overflow-x: hidden;
+}
+
+/* ===================================================
+   HERO SECTION - Matches Play page pattern exactly
+   Header is fixed 140px, so hero goes under it
+   =================================================== */
+
+.pianomode-search-hero {
+    position: relative;
+    min-height: 65vh;
+    width: 100vw !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 0 60px 0 !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: linear-gradient(135deg,
+        var(--search-black) 0%,
+        var(--search-black-medium) 40%,
+        var(--search-black-light) 70%,
+        var(--search-black) 100%);
+    overflow: hidden;
+    z-index: 1;
+    box-sizing: border-box !important;
+}
+
+/* Background image - covers entire hero */
+.pianomode-search-hero-bg {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: brightness(0.3) saturate(0.5);
+    z-index: 1;
+}
+
+/* Fallback when no image available */
+.pianomode-search-hero-bg-fallback {
+    background: linear-gradient(135deg,
+        var(--search-black) 0%,
+        var(--search-black-medium) 40%,
+        var(--search-black-light) 70%,
+        var(--search-black) 100%) !important;
+    filter: none !important;
+}
+
+/* Dark overlay for text readability */
+.pianomode-search-hero-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.55) 0%,
+        rgba(215, 191, 129, 0.06) 50%,
+        rgba(0, 0, 0, 0.6) 100%);
+    z-index: 2;
+}
+
+/* Gold separation bar at bottom (like Play hero) */
+.pianomode-search-hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 8px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        #BEA86E 10%,
+        #D7BF81 30%,
+        #E6D4A8 50%,
+        #D7BF81 70%,
+        #BEA86E 90%,
+        transparent 100%) !important;
+    box-shadow:
+        0 -4px 20px rgba(215, 191, 129, 0.4),
+        0 4px 20px rgba(215, 191, 129, 0.3);
+    z-index: 100;
+}
+
+/* ===================================================
+   HERO CONTENT - Badge has margin-top to clear header
+   =================================================== */
+
+.pianomode-search-hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 850px;
+    margin-top: 80px !important;
+    padding: 0 2rem;
+    width: 100%;
+}
+
+/* Badge pushed below fixed header (140px) */
+.pianomode-search-badge {
+    display: inline-block;
+    padding: 0.7rem 1.5rem;
+    background: linear-gradient(135deg,
+        rgba(215, 191, 129, 0.2) 0%,
+        rgba(215, 191, 129, 0.08) 100%) !important;
+    border: 2px solid var(--search-gold) !important;
+    border-radius: 50px;
+    color: var(--search-gold) !important;
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 200px !important;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 4px 20px rgba(215, 191, 129, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    animation: searchFadeInUp 0.8s ease-out 0.2s both;
+}
+
+.pianomode-search-title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    line-height: 1.15;
+    color: #ffffff;
+    animation: searchFadeInUp 0.8s ease-out 0.4s both;
+}
+
+.search-term-accent {
+    background: linear-gradient(135deg,
+        var(--search-gold) 0%,
+        var(--search-gold-light) 50%,
+        var(--search-gold) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: searchShimmer 3s ease-in-out infinite alternate;
+}
+
+.pianomode-search-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 1.5rem;
+    animation: searchFadeInUp 0.8s ease-out 0.6s both;
+}
+
+.search-stat { text-align: center; }
+
+.search-stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--search-gold);
+    margin-bottom: 0.3rem;
+}
+
+.search-stat-label {
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.75);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.no-results-message {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1.05rem;
+    margin-top: 1.2rem;
+    animation: searchFadeInUp 0.8s ease-out 0.6s both;
+}
+
+/* ===================================================
+   RESULTS CONTAINER
+   =================================================== */
+
+.pianomode-search-results-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+}
+
+/* ===================================================
+   TOPICS SECTION (full width, above columns)
+   =================================================== */
+
+.search-section-topics {
+    margin-bottom: 3rem;
+}
+
+.search-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.8rem;
+    border-bottom: 2px solid var(--search-gold);
+}
+
+.search-section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--search-text-dark);
+    margin: 0;
+}
+
+.search-section-count {
+    color: var(--search-text-medium);
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: var(--search-gold-alpha-10);
+    padding: 0.25rem 0.7rem;
+    border-radius: 20px;
+}
+
+.search-categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.2rem;
+}
+
+/* ===================================================
+   DYNAMIC COLUMNS LAYOUT
+   =================================================== */
+
+.search-dynamic-columns {
+    display: grid;
+    gap: 2.5rem;
+}
+
+.search-cols-1 {
+    grid-template-columns: 1fr;
+}
+
+.search-cols-2 {
+    grid-template-columns: 1fr 1fr;
+}
+
+.search-cols-3 {
+    grid-template-columns: 1fr 1fr 1fr;
+}
+
+.search-column {
+    min-width: 0;
+}
+
+.search-subsection {
+    margin-bottom: 2rem;
+}
+.search-subsection:last-child {
+    margin-bottom: 0;
+}
+
+.search-column-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+/* Articles: 2x2 grid inside their column */
+.search-articles-inner-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.2rem;
+}
+
+/* When articles are alone (1 col), wider grid */
+.search-cols-1 .search-articles-inner-grid {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+/* ===================================================
+   CARD BASE STYLES
+   =================================================== */
+
+.search-category-card,
+.search-post-card,
+.search-page-card,
+.search-score-card,
+.search-game-card {
+    background: white;
+    border-radius: var(--search-radius);
+    overflow: hidden;
+    box-shadow: var(--search-shadow-soft);
+    transition: var(--search-transition);
+    border: 1px solid var(--search-border-light);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: searchCardFadeIn 0.5s ease-out forwards;
+}
+
+.search-category-card:hover,
+.search-post-card:hover,
+.search-page-card:hover,
+.search-score-card:hover,
+.search-game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--search-shadow-gold);
+    border-color: var(--search-gold-border);
+}
+
+/* ===================================================
+   CARD IMAGES - with badge overlay top-left
+   =================================================== */
+
+.search-card-image-container {
+    position: relative;
+    width: 100%;
+    height: 160px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+}
+
+.search-card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--search-transition);
+}
+
+.search-card-image-container:hover .search-card-image {
+    transform: scale(1.05);
+}
+
+.search-image-overlay {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: linear-gradient(to bottom,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(0, 0, 0, 0.08) 70%,
+        rgba(0, 0, 0, 0.2) 100%);
+    opacity: 0;
+    transition: var(--search-transition);
+    pointer-events: none;
+}
+
+.search-category-card:hover .search-image-overlay,
+.search-post-card:hover .search-image-overlay,
+.search-page-card:hover .search-image-overlay,
+.search-score-card:hover .search-image-overlay,
+.search-game-card:hover .search-image-overlay {
+    opacity: 1;
+}
+
+/* ===================================================
+   BADGE ON IMAGE - Top left corner
+   =================================================== */
+
+.search-card-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 0.25rem 0.65rem;
+    border-radius: 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: white;
+    z-index: 5;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.search-badge-topic {
+    background: linear-gradient(135deg, var(--search-gold), var(--search-gold-dark));
+}
+
+.search-badge-article {
+    background: linear-gradient(135deg, var(--search-gold), var(--search-gold-dark));
+}
+
+.search-badge-score {
+    background: linear-gradient(135deg, #9B7DDB, #7B5FBB);
+}
+
+.search-badge-page {
+    background: linear-gradient(135deg, #6c757d, #5a6268);
+}
+
+.search-badge-game {
+    background: linear-gradient(135deg, #e67e22, #d35400);
+}
+
+/* ===================================================
+   CARD CONTENT
+   =================================================== */
+
+.search-card-content {
+    padding: 1.1rem 1.2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.search-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--search-text-dark);
+    line-height: 1.3;
+    margin: 0 0 0.4rem 0;
+}
+
+.search-card-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: var(--search-transition);
+}
+
+.search-card-title a:hover {
+    color: var(--search-gold-dark);
+}
+
+/* Categories on article cards */
+.search-card-categories {
+    display: flex;
+    gap: 0.4rem;
+    margin-bottom: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.search-card-category {
+    background: var(--search-gold-alpha-10);
+    color: var(--search-gold-dark);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--search-transition);
+}
+
+.search-card-category:hover {
+    background: var(--search-gold);
+    color: white;
+}
+
+/* Description */
+.search-card-description {
+    color: var(--search-text-medium);
+    line-height: 1.45;
+    margin-bottom: 0.6rem;
+    font-size: 0.85rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex: 1;
+}
+
+/* Meta */
+.search-card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.search-card-count {
+    color: var(--search-text-light);
+    font-size: 0.78rem;
+    font-weight: 500;
+}
+
+/* Arrow */
+.search-card-arrow {
+    width: 2rem;
+    height: 2rem;
+    background: var(--search-gold-alpha-10);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--search-transition);
+    margin-left: auto;
+}
+
+.search-card-arrow a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.search-card-arrow svg {
+    width: 1rem;
+    height: 1rem;
+    stroke: var(--search-gold);
+    transition: var(--search-transition);
+}
+
+/* Accent arrow (score/page/game cards) */
+.search-card-arrow-accent {
+    width: 2.4rem;
+    height: 2.4rem;
+    background: var(--search-gold-alpha-25);
+    border: 1px solid var(--search-gold-border);
+}
+
+.search-card-arrow-accent svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    stroke: var(--search-gold);
+    stroke-width: 2.5;
+}
+
+/* Hover: arrow fills gold */
+.search-category-card:hover .search-card-arrow,
+.search-post-card:hover .search-card-arrow,
+.search-page-card:hover .search-card-arrow,
+.search-score-card:hover .search-card-arrow,
+.search-game-card:hover .search-card-arrow,
+.search-category-card:hover .search-card-arrow-accent,
+.search-post-card:hover .search-card-arrow-accent,
+.search-page-card:hover .search-card-arrow-accent,
+.search-score-card:hover .search-card-arrow-accent,
+.search-game-card:hover .search-card-arrow-accent {
+    background: var(--search-gold);
+    border-color: var(--search-gold);
+    transform: translateX(3px);
+}
+
+.search-category-card:hover .search-card-arrow svg,
+.search-post-card:hover .search-card-arrow svg,
+.search-page-card:hover .search-card-arrow svg,
+.search-score-card:hover .search-card-arrow svg,
+.search-game-card:hover .search-card-arrow svg,
+.search-category-card:hover .search-card-arrow-accent svg,
+.search-post-card:hover .search-card-arrow-accent svg,
+.search-page-card:hover .search-card-arrow-accent svg,
+.search-score-card:hover .search-card-arrow-accent svg,
+.search-game-card:hover .search-card-arrow-accent svg {
+    stroke: white;
+}
+
+/* ===================================================
+   NO RESULTS
+   =================================================== */
+
+.search-no-results {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.no-results-content {
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.no-results-content h2 {
+    font-size: 1.8rem;
+    color: var(--search-text-dark);
+    margin-bottom: 0.8rem;
+}
+
+.no-results-content p {
+    color: var(--search-text-medium);
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.no-results-content ul {
+    text-align: left;
+    color: var(--search-text-medium);
+    margin-bottom: 1.5rem;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.no-results-content a {
+    color: var(--search-gold);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.no-results-content a:hover {
+    color: var(--search-gold-dark);
+}
+
+/* ===================================================
+   BOTTOM TOPICS - Horizontal layout
+   =================================================== */
+
+.search-bottom-topics {
+    background: linear-gradient(135deg,
+        var(--search-black-medium) 0%,
+        var(--search-black) 100%);
+    padding: 2.5rem 2rem;
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    box-sizing: border-box;
+}
+
+.search-bottom-topics-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+}
+
+.search-bottom-section {
+    flex: 1;
+    min-width: 0;
+}
+
+.search-bottom-title {
+    color: var(--search-gold);
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 1rem;
+    margin-top: 0;
+}
+
+.search-bottom-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.search-bottom-chip {
+    background: rgba(215, 191, 129, 0.1);
+    color: rgba(255, 255, 255, 0.85);
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: var(--search-transition);
+    border: 1px solid rgba(215, 191, 129, 0.15);
+    white-space: nowrap;
+}
+
+.search-bottom-chip:hover {
+    background: var(--search-gold);
+    color: var(--search-black);
+    border-color: var(--search-gold);
+    transform: translateY(-2px);
+}
+
+.search-bottom-chip-related {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.search-chip-count {
+    background: rgba(215, 191, 129, 0.25);
+    color: var(--search-gold);
+    padding: 0.1rem 0.4rem;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.search-bottom-chip-related:hover .search-chip-count {
+    background: rgba(0, 0, 0, 0.15);
+    color: var(--search-black);
+}
+
+/* ===================================================
+   ANIMATIONS
+   =================================================== */
+
+@keyframes searchFadeInUp {
+    from { opacity: 0; transform: translateY(25px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes searchCardFadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes searchShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* Staggered card delays */
+.search-post-card:nth-child(1),
+.search-score-card:nth-child(1),
+.search-page-card:nth-child(1),
+.search-game-card:nth-child(1),
+.search-category-card:nth-child(1) { animation-delay: 0.05s; }
+
+.search-post-card:nth-child(2),
+.search-score-card:nth-child(2),
+.search-page-card:nth-child(2),
+.search-game-card:nth-child(2),
+.search-category-card:nth-child(2) { animation-delay: 0.1s; }
+
+.search-post-card:nth-child(3),
+.search-score-card:nth-child(3),
+.search-page-card:nth-child(3),
+.search-game-card:nth-child(3),
+.search-category-card:nth-child(3) { animation-delay: 0.15s; }
+
+.search-post-card:nth-child(4),
+.search-score-card:nth-child(4),
+.search-page-card:nth-child(4),
+.search-game-card:nth-child(4),
+.search-category-card:nth-child(4) { animation-delay: 0.2s; }
+
+.search-post-card:nth-child(n+5),
+.search-score-card:nth-child(n+5),
+.search-page-card:nth-child(n+5),
+.search-game-card:nth-child(n+5),
+.search-category-card:nth-child(n+5) { animation-delay: 0.25s; }
+
+/* ===================================================
+   RESPONSIVE DESIGN
+   =================================================== */
+
+/* Large tablet / small desktop */
+@media (max-width: 1200px) {
+    .search-cols-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+    /* Pages column spans full width below */
+    .search-cols-3 .search-column-pages {
+        grid-column: 1 / -1;
+    }
+    .search-cols-3 .search-column-pages .search-column-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    }
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .pianomode-search-hero {
+        min-height: 55vh;
+    }
+
+    .pianomode-search-badge {
+        margin-top: 140px !important;
+    }
+
+    .search-dynamic-columns {
+        gap: 2rem;
+    }
+
+    .search-cols-2,
+    .search-cols-3 {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .search-cols-3 .search-column-pages {
+        grid-column: 1 / -1;
+    }
+
+    .search-articles-inner-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pianomode-search-results-container {
+        padding: 2.5rem 1.5rem;
+    }
+}
+
+/* Tablet portrait */
+@media (max-width: 768px) {
+    .pianomode-search-hero {
+        min-height: 50vh;
+    }
+
+    .pianomode-search-badge {
+        margin-top: 120px !important;
+    }
+
+    .pianomode-search-hero-content {
+        padding: 0 1.2rem;
+    }
+
+    .pianomode-search-title {
+        font-size: clamp(1.5rem, 4.5vw, 2.4rem);
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-search-stats {
+        gap: 2rem;
+    }
+
+    .search-stat-number {
+        font-size: 1.5rem;
+    }
+
+    /* All columns stack on mobile */
+    .search-cols-2,
+    .search-cols-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .search-articles-inner-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .search-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .search-categories-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .pianomode-search-results-container {
+        padding: 2rem 1rem;
+    }
+
+    /* Bottom topics stack */
+    .search-bottom-topics-inner {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .search-bottom-topics {
+        padding: 2rem 1rem;
+    }
+}
+
+/* Mobile landscape */
+@media (max-width: 768px) and (orientation: landscape) {
+    .pianomode-search-hero {
+        min-height: 70vh;
+    }
+
+    .pianomode-search-badge {
+        margin-top: 110px !important;
+        font-size: 0.7rem;
+        padding: 0.4rem 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .pianomode-search-title {
+        font-size: clamp(1.2rem, 3vw, 1.8rem);
+        margin-bottom: 0.6rem;
+    }
+
+    .pianomode-search-stats {
+        margin-top: 0.6rem;
+        gap: 2rem;
+    }
+
+    .search-stat-number {
+        font-size: 1.3rem;
+    }
+
+    .search-stat-label {
+        font-size: 0.7rem;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .pianomode-search-hero {
+        min-height: 50vh;
+    }
+
+    .pianomode-search-badge {
+        margin-top: 110px !important;
+        font-size: 0.7rem;
+        padding: 0.4rem 1rem;
+    }
+
+    .search-card-content {
+        padding: 0.9rem 1rem;
+    }
+
+    .search-card-image-container {
+        height: 130px;
+    }
+
+    .search-stat-number {
+        font-size: 1.3rem;
+    }
+
+    .search-articles-inner-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .search-bottom-chips {
+        gap: 0.4rem;
+    }
+
+    .search-bottom-chip {
+        font-size: 0.75rem;
+        padding: 0.45rem 0.8rem;
+    }
+}
+
+/* Very small screens */
+@media (max-width: 360px) {
+    .pianomode-search-badge {
+        margin-top: 100px !important;
+    }
+
+    .pianomode-search-title {
+        font-size: 1.2rem;
+    }
+}

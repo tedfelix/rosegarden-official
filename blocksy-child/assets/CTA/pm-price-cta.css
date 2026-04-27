@@ -1,0 +1,754 @@
+/**
+ * PianoMode Price CTA v8 - Modern Premium Design
+ * @version 8.0.0
+ *
+ * Design: Largeur fixe 336px (comme Kindle preview)
+ * Texte adaptatif multi-ligne
+ * Stores: Amazon, Thomann, Sweetwater, Beatport, Sam Ash, Gear4music
+ */
+
+:root {
+    --pm-btn-width: 336px;
+    --pm-gold: #D4AF37;
+    --pm-gold-light: #F4D58D;
+    --pm-gold-dark: #996515;
+    --pm-samash-primary: #5B3FD9;
+    --pm-samash-dark: #3A2299;
+    --pm-gear4music-primary: #E8700A;
+    --pm-gear4music-dark: #B85500;
+}
+
+/* ===== BOUTON BASE - LARGEUR FIXE ===== */
+.pm-price-btn {
+    /* Dimensions fixes */
+    width: var(--pm-btn-width);
+    max-width: 100%;
+    box-sizing: border-box;
+
+    /* Layout interne */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 24px;
+
+    /* Style moderne */
+    border-radius: 12px;
+    font-family: 'Montserrat', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+
+    /* Transition fluide */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+    /* Reset */
+    border: none;
+    outline: none;
+    margin: 1.5rem 0;
+}
+
+/* Hover subtil */
+.pm-price-btn:hover {
+    transform: translateY(-3px);
+    text-decoration: none;
+}
+
+.pm-price-btn:active {
+    transform: translateY(-1px);
+}
+
+/* ===== CONTENU TEXTE - ADAPTATIF ===== */
+.pm-price-text {
+    flex: 1;
+    min-width: 0; /* Permet le text-wrap */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+.pm-product-name {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.2px;
+    color: inherit;
+
+    /* Texte adaptatif */
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    max-width: 100%;
+}
+
+.pm-price-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 4px 12px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(4px);
+}
+
+.pm-price-amount {
+    font-weight: 700;
+    font-size: 14px;
+}
+
+/* ===== BRAND HIGHLIGHT - Bold + Glow Animation ===== */
+.pm-brand-highlight {
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    position: relative;
+    display: inline;
+    animation: pm-brand-glow 2.5s ease-in-out infinite;
+}
+
+@keyframes pm-brand-glow {
+    0%, 100% { opacity: 1; text-shadow: inherit; }
+    50% { opacity: 0.85; filter: brightness(1.2); }
+}
+
+/* Brand highlight per store - subtle glow color */
+.pm-amazon-price .pm-brand-highlight {
+    color: #1a1a1a;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+}
+
+.pm-thomann-price .pm-brand-highlight {
+    color: #fff;
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.6);
+}
+
+.pm-sweetwater-price .pm-brand-highlight {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.pm-beatport-price .pm-brand-highlight {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.pm-samash-price .pm-brand-highlight {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+.pm-gear4music-price .pm-brand-highlight {
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* ===== CLÉ DE SOL - ÉLÉGANTE ===== */
+.pm-note {
+    font-size: 28px;
+    line-height: 1;
+    flex-shrink: 0;
+    opacity: 0.9;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+}
+
+.pm-price-btn:hover .pm-note {
+    transform: scale(1.15) rotate(-8deg);
+    opacity: 1;
+}
+
+/* ===== BOUTON AMAZON - OR PREMIUM ===== */
+.pm-amazon-price {
+    background: linear-gradient(145deg, #F5D76E 0%, #D4AF37 50%, #B8860B 100%);
+    color: #1a1a1a;
+    box-shadow:
+        0 4px 20px rgba(212, 175, 55, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.pm-amazon-price:hover {
+    box-shadow:
+        0 8px 32px rgba(212, 175, 55, 0.5),
+        0 4px 12px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    color: #1a1a1a;
+}
+
+.pm-amazon-price .pm-product-name {
+    color: #1a1a1a;
+}
+
+.pm-amazon-price .pm-price-display {
+    background: rgba(0, 0, 0, 0.12);
+    color: #1a1a1a;
+}
+
+.pm-amazon-price .pm-note {
+    color: #5c4a1f;
+}
+
+/* Bordure lumineuse subtile */
+.pm-amazon-price::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.6), rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* Effet brillance au hover - shared by all buttons */
+.pm-price-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 60%;
+    height: 100%;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+    );
+    transition: left 0.6s ease;
+    pointer-events: none;
+}
+
+.pm-price-btn:hover::after {
+    left: 150%;
+}
+
+/* ===== BOUTON THOMANN - NOIR ÉLÉGANT ===== */
+.pm-thomann-price {
+    background: linear-gradient(145deg, #3a3a3a 0%, #1a1a1a 50%, #0d0d0d 100%);
+    color: var(--pm-gold-light);
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pm-thomann-price:hover {
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 4px 12px rgba(212, 175, 55, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.pm-thomann-price .pm-product-name {
+    color: var(--pm-gold-light);
+}
+
+.pm-thomann-price:hover .pm-product-name {
+    color: #fff;
+}
+
+.pm-thomann-price .pm-price-display {
+    background: rgba(212, 175, 55, 0.2);
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    color: var(--pm-gold-light);
+}
+
+.pm-thomann-price .pm-note {
+    color: var(--pm-gold);
+}
+
+.pm-thomann-price::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(212,175,55,0.4), rgba(212,175,55,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* ===== BOUTON SWEETWATER - BLEU MODERNE ===== */
+.pm-sweetwater-price {
+    background: linear-gradient(145deg, #3498db 0%, #1a6cb3 50%, #0d4f8a 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 20px rgba(26, 108, 179, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pm-sweetwater-price:hover {
+    box-shadow:
+        0 8px 32px rgba(26, 108, 179, 0.5),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.pm-sweetwater-price .pm-price-display {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.pm-sweetwater-price .pm-note {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.pm-sweetwater-price::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* ===== BOUTON BEATPORT - VIOLET/ROSE ===== */
+.pm-beatport-price {
+    background: linear-gradient(145deg, #9b59b6 0%, #8e44ad 50%, #6c3483 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 20px rgba(142, 68, 173, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pm-beatport-price:hover {
+    box-shadow:
+        0 8px 32px rgba(142, 68, 173, 0.5),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.pm-beatport-price .pm-price-display {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.pm-beatport-price .pm-note {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.pm-beatport-price::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* ===== BOUTON SAM ASH - BLEU VIOLET ===== */
+.pm-samash-price {
+    background: linear-gradient(145deg, #7B5FE9 0%, var(--pm-samash-primary) 50%, var(--pm-samash-dark) 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 20px rgba(91, 63, 217, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pm-samash-price:hover {
+    box-shadow:
+        0 8px 32px rgba(91, 63, 217, 0.55),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.pm-samash-price .pm-product-name {
+    color: #ffffff;
+}
+
+.pm-samash-price .pm-price-display {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.pm-samash-price .pm-note {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.pm-samash-price::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.4), rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* ===== BOUTON GEAR4MUSIC - ORANGE ===== */
+.pm-gear4music-price {
+    background: linear-gradient(145deg, #F49B2E 0%, var(--pm-gear4music-primary) 50%, var(--pm-gear4music-dark) 100%);
+    color: #ffffff;
+    box-shadow:
+        0 4px 20px rgba(232, 112, 10, 0.4),
+        0 2px 6px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.pm-gear4music-price:hover {
+    box-shadow:
+        0 8px 32px rgba(232, 112, 10, 0.55),
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.pm-gear4music-price .pm-product-name {
+    color: #ffffff;
+}
+
+.pm-gear4music-price .pm-price-display {
+    background: rgba(0, 0, 0, 0.15);
+    color: #fff;
+}
+
+.pm-gear4music-price .pm-note {
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.pm-gear4music-price::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    padding: 1px;
+    background: linear-gradient(145deg, rgba(255,255,255,0.5), rgba(255,255,255,0.1));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+/* ===== ÉTAT LOADING ===== */
+.pm-price-btn.loading {
+    opacity: 0.8;
+    pointer-events: none;
+}
+
+.pm-price-btn.loading .pm-note {
+    animation: pm-pulse 1s ease-in-out infinite;
+}
+
+@keyframes pm-pulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* ===== WRAPPER CTA + DISCLAIMER ===== */
+.pm-cta-wrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+    margin: 0.75rem 0;
+    max-width: fit-content;
+}
+
+.pm-cta-align-left {
+    justify-content: flex-start;
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.pm-cta-align-center {
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.pm-cta-align-right {
+    justify-content: flex-end;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.pm-cta-wrapper .pm-price-btn {
+    margin: 0 !important;
+}
+
+/* Disclaimer discret - positioned clearly below or beside button, never overlapping */
+.pm-affiliate-disclaimer {
+    max-width: 140px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px;
+    line-height: 1.4;
+    color: #888;
+    text-align: left;
+    opacity: 0.7;
+    transition: opacity 0.3s ease;
+    flex-shrink: 0;
+}
+
+.pm-affiliate-disclaimer:hover {
+    opacity: 1;
+}
+
+.pm-affiliate-disclaimer p {
+    margin: 0 0 2px 0 !important;
+    padding: 0 !important;
+}
+
+.pm-affiliate-disclaimer p:last-child {
+    margin-bottom: 0 !important;
+    font-size: 8px;
+    color: #aaa;
+    font-style: italic;
+}
+
+/* ===== GROUPE BOUTONS (même produit, multi-store) ===== */
+.pm-price-group {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 0;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 1rem 0;
+}
+
+.pm-price-group .pm-cta-wrapper {
+    margin: 0.4rem 0;
+}
+
+.pm-price-group .pm-price-btn {
+    margin: 0;
+}
+
+/* ===== INLINE GROUP (shortcodes adjacents côte-à-côte) ===== */
+.pm-cta-inline-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: flex-start;
+    margin: 1.5rem 0;
+}
+
+/* Force children to auto-width (override WP/theme full-width defaults) */
+.pm-cta-inline-group > .pm-cta-wrapper,
+.pm-cta-inline-group > .pm-price-group,
+.pm-cta-inline-group > .wp-block-html {
+    margin: 0 !important;
+    flex: 0 0 auto;
+    width: auto !important;
+    max-width: none !important;
+    float: none !important;
+}
+
+.pm-cta-inline-group .pm-cta-wrapper,
+.pm-cta-inline-group .pm-price-group {
+    margin: 0;
+}
+
+/* Disclaimer partagé : pleine largeur sous les boutons */
+.pm-cta-inline-group > .pm-affiliate-disclaimer {
+    flex-basis: 100%;
+    max-width: none;
+    text-align: left;
+}
+
+/* ===== KINDLE EMBED ===== */
+.pm-kindle-cta-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin: 1.5rem 0;
+}
+
+.pm-kindle-cta-wrapper .pm-price-btn,
+.pm-kindle-cta-wrapper .pm-cta-wrapper,
+.pm-kindle-cta-wrapper .pm-price-group {
+    margin: 0;
+}
+
+.pm-kindle-embed {
+    width: var(--pm-btn-width);
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px;
+    border: 2px solid var(--pm-gold);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.pm-kindle-embed::before {
+    content: 'Kindle Preview';
+    display: block;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--pm-gold-dark);
+    margin-bottom: 10px;
+}
+
+.pm-kindle-embed iframe {
+    width: 100%;
+    max-width: 310px;
+    height: 500px;
+    border: none;
+    border-radius: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    :root {
+        --pm-btn-width: 300px;
+    }
+
+    .pm-price-btn {
+        padding: 16px 20px;
+        gap: 14px;
+    }
+
+    .pm-product-name {
+        font-size: 13px;
+    }
+
+    .pm-note {
+        font-size: 24px;
+    }
+
+    /* Disclaimer sous le bouton sur mobile */
+    .pm-cta-wrapper {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+
+    .pm-cta-align-center .pm-affiliate-disclaimer {
+        text-align: center;
+        align-self: center;
+    }
+
+    .pm-affiliate-disclaimer {
+        max-width: 100%;
+    }
+
+    /* Inline group : empiler sur mobile */
+    .pm-cta-inline-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .pm-kindle-embed iframe {
+        height: 450px;
+    }
+}
+
+@media (max-width: 400px) {
+    :root {
+        --pm-btn-width: 280px;
+    }
+
+    .pm-price-btn {
+        padding: 14px 16px;
+        gap: 12px;
+        border-radius: 10px;
+    }
+
+    .pm-product-name {
+        font-size: 12px;
+    }
+
+    .pm-price-display {
+        font-size: 11px;
+        padding: 3px 10px;
+    }
+
+    .pm-note {
+        font-size: 22px;
+    }
+
+    .pm-kindle-embed iframe {
+        height: 400px;
+    }
+}
+
+@media (max-width: 320px) {
+    :root {
+        --pm-btn-width: 260px;
+    }
+
+    .pm-price-btn {
+        padding: 12px 14px;
+    }
+
+    .pm-product-name {
+        font-size: 11px;
+    }
+
+    .pm-note {
+        font-size: 20px;
+    }
+}
+
+/* ===== ACCESSIBILITÉ ===== */
+.pm-price-btn:focus-visible {
+    outline: 3px solid var(--pm-gold);
+    outline-offset: 3px;
+}
+
+.pm-sweetwater-price:focus-visible {
+    outline-color: #3498db;
+}
+
+.pm-beatport-price:focus-visible {
+    outline-color: #9b59b6;
+}
+
+.pm-samash-price:focus-visible {
+    outline-color: var(--pm-samash-primary);
+}
+
+.pm-gear4music-price:focus-visible {
+    outline-color: var(--pm-gear4music-primary);
+}
+
+/* ===== PRINT ===== */
+@media print {
+    .pm-price-btn {
+        box-shadow: none !important;
+        border: 2px solid #333;
+    }
+
+    .pm-price-btn::before,
+    .pm-price-btn::after {
+        display: none;
+    }
+}

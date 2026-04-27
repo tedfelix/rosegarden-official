@@ -1,0 +1,696 @@
+/**
+ * Melody Merge — PianoMode Game Styles
+ * Dark theme, responsive, mobile-first
+ */
+
+/* ===================================================
+   BASE / APP CONTAINER
+   =================================================== */
+
+.mm-app {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    background: #0a0a0a;
+    color: #fff;
+    font-family: 'Montserrat', sans-serif;
+    overflow: hidden;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.mm-app *,
+.mm-app *::before,
+.mm-app *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* ===================================================
+   SCREENS (shared)
+   =================================================== */
+
+.mm-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.mm-screen--game {
+    flex-direction: column;
+    z-index: 5;
+}
+
+/* ===================================================
+   START SCREEN
+   =================================================== */
+
+.mm-screen--start {
+    background: radial-gradient(ellipse at 50% 30%, rgba(215, 191, 129, 0.08) 0%, transparent 60%),
+                #0a0a0a;
+    overflow-y: auto;
+    padding: 2rem 1rem;
+}
+
+.mm-start-content {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+    animation: mm-fadeIn 0.6s ease;
+}
+
+.mm-start-brand {
+    margin-bottom: 1.5rem;
+}
+
+.mm-start-logo {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    margin-bottom: 0.75rem;
+    filter: drop-shadow(0 0 12px rgba(215, 191, 129, 0.3));
+}
+
+.mm-start-title {
+    font-size: 2.4rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #D7BF81 0%, #F5E6B8 50%, #D7BF81 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: mm-shimmer 3s ease infinite;
+}
+
+.mm-start-subtitle {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-top: 0.25rem;
+}
+
+.mm-start-description {
+    margin-bottom: 1.5rem;
+}
+
+.mm-start-description p {
+    font-size: 0.95rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+}
+
+/* Note progression preview */
+.mm-note-progression {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    border: 1px solid rgba(215, 191, 129, 0.1);
+}
+
+.mm-progression-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #fff;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+.mm-progression-note span {
+    line-height: 1;
+}
+
+.mm-progression-arrow {
+    color: rgba(215, 191, 129, 0.4);
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.mm-progression-dots {
+    color: rgba(215, 191, 129, 0.4);
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+}
+
+/* Melody selection */
+.mm-melody-select {
+    margin-bottom: 1.5rem;
+}
+
+.mm-melody-select h3 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.5);
+    margin-bottom: 0.75rem;
+}
+
+.mm-melody-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.mm-melody-btn {
+    background: transparent;
+    border: 1px solid rgba(215, 191, 129, 0.3);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.4rem 0.9rem;
+    border-radius: 9999px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.mm-melody-btn:hover {
+    border-color: #D7BF81;
+    color: #D7BF81;
+    background: rgba(215, 191, 129, 0.08);
+}
+
+.mm-melody-btn--active {
+    background: rgba(215, 191, 129, 0.15);
+    border-color: #D7BF81;
+    color: #D7BF81;
+}
+
+/* ===================================================
+   BUTTONS
+   =================================================== */
+
+.mm-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 2rem;
+    border: none;
+    border-radius: 9999px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.mm-btn--play {
+    background: linear-gradient(135deg, #D7BF81 0%, #C5A85C 100%);
+    color: #0a0a0a;
+    box-shadow: 0 4px 20px rgba(215, 191, 129, 0.3);
+}
+
+.mm-btn--play:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 28px rgba(215, 191, 129, 0.45);
+}
+
+.mm-btn--secondary {
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.mm-btn--secondary:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+    color: #fff;
+}
+
+.mm-btn__icon {
+    font-size: 1.1em;
+}
+
+.mm-login-hint {
+    margin-top: 1rem;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.mm-login-hint a {
+    color: #D7BF81;
+    text-decoration: none;
+}
+
+.mm-login-hint a:hover {
+    text-decoration: underline;
+}
+
+/* ===================================================
+   GAME SCREEN
+   =================================================== */
+
+.mm-screen--game {
+    background: #0a0a0a;
+}
+
+/* HUD */
+.mm-hud {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    background: rgba(10, 10, 10, 0.95);
+    border-bottom: 1px solid rgba(215, 191, 129, 0.15);
+    flex-shrink: 0;
+    z-index: 20;
+}
+
+.mm-hud__left,
+.mm-hud__right {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.mm-hud__center {
+    text-align: center;
+}
+
+.mm-hud__score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mm-hud__score-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.mm-hud__score-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #D7BF81;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.mm-hud__next {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.15rem;
+}
+
+.mm-hud__next-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#mm-next-canvas {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(215, 191, 129, 0.1);
+}
+
+.mm-hud-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mm-hud-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(215, 191, 129, 0.3);
+}
+
+/* Canvas container */
+.mm-canvas-wrap {
+    position: relative;
+    flex: 1;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    touch-action: manipulation;
+    overflow: hidden;
+    background: #0a0a0a;
+}
+
+#mm-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Danger line */
+.mm-danger-line {
+    position: absolute;
+    top: 80px;
+    left: 8px;
+    right: 8px;
+    height: 2px;
+    background: rgba(239, 68, 68, 0.15);
+    pointer-events: none;
+    transition: all 0.3s ease;
+}
+
+.mm-danger-line--active {
+    background: rgba(239, 68, 68, 0.6);
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+    animation: mm-dangerPulse 0.5s ease infinite alternate;
+}
+
+/* ===================================================
+   PAUSE OVERLAY
+   =================================================== */
+
+.mm-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    z-index: 50;
+    animation: mm-fadeIn 0.2s ease;
+}
+
+.mm-overlay__box {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}
+
+.mm-overlay__box h2 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #D7BF81;
+}
+
+/* ===================================================
+   GAME OVER SCREEN
+   =================================================== */
+
+.mm-screen--gameover {
+    background: radial-gradient(ellipse at 50% 40%, rgba(215, 191, 129, 0.06) 0%, transparent 60%),
+                rgba(10, 10, 10, 0.98);
+}
+
+.mm-gameover-content {
+    text-align: center;
+    animation: mm-fadeIn 0.5s ease;
+}
+
+.mm-gameover-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1.5rem;
+}
+
+.mm-gameover-score,
+.mm-gameover-best {
+    margin-bottom: 0.75rem;
+}
+
+.mm-gameover-score__label,
+.mm-gameover-best__label {
+    display: block;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 0.2rem;
+}
+
+.mm-gameover-score__value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #D7BF81;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+}
+
+.mm-gameover-best__value {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.6);
+    font-variant-numeric: tabular-nums;
+}
+
+.mm-gameover-record {
+    display: inline-block;
+    padding: 0.35rem 1.2rem;
+    background: linear-gradient(135deg, #D7BF81, #F5E6B8);
+    color: #0a0a0a;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    border-radius: 9999px;
+    margin-bottom: 1.5rem;
+    animation: mm-recordPulse 1s ease infinite;
+}
+
+.mm-gameover-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1.5rem;
+}
+
+/* ===================================================
+   ANIMATIONS
+   =================================================== */
+
+@keyframes mm-fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes mm-shimmer {
+    0%, 100% { background-position: 0% 50%; }
+    50%      { background-position: 100% 50%; }
+}
+
+@keyframes mm-dangerPulse {
+    from { opacity: 0.6; }
+    to   { opacity: 1; }
+}
+
+@keyframes mm-recordPulse {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.05); box-shadow: 0 0 20px rgba(215, 191, 129, 0.4); }
+}
+
+/* ===================================================
+   RESPONSIVE — Tablet
+   =================================================== */
+
+@media (max-width: 768px) {
+    .mm-start-title {
+        font-size: 2rem;
+    }
+
+    .mm-hud {
+        padding: 0.4rem 0.75rem;
+    }
+
+    .mm-hud__score-value {
+        font-size: 1.3rem;
+    }
+
+    .mm-hud-btn {
+        width: 32px;
+        height: 32px;
+        font-size: 0.8rem;
+    }
+
+    .mm-gameover-score__value {
+        font-size: 2.4rem;
+    }
+}
+
+/* ===================================================
+   RESPONSIVE — Small Mobile
+   =================================================== */
+
+@media (max-width: 480px) {
+    .mm-screen--start {
+        padding: 1.5rem 0.75rem;
+    }
+
+    .mm-start-title {
+        font-size: 1.7rem;
+    }
+
+    .mm-start-logo {
+        width: 44px;
+        height: 44px;
+    }
+
+    .mm-start-description p {
+        font-size: 0.85rem;
+    }
+
+    .mm-melody-btn {
+        font-size: 0.72rem;
+        padding: 0.35rem 0.7rem;
+    }
+
+    .mm-btn {
+        padding: 0.7rem 1.5rem;
+        font-size: 0.9rem;
+    }
+
+    .mm-hud__score-value {
+        font-size: 1.1rem;
+    }
+
+    #mm-next-canvas {
+        width: 32px;
+        height: 32px;
+    }
+
+    .mm-gameover-title {
+        font-size: 1.6rem;
+    }
+
+    .mm-gameover-score__value {
+        font-size: 2rem;
+    }
+}
+
+/* ===================================================
+   RESPONSIVE — Landscape
+   =================================================== */
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .mm-screen--start {
+        padding: 1rem;
+    }
+
+    .mm-start-brand {
+        margin-bottom: 0.75rem;
+    }
+
+    .mm-start-title {
+        font-size: 1.5rem;
+    }
+
+    .mm-start-logo {
+        width: 36px;
+        height: 36px;
+        margin-bottom: 0.4rem;
+    }
+
+    .mm-start-description {
+        margin-bottom: 0.75rem;
+    }
+
+    .mm-melody-select {
+        margin-bottom: 0.75rem;
+    }
+
+    .mm-hud {
+        padding: 0.25rem 0.75rem;
+    }
+
+    .mm-hud__score-value {
+        font-size: 1rem;
+    }
+
+    .mm-canvas-wrap {
+        max-width: 320px;
+    }
+
+    .mm-gameover-title {
+        font-size: 1.4rem;
+        margin-bottom: 0.75rem;
+    }
+
+    .mm-gameover-score__value {
+        font-size: 1.8rem;
+    }
+
+    .mm-gameover-actions {
+        flex-direction: row;
+        margin-top: 1rem;
+    }
+}
+
+/* ===================================================
+   SAFE AREAS (notched phones)
+   =================================================== */
+
+@supports (padding: env(safe-area-inset-top)) {
+    .mm-hud {
+        padding-top: calc(0.5rem + env(safe-area-inset-top));
+        padding-left: calc(1rem + env(safe-area-inset-left));
+        padding-right: calc(1rem + env(safe-area-inset-right));
+    }
+
+    .mm-canvas-wrap {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+}
+
+/* ===================================================
+   PRINT
+   =================================================== */
+
+@media print {
+    .mm-app {
+        display: none;
+    }
+}
+
+/* ===================================================
+   BLOCKSY INTEGRATION — hide theme header/footer in game
+   =================================================== */
+
+body.page-template-page-melody-merge .site-header,
+body.page-template-page-melody-merge .site-footer,
+body.page-template-page-melody-merge .ct-container,
+body.page-template-page-melody-merge #main-container {
+    display: none !important;
+}
+
+body.page-template-page-melody-merge {
+    background: #0a0a0a !important;
+    overflow: hidden;
+}
+
+body.page-template-page-melody-merge .mm-app {
+    position: fixed;
+    inset: 0;
+}

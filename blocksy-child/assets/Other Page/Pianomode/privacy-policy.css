@@ -1,0 +1,742 @@
+/**
+ * Privacy & Cookie Policy Page - PianoMode
+ * Styles pour la page Privacy Policy avec hero Learn-style
+ * @version 1.0.0
+ */
+
+/* Montserrat font loaded via functions.php preload for better LCP */
+
+/* ===================================================
+   VARIABLES
+   =================================================== */
+
+:root {
+    /* Couleurs PianoMode */
+    --pm-gold: #D7BF81;
+    --pm-gold-dark: #BEA86E;
+    --pm-gold-light: #E6D4A8;
+    --pm-gold-alpha-10: rgba(215, 191, 129, 0.1);
+    --pm-gold-alpha-25: rgba(215, 191, 129, 0.25);
+    --pm-black: #0a0a0a;
+    --pm-black-medium: #1a1a1a;
+    --pm-black-light: #2a2a2a;
+    --pm-white: #ffffff;
+    --pm-beige-light: #FAF7F0;
+    --pm-beige-medium: #F5F1E8;
+    --pm-font: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ===================================================
+   HERO PRIVACY POLICY
+   =================================================== */
+
+.pianomode-hero-privacy {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 140px;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,
+        var(--pm-black) 0%,
+        var(--pm-black-medium) 40%,
+        var(--pm-black-light) 70%,
+        var(--pm-black) 100%);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Background Image */
+.pianomode-hero-privacy .pianomode-hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.pianomode-hero-privacy .pianomode-hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+    filter: sepia(0.2) brightness(0.6) contrast(1.1);
+}
+
+/* Overlay */
+.pianomode-hero-privacy .pianomode-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(26, 26, 26, 0.6) 50%,
+        rgba(0, 0, 0, 0.8) 100%);
+    z-index: 2;
+}
+
+/* Notes musicales flottantes */
+.pianomode-hero-privacy .pianomode-floating-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.pianomode-hero-privacy .pianomode-note {
+    position: absolute;
+    font-size: clamp(2rem, 4vw, 4rem);
+    color: rgba(215, 191, 129, 0.15);
+    animation: float 20s ease-in-out infinite;
+}
+
+.pianomode-hero-privacy .pianomode-note:nth-child(1) {
+    top: 10%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.pianomode-hero-privacy .pianomode-note:nth-child(2) {
+    top: 20%;
+    right: 15%;
+    animation-delay: -2s;
+}
+
+.pianomode-hero-privacy .pianomode-note:nth-child(3) {
+    top: 50%;
+    left: 5%;
+    animation-delay: -4s;
+}
+
+.pianomode-hero-privacy .pianomode-note:nth-child(4) {
+    top: 70%;
+    right: 10%;
+    animation-delay: -6s;
+}
+
+.pianomode-hero-privacy .pianomode-note:nth-child(5) {
+    bottom: 15%;
+    left: 20%;
+    animation-delay: -8s;
+}
+
+.pianomode-hero-privacy .pianomode-note:nth-child(6) {
+    bottom: 25%;
+    right: 25%;
+    animation-delay: -10s;
+}
+
+/* Contenu hero */
+.pianomode-hero-privacy .pianomode-hero-content {
+    position: relative;
+    z-index: 4;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 2rem;
+}
+
+.pianomode-hero-privacy .pianomode-hero-badge {
+    display: inline-block;
+    padding: 8px 20px;
+    background: rgba(215, 191, 129, 0.15);
+    border: 1px solid rgba(215, 191, 129, 0.3);
+    border-radius: 50px;
+    color: var(--pm-gold);
+    font-family: var(--pm-font);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.pianomode-hero-privacy .pianomode-hero-title {
+    font-family: var(--pm-font);
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.pianomode-hero-privacy .pianomode-hero-title-main {
+    color: var(--pm-white);
+    display: block;
+}
+
+.pianomode-hero-privacy .pianomode-hero-title-accent {
+    background: linear-gradient(135deg,
+        var(--pm-gold-light) 0%,
+        var(--pm-gold) 50%,
+        var(--pm-gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+}
+
+.pianomode-hero-privacy .pianomode-hero-subtitle {
+    font-family: var(--pm-font);
+    font-size: clamp(1rem, 2.5vw, 1.3rem);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.6;
+    margin: 0;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* Breadcrumbs */
+.pianomode-hero-privacy .pianomode-hero-breadcrumbs {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    z-index: 4;
+}
+
+.pianomode-hero-privacy .breadcrumb-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.pianomode-hero-privacy .breadcrumb-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.7);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.pianomode-hero-privacy .breadcrumb-link:hover {
+    color: var(--pm-gold);
+}
+
+.pianomode-hero-privacy .breadcrumb-link svg {
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+}
+
+.pianomode-hero-privacy .breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.pianomode-hero-privacy .breadcrumb-current {
+    color: var(--pm-gold);
+}
+
+/* ===================================================
+   CONTAINER PRINCIPAL
+   =================================================== */
+
+.pianomode-privacy-page-wrapper {
+    position: relative;
+    background: var(--pm-white);
+    padding: 80px 0;
+    overflow: hidden;
+}
+
+/* Notes musicales sur la page */
+.pianomode-privacy-page-wrapper .pianomode-page-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.pianomode-privacy-page-wrapper .pianomode-page-note {
+    position: absolute;
+    font-size: clamp(3rem, 6vw, 6rem);
+    color: rgba(215, 191, 129, 0.05);
+    animation: float 25s ease-in-out infinite;
+}
+
+.pianomode-privacy-page-wrapper .pianomode-page-note:nth-child(1) {
+    top: 10%;
+    left: 5%;
+    animation-delay: 0s;
+}
+
+.pianomode-privacy-page-wrapper .pianomode-page-note:nth-child(2) {
+    top: 30%;
+    right: 8%;
+    animation-delay: -3s;
+}
+
+.pianomode-privacy-page-wrapper .pianomode-page-note:nth-child(3) {
+    bottom: 20%;
+    left: 10%;
+    animation-delay: -6s;
+}
+
+.pianomode-privacy-page-wrapper .pianomode-page-note:nth-child(4) {
+    bottom: 40%;
+    right: 5%;
+    animation-delay: -9s;
+}
+
+/* Container beige */
+.pianomode-privacy-text-container {
+    position: relative;
+    z-index: 2;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 60px;
+    background: var(--pm-beige-light);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+}
+
+.pianomode-privacy-text-content {
+    font-family: var(--pm-font);
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: var(--pm-black);
+}
+
+.pianomode-privacy-text-content h1,
+.pianomode-privacy-text-content h2,
+.pianomode-privacy-text-content h3,
+.pianomode-privacy-text-content h4,
+.pianomode-privacy-text-content h5,
+.pianomode-privacy-text-content h6 {
+    font-family: var(--pm-font);
+    font-weight: 700;
+    color: var(--pm-black);
+    margin-top: 2.5rem;
+    margin-bottom: 1.5rem;
+    line-height: 1.3;
+}
+
+.pianomode-privacy-text-content h2 {
+    font-size: 2rem;
+    background: linear-gradient(135deg,
+        var(--pm-gold-light) 0%,
+        var(--pm-gold) 50%,
+        var(--pm-gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.pianomode-privacy-text-content h3 {
+    font-size: 1.6rem;
+    color: var(--pm-gold-dark);
+}
+
+.pianomode-privacy-text-content h4 {
+    font-size: 1.3rem;
+}
+
+.pianomode-privacy-text-content p {
+    margin-bottom: 1.5rem;
+}
+
+.pianomode-privacy-text-content ul,
+.pianomode-privacy-text-content ol {
+    margin: 1.5rem 0;
+    padding-left: 2rem;
+}
+
+.pianomode-privacy-text-content li {
+    margin-bottom: 0.8rem;
+}
+
+.pianomode-privacy-text-content strong {
+    font-weight: 700;
+    color: var(--pm-gold-dark);
+}
+
+.pianomode-privacy-text-content a {
+    color: var(--pm-gold-dark);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.pianomode-privacy-text-content a:hover {
+    color: var(--pm-gold);
+}
+
+/* ===================================================
+   ANIMATIONS
+   =================================================== */
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px) translateX(0px) rotate(0deg);
+        opacity: 0.15;
+    }
+    25% {
+        transform: translateY(-30px) translateX(15px) rotate(10deg);
+        opacity: 0.08;
+    }
+    50% {
+        transform: translateY(-20px) translateX(-10px) rotate(-5deg);
+        opacity: 0.12;
+    }
+    75% {
+        transform: translateY(-40px) translateX(20px) rotate(15deg);
+        opacity: 0.06;
+    }
+}
+
+/* ===================================================
+   RESPONSIVE
+   =================================================== */
+
+/* Tablet Landscape (1024px) */
+@media (max-width: 1024px) {
+    .pianomode-hero-privacy {
+        min-height: 80vh;
+        padding-top: 120px;
+        padding-bottom: 80px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-content {
+        max-width: 700px;
+        padding: 0 3rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-badge {
+        font-size: 0.8rem;
+        padding: 6px 16px;
+        margin-bottom: 1.5rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-breadcrumbs {
+        bottom: 25px;
+        right: 30px;
+    }
+
+    .pianomode-privacy-page-wrapper {
+        padding: 60px 30px;
+    }
+
+    .pianomode-privacy-text-container {
+        padding: 40px;
+        margin: 0 20px;
+    }
+}
+
+/* Tablet Portrait (768px) */
+@media (max-width: 768px) {
+    .pianomode-hero-privacy {
+        min-height: auto;
+        min-height: 70vh;
+        padding-top: 100px;
+        padding-bottom: 100px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-content {
+        max-width: 100%;
+        padding: 0 2rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-badge {
+        font-size: 0.75rem;
+        padding: 6px 14px;
+        letter-spacing: 0.5px;
+        margin-bottom: 1.2rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-title {
+        gap: 0.2rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-subtitle {
+        font-size: 1rem;
+        line-height: 1.5;
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    /* Breadcrumbs centré en bas */
+    .pianomode-hero-privacy .pianomode-hero-breadcrumbs {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        width: 100%;
+        text-align: center;
+    }
+
+    .pianomode-hero-privacy .breadcrumb-container {
+        justify-content: center;
+        font-size: 0.8rem;
+        gap: 8px;
+    }
+
+    /* Réduire les notes flottantes */
+    .pianomode-hero-privacy .pianomode-note {
+        font-size: clamp(1.5rem, 3vw, 2.5rem);
+        opacity: 0.1;
+    }
+
+    /* Container texte */
+    .pianomode-privacy-page-wrapper {
+        padding: 50px 20px;
+    }
+
+    .pianomode-privacy-text-container {
+        padding: 30px 25px;
+        border-radius: 15px;
+        margin: 0 10px;
+    }
+
+    .pianomode-privacy-text-content {
+        font-size: 1rem;
+        line-height: 1.7;
+    }
+
+    .pianomode-privacy-text-content h2 {
+        font-size: 1.6rem;
+        margin-top: 2rem;
+    }
+
+    .pianomode-privacy-text-content h3 {
+        font-size: 1.3rem;
+    }
+
+    .pianomode-privacy-text-content h4 {
+        font-size: 1.15rem;
+    }
+
+    .pianomode-privacy-text-content ul,
+    .pianomode-privacy-text-content ol {
+        padding-left: 1.5rem;
+    }
+
+    /* Notes de page */
+    .pianomode-privacy-page-wrapper .pianomode-page-note {
+        font-size: clamp(2rem, 5vw, 4rem);
+    }
+}
+
+/* Mobile Large (576px) */
+@media (max-width: 576px) {
+    .pianomode-hero-privacy {
+        min-height: 65vh;
+        padding-top: 90px;
+        padding-bottom: 90px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-content {
+        padding: 0 1.5rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-badge {
+        font-size: 0.7rem;
+        padding: 5px 12px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-title {
+        gap: 0.15rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-subtitle {
+        font-size: 0.95rem;
+        padding: 0;
+    }
+
+    .pianomode-hero-privacy .breadcrumb-container {
+        font-size: 0.75rem;
+        gap: 6px;
+    }
+
+    .pianomode-hero-privacy .breadcrumb-link svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    /* Cacher certaines notes pour éviter l'encombrement */
+    .pianomode-hero-privacy .pianomode-note:nth-child(4),
+    .pianomode-hero-privacy .pianomode-note:nth-child(5),
+    .pianomode-hero-privacy .pianomode-note:nth-child(6) {
+        display: none;
+    }
+
+    .pianomode-privacy-page-wrapper {
+        padding: 40px 15px;
+    }
+
+    .pianomode-privacy-text-container {
+        padding: 25px 18px;
+        border-radius: 12px;
+        margin: 0;
+    }
+
+    .pianomode-privacy-text-content {
+        font-size: 0.95rem;
+    }
+
+    .pianomode-privacy-text-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .pianomode-privacy-text-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .pianomode-privacy-text-content h4 {
+        font-size: 1.05rem;
+    }
+}
+
+/* Mobile Small (420px) */
+@media (max-width: 420px) {
+    .pianomode-hero-privacy {
+        min-height: 60vh;
+        padding-top: 80px;
+        padding-bottom: 80px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-content {
+        padding: 0 1rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-badge {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-title {
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-subtitle {
+        font-size: 0.9rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-breadcrumbs {
+        bottom: 15px;
+    }
+
+    .pianomode-hero-privacy .breadcrumb-container {
+        font-size: 0.7rem;
+    }
+
+    /* Cacher plus de notes */
+    .pianomode-hero-privacy .pianomode-note:nth-child(3) {
+        display: none;
+    }
+
+    .pianomode-privacy-page-wrapper {
+        padding: 30px 12px;
+    }
+
+    .pianomode-privacy-text-container {
+        padding: 20px 15px;
+        border-radius: 10px;
+    }
+
+    .pianomode-privacy-text-content {
+        font-size: 0.9rem;
+        line-height: 1.65;
+    }
+
+    .pianomode-privacy-text-content h2 {
+        font-size: 1.25rem;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-privacy-text-content h3 {
+        font-size: 1.1rem;
+    }
+
+    .pianomode-privacy-text-content ul,
+    .pianomode-privacy-text-content ol {
+        padding-left: 1.2rem;
+        margin: 1rem 0;
+    }
+
+    .pianomode-privacy-text-content li {
+        margin-bottom: 0.6rem;
+    }
+
+    /* Notes de page sur mobile */
+    .pianomode-privacy-page-wrapper .pianomode-page-note:nth-child(3),
+    .pianomode-privacy-page-wrapper .pianomode-page-note:nth-child(4) {
+        display: none;
+    }
+}
+
+/* Landscape orientation - short viewport */
+@media (orientation: landscape) and (max-height: 500px) {
+    .pianomode-hero-privacy {
+        min-height: auto;
+        padding-top: 70px;
+        padding-bottom: 60px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-badge {
+        font-size: 0.65rem;
+        padding: 4px 10px;
+        margin-bottom: 0.8rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-title {
+        font-size: clamp(1.5rem, 5vw, 2.5rem);
+        margin-bottom: 0.8rem;
+        gap: 0.1rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-subtitle {
+        font-size: 0.85rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-breadcrumbs {
+        bottom: 10px;
+    }
+
+    .pianomode-hero-privacy .pianomode-note {
+        display: none;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 700px) and (min-height: 501px) {
+    .pianomode-hero-privacy {
+        min-height: auto;
+        padding-top: 90px;
+        padding-bottom: 70px;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-badge {
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-hero-title {
+        font-size: clamp(2rem, 5vw, 3rem);
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-hero-privacy .pianomode-note:nth-child(n+4) {
+        display: none;
+    }
+}

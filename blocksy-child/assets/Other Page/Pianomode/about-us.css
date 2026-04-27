@@ -1,0 +1,937 @@
+/**
+ * About Us Page - PianoMode
+ * Styles pour la page About Us avec hero Learn-style
+ * @version 1.0.0
+ */
+
+/* Montserrat font loaded via functions.php preload for better LCP */
+
+/* ===================================================
+   VARIABLES
+   =================================================== */
+
+:root {
+    /* Couleurs PianoMode */
+    --pm-gold: #D7BF81;
+    --pm-gold-dark: #BEA86E;
+    --pm-gold-light: #E6D4A8;
+    --pm-gold-alpha-10: rgba(215, 191, 129, 0.1);
+    --pm-gold-alpha-25: rgba(215, 191, 129, 0.25);
+    --pm-black: #0a0a0a;
+    --pm-black-medium: #1a1a1a;
+    --pm-black-light: #2a2a2a;
+    --pm-white: #ffffff;
+    --pm-beige-light: #FAF7F0;
+    --pm-beige-medium: #F5F1E8;
+    --pm-font: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+
+    /* PayPal colors */
+    --paypal-blue: #0070BA;
+    --paypal-blue-dark: #005EA6;
+    --paypal-blue-light: #009CDE;
+}
+
+/* ===================================================
+   HERO ABOUT US - STYLE LEARN
+   =================================================== */
+
+.pianomode-hero-about {
+    position: relative;
+    min-height: 100vh;
+    width: 100vw;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    padding-top: 140px;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,
+        var(--pm-black) 0%,
+        var(--pm-black-medium) 40%,
+        var(--pm-black-light) 70%,
+        var(--pm-black) 100%);
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Background Image */
+.pianomode-hero-about .pianomode-hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.pianomode-hero-about .pianomode-hero-bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.3;
+    filter: sepia(0.2) brightness(0.6) contrast(1.1);
+}
+
+/* Overlay */
+.pianomode-hero-about .pianomode-hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg,
+        rgba(0, 0, 0, 0.7) 0%,
+        rgba(26, 26, 26, 0.6) 50%,
+        rgba(0, 0, 0, 0.8) 100%);
+    z-index: 2;
+}
+
+/* Notes musicales flottantes dans le hero */
+.pianomode-hero-about .pianomode-floating-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.pianomode-hero-about .pianomode-note {
+    position: absolute;
+    color: var(--pm-gold);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+    font-family: var(--pm-font);
+    font-weight: 400;
+    user-select: none;
+    will-change: transform, opacity;
+    opacity: 0;
+    text-shadow:
+        0 0 10px rgba(215, 191, 129, 0.6),
+        0 0 20px rgba(215, 191, 129, 0.4),
+        0 0 30px rgba(215, 191, 129, 0.2);
+    filter: drop-shadow(0 0 8px rgba(215, 191, 129, 0.5));
+}
+
+/* Animations des notes du hero */
+.pianomode-hero-about .pianomode-note:nth-child(1) {
+    animation: heroNoteFloat1 45s ease-in-out infinite;
+}
+
+.pianomode-hero-about .pianomode-note:nth-child(2) {
+    animation: heroNoteFloat2 52s ease-in-out infinite;
+    animation-delay: 8s;
+}
+
+.pianomode-hero-about .pianomode-note:nth-child(3) {
+    animation: heroNoteFloat3 48s ease-in-out infinite;
+    animation-delay: 15s;
+}
+
+.pianomode-hero-about .pianomode-note:nth-child(4) {
+    animation: heroNoteFloat4 55s ease-in-out infinite;
+    animation-delay: 5s;
+}
+
+.pianomode-hero-about .pianomode-note:nth-child(5) {
+    animation: heroNoteFloat5 50s ease-in-out infinite;
+    animation-delay: 20s;
+}
+
+.pianomode-hero-about .pianomode-note:nth-child(6) {
+    animation: heroNoteFloat6 58s ease-in-out infinite;
+    animation-delay: 12s;
+}
+
+@keyframes heroNoteFloat1 {
+    0% { transform: translate(10vw, 20vh); opacity: 0; }
+    5% { opacity: 0.25; }
+    15% { transform: translate(25vw, 35vh); opacity: 0.35; }
+    30% { transform: translate(45vw, 55vh); opacity: 0.2; }
+    45% { transform: translate(70vw, 40vh); opacity: 0.4; }
+    60% { transform: translate(55vw, 65vh); opacity: 0.15; }
+    75% { transform: translate(30vw, 50vh); opacity: 0.3; }
+    90% { transform: translate(15vw, 30vh); opacity: 0.2; }
+    95% { opacity: 0.1; }
+    100% { transform: translate(10vw, 20vh); opacity: 0; }
+}
+
+@keyframes heroNoteFloat2 {
+    0% { transform: translate(75vw, 25vh); opacity: 0; }
+    8% { opacity: 0.3; }
+    20% { transform: translate(60vw, 45vh); opacity: 0.25; }
+    35% { transform: translate(40vw, 30vh); opacity: 0.4; }
+    50% { transform: translate(20vw, 55vh); opacity: 0.2; }
+    65% { transform: translate(35vw, 70vh); opacity: 0.35; }
+    80% { transform: translate(55vw, 50vh); opacity: 0.15; }
+    92% { opacity: 0.1; }
+    100% { transform: translate(75vw, 25vh); opacity: 0; }
+}
+
+@keyframes heroNoteFloat3 {
+    0% { transform: translate(50vw, 70vh); opacity: 0; }
+    6% { opacity: 0.2; }
+    18% { transform: translate(30vw, 50vh); opacity: 0.35; }
+    36% { transform: translate(15vw, 35vh); opacity: 0.25; }
+    54% { transform: translate(40vw, 20vh); opacity: 0.4; }
+    72% { transform: translate(65vw, 45vh); opacity: 0.2; }
+    88% { transform: translate(55vw, 60vh); opacity: 0.15; }
+    94% { opacity: 0.08; }
+    100% { transform: translate(50vw, 70vh); opacity: 0; }
+}
+
+@keyframes heroNoteFloat4 {
+    0% { transform: translate(20vw, 60vh); opacity: 0; }
+    7% { opacity: 0.25; }
+    22% { transform: translate(40vw, 40vh); opacity: 0.3; }
+    40% { transform: translate(65vw, 55vh); opacity: 0.2; }
+    55% { transform: translate(80vw, 35vh); opacity: 0.35; }
+    70% { transform: translate(55vw, 25vh); opacity: 0.15; }
+    85% { transform: translate(35vw, 50vh); opacity: 0.25; }
+    93% { opacity: 0.1; }
+    100% { transform: translate(20vw, 60vh); opacity: 0; }
+}
+
+@keyframes heroNoteFloat5 {
+    0% { transform: translate(80vw, 50vh); opacity: 0; }
+    5% { opacity: 0.2; }
+    20% { transform: translate(60vw, 30vh); opacity: 0.35; }
+    38% { transform: translate(35vw, 45vh); opacity: 0.25; }
+    55% { transform: translate(20vw, 65vh); opacity: 0.4; }
+    70% { transform: translate(45vw, 55vh); opacity: 0.2; }
+    85% { transform: translate(70vw, 40vh); opacity: 0.15; }
+    95% { opacity: 0.08; }
+    100% { transform: translate(80vw, 50vh); opacity: 0; }
+}
+
+@keyframes heroNoteFloat6 {
+    0% { transform: translate(35vw, 15vh); opacity: 0; }
+    6% { opacity: 0.25; }
+    18% { transform: translate(55vw, 35vh); opacity: 0.3; }
+    35% { transform: translate(75vw, 60vh); opacity: 0.2; }
+    52% { transform: translate(50vw, 75vh); opacity: 0.35; }
+    68% { transform: translate(25vw, 55vh); opacity: 0.15; }
+    82% { transform: translate(45vw, 30vh); opacity: 0.25; }
+    94% { opacity: 0.1; }
+    100% { transform: translate(35vw, 15vh); opacity: 0; }
+}
+
+/* Contenu du hero */
+.pianomode-hero-about .pianomode-hero-content {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    max-width: 900px;
+    padding: 0 2rem;
+}
+
+/* Badge */
+.pianomode-hero-about .pianomode-hero-badge {
+    display: inline-block;
+    padding: 0.8rem 1.8rem;
+    background: linear-gradient(135deg,
+        var(--pm-gold-alpha-25) 0%,
+        var(--pm-gold-alpha-10) 100%);
+    border: 2px solid var(--pm-gold);
+    border-radius: 50px;
+    color: var(--pm-gold);
+    font-family: var(--pm-font);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 2rem;
+    backdrop-filter: blur(10px);
+    box-shadow:
+        0 4px 20px rgba(215, 191, 129, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    animation: heroFadeInUp 1s ease-out 0.2s both;
+}
+
+/* Titre */
+.pianomode-hero-about .pianomode-hero-title {
+    font-family: var(--pm-font);
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 800;
+    margin-bottom: 2rem;
+    line-height: 1.1;
+    letter-spacing: -1px;
+}
+
+.pianomode-hero-about .pianomode-hero-title-main {
+    color: var(--pm-white);
+    display: block;
+    margin-bottom: 0.5rem;
+    font-family: var(--pm-font);
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    animation: heroFadeInUp 1s ease-out 0.3s both;
+}
+
+.pianomode-hero-about .pianomode-hero-title-accent {
+    background: linear-gradient(135deg,
+        var(--pm-gold-light) 0%,
+        var(--pm-gold) 30%,
+        var(--pm-gold-dark) 60%,
+        var(--pm-gold) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: block;
+    font-family: var(--pm-font);
+    filter: drop-shadow(0 4px 12px rgba(215, 191, 129, 0.5));
+    animation: heroShimmer 3s ease-in-out infinite,
+               heroTitlePulse 4s ease-in-out infinite,
+               heroFadeInUp 1s ease-out 0.4s both;
+}
+
+/* Sous-titre */
+.pianomode-hero-about .pianomode-hero-subtitle {
+    font-family: var(--pm-font);
+    font-size: clamp(1rem, 2vw, 1.25rem);
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 3rem;
+    line-height: 1.7;
+    font-weight: 400;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    animation: heroFadeInUp 1s ease-out 0.7s both;
+}
+
+/* Breadcrumbs en bas du hero */
+.pianomode-hero-breadcrumbs {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    z-index: 10;
+}
+
+.breadcrumb-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+}
+
+.breadcrumb-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--pm-gold);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.breadcrumb-link:hover {
+    color: var(--pm-gold-light);
+    transform: translateX(-3px);
+}
+
+.breadcrumb-link svg {
+    width: 16px;
+    height: 16px;
+}
+
+.breadcrumb-separator {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.breadcrumb-current {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Animations hero */
+@keyframes heroFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes heroShimmer {
+    0% {
+        background-position: -200% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
+}
+
+@keyframes heroTitlePulse {
+    0%, 100% {
+        transform: scale(1);
+        filter: drop-shadow(0 0 10px rgba(215, 191, 129, 0.3));
+    }
+    50% {
+        transform: scale(1.02);
+        filter: drop-shadow(0 0 20px rgba(215, 191, 129, 0.6));
+    }
+}
+
+/* ===================================================
+   PAGE WRAPPER - FOND BLANC
+   =================================================== */
+
+.pianomode-about-page-wrapper {
+    position: relative;
+    background: var(--pm-white);
+    min-height: 100vh;
+    padding: 80px clamp(20px, 5vw, 80px);
+    overflow: hidden;
+}
+
+/* ===================================================
+   NOTES MUSICALES SUR LA PAGE
+   =================================================== */
+
+.pianomode-page-notes {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.pianomode-page-note {
+    position: absolute;
+    color: var(--pm-gold);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-family: var(--pm-font);
+    font-weight: 300;
+    opacity: 0;
+    user-select: none;
+    will-change: transform, opacity;
+}
+
+.pianomode-page-note:nth-child(1) {
+    animation: pageNoteFloat1 60s ease-in-out infinite;
+}
+
+.pianomode-page-note:nth-child(2) {
+    animation: pageNoteFloat2 65s ease-in-out infinite;
+    animation-delay: 10s;
+}
+
+.pianomode-page-note:nth-child(3) {
+    animation: pageNoteFloat3 58s ease-in-out infinite;
+    animation-delay: 20s;
+}
+
+.pianomode-page-note:nth-child(4) {
+    animation: pageNoteFloat4 62s ease-in-out infinite;
+    animation-delay: 30s;
+}
+
+@keyframes pageNoteFloat1 {
+    0% { transform: translate(5vw, 10vh) rotate(0deg); opacity: 0; }
+    5% { opacity: 0.08; }
+    25% { transform: translate(30vw, 40vh) rotate(15deg); opacity: 0.12; }
+    50% { transform: translate(60vw, 70vh) rotate(-10deg); opacity: 0.08; }
+    75% { transform: translate(85vw, 30vh) rotate(20deg); opacity: 0.1; }
+    95% { opacity: 0.05; }
+    100% { transform: translate(95vw, 10vh) rotate(0deg); opacity: 0; }
+}
+
+@keyframes pageNoteFloat2 {
+    0% { transform: translate(90vw, 20vh) rotate(0deg); opacity: 0; }
+    5% { opacity: 0.1; }
+    25% { transform: translate(70vw, 50vh) rotate(-15deg); opacity: 0.12; }
+    50% { transform: translate(40vw, 80vh) rotate(10deg); opacity: 0.08; }
+    75% { transform: translate(15vw, 40vh) rotate(-20deg); opacity: 0.1; }
+    95% { opacity: 0.05; }
+    100% { transform: translate(5vw, 20vh) rotate(0deg); opacity: 0; }
+}
+
+@keyframes pageNoteFloat3 {
+    0% { transform: translate(50vw, 5vh) rotate(0deg); opacity: 0; }
+    5% { opacity: 0.09; }
+    25% { transform: translate(20vw, 35vh) rotate(18deg); opacity: 0.11; }
+    50% { transform: translate(75vw, 60vh) rotate(-12deg); opacity: 0.09; }
+    75% { transform: translate(45vw, 85vh) rotate(15deg); opacity: 0.1; }
+    95% { opacity: 0.05; }
+    100% { transform: translate(50vw, 95vh) rotate(0deg); opacity: 0; }
+}
+
+@keyframes pageNoteFloat4 {
+    0% { transform: translate(25vw, 90vh) rotate(0deg); opacity: 0; }
+    5% { opacity: 0.08; }
+    25% { transform: translate(55vw, 65vh) rotate(-18deg); opacity: 0.12; }
+    50% { transform: translate(10vw, 40vh) rotate(12deg); opacity: 0.08; }
+    75% { transform: translate(80vw, 15vh) rotate(-15deg); opacity: 0.1; }
+    95% { opacity: 0.05; }
+    100% { transform: translate(25vw, 5vh) rotate(0deg); opacity: 0; }
+}
+
+/* ===================================================
+   CONTAINER BEIGE POUR LE TEXTE
+   =================================================== */
+
+.pianomode-about-text-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: var(--pm-beige-light);
+    border: 1px solid rgba(215, 191, 129, 0.2);
+    border-radius: 20px;
+    padding: 60px clamp(40px, 5vw, 80px);
+    box-shadow:
+        0 10px 40px rgba(0, 0, 0, 0.08),
+        0 0 0 1px rgba(215, 191, 129, 0.1);
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.pianomode-about-text-content {
+    font-family: var(--pm-font);
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: #2a2a2a;
+}
+
+/* ===================================================
+   DROP CAP - PREMIÈRE LETTRE
+   =================================================== */
+
+.pianomode-drop-cap-paragraph::first-letter {
+    font-family: var(--pm-font);
+    font-size: 5rem;
+    font-weight: 800;
+    line-height: 0.85;
+    float: left;
+    margin: 10px 15px 0 0;
+    background: linear-gradient(135deg,
+        var(--pm-gold-light) 0%,
+        var(--pm-gold) 50%,
+        var(--pm-gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 8px rgba(215, 191, 129, 0.3));
+}
+
+/* Paragraphes */
+.pianomode-about-text-content p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.pianomode-about-text-content p:last-of-type {
+    margin-bottom: 0;
+}
+
+/* ===================================================
+   SOUS-TITRE "THE SPIRIT OF PIANOMODE"
+   =================================================== */
+
+.pianomode-spirit-subtitle {
+    font-family: var(--pm-font);
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--pm-gold-dark);
+    margin: 3rem 0 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    padding-bottom: 15px;
+}
+
+.pianomode-spirit-subtitle::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg,
+        var(--pm-gold) 0%,
+        var(--pm-gold-light) 100%);
+    border-radius: 2px;
+}
+
+/* ===================================================
+   CITATION MISE EN VALEUR
+   =================================================== */
+
+.pianomode-highlight-quote {
+    font-family: var(--pm-font);
+    font-size: 2rem;
+    font-weight: 700;
+    font-style: italic;
+    text-align: center;
+    color: var(--pm-gold-dark);
+    margin: 3rem 0 2rem;
+    padding: 2rem;
+    background: linear-gradient(135deg,
+        rgba(215, 191, 129, 0.08) 0%,
+        rgba(215, 191, 129, 0.15) 50%,
+        rgba(215, 191, 129, 0.08) 100%);
+    border-left: 5px solid var(--pm-gold);
+    border-radius: 10px;
+    position: relative;
+}
+
+.pianomode-highlight-quote::before {
+    content: '"';
+    position: absolute;
+    top: -10px;
+    left: 15px;
+    font-size: 5rem;
+    color: var(--pm-gold-light);
+    opacity: 0.3;
+    line-height: 1;
+}
+
+/* ===================================================
+   CTA PAYPAL - STYLE BLEU ÉLÉGANT
+   =================================================== */
+
+.pianomode-paypal-cta-container {
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: 60px auto 0;
+    z-index: 10;
+    box-sizing: border-box;
+}
+
+.pianomode-paypal-cta-content {
+    background: linear-gradient(135deg,
+        var(--paypal-blue) 0%,
+        var(--paypal-blue-dark) 100%);
+    border-radius: 20px;
+    padding: 50px clamp(40px, 5vw, 80px);
+    text-align: center;
+    box-shadow:
+        0 15px 50px rgba(0, 112, 186, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Pattern background subtil */
+.pianomode-paypal-cta-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image:
+        repeating-linear-gradient(45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.02) 10px,
+            rgba(255, 255, 255, 0.02) 20px);
+    pointer-events: none;
+}
+
+/* Icône */
+.pianomode-paypal-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 25px;
+    color: var(--pm-white);
+    opacity: 0.9;
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2));
+}
+
+/* Titre */
+.pianomode-paypal-title {
+    font-family: var(--pm-font);
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--pm-white);
+    margin-bottom: 20px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Description */
+.pianomode-paypal-description {
+    font-family: var(--pm-font);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 35px;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Bouton PayPal */
+.pianomode-paypal-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 18px 45px;
+    background: var(--pm-white);
+    color: var(--paypal-blue);
+    font-family: var(--pm-font);
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 50px;
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.5);
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.pianomode-paypal-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg,
+        transparent,
+        rgba(0, 112, 186, 0.1),
+        transparent);
+    transition: left 0.6s ease;
+}
+
+.pianomode-paypal-button:hover::before {
+    left: 100%;
+}
+
+.pianomode-paypal-button:hover {
+    transform: translateY(-3px) scale(1.03);
+    box-shadow:
+        0 15px 40px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    color: var(--paypal-blue-dark);
+}
+
+.pianomode-paypal-button:active {
+    transform: translateY(-1px) scale(0.98);
+}
+
+/* Icône bouton */
+.paypal-button-icon {
+    width: 24px;
+    height: 24px;
+}
+
+/* Benefits section */
+.pianomode-paypal-benefits {
+    text-align: left;
+    max-width: 750px;
+    margin: 0 auto;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 15px;
+    backdrop-filter: blur(10px);
+}
+
+.pianomode-paypal-benefits h3 {
+    font-family: var(--pm-font);
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--pm-white);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.pianomode-paypal-benefits ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pianomode-paypal-benefits li {
+    font-family: var(--pm-font);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pianomode-paypal-benefits li:last-child {
+    margin-bottom: 0;
+}
+
+.benefit-icon {
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+/* ===================================================
+   RESPONSIVE
+   =================================================== */
+
+/* Large screens */
+@media (min-width: 1400px) {
+    .pianomode-about-text-container,
+    .pianomode-paypal-cta-container {
+        max-width: 1300px;
+    }
+}
+
+/* Extra-large screens */
+@media (min-width: 1800px) {
+    .pianomode-about-text-container,
+    .pianomode-paypal-cta-container {
+        max-width: 1440px;
+    }
+
+    .pianomode-about-page-wrapper {
+        padding: 80px clamp(60px, 8vw, 160px);
+    }
+}
+
+@media (max-width: 768px) {
+    .pianomode-hero-about {
+        min-height: 80vh;
+        padding-top: 120px;
+    }
+
+    .pianomode-hero-about .pianomode-hero-content {
+        padding: 0 1.5rem;
+    }
+
+    .pianomode-hero-about .pianomode-hero-badge {
+        font-size: 0.7rem;
+        padding: 0.5rem 1rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .pianomode-hero-about .pianomode-hero-title {
+        font-size: clamp(2rem, 6vw, 3.5rem);
+        margin-bottom: 1rem;
+    }
+
+    .pianomode-hero-about .pianomode-hero-subtitle {
+        font-size: clamp(0.9rem, 2vw, 1.1rem);
+        margin-bottom: 2rem;
+    }
+
+    .pianomode-hero-breadcrumbs {
+        bottom: 20px;
+        right: 20px;
+    }
+
+    .pianomode-about-page-wrapper {
+        padding: 40px 15px;
+    }
+
+    .pianomode-about-text-container {
+        padding: 40px 28px;
+    }
+
+    .pianomode-about-text-content {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    .pianomode-drop-cap-paragraph::first-letter {
+        font-size: 4rem;
+        margin: 5px 10px 0 0;
+    }
+
+    .pianomode-spirit-subtitle {
+        font-size: 1.4rem;
+        margin: 2rem 0 1rem;
+    }
+
+    .pianomode-highlight-quote {
+        font-size: 1.5rem;
+        padding: 1.5rem;
+        margin: 2rem 0 1.5rem;
+    }
+
+    .pianomode-paypal-cta-content {
+        padding: 40px 30px;
+    }
+
+    .pianomode-paypal-title {
+        font-size: 1.6rem;
+    }
+
+    .pianomode-paypal-description {
+        font-size: 1rem;
+    }
+
+    .pianomode-paypal-button {
+        padding: 15px 35px;
+        font-size: 1rem;
+    }
+
+    .pianomode-paypal-benefits {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .pianomode-hero-about {
+        min-height: 70vh;
+        padding-top: 100px;
+    }
+
+    .pianomode-hero-breadcrumbs {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .breadcrumb-container {
+        font-size: 0.8rem;
+    }
+
+    .pianomode-about-text-container {
+        padding: 30px 20px;
+        border-radius: 15px;
+    }
+
+    .pianomode-about-text-content {
+        font-size: 0.95rem;
+    }
+
+    .pianomode-about-text-content p {
+        text-align: left;
+    }
+
+    .pianomode-drop-cap-paragraph::first-letter {
+        font-size: 3.5rem;
+    }
+
+    .pianomode-spirit-subtitle {
+        font-size: 1.2rem;
+    }
+
+    .pianomode-highlight-quote {
+        font-size: 1.3rem;
+        padding: 1.2rem;
+    }
+
+    .pianomode-paypal-cta-content {
+        padding: 30px 20px;
+    }
+
+    .pianomode-paypal-title {
+        font-size: 1.4rem;
+    }
+
+    .pianomode-paypal-benefits li {
+        font-size: 0.9rem;
+    }
+}

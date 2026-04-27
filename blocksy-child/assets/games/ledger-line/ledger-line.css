@@ -1,0 +1,1715 @@
+/* ============================================================
+   LEDGER LINE LEGEND - PianoMode Game
+   A cinematic 2D platformer on the Grand Staff
+   ============================================================ */
+
+/* --- CSS Variables --- */
+:root {
+    --ll-gold: #D7BF81;
+    --ll-gold-dark: #BEA86E;
+    --ll-gold-light: #E8D092;
+    --ll-gold-glow: rgba(215, 191, 129, 0.35);
+    --ll-gold-border: rgba(215, 191, 129, 0.25);
+    --ll-bg-deep: #0A0A0F;
+    --ll-bg-card: #12121A;
+    --ll-bg-header: #1A1A24;
+    --ll-text: #FFFFFF;
+    --ll-text-secondary: #A0A0B0;
+    --ll-text-muted: #6A6A7A;
+    --ll-danger: #E6735C;
+    --ll-success: #50C878;
+    --ll-info: #5B8DEE;
+    --ll-purple: #9B7BDB;
+    --ll-header-h: 56px;
+    --ll-hud-h: 40px;
+    --ll-keyboard-height: 155px;
+    --ll-safe-bottom: env(safe-area-inset-bottom, 0px);
+    --ll-font: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --ll-site-header-h: 80px;
+    --ll-total-offset: 80px;
+}
+
+/* --- Reset & Base --- */
+.ll-app {
+    font-family: var(--ll-font);
+    background: var(--ll-bg-deep);
+    color: var(--ll-text);
+    /* Height fills remaining viewport below site header */
+    height: calc(100vh - var(--ll-total-offset, var(--ll-site-header-h)));
+    max-height: calc(100vh - var(--ll-total-offset, var(--ll-site-header-h)));
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    border-radius: 0;
+    border: none;
+    box-shadow: 0 0 60px rgba(215, 191, 129, 0.1);
+}
+
+/* Playing mode: full viewport, above site header */
+.ll-app.playing-mode {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin-top: 0 !important;
+    z-index: 99999 !important;
+}
+
+/* Welcome mode: app shrinks to fit content, footer visible */
+.ll-app.welcome-mode {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+}
+.ll-app.welcome-mode .ll-header,
+.ll-app.welcome-mode .ll-hud {
+    display: none !important;
+}
+.ll-app.welcome-mode .ll-canvas-container canvas,
+.ll-app.welcome-mode .ll-canvas-container .ll-feedback,
+.ll-app.welcome-mode .ll-canvas-container .ll-touch-controls {
+    display: none !important;
+}
+.ll-app.welcome-mode .ll-canvas-container {
+    flex: none;
+    min-height: 0;
+    overflow: visible;
+}
+.ll-app.welcome-mode .ll-modal {
+    position: fixed;
+    z-index: 100000;
+}
+.ll-app.welcome-mode .ll-overlay {
+    position: relative;
+    top: auto; left: auto; right: auto; bottom: auto;
+    background: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    padding: 16px 12px;
+    min-height: 0;
+}
+.ll-app.welcome-mode .ll-overlay-box {
+    max-height: none;
+    overflow-y: visible;
+    margin: 0 auto;
+}
+
+.ll-app *,
+.ll-app *::before,
+.ll-app *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* --- Header — hidden, drawn on canvas instead --- */
+.ll-header {
+    display: none !important;
+}
+
+.ll-header::before {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--ll-gold), transparent);
+}
+
+.ll-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ll-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+}
+
+.ll-logo-icon {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ll-logo-icon svg {
+    width: 28px;
+    height: 28px;
+    fill: var(--ll-gold);
+}
+
+.ll-logo-brand {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ll-gold);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.ll-logo-sub {
+    font-size: 9px;
+    color: var(--ll-text-secondary);
+    letter-spacing: 0.5px;
+    display: block;
+    margin-top: -2px;
+}
+
+.ll-header-center {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ll-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* --- Icon Buttons --- */
+.ll-btn-icon {
+    width: 36px;
+    height: 36px;
+    background: var(--ll-bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    color: var(--ll-text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+}
+
+.ll-btn-icon:hover {
+    color: var(--ll-text);
+    border-color: var(--ll-gold-border);
+    background: rgba(215, 191, 129, 0.1);
+}
+
+.ll-btn-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+/* --- Primary Buttons --- */
+.ll-btn-primary {
+    background: var(--ll-gold);
+    border: none;
+    border-radius: 20px;
+    color: var(--ll-bg-deep);
+    font-family: var(--ll-font);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ll-btn-primary:hover {
+    background: var(--ll-gold-light);
+    transform: scale(1.02);
+}
+
+.ll-btn-primary:active {
+    transform: scale(0.98);
+}
+
+/* --- HUD — hidden, drawn on canvas instead --- */
+.ll-hud {
+    display: none !important;
+}
+
+.ll-hud-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.ll-hud-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--ll-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.ll-hud-value {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ll-text);
+    min-width: 28px;
+    text-align: center;
+}
+
+.ll-hud-value.gold {
+    color: var(--ll-gold);
+}
+
+.ll-hud-divider {
+    width: 1px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.ll-lives {
+    display: flex;
+    gap: 3px;
+}
+
+.ll-life {
+    font-size: 12px;
+    transition: all 0.3s;
+}
+
+.ll-life.lost {
+    opacity: 0.2;
+    filter: grayscale(1);
+}
+
+/* --- Canvas Container --- */
+.ll-canvas-container {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 0;
+    background: radial-gradient(ellipse at center, rgba(215, 191, 129, 0.03) 0%, transparent 70%);
+}
+
+.ll-canvas-container canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Mobile Touch Controls --- */
+.ll-touch-controls {
+    display: none;
+    position: absolute;
+    bottom: 12px;
+    left: 0;
+    right: 0;
+    z-index: 200;
+    pointer-events: none;
+    padding: 0 12px;
+    justify-content: space-between;
+}
+
+.ll-touch-btn {
+    pointer-events: auto;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: rgba(215, 191, 129, 0.12);
+    border: 2px solid rgba(215, 191, 129, 0.35);
+    color: rgba(215, 191, 129, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.ll-touch-btn:active {
+    background: rgba(215, 191, 129, 0.3);
+    border-color: rgba(215, 191, 129, 0.7);
+}
+
+.ll-touch-btn svg {
+    width: 32px;
+    height: 32px;
+}
+
+/* --- Feedback Popup --- */
+.ll-feedback {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 32px;
+    font-weight: 800;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 200;
+    text-shadow: 0 0 20px currentColor;
+}
+
+.ll-feedback.show {
+    animation: ll-feedback-pop 0.6s ease-out forwards;
+}
+
+@keyframes ll-feedback-pop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+    100% { opacity: 0; transform: translate(-50%, -70%) scale(1); }
+}
+
+.ll-feedback.perfect { color: var(--ll-gold); }
+.ll-feedback.good { color: var(--ll-success); }
+.ll-feedback.miss { color: var(--ll-danger); }
+
+/* --- Overlays --- */
+.ll-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(5, 5, 10, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+}
+
+.ll-overlay.hidden {
+    display: none;
+}
+
+.ll-overlay-box {
+    background: linear-gradient(180deg, #1A1A24 0%, #0F0F14 100%);
+    border: 1px solid var(--ll-gold);
+    border-radius: 14px;
+    padding: 16px 14px;
+    max-width: 460px;
+    width: calc(100vw - 32px);
+    box-sizing: border-box;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(215, 191, 129, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    max-height: calc(100vh - 40px);
+    max-height: calc(100dvh - 40px);
+    overflow-y: auto;
+    margin: 0 auto;
+}
+
+.ll-overlay-box::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ll-gold), transparent);
+}
+
+.ll-overlay-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ll-gold);
+    line-height: 1.1;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    text-shadow: 0 0 20px rgba(215, 191, 129, 0.3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ll-overlay-subtitle {
+    font-size: 11px;
+    color: var(--ll-text-secondary);
+    margin-bottom: 8px;
+    line-height: 1.3;
+}
+
+.ll-overlay-divider {
+    width: 40px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ll-gold), transparent);
+    margin: 0 auto 10px;
+}
+
+/* --- Welcome Screen --- */
+.ll-welcome-realms {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.ll-realm-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+}
+
+.ll-realm-card:hover {
+    background: rgba(215, 191, 129, 0.08);
+    border-color: var(--ll-gold-border);
+    transform: translateX(4px);
+}
+
+.ll-realm-card.active {
+    background: rgba(215, 191, 129, 0.12);
+    border-color: var(--ll-gold);
+    box-shadow: 0 0 20px rgba(215, 191, 129, 0.1);
+}
+
+.ll-realm-card.locked {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.ll-realm-card.locked:hover {
+    transform: none;
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.ll-realm-number {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--ll-gold);
+    color: var(--ll-bg-deep);
+    font-weight: 800;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.ll-realm-card.locked .ll-realm-number {
+    background: var(--ll-text-muted);
+}
+
+.ll-realm-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.ll-realm-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ll-text);
+    margin-bottom: 2px;
+}
+
+.ll-realm-desc {
+    font-size: 10px;
+    color: var(--ll-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.ll-realm-stars {
+    display: none;
+}
+
+/* Lock info line below realm name/desc */
+.ll-realm-lock {
+    font-size: 9px;
+    color: var(--ll-text-muted);
+    margin-top: 3px;
+    line-height: 1.2;
+}
+
+/* --- Load Save Button --- */
+.ll-load-save-btn {
+    display: block;
+    width: auto;
+    margin: 8px auto 0;
+}
+
+/* --- Contact link --- */
+.ll-contact-link {
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ll-text-muted);
+    text-decoration: none;
+    letter-spacing: 0.3px;
+    opacity: 0.6;
+    transition: opacity 0.2s, color 0.2s;
+}
+.ll-contact-link:hover {
+    opacity: 1;
+    color: var(--ll-gold);
+}
+
+/* --- Controls Hint (desktop only) --- */
+.ll-controls-hint {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+/* Hide keyboard controls on touch devices (mobile/tablet) */
+@media (hover: none) and (pointer: coarse) {
+    .ll-controls-hint.ll-desktop-only { display: none !important; }
+}
+@media (max-width: 900px) {
+    .ll-controls-hint.ll-desktop-only { display: none !important; }
+}
+
+.ll-control-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    color: var(--ll-text-muted);
+}
+
+.ll-key-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 22px;
+    padding: 0 6px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--ll-text);
+    font-family: var(--ll-font);
+}
+
+/* --- Game Over Screen --- */
+.ll-gameover-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.ll-stat-box {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 12px;
+}
+
+.ll-stat-label {
+    font-size: 10px;
+    color: var(--ll-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.ll-stat-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ll-gold);
+}
+
+.ll-stat-value.small {
+    font-size: 16px;
+}
+
+.ll-gameover-btns {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.ll-btn-secondary {
+    background: transparent;
+    border: 1px solid var(--ll-gold-border);
+    border-radius: 20px;
+    color: var(--ll-gold);
+    font-family: var(--ll-font);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.ll-btn-secondary:hover {
+    background: rgba(215, 191, 129, 0.1);
+    border-color: var(--ll-gold);
+}
+
+/* --- Pause Screen --- */
+.ll-pause-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+}
+
+.ll-pause-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    color: var(--ll-text);
+    font-family: var(--ll-font);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 12px;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.ll-pause-btn:hover {
+    background: rgba(215, 191, 129, 0.1);
+    border-color: var(--ll-gold-border);
+}
+
+/* --- Chord Barrier Overlay --- */
+.ll-chord-box {
+    max-width: 420px;
+}
+
+.ll-chord-staff {
+    min-height: 80px;
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: var(--ll-gold);
+}
+
+.ll-chord-prompt {
+    font-size: 13px;
+    color: var(--ll-text-secondary);
+    margin-bottom: 12px;
+}
+
+.ll-chord-input-row {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+}
+
+.ll-chord-input {
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(215, 191, 129, 0.4);
+    border-radius: 8px;
+    padding: 8px 14px;
+    color: var(--ll-text);
+    font-family: var(--ll-font);
+    font-size: 14px;
+    font-weight: 600;
+    width: 200px;
+    text-align: center;
+    outline: none;
+}
+
+.ll-chord-input:focus {
+    border-color: var(--ll-gold);
+    box-shadow: 0 0 12px rgba(215, 191, 129, 0.3);
+}
+
+.ll-chord-feedback {
+    margin-top: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    min-height: 18px;
+}
+
+.ll-chord-feedback.correct {
+    color: var(--ll-success);
+}
+
+.ll-chord-feedback.wrong {
+    color: var(--ll-danger);
+}
+
+/* --- Tutorial Modal --- */
+.ll-modal {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.ll-modal.hidden {
+    display: none;
+}
+
+.ll-modal-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+}
+
+.ll-modal-content {
+    position: relative;
+    background: linear-gradient(180deg, #1A1A24 0%, #0F0F14 100%);
+    border: 1px solid var(--ll-gold);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 560px;
+    width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 0 60px rgba(215, 191, 129, 0.15);
+}
+
+.ll-modal-content::-webkit-scrollbar {
+    width: 4px;
+}
+
+.ll-modal-content::-webkit-scrollbar-thumb {
+    background: var(--ll-gold-border);
+    border-radius: 2px;
+}
+
+.ll-modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    color: var(--ll-text-secondary);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.15s;
+}
+
+.ll-modal-close:hover {
+    color: var(--ll-text);
+    border-color: var(--ll-gold-border);
+}
+
+.ll-modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--ll-gold);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 20px;
+}
+
+.ll-tutorial-section {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.ll-tutorial-section h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ll-gold);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.ll-tutorial-section p,
+.ll-tutorial-section li {
+    font-size: 12px;
+    color: var(--ll-text-secondary);
+    line-height: 1.7;
+}
+
+.ll-tutorial-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.ll-tutorial-section li {
+    padding: 4px 0 4px 16px;
+    position: relative;
+}
+
+.ll-tutorial-section li::before {
+    content: '>';
+    position: absolute;
+    left: 0;
+    color: var(--ll-gold);
+    font-weight: 700;
+}
+
+/* ================================================
+   PIANO KEYBOARD - REMOVED (now rendered on canvas)
+   ================================================ */
+.ll-keyboard-section {
+    display: none !important;
+}
+
+.ll-keyboard-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ll-gold), transparent);
+    box-shadow: 0 0 20px var(--ll-gold-glow), 0 0 40px var(--ll-gold-glow);
+}
+
+.ll-keyboard-wrapper {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.ll-keyboard-decoration {
+    width: 24px;
+    background: linear-gradient(180deg, #2A2520 0%, #1A1815 50%, #0F0D0A 100%);
+    border: 1px solid rgba(197, 157, 58, 0.3);
+    position: relative;
+}
+.ll-decoration-left {
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+.ll-decoration-right {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+.ll-keyboard-decoration::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    width: 4px;
+    background: linear-gradient(180deg, var(--ll-gold-dark), var(--ll-gold), var(--ll-gold-dark));
+    border-radius: 2px;
+}
+.ll-decoration-left::after { right: 6px; }
+.ll-decoration-right::after { left: 6px; }
+
+.ll-keyboard {
+    display: flex;
+    background: linear-gradient(180deg, #1C1C22 0%, #141418 100%);
+    padding: 8px 8px 4px 8px;
+    border-radius: 0;
+    border: 1px solid rgba(197, 157, 58, 0.2);
+    border-left: none;
+    border-right: none;
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(197, 157, 58, 0.1);
+}
+
+.ll-octave {
+    flex: 1;
+    position: relative;
+    height: var(--ll-keyboard-height);
+}
+
+.ll-white-keys {
+    display: flex;
+    height: 100%;
+    gap: 3px;
+}
+
+.ll-black-keys {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 65%;
+    pointer-events: none;
+}
+
+.ll-key {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    touch-action: manipulation;
+    pointer-events: auto;
+    font-family: var(--ll-font);
+}
+
+/* White keys - enhanced 3D look */
+.ll-key-white {
+    flex: 1;
+    min-width: 50px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 40%, #E8E8E8 70%, #DCDCDC 100%);
+    border-radius: 0 0 6px 6px;
+    border: 1px solid #AAA;
+    border-top: none;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.ll-key-white:hover {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 40%, #F0F0F0 70%, #E8E8E8 100%);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.ll-key-white:active, .ll-key-white.pressed {
+    background: linear-gradient(180deg, #E8E8E8 0%, #DCDCDC 40%, #D0D0D0 100%);
+    transform: translateY(3px);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.ll-key-white.hit {
+    background: linear-gradient(180deg, var(--ll-gold-light) 0%, var(--ll-gold) 50%, var(--ll-gold-dark) 100%) !important;
+    box-shadow:
+        0 0 20px var(--ll-gold-glow),
+        0 0 40px var(--ll-gold-glow),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Black keys - enhanced 3D look, taller */
+.ll-key-black {
+    position: absolute;
+    width: 34px;
+    height: 100%;
+    background: linear-gradient(180deg, #3A3A3A 0%, #2A2A2A 30%, #1A1A1A 70%, #0A0A0A 100%);
+    border-radius: 0 0 5px 5px;
+    z-index: 10;
+    padding-bottom: 6px;
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+.ll-key-black:hover {
+    background: linear-gradient(180deg, #4A4A4A 0%, #3A3A3A 30%, #2A2A2A 70%, #1A1A1A 100%);
+}
+.ll-key-black:active, .ll-key-black.pressed {
+    background: linear-gradient(180deg, #2A2A2A 0%, #1A1A1A 50%, #0A0A0A 100%);
+    transform: translateY(2px);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.ll-key-black.hit {
+    background: linear-gradient(180deg, var(--ll-gold) 0%, var(--ll-gold-dark) 50%, #8B7320 100%) !important;
+    box-shadow:
+        0 0 15px var(--ll-gold-glow),
+        0 0 30px var(--ll-gold-glow);
+}
+
+/* Piano key feedback flash colors */
+.ll-key-white.key-correct {
+    background: linear-gradient(to bottom, #E8D898, #D7BF81) !important;
+    box-shadow: inset 0 -3px 0 rgba(180,150,60,.4), 0 0 14px rgba(215,191,129,.8) !important;
+}
+.ll-key-black.key-correct {
+    background: linear-gradient(to bottom, #A08850, #7A6830) !important;
+    box-shadow: 0 0 12px rgba(215,191,129,.7) !important;
+}
+.ll-key-white.key-wrong {
+    background: linear-gradient(to bottom, #F0A090, #E6735C) !important;
+    box-shadow: inset 0 -3px 0 rgba(180,60,40,.4), 0 0 12px rgba(230,115,92,.7) !important;
+}
+.ll-key-black.key-wrong {
+    background: linear-gradient(to bottom, #C05030, #A03020) !important;
+    box-shadow: 0 0 10px rgba(230,115,92,.6) !important;
+}
+
+/* Notation toggle button */
+.ll-notation-toggle {
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.5px;
+    min-width: 52px;
+    padding: 6px 8px;
+    color: rgba(215,191,129,.85);
+    border: 1px solid rgba(215,191,129,.3);
+    border-radius: 6px;
+}
+.ll-notation-toggle:hover {
+    background: rgba(215,191,129,.12);
+    color: #F0E0A0;
+    border-color: rgba(215,191,129,.6);
+}
+
+/* Key labels */
+.ll-key-note {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.ll-key-black .ll-key-note {
+    font-size: 0.65rem;
+    color: #CCC;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.ll-key-bind {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #666;
+    background: rgba(0, 0, 0, 0.08);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.ll-key-black .ll-key-bind {
+    color: #999;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* --- MIDI Status Badge --- */
+.ll-midi-badge {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--ll-text-muted);
+}
+
+.ll-midi-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ll-text-muted);
+}
+
+.ll-midi-badge.connected {
+    border-color: rgba(80, 200, 120, 0.3);
+    color: var(--ll-success);
+}
+
+.ll-midi-badge.connected .ll-midi-dot {
+    background: var(--ll-success);
+    box-shadow: 0 0 6px var(--ll-success);
+    animation: ll-pulse 2s infinite;
+}
+
+@keyframes ll-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+/* ─── RESPONSIVE ─── */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .ll-header-center { display: none; }
+    :root { --ll-site-header-h: 70px; }
+    .ll-keyboard-wrapper { max-width: 500px; }
+}
+
+/* Small tablet / large phone portrait */
+@media (max-width: 800px) {
+    :root {
+        --ll-site-header-h: 60px;
+        --ll-keyboard-height: 130px;
+    }
+    .ll-header {
+        height: 44px;
+        padding: 0 10px;
+    }
+    .ll-logo-brand {
+        font-size: 11px;
+        letter-spacing: 1px;
+    }
+    .ll-hud {
+        gap: 8px;
+        height: 32px;
+        padding: 0 10px;
+    }
+    .ll-hud-label { font-size: 9px; }
+    .ll-hud-value { font-size: 12px; }
+    .ll-overlay-box { padding: 14px 12px; }
+    .ll-overlay-title { font-size: 18px; }
+    .ll-keyboard-wrapper { max-width: 420px; }
+}
+
+/* Mobile portrait (<=600px) — show touch controls */
+@media (max-width: 600px) {
+    :root {
+        --ll-keyboard-height: 120px;
+        --ll-header-h: 44px;
+        --ll-hud-h: 32px;
+        --ll-site-header-h: 56px;
+    }
+    .ll-app {
+        height: calc(100dvh - var(--ll-site-header-h)) !important;
+        max-height: calc(100dvh - var(--ll-site-header-h)) !important;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+        padding-bottom: env(safe-area-inset-bottom, 0px);
+    }
+    .ll-header {
+        height: var(--ll-header-h);
+        padding: 0 8px;
+        gap: 4px;
+    }
+    .ll-logo-img { height: 24px !important; }
+    .ll-logo-brand { font-size: 10px; letter-spacing: 0.5px; }
+    .ll-logo-sub { display: none; }
+    .ll-notation-toggle { display: none; }
+    .ll-btn-icon { width: 30px; height: 30px; }
+    .ll-btn-icon svg { width: 14px; height: 14px; }
+    /* HUD compact single line */
+    .ll-hud {
+        height: var(--ll-hud-h);
+        gap: 5px;
+        padding: 0 6px;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+    .ll-hud::-webkit-scrollbar { display: none; }
+    .ll-hud-item #ll-fly-bar-wrap,
+    .ll-hud-item:has(#ll-hint-indicator) { display: none; }
+    .ll-hud-label { font-size: 7px; }
+    .ll-hud-value { font-size: 10px; min-width: 16px; }
+    .ll-hud-divider { height: 12px; }
+    /* Touch controls hidden — movement via swipe/piano */
+    .ll-touch-controls { display: none !important; }
+    /* Keyboard */
+    .ll-keyboard-section {
+        padding: 4px 4px;
+        padding-bottom: calc(4px + env(safe-area-inset-bottom, 0px));
+    }
+    .ll-keyboard-wrapper { max-width: 100%; }
+    .ll-key-white { min-width: 36px; border-radius: 0 0 5px 5px; }
+    .ll-key-black { width: 26px; height: 64%; border-radius: 0 0 4px 4px; }
+    .ll-key-note { font-size: 0.72rem; margin-bottom: 2px; }
+    .ll-key-bind { display: none; }
+    .ll-key-black .ll-key-note { font-size: 0.58rem; }
+    /* Overlays */
+    .ll-overlay-box { padding: 12px 10px; max-height: calc(100dvh - 20px); overflow-y: auto; }
+    .ll-overlay-title { font-size: 16px; line-height: 1.1; margin-bottom: 3px; }
+    .ll-overlay-subtitle { font-size: 10px; margin-bottom: 6px; }
+    .ll-overlay-divider { margin: 0 auto 6px; }
+    .ll-welcome-realms { gap: 4px; margin-bottom: 6px; }
+    .ll-realm-card { padding: 6px 8px; }
+    .ll-realm-name { font-size: 11px; }
+    .ll-realm-desc { font-size: 8px; }
+    .ll-diff-row { gap: 8px; margin-top: 6px; }
+    .ll-diff-btn { padding: 8px 14px; font-size: 10px; min-width: 100px; }
+    .ll-gameover-stats { grid-template-columns: 1fr 1fr; gap: 6px; }
+    .ll-controls-hint { display: none; }
+    .ll-keys-hint { display: none !important; }
+    .ll-keyboard-decoration { width: 10px; }
+    .ll-feedback { font-size: 22px; }
+}
+
+/* Mobile portrait small (<=430px) */
+@media (max-width: 430px) {
+    :root { --ll-keyboard-height: 105px; }
+    .ll-key-white { min-width: 32px; }
+    .ll-key-black { width: 24px; }
+    .ll-key-note { font-size: 0.65rem; }
+    .ll-touch-btn { width: 54px; height: 54px; }
+    .ll-touch-btn svg { width: 26px; height: 26px; }
+}
+
+/* Mobile portrait tiny (<=360px) */
+@media (max-width: 360px) {
+    :root { --ll-keyboard-height: 90px; }
+    .ll-key-white { min-width: 28px; }
+    .ll-key-black { width: 20px; }
+    .ll-key-note { font-size: 0.55rem; }
+    .ll-hud-label { display: none; }
+    .ll-keyboard-decoration { width: 6px; }
+    .ll-touch-btn { width: 48px; height: 48px; }
+}
+
+/* Landscape mobile (thin height) */
+@media (orientation: landscape) and (max-height: 500px) {
+    :root {
+        --ll-keyboard-height: 80px;
+        --ll-header-h: 32px;
+        --ll-hud-h: 22px;
+        --ll-site-header-h: 0px;
+    }
+    .ll-app {
+        height: 100dvh !important;
+        max-height: 100dvh !important;
+        border-radius: 0;
+        /* Safe area for notched phones in landscape */
+        padding-left: env(safe-area-inset-left, 0px);
+        padding-right: env(safe-area-inset-right, 0px);
+    }
+    .ll-header {
+        height: var(--ll-header-h);
+        padding: 0 max(10px, env(safe-area-inset-left, 10px));
+    }
+    .ll-logo-brand { font-size: 10px; }
+    .ll-logo-sub { display: none; }
+    .ll-notation-toggle { display: none; }
+    .ll-hud {
+        height: var(--ll-hud-h);
+        gap: 8px;
+        padding: 0 max(10px, env(safe-area-inset-left, 10px));
+    }
+    .ll-hud-label { display: none; }
+    .ll-keyboard-section {
+        padding: 2px max(10px, env(safe-area-inset-left, 10px));
+    }
+    .ll-key-note { font-size: 0.6rem; margin-bottom: 1px; }
+    .ll-key-bind { display: none; }
+    .ll-key-black { height: 62%; }
+    .ll-keyboard-decoration { width: 12px; }
+    .ll-overlay-box { max-height: calc(100dvh - 16px); overflow-y: auto; padding: 8px 14px; max-width: min(92vw, 760px); width: calc(100vw - 16px); }
+    .ll-overlay-title { font-size: 14px !important; margin-bottom: 2px !important; line-height: 1 !important; letter-spacing: 1px !important; }
+    .ll-overlay-subtitle { font-size: 9px !important; margin-bottom: 3px !important; line-height: 1.1; }
+    .ll-overlay-divider { margin: 2px auto 4px !important; }
+    .ll-realm-card { padding: 3px 6px; gap: 6px !important; }
+    .ll-realm-number { width: 20px; height: 20px; font-size: 10px; min-width: 20px; }
+    .ll-realm-name { font-size: 10px !important; }
+    .ll-realm-desc { display: none !important; }
+    .ll-realm-stars { font-size: 9px; }
+    .ll-controls-hint { display: none !important; }
+    .ll-diff-btn { padding: 5px 10px !important; font-size: 9px !important; min-width: 80px !important; }
+    .ll-diff-row { gap: 6px; margin-top: 4px !important; }
+    .ll-welcome-realms { display: grid !important; grid-template-columns: 1fr 1fr; gap: 3px; margin-bottom: 4px !important; }
+    #ll-start-btn { font-size: 11px !important; padding: 6px 18px !important; margin-top: 4px !important; }
+    .ll-gameover-stats { grid-template-columns: 1fr 1fr 1fr !important; gap: 4px !important; margin-bottom: 6px !important; }
+    .ll-stat-box { padding: 6px !important; }
+    .ll-stat-label { font-size: 8px !important; }
+    .ll-stat-value { font-size: 14px !important; }
+    .ll-feedback { font-size: 18px; }
+    /* Touch controls in landscape */
+    .ll-touch-controls { display: none !important; }
+    .ll-touch-btn { width: 48px; height: 48px; }
+    .ll-touch-btn svg { width: 24px; height: 24px; }
+}
+
+/* Landscape very short */
+@media (orientation: landscape) and (max-height: 380px) {
+    :root { --ll-keyboard-height: 64px; }
+    .ll-header { height: 28px; }
+    .ll-hud { height: 20px; gap: 6px; }
+    .ll-key-white { min-width: 34px; }
+    .ll-key-black { width: 22px; height: 58%; }
+    .ll-key-note { font-size: 0.5rem; }
+    .ll-welcome-realms { gap: 3px; margin-bottom: 4px; }
+    .ll-realm-card { padding: 2px 5px; }
+    .ll-realm-number { width: 20px; height: 20px; font-size: 9px; }
+    .ll-realm-name { font-size: 9px; }
+    .ll-realm-desc { display: none; }
+    .ll-overlay-box { max-height: calc(100dvh - 10px); padding: 6px 10px; }
+    .ll-overlay-title { font-size: 13px; margin-bottom: 1px; }
+    .ll-overlay-subtitle { font-size: 8px; margin-bottom: 2px; }
+    .ll-gameover-stats { grid-template-columns: 1fr 1fr 1fr; gap: 4px; }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+    .ll-key:hover { transform: none !important; }
+    .ll-realm-card:hover { transform: none !important; }
+    .ll-btn-icon:hover { opacity: 1; }
+    .ll-key { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .ll-btn-icon { min-width: 36px; min-height: 36px; }
+}
+
+/* --- Fullscreen Mode --- */
+.ll-app.fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin-top: 0;
+    z-index: 999999;
+    border-radius: 0;
+    border: none;
+}
+
+/* --- Animations --- */
+@keyframes ll-shake {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-4px); }
+    40% { transform: translateX(4px); }
+    60% { transform: translateX(-2px); }
+    80% { transform: translateX(2px); }
+}
+
+.ll-shake {
+    animation: ll-shake 0.4s ease;
+}
+
+/* --- Reduced Motion --- */
+@media (prefers-reduced-motion: reduce) {
+    .ll-app *,
+    .ll-app *::before,
+    .ll-app *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* --- Score Page Body Overrides --- */
+body.page-template-page-ledger-line {
+    background: #000 !important;
+}
+
+body.page-template-page-ledger-line .site-main,
+body.page-template-page-ledger-line #main {
+    background-color: var(--ll-bg-deep) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+body.page-template-page-ledger-line .site-main > .ct-container {
+    max-width: 100% !important;
+    padding: 0 !important;
+}
+
+/* ============================================================
+   LEDGER LINE LEGEND — Additional Styles
+   ============================================================ */
+
+/* --- Enhanced feedback popup --- */
+.ll-feedback {
+    font-size: 36px !important;
+    font-weight: 900 !important;
+    letter-spacing: 2px;
+}
+
+/* --- Enhanced HUD with glowing score --- */
+#ll-score {
+    transition: color 0.15s, text-shadow 0.15s;
+}
+.ll-score-pop {
+    color: var(--ll-gold-light) !important;
+    text-shadow: 0 0 12px var(--ll-gold) !important;
+    animation: ll-score-bounce 0.3s ease-out;
+}
+@keyframes ll-score-bounce {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+/* --- Vine swing golden flash --- */
+@keyframes ll-vine-flash {
+    0% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+    50% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), inset 0 0 30px rgba(255, 215, 0, 0.15); }
+    100% { box-shadow: 0 0 0 rgba(255, 215, 0, 0); }
+}
+.ll-canvas-container.vine-flash {
+    animation: ll-vine-flash 0.7s ease-out;
+}
+
+/* --- Staff line glow enhancement --- */
+.ll-canvas-container::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse at 50% 50%,
+        rgba(215, 191, 129, 0.04) 0%,
+        rgba(215, 191, 129, 0.01) 50%,
+        transparent 70%);
+    z-index: 1;
+}
+
+/* --- Hint-active piano key --- */
+.ll-key.hint-active,
+.ll-key-white.hint-active {
+    background: linear-gradient(180deg,
+        rgba(160, 80, 255, 0.5) 0%,
+        rgba(200, 120, 255, 0.3) 100%) !important;
+    border-color: rgba(180, 100, 255, 0.9) !important;
+    box-shadow:
+        0 0 18px rgba(160, 80, 255, 0.7),
+        0 0 36px rgba(160, 80, 255, 0.35) !important;
+    animation: ll-hint-pulse 0.9s ease-in-out infinite alternate;
+}
+.ll-key-black.hint-active {
+    background: linear-gradient(180deg,
+        rgba(140, 60, 230, 0.85) 0%,
+        rgba(100, 30, 180, 0.95) 100%) !important;
+    box-shadow:
+        0 0 14px rgba(160, 80, 255, 0.7),
+        0 0 28px rgba(160, 80, 255, 0.35) !important;
+    animation: ll-hint-pulse 0.9s ease-in-out infinite alternate;
+}
+@keyframes ll-hint-pulse {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.35); }
+}
+
+/* Help hint (green glow) */
+.ll-key.help-hint,
+.ll-key-white.help-hint {
+    background: linear-gradient(180deg,
+        rgba(50, 200, 80, 0.5) 0%,
+        rgba(80, 230, 120, 0.3) 100%) !important;
+    box-shadow:
+        0 0 14px rgba(50, 200, 80, 0.6),
+        0 0 28px rgba(50, 200, 80, 0.3) !important;
+    animation: ll-help-pulse 0.8s ease-in-out infinite alternate;
+}
+.ll-key-black.help-hint {
+    background: linear-gradient(180deg,
+        rgba(30, 160, 60, 0.85) 0%,
+        rgba(20, 120, 40, 0.95) 100%) !important;
+    box-shadow:
+        0 0 14px rgba(50, 200, 80, 0.7),
+        0 0 28px rgba(50, 200, 80, 0.35) !important;
+    animation: ll-help-pulse 0.8s ease-in-out infinite alternate;
+}
+@keyframes ll-help-pulse {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.4); }
+}
+
+/* --- Fly bonus bar --- */
+#ll-fly-bar-wrap {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #7DF;
+}
+#ll-fly-bar-wrap.active {
+    display: flex;
+}
+#ll-fly-bar {
+    width: 80px;
+    height: 8px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(80,200,255,0.5);
+}
+#ll-fly-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(90deg, #5BE 0%, #0CF 100%);
+    border-radius: 4px;
+    transition: width 0.1s linear;
+    box-shadow: 0 0 8px rgba(80,200,255,0.6);
+}
+
+/* --- Difficulty selection buttons --- */
+.ll-diff-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 22px;
+    border-radius: 12px;
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    font-family: var(--ll-font);
+    font-size: 12px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.45);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06), 0 4px 16px rgba(0,0,0,0.4);
+    min-width: 120px;
+    position: relative;
+    overflow: hidden;
+}
+.ll-diff-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.0) 60%);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.ll-diff-btn:hover::before { opacity: 1; }
+.ll-diff-btn:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.65);
+}
+.ll-diff-btn.easy.active {
+    background: rgba(80, 210, 130, 0.18);
+    border-color: rgba(80, 210, 130, 0.75);
+    color: #7EF0A8;
+    box-shadow: inset 0 1px 0 rgba(130,255,170,0.15), 0 0 22px rgba(80,210,130,0.35), 0 4px 16px rgba(0,0,0,0.5);
+    text-shadow: 0 0 12px rgba(80,210,130,0.6);
+}
+.ll-diff-btn.pianist.active {
+    background: rgba(215, 191, 100, 0.18);
+    border-color: rgba(215, 191, 100, 0.75);
+    color: #F0DFA0;
+    box-shadow: inset 0 1px 0 rgba(255,230,120,0.15), 0 0 22px rgba(215,191,100,0.35), 0 4px 16px rgba(0,0,0,0.5);
+    text-shadow: 0 0 12px rgba(215,191,100,0.6);
+}
+.ll-diff-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+}
+
+/* === PIANIST MODE — hide note name labels on keyboard === */
+.ll-keyboard.pianist-mode .ll-key-note {
+    display: none;
+}
+
+/* --- Note hint indicator in HUD --- */
+#ll-hint-indicator {
+    display: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: #A060FF;
+    text-shadow: 0 0 8px rgba(160,80,255,0.6);
+    animation: ll-hint-pulse 0.9s ease-in-out infinite alternate;
+}
+#ll-hint-indicator.active {
+    display: inline;
+}
+
+/* --- Vine-active keyboard --- */
+.ll-key-white.vine-active {
+    background: linear-gradient(180deg, rgba(255,215,0,0.3) 0%, rgba(255,215,0,0.15) 100%) !important;
+    border-color: rgba(255,215,0,0.6) !important;
+    box-shadow: 0 0 15px rgba(255,215,0,0.4) !important;
+}
+.ll-keyboard-section.vine-mode {
+    border-top-color: #FFD700;
+    box-shadow: 0 0 30px rgba(255,215,0,0.25);
+}
+
+/* --- Combo text enhancement --- */
+#ll-combo { transition: all 0.2s; }
+
+/* --- Welcome modal mobile responsive --- */
+@media (max-width: 600px) {
+    .ll-app.welcome-mode .ll-overlay {
+        padding: 8px 6px;
+    }
+    .ll-app.welcome-mode .ll-overlay-box {
+        padding: 12px 10px;
+        max-width: 100%;
+    }
+    .ll-overlay-title {
+        font-size: 16px !important;
+        line-height: 1.1 !important;
+        margin-bottom: 3px !important;
+        letter-spacing: 1px !important;
+    }
+    .ll-overlay-subtitle {
+        font-size: 10px !important;
+        line-height: 1.2;
+        margin-bottom: 6px !important;
+    }
+    .ll-overlay-divider {
+        margin: 0 auto 6px !important;
+    }
+    .ll-welcome-realms {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 4px;
+        margin-bottom: 6px !important;
+    }
+    .ll-realm-card {
+        padding: 6px 8px !important;
+        gap: 8px !important;
+    }
+    .ll-realm-name {
+        font-size: 11px !important;
+    }
+    .ll-realm-desc {
+        font-size: 8px !important;
+        line-height: 1.2;
+    }
+    .ll-realm-number {
+        width: 22px;
+        height: 22px;
+        font-size: 11px;
+        min-width: 22px;
+    }
+    .ll-realm-stars {
+        font-size: 10px;
+    }
+    .ll-diff-row {
+        gap: 8px;
+        margin-top: 6px !important;
+    }
+    .ll-diff-btn {
+        padding: 8px 14px !important;
+        font-size: 10px !important;
+        min-width: 100px !important;
+    }
+    #ll-start-btn {
+        font-size: 12px !important;
+        padding: 10px 24px !important;
+        margin-top: 8px !important;
+    }
+    .ll-gameover-stats {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px;
+    }
+}
+
+/* --- Touch controls improved --- */
+.ll-touch-controls {
+    pointer-events: none;
+}
+.ll-touch-btn {
+    pointer-events: auto;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+}

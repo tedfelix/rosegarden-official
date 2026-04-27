@@ -1,0 +1,324 @@
+/**
+ * PianoMode Author Badge Component
+ * Elegant, refined badge placed at the end of articles/posts/scores
+ * Path: blocksy-child/assets/Other Page/Pianomode/author-badge.css
+ */
+
+.pm-author-badge {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 40px 0 8px;
+    padding: 28px 32px;
+    background: linear-gradient(135deg, #fdfcfa 0%, #f9f7f2 100%);
+    border: 1px solid rgba(215, 191, 129, 0.25);
+    border-radius: 14px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.pm-author-badge:hover {
+    box-shadow: 0 4px 28px rgba(215, 191, 129, 0.18);
+    border-color: rgba(215, 191, 129, 0.5);
+}
+
+/* Subtle gold accent line at top */
+.pm-author-badge::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 32px;
+    right: 32px;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(215, 191, 129, 0.4) 15%,
+        rgba(215, 191, 129, 0.7) 50%,
+        rgba(215, 191, 129, 0.4) 85%,
+        transparent 100%);
+    border-radius: 0 0 2px 2px;
+}
+
+/* Photo container — badge version */
+.pm-author-badge-photo {
+    flex-shrink: 0;
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid rgba(215, 191, 129, 0.45);
+    box-shadow:
+        0 3px 14px rgba(215, 191, 129, 0.25),
+        0 0 0 4px rgba(215, 191, 129, 0.08);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.pm-author-badge:hover .pm-author-badge-photo {
+    border-color: rgba(215, 191, 129, 0.75);
+    box-shadow:
+        0 4px 22px rgba(215, 191, 129, 0.35),
+        0 0 0 6px rgba(215, 191, 129, 0.1);
+    transform: scale(1.03);
+}
+
+.pm-author-badge-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    display: block;
+    image-rendering: high-quality;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+}
+
+/* Text content */
+.pm-author-badge-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.pm-author-badge-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+}
+
+.pm-author-badge-name {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    letter-spacing: 0.01em;
+    line-height: 1.2;
+}
+
+.pm-author-badge-role {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #D7BF81;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    line-height: 1.2;
+}
+
+.pm-author-badge-bio {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.84rem;
+    font-weight: 400;
+    color: #555;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* Repertoire section */
+.pm-author-badge-repertoire {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(215, 191, 129, 0.15);
+}
+
+.pm-author-badge-repertoire-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #D7BF81;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.pm-author-badge-repertoire-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 12px;
+}
+
+.pm-author-badge-repertoire-list li {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.65rem;
+    color: #777;
+    line-height: 1.4;
+}
+
+.pm-author-badge-repertoire-list li strong {
+    font-weight: 600;
+    color: #555;
+}
+
+.pm-author-badge-footer {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.pm-author-badge-founded {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #aaa;
+    letter-spacing: 0.04em;
+}
+
+.pm-author-badge-readmore {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #D7BF81;
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.pm-author-badge-readmore:hover {
+    color: #BEA86E;
+    opacity: 0.85;
+}
+
+/* ── About Us page: round photo floating beside first paragraph ── */
+.pm-about-author-photo-float {
+    float: left;
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 6px 18px 8px 0;
+    border: 2.5px solid rgba(215, 191, 129, 0.5);
+    box-shadow:
+        0 2px 10px rgba(215, 191, 129, 0.2),
+        0 0 0 3px rgba(215, 191, 129, 0.08);
+    shape-outside: circle(50%);
+}
+
+.pm-about-author-photo-float img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 15%;
+    display: block;
+    image-rendering: high-quality;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* ── Contact CTA — full-width, prominent ── */
+.pm-about-contact-cta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    box-sizing: border-box;
+    margin: 36px 0 8px;
+    padding: 18px 28px;
+    background: linear-gradient(135deg, rgba(215, 191, 129, 0.1) 0%, rgba(215, 191, 129, 0.18) 100%);
+    border: 2px solid rgba(215, 191, 129, 0.35);
+    border-radius: 14px;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #BEA86E;
+    letter-spacing: 0.02em;
+    transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease, transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.pm-about-contact-cta::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(215, 191, 129, 0.5) 20%,
+        rgba(215, 191, 129, 0.8) 50%,
+        rgba(215, 191, 129, 0.5) 80%,
+        transparent 100%);
+}
+
+.pm-about-contact-cta:hover {
+    background: linear-gradient(135deg, rgba(215, 191, 129, 0.18) 0%, rgba(215, 191, 129, 0.28) 100%);
+    border-color: rgba(215, 191, 129, 0.6);
+    color: #a89550;
+    box-shadow: 0 4px 20px rgba(215, 191, 129, 0.2);
+    transform: translateY(-1px);
+}
+
+.pm-about-contact-cta svg {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+    .pm-author-badge {
+        flex-direction: column;
+        text-align: center;
+        gap: 16px;
+        padding: 22px 18px;
+        margin: 32px 0 8px;
+    }
+
+    .pm-author-badge-header {
+        justify-content: center;
+    }
+
+    .pm-author-badge-photo {
+        width: 90px;
+        height: 90px;
+    }
+
+    .pm-author-badge-bio {
+        font-size: 0.8rem;
+    }
+
+    .pm-author-badge-footer {
+        justify-content: center;
+    }
+
+    .pm-about-author-photo-float {
+        width: 60px;
+        height: 60px;
+        margin: 4px 14px 6px 0;
+    }
+
+    .pm-about-contact-cta {
+        padding: 16px 20px;
+        font-size: 0.92rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .pm-author-badge {
+        padding: 18px 14px;
+        gap: 12px;
+    }
+
+    .pm-author-badge-photo {
+        width: 78px;
+        height: 78px;
+    }
+
+    .pm-author-badge-name {
+        font-size: 0.95rem;
+    }
+}

@@ -1,0 +1,1303 @@
+/**
+ * PianoMode OCR Scanner - Styles
+ * Partition photo/PDF → MusicXML → AlphaTab player
+ *
+ * Uses the PianoMode design system:
+ *   --pm-gold: #D7BF81   --pm-black: #1a1a1a
+ *   --pm-font: 'Montserrat', sans-serif
+ *
+ * @package PianoMode
+ * @version 1.0.0
+ */
+
+/* =====================================================
+   CSS VARIABLES (scoped to this page)
+   ===================================================== */
+.pm-omr-page {
+    --pm-gold: #D7BF81;
+    --pm-gold-dark: #BEA86E;
+    --pm-gold-light: rgba(215, 191, 129, 0.1);
+    --pm-gold-border: rgba(215, 191, 129, 0.25);
+    --pm-black: #1a1a1a;
+    --pm-white: #ffffff;
+    --pm-gray: #666;
+    --pm-green: #4CAF50;
+    --pm-red: #ff4444;
+    --pm-font: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --pm-radius: 16px;
+    --pm-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    --pm-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    font-family: var(--pm-font);
+    color: var(--pm-white);
+    background: #111;
+}
+
+/* =====================================================
+   HERO SECTION
+   ===================================================== */
+.pm-omr-hero {
+    position: relative;
+    min-height: 45vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 10rem 2rem 4rem;
+    background: linear-gradient(135deg, #0d0d0d 0%, #1a1a1a 50%, #0d0d0d 100%);
+    overflow: hidden;
+}
+
+.pm-omr-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 20% 50%, rgba(215, 191, 129, 0.08) 0%, transparent 60%),
+        radial-gradient(ellipse at 80% 50%, rgba(215, 191, 129, 0.05) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.pm-omr-hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 700px;
+}
+
+.pm-omr-hero-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    background: linear-gradient(135deg, var(--pm-gold), var(--pm-gold-dark));
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 32px rgba(215, 191, 129, 0.3);
+}
+
+.pm-omr-hero-icon svg {
+    width: 40px;
+    height: 40px;
+    color: var(--pm-black);
+}
+
+.pm-omr-hero h1 {
+    font-family: var(--pm-font);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: var(--pm-white);
+    margin: 0 0 0.75rem;
+    line-height: 1.15;
+}
+
+.pm-omr-hero h1 span {
+    background: linear-gradient(135deg, var(--pm-gold), var(--pm-gold-dark));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.pm-omr-hero p {
+    font-size: 1.15rem;
+    color: #aaa;
+    line-height: 1.6;
+    margin: 0;
+}
+
+/* =====================================================
+   MAIN CONTAINER
+   ===================================================== */
+.pm-omr-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 3rem 2rem 4rem;
+}
+
+/* =====================================================
+   UPLOAD ZONE
+   ===================================================== */
+.pm-omr-upload-zone {
+    position: relative;
+    border: 2px dashed var(--pm-gold-border);
+    border-radius: var(--pm-radius);
+    padding: 3rem 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--pm-transition);
+    background: rgba(215, 191, 129, 0.03);
+    margin-bottom: 2rem;
+}
+
+.pm-omr-upload-zone:hover,
+.pm-omr-upload-zone.dragover {
+    border-color: var(--pm-gold);
+    background: rgba(215, 191, 129, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(215, 191, 129, 0.15);
+}
+
+.pm-omr-upload-zone.dragover {
+    animation: pm-omr-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pm-omr-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(215, 191, 129, 0.3); }
+    50%      { box-shadow: 0 0 0 12px rgba(215, 191, 129, 0); }
+}
+
+.pm-omr-upload-zone input[type="file"] {
+    display: none;
+}
+
+.pm-omr-upload-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 1.25rem;
+    color: var(--pm-gold);
+    opacity: 0.8;
+}
+
+.pm-omr-upload-zone h3 {
+    font-family: var(--pm-font);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--pm-white);
+    margin: 0 0 0.5rem;
+}
+
+.pm-omr-upload-zone h3 span {
+    color: var(--pm-gold);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.pm-omr-upload-hint {
+    font-size: 0.85rem;
+    color: #888;
+    margin: 0;
+}
+
+/* File preview after selection */
+.pm-omr-file-preview {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    margin-top: 1.25rem;
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pm-omr-file-preview.visible {
+    display: flex;
+}
+
+.pm-omr-file-preview svg {
+    flex-shrink: 0;
+    color: var(--pm-gold);
+}
+
+.pm-omr-file-name {
+    flex: 1;
+    font-size: 0.9rem;
+    color: var(--pm-white);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.pm-omr-file-size {
+    font-size: 0.8rem;
+    color: #888;
+    flex-shrink: 0;
+}
+
+.pm-omr-file-remove {
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: var(--pm-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pm-omr-file-remove:hover {
+    color: var(--pm-red);
+    background: rgba(255, 68, 68, 0.1);
+}
+
+/* =====================================================
+   SCAN BUTTON
+   ===================================================== */
+.pm-omr-scan-btn {
+    display: none;
+    width: 100%;
+    padding: 1rem 2rem;
+    font-family: var(--pm-font);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--pm-black);
+    background: linear-gradient(135deg, var(--pm-gold), var(--pm-gold-dark));
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: var(--pm-transition);
+    margin-bottom: 2rem;
+    letter-spacing: 0.3px;
+}
+
+.pm-omr-scan-btn.visible {
+    display: block;
+}
+
+.pm-omr-scan-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(215, 191, 129, 0.4);
+}
+
+.pm-omr-scan-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* =====================================================
+   PROGRESS STEPPER
+   ===================================================== */
+.pm-omr-progress {
+    display: none;
+    margin-bottom: 2.5rem;
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--pm-radius);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pm-omr-progress.visible {
+    display: block;
+}
+
+.pm-omr-steps {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Connector line behind steps */
+.pm-omr-steps::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 40px;
+    right: 40px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.pm-omr-step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    z-index: 1;
+    flex: 1;
+}
+
+.pm-omr-step-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    border: 2px solid #444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #666;
+    transition: var(--pm-transition);
+}
+
+.pm-omr-step-label {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: var(--pm-transition);
+    text-align: center;
+}
+
+/* Active step */
+.pm-omr-step.active .pm-omr-step-circle {
+    background: var(--pm-gold);
+    border-color: var(--pm-gold);
+    color: var(--pm-black);
+    box-shadow: 0 0 20px rgba(215, 191, 129, 0.4);
+    animation: pm-omr-step-pulse 2s ease-in-out infinite;
+}
+
+.pm-omr-step.active .pm-omr-step-label {
+    color: var(--pm-gold);
+}
+
+@keyframes pm-omr-step-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(215, 191, 129, 0.4); }
+    50%      { box-shadow: 0 0 30px rgba(215, 191, 129, 0.6); }
+}
+
+/* Completed step */
+.pm-omr-step.done .pm-omr-step-circle {
+    background: var(--pm-green);
+    border-color: var(--pm-green);
+    color: var(--pm-white);
+    box-shadow: none;
+    animation: none;
+}
+
+.pm-omr-step.done .pm-omr-step-label {
+    color: var(--pm-green);
+}
+
+/* Error step */
+.pm-omr-step.error .pm-omr-step-circle {
+    background: var(--pm-red);
+    border-color: var(--pm-red);
+    color: var(--pm-white);
+    box-shadow: none;
+    animation: none;
+}
+
+.pm-omr-step.error .pm-omr-step-label {
+    color: var(--pm-red);
+}
+
+/* Progress status text */
+.pm-omr-progress-status {
+    text-align: center;
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    color: #aaa;
+    min-height: 1.4em;
+}
+
+.pm-omr-progress-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding: 0 1rem;
+}
+
+.pm-omr-progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid rgba(215, 191, 129, 0.15);
+}
+
+.pm-omr-progress-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--pm-gold, #D7BF81), #f0d88a);
+    border-radius: 4px;
+    transition: width 0.3s ease-out;
+    box-shadow: 0 0 8px rgba(215, 191, 129, 0.3);
+}
+
+.pm-omr-progress-percent {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--pm-gold, #D7BF81);
+    min-width: 3em;
+    text-align: right;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* Audiveris-style live log panel */
+.pm-omr-log-panel {
+    display: none;
+    margin-top: 12px;
+    background: #0a0a0a;
+    border: 1px solid rgba(215, 191, 129, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+}
+.pm-omr-log-scroll {
+    max-height: 160px;
+    overflow-y: auto;
+    padding: 10px 14px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(215,191,129,0.3) transparent;
+}
+.pm-omr-log-scroll::-webkit-scrollbar {
+    width: 6px;
+}
+.pm-omr-log-scroll::-webkit-scrollbar-thumb {
+    background: rgba(215,191,129,0.3);
+    border-radius: 3px;
+}
+.pm-omr-log-line {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 0.72rem;
+    line-height: 1.6;
+    color: rgba(215, 191, 129, 0.7);
+    white-space: nowrap;
+}
+.pm-omr-log-line:last-child {
+    color: var(--pm-gold, #D7BF81);
+    font-weight: 600;
+}
+
+/* =====================================================
+   PREMIUM PIANO KEYBOARD — Sightreading-quality
+   Realistic Grand Piano Look with responsive sizing
+   ===================================================== */
+.pm-omr-piano-wrap {
+    background: linear-gradient(135deg, #0D0D0D 0%, #151515 100%);
+    border-radius: 0 0 var(--pm-radius, 16px) var(--pm-radius, 16px);
+    padding: 6px 8px;
+    box-shadow: inset 0 1px 0 rgba(197, 157, 58, 0.08);
+    border-top: 1px solid rgba(215, 191, 129, 0.15);
+    width: 100%;
+    box-sizing: border-box;
+    position: relative;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-height: 120px;
+}
+
+.pm-omr-piano-inner {
+    background: linear-gradient(180deg, #1A1714 0%, #0D0B09 100%);
+    border-radius: 4px 4px 12px 12px;
+    border-top: 3px solid #2C2520;
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    box-shadow: inset 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.pm-omr-piano {
+    display: flex;
+    position: relative;
+    height: var(--omr-white-key-height, 140px);
+    min-height: 100px;
+    width: 100%;
+    margin: 0;
+    --omr-white-key-width: 24px;
+    --omr-black-key-width: 15px;
+    --omr-white-key-height: 140px;
+    --omr-black-key-height: 91px;
+    justify-content: flex-start;
+}
+
+.pm-piano-key-wrapper {
+    position: relative;
+    height: 100%;
+    flex-shrink: 0;
+}
+
+.pm-piano-key-wrapper-white {
+    width: var(--omr-white-key-width);
+}
+
+.pm-piano-key-wrapper-black {
+    width: 0;
+    overflow: visible;
+    z-index: 2;
+}
+
+.pm-piano-key {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* White keys — premium realistic look */
+.pm-piano-white {
+    width: var(--omr-white-key-width);
+    height: var(--omr-white-key-height);
+    background: linear-gradient(
+        to bottom,
+        #FEFEFE 0%,
+        #F9F9F9 40%,
+        #F0EDE8 75%,
+        #E8E4DD 90%,
+        #DDD8D0 100%
+    );
+    border: none;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 0 0 6px 6px;
+    margin: 0;
+    z-index: 1;
+    display: inline-block;
+    box-shadow:
+        -1px 0 0 rgba(0,0,0,0.04),
+        1px 0 0 rgba(0,0,0,0.04),
+        0 4px 3px rgba(0,0,0,0.12),
+        inset 0 -8px 12px rgba(0,0,0,0.04),
+        inset 0 2px 0 rgba(255,255,255,0.8);
+    transition: all 0.06s ease-out;
+}
+
+.pm-piano-white:hover {
+    background: linear-gradient(
+        to bottom,
+        #FDFCFA 0%,
+        #F5F3EE 50%,
+        #EDE9E2 100%
+    );
+    box-shadow:
+        -1px 0 0 rgba(0,0,0,0.04),
+        1px 0 0 rgba(0,0,0,0.04),
+        0 3px 2px rgba(0,0,0,0.1),
+        inset 0 -6px 10px rgba(0,0,0,0.03),
+        inset 0 2px 0 rgba(255,255,255,0.7);
+}
+
+/* White key active (playing) — gold glow */
+.pm-piano-white.pm-piano-active,
+.pm-piano-white:active {
+    background: linear-gradient(
+        to bottom,
+        #F0EDE8 0%,
+        #E8E4DD 50%,
+        #DDD8D0 100%
+    );
+    transform: translateY(2px);
+    box-shadow:
+        -1px 0 0 rgba(0,0,0,0.06),
+        1px 0 0 rgba(0,0,0,0.06),
+        0 1px 1px rgba(0,0,0,0.08),
+        inset 0 -3px 6px rgba(0,0,0,0.06),
+        inset 0 3px 4px rgba(0,0,0,0.04),
+        0 0 20px rgba(197, 157, 58, 0.6);
+}
+
+/* White key gold highlight when note plays */
+.pm-piano-white.pm-piano-active {
+    background: linear-gradient(to bottom, #F7F0DC 0%, #EEDCB5 100%) !important;
+    box-shadow: 0 0 20px rgba(197, 157, 58, 0.6), inset 0 -3px 6px rgba(0,0,0,0.04) !important;
+}
+
+/* Black keys — realistic dark with subtle gradient */
+.pm-piano-black {
+    width: var(--omr-black-key-width);
+    height: var(--omr-black-key-height);
+    background: linear-gradient(
+        to bottom,
+        #2A2A2A 0%,
+        #1A1A1A 30%,
+        #111111 60%,
+        #0A0A0A 85%,
+        #050505 100%
+    );
+    border-radius: 0 0 4px 4px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-left: calc(var(--omr-black-key-width) / -2);
+    z-index: 2;
+    box-shadow:
+        -2px 0 2px rgba(0,0,0,0.3),
+        2px 0 2px rgba(0,0,0,0.3),
+        0 6px 8px rgba(0,0,0,0.5),
+        inset 0 -4px 6px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.08),
+        inset 0 0 8px rgba(255,255,255,0.03);
+    transition: all 0.06s ease-out;
+}
+
+.pm-piano-black:hover {
+    background: linear-gradient(
+        to bottom,
+        #333333 0%,
+        #222222 50%,
+        #111111 100%
+    );
+}
+
+/* Black key active — gold glow */
+.pm-piano-black.pm-piano-active,
+.pm-piano-black:active {
+    background: linear-gradient(
+        to bottom,
+        #1A1A1A 0%,
+        #0D0D0D 50%,
+        #000000 100%
+    );
+    transform: translateY(2px);
+    box-shadow:
+        -1px 0 1px rgba(0,0,0,0.3),
+        1px 0 1px rgba(0,0,0,0.3),
+        0 2px 3px rgba(0,0,0,0.3),
+        inset 0 -2px 4px rgba(0,0,0,0.5),
+        inset 0 2px 3px rgba(0,0,0,0.2);
+}
+
+.pm-piano-black.pm-piano-active {
+    box-shadow: 0 0 12px rgba(197, 157, 58, 0.5), inset 0 -2px 4px rgba(0,0,0,0.5) !important;
+}
+
+/* Key labels */
+.pm-piano-label {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #AAA49A;
+    font-size: 9px;
+    font-weight: 500;
+    font-family: var(--pm-font, 'Montserrat', sans-serif);
+    letter-spacing: 0.5px;
+    pointer-events: none;
+    user-select: none;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+    white-space: nowrap;
+}
+
+.pm-piano-white:hover .pm-piano-label {
+    opacity: 1;
+    color: #8B7355;
+}
+
+.pm-piano-white.pm-piano-active .pm-piano-label {
+    color: #C59D3A;
+    opacity: 1;
+}
+
+/* =====================================================
+   ERROR MESSAGE
+   ===================================================== */
+.pm-omr-error {
+    display: none;
+    padding: 1rem 1.25rem;
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.3);
+    border-radius: 12px;
+    color: #ff6b6b;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+.pm-omr-error.visible {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+}
+
+.pm-omr-error svg {
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.pm-omr-error-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    color: #ff6b6b;
+    cursor: pointer;
+    padding: 2px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.pm-omr-error-close:hover {
+    opacity: 1;
+}
+
+/* =====================================================
+   RESULT PANEL (AlphaTab player + download)
+   ===================================================== */
+.pm-omr-result {
+    display: none;
+    margin-bottom: 2rem;
+}
+
+.pm-omr-result.visible {
+    display: block;
+    animation: pm-omr-fadeIn 0.6s ease;
+}
+
+@keyframes pm-omr-fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* AlphaTab container reuses single-score.php patterns */
+.pm-omr-alphatab-container {
+    border-radius: var(--pm-radius);
+    overflow: hidden;
+    box-shadow: var(--pm-shadow);
+    background: var(--pm-black);
+    margin-bottom: 1.5rem;
+}
+
+.pm-omr-alphatab-header {
+    padding: 1rem 1.5rem;
+    background: linear-gradient(135deg, var(--pm-gold), var(--pm-gold-dark));
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.pm-omr-alphatab-title {
+    color: var(--pm-black);
+    font-weight: 700;
+    font-family: var(--pm-font);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+.pm-omr-alphatab-subtitle {
+    color: rgba(0, 0, 0, 0.7);
+    font-size: 0.8rem;
+    font-family: var(--pm-font);
+}
+
+.pm-omr-alphatab-progress {
+    color: var(--pm-black);
+    font-size: 0.85rem;
+    font-weight: 600;
+    font-family: var(--pm-font);
+}
+
+.pm-omr-alphatab-wrap {
+    position: relative;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+}
+
+.pm-omr-alphatab-viewport {
+    flex: 1;
+    overflow-x: auto !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    background: var(--pm-white);
+}
+
+.pm-omr-at-main {
+    width: 100% !important;
+    min-height: 100%;
+    padding: 20px;
+}
+
+/* Cursor styles */
+.pm-omr-alphatab-container .at-cursor-bar {
+    background: rgba(76, 175, 80, 0.25) !important;
+}
+
+.pm-omr-alphatab-container .at-cursor-beat {
+    background: var(--pm-green) !important;
+    width: 3px !important;
+}
+
+.pm-omr-alphatab-container .at-highlight * {
+    fill: var(--pm-green) !important;
+}
+
+/* Controls bar */
+.pm-omr-alphatab-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+    flex-wrap: wrap;
+}
+
+.pm-omr-controls-left,
+.pm-omr-controls-center,
+.pm-omr-controls-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pm-omr-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: #444;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.pm-omr-btn:hover:not(:disabled) {
+    background: #555;
+    transform: scale(1.05);
+}
+
+.pm-omr-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.pm-omr-btn-play {
+    width: 48px;
+    height: 48px;
+    background: var(--pm-gold) !important;
+    color: var(--pm-black) !important;
+}
+
+.pm-omr-btn-play:hover:not(:disabled) {
+    background: var(--pm-gold-dark) !important;
+    transform: scale(1.08);
+}
+
+.pm-omr-time {
+    color: #fff;
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+    min-width: 110px;
+    font-weight: 500;
+}
+
+.pm-omr-control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 8px 14px;
+    border-radius: 25px;
+}
+
+.pm-omr-control-group label {
+    color: #999;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-family: var(--pm-font);
+}
+
+.pm-omr-control-group span {
+    color: var(--pm-gold);
+    font-weight: 700;
+    font-size: 0.9rem;
+    min-width: 45px;
+    text-align: center;
+    font-family: var(--pm-font);
+}
+
+.pm-omr-btn-small {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pm-omr-btn-small:hover {
+    background: var(--pm-gold);
+    color: var(--pm-black);
+}
+
+.pm-omr-btn-toggle {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: #888;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.pm-omr-btn-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+.pm-omr-btn-toggle.active {
+    background: var(--pm-gold) !important;
+    color: var(--pm-black) !important;
+}
+
+.pm-omr-volume {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #888;
+}
+
+.pm-omr-volume input[type="range"] {
+    width: 80px;
+    height: 4px;
+    -webkit-appearance: none;
+    background: #444;
+    border-radius: 2px;
+    outline: none;
+}
+
+.pm-omr-volume input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    background: var(--pm-gold);
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.pm-omr-volume input[type="range"]::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    background: var(--pm-gold);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+}
+
+/* =====================================================
+   DOWNLOAD ACTIONS
+   ===================================================== */
+.pm-omr-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 2rem;
+}
+
+.pm-omr-action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0.75rem 1.5rem;
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--pm-transition);
+    text-decoration: none;
+    border: none;
+}
+
+.pm-omr-action-btn--download {
+    background: linear-gradient(135deg, var(--pm-gold), var(--pm-gold-dark));
+    color: var(--pm-black);
+}
+
+.pm-omr-action-btn--download:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(215, 191, 129, 0.3);
+}
+
+.pm-omr-action-btn--midi {
+    background: linear-gradient(135deg, #4CAF50, #388E3C);
+    color: var(--pm-white);
+}
+
+.pm-omr-action-btn--midi:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(76, 175, 80, 0.3);
+}
+
+.pm-omr-action-btn--new {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--pm-white);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.pm-omr-action-btn--new:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   HOW IT WORKS SECTION
+   ===================================================== */
+.pm-omr-how {
+    margin-top: 3rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pm-omr-how h2 {
+    font-family: var(--pm-font);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--pm-white);
+    margin: 0 0 2rem;
+    text-align: center;
+}
+
+.pm-omr-how-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+}
+
+.pm-omr-how-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: var(--pm-transition);
+}
+
+.pm-omr-how-card:hover {
+    background: rgba(215, 191, 129, 0.05);
+    border-color: var(--pm-gold-border);
+    transform: translateY(-4px);
+}
+
+.pm-omr-how-card-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0 auto 1rem;
+    background: var(--pm-gold-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--pm-gold);
+}
+
+.pm-omr-how-card h3 {
+    font-family: var(--pm-font);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--pm-white);
+    margin: 0 0 0.5rem;
+}
+
+.pm-omr-how-card p {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* =====================================================
+   SUPPORTED FORMATS BADGES
+   ===================================================== */
+.pm-omr-formats {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 1.5rem;
+}
+
+.pm-omr-format-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 0.35rem 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #aaa;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* =====================================================
+   DETECTION PREVIEW
+   ===================================================== */
+.pm-omr-preview {
+    margin-bottom: 2rem;
+    border-radius: var(--pm-radius);
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pm-omr-preview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #aaa;
+}
+
+.pm-omr-preview-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #aaa;
+    padding: 4px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s;
+}
+
+.pm-omr-preview-toggle:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+}
+
+/* =====================================================
+   STATS
+   ===================================================== */
+.pm-omr-stats {
+    padding: 0.75rem 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 10px;
+    font-size: 0.85rem;
+    color: #aaa;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.pm-omr-stats strong {
+    color: var(--pm-gold);
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 1024px) {
+    .pm-omr-alphatab-wrap {
+        height: 400px;
+    }
+
+    .pm-omr-alphatab-controls {
+        gap: 10px;
+        padding: 12px 15px;
+    }
+
+    .pm-omr-controls-center {
+        order: 3;
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .pm-omr-hero {
+        min-height: 35vh;
+        padding: 3rem 1.25rem;
+    }
+
+    .pm-omr-hero h1 {
+        font-size: clamp(1.5rem, 6vw, 2.2rem);
+    }
+
+    .pm-omr-hero p {
+        font-size: 1rem;
+    }
+
+    .pm-omr-container {
+        padding: 2rem 1.25rem 3rem;
+    }
+
+    .pm-omr-upload-zone {
+        padding: 2rem 1.25rem;
+    }
+
+    .pm-omr-how-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+
+    .pm-omr-alphatab-wrap {
+        height: 350px;
+    }
+
+    .pm-omr-alphatab-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pm-omr-controls-left,
+    .pm-omr-controls-center,
+    .pm-omr-controls-right {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .pm-omr-steps {
+        gap: 0;
+    }
+
+    .pm-omr-step-label {
+        font-size: 0.65rem;
+    }
+
+    .pm-omr-step-circle {
+        width: 34px;
+        height: 34px;
+        font-size: 0.75rem;
+    }
+
+    .pm-omr-actions {
+        flex-direction: column;
+    }
+
+    .pm-omr-action-btn {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .pm-omr-hero-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 14px;
+    }
+
+    .pm-omr-hero-icon svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .pm-omr-how-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .pm-omr-alphatab-wrap {
+        height: 300px;
+    }
+
+    .pm-omr-file-preview {
+        flex-wrap: wrap;
+    }
+}

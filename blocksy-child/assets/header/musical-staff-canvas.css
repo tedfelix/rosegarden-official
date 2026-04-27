@@ -1,0 +1,707 @@
+/**
+ * Musical Staff Canvas - PianoMode
+ * Premium slide-out canvas with musical staff icon
+ * @version 1.0.0
+ */
+
+/* Montserrat font loaded via functions.php preload for better LCP */
+
+/* ===================================================
+   VARIABLES
+   =================================================== */
+
+:root {
+    --pm-gold: #D7BF81;
+    --pm-gold-dark: #BEA86E;
+    --pm-gold-light: #E6D4A8;
+    --pm-gold-pale: #F5EED9;
+    --pm-gold-pale-light: #FAF7EE;
+    --pm-gold-pale-medium: #EDE4CA;
+    --pm-black: #0a0a0a;
+    --pm-black-medium: #1a1a1a;
+    --pm-white: #ffffff;
+    --pm-font: 'Montserrat', sans-serif;
+}
+
+/* ===================================================
+   MUSICAL STAFF BUTTON (remplace MORE)
+   =================================================== */
+
+.nav-more {
+    position: relative;
+}
+
+.nav-staff-trigger {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.nav-staff-trigger:hover {
+    background: rgba(215, 191, 129, 0.1);
+    transform: translateY(-2px);
+}
+
+/* Icône Musical Staff SVG */
+.nav-staff-icon {
+    width: 32px;
+    height: 20px;
+    transition: all 0.3s ease;
+}
+
+.nav-staff-trigger:hover .nav-staff-icon {
+    filter: drop-shadow(0 0 6px rgba(215, 191, 129, 0.5));
+    transform: scale(1.05);
+}
+
+.nav-staff-trigger:hover .nav-staff-icon line {
+    stroke: var(--pm-gold);
+}
+
+.nav-staff-trigger:hover .nav-staff-icon ellipse,
+.nav-staff-trigger:hover .nav-staff-icon path {
+    fill: var(--pm-gold-light);
+    stroke: var(--pm-gold-light);
+}
+
+/* ===================================================
+   SLIDE-OUT CANVAS OVERLAY (30% from right)
+   =================================================== */
+
+.pm-canvas-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100000;
+}
+
+.pm-canvas-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.pm-slide-canvas {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 30%;
+    min-width: 380px;
+    max-width: 500px;
+    height: 100vh;
+    background: linear-gradient(180deg,
+        rgba(25, 25, 25, 0.98) 0%,
+        rgba(15, 15, 15, 0.99) 50%,
+        var(--pm-black) 100%);
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100001;
+    overflow-y: auto;
+    box-shadow: -10px 0 50px rgba(0, 0, 0, 0.5);
+    border-left: 2px solid var(--pm-gold-pale);
+}
+
+.pm-slide-canvas.active {
+    transform: translateX(0);
+}
+
+/* ===================================================
+   CANVAS HEADER
+   =================================================== */
+
+.pm-canvas-header {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(180deg,
+        rgba(25, 25, 25, 0.98) 0%,
+        rgba(20, 20, 20, 0.99) 100%);
+    backdrop-filter: blur(20px);
+    padding: 30px;
+    padding-top: 30px;
+    border-bottom: 1px solid var(--pm-gold-pale);
+    z-index: 10;
+}
+
+.pm-canvas-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 5px;
+}
+
+.pm-canvas-close-inline {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--pm-gold-pale);
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    flex-shrink: 0;
+    padding: 0;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.pm-canvas-close-inline:hover {
+    transform: rotate(90deg) scale(1.15);
+    background: rgba(215, 191, 129, 0.15);
+    border-color: var(--pm-gold);
+}
+
+.pm-canvas-close-inline svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--pm-gold-pale);
+    transition: all 0.3s ease;
+}
+
+.pm-canvas-close-inline:hover svg {
+    stroke: var(--pm-gold);
+}
+
+.pm-canvas-title {
+    font-family: var(--pm-font);
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg,
+        var(--pm-gold-pale) 0%,
+        var(--pm-gold-light) 50%,
+        var(--pm-gold-pale) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.pm-canvas-subtitle {
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+    color: var(--pm-gold-pale);
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+/* PianoMode title as clickable link */
+.pm-canvas-title-link {
+    text-decoration: none;
+    color: inherit;
+    -webkit-text-fill-color: inherit;
+}
+.pm-canvas-title-link:hover .pm-canvas-title {
+    filter: drop-shadow(0 2px 8px rgba(215, 191, 129, 0.5));
+}
+
+/* Discrete back-to-home link — between subtitle and nav modules */
+.pm-canvas-back-home {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    padding: 4px 10px;
+    font-family: var(--pm-font);
+    font-size: 0.72rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.45);
+    text-decoration: none;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    letter-spacing: 0.02em;
+}
+.pm-canvas-back-home:hover {
+    color: var(--pm-gold);
+    background: rgba(215, 191, 129, 0.08);
+}
+.pm-canvas-back-home svg {
+    opacity: 0.6;
+    transition: opacity 0.3s ease;
+}
+.pm-canvas-back-home:hover svg {
+    opacity: 1;
+    stroke: var(--pm-gold);
+}
+
+/* ===================================================
+   CANVAS CONTENT
+   =================================================== */
+
+.pm-canvas-content {
+    padding: 30px;
+}
+
+/* Navigation principale */
+.pm-canvas-nav {
+    margin-bottom: 30px;
+}
+
+/* Section primaire (Discover) - plus mise en avant */
+.pm-canvas-nav.pm-canvas-nav-primary {
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(245, 238, 217, 0.15);
+}
+
+/* Section secondaire (More) - plus discrète */
+.pm-canvas-nav.pm-canvas-nav-secondary {
+    margin-bottom: 25px;
+}
+
+.pm-canvas-nav.pm-canvas-nav-secondary .pm-canvas-nav-link {
+    padding: 9px 14px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+    border-radius: 10px;
+    border-color: rgba(245, 238, 217, 0.08);
+    background: rgba(255, 255, 255, 0.015);
+}
+
+.pm-canvas-nav.pm-canvas-nav-secondary .pm-canvas-nav-link svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.7;
+}
+
+.pm-canvas-nav h3 {
+    font-family: var(--pm-font);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--pm-gold-pale);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pm-canvas-nav h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg,
+        var(--pm-gold-pale) 0%,
+        transparent 100%);
+}
+
+.pm-canvas-nav-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    margin-bottom: 8px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(245, 238, 217, 0.15);
+    border-radius: 12px;
+    text-decoration: none;
+    color: var(--pm-gold-pale);
+    font-family: var(--pm-font);
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: none;
+}
+
+.pm-canvas-nav-link:hover {
+    background: rgba(245, 238, 217, 0.08);
+    border-color: var(--pm-gold-pale);
+    transform: translateX(5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    color: var(--pm-gold-light);
+}
+
+.pm-canvas-nav-link svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--pm-gold-pale);
+    stroke-width: 1.5;
+    fill: none;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.pm-canvas-nav-link:hover svg {
+    stroke: var(--pm-gold-light);
+    filter: drop-shadow(0 0 4px rgba(245, 238, 217, 0.3));
+}
+
+/* Latest Publications */
+.pm-canvas-section {
+    margin-bottom: 30px;
+}
+
+.pm-canvas-section h3 {
+    font-family: var(--pm-font);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--pm-gold-pale);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pm-canvas-section h3::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg,
+        var(--pm-gold-pale) 0%,
+        transparent 100%);
+}
+
+/* Publication Card */
+.pm-pub-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(245, 238, 217, 0.15);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: none;
+}
+
+.pm-pub-card:hover {
+    background: rgba(245, 238, 217, 0.08);
+    border-color: var(--pm-gold-pale);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pm-pub-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
+.pm-pub-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(245, 238, 217, 0.2);
+}
+
+.pm-pub-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.pm-pub-info {
+    flex: 1;
+}
+
+.pm-pub-title {
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--pm-gold-pale);
+    margin-bottom: 5px;
+    line-height: 1.3;
+}
+
+.pm-pub-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--pm-font);
+    font-size: 0.7rem;
+    color: var(--pm-gold-pale);
+    opacity: 0.6;
+}
+
+.pm-pub-type {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    background: rgba(215, 191, 129, 0.15);
+    border: 1px solid rgba(215, 191, 129, 0.3);
+    border-radius: 9999px;
+    color: var(--pm-gold-dark, #BEA86E);
+    font-weight: 700;
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.pm-pub-excerpt {
+    font-family: var(--pm-font);
+    font-size: 0.8rem;
+    color: var(--pm-gold-pale);
+    opacity: 0.7;
+    line-height: 1.5;
+    margin-top: 8px;
+}
+
+/* Loading state */
+.pm-pub-loading {
+    text-align: center;
+    padding: 30px;
+    color: var(--pm-gold-pale);
+    opacity: 0.5;
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+}
+
+/* Empty state */
+.pm-pub-empty {
+    text-align: center;
+    padding: 30px;
+    color: var(--pm-gold-pale);
+    opacity: 0.4;
+    font-family: var(--pm-font);
+    font-size: 0.9rem;
+}
+
+/* ===================================================
+   CANVAS SOCIAL MEDIA
+   =================================================== */
+
+.pm-canvas-nav.pm-canvas-nav-social {
+    margin-bottom: 25px;
+}
+
+.pm-canvas-social-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pm-canvas-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(245, 238, 217, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    color: rgba(245, 238, 217, 0.5);
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.pm-canvas-social-icon svg {
+    color: inherit;
+}
+/* Instagram: stroke-only icon */
+.pm-canvas-social-icon:first-child svg { fill: none; stroke: currentColor; }
+/* TikTok, Facebook, Pinterest: fill-only icons */
+.pm-canvas-social-icon:nth-child(n+2) svg { fill: currentColor; stroke: none; }
+
+.pm-canvas-social-icon:hover {
+    color: var(--pm-gold, #D7BF81);
+    border-color: rgba(215, 191, 129, 0.4);
+    background: rgba(215, 191, 129, 0.08);
+    transform: scale(1.08);
+}
+
+/* ===================================================
+   CANVAS FOOTER
+   =================================================== */
+
+.pm-canvas-footer {
+    padding: 25px 30px;
+    border-top: 1px solid rgba(245, 238, 217, 0.15);
+    text-align: center;
+    background: rgba(10, 10, 10, 0.5);
+}
+
+.pm-canvas-footer-text {
+    font-family: var(--pm-font);
+    font-size: 0.75rem;
+    color: var(--pm-gold-pale);
+    opacity: 0.6;
+    line-height: 1.6;
+}
+
+/* ===================================================
+   MOBILE MENU - LATEST ARTICLES
+   =================================================== */
+
+.mobile-latest-articles {
+    padding: 30px 20px;
+    border-top: 1px solid rgba(215, 191, 129, 0.2);
+    margin-top: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.mobile-latest-title {
+    font-family: var(--pm-font);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--pm-gold);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mobile-latest-title::before {
+    content: '';
+    width: 30px;
+    height: 2px;
+    background: linear-gradient(90deg,
+        var(--pm-gold) 0%,
+        transparent 100%);
+}
+
+.mobile-publications-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.mobile-pub-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(215, 191, 129, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.mobile-pub-card:hover {
+    background: rgba(255, 255, 255, 1);
+    border-color: var(--pm-gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(215, 191, 129, 0.2);
+}
+
+/* Text colors for mobile publication cards - BLACK design */
+.mobile-pub-card .pm-pub-title {
+    color: var(--pm-black);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+.mobile-pub-card .pm-pub-date {
+    color: rgba(10, 10, 10, 0.7);
+}
+
+.mobile-pub-card .pm-pub-header {
+    width: 100%;
+}
+
+.mobile-pub-card .pm-pub-info {
+    min-width: 0; /* Permet au flex item de rétrécir en dessous de sa taille de contenu */
+}
+
+/* Badge type on light background — darker gold for visibility */
+.mobile-pub-card .pm-pub-type {
+    color: #9A8550;
+    background: rgba(215, 191, 129, 0.12);
+    border-color: rgba(154, 133, 80, 0.3);
+}
+
+/* ===================================================
+   RESPONSIVE DESIGN
+   =================================================== */
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .pm-slide-canvas {
+        width: 40%;
+        min-width: 320px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .pm-slide-canvas {
+        width: 85%;
+        min-width: unset;
+        max-width: unset;
+    }
+
+    .pm-canvas-header {
+        padding: 20px;
+        padding-top: 20px;
+    }
+
+    .pm-canvas-title {
+        font-size: 1.5rem;
+    }
+
+    .pm-canvas-content {
+        padding: 20px;
+    }
+
+    .pm-canvas-nav-link {
+        padding: 12px 15px;
+        font-size: 0.95rem;
+    }
+
+    .pm-pub-card {
+        padding: 12px;
+    }
+
+    .pm-pub-thumb {
+        width: 50px;
+        height: 50px;
+    }
+
+    .pm-pub-title {
+        font-size: 0.9rem;
+    }
+}
+
+/* Small mobile */
+@media (max-width: 480px) {
+    .pm-slide-canvas {
+        width: 100%;
+    }
+
+    .pm-canvas-nav-link svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+/* Scrollbar styling */
+.pm-slide-canvas::-webkit-scrollbar {
+    width: 6px;
+}
+
+.pm-slide-canvas::-webkit-scrollbar-track {
+    background: rgba(245, 238, 217, 0.05);
+}
+
+.pm-slide-canvas::-webkit-scrollbar-thumb {
+    background: var(--pm-gold-pale);
+    border-radius: 3px;
+}
+
+.pm-slide-canvas::-webkit-scrollbar-thumb:hover {
+    background: var(--pm-gold-light);
+}

@@ -1,0 +1,1934 @@
+/**
+ * Note Invaders v3.0 - Complete Redesign
+ * PianoMode Premium Musical Game
+ */
+
+:root {
+    --ni-gold: #C59D3A;
+    --ni-gold-light: #D4B14A;
+    --ni-gold-dark: #A68325;
+    --ni-gold-glow: rgba(197, 157, 58, 0.5);
+    --ni-gold-subtle: rgba(197, 157, 58, 0.15);
+
+    --ni-bg-dark: #0A0A0F;
+    --ni-bg-card: #12121A;
+    --ni-bg-elevated: #1A1A24;
+
+    --ni-text: #FFFFFF;
+    --ni-text-secondary: #A0A0B0;
+    --ni-text-muted: #606070;
+
+    --ni-success: #4ADE80;
+    --ni-error: #F87171;
+
+    --ni-header-height: 50px;
+    --ni-hud-height: 38px;
+    --ni-keyboard-height: 110px;
+
+    --ni-safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Page background - black like footer */
+body.page-template-page-note-invaders {
+    background: #000 !important;
+}
+body.page-template-page-note-invaders .site-content {
+    background: #000 !important;
+    padding-bottom: 0 !important;
+}
+
+/* Normal mode: keep site header & footer visible, only hide admin bar */
+body.page-template-page-note-invaders #wpadminbar {
+    display: none !important;
+}
+
+/* Reset */
+.ni-app * { box-sizing: border-box; margin: 0; padding: 0; }
+.ni-app {
+    font-family: 'Montserrat', -apple-system, sans-serif;
+    background: var(--ni-bg-dark);
+    color: var(--ni-text);
+    /* Fit viewport minus the site header (JS sets --ni-wp-header-height) */
+    margin-top: var(--ni-wp-header-height, 140px);
+    height: calc(100vh - var(--ni-wp-header-height, 140px));
+    height: calc(100dvh - var(--ni-wp-header-height, 140px));
+    max-height: calc(100vh - var(--ni-wp-header-height, 140px));
+    max-height: calc(100dvh - var(--ni-wp-header-height, 140px));
+    display: flex;
+    flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    position: relative;
+    z-index: 10;
+    border-radius: 0 0 16px 16px;
+    overflow: hidden;
+    border: 1px solid rgba(197, 157, 58, 0.2);
+    border-top: none;
+    box-shadow: 0 0 60px rgba(197, 157, 58, 0.1);
+}
+.hidden { display: none !important; }
+
+/* ================================================
+   LANDING PAGE - Mode Selection Cards
+   ================================================ */
+.ni-landing-page {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, #0A0A0F 0%, #12121A 50%, #0A0A0F 100%);
+    padding: 20px;
+}
+.ni-landing-content {
+    text-align: center;
+    max-width: 700px;
+    width: 100%;
+}
+.ni-landing-brand {
+    margin-bottom: 40px;
+}
+.ni-landing-logo {
+    height: 48px;
+    width: auto;
+    margin-bottom: 12px;
+    filter: drop-shadow(0 0 12px rgba(197, 157, 58, 0.4));
+}
+.ni-landing-title {
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--ni-gold) 60%, #FFD700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 6px;
+    text-shadow: none;
+}
+.ni-landing-round-logo {
+    height: 64px;
+    width: 64px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 12px auto 8px;
+    display: block;
+    filter: drop-shadow(0 0 16px rgba(197, 157, 58, 0.5));
+    border: 2px solid rgba(197, 157, 58, 0.3);
+}
+.ni-landing-subtitle {
+    font-size: 0.85rem;
+    color: var(--ni-text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+}
+.ni-landing-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    max-width: 580px;
+    margin: 0 auto;
+}
+.ni-landing-card {
+    padding: 28px 20px;
+    background: var(--ni-bg-card);
+    border: 2px solid rgba(197, 157, 58, 0.25);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-align: center;
+}
+.ni-landing-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--ni-gold);
+    box-shadow: 0 8px 32px rgba(197, 157, 58, 0.2);
+}
+.ni-card-game {
+    border-color: rgba(0, 245, 255, 0.2);
+}
+.ni-card-game:hover {
+    border-color: #00F5FF;
+    box-shadow: 0 8px 32px rgba(0, 245, 255, 0.15);
+}
+.ni-card-icon {
+    margin-bottom: 16px;
+    color: var(--ni-gold);
+}
+.ni-card-game .ni-card-icon {
+    color: #00F5FF;
+}
+.ni-landing-card h2 {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: var(--ni-text);
+    margin-bottom: 8px;
+}
+.ni-landing-card p {
+    font-size: 0.8rem;
+    color: var(--ni-text-secondary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+}
+.ni-card-modes {
+    display: block;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ni-gold);
+    opacity: 0.7;
+    margin-bottom: 16px;
+}
+.ni-card-game .ni-card-modes {
+    color: #00F5FF;
+}
+.ni-card-cta {
+    display: inline-block;
+    padding: 10px 32px;
+    background: var(--ni-gold);
+    color: var(--ni-bg-dark);
+    font-weight: 700;
+    font-size: 0.9rem;
+    border-radius: 25px;
+    transition: background 0.15s;
+}
+.ni-card-cta.ni-cta-cyan {
+    background: #00F5FF;
+}
+.ni-landing-card:hover .ni-card-cta {
+    background: var(--ni-gold-light);
+}
+.ni-landing-card:hover .ni-cta-cyan {
+    background: #33F7FF;
+}
+
+/* Landing page active: hide game content */
+.ni-app.ni-landing-active .ni-game-header,
+.ni-app.ni-landing-active .ni-hud,
+.ni-app.ni-landing-active .ni-canvas-container,
+.ni-app.ni-landing-active .ni-keyboard-section,
+.ni-app.ni-landing-active .ni-options-panel {
+    display: none !important;
+}
+
+@media (max-width: 480px) {
+    .ni-landing-page { padding: 10px 12px; }
+    .ni-landing-cards {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .ni-landing-title { font-size: 1.4rem; }
+    .ni-landing-round-logo { height: 48px; width: 48px; margin: 8px auto 6px; }
+    .ni-landing-subtitle { font-size: 0.7rem; }
+    .ni-landing-card { padding: 14px 14px; }
+    .ni-landing-card h2 { font-size: 0.95rem; margin-bottom: 4px; }
+    .ni-landing-card p { font-size: 0.72rem; margin-bottom: 6px; line-height: 1.3; }
+    .ni-landing-brand { margin-bottom: 14px; }
+    .ni-landing-logo { height: 32px; margin-bottom: 6px; }
+    .ni-card-icon { margin-bottom: 8px; }
+    .ni-card-icon svg { width: 36px; height: 36px; }
+    .ni-card-modes { font-size: 0.6rem; margin-bottom: 10px; }
+    .ni-card-cta { padding: 8px 24px; font-size: 0.8rem; }
+}
+
+/* Very small screens (iPhone SE, small Android) */
+@media (max-height: 700px) and (max-width: 480px) {
+    .ni-landing-page {
+        padding: 6px 10px;
+        align-items: flex-start;
+        padding-top: 10px;
+    }
+    .ni-landing-brand { margin-bottom: 8px; }
+    .ni-landing-logo { height: 24px; margin-bottom: 4px; }
+    .ni-landing-round-logo { height: 36px; width: 36px; margin: 4px auto 4px; }
+    .ni-landing-title { font-size: 1.2rem; margin-bottom: 2px; }
+    .ni-landing-subtitle { font-size: 0.6rem; }
+    .ni-landing-cards { gap: 8px; }
+    .ni-landing-card { padding: 10px 12px; border-radius: 12px; }
+    .ni-landing-card h2 { font-size: 0.85rem; }
+    .ni-landing-card p { font-size: 0.65rem; margin-bottom: 4px; }
+    .ni-card-icon { margin-bottom: 6px; }
+    .ni-card-icon svg { width: 28px; height: 28px; }
+    .ni-card-modes { font-size: 0.55rem; margin-bottom: 6px; }
+    .ni-card-cta { padding: 6px 20px; font-size: 0.75rem; }
+}
+
+/* ================================================
+   MODE GROUP LABELS
+   ================================================ */
+.ni-mode-grouped {
+    align-items: center;
+    flex-wrap: wrap;
+}
+.ni-mode-group-label {
+    font-size: 0.55rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ni-gold);
+    opacity: 0.6;
+    padding: 0 4px;
+}
+.ni-mode-group-sep {
+    width: 1px;
+    height: 16px;
+    background: rgba(255, 255, 255, 0.15);
+    margin: 0 4px;
+}
+
+/* ================================================
+   GAME HEADER - Premium PianoMode Design
+   ================================================ */
+.ni-game-header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--ni-header-height);
+    min-height: 0;
+    padding: 0 12px;
+    background: linear-gradient(180deg, #1A1A24 0%, #0F0F14 100%);
+    border-bottom: 2px solid var(--ni-gold);
+    gap: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    flex-shrink: 0;
+}
+
+/* Gold accent line at top */
+.ni-game-header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--ni-gold), transparent);
+}
+
+.ni-header-left { display: flex; align-items: center; }
+.ni-header-center { display: flex; align-items: center; gap: 16px; flex: 1; justify-content: center; }
+.ni-header-right { display: flex; align-items: center; gap: 8px; }
+
+/* Logo - Premium branding */
+.ni-logo-link {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    color: var(--ni-text);
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+}
+.ni-logo-link:hover {
+    background: rgba(197, 157, 58, 0.1);
+}
+.ni-logo-img {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    filter: drop-shadow(0 0 8px rgba(197, 157, 58, 0.3));
+}
+.ni-logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+.ni-logo-brand {
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ni-gold);
+    opacity: 0.8;
+}
+.ni-logo-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #FFFFFF 0%, var(--ni-gold) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: none;
+}
+
+/* Header Selectors */
+.ni-header-select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+.ni-header-select label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--ni-text-muted);
+    letter-spacing: 0.05em;
+}
+.ni-select-group { display: flex; gap: 2px; }
+.ni-select-btn {
+    padding: 4px 10px;
+    background: var(--ni-bg-card);
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: var(--ni-text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.ni-select-btn:hover { background: var(--ni-bg-elevated); color: var(--ni-text); }
+.ni-select-btn.active {
+    background: var(--ni-gold);
+    color: var(--ni-bg-dark);
+    border-color: var(--ni-gold);
+}
+
+/* Start/Play Button - GREEN design, stands out */
+.ni-start-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #2ECC71, #27AE60);
+    border: none;
+    border-radius: 20px;
+    color: #FFFFFF;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    box-shadow: 0 2px 10px rgba(46, 204, 113, 0.35);
+}
+.ni-start-btn:hover {
+    background: linear-gradient(135deg, #27AE60, #219A52);
+    transform: scale(1.04);
+    box-shadow: 0 4px 16px rgba(46, 204, 113, 0.5);
+}
+.ni-start-btn svg { fill: #FFFFFF; }
+
+/* Icon Buttons */
+.ni-icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: var(--ni-bg-card);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    color: var(--ni-text-secondary);
+    cursor: pointer;
+    transition: 0.15s;
+}
+.ni-icon-btn:hover { background: var(--ni-bg-elevated); color: var(--ni-gold); border-color: var(--ni-gold); }
+.ni-icon-btn:hover svg { stroke: var(--ni-gold); }
+
+/* Icon toggle: off/exit hidden by default, shown when active */
+.ni-icon-btn .icon-off,
+.ni-icon-btn .icon-exit { display: none; }
+.ni-icon-btn.muted .icon-on { display: none; }
+.ni-icon-btn.muted .icon-off { display: block !important; }
+.ni-icon-btn.fullscreen .icon-enter { display: none; }
+.ni-icon-btn.fullscreen .icon-exit { display: block !important; }
+
+/* Active toggle state: gold border + visible icon */
+.ni-icon-btn.muted,
+.ni-icon-btn.fullscreen {
+    border-color: var(--ni-gold);
+    color: var(--ni-text);
+}
+.ni-icon-btn.muted svg,
+.ni-icon-btn.fullscreen svg {
+    stroke: var(--ni-text);
+}
+.ni-icon-btn.muted:hover,
+.ni-icon-btn.fullscreen:hover {
+    border-color: var(--ni-gold-light);
+    color: var(--ni-gold);
+}
+.ni-icon-btn.muted:hover svg,
+.ni-icon-btn.fullscreen:hover svg {
+    stroke: var(--ni-gold);
+}
+
+/* Account button */
+.ni-account-btn {
+    background: transparent;
+    border: 2px solid var(--ni-gold);
+    color: var(--ni-gold);
+    text-decoration: none;
+}
+.ni-account-btn:hover {
+    background: var(--ni-gold);
+    color: var(--ni-bg-dark);
+}
+
+/* Mobile only elements */
+.ni-mobile-only { display: none; }
+
+/* Options panel for mobile/tablet */
+.ni-options-panel {
+    position: absolute;
+    top: var(--ni-header-height);
+    left: 0;
+    right: 0;
+    z-index: 99;
+    background: linear-gradient(180deg, #1A1A24 0%, #12121A 100%);
+    border-bottom: 2px solid var(--ni-gold);
+    padding: 16px;
+    padding-top: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    max-height: 60vh;
+    overflow-y: auto;
+}
+/* Fullscreen: panel is fixed and just below the game header */
+body.ni-fullscreen .ni-options-panel,
+body.ni-pseudo-fullscreen .ni-options-panel {
+    position: fixed;
+    top: var(--ni-header-height);
+}
+.ni-options-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+.ni-options-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    gap: 12px;
+}
+.ni-options-row:last-child { margin-bottom: 0; }
+.ni-options-row label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--ni-gold);
+    letter-spacing: 0.05em;
+    min-width: 70px;
+}
+.ni-options-row .ni-select-group {
+    flex: 1;
+    justify-content: flex-end;
+}
+
+/* ================================================
+   HUD
+   ================================================ */
+.ni-hud {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    height: var(--ni-hud-height);
+    min-height: 0;
+    padding: 0 12px;
+    background: var(--ni-bg-card);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    flex-wrap: wrap;
+    flex-shrink: 0;
+}
+.ni-hud-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+}
+.ni-hud-label {
+    font-size: 0.6rem;
+    text-transform: uppercase;
+    color: var(--ni-text-muted);
+    letter-spacing: 0.05em;
+}
+.ni-hud-value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ni-text);
+    font-variant-numeric: tabular-nums;
+}
+.ni-score-value { color: var(--ni-gold); }
+.ni-combo-value { color: var(--ni-gold); }
+.ni-super-value { color: #FF6B9D; } /* Pink for super combo */
+.ni-avg-value { color: #60A5FA; opacity: 0.85; } /* Blue for avg accuracy */
+.ni-super-combo-item .ni-hud-label { color: #FF6B9D; opacity: 0.7; }
+
+/* Lives */
+.ni-lives { display: flex; gap: 4px; }
+.ni-life {
+    width: 16px; height: 14px;
+    background: var(--ni-text-muted);
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='currentColor'%3E%3Cpath d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z'/%3E%3C/svg%3E");
+    mask-size: contain; -webkit-mask-size: contain;
+    transition: 0.2s;
+}
+.ni-life.active { background: var(--ni-error); }
+.ni-life.half {
+    background: linear-gradient(90deg, var(--ni-error) 50%, var(--ni-text-muted) 50%);
+}
+
+/* ================================================
+   CANVAS CONTAINER
+   ================================================ */
+.ni-canvas-container {
+    flex: 1;
+    position: relative;
+    background: linear-gradient(180deg, #0A0A0F 0%, #05050A 100%);
+    overflow: hidden;
+    min-height: 120px;
+}
+#ni-canvas { display: block; width: 100%; height: 100%; }
+
+/* Game Alert Messages (behind notes) - New Record, Last Life */
+.ni-game-alert {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 1; /* Behind notes */
+    text-shadow:
+        0 0 20px currentColor,
+        0 0 40px currentColor,
+        0 0 60px currentColor;
+    white-space: nowrap;
+}
+.ni-game-alert.active {
+    animation: gameAlertPulse 2s ease-out forwards;
+}
+.ni-game-alert.new-record {
+    color: var(--ni-gold);
+    background: linear-gradient(135deg, var(--ni-gold), #FFD700, var(--ni-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 0 30px var(--ni-gold-glow));
+}
+.ni-game-alert.last-life {
+    color: var(--ni-error);
+    filter: drop-shadow(0 0 30px rgba(248, 113, 113, 0.8));
+}
+@keyframes gameAlertPulse {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    15% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.1); }
+    30% { opacity: 0.7; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.05); }
+    70% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    100% { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+}
+
+/* Feedback */
+.ni-feedback {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 10;
+}
+.ni-feedback.perfect { color: var(--ni-gold); text-shadow: 0 0 20px var(--ni-gold-glow); animation: feedbackPop 0.5s ease-out; }
+.ni-feedback.good { color: var(--ni-success); animation: feedbackPop 0.4s ease-out; }
+.ni-feedback.miss { color: var(--ni-error); animation: feedbackShake 0.4s ease-out; }
+@keyframes feedbackPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+    30% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+    100% { opacity: 0; transform: translate(-50%, -65%) scale(1); }
+}
+@keyframes feedbackShake {
+    0%, 100% { transform: translate(-50%, -50%); opacity: 0; }
+    20% { transform: translate(-45%, -50%); opacity: 1; }
+    40% { transform: translate(-55%, -50%); }
+    60% { transform: translate(-48%, -50%); }
+    80% { transform: translate(-52%, -50%); opacity: 0.8; }
+}
+
+/* ================================================
+   HIT STATUS (Learning Mode - near hit zone)
+   ================================================ */
+.ni-hit-status {
+    position: absolute;
+    bottom: calc(var(--ni-keyboard-height) + 60px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.8);
+    font-size: 2.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
+    letter-spacing: 3px;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.ni-hit-status.show {
+    opacity: 0.25;
+    transform: translateX(-50%) scale(1);
+}
+.ni-hit-status--perfect { color: var(--ni-gold); text-shadow: 0 0 30px var(--ni-gold-glow); }
+.ni-hit-status--great { color: var(--ni-success); text-shadow: 0 0 20px rgba(74, 222, 128, 0.3); }
+.ni-hit-status--good { color: #60A5FA; text-shadow: 0 0 20px rgba(96, 165, 250, 0.3); }
+.ni-hit-status--too-late { color: var(--ni-error); text-shadow: 0 0 20px rgba(248, 113, 113, 0.3); }
+.ni-hit-status--too-early { color: #FBBF24; text-shadow: 0 0 20px rgba(251, 191, 36, 0.3); }
+.ni-hit-status--wrong-note { color: #F87171; text-shadow: 0 0 20px rgba(248, 113, 113, 0.4); }
+
+/* ================================================
+   OVERLAYS
+   ================================================ */
+
+/* Welcome and Pause overlays - only cover canvas area, not keyboard or header */
+.ni-overlay.ni-welcome-overlay,
+.ni-overlay.ni-pause-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 50;
+    padding: 20px;
+}
+
+/* Game over overlay - cover everything */
+.ni-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 10000;
+    padding: 20px;
+}
+.ni-overlay-box {
+    text-align: center;
+    max-width: 360px;
+    padding: 32px;
+    background: var(--ni-bg-card);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.ni-overlay-box h2 {
+    font-size: 1.8rem;
+    margin-bottom: 12px;
+    background: linear-gradient(135deg, var(--ni-text), var(--ni-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.ni-overlay-box p { color: var(--ni-text-secondary); margin-bottom: 8px; }
+.ni-hint { font-size: 0.85rem; color: var(--ni-text-muted); margin-top: 12px; }
+.ni-hint strong { color: var(--ni-gold); }
+
+/* Welcome Start Button - Large, designed, prominent */
+.ni-welcome-start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    padding: 14px 40px;
+    background: linear-gradient(135deg, #2ECC71, #27AE60);
+    border: none;
+    border-radius: 50px;
+    color: #FFF;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 20px rgba(46, 204, 113, 0.4), 0 0 0 0 rgba(46, 204, 113, 0.3);
+    animation: welcomeStartPulse 2s ease-in-out infinite;
+}
+.ni-welcome-start-btn:hover {
+    background: linear-gradient(135deg, #27AE60, #219A52);
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 30px rgba(46, 204, 113, 0.5);
+}
+.ni-welcome-start-btn:active {
+    transform: translateY(0) scale(0.98);
+}
+.ni-welcome-start-btn svg {
+    filter: drop-shadow(0 0 4px rgba(255,255,255,0.5));
+}
+@keyframes welcomeStartPulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(46, 204, 113, 0.4), 0 0 0 0 rgba(46, 204, 113, 0.3); }
+    50% { box-shadow: 0 4px 20px rgba(46, 204, 113, 0.4), 0 0 0 10px rgba(46, 204, 113, 0); }
+}
+/* Invaders mode welcome start */
+.ni-app.mode-invaders .ni-welcome-start-btn {
+    background: linear-gradient(135deg, #00E5FF, #00B8D4);
+    box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4), 0 0 0 0 rgba(0, 229, 255, 0.3);
+    animation: welcomeStartPulseCyan 2s ease-in-out infinite;
+}
+.ni-app.mode-invaders .ni-welcome-start-btn:hover {
+    background: linear-gradient(135deg, #00B8D4, #0097A7);
+    box-shadow: 0 6px 30px rgba(0, 229, 255, 0.5);
+}
+@keyframes welcomeStartPulseCyan {
+    0%, 100% { box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4), 0 0 0 0 rgba(0, 229, 255, 0.3); }
+    50% { box-shadow: 0 4px 20px rgba(0, 229, 255, 0.4), 0 0 0 10px rgba(0, 229, 255, 0); }
+}
+
+.ni-overlay-btns { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+
+.ni-btn-primary {
+    padding: 12px 24px;
+    background: var(--ni-gold);
+    border: none;
+    border-radius: 25px;
+    color: var(--ni-bg-dark);
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.ni-btn-primary:hover { background: var(--ni-gold-light); transform: translateY(-1px); }
+.ni-btn-secondary {
+    padding: 10px 20px;
+    background: transparent;
+    border: 2px solid var(--ni-gold);
+    border-radius: 25px;
+    color: var(--ni-gold);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.ni-btn-secondary:hover { background: var(--ni-gold); color: var(--ni-bg-dark); }
+
+/* Game Over */
+.ni-gameover-box { max-width: 380px; }
+.ni-new-record {
+    display: inline-block;
+    padding: 6px 16px;
+    background: linear-gradient(135deg, var(--ni-gold), var(--ni-gold-light));
+    border-radius: 20px;
+    color: var(--ni-bg-dark);
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+    animation: pulse 1.5s ease infinite;
+}
+@keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+.ni-final-stats { margin-bottom: 20px; }
+.ni-stat-main {
+    padding: 16px;
+    background: var(--ni-gold-subtle);
+    border: 2px solid var(--ni-gold);
+    border-radius: 10px;
+    margin-bottom: 12px;
+}
+.ni-stat-main .ni-stat-value { font-size: 2.2rem; color: var(--ni-gold); }
+.ni-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.ni-stat {
+    padding: 10px;
+    background: var(--ni-bg-elevated);
+    border-radius: 8px;
+}
+.ni-stat-label { display: block; font-size: 0.65rem; text-transform: uppercase; color: var(--ni-text-muted); margin-bottom: 2px; }
+.ni-stat-value { display: block; font-size: 1.1rem; font-weight: 700; }
+.ni-gameover-msg {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--ni-gold);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+}
+
+/* ================================================
+   PIANO KEYBOARD - PREMIUM SINGLE OCTAVE DESIGN
+   ================================================ */
+.ni-keyboard-section {
+    padding: 8px 12px;
+    padding-bottom: calc(8px + var(--ni-safe-bottom));
+    background: linear-gradient(180deg, #1A1A24 0%, #12121A 50%, #0A0A0F 100%);
+    border-top: 2px solid var(--ni-gold);
+    position: relative;
+}
+
+/* Decorative top glow */
+.ni-keyboard-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--ni-gold), transparent);
+    box-shadow: 0 0 20px var(--ni-gold-glow), 0 0 40px var(--ni-gold-glow);
+}
+
+/* Keyboard wrapper with decorations */
+.ni-keyboard-wrapper {
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+    max-width: 600px;
+    margin: 0 auto;
+    position: relative;
+}
+
+/* Side decorations (piano-style wooden ends) */
+.ni-keyboard-decoration {
+    width: 24px;
+    background: linear-gradient(180deg, #2A2520 0%, #1A1815 50%, #0F0D0A 100%);
+    border: 1px solid rgba(197, 157, 58, 0.3);
+    position: relative;
+}
+.ni-decoration-left {
+    border-radius: 8px 0 0 8px;
+    border-right: none;
+}
+.ni-decoration-right {
+    border-radius: 0 8px 8px 0;
+    border-left: none;
+}
+.ni-keyboard-decoration::after {
+    content: '';
+    position: absolute;
+    top: 10%;
+    bottom: 10%;
+    width: 4px;
+    background: linear-gradient(180deg, var(--ni-gold-dark), var(--ni-gold), var(--ni-gold-dark));
+    border-radius: 2px;
+}
+.ni-decoration-left::after { right: 6px; }
+.ni-decoration-right::after { left: 6px; }
+
+.ni-keyboard {
+    display: flex;
+    background: linear-gradient(180deg, #1C1C22 0%, #141418 100%);
+    padding: 8px 8px 4px 8px;
+    border-radius: 0;
+    border: 1px solid rgba(197, 157, 58, 0.2);
+    border-left: none;
+    border-right: none;
+    box-shadow:
+        inset 0 2px 4px rgba(0, 0, 0, 0.3),
+        0 8px 32px rgba(0, 0, 0, 0.5),
+        0 0 40px rgba(197, 157, 58, 0.1);
+}
+
+.ni-octave {
+    flex: 1;
+    position: relative;
+    height: var(--ni-keyboard-height);
+}
+
+.ni-white-keys {
+    display: flex;
+    height: 100%;
+    gap: 3px;
+}
+
+.ni-black-keys {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 56%;
+    pointer-events: none;
+}
+
+.ni-key {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding-bottom: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.1s ease;
+    touch-action: manipulation;
+    pointer-events: auto;
+}
+
+/* White keys - enhanced 3D look */
+.ni-key-white {
+    flex: 1;
+    min-width: 42px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F5F5F5 40%, #E8E8E8 70%, #DCDCDC 100%);
+    border-radius: 0 0 6px 6px;
+    border: 1px solid #AAA;
+    border-top: none;
+    box-shadow:
+        0 4px 8px rgba(0, 0, 0, 0.2),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+.ni-key-white:hover {
+    background: linear-gradient(180deg, #FFFFFF 0%, #FAFAFA 40%, #F0F0F0 70%, #E8E8E8 100%);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.25),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+.ni-key-white:active, .ni-key-white.pressed {
+    background: linear-gradient(180deg, #E8E8E8 0%, #DCDCDC 40%, #D0D0D0 100%);
+    transform: translateY(3px);
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.2),
+        inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.ni-key-white.hit {
+    background: linear-gradient(180deg, var(--ni-gold-light) 0%, var(--ni-gold) 50%, var(--ni-gold-dark) 100%) !important;
+    box-shadow:
+        0 0 20px var(--ni-gold-glow),
+        0 0 40px var(--ni-gold-glow),
+        inset 0 -4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Black keys - enhanced 3D look */
+.ni-key-black {
+    position: absolute;
+    width: 30px;
+    height: 100%;
+    background: linear-gradient(180deg, #3A3A3A 0%, #2A2A2A 30%, #1A1A1A 70%, #0A0A0A 100%);
+    border-radius: 0 0 5px 5px;
+    z-index: 10;
+    padding-bottom: 6px;
+    box-shadow:
+        0 6px 12px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.3);
+}
+.ni-key-black:hover {
+    background: linear-gradient(180deg, #4A4A4A 0%, #3A3A3A 30%, #2A2A2A 70%, #1A1A1A 100%);
+}
+.ni-key-black:active, .ni-key-black.pressed {
+    background: linear-gradient(180deg, #2A2A2A 0%, #1A1A1A 50%, #0A0A0A 100%);
+    transform: translateX(-50%) translateY(2px);
+    box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+.ni-key-black.hit {
+    background: linear-gradient(180deg, var(--ni-gold) 0%, var(--ni-gold-dark) 50%, #8B7320 100%) !important;
+    box-shadow:
+        0 0 15px var(--ni-gold-glow),
+        0 0 30px var(--ni-gold-glow);
+}
+
+/* Key labels */
+.ni-key-note {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 4px;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+}
+.ni-key-black .ni-key-note {
+    font-size: 0.65rem;
+    color: #CCC;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.ni-key-bind {
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: #666;
+    background: rgba(0, 0, 0, 0.08);
+    padding: 2px 6px;
+    border-radius: 3px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.ni-key-black .ni-key-bind {
+    color: #999;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Keyboard footer with label and piano mute */
+.ni-keyboard-footer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+}
+
+.ni-keyboard-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--ni-gold);
+    opacity: 0.6;
+}
+
+/* Piano mute button */
+.ni-piano-mute-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--ni-bg-card);
+    border: 2px solid var(--ni-gold);
+    border-radius: 16px;
+    color: var(--ni-gold);
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: 0.15s;
+}
+.ni-piano-mute-btn svg {
+    flex-shrink: 0;
+}
+.ni-piano-mute-btn:hover {
+    background: var(--ni-gold);
+    color: var(--ni-bg-dark);
+}
+.ni-piano-mute-btn.muted {
+    background: rgba(248, 113, 113, 0.2);
+    border-color: var(--ni-error);
+    color: var(--ni-error);
+}
+.ni-piano-mute-btn.muted:hover {
+    background: var(--ni-error);
+    color: var(--ni-bg-dark);
+}
+.ni-piano-mute-btn .icon-speaker-off { display: none; }
+.ni-piano-mute-btn.muted .icon-speaker-on { display: none; }
+.ni-piano-mute-btn.muted .icon-speaker-off { display: block; }
+
+/* Pro mode - hide labels on keyboard */
+.ni-app.mode-pro .ni-key-note,
+.ni-app.mode-pro .ni-key-bind { display: none; }
+
+/* ================================================
+   INVADERS MODE - Full arcade transformation
+   ================================================ */
+.ni-app.mode-invaders .ni-keyboard-section { display: none !important; }
+.ni-app.mode-invaders .ni-header-select:has([data-notation]) { display: none !important; }
+.ni-app.mode-invaders .ni-options-row:has([data-notation]) { display: none !important; }
+.ni-app.mode-invaders {
+    background: #000 !important;
+    border-color: rgba(0, 245, 255, 0.3);
+    box-shadow: 0 0 60px rgba(0, 245, 255, 0.08);
+}
+.ni-app.mode-invaders .ni-game-header {
+    background: linear-gradient(180deg, #0A0A10 0%, #050508 100%);
+    border-bottom-color: #00F5FF;
+}
+.ni-app.mode-invaders .ni-game-header::before {
+    background: linear-gradient(90deg, transparent, #00F5FF, transparent);
+}
+.ni-app.mode-invaders .ni-hud {
+    background: rgba(0, 10, 20, 0.9);
+    border-bottom-color: rgba(0, 245, 255, 0.1);
+}
+.ni-app.mode-invaders .ni-score-value { color: #00F5FF; }
+.ni-app.mode-invaders .ni-combo-value { color: #00F5FF; }
+.ni-app.mode-invaders .ni-canvas-container {
+    background: #000 !important;
+}
+.ni-app.mode-invaders .ni-select-btn.active {
+    background: #00F5FF;
+    color: #000;
+    border-color: #00F5FF;
+}
+.ni-app.mode-invaders .ni-start-btn {
+    background: linear-gradient(135deg, #2ECC71, #27AE60);
+    color: #FFF;
+    box-shadow: 0 2px 10px rgba(46, 204, 113, 0.35);
+}
+.ni-app.mode-invaders .ni-start-btn:hover {
+    background: linear-gradient(135deg, #27AE60, #219A52);
+    box-shadow: 0 4px 16px rgba(46, 204, 113, 0.5);
+}
+.ni-app.mode-invaders .ni-overlay-box {
+    border-color: rgba(0, 245, 255, 0.3);
+}
+.ni-app.mode-invaders .ni-overlay-box h2 {
+    background: linear-gradient(135deg, #FFF, #00F5FF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.ni-app.mode-invaders .ni-btn-primary {
+    background: #00F5FF;
+    color: #000;
+}
+.ni-app.mode-invaders .ni-btn-primary:hover {
+    background: #33F7FF;
+}
+.ni-app.mode-invaders .ni-icon-btn:hover {
+    color: #00F5FF;
+    border-color: #00F5FF;
+}
+/* Invaders mode - hide super combo item (not relevant) */
+.ni-app.mode-invaders .ni-super-combo-item { display: none; }
+/* Invaders cursor */
+.ni-app.mode-invaders .ni-canvas-container { cursor: crosshair; }
+
+/* ================================================
+   MODAL / TUTORIAL - Compact Premium Design
+   ================================================ */
+.ni-modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10001;
+    padding: 20px;
+}
+.ni-modal-backdrop {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.9);
+    backdrop-filter: blur(8px);
+}
+.ni-modal-content {
+    position: relative;
+    max-width: 420px;
+    width: 100%;
+    max-height: 50vh;
+    overflow-y: auto;
+    background: linear-gradient(180deg, #1A1A24 0%, #0F0F14 100%);
+    border-radius: 16px;
+    border: 1px solid var(--ni-gold);
+    padding: 20px 24px;
+    box-shadow: 0 0 40px rgba(197, 157, 58, 0.2);
+}
+.ni-modal-close {
+    position: absolute;
+    top: 10px; right: 10px;
+    width: 28px; height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--ni-gold);
+    border-radius: 50%;
+    color: var(--ni-gold);
+    cursor: pointer;
+    transition: 0.15s;
+}
+.ni-modal-close:hover {
+    background: var(--ni-gold);
+    color: var(--ni-bg-dark);
+}
+
+/* Tutorial - Compact with gold titles */
+.ni-tutorial h2 {
+    font-size: 1.2rem;
+    color: var(--ni-gold);
+    margin-bottom: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
+.ni-tutorial-step {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding: 10px 12px;
+    background: rgba(197, 157, 58, 0.05);
+    border-radius: 8px;
+    border-left: 2px solid var(--ni-gold);
+}
+.ni-step-num {
+    flex-shrink: 0;
+    width: 22px; height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ni-gold);
+    border-radius: 50%;
+    color: var(--ni-bg-dark);
+    font-weight: 700;
+    font-size: 0.75rem;
+}
+.ni-step-text h3 {
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+    color: var(--ni-gold);
+}
+.ni-step-text p {
+    font-size: 0.75rem;
+    color: var(--ni-text-secondary);
+    line-height: 1.3;
+}
+.ni-tutorial-tips {
+    margin-top: 12px;
+    padding: 12px;
+    background: rgba(197, 157, 58, 0.08);
+    border-radius: 8px;
+    border: 1px solid rgba(197, 157, 58, 0.3);
+}
+.ni-tutorial-tips h3 {
+    font-size: 0.8rem;
+    color: var(--ni-gold);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.ni-tutorial-tips ul { list-style: none; }
+.ni-tutorial-tips li {
+    font-size: 0.72rem;
+    color: var(--ni-text-secondary);
+    margin-bottom: 4px;
+    padding-left: 10px;
+    position: relative;
+}
+.ni-tutorial-tips li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--ni-gold);
+    font-weight: bold;
+}
+.ni-tutorial-tips li strong {
+    color: var(--ni-gold);
+}
+.ni-tutorial .ni-btn-primary {
+    width: 100%;
+    margin-top: 14px;
+    padding: 10px 20px;
+    font-size: 0.9rem;
+}
+.ni-tutorial .ni-contact-btn {
+    width: 100%;
+    margin-top: 10px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+}
+
+/* Gold scrollbar for modal */
+.ni-modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+.ni-modal-content::-webkit-scrollbar-track {
+    background: var(--ni-bg-card);
+    border-radius: 4px;
+}
+.ni-modal-content::-webkit-scrollbar-thumb {
+    background: var(--ni-gold);
+    border-radius: 4px;
+}
+.ni-modal-content::-webkit-scrollbar-thumb:hover {
+    background: var(--ni-gold-light);
+}
+.ni-modal-content {
+    scrollbar-width: thin;
+    scrollbar-color: var(--ni-gold) var(--ni-bg-card);
+}
+
+/* ================================================
+   RESPONSIVE
+   ================================================ */
+
+/* Tablet and below - show options button, hide center selectors */
+@media (max-width: 1024px) {
+    .ni-header-center { display: none; }
+    .ni-mobile-only { display: flex; }
+    .ni-game-header { justify-content: space-between; padding: 0 12px; gap: 8px; }
+    .ni-account-btn span { display: none; }
+    .ni-account-btn { padding: 8px 10px; }
+    .ni-header-right { gap: 6px; }
+    .ni-icon-btn { width: 34px; height: 34px; border-radius: 8px; }
+    .ni-icon-btn svg { width: 16px; height: 16px; }
+}
+
+@media (max-width: 800px) {
+    :root { --ni-keyboard-height: 100px; --ni-header-height: 48px; --ni-hud-height: 0px; }
+    /* Hide the HTML HUD bar on mobile/small tablet - stats shown on canvas instead */
+    .ni-hud { display: none !important; }
+    .ni-key-black { width: 26px; }
+    .ni-key-white { min-width: 38px; }
+    .ni-keyboard-wrapper { max-width: 100%; }
+    .ni-keyboard-decoration { width: 16px; }
+
+    /* Modern mobile header - clean, evenly spaced */
+    .ni-game-header {
+        padding: 0 10px;
+        gap: 0;
+        background: linear-gradient(180deg, #141420 0%, #0C0C14 100%);
+        border-bottom-width: 1px;
+    }
+    .ni-header-left { flex: 0 0 auto; }
+    .ni-header-right {
+        flex: 1;
+        justify-content: flex-end;
+        gap: 6px;
+        flex-wrap: nowrap;
+    }
+
+    /* Start/Play button - green pill, always visible */
+    .ni-start-btn {
+        padding: 6px 12px;
+        border-radius: 16px;
+        font-size: 0;
+        gap: 0;
+    }
+    .ni-start-btn span { display: none; }
+    .ni-start-btn svg { width: 14px; height: 14px; }
+
+    #ni-pause-btn { order: 0; }
+
+    .ni-icon-btn {
+        width: 30px; height: 30px; min-width: 30px;
+        border-radius: 8px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+    .ni-icon-btn svg { width: 14px; height: 14px; }
+
+    .ni-logo-link { padding: 4px 6px; gap: 6px; }
+    .ni-logo-img { height: 26px; width: 26px; }
+    .ni-logo-brand { font-size: 0.5rem; }
+    .ni-logo-title { font-size: 0.85rem; }
+    .ni-life { width: 12px; height: 10px; }
+    .ni-lives { gap: 2px; }
+    .ni-account-btn {
+        padding: 6px 8px;
+        border-radius: 8px;
+        border-width: 1px;
+    }
+}
+
+/* Very small mobile - modern compact layout */
+@media (max-width: 480px) {
+    :root { --ni-header-height: 46px; --ni-hud-height: 0px; }
+    .ni-game-header {
+        padding: 0 8px;
+        gap: 0;
+    }
+    .ni-header-right {
+        gap: 5px;
+    }
+    .ni-icon-btn {
+        width: 28px; height: 28px; min-width: 28px;
+        border-radius: 6px;
+    }
+    .ni-icon-btn svg { width: 12px; height: 12px; }
+
+    /* Play button compact but prominent */
+    .ni-start-btn {
+        padding: 5px 10px;
+        border-radius: 14px;
+    }
+    .ni-start-btn svg { width: 12px; height: 12px; }
+
+    .ni-account-btn {
+        padding: 5px 7px;
+        border-radius: 6px;
+    }
+
+    .ni-logo-link { padding: 2px 4px; gap: 4px; }
+    .ni-logo-img { height: 22px; width: 22px; }
+    .ni-logo-brand { display: none; }
+    .ni-logo-title { font-size: 0.78rem; }
+    .ni-hud { gap: 6px; padding: 0 4px; height: auto; min-height: var(--ni-hud-height); flex-wrap: wrap; }
+    .ni-hud-item { padding: 2px 0; }
+    .ni-hud-label { font-size: 0.45rem; }
+    .ni-hud-value { font-size: 0.7rem; }
+    .ni-life { width: 10px; height: 8px; }
+    .ni-lives { gap: 1px; }
+    .ni-keyboard-decoration { display: none; }
+    .ni-keyboard { border-radius: 4px; width: 100%; }
+    .ni-key-white { min-width: 32px; }
+    .ni-key-black { width: 22px; }
+    .ni-key-note { font-size: 0.6rem; }
+    .ni-key-bind { font-size: 0.5rem; padding: 1px 3px; }
+    .ni-keyboard-footer { gap: 8px; margin-top: 8px; }
+    .ni-keyboard-label { font-size: 0.55rem; }
+    .ni-piano-mute-btn { padding: 4px 8px; font-size: 0.6rem; gap: 4px; }
+    .ni-piano-mute-btn svg { width: 14px; height: 14px; }
+    .ni-game-alert { font-size: 1.5rem; }
+
+    /* Game over modal - better proportioned on small screens */
+    .ni-overlay { padding: 12px; }
+    .ni-overlay-box { padding: 20px 16px; max-width: 300px; }
+    .ni-overlay-box h2 { font-size: 1.4rem; margin-bottom: 8px; }
+    .ni-gameover-box { max-width: 300px; }
+    .ni-stat-main { padding: 10px; margin-bottom: 8px; }
+    .ni-stat-main .ni-stat-value { font-size: 1.6rem; }
+    .ni-stat-grid { gap: 6px; }
+    .ni-stat { padding: 8px; }
+    .ni-stat-label { font-size: 0.55rem; }
+    .ni-stat-value { font-size: 0.85rem; }
+    .ni-new-record { font-size: 0.75rem; padding: 4px 12px; margin-bottom: 8px; }
+    .ni-gameover-msg { font-size: 0.85rem; margin-bottom: 8px; }
+    .ni-btn-primary { padding: 10px 20px; font-size: 0.9rem; }
+
+    /* Welcome start button compact */
+    .ni-welcome-start-btn { padding: 12px 30px; font-size: 1rem; }
+}
+
+@media (min-width: 801px) {
+    :root { --ni-keyboard-height: 130px; }
+    .ni-key-black { width: 32px; }
+    .ni-key-white { min-width: 60px; }
+}
+
+@media (min-width: 1200px) {
+    :root { --ni-keyboard-height: 150px; }
+    .ni-key-white { min-width: 70px; }
+    .ni-key-note { font-size: 1rem; }
+    .ni-key-bind { font-size: 0.75rem; }
+}
+
+/* Landscape mobile (e.g. 844x390) */
+@media (max-height: 500px) and (orientation: landscape) {
+    :root {
+        --ni-header-height: 40px;
+        --ni-hud-height: 28px;
+        --ni-keyboard-height: 70px;
+    }
+    .ni-app {
+        margin-top: 0 !important;
+        height: auto !important;
+        min-height: 100vh;
+        min-height: 100dvh;
+        max-height: none !important;
+        border-radius: 0;
+        border: none;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+    /* Landing page: horizontal cards, compact */
+    .ni-landing-page {
+        padding: 8px 16px;
+        overflow-y: auto;
+    }
+    .ni-landing-brand { margin-bottom: 10px; }
+    .ni-landing-logo { height: 28px; margin-bottom: 4px; }
+    .ni-landing-title { font-size: 1.3rem; margin-bottom: 2px; }
+    .ni-landing-subtitle { font-size: 0.65rem; }
+    .ni-landing-cards {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        max-width: 560px;
+    }
+    .ni-landing-card {
+        padding: 10px 10px;
+    }
+    .ni-landing-card h2 { font-size: 0.85rem; margin-bottom: 4px; }
+    .ni-landing-card p { font-size: 0.65rem; margin-bottom: 4px; line-height: 1.2; }
+    .ni-card-modes { margin-bottom: 6px; font-size: 0.55rem; }
+    .ni-card-cta { padding: 6px 18px; font-size: 0.75rem; }
+    .ni-card-icon svg { width: 36px; height: 36px; }
+    .ni-card-icon { margin-bottom: 6px; }
+
+    /* Header compact */
+    .ni-game-header { padding: 0 8px; gap: 4px; }
+    .ni-logo-link { padding: 2px 6px; gap: 6px; }
+    .ni-logo-img { height: 22px; }
+    .ni-logo-brand { font-size: 0.5rem; }
+    .ni-logo-title { font-size: 0.65rem; }
+    .ni-header-center { gap: 8px; }
+    .ni-header-select label { font-size: 0.5rem; }
+    .ni-select-btn { font-size: 0.55rem; padding: 2px 6px; }
+    .ni-icon-btn { width: 28px; height: 28px; }
+    .ni-icon-btn svg { width: 14px; height: 14px; }
+    .ni-start-btn { padding: 3px 10px; font-size: 0.65rem; }
+    .ni-start-btn svg { width: 12px; height: 12px; }
+
+    /* HUD compact */
+    .ni-hud { gap: 8px; padding: 2px 8px; }
+    .ni-hud-label { font-size: 0.5rem; }
+    .ni-hud-value { font-size: 0.75rem; }
+    .ni-life { width: 12px; height: 12px; }
+
+    /* Canvas takes all available space */
+    .ni-canvas-container { flex: 1; min-height: 0; }
+
+    /* Keyboard ultra-compact */
+    .ni-keyboard-section {
+        padding: 3px 8px;
+        padding-bottom: calc(3px + var(--ni-safe-bottom));
+    }
+    .ni-keyboard-section::before { display: none; }
+    .ni-keyboard-decoration { display: none; }
+    .ni-keyboard { padding: 3px 4px 2px; border-radius: 4px; }
+    .ni-key-white { min-width: 36px; }
+    .ni-key-white, .ni-key-black { padding-bottom: 3px; }
+    .ni-key-note { font-size: 0.6rem; margin-bottom: 1px; }
+    .ni-key-bind { font-size: 0.5rem; padding: 1px 3px; }
+    .ni-keyboard-footer { margin-top: 2px; gap: 6px; }
+    .ni-keyboard-label { font-size: 0.55rem; }
+    .ni-piano-mute-btn { padding: 2px 8px; font-size: 0.55rem; }
+
+    /* Overlays: compact for landscape */
+    .ni-overlay-box {
+        padding: 16px 20px;
+        max-width: 320px;
+    }
+    .ni-overlay-box h2 { font-size: 1.2rem; margin-bottom: 6px; }
+    .ni-overlay-box p { font-size: 0.75rem; margin-bottom: 4px; }
+    .ni-hint { font-size: 0.7rem; margin-top: 8px; }
+    .ni-overlay-btns { gap: 6px; margin-top: 10px; }
+    .ni-btn-primary { padding: 8px 18px; font-size: 0.85rem; }
+    .ni-btn-secondary { padding: 6px 14px; font-size: 0.75rem; }
+
+    /* Game over: compact stats */
+    .ni-gameover-box { max-width: 340px; }
+    .ni-stat-main { padding: 8px; margin-bottom: 6px; }
+    .ni-stat-main .ni-stat-value { font-size: 1.5rem; }
+    .ni-stat-grid { gap: 4px; }
+    .ni-stat { padding: 6px; }
+    .ni-stat-label { font-size: 0.55rem; }
+    .ni-stat-value { font-size: 0.85rem; }
+    .ni-new-record { font-size: 0.75rem; padding: 4px 12px; margin-bottom: 8px; }
+    .ni-final-stats { margin-bottom: 10px; }
+
+    /* Tutorial modal: scrollable and compact */
+    .ni-modal-content {
+        max-height: 85vh;
+        padding: 12px 16px;
+    }
+    .ni-tutorial h2 { font-size: 0.95rem; margin-bottom: 8px; }
+    .ni-tutorial-step { padding: 6px 8px; margin-bottom: 6px; }
+    .ni-step-num { width: 18px; height: 18px; font-size: 0.6rem; }
+    .ni-step-text h3 { font-size: 0.7rem; }
+    .ni-step-text p { font-size: 0.6rem; }
+    .ni-tutorial-tips { padding: 8px; margin-top: 8px; }
+    .ni-tutorial-tips h3 { font-size: 0.65rem; margin-bottom: 4px; }
+    .ni-tutorial-tips li { font-size: 0.6rem; margin-bottom: 2px; }
+
+    /* Mobile controls in landscape */
+    .ni-mobile-missile-btn {
+        width: 40px;
+        height: 40px;
+        left: 8px;
+        right: auto;
+        bottom: 30px;
+    }
+
+    /* Game alert messages */
+    .ni-game-alert { font-size: 0.7rem !important; }
+}
+
+/* Extra small landscape (height < 380px) */
+@media (max-height: 380px) and (orientation: landscape) {
+    :root {
+        --ni-header-height: 30px;
+        --ni-hud-height: 22px;
+        --ni-keyboard-height: 55px;
+    }
+    .ni-landing-brand { margin-bottom: 6px; }
+    .ni-landing-title { font-size: 1rem; }
+    .ni-landing-card { padding: 8px; }
+    .ni-card-icon { margin-bottom: 4px; }
+    .ni-card-icon svg { width: 28px; height: 28px; }
+    .ni-overlay-box { padding: 12px 16px; }
+    .ni-overlay-box h2 { font-size: 1rem; }
+    .ni-btn-primary { padding: 6px 14px; font-size: 0.75rem; }
+}
+
+/* ================================================
+   FULLSCREEN & PSEUDO-FULLSCREEN shared rules
+   Hide site header + footer, expand game to full viewport
+   ================================================ */
+body.ni-fullscreen .piano-header,
+body.ni-fullscreen #pianoHeader,
+body.ni-fullscreen .pianomode-footer,
+body.ni-fullscreen #wpadminbar,
+body.ni-pseudo-fullscreen .piano-header,
+body.ni-pseudo-fullscreen #pianoHeader,
+body.ni-pseudo-fullscreen .pianomode-footer,
+body.ni-pseudo-fullscreen #wpadminbar { display: none !important; }
+
+body.ni-fullscreen .ni-app,
+body.ni-pseudo-fullscreen .ni-app,
+.ni-app.ni-pseudo-fs {
+    position: fixed !important;
+    top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+    z-index: 99999 !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100vh !important;
+    max-height: 100dvh !important;
+    margin-top: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    width: 100vw !important;
+}
+
+body.ni-fullscreen .ni-game-header,
+body.ni-pseudo-fullscreen .ni-game-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+}
+
+/* HUD visible in fullscreen on desktop (hidden on mobile via media query) */
+body.ni-fullscreen .ni-hud,
+body.ni-pseudo-fullscreen .ni-hud {
+    position: fixed;
+    top: var(--ni-header-height);
+    left: 0; right: 0;
+    z-index: 99;
+    background: rgba(10, 10, 15, 0.95);
+}
+
+body.ni-fullscreen .ni-canvas-container,
+body.ni-pseudo-fullscreen .ni-canvas-container {
+    margin-top: calc(var(--ni-header-height) + var(--ni-hud-height));
+}
+
+body.ni-pseudo-fullscreen {
+    overflow: hidden !important;
+}
+
+/* iOS safe area padding for pseudo-fullscreen */
+@supports (padding-top: env(safe-area-inset-top)) {
+    body.ni-pseudo-fullscreen .ni-game-header {
+        padding-top: env(safe-area-inset-top);
+    }
+}
+
+/* ================================================
+   MOBILE TOUCH CONTROLS (Invaders Mode)
+   ================================================ */
+.ni-mobile-control {
+    position: absolute;
+    z-index: 60;
+    border: none;
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+    user-select: none;
+    /* Glass morphism - iPhone style */
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+.ni-mobile-control:active {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.35);
+    transform: scale(0.92);
+}
+
+/* Fire button - hidden on mobile (not functional) */
+.ni-mobile-fire-btn {
+    display: none !important;
+}
+
+/* Missile button - left side, thumb position, more visible UX */
+.ni-mobile-missile-btn {
+    left: 16px;
+    bottom: 80px;
+    width: 58px;
+    height: 58px;
+    background: rgba(255, 136, 0, 0.08);
+    border: 2px solid rgba(255, 136, 0, 0.35);
+    box-shadow: 0 0 12px rgba(255, 136, 0, 0.15), inset 0 0 8px rgba(255, 136, 0, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+.ni-mobile-missile-btn::after {
+    content: 'MISSILE';
+    position: absolute;
+    bottom: -16px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.5rem;
+    font-weight: 700;
+    color: rgba(255, 136, 0, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+}
+.ni-mobile-missile-btn svg {
+    width: 24px;
+    height: 24px;
+    fill: rgba(255, 136, 0, 0.85);
+    filter: drop-shadow(0 0 4px rgba(255, 136, 0, 0.3));
+}
+.ni-mobile-missile-btn:active,
+.ni-mobile-missile-btn.active {
+    background: rgba(255, 136, 0, 0.2);
+    border-color: rgba(255, 136, 0, 0.6);
+    box-shadow: 0 0 20px rgba(255, 136, 0, 0.3), inset 0 0 12px rgba(255, 136, 0, 0.1);
+    transform: scale(0.93);
+}
+.ni-mobile-missile-btn:active svg,
+.ni-mobile-missile-btn.active svg {
+    fill: #FF8800;
+    filter: drop-shadow(0 0 10px rgba(255, 136, 0, 0.7));
+}
+
+/* Hide mobile controls on desktop */
+.ni-mobile-control {
+    display: none;
+}
+@media (pointer: coarse), (max-width: 1024px) {
+    .ni-mobile-control:not(.hidden) {
+        display: flex;
+    }
+}
+
+/* Adjust mobile button positions for smaller screens */
+@media (max-width: 480px) {
+    .ni-mobile-missile-btn {
+        width: 48px;
+        height: 48px;
+        left: 10px;
+        right: auto;
+        bottom: 60px;
+    }
+}
+
+/* Landscape mobile touch buttons - overridden in main landscape block above */
+
+/* ================================================
+   VOLUME POPUP
+   ================================================ */
+.ni-volume-wrapper {
+    position: relative;
+    display: inline-flex;
+}
+
+.ni-volume-popup {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    background: linear-gradient(180deg, #1A1A24 0%, #0F0F14 100%);
+    border: 1px solid var(--ni-gold);
+    border-radius: 12px;
+    padding: 14px 16px 10px;
+    width: 180px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(197, 157, 58, 0.15);
+    z-index: 1000;
+    text-align: center;
+}
+
+.ni-volume-label {
+    display: block;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--ni-gold);
+    margin-bottom: 10px;
+    letter-spacing: 0.05em;
+}
+
+.ni-volume-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--ni-bg-elevated) 0%, var(--ni-bg-elevated) 100%);
+    outline: none;
+    cursor: pointer;
+}
+
+.ni-volume-slider::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--ni-bg-elevated);
+    border: 1px solid rgba(197, 157, 58, 0.2);
+}
+
+.ni-volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ni-gold);
+    border: 2px solid var(--ni-gold-light);
+    box-shadow: 0 0 8px var(--ni-gold-glow), 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    margin-top: -7px;
+    transition: box-shadow 0.15s;
+}
+
+.ni-volume-slider::-webkit-slider-thumb:hover {
+    box-shadow: 0 0 16px var(--ni-gold-glow), 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.ni-volume-slider::-moz-range-track {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--ni-bg-elevated);
+    border: 1px solid rgba(197, 157, 58, 0.2);
+}
+
+.ni-volume-slider::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--ni-gold);
+    border: 2px solid var(--ni-gold-light);
+    box-shadow: 0 0 8px var(--ni-gold-glow), 0 2px 4px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.ni-volume-ticks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: var(--ni-text-muted);
+}
+
+/* Invaders mode volume popup colors */
+.ni-app.mode-invaders .ni-volume-popup {
+    border-color: #00F5FF;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 245, 255, 0.15);
+}
+.ni-app.mode-invaders .ni-volume-label {
+    color: #00F5FF;
+}
+.ni-app.mode-invaders .ni-volume-slider::-webkit-slider-thumb {
+    background: #00F5FF;
+    border-color: #33F7FF;
+    box-shadow: 0 0 8px rgba(0, 245, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.ni-app.mode-invaders .ni-volume-slider::-moz-range-thumb {
+    background: #00F5FF;
+    border-color: #33F7FF;
+    box-shadow: 0 0 8px rgba(0, 245, 255, 0.5), 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+.ni-app.mode-invaders .ni-volume-slider::-webkit-slider-runnable-track {
+    border-color: rgba(0, 245, 255, 0.2);
+}
+.ni-app.mode-invaders .ni-volume-slider::-moz-range-track {
+    border-color: rgba(0, 245, 255, 0.2);
+}
+
+/* Responsive volume popup */
+@media (max-width: 480px) {
+    .ni-volume-popup {
+        width: 150px;
+        padding: 10px 12px 8px;
+        right: -20px;
+    }
+    .ni-volume-label {
+        font-size: 0.9rem;
+    }
+}
+
+/* ================================================
+   REDUCED MOTION
+   ================================================ */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+    }
+}

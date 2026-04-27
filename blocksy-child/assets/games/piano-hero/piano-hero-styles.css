@@ -1,0 +1,797 @@
+/**
+ * Piano Hero Styles
+ * Styles autonomes pour le jeu Piano Hero
+ *
+ * @version 3.0.0 - Modern 2026 Design
+ */
+
+/* ===================================================
+   CSS VARIABLES
+   =================================================== */
+:root {
+    --ph-primary: #D7BF81;
+    --ph-primary-dark: #B8A060;
+    --ph-primary-light: #FFE4A1;
+    --ph-bg-dark: #1a1a1a;
+    --ph-bg-darker: #0f0f0f;
+    --ph-bg-medium: #252525;
+    --ph-text: #ffffff;
+    --ph-text-secondary: #cccccc;
+    --ph-success: #4CAF50;
+    --ph-warning: #FF9800;
+    --ph-danger: #f44336;
+    --ph-info: #2196F3;
+    --ph-purple: #9C27B0;
+    --ph-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --ph-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    --ph-shadow-glow: 0 4px 16px rgba(215, 191, 129, 0.3);
+    --ph-glass-bg: rgba(25, 25, 25, 0.65);
+    --ph-glass-border: rgba(255, 255, 255, 0.08);
+    --ph-glass-blur: blur(16px);
+    --ph-radius: 10px;
+    --ph-radius-lg: 14px;
+}
+
+/* ===================================================
+   BASE STYLES
+   =================================================== */
+.piano-hero-page {
+    background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+    min-height: 100vh;
+    color: var(--ph-text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+}
+
+.piano-hero-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* ===================================================
+   COMPONENT CONTAINER
+   =================================================== */
+.component-container-ph {
+    background: linear-gradient(135deg, rgba(215, 191, 129, 0.05) 0%, transparent 100%);
+    border: 2px solid rgba(215, 191, 129, 0.2);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: var(--ph-shadow);
+}
+
+.component-header-ph {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    background: linear-gradient(135deg, var(--ph-bg-dark), var(--ph-bg-darker));
+    border-bottom: 3px solid var(--ph-primary);
+}
+
+.header-left-ph {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.component-logo-ph {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.header-titles-ph {
+    display: flex;
+    flex-direction: column;
+}
+
+.component-title-ph {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ph-primary);
+    margin: 0;
+    text-shadow: 0 2px 8px rgba(215, 191, 129, 0.4);
+}
+
+.component-subtitle-ph {
+    font-size: 0.9rem;
+    color: var(--ph-text-secondary);
+    margin: 4px 0 0 0;
+}
+
+.header-right-ph {
+    display: flex;
+    gap: 12px;
+}
+
+.component-toggle-btn-ph {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, var(--ph-bg-medium), var(--ph-bg-dark));
+    border: 2px solid var(--ph-primary);
+    border-radius: 8px;
+    color: var(--ph-primary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: var(--ph-transition);
+}
+
+.component-toggle-btn-ph:hover {
+    background: var(--ph-primary);
+    color: var(--ph-bg-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--ph-shadow-glow);
+}
+
+.toggle-icon-ph {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.component-body-ph {
+    padding: 0;
+    transition: var(--ph-transition);
+}
+
+.component-body-ph.hidden {
+    display: none;
+}
+
+/* ===================================================
+   WELCOME SCREEN - Modern Video Game Style
+   =================================================== */
+/* Montserrat font loaded via functions.php preload for better LCP */
+
+.piano-hero-welcome {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 320px;
+    padding: 24px;
+    background: radial-gradient(ellipse at center, rgba(215, 191, 129, 0.08) 0%, transparent 70%),
+                linear-gradient(180deg, #0a0a0a 0%, #111 100%);
+    font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated background grid effect */
+.piano-hero-welcome::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+        linear-gradient(rgba(215, 191, 129, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(215, 191, 129, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: gridMove 20s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes gridMove {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(40px); }
+}
+
+.hero-welcome-content {
+    text-align: center;
+    max-width: 560px;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-welcome-content h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2rem;
+    font-weight: 800;
+    color: transparent;
+    background: linear-gradient(135deg, var(--ph-primary) 0%, var(--ph-primary-light) 50%, var(--ph-primary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    position: relative;
+}
+
+/* Gold outline effect for title */
+.hero-welcome-content h2::after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    -webkit-text-stroke: 1px var(--ph-primary);
+    color: transparent;
+    opacity: 0.3;
+}
+
+.hero-welcome-content > p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.hero-instructions {
+    text-align: left;
+    background: rgba(20, 20, 20, 0.8);
+    backdrop-filter: blur(10px);
+    padding: 16px 20px;
+    border-radius: 10px;
+    border: 1px solid rgba(215, 191, 129, 0.2);
+    margin-bottom: 24px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.75);
+    position: relative;
+}
+
+/* Gold accent line */
+.hero-instructions::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, var(--ph-primary), transparent);
+    border-radius: 3px 0 0 3px;
+}
+
+.hero-instructions-icon {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    vertical-align: middle;
+    stroke: var(--ph-primary);
+    fill: none;
+    stroke-width: 1.5;
+}
+
+.hero-start-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 16px 40px;
+    background: transparent;
+    border: 2px solid var(--ph-primary);
+    border-radius: 8px;
+    color: var(--ph-primary);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 0 20px rgba(215, 191, 129, 0.2),
+        inset 0 0 20px rgba(215, 191, 129, 0.05);
+}
+
+/* Animated border glow */
+.hero-start-btn::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, var(--ph-primary), transparent, var(--ph-primary), transparent);
+    background-size: 400% 400%;
+    border-radius: 10px;
+    z-index: -1;
+    animation: borderGlow 3s ease-in-out infinite;
+    opacity: 0.5;
+}
+
+@keyframes borderGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Inner shine effect */
+.hero-start-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(215, 191, 129, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.hero-start-btn:hover::after {
+    left: 100%;
+}
+
+.hero-start-btn:hover {
+    background: rgba(215, 191, 129, 0.1);
+    transform: translateY(-2px);
+    box-shadow:
+        0 0 30px rgba(215, 191, 129, 0.4),
+        0 0 60px rgba(215, 191, 129, 0.2),
+        inset 0 0 30px rgba(215, 191, 129, 0.1);
+    border-color: var(--ph-primary-light);
+    color: var(--ph-primary-light);
+}
+
+.hero-start-btn:active {
+    transform: translateY(0);
+    box-shadow:
+        0 0 15px rgba(215, 191, 129, 0.3),
+        inset 0 0 15px rgba(215, 191, 129, 0.1);
+}
+
+.hero-start-icon {
+    font-size: 1.3rem;
+    filter: drop-shadow(0 0 8px rgba(215, 191, 129, 0.5));
+}
+
+/* SVG icon styling for outlined gold look */
+.hero-start-icon svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--ph-primary);
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* ===================================================
+   GAME CONTAINER
+   =================================================== */
+#pianoHeroGameContainer {
+    width: 100%;
+    min-height: 600px;
+}
+
+/* ===================================================
+   MIDI STATUS
+   =================================================== */
+.midi-status-ph {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: var(--ph-bg-medium);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+.midi-status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #666;
+    transition: var(--ph-transition);
+}
+
+.midi-status-dot.connected {
+    background: var(--ph-success);
+    box-shadow: 0 0 10px rgba(76, 175, 80, 0.6);
+}
+
+/* ===================================================
+   LOADING OVERLAY
+   =================================================== */
+.loading-overlay-ph {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.loading-spinner-ph {
+    width: 60px;
+    height: 60px;
+    border: 4px solid rgba(215, 191, 129, 0.2);
+    border-top-color: var(--ph-primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.loading-text-ph {
+    margin-top: 20px;
+    color: var(--ph-primary);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* ===================================================
+   FULLSCREEN MODE
+   =================================================== */
+.piano-hero-fullscreen {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    z-index: 9999 !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding-top: env(safe-area-inset-top) !important;
+    padding-bottom: env(safe-area-inset-bottom) !important;
+    padding-left: env(safe-area-inset-left) !important;
+    padding-right: env(safe-area-inset-right) !important;
+}
+
+/* ===================================================
+   SAFE AREA - iPhone Island/Notch
+   =================================================== */
+@supports (padding-top: env(safe-area-inset-top)) {
+    .piano-hero-page {
+        padding-top: env(safe-area-inset-top);
+    }
+}
+
+/* ===================================================
+   RESPONSIVE DESIGN
+   =================================================== */
+@media (max-width: 768px) {
+    .piano-hero-wrapper {
+        padding: 10px;
+    }
+
+    .component-header-ph {
+        flex-direction: column;
+        gap: 12px;
+        padding: 12px;
+    }
+
+    .header-left-ph {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .header-right-ph {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .component-title-ph {
+        font-size: 1.3rem;
+    }
+
+    .piano-hero-welcome {
+        padding: 16px;
+        min-height: 280px;
+    }
+
+    .hero-welcome-content h2 {
+        font-size: 1.4rem;
+        letter-spacing: 2px;
+    }
+
+    .hero-welcome-content > p {
+        font-size: 0.85rem;
+    }
+
+    .hero-instructions {
+        padding: 12px 16px;
+        font-size: 0.75rem;
+        line-height: 1.7;
+    }
+
+    .hero-start-btn {
+        padding: 12px 28px;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+    }
+}
+
+@media (max-width: 480px) {
+    .component-logo-ph {
+        width: 40px;
+        height: 40px;
+    }
+
+    .component-title-ph {
+        font-size: 1.1rem;
+    }
+
+    .component-subtitle-ph {
+        font-size: 0.8rem;
+    }
+
+    .piano-hero-welcome {
+        padding: 12px;
+        min-height: 250px;
+    }
+
+    .hero-welcome-content h2 {
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+    }
+
+    .hero-welcome-content > p {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+
+    .hero-instructions {
+        padding: 10px 12px;
+        font-size: 0.7rem;
+        line-height: 1.6;
+        margin-bottom: 16px;
+    }
+
+    .hero-start-btn {
+        padding: 10px 20px;
+        font-size: 0.75rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-start-icon {
+        font-size: 1rem;
+    }
+}
+
+/* ===================================================
+   ORIENTATION NOTICE (Disabled - Portrait mode supported)
+   =================================================== */
+.orientation-notice-ph {
+    display: none !important;
+}
+
+/* ===================================================
+   NOTIFICATIONS
+   =================================================== */
+.notification-ph {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 16px 24px;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+    z-index: 10001;
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification-ph.success {
+    background: linear-gradient(135deg, var(--ph-success), #388E3C);
+}
+
+.notification-ph.warning {
+    background: linear-gradient(135deg, var(--ph-warning), #F57C00);
+}
+
+.notification-ph.error {
+    background: linear-gradient(135deg, var(--ph-danger), #C62828);
+}
+
+.notification-ph.info {
+    background: linear-gradient(135deg, var(--ph-info), #1976D2);
+}
+
+/* ===================================================
+   MODERN 2026 GLASSMORPHISM COMPONENTS
+   =================================================== */
+
+/* Modern Button Base */
+.ph-btn {
+    padding: 8px 16px;
+    background: var(--ph-glass-bg);
+    backdrop-filter: var(--ph-glass-blur);
+    -webkit-backdrop-filter: var(--ph-glass-blur);
+    border: 1px solid var(--ph-glass-border);
+    border-radius: var(--ph-radius);
+    color: #ccc;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Montserrat', -apple-system, sans-serif;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255,255,255,0.06);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    line-height: 1;
+    white-space: nowrap;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+.ph-btn:hover {
+    background: rgba(40, 40, 40, 0.75);
+    border-color: rgba(215, 191, 129, 0.35);
+    color: var(--ph-primary);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(215, 191, 129, 0.12);
+}
+.ph-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+.ph-btn-gold {
+    background: linear-gradient(135deg, rgba(215, 191, 129, 0.15), rgba(215, 191, 129, 0.08));
+    border-color: rgba(215, 191, 129, 0.3);
+    color: var(--ph-primary);
+}
+.ph-btn-gold.active {
+    background: linear-gradient(135deg, #D7BF81, #C5A94A) !important;
+    color: #000 !important;
+    box-shadow: 0 2px 12px rgba(215, 191, 129, 0.5) !important;
+    border-color: #D7BF81 !important;
+}
+.ph-btn-gold.active svg {
+    stroke: #000 !important;
+}
+
+/* Modern Select */
+.ph-select {
+    padding: 8px 32px 8px 12px;
+    background: rgba(20, 20, 20, 0.7) !important;
+    backdrop-filter: var(--ph-glass-blur);
+    -webkit-backdrop-filter: var(--ph-glass-blur);
+    border: 1px solid rgba(215, 191, 129, 0.2);
+    border-radius: var(--ph-radius);
+    color: #fff !important;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Montserrat', sans-serif;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.05);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D7BF81' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: right 10px center !important;
+    background-size: 12px !important;
+    -webkit-text-fill-color: #fff !important;
+    height: auto;
+    min-height: 34px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-tap-highlight-color: transparent;
+}
+.ph-select:hover {
+    border-color: rgba(215, 191, 129, 0.5);
+    box-shadow: 0 4px 16px rgba(215, 191, 129, 0.15);
+}
+.ph-select:focus {
+    outline: none;
+    border-color: rgba(215, 191, 129, 0.6);
+    box-shadow: 0 0 0 2px rgba(215, 191, 129, 0.15);
+}
+.ph-select option {
+    background: #1a1a1a !important;
+    color: #fff !important;
+    padding: 10px 12px !important;
+    font-size: 13px;
+}
+
+/* Modern Checkbox */
+.ph-checkbox {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px !important;
+    height: 18px !important;
+    border: 2px solid rgba(215, 191, 129, 0.3);
+    border-radius: 5px;
+    background: rgba(20, 20, 20, 0.6);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+.ph-checkbox:checked {
+    background: linear-gradient(135deg, #D7BF81, #C5A94A);
+    border-color: #D7BF81;
+}
+.ph-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 1px;
+    width: 5px;
+    height: 10px;
+    border: solid #000;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+.ph-checkbox:hover {
+    border-color: rgba(215, 191, 129, 0.6);
+}
+
+/* Modern Range Slider */
+.ph-range {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 2px;
+    outline: none;
+    width: 100%;
+}
+.ph-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #D7BF81, #C5A94A);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(215, 191, 129, 0.4);
+    border: none;
+}
+.ph-range::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #D7BF81, #C5A94A);
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(215, 191, 129, 0.4);
+    border: none;
+}
+
+/* ===================================================
+   MOBILE-SPECIFIC TOUCH OPTIMIZATIONS
+   =================================================== */
+@media (max-width: 768px) {
+    .ph-btn {
+        min-height: 40px;
+        min-width: 40px;
+        padding: 8px 12px;
+    }
+    .ph-select {
+        min-height: 38px;
+        padding: 8px 32px 8px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .ph-btn {
+        min-height: 36px;
+        font-size: 11px;
+    }
+}
