@@ -1,0 +1,151 @@
+/**
+ * PianoMode LMS Quiz Admin Styles
+ */
+
+.pm-quiz-admin-wrapper {
+    padding: 10px 0;
+}
+
+.pm-quiz-header h3 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.pm-quiz-header .description {
+    color: #646970;
+    margin-bottom: 20px;
+}
+
+.pm-challenge-row {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.pm-challenge-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.pm-challenge-number {
+    font-weight: 700;
+    font-size: 16px;
+    color: #2271b1;
+    background: #e8f0fe;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.pm-challenge-fields p {
+    margin-bottom: 10px;
+}
+
+.pm-challenge-fields textarea,
+.pm-challenge-fields input[type="url"],
+.pm-challenge-fields select {
+    width: 100%;
+    max-width: 100%;
+}
+
+.pm-options-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.pm-options-section h4 {
+    margin: 0 0 10px;
+    font-size: 14px;
+    color: #1d2327;
+}
+
+.pm-option-row {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 10px 15px;
+    margin-bottom: 8px;
+}
+
+.pm-option-fields {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.pm-option-text {
+    flex: 1;
+    min-width: 200px;
+    padding: 6px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.pm-correct-label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #00a32a;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.pm-option-url {
+    width: 180px !important;
+    font-size: 12px;
+    padding: 4px 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.pm-remove-challenge,
+.pm-remove-option {
+    cursor: pointer;
+    color: #d63638 !important;
+    background: none;
+    border: none;
+    font-size: 13px;
+}
+
+.pm-remove-challenge:hover,
+.pm-remove-option:hover {
+    color: #a00 !important;
+}
+
+.pm-quiz-actions {
+    margin-top: 15px;
+}
+
+.pm-no-challenges {
+    text-align: center;
+    padding: 30px;
+    background: #f0f0f1;
+    border-radius: 8px;
+    color: #646970;
+}
+
+.pm-add-option-btn {
+    margin-top: 10px !important;
+}
+
+@media (max-width: 782px) {
+    .pm-option-fields {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .pm-option-text,
+    .pm-option-url {
+        width: 100% !important;
+        min-width: 100%;
+    }
+}
