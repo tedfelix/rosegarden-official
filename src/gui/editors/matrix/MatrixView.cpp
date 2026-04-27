@@ -698,7 +698,7 @@ MatrixView::initActionsToolbar()
     m_snapGridCombo->setMaxVisibleItems(m_snapValues.size());
 
     // Up the minimum for "Native (Light)" theme to make sure the contents
-    // are fully visible.
+    // are fully visible.  Kludge for bug #1778.
     if (Preferences::getTheme() == Preferences::NativeTheme)
         m_snapGridCombo->setMinimumWidth(90);
 
@@ -760,6 +760,11 @@ MatrixView::initActionsToolbar()
     m_quantizeCombo->setCurrentIndex(m_quantizeCombo->count() - 1);
 
     m_quantizeCombo->setSizeAdjustPolicy(QComboBox::AdjustToContents);
+
+    // Up the minimum for "Native (Light)" theme to make sure the contents
+    // are fully visible.  Kludge for bug #1778.
+    if (Preferences::getTheme() == Preferences::NativeTheme)
+        m_quantizeCombo->setMinimumWidth(90);
 
     connect(m_quantizeCombo,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
