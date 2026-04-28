@@ -642,28 +642,29 @@ class VirtualStudioPro {
             }).connect(audioOutput);
 
             // ============================================
-            // SYNTH BASS - Deep punchy bass for bass-line work
+            // SYNTH BASS — punchy sawtooth bass, low-passed for warmth.
+            // Uses a plain PolySynth(Synth) + a static lowpass filter so it
+            // never chokes (the Tone.PolySynth(MonoSynth) variant with
+            // filterEnvelope has known instability in v14).
             // ============================================
-            this.synths.bass = new Tone.PolySynth(Tone.MonoSynth, {
-                maxPolyphony: 4,
+            this.synths.bass = new Tone.PolySynth(Tone.Synth, {
+                maxPolyphony: 6,
                 oscillator: { type: "sawtooth" },
-                filter: { Q: 2, frequency: 250, rolloff: -24 },
                 envelope: {
-                    attack: 0.005,
-                    decay: 0.2,
-                    sustain: 0.4,
-                    release: 0.3
+                    attack: 0.008,
+                    decay: 0.18,
+                    sustain: 0.55,
+                    release: 0.35
                 },
-                filterEnvelope: {
-                    attack: 0.005,
-                    decay: 0.15,
-                    sustain: 0.5,
-                    release: 0.4,
-                    baseFrequency: 80,
-                    octaves: 2.5
-                },
-                volume: -6
+                volume: -10
+            });
+            const bassFilter = new Tone.Filter({
+                frequency: 600,
+                type: "lowpass",
+                rolloff: -24,
+                Q: 1.4
             }).connect(audioOutput);
+            this.synths.bass.connect(bassFilter);
 
             // ============================================
             // LEAD SYNTH - Sharp cutting lead for melody
