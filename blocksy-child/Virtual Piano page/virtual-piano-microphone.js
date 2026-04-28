@@ -461,7 +461,8 @@ class MicrophoneStudio {
         const detect = () => {
             if (!this.pitchDetectionActive) return;
             this.micAnalyser.getFloatTimeDomainData(this.pitchBuffer);
-            const pitch = this.autoCorrelate(this.pitchBuffer, this.micAnalyser.context.sampleRate);
+            // YIN handles vocal vibrato + octave errors better than autocorrelation
+            const pitch = this.detectPitchYIN(this.pitchBuffer, this.micAnalyser.context.sampleRate);
             if (pitch !== -1 && pitch > 60 && pitch < 1500) {
                 this.currentPitch = pitch;
                 const noteInfo = this.frequencyToNote(pitch);
@@ -499,6 +500,55 @@ class MicrophoneStudio {
     stopPitchDetection() {
         if (this.pitchAnimFrame) { cancelAnimationFrame(this.pitchAnimFrame); this.pitchAnimFrame = null; }
         this.pitchHistory = [];
+    }
+
+    // YIN pitch detection — significantly more accurate than autocorrelation,
+    // especially for the human voice (handles octave errors). Returns -1 when
+    // there's no clear fundamental.
+    detectPitchYIN(buffer, sampleRate, threshold = 0.1) {
+        const bufferSize = buffer.length;
+        const halfSize = Math.floor(bufferSize / 2);
+        const yin = new Float32Array(halfSize);
+
+        // Step 1 — difference function
+        for (let tau = 0; tau < halfSize; tau++) {
+            let sum = 0;
+            for (let i = 0; i < halfSize; i++) {
+                const delta = buffer[i] - buffer[i + tau];
+                sum += delta * delta;
+            }
+            yin[tau] = sum;
+        }
+
+        // Step 2 — cumulative mean normalised difference
+        yin[0] = 1;
+        let runningSum = 0;
+        for (let tau = 1; tau < halfSize; tau++) {
+            runningSum += yin[tau];
+            yin[tau] = yin[tau] * tau / (runningSum || 1);
+        }
+
+        // Step 3 — absolute threshold
+        let tau = -1;
+        for (let t = 2; t < halfSize; t++) {
+            if (yin[t] < threshold) {
+                while (t + 1 < halfSize && yin[t + 1] < yin[t]) t++;
+                tau = t;
+                break;
+            }
+        }
+        if (tau === -1) return -1;
+
+        // Step 4 — parabolic interpolation for sub-sample precision
+        const x0 = tau > 0 ? tau - 1 : tau;
+        const x2 = tau + 1 < halfSize ? tau + 1 : tau;
+        const refined = (x0 === tau || x2 === tau)
+            ? tau
+            : tau + 0.5 * (yin[x0] - yin[x2]) / (yin[x0] - 2 * yin[tau] + yin[x2]);
+
+        if (refined <= 0 || !isFinite(refined)) return -1;
+        const freq = sampleRate / refined;
+        return (freq > 50 && freq < 2000) ? freq : -1;
     }
 
     autoCorrelate(buffer, sampleRate) {
@@ -815,11 +865,15 @@ class MicrophoneStudio {
         if (ctx.state === 'suspended') await ctx.resume();
         const source = ctx.createMediaStreamSource(this.micStream);
         this.autotuneOutputGain = ctx.createGain();
-        this.autotuneOutputGain.gain.value = 0.8;
+        this.autotuneOutputGain.gain.value = 0.85;
         const analyser = ctx.createAnalyser();
         analyser.fftSize = 2048;
         const pitchBuf = new Float32Array(analyser.fftSize);
-        const bufferSize = 4096;
+
+        // Granular pitch-shift processor: instead of resampling (which changes
+        // pitch AND speed), we use overlapping grains of input audio that we
+        // re-pitch independently. Hann window + 4× overlap kills the chirp
+        // artefacts of the previous resample-only autotune.
         if (typeof AudioWorkletNode !== 'undefined' && ctx.audioWorklet) {
             try {
                 if (!this._autotuneProcessorRegistered) {
@@ -829,23 +883,51 @@ class AutotuneProcessor extends AudioWorkletProcessor {
         super();
         this.ratio = 1;
         this.smoothRatio = 1;
-        this.port.onmessage = (event) => { this.ratio = event.data.ratio; };
+        this.grainSize = 1024;
+        this.overlap = 4;
+        this.hop = this.grainSize / this.overlap;
+        this.window = new Float32Array(this.grainSize);
+        for (let i = 0; i < this.grainSize; i++) {
+            this.window[i] = 0.5 * (1 - Math.cos(2 * Math.PI * i / (this.grainSize - 1)));
+        }
+        this.inBuffer = new Float32Array(this.grainSize * 2);
+        this.outBuffer = new Float32Array(this.grainSize * 2);
+        this.inWriteIdx = 0;
+        this.outReadIdx = 0;
+        this.outWriteIdx = 0;
+        this.framesSinceLastGrain = 0;
+        this.port.onmessage = (e) => { this.ratio = e.data.ratio || 1; };
     }
     process(inputs, outputs) {
         const input = inputs[0][0];
         const output = outputs[0][0];
         if (!input || !output) return true;
-        this.smoothRatio += (this.ratio - this.smoothRatio) * 0.15;
-        const r = this.smoothRatio;
+        // Smooth ratio so transitions between detected notes don't click
+        this.smoothRatio += (this.ratio - this.smoothRatio) * 0.1;
+        const r = Math.max(0.5, Math.min(2, this.smoothRatio));
+
         for (let i = 0; i < output.length; i++) {
-            const readIdx = i * r;
-            const intIdx = Math.floor(readIdx);
-            const frac = readIdx - intIdx;
-            if (intIdx + 1 < input.length) {
-                output[i] = input[intIdx] * (1 - frac) + input[intIdx + 1] * frac;
-            } else {
-                output[i] = input[Math.min(i, input.length - 1)];
+            // Push input into circular buffer
+            this.inBuffer[this.inWriteIdx] = input[i];
+            this.inWriteIdx = (this.inWriteIdx + 1) % this.inBuffer.length;
+            this.framesSinceLastGrain++;
+
+            // Every \`hop\` frames, schedule a new grain
+            if (this.framesSinceLastGrain >= this.hop) {
+                this.framesSinceLastGrain = 0;
+                const grainStart = (this.inWriteIdx - this.grainSize + this.inBuffer.length) % this.inBuffer.length;
+                for (let k = 0; k < this.grainSize; k++) {
+                    const srcIdx = (grainStart + Math.floor(k * r)) % this.inBuffer.length;
+                    const outIdx = (this.outWriteIdx + k) % this.outBuffer.length;
+                    this.outBuffer[outIdx] += this.inBuffer[srcIdx] * this.window[k];
+                }
+                this.outWriteIdx = (this.outWriteIdx + this.hop) % this.outBuffer.length;
             }
+
+            // Read shifted output, with normalization for the 4× overlap
+            output[i] = this.outBuffer[this.outReadIdx] * 0.5;
+            this.outBuffer[this.outReadIdx] = 0;
+            this.outReadIdx = (this.outReadIdx + 1) % this.outBuffer.length;
         }
         return true;
     }
@@ -860,7 +942,9 @@ registerProcessor('autotune-processor', AutotuneProcessor);`;
                 this.autotuneNode = new AudioWorkletNode(ctx, 'autotune-processor');
                 this._autotuneRatioInterval = setInterval(() => {
                     analyser.getFloatTimeDomainData(pitchBuf);
-                    const detectedPitch = this.autoCorrelate(pitchBuf, ctx.sampleRate);
+                    const detectedPitch = this.detectPitchYIN
+                        ? this.detectPitchYIN(pitchBuf, ctx.sampleRate)
+                        : this.autoCorrelate(pitchBuf, ctx.sampleRate);
                     let ratio = 1;
                     if (detectedPitch > 60 && detectedPitch < 1500) {
                         const targetPitch = this.snapToScale(detectedPitch);
@@ -871,7 +955,7 @@ registerProcessor('autotune-processor', AutotuneProcessor);`;
                 }, 30);
             } catch (workletErr) {
                 console.warn('AudioWorklet failed, using ScriptProcessor fallback:', workletErr);
-                this._setupScriptProcessorAutotune(ctx, source, analyser, pitchBuf, bufferSize);
+                this._setupScriptProcessorAutotune(ctx, source, analyser, pitchBuf, 4096);
                 this._autotuneSource = source;
                 this._autotuneAnalyser = analyser;
                 const statusEl = document.getElementById('autotuneStatus');
@@ -879,17 +963,29 @@ registerProcessor('autotune-processor', AutotuneProcessor);`;
                 return;
             }
         } else {
-            this._setupScriptProcessorAutotune(ctx, source, analyser, pitchBuf, bufferSize);
+            this._setupScriptProcessorAutotune(ctx, source, analyser, pitchBuf, 4096);
             this._autotuneSource = source;
             this._autotuneAnalyser = analyser;
             const statusEl = document.getElementById('autotuneStatus');
             if (statusEl) { statusEl.textContent = 'Autotune active — speak or sing into mic'; statusEl.style.color = '#4CAF50'; }
             return;
         }
+
+        // Route the autotuned signal through the unified master bus so the
+        // recorder captures it AND the limiter prevents clipping. If the bus
+        // isn't ready (mic feature opened before piano init), fall back to
+        // direct destination so the user still hears their voice.
         source.connect(analyser);
         source.connect(this.autotuneNode);
         this.autotuneNode.connect(this.autotuneOutputGain);
-        this.autotuneOutputGain.connect(ctx.destination);
+        const busTarget = (window._masterBusInput && window._masterBusInput.input)
+            || window._masterBusInput
+            || ctx.destination;
+        try {
+            this.autotuneOutputGain.connect(busTarget);
+        } catch (e) {
+            this.autotuneOutputGain.connect(ctx.destination);
+        }
         this._autotuneSource = source;
         this._autotuneAnalyser = analyser;
         const statusEl = document.getElementById('autotuneStatus');

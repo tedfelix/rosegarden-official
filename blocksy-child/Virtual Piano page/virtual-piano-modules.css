@@ -1426,3 +1426,321 @@
         transition: none !important;
     }
 }
+
+/* =====================================================================
+   STUDIO MASTER / TRACK FOCUS GREYING
+   When the user plays the master, the source tracks dim so the master
+   waveform / output is visually emphasised — but the live knobs (PAN /
+   REV / DLY) stay at full opacity so the user can keep tweaking without
+   losing the visual feedback of the animated indicators.
+   ===================================================================== */
+.audio-track.master-dimmed {
+    opacity: 0.32;
+    filter: saturate(0.55);
+    pointer-events: none;
+    transition: opacity 0.35s ease, filter 0.35s ease;
+}
+/* Knobs / potentiometers stay alive even when the strip is dimmed */
+.audio-track.master-dimmed .knob-mini-visual,
+.audio-track.master-dimmed .knob-mini-indicator,
+.audio-track.master-dimmed .knob-mini-label,
+.audio-track.master-dimmed [class*="knob"],
+.audio-track.master-dimmed [class*="potentiometer"],
+.audio-track.master-dimmed .knob-mini-visual * {
+    opacity: 1 !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+.audio-track.master-track.master-dimmed {
+    /* Same dim treatment when the user plays a single track and the master
+       fades — knobs still alive */
+    opacity: 0.32;
+    filter: saturate(0.55);
+    pointer-events: none;
+}
+.audio-track.master-track.master-dimmed .knob-mini-visual,
+.audio-track.master-track.master-dimmed [class*="knob"],
+.audio-track.master-track.master-dimmed [class*="potentiometer"] {
+    opacity: 1 !important;
+    filter: none !important;
+    pointer-events: auto !important;
+}
+
+/* The active focused track gets a subtle glow so the user knows what's
+   currently driving the speakers */
+.audio-track.focus-playing {
+    box-shadow: 0 0 0 1px rgba(215, 191, 129, 0.45),
+                0 8px 28px rgba(215, 191, 129, 0.12);
+    transition: box-shadow 0.35s ease;
+}
+.audio-track.master-track.focus-playing {
+    box-shadow: 0 0 0 1px rgba(76, 175, 80, 0.55),
+                0 10px 32px rgba(76, 175, 80, 0.18);
+}
+
+/* =====================================================================
+   MOBILE PORTRAIT — Audio Tracks header buttons + sequencer overflow
+   The audit found the 3 tracks-actions buttons (Add / Upload / Export)
+   bleeding off-screen because the parent flex row had no wrap. Same
+   treatment for the sequencer scroll container + transport bar.
+   ===================================================================== */
+@media (max-width: 540px) {
+    .tracks-actions,
+    .daw-track-actions {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+        gap: 6px !important;
+        justify-content: stretch;
+    }
+    .tracks-actions .track-action-btn,
+    .tracks-actions .add-track-btn,
+    .daw-track-actions .track-action-btn,
+    .daw-track-actions .add-track-btn {
+        flex: 1 1 calc(33.33% - 6px);
+        min-width: 0;
+        padding: 0.6rem 0.4rem;
+        font-size: 0.78rem;
+        text-align: center;
+        justify-content: center;
+        white-space: nowrap;
+    }
+    .tracks-header,
+    .daw-tracks-section .tracks-header {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+    .tracks-title { width: 100%; }
+
+    /* Transport bar: tighter spacing + scroll horizontally if too wide */
+    .daw-transport-section,
+    .transport-buttons-group {
+        flex-wrap: wrap;
+        gap: 6px !important;
+        justify-content: center;
+    }
+    .transport-btn-pro {
+        min-width: 44px;
+        height: 44px;
+        padding: 0;
+    }
+    .transport-btn-play-tracks,
+    .transport-btn-play-master {
+        min-width: 64px !important;
+    }
+}
+
+/* Mobile portrait extreme — phones < 380px (some Android compact) */
+@media (max-width: 380px) {
+    .tracks-actions .track-action-btn,
+    .daw-track-actions .track-action-btn {
+        flex: 1 1 calc(50% - 6px);
+    }
+    .transport-btn-pro .btn-label {
+        font-size: 8px;
+    }
+}
+
+/* =====================================================================
+   MODERN STUDIO BUTTONS — applied site-wide
+   Subtle gloss + bigger radius + smooth scale on press. Designed to feel
+   premium without overpowering the existing gold/dark theme.
+   ===================================================================== */
+.transport-btn-pro,
+.toolbar-toggle-btn,
+.track-action-btn,
+.add-track-btn,
+.rec-btn,
+.daw-transport-btn,
+.hero-btn-v2 {
+    border-radius: 10px;
+    backdrop-filter: blur(6px) saturate(120%);
+    -webkit-backdrop-filter: blur(6px) saturate(120%);
+    transition: transform 0.18s cubic-bezier(0.2, 0, 0.2, 1),
+                box-shadow 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease;
+    will-change: transform;
+}
+.transport-btn-pro:hover,
+.toolbar-toggle-btn:hover,
+.track-action-btn:hover,
+.add-track-btn:hover,
+.rec-btn:hover,
+.hero-btn-v2:hover {
+    transform: translateY(-1px) scale(1.025);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35),
+                0 0 0 1px rgba(215, 191, 129, 0.4) inset;
+}
+.transport-btn-pro:active,
+.toolbar-toggle-btn:active,
+.track-action-btn:active,
+.add-track-btn:active,
+.rec-btn:active,
+.hero-btn-v2:active {
+    transform: translateY(0) scale(0.97);
+    transition-duration: 0.08s;
+}
+
+/* Ripple-like gloss on the new modern buttons */
+.transport-btn-pro,
+.toolbar-toggle-btn,
+.track-action-btn,
+.hero-btn-v2 {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+}
+.transport-btn-pro::after,
+.toolbar-toggle-btn::after,
+.track-action-btn::after,
+.hero-btn-v2::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg,
+                rgba(255, 255, 255, 0.08) 0%,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(0, 0, 0, 0.18) 100%);
+    pointer-events: none;
+    z-index: -1;
+    border-radius: inherit;
+}
+
+/* Recording / playing state animations */
+.transport-btn-record-pro.is-recording {
+    animation: pulseRec 1.4s ease-in-out infinite;
+}
+@keyframes pulseRec {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(244, 67, 54, 0.65); }
+    50%      { box-shadow: 0 0 0 10px rgba(244, 67, 54, 0); }
+}
+
+/* =====================================================================
+   COUNT-IN BUTTON
+   Pulses when armed (waiting for next record start), shows beat dots
+   while counting in.
+   ===================================================================== */
+.count-in-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.count-in-btn[data-armed="true"] {
+    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.55),
+                0 6px 18px rgba(76, 175, 80, 0.2);
+}
+.count-in-btn .count-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(215, 191, 129, 0.4);
+    transition: transform 0.12s ease, background 0.12s ease;
+}
+.count-in-btn .count-dot.lit {
+    background: #f5c842;
+    transform: scale(1.6);
+    box-shadow: 0 0 8px rgba(245, 200, 66, 0.85);
+}
+
+/* =====================================================================
+   HERO ↔ GUIDE FUSION
+   The first component (#appGuideComponent) sits flush against the bottom
+   of the hero so the page reads as a single unit. Negative margin
+   creates visual continuity, the section keeps its own padding.
+   ===================================================================== */
+.studio-hero-v2 {
+    margin-bottom: 0 !important;
+    padding-bottom: 32px !important;
+}
+.piano-main {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+}
+.studio-layout-wrapper > .component-container-v2:first-of-type,
+.studio-modules-container > .component-container-v2:first-of-type {
+    margin-top: -28px;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    box-shadow: 0 -12px 32px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 2;
+}
+
+/* =====================================================================
+   MICROPHONE TUNER / AUTOTUNE — modern card styling
+   ===================================================================== */
+.mic-feature-card {
+    background: linear-gradient(140deg, rgba(35, 35, 40, 0.92), rgba(20, 20, 25, 0.95));
+    border: 1px solid rgba(215, 191, 129, 0.18);
+    border-radius: 14px;
+    padding: 1rem 1.25rem;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04),
+                0 12px 32px rgba(0, 0, 0, 0.5);
+}
+.mic-tuner-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 1rem 0;
+}
+.mic-tuner-note {
+    font-size: 3rem;
+    font-weight: 800;
+    color: #f5c842;
+    text-shadow: 0 0 14px rgba(245, 200, 66, 0.3);
+    line-height: 1;
+}
+.mic-tuner-cents {
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    color: rgba(215, 191, 129, 0.7);
+}
+.mic-tuner-needle-track {
+    position: relative;
+    width: min(280px, 100%);
+    height: 8px;
+    background: linear-gradient(to right,
+                rgba(244, 67, 54, 0.4),
+                rgba(255, 193, 7, 0.3),
+                rgba(76, 175, 80, 0.6),
+                rgba(255, 193, 7, 0.3),
+                rgba(244, 67, 54, 0.4));
+    border-radius: 4px;
+    overflow: hidden;
+}
+.mic-tuner-needle-track .mic-tuner-needle-mark {
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 4px;
+    height: 16px;
+    background: #fff;
+    border-radius: 2px;
+    transform: translateX(-50%);
+    box-shadow: 0 0 6px rgba(255, 255, 255, 0.7);
+    transition: left 0.08s linear;
+}
+.autotune-active-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0.25rem 0.75rem;
+    background: rgba(76, 175, 80, 0.18);
+    color: #4caf50;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    border-radius: 99px;
+    border: 1px solid rgba(76, 175, 80, 0.4);
+}
+.autotune-active-indicator::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #4caf50;
+    animation: pulseRec 1.6s ease-in-out infinite;
+}

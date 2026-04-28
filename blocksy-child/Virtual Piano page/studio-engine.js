@@ -16,16 +16,19 @@ function prewarmAudioOnce() {
                 Tone.context.lookAhead = 0.01;
             }
             if (!window._masterLimiterInstalled) {
-                // Master bus input — every audio source connects HERE, never to Tone.Destination directly
-                const masterBusInput = new Tone.Gain(1);
+                // Master bus input — every audio source connects HERE, never to Tone.Destination directly.
+                // Pre-attenuate by ~3 dB so even with several sources on top of each other, we
+                // approach the compressor a couple dB below 0 dBFS instead of hitting the wall.
+                const masterBusInput = new Tone.Gain(0.7);
 
-                // Tightened compressor settings to tame piano peaks without pumping
+                // Pre-comp: warm bus glue. Catches piano peaks without pumping. Lower threshold
+                // and faster release than before so loud piano + drums never crackle.
                 const masterCompressor = new Tone.Compressor({
-                    threshold: -18,
-                    ratio: 4,
-                    attack: 0.003,
-                    release: 0.08,
-                    knee: 12
+                    threshold: -24,
+                    ratio: 3,
+                    attack: 0.005,
+                    release: 0.12,
+                    knee: 18
                 });
                 const safetyCompressor = new Tone.Compressor({
                     threshold: -3,
@@ -588,6 +591,95 @@ class VirtualStudioPro {
                     release: 1.5
                 },
                 volume: -8
+            }).connect(audioOutput);
+
+            // ============================================
+            // BELLS - Bright crystalline metallic tone
+            // ============================================
+            this.synths.bells = new Tone.PolySynth(Tone.FMSynth, {
+                maxPolyphony: 16,
+                harmonicity: 6.5,
+                modulationIndex: 16,
+                oscillator: { type: "sine" },
+                modulation: { type: "sine" },
+                modulationEnvelope: {
+                    attack: 0.001,
+                    decay: 0.6,
+                    sustain: 0,
+                    release: 1.0
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 1.2,
+                    sustain: 0,
+                    release: 2.0
+                },
+                volume: -10
+            }).connect(audioOutput);
+
+            // ============================================
+            // CELESTA - Soft, percussive metallic keyboard
+            // ============================================
+            this.synths.celesta = new Tone.PolySynth(Tone.FMSynth, {
+                maxPolyphony: 16,
+                harmonicity: 4,
+                modulationIndex: 8,
+                oscillator: { type: "triangle" },
+                modulation: { type: "sine" },
+                modulationEnvelope: {
+                    attack: 0.001,
+                    decay: 0.4,
+                    sustain: 0,
+                    release: 0.6
+                },
+                envelope: {
+                    attack: 0.001,
+                    decay: 0.6,
+                    sustain: 0,
+                    release: 0.8
+                },
+                volume: -9
+            }).connect(audioOutput);
+
+            // ============================================
+            // SYNTH BASS - Deep punchy bass for bass-line work
+            // ============================================
+            this.synths.bass = new Tone.PolySynth(Tone.MonoSynth, {
+                maxPolyphony: 4,
+                oscillator: { type: "sawtooth" },
+                filter: { Q: 2, frequency: 250, rolloff: -24 },
+                envelope: {
+                    attack: 0.005,
+                    decay: 0.2,
+                    sustain: 0.4,
+                    release: 0.3
+                },
+                filterEnvelope: {
+                    attack: 0.005,
+                    decay: 0.15,
+                    sustain: 0.5,
+                    release: 0.4,
+                    baseFrequency: 80,
+                    octaves: 2.5
+                },
+                volume: -6
+            }).connect(audioOutput);
+
+            // ============================================
+            // LEAD SYNTH - Sharp cutting lead for melody
+            // ============================================
+            this.synths.lead = new Tone.PolySynth(Tone.Synth, {
+                maxPolyphony: 8,
+                oscillator: {
+                    type: "sawtooth"
+                },
+                envelope: {
+                    attack: 0.005,
+                    decay: 0.1,
+                    sustain: 0.6,
+                    release: 0.2
+                },
+                volume: -10
             }).connect(audioOutput);
 
             // Drum Machine
@@ -1816,7 +1908,10 @@ class VirtualStudioPro {
                 if (this.currentInstrument !== 'piano') {
                     const autoReleaseNote = note;
                     const inst = this.currentInstrument;
-                    const timeout = (inst === 'strings' || inst === 'pad') ? 8000 : 2000;
+                    // Long-sustain instruments need a longer safety release
+                    const timeout = (inst === 'strings' || inst === 'pad') ? 8000
+                                  : (inst === 'bells' || inst === 'celesta') ? 4000
+                                  : 2000;
                     setTimeout(() => {
                         if (this.activeNotes.has(autoReleaseNote)) {
                             try { synth.triggerRelease(autoReleaseNote); } catch(e) {}

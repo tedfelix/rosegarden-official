@@ -11076,6 +11076,16 @@ button, .drum-transport-btn, .transport-btn, .rec-btn, .download-btn,
                                 <span class="btn-icon">♩</span>
                                 <span>Metronome</span>
                             </button>
+
+                            <!-- Count-In: 4-beat lead-in before recording (Rosegarden-style) -->
+                            <button class="toolbar-toggle-btn count-in-btn" id="dawCountIn" title="Toggle 1-bar count-in before recording" data-armed="false">
+                                <span class="btn-icon">📍</span>
+                                <span>Count-in</span>
+                                <span class="count-dot" data-beat="1"></span>
+                                <span class="count-dot" data-beat="2"></span>
+                                <span class="count-dot" data-beat="3"></span>
+                                <span class="count-dot" data-beat="4"></span>
+                            </button>
                         </div>
 
                         <!-- Hidden controls for JS compatibility -->
@@ -11259,10 +11269,20 @@ button, .drum-transport-btn, .transport-btn, .rec-btn, .download-btn,
                         <div class="instrument-selector-piano">
                             <label for="pianoInstrumentSelect">Sound:</label>
                             <select class="piano-instrument-select" id="pianoInstrumentSelect" aria-label="Select piano instrument sound">
-                                <option value="piano">Grand Piano</option>
-                                <option value="electric-piano">Electric Piano</option>
-                                <option value="organ">Organ</option>
-                                <option value="synth">Synthesizer</option>
+                                <optgroup label="Keys">
+                                    <option value="piano">🎹 Grand Piano</option>
+                                    <option value="electric-piano">🎼 Electric Piano</option>
+                                    <option value="organ">🎻 Organ</option>
+                                    <option value="bells">🔔 Bells</option>
+                                    <option value="celesta">🎶 Celesta</option>
+                                </optgroup>
+                                <optgroup label="Synths">
+                                    <option value="synth">🎚 Synthesizer</option>
+                                    <option value="strings">🎻 Strings</option>
+                                    <option value="pad">☁ Pad</option>
+                                    <option value="bass">🎸 Synth Bass</option>
+                                    <option value="lead">⚡ Lead Synth</option>
+                                </optgroup>
                             </select>
                         </div>
 

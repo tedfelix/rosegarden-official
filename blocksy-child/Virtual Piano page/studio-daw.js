@@ -594,12 +594,14 @@ document.addEventListener('DOMContentLoaded', function() {
             const sourceId = `backtrack-${Date.now()}`;
             const sourceName = `🎵 ${trackName}`;
             let blobUrl = this.audio.src;
+            let blobReference = null;
             // Get duration from the already-loaded audio element (most reliable)
             let audioDuration = this.audio.duration;
             try {
                 const response = await fetch(this.audio.src);
                 const blob = await response.blob();
                 blobUrl = URL.createObjectURL(blob);
+                blobReference = blob;  // Keep a hard reference so the blob URL stays valid
                 if (!audioDuration || isNaN(audioDuration) || audioDuration <= 0) {
                     audioDuration = await this.getBlobDuration(blob);
                 }
@@ -614,8 +616,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 type: 'backtrack',
                 url: blobUrl,
                 filename: this.currentTrack,
-                duration: audioDuration
+                duration: audioDuration,
+                // Hold the blob alive — without this reference the GC can free
+                // the blob and the blob URL silently stops working in playAudioClip.
+                _blob: blobReference
             };
+            // Stash a global pin so the blob never gets collected during the session
+            window._studioBlobPins = window._studioBlobPins || new Map();
+            if (blobReference) window._studioBlobPins.set(blobUrl, blobReference);
+
             window.globalDAW.registerAndAssign(sourceId, sourceName, 'backtrack', backtrackData);
             window.globalDAW.ensureRecordingStudioVisible();
             const btn = this.sendBtn;
@@ -1666,6 +1675,18 @@ document.addEventListener('DOMContentLoaded', function() {
             if (rewindBtn) rewindBtn.addEventListener('click', () => this.rewind());
             if (metronomeBtn) metronomeBtn.addEventListener('click', () => this.toggleMetronome());
             if (loopBtn) loopBtn.addEventListener('click', () => this.toggleLoop());
+
+            // Count-In: arms a 1-bar lead-in that fires the next time the user
+            // presses Record. Click again to disarm.
+            const countInBtn = document.getElementById('dawCountIn');
+            if (countInBtn) {
+                countInBtn.addEventListener('click', () => {
+                    const armed = countInBtn.dataset.armed === 'true';
+                    countInBtn.dataset.armed = armed ? 'false' : 'true';
+                    countInBtn.classList.toggle('active', !armed);
+                    this._countInArmed = !armed;
+                });
+            }
 
             // Master Output Volume slider (in transport bar, always accessible)
             const masterOutputSlider = document.getElementById('masterOutputSlider');
@@ -2788,6 +2809,37 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.hideMasterRecordingOverlay();
 
             } else {
+                // If count-in is armed, run a 4-beat lead-in before actually
+                // starting the record. The dot beats animate so the user can
+                // visually count along.
+                if (this._countInArmed && typeof window.studioCountIn === 'function') {
+                    const btn = document.getElementById('dawCountIn');
+                    const dots = btn ? btn.querySelectorAll('.count-dot') : [];
+                    const tempo = parseInt(document.getElementById('dawBPM')?.value || '120', 10) || 120;
+                    let beatIdx = 0;
+                    const beatTimer = setInterval(() => {
+                        dots.forEach(d => d.classList.remove('lit'));
+                        if (dots[beatIdx]) dots[beatIdx].classList.add('lit');
+                        beatIdx++;
+                        if (beatIdx >= 4) clearInterval(beatTimer);
+                    }, (60 / tempo) * 1000);
+
+                    if (recordBtn) recordBtn.classList.add('arming');
+                    window.studioCountIn(() => {
+                        clearInterval(beatTimer);
+                        dots.forEach(d => d.classList.remove('lit'));
+                        if (recordBtn) recordBtn.classList.remove('arming');
+                        this._countInArmed = false; // single-shot
+                        if (btn) {
+                            btn.dataset.armed = 'false';
+                            btn.classList.remove('active');
+                        }
+                        // Recurse without count-in to actually start
+                        this.toggleRecord();
+                    }, { tempo, beats: 4 });
+                    return;
+                }
+
                 // Start recording at current cursor position
                 this.isRecording = true;
                 recordBtn?.classList.add('active');
@@ -3824,23 +3876,27 @@ document.addEventListener('DOMContentLoaded', function() {
         setPlayModeVisual(mode) {
             const allTracks = document.querySelectorAll('.audio-track');
             allTracks.forEach(el => {
-                el.classList.remove('play-mode-inactive', 'play-mode-active', 'play-mode-playing');
+                el.classList.remove(
+                    'play-mode-inactive', 'play-mode-active', 'play-mode-playing',
+                    'master-dimmed', 'focus-playing'
+                );
             });
 
             if (mode === 'tracks') {
                 allTracks.forEach(el => {
                     if (el.classList.contains('master-track')) {
-                        el.classList.add('play-mode-inactive');
+                        // Master fades; knobs are protected by .master-dimmed CSS rules
+                        el.classList.add('play-mode-inactive', 'master-dimmed');
                     } else {
-                        el.classList.add('play-mode-active', 'play-mode-playing');
+                        el.classList.add('play-mode-active', 'play-mode-playing', 'focus-playing');
                     }
                 });
             } else if (mode === 'master') {
                 allTracks.forEach(el => {
                     if (el.classList.contains('master-track')) {
-                        el.classList.add('play-mode-active', 'play-mode-playing');
+                        el.classList.add('play-mode-active', 'play-mode-playing', 'focus-playing');
                     } else {
-                        el.classList.add('play-mode-inactive');
+                        el.classList.add('play-mode-inactive', 'master-dimmed');
                     }
                 });
             }
