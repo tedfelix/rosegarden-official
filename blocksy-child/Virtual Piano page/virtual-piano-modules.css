@@ -2174,11 +2174,19 @@
     flex-direction: column;
     gap: 0.5rem;
 }
+/* Two-row layout for the recording item — top row holds the metadata
+   and action buttons, bottom row holds the player. This guarantees the
+   play button is never overlapped by a long recording name or progress
+   bar dots, which was the bug the user reported. */
 .mic-recording-item {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    grid-template-areas:
+        "name  duration edit   send"
+        "player player   player player";
     align-items: center;
-    gap: 0.6rem;
-    padding: 0.65rem 0.85rem;
+    gap: 0.5rem 0.6rem;
+    padding: 0.7rem 0.85rem;
     background: rgba(15, 15, 18, 0.55);
     border: 1px solid rgba(215, 191, 129, 0.14);
     border-radius: 10px;
@@ -2186,13 +2194,23 @@
     color: rgba(255, 255, 255, 0.85);
 }
 .mic-recording-item .rec-name {
+    grid-area: name;
     font-weight: 600;
     color: #f5c842;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    min-width: 0;
 }
 .mic-recording-item .rec-duration {
+    grid-area: duration;
     font-size: 0.8rem;
     color: rgba(215, 191, 129, 0.6);
+    white-space: nowrap;
 }
+.mic-recording-item .edit-vocal-btn { grid-area: edit; }
+.mic-recording-item .send-to-mix-btn { grid-area: send; }
+.mic-recording-item .vocal-player-container { grid-area: player; }
 .mic-recording-item .edit-vocal-btn,
 .mic-recording-item .send-to-mix-btn {
     padding: 0.4rem 0.7rem;
@@ -2203,6 +2221,7 @@
     color: rgba(215, 191, 129, 0.9);
     cursor: pointer;
     transition: background 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
 }
 .mic-recording-item .edit-vocal-btn:hover,
 .mic-recording-item .send-to-mix-btn:hover {
@@ -2212,19 +2231,24 @@
 .mic-recording-item .vocal-player-container {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    flex: 1 1 220px;
-    min-width: 200px;
+    gap: 0.6rem;
+    width: 100%;
+    padding-top: 0.4rem;
+    border-top: 1px solid rgba(215, 191, 129, 0.08);
 }
 .mic-recording-item .vocal-play-pause-btn {
-    width: 32px;
-    height: 32px;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
     border: 1px solid rgba(215, 191, 129, 0.4);
     background: rgba(215, 191, 129, 0.12);
     color: #f5c842;
     cursor: pointer;
-    font-size: 0.85rem;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 .mic-recording-item .vocal-play-pause-btn.playing {
     background: rgba(76, 175, 80, 0.22);

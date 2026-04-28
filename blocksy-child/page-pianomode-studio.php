@@ -11552,8 +11552,8 @@ button, .drum-transport-btn, .transport-btn, .rec-btn, .download-btn,
                             </select>
                         </label>
                         <label class="autotune-config-item autotune-config-slider">
-                            <span class="config-label">Strength <span id="autotuneSpeedDisplay">85%</span></span>
-                            <input type="range" id="autotuneSpeedSlider" min="0" max="1" step="0.01" value="0.85">
+                            <span class="config-label">Strength <span id="autotuneSpeedDisplay">100%</span></span>
+                            <input type="range" id="autotuneSpeedSlider" min="0" max="1" step="0.01" value="1">
                         </label>
                     </div>
                     <div id="autotuneDisplay" class="autotune-display hidden">

@@ -490,21 +490,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.isPlaying = false;
                 this.cancelProgressUpdate();
             } else {
-                // Try to route the backtrack through the unified master bus so the
-                // recorder, effects and limiter all see it. If routing fails, we
-                // fall back to direct HTML5 playback (user hears it but no record).
-                if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
-                const routed = this.connectToToneJS();
-
+                // Preview = pure HTML5 Audio. createMediaElementSource() permanently
+                // hijacks the <audio> element, so once you call it the element
+                // can NEVER play directly to speakers again — if anything in the
+                // Tone graph isn't perfectly wired the user gets silence on every
+                // future click. We deliberately keep preview simple. The track
+                // version (playAudioClip) does its own Tone routing so the master
+                // recorder still captures the backtrack when it sits on a track.
                 const volSlider = this.volumeSlider;
                 const vol = volSlider ? parseInt(volSlider.value) / 100 : 0.4;
-                if (routed && this.btGainNode) {
-                    // Route via Tone — keep <audio>.volume at 1, Tone gain controls level
-                    this.audio.volume = 1;
-                    this.btGainNode.gain.value = vol;
-                } else {
-                    this.audio.volume = vol;
-                }
+                this.audio.volume = vol;
 
                 try {
                     await this.audio.play();
@@ -2379,7 +2374,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // Per-track synths: sustain: 0 (prevents pile-up), low polyphony, quiet volumes
                     const synthDefs = {
                         'piano': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 6,
+                            maxPolyphony: 32,
                             harmonicity: 3, modulationIndex: 8,
                             oscillator: { type: "sine" }, modulation: { type: "sine" },
                             modulationEnvelope: { attack: 0.001, decay: 0.3, sustain: 0, release: 0.5 },
@@ -2387,7 +2382,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             volume: -14
                         }),
                         'electric-piano': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 6,
+                            maxPolyphony: 32,
                             harmonicity: 3.01, modulationIndex: 10,
                             oscillator: { type: "sine" }, modulation: { type: "sine" },
                             modulationEnvelope: { attack: 0.002, decay: 0.3, sustain: 0, release: 0.2 },
@@ -2395,25 +2390,25 @@ document.addEventListener('DOMContentLoaded', function() {
                             volume: -14
                         }),
                         'organ': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 8,
+                            maxPolyphony: 32,
                             oscillator: { type: "fatcustom", partials: [1, 0.5, 0.33, 0.25], spread: 20, count: 3 },
                             envelope: { attack: 0.005, decay: 0.3, sustain: 0, release: 0.1 },
                             volume: -12
                         }),
                         'synth': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 10,
+                            maxPolyphony: 32,
                             oscillator: { type: "sawtooth" },
                             envelope: { attack: 0.01, decay: 0.15, sustain: 0, release: 0.05 },
                             volume: -14
                         }),
                         'strings': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 8,
+                            maxPolyphony: 32,
                             oscillator: { type: "fatsawtooth", spread: 30, count: 3 },
                             envelope: { attack: 0.3, decay: 0.5, sustain: 0, release: 1.5 },
                             volume: -14
                         }),
                         'pad': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 6,
+                            maxPolyphony: 32,
                             harmonicity: 1.5, modulationIndex: 2,
                             oscillator: { type: "sine" }, modulation: { type: "triangle" },
                             modulationEnvelope: { attack: 0.5, decay: 1, sustain: 0, release: 2 },
@@ -2436,14 +2431,35 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         playAudioClip(clipData, track, clipStartTimeMs, currentTimeMs) {
-            if (!clipData.sourceData.url) return;
+            // Resolve the playable URL. If we have a blob reference (the canonical
+            // case for backtracks sent to mix and master recordings), regenerate
+            // a fresh blob URL on every play. Without this, a previously-revoked
+            // or GC'd blob URL throws "NotSupportedError: The element has no
+            // supported sources" the moment the user hits Play Tracks/Master.
+            let playableUrl = clipData.sourceData.url;
+            const blobRef = clipData.sourceData._blob || clipData.sourceData.blob;
+            if (blobRef instanceof Blob) {
+                try {
+                    playableUrl = URL.createObjectURL(blobRef);
+                    clipData.sourceData.url = playableUrl;
+                } catch (e) {
+                    console.warn('Could not regenerate blob URL, falling back:', e);
+                }
+            }
+            if (!playableUrl) return;
             try {
                 const delay = Math.max(0, clipStartTimeMs - currentTimeMs);
                 const timeoutId = setTimeout(async () => {
                     if (!this.isPlaying || this.isPaused || !this.shouldTrackPlay(track)) return;
-                    const audio = new Audio(clipData.sourceData.url);
-                    audio.crossOrigin = 'anonymous';
+                    const audio = new Audio();
+                    // crossOrigin='anonymous' on a blob: URL breaks playback in
+                    // Chromium-based browsers ("no supported sources"). Only set
+                    // it for HTTP(S) where CORS is meaningful.
+                    if (/^https?:/.test(playableUrl)) {
+                        audio.crossOrigin = 'anonymous';
+                    }
                     audio.preload = 'auto';
+                    audio.src = playableUrl;
                     const vol = track.volume != null ? track.volume : 75;
                     const volumeGain = vol / 100;
                     if (currentTimeMs > clipStartTimeMs) {
@@ -2491,23 +2507,29 @@ document.addEventListener('DOMContentLoaded', function() {
                             await audio.play();
                         } catch(playErr) {
                             console.warn('Audio play failed:', playErr);
-                            // Fallback: if routed through Web Audio failed, try direct playback
-                            if (routed) {
-                                try {
-                                    const fallbackAudio = new Audio(clipData.sourceData.url);
-                                    const globalVol = (this.globalMasterVolume != null ? this.globalMasterVolume : 100) / 100;
-                                    fallbackAudio.volume = Math.min(1, volumeGain * globalVol);
-                                    if (currentTimeMs > clipStartTimeMs) {
-                                        fallbackAudio.currentTime = (currentTimeMs - clipStartTimeMs) / 1000;
-                                    }
-                                    track.audioPlayer = fallbackAudio;
-                                    fallbackAudio.addEventListener('ended', () => {
-                                        if (track.audioPlayer === fallbackAudio) track.audioPlayer = null;
-                                    });
-                                    await fallbackAudio.play();
-                                } catch(fallbackErr) {
-                                    console.error('Audio fallback also failed:', fallbackErr);
+                            // Fallback: if routed through Web Audio failed, try direct playback.
+                            // Re-resolve the URL from the blob ref so we never use a stale URL.
+                            try {
+                                let fallbackUrl = playableUrl;
+                                if (blobRef instanceof Blob) {
+                                    fallbackUrl = URL.createObjectURL(blobRef);
+                                    clipData.sourceData.url = fallbackUrl;
                                 }
+                                const fallbackAudio = new Audio();
+                                fallbackAudio.preload = 'auto';
+                                fallbackAudio.src = fallbackUrl;
+                                const globalVol = (this.globalMasterVolume != null ? this.globalMasterVolume : 100) / 100;
+                                fallbackAudio.volume = Math.min(1, volumeGain * globalVol);
+                                if (currentTimeMs > clipStartTimeMs) {
+                                    fallbackAudio.currentTime = (currentTimeMs - clipStartTimeMs) / 1000;
+                                }
+                                track.audioPlayer = fallbackAudio;
+                                fallbackAudio.addEventListener('ended', () => {
+                                    if (track.audioPlayer === fallbackAudio) track.audioPlayer = null;
+                                });
+                                await fallbackAudio.play();
+                            } catch(fallbackErr) {
+                                console.error('Audio fallback also failed:', fallbackErr);
                             }
                         }
                     };

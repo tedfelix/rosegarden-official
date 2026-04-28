@@ -38,7 +38,9 @@ class MicrophoneStudio {
         this.autotuneActive = false;
         this.autotuneNode = null;
         this.autotuneScale = 'chromatic';
-        this.autotuneSpeed = 0.85;
+        // Default 1.0 = full snap-to-grid (T-Pain style). The slider lets the
+        // user back off to 0.5–0.85 for a more natural correction.
+        this.autotuneSpeed = 1.0;
         this.autotuneOutputGain = null;
         this.autotuneKey = 'C';
         this._autotuneSource = null;
@@ -902,8 +904,10 @@ class AutotuneProcessor extends AudioWorkletProcessor {
         const input = inputs[0][0];
         const output = outputs[0][0];
         if (!input || !output) return true;
-        // Smooth ratio so transitions between detected notes don't click
-        this.smoothRatio += (this.ratio - this.smoothRatio) * 0.1;
+        // Aggressive smoothing — 0.45 instead of 0.1 so the corrected pitch
+        // reaches the target in ~4 process blocks (T-Pain hard-tune feel).
+        // The previous 0.1 took ~25 blocks → barely audible correction.
+        this.smoothRatio += (this.ratio - this.smoothRatio) * 0.45;
         const r = Math.max(0.5, Math.min(2, this.smoothRatio));
 
         for (let i = 0; i < output.length; i++) {
