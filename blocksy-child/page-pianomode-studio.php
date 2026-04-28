@@ -11425,6 +11425,174 @@ button, .drum-transport-btn, .transport-btn, .rec-btn, .download-btn,
         </div>
 
         <!-- ================================================
+             2.5. MICROPHONE STUDIO COMPONENT
+             Tuner (YIN pitch detection), Autotune (granular
+             pitch shift), Training mode and vocal recorder.
+             Routed through the unified master bus, so what
+             you sing here is captured by the global recorder.
+             ================================================ -->
+        <div class="component-container-v2" id="microphoneStudioComponent">
+            <div class="component-header-v2">
+                <div class="header-left-v2">
+                    <img src="https://pianomode.com/wp-content/uploads/2025/12/cropped-PianoMode_Logo_2026.png" alt="PianoMode" class="component-logo-v2">
+                    <div class="header-titles-v2">
+                        <h3 class="component-title-v2">Microphone Studio</h3>
+                        <p class="component-subtitle-v2">Tuner · Autotune · Training · Vocal recorder</p>
+                    </div>
+                </div>
+                <div class="header-right-v2">
+                    <button class="component-toggle-btn-v2" id="microphoneStudioToggleBtn" onclick="toggleComponentV2('microphoneStudioComponent')">
+                        <span class="toggle-icon-v2">−</span>
+                        <span class="toggle-text-v2">Hide</span>
+                    </button>
+                </div>
+            </div>
+            <div class="component-body-v2" id="microphoneStudioBody">
+
+                <!-- Connect / level meter row -->
+                <div class="mic-studio-connect-row">
+                    <button id="micStudioConnectBtn" class="mic-studio-btn mic-studio-btn-primary" type="button">
+                        <span class="btn-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+                        </span>
+                        <span class="btn-text">Allow Microphone</span>
+                    </button>
+                    <div class="mic-studio-status-box">
+                        <div id="micStudioStatusText" class="mic-studio-status-text">Microphone disconnected</div>
+                        <div class="mic-studio-level-meter">
+                            <div id="micStudioLevelBar" class="mic-studio-level-bar"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vocal recorder controls -->
+                <div class="mic-studio-record-row">
+                    <button id="micStudioRecordBtn" class="mic-studio-btn mic-studio-btn-record" type="button" disabled>
+                        <span class="rec-dot-icon"></span>
+                        <span>Record voice</span>
+                    </button>
+                    <button id="micStudioStopBtn" class="mic-studio-btn mic-studio-btn-stop" type="button" disabled>
+                        <span class="stop-square-icon"></span>
+                        <span>Stop</span>
+                    </button>
+                    <div id="micStudioRecordingInfo" class="mic-studio-recording-info" style="display:none;">
+                        <span class="rec-pulse"></span>
+                        <span class="rec-label">REC</span>
+                        <span id="micStudioRecTime" class="rec-timer">0:00</span>
+                    </div>
+                </div>
+
+                <!-- Feature tabs: Tuner / Autotune / Training -->
+                <div class="mic-feature-tabs" role="tablist">
+                    <button class="mic-feature-tab active" data-panel="micTunerPanel" role="tab" aria-selected="true">Tuner</button>
+                    <button class="mic-feature-tab" data-panel="micAutotunePanel" role="tab" aria-selected="false">Autotune</button>
+                    <button class="mic-feature-tab" data-panel="micTrainingPanel" role="tab" aria-selected="false">Training</button>
+                </div>
+
+                <!-- TUNER PANEL -->
+                <div class="mic-feature-panel" id="micTunerPanel" role="tabpanel">
+                    <div class="mic-feature-row">
+                        <button id="pitchDetectionToggle" class="mic-feature-btn">Start</button>
+                        <span class="mic-feature-hint">Real-time vocal tuner powered by the YIN algorithm.</span>
+                    </div>
+                    <div id="pitchDetectorDisplay" class="tuner-display hidden">
+                        <div class="tuner-note-block">
+                            <div id="pitchNoteDisplay" class="tuner-note">—</div>
+                            <div id="pitchCentsDisplay" class="tuner-cents"></div>
+                            <div id="pitchFreqDisplay" class="tuner-freq">— Hz</div>
+                        </div>
+                        <div class="tuner-needle-block">
+                            <div class="tuner-needle-track">
+                                <span class="tuner-mark tuner-mark-50">-50</span>
+                                <span class="tuner-mark tuner-mark-25">-25</span>
+                                <span class="tuner-mark tuner-mark-0">0</span>
+                                <span class="tuner-mark tuner-mark-p25">+25</span>
+                                <span class="tuner-mark tuner-mark-p50">+50</span>
+                                <div id="pitchNeedle" class="tuner-needle"></div>
+                            </div>
+                        </div>
+                        <canvas id="pitchHistoryCanvas" class="tuner-history-canvas"></canvas>
+                    </div>
+                </div>
+
+                <!-- AUTOTUNE PANEL -->
+                <div class="mic-feature-panel hidden" id="micAutotunePanel" role="tabpanel">
+                    <div class="mic-feature-row">
+                        <button id="autotuneToggle" class="mic-feature-btn">Start</button>
+                        <span class="mic-feature-hint">Granular pitch correction. Routes through the master bus and is captured by the recorder.</span>
+                    </div>
+                    <div class="autotune-config-grid">
+                        <label class="autotune-config-item">
+                            <span class="config-label">Key</span>
+                            <select id="autotuneKeySelect" class="mic-feature-select">
+                                <option value="C" selected>C</option>
+                                <option value="C#">C#</option>
+                                <option value="D">D</option>
+                                <option value="D#">D#</option>
+                                <option value="E">E</option>
+                                <option value="F">F</option>
+                                <option value="F#">F#</option>
+                                <option value="G">G</option>
+                                <option value="G#">G#</option>
+                                <option value="A">A</option>
+                                <option value="A#">A#</option>
+                                <option value="B">B</option>
+                            </select>
+                        </label>
+                        <label class="autotune-config-item">
+                            <span class="config-label">Scale</span>
+                            <select id="autotuneScaleSelect" class="mic-feature-select">
+                                <option value="chromatic" selected>Chromatic</option>
+                                <option value="major">Major</option>
+                                <option value="minor">Minor</option>
+                                <option value="pentatonic">Pentatonic</option>
+                                <option value="blues">Blues</option>
+                                <option value="dorian">Dorian</option>
+                                <option value="mixolydian">Mixolydian</option>
+                            </select>
+                        </label>
+                        <label class="autotune-config-item autotune-config-slider">
+                            <span class="config-label">Strength <span id="autotuneSpeedDisplay">85%</span></span>
+                            <input type="range" id="autotuneSpeedSlider" min="0" max="1" step="0.01" value="0.85">
+                        </label>
+                    </div>
+                    <div id="autotuneDisplay" class="autotune-display hidden">
+                        <div id="autotuneStatus" class="autotune-status">Autotune off</div>
+                    </div>
+                </div>
+
+                <!-- TRAINING PANEL -->
+                <div class="mic-feature-panel hidden" id="micTrainingPanel" role="tabpanel">
+                    <div class="mic-feature-row">
+                        <button id="trainingToggle" class="mic-feature-btn">Start</button>
+                        <button id="trainingNewNote" class="mic-feature-btn-secondary">New note</button>
+                        <button id="trainingReset" class="mic-feature-btn-secondary">Reset</button>
+                    </div>
+                    <div id="trainingDisplay" class="training-display hidden">
+                        <div class="training-target-block">
+                            <div class="training-target-label">Sing this note</div>
+                            <div id="trainingTargetNote" class="training-target-note">—</div>
+                            <div id="trainingFeedback" class="training-feedback">Listen, then sing the note…</div>
+                        </div>
+                        <div class="training-stats">
+                            <div class="training-stat"><span class="stat-label">Score</span><span id="trainingScoreDisplay" class="stat-value">0 / 0</span></div>
+                            <div class="training-stat"><span class="stat-label">Accuracy</span><span id="trainingAccuracy" class="stat-value">—</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recordings list — every voice take is shown here.
+                     Each item has Play, Edit and "Send to Mix" so the user
+                     can ship the take to the recording-studio timeline. -->
+                <div class="mic-recordings-section">
+                    <h4 class="mic-recordings-title">Vocal recordings</h4>
+                    <div id="micStudioRecordingsList" class="mic-recordings-list"></div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ================================================
              3. DRUM MACHINE COMPONENT
              ================================================ -->
         <div class="component-container-v2" id="drumMachineComponent">

@@ -444,11 +444,18 @@ class VirtualStudioPro {
                                     onload: () => {
                                         this.pianoSamplerLoaded = true;
                                     }
-                                }).connect(audioOutput);
+                                });
+                                this.synths.piano.volume.value = -6;
+                                this.synths.piano.connect(audioOutput);
                             }, 1000 * this.pianoLoadRetries);
                         }
                     }
                 });
+                // Pre-attenuate the piano sampler by 6 dB. Tone.Sampler defaults
+                // to 0 dB which combined with other sources on the master bus
+                // pushes the compressor into permanent gain reduction → audible
+                // crackle. -6 dB headroom keeps the master clean.
+                this.synths.piano.volume.value = -6;
                 // Route through master chain (effectsChain → compressor → limiter)
                 // NOT toDestination() which bypasses all protection
                 this.synths.piano.connect(audioOutput);
@@ -481,7 +488,7 @@ class VirtualStudioPro {
             // sustain: 0 = notes decay naturally (no infinite sound)
             // ============================================
             this.synths['electric-piano'] = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 24,
+                maxPolyphony: 32,
                 harmonicity: 3.01,
                 modulationIndex: 10,
                 oscillator: { type: "sine" },
@@ -498,7 +505,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.3
                 },
-                volume: -8
+                volume: -12
             }).connect(audioOutput);
 
             // ============================================
@@ -506,7 +513,7 @@ class VirtualStudioPro {
             // sustain: 0 = notes decay and stop (short punchy notes)
             // ============================================
             this.synths.organ = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 16,
+                maxPolyphony: 32,
                 oscillator: {
                     type: "fatcustom",
                     partials: [1, 0.5, 0.33, 0.25],
@@ -519,7 +526,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.1
                 },
-                volume: -6
+                volume: -10
             }).connect(audioOutput);
 
             // No extra layers - simple organ
@@ -538,7 +545,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.05
                 },
-                volume: -8
+                volume: -12
             }).connect(audioOutput);
 
             // Synth filter for warmer sound
@@ -554,7 +561,7 @@ class VirtualStudioPro {
             // STRINGS - Slow attack, rich sustained sound
             // ============================================
             this.synths.strings = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 16,
+                maxPolyphony: 32,
                 oscillator: {
                     type: "fatsawtooth",
                     spread: 30,
@@ -566,14 +573,14 @@ class VirtualStudioPro {
                     sustain: 0.4,
                     release: 1.0
                 },
-                volume: -8
+                volume: -12
             }).connect(audioOutput);
 
             // ============================================
             // WARM PAD - Slow evolving ambient pad
             // ============================================
             this.synths.pad = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 8,
+                maxPolyphony: 32,
                 harmonicity: 1.5,
                 modulationIndex: 2,
                 oscillator: { type: "sine" },
@@ -590,14 +597,14 @@ class VirtualStudioPro {
                     sustain: 0.4,
                     release: 1.5
                 },
-                volume: -8
+                volume: -12
             }).connect(audioOutput);
 
             // ============================================
             // BELLS - Bright crystalline metallic tone
             // ============================================
             this.synths.bells = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 16,
+                maxPolyphony: 32,
                 harmonicity: 6.5,
                 modulationIndex: 16,
                 oscillator: { type: "sine" },
@@ -614,14 +621,14 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 2.0
                 },
-                volume: -10
+                volume: -14
             }).connect(audioOutput);
 
             // ============================================
             // CELESTA - Soft, percussive metallic keyboard
             // ============================================
             this.synths.celesta = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 16,
+                maxPolyphony: 32,
                 harmonicity: 4,
                 modulationIndex: 8,
                 oscillator: { type: "triangle" },
@@ -638,7 +645,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.8
                 },
-                volume: -9
+                volume: -13
             }).connect(audioOutput);
 
             // ============================================
@@ -648,7 +655,7 @@ class VirtualStudioPro {
             // filterEnvelope has known instability in v14).
             // ============================================
             this.synths.bass = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 6,
+                maxPolyphony: 32,
                 oscillator: { type: "sawtooth" },
                 envelope: {
                     attack: 0.008,
@@ -656,7 +663,7 @@ class VirtualStudioPro {
                     sustain: 0.55,
                     release: 0.35
                 },
-                volume: -10
+                volume: -14
             });
             const bassFilter = new Tone.Filter({
                 frequency: 600,
@@ -670,7 +677,7 @@ class VirtualStudioPro {
             // LEAD SYNTH - Sharp cutting lead for melody
             // ============================================
             this.synths.lead = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 8,
+                maxPolyphony: 32,
                 oscillator: {
                     type: "sawtooth"
                 },
@@ -680,7 +687,7 @@ class VirtualStudioPro {
                     sustain: 0.6,
                     release: 0.2
                 },
-                volume: -10
+                volume: -14
             }).connect(audioOutput);
 
             // Drum Machine
@@ -725,7 +732,7 @@ class VirtualStudioPro {
                 sustain: 0,
                 release: 1.2
             },
-            volume: -8
+            volume: -12
         }).connect(audioOutput);
         this.pianoSamplerLoaded = true;
     }
@@ -845,7 +852,7 @@ class VirtualStudioPro {
                         release: 1.2,
                         attackCurve: "exponential"
                     },
-                    volume: -6
+                    volume: -10
                 }).connect(this.drumLimiter),
 
                 // SNARE - Crisp snare with noise body
@@ -859,7 +866,7 @@ class VirtualStudioPro {
                         attackCurve: "exponential",
                         decayCurve: "exponential"
                     },
-                    volume: -8
+                    volume: -12
                 }).connect(this.drumLimiter),
 
                 // HIHAT - Tight closed hi-hat
@@ -874,7 +881,7 @@ class VirtualStudioPro {
                     modulationIndex: 20,
                     resonance: 3500,
                     octaves: 1.2,
-                    volume: -12
+                    volume: -16
                 }).connect(this.drumLimiter),
 
                 // OPEN HAT - Longer, open hi-hat
@@ -889,7 +896,7 @@ class VirtualStudioPro {
                     modulationIndex: 24,
                     resonance: 3200,
                     octaves: 1.5,
-                    volume: -14
+                    volume: -18
                 }).connect(this.drumLimiter),
 
                 // CLAP - Layered clap sound
@@ -901,7 +908,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.12
                     },
-                    volume: -10
+                    volume: -14
                 }).connect(this.drumLimiter),
 
                 // CRASH - Crash cymbal
@@ -916,7 +923,7 @@ class VirtualStudioPro {
                     modulationIndex: 32,
                     resonance: 4000,
                     octaves: 1.8,
-                    volume: -16
+                    volume: -20
                 }).connect(this.drumLimiter),
 
                 // RIDE - Ride cymbal (higher, shorter)
@@ -931,7 +938,7 @@ class VirtualStudioPro {
                     modulationIndex: 16,
                     resonance: 4500,
                     octaves: 1,
-                    volume: -15
+                    volume: -19
                 }).connect(this.drumLimiter),
 
                 // TOM (High) - High tom drum
@@ -945,7 +952,7 @@ class VirtualStudioPro {
                         sustain: 0.01,
                         release: 0.5
                     },
-                    volume: -8
+                    volume: -12
                 }).connect(this.drumLimiter),
 
                 // TOM2 (Low) - Low tom drum
@@ -959,7 +966,7 @@ class VirtualStudioPro {
                         sustain: 0.01,
                         release: 0.6
                     },
-                    volume: -7
+                    volume: -11
                 }).connect(this.drumLimiter),
 
                 // SHAKER - Electronic shaker
@@ -971,7 +978,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.04
                     },
-                    volume: -16
+                    volume: -20
                 }).connect(this.drumLimiter),
 
                 // COWBELL - Classic cowbell
@@ -986,7 +993,7 @@ class VirtualStudioPro {
                     modulationIndex: 8,
                     resonance: 2000,
                     octaves: 0.5,
-                    volume: -14
+                    volume: -18
                 }).connect(this.drumLimiter),
 
                 // PERC - Percussion hit
@@ -1000,7 +1007,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.08
                     },
-                    volume: -10
+                    volume: -14
                 }).connect(this.drumLimiter),
                 // RIMSHOT - Sharp rim hit
                 rimshot: new Tone.MembraneSynth({
@@ -1013,7 +1020,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.04
                     },
-                    volume: -8
+                    volume: -12
                 }).connect(this.drumLimiter),
                 // 909 KICK - TR-909 style deep kick
                 kick909: new Tone.MembraneSynth({
@@ -1027,7 +1034,7 @@ class VirtualStudioPro {
                         release: 1.4,
                         attackCurve: "exponential"
                     },
-                    volume: -4
+                    volume: -8
                 }).connect(this.drumLimiter),
                 // 909 SNARE - TR-909 style snare
                 snare909: new Tone.NoiseSynth({
@@ -1039,7 +1046,7 @@ class VirtualStudioPro {
                         release: 0.25,
                         attackCurve: "exponential"
                     },
-                    volume: -6
+                    volume: -10
                 }).connect(this.drumLimiter),
                 // CONGA - Deep conga drum
                 conga: new Tone.MembraneSynth({
@@ -1052,7 +1059,7 @@ class VirtualStudioPro {
                         sustain: 0.02,
                         release: 0.3
                     },
-                    volume: -8
+                    volume: -12
                 }).connect(this.drumLimiter),
                 // BONGO - Higher pitched bongo
                 bongo: new Tone.MembraneSynth({
@@ -1065,7 +1072,7 @@ class VirtualStudioPro {
                         sustain: 0.01,
                         release: 0.2
                     },
-                    volume: -9
+                    volume: -13
                 }).connect(this.drumLimiter),
                 // TAMBOURINE - Bright tambourine shake
                 tambourine: new Tone.MetalSynth({
@@ -1079,7 +1086,7 @@ class VirtualStudioPro {
                     modulationIndex: 30,
                     resonance: 5000,
                     octaves: 1.5,
-                    volume: -16
+                    volume: -20
                 }).connect(this.drumLimiter),
                 // SPLASH - Short splash cymbal
                 splash: new Tone.MetalSynth({
@@ -1093,7 +1100,7 @@ class VirtualStudioPro {
                     modulationIndex: 28,
                     resonance: 4200,
                     octaves: 1.6,
-                    volume: -15
+                    volume: -19
                 }).connect(this.drumLimiter),
                 // WOODBLOCK - Percussive woodblock
                 woodblock: new Tone.MembraneSynth({
@@ -1106,7 +1113,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.03
                     },
-                    volume: -10
+                    volume: -14
                 }).connect(this.drumLimiter)
             };
 
@@ -2819,8 +2826,15 @@ class VirtualStudioPro {
                         // Trigger at the exact scheduled time for sample-accurate playback
                         try {
                             const vol = Tone.gainToDb(trackVolume * this.masterVolume);
-                            // Set volume directly - setValueAtTime fails if time is in the past
-                            drum.volume.value = vol;
+                            // Set volume at the same scheduled time as the trigger so we don't
+                            // hit Tone's "events scheduled inside scheduled callbacks should use
+                            // the passed in scheduling time" warning. Fall back to immediate set
+                            // if for some reason `time` is invalid.
+                            try {
+                                drum.volume.setValueAtTime(vol, time);
+                            } catch (volErr) {
+                                drum.volume.value = vol;
+                            }
 
                             switch(instrument.id) {
                                 case 'kick': case 'kick909':
