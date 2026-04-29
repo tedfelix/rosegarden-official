@@ -1,7 +1,4 @@
-// ===== PRÉ-CHAUFFAGE AUDIO / UNIFIED MASTER BUS =====
-// Single-context architecture: every source feeds _masterBusInput which goes
-// through compressor → safety → limiter → tap → [speakers, recording].
-// Recording captures EXACTLY what the user hears (no resampling, same context).
+// ===== PRÉ-CHAUFFAGE AUDIO / UNLOCK WEBAUDIO =====
 function prewarmAudioOnce() {
     if (prewarmAudioOnce._done) return;
     prewarmAudioOnce._done = true;
@@ -16,42 +13,33 @@ function prewarmAudioOnce() {
                 Tone.context.lookAhead = 0.01;
             }
             if (!window._masterLimiterInstalled) {
-                // Simplified master chain. Three stacked compressors squashed and
-                // re-squashed the signal — that's why the user kept hearing the
-                // "saturation rapide quand play master". Modern DAW masters are a
-                // single transparent limiter; that's all we need.
-                //
-                // Chain: sources → masterBusInput (Gain 0.6, headroom)
-                //                → masterLimiter (-1 dB, single peak guard)
-                //                → masterTap → [Tone.Destination, recordingDest]
-                //
-                // _masterCompressor is kept as an alias of masterBusInput for
-                // backward compatibility with code that connects to it (drums,
-                // backtrack, effects all connect to "_masterCompressor.input").
-                const masterBusInput = new Tone.Gain(0.6);
-                const masterLimiter = new Tone.Limiter(-1);
-                const masterTap = new Tone.Gain(1);
-
-                masterBusInput.connect(masterLimiter);
-                masterLimiter.connect(masterTap);
-                masterTap.toDestination();
-
-                // Recording destination lives in the SAME Tone.context so the
-                // recorder captures the exact signal the user hears, no resampling.
-                const recordingDest = Tone.context.createMediaStreamDestination();
-                masterTap.connect(recordingDest);
-
+                // Match OLD working code EXACTLY (lines 12582-12609)
+                const masterCompressor = new Tone.Compressor({
+                    threshold: -12,
+                    ratio: 3,
+                    attack: 0.002,
+                    release: 0.15,
+                    knee: 10
+                });
+                const masterLimiter = new Tone.Limiter(-0.3);
+                const safetyCompressor = new Tone.Compressor({
+                    threshold: -3,
+                    ratio: 20,
+                    attack: 0.001,
+                    release: 0.05,
+                    knee: 2
+                });
+                // OLD code chain: masterCompressor → safetyCompressor → masterLimiter → destination
+                masterCompressor.connect(safetyCompressor);
+                safetyCompressor.connect(masterLimiter);
+                masterLimiter.toDestination();
                 window._masterLimiterInstalled = true;
-                window._masterBusInput = masterBusInput;
-                window._masterCompressor = masterBusInput; // alias for legacy callers
-                window._masterSafetyCompressor = masterBusInput;
+                // window._masterCompressor must point to the REAL compressor (not a Gain node!)
+                window._masterCompressor = masterCompressor;
+                window._masterSafetyCompressor = safetyCompressor;
                 window._masterLimiter = masterLimiter;
-                window._masterTap = masterTap;
-                window._recordingDest = recordingDest;
-
-                // If effects module already exists, route its output into the bus
                 if (window.effectsModule && window.effectsModule.updateOutputRouting) {
-                    window.effectsModule.updateOutputRouting(masterBusInput);
+                    window.effectsModule.updateOutputRouting(masterCompressor);
                 }
             }
             const hush = new Tone.Gain(0).toDestination();
@@ -68,19 +56,6 @@ function prewarmAudioOnce() {
         console.warn('Tone.js start error:', err);
     });
 }
-
-// Helper: returns the canonical audio entry point for any source.
-// Order: effects chain (if loaded) > master bus input > master compressor > Tone.Destination.
-// Sources should ALWAYS use this so they go through the limiter chain and get recorded.
-function getStudioAudioOutput() {
-    if (window.effectsModule && window.effectsModule.effectsChain) {
-        return window.effectsModule.effectsChain;
-    }
-    if (window._masterBusInput) return window._masterBusInput;
-    if (window._masterCompressor) return window._masterCompressor;
-    return Tone.getDestination();
-}
-window.getStudioAudioOutput = getStudioAudioOutput;
 
 // ===== HELPER FUNCTIONS =====
 function safeGetElement(id) {
@@ -390,15 +365,10 @@ class VirtualStudioPro {
         if (!this.isInitialized) return;
 
         try {
-            // Always use the unified master bus when effects aren't loaded yet,
-            // never Tone.getDestination() directly (that bypasses the limiter).
-            prewarmAudioOnce();
-            const audioOutput = (typeof getStudioAudioOutput === 'function')
-                ? getStudioAudioOutput()
-                : (window.effectsModule && window.effectsModule.effectsChain)
-                    || window._masterBusInput
-                    || window._masterCompressor
-                    || Tone.getDestination();
+            // Effects chain for instruments that need effects
+            const audioOutput = window.effectsModule && window.effectsModule.effectsChain
+                ? window.effectsModule.effectsChain
+                : Tone.getDestination();
 
 
             // PIANO - Salamander Grand Piano
@@ -432,18 +402,11 @@ class VirtualStudioPro {
                                     onload: () => {
                                         this.pianoSamplerLoaded = true;
                                     }
-                                });
-                                this.synths.piano.volume.value = -6;
-                                this.synths.piano.connect(audioOutput);
+                                }).connect(audioOutput);
                             }, 1000 * this.pianoLoadRetries);
                         }
                     }
                 });
-                // Pre-attenuate the piano sampler by 6 dB. Tone.Sampler defaults
-                // to 0 dB which combined with other sources on the master bus
-                // pushes the compressor into permanent gain reduction → audible
-                // crackle. -6 dB headroom keeps the master clean.
-                this.synths.piano.volume.value = -6;
                 // Route through master chain (effectsChain → compressor → limiter)
                 // NOT toDestination() which bypasses all protection
                 this.synths.piano.connect(audioOutput);
@@ -476,7 +439,7 @@ class VirtualStudioPro {
             // sustain: 0 = notes decay naturally (no infinite sound)
             // ============================================
             this.synths['electric-piano'] = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 32,
+                maxPolyphony: 24,
                 harmonicity: 3.01,
                 modulationIndex: 10,
                 oscillator: { type: "sine" },
@@ -493,7 +456,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.3
                 },
-                volume: -12
+                volume: -8
             }).connect(audioOutput);
 
             // ============================================
@@ -501,7 +464,7 @@ class VirtualStudioPro {
             // sustain: 0 = notes decay and stop (short punchy notes)
             // ============================================
             this.synths.organ = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 32,
+                maxPolyphony: 16,
                 oscillator: {
                     type: "fatcustom",
                     partials: [1, 0.5, 0.33, 0.25],
@@ -514,7 +477,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.1
                 },
-                volume: -10
+                volume: -6
             }).connect(audioOutput);
 
             // No extra layers - simple organ
@@ -533,7 +496,7 @@ class VirtualStudioPro {
                     sustain: 0,
                     release: 0.05
                 },
-                volume: -12
+                volume: -8
             }).connect(audioOutput);
 
             // Synth filter for warmer sound
@@ -549,7 +512,7 @@ class VirtualStudioPro {
             // STRINGS - Slow attack, rich sustained sound
             // ============================================
             this.synths.strings = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 32,
+                maxPolyphony: 16,
                 oscillator: {
                     type: "fatsawtooth",
                     spread: 30,
@@ -561,14 +524,14 @@ class VirtualStudioPro {
                     sustain: 0.4,
                     release: 1.0
                 },
-                volume: -12
+                volume: -8
             }).connect(audioOutput);
 
             // ============================================
             // WARM PAD - Slow evolving ambient pad
             // ============================================
             this.synths.pad = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 32,
+                maxPolyphony: 8,
                 harmonicity: 1.5,
                 modulationIndex: 2,
                 oscillator: { type: "sine" },
@@ -585,97 +548,7 @@ class VirtualStudioPro {
                     sustain: 0.4,
                     release: 1.5
                 },
-                volume: -12
-            }).connect(audioOutput);
-
-            // ============================================
-            // BELLS - Bright crystalline metallic tone
-            // ============================================
-            this.synths.bells = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 32,
-                harmonicity: 6.5,
-                modulationIndex: 16,
-                oscillator: { type: "sine" },
-                modulation: { type: "sine" },
-                modulationEnvelope: {
-                    attack: 0.001,
-                    decay: 0.6,
-                    sustain: 0,
-                    release: 1.0
-                },
-                envelope: {
-                    attack: 0.001,
-                    decay: 1.2,
-                    sustain: 0,
-                    release: 2.0
-                },
-                volume: -14
-            }).connect(audioOutput);
-
-            // ============================================
-            // CELESTA - Soft, percussive metallic keyboard
-            // ============================================
-            this.synths.celesta = new Tone.PolySynth(Tone.FMSynth, {
-                maxPolyphony: 32,
-                harmonicity: 4,
-                modulationIndex: 8,
-                oscillator: { type: "triangle" },
-                modulation: { type: "sine" },
-                modulationEnvelope: {
-                    attack: 0.001,
-                    decay: 0.4,
-                    sustain: 0,
-                    release: 0.6
-                },
-                envelope: {
-                    attack: 0.001,
-                    decay: 0.6,
-                    sustain: 0,
-                    release: 0.8
-                },
-                volume: -13
-            }).connect(audioOutput);
-
-            // ============================================
-            // SYNTH BASS — punchy sawtooth bass, low-passed for warmth.
-            // Uses a plain PolySynth(Synth) + a static lowpass filter so it
-            // never chokes (the Tone.PolySynth(MonoSynth) variant with
-            // filterEnvelope has known instability in v14).
-            // ============================================
-            this.synths.bass = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 32,
-                oscillator: { type: "sawtooth" },
-                envelope: {
-                    attack: 0.008,
-                    decay: 0.18,
-                    sustain: 0.55,
-                    release: 0.35
-                },
-                volume: -14
-            });
-            const bassFilter = new Tone.Filter({
-                frequency: 600,
-                type: "lowpass",
-                rolloff: -24,
-                Q: 1.4
-            }).connect(audioOutput);
-            this.synths.bass.connect(bassFilter);
-
-            // ============================================
-            // LEAD SYNTH - Sharp cutting lead for melody
-            // ============================================
-            this.synths.lead = new Tone.PolySynth(Tone.Synth, {
-                maxPolyphony: 32,
-                oscillator: {
-                    type: "sawtooth"
-                },
-                envelope: {
-                    attack: 0.005,
-                    decay: 0.1,
-                    sustain: 0.6,
-                    release: 0.2
-                },
-                volume: -14
+                volume: -8
             }).connect(audioOutput);
 
             // Drum Machine
@@ -695,13 +568,9 @@ class VirtualStudioPro {
 
     // Fallback piano if samples fail to load
     createFallbackPiano() {
-        prewarmAudioOnce();
-        const audioOutput = (typeof getStudioAudioOutput === 'function')
-            ? getStudioAudioOutput()
-            : (window.effectsModule && window.effectsModule.effectsChain)
-                || window._masterBusInput
-                || window._masterCompressor
-                || Tone.getDestination();
+        const audioOutput = window.effectsModule && window.effectsModule.effectsChain
+            ? window.effectsModule.effectsChain
+            : (window._masterCompressor || Tone.getDestination());
         this.synths.piano = new Tone.PolySynth(Tone.FMSynth, {
             maxPolyphony: 32,
             harmonicity: 3,
@@ -720,7 +589,7 @@ class VirtualStudioPro {
                 sustain: 0,
                 release: 1.2
             },
-            volume: -12
+            volume: -8
         }).connect(audioOutput);
         this.pianoSamplerLoaded = true;
     }
@@ -813,17 +682,12 @@ class VirtualStudioPro {
         if (!this.isInitialized) return;
 
         try {
-            // Drums route through effects chain if loaded, otherwise unified master bus.
-            // Never Tone.getDestination() directly — that bypasses the master limiter.
-            prewarmAudioOnce();
-            const audioOutput = (typeof getStudioAudioOutput === 'function')
-                ? getStudioAudioOutput()
-                : (window.effectsModule && window.effectsModule.effectsChain)
-                    || window._masterBusInput
-                    || window._masterCompressor
-                    || Tone.getDestination();
+            // Route drums through effects chain if available
+            const audioOutput = window.effectsModule && window.effectsModule.effectsChain
+                ? window.effectsModule.effectsChain
+                : Tone.getDestination();
 
-            // Per-bus limiter prevents drum stacking from triggering the master safety compressor
+            // Create limiter to prevent clipping/distortion
             this.drumLimiter = new Tone.Limiter(-3).connect(audioOutput);
 
             // High-Quality Synthesized Drum Sounds (all free for commercial use)
@@ -840,7 +704,7 @@ class VirtualStudioPro {
                         release: 1.2,
                         attackCurve: "exponential"
                     },
-                    volume: -10
+                    volume: -6
                 }).connect(this.drumLimiter),
 
                 // SNARE - Crisp snare with noise body
@@ -854,7 +718,7 @@ class VirtualStudioPro {
                         attackCurve: "exponential",
                         decayCurve: "exponential"
                     },
-                    volume: -12
+                    volume: -8
                 }).connect(this.drumLimiter),
 
                 // HIHAT - Tight closed hi-hat
@@ -869,7 +733,7 @@ class VirtualStudioPro {
                     modulationIndex: 20,
                     resonance: 3500,
                     octaves: 1.2,
-                    volume: -16
+                    volume: -12
                 }).connect(this.drumLimiter),
 
                 // OPEN HAT - Longer, open hi-hat
@@ -884,7 +748,7 @@ class VirtualStudioPro {
                     modulationIndex: 24,
                     resonance: 3200,
                     octaves: 1.5,
-                    volume: -18
+                    volume: -14
                 }).connect(this.drumLimiter),
 
                 // CLAP - Layered clap sound
@@ -896,7 +760,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.12
                     },
-                    volume: -14
+                    volume: -10
                 }).connect(this.drumLimiter),
 
                 // CRASH - Crash cymbal
@@ -911,7 +775,7 @@ class VirtualStudioPro {
                     modulationIndex: 32,
                     resonance: 4000,
                     octaves: 1.8,
-                    volume: -20
+                    volume: -16
                 }).connect(this.drumLimiter),
 
                 // RIDE - Ride cymbal (higher, shorter)
@@ -926,7 +790,7 @@ class VirtualStudioPro {
                     modulationIndex: 16,
                     resonance: 4500,
                     octaves: 1,
-                    volume: -19
+                    volume: -15
                 }).connect(this.drumLimiter),
 
                 // TOM (High) - High tom drum
@@ -940,7 +804,7 @@ class VirtualStudioPro {
                         sustain: 0.01,
                         release: 0.5
                     },
-                    volume: -12
+                    volume: -8
                 }).connect(this.drumLimiter),
 
                 // TOM2 (Low) - Low tom drum
@@ -954,7 +818,7 @@ class VirtualStudioPro {
                         sustain: 0.01,
                         release: 0.6
                     },
-                    volume: -11
+                    volume: -7
                 }).connect(this.drumLimiter),
 
                 // SHAKER - Electronic shaker
@@ -966,7 +830,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.04
                     },
-                    volume: -20
+                    volume: -16
                 }).connect(this.drumLimiter),
 
                 // COWBELL - Classic cowbell
@@ -981,7 +845,7 @@ class VirtualStudioPro {
                     modulationIndex: 8,
                     resonance: 2000,
                     octaves: 0.5,
-                    volume: -18
+                    volume: -14
                 }).connect(this.drumLimiter),
 
                 // PERC - Percussion hit
@@ -995,7 +859,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.08
                     },
-                    volume: -14
+                    volume: -10
                 }).connect(this.drumLimiter),
                 // RIMSHOT - Sharp rim hit
                 rimshot: new Tone.MembraneSynth({
@@ -1008,7 +872,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.04
                     },
-                    volume: -12
+                    volume: -8
                 }).connect(this.drumLimiter),
                 // 909 KICK - TR-909 style deep kick
                 kick909: new Tone.MembraneSynth({
@@ -1022,7 +886,7 @@ class VirtualStudioPro {
                         release: 1.4,
                         attackCurve: "exponential"
                     },
-                    volume: -8
+                    volume: -4
                 }).connect(this.drumLimiter),
                 // 909 SNARE - TR-909 style snare
                 snare909: new Tone.NoiseSynth({
@@ -1034,7 +898,7 @@ class VirtualStudioPro {
                         release: 0.25,
                         attackCurve: "exponential"
                     },
-                    volume: -10
+                    volume: -6
                 }).connect(this.drumLimiter),
                 // CONGA - Deep conga drum
                 conga: new Tone.MembraneSynth({
@@ -1047,7 +911,7 @@ class VirtualStudioPro {
                         sustain: 0.02,
                         release: 0.3
                     },
-                    volume: -12
+                    volume: -8
                 }).connect(this.drumLimiter),
                 // BONGO - Higher pitched bongo
                 bongo: new Tone.MembraneSynth({
@@ -1060,7 +924,7 @@ class VirtualStudioPro {
                         sustain: 0.01,
                         release: 0.2
                     },
-                    volume: -13
+                    volume: -9
                 }).connect(this.drumLimiter),
                 // TAMBOURINE - Bright tambourine shake
                 tambourine: new Tone.MetalSynth({
@@ -1074,7 +938,7 @@ class VirtualStudioPro {
                     modulationIndex: 30,
                     resonance: 5000,
                     octaves: 1.5,
-                    volume: -20
+                    volume: -16
                 }).connect(this.drumLimiter),
                 // SPLASH - Short splash cymbal
                 splash: new Tone.MetalSynth({
@@ -1088,7 +952,7 @@ class VirtualStudioPro {
                     modulationIndex: 28,
                     resonance: 4200,
                     octaves: 1.6,
-                    volume: -19
+                    volume: -15
                 }).connect(this.drumLimiter),
                 // WOODBLOCK - Percussive woodblock
                 woodblock: new Tone.MembraneSynth({
@@ -1101,7 +965,7 @@ class VirtualStudioPro {
                         sustain: 0,
                         release: 0.03
                     },
-                    volume: -14
+                    volume: -10
                 }).connect(this.drumLimiter)
             };
 
@@ -1854,19 +1718,6 @@ class VirtualStudioPro {
             if (window.recorderModule && window.recorderModule.isRecording) {
                 window.recorderModule.recordNoteOn(note, Math.round(vel * 127));
             }
-
-            // Public bridge — sight-reading trainer / OMR can listen
-            try {
-                window.dispatchEvent(new CustomEvent('pianomode:notePlay', {
-                    detail: {
-                        note,
-                        midi: this.noteToMIDI ? this.noteToMIDI(note) : null,
-                        velocity: vel,
-                        instrument: this.currentInstrument
-                    }
-                }));
-            } catch (e) {}
-
             if (!this.audioReady || (!this.isInitialized && !this.useFallbackAudio)) {
                 this.playBasicNote(note, noteStartTime);
                 return;
@@ -1904,10 +1755,7 @@ class VirtualStudioPro {
                 if (this.currentInstrument !== 'piano') {
                     const autoReleaseNote = note;
                     const inst = this.currentInstrument;
-                    // Long-sustain instruments need a longer safety release
-                    const timeout = (inst === 'strings' || inst === 'pad') ? 8000
-                                  : (inst === 'bells' || inst === 'celesta') ? 4000
-                                  : 2000;
+                    const timeout = (inst === 'strings' || inst === 'pad') ? 8000 : 2000;
                     setTimeout(() => {
                         if (this.activeNotes.has(autoReleaseNote)) {
                             try { synth.triggerRelease(autoReleaseNote); } catch(e) {}
@@ -1958,13 +1806,6 @@ class VirtualStudioPro {
                 window.recorderModule.recordNoteOff(note);
             }
 
-            // Public bridge
-            try {
-                window.dispatchEvent(new CustomEvent('pianomode:noteStop', {
-                    detail: { note, midi: this.noteToMIDI ? this.noteToMIDI(note) : null }
-                }));
-            } catch (e) {}
-
             // Release the note (natural piano behavior)
             if (sound.type === 'tone' && sound.synth) {
                 sound.synth.triggerRelease(note);
@@ -2004,66 +1845,11 @@ class VirtualStudioPro {
         this.sustainActive = true;
         // Dispatch event for PianoSequencer to capture
         window.dispatchEvent(new CustomEvent('sustainOn'));
-
-        // Safety net: if the user holds the pedal but never releases (or forgets it
-        // while leaving the tab), force-release every sustained note after 30s.
-        // This kills the voice-stealing leak that used to silence the piano after
-        // a few minutes of heavy playing.
-        if (this._sustainPanicTimeout) clearTimeout(this._sustainPanicTimeout);
-        this._sustainPanicTimeout = setTimeout(() => {
-            if (this.sustainActive) {
-                console.warn('Sustain pedal held > 30s, panic-releasing notes');
-                this.panicReleaseAll();
-            }
-        }, 30000);
-    }
-
-    // Hard reset: release every active and sustained note across every synth.
-    // Called when the user switches instrument, panics, or stops the studio.
-    panicReleaseAll() {
-        try {
-            this.sustainedNotes.forEach((noteData, note) => {
-                try {
-                    if (noteData && noteData.synth && noteData.synth.triggerRelease) {
-                        noteData.synth.triggerRelease(note);
-                    }
-                } catch (e) {}
-            });
-            this.sustainedNotes.clear();
-
-            this.activeNotes.forEach((noteData, note) => {
-                try {
-                    if (noteData && noteData.synth && noteData.synth.triggerRelease) {
-                        noteData.synth.triggerRelease(note);
-                    } else if (noteData && noteData.player && noteData.player.stop) {
-                        noteData.player.stop();
-                        try { noteData.player.dispose(); } catch (e) {}
-                    }
-                } catch (e) {}
-                const keyEl = document.querySelector(`[data-note="${note}"]`);
-                if (keyEl) keyEl.classList.remove('active');
-            });
-            this.activeNotes.clear();
-
-            // Belt-and-suspenders: ask every PolySynth to release everything.
-            if (this.synths) {
-                Object.values(this.synths).forEach(s => {
-                    try { if (s && s.releaseAll) s.releaseAll(); } catch (e) {}
-                });
-            }
-        } catch (e) {
-            console.warn('panicReleaseAll error:', e);
-        }
     }
 
     // Deactivate sustain pedal and release all sustained notes
     deactivateSustain() {
         this.sustainActive = false;
-
-        if (this._sustainPanicTimeout) {
-            clearTimeout(this._sustainPanicTimeout);
-            this._sustainPanicTimeout = null;
-        }
 
         // Dispatch event for PianoSequencer to capture
         window.dispatchEvent(new CustomEvent('sustainOff'));
@@ -2090,12 +1876,9 @@ class VirtualStudioPro {
                 this.playBasicNote(note, startTime);
                 return;
             }
-            const audioOutput = (typeof getStudioAudioOutput === 'function')
-                ? getStudioAudioOutput()
-                : (window.effectsModule && window.effectsModule.effectsChain)
-                    || window._masterBusInput
-                    || window._masterCompressor
-                    || Tone.getDestination();
+            const audioOutput = window.effectsModule && window.effectsModule.effectsChain
+                ? window.effectsModule.effectsChain
+                : Tone.getDestination();
             const player = new Tone.Player(soundData.buffer).connect(audioOutput);
             const noteNumber = this.noteToMIDI(note);
             const basePitch = 60;
@@ -2130,24 +1913,16 @@ class VirtualStudioPro {
 
     playBasicNote(note, startTime) {
         try {
-            // Always use Tone's raw AudioContext so the basic-piano fallback
-            // shares the same clock and goes through the unified master bus.
-            prewarmAudioOnce();
-            if (typeof Tone === 'undefined' || !Tone.context) return;
-            const audioContext = Tone.context.rawContext || Tone.context._context || Tone.context;
-            this._fallbackAudioContext = audioContext;
+            // Reuse existing AudioContext to prevent resource leaks
+            if (!this._fallbackAudioContext || this._fallbackAudioContext.state === 'closed') {
+                this._fallbackAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            const audioContext = this._fallbackAudioContext;
             const frequency = this.noteToFrequency(note);
 
             // Create a more piano-like sound using multiple oscillators (additive synthesis)
             const masterGain = audioContext.createGain();
-            const busTarget = (window._masterBusInput && window._masterBusInput.input)
-                || window._masterBusInput
-                || audioContext.destination;
-            try {
-                masterGain.connect(busTarget);
-            } catch (e) {
-                masterGain.connect(audioContext.destination);
-            }
+            masterGain.connect(audioContext.destination);
 
             // Fundamental frequency with softer sine wave
             const osc1 = audioContext.createOscillator();
@@ -2255,9 +2030,7 @@ class VirtualStudioPro {
             if (this.customSamples.has(instrumentId)) {
                 const player = this.customSamples.get(instrumentId);
                 if (player && player.buffer && this.isInitialized) {
-                    const audioOut = (typeof getStudioAudioOutput === 'function')
-                        ? getStudioAudioOutput()
-                        : (window.effectsModule?.effectsChain || window._masterBusInput || window._masterCompressor || Tone.getDestination());
+                    const audioOut = window.effectsModule?.effectsChain || window._masterCompressor || Tone.getDestination();
                 const newPlayer = new Tone.Player(player.buffer).connect(audioOut);
                     newPlayer.volume.value = Tone.gainToDb(trackVolume * this.masterVolume);
                     newPlayer.start();
@@ -2378,9 +2151,7 @@ class VirtualStudioPro {
             const sample = this.uploadedSamples.get(sampleId);
             if (!sample || !sample.buffer || !this.isInitialized) return;
 
-            const audioOut = (typeof getStudioAudioOutput === 'function')
-                ? getStudioAudioOutput()
-                : (window.effectsModule?.effectsChain || window._masterBusInput || window._masterCompressor || Tone.getDestination());
+            const audioOut = window.effectsModule?.effectsChain || window._masterCompressor || Tone.getDestination();
             const player = new Tone.Player(sample.buffer).connect(audioOut);
             player.volume.value = Tone.gainToDb(volume * this.masterVolume);
             player.start();
@@ -2391,63 +2162,26 @@ class VirtualStudioPro {
     }
 
     // Initialize shared drum audio context (lazy loading)
-    // ALWAYS uses Tone.js raw AudioContext + routes through the unified master bus
-    // so basic-drum oscillators are limited/compressed and captured by the recorder.
+    // Uses Tone.js AudioContext when available so drum sounds get captured by master recording
     initDrumAudioContext() {
         if (!this.drumAudioContext) {
             try {
-                if (typeof Tone === 'undefined' || !Tone.context) {
-                    console.warn('Tone.js context not ready, basic drums will be silent');
-                    return null;
+                // Prefer Tone.js AudioContext so drums are captured by MediaRecorder
+                if (typeof Tone !== 'undefined' && Tone.context) {
+                    this.drumAudioContext = Tone.context.rawContext || Tone.context._context || Tone.context;
+                } else {
+                    this.drumAudioContext = new (window.AudioContext || window.webkitAudioContext)();
                 }
-                prewarmAudioOnce();
-                this.drumAudioContext = Tone.context.rawContext || Tone.context._context || Tone.context;
 
-                // Master gain for drum-machine volume; feeds the unified bus, not destination.
+                // Create master gain node for drum machine volume control
                 this.drumMasterGain = this.drumAudioContext.createGain();
                 this.drumMasterGain.gain.value = this.masterVolume;
-
-                this._connectDrumMasterToBus();
+                this.drumMasterGain.connect(this.drumAudioContext.destination);
             } catch (error) {
                 console.error('Impossible de créer AudioContext pour drum machine:', error);
             }
         }
         return this.drumAudioContext;
-    }
-
-    // Connect drumMasterGain to the unified master bus. If the bus isn't ready yet,
-    // schedules a retry so basic-drum oscillators always end up routed correctly.
-    _connectDrumMasterToBus() {
-        if (!this.drumMasterGain) return;
-        const target = (window._masterBusInput && window._masterBusInput.input)
-            || window._masterBusInput
-            || (window._masterCompressor && window._masterCompressor.input)
-            || window._masterCompressor;
-
-        try {
-            this.drumMasterGain.disconnect();
-        } catch (e) {}
-
-        if (target && typeof this.drumMasterGain.connect === 'function') {
-            try {
-                this.drumMasterGain.connect(target);
-                return;
-            } catch (e) {
-                console.warn('drumMasterGain → master bus connect failed:', e);
-            }
-        }
-
-        // Bus not ready yet — retry shortly. As fallback, connect to destination
-        // so the user still hears something.
-        try {
-            this.drumMasterGain.connect(this.drumAudioContext.destination);
-        } catch (e) {}
-        if (!this._drumBusRetry) {
-            this._drumBusRetry = setTimeout(() => {
-                this._drumBusRetry = null;
-                this._connectDrumMasterToBus();
-            }, 250);
-        }
     }
 
     playBasicDrumSound(instrumentId, volume = 1) {
@@ -2814,11 +2548,7 @@ class VirtualStudioPro {
                         // Trigger at the exact scheduled time for sample-accurate playback
                         try {
                             const vol = Tone.gainToDb(trackVolume * this.masterVolume);
-                            // Immediate set — tried setValueAtTime(time) but in Tone v14 the
-                            // scheduled value can desynchronise from the trigger and silence
-                            // the drum if `time` is in the past or near-equal to currentTime.
-                            // The "events scheduled inside scheduled callbacks" warning is
-                            // cosmetic; silent drums are not.
+                            // Set volume directly - setValueAtTime fails if time is in the past
                             drum.volume.value = vol;
 
                             switch(instrument.id) {
@@ -3119,12 +2849,9 @@ class VirtualStudioPro {
             if (this.isInitialized && Tone) {
                 // Reuse a single synth for metronome clicks (avoid creating/disposing every beat)
                 if (!this._metronomeSynth || this._metronomeSynth.disposed) {
-                    const audioOutput = (typeof getStudioAudioOutput === 'function')
-                        ? getStudioAudioOutput()
-                        : (window.effectsModule && window.effectsModule.effectsChain)
-                            || window._masterBusInput
-                            || window._masterCompressor
-                            || Tone.getDestination();
+                    const audioOutput = window.effectsModule && window.effectsModule.effectsChain
+                        ? window.effectsModule.effectsChain
+                        : Tone.getDestination();
 
                     this._metronomeSynth = new Tone.Synth({
                         oscillator: { type: "sine" },
@@ -6197,24 +5924,17 @@ class PianoSequencer {
     }
 
     startMetronome() {
-        prewarmAudioOnce();
-        if (typeof Tone !== 'undefined' && Tone.context) {
-            this.metronomeContext = Tone.context.rawContext || Tone.context._context || Tone.context;
+        if (!this.metronomeContext) {
+            this.metronomeContext = new (window.AudioContext || window.webkitAudioContext)();
         }
-        if (!this.metronomeContext) return;
 
-        // Beat counter for accent on beat 1 (Rosegarden-inspired)
-        this._metronomeBeat = 0;
-        const beatsPerBar = this._metronomeBeatsPerBar || 4;
         const beatInterval = (60 / this.tempo) * 1000;
 
         this.metronomeInterval = setInterval(() => {
-            this.playMetronomeClick(this._metronomeBeat % beatsPerBar === 0);
-            this._metronomeBeat++;
+            this.playMetronomeClick();
         }, beatInterval);
 
-        this.playMetronomeClick(true);
-        this._metronomeBeat = 1;
+        this.playMetronomeClick();
     }
 
     stopMetronome() {
@@ -6224,31 +5944,20 @@ class PianoSequencer {
         }
     }
 
-    playMetronomeClick(accented = false) {
+    playMetronomeClick() {
         if (!this.metronomeContext) return;
 
         const oscillator = this.metronomeContext.createOscillator();
         const gainNode = this.metronomeContext.createGain();
 
-        // Beat 1 gets a higher pitch (1320 Hz) so the user hears the bar boundary.
-        oscillator.frequency.value = accented ? 1320 : 880;
+        oscillator.frequency.value = 880;
         oscillator.type = 'sine';
 
-        const peak = (this.metronomeVolume != null ? this.metronomeVolume : 0.3) * (accented ? 1 : 0.7);
-        gainNode.gain.setValueAtTime(peak, this.metronomeContext.currentTime);
-        gainNode.gain.exponentialRampToValueAtTime(0.001, this.metronomeContext.currentTime + 0.08);
+        gainNode.gain.setValueAtTime(0.3, this.metronomeContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, this.metronomeContext.currentTime + 0.1);
 
         oscillator.connect(gainNode);
-        // Route through the unified master bus so the metronome is included in
-        // recordings (only if user wants it — see recorder excludeMetronome flag).
-        const target = (window._masterBusInput && window._masterBusInput.input)
-            || window._masterBusInput
-            || this.metronomeContext.destination;
-        try {
-            gainNode.connect(target);
-        } catch (e) {
-            gainNode.connect(this.metronomeContext.destination);
-        }
+        gainNode.connect(this.metronomeContext.destination);
 
         oscillator.start();
         oscillator.stop(this.metronomeContext.currentTime + 0.1);
@@ -6417,191 +6126,3 @@ if (document.readyState === 'loading') {
         }
     }, 100);
 }
-
-// =====================================================================
-// VirtualStudioAPI — public bridge between Virtual Studio, sight-reading
-// trainer, OMR scanner, and any future tool. Other pages dispatch events
-// or call methods on window.VirtualStudioAPI to import notes / MIDI /
-// MusicXML, or to listen to live note play.
-//
-// Events emitted (via window.dispatchEvent):
-//   pianomode:notePlay     { note, midi, velocity, duration, instrument }
-//   pianomode:noteStop     { note, midi }
-//   pianomode:transportPlay
-//   pianomode:transportStop
-//   pianomode:recordStart
-//   pianomode:recordStop   { duration, midiEvents, audioBlob? }
-//
-// Events consumed (window.addEventListener):
-//   pianomode:loadMidi     { arrayBuffer, fileName? }
-//   pianomode:loadMusicXml { xml, fileName? }
-//   pianomode:playNote     { midi | note, velocity?, duration? }
-//   pianomode:stopNote     { midi | note }
-// =====================================================================
-(function installVirtualStudioAPI() {
-    if (window.VirtualStudioAPI) return;
-
-    const midiToNoteName = (midi) => {
-        const names = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
-        const octave = Math.floor(midi / 12) - 1;
-        return names[midi % 12] + octave;
-    };
-
-    const resolveNote = (payload) => {
-        if (!payload) return null;
-        if (payload.note) return payload.note;
-        if (typeof payload.midi === 'number') return midiToNoteName(payload.midi);
-        return null;
-    };
-
-    const API = {
-        version: '1.0',
-
-        // Live playback — used by sight-reading trainer to trigger notes from
-        // the score, and by OMR scanner playback to highlight the keyboard.
-        playNote(payload) {
-            const note = resolveNote(payload);
-            if (!note || !window.virtualStudio) return false;
-            const vel = payload && typeof payload.velocity === 'number'
-                ? Math.max(0, Math.min(1, payload.velocity > 1 ? payload.velocity / 127 : payload.velocity))
-                : 0.7;
-            try {
-                window.virtualStudio.playPianoNote(note, vel);
-                if (payload && payload.duration) {
-                    setTimeout(() => API.stopNote({ note }), payload.duration);
-                }
-                return true;
-            } catch (e) {
-                console.warn('VirtualStudioAPI.playNote error:', e);
-                return false;
-            }
-        },
-
-        stopNote(payload) {
-            const note = resolveNote(payload);
-            if (!note || !window.virtualStudio) return false;
-            try {
-                window.virtualStudio.stopPianoNote(note);
-                return true;
-            } catch (e) { return false; }
-        },
-
-        // Import a MIDI file (ArrayBuffer or Uint8Array). Forwarded to whatever
-        // import handler is registered (track-editor, recorder, etc.).
-        async importMIDI(buffer, opts = {}) {
-            if (!buffer) return false;
-            window.dispatchEvent(new CustomEvent('pianomode:loadMidi', {
-                detail: { arrayBuffer: buffer, fileName: opts.fileName || 'imported.mid' }
-            }));
-            // Also expose on a queue so a late-loading consumer can pick it up
-            window._pendingImports = window._pendingImports || [];
-            window._pendingImports.push({ kind: 'midi', buffer, fileName: opts.fileName });
-            return true;
-        },
-
-        // Import MusicXML — same pattern. The OMR scanner produces blob URLs;
-        // callers should pre-fetch text() and pass the string here.
-        async importMusicXML(xmlString, opts = {}) {
-            if (!xmlString) return false;
-            window.dispatchEvent(new CustomEvent('pianomode:loadMusicXml', {
-                detail: { xml: xmlString, fileName: opts.fileName || 'imported.musicxml' }
-            }));
-            window._pendingImports = window._pendingImports || [];
-            window._pendingImports.push({ kind: 'musicxml', xml: xmlString, fileName: opts.fileName });
-            return true;
-        },
-
-        // Recording control — sight-reading trainer can trigger record before
-        // a sight-reading exercise so the user's performance is captured.
-        startRecording() {
-            if (window.recorderModule && typeof window.recorderModule.startRecording === 'function') {
-                return window.recorderModule.startRecording();
-            }
-            return false;
-        },
-        stopRecording() {
-            if (window.recorderModule && typeof window.recorderModule.stopRecording === 'function') {
-                return window.recorderModule.stopRecording();
-            }
-            return false;
-        },
-
-        // Convenience: subscribe to live note play with a callback. The trainer
-        // uses this to compare what the user played vs the expected note.
-        onNotePlay(callback) {
-            if (typeof callback !== 'function') return () => {};
-            const handler = (e) => callback(e.detail);
-            window.addEventListener('pianomode:notePlay', handler);
-            return () => window.removeEventListener('pianomode:notePlay', handler);
-        },
-
-        // True when the audio engine is initialized — useful for the trainer
-        // to wait before sending notes.
-        isReady() {
-            return !!(window.virtualStudio && window.virtualStudio.isInitialized
-                && window._masterLimiterInstalled);
-        }
-    };
-
-    // Wire incoming events from other tools
-    window.addEventListener('pianomode:playNote', (e) => API.playNote(e.detail));
-    window.addEventListener('pianomode:stopNote', (e) => API.stopNote(e.detail));
-
-    window.VirtualStudioAPI = API;
-})();
-
-// =====================================================================
-// Rosegarden-inspired count-in: 1-bar of clicks before recording starts.
-// The trainer / OMR / drum sequencer can call window.studioCountIn(callback)
-// and a 4-beat count-in plays at the current tempo, then the callback fires.
-// =====================================================================
-window.studioCountIn = function studioCountIn(onComplete, opts = {}) {
-    try {
-        if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
-        const tempo = opts.tempo || (window.virtualStudio && window.virtualStudio.tempo) || 120;
-        const beats = opts.beats || 4;
-        const beatMs = (60 / tempo) * 1000;
-
-        const ctx = (typeof Tone !== 'undefined' && Tone.context)
-            ? (Tone.context.rawContext || Tone.context._context || Tone.context)
-            : null;
-        if (!ctx) {
-            if (typeof onComplete === 'function') onComplete();
-            return;
-        }
-
-        const target = (window._masterBusInput && window._masterBusInput.input)
-            || window._masterBusInput
-            || ctx.destination;
-
-        let beat = 0;
-        const click = () => {
-            const accent = (beat === 0);
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-            osc.frequency.value = accent ? 1320 : 880;
-            osc.type = 'sine';
-            const peak = accent ? 0.45 : 0.25;
-            gain.gain.setValueAtTime(peak, ctx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-            osc.connect(gain);
-            try { gain.connect(target); } catch (e) { gain.connect(ctx.destination); }
-            osc.start();
-            osc.stop(ctx.currentTime + 0.1);
-            beat++;
-        };
-
-        click();
-        const id = setInterval(() => {
-            if (beat >= beats) {
-                clearInterval(id);
-                if (typeof onComplete === 'function') onComplete();
-                return;
-            }
-            click();
-        }, beatMs);
-    } catch (e) {
-        console.warn('studioCountIn error:', e);
-        if (typeof onComplete === 'function') onComplete();
-    }
-};

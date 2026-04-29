@@ -30,14 +30,10 @@ class VirtualPianoEffects {
 
         this.effectsChain = new Tone.Channel();
 
-        // Connect effects chain — output goes to the unified master bus so the
-        // delay/reverb signal is compressed and limited like every other source.
-        // If the bus is not yet ready (rare race), we route to Tone.Destination
-        // and updateOutputRouting() will reroute when prewarmAudioOnce finishes.
+        // Connect effects chain
         this.effectsChain.connect(this.delay);
         this.delay.connect(this.reverb);
-        this._currentOutput = window._masterBusInput || window._masterCompressor || Tone.getDestination();
-        this.reverb.connect(this._currentOutput);
+        this.reverb.toDestination();
 
         // Swing settings
         this.swingAmount = 0;
@@ -484,23 +480,6 @@ class VirtualPianoEffects {
     // Get effects chain for connecting to instruments
     getEffectsChain() {
         return this.effectsChain;
-    }
-
-    // Re-route the tail of the effects chain (reverb) to a new target.
-    // Used by prewarmAudioOnce when the unified master bus is created after
-    // VirtualPianoEffects was instantiated.
-    updateOutputRouting(target) {
-        if (!target || target === this._currentOutput) return;
-        try {
-            this.reverb.disconnect();
-        } catch (e) {}
-        try {
-            this.reverb.connect(target);
-            this._currentOutput = target;
-        } catch (e) {
-            console.warn('updateOutputRouting failed, falling back to destination:', e);
-            try { this.reverb.toDestination(); } catch (e2) {}
-        }
     }
 
     // Capture current effects state for recording with tracks

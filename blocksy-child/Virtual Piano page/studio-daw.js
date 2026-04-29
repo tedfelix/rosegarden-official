@@ -331,10 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
     class BackTracksPlayer {
         constructor() {
             this.audio = new Audio();
-            // crossOrigin='anonymous' on the source <audio> element silently
-            // breaks playback for blob URLs and (on Cloudflare) for some
-            // same-origin MP3 fetches when the response lacks Access-Control
-            // headers. We only enable it once we know the URL is HTTP(S).
+            this.audio.crossOrigin = 'anonymous';
             this.isPlaying = false;
             this.currentTrack = null;
             // Build backtrack base path — bulletproof: derive from our own <script> tag
@@ -371,36 +368,32 @@ document.addEventListener('DOMContentLoaded', function() {
             this.bindEvents();
         }
 
-        // Route the backtrack <audio> element into the unified master bus so
-        // effects, master limiter and recorder all see it.
-        // IMPORTANT: createMediaElementSource() permanently hijacks the HTML5
-        // output, so we only call it once the bus is fully wired.
+        // Connect backtrack Audio element to Tone.js so effects chain applies and master recording captures it
+        // IMPORTANT: createMediaElementSource() permanently hijacks audio from HTML5 output.
+        // Only call it if we have a COMPLETE routing chain to destination.
         connectToToneJS() {
             if (this.audioSourceConnected) return true;
             try {
                 if (typeof Tone === 'undefined' || !Tone.context) return false;
+                // Don't route through Tone.js if context isn't running yet
                 const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
                 if (!rawCtx || rawCtx.state !== 'running') return false;
-
-                if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
-
-                const effectsInput = window.effectsModule && window.effectsModule.effectsChain
-                    && window.effectsModule.effectsChain.input;
-                const busInput = window._masterBusInput && (window._masterBusInput.input || window._masterBusInput);
-                const compInput = window._masterCompressor && window._masterCompressor.input;
-                const target = effectsInput || busInput || compInput;
-
-                if (!target) {
-                    // Bus not ready — leave the <audio> element playing through HTML5
-                    // (user still hears it, but the recorder cannot capture it yet).
+                // Need at least one valid destination in the chain
+                const hasEffectsChain = window.effectsModule && window.effectsModule.effectsChain;
+                const hasMasterCompressor = window._masterCompressor;
+                if (!hasEffectsChain && !hasMasterCompressor) {
+                    // Chain not ready - DON'T hijack audio, let HTML5 Audio play directly
                     return false;
                 }
-
                 if (rawCtx.createMediaElementSource) {
                     this.mediaSource = rawCtx.createMediaElementSource(this.audio);
                     const toneGainNode = rawCtx.createGain();
                     this.mediaSource.connect(toneGainNode);
-                    toneGainNode.connect(target);
+                    if (hasEffectsChain) {
+                        toneGainNode.connect(window.effectsModule.effectsChain.input);
+                    } else {
+                        toneGainNode.connect(hasMasterCompressor.input);
+                    }
                     this.btGainNode = toneGainNode;
                     this.audioSourceConnected = true;
                     return true;
@@ -493,16 +486,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.isPlaying = false;
                 this.cancelProgressUpdate();
             } else {
-                // Preview = pure HTML5 Audio. createMediaElementSource() permanently
-                // hijacks the <audio> element, so once you call it the element
-                // can NEVER play directly to speakers again — if anything in the
-                // Tone graph isn't perfectly wired the user gets silence on every
-                // future click. We deliberately keep preview simple. The track
-                // version (playAudioClip) does its own Tone routing so the master
-                // recorder still captures the backtrack when it sits on a track.
+                // Preview = pure HTML5 Audio. No Tone.js routing.
+                // createMediaElementSource permanently hijacks audio and breaks playback
+                // if the Tone.js chain isn't perfectly set up. For preview, just play directly.
                 const volSlider = this.volumeSlider;
-                const vol = volSlider ? parseInt(volSlider.value) / 100 : 0.4;
-                this.audio.volume = vol;
+                this.audio.volume = volSlider ? parseInt(volSlider.value) / 100 : 0.4;
 
                 try {
                     await this.audio.play();
@@ -592,14 +580,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const sourceId = `backtrack-${Date.now()}`;
             const sourceName = `🎵 ${trackName}`;
             let blobUrl = this.audio.src;
-            let blobReference = null;
             // Get duration from the already-loaded audio element (most reliable)
             let audioDuration = this.audio.duration;
             try {
                 const response = await fetch(this.audio.src);
                 const blob = await response.blob();
                 blobUrl = URL.createObjectURL(blob);
-                blobReference = blob;  // Keep a hard reference so the blob URL stays valid
                 if (!audioDuration || isNaN(audioDuration) || audioDuration <= 0) {
                     audioDuration = await this.getBlobDuration(blob);
                 }
@@ -614,15 +600,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 type: 'backtrack',
                 url: blobUrl,
                 filename: this.currentTrack,
-                duration: audioDuration,
-                // Hold the blob alive — without this reference the GC can free
-                // the blob and the blob URL silently stops working in playAudioClip.
-                _blob: blobReference
+                duration: audioDuration
             };
-            // Stash a global pin so the blob never gets collected during the session
-            window._studioBlobPins = window._studioBlobPins || new Map();
-            if (blobReference) window._studioBlobPins.set(blobUrl, blobReference);
-
             window.globalDAW.registerAndAssign(sourceId, sourceName, 'backtrack', backtrackData);
             window.globalDAW.ensureRecordingStudioVisible();
             const btn = this.sendBtn;
@@ -1674,18 +1653,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (metronomeBtn) metronomeBtn.addEventListener('click', () => this.toggleMetronome());
             if (loopBtn) loopBtn.addEventListener('click', () => this.toggleLoop());
 
-            // Count-In: arms a 1-bar lead-in that fires the next time the user
-            // presses Record. Click again to disarm.
-            const countInBtn = document.getElementById('dawCountIn');
-            if (countInBtn) {
-                countInBtn.addEventListener('click', () => {
-                    const armed = countInBtn.dataset.armed === 'true';
-                    countInBtn.dataset.armed = armed ? 'false' : 'true';
-                    countInBtn.classList.toggle('active', !armed);
-                    this._countInArmed = !armed;
-                });
-            }
-
             // Master Output Volume slider (in transport bar, always accessible)
             const masterOutputSlider = document.getElementById('masterOutputSlider');
             const masterOutputValue = document.getElementById('masterOutputValue');
@@ -2374,15 +2341,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 if (!track._pianoSynthPool[instrument]) {
-                    // 64 voices per per-track synth — generous enough that a
-                    // 45-note track held under sustain still has headroom
-                    // without flooding the console with "Max polyphony exceeded".
-                    // Tone.Sampler would be ideal (unlimited voices) but the
-                    // CDN load is async, so the first Play Tracks click after
-                    // page load would be silent. PolySynth fires immediately.
+                    // Per-track synths: sustain: 0 (prevents pile-up), low polyphony, quiet volumes
                     const synthDefs = {
                         'piano': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 64,
+                            maxPolyphony: 6,
                             harmonicity: 3, modulationIndex: 8,
                             oscillator: { type: "sine" }, modulation: { type: "sine" },
                             modulationEnvelope: { attack: 0.001, decay: 0.3, sustain: 0, release: 0.5 },
@@ -2390,7 +2352,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             volume: -14
                         }),
                         'electric-piano': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 64,
+                            maxPolyphony: 6,
                             harmonicity: 3.01, modulationIndex: 10,
                             oscillator: { type: "sine" }, modulation: { type: "sine" },
                             modulationEnvelope: { attack: 0.002, decay: 0.3, sustain: 0, release: 0.2 },
@@ -2398,25 +2360,25 @@ document.addEventListener('DOMContentLoaded', function() {
                             volume: -14
                         }),
                         'organ': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 64,
+                            maxPolyphony: 8,
                             oscillator: { type: "fatcustom", partials: [1, 0.5, 0.33, 0.25], spread: 20, count: 3 },
                             envelope: { attack: 0.005, decay: 0.3, sustain: 0, release: 0.1 },
                             volume: -12
                         }),
                         'synth': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 64,
+                            maxPolyphony: 10,
                             oscillator: { type: "sawtooth" },
                             envelope: { attack: 0.01, decay: 0.15, sustain: 0, release: 0.05 },
                             volume: -14
                         }),
                         'strings': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 64,
+                            maxPolyphony: 8,
                             oscillator: { type: "fatsawtooth", spread: 30, count: 3 },
                             envelope: { attack: 0.3, decay: 0.5, sustain: 0, release: 1.5 },
                             volume: -14
                         }),
                         'pad': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 64,
+                            maxPolyphony: 6,
                             harmonicity: 1.5, modulationIndex: 2,
                             oscillator: { type: "sine" }, modulation: { type: "triangle" },
                             modulationEnvelope: { attack: 0.5, decay: 1, sustain: 0, release: 2 },
@@ -2439,40 +2401,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         playAudioClip(clipData, track, clipStartTimeMs, currentTimeMs) {
-            // Resolve the playable URL. If we have a Blob reference (the canonical
-            // case for backtracks sent to mix and for master recordings),
-            // regenerate a fresh blob URL on every play; that pattern made Send-
-            // to-Mix work after the previous round and we keep it here.
-            let playableUrl = clipData.sourceData.url;
-            const blobRef = clipData.sourceData._blob || clipData.sourceData.blob;
-            if (blobRef instanceof Blob) {
-                try {
-                    playableUrl = URL.createObjectURL(blobRef);
-                    clipData.sourceData.url = playableUrl;
-                } catch (e) {
-                    console.warn('Could not regenerate blob URL, falling back:', e);
-                }
-            }
-            if (!playableUrl) return;
-
-            // CORS heuristics. createMediaElementSource() requires the audio data
-            // to be CORS-readable. blob: URLs are always same-origin so they read
-            // freely. http(s) URLs depend on the server; some Cloudflare cache
-            // configs strip Access-Control-Allow-Origin which makes the audio
-            // refuse to play with crossOrigin='anonymous' set ("no supported
-            // sources"). So:
-            //   - blob URL: route via Web Audio (full features, recorder captures it)
-            //   - http(s) URL: play via plain <audio> element (still hearable),
-            //     skip Web Audio routing so we never need CORS headers.
-            const isBlobUrl = playableUrl.startsWith('blob:');
-
+            if (!clipData.sourceData.url) return;
             try {
                 const delay = Math.max(0, clipStartTimeMs - currentTimeMs);
                 const timeoutId = setTimeout(async () => {
                     if (!this.isPlaying || this.isPaused || !this.shouldTrackPlay(track)) return;
-                    const audio = new Audio();
+                    const audio = new Audio(clipData.sourceData.url);
+                    audio.crossOrigin = 'anonymous';
                     audio.preload = 'auto';
-                    audio.src = playableUrl;
                     const vol = track.volume != null ? track.volume : 75;
                     const volumeGain = vol / 100;
                     if (currentTimeMs > clipStartTimeMs) {
@@ -2480,41 +2416,35 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     this.initializeTrackToneEffects(track);
                     this.updateTrackToneEffects(track);
-
                     let routed = false;
-                    if (isBlobUrl) {
-                        try {
-                            if (typeof Tone !== 'undefined' && Tone.context && Tone.context.state === 'running') {
-                                const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
-                                if (rawCtx && rawCtx.createMediaElementSource) {
-                                    const source = rawCtx.createMediaElementSource(audio);
-                                    const toneGain = new Tone.Gain(volumeGain);
-                                    const toneSource = Tone.context.createGain();
-                                    source.connect(toneSource);
-                                    toneSource.connect(toneGain.input);
-                                    if (track.tonePanner) {
-                                        toneGain.connect(track.tonePanner);
-                                    } else if (window._masterCompressor) {
-                                        const tonePan = new Tone.Panner((track.pan || 0) / 100);
-                                        toneGain.connect(tonePan);
-                                        tonePan.connect(window._masterCompressor);
-                                        track.audioClipPan = tonePan;
-                                    } else {
-                                        toneGain.toDestination();
-                                    }
-                                    track.audioClipGain = toneGain;
-                                    track._audioClipSource = toneSource;
-                                    routed = true;
+                    try {
+                        if (typeof Tone !== 'undefined' && Tone.context && Tone.context.state === 'running') {
+                            const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
+                            if (rawCtx && rawCtx.createMediaElementSource) {
+                                const source = rawCtx.createMediaElementSource(audio);
+                                const toneGain = new Tone.Gain(volumeGain);
+                                const toneSource = Tone.context.createGain();
+                                source.connect(toneSource);
+                                toneSource.connect(toneGain.input);
+                                if (track.tonePanner) {
+                                    toneGain.connect(track.tonePanner);
+                                } else if (window._masterCompressor) {
+                                    const tonePan = new Tone.Panner((track.pan || 0) / 100);
+                                    toneGain.connect(tonePan);
+                                    tonePan.connect(window._masterCompressor);
+                                    track.audioClipPan = tonePan;
+                                } else {
+                                    toneGain.toDestination();
                                 }
+                                track.audioClipGain = toneGain;
+                                track._audioClipSource = toneSource;
+                                routed = true;
                             }
-                        } catch (routeErr) {
-                            console.warn('Audio routing fallback:', routeErr);
                         }
+                    } catch(routeErr) {
+                        console.warn('Audio routing fallback:', routeErr);
                     }
                     if (!routed) {
-                        // Plain HTML5 playback. The user hears it; the master
-                        // recorder won't capture it (CORS prevents Web Audio from
-                        // reading the samples), but at least nothing is silent.
                         const globalVol = (this.globalMasterVolume != null ? this.globalMasterVolume : 100) / 100;
                         audio.volume = Math.min(1, volumeGain * globalVol);
                     }
@@ -2526,29 +2456,23 @@ document.addEventListener('DOMContentLoaded', function() {
                             await audio.play();
                         } catch(playErr) {
                             console.warn('Audio play failed:', playErr);
-                            // Fallback: if routed through Web Audio failed, try direct playback.
-                            // Re-resolve the URL from the blob ref so we never use a stale URL.
-                            try {
-                                let fallbackUrl = playableUrl;
-                                if (blobRef instanceof Blob) {
-                                    fallbackUrl = URL.createObjectURL(blobRef);
-                                    clipData.sourceData.url = fallbackUrl;
+                            // Fallback: if routed through Web Audio failed, try direct playback
+                            if (routed) {
+                                try {
+                                    const fallbackAudio = new Audio(clipData.sourceData.url);
+                                    const globalVol = (this.globalMasterVolume != null ? this.globalMasterVolume : 100) / 100;
+                                    fallbackAudio.volume = Math.min(1, volumeGain * globalVol);
+                                    if (currentTimeMs > clipStartTimeMs) {
+                                        fallbackAudio.currentTime = (currentTimeMs - clipStartTimeMs) / 1000;
+                                    }
+                                    track.audioPlayer = fallbackAudio;
+                                    fallbackAudio.addEventListener('ended', () => {
+                                        if (track.audioPlayer === fallbackAudio) track.audioPlayer = null;
+                                    });
+                                    await fallbackAudio.play();
+                                } catch(fallbackErr) {
+                                    console.error('Audio fallback also failed:', fallbackErr);
                                 }
-                                const fallbackAudio = new Audio();
-                                fallbackAudio.preload = 'auto';
-                                fallbackAudio.src = fallbackUrl;
-                                const globalVol = (this.globalMasterVolume != null ? this.globalMasterVolume : 100) / 100;
-                                fallbackAudio.volume = Math.min(1, volumeGain * globalVol);
-                                if (currentTimeMs > clipStartTimeMs) {
-                                    fallbackAudio.currentTime = (currentTimeMs - clipStartTimeMs) / 1000;
-                                }
-                                track.audioPlayer = fallbackAudio;
-                                fallbackAudio.addEventListener('ended', () => {
-                                    if (track.audioPlayer === fallbackAudio) track.audioPlayer = null;
-                                });
-                                await fallbackAudio.play();
-                            } catch(fallbackErr) {
-                                console.error('Audio fallback also failed:', fallbackErr);
                             }
                         }
                     };
@@ -2827,12 +2751,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.mediaRecorder.stop();
                 }
 
-                // Only disconnect when we created a private fallback dest (the
-                // shared window._recordingDest belongs to the bus and stays alive).
+                // Disconnect master recording capture node to prevent leaked connections
                 if (this._masterRecordDest) {
                     try {
-                        if (window._masterTap) window._masterTap.disconnect(this._masterRecordDest);
-                        else if (window._masterBusInput) window._masterBusInput.disconnect(this._masterRecordDest);
+                        Tone.getDestination().disconnect(this._masterRecordDest);
                     } catch(e) {}
                     this._masterRecordDest = null;
                 }
@@ -2852,37 +2774,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.hideMasterRecordingOverlay();
 
             } else {
-                // If count-in is armed, run a 4-beat lead-in before actually
-                // starting the record. The dot beats animate so the user can
-                // visually count along.
-                if (this._countInArmed && typeof window.studioCountIn === 'function') {
-                    const btn = document.getElementById('dawCountIn');
-                    const dots = btn ? btn.querySelectorAll('.count-dot') : [];
-                    const tempo = parseInt(document.getElementById('dawBPM')?.value || '120', 10) || 120;
-                    let beatIdx = 0;
-                    const beatTimer = setInterval(() => {
-                        dots.forEach(d => d.classList.remove('lit'));
-                        if (dots[beatIdx]) dots[beatIdx].classList.add('lit');
-                        beatIdx++;
-                        if (beatIdx >= 4) clearInterval(beatTimer);
-                    }, (60 / tempo) * 1000);
-
-                    if (recordBtn) recordBtn.classList.add('arming');
-                    window.studioCountIn(() => {
-                        clearInterval(beatTimer);
-                        dots.forEach(d => d.classList.remove('lit'));
-                        if (recordBtn) recordBtn.classList.remove('arming');
-                        this._countInArmed = false; // single-shot
-                        if (btn) {
-                            btn.dataset.armed = 'false';
-                            btn.classList.remove('active');
-                        }
-                        // Recurse without count-in to actually start
-                        this.toggleRecord();
-                    }, { tempo, beats: 4 });
-                    return;
-                }
-
                 // Start recording at current cursor position
                 this.isRecording = true;
                 recordBtn?.classList.add('active');
@@ -2914,34 +2805,21 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 // Get Tone.js audio context
                 if (typeof Tone !== 'undefined' && Tone.context) {
-                    // Ensure AudioContext is running and the master bus exists
+                    // Ensure AudioContext is running
                     if (Tone.context.state !== 'running') {
                         await Tone.start();
                     }
-                    if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
 
                     this.audioContext = Tone.context;
                     const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
 
-                    // Use the unified recording destination created by
-                    // prewarmAudioOnce. It taps the master bus AFTER the limiter
-                    // and BEFORE Tone.Destination, so the captured audio is the
-                    // exact mix the user hears. Trying to record off
-                    // Tone.getDestination() (the old code) produced silent files
-                    // because Tone.Destination doesn't re-emit downstream — it's
-                    // a pure sink.
-                    let dest;
-                    if (window._recordingDest) {
-                        dest = window._recordingDest;
-                        this._masterRecordDest = null; // not ours to disconnect
-                    } else {
-                        // Defensive fallback if the bus didn't init
-                        dest = rawCtx.createMediaStreamDestination();
-                        if (window._masterTap) {
-                            window._masterTap.connect(dest);
-                        } else if (window._masterBusInput) {
-                            window._masterBusInput.connect(dest);
-                        }
+                    // Create a MediaStreamDestination to capture audio
+                    const dest = rawCtx.createMediaStreamDestination();
+
+                    // Connect Tone.js destination to our capture node
+                    // Store reference for cleanup when recording stops
+                    if (Tone.getDestination()) {
+                        Tone.getDestination().connect(dest);
                         this._masterRecordDest = dest;
                     }
 
@@ -3932,27 +3810,23 @@ document.addEventListener('DOMContentLoaded', function() {
         setPlayModeVisual(mode) {
             const allTracks = document.querySelectorAll('.audio-track');
             allTracks.forEach(el => {
-                el.classList.remove(
-                    'play-mode-inactive', 'play-mode-active', 'play-mode-playing',
-                    'master-dimmed', 'focus-playing'
-                );
+                el.classList.remove('play-mode-inactive', 'play-mode-active', 'play-mode-playing');
             });
 
             if (mode === 'tracks') {
                 allTracks.forEach(el => {
                     if (el.classList.contains('master-track')) {
-                        // Master fades; knobs are protected by .master-dimmed CSS rules
-                        el.classList.add('play-mode-inactive', 'master-dimmed');
+                        el.classList.add('play-mode-inactive');
                     } else {
-                        el.classList.add('play-mode-active', 'play-mode-playing', 'focus-playing');
+                        el.classList.add('play-mode-active', 'play-mode-playing');
                     }
                 });
             } else if (mode === 'master') {
                 allTracks.forEach(el => {
                     if (el.classList.contains('master-track')) {
-                        el.classList.add('play-mode-active', 'play-mode-playing', 'focus-playing');
+                        el.classList.add('play-mode-active', 'play-mode-playing');
                     } else {
-                        el.classList.add('play-mode-inactive', 'master-dimmed');
+                        el.classList.add('play-mode-inactive');
                     }
                 });
             }

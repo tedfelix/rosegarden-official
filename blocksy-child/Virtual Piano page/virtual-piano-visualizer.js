@@ -2964,13 +2964,6 @@ class VirtualPianoVisualizer {
     animate() {
         if (!this.isPlaying) return;
 
-        // Skip drawing while the tab is hidden — saves a ton of CPU and stops
-        // audio dropouts caused by the visualizer hogging the main thread.
-        if (typeof document !== 'undefined' && document.hidden) {
-            this.animationFrame = requestAnimationFrame(() => this.animate());
-            return;
-        }
-
         this.currentTime = ((performance.now() - this.startTime) / 1000) * this.tempo;
 
         if (this.currentTime >= this.midiData.duration) {
@@ -2978,18 +2971,9 @@ class VirtualPianoVisualizer {
             return;
         }
 
-        // Throttle redraw to ~30 FPS (33ms). Audio scheduling has 4-5ms head-room
-        // on a typical desktop; redrawing at 60 FPS spends most of the CPU on
-        // canvas paints and causes scheduler glitches. 30 FPS is invisible to the
-        // eye on a piano roll but doubles the audio stability.
-        const now = performance.now();
-        const minFrameMs = 33;
-        if (this._lastDraw == null || now - this._lastDraw >= minFrameMs) {
-            this.checkTargetZone();
-            this.updateBlinkingKeys();
-            this.draw();
-            this._lastDraw = now;
-        }
+        this.checkTargetZone();
+        this.updateBlinkingKeys(); // Update blinking keys in Easy Mode
+        this.draw();
         this.animationFrame = requestAnimationFrame(() => this.animate());
     }
 
