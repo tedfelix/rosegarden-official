@@ -11269,20 +11269,10 @@ button, .drum-transport-btn, .transport-btn, .rec-btn, .download-btn,
                         <div class="instrument-selector-piano">
                             <label for="pianoInstrumentSelect">Sound:</label>
                             <select class="piano-instrument-select" id="pianoInstrumentSelect" aria-label="Select piano instrument sound">
-                                <optgroup label="Keys">
-                                    <option value="piano">Grand Piano</option>
-                                    <option value="electric-piano">Electric Piano</option>
-                                    <option value="organ">Organ</option>
-                                    <option value="bells">Bells</option>
-                                    <option value="celesta">Celesta</option>
-                                </optgroup>
-                                <optgroup label="Synths">
-                                    <option value="synth">Synthesizer</option>
-                                    <option value="strings">Strings</option>
-                                    <option value="pad">Pad</option>
-                                    <option value="bass">Synth Bass</option>
-                                    <option value="lead">Lead Synth</option>
-                                </optgroup>
+                                <option value="piano">Grand Piano</option>
+                                <option value="electric-piano">Electric Piano</option>
+                                <option value="organ">Organ</option>
+                                <option value="synth">Synthesizer</option>
                             </select>
                         </div>
 
@@ -11803,16 +11793,35 @@ function prewarmAudioOnce() {
     Tone.start().then(async () => {
         try {
             await Tone.context.resume();
-            
+
+            // Master safety limiter — transparently inserted between every
+            // source and the real audio output. The inline studio connects
+            // dozens of synths/players directly to Tone.getDestination(); when
+            // piano + drums + backtrack + multi-track playback all hit at once,
+            // their summed signal regularly exceeds 0 dBFS and the master
+            // potentiometer red-saturates instantly. One -1 dB limiter at the
+            // destination caps that without changing any of the connection
+            // sites. The chain() call only runs once thanks to _done guard.
+            if (!window._inlineMasterLimiterInstalled) {
+                try {
+                    const limiter = new Tone.Limiter(-1);
+                    Tone.getDestination().chain(limiter);
+                    window._inlineMasterLimiterInstalled = true;
+                    window._inlineMasterLimiter = limiter;
+                } catch (limErr) {
+                    console.warn('Could not install master limiter:', limErr);
+                }
+            }
+
             // Petit "prime" inaudible
             const hush = new Tone.Gain(0).toDestination();
             const primingOsc = new Tone.Oscillator(0).connect(hush).start();
             primingOsc.stop("+0.05");
-            
+
             if (Tone.loaded) {
                 await Tone.loaded();
             }
-            
+
             console.log("✅ Audio pré-chauffé et prêt");
         } catch (e) {
             console.warn("⚠️ Erreur pré-chauffage audio:", e);
@@ -19396,15 +19405,46 @@ document.addEventListener('DOMContentLoaded', function() {
                 const timeoutId = setTimeout(() => {
                     if (!this.isPlaying || this.isPaused || !this.shouldTrackPlay(track)) return;
 
-                    const audio = new Audio(clipData.sourceData.url);
+                    // Robust audio loading: explicit preload + wait until the
+                    // browser confirms it can play. Without this, new Audio(url)
+                    // can resolve play() before any data is buffered, producing
+                    // silent playback (the symptom the user reports for backtracks
+                    // sent to the rec studio).
+                    const audio = new Audio();
+                    audio.preload = 'auto';
                     audio.volume = (track.volume != null ? track.volume : 100) / 100;
+                    audio.src = clipData.sourceData.url;
 
-                    // If we're starting mid-clip, seek to the appropriate position
-                    if (currentTimeMs > clipStartTimeMs) {
-                        audio.currentTime = (currentTimeMs - clipStartTimeMs) / 1000;
+                    const seekIfNeeded = () => {
+                        if (currentTimeMs > clipStartTimeMs) {
+                            try { audio.currentTime = (currentTimeMs - clipStartTimeMs) / 1000; } catch(e) {}
+                        }
+                    };
+
+                    const tryPlay = () => {
+                        seekIfNeeded();
+                        audio.play().catch(err => {
+                            console.warn('Audio play error on', clipData.sourceData.url, err);
+                        });
+                    };
+
+                    if (audio.readyState >= 2) {
+                        // HAVE_CURRENT_DATA — already buffered, play now
+                        tryPlay();
+                    } else {
+                        // Wait for buffered data, then play. Timeout after 4s in case
+                        // the file fails to load entirely.
+                        let played = false;
+                        const onReady = () => {
+                            if (played) return;
+                            played = true;
+                            tryPlay();
+                        };
+                        audio.addEventListener('canplay', onReady, { once: true });
+                        audio.addEventListener('loadeddata', onReady, { once: true });
+                        setTimeout(() => { if (!played) onReady(); }, 4000);
+                        try { audio.load(); } catch(e) {}
                     }
-
-                    audio.play().catch(err => console.warn('Audio play error:', err));
 
                     // Store reference for pause/stop
                     track.audioPlayer = audio;
