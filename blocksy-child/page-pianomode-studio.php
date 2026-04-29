@@ -11804,9 +11804,23 @@ function prewarmAudioOnce() {
             // sites. The chain() call only runs once thanks to _done guard.
             if (!window._inlineMasterLimiterInstalled) {
                 try {
+                    // Two-stage master glue: a soft compressor catches the
+                    // average level so multi-track sums don't pump the limiter,
+                    // followed by a brick-wall limiter at -1 dB as a hard cap.
+                    // Without the compressor the limiter alone (especially with
+                    // a fast attack) sounds aggressive and the user's master
+                    // VU pegs red instantly when 4–5 tracks play together.
+                    const masterComp = new Tone.Compressor({
+                        threshold: -18,
+                        ratio: 4,
+                        attack: 0.01,
+                        release: 0.15,
+                        knee: 12
+                    });
                     const limiter = new Tone.Limiter(-1);
-                    Tone.getDestination().chain(limiter);
+                    Tone.getDestination().chain(masterComp, limiter);
                     window._inlineMasterLimiterInstalled = true;
+                    window._inlineMasterCompressor = masterComp;
                     window._inlineMasterLimiter = limiter;
                 } catch (limErr) {
                     console.warn('Could not install master limiter:', limErr);
@@ -17785,7 +17799,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return m + ':' + (s < 10 ? '0' : '') + s;
         }
 
-        sendToMix() {
+        async sendToMix() {
             if (!this.currentTrack || !this.audio.src) {
                 alert('Please select a backing track first.');
                 return;
@@ -17799,15 +17813,40 @@ document.addEventListener('DOMContentLoaded', function() {
             const sourceId = `backtrack-${Date.now()}`;
             const sourceName = `🎵 ${trackName}`;
 
+            // Fetch the backtrack and pin a Blob inside the source data. Without
+            // this, sending the same HTTPS URL to playAudioClip's `new Audio()`
+            // sometimes fails to play (Cloudflare cache, second fetch quirks,
+            // race conditions). A blob: URL is same-origin, always playable,
+            // and we keep the Blob ref alive on the source so the URL never
+            // becomes stale. Falls back to the raw HTTPS URL on fetch error.
+            let resolvedUrl = this.audio.src;
+            let blobReference = null;
+            try {
+                const response = await fetch(this.audio.src);
+                if (response.ok) {
+                    blobReference = await response.blob();
+                    resolvedUrl = URL.createObjectURL(blobReference);
+                }
+            } catch (e) {
+                console.warn('Could not pin backtrack blob, falling back to URL:', e);
+            }
+
             const backtrackData = {
                 type: 'backtrack',
-                url: this.audio.src,
+                url: resolvedUrl,
                 filename: this.currentTrack,
-                duration: this.audio.duration || 0
+                duration: this.audio.duration || 0,
+                _blob: blobReference  // keeps the blob alive for the session
             };
 
+            // Global pin so the GC never drops the blob
+            if (blobReference) {
+                window._studioBlobPins = window._studioBlobPins || new Map();
+                window._studioBlobPins.set(resolvedUrl, blobReference);
+            }
+
             window.globalDAW.registerSource(sourceId, sourceName, 'backtrack', backtrackData);
-            console.log(`📤 Sent backtrack "${trackName}" to Mix`);
+            console.log(`📤 Sent backtrack "${trackName}" to Mix${blobReference ? ' (blob pinned)' : ' (URL only)'}`);
 
             const btn = this.sendBtn;
             if (btn) {
@@ -19396,7 +19435,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         playAudioClip(clipData, track, clipStartTimeMs, currentTimeMs) {
-            if (!clipData.sourceData.url) return;
+            // Resolve the playable URL. If we have a Blob ref (pinned by
+            // BackTracksPlayer.sendToMix or processMasterRecording), regenerate
+            // a fresh blob URL on every play so a previously-revoked URL
+            // doesn't leave the user staring at a silent track.
+            let playableUrl = clipData.sourceData.url;
+            const blobRef = clipData.sourceData._blob || clipData.sourceData.blob;
+            if (blobRef instanceof Blob) {
+                try {
+                    playableUrl = URL.createObjectURL(blobRef);
+                    clipData.sourceData.url = playableUrl;
+                } catch (e) { /* keep existing URL */ }
+            }
+            if (!playableUrl) return;
 
             try {
                 // Calculate delay until clip should start
@@ -19413,7 +19464,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     const audio = new Audio();
                     audio.preload = 'auto';
                     audio.volume = (track.volume != null ? track.volume : 100) / 100;
-                    audio.src = clipData.sourceData.url;
+                    audio.src = playableUrl;
 
                     const seekIfNeeded = () => {
                         if (currentTimeMs > clipStartTimeMs) {

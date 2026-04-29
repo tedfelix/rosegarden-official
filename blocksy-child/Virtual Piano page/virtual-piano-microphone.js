@@ -408,11 +408,30 @@ class MicrophoneStudio {
             const url = btn.dataset.url;
             const dur = parseFloat(btn.dataset.duration);
             const daw = window.globalDAW;
-            if (daw && daw.registerAndAssign) {
-                daw.registerAndAssign(`voice-${id}`, `🎤 Vocal - ${id} (${dur.toFixed(1)}s)`, 'audio', {
-                    url, duration: dur, type: 'voice'
-                });
-                daw.ensureRecordingStudioVisible();
+            // The inline VirtualStudioPro DAW exposes registerSource(). The
+            // newer external DAW exposes registerAndAssign(). We support both
+            // so the mic ships its take to whichever variant is loaded.
+            const sourceId = `voice-${id}`;
+            const sourceName = `🎤 Vocal - ${id} (${dur.toFixed(1)}s)`;
+            const sourceData = { url, duration: dur, type: 'voice', _blob: blob };
+
+            const registered = (() => {
+                if (!daw) return false;
+                if (daw.registerAndAssign) {
+                    daw.registerAndAssign(sourceId, sourceName, 'audio', sourceData);
+                    return true;
+                }
+                if (daw.registerSource) {
+                    daw.registerSource(sourceId, sourceName, 'audio', sourceData);
+                    return true;
+                }
+                return false;
+            })();
+
+            if (registered) {
+                if (daw.ensureRecordingStudioVisible) {
+                    daw.ensureRecordingStudioVisible();
+                }
                 btn.textContent = '✓ Sent';
                 btn.disabled = true;
                 btn.style.background = 'rgba(76,175,80,0.3)';
