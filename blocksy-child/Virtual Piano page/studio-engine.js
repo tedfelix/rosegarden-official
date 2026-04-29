@@ -16,47 +16,35 @@ function prewarmAudioOnce() {
                 Tone.context.lookAhead = 0.01;
             }
             if (!window._masterLimiterInstalled) {
-                // Master bus input — every audio source connects HERE, never to Tone.Destination directly.
-                // Pre-attenuate by ~3 dB so even with several sources on top of each other, we
-                // approach the compressor a couple dB below 0 dBFS instead of hitting the wall.
-                const masterBusInput = new Tone.Gain(0.7);
-
-                // Pre-comp: warm bus glue. Catches piano peaks without pumping. Lower threshold
-                // and faster release than before so loud piano + drums never crackle.
-                const masterCompressor = new Tone.Compressor({
-                    threshold: -24,
-                    ratio: 3,
-                    attack: 0.005,
-                    release: 0.12,
-                    knee: 18
-                });
-                const safetyCompressor = new Tone.Compressor({
-                    threshold: -3,
-                    ratio: 20,
-                    attack: 0.001,
-                    release: 0.05,
-                    knee: 2
-                });
-                const masterLimiter = new Tone.Limiter(-0.3);
-
-                // Tap point — single split between speakers and recording capture
+                // Simplified master chain. Three stacked compressors squashed and
+                // re-squashed the signal — that's why the user kept hearing the
+                // "saturation rapide quand play master". Modern DAW masters are a
+                // single transparent limiter; that's all we need.
+                //
+                // Chain: sources → masterBusInput (Gain 0.6, headroom)
+                //                → masterLimiter (-1 dB, single peak guard)
+                //                → masterTap → [Tone.Destination, recordingDest]
+                //
+                // _masterCompressor is kept as an alias of masterBusInput for
+                // backward compatibility with code that connects to it (drums,
+                // backtrack, effects all connect to "_masterCompressor.input").
+                const masterBusInput = new Tone.Gain(0.6);
+                const masterLimiter = new Tone.Limiter(-1);
                 const masterTap = new Tone.Gain(1);
 
-                masterBusInput.connect(masterCompressor);
-                masterCompressor.connect(safetyCompressor);
-                safetyCompressor.connect(masterLimiter);
+                masterBusInput.connect(masterLimiter);
                 masterLimiter.connect(masterTap);
                 masterTap.toDestination();
 
-                // Recording destination lives in the SAME Tone.context, so recorder
-                // captures the exact post-limiter signal without cross-context resampling.
+                // Recording destination lives in the SAME Tone.context so the
+                // recorder captures the exact signal the user hears, no resampling.
                 const recordingDest = Tone.context.createMediaStreamDestination();
                 masterTap.connect(recordingDest);
 
                 window._masterLimiterInstalled = true;
                 window._masterBusInput = masterBusInput;
-                window._masterCompressor = masterCompressor;
-                window._masterSafetyCompressor = safetyCompressor;
+                window._masterCompressor = masterBusInput; // alias for legacy callers
+                window._masterSafetyCompressor = masterBusInput;
                 window._masterLimiter = masterLimiter;
                 window._masterTap = masterTap;
                 window._recordingDest = recordingDest;
@@ -2826,15 +2814,12 @@ class VirtualStudioPro {
                         // Trigger at the exact scheduled time for sample-accurate playback
                         try {
                             const vol = Tone.gainToDb(trackVolume * this.masterVolume);
-                            // Set volume at the same scheduled time as the trigger so we don't
-                            // hit Tone's "events scheduled inside scheduled callbacks should use
-                            // the passed in scheduling time" warning. Fall back to immediate set
-                            // if for some reason `time` is invalid.
-                            try {
-                                drum.volume.setValueAtTime(vol, time);
-                            } catch (volErr) {
-                                drum.volume.value = vol;
-                            }
+                            // Immediate set — tried setValueAtTime(time) but in Tone v14 the
+                            // scheduled value can desynchronise from the trigger and silence
+                            // the drum if `time` is in the past or near-equal to currentTime.
+                            // The "events scheduled inside scheduled callbacks" warning is
+                            // cosmetic; silent drums are not.
+                            drum.volume.value = vol;
 
                             switch(instrument.id) {
                                 case 'kick': case 'kick909':

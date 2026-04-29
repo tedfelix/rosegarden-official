@@ -331,7 +331,10 @@ document.addEventListener('DOMContentLoaded', function() {
     class BackTracksPlayer {
         constructor() {
             this.audio = new Audio();
-            this.audio.crossOrigin = 'anonymous';
+            // crossOrigin='anonymous' on the source <audio> element silently
+            // breaks playback for blob URLs and (on Cloudflare) for some
+            // same-origin MP3 fetches when the response lacks Access-Control
+            // headers. We only enable it once we know the URL is HTTP(S).
             this.isPlaying = false;
             this.currentTrack = null;
             // Build backtrack base path — bulletproof: derive from our own <script> tag
@@ -2371,10 +2374,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
 
                 if (!track._pianoSynthPool[instrument]) {
-                    // Per-track synths: sustain: 0 (prevents pile-up), low polyphony, quiet volumes
+                    // 64 voices per per-track synth — generous enough that a
+                    // 45-note track held under sustain still has headroom
+                    // without flooding the console with "Max polyphony exceeded".
+                    // Tone.Sampler would be ideal (unlimited voices) but the
+                    // CDN load is async, so the first Play Tracks click after
+                    // page load would be silent. PolySynth fires immediately.
                     const synthDefs = {
                         'piano': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 32,
+                            maxPolyphony: 64,
                             harmonicity: 3, modulationIndex: 8,
                             oscillator: { type: "sine" }, modulation: { type: "sine" },
                             modulationEnvelope: { attack: 0.001, decay: 0.3, sustain: 0, release: 0.5 },
@@ -2382,7 +2390,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             volume: -14
                         }),
                         'electric-piano': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 32,
+                            maxPolyphony: 64,
                             harmonicity: 3.01, modulationIndex: 10,
                             oscillator: { type: "sine" }, modulation: { type: "sine" },
                             modulationEnvelope: { attack: 0.002, decay: 0.3, sustain: 0, release: 0.2 },
@@ -2390,25 +2398,25 @@ document.addEventListener('DOMContentLoaded', function() {
                             volume: -14
                         }),
                         'organ': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 32,
+                            maxPolyphony: 64,
                             oscillator: { type: "fatcustom", partials: [1, 0.5, 0.33, 0.25], spread: 20, count: 3 },
                             envelope: { attack: 0.005, decay: 0.3, sustain: 0, release: 0.1 },
                             volume: -12
                         }),
                         'synth': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 32,
+                            maxPolyphony: 64,
                             oscillator: { type: "sawtooth" },
                             envelope: { attack: 0.01, decay: 0.15, sustain: 0, release: 0.05 },
                             volume: -14
                         }),
                         'strings': () => new Tone.PolySynth(Tone.Synth, {
-                            maxPolyphony: 32,
+                            maxPolyphony: 64,
                             oscillator: { type: "fatsawtooth", spread: 30, count: 3 },
                             envelope: { attack: 0.3, decay: 0.5, sustain: 0, release: 1.5 },
                             volume: -14
                         }),
                         'pad': () => new Tone.PolySynth(Tone.FMSynth, {
-                            maxPolyphony: 32,
+                            maxPolyphony: 64,
                             harmonicity: 1.5, modulationIndex: 2,
                             oscillator: { type: "sine" }, modulation: { type: "triangle" },
                             modulationEnvelope: { attack: 0.5, decay: 1, sustain: 0, release: 2 },
@@ -2431,11 +2439,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
 
         playAudioClip(clipData, track, clipStartTimeMs, currentTimeMs) {
-            // Resolve the playable URL. If we have a blob reference (the canonical
-            // case for backtracks sent to mix and master recordings), regenerate
-            // a fresh blob URL on every play. Without this, a previously-revoked
-            // or GC'd blob URL throws "NotSupportedError: The element has no
-            // supported sources" the moment the user hits Play Tracks/Master.
+            // Resolve the playable URL. If we have a Blob reference (the canonical
+            // case for backtracks sent to mix and for master recordings),
+            // regenerate a fresh blob URL on every play; that pattern made Send-
+            // to-Mix work after the previous round and we keep it here.
             let playableUrl = clipData.sourceData.url;
             const blobRef = clipData.sourceData._blob || clipData.sourceData.blob;
             if (blobRef instanceof Blob) {
@@ -2447,17 +2454,23 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             if (!playableUrl) return;
+
+            // CORS heuristics. createMediaElementSource() requires the audio data
+            // to be CORS-readable. blob: URLs are always same-origin so they read
+            // freely. http(s) URLs depend on the server; some Cloudflare cache
+            // configs strip Access-Control-Allow-Origin which makes the audio
+            // refuse to play with crossOrigin='anonymous' set ("no supported
+            // sources"). So:
+            //   - blob URL: route via Web Audio (full features, recorder captures it)
+            //   - http(s) URL: play via plain <audio> element (still hearable),
+            //     skip Web Audio routing so we never need CORS headers.
+            const isBlobUrl = playableUrl.startsWith('blob:');
+
             try {
                 const delay = Math.max(0, clipStartTimeMs - currentTimeMs);
                 const timeoutId = setTimeout(async () => {
                     if (!this.isPlaying || this.isPaused || !this.shouldTrackPlay(track)) return;
                     const audio = new Audio();
-                    // crossOrigin='anonymous' on a blob: URL breaks playback in
-                    // Chromium-based browsers ("no supported sources"). Only set
-                    // it for HTTP(S) where CORS is meaningful.
-                    if (/^https?:/.test(playableUrl)) {
-                        audio.crossOrigin = 'anonymous';
-                    }
                     audio.preload = 'auto';
                     audio.src = playableUrl;
                     const vol = track.volume != null ? track.volume : 75;
@@ -2467,35 +2480,41 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                     this.initializeTrackToneEffects(track);
                     this.updateTrackToneEffects(track);
+
                     let routed = false;
-                    try {
-                        if (typeof Tone !== 'undefined' && Tone.context && Tone.context.state === 'running') {
-                            const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
-                            if (rawCtx && rawCtx.createMediaElementSource) {
-                                const source = rawCtx.createMediaElementSource(audio);
-                                const toneGain = new Tone.Gain(volumeGain);
-                                const toneSource = Tone.context.createGain();
-                                source.connect(toneSource);
-                                toneSource.connect(toneGain.input);
-                                if (track.tonePanner) {
-                                    toneGain.connect(track.tonePanner);
-                                } else if (window._masterCompressor) {
-                                    const tonePan = new Tone.Panner((track.pan || 0) / 100);
-                                    toneGain.connect(tonePan);
-                                    tonePan.connect(window._masterCompressor);
-                                    track.audioClipPan = tonePan;
-                                } else {
-                                    toneGain.toDestination();
+                    if (isBlobUrl) {
+                        try {
+                            if (typeof Tone !== 'undefined' && Tone.context && Tone.context.state === 'running') {
+                                const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
+                                if (rawCtx && rawCtx.createMediaElementSource) {
+                                    const source = rawCtx.createMediaElementSource(audio);
+                                    const toneGain = new Tone.Gain(volumeGain);
+                                    const toneSource = Tone.context.createGain();
+                                    source.connect(toneSource);
+                                    toneSource.connect(toneGain.input);
+                                    if (track.tonePanner) {
+                                        toneGain.connect(track.tonePanner);
+                                    } else if (window._masterCompressor) {
+                                        const tonePan = new Tone.Panner((track.pan || 0) / 100);
+                                        toneGain.connect(tonePan);
+                                        tonePan.connect(window._masterCompressor);
+                                        track.audioClipPan = tonePan;
+                                    } else {
+                                        toneGain.toDestination();
+                                    }
+                                    track.audioClipGain = toneGain;
+                                    track._audioClipSource = toneSource;
+                                    routed = true;
                                 }
-                                track.audioClipGain = toneGain;
-                                track._audioClipSource = toneSource;
-                                routed = true;
                             }
+                        } catch (routeErr) {
+                            console.warn('Audio routing fallback:', routeErr);
                         }
-                    } catch(routeErr) {
-                        console.warn('Audio routing fallback:', routeErr);
                     }
                     if (!routed) {
+                        // Plain HTML5 playback. The user hears it; the master
+                        // recorder won't capture it (CORS prevents Web Audio from
+                        // reading the samples), but at least nothing is silent.
                         const globalVol = (this.globalMasterVolume != null ? this.globalMasterVolume : 100) / 100;
                         audio.volume = Math.min(1, volumeGain * globalVol);
                     }
@@ -2808,10 +2827,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     this.mediaRecorder.stop();
                 }
 
-                // Disconnect master recording capture node to prevent leaked connections
+                // Only disconnect when we created a private fallback dest (the
+                // shared window._recordingDest belongs to the bus and stays alive).
                 if (this._masterRecordDest) {
                     try {
-                        Tone.getDestination().disconnect(this._masterRecordDest);
+                        if (window._masterTap) window._masterTap.disconnect(this._masterRecordDest);
+                        else if (window._masterBusInput) window._masterBusInput.disconnect(this._masterRecordDest);
                     } catch(e) {}
                     this._masterRecordDest = null;
                 }
@@ -2893,21 +2914,34 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 // Get Tone.js audio context
                 if (typeof Tone !== 'undefined' && Tone.context) {
-                    // Ensure AudioContext is running
+                    // Ensure AudioContext is running and the master bus exists
                     if (Tone.context.state !== 'running') {
                         await Tone.start();
                     }
+                    if (typeof prewarmAudioOnce === 'function') prewarmAudioOnce();
 
                     this.audioContext = Tone.context;
                     const rawCtx = Tone.context.rawContext || Tone.context._context || Tone.context;
 
-                    // Create a MediaStreamDestination to capture audio
-                    const dest = rawCtx.createMediaStreamDestination();
-
-                    // Connect Tone.js destination to our capture node
-                    // Store reference for cleanup when recording stops
-                    if (Tone.getDestination()) {
-                        Tone.getDestination().connect(dest);
+                    // Use the unified recording destination created by
+                    // prewarmAudioOnce. It taps the master bus AFTER the limiter
+                    // and BEFORE Tone.Destination, so the captured audio is the
+                    // exact mix the user hears. Trying to record off
+                    // Tone.getDestination() (the old code) produced silent files
+                    // because Tone.Destination doesn't re-emit downstream — it's
+                    // a pure sink.
+                    let dest;
+                    if (window._recordingDest) {
+                        dest = window._recordingDest;
+                        this._masterRecordDest = null; // not ours to disconnect
+                    } else {
+                        // Defensive fallback if the bus didn't init
+                        dest = rawCtx.createMediaStreamDestination();
+                        if (window._masterTap) {
+                            window._masterTap.connect(dest);
+                        } else if (window._masterBusInput) {
+                            window._masterBusInput.connect(dest);
+                        }
                         this._masterRecordDest = dest;
                     }
 
