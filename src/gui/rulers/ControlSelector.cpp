@@ -86,7 +86,9 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 
     }
 
-    return ControlMover::handleMouseMove(e);
+    ControlMover::handleMouseMove(e);
+
+    return FOLLOW_HORIZONTAL;
 }
 
 void
