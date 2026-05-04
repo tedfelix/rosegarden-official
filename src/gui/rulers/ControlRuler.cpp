@@ -96,11 +96,12 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
 
     // Snap
     m_snapGrid = new SnapGrid(m_rulerScale);
+
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
     QString snapString =
         settings.value("Snap Grid Size", "snap_editor").toString();
-    settings.endGroup();
+
     setSnapTimeFromActionName(snapString);
 }
 
@@ -732,43 +733,53 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     setPannedRect(m_pannedRect);
 }
 
-ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
+ControlMouseEvent ControlRuler::createControlMouseEvent(
+        const QMouseEvent *e) const
 {
     ControlMouseEvent controlMouseEvent;
+
+    // Copy mouse position.
     QPoint widgetMousePos = e->pos();
     QPointF mousePos = mapWidgetToItem(&widgetMousePos);
     controlMouseEvent.x = mousePos.x();
     controlMouseEvent.y = mousePos.y();
 
-    int mtime = m_rulerScale->getTimeForX(controlMouseEvent.x / m_xScale);
+    // Compute snapped coords, left and right.
 
-    int leftTime = m_snapGrid->snapTime(mtime, SnapGrid::SnapLeft);
+    const int mouseTime = m_rulerScale->getTimeForX(
+            controlMouseEvent.x / m_xScale);
+
+    const int leftTime = m_snapGrid->snapTime(mouseTime, SnapGrid::SnapLeft);
     controlMouseEvent.snappedXLeft =
         m_rulerScale->getXForTime(leftTime) * m_xScale;
-    int rightTime = m_snapGrid->snapTime(mtime, SnapGrid::SnapRight);
+
+    const int rightTime = m_snapGrid->snapTime(mouseTime, SnapGrid::SnapRight);
     controlMouseEvent.snappedXRight =
         m_rulerScale->getXForTime(rightTime) * m_xScale;
 
     //RG_DEBUG << "createControlMouseEvent(): snap" <<
-    //    controlMouseEvent.x << mtime <<
+    //    controlMouseEvent.x << mouseTime <<
     //    controlMouseEvent.snappedXLeft << leftTime <<
     //    controlMouseEvent.snappedXRight << rightTime <<
     //    m_xScale;
 
-    for (ControlItemList::iterator it = m_visibleItems.begin();
-            it != m_visibleItems.end(); ++it) {
-        if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
+    // Fill the itemList with each ControlItem under the mouse pointer.
+
+    for (ControlItemList::const_iterator it = m_visibleItems.begin();
+         it != m_visibleItems.end();
+         ++it) {
+        if ((*it)->containsPoint(mousePos, Qt::OddEvenFill))
             controlMouseEvent.itemList.push_back(*it);
-        }
     }
 
+    // Copy buttons and modifiers.
     controlMouseEvent.buttons = e->buttons();
     controlMouseEvent.modifiers = e->modifiers();
 
     return controlMouseEvent;
 }
 
-void ControlRuler::mousePressEvent(QMouseEvent* e)
+void ControlRuler::mousePressEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
         return;
@@ -786,11 +797,12 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         if (!m_rulerMenu)
             createRulerMenu();
         if (m_rulerMenu) {
-            QAction* setAction = findAction(m_snapName);
-            RG_DEBUG << "set checked" << m_snapName;
+            QAction *setAction = findAction(m_snapName);
             setAction->setChecked(true);
+
             // Let derivers update the menu as needed.
             updateRulerMenu();
+
             m_rulerMenu->exec(QCursor::pos());
         }
     }
@@ -799,11 +811,12 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         m_autoScroller->start();
 }
 
-void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
+void ControlRuler::mouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
         return;
 
+    // Delegate left and middle button release to tool.
     if (e->button() == Qt::LeftButton  ||  e->button() == Qt::MiddleButton) {
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMouseRelease(&controlMouseEvent);
@@ -813,14 +826,17 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
         m_autoScroller->stop();
 }
 
-void ControlRuler::mouseMoveEvent(QMouseEvent* e)
+void ControlRuler::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
         return;
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
-    // ??? Isn't this always FOLLOW_HORIZONTAL?  I don't think we can
-    //     scroll anything vertically within the control rulers.
+
+    // Some tools (e.g. ControlPainter) return NO_FOLLOW to prevent following
+    // while adding new points.
+    // Others, (e.g. ControlSelector) return FOLLOW_HORIZONTAL to allow
+    // auto scrolling while selecting.
     FollowMode mode = m_currentTool->handleMouseMove(&controlMouseEvent);
 
     if (m_autoScroller)
@@ -838,77 +854,81 @@ ControlRuler::wheelEvent(QWheelEvent * /*e*/)
 
 void ControlRuler::slotSnap()
 {
-    QObject* obj = sender();
-    QString oname = obj->objectName();
-    RG_DEBUG << "slotSnap" << oname;
-    setSnapTimeFromActionName(oname);
+    setSnapTimeFromActionName(sender()->objectName());
+
     repaint();
 }
 
-void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
+void ControlRuler::setSnapTimeFromActionName(const QString &actionName)
 {
     QString snapName = actionName;
-    int stime = SnapGrid::NoSnap;
+
+    // Convert action name to duration.
+    int snapTime = SnapGrid::NoSnap;
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     if (actionName == "snap_none") {
-        stime = SnapGrid::NoSnap;
+        snapTime = SnapGrid::NoSnap;
     } else if (actionName == "snap_editor") {
-        stime = m_snapTimeFromEditor;
+        snapTime = m_snapTimeFromEditor;
     } else if (actionName == "snap_unit") {
-        stime = SnapGrid::SnapToUnit;
+        snapTime = SnapGrid::SnapToUnit;
     } else if (actionName == "snap_64") {
-        stime = crotchetDuration / 16;
+        snapTime = crotchetDuration / 16;
     } else if (actionName == "snap_48") {
-        stime = crotchetDuration / 12;
+        snapTime = crotchetDuration / 12;
     } else if (actionName == "snap_32") {
-        stime = crotchetDuration / 8;
+        snapTime = crotchetDuration / 8;
     } else if (actionName == "snap_24") {
-        stime = crotchetDuration / 6;
+        snapTime = crotchetDuration / 6;
     } else if (actionName == "snap_16") {
-        stime = crotchetDuration / 4;
+        snapTime = crotchetDuration / 4;
     } else if (actionName == "snap_12") {
-        stime = crotchetDuration / 3;
+        snapTime = crotchetDuration / 3;
     } else if (actionName == "snap_8") {
-        stime = crotchetDuration / 2;
+        snapTime = crotchetDuration / 2;
     } else if (actionName == "snap_dotted_8") {
-        stime = (crotchetDuration * 3) / 4;
+        snapTime = (crotchetDuration * 3) / 4;
     } else if (actionName == "snap_4") {
-        stime = crotchetDuration;
+        snapTime = crotchetDuration;
     } else if (actionName == "snap_dotted_4") {
-        stime = (crotchetDuration * 3) / 2;
+        snapTime = (crotchetDuration * 3) / 2;
     } else if (actionName == "snap_2") {
-        stime = crotchetDuration * 2;
+        snapTime = crotchetDuration * 2;
     } else if (actionName == "snap_beat") {
-        stime = SnapGrid::SnapToBeat;
+        snapTime = SnapGrid::SnapToBeat;
     } else if (actionName == "snap_bar") {
-        stime = SnapGrid::SnapToBar;
+        snapTime = SnapGrid::SnapToBar;
     } else {
         // unknown action name - use snap_none
         snapName = "snap_none";
     }
-    RG_DEBUG << "setSnapTimeFromActionName" << snapName << stime;
-    m_snapGrid->setSnapTime(stime);
+
+    m_snapGrid->setSnapTime(snapTime);
     m_snapName = snapName;
+
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
     settings.setValue("Snap Grid Size", snapName);
-    settings.endGroup();
 }
 
 void ControlRuler::contextMenuEvent(QContextMenuEvent *)
 {
+    // DO NOT REMOVE.
+    // This is required for the context menu to launch.
+    // ??? Why?
 }
 
 void
 ControlRuler::clearSelectedItems()
 {
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (ControlItemList::iterator it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         ++it) {
         (*it)->setSelected(false);
     }
     m_selectedItems.clear();
 
-    if (m_eventSelection) delete m_eventSelection;
-
+    delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
     emit rulerSelectionChanged(m_eventSelection);
@@ -916,7 +936,7 @@ ControlRuler::clearSelectedItems()
 
 void ControlRuler::updateSelection()
 {
-    if (m_eventSelection) delete m_eventSelection;
+    delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
     for (ControlItemList::iterator it = m_selectedItems.begin();
@@ -942,31 +962,29 @@ void ControlRuler::updateSelection()
 
 void ControlRuler::addToSelection(QSharedPointer<ControlItem> item)
 {
-    ControlItemList::iterator found = std::find(
-            m_selectedItems.begin(), m_selectedItems.end(), item);
+    // If we already have this one, bail.
+    if (std::find(m_selectedItems.begin(), m_selectedItems.end(), item) !=
+            m_selectedItems.end())
+        return;
 
-    // If we already have this item, do nothing.
-    if (found != m_selectedItems.end()) { return; }
     m_selectedItems.push_back(item);
     item->setSelected(true);
+
     m_eventSelection->addEvent(item->getEvent());
     emit rulerSelectionChanged(m_eventSelection);
-
-    RG_DEBUG << "addToSelection() done";
 }
 
 void ControlRuler::removeFromSelection(QSharedPointer<ControlItem> item)
 {
     m_selectedItems.remove(item);
     item->setSelected(false);
+
     m_eventSelection->removeEvent(item->getEvent());
     emit rulerSelectionChanged(m_eventSelection);
 }
 
 void ControlRuler::clear()
 {
-    RG_DEBUG << "clear() - m_controlItemMap.size(): " << m_controlItemMap.size();
-
     m_controlItemMap.clear();
     m_firstVisibleItem = m_controlItemMap.end();
     m_lastVisibleItem = m_controlItemMap.end();
@@ -983,24 +1001,20 @@ float ControlRuler::valueToY(long val)
 
 long ControlRuler::yToValue(float y)
 {
-    // NOTE: while debugging #1451 I had debug output here and it confirmed that
-    // this is returning very reasonable numbers, which get mangled elsewhere
-
     return (long)(y * (m_maxItemValue - m_minItemValue)) + m_minItemValue;
 }
 
 void ControlRuler::setSnapFromEditor(timeT snapSetting, bool forceFromEditor)
 {
-    RG_DEBUG << "setSnapFromEditor" << m_snapName << snapSetting <<
-        forceFromEditor;
     m_snapTimeFromEditor = snapSetting;
-    if (forceFromEditor) {
+    if (forceFromEditor)
         m_snapName = "snap_editor";
-    }
+
     if (m_snapName == "snap_editor") {
         m_snapGrid->setSnapTime(snapSetting);
         repaint();
     }
 }
+
 
 }

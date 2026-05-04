@@ -161,8 +161,6 @@ protected:
     void mousePressEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
-    // ??? Do we need this?  It's empty.  Does it break the context menu if
-    //     we remove it?
     void contextMenuEvent(QContextMenuEvent *) override;
     void wheelEvent(QWheelEvent *) override;
     void resizeEvent(QResizeEvent *) override;
@@ -247,7 +245,7 @@ private:
 
     QPointF mapWidgetToItem(const QPoint *point) const;
 
-    ControlMouseEvent createControlMouseEvent(QMouseEvent *e);
+    ControlMouseEvent createControlMouseEvent(const QMouseEvent *e) const;
 
     SnapGrid *m_snapGrid;
     QString m_snapName;

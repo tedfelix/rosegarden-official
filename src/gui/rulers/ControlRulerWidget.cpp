@@ -688,7 +688,7 @@ void ControlRulerWidget::setSnapFromEditor(timeT snapSetting)
         PropertyControlRuler *pcr =
             dynamic_cast <PropertyControlRuler *>(ruler);
         bool forceFromEditor = false;
-        // propery control ruler always takes the editor setting
+        // property control ruler always takes the editor setting
         if (pcr) forceFromEditor = true;
         ruler->setSnapFromEditor(snapSetting, forceFromEditor);
     }

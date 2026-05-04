@@ -159,10 +159,9 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
         }
     }
 
-    // not sure what any of this is about; had to match the return type used
-    // elsewhere, and have made no investigation into what any of it means
+    // ControlPainter does not need autoscroll.
     return NO_FOLLOW;
 }
 
-QString ControlPainter::ToolName() { return "painter"; }
+
 }
