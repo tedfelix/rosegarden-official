@@ -64,7 +64,7 @@ ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
             if ((*it)->active()) {
 
                 it = e->itemList.begin();
-                ruler->clearSelectedItems();
+                ruler->clearSelection();
                 ruler->addToSelection(*it);
                 ruler->eraseControllerEvent();
                 break;

@@ -71,7 +71,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
     }
     if (e->itemList.size()) {
         ControlItemVector::const_iterator it = e->itemList.begin();
-        ruler1->clearSelectedItems();
+        ruler1->clearSelection();
         ruler1->addToSelection(*it);
         ruler1->eraseControllerEvent();
 

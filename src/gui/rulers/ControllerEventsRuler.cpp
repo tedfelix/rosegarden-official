@@ -435,7 +435,7 @@ QSharedPointer<ControlItem>
 ControllerEventsRuler::addControlItem2(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
-    clearSelectedItems();
+    clearSelection();
 
     QSharedPointer<EventControlItem> item(new EventControlItem(
             this,  // controlRuler
@@ -455,7 +455,7 @@ ControllerEventsRuler::addControlLine(
         double x2, double y2,
         bool eraseExistingControllers)
 {
-    clearSelectedItems();
+    clearSelection();
 
     if (!m_controller) {
         RG_WARNING << "addControlLine(): No controller number set.  Line drawing aborted.";
@@ -713,7 +713,7 @@ void ControllerEventsRuler::eraseControllerEvent()
                                           getEventSelection()->getEndTime());
     CommandHistory::getInstance()->addCommand(command);
     m_selectedItems.clear();
-    updateSelection();
+    updateEventSelection();
 }
 
 Event* ControllerEventsRuler::getNewEvent(timeT time, long value) const

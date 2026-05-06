@@ -217,7 +217,7 @@ void PropertyControlRuler::updateSelection(
 
     // Set each item as not selected, clear m_selectedItems and create a new
     // m_eventSelection member.
-    clearSelectedItems();
+    clearSelection();
 
     // For each item in the new selection
     for (const ViewElement *element : elementList) {

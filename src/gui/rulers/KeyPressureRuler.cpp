@@ -102,7 +102,7 @@ void KeyPressureRuler::setElementSelection
     }
 
     // and clear any selection
-    if (m_selectedItems.size() > 0) clearSelectedItems();
+    if (m_selectedItems.size() > 0) clearSelection();
     update();
 }
 

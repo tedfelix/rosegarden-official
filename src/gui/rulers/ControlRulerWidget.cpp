@@ -622,11 +622,11 @@ ControlRulerWidget::slotHoveredOverNoteChanged(int /* evPitch */, bool /* haveEv
 }
 
 void
-ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT endTime)
+ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT /*endTime*/)
 {
     // For each ruler, ask for an update.
     for (ControlRuler *ruler : m_controlRulerList) {
-        ruler->notationLayoutUpdated(startTime, endTime);
+        ruler->notationLayoutUpdated(startTime);
     }
 }
 
@@ -654,7 +654,7 @@ ControlRulerWidget::slotSetTool(const QString &toolName)
 }
 
 void
-ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *)
+ControlRulerWidget::slotChildRulerSelectionChanged()
 {
     emit childRulerSelectionChanged();
 }

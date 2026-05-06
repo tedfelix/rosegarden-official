@@ -86,14 +86,10 @@ public:
     /// Also performs a setSegment().
     virtual void setViewSegment(ViewSegment *viewSegment);
 
-    /// Copy screen to document.  Uses a command for undo.
-    /**
-     * ??? rename: updateDocument()?
-     */
+    /// Copy control events from the UI to the document.
     void updateSegment();
 
-    // ??? endTime is unused.  Remove it.
-    void notationLayoutUpdated(timeT startTime, timeT endTime);
+    void notationLayoutUpdated(timeT startTime);
 
     void setXOffset(int offset)  { m_xOffset = offset; }
 
@@ -110,11 +106,7 @@ public:
 
     void addToSelection(QSharedPointer<ControlItem>);
     void removeFromSelection(QSharedPointer<ControlItem>);
-    /// Deselect all selected items.
-    /**
-     * ??? rename: removeAllFromSelection()
-     */
-    void clearSelectedItems();
+    void clearSelection();
     EventSelection *getEventSelection()  { return m_eventSelection; }
 
 
@@ -131,7 +123,7 @@ signals:
     /**
      * Eventually ends up calling MatrixView::slotUpdateMenuStates().
      */
-    void rulerSelectionChanged(EventSelection *);
+    void rulerSelectionChanged();
     /// Special case for velocity ruler.
     /**
      * See the emitter, ControlRuler::updateSelection(), for details.
@@ -176,10 +168,7 @@ protected:
             QSharedPointer<const ControlItem> controlItem) const;
 
     /// Copies from m_selectedItems to m_eventSelection.
-    /**
-     * ??? rename: updateEventSelection()
-     */
-    void updateSelection();
+    void updateEventSelection();
 
     /// Derivers override to create a right-click context menu for display.
     virtual void createRulerMenu()  { }
@@ -200,6 +189,7 @@ protected:
     ControlItemMap::iterator m_lastVisibleItem;
     ControlItemMap::iterator m_nextItemLeft;
 
+    /// Selected ControlItems on the UI.
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
@@ -241,7 +231,7 @@ private:
      */
     void removeCheckVisibleLimits(const ControlItemMap::iterator &);
 
-    int visiblePosition(QSharedPointer<ControlItem>);
+    int visiblePosition(QSharedPointer<ControlItem> item);
 
     QPointF mapWidgetToItem(const QPoint *point) const;
 
@@ -254,6 +244,11 @@ private:
 
     QPointer<AutoScroller> m_autoScroller;
 
+    /// Selected Events in the Segment.
+    /**
+     * This should match m_selectedItems.  See updateEventSelection().
+     * updateSegment() appears to be the main user of this.
+     */
     EventSelection *m_eventSelection{nullptr};
 
 };

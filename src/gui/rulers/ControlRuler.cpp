@@ -487,10 +487,10 @@ void ControlRuler::updateSegment()
 
     CommandHistory::getInstance()->addCommand(macro.release());
 
-    updateSelection();
+    updateEventSelection();
 }
 
-void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
+void ControlRuler::notationLayoutUpdated(timeT startTime)
 {
     // notationLayoutUpdated() should be called after Notation has adjusted the
     // layout.  Clearly, for property control rulers, notes may have been moved
@@ -919,7 +919,7 @@ void ControlRuler::contextMenuEvent(QContextMenuEvent *)
 }
 
 void
-ControlRuler::clearSelectedItems()
+ControlRuler::clearSelection()
 {
     for (ControlItemList::iterator it = m_selectedItems.begin();
          it != m_selectedItems.end();
@@ -931,10 +931,10 @@ ControlRuler::clearSelectedItems()
     delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 }
 
-void ControlRuler::updateSelection()
+void ControlRuler::updateEventSelection()
 {
     delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
@@ -945,7 +945,7 @@ void ControlRuler::updateSelection()
         m_eventSelection->addEvent((*it)->getEvent());
     }
 
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 
     // Special signal for the velocity ruler to make sure the user can
     // go from bar to bar and adjust velocities when nothing is selected
@@ -971,7 +971,7 @@ void ControlRuler::addToSelection(QSharedPointer<ControlItem> item)
     item->setSelected(true);
 
     m_eventSelection->addEvent(item->getEvent());
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 }
 
 void ControlRuler::removeFromSelection(QSharedPointer<ControlItem> item)
@@ -980,7 +980,7 @@ void ControlRuler::removeFromSelection(QSharedPointer<ControlItem> item)
     item->setSelected(false);
 
     m_eventSelection->removeEvent(item->getEvent());
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 }
 
 void ControlRuler::clear()
