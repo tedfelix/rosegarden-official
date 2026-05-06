@@ -222,7 +222,7 @@ void PropertyControlRuler::updateSelection(
     // For each item in the new selection
     for (const ViewElement *element : elementList) {
         // For each item on the ruler
-        for (ControlItemMap::value_type &rControlItemPair : m_controlItemMap) {
+        for (ControlItemMultiMap::value_type &rControlItemPair : m_controlItemMap) {
             // Downcast so we can call getElement().
             QSharedPointer<PropertyControlItem> item =
                     qSharedPointerDynamicCast<PropertyControlItem>(
@@ -308,7 +308,7 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 
     RG_DEBUG << "elementRemoved()";
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
          it != m_controlItemMap.end();
          ++it) {
         QSharedPointer<PropertyControlItem> item =
@@ -410,7 +410,7 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     // check if we actually have some control items
     bool haveItems = false;
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
          it != m_controlItemMap.end();
          ++it) {
         if (it->second) {

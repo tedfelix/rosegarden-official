@@ -125,7 +125,7 @@ private:
 };
 
 typedef std::multimap<double /* xStart */, QSharedPointer<ControlItem>>
-        ControlItemMap;
+        ControlItemMultiMap;
 
 typedef std::list<QSharedPointer<ControlItem>> ControlItemList;
 

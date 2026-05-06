@@ -132,15 +132,15 @@ void ControlRuler::setViewSegment(ViewSegment *viewSegment)
     setSegment(&m_viewSegment->getSegment());
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(const double x)
+ControlItemMultiMap::iterator ControlRuler::findControlItem(const double x)
 {
     return m_controlItemMap.upper_bound(x);
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
+ControlItemMultiMap::iterator ControlRuler::findControlItem(const Event *event)
 {
 #if 0
-    ControlItemMap::iterator iter;
+    ControlItemMultiMap::iterator iter;
 
     // For each controlItem, find the provided Event.
     for (iter = m_controlItemMap.begin();
@@ -156,26 +156,24 @@ ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
     // Not a fan of STL algorithms, just trying this one out.
     return std::find_if(m_controlItemMap.begin(),
                         m_controlItemMap.end(),
-                        [event](const ControlItemMap::value_type &x)
+                        [event](const ControlItemMultiMap::value_type &x)
                             { return (x.second->getEvent() == event); });
 #endif
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem *item)
+ControlItemMultiMap::iterator ControlRuler::findControlItem(const ControlItem *item)
 {
-#if 0
     const double xStart = item->xKey();
 
-    // ??? Why equal_range()?  In a std::map there can only be exactly one
-    //     element with a specific key value.  Why not use find() instead?
-    const std::pair<ControlItemMap::iterator, ControlItemMap::iterator>
-            range = m_controlItemMap.equal_range(xStart);
+    const std::pair<ControlItemMultiMap::iterator,
+                    ControlItemMultiMap::iterator> range =
+                            m_controlItemMap.equal_range(xStart);
     // Not found?  Bail.
     //if (range.first == m_controlItemMap.end())
     //    return range.first;
 
     // now find in this range
-    for (ControlItemMap::iterator it = range.first;
+    for (ControlItemMultiMap::iterator it = range.first;
          it != range.second;
          ++it) {
         if (it->second == item)
@@ -183,9 +181,6 @@ ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem *item)
     }
 
     return m_controlItemMap.end();
-#else
-    return m_controlItemMap.find(item->xKey());
-#endif
 }
 
 void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
@@ -194,8 +189,8 @@ void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
     item->setXKey(item->xStart());
 
     // Insert it.
-    ControlItemMap::iterator it = m_controlItemMap.insert(
-            ControlItemMap::value_type(item->xStart(), item));
+    ControlItemMultiMap::iterator it = m_controlItemMap.insert(
+            ControlItemMultiMap::value_type(item->xStart(), item));
 
     addCheckVisibleLimits(it);
 
@@ -203,7 +198,7 @@ void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
         m_selectedItems.push_back(it->second);
 }
 
-void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
+void ControlRuler::addCheckVisibleLimits(ControlItemMultiMap::iterator it)
 {
     // Referenced item has just been added to m_controlItemMap.
     // If it is visible, add it to the list and correct first/last
@@ -248,7 +243,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
     }
 }
 
-void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
+void ControlRuler::removeControlItem(const ControlItemMultiMap::iterator &it)
 {
     if (it->second->isSelected())
         m_selectedItems.remove(it->second);
@@ -258,7 +253,7 @@ void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
     m_controlItemMap.erase(it);
 }
 
-void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
+void ControlRuler::removeCheckVisibleLimits(const ControlItemMultiMap::iterator &it)
 {
     // Referenced item is being removed from m_controlItemMap
     // If it was visible, remove it from the list and correct first/last
@@ -312,14 +307,14 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
 
 void ControlRuler::eraseControlItem(const Event *event)
 {
-    ControlItemMap::iterator it = findControlItem(event);
+    ControlItemMultiMap::iterator it = findControlItem(event);
     if (it != m_controlItemMap.end())
         removeControlItem(it);
 }
 
 void ControlRuler::moveItem(ControlItem *item)
 {
-    ControlItemMap::iterator it = findControlItem(item);
+    ControlItemMultiMap::iterator it = findControlItem(item);
     // Not found?  Bail.
     if (it == m_controlItemMap.end())
         return;
@@ -334,7 +329,7 @@ void ControlRuler::moveItem(ControlItem *item)
     // Add the new.
     item2->setXKey(item2->xStart());
     it = m_controlItemMap.insert(
-            ControlItemMap::value_type(item2->xStart(), item2));
+            ControlItemMultiMap::value_type(item2->xStart(), item2));
     addCheckVisibleLimits(it);
 }
 
@@ -438,7 +433,7 @@ void ControlRuler::updateSegment()
             RG_DEBUG << "updateSegment(): check for event at" << xItem;
 
             // For each control item starting at xItem...
-            for (ControlItemMap::const_iterator otherItemIter =
+            for (ControlItemMultiMap::const_iterator otherItemIter =
                      m_controlItemMap.lower_bound(xItem);
                  otherItemIter != m_controlItemMap.end();
                  ++otherItemIter) {
@@ -504,7 +499,7 @@ void ControlRuler::notationLayoutUpdated(timeT startTime)
 
     ControlItemVector itemsToUpdate;
 
-    ControlItemMap::iterator it = m_controlItemMap.begin();
+    ControlItemMultiMap::iterator it = m_controlItemMap.begin();
 
     // Add all new items (items at x position 0) to itemsToUpdate.
     while (it != m_controlItemMap.end()  &&  it->first == 0) {
@@ -591,7 +586,6 @@ void ControlRuler::paintEvent(QPaintEvent * /*event*/)
         // For each bar in the Segment...
         for (int bar = firstBar; bar <= lastBar; ++bar) {
             std::pair<timeT, timeT> range = comp->getBarRange(bar);
-            // ??? Why are these double when they are window coords?
             const double x0 = m_rulerScale->getXForTime(range.first);
             const double x1 = m_rulerScale->getXForTime(range.second);
 
@@ -699,7 +693,7 @@ void ControlRuler::setPannedRect(const QRectF &pannedRect)
     m_lastVisibleItem = m_controlItemMap.end();
 
     // For each ControlItem...
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
+    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
          it != m_controlItemMap.end();
          ++it) {
         const int visPos = visiblePosition(it->second);
@@ -849,7 +843,6 @@ ControlRuler::wheelEvent(QWheelEvent * /*e*/)
     // not sure what to do yet
     // ??? It would be really nice if this would gently move the selected
     //     items up/down by one.  This would provide precision adjustment.
-
 }
 
 void ControlRuler::slotSnap()

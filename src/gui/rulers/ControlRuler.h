@@ -110,7 +110,7 @@ public:
     EventSelection *getEventSelection()  { return m_eventSelection; }
 
 
-    ControlItemMap::iterator findControlItem(double x);
+    ControlItemMultiMap::iterator findControlItem(double x);
     void moveItem(ControlItem *item);
 
     SnapGrid *getSnapGrid() const  { return m_snapGrid; }
@@ -158,7 +158,7 @@ protected:
     void resizeEvent(QResizeEvent *) override;
 
     void addControlItem(QSharedPointer<ControlItem>);
-    void removeControlItem(const ControlItemMap::iterator &);
+    void removeControlItem(const ControlItemMultiMap::iterator &);
     void eraseControlItem(const Event *);
 
     int mapXToWidget(float x) const;
@@ -178,16 +178,16 @@ protected:
     ViewSegment *m_viewSegment{nullptr};
     Segment *m_segment{nullptr};
 
-    ControlItemMap m_controlItemMap;
+    ControlItemMultiMap m_controlItemMap;
 
     // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
     //   to the left of the screen but end on screen. For this reason, the
     //   m_visibleItems list includes all items that are actually visible.
-    ControlItemMap::iterator m_firstVisibleItem;
-    ControlItemMap::iterator m_lastVisibleItem;
-    ControlItemMap::iterator m_nextItemLeft;
+    ControlItemMultiMap::iterator m_firstVisibleItem;
+    ControlItemMultiMap::iterator m_lastVisibleItem;
+    ControlItemMultiMap::iterator m_nextItemLeft;
 
     /// Selected ControlItems on the UI.
     ControlItemList m_selectedItems;
@@ -212,8 +212,8 @@ private:
 
     int m_xOffset{0};
 
-    ControlItemMap::iterator findControlItem(const ControlItem *);
-    ControlItemMap::iterator findControlItem(const Event *);
+    ControlItemMultiMap::iterator findControlItem(const ControlItem *);
+    ControlItemMultiMap::iterator findControlItem(const Event *);
 
     /**
      * Update m_visibleItems, m_firstVisibleItem, m_lastVisibleItem, and
@@ -221,7 +221,7 @@ private:
      *
      * See removeCheckVisibleLimits().
      */
-    void addCheckVisibleLimits(ControlItemMap::iterator);
+    void addCheckVisibleLimits(ControlItemMultiMap::iterator);
 
     /**
      * Update m_visibleItems, m_firstVisibleItem, m_lastVisibleItem, and
@@ -229,7 +229,7 @@ private:
      *
      * See addCheckVisibleLimits().
      */
-    void removeCheckVisibleLimits(const ControlItemMap::iterator &);
+    void removeCheckVisibleLimits(const ControlItemMultiMap::iterator &);
 
     int visiblePosition(QSharedPointer<ControlItem> item);
 
