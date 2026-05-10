@@ -2403,7 +2403,6 @@ LilyPondExporter::writeBar(Segment *s,
                            bool &nextBarIsDot,  bool noTimeSignature)
 {
     int lastStem = 0; // 0 => unset, -1 => down, 1 => up
-    int isGrace = 0;
 
     Segment::iterator i =
         SegmentNotationHelper(*s).findNotationAbsoluteTime(barStart);
@@ -2456,6 +2455,9 @@ LilyPondExporter::writeBar(Segment *s,
     bool startingBeamedGroup = false;
     const Event *nextBeamedNoteInGroup = nullptr;
     const Event *nextNoteInTuplet = nullptr;
+
+    bool inGrace = false;
+    bool nextInGroupIsGrace = false;
 
     while (s->isBeforeEndMarker(i)) {
 
@@ -2533,24 +2535,27 @@ LilyPondExporter::writeBar(Segment *s,
 
         // Test whether the next note is grace note or not.
         // The start or end of beamed grouping should be put in proper places.
-        if (event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE)) {
-            if (isGrace == 0) {
-                isGrace = 1;
+        const bool currentIsGrace = event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
+        if (currentIsGrace && !inGrace) {
+            inGrace = true;
+            // LilyPond export hack:  If a grace note has one or more
+            // tremolo slashes, we export it as a slashed grace note instead
+            // of a plain one.
+            long slashes;
+            slashes = event->get<Int>(NotationProperties::SLASHES, slashes);
+            if (slashes > 0) str << "\\slashedGrace { ";
+            else str << "\\grace { ";
 
-                // LilyPond export hack:  If a grace note has one or more
-                // tremolo slashes, we export it as a slashed grace note instead
-                // of a plain one.
-                long slashes;
-                slashes = event->get<Int>(NotationProperties::SLASHES, slashes);
-                if (slashes > 0) str << "\\slashedGrace { ";
-                else str << "\\grace { ";
-
-                // str << "%{ grace starts %} "; // DEBUG
-            }
-        } else if (isGrace == 1) {
-            isGrace = 0;
+            // str << "%{ grace starts %} "; // DEBUG
+        } else if (inGrace && !currentIsGrace) {
+            inGrace = false;
             // str << "%{ grace ends %} "; // DEBUG
             str << "} ";
+        }
+        if (nextBeamedNoteInGroup && nextBeamedNoteInGroup->has(IS_GRACE_NOTE)) {
+            nextInGroupIsGrace = nextBeamedNoteInGroup->get<Bool>(IS_GRACE_NOTE);
+        } else {
+            nextInGroupIsGrace = false;
         }
         str << qStrToStrUtf8(startTupledStr);
 
@@ -2939,7 +2944,7 @@ LilyPondExporter::writeBar(Segment *s,
 
         if ((isNote || isRest)) {
             bool endGroup = false;
-            if (!nextBeamedNoteInGroup) {
+            if (!nextBeamedNoteInGroup || (inGrace && !nextInGroupIsGrace)) {
                 //RG_DEBUG << "Leaving beamed group" << groupId;
                 // ending a beamed group
                 if (m_exportBeams && inBeamedGroup) {
@@ -2964,7 +2969,7 @@ LilyPondExporter::writeBar(Segment *s,
         ++i;
     } // end of the gigantic while loop, I think
 
-    if (isGrace == 1) {
+    if (inGrace) {
         // str << "%{ grace ends %} "; // DEBUG
         str << "} ";
     }
