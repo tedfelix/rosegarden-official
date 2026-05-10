@@ -2457,6 +2457,7 @@ LilyPondExporter::writeBar(Segment *s,
     const Event *nextNoteInTuplet = nullptr;
 
     bool inGrace = false;
+    bool groupInGrace = false;
     bool nextInGroupIsGrace = false;
 
     while (s->isBeforeEndMarker(i)) {
@@ -2538,6 +2539,9 @@ LilyPondExporter::writeBar(Segment *s,
         const bool currentIsGrace = event->has(IS_GRACE_NOTE) && event->get<Bool>(IS_GRACE_NOTE);
         if (currentIsGrace && !inGrace) {
             inGrace = true;
+            if (startingBeamedGroup) {
+                groupInGrace = true;
+            }
             // LilyPond export hack:  If a grace note has one or more
             // tremolo slashes, we export it as a slashed grace note instead
             // of a plain one.
@@ -2944,7 +2948,7 @@ LilyPondExporter::writeBar(Segment *s,
 
         if ((isNote || isRest)) {
             bool endGroup = false;
-            if (!nextBeamedNoteInGroup || (inGrace && !nextInGroupIsGrace)) {
+            if (!nextBeamedNoteInGroup || (groupInGrace && !nextInGroupIsGrace)) {
                 //RG_DEBUG << "Leaving beamed group" << groupId;
                 // ending a beamed group
                 if (m_exportBeams && inBeamedGroup) {
@@ -2963,6 +2967,7 @@ LilyPondExporter::writeBar(Segment *s,
             if (endGroup) {
                 groupId = -1;
                 groupType = "";
+                groupInGrace = false;
             }
         }
 
