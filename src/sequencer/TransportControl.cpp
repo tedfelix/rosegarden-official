@@ -101,7 +101,7 @@ void TransportControl::tick()
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     //RG_DEBUG << "tick" << seq.getStatus();
 #ifdef HAVE_LIBJACK
-    if (Preferences::getUseJackTransport()) {
+    if (Preferences::getUseJackTransport() == Preferences::New) {
         // logic with jack transport
         switch (seq.getStatus()) {
         case STARTING_TO_PLAY:
@@ -187,7 +187,7 @@ void TransportControl::tick()
 
     bool withJackTransport = false;
 #ifdef HAVE_LIBJACK
-    withJackTransport = Preferences::getUseJackTransport();
+    withJackTransport = Preferences::getUseJackTransport() == Preferences::New;
 #endif
     if (! withJackTransport) {
         // logic without jack transport
@@ -256,7 +256,7 @@ int TransportControl::play(RealTime startPos)
 {
 #ifdef HAVE_LIBJACK
     int result = true;
-    if (Preferences::getUseJackTransport()) {
+    if (Preferences::getUseJackTransport() == Preferences::New) {
         unsigned int sampleRate =
             RosegardenSequencer::getInstance()->getSampleRate();
         if (startPos < RealTime::zero()) {
@@ -297,7 +297,7 @@ void TransportControl::sequencerPlayReady()
 void TransportControl::stop(bool autoStop)
 {
 #ifdef HAVE_LIBJACK
-    if (Preferences::getUseJackTransport()) {
+    if (Preferences::getUseJackTransport() == Preferences::New) {
         if (m_countIn) {
             // we are still in the count in and jack is not rolling
             RosegardenSequencer::getInstance()->stop(autoStop);
@@ -326,7 +326,7 @@ void TransportControl::jumpTo(RealTime time)
 {
     RG_DEBUG << "jumpTo" << time;
 #ifdef HAVE_LIBJACK
-    if (Preferences::getUseJackTransport()) {
+    if (Preferences::getUseJackTransport() == Preferences::New) {
         // if we are in record count in the time may be 0. We cannot
         // use -ve time in jack so we have to set zero here but still
         // tell the sequencer to go to the -ve time.
@@ -385,7 +385,7 @@ int TransportControl::syncCallback(jack_transport_state_t state,
 int TransportControl::processCallback(jack_nframes_t)
 {
     //RG_DEBUG << "processCallback";
-    if (!Preferences::getUseJackTransport()) return 0;
+    if (Preferences::getUseJackTransport() != Preferences::New) return 0;
     jack_position_t pos ;
     jack_transport_state_t state = jack_transport_query(m_client, &pos);
 
