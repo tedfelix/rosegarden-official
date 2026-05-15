@@ -150,8 +150,13 @@ namespace Preferences
     void setShowGtk2Warning(bool value);
     bool getShowGtk2Warning();
 
-    void setUseJackTransport(bool value);
-    bool getUseJackTransport();
+    enum JackTransportMethod {
+        None,
+        Old,
+        New
+    };
+    void setUseJackTransport(JackTransportMethod value);
+    JackTransportMethod getUseJackTransport();
 
 }
 

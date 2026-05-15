@@ -274,7 +274,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     // Use JACK transport
-    layout->addWidget(new QLabel(tr("Use JACK transport"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("JACK transport Method"), frame), row, 0);
 
     // ??? Just a checkbox for now.  Originally, three settings were
     //     proposed for this:
@@ -282,15 +282,19 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     //       - Sync
     //       - Sync, and offer timebase master
     //     Not sure whether those are still relevant.  Capturing here in case.
-    m_useJackTransport = new QCheckBox(frame);
-    m_useJackTransport->setChecked(Preferences::getUseJackTransport());
-#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
-    connect(m_useJackTransport, &QCheckBox::checkStateChanged,
-#else
-    connect(m_useJackTransport, &QCheckBox::stateChanged,
-#endif
+
+    // now a checkbox none/old/new
+
+    m_jackTransportMethod = new QComboBox(frame);
+    m_jackTransportMethod->addItem(tr("Do not Use"));
+    m_jackTransportMethod->addItem(tr("Old method"));
+    m_jackTransportMethod->addItem(tr("New method"));
+    m_jackTransportMethod->setCurrentIndex
+            (Preferences::getUseJackTransport());
+    connect(m_jackTransportMethod, static_cast<void(QComboBox::*)(int)>(
+                &QComboBox::activated),
             this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_useJackTransport, row, 1, 1, 2);
+    layout->addWidget(m_jackTransportMethod, row, 1, 1, 2);
 
     ++row;
 
@@ -753,17 +757,18 @@ void GeneralConfigurationPage::apply()
 #ifdef HAVE_LIBJACK
     settings.beginGroup(SequencerOptionsConfigGroup);
 
-    bool jackTransport = m_useJackTransport->isChecked();
+    int jackTransport = m_jackTransportMethod->currentIndex();
+    Preferences::JackTransportMethod jackTransportMethod =
+        static_cast<Preferences::JackTransportMethod>(jackTransport);
 
-    // 0 -> nothing, 1 -> sync, 2 -> master
-    int jackValue = jackTransport ? 1 : 0;
+    Preferences::setUseJackTransport(jackTransportMethod);
 
-    settings.setValue("jacktransport", jackTransport);
-
+    // This is no longer required as the preferences can be usde in
+    // the audio thread
     MappedEvent mEjackValue;
     mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
     mEjackValue.setType(MappedEvent::SystemJackTransport);
-    mEjackValue.setData1(MidiByte(jackValue));
+    mEjackValue.setData1(MidiByte(jackTransport));
     StudioControl::sendMappedEvent(mEjackValue);
 
     settings.endGroup();
@@ -780,7 +785,6 @@ void GeneralConfigurationPage::apply()
     Preferences::setLV2(m_lv2->isChecked());
     Preferences::setDynamicDrag(m_dynamicDrag->isChecked());
     Preferences::setLv2Environment(m_lv2Environment->isChecked());
-    Preferences::setUseJackTransport(m_useJackTransport->isChecked());
 
     // Presentation tab
 

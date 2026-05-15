@@ -423,17 +423,36 @@ int Preferences::getFilePrinter()
     return filePrinter.get();
 }
 
-static PreferenceBool useJackTransport(
-        SequencerOptionsConfigGroup, "jacktransport", false);
+//static PreferenceBool useJackTransport(
+//      SequencerOptionsConfigGroup, "jacktransport", false);
 
-void Preferences::setUseJackTransport(bool value)
+static PreferenceInt jackTransportMethod(
+        SequencerOptionsConfigGroup, "jacktransportMethod", 0);
+
+void Preferences::setUseJackTransport(JackTransportMethod value)
 {
-    useJackTransport.set(value);
+    jackTransportMethod.set(value);
 }
 
-bool Preferences::getUseJackTransport()
+Preferences::JackTransportMethod Preferences::getUseJackTransport()
 {
-    return useJackTransport.get();
+    static bool first = true;
+    if (first) {
+        first = false;
+        // first call - we can access settings
+        QSettings settings;
+        settings.beginGroup(SequencerOptionsConfigGroup);
+        if (! settings.contains("jacktransportMethod")) {
+            // This item does not exist - use the old prefernce value
+            bool oldJackTransport =
+                settings.value("jacktransport", false).toBool();
+            if (oldJackTransport) {
+                setUseJackTransport(Old);
+            }
+        }
+        settings.endGroup();
+    }
+    return static_cast<JackTransportMethod>(jackTransportMethod.get());
 }
 
 
