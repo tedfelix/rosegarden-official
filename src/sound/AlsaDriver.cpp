@@ -2138,8 +2138,7 @@ AlsaDriver::stopPlayback(bool autoStop)
     m_playing = false;
 
 #ifdef HAVE_LIBJACK
-    if (m_jackDriver &&
-        Preferences::getUseJackTransport() == Preferences::Old) {
+    if (m_jackDriver) {
         // Normally we want to send out a JACK stop even when the stop is
         // initiated by rg at the end of the composition (auto stop).
         // The user can disable this via the preferences and JACK will
@@ -4426,22 +4425,18 @@ AlsaDriver::startClocks()
 
                 m_jackDriver->prepareAudio();
             }
-            if (Preferences::getUseJackTransport() == Preferences::Old) {
-                bool rv;
-                if (m_needJackStart == NeedJackReposition) {
-                    rv = m_jackDriver->relocateTransport();
-                } else {
-                    rv = m_jackDriver->startTransport();
-                    if (!rv) {
+            bool rv;
+            if (m_needJackStart == NeedJackReposition) {
+                rv = m_jackDriver->relocateTransport();
+            } else {
+                rv = m_jackDriver->startTransport();
+                if (!rv) {
 #ifdef DEBUG_ALSA
-                        RG_DEBUG <<
-                            "startClocks(): Waiting for startClocksApproved";
+                    RG_DEBUG << "startClocks(): Waiting for startClocksApproved";
 #endif
-                        // need to wait for transport sync
-                        debug_jack_frame_count =
-                            m_jackDriver->getFramesProcessed();
-                        return ;
-                    }
+                    // need to wait for transport sync
+                    debug_jack_frame_count = m_jackDriver->getFramesProcessed();
+                    return ;
                 }
             }
         }
@@ -4744,43 +4739,42 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
         }
 
 #ifdef HAVE_LIBJACK
-        if (Preferences::getUseJackTransport() == Preferences::Old) {
-            // Set the JACK transport
-            if (mappedEvent->getType() == MappedEvent::SystemJackTransport) {
-                bool enabled = false;
-                bool source = false;
+        // Set the JACK transport
+        if (mappedEvent->getType() == MappedEvent::SystemJackTransport) {
+            bool enabled = false;
+            bool source = false;
 
-                switch ((int)mappedEvent->getData1()) {
-                case 2:  // JACK Transport Source
-                    source = true;
-                    enabled = true;
+            switch ((int)mappedEvent->getData1()) {
+            case 2:  // JACK Transport Source
+                source = true;
+                enabled = true;
 #ifdef DEBUG_ALSA
-                    RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)";
+                RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)";
 #endif
-                    break;
+                break;
 
-                case 1:  // Follow JACK Transport
-                    enabled = true;
+            case 1:  // Follow JACK Transport
+                enabled = true;
 #ifdef DEBUG_ALSA
-                    RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport";
+                RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport";
 #endif
-                    break;
+                break;
 
-                case 0:  // Ignore JACK Transport
-                default:
+            case 0:  // Ignore JACK Transport
+            default:
 #ifdef DEBUG_ALSA
-                    RG_DEBUG << "processEventsOut(): Rosegarden to ignore JACK transport";
+                RG_DEBUG << "processEventsOut(): Rosegarden to ignore JACK transport";
 #endif
-                    break;
-                }
+                break;
+            }
 
-                if (m_jackDriver) {
-                    m_jackDriver->setTransportEnabled(enabled);
-                    m_jackDriver->setTransportSource(source);
-                }
+            if (m_jackDriver) {
+                m_jackDriver->setTransportEnabled(enabled);
+                m_jackDriver->setTransportSource(source);
             }
         }
 #endif // HAVE_LIBJACK
+
 
         if (mappedEvent->getType() == MappedEvent::SystemMMCTransport) {
             switch ((int)mappedEvent->getData1()) {
