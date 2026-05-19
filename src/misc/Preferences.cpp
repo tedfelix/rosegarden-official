@@ -455,5 +455,38 @@ Preferences::JackTransportMethod Preferences::getUseJackTransport()
     return static_cast<JackTransportMethod>(jackTransportMethod.get());
 }
 
+void Preferences::initializeCache()
+{
+    getMIDIPitchOctave();
+    getSendProgramChangesWhenLooping();
+    getSendControlChangesWhenLooping();
+    getAllowresetallcontrollers();
+    getForceChannelSetups();
+    getUseNativeFileDialogs();
+    getStopAtSegmentEnd();
+    getJumpToLoop();
+    getAdvancedLooping();
+    getJACKStopAtAutoStop();
+    getAudioFileLocationDlgDontShow();
+    getDefaultAudioLocation();
+    getCustomAudioLocation();
+    getJACKLoadCheck();
+    getShowNoteNames();
+    getPDFViewer();
+    getFilePrinter();
+    getBug1623();
+    getMusewhirl();
+    getHRTimer();
+    getLV2();
+    getDynamicDrag();
+    getLv2Environment();
+    getAutoChannels();
+    getIncludeAlsaPortNumbersWhenMatching();
+    getSMFExportPPQN();
+    getMatrixConstrainNotes();
+    getShowGtk2Warning();
+    getUseJackTransport();
+
+}
 
 }

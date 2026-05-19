@@ -763,8 +763,9 @@ void GeneralConfigurationPage::apply()
 
     Preferences::setUseJackTransport(jackTransportMethod);
 
-    // This is no longer required as the preferences can be usde in
-    // the audio thread
+    // This can be removed if preferences are used in the sound drivers
+    // note: Preferences can be used in the audio thread
+    if (jackTransportMethod == Preferences::New) jackTransport = 0;
     MappedEvent mEjackValue;
     mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
     mEjackValue.setType(MappedEvent::SystemJackTransport);

@@ -319,6 +319,7 @@ RosegardenMainWindow::RosegardenMainWindow(
     RG_WARNING << "UI Thread gettid(): " << gettid();
 #endif
 
+    Preferences::initializeCache();
     initStaticObjects();
 
     // the AudioPluginGUIManager must be created after initStaticObjects

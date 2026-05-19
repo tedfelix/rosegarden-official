@@ -158,6 +158,9 @@ namespace Preferences
     void setUseJackTransport(JackTransportMethod value);
     JackTransportMethod getUseJackTransport();
 
+    // This will setup all the cached variables so the get... calls
+    // can be made from realtime threads
+    void initializeCache();
 }
 
 

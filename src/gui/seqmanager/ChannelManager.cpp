@@ -59,9 +59,6 @@ ChannelManager::connectInstrument(Instrument *instrument)
     if (!instrument)
         return;
 
-    // setup the Preferences
-    setupPreferences();
-
     // Disconnect the old instrument, if any.
     if (m_instrument)
         disconnect(m_instrument);
@@ -656,16 +653,5 @@ ChannelManager::slotInstrumentChanged()
     // The above code won't always set dirty flag, so set it now.
     m_ready = false;
 }
-
-void ChannelManager::setupPreferences()
-{
-    RG_DEBUG << "setupPreferences";
-    // call Preferences get here to setup the cache
-    (void)Preferences::getSendProgramChangesWhenLooping();
-    (void)Preferences::getSendControlChangesWhenLooping();
-    (void)Preferences::getAllowresetallcontrollers();
-    (void)Preferences::getForceChannelSetups();
-}
-
 
 }

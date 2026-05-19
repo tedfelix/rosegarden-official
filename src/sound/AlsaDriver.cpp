@@ -2118,7 +2118,7 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 }
 
 void
-AlsaDriver::stopPlayback(bool)
+AlsaDriver::stopPlayback(bool autoStop)
 {
 #ifdef DEBUG_ALSA
     RG_DEBUG << "stopPlayback() begin...";
@@ -2136,6 +2136,23 @@ AlsaDriver::stopPlayback(bool)
 
     allNotesOff();
     m_playing = false;
+
+#ifdef HAVE_LIBJACK
+    if (m_jackDriver &&
+        Preferences::getUseJackTransport() == Preferences::Old) {
+        // Normally we want to send out a JACK stop even when the stop is
+        // initiated by rg at the end of the composition (auto stop).
+        // The user can disable this via the preferences and JACK will
+        // continue to roll past the end of the rg composition, but this will
+        // introduce some strange behavior since JACK transport will be out of
+        // sync with the rg transport.
+        // See Bug #1693 for details.
+        if (Preferences::getJACKStopAtAutoStop()  ||  !autoStop)
+            m_jackDriver->stopTransport();
+
+        m_needJackStart = NeedNoJackStart;
+    }
+#endif
 
     // Flush the output and input queues
     //
@@ -4409,6 +4426,24 @@ AlsaDriver::startClocks()
 
                 m_jackDriver->prepareAudio();
             }
+            if (Preferences::getUseJackTransport() == Preferences::Old) {
+                bool rv;
+                if (m_needJackStart == NeedJackReposition) {
+                    rv = m_jackDriver->relocateTransport();
+                } else {
+                    rv = m_jackDriver->startTransport();
+                    if (!rv) {
+#ifdef DEBUG_ALSA
+                        RG_DEBUG <<
+                            "startClocks(): Waiting for startClocksApproved";
+#endif
+                        // need to wait for transport sync
+                        debug_jack_frame_count =
+                            m_jackDriver->getFramesProcessed();
+                        return ;
+                    }
+                }
+            }
         }
     }
 #endif
@@ -4707,6 +4742,45 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
 #endif
             }
         }
+
+#ifdef HAVE_LIBJACK
+        if (Preferences::getUseJackTransport() == Preferences::Old) {
+            // Set the JACK transport
+            if (mappedEvent->getType() == MappedEvent::SystemJackTransport) {
+                bool enabled = false;
+                bool source = false;
+
+                switch ((int)mappedEvent->getData1()) {
+                case 2:  // JACK Transport Source
+                    source = true;
+                    enabled = true;
+#ifdef DEBUG_ALSA
+                    RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport and request JACK timebase master role (not yet implemented)";
+#endif
+                    break;
+
+                case 1:  // Follow JACK Transport
+                    enabled = true;
+#ifdef DEBUG_ALSA
+                    RG_DEBUG << "processEventsOut(): Rosegarden to follow JACK transport";
+#endif
+                    break;
+
+                case 0:  // Ignore JACK Transport
+                default:
+#ifdef DEBUG_ALSA
+                    RG_DEBUG << "processEventsOut(): Rosegarden to ignore JACK transport";
+#endif
+                    break;
+                }
+
+                if (m_jackDriver) {
+                    m_jackDriver->setTransportEnabled(enabled);
+                    m_jackDriver->setTransportSource(source);
+                }
+            }
+        }
+#endif // HAVE_LIBJACK
 
         if (mappedEvent->getType() == MappedEvent::SystemMMCTransport) {
             switch ((int)mappedEvent->getData1()) {
