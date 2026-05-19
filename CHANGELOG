@@ -22,13 +22,13 @@ Included in this release...
   * cmake: Rename DISABLE_LILV -> DISABLE_LV2.  [2d2824cc84]
   * cmake: Add DISABLE_PCH.  [04e36f6ea4]
   * cmake: Fix broken CMAKE_BUILD_TYPE.  [c149ea9a66]
-  * matrix: Fixed crash on large horizontal zoom.  Bug #1761.
+  * Matrix: Fixed crash on large horizontal zoom.  Bug #1761.
     [853313edcf]
-  * matrix: Fixed horizonatal zoom range issue.  Bug #1761.
+  * Matrix: Fixed horizonatal zoom range issue.  Bug #1761.
     [4a34375a33]
-  * matrix: Fix vertical zoom range issue.  [807cd89374]
-  * matrix: Improve HV wheel behavior.  [0ef1e21deb] [566f984873]
-  * matrix: Fix preview play for tied notes.  Bug #1764.  [e9ed4f1221]
+  * Matrix: Fix vertical zoom range issue.  [807cd89374]
+  * Matrix: Improve HV wheel behavior.  [0ef1e21deb] [566f984873]
+  * Matrix: Fix preview play for tied notes.  Bug #1764.  [e9ed4f1221]
   * AudioPluginDialog: Improve Editor button behavior.  Editor button
     is now disabled if JACK isn't up.  An error message is provided via
     the button's tooltip when it is disabled.  [fbaa3ec6b1]
@@ -60,8 +60,22 @@ Included in this release...
     display will not scroll.  Turn it on and the display will jump to
     where the cursor is.  Bug #1774.  [254f9824ce]
   * examples: Make all channels fixed.  PR #45.  [6b2824a52d]
-
-Done to: bbc0a4aa4c
+  * Notation: Fix beaming a selection that contains a tuplet losing
+    the tuplet.  Bug #1773.  [80af019789]
+  * Notation: Improve rendering of mixed beam/tuple group.  Bug #1773.
+    [905859fc05]
+  * Event List Editor: Fix initial selection in event editor.
+    Bug #1777.  [af81698a7c]
+  * Editors: Remove "Durations" from rescale menu items.  Bug #1771.
+    [91a1a718f5]
+  * Event List Editor: Select new event after insert.  [5131ab73df]
+  * Event List Editor: Fix edit not leaving event selected.
+    [c6ec410702]
+  * Matrix: Fix matrix velocity can end up 0.  Bug #1777.  [af83558f8e]
+  * Matrix: Fix unreadable grid dropdown in Native theme.  Bug #1778.
+    [6f886727a6]
+  * Matrix: Fix unreadable quantize dropdown in Native theme.
+    Bug #1778.  [29193b7a03]
 
 ===== New Features =====
 
@@ -78,8 +92,7 @@ Done to: bbc0a4aa4c
     middle mouse button in select and move tools.  [5a2efddfb3]
   * lilypond: Add warning about too-short durations that will lead to
     lilypond errors.  PR #44.  [a11a8343f8]
-
-===== General Improvements =====
+  * Event List Editor: Add Edit > Paste At...  [b3682ef93c]
 
 
 ====== ROSEGARDEN 25.12 RELEASED ======
