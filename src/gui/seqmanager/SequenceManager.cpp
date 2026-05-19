@@ -1771,18 +1771,12 @@ SequenceManager::sendPreferences()
 
     // Send JACK transport
 
-    const bool jackTransport = qStrToBool(settings.value("jacktransport", "false"));
-    const bool jackSource = qStrToBool(settings.value("jackmaster", "false"));
+    Preferences::JackTransportMethod method =
+        Preferences::getUseJackTransport();
 
+    // For no jack transport or new method - disable old method
     MidiByte jackValue{0};
-    if (jackTransport && jackSource)
-        jackValue = 2;  // On and source.
-    else {
-        if (jackTransport)
-            jackValue = 1;  // On and follow.
-        else
-            jackValue = 0;  // Off.
-    }
+    if (method == Preferences::Old) jackValue = 1;
 
     MappedEvent mEjackValue;
     mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
