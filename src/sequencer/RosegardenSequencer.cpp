@@ -21,6 +21,7 @@
 #include "RosegardenSequencer.h"
 
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "sound/ControlBlock.h"
 #include "sound/SoundDriver.h"
@@ -34,6 +35,7 @@
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
 #include "gui/studio/StudioControl.h"
+#include "sequencer/TransportControl.h"
 
 #include "gui/application/RosegardenMainWindow.h"
 
@@ -462,7 +464,7 @@ RosegardenSequencer::setLoop(
 
     if (jumpToLoop) {
         if (!inLoop)
-            jumpTo(loopStart);
+            TransportControl::getInstance()->jumpTo(loopStart);
         // Guaranteed to be the case now.
         m_withinLoop = true;
     } else {
@@ -1316,6 +1318,12 @@ RosegardenSequencer::updateClocks()
 
     // If we've reached the end of the loop, go back to the beginning.
     if (isLooping()  &&  newPosition >= m_loopEnd) {
+
+        // if we are using TransportControl just jumpTo the loop start
+        if (Preferences::getUseJackTransport() == Preferences::New) {
+            TransportControl::getInstance()->jumpTo(m_loopStart);
+            return;
+        }
 
         RealTime oldPosition = m_songPosition;
 
