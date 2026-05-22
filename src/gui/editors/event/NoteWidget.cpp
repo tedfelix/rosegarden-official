@@ -88,10 +88,13 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
 
     m_durationSpinBox = new QSpinBox(propertiesGroup);
     m_durationSpinBox->setMinimum(1);
+    bool isGrace = event.has(BaseProperties::IS_GRACE_NOTE) &&
+        event.get<Bool>(BaseProperties::IS_GRACE_NOTE);
+    if (isGrace) m_durationSpinBox->setMinimum(0);
     m_durationSpinBox->setMaximum(INT_MAX);
     m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     timeT duration{event.getDuration()};
-    if (duration == 0)
+        if (duration == 0 && ! isGrace)
         duration = a_durationSetting.get();
     m_durationSpinBox->setValue(duration);
     propertiesLayout->addWidget(m_durationSpinBox, row, 1);
@@ -284,7 +287,9 @@ void NoteWidget::updateEvent(Event &event) const
     event.setDuration(m_durationSpinBox->value());
     event.set<Int>(BaseProperties::PITCH, m_pitchComboBox->currentIndex());
     event.set<Int>(BaseProperties::VELOCITY, m_velocitySpinBox->value());
-    if (m_lockNotation->isChecked()) {
+    bool isGrace = event.has(BaseProperties::IS_GRACE_NOTE) &&
+        event.get<Bool>(BaseProperties::IS_GRACE_NOTE);
+    if (m_lockNotation->isChecked() && ! isGrace) {
         event.setNotationAbsoluteTime(m_parent->getAbsoluteTime());
         event.setNotationDuration(m_durationSpinBox->value());
     } else {
