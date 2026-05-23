@@ -226,6 +226,10 @@ void InternalSegmentMapper::fillBuffer()
 
                     if (playTime + playDuration > repeatEndTime)
                         playDuration = repeatEndTime - playTime;
+                    timeT repeatSegmentEndTime =
+                        segmentEndTime + timeForRepeats;
+                    if (playTime + playDuration > repeatSegmentEndTime)
+                        playDuration = repeatSegmentEndTime - playTime;
 
                     playTime = playTime + m_segment->getDelay();
                     const RealTime eventTime = toRealTime(comp, playTime);
