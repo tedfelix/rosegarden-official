@@ -76,6 +76,8 @@ Included in this release...
     [6f886727a6]
   * Matrix: Fix unreadable quantize dropdown in Native theme.
     Bug #1778.  [29193b7a03]
+  * Notation: Fix crash with Make Triplet (Ctrl+R).  Bug #1781.
+    [6bf63b0f3d]
 
 ===== New Features =====
 
