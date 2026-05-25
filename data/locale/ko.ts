@@ -1,10 +1,12 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS version="2.1" language="ko" sourcelanguage="en_US">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="ko" sourcelanguage="en_US">
 <context>
     <name>:</name>
     <message>
-        <source/>
+        <source></source>
         <comment>this is a tooltip. It should not contain any keyboard shortcuts. Shortcuts will be added automatically at runtime.</comment>
-        <translation type="unfinished"/>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -12,7 +14,9 @@
     <message numerus="yes">
         <location filename="../../src/document/Command.cpp" line="+104"/>
         <source>%1 (%n change(s))</source>
-        <translation><numerusform>%1 (%n개 변경)</numerusform></translation>
+        <translation>
+            <numerusform>%1 (%n개 변경)</numerusform>
+        </translation>
     </message>
 </context>
 <context>
@@ -9091,8 +9095,8 @@
         <translation>장조</translation>
     </message>
     <message>
-        <source/>
-        <translation type="unfinished"/>
+        <source></source>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+282"/>
@@ -10452,7 +10456,9 @@ Please select the ones you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location line="+10"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;This action cannot be undone, and there will be no way to recover the files.&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation><numerusform>&lt;qt&gt;하드 디스크에서 %n개의 오디오 파일을 영구적으로 삭제하려고 합니다.&lt;br&gt;이 작업은 실행 취소할 수 없으며 파일을 복구할 방법이 없습니다.&lt;br&gt;계속하시겠습니까?&lt;/qt&gt;</numerusform></translation>
+        <translation>
+            <numerusform>&lt;qt&gt;하드 디스크에서 %n개의 오디오 파일을 영구적으로 삭제하려고 합니다.&lt;br&gt;이 작업은 실행 취소할 수 없으며 파일을 복구할 방법이 없습니다.&lt;br&gt;계속하시겠습니까?&lt;/qt&gt;</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+13"/>
@@ -10744,7 +10750,7 @@ Are you sure?</source>
     <message>
         <location line="+2"/>
         <source>&lt;id&gt;</source>
-        <comment>'id' is short for 'identification'</comment>
+        <comment>&apos;id&apos; is short for &apos;identification&apos;</comment>
         <translation>&lt;ID&gt;</translation>
     </message>
     <message>
@@ -15016,12 +15022,16 @@ Example text from file:</source>
     <message numerus="yes">
         <location line="+8"/>
         <source>up %n octave(s) and %1</source>
-        <translation><numerusform>%n 옥타브 및 %1 올림</numerusform></translation>
+        <translation>
+            <numerusform>%n 옥타브 및 %1 올림</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>up %n octave(s)</source>
-        <translation><numerusform>%n 옥타브 올림</numerusform></translation>
+        <translation>
+            <numerusform>%n 옥타브 올림</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+3"/>
@@ -15031,12 +15041,16 @@ Example text from file:</source>
     <message numerus="yes">
         <location line="+5"/>
         <source>down %n octave(s) and %1</source>
-        <translation><numerusform>%n 옥타브 및 %1 내림</numerusform></translation>
+        <translation>
+            <numerusform>%n 옥타브 및 %1 내림</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>down %n octave(s)</source>
-        <translation><numerusform>%n 옥타브 내림</numerusform></translation>
+        <translation>
+            <numerusform>%n 옥타브 내림</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+3"/>
@@ -18051,7 +18065,9 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location line="-8"/>
         <source>%n pixel(s)</source>
-        <translation><numerusform>%n개 픽셀</numerusform></translation>
+        <translation>
+            <numerusform>%n개 픽셀</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+222"/>
@@ -18076,7 +18092,9 @@ This is a bug (the program would previously have crashed by now)</source>
     <message numerus="yes">
         <location line="-150"/>
         <source>  %n event(s) selected </source>
-        <translation><numerusform>  %n개 이벤트 선택됨 </numerusform></translation>
+        <translation>
+            <numerusform>  %n개 이벤트 선택됨 </numerusform>
+        </translation>
     </message>
     <message>
         <location line="+2731"/>
@@ -18723,13 +18741,13 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
     <message>
         <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+59"/>
         <source>  A#2   Acoustic Bass Drum  </source>
-        <extracomment>Note to the translators: Don't translate literally. This string is never displayed but defines the largest width of the text (pitch and instrument name) in the percussion ruler.</extracomment>
+        <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and instrument name) in the percussion ruler.</extracomment>
         <translation>  A#2   어쿠스틱 베이스 드럼  </translation>
     </message>
     <message>
         <location line="+35"/>
         <source>A#2</source>
-        <extracomment>Note to the translators: Don't translate literally. This string is never displayed but defines the largest width of the pitch name in the percussion ruler text.</extracomment>
+        <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the pitch name in the percussion ruler text.</extracomment>
         <translation>A#2</translation>
     </message>
 </context>
@@ -20166,7 +20184,9 @@ There may be some incompatibilities with the file format.</source>
     <message numerus="yes">
         <location line="-2593"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
-        <translation><numerusform>저장되지 않은 세션에서 녹음된 %n개 오디오 파일을 삭제하시겠습니까?</numerusform></translation>
+        <translation>
+            <numerusform>저장되지 않은 세션에서 녹음된 %n개 오디오 파일을 삭제하시겠습니까?</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+22"/>
@@ -20188,7 +20208,9 @@ Please select any you wish to delete permanently from the hard disk.
     <message numerus="yes">
         <location line="+16"/>
         <source>&lt;qt&gt;About to delete %n audio file(s) permanently from the hard disk.&lt;br&gt;There will be no way to recover the file(s).&lt;br&gt;Are you sure?&lt;/qt&gt;</source>
-        <translation><numerusform>&lt;qt&gt;하드 디스크에서 %n개 오디오 파일을 영구적으로 삭제하려고 합니다.&lt;br&gt;파일을 복구할 수 없습니다.&lt;br&gt;계속하시겠습니까?&lt;/qt&gt;</numerusform></translation>
+        <translation>
+            <numerusform>&lt;qt&gt;하드 디스크에서 %n개 오디오 파일을 영구적으로 삭제하려고 합니다.&lt;br&gt;파일을 복구할 수 없습니다.&lt;br&gt;계속하시겠습니까?&lt;/qt&gt;</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+8"/>
@@ -20395,7 +20417,7 @@ Rosegarden의 다른 사용자나 인스턴스가 이미 이 파일을
     </message>
     <message>
         <location line="+380"/>
-        <source>You've not yet defined an audio editor for Rosegarden to use.
+        <source>You&apos;ve not yet defined an audio editor for Rosegarden to use.
 See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>Rosegarden에서 사용할 오디오 편집기를 아직 정의하지 않았습니다.
 편집 -&gt; 환경설정 -&gt; 오디오를 참조하십시오.</translation>
@@ -20689,7 +20711,9 @@ Error was : %2</source>
         <location line="+173"/>
         <location line="+36"/>
         <source>Split %n Segment(s) at Time</source>
-        <translation><numerusform>시간에서 %n개 세그먼트 분리</numerusform></translation>
+        <translation>
+            <numerusform>시간에서 %n개 세그먼트 분리</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+6"/>
@@ -20760,7 +20784,9 @@ Do you want to open it?</source>
         <location line="-2431"/>
         <location line="+55"/>
         <source>Split %n Segment(s) by Drum</source>
-        <translation><numerusform>드럼별로 %n개 세그먼트 분할</numerusform></translation>
+        <translation>
+            <numerusform>드럼별로 %n개 세그먼트 분할</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+6"/>
@@ -20836,7 +20862,7 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+83"/>
-        <source>The join tool isn't implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
+        <source>The join tool isn&apos;t implemented yet.  Instead please highlight the segments you want to join and then use the menu option:
 
         Segments-&gt;Collapse Segments.
 </source>
@@ -20904,7 +20930,7 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+24"/>
-        <source>Can't load MusicXML file:
+        <source>Can&apos;t load MusicXML file:
 </source>
         <translation>MusicXML 파일을 불러올 수 없음:
 </translation>
@@ -21158,7 +21184,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
     <message>
         <location line="+1937"/>
         <source>Saving file%1with a new filename...</source>
-        <comment>'file%1with' is correct. %1 will either become ' ' or ' as a template ' at runtime</comment>
+        <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>%1 파일을 새 파일 이름으로 저장하는 중...</translation>
     </message>
     <message>
@@ -21891,7 +21917,9 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+321"/>
         <source>Move %n Segment(s)</source>
-        <translation><numerusform>%n개 세그먼트 이동</numerusform></translation>
+        <translation>
+            <numerusform>%n개 세그먼트 이동</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+312"/>
@@ -21946,12 +21974,16 @@ Would you like to set it now?</source>
     <message numerus="yes">
         <location line="+248"/>
         <source>Copy %n Segment(s) as link(s)</source>
-        <translation><numerusform>링크로 %n개 세그먼트 복사</numerusform></translation>
+        <translation>
+            <numerusform>링크로 %n개 세그먼트 복사</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location line="+3"/>
         <source>Copy %n Segment(s)</source>
-        <translation><numerusform>%n개 세그먼트 복사</numerusform></translation>
+        <translation>
+            <numerusform>%n개 세그먼트 복사</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+356"/>
@@ -23758,12 +23790,16 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message numerus="yes">
         <location line="+23"/>
         <source>Turn %n Repeating Segment(s) into Real Copies</source>
-        <translation><numerusform>%n개의 반복 세그먼트를 실제 복사본으로 전환하기</numerusform></translation>
+        <translation>
+            <numerusform>%n개의 반복 세그먼트를 실제 복사본으로 전환하기</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location line="+26"/>
         <source>Turn %n Linked Segment(s) into Real Copies</source>
-        <translation><numerusform>%n개의 링크된 세그먼트를 실제 복사본으로 전환하기</numerusform></translation>
+        <translation>
+            <numerusform>%n개의 링크된 세그먼트를 실제 복사본으로 전환하기</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+340"/>
@@ -24435,7 +24471,9 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message numerus="yes">
         <location line="+2"/>
         <source>%1 on %n track(s)</source>
-        <translation><numerusform>%n개 트랙의 %1</numerusform></translation>
+        <translation>
+            <numerusform>%n개 트랙의 %1</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+28"/>
@@ -24467,7 +24505,9 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message numerus="yes">
         <location line="+32"/>
         <source>This triggered segment is used %n time(s) in the current composition.  Are you sure you want to remove it?</source>
-        <translation><numerusform>이 트리거된 세그먼트는 현재 작곡에서 %n번 사용되었습니다. 삭제하시겠습니까?</numerusform></translation>
+        <translation>
+            <numerusform>이 트리거된 세그먼트는 현재 작곡에서 %n번 사용되었습니다. 삭제하시겠습니까?</numerusform>
+        </translation>
     </message>
     <message>
         <location line="+15"/>
@@ -24971,9 +25011,9 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>S:</name>
     <message>
-        <source/>
+        <source></source>
         <comment>if the manual is translated into your language, you can</comment>
-        <translation type="unfinished"/>
+        <translation></translation>
     </message>
 </context>
 </TS>
