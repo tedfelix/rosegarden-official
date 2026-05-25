@@ -10210,7 +10210,7 @@ Chyba byla: %2</translation>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="423"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nepodařilo se uložit dokument v %1</translation>
     </message>
     <message>
         <location filename="../../src/sound/AudioFileManager.cpp" line="629"/>
@@ -10846,7 +10846,7 @@ Are you sure?</source>
     <message>
         <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="84"/>
         <source>Sub %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sub %1</translation>
     </message>
 </context>
 <context>
@@ -11288,7 +11288,7 @@ Are you sure?</source>
     <message>
         <location filename="../../src/gui/studio/AudioStrip.cpp" line="332"/>
         <source>Sub %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sub %1</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/AudioStrip.cpp" line="334"/>

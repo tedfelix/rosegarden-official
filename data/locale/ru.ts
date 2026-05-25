@@ -8322,7 +8322,7 @@
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10591,7 +10591,7 @@ Are you sure?</source>
     <message>
         <location line="+38"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;нет&gt;</translation>
     </message>
     <message>
         <location line="+129"/>
@@ -10601,12 +10601,12 @@ Are you sure?</source>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Слева</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Справа</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11272,7 +11272,7 @@ Are you sure?</source>
         <location line="+17"/>
         <location line="+166"/>
         <source>&lt;none&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;нет&gt;</translation>
     </message>
     <message>
         <location line="-163"/>
@@ -11292,7 +11292,7 @@ Are you sure?</source>
     <message>
         <location line="+2"/>
         <source>Master</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Микс</translation>
     </message>
     <message>
         <location line="+81"/>
@@ -13108,7 +13108,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить</translation>
     </message>
 </context>
 <context>
@@ -13549,12 +13549,12 @@ Destination device already has a bank for
     <message>
         <location line="+28"/>
         <source>Base pitch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Базовая высота тона</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>Base velocity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Базовая сила нажатия</translation>
     </message>
     <message>
         <location line="+147"/>
@@ -15833,7 +15833,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
     <message>
         <location line="+42"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden - Предупреждение</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21074,7 +21074,7 @@ Only audio and synth plugin tracks will be exported</source>
     <message>
         <location line="+33"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden - Предупреждение</translation>
     </message>
     <message>
         <location line="+1"/>

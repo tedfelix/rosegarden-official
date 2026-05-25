@@ -20828,7 +20828,7 @@ Haluatko asettaa sen nyt?</translation>
     <message>
         <location line="+9"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">WAV-tiedostot</translation>
     </message>
     <message>
         <location line="+8"/>

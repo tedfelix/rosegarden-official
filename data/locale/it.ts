@@ -13551,7 +13551,7 @@ Il device di destinazione ha già il banco per
         <location line="+208"/>
         <location line="+11"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;non settato&gt;</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -13576,7 +13576,7 @@ Il device di destinazione ha già il banco per
     <message>
         <location line="+26"/>
         <source>Base velocity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velocità di base</translation>
     </message>
     <message>
         <location line="+147"/>
@@ -18614,7 +18614,7 @@ Accertati che il dispositivo sia correttamente configurato alla voce
     <message>
         <location line="+24"/>
         <source>Velocity:</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Velocity:</translation>
     </message>
     <message>
         <location line="+16"/>

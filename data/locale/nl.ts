@@ -6758,7 +6758,7 @@
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verwijder</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13105,7 +13105,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Verwijder</translation>
     </message>
 </context>
 <context>

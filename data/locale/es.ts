@@ -6695,7 +6695,7 @@
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Borrar</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10599,12 +10599,12 @@ Are you sure?</source>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Izquierda</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Derecha</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13106,7 +13106,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Borrar</translation>
     </message>
 </context>
 <context>
@@ -13364,7 +13364,7 @@ Destination device already has a bank for
     <message>
         <location line="+5"/>
         <source>Program Change</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Cambio de Programa</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -21241,7 +21241,7 @@ Para asistencia acerca de una correcta configuración de audio y MIDI, vaya ahtt
     <message>
         <location line="+9"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">archivos WAV</translation>
     </message>
     <message>
         <location line="+8"/>
@@ -22928,7 +22928,7 @@ Cerrando otras aplicaciones en ejecución puede mejorar el rendimiento de Rosega
     <message>
         <location line="+7"/>
         <source>Time Signature</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Medida del Compás</translation>
     </message>
     <message>
         <location line="+23"/>

@@ -8519,7 +8519,7 @@
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">删除</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10519,7 +10519,7 @@ Please select the ones you wish to delete permanently from the hard disk.
         <location line="+3"/>
         <location line="+66"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="-17"/>
@@ -10593,12 +10593,12 @@ Are you sure?</source>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">左</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">右</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11269,7 +11269,7 @@ Are you sure?</source>
     <message>
         <location line="-163"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">点击加载音频插件</translation>
     </message>
     <message>
         <location line="+79"/>
@@ -11294,7 +11294,7 @@ Are you sure?</source>
     <message>
         <location line="+76"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12715,7 +12715,7 @@ Destination device already has a bank for
     <message>
         <location line="+3"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+80"/>
@@ -13075,7 +13075,7 @@ Destination device already has a bank for
     <message>
         <location line="+94"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13100,7 +13100,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">删除</translation>
     </message>
 </context>
 <context>
@@ -13388,7 +13388,7 @@ Destination device already has a bank for
     <message>
         <location line="+5"/>
         <source>System Exclusive</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">系统独有信息</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -16534,7 +16534,7 @@ Right-click for context menu.</source>
     <message>
         <location line="+54"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21384,7 +21384,7 @@ Would you like to set it now?</source>
     <message>
         <location filename="../../src/gui/widgets/Rotary.cpp" line="+617"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+172"/>
@@ -21716,7 +21716,7 @@ Would you like to set it now?</source>
         <location line="+465"/>
         <location line="+46"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="-45"/>
@@ -21839,7 +21839,7 @@ Would you like to set it now?</source>
     <message>
         <location line="+4"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+116"/>
@@ -22435,7 +22435,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <message>
         <location line="+199"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -22861,7 +22861,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <location line="+21"/>
         <location line="+36"/>
         <source>Rosegarden</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden</translation>
     </message>
     <message>
         <location line="-57"/>
