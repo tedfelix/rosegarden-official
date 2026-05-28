@@ -387,13 +387,12 @@ PeakFile::writeHeader(std::ofstream *file)
     //
     header += getLittleEndianFromInteger(128, 4);
 
-    // Creation timestamp - fill in on close() so just use spacing
-    // of 28 bytes for the moment.
-    //
-    header += getLittleEndianFromInteger(0, 28);
+    // Creation timestamp - fill in on close() so just use 28 bytes of
+    // zeroes for the moment.
+    header += std::string(28, 0);
 
     // reserved space - 60 bytes
-    header += getLittleEndianFromInteger(0, 60);
+    header += std::string(60, 0);
 
     //RG_DEBUG << "writeHeader(): HEADER LENGTH =" << header.length();
 
