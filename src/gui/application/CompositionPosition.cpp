@@ -69,9 +69,9 @@ void CompositionPosition::setPositionForNewDocument(timeT time)
     m_documentPosition = time;
 }
 
-void CompositionPosition::slotSet(timeT time)
+void CompositionPosition::setPosition(timeT time, bool reset)
 {
-    RG_DEBUG << "slotSet" << m_position << "->" << time;
+    RG_DEBUG << "setPosition" << m_position << "->" << time << reset;
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
 
@@ -80,11 +80,16 @@ void CompositionPosition::slotSet(timeT time)
     const Composition& comp = doc->getComposition();
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
-    RG_DEBUG << "slotSet" << m_positionAsElapsedTime;
+    RG_DEBUG << "setPosition" << m_positionAsElapsedTime;
     SequenceManager* sequenceManager = doc->getSequenceManager();
-    sequenceManager->jumpTo(m_positionAsElapsedTime);
+    sequenceManager->jumpTo(m_positionAsElapsedTime, reset);
 
     emit changed(m_position);
+}
+
+void CompositionPosition::slotSet(timeT time)
+{
+    setPosition(time);
 }
 
 void CompositionPosition::slotSetDocumentTime()

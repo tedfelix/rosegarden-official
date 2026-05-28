@@ -368,9 +368,9 @@ SequenceManager::fastforward()
 }
 
 void
-SequenceManager::jumpTo(const RealTime &time)
+SequenceManager::jumpTo(const RealTime &time, bool reset)
 {
-    RosegardenSequencer::getInstance()->jumpTo(time);
+    RosegardenSequencer::getInstance()->jumpTo(time, reset);
 }
 
 void

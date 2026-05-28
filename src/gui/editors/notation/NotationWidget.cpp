@@ -1412,23 +1412,9 @@ NotationWidget::slotSetInsertedSymbol(Symbol type)
 }
 
 void
-NotationWidget::setPointerPosition(timeT t)
+NotationWidget::setPointerPosition(timeT t, bool reset)
 {
-    // Fixes problem with sustaining notes while adding notes with
-    // the pencil tool.  Also avoids moving playback position in
-    // playback mode, allowing editing of a loop in real-time.
-    // ??? A flag in RMW would be faster.  E.g. RMW::m_enableSetPointerPosition.
-    disconnect(CompositionPosition::getInstance(),
-               &CompositionPosition::changed,
-               RosegardenMainWindow::self(),
-               &RosegardenMainWindow::slotUpdateForPointerChange);
-
-    CompositionPosition::getInstance()->slotSet(t);
-
-    connect(CompositionPosition::getInstance(),
-            &CompositionPosition::changed,
-            RosegardenMainWindow::self(),
-            &RosegardenMainWindow::slotUpdateForPointerChange);
+    CompositionPosition::getInstance()->setPosition(t, reset);
 }
 
 void

@@ -397,23 +397,28 @@ RosegardenSequencer::punchOut()
 // from where playback can continue.
 //
 void
-RosegardenSequencer::jumpTo(const RealTime &pos)
+RosegardenSequencer::jumpTo(const RealTime &pos, bool reset)
 {
     LOCKED;
 
+    RG_DEBUG << "jumpTo" << pos << reset;
 #ifdef DEBUG_ROSEGARDEN_SEQUENCER
     SEQUENCER_DEBUG << "RosegardenSequencer::jumpTo(" << pos << ")\n";
 #endif
     if (pos < RealTime::zero())
         return;
 
-    m_driver->stopClocks();
-
     RealTime oldPosition = m_songPosition;
-
     m_songPosition = m_lastFetchSongPosition = pos;
-
     SequencerDataBlock::getInstance()->setPositionPointer(m_songPosition);
+
+    if (! reset) {
+        RG_DEBUG << "jumpTo no playback reset";
+        // if we are not resetting we are done
+        return;
+    }
+
+    m_driver->stopClocks();
 
     m_driver->resetPlayback(oldPosition, m_songPosition);
 

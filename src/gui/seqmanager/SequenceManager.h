@@ -147,7 +147,8 @@ public:
     /// Start recording.
     void record(bool countIn);
 
-    void jumpTo(const RealTime &time);
+    // jump to the given time. If reset is true playback will be reset.
+    void jumpTo(const RealTime &time, bool reset = true);
 
     void setTransportStatus(TransportStatus status)
             { m_transportStatus = status; }

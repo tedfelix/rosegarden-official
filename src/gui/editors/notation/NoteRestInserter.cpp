@@ -343,9 +343,9 @@ NoteRestInserter::handleMouseRelease(const NotationMouseEvent *e)
             // the full duration of the original note calculate the position of
             // the pointer.
             timeT nextLocation = m_clickTimeCopy + note.getDuration();
-            m_widget->setPointerPosition(nextLocation);
+            m_widget->setPointerPosition(nextLocation, false);
         } else {
-            m_widget->setPointerPosition(m_clickTimeCopy);
+            m_widget->setPointerPosition(m_clickTimeCopy, false);
         }
     }
 }
@@ -531,7 +531,7 @@ NoteRestInserter::insertNote(Segment &segment,
                                                  m_widget->getUntupledCount());
             }
             timeT nextLocation = insertionTime + trueDuration;
-            m_widget->setPointerPosition(nextLocation);
+            m_widget->setPointerPosition(nextLocation, false);
         }
     }
 
