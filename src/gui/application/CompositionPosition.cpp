@@ -76,22 +76,15 @@ void CompositionPosition::setPosition(timeT time, bool reset)
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
 
+    // even if the time has not changed pass it on otherwise it may
+    // mess up the trensport request system
     const Composition& comp = doc->getComposition();
-    // After a set we blockupdates for a few cycles to give time for
-    // the sequencer to accept the new value.
-    m_blockUpdateCycles = 4;
     m_position = time;
     m_positionAsElapsedTime = comp.getElapsedRealTime(time);
     RG_DEBUG << "setPosition" << m_positionAsElapsedTime;
     SequenceManager* sequenceManager = doc->getSequenceManager();
     sequenceManager->jumpTo(m_positionAsElapsedTime, reset);
 
-    // even if the time has not changed pass it on otherwise it may
-    // mess up the trensport request system
-    RealTime positionAsElapsedTime = comp.getElapsedRealTime(time);
-    RG_DEBUG << "slotSet" << positionAsElapsedTime;
-    SequenceManager* sequenceManager = doc->getSequenceManager();
-    sequenceManager->jumpTo(positionAsElapsedTime);
     emit changed(m_position);
 }
 
