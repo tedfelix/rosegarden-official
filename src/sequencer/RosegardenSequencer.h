@@ -91,7 +91,7 @@ public:
             bool jumpToLoop);
 
     /// Set the sequencer to a given time.
-    void jumpTo(const RealTime &pos);
+    void jumpTo(const RealTime &pos, bool reset = true);
 
     /// Return the Sound system status (audio/MIDI)
     unsigned getSoundDriverStatus();

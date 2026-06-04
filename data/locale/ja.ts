@@ -9225,7 +9225,7 @@
     <message>
         <location line="+9"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数値</translation>
     </message>
     <message>
         <location filename="../../src/base/parameterpattern/IncreaseParameterPattern.cpp" line="+32"/>
@@ -10209,7 +10209,7 @@ Error was : %2</source>
     <message>
         <location line="+6"/>
         <source>Could not save document at %1</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">%1 にドキュメントをセーブできません</translation>
     </message>
     <message>
         <location line="+206"/>
@@ -10599,12 +10599,12 @@ Are you sure?</source>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">左</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">右</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -11275,7 +11275,7 @@ Are you sure?</source>
     <message>
         <location line="-163"/>
         <source>Click to load an audio plugin</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">クリックしてオーディオプラグインをロード</translation>
     </message>
     <message>
         <location line="+79"/>
@@ -13076,7 +13076,7 @@ Destination device already has a bank for
     <message>
         <location line="+1"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数値</translation>
     </message>
     <message>
         <location line="+94"/>
@@ -13354,7 +13354,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Note</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">音符</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -15819,7 +15819,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
     <message>
         <location line="+42"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden - 注意</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21378,7 +21378,7 @@ Error was : %2</source>
     <message>
         <location line="+33"/>
         <source>Rosegarden - Warning</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rosegarden - 注意</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -21408,7 +21408,7 @@ Error was : %2</source>
     <message>
         <location filename="../../src/gui/widgets/Rotary.h" line="+126"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">数値</translation>
     </message>
 </context>
 <context>

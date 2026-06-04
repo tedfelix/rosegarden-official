@@ -136,7 +136,7 @@ public:
     void suspendLayoutUpdates();
     void resumeLayoutUpdates();
 
-    void setPointerPosition(timeT);
+    void setPointerPosition(timeT, bool reset = true);
 
     void setHorizontalZoomFactor(double factor);
     void setVerticalZoomFactor(double factor);

@@ -6739,12 +6739,12 @@
     <message>
         <location line="+4"/>
         <source>Set to &amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Choisir les valeurs par &amp;défaut</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Paste &amp;At...</source>
-        <translation type="unfinished"></translation>
+        <translation>Coller &amp;à...</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -6778,13 +6778,13 @@
         <location line="-359"/>
         <location line="+408"/>
         <source>&amp;Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Divi&amp;ser par deux</translation>
     </message>
     <message>
         <location line="-407"/>
         <location line="+408"/>
         <source>&amp;Double</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Doubler</translation>
     </message>
     <message>
         <location line="-304"/>
@@ -7221,7 +7221,7 @@
     <message>
         <location line="+2"/>
         <source>Grace Insert &amp;Mode</source>
-        <translation>&amp;Mode d&apos;insertion de fioritures</translation>
+        <translation>&amp;Mode d&apos;insertion de notes d&apos;ornement</translation>
     </message>
     <message>
         <location line="-344"/>
@@ -8945,7 +8945,7 @@
     <message>
         <location line="+1"/>
         <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
-        <translation type="unfinished"></translation>
+        <translation>La bibliothèque partagée librosegardenGtk2.so n&apos;a pas été trouvée. Vérifiez qu&apos;elle se trouve à un emplacement standard ou qu&apos;il est possible de l&apos;atteindre en utilisant la variable d&apos;environnement LD_LIBRARY_PATH.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+430"/>
@@ -9505,7 +9505,7 @@ Le démarrage du pilote a échoué avec le message suivant :
     <message>
         <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+74"/>
         <source>Bank and Program details</source>
-        <translation>Détails de la banques et du programme</translation>
+        <translation>Détails sur la banque et les programmes</translation>
     </message>
     <message>
         <location filename="../../src/sound/WAVExporter.cpp" line="+1"/>
@@ -10838,12 +10838,12 @@ Are you sure?</source>
     <message>
         <location line="-199"/>
         <source>JACK Audio subsystem not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le sous-système audio JACK n&apos;est pas disponible.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Plugin editor not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Editeur de greffon indisponible.</translation>
     </message>
     <message>
         <location line="+357"/>
@@ -11390,27 +11390,27 @@ Are you sure?</source>
     <message>
         <location line="-1815"/>
         <source>Bank Select Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Mode de sélection des banques</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Normal&lt;/b&gt; sends bank select MSB/LSB and program change.&lt;/p&gt;&lt;p&gt;&lt;b&gt;PC100+&lt;/b&gt; uses program changes 100-127 as bank selects.  Yamaha TG77 and others.&lt;/p&gt;&lt;p&gt;&lt;b&gt;CC31&lt;/b&gt; uses control change 31 value 127 and a program change as a bank select.  Oberheim Matrix-1000.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Normal&lt;/b&gt; Utilise la sélection de banque MSB/LSB et le changement de programme.&lt;/p&gt;&lt;p&gt;&lt;b&gt;PC100+&lt;/b&gt; Utilise le changement de programme 100-127 comme sélection de banque. (Yamaha TG77 et autres).&lt;/p&gt;&lt;p&gt;&lt;b&gt;CC31&lt;/b&gt; Utilise le changement de paramètre 31 (CC31) valeur 127 et un changement de programme comme sélection de banque. (Oberheim Matrix-1000).&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Normal</source>
-        <translation type="unfinished">Normale</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PC100+</source>
-        <translation type="unfinished"></translation>
+        <translation>PC100+</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CC31</source>
-        <translation type="unfinished"></translation>
+        <translation>CC31</translation>
     </message>
     <message>
         <location line="+513"/>
@@ -11465,7 +11465,7 @@ Are you sure?</source>
     <message>
         <location line="+16"/>
         <source>bank select type changed</source>
-        <translation type="unfinished"></translation>
+        <translation>mode de sélection de banque changé</translation>
     </message>
     <message>
         <location line="+111"/>
@@ -14103,12 +14103,12 @@ Le périphérique de destinaion a déjà une banque pour
     <message>
         <location line="-559"/>
         <source>MuPDF</source>
-        <translation></translation>
+        <translation>MuPDF</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>ePDFView</source>
-        <translation></translation>
+        <translation>ePDFView</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -15224,12 +15224,12 @@ Texte d&apos;exemple depuis le fichier:</translation>
     <message>
         <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="-39"/>
         <source>Do not show this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne plus montrer</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:&lt;br/&gt;set QT_QPA_PLATFORMTHEME to gtk2 and install the gtk2 style plugin or&lt;br/&gt;set XDG_SESSION_TYPE to unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous êtes sur le point de charger l&apos;infrastructure gtk2 qui est connue pour provoquer des plantages sur certains systèmes. Un contournement possible consiste à définir certaines variables d&apos;environnement :&lt;br/&gt;définir QT_QPA_PLATFORMTHEME comme &quot;gtk2&quot; et installer le &quot;gtk2 style plugin&quot; ou&lt;br/&gt;définir XDG_SESSION_TYPE comme &quot;unknown&quot;</translation>
     </message>
 </context>
 <context>
@@ -15298,7 +15298,8 @@ Voulez-vous utiliser
         <location line="+1155"/>
         <source>Bar %1 contains an event too short to represent in standard notation.
 This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.</source>
-        <translation type="unfinished"></translation>
+        <translation>La mesure %1 contient un évènement trop bref pour être représenté sur une partition standard.
+Ce résultat est probablement dû à un fichier corrompu et risque de provoquer l&apos;avertissement de LilyPond : &quot;échec du contrôle de mesure (barcheck)&quot;.</translation>
     </message>
     <message>
         <location line="+751"/>
@@ -15789,7 +15790,7 @@ répartis verticalement sur la page)</translation>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to toggle the range.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le pointeur de lecture.&lt;/p&gt;&lt;p&gt;Clic droit et glisser pour définir une plage pour lire en boucle ou éditer.&lt;/p&gt;&lt;p&gt;Click droit pour activer ou désactiver la plage.&lt;/p&gt;&lt;p&gt;Ctrl+cliquer et glisser pour déplacer le pointeur de lecture en s&apos;accrochant aux temps.&lt;/p&gt;&lt;p&gt;Double-cliquer pour commecer la lecture.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Cliquer et glisser pour déplacer le pointeur de lecture.&lt;/p&gt;&lt;p&gt;Clic droit et glisser pour définir une plage pour lire en boucle ou éditer.&lt;/p&gt;&lt;p&gt;Click droit pour activer ou désactiver la plage.&lt;/p&gt;&lt;p&gt;Ctrl+cliquer et glisser pour déplacer le pointeur de lecture en s&apos;accrochant aux temps.&lt;/p&gt;&lt;p&gt;Double-cliquer pour commencer la lecture.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+398"/>
@@ -22956,7 +22957,7 @@ Si d&apos;autres applications sont actuellement en fonctionnement, les arrêter 
     <message>
         <location line="+15"/>
         <source>Could not save SysEx file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Echec de l&apos;écriture du fichier SysEx.</translation>
     </message>
 </context>
 <context>
@@ -23765,18 +23766,21 @@ Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais l
     <message>
         <location line="+60"/>
         <source>starting</source>
-        <translation type="unfinished"></translation>
+        <translation>début</translation>
     </message>
     <message>
         <location line="+12"/>
         <location line="+10"/>
         <source>bpm</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Beats Per Minute = Battements Par Minute</translatorcomment>
+        <translation>bpm</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>qpm</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>La traduction de qpm devrait être npm (quarter -&gt; noire), mais npm est-il compréhensible en français ?
+Comme, de toute façon, qpm ne me semble pas non plus compréhensible, je fais la traduction.</translatorcomment>
+        <translation>npm</translation>
     </message>
 </context>
 <context>

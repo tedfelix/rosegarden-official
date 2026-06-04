@@ -4897,7 +4897,7 @@
         <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Suara</translation>
     </message>
     <message>
         <location filename="../../src/base/MidiDevice.cpp" line="+1090"/>
@@ -6715,7 +6715,7 @@
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hapus</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -13105,7 +13105,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hapus</translation>
     </message>
 </context>
 <context>
@@ -13473,7 +13473,7 @@ Destination device already has a bank for
     <message>
         <location line="+3"/>
         <source>&lt;no label&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;tanpa label&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -13557,7 +13557,7 @@ Destination device already has a bank for
         <location line="+147"/>
         <location line="+46"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Memasukkan isi papan klip...</translation>
     </message>
     <message>
         <location line="-18"/>
@@ -21207,7 +21207,7 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
     <message>
         <location line="+9"/>
         <source>WAV files</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">berkas WAV</translation>
     </message>
     <message>
         <location line="+8"/>

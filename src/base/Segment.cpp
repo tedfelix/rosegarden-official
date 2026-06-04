@@ -1899,11 +1899,11 @@ bool Segment::getTupletAt(timeT time,
 }
 
 void Segment::getTupletData(const iterator it,
-                            timeT& tupletStart,
-                            timeT& tupletEnd,
-                            int& tupledCount,
-                            int& untupledCount,
-                            int& groupId)
+                            timeT &tupletStart,
+                            timeT &tupletEnd,
+                            int &tupledCount,
+                            int &untupledCount,
+                            int &groupId)
 {
 #ifdef DEBUG_NORMALIZE_RESTS
     RG_DEBUG << "getTupletData";
@@ -1913,16 +1913,27 @@ void Segment::getTupletData(const iterator it,
     tupledCount = 0;
     untupledCount = 0;
     groupId = 0;
-    Event* event = *it;
-    if (! event->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE)) return;
-    timeT unit = event->get<Int>(BaseProperties::BEAMED_GROUP_TUPLET_BASE);
+
+    Event *event = *it;
+    if (!event->has(BaseProperties::BEAMED_GROUP_TUPLET_BASE))
+        return;
+    const timeT unit = event->get<Int>(BaseProperties::BEAMED_GROUP_TUPLET_BASE);
+
+    if (!event->has(BaseProperties::BEAMED_GROUP_TUPLED_COUNT))
+        return;
     tupledCount =
         event->get<Int>(BaseProperties::BEAMED_GROUP_TUPLED_COUNT);
+
+    if (!event->has(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT))
+        return;
     untupledCount =
         event->get<Int>(BaseProperties::BEAMED_GROUP_UNTUPLED_COUNT);
-    groupId =
-        event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
-    timeT size = unit * tupledCount;
+
+    if (!event->has(BaseProperties::BEAMED_GROUP_ID))
+        return;
+    groupId = event->get<Int>(BaseProperties::BEAMED_GROUP_ID);
+
+    const timeT size = unit * tupledCount;
     tupletStart = (event->getAbsoluteTime() / size) * size;
     tupletEnd = tupletStart + size;
 #ifdef DEBUG_NORMALIZE_RESTS

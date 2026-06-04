@@ -6790,12 +6790,12 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="-514"/>
         <source>Set to &amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Auf Stan&amp;dardwert setzen</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Paste &amp;At...</source>
-        <translation type="unfinished"></translation>
+        <translation>Einfügen &amp;bei...</translation>
     </message>
     <message>
         <location line="+103"/>
@@ -6807,13 +6807,13 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
         <location line="-359"/>
         <location line="+408"/>
         <source>&amp;Half</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Halbe</translation>
     </message>
     <message>
         <location line="-407"/>
         <location line="+408"/>
         <source>&amp;Double</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Doppelte</translation>
     </message>
     <message>
         <location line="-304"/>
@@ -8943,7 +8943,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+1"/>
         <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
-        <translation type="unfinished"></translation>
+        <translation>Die Rosegarden GTK2-Bibliothek (librosegardenGtk2.so) wurde nicht gefunden. Stellen Sie sicher, dass sich die Bibliothek an einem Standardort befindet oder über die Umgebungsvariable LD_LIBRARY_PATH gefunden werden kann.</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/main.cpp" line="+430"/>
@@ -9515,7 +9515,7 @@ und erneut probieren&lt;/p&gt;&lt;/qt&gt;</translation>
     <message>
         <location line="+18"/>
         <source>&lt;h2&gt;Rosegarden&lt;/h2&gt;&lt;h3&gt;A sequencer and musical notation editor&lt;/h3&gt;</source>
-        <translation>&lt;h2&gt;Rosegarden&lt;/h2&gt;&lt;h3&gt;Ein Sequenzer and Notensatzprogramm&lt;/h3&gt;</translation>
+        <translation>&lt;h2&gt;Rosegarden&lt;/h2&gt;&lt;h3&gt;Ein Sequenzer und Notensatzprogramm&lt;/h3&gt;</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -10834,12 +10834,12 @@ Bist du sicher?</translation>
     <message>
         <location line="-199"/>
         <source>JACK Audio subsystem not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>JACK-Audiosubsystem nicht verfügbar.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Plugin editor not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Plugin-Editor nicht verfügbar.</translation>
     </message>
     <message>
         <location line="+357"/>
@@ -11386,27 +11386,27 @@ Bist du sicher?</translation>
     <message>
         <location line="-1815"/>
         <source>Bank Select Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Bankwahltyp</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Normal&lt;/b&gt; sends bank select MSB/LSB and program change.&lt;/p&gt;&lt;p&gt;&lt;b&gt;PC100+&lt;/b&gt; uses program changes 100-127 as bank selects.  Yamaha TG77 and others.&lt;/p&gt;&lt;p&gt;&lt;b&gt;CC31&lt;/b&gt; uses control change 31 value 127 and a program change as a bank select.  Oberheim Matrix-1000.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Normal&lt;/b&gt; sendet Bankwahl MSB/LSB und Programmwechsel.&lt;/p&gt;&lt;p&gt;&lt;b&gt;PC100+&lt;/b&gt; verwendet Programmwechsel 100-127 als Bankwahl.  Yamaha TG77 und andere.&lt;/p&gt;&lt;p&gt;&lt;b&gt;CC31&lt;/b&gt; verwendet Kontroller 31 Wert 127 und einen Programmwechsel als Bankwahl.  Oberheim Matrix-1000.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Normal</source>
-        <translation type="unfinished">Normal</translation>
+        <translation>Normal</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PC100+</source>
-        <translation type="unfinished"></translation>
+        <translation>PC100</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CC31</source>
-        <translation type="unfinished"></translation>
+        <translation>CC31</translation>
     </message>
     <message>
         <location line="+513"/>
@@ -11461,7 +11461,7 @@ Bist du sicher?</translation>
     <message>
         <location line="+16"/>
         <source>bank select type changed</source>
-        <translation type="unfinished"></translation>
+        <translation>Bankwahl Typ geändert</translation>
     </message>
     <message>
         <location line="+111"/>
@@ -15222,12 +15222,12 @@ Beispieltext aus Datei:</translation>
     <message>
         <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="-39"/>
         <source>Do not show this again</source>
-        <translation type="unfinished"></translation>
+        <translation>Dies nicht erneut anzeigen</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>You are about to load the gtk2 infrastructure. This has been know to cause crashes on some systems. Possible workarounds are to set environment variables for the Rosegarden program:&lt;br/&gt;set QT_QPA_PLATFORMTHEME to gtk2 and install the gtk2 style plugin or&lt;br/&gt;set XDG_SESSION_TYPE to unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie sind im Begriff, die GTK2-Infrastruktur zu laden. Dies kann auf manchen Systemen zu Abstürzen führen. Mögliche Abhilfe besteht darin, Umgebungsvariablen für das Rosegarden-Programm festzulegen:&lt;br/&gt;Setzen Sie QT_QPA_PLATFORMTHEME auf gtk2 und installieren Sie das gtk2-Style-Plugin oder&lt;br/&gt;XDG_SESSION_TYPE auf unbekannt setzen</translation>
     </message>
 </context>
 <context>
@@ -15297,7 +15297,7 @@ Es gibt keine Segmente auf den ausgewählten Spuren.</translation>
         <location line="+1155"/>
         <source>Bar %1 contains an event too short to represent in standard notation.
 This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt %1 enthält ein Ereignis, das zu kurz ist, um in Standardnotation dargestellt zu werden. Dies liegt wahrscheinlich an einem beschädigten Ereignis in der Datei. Es ist mit Fehlern bei der Taktprüfung in LilyPond zu rechnen.</translation>
     </message>
     <message>
         <location line="+751"/>
@@ -22980,7 +22980,7 @@ des Systems zu reparieren und Rosegarden neu zu starten.&lt;/p&gt;</translation>
     <message>
         <location line="+15"/>
         <source>Could not save SysEx file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte SysEx-Datei nicht speichern.</translation>
     </message>
 </context>
 <context>

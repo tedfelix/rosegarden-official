@@ -13135,7 +13135,7 @@ O dispositivo destino já tem um banco para
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Excluir</translation>
     </message>
 </context>
 <context>
@@ -13556,7 +13556,7 @@ O dispositivo destino já tem um banco para
         <location line="+208"/>
         <location line="+11"/>
         <source>&lt;not set&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&lt;não determinado&gt;</translation>
     </message>
     <message>
         <location line="+88"/>
@@ -13587,7 +13587,7 @@ O dispositivo destino já tem um banco para
         <location line="+147"/>
         <location line="+46"/>
         <source>Inserting clipboard contents...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Inserindo conteúdos da área de transferência...</translation>
     </message>
     <message>
         <location line="-18"/>

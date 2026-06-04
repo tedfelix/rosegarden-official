@@ -858,6 +858,12 @@ NotationGroup::applyTuplingLine(NotationStaff &staff)
         initialElement(getInitialElement()),
         finalElement(getFinalElement());
 
+    if (initialNote == getContainer().end() ||
+        initialNote == finalNote) {
+        RG_DEBUG << "applyTuplingLine: no notes in group";
+        return; // no notes, no case to answer
+    }
+
     NELIterator initialNoteOrRest(initialElement);
     NotationElement* initialNoteOrRestEl =
         static_cast<NotationElement*>(*initialNoteOrRest);

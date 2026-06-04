@@ -41,6 +41,10 @@ public:
     RealTime getElapsedTime() const;
 
     void setPositionForNewDocument(timeT time);
+    // if reset is true the playback will be reset. This is most often
+    // what we want but in some cases (eg. playing a preview note in
+    // the notation editor) we do not want to reset the playback.
+    void setPosition(timeT time, bool reset = true);
 
 public slots:
     void slotSet(timeT time);

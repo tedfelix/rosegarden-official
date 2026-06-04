@@ -6754,7 +6754,7 @@
     <message>
         <location line="+3"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -10599,12 +10599,12 @@ Are you sure?</source>
     <message>
         <location line="+5"/>
         <source>Left</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Vänster</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Right</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Höger</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -12570,7 +12570,7 @@ Destination device already has a bank for
     <message>
         <location line="+4"/>
         <source>(copied)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">(kopierad)</translation>
     </message>
     <message>
         <location filename="../../src/commands/segment/CopySegmentCommand.h" line="+50"/>
@@ -13106,7 +13106,7 @@ Destination device already has a bank for
     <message>
         <location line="+7"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Radera</translation>
     </message>
 </context>
 <context>
@@ -13547,7 +13547,7 @@ Destination device already has a bank for
     <message>
         <location line="+28"/>
         <source>Base pitch</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Huvudtonhöjd</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -22740,7 +22740,7 @@ Att avsluta andra program som körs kan förbättra Rosegardens prestanda.</tran
         <location line="+1"/>
         <source>B</source>
         <comment>note name</comment>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">H</translation>
     </message>
     <message>
         <location line="+112"/>

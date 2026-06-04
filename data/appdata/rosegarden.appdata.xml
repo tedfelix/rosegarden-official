@@ -62,6 +62,68 @@
 
     <releases>
 
+      <release type="stable" version="26.06" date="2026-06-03">
+        <url>https://rosegardenmusic.com/wiki/dev:26.06</url>
+        <description>
+          <p>This version includes the following bug fixes:</p>
+          <ul>
+            <li>LV2: Fix memory leaks.  Bug #1748.  [8139069f92]</li>
+            <li>cmake: Set LV2 minimum version to 1.18.0.  [e78887fc13]</li>
+            <li>LV2: Improved handling of GTK2 plugins.  Feature Request #541.  [6c6b5e39ba]</li>
+            <li>Fix duplicate menu items in "Set Entry Velocities" window.  Bug #1752.  [95e52f0e64]</li>
+            <li>Fix empty profile dump with no profiling.  Bug #1755.  [90d2c00a16]</li>
+            <li>Add missing #include &lt;QObject&gt;.  Bug #1746  [b714afbaa4]</li>
+            <li>cmake: Make lv2 optional.  Patch #84.  [c519c57ab2]</li>
+            <li>cmake: Rename DISABLE_LILV -> DISABLE_LV2.  [2d2824cc84]</li>
+            <li>cmake: Add DISABLE_PCH.  [04e36f6ea4]</li>
+            <li>cmake: Fix broken CMAKE_BUILD_TYPE.  [c149ea9a66]</li>
+            <li>Matrix: Fixed crash on large horizontal zoom.  Bug #1761.  [853313edcf]</li>
+            <li>Matrix: Fixed horizonatal zoom range issue.  Bug #1761.  [4a34375a33]</li>
+            <li>Matrix: Fix vertical zoom range issue.  [807cd89374]</li>
+            <li>Matrix: Improve HV wheel behavior.  [0ef1e21deb] [566f984873]</li>
+            <li>Matrix: Fix preview play for tied notes.  Bug #1764.  [e9ed4f1221]</li>
+            <li>AudioPluginDialog: Improve Editor button behavior.  Editor button is now disabled if JACK isn't up.  An error message is provided via the button's tooltip when it is disabled.  [fbaa3ec6b1]</li>
+            <li>MIDI Mixer: Handle changes to the number of devices without closing the window.  [520641f59c]</li>
+            <li>MIDI Mixer: Fix garbage in meters.  [254e75a45f]</li>
+            <li>MIDI Mixer: Handle changes to the number of controllers.  [faeb4238be]</li>
+            <li>Audio File Manager: Fix unload not working on selected WAV files.  Bug #1766.  [8626e2ec58]</li>
+            <li>main window: Fix toolbar tool buttons not responding to tool changes via the context menu.  [6d33d9d5ed]</li>
+            <li>main window: Fix context menu tool items enabled at the wrong time.  [212f1ba128]</li>
+            <li>main window: Disable VU meters on muted and archived tracks.  Bug #1767.  [1ff36b47e4] [5ed9c5248c]</li>
+            <li>main window: Make rotary tooltip dynamic.  Bug #1768.  [d39555d401]</li>
+            <li>metronome: Use bar velocity for preview.  [3f773b79b0]</li>
+            <li>MusicXML: Fix crash when importing MusicXML.  PR #32.  [92f9b3b426]</li>
+            <li>Notation: Fix erasing triplet note.  Bug #1772.  [5a0d019c45]</li>
+            <li>Tranzport: Disabled support for Frontier Design Group's TranzPort DAW Control.  See README for instructions on re-enabling and let us know if you are using this.  [44dab8314b]</li>
+            <li>Notation: Fix select and delete notes in tuplets.  Bug #1772.  [ff57686630] [81541588f7]</li>
+            <li>Notation: Fix inserting tuplet note at beginning.  Bug #1772.  [de410d7937]</li>
+            <li>main window: Fix scroll to follow playback.  When it is off, the display will not scroll.  Turn it on and the display will jump to where the cursor is.  Bug #1774.  [254f9824ce]</li>
+            <li>examples: Make all channels fixed.  PR #45.  [6b2824a52d]</li>
+            <li>Notation: Fix beaming a selection that contains a tuplet losing the tuplet.  Bug #1773.  [80af019789]</li>
+            <li>Notation: Improve rendering of mixed beam/tuple group.  Bug #1773.  [905859fc05]</li>
+            <li>Event List Editor: Fix initial selection in event editor.  Bug #1777.  [af81698a7c]</li>
+            <li>Editors: Remove "Durations" from rescale menu items.  Bug #1771.  [91a1a718f5]</li>
+            <li>Event List Editor: Select new event after insert.  [5131ab73df]</li>
+            <li>Event List Editor: Fix edit not leaving event selected.  [c6ec410702]</li>
+            <li>Matrix: Fix matrix velocity can end up 0.  Bug #1777.  [af83558f8e]</li>
+            <li>Matrix: Fix unreadable grid dropdown in Native theme.  Bug #1778.  [6f886727a6]</li>
+            <li>Matrix: Fix unreadable quantize dropdown in Native theme.  Bug #1778.  [29193b7a03]</li>
+            <li>Notation: Fix crash with Make Triplet (Ctrl+R).  Bug #1781.  [6bf63b0f3d]</li>
+          </ul>
+
+          <p>This version adds the following new features:</p>
+          <ul>
+            <li>rgd: Added support for alternative bank select approaches for synths like the Yamaha TG77 and Oberheim Matrix-1000.  Feature Request #542.  [b9c94293c5] [5b03a6285c]</li>
+            <li>matrix: Remember velocity for each segment.  [7e3ecfa101]</li>
+            <li>main window toolbar: Added metronome button to the transport toolbar.  [2fcbb1426f]</li>
+            <li>main window: Make "End" key jump to the end of the segments on first press, and to the end of the composition on the second press.  [42ba3c6341]</li>
+            <li>Rulers: Add "Set to Default" to context menu.  Also accessible via middle mouse button in select and move tools.  [5a2efddfb3]</li>
+            <li>lilypond: Add warning about too-short durations that will lead to lilypond errors.  PR #44.  [a11a8343f8]</li>
+            <li>Event List Editor: Add Edit > Paste At...  [b3682ef93c]</li>
+          </ul>
+        </description>
+      </release>
+
       <release type="stable" version="25.12" date="2025-12-02">
         <url>https://rosegardenmusic.com/wiki/dev:25.12</url>
         <description>
