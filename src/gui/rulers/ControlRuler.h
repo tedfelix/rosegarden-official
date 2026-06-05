@@ -178,7 +178,7 @@ protected:
     ViewSegment *m_viewSegment{nullptr};
     Segment *m_segment{nullptr};
 
-    ControlItemMultiMap m_controlItemMap;
+    ControlItemMultiMap m_controlItems;
 
     // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the

@@ -62,9 +62,9 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
                            QWidget *parent) :
     QWidget(parent),
     m_rulerScale(rulerScale),
-    m_firstVisibleItem(m_controlItemMap.end()),
-    m_lastVisibleItem(m_controlItemMap.end()),
-    m_nextItemLeft(m_controlItemMap.end()),
+    m_firstVisibleItem(m_controlItems.end()),
+    m_lastVisibleItem(m_controlItems.end()),
+    m_nextItemLeft(m_controlItems.end()),
     m_snapTimeFromEditor(SnapGrid::NoSnap)
 {
     setFixedHeight(sizeHint().height());
@@ -134,7 +134,7 @@ void ControlRuler::setViewSegment(ViewSegment *viewSegment)
 
 ControlItemMultiMap::iterator ControlRuler::findControlItem(const double x)
 {
-    return m_controlItemMap.upper_bound(x);
+    return m_controlItems.upper_bound(x);
 }
 
 ControlItemMultiMap::iterator ControlRuler::findControlItem(const Event *event)
@@ -143,8 +143,8 @@ ControlItemMultiMap::iterator ControlRuler::findControlItem(const Event *event)
     ControlItemMultiMap::iterator iter;
 
     // For each controlItem, find the provided Event.
-    for (iter = m_controlItemMap.begin();
-         iter != m_controlItemMap.end();
+    for (iter = m_controlItems.begin();
+         iter != m_controlItems.end();
          ++iter) {
         if (iter->second->getEvent() == event)
             break;
@@ -154,8 +154,8 @@ ControlItemMultiMap::iterator ControlRuler::findControlItem(const Event *event)
 #else
     // Find the ControlItem for the given event.
     // Not a fan of STL algorithms, just trying this one out.
-    return std::find_if(m_controlItemMap.begin(),
-                        m_controlItemMap.end(),
+    return std::find_if(m_controlItems.begin(),
+                        m_controlItems.end(),
                         [event](const ControlItemMultiMap::value_type &x)
                             { return (x.second->getEvent() == event); });
 #endif
@@ -167,9 +167,9 @@ ControlItemMultiMap::iterator ControlRuler::findControlItem(const ControlItem *i
 
     const std::pair<ControlItemMultiMap::iterator,
                     ControlItemMultiMap::iterator> range =
-                            m_controlItemMap.equal_range(xStart);
+                            m_controlItems.equal_range(xStart);
     // Not found?  Bail.
-    //if (range.first == m_controlItemMap.end())
+    //if (range.first == m_controlItems.end())
     //    return range.first;
 
     // now find in this range
@@ -180,7 +180,7 @@ ControlItemMultiMap::iterator ControlRuler::findControlItem(const ControlItem *i
             return it;
     }
 
-    return m_controlItemMap.end();
+    return m_controlItems.end();
 }
 
 void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
@@ -189,7 +189,7 @@ void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
     item->setXKey(item->xStart());
 
     // Insert it.
-    ControlItemMultiMap::iterator it = m_controlItemMap.insert(
+    ControlItemMultiMap::iterator it = m_controlItems.insert(
             ControlItemMultiMap::value_type(item->xStart(), item));
 
     addCheckVisibleLimits(it);
@@ -200,7 +200,7 @@ void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
 
 void ControlRuler::addCheckVisibleLimits(ControlItemMultiMap::iterator it)
 {
-    // Referenced item has just been added to m_controlItemMap.
+    // Referenced item has just been added to m_controlItems.
     // If it is visible, add it to the list and correct first/last
     // visible item iterators
     const QSharedPointer<ControlItem> item = it->second;
@@ -213,7 +213,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMultiMap::iterator it)
         // Update m_firstVisibleItem.
 
         // If there is no first visible item or this one is farthest left
-        if (m_firstVisibleItem == m_controlItemMap.end()  ||
+        if (m_firstVisibleItem == m_controlItems.end()  ||
             item->xStart() < m_firstVisibleItem->second->xStart()) {
             // make it the first visible item
             m_firstVisibleItem = it;
@@ -222,7 +222,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMultiMap::iterator it)
         // Update m_lastVisibleItem.
 
         // If there is no last visible item or this is farthest right
-        if (m_lastVisibleItem == m_controlItemMap.end()  ||
+        if (m_lastVisibleItem == m_controlItems.end()  ||
             item->xStart() >= m_lastVisibleItem->second->xStart()) {
             // make it the last visible item
             m_lastVisibleItem = it;
@@ -235,7 +235,7 @@ void ControlRuler::addCheckVisibleLimits(ControlItemMultiMap::iterator it)
     if (visiblePosition(item) == -1) {
         // If there is no "next item left" or this one is after the
         // "next item left"...
-        if (m_nextItemLeft == m_controlItemMap.end()  ||
+        if (m_nextItemLeft == m_controlItems.end()  ||
             item->xStart() > m_nextItemLeft->second->xStart()) {
             // make it the next item to the left
             m_nextItemLeft = it;
@@ -250,12 +250,12 @@ void ControlRuler::removeControlItem(const ControlItemMultiMap::iterator &it)
 
     removeCheckVisibleLimits(it);
 
-    m_controlItemMap.erase(it);
+    m_controlItems.erase(it);
 }
 
 void ControlRuler::removeCheckVisibleLimits(const ControlItemMultiMap::iterator &it)
 {
-    // Referenced item is being removed from m_controlItemMap
+    // Referenced item is being removed from m_controlItems
     // If it was visible, remove it from the list and correct first/last
     // visible item iterators
     // Note, we can't check if it _was_ visible. It may have just become invisible
@@ -271,9 +271,9 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMultiMap::iterator 
         ++m_firstVisibleItem;
         // If the next item to the right is invisible, there are no visible items
         // Note we have to check .end() before we dereference ->second
-        if (m_firstVisibleItem != m_controlItemMap.end() &&
+        if (m_firstVisibleItem != m_controlItems.end() &&
                 visiblePosition(m_firstVisibleItem->second)!=0)
-            m_firstVisibleItem = m_controlItemMap.end();
+            m_firstVisibleItem = m_controlItems.end();
     }
 
     // Update m_lastVisibleItem.
@@ -281,14 +281,14 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMultiMap::iterator 
     // If this was the last visible item
     if (it == m_lastVisibleItem) {
         // and not the first in the list
-        if (it != m_controlItemMap.begin()) {
+        if (it != m_controlItems.begin()) {
             // check the next item to the left
             --m_lastVisibleItem;
             // If this is invisible, there are no visible items
-            if (visiblePosition(m_lastVisibleItem->second)!=0) m_lastVisibleItem = m_controlItemMap.end();
+            if (visiblePosition(m_lastVisibleItem->second)!=0) m_lastVisibleItem = m_controlItems.end();
         }
         // if it's first in the list then there are no visible items
-        else m_lastVisibleItem = m_controlItemMap.end();
+        else m_lastVisibleItem = m_controlItems.end();
     }
 
     // Update m_nextItemLeft.
@@ -296,19 +296,19 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMultiMap::iterator 
     // If this was the first invisible item left (could be part of a selection moved off screen)
     if (it == m_nextItemLeft) {
         // and not the first in the list
-        if (it != m_controlItemMap.begin()) {
+        if (it != m_controlItems.begin()) {
             // use the next to the left (we know it is invisible)
             --m_nextItemLeft;
         }
         // if it's first in the list then there are no invisible items to the left
-        else m_nextItemLeft = m_controlItemMap.end();
+        else m_nextItemLeft = m_controlItems.end();
     }
 }
 
 void ControlRuler::eraseControlItem(const Event *event)
 {
     ControlItemMultiMap::iterator it = findControlItem(event);
-    if (it != m_controlItemMap.end())
+    if (it != m_controlItems.end())
         removeControlItem(it);
 }
 
@@ -316,7 +316,7 @@ void ControlRuler::moveItem(ControlItem *item)
 {
     ControlItemMultiMap::iterator it = findControlItem(item);
     // Not found?  Bail.
-    if (it == m_controlItemMap.end())
+    if (it == m_controlItems.end())
         return;
 
     // Copy the shared pointer so that the item isn't deleted.
@@ -324,11 +324,11 @@ void ControlRuler::moveItem(ControlItem *item)
 
     // Remove the original.
     removeCheckVisibleLimits(it);
-    m_controlItemMap.erase(it);
+    m_controlItems.erase(it);
 
     // Add the new.
     item2->setXKey(item2->xStart());
-    it = m_controlItemMap.insert(
+    it = m_controlItems.insert(
             ControlItemMultiMap::value_type(item2->xStart(), item2));
     addCheckVisibleLimits(it);
 }
@@ -434,8 +434,8 @@ void ControlRuler::updateSegment()
 
             // For each control item starting at xItem...
             for (ControlItemMultiMap::const_iterator otherItemIter =
-                     m_controlItemMap.lower_bound(xItem);
-                 otherItemIter != m_controlItemMap.end();
+                     m_controlItems.lower_bound(xItem);
+                 otherItemIter != m_controlItems.end();
                  ++otherItemIter) {
                 // Item not active?  Try the next.
                 if (!otherItemIter->second->active())
@@ -499,16 +499,16 @@ void ControlRuler::notationLayoutUpdated(timeT startTime)
 
     ControlItemVector itemsToUpdate;
 
-    ControlItemMultiMap::iterator it = m_controlItemMap.begin();
+    ControlItemMultiMap::iterator it = m_controlItems.begin();
 
     // Add all new items (items at x position 0) to itemsToUpdate.
-    while (it != m_controlItemMap.end()  &&  it->first == 0) {
+    while (it != m_controlItems.end()  &&  it->first == 0) {
         itemsToUpdate.push_back(it->second);
         ++it;
     }
 
     // Skip items up to the first whose x is at or after startTime.
-    while (it != m_controlItemMap.end()  &&
+    while (it != m_controlItems.end()  &&
            it->first < getRulerScale()->getXForTime(startTime)) {
         ++it;
     }
@@ -518,7 +518,7 @@ void ControlRuler::notationLayoutUpdated(timeT startTime)
     // everything after startTime.
 
     // Copy all items up to the end to itemsToUpdate.
-    while (it != m_controlItemMap.end()) {
+    while (it != m_controlItems.end()) {
         itemsToUpdate.push_back(it->second);
         ++it;
     }
@@ -688,13 +688,13 @@ void ControlRuler::setPannedRect(const QRectF &pannedRect)
     m_visibleItems.clear();
     bool anyVisibleYet = false;
 
-    m_nextItemLeft = m_controlItemMap.end();
-    m_firstVisibleItem = m_controlItemMap.end();
-    m_lastVisibleItem = m_controlItemMap.end();
+    m_nextItemLeft = m_controlItems.end();
+    m_firstVisibleItem = m_controlItems.end();
+    m_lastVisibleItem = m_controlItems.end();
 
     // For each ControlItem...
-    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         const int visPos = visiblePosition(it->second);
 
@@ -978,10 +978,10 @@ void ControlRuler::removeFromSelection(QSharedPointer<ControlItem> item)
 
 void ControlRuler::clear()
 {
-    m_controlItemMap.clear();
-    m_firstVisibleItem = m_controlItemMap.end();
-    m_lastVisibleItem = m_controlItemMap.end();
-    m_nextItemLeft = m_controlItemMap.end();
+    m_controlItems.clear();
+    m_firstVisibleItem = m_controlItems.end();
+    m_lastVisibleItem = m_controlItems.end();
+    m_nextItemLeft = m_controlItems.end();
 
     m_visibleItems.clear();
     m_selectedItems.clear();

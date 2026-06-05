@@ -80,8 +80,8 @@ void KeyPressureRuler::setElementSelection
     }
 
     // set element active flag
-    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         ControlItem* item = it->second.data();
         EventControlItem *ecItem = dynamic_cast<EventControlItem*>(item);
@@ -122,8 +122,8 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
     //  come out the right size
     ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
-        for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
-             it != m_controlItemMap.end();
+        for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+             it != m_controlItems.end();
              ++it) {
             it->second->reconfigure();
         }
@@ -144,8 +144,8 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
     // only connect active items
     float lastX, lastY;
     bool first = true;
-    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         if (!it->second->active()) continue;
         QSharedPointer<ControlItem> item = it->second;
@@ -175,8 +175,8 @@ KeyPressureRuler::setSegment(Segment *segment)
 {
     ControllerEventsRuler::setSegment(segment); // create all items
     // and deactivate them
-    for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         it->second->setActive(false);
     }

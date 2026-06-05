@@ -287,8 +287,8 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     //  come out the right size
     ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
-        for (ControlItemMultiMap::iterator it = m_controlItemMap.begin();
-             it != m_controlItemMap.end();
+        for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+             it != m_controlItems.end();
              ++it) {
             it->second->reconfigure();
         }
@@ -310,14 +310,14 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     float lastX, lastY;
     lastX = m_rulerScale->getXForTime(m_segment->getStartTime()) * getXScale();
 
-    if (m_nextItemLeft != m_controlItemMap.end()) {
+    if (m_nextItemLeft != m_controlItems.end()) {
         lastY = m_nextItemLeft->second->y();
     } else {
         lastY = valueToY(m_controller->getDefault());
     }
 
     mapIt = m_firstVisibleItem;
-    while (mapIt != m_controlItemMap.end()) {
+    while (mapIt != m_controlItems.end()) {
         QSharedPointer<ControlItem> item = mapIt->second;
 
         painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
@@ -327,7 +327,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         lastX = item->xStart();
         lastY = item->y();
         if (mapIt == m_lastVisibleItem) {
-            mapIt = m_controlItemMap.end();
+            mapIt = m_controlItems.end();
         } else {
             ++mapIt;
         }
