@@ -38,7 +38,7 @@ public:
     int play(RealTime startPos);
     void sequencerPlayReady();
     void stop(bool autoStop);
-    void jumpTo(RealTime time);
+    void jumpTo(RealTime time, bool reset = true);
     int record(const RealTime &time, long recordMode);
 
 #ifdef HAVE_LIBJACK
@@ -58,6 +58,7 @@ private:
     bool m_waitingForStart;
     bool m_waitingForStartJack;
     bool m_countIn;
+    bool m_resetPlaybackOnJump;
 #endif
 };
 

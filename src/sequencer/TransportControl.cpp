@@ -70,7 +70,8 @@ TransportControl* TransportControl::getInstance()
         m_allowedDelta(RealTime::fromSeconds(0.05)),
         m_waitingForStart(false),
         m_waitingForStartJack(false),
-        m_countIn(false)
+        m_countIn(false),
+        m_resetPlaybackOnJump(true)
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -322,11 +323,12 @@ void TransportControl::stop(bool autoStop)
 #endif
 }
 
-void TransportControl::jumpTo(RealTime time)
+void TransportControl::jumpTo(RealTime time, bool reset)
 {
     RG_DEBUG << "jumpTo" << time;
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport() == Preferences::New) {
+        m_resetPlaybackOnJump = reset;
         // if we are in record count in the time may be 0. We cannot
         // use -ve time in jack so we have to set zero here but still
         // tell the sequencer to go to the -ve time.
@@ -344,7 +346,7 @@ void TransportControl::jumpTo(RealTime time)
         }
     } else {
         RG_DEBUG << "jumpTo internal" << time;
-        RosegardenSequencer::getInstance()->jumpTo(time);
+        RosegardenSequencer::getInstance()->jumpTo(time, reset);
     }
 #else
     RosegardenSequencer::getInstance()->jumpTo(time);
@@ -368,11 +370,8 @@ int TransportControl::record(const RealTime &time, long recordMode)
 int TransportControl::syncCallback(jack_transport_state_t state,
                                    const jack_position_t *pos) const
 {
-    static bool waiting = false;
-    if (m_waitingForStart != waiting) {
-        RG_DEBUG << "syncCallback" << state << pos->usecs << m_waitingForStart;
-        waiting = m_waitingForStart;
-    }
+    RG_DEBUG << "syncCallback" <<
+        m_state << state << pos->usecs << m_waitingForStart;
 
     if (m_waitingForStart) return 0;
 
@@ -415,7 +414,7 @@ int TransportControl::processCallback(jack_nframes_t)
         (jackTime <= compEndTime)) { // within composition
             RG_DEBUG << "jump" << jackTime << songPosition <<
                 compEndTime << delta << frame << sampleRate;
-            seq.jumpTo(jackTime);
+            seq.jumpTo(jackTime, m_resetPlaybackOnJump);
         }
     //RG_DEBUG << "processCallback state" << state << m_state;
 
