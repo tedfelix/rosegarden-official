@@ -220,6 +220,15 @@ void TransportControl::tick()
         case QUIT:
             break;
         case PLAYING:
+            if (!seq.keepPlaying()) {
+                // there's a problem or the piece has
+                // finished - so stop playing
+                seq.setStatus(STOPPING);
+            } else {
+                // process any async events
+                //
+                seq.processAsynchronousEvents();
+            }
             break;
         case STARTING_TO_RECORD:
             if (!seq.startPlaying()) {
@@ -261,9 +270,19 @@ void TransportControl::tick()
             }
             break;
         case STOPPING:
+            // There's no call to RosegardenSequencer to actually process the
+            // stop, because this arises from a call from the GUI
+            // direct to RosegardenSequencer to start with
+            seq.setStatus(STOPPED);
+
+            RG_DEBUG << "run() - Stopped";
+            break;
         case RECORDING_ARMED:
+            RG_DEBUG << "run() - Sequencer can't enter \"RECORDING_ARMED\" state - internal error";
+            break;
         case STOPPED:
         default:
+            seq.processAsynchronousEvents();
             break;
         }
     }
@@ -332,7 +351,7 @@ void TransportControl::stop(bool autoStop)
 
 void TransportControl::jumpTo(RealTime time, bool reset)
 {
-    RG_DEBUG << "jumpTo" << time;
+    RG_DEBUG << "jumpTo" << time << reset;
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport() == Preferences::New) {
         m_resetPlaybackOnJump = reset;

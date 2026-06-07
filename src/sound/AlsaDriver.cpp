@@ -2118,7 +2118,11 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 }
 
 void
+#ifdef HAVE_LIBJACK
 AlsaDriver::stopPlayback(bool autoStop)
+#else
+AlsaDriver::stopPlayback(bool)
+#endif
 {
 #ifdef DEBUG_ALSA
     RG_DEBUG << "stopPlayback() begin...";
