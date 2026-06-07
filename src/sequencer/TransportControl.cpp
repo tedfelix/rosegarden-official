@@ -67,8 +67,7 @@ TransportControl* TransportControl::getInstance()
 #ifdef HAVE_LIBJACK
         :
         m_state(JackTransportStopped),
-        m_allowedDelta(RealTime::fromSeconds(0.05)),
-        m_waitingForStart(false),
+        m_allowedDelta(RealTime::fromMilliseconds(0.1)),
         m_waitingForStartJack(false),
         m_countIn(false),
         m_resetPlaybackOnJump(true)
@@ -110,7 +109,6 @@ void TransportControl::tick()
             // state to PLAYING yet because there may be a slow
             // starter. Wait for jack rolling
             m_waitingForStartJack = true;
-            sequencerPlayReady();
             break;
         case QUIT:
             break;
@@ -129,7 +127,6 @@ void TransportControl::tick()
                 // state to RECORDING yet because there may be a slow
                 // starter. Wait for jack rolling
                 m_waitingForStartJack = true;
-                sequencerPlayReady();
             }
             break;
 
@@ -275,7 +272,6 @@ int TransportControl::play(RealTime startPos)
             RG_DEBUG << "play jackTransport" << startPos << sampleRate << frame;
             jack_transport_locate(m_client, frame);
             jack_transport_start(m_client);
-            m_waitingForStart = true;
         }
     } else {
         RG_DEBUG << "play internal" << startPos;
@@ -284,14 +280,6 @@ int TransportControl::play(RealTime startPos)
     return result;
 #else
     return RosegardenSequencer::getInstance()->play(startPos);
-#endif
-}
-
-void TransportControl::sequencerPlayReady()
-{
-    RG_DEBUG << "sequencerPlayReady";
-#ifdef HAVE_LIBJACK
-    m_waitingForStart = false;
 #endif
 }
 
@@ -370,10 +358,23 @@ int TransportControl::record(const RealTime &time, long recordMode)
 int TransportControl::syncCallback(jack_transport_state_t state,
                                    const jack_position_t *pos) const
 {
-    RG_DEBUG << "syncCallback" <<
-        m_state << state << pos->usecs << m_waitingForStart;
+    RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
+    TransportStatus seqStatus = seq.getStatus();
+    unsigned int frame = pos->frame;
+    unsigned int sampleRate = seq.getSampleRate();
+    RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
+    RealTime songPosition = seq.getSongPosition();
+    RealTime delta = jackTime - songPosition;
+    RG_DEBUG << "syncCallback" << m_state << state << pos->frame <<
+        jackTime << songPosition << delta << seqStatus;
 
-    if (m_waitingForStart) return 0;
+    if ((delta > m_allowedDelta || delta < -m_allowedDelta) && // jump requested
+        seqStatus != STARTING_TO_RECORD &&
+        seqStatus != RECORDING) { // no jump while recording
+        RG_DEBUG << "syncCallback jump requested" << songPosition <<
+            "->" << jackTime;
+        seq.jumpTo(jackTime, m_resetPlaybackOnJump);
+    }
 
     return 1;
 }
@@ -394,7 +395,6 @@ int TransportControl::processCallback(jack_nframes_t)
     unsigned int frame = pos.frame;
     unsigned int sampleRate = seq.getSampleRate();
     RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
-    RealTime songPosition = seq.getSongPosition();
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return 0;
     const Composition& comp = doc->getComposition();
@@ -405,18 +405,6 @@ int TransportControl::processCallback(jack_nframes_t)
         endTime = comp.getDuration(true);
     RealTime compEndTime =
         comp.getElapsedRealTime(endTime);
-    RealTime delta = jackTime - songPosition;
-    //RG_DEBUG << "delta" << jackTime << songPosition <<
-    //  compEndTime << delta;
-    if ((delta > m_allowedDelta || delta < -m_allowedDelta) && // out of sync
-        seqStatus != STARTING_TO_RECORD &&
-        seqStatus != RECORDING && // not recording
-        (jackTime <= compEndTime)) { // within composition
-            RG_DEBUG << "jump" << jackTime << songPosition <<
-                compEndTime << delta << frame << sampleRate;
-            seq.jumpTo(jackTime, m_resetPlaybackOnJump);
-        }
-    //RG_DEBUG << "processCallback state" << state << m_state;
 
     if (m_waitingForStartJack && state == JackTransportRolling) {
         // now we are ready to play or record and everyone else too

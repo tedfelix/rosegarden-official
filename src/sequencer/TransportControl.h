@@ -36,7 +36,6 @@ public:
     void tick();
 
     int play(RealTime startPos);
-    void sequencerPlayReady();
     void stop(bool autoStop);
     void jumpTo(RealTime time, bool reset = true);
     int record(const RealTime &time, long recordMode);
@@ -55,7 +54,6 @@ private:
     jack_client_t* m_client;
     jack_transport_state_t m_state;
     RealTime m_allowedDelta;
-    bool m_waitingForStart;
     bool m_waitingForStartJack;
     bool m_countIn;
     bool m_resetPlaybackOnJump;
