@@ -396,6 +396,8 @@ int TransportControl::record(const RealTime &time, long recordMode)
 int TransportControl::syncCallback(jack_transport_state_t state,
                                    const jack_position_t *pos) const
 {
+    if (Preferences::getUseJackTransport() != Preferences::New) return 1;
+
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     TransportStatus seqStatus = seq.getStatus();
     unsigned int frame = pos->frame;
