@@ -176,6 +176,8 @@ private slots:
     void slotMetronomeTimer();
     void slotMetronomeButtonClicked();
 
+    void slotDocumentAboutToChange();
+
 private:
 
     void loadPixmaps();

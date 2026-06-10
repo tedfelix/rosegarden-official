@@ -238,7 +238,6 @@ MatrixView::MatrixView(const std::vector<Segment *>& segments,
         findAction("highlight_black_notes")->setChecked(true);
         break;
     }
-    settings.endGroup();
 
     bool constrain = Preferences::getMatrixConstrainNotes();
     findAction("constrained_move")->setChecked(constrain);

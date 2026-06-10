@@ -20,6 +20,7 @@
 */
 
 #define RG_MODULE_STRING "[TrackParameterBox]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TrackParameterBox.h"
 
@@ -439,6 +440,9 @@ TrackParameterBox::TrackParameterBox(QWidget *parent) :
     connect(RosegardenMainWindow::self(),
                 &RosegardenMainWindow::documentLoaded,
             this, &TrackParameterBox::slotDocumentLoaded);
+    connect(RosegardenMainWindow::self(),
+            &RosegardenMainWindow::documentAboutToChange,
+            this, &TrackParameterBox::slotDocumentAboutToChange);
 
     // Layout
 
@@ -467,17 +471,7 @@ TrackParameterBox::setDocument(RosegardenDocument *doc)
 
     m_doc = doc;
 
-    // ??? We never remove this observer.  Add a dtor.  Might need to consider
-    //     a virtual dtor.  Have this class's dtor call removeObserver().
-    //
-    //     If that works, do the same for the following:
-    //       - CompositionModelImpl
-    //       - TrackButtons
-    //       - NotationScene
-    //       - others?
-    //
-    //     Test by checking the output for
-    //       [Composition] dtor: WARNING: x observers still extant:
+    RG_DEBUG << "setDocument addObserver" << doc;
     m_doc->getComposition().addObserver(this);
 
     // Populate color combo from the document colors.
@@ -503,6 +497,13 @@ void
 TrackParameterBox::devicesChanged()
 {
     updateWidgets2();
+}
+
+void TrackParameterBox::slotDocumentAboutToChange()
+{
+    if (! m_doc) return;
+    RG_DEBUG << "slotDocumentAboutToChange removeObserver" << m_doc;
+    m_doc->getComposition().removeObserver(this);
 }
 
 void

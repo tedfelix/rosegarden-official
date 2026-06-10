@@ -37,6 +37,7 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -183,6 +184,10 @@ TrackButtons::TrackButtons(int trackCellHeight,
             this, &TrackButtons::slotTrackSelected);
 #endif
 
+    connect(RosegardenMainWindow::self(),
+            &RosegardenMainWindow::documentAboutToChange,
+            this, &TrackButtons::slotDocumentAboutToChange);
+
     // We have to force the height for the moment
     //
     setMinimumHeight(overallHeight);
@@ -193,10 +198,6 @@ TrackButtons::TrackButtons(int trackCellHeight,
 
 TrackButtons::~TrackButtons()
 {
-    // CRASH!  Probably RosegardenDocument::currentDocument is gone...
-    // Probably don't need to disconnect as we only go away when the
-    // doc and composition do.  shared_ptr would help here.
-    //RosegardenDocument::currentDocument->getComposition().removeObserver(this);
 }
 
 void
@@ -1435,5 +1436,9 @@ TrackButtons::slotDocumentModified(bool)
     slotUpdateTracks();
 }
 
+void TrackButtons::slotDocumentAboutToChange()
+{
+    RosegardenDocument::currentDocument->getComposition().removeObserver(this);
+}
 
 }

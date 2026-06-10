@@ -289,6 +289,9 @@ TransportDialog::TransportDialog(QWidget *parent):
     connect(RosegardenMainWindow::self(),
                 &RosegardenMainWindow::documentLoaded,
             this, &TransportDialog::slotDocumentLoaded);
+    connect(RosegardenMainWindow::self(),
+            &RosegardenMainWindow::documentAboutToChange,
+            this, &TransportDialog::slotDocumentAboutToChange);
 
     // Metronome
     connect(&m_metronomeTimer, &QTimer::timeout,
@@ -320,12 +323,6 @@ TransportDialog::~TransportDialog()
     // saved if we are hidden.
     if (isVisible())
         saveGeo();
-
-    RosegardenDocument *doc = RosegardenDocument::currentDocument;
-    if (!doc)
-        return;
-    Composition &comp = doc->getComposition();
-    comp.removeObserver(this);
 }
 
 void TransportDialog::init()
@@ -1442,6 +1439,14 @@ TransportDialog::slotMetronomeButtonClicked()
     // Trigger it.
     if (toggleMetronome)
         toggleMetronome->trigger();
+}
+
+void TransportDialog::slotDocumentAboutToChange()
+{
+    RosegardenDocument *doc = RosegardenDocument::currentDocument;
+    if (!doc)
+        return;
+    doc->getComposition().removeObserver(this);
 }
 
 
