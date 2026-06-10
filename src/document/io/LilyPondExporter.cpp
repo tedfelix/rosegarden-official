@@ -1499,11 +1499,6 @@ LilyPondExporter::write()
             str << indent(col) << "\\new Voice \\markers" << std::endl;
         }
 
-        if (m_exportBeams) {
-            str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
-        }
-
-
         int voiceIndex;
         for (voiceIndex = lsc.useFirstVoice();
                           voiceIndex != -1; voiceIndex = lsc.useNextVoice()) {
@@ -1670,6 +1665,10 @@ LilyPondExporter::write()
 
                     str << std::endl << indent(col) << "\\override Voice.TextScript.padding = #2.0";
                     str << std::endl << indent(col) << "\\override MultiMeasureRest.expand-limit = 1" << std::endl;
+
+                    if (m_exportBeams) {
+                        str << indent(col) << "\\set Staff.autoBeaming = ##f % turns off all autobeaming" << std::endl;
+                    }
 
                     // staff notation size
                     int staffSize = track->getStaffSize();
