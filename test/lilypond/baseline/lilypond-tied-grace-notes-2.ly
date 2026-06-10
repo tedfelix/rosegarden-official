@@ -28,12 +28,12 @@ globalTempo = {
             \set Staff.printKeyCancellation = ##f
             \new Voice \global
             \new Voice \globalTempo
-            \set Staff.autoBeaming = ##f % turns off all autobeaming
 
             \context Voice = "voice 0.0" {
                 % Segment: Acoustic Grand Piano
                 \override Voice.TextScript.padding = #2.0
                 \override MultiMeasureRest.expand-limit = 1
+                \set Staff.autoBeaming = ##f % turns off all autobeaming
                 \once \override Staff.TimeSignature.style = #'numbered 
                 \time 4/4
                 
