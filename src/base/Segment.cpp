@@ -1731,6 +1731,7 @@ Segment::notifySourceDeletion() const
 void
 Segment::lockResizeNotifications()
 {
+    RG_DEBUG << "lockResizeNotifications" << this << m_endMarkerTime;
     m_notifyResizeLocked = true;
     m_memoStart = m_startTime;
     m_memoEndMarkerTime = m_endMarkerTime ? new timeT(*m_endMarkerTime) : nullptr;
@@ -1739,13 +1740,20 @@ Segment::lockResizeNotifications()
 void
 Segment::unlockResizeNotifications()
 {
+    RG_DEBUG << "unlockResizeNotifications" << this << m_memoEndMarkerTime <<
+        m_endMarkerTime;
     m_notifyResizeLocked = false;
     if (m_startTime != m_memoStart) notifyStartChanged(m_startTime);
     if (!m_memoEndMarkerTime && !m_endMarkerTime) return;  // ???
     bool shorten = false;
     if (m_memoEndMarkerTime && m_endMarkerTime) {
-        if (*m_memoEndMarkerTime > *m_endMarkerTime) shorten = true;
-        else if (*m_memoEndMarkerTime == *m_endMarkerTime) return;
+        if (*m_memoEndMarkerTime > *m_endMarkerTime) {
+            shorten = true;
+        } else if (*m_memoEndMarkerTime == *m_endMarkerTime) {
+            delete m_memoEndMarkerTime;
+            m_memoEndMarkerTime = nullptr;
+            return;
+        }
     }
 
     // What if m_memoEndMarkerTime=0 and m_endMarkerTime!=0 (or the
