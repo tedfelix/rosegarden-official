@@ -392,10 +392,10 @@ NotationWidget::~NotationWidget()
 void
 NotationWidget::clearAll()
 {
-    delete m_scene;
-    m_scene = nullptr;
     delete m_headersScene;
     m_headersScene = nullptr;
+    delete m_scene;
+    m_scene = nullptr;
     delete m_referenceScale;
     m_referenceScale = nullptr;
 }
@@ -503,6 +503,7 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                           document,
                                           segments,
                                           24);     // height
+    if (! m_chordNameRulerIsVisible) m_chordNameRuler->hide();
     m_layout->addWidget(m_chordNameRuler, CHORDNAMERULER_ROW, MAIN_COL, 1, 1);
 
     // TempoRuler
@@ -512,12 +513,14 @@ NotationWidget::setSegments(RosegardenDocument *document,
                                   true,   // small
                                   ThornStyle::isEnabled());
     m_tempoRuler->setAutoScroller(&m_autoScroller);
+    if (! m_tempoRulerIsVisible) m_tempoRuler->hide();
     m_layout->addWidget(m_tempoRuler, TEMPORULER_ROW, MAIN_COL, 1, 1);
 
     // RawNoteRuler
     m_rawNoteRuler = new RawNoteRuler(m_referenceScale,
                                       segments[0],
                                       20);  // why not 24 as other rulers ?
+    if (! m_rawNoteRulerIsVisible) m_rawNoteRuler->hide();
     m_layout->addWidget(m_rawNoteRuler, RAWNOTERULER_ROW, MAIN_COL, 1, 1);
 
     // Top StandardRuler
@@ -889,6 +892,12 @@ NotationWidget::setScrollToFollow(bool scrollToFollow)
     }
 }
 
+void NotationWidget::removeHeaders()
+{
+    m_headersGroup->setParent(nullptr);
+    delete m_headersGroup;
+}
+
 void
 NotationWidget::slotScrollToFollow()
 {
@@ -1005,7 +1014,7 @@ NotationWidget::dispatchMouseMove(const NotationMouseEvent *e)
 
     FollowMode followMode = m_currentTool->handleMouseMove(e);
 
-    RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
+    //RG_DEBUG << "slotDispatchMouseMove mode" << followMode;
     m_autoScroller.setFollowMode(followMode);
 
     if (e->staff) {
@@ -1294,6 +1303,7 @@ NotationWidget::setChordNameRulerVisible(bool visible)
 void
 NotationWidget::setRawNoteRulerVisible(bool visible)
 {
+    RG_DEBUG << "setRawNoteRulerVisible" << visible;
     if (visible && linearMode()) m_rawNoteRuler->show();
     else m_rawNoteRuler->hide();
     m_rawNoteRulerIsVisible = visible;
@@ -1351,6 +1361,9 @@ NotationWidget::slotCloseHeaders()
 void
 NotationWidget::hideOrShowRulers()
 {
+    RG_DEBUG << "hideOrShowRulers" << m_tempoRulerIsVisible <<
+        m_rawNoteRulerIsVisible << m_chordNameRulerIsVisible <<
+        m_headersAreVisible;
     if (linearMode()) {
         if (m_tempoRulerIsVisible) m_tempoRuler->show();
         if (m_rawNoteRulerIsVisible) m_rawNoteRuler->show();
