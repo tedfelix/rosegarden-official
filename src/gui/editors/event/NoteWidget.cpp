@@ -88,13 +88,17 @@ NoteWidget::NoteWidget(EditEvent *parent, const Event &event) :
 
     m_durationSpinBox = new QSpinBox(propertiesGroup);
     m_durationSpinBox->setMinimum(1);
-    bool isGrace = event.has(BaseProperties::IS_GRACE_NOTE) &&
-        event.get<Bool>(BaseProperties::IS_GRACE_NOTE);
-    if (isGrace) m_durationSpinBox->setMinimum(0);
+    const bool isGrace = (event.has(BaseProperties::IS_GRACE_NOTE)  &&
+                          event.get<Bool>(BaseProperties::IS_GRACE_NOTE));
+    // Allow a duration of 0 for grace notes.  The duration for a grace note
+    // is stored in the notation duration, not the performance duration.
+    if (isGrace)
+        m_durationSpinBox->setMinimum(0);
     m_durationSpinBox->setMaximum(INT_MAX);
     m_durationSpinBox->setSingleStep(Note(Note::Shortest).getDuration());
     timeT duration{event.getDuration()};
-        if (duration == 0 && ! isGrace)
+    // For non-grace notes, fix 0 durations.
+    if (!isGrace  &&  duration == 0)
         duration = a_durationSetting.get();
     m_durationSpinBox->setValue(duration);
     propertiesLayout->addWidget(m_durationSpinBox, row, 1);
@@ -287,9 +291,13 @@ void NoteWidget::updateEvent(Event &event) const
     event.setDuration(m_durationSpinBox->value());
     event.set<Int>(BaseProperties::PITCH, m_pitchComboBox->currentIndex());
     event.set<Int>(BaseProperties::VELOCITY, m_velocitySpinBox->value());
-    bool isGrace = event.has(BaseProperties::IS_GRACE_NOTE) &&
-        event.get<Bool>(BaseProperties::IS_GRACE_NOTE);
-    if (m_lockNotation->isChecked() && ! isGrace) {
+    const bool isGrace = (event.has(BaseProperties::IS_GRACE_NOTE)  &&
+                          event.get<Bool>(BaseProperties::IS_GRACE_NOTE));
+    // When locked, use performance time/duration for notation time/duration.
+    // Exception is for grace notes where performance duration is 0 and
+    // notation duration contains the actual duration of the grace note.
+    // (For grace notes, the performance and notation times are the same.)
+    if (m_lockNotation->isChecked()  &&  !isGrace) {
         event.setNotationAbsoluteTime(m_parent->getAbsoluteTime());
         event.setNotationDuration(m_durationSpinBox->value());
     } else {
