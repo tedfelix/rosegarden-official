@@ -389,6 +389,21 @@ int main(int argc, char *argv[])
     QString organizationDomain("rosegardenmusic.com");
     QString applicationName("Rosegarden");
 
+    // setup environment for logging with file name
+    QByteArray pattern = qgetenv("QT_MESSAGE_PATTERN");
+    if (pattern.isEmpty()) {
+        pattern = "(%{file}:%{line}) %{message}";
+        qputenv("QT_MESSAGE_PATTERN", pattern);
+    } else {
+        // check if file is already used
+        QByteArray substring = "%{file}";
+        if (! pattern.contains(substring)) {
+            // then add it
+            pattern = "(%{file}:%{line})" + pattern;
+            qputenv("QT_MESSAGE_PATTERN", pattern);
+        }
+    }
+
     {
         // on wayland and gnome there are some requirements for
         // environment variables to avoid crashes when using lv2

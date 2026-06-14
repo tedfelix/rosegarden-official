@@ -38,10 +38,6 @@ public:
     RGNoDebug &operator<<(QTextStreamFunction)  { return *this; }
 };
 
-#if !defined RG_MODULE_STRING
-    #define RG_MODULE_STRING "[generic] "
-#endif
-
 #if !defined NDEBUG
 
     // Use RG_INFO for startup/shutdown progress messages that will be helpful
@@ -51,7 +47,7 @@ public:
     #define RG_INFO QMessageLogger(__FILE_NAME__, __LINE__, Q_FUNC_INFO).debug()
 #else
 
-    #define RG_INFO Rosegarden::RGNoDebug() << RG_MODULE_STRING
+    #define RG_INFO Rosegarden::RGNoDebug()
 
 #endif
 
@@ -61,8 +57,6 @@ public:
     // top of a .cpp to turn off all RG_DEBUG output.
     #define RG_DEBUG QMessageLogger(__FILE_NAME__, __LINE__, Q_FUNC_INFO).debug()
 
-    // !!! The following are deprecated since RG_MODULE_STRING provides more
-    //     information.  Define RG_MODULE_STRING and use RG_DEBUG instead.
     #define NOTATION_DEBUG  RG_DEBUG
     #define MATRIX_DEBUG    RG_DEBUG
     #define SEQUENCER_DEBUG RG_DEBUG
