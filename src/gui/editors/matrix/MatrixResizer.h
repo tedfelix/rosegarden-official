@@ -39,7 +39,7 @@ class MatrixResizer : public MatrixTool
 
 public:
 
-    MatrixResizer(MatrixWidget *);
+    explicit MatrixResizer(MatrixWidget *);
 
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     FollowMode handleMouseMove(const MatrixMouseEvent *) override;
@@ -52,7 +52,6 @@ public:
     void handleEventRemoved(Event *event) override;
 
     void ready() override;
-    void stow() override  { }
 
     static QString ToolName()  { return "resizer"; }
 

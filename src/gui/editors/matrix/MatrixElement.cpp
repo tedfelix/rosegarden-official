@@ -248,13 +248,15 @@ MatrixElement::reconfigure(timeT time, timeT duration, int pitch, int velocity)
             font.setPixelSize(8);
             m_textItem->setFont(font);
             m_textItem->setData(MatrixElementData,
-                                QVariant::fromValue((void *)this));
+                                QVariant::fromValue
+                                (static_cast<void*>(this)));
         }
     }
 
     setLayoutX(x0);
 
-    m_item->setData(MatrixElementData, QVariant::fromValue((void *)this));
+    m_item->setData(MatrixElementData,
+                    QVariant::fromValue(static_cast<void*>(this)));
 
     // set the Y position taking m_pitchOffset into account, subtracting the
     // opposite of whatever the originating segment transpose was

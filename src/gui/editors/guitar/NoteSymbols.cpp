@@ -430,8 +430,8 @@ NoteSymbols::getStringNumber ( int imgWidth,
     bool valueOk = false;
 
     posPair xPairPos;
-    unsigned int min = 0;
-    unsigned int max = 0;
+    unsigned int min;
+    unsigned int max;
     unsigned int result = 0;
 
     for ( unsigned int i = 0; i < maxStringNum; ++i ) {

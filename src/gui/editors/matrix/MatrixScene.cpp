@@ -452,11 +452,11 @@ MatrixScene::recreateLines()
 void
 MatrixScene::recreateTriadHighlights()
 {
-    Segment *segment = getCurrentSegment();
+    const Segment *segment = getCurrentSegment();
     if (!segment) return;
 
     timeT k0 = segment->getClippedStartTime();
-    timeT k1 = segment->getClippedStartTime();
+    timeT k1 = k0;
 
     int i = 0;
 
@@ -550,7 +550,7 @@ MatrixScene::recreateTriadHighlights()
 void
 MatrixScene::recreateBlackkeyHighlights()
 {
-    Segment *segment = getCurrentSegment();
+    const Segment *segment = getCurrentSegment();
     if (!segment) return;
 
     timeT k0 = segment->getClippedStartTime();
@@ -607,7 +607,7 @@ MatrixScene::recreateBlackkeyHighlights()
 void
 MatrixScene::recreatePitchHighlights()
 {
-    Segment *segment = getCurrentSegment();
+    const Segment *segment = getCurrentSegment();
     if (!segment) return;
 
     QSettings settings;

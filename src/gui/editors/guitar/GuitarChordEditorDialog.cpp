@@ -54,14 +54,14 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(
     m_startFret->setRange(1, 24);
     m_startFret->setSingleStep(1);
     topLayout->addWidget(m_startFret, 1, 1);
-    
+
     connect(m_startFret, (void(QSpinBox::*)(int))&QSpinBox::valueChanged,
             this, &GuitarChordEditorDialog::slotStartFretChanged);
-    
+
     topLayout->addWidget(new QLabel(tr("Root"), page), 2, 1);
     m_rootNotesList = new QComboBox(page);
     topLayout->addWidget(m_rootNotesList, 3, 1);
-    
+
     topLayout->addWidget(new QLabel(tr("Extension"), page), 4, 1);
     m_ext = new QComboBox(page);
 
@@ -77,6 +77,7 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(
 
     m_fingeringBox = new FingeringBox(true, page, true);
     m_fingeringBox->setFingering(m_chord.getFingering());
+    // cppcheck-suppress duplicateExpression
     topLayout->addWidget(m_fingeringBox, 0, 0, 7- 0+1, 0- 0+1);
 
     NOTATION_DEBUG << "GuitarChordEditorDialog : chord = " << m_chord;
@@ -87,7 +88,7 @@ GuitarChordEditorDialog::GuitarChordEditorDialog(
         m_rootNotesList->addItems(rootList);
         m_rootNotesList->setCurrentIndex(rootList.indexOf(m_chord.getRoot()));
     }
-    
+
     QStringList extList = m_chordMap.getExtList(m_chord.getRoot());
     if (extList.count() > 0) {
         m_ext->addItems(extList);
@@ -115,12 +116,10 @@ GuitarChordEditorDialog::accept()
     m_chord.setFingering(m_fingeringBox->getFingering());
     m_chord.setExt(m_ext->currentText());
     m_chord.setRoot(m_rootNotesList->currentText());
-    m_chord.setUserChord(true);            
-	
+    m_chord.setUserChord(true);
+
     QDialog::accept();
 }
 
 
 }
-
-

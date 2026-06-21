@@ -209,7 +209,7 @@ FingeringBox::mousePressEvent(QMouseEvent *event)
     if (!m_editable)
         return;
 
-    if((event->button() == Qt::LeftButton) && m_editable) {
+    if (event->button() == Qt::LeftButton) {
 
         // Find string position
         m_press_string_num = getStringNumber(event->pos());
@@ -265,7 +265,8 @@ FingeringBox::processMouseRelease(unsigned int release_string_num,
                    (( m_press_string_num <= m_nbStrings)&&
                      (release_string_num <= m_nbStrings)) &&
                    (( m_press_fret_num <(m_startFret + m_nbFretsDisplayed)) &&
-                     (release_fret_num <(m_startFret + m_nbFretsDisplayed)))) {
+                    // cppcheck-suppress knownConditionTrueFalse
+                    (release_fret_num <(m_startFret + m_nbFretsDisplayed)))) {
 
                 // TODO deal with barre later on
 

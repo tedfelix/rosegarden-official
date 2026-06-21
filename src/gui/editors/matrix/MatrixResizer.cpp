@@ -87,7 +87,7 @@ MatrixResizer::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     // Add this element and allow movement
     //
-    EventSelection* selection = m_scene->getSelection();
+    const EventSelection* selection = m_scene->getSelection();
 
     if (selection) {
         EventSelection *newSelection;
@@ -262,7 +262,7 @@ void MatrixResizer::ready()
 
 void MatrixResizer::setBasicContextHelp()
 {
-    EventSelection *selection = m_scene->getSelection();
+    const EventSelection *selection = m_scene->getSelection();
     if (selection && selection->size() > 1) {
         setContextHelp(tr("Click and drag to resize selected notes"));
     } else {

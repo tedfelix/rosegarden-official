@@ -42,7 +42,7 @@ class MatrixMover : public MatrixTool
 
 public:
 
-    MatrixMover(MatrixWidget *);
+    explicit MatrixMover(MatrixWidget *);
 
     void handleLeftButtonPress(const MatrixMouseEvent *) override;
     FollowMode handleMouseMove(const MatrixMouseEvent *) override;
@@ -58,7 +58,6 @@ public:
     void handleEventRemoved(Event *event) override;
 
     void ready() override;
-    void stow() override;
 
     static QString ToolName();
 
