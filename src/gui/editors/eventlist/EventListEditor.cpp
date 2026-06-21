@@ -750,8 +750,12 @@ EventListEditor::updateTableWidget()
 
         // Time
         QTableWidgetItem *timeItem = new QTableWidgetItem(timeStr);
-        timeItem->setData(SegmentPtrRole, QVariant::fromValue((void *)(m_segments[0])));
-        timeItem->setData(EventPtrRole, QVariant::fromValue((void *)event));
+        timeItem->setData(SegmentPtrRole,
+                          QVariant::fromValue
+                          (static_cast<void*>((m_segments[0]))));
+        timeItem->setData(EventPtrRole,
+                          QVariant::fromValue
+                          (static_cast<void*>(event)));
         m_tableWidget->setItem(row, col1++, timeItem);
 
         // Duration
@@ -1619,7 +1623,7 @@ EventListEditor::slotRawTime()
 void
 EventListEditor::slotCellDoubleClicked(int row, int /* column */)
 {
-    QTableWidgetItem *item = m_tableWidget->item(row, 0);
+    const QTableWidgetItem *item = m_tableWidget->item(row, 0);
     if (!item) {
         RG_WARNING << "slotItemDoubleClicked(): WARNING: No Item.";
         return;
@@ -1656,7 +1660,7 @@ EventListEditor::slotContextMenu(const QPoint &pos)
             return;
         }
 
-        QAction *eventEditorAction =
+        const QAction *eventEditorAction =
                 m_contextMenu->addAction(tr("Open in Event Editor"));
         connect(eventEditorAction, &QAction::triggered,
                 this, &EventListEditor::slotOpenInEventEditor);

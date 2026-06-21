@@ -200,7 +200,6 @@ bool ChordMap::saveDocument(
             // If we are in a <chordset>, close it.
             if (inChordset) {
                 outStream << " </chordset>\n";
-                inChordset = false;
             }
 
             // open new chordset
