@@ -63,7 +63,7 @@ public:
     ~MatrixView() override;
 
     /// To allow clients to launch the rulers after the view is up.
-    void launchRulers(std::vector<Segment *> segments);
+    void launchRulers(const std::vector<Segment *>& segments);
 
     void closeEvent(QCloseEvent *event) override;
 

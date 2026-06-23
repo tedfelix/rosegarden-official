@@ -107,7 +107,7 @@ ClefKeyContext::setSegments(NotationScene *scene)
                       KeyMaps::value_type(trackId, keyMap)).first;
         }
 
-        Segment &s = (*staffsIt)->getSegment();
+        const Segment &s = (*staffsIt)->getSegment();
         bool again;
 
         // Set clefs and keys undefined outside segments

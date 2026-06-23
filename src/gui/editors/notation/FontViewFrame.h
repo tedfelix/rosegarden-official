@@ -37,14 +37,14 @@ class FontViewFrame : public QFrame
     Q_OBJECT
 
 public:
-    FontViewFrame(int pixelSize, QWidget *parent = nullptr);
+    explicit FontViewFrame(int pixelSize, QWidget *parent = nullptr);
     ~FontViewFrame() override;
 
     QSize sizeHint() const override;
     bool hasRow(int row) const;
 
 public slots:
-    void setFont(QString font);
+    void setFont(const QString& font);
     void setRow(int);
     void setGlyphs(bool glyphs);
 

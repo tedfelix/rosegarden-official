@@ -300,7 +300,7 @@ MatrixView::~MatrixView()
 }
 
 void
-MatrixView::launchRulers(std::vector<Segment *> segments)
+MatrixView::launchRulers(const std::vector<Segment *>& segments)
 {
     if (!m_matrixWidget)
         return;
@@ -615,9 +615,9 @@ MatrixView::setupActions()
     bool keyPressureEnabled = false;
     for(const Segment* segment : m_segments) {
         RosegardenDocument* doc = RosegardenDocument::currentDocument;
-        Track *track = doc->getComposition().getTrackById(segment->getTrack());
+        const Track *track = doc->getComposition().getTrackById(segment->getTrack());
 
-        Instrument *instrument = doc->getStudio().
+        const Instrument *instrument = doc->getStudio().
             getInstrumentById(track->getInstrument());
 
         if (instrument) {
@@ -774,7 +774,7 @@ MatrixView::initActionsToolbar()
 void
 MatrixView::initRulersToolbar()
 {
-    QToolBar *rulersToolbar = findToolbar("Rulers Toolbar");
+    const QToolBar *rulersToolbar = findToolbar("Rulers Toolbar");
     if (!rulersToolbar) {
         RG_WARNING << "MatrixView::initRulersToolbar() - rulers toolbar not found!";
         return;
@@ -825,7 +825,7 @@ MatrixView::slotShowContextHelp(const QString &help)
 void
 MatrixView::slotUpdateMenuStates()
 {
-    EventSelection *selection = getSelection();
+    EventSelection *selection = MatrixView::getSelection();
 
     // Note Selection
 
@@ -1116,7 +1116,7 @@ MatrixView::slotQuantizeSelection(int q)
     if (!selection) return;
 
     if (unit) {
-        if (selection && selection->size()) {
+        if (selection->size()) {
             CommandHistory::getInstance()->addCommand
                 (new EventQuantizeCommand(*selection, quant));
         } else {
@@ -1128,7 +1128,7 @@ MatrixView::slotQuantizeSelection(int q)
             }
         }
     } else {
-        if (selection  &&  !selection->empty()) {
+        if (!selection->empty()) {
             CommandHistory::getInstance()->addCommand
                 (new EventUnquantizeCommand(*selection, quant));
         } else {
@@ -1256,7 +1256,7 @@ MatrixView::slotPlaceControllers()
     ControlRulerWidget *cr = m_matrixWidget->getControlsWidget();
     if (!cr) { return; }
 
-    ControlParameter *cp = cr->getControlParameter();
+    const ControlParameter *cp = cr->getControlParameter();
     if (!cp) { return; }
 
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
@@ -1387,7 +1387,7 @@ MatrixView::slotFilterSelection()
         bool haveEvent = false;
 
         EventSelection *newSelection = new EventSelection(*segment);
-        EventContainer &ec =
+        const EventContainer &ec =
             existingSelection->getSegmentEvents();
         for (EventContainer::iterator i =
                     ec.begin(); i != ec.end(); ++i) {
@@ -1456,7 +1456,7 @@ MatrixView::slotLoop()
 void
 MatrixView::slotLoopChanged()
 {
-    Composition &composition =
+    const Composition &composition =
         RosegardenDocument::currentDocument->getComposition();
 
     findAction("loop")->setChecked(
@@ -1844,7 +1844,7 @@ MatrixView::slotHighlight()
 void
 MatrixView::slotStepBackward()
 {
-    Segment *segment = getCurrentSegment();
+    const Segment *segment = getCurrentSegment();
     if (!segment) return;
 
     // Sanity check.  Move postion marker inside segmet if not
@@ -1868,7 +1868,7 @@ MatrixView::slotStepBackward()
 void
 MatrixView::stepForward(bool force)
 {
-    Segment *segment = getCurrentSegment();
+    const Segment *segment = getCurrentSegment();
     if (!segment) return;
 
     // Sanity check.  Move position marker inside segment if not
@@ -2046,7 +2046,7 @@ void
 MatrixView::
 insertControllerSequence(const ControlParameter &controlParameter)
 {
-    EventSelection *selection = getSelection();
+    const EventSelection *selection = getSelection();
 
     // No selection?  Bail.
     if (!selection)
@@ -2481,7 +2481,7 @@ MatrixView::slotEditAddKeySignature()
     Clef clef = segment->getClefAtTime(insertionTime);
     Key key = AnalysisHelper::guessKeyForSegment(insertionTime, segment);
 
-    MatrixScene *scene = m_matrixWidget->getScene();
+    const MatrixScene *scene = m_matrixWidget->getScene();
     if (!scene) return;
 
     NotePixmapFactory npf;
@@ -2502,9 +2502,9 @@ MatrixView::slotEditAddKeySignature()
 
         bool transposeKey = dialog.shouldBeTransposed();
         bool applyToAll = dialog.shouldApplyToAll();
-        bool ignorePercussion = dialog.shouldIgnorePercussion();
 
         if (applyToAll) {
+            bool ignorePercussion = dialog.shouldIgnorePercussion();
             CommandHistory::getInstance()->addCommand(
                     new MultiKeyInsertionCommand(
                             RosegardenDocument::currentDocument,

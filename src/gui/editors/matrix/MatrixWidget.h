@@ -402,7 +402,7 @@ private:
 
     QSharedPointer<MatrixToolBox> m_toolBox;
     MatrixTool *m_currentTool{nullptr};
-    void setTool(QString name);
+    void setTool(const QString& name);
     /// Used by the MatrixMover and MatrixPainter tools for preview notes.
     int m_currentVelocity{100};
 

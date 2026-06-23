@@ -97,7 +97,7 @@ MatrixVelocity::handleLeftButtonPress(const MatrixMouseEvent *e)
     m_mouseStartY = e->sceneY;
 
     // Add this element and allow velocity change
-    EventSelection *selection = m_scene->getSelection();
+    const EventSelection *selection = m_scene->getSelection();
 
     if (selection) {
         EventSelection *newSelection;
@@ -256,12 +256,6 @@ MatrixVelocity::handleMouseRelease(const MatrixMouseEvent *e)
         m_widget->showHighlight(true);
         return;
     } else {
-        QString commandLabel = tr("Change Velocity");
-
-        if (selection->size() > 1) {
-            commandLabel = tr("Change Velocities");
-        }
-
         m_scene->setSelection(nullptr, false);
 
         CommandHistory::getInstance()->addCommand
@@ -299,7 +293,7 @@ MatrixVelocity::stow()
 void
 MatrixVelocity::setBasicContextHelp()
 {
-    EventSelection *selection = m_scene->getSelection();
+    const EventSelection *selection = m_scene->getSelection();
     if (selection && selection->size() > 1) {
         setContextHelp(tr("Click and drag to scale velocity of selected notes"));
     } else {
