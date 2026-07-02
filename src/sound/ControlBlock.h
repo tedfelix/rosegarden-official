@@ -20,6 +20,8 @@
 #include "base/MidiProgram.h"  // InstrumentId, MidiFilter
 #include "base/Track.h"  // TrackId
 
+#include <QMutex>
+
 namespace Rosegarden
 {
 
@@ -45,8 +47,7 @@ struct InstrumentAndChannel
 struct TrackInfo
 {
 public:
-    /// This should be the ctor.
-    void clear();
+    TrackInfo();
 
     /// Get instrument and channel, preparing the channel if needed.
     /**
@@ -128,9 +129,6 @@ private:
     void allocateThruChannel(Studio &studio);
 };
 
-// should be high enough for the moment
-#define CONTROLBLOCK_MAX_NB_TRACKS 1024
-
 /// Control data passed from GUI thread to sequencer thread.
 /**
  * This class contains data that is being passed from GUI threads to
@@ -148,7 +146,8 @@ private:
  *     between threads, yet it is lock free.  I suspect this is OK since
  *     we never move more than a word at a time.  The only issue might
  *     be inconsistency across fields.  And in that case, there is little
- *     that can really go wrong.
+ *     that can really go wrong. I added a mutex and used it where necessary -
+ *     there may be other places where it should be used.
  *
  * @see SequencerDataBlock
  */
@@ -158,8 +157,6 @@ public:
     static ControlBlock *getInstance();
 
     void setDocument(RosegardenDocument *doc);
-
-    //unsigned int getMaxTrackId() const { return m_maxTrackId; }
 
     /// Update m_trackInfo for the track.
     void updateTrackData(Track *);
@@ -225,11 +222,7 @@ private:
     // Singleton.  Use getInstance().
     ControlBlock();
 
-    void clearTracks();
-
     RosegardenDocument *m_doc;
-
-    unsigned int m_maxTrackId;
 
     bool m_isSelectedChannelReady;
     MidiFilter m_thruFilter;
@@ -239,7 +232,9 @@ private:
 
     TrackInfo m_metronomeInfo;
 
-    TrackInfo m_trackInfo[CONTROLBLOCK_MAX_NB_TRACKS];
+    std::map<TrackId, TrackInfo> m_trackInfo;
+
+    mutable QMutex m_mutex;
 };
 
 }

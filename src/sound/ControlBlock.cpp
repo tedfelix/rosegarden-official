@@ -28,6 +28,9 @@
 #include "misc/Debug.h"
 
 #include <QtGlobal>
+#include <QMutexLocker>
+
+#define LOCKED QMutexLocker rg_ControlBlock_locker(&m_mutex)
 
 #define DEBUG_CONTROL_BLOCK 1
 
@@ -35,22 +38,22 @@
 namespace Rosegarden
 {
 
-void TrackInfo::clear()
+TrackInfo::TrackInfo() :
+    m_deleted(true),
+    m_muted(true),
+    m_archived(false),
+    m_armed(false),
+    m_solo(false),
+    m_deviceFilter(0),
+    m_channelFilter(0),
+    m_thruRouting(Track::Auto),
+    m_instrumentId(0),
+    m_thruChannel(0),
+    m_isThruChannelReady(false),
+    m_hasThruChannel(false),
+    m_selected(false),
+    m_useFixedChannel(true)
 {
-    m_deleted = true;
-    m_muted = true;
-    m_archived = false;
-    m_armed = false;
-    m_solo = false;
-    m_deviceFilter = 0;
-    m_channelFilter = 0;
-    m_thruRouting = Track::Auto;
-    m_instrumentId = 0;
-    m_thruChannel = 0;
-    m_isThruChannelReady = false;
-    m_hasThruChannel = false;
-    m_selected = false;
-    m_useFixedChannel = true;
 }
 
 ControlBlock *
@@ -63,28 +66,13 @@ ControlBlock::getInstance()
 
 ControlBlock::ControlBlock() :
     m_doc(nullptr),
-    m_maxTrackId(0),
     m_thruFilter(0),
     m_recordFilter(0),
     m_selectedTrack(0)
 {
     m_metronomeInfo.m_muted = true;
     m_metronomeInfo.m_instrumentId = 0;
-    clearTracks();
     setSelectedTrack(0);
-}
-
-void
-ControlBlock::
-clearTracks()
-{
-    // ??? Giving TrackInfo a proper default ctor would simplify this.
-    //       m_trackInfo[i] = TrackInfo();
-    //     It would also mean that this wouldn't need to be called in
-    //     the ctor.
-
-    for (unsigned int i = 0; i < CONTROLBLOCK_MAX_NB_TRACKS; ++i)
-        m_trackInfo[i].clear();
 }
 
 void
@@ -93,9 +81,8 @@ ControlBlock::setDocument(RosegardenDocument *doc)
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setDocument()";
 #endif
-    clearTracks();
+    m_trackInfo.clear();
     m_doc = doc;
-    m_maxTrackId = m_doc->getComposition().getMaxTrackId();
 
     Composition& comp = m_doc->getComposition();
 
@@ -116,96 +103,113 @@ ControlBlock::setDocument(RosegardenDocument *doc)
 void
 ControlBlock::updateTrackData(Track* t)
 {
+    LOCKED;
     if (t) {
+        TrackId trackId = t->getId();
 #ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "Updating track"
-             << t->getId();
+        RG_DEBUG << "Updating track"
+                 << trackId;
 #endif
-        setInstrumentForTrack(t->getId(), t->getInstrument());
-        setTrackArmed(t->getId(), t->isArmed());
-        setTrackMuted(t->getId(), t->isMuted());
-        setTrackArchived(t->getId(), t->isArchived());
-        setSolo(t->getId(), t->isSolo());
-        setTrackDeleted(t->getId(), false);
-        setTrackDeviceFilter(t->getId(), t->getMidiInputDevice());
-        setTrackChannelFilter(t->getId(), t->getMidiInputChannel());
-        setTrackThruRouting(t->getId(), t->getThruRouting());
-        if (t->getId() > m_maxTrackId)
-            m_maxTrackId = t->getId();
+        auto iter = m_trackInfo.find(trackId);
+        if (iter == m_trackInfo.end()) {
+            RG_DEBUG << "updateTrackData new trackId" << trackId;
+            TrackInfo info;
+            m_trackInfo[trackId] = info;
+        }
+
+        setInstrumentForTrack(trackId, t->getInstrument());
+        setTrackArmed(trackId, t->isArmed());
+        setTrackMuted(trackId, t->isMuted());
+        setTrackArchived(trackId, t->isArchived());
+        setSolo(trackId, t->isSolo());
+        setTrackDeleted(trackId, false);
+        setTrackDeviceFilter(trackId, t->getMidiInputDevice());
+        setTrackChannelFilter(trackId, t->getMidiInputChannel());
+        setTrackThruRouting(trackId, t->getThruRouting());
     }
 }
 
 void
 ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 {
-    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS) { return; }
-    TrackInfo &track = m_trackInfo[trackId];
-
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setInstrumentForTrack unkown trackId" << trackId;
+        return;
+    }
+    TrackInfo &track = (*iter).second;
     track.releaseThruChannel(m_doc->getStudio());
     track.m_instrumentId = instId;
     track.conform(m_doc->getStudio());
 }
 
-/* unused
-InstrumentId
-ControlBlock::getInstrumentForTrack(TrackId trackId) const
-{
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_instrumentId;
-    return 0;
-}
-*/
-
 void
 ControlBlock::setTrackMuted(TrackId trackId, bool muted)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        m_trackInfo[trackId].m_muted = muted;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackMuted unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_muted = muted;
 }
 
 bool ControlBlock::isTrackMuted(TrackId trackId) const
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_muted;
-    return true;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "isTrackMuted unkown trackId" << trackId;
+        return true;
+    }
+    return (*iter).second.m_muted;
 }
 
 void
 ControlBlock::setTrackArchived(TrackId trackId, bool archived)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        m_trackInfo[trackId].m_archived = archived;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackArchived unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_archived = archived;
 }
 
 bool ControlBlock::isTrackArchived(TrackId trackId) const
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_archived;
-    return true;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "isTrackArchived unkown trackId" << trackId;
+        return true;
+    }
+    return (*iter).second.m_archived;
 }
 
 void ControlBlock::setSolo(TrackId trackId, bool solo)
 {
-    // Bail on invalid track ID.
-    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS)
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setSolo unkown trackId" << trackId;
         return;
-
-    m_trackInfo[trackId].m_solo = solo;
+    }
+    (*iter).second.m_solo = solo;
 }
 
 bool ControlBlock::isSolo(TrackId trackId) const
 {
-    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS)
-        return false;
-
-    return m_trackInfo[trackId].m_solo;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "isSolo unkown trackId" << trackId;
+        return true;
+    }
+    return (*iter).second.m_solo;
 }
 
 bool ControlBlock::isAnyTrackInSolo() const
 {
     // For each track
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        const TrackInfo &track = m_trackInfo[i];
+    for (auto& pair : m_trackInfo) {
+        const TrackInfo &track = pair.second;
 
         // If this track was deleted, try the next.
         if (track.m_deleted)
@@ -225,92 +229,70 @@ bool ControlBlock::isAnyTrackInSolo() const
 void
 ControlBlock::setTrackArmed(TrackId trackId, bool armed)
 {
-    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS) { return; }
-
-    TrackInfo &track = m_trackInfo[trackId];
-    track.m_armed = armed;
-    track.conform(m_doc->getStudio());
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackArmed unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_armed = armed;
+    (*iter).second.conform(m_doc->getStudio());
 }
-
-#if 0
-bool
-ControlBlock::isTrackArmed(TrackId trackId) const
-{
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_armed;
-    return false;
-}
-#endif
 
 void
 ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
 {
-    if (trackId >= CONTROLBLOCK_MAX_NB_TRACKS) { return; }
-
-    TrackInfo &track = m_trackInfo[trackId];
-    track.m_deleted = deleted;
-    track.conform(m_doc->getStudio());
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackDeleted unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_deleted = deleted;
+    (*iter).second.conform(m_doc->getStudio());
 }
-
-#if 0
-bool
-ControlBlock::isTrackDeleted(TrackId trackId) const
-{
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_deleted;
-    return true;
-}
-#endif
 
 void
 ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        m_trackInfo[trackId].m_channelFilter = channel;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackChannelFilter unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_channelFilter = channel;
 }
-
-#if 0
-char
-ControlBlock::getTrackChannelFilter(TrackId trackId) const
-{
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_channelFilter;
-    return -1;
-}
-#endif
 
 void
 ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        m_trackInfo[trackId].m_deviceFilter = device;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_deviceFilter = device;
 }
-
-#if 0
-DeviceId
-ControlBlock::getTrackDeviceFilter(TrackId trackId) const
-{
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        return m_trackInfo[trackId].m_deviceFilter;
-    return ALL_DEVICES;
-}
-#endif
 
 void ControlBlock::setTrackThruRouting(
         TrackId trackId, Track::ThruRouting thruRouting)
 {
-    if (trackId < CONTROLBLOCK_MAX_NB_TRACKS)
-        m_trackInfo[trackId].m_thruRouting = thruRouting;
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_thruRouting = thruRouting;
 }
 
 bool
 ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
 {
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        if (m_trackInfo[i].m_instrumentId == instrumentId  &&
-            !m_trackInfo[i].m_deleted  &&
-            !m_trackInfo[i].m_muted  &&
-            !m_trackInfo[i].m_archived)
+    // For each track
+    for (auto& pair : m_trackInfo) {
+        const TrackInfo &track = pair.second;
+        if (track.m_instrumentId == instrumentId  &&
+            !track.m_deleted  &&
+            !track.m_muted  &&
+            !track.m_archived)
             return false;
     }
     return true;
@@ -319,9 +301,12 @@ ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
 bool
 ControlBlock::isInstrumentUnused(InstrumentId instrumentId) const
 {
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        if (m_trackInfo[i].m_instrumentId == instrumentId &&
-                !m_trackInfo[i].m_deleted)
+    LOCKED;
+    // For each track
+    for (auto& pair : m_trackInfo) {
+        const TrackInfo &track = pair.second;
+        if (track.m_instrumentId == instrumentId &&
+            !track.m_deleted)
             return false;
     }
     return true;
@@ -335,30 +320,32 @@ setSelectedTrack(TrackId track)
     RG_DEBUG << "ControlBlock::setSelectedTrack()";
 #endif
 
+    auto iter = m_trackInfo.find(track);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setSelectedTrack unkown trackId" << track;
+        return;
+    }
     // Undo the old selected track.  Safe even if it referred to the
     // same track or to no track.
-    if (m_selectedTrack < CONTROLBLOCK_MAX_NB_TRACKS) {
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setSelectedTrack() deselecting"
              << m_selectedTrack;
 #endif
-        TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
-        oldTrack.m_selected = false;
-        if (m_doc)
-            oldTrack.conform(m_doc->getStudio());
-    }
+    TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
+    oldTrack.m_selected = false;
+    if (m_doc)
+        oldTrack.conform(m_doc->getStudio());
 
     // Set up the new selected track
-    if (track < CONTROLBLOCK_MAX_NB_TRACKS) {
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setSelectedTrack() selecting"
              << track;
 #endif
-        TrackInfo &newTrack = m_trackInfo[track];
-        newTrack.m_selected = true;
-        if (m_doc)
-            newTrack.conform(m_doc->getStudio());
-    }
+    TrackInfo &newTrack = m_trackInfo[track];
+    newTrack.m_selected = true;
+    if (m_doc)
+        newTrack.conform(m_doc->getStudio());
+
     // What's selected is recorded both here and in the trackinfo
     // objects.
     m_selectedTrack = track;
@@ -369,19 +356,19 @@ ControlBlock::
 getInstAndChanForEvent(bool recording, DeviceId deviceId, char channel)
 {
     // For each track
-    for (unsigned i = 0; i <= m_maxTrackId; ++i) {
-        TrackInfo &track = m_trackInfo[i];
+    for (auto& pair : m_trackInfo) {
+        TrackInfo &track = pair.second;
 
         // Skip archived Tracks.
         if (track.m_archived)
             continue;
 
         bool deviceMatch =
-                (track.m_deviceFilter == ALL_DEVICES  ||
-                 track.m_deviceFilter == deviceId);
+            (track.m_deviceFilter == ALL_DEVICES  ||
+             track.m_deviceFilter == deviceId);
         bool channelMatch =
-                (track.m_channelFilter == -1  ||  // all channels
-                 track.m_channelFilter == static_cast<int>(channel));
+            (track.m_channelFilter == -1  ||  // all channels
+             track.m_channelFilter == static_cast<int>(channel));
 
         // if the event doesn't match this track's filters, try the next track
         if (!deviceMatch  ||  !channelMatch)
@@ -439,8 +426,9 @@ void
 ControlBlock::
 vacateThruChannel(int channel)
 {
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        TrackInfo &track = m_trackInfo[i];
+    // For each track
+    for (auto& pair : m_trackInfo) {
+        TrackInfo &track = pair.second;
         if(track.m_hasThruChannel &&
            (track.m_thruChannel == channel) &&
            !track.m_useFixedChannel) {
@@ -461,8 +449,9 @@ void
 ControlBlock::
 instrumentChangedProgram(InstrumentId instrumentId)
 {
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        TrackInfo &track = m_trackInfo[i];
+    // For each track
+    for (auto& pair : m_trackInfo) {
+        TrackInfo &track = pair.second;
         if(track.m_hasThruChannel && (track.m_instrumentId == instrumentId)) {
             track.makeChannelReady(m_doc->getStudio());
         }
@@ -475,8 +464,9 @@ void
 ControlBlock::
 instrumentChangedFixity(InstrumentId instrumentId)
 {
-    for (unsigned int i = 0; i <= m_maxTrackId; ++i) {
-        TrackInfo &track = m_trackInfo[i];
+    // For each track
+    for (auto& pair : m_trackInfo) {
+        TrackInfo &track = pair.second;
         if(track.m_hasThruChannel && (track.m_instrumentId == instrumentId)) {
             track.instrumentChangedFixity(m_doc->getStudio());
         }
