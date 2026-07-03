@@ -316,7 +316,9 @@ private:
      * If the path is not empty that file will be loaded but the document
      * will still be considered "new" - no filename will be set
      */
-    RosegardenDocument *newDocument(bool permanent, const QString& path = "");
+    RosegardenDocument *newDocument(bool permanent,
+                                    const QString& path = "",
+                                    bool clearHistory = true);
 
     /**** File handling code that we don't want the outside world to use ****/
     /**/
@@ -344,12 +346,14 @@ private:
      */
     RosegardenDocument *createDocumentFromMIDIFile(
             const QString &filePath,
-            bool permanent);
+            bool permanent,
+            bool clearHistory = true);
 
     /**
      * Create document from RG21 file
      */
-    RosegardenDocument *createDocumentFromRG21File(QString file);
+    RosegardenDocument *createDocumentFromRG21File(QString file,
+                                                   bool clearHistory = true);
 
     /**
      * Create document from Hydrogen drum machine file
@@ -359,8 +363,10 @@ private:
     /**
      * Create document from MusicXML file
      */
-    RosegardenDocument *createDocumentFromMusicXMLFile(const QString& file,
-                                                       bool permanent);
+    RosegardenDocument *createDocumentFromMusicXMLFile
+        (const QString& file,
+         bool permanent,
+         bool clearHistory = true);
 
     /**/
     /**/

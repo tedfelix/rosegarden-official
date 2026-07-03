@@ -172,8 +172,10 @@ RosegardenDocument::~RosegardenDocument()
 
     //     ControlRulerCanvasRepository::clear();
 
-    if (m_clearCommandHistory)
+    if (m_clearCommandHistory) {
+        RG_DEBUG << "dtor clear history";
         CommandHistory::getInstance()->clear(); // before Composition is deleted
+    }
 
     release();
 }
@@ -516,7 +518,10 @@ void RosegardenDocument::newDocument(const QString& path)
     }
     setAbsFilePath(QString());
     setTitle(tr("Untitled"));
-    if (m_clearCommandHistory) CommandHistory::getInstance()->clear();
+    if (m_clearCommandHistory) {
+        RG_DEBUG << "newDocument clear history";
+        CommandHistory::getInstance()->clear();
+    }
 }
 
 void RosegardenDocument::performAutoload()
