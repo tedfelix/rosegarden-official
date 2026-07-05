@@ -87,9 +87,6 @@ public:
      * !!! ONLY PUT PLAIN DATA HERE - NO POINTERS EVER !!! *
      *******************************************************/
 
-    /// Track is no longer in the Composition.
-    bool m_deleted;
-
     bool m_muted;
     bool m_archived;
     bool m_armed;
@@ -167,7 +164,7 @@ public:
     bool isSolo(TrackId trackId) const;
     bool isAnyTrackInSolo() const;
 
-    void setTrackDeleted(TrackId trackId, bool deleted);
+    void trackDeleted(TrackId trackId);
 
     void setInstrumentForMetronome(InstrumentId instId)
         { m_metronomeInfo.m_instrumentId = instId; }
@@ -208,7 +205,7 @@ private:
     // internally used implementations
     void updateTrackDataImpl(Track *t);
     void setInstrumentForTrackImpl(TrackId trackId, InstrumentId);
-    void setTrackDeletedImpl(TrackId trackId, bool deleted);
+    void trackDeletedImpl(TrackId trackId);
     void setSelectedTrackImpl(TrackId track);
 
     RosegardenDocument *m_doc;

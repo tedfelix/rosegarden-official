@@ -39,7 +39,6 @@ namespace Rosegarden
 {
 
 TrackInfo::TrackInfo() :
-    m_deleted(true),
     m_muted(true),
     m_archived(false),
     m_armed(false),
@@ -197,10 +196,6 @@ bool ControlBlock::isAnyTrackInSolo() const
     for (auto& pair : m_trackInfo) {
         const TrackInfo &track = pair.second;
 
-        // If this track was deleted, try the next.
-        if (track.m_deleted)
-            continue;
-
         // Don't include archived tracks.
         if (track.m_archived)
             continue;
@@ -226,11 +221,11 @@ ControlBlock::setTrackArmed(TrackId trackId, bool armed)
 }
 
 void
-ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
+ControlBlock::trackDeleted(TrackId trackId)
 {
     // called from gui thread
     LOCKED;
-    setTrackDeletedImpl(trackId, deleted);
+    trackDeletedImpl(trackId);
 }
 
 void
@@ -278,7 +273,6 @@ ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
     for (auto& pair : m_trackInfo) {
         const TrackInfo &track = pair.second;
         if (track.m_instrumentId == instrumentId  &&
-            !track.m_deleted  &&
             !track.m_muted  &&
             !track.m_archived)
             return false;
@@ -294,8 +288,7 @@ ControlBlock::isInstrumentUnused(InstrumentId instrumentId) const
     // For each track
     for (auto& pair : m_trackInfo) {
         const TrackInfo &track = pair.second;
-        if (track.m_instrumentId == instrumentId &&
-            !track.m_deleted)
+        if (track.m_instrumentId == instrumentId)
             return false;
     }
     return true;
@@ -462,7 +455,6 @@ void ControlBlock::updateTrackDataImpl(Track *t)
         setTrackMuted(trackId, t->isMuted());
         setTrackArchived(trackId, t->isArchived());
         setSolo(trackId, t->isSolo());
-        setTrackDeletedImpl(trackId, false);
         setTrackDeviceFilter(trackId, t->getMidiInputDevice());
         setTrackChannelFilter(trackId, t->getMidiInputChannel());
         setTrackThruRouting(trackId, t->getThruRouting());
@@ -483,15 +475,9 @@ void ControlBlock::setInstrumentForTrackImpl(TrackId trackId,
     track.conform(m_doc->getStudio());
 }
 
-void ControlBlock::setTrackDeletedImpl(TrackId trackId, bool deleted)
+void ControlBlock::trackDeletedImpl(TrackId trackId)
 {
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackDeleted unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_deleted = deleted;
-    (*iter).second.conform(m_doc->getStudio());
+    m_trackInfo.erase(trackId);
 }
 
 void ControlBlock::setSelectedTrackImpl(TrackId track)
@@ -538,7 +524,7 @@ TrackInfo::
 conform(Studio &studio)
 {
     bool thruAuto = (m_thruRouting == Track::Auto);
-    bool shouldHaveThru = (!thruAuto || m_armed || m_selected) && !m_deleted;
+    bool shouldHaveThru = (!thruAuto || m_armed || m_selected);
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "TrackInfo::conform()"
              << (shouldHaveThru ?

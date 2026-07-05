@@ -1680,7 +1680,7 @@ void SequenceManager::tracksDeleted(const Composition *, std::vector<TrackId> &t
 
     for (unsigned i = 0; i < trackIds.size(); ++i) {
         RG_DEBUG << "  ID: " << trackIds[i];
-        ControlBlock::getInstance()->setTrackDeleted(trackIds[i], true);
+        ControlBlock::getInstance()->trackDeleted(trackIds[i]);
     }
 }
 
