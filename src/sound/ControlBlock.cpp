@@ -72,12 +72,14 @@ ControlBlock::ControlBlock() :
 {
     m_metronomeInfo.m_muted = true;
     m_metronomeInfo.m_instrumentId = 0;
-    setSelectedTrack(0);
+    setSelectedTrackImpl(0);
 }
 
 void
 ControlBlock::setDocument(RosegardenDocument *doc)
 {
+    // called from gui thread
+    LOCKED;
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setDocument()";
 #endif
@@ -90,62 +92,36 @@ ControlBlock::setDocument(RosegardenDocument *doc)
 	 i != comp.getTracks().end(); ++i) {
         Track *track = i->second;
         if (!track) continue;
-	updateTrackData(track);
+	updateTrackDataImpl(track);
     }
 
     setMetronomeMuted(!comp.usePlayMetronome());
 
     setThruFilter(m_doc->getStudio().getMIDIThruFilter());
     setRecordFilter(m_doc->getStudio().getMIDIRecordFilter());
-    setSelectedTrack(comp.getSelectedTrack());
+    setSelectedTrackImpl(comp.getSelectedTrack());
 }
 
 void
 ControlBlock::updateTrackData(Track* t)
 {
+    // called from gui thread
     LOCKED;
-    if (t) {
-        TrackId trackId = t->getId();
-#ifdef DEBUG_CONTROL_BLOCK
-        RG_DEBUG << "Updating track"
-                 << trackId;
-#endif
-        auto iter = m_trackInfo.find(trackId);
-        if (iter == m_trackInfo.end()) {
-            RG_DEBUG << "updateTrackData new trackId" << trackId;
-            TrackInfo info;
-            m_trackInfo[trackId] = info;
-        }
-
-        setInstrumentForTrack(trackId, t->getInstrument());
-        setTrackArmed(trackId, t->isArmed());
-        setTrackMuted(trackId, t->isMuted());
-        setTrackArchived(trackId, t->isArchived());
-        setSolo(trackId, t->isSolo());
-        setTrackDeleted(trackId, false);
-        setTrackDeviceFilter(trackId, t->getMidiInputDevice());
-        setTrackChannelFilter(trackId, t->getMidiInputChannel());
-        setTrackThruRouting(trackId, t->getThruRouting());
-    }
+    updateTrackDataImpl(t);
 }
 
 void
 ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 {
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setInstrumentForTrack unkown trackId" << trackId;
-        return;
-    }
-    TrackInfo &track = (*iter).second;
-    track.releaseThruChannel(m_doc->getStudio());
-    track.m_instrumentId = instId;
-    track.conform(m_doc->getStudio());
+    // called from gui thread
+    LOCKED;
+    setInstrumentForTrackImpl(trackId, instId);
 }
 
 void
 ControlBlock::setTrackMuted(TrackId trackId, bool muted)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackMuted unkown trackId" << trackId;
@@ -156,6 +132,8 @@ ControlBlock::setTrackMuted(TrackId trackId, bool muted)
 
 bool ControlBlock::isTrackMuted(TrackId trackId) const
 {
+    // called from gui and sound threads
+    LOCKED;
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "isTrackMuted unkown trackId" << trackId;
@@ -167,6 +145,7 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
 void
 ControlBlock::setTrackArchived(TrackId trackId, bool archived)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackArchived unkown trackId" << trackId;
@@ -177,6 +156,8 @@ ControlBlock::setTrackArchived(TrackId trackId, bool archived)
 
 bool ControlBlock::isTrackArchived(TrackId trackId) const
 {
+    // called from gui and sound threads
+    LOCKED;
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "isTrackArchived unkown trackId" << trackId;
@@ -187,6 +168,7 @@ bool ControlBlock::isTrackArchived(TrackId trackId) const
 
 void ControlBlock::setSolo(TrackId trackId, bool solo)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setSolo unkown trackId" << trackId;
@@ -197,6 +179,8 @@ void ControlBlock::setSolo(TrackId trackId, bool solo)
 
 bool ControlBlock::isSolo(TrackId trackId) const
 {
+    // called from gui and sound threads
+    LOCKED;
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "isSolo unkown trackId" << trackId;
@@ -207,6 +191,8 @@ bool ControlBlock::isSolo(TrackId trackId) const
 
 bool ControlBlock::isAnyTrackInSolo() const
 {
+    // called from gui and sound threads
+    LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
         const TrackInfo &track = pair.second;
@@ -229,6 +215,7 @@ bool ControlBlock::isAnyTrackInSolo() const
 void
 ControlBlock::setTrackArmed(TrackId trackId, bool armed)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackArmed unkown trackId" << trackId;
@@ -241,18 +228,15 @@ ControlBlock::setTrackArmed(TrackId trackId, bool armed)
 void
 ControlBlock::setTrackDeleted(TrackId trackId, bool deleted)
 {
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackDeleted unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_deleted = deleted;
-    (*iter).second.conform(m_doc->getStudio());
+    // called from gui thread
+    LOCKED;
+    setTrackDeletedImpl(trackId, deleted);
 }
 
 void
 ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackChannelFilter unkown trackId" << trackId;
@@ -264,6 +248,7 @@ ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
 void
 ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
@@ -275,6 +260,7 @@ ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
 void ControlBlock::setTrackThruRouting(
         TrackId trackId, Track::ThruRouting thruRouting)
 {
+    // called internally
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
@@ -286,6 +272,8 @@ void ControlBlock::setTrackThruRouting(
 bool
 ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
 {
+    // called from sound thread
+    LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
         const TrackInfo &track = pair.second;
@@ -301,6 +289,7 @@ ControlBlock::isInstrumentMuted(InstrumentId instrumentId) const
 bool
 ControlBlock::isInstrumentUnused(InstrumentId instrumentId) const
 {
+    // called from sound thread
     LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
@@ -316,45 +305,17 @@ void
 ControlBlock::
 setSelectedTrack(TrackId track)
 {
-#ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "ControlBlock::setSelectedTrack()";
-#endif
-
-    auto iter = m_trackInfo.find(track);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setSelectedTrack unkown trackId" << track;
-        return;
-    }
-    // Undo the old selected track.  Safe even if it referred to the
-    // same track or to no track.
-#ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "ControlBlock::setSelectedTrack() deselecting"
-             << m_selectedTrack;
-#endif
-    TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
-    oldTrack.m_selected = false;
-    if (m_doc)
-        oldTrack.conform(m_doc->getStudio());
-
-    // Set up the new selected track
-#ifdef DEBUG_CONTROL_BLOCK
-    RG_DEBUG << "ControlBlock::setSelectedTrack() selecting"
-             << track;
-#endif
-    TrackInfo &newTrack = m_trackInfo[track];
-    newTrack.m_selected = true;
-    if (m_doc)
-        newTrack.conform(m_doc->getStudio());
-
-    // What's selected is recorded both here and in the trackinfo
-    // objects.
-    m_selectedTrack = track;
+    // called from gui thread
+    LOCKED;
+    setSelectedTrackImpl(track);
 }
 
 InstrumentAndChannel
 ControlBlock::
 getInstAndChanForEvent(bool recording, DeviceId deviceId, char channel)
 {
+    // called from sequencer thread
+    LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
         TrackInfo &track = pair.second;
@@ -426,6 +387,8 @@ void
 ControlBlock::
 vacateThruChannel(int channel)
 {
+    // called from gui thread
+    LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
         TrackInfo &track = pair.second;
@@ -449,6 +412,8 @@ void
 ControlBlock::
 instrumentChangedProgram(InstrumentId instrumentId)
 {
+    // called from gui thread
+    LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
         TrackInfo &track = pair.second;
@@ -464,6 +429,8 @@ void
 ControlBlock::
 instrumentChangedFixity(InstrumentId instrumentId)
 {
+    // called from gui thread
+    LOCKED;
     // For each track
     for (auto& pair : m_trackInfo) {
         TrackInfo &track = pair.second;
@@ -473,7 +440,98 @@ instrumentChangedFixity(InstrumentId instrumentId)
     }
 
 }
-    /** TrackInfo members **/
+
+void ControlBlock::updateTrackDataImpl(Track *t)
+{
+    // called internally
+    if (t) {
+        TrackId trackId = t->getId();
+#ifdef DEBUG_CONTROL_BLOCK
+        RG_DEBUG << "Updating track"
+                 << trackId;
+#endif
+        auto iter = m_trackInfo.find(trackId);
+        if (iter == m_trackInfo.end()) {
+            RG_DEBUG << "updateTrackDataImpl new trackId" << trackId;
+            TrackInfo info;
+            m_trackInfo[trackId] = info;
+        }
+
+        setInstrumentForTrackImpl(trackId, t->getInstrument());
+        setTrackArmed(trackId, t->isArmed());
+        setTrackMuted(trackId, t->isMuted());
+        setTrackArchived(trackId, t->isArchived());
+        setSolo(trackId, t->isSolo());
+        setTrackDeletedImpl(trackId, false);
+        setTrackDeviceFilter(trackId, t->getMidiInputDevice());
+        setTrackChannelFilter(trackId, t->getMidiInputChannel());
+        setTrackThruRouting(trackId, t->getThruRouting());
+    }
+}
+
+void ControlBlock::setInstrumentForTrackImpl(TrackId trackId,
+                                             InstrumentId instId)
+{
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setInstrumentForTrack unkown trackId" << trackId;
+        return;
+    }
+    TrackInfo &track = (*iter).second;
+    track.releaseThruChannel(m_doc->getStudio());
+    track.m_instrumentId = instId;
+    track.conform(m_doc->getStudio());
+}
+
+void ControlBlock::setTrackDeletedImpl(TrackId trackId, bool deleted)
+{
+    auto iter = m_trackInfo.find(trackId);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setTrackDeleted unkown trackId" << trackId;
+        return;
+    }
+    (*iter).second.m_deleted = deleted;
+    (*iter).second.conform(m_doc->getStudio());
+}
+
+void ControlBlock::setSelectedTrackImpl(TrackId track)
+{
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setSelectedTrack()";
+#endif
+
+    auto iter = m_trackInfo.find(track);
+    if (iter == m_trackInfo.end()) {
+        RG_DEBUG << "setSelectedTrack unkown trackId" << track;
+        return;
+    }
+    // Undo the old selected track.  Safe even if it referred to the
+    // same track or to no track.
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setSelectedTrack() deselecting"
+             << m_selectedTrack;
+#endif
+    TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
+    oldTrack.m_selected = false;
+    if (m_doc)
+        oldTrack.conform(m_doc->getStudio());
+
+    // Set up the new selected track
+#ifdef DEBUG_CONTROL_BLOCK
+    RG_DEBUG << "ControlBlock::setSelectedTrack() selecting"
+             << track;
+#endif
+    TrackInfo &newTrack = m_trackInfo[track];
+    newTrack.m_selected = true;
+    if (m_doc)
+        newTrack.conform(m_doc->getStudio());
+
+    // What's selected is recorded both here and in the trackinfo
+    // objects.
+    m_selectedTrack = track;
+}
+
+/** TrackInfo members **/
 
 void
 TrackInfo::

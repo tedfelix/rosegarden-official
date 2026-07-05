@@ -142,12 +142,6 @@ private:
  * RosegardenSequencer and the mappers (e.g. InternalSegmentMapper) use
  * the data found here.
  *
- * ??? It seems strange that this class/object is used for communication
- *     between threads, yet it is lock free.  I suspect this is OK since
- *     we never move more than a word at a time.  The only issue might
- *     be inconsistency across fields.  And in that case, there is little
- *     that can really go wrong. I added a mutex and used it where necessary -
- *     there may be other places where it should be used.
  *
  * @see SequencerDataBlock
  */
@@ -165,33 +159,15 @@ public:
     // unused InstrumentId getInstrumentForTrack(TrackId trackId) const;
     bool isInstrumentUnused(InstrumentId instrumentId) const;
 
-    void setTrackArmed(TrackId trackId, bool armed);
-    //bool isTrackArmed(TrackId trackId) const;
-
-    void setTrackMuted(TrackId trackId, bool muted);
     bool isTrackMuted(TrackId trackId) const;
     bool isInstrumentMuted(InstrumentId instrumentId) const;
 
-    void setTrackArchived(TrackId trackId, bool archived);
     bool isTrackArchived(TrackId trackId) const;
 
-    void setSolo(TrackId trackId, bool solo);
     bool isSolo(TrackId trackId) const;
     bool isAnyTrackInSolo() const;
 
     void setTrackDeleted(TrackId trackId, bool deleted);
-    //bool isTrackDeleted(TrackId trackId) const;
-
-    /// Recording filters: Device
-    void setTrackDeviceFilter(TrackId trackId, DeviceId);
-    //DeviceId getTrackDeviceFilter(TrackId trackId) const;
-
-    /// Recording filters: Channel
-    void setTrackChannelFilter(TrackId trackId, char channel);
-    //char getTrackChannelFilter(TrackId trackId) const;
-
-    /// Recording filters: Thru Routing
-    void setTrackThruRouting(TrackId trackId, Track::ThruRouting thruRouting);
 
     void setInstrumentForMetronome(InstrumentId instId)
         { m_metronomeInfo.m_instrumentId = instId; }
@@ -221,6 +197,19 @@ public:
 private:
     // Singleton.  Use getInstance().
     ControlBlock();
+    void setTrackMuted(TrackId trackId, bool muted);
+    void setTrackArchived(TrackId trackId, bool archived);
+    void setSolo(TrackId trackId, bool solo);
+    void setTrackArmed(TrackId trackId, bool armed);
+    void setTrackChannelFilter(TrackId trackId, char channel);
+    void setTrackDeviceFilter(TrackId trackId, DeviceId);
+    void setTrackThruRouting(TrackId trackId, Track::ThruRouting thruRouting);
+
+    // internally used implementations
+    void updateTrackDataImpl(Track *t);
+    void setInstrumentForTrackImpl(TrackId trackId, InstrumentId);
+    void setTrackDeletedImpl(TrackId trackId, bool deleted);
+    void setSelectedTrackImpl(TrackId track);
 
     RosegardenDocument *m_doc;
 
