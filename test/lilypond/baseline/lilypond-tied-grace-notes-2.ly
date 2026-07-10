@@ -2,16 +2,14 @@
 \include "nederlands.ly"
 \version "2.18.0"
 \header {
-    copyright =  \markup { "Copyright "\char ##x00A9" xxxx Copyright Holder" }
-    subtitle = "not yet subtitled"
-    title = "Not Yet Titled"
+    title = "Testcase for grace notes and ties"
     tagline = "Created using Rosegarden 26.06 and LilyPond"
 }
 #(set-global-staff-size 18)
 #(set-default-paper-size "a4")
 global = { 
     \time 4/4
-    \skip 1*2 
+    \skip 1*3 
 }
 globalTempo = {
     \override Score.MetronomeMark.transparent = ##t
@@ -40,38 +38,10 @@ globalTempo = {
                 \time 4/4
                 
                 \clef "treble"
-                \key e \major
-                cis' 4 fis' dis'' gis''  |
-                cis'' 4 fis dis' fis'' 
-            } % Voice
-
-            % End of segment Acoustic Grand Piano
-
-            \context Voice = "voice 0.0" {
-                % Segment: Acoustic Grand Piano
-                \override Voice.TextScript.padding = #2.0
-                \override MultiMeasureRest.expand-limit = 1
-                \set Staff.autoBeaming = ##f % turns off all autobeaming
-
-                \skip 1*2 
-                \clef "treble"
-                cis' 4 fis' dis'' gis''  |
-                cis'' 4 fis dis' fis'' 
-            } % Voice
-
-            % End of segment Acoustic Grand Piano
-
-            \context Voice = "voice 0.0" {
-                % Segment: Acoustic Grand Piano
-                \override Voice.TextScript.padding = #2.0
-                \override MultiMeasureRest.expand-limit = 1
-                \set Staff.autoBeaming = ##f % turns off all autobeaming
-
-                \skip 1*4 
-%% 5
-                \clef "treble"
-                cis' 4 fis' dis'' gis''  |
-                cis'' 4 fis dis' fis'' 
+                \key c \major
+                R1  |
+                \grace { e' 16 [ g' ] } d'' 8 [ e'' c'' b' ] g' [ \grace { e' 16 } d'' 8 ] r4  |
+                \grace { e' 16 [ g' ] } g' 8 [ b' d'' f'' ] r2 
                 \bar "|."
             } % Voice
 
