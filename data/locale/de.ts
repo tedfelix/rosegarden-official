@@ -8793,7 +8793,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+1"/>
         <source>Edit Tempo...</source>
-        <translation>Tempo.ändern...</translation>
+        <translation>Tempo ändern...</translation>
     </message>
     <message>
         <location line="+1"/>
