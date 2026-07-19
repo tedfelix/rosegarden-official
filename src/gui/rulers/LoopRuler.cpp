@@ -368,10 +368,23 @@ LoopRuler::mouseReleaseEvent(QMouseEvent *mouseEvent)
             if (m_endDrag == m_startDrag) {
                 // Toggle the loop mode.
                 if (composition.getLoopMode() == Composition::LoopOff  ||
-                    composition.getLoopMode() == Composition::LoopAll)
-                    composition.setLoopMode(Composition::LoopOn);
-                else if (composition.getLoopMode() == Composition::LoopOn)
-                    composition.setLoopMode(Composition::LoopAll);
+                    composition.getLoopMode() == Composition::LoopAll) {
+                    // only set LoopOn if there is a non degenerate loop range
+                    if (composition.getLoopEnd() >
+                        composition.getLoopStart()) {
+                        composition.setLoopMode(Composition::LoopOn);
+                    } else {
+                        // toggle between loop all and off
+                        if (composition.getLoopMode() == Composition::LoopOff) {
+                            composition.setLoopMode(Composition::LoopAll);
+                        } else {
+                            composition.setLoopMode(Composition::LoopOff);
+                        }
+                    }
+                } else {
+                    if (composition.getLoopMode() == Composition::LoopOn)
+                        composition.setLoopMode(Composition::LoopAll);
+                }
             } else {  // Drag
                 // Start must be before end.
                 if (m_startDrag > m_endDrag)
