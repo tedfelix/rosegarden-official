@@ -399,7 +399,7 @@ int main(int argc, char *argv[])
         QByteArray substring = "%{file}";
         if (! pattern.contains(substring)) {
             // then add it
-            pattern = "(%{file}:%{line})" + pattern;
+            pattern = "(%{file}:%{line}) " + pattern;
             qputenv("QT_MESSAGE_PATTERN", pattern);
         }
     }
