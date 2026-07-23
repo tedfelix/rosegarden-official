@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ChordMap]"
 
 #include "misc/Debug.h"
 #include "misc/Strings.h"

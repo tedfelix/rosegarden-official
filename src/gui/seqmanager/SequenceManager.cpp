@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[SequenceManager]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "SequenceManager.h"

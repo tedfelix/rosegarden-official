@@ -17,7 +17,6 @@
 
 #ifdef HAVE_LIBSNDFILE
 
-#define RG_MODULE_STRING "[WavFileWriteStream]"
 
 #include "WavFileWriteStream.h"
 

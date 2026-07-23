@@ -21,7 +21,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[CommandRegistry]"
 #define RG_NO_DEBUG_PRINT
 
 #include "CommandRegistry.h"

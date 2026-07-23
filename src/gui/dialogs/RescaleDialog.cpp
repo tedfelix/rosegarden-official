@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[RescaleDialog]"
 #define RG_NO_DEBUG_PRINT
 
 #include "RescaleDialog.h"

@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[AudioInstrumentMixer]"
 #define RG_NO_DEBUG_PRINT
 
 #include "AudioInstrumentMixer.h"

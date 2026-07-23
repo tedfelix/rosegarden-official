@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[EditEvent]"
 #define RG_NO_DEBUG_PRINT
 
 #include "EditEvent.h"

@@ -12,7 +12,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[LV2PluginParameter]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginParameter.h"

@@ -16,7 +16,6 @@
 */
 
 
-#define RG_MODULE_STRING "[AudioManagerDialog]"
 #define RG_NO_DEBUG_PRINT
 
 #include "AudioManagerDialog.h"

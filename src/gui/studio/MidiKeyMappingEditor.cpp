@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[MidiKeyMappingEditor]"
 #define RG_NO_DEBUG_PRINT
 
 #include "MidiKeyMappingEditor.h"

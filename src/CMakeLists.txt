@@ -911,16 +911,6 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0" AND NOT DISABLE_PCH)
 
       # Top 5 rg headers
       #
-      # Can't bring any of these in or we'll get RG_MODULE_STRING redefinition
-      # warnings.  This is due to the fact that a default RG_MODULE_STRING is
-      # defined in misc/Debug.h and that ends up being #included before
-      # RG_MODULE_STRING is defined in each file.  We could remove the default
-      # from Debug.h which would force all #includers to define
-      # RG_MODULE_STRING.  That idea has some merit.
-      #
-      # Just bring in the system headers they pull in then.  That
-      # should be similar.
-      #
       # Adding any of these just slows the build down, so no point.  Let's
       # just stick to the top 10 system headers above.
       #"misc/Debug.h"

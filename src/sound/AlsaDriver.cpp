@@ -17,7 +17,6 @@
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 #endif
 
-#define RG_MODULE_STRING "[AlsaDriver]"
 #define RG_NO_DEBUG_PRINT
 
 #include "misc/Debug.h"

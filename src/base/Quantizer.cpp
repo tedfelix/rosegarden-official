@@ -12,7 +12,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[Quantizer]"
 
 #include "Quantizer.h"
 

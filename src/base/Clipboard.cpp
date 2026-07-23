@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[Clipboard]"
 
 #include "Clipboard.h"
 #include "Selection.h"

@@ -12,7 +12,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[LV2PluginInstance]"
 #define RG_NO_DEBUG_PRINT 1
 
 //#define LV2RUN_PROFILE 1

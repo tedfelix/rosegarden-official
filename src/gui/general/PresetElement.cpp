@@ -18,7 +18,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[PresetElement]"
 
 #include "PresetElement.h"
 #include "misc/Debug.h"

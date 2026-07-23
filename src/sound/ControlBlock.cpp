@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlBlock]"
 
 #define RG_NO_DEBUG_PRINT 1
 
