@@ -4001,6 +4001,9 @@ NotationView::slotRegenerateScene()
                    << m_notationWidget->getScene()->getSegmentsDeleted()->size()
                    << " segments deleted";
 
+    // first remove headers to clean up observers
+    m_notationWidget->removeHeaders();
+
     // The scene is going to be deleted then restored.  To continue
     // processing at best is useless and at the worst may cause a
     // crash.  This call could replace the multiple calls in

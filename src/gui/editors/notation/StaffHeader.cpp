@@ -309,6 +309,7 @@ StaffHeader::StaffHeader(HeadersGroup *group,
     // Create a vector to pass all the segments of a track to the Overlaps ctors
     // and, in the same time, set the header as observer of these segments.
     std::vector<Segment *> segVec;
+    RG_DEBUG << "ctor add observers" << m_segments.size();
     for (SortedSegments::iterator i=m_segments.begin();
                                       i!=m_segments.end(); ++i) {
         segVec.push_back(*i);
@@ -336,6 +337,7 @@ StaffHeader::~StaffHeader()
     delete m_keyOverlaps;
     delete m_transposeOverlaps;
 
+    RG_DEBUG << "dtor remove observers" << m_segments.size();
     for (SortedSegments::iterator i=m_segments.begin();
                                       i!=m_segments.end(); ++i) {
         (*i)->removeObserver(this);

@@ -108,27 +108,15 @@ CompositionModelImpl::CompositionModelImpl(
     connect(RosegardenMainWindow::self(),
                 &RosegardenMainWindow::documentLoaded,
             this, &CompositionModelImpl::slotDocumentLoaded);
+    connect(RosegardenMainWindow::self(),
+                &RosegardenMainWindow::documentAboutToChange,
+            this, &CompositionModelImpl::slotDocumentAboutToChange);
 
     connect(&m_updateTimer, &QTimer::timeout, this, &CompositionModelImpl::slotUpdateTimer);
 }
 
 CompositionModelImpl::~CompositionModelImpl()
 {
-    if (!isCompositionDeleted()) {
-
-        m_composition.removeObserver(this);
-
-        SegmentMultiSet &segments = m_composition.getSegments();
-
-        // For each segment in the Composition
-        for (SegmentMultiSet::iterator i = segments.begin();
-             i != segments.end(); ++i) {
-
-            // Unsubscribe
-            (*i)->removeObserver(this);
-        }
-    }
-
     if (m_audioPeaksThread) {
         // For each audio peaks updater
         // ??? This is similar to setAudioPeaksThread().
@@ -589,6 +577,21 @@ void CompositionModelImpl::slotUpdateTimer()
 
     // Make sure the recording segments get drawn.
     emit needUpdate();
+}
+
+void CompositionModelImpl::slotDocumentAboutToChange()
+{
+    m_composition.removeObserver(this);
+
+    SegmentMultiSet &segments = m_composition.getSegments();
+
+    // For each segment in the Composition
+    for (SegmentMultiSet::iterator i = segments.begin();
+         i != segments.end(); ++i) {
+
+        // Unsubscribe
+        (*i)->removeObserver(this);
+    }
 }
 
 // --- Changing -----------------------------------------------------

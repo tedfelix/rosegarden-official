@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[NotationTool]"
+#define RG_NO_DEBUG_PRINT
 
 #include "NotationTool.h"
 #include "misc/Debug.h"

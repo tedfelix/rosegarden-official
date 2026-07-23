@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2026 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -16,6 +16,7 @@
 */
 
 #define RG_MODULE_STRING "[MatrixToolBox]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MatrixToolBox.h"
 #include "MatrixTool.h"
@@ -77,7 +78,7 @@ MatrixToolBox::createTool(QString toolName)
     else if (toolNamelc == MatrixVelocity::ToolName())
 
         tool = new MatrixVelocity(m_widget);
-    
+
     else {
         QMessageBox::critical(nullptr, tr("Rosegarden"), QString("MatrixToolBox::createTool : unrecognised toolname %1 (%2)")
                            .arg(toolName).arg(toolNamelc));

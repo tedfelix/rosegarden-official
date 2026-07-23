@@ -170,7 +170,11 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     //        this, &NoteRestInserter::slotSetAccidental);
 
     // Push down the default RadioAction on Accidentals.
-    invokeInParentView("no_accidental");
+    // A direct call does not work in the constructor as the widget hierarchy
+    // is not yet available
+    QTimer::singleShot(0, this, [this]() {
+        invokeInParentView("no_accidental");
+    });
 
     // Setup wheelIndex accordingly to m_noteType and m_noteDots
     synchronizeWheel();
@@ -187,7 +191,11 @@ NoteRestInserter::NoteRestInserter(const QString &rcFileName,
     //        this, &NoteRestInserter::slotSetAccidental);
 
     // Push down the default RadioAction on Accidentals.
-    invokeInParentView("no_accidental");
+    // A direct call does not work in the constructor as the widget hierarchy
+    // is not yet available
+    QTimer::singleShot(0, this, [this]() {
+        invokeInParentView("no_accidental");
+    });
 
     //!!! grace & triplet mode should be stored by this tool, not by widget!
 
