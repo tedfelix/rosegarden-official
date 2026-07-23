@@ -1,6 +1,13 @@
+# To use:
+#   export LSAN_OPTIONS=suppressions=lsan.supp
+
 leak:calflv2gui.so
 leak:libcanberra-multi.so
 leak:libcanberra-gtk-module.so
 leak:libcairo.so.2
 leak:libserd-0.so.0
 
+leak:UTF-32.so
+leak:libraptor2.so.0
+leak:liblrdf.so.0
+leak:dlopen
