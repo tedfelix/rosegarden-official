@@ -48,6 +48,8 @@ public:
     /// Get the list of recent file names.
     const std::list<QString> &get() const  { return m_names; }
 
+    void clear();
+
 private:
     std::list<QString> m_names;
 

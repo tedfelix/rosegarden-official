@@ -136,5 +136,21 @@ RecentFiles::removeNonExistent()
 
 }
 
+void RecentFiles::clear()
+{
+    // clear recent files
+    m_names.clear();
+    QSettings settings;
+    settings.beginGroup(RecentFilesConfigGroup);
+    QStringList keys = settings.allKeys();
+    for (const QString &key : keys) {
+        if (key.startsWith("recent-")) {
+            settings.remove(key);
+        }
+    }
+    settings.endGroup();
+
+}
+
 
 }
