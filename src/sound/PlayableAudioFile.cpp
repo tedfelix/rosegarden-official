@@ -65,7 +65,7 @@ PlayableAudioFile::PlayableAudioFile(InstrumentId instrumentId,
     m_smallFileScanFrame(0)
 {
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << " for instrument " << instrumentId << " with file " << (m_audioFile ? m_audioFile->getShortFilename() : "(none)") << std::endl;
+    std::cerr << "PlayableAudioFile::PlayableAudioFile - creating " << this << " for instrument " << instrumentId << " with file " << (m_audioFile ? m_audioFile->getFileName() : "(none)") << std::endl;
 #endif
 
     if (!m_ringBufferPool) {
@@ -248,7 +248,7 @@ PlayableAudioFile::getSampleFramesAvailable()
     }
 
 #ifdef DEBUG_PLAYABLE
-    std::cerr << "PlayableAudioFile(" << (m_audioFile ? m_audioFile->getShortFilename() : "(none)") << " " << this << ")::getSampleFramesAvailable: have " << actual << std::endl;
+    std::cerr << "PlayableAudioFile(" << (m_audioFile ? m_audioFile->getFileName() : "(none)") << " " << this << ")::getSampleFramesAvailable: have " << actual << std::endl;
 #endif
 
     return actual;
@@ -463,7 +463,7 @@ PlayableAudioFile::fillBuffers()
 {
 #ifdef DEBUG_PLAYABLE
     if (m_audioFile) {
-        std::cerr << "PlayableAudioFile(" << m_audioFile->getShortFilename() << ")::fillBuffers() [async] -- scanning to " << m_startIndex << std::endl;
+        std::cerr << "PlayableAudioFile(" << m_audioFile->getFileName() << ")::fillBuffers() [async] -- scanning to " << m_startIndex << std::endl;
     } else {
         std::cerr << "PlayableAudioFile::fillBuffers() [async] -- scanning to " << m_startIndex << std::endl;
     }
@@ -497,7 +497,7 @@ PlayableAudioFile::fillBuffers(const RealTime &currentTime)
 #ifdef DEBUG_PLAYABLE
     if (!m_isSmallFile) {
         if (m_audioFile) {
-            std::cerr << "PlayableAudioFile(" << m_audioFile->getShortFilename() << " " << this << ")::fillBuffers(" << currentTime << "):\n my start time " << m_startTime << ", start index " << m_startIndex << ", duration " << m_duration << std::endl;
+            std::cerr << "PlayableAudioFile(" << m_audioFile->getFileName() << " " << this << ")::fillBuffers(" << currentTime << "):\n my start time " << m_startTime << ", start index " << m_startIndex << ", duration " << m_duration << std::endl;
         } else {
             std::cerr << "PlayableAudioFile::fillBuffers(" << currentTime << "): my start time " << m_startTime << ", start index " << m_startIndex << ", duration " << m_duration << std::endl;
         }
