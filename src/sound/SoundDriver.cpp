@@ -156,6 +156,13 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
     RG_DEBUG << "SoundDriver::initialiseAudioQueue -- new queue has "
     << newQueue->size() << " files";
 
+    // The audio mixer may have to reload buffers - this is necessary,
+    // for example, if a track is unmuted during play. Note we do this
+    // even if the audio queue is empty as we may have plugins which
+    // need resetting.
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    aim->emptyBuffers(getSequencerTime());
+
     if (newQueue->empty()) {
         if (m_audioQueue->empty()) {
             delete newQueue;
@@ -168,10 +175,6 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
     if (oldQueue)
         m_audioQueueScavenger.claim(oldQueue);
 
-    // The audio mixer may have to reload buffers - this is necessary,
-    // for example, if a track is unmuted during play.
-    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
-    aim->fillBuffers(getSequencerTime());
 }
 
 const AudioPlayQueue *
