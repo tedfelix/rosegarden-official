@@ -188,16 +188,6 @@ private:
     // Singleton.  Use getInstance().
     ControlBlock();
 
-    // ??? These internal routines can probably be inlined into their
-    //     only caller.  They would then likely be reduced to one-liners.
-    void setTrackMuted(TrackId trackId, bool muted);
-    void setTrackArchived(TrackId trackId, bool archived);
-    void setSolo(TrackId trackId, bool solo);
-    void setTrackArmed(TrackId trackId, bool armed);
-    void setTrackChannelFilter(TrackId trackId, char channel);
-    void setTrackDeviceFilter(TrackId trackId, DeviceId);
-    void setTrackThruRouting(TrackId trackId, Track::ThruRouting thruRouting);
-
     // Factored out implementations for reuse.
     void updateTrackDataImpl(Track *t);
     void setInstrumentForTrackImpl(TrackId trackId, InstrumentId);

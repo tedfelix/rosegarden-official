@@ -100,19 +100,6 @@ ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
     setInstrumentForTrackImpl(trackId, instId);
 }
 
-void
-ControlBlock::setTrackMuted(TrackId trackId, bool muted)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackMuted unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_muted = muted;
-}
-
 bool ControlBlock::isTrackMuted(TrackId trackId) const
 {
     // called from gui and sound threads
@@ -125,19 +112,6 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
     return (*iter).second.m_muted;
 }
 
-void
-ControlBlock::setTrackArchived(TrackId trackId, bool archived)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackArchived unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_archived = archived;
-}
-
 bool ControlBlock::isTrackArchived(TrackId trackId) const
 {
     // called from gui and sound threads
@@ -148,18 +122,6 @@ bool ControlBlock::isTrackArchived(TrackId trackId) const
         return true;
     }
     return (*iter).second.m_archived;
-}
-
-void ControlBlock::setSolo(TrackId trackId, bool solo)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setSolo unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_solo = solo;
 }
 
 bool ControlBlock::isSolo(TrackId trackId) const
@@ -194,64 +156,11 @@ bool ControlBlock::isAnyTrackInSolo() const
 }
 
 void
-ControlBlock::setTrackArmed(TrackId trackId, bool armed)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackArmed unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_armed = armed;
-    (*iter).second.conform(m_doc->getStudio());
-}
-
-void
 ControlBlock::trackDeleted(TrackId trackId)
 {
     // called from gui thread
     LOCKED;
     trackDeletedImpl(trackId);
-}
-
-void
-ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackChannelFilter unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_channelFilter = channel;
-}
-
-void
-ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_deviceFilter = device;
-}
-
-void ControlBlock::setTrackThruRouting(
-        TrackId trackId, Track::ThruRouting thruRouting)
-{
-    // called internally, LOCKED not required
-
-    auto iter = m_trackInfo.find(trackId);
-    if (iter == m_trackInfo.end()) {
-        RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
-        return;
-    }
-    (*iter).second.m_thruRouting = thruRouting;
 }
 
 bool
@@ -437,18 +346,19 @@ void ControlBlock::updateTrackDataImpl(Track *t)
         auto iter = m_trackInfo.find(trackId);
         if (iter == m_trackInfo.end()) {
             RG_DEBUG << "updateTrackDataImpl new trackId" << trackId;
-            TrackInfo info;
-            m_trackInfo[trackId] = info;
+            const auto pair = m_trackInfo.insert({trackId, TrackInfo()});
+            iter = pair.first;
         }
 
         setInstrumentForTrackImpl(trackId, t->getInstrument());
-        setTrackArmed(trackId, t->isArmed());
-        setTrackMuted(trackId, t->isMuted());
-        setTrackArchived(trackId, t->isArchived());
-        setSolo(trackId, t->isSolo());
-        setTrackDeviceFilter(trackId, t->getMidiInputDevice());
-        setTrackChannelFilter(trackId, t->getMidiInputChannel());
-        setTrackThruRouting(trackId, t->getThruRouting());
+        iter->second.m_armed = t->isArmed();
+        iter->second.m_muted = t->isMuted();
+        iter->second.m_archived = t->isArchived();
+        iter->second.m_solo = t->isSolo();
+        iter->second.m_deviceFilter = t->getMidiInputDevice();
+        iter->second.m_channelFilter = t->getMidiInputChannel();
+        iter->second.m_thruRouting = t->getThruRouting();
+        iter->second.conform(m_doc->getStudio());
     }
 }
 
