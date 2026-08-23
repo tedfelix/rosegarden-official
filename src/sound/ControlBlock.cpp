@@ -38,23 +38,6 @@
 namespace Rosegarden
 {
 
-TrackInfo::TrackInfo() :
-    m_muted(true),
-    m_archived(false),
-    m_armed(false),
-    m_solo(false),
-    m_deviceFilter(0),
-    m_channelFilter(0),
-    m_thruRouting(Track::Auto),
-    m_instrumentId(0),
-    m_thruChannel(0),
-    m_isThruChannelReady(false),
-    m_hasThruChannel(false),
-    m_selected(false),
-    m_useFixedChannel(true)
-{
-}
-
 ControlBlock *
 ControlBlock::getInstance()
 {
@@ -120,7 +103,8 @@ ControlBlock::setInstrumentForTrack(TrackId trackId, InstrumentId instId)
 void
 ControlBlock::setTrackMuted(TrackId trackId, bool muted)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackMuted unkown trackId" << trackId;
@@ -144,7 +128,8 @@ bool ControlBlock::isTrackMuted(TrackId trackId) const
 void
 ControlBlock::setTrackArchived(TrackId trackId, bool archived)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackArchived unkown trackId" << trackId;
@@ -167,7 +152,8 @@ bool ControlBlock::isTrackArchived(TrackId trackId) const
 
 void ControlBlock::setSolo(TrackId trackId, bool solo)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setSolo unkown trackId" << trackId;
@@ -210,7 +196,8 @@ bool ControlBlock::isAnyTrackInSolo() const
 void
 ControlBlock::setTrackArmed(TrackId trackId, bool armed)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackArmed unkown trackId" << trackId;
@@ -231,7 +218,8 @@ ControlBlock::trackDeleted(TrackId trackId)
 void
 ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackChannelFilter unkown trackId" << trackId;
@@ -243,7 +231,8 @@ ControlBlock::setTrackChannelFilter(TrackId trackId, char channel)
 void
 ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
@@ -255,7 +244,8 @@ ControlBlock::setTrackDeviceFilter(TrackId trackId, DeviceId device)
 void ControlBlock::setTrackThruRouting(
         TrackId trackId, Track::ThruRouting thruRouting)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setTrackDeviceFilter unkown trackId" << trackId;
@@ -436,7 +426,8 @@ instrumentChangedFixity(InstrumentId instrumentId)
 
 void ControlBlock::updateTrackDataImpl(Track *t)
 {
-    // called internally
+    // called internally, LOCKED not required
+
     if (t) {
         TrackId trackId = t->getId();
 #ifdef DEBUG_CONTROL_BLOCK
@@ -464,6 +455,8 @@ void ControlBlock::updateTrackDataImpl(Track *t)
 void ControlBlock::setInstrumentForTrackImpl(TrackId trackId,
                                              InstrumentId instId)
 {
+    // called internally, LOCKED not required
+
     auto iter = m_trackInfo.find(trackId);
     if (iter == m_trackInfo.end()) {
         RG_DEBUG << "setInstrumentForTrack unkown trackId" << trackId;
@@ -477,17 +470,21 @@ void ControlBlock::setInstrumentForTrackImpl(TrackId trackId,
 
 void ControlBlock::trackDeletedImpl(TrackId trackId)
 {
+    // called internally, LOCKED not required
+
     m_trackInfo.erase(trackId);
 }
 
 void ControlBlock::setSelectedTrackImpl(TrackId track)
 {
+    // called internally, LOCKED not required
+
 #ifdef DEBUG_CONTROL_BLOCK
     RG_DEBUG << "ControlBlock::setSelectedTrack()";
 #endif
 
-    auto iter = m_trackInfo.find(track);
-    if (iter == m_trackInfo.end()) {
+    auto newTrackIter = m_trackInfo.find(track);
+    if (newTrackIter == m_trackInfo.end()) {
         RG_DEBUG << "setSelectedTrack unkown trackId" << track;
         return;
     }
@@ -497,6 +494,8 @@ void ControlBlock::setSelectedTrackImpl(TrackId track)
     RG_DEBUG << "ControlBlock::setSelectedTrack() deselecting"
              << m_selectedTrack;
 #endif
+    // ??? Should we use find() in case the selected track doesn't
+    //     exist?  Might be overly cautious.
     TrackInfo &oldTrack = m_trackInfo[m_selectedTrack];
     oldTrack.m_selected = false;
     if (m_doc)
@@ -507,10 +506,9 @@ void ControlBlock::setSelectedTrackImpl(TrackId track)
     RG_DEBUG << "ControlBlock::setSelectedTrack() selecting"
              << track;
 #endif
-    TrackInfo &newTrack = m_trackInfo[track];
-    newTrack.m_selected = true;
+    newTrackIter->second.m_selected = true;
     if (m_doc)
-        newTrack.conform(m_doc->getStudio());
+        newTrackIter->second.conform(m_doc->getStudio());
 
     // What's selected is recorded both here and in the trackinfo
     // objects.

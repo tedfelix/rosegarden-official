@@ -44,11 +44,13 @@ struct InstrumentAndChannel
     int channel;
 };
 
+/// Track information stored by ControlBlock.
+/**
+ * ??? Non-trivial class deserves its own TrackInfo.h/.cpp.
+ */
 struct TrackInfo
 {
 public:
-    TrackInfo();
-
     /// Get instrument and channel, preparing the channel if needed.
     /**
      * Return the instrument id and channel number that this track plays on,
@@ -83,44 +85,41 @@ public:
     /// Adjust channel based on fixed/auto mode change.
     void instrumentChangedFixity(Studio &studio);
 
-    /*******************************************************
-     * !!! ONLY PUT PLAIN DATA HERE - NO POINTERS EVER !!! *
-     *******************************************************/
-
-    bool m_muted;
-    bool m_archived;
-    bool m_armed;
-    bool m_solo;
+    bool m_muted{true};
+    bool m_archived{false};
+    bool m_armed{false};
+    bool m_solo{false};
 
     /// Recording filters: Device
-    DeviceId m_deviceFilter;
+    DeviceId m_deviceFilter{0};
     /// Recording filters: Channel
-    char m_channelFilter;
+    char m_channelFilter{0};
     /// Recording filters: Thru Routing
-    Track::ThruRouting m_thruRouting;
+    Track::ThruRouting m_thruRouting{Track::Auto};
 
-    InstrumentId m_instrumentId;
+    InstrumentId m_instrumentId{0};
 
     /// The channel to play thru MIDI events on, if any.
     /**
      * For unarmed unselected tracks, this will be an invalid channel.  For
      * fixed-channel instruments, this is the instrument's fixed channel.
      */
-    int m_thruChannel;
+    int m_thruChannel{0};
     /// Whether the thru channel is ready - the right program has been sent, etc.
-    bool m_isThruChannelReady;
+    bool m_isThruChannelReady{false};
     /// Whether we have allocated a thru channel.
-    bool m_hasThruChannel;
+    bool m_hasThruChannel{false};
+    /// Used for auto thru routing mode.
     /**
      * This duplicates information in ControlBlock.  It exists so that
      * we can check if we need a thru channel using just this class.
      */
-    bool m_selected;
+    bool m_selected{false};
     /**
      * This is usually the same as Instrument's fixedness, but can
      * disagree briefly when fixedness changes.  Meaningless if no channel.
      */
-    bool m_useFixedChannel;
+    bool m_useFixedChannel{true};
 
 private:
     void allocateThruChannel(Studio &studio);
@@ -128,17 +127,11 @@ private:
 
 /// Control data passed from GUI thread to sequencer thread.
 /**
- * This class contains data that is being passed from GUI threads to
- * sequencer threads.  It used to be mapped into a shared memory
- * backed file, which had to be of fixed size and layout (with no
- * internal pointers).  The design reflects that history to an extent,
- * though nowadays it is a simple singleton class with no such
- * constraint.
- *
+ * This class contains data that is being passed from the GUI thread
+ * (SequenceManager) to the sequencer thread (RosegardenSequencer).
  * SequenceManager monitors the Composition and updates the data here.
  * RosegardenSequencer and the mappers (e.g. InternalSegmentMapper) use
  * the data found here.
- *
  *
  * @see SequencerDataBlock
  */
@@ -175,7 +168,7 @@ public:
     bool isMetronomeMuted() const     { return m_metronomeInfo.m_muted; }
 
     void setSelectedTrack(TrackId track);
-    TrackId getSelectedTrack() const     { return m_selectedTrack; }
+    //TrackId getSelectedTrack() const     { return m_selectedTrack; }
 
     void setThruFilter(MidiFilter filter) { m_thruFilter = filter; }
     MidiFilter getThruFilter() const { return m_thruFilter; }
@@ -194,6 +187,9 @@ public:
 private:
     // Singleton.  Use getInstance().
     ControlBlock();
+
+    // ??? These internal routines can probably be inlined into their
+    //     only caller.  They would then likely be reduced to one-liners.
     void setTrackMuted(TrackId trackId, bool muted);
     void setTrackArchived(TrackId trackId, bool archived);
     void setSolo(TrackId trackId, bool solo);
@@ -202,11 +198,12 @@ private:
     void setTrackDeviceFilter(TrackId trackId, DeviceId);
     void setTrackThruRouting(TrackId trackId, Track::ThruRouting thruRouting);
 
-    // internally used implementations
+    // Factored out implementations for reuse.
     void updateTrackDataImpl(Track *t);
     void setInstrumentForTrackImpl(TrackId trackId, InstrumentId);
-    void trackDeletedImpl(TrackId trackId);
     void setSelectedTrackImpl(TrackId track);
+    // ??? Can probably be inlined into only caller.
+    void trackDeletedImpl(TrackId trackId);
 
     RosegardenDocument *m_doc;
 
@@ -214,6 +211,7 @@ private:
     MidiFilter m_thruFilter;
     MidiFilter m_recordFilter;
 
+    /// Used only for deselection of the previously selected track.
     TrackId m_selectedTrack;
 
     TrackInfo m_metronomeInfo;
