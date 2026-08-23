@@ -14,29 +14,27 @@
 */
 
 #define RG_MODULE_STRING "[ControlBlock]"
-
 #define RG_NO_DEBUG_PRINT 1
-
-#include <cstring>
 
 #include "ControlBlock.h"
 
 #include "base/AllocateChannels.h"
-#include "base/Instrument.h"
+#include "base/Composition.h"
 #include "document/RosegardenDocument.h"
 #include "gui/studio/StudioControl.h"
 #include "misc/Debug.h"
 
-#include <QtGlobal>
+#include <QtGlobal>  // Q_CHECK_PTR()
 #include <QMutexLocker>
 
 #define LOCKED QMutexLocker rg_ControlBlock_locker(&m_mutex)
 
-#define DEBUG_CONTROL_BLOCK 1
+//#define DEBUG_CONTROL_BLOCK
 
 
 namespace Rosegarden
 {
+
 
 ControlBlock *
 ControlBlock::getInstance()
@@ -44,17 +42,6 @@ ControlBlock::getInstance()
     static ControlBlock *instance = nullptr;
     if (!instance) instance = new ControlBlock();
     return instance;
-}
-
-ControlBlock::ControlBlock() :
-    m_doc(nullptr),
-    m_thruFilter(0),
-    m_recordFilter(0),
-    m_selectedTrack(0)
-{
-    m_metronomeInfo.m_muted = true;
-    m_metronomeInfo.m_instrumentId = 0;
-    setSelectedTrackImpl(0);
 }
 
 void
@@ -71,10 +58,11 @@ ControlBlock::setDocument(RosegardenDocument *doc)
     Composition& comp = m_doc->getComposition();
 
     for (Composition::TrackMap::iterator i = comp.getTracks().begin();
-	 i != comp.getTracks().end(); ++i) {
+	     i != comp.getTracks().end();
+	     ++i) {
         Track *track = i->second;
         if (!track) continue;
-	updateTrackDataImpl(track);
+	    updateTrackDataImpl(track);
     }
 
     setMetronomeMuted(!comp.usePlayMetronome());
@@ -160,7 +148,8 @@ ControlBlock::trackDeleted(TrackId trackId)
 {
     // called from gui thread
     LOCKED;
-    trackDeletedImpl(trackId);
+
+    m_trackInfo.erase(trackId);
 }
 
 bool
@@ -378,13 +367,6 @@ void ControlBlock::setInstrumentForTrackImpl(TrackId trackId,
     track.conform(m_doc->getStudio());
 }
 
-void ControlBlock::trackDeletedImpl(TrackId trackId)
-{
-    // called internally, LOCKED not required
-
-    m_trackInfo.erase(trackId);
-}
-
 void ControlBlock::setSelectedTrackImpl(TrackId track)
 {
     // called internally, LOCKED not required
@@ -600,5 +582,6 @@ instrumentChangedFixity(Studio &studio)
     releaseThruChannel(studio);
     allocateThruChannel(studio);
 }
+
 
 }

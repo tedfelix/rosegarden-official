@@ -17,13 +17,18 @@
 #define RG_CONTROLBLOCK_H
 
 #include "base/Device.h"  // DeviceId
-#include "base/MidiProgram.h"  // InstrumentId, MidiFilter
+#include "base/Instrument.h"  // InstrumentId
+#include "base/MidiProgram.h"  // MidiFilter
 #include "base/Track.h"  // TrackId
 
 #include <QMutex>
 
+#include <map>
+
+
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class Studio;
@@ -186,23 +191,20 @@ public:
 
 private:
     // Singleton.  Use getInstance().
-    ControlBlock();
+    ControlBlock()  { }
 
     // Factored out implementations for reuse.
     void updateTrackDataImpl(Track *t);
     void setInstrumentForTrackImpl(TrackId trackId, InstrumentId);
     void setSelectedTrackImpl(TrackId track);
-    // ??? Can probably be inlined into only caller.
-    void trackDeletedImpl(TrackId trackId);
 
-    RosegardenDocument *m_doc;
+    RosegardenDocument *m_doc{nullptr};
 
-    bool m_isSelectedChannelReady;
-    MidiFilter m_thruFilter;
-    MidiFilter m_recordFilter;
+    MidiFilter m_thruFilter{0};
+    MidiFilter m_recordFilter{0};
 
     /// Used only for deselection of the previously selected track.
-    TrackId m_selectedTrack;
+    TrackId m_selectedTrack{0};
 
     TrackInfo m_metronomeInfo;
 
@@ -210,6 +212,7 @@ private:
 
     mutable QMutex m_mutex;
 };
+
 
 }
 
