@@ -998,6 +998,7 @@ RosegardenMainWindow::setupActions()
 void
 RosegardenMainWindow::setupRecentFilesMenu()
 {
+    RG_DEBUG << "setupRecentFilesMenu";
     QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
     if (!fileOpenRecentMenu) {
         RG_WARNING << "setupRecentFilesMenu(): WARNING: No recent files menu!";
@@ -1031,6 +1032,12 @@ RosegardenMainWindow::setupRecentFilesMenu()
             action->setShortcuts(m_mostRecentShortcuts);
         }
     }
+
+    fileOpenRecentMenu->addSeparator();
+    QAction *clearAction = new QAction(tr("Clear recent files menu"), this);
+    connect(clearAction, &QAction::triggered,
+            this, &RosegardenMainWindow::slotClearRecentFiles);
+    fileOpenRecentMenu->addAction(clearAction);
 }
 
 void
@@ -6135,6 +6142,11 @@ RosegardenMainWindow::slotToggleMute()
     // Notify observers
     comp.notifyTrackChanged(track);
     RosegardenDocument::currentDocument->slotDocumentModified();
+}
+
+void RosegardenMainWindow::slotClearRecentFiles()
+{
+    m_recentFiles.clear();
 }
 
 void
