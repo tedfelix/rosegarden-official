@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlEraser]"
 #define RG_NO_DEBUG_PRINT
 
 #include "ControlEraser.h"
@@ -64,7 +63,7 @@ ControlEraser::handleLeftButtonPress(const ControlMouseEvent *e)
             if ((*it)->active()) {
 
                 it = e->itemList.begin();
-                ruler->clearSelectedItems();
+                ruler->clearSelection();
                 ruler->addToSelection(*it);
                 ruler->eraseControllerEvent();
                 break;

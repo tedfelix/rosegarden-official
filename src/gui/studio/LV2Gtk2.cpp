@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[LV2Gtk2]"
 #define RG_NO_DEBUG_PRINT
 
 #include "LV2Gtk2.h"

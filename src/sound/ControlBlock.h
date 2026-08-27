@@ -17,11 +17,18 @@
 #define RG_CONTROLBLOCK_H
 
 #include "base/Device.h"  // DeviceId
-#include "base/MidiProgram.h"  // InstrumentId, MidiFilter
+#include "base/Instrument.h"  // InstrumentId
+#include "base/MidiProgram.h"  // MidiFilter
 #include "base/Track.h"  // TrackId
+
+#include <QMutex>
+
+#include <map>
+
 
 namespace Rosegarden
 {
+
 
 class RosegardenDocument;
 class Studio;
@@ -42,12 +49,13 @@ struct InstrumentAndChannel
     int channel;
 };
 
+/// Track information stored by ControlBlock.
+/**
+ * ??? Non-trivial class deserves its own TrackInfo.h/.cpp.
+ */
 struct TrackInfo
 {
 public:
-    /// This should be the ctor.
-    void clear();
-
     /// Get instrument and channel, preparing the channel if needed.
     /**
      * Return the instrument id and channel number that this track plays on,
@@ -82,73 +90,53 @@ public:
     /// Adjust channel based on fixed/auto mode change.
     void instrumentChangedFixity(Studio &studio);
 
-    /*******************************************************
-     * !!! ONLY PUT PLAIN DATA HERE - NO POINTERS EVER !!! *
-     *******************************************************/
-
-    /// Track is no longer in the Composition.
-    bool m_deleted;
-
-    bool m_muted;
-    bool m_archived;
-    bool m_armed;
-    bool m_solo;
+    bool m_muted{true};
+    bool m_archived{false};
+    bool m_armed{false};
+    bool m_solo{false};
 
     /// Recording filters: Device
-    DeviceId m_deviceFilter;
+    DeviceId m_deviceFilter{0};
     /// Recording filters: Channel
-    char m_channelFilter;
+    char m_channelFilter{0};
     /// Recording filters: Thru Routing
-    Track::ThruRouting m_thruRouting;
+    Track::ThruRouting m_thruRouting{Track::Auto};
 
-    InstrumentId m_instrumentId;
+    InstrumentId m_instrumentId{0};
 
     /// The channel to play thru MIDI events on, if any.
     /**
      * For unarmed unselected tracks, this will be an invalid channel.  For
      * fixed-channel instruments, this is the instrument's fixed channel.
      */
-    int m_thruChannel;
+    int m_thruChannel{0};
     /// Whether the thru channel is ready - the right program has been sent, etc.
-    bool m_isThruChannelReady;
+    bool m_isThruChannelReady{false};
     /// Whether we have allocated a thru channel.
-    bool m_hasThruChannel;
+    bool m_hasThruChannel{false};
+    /// Used for auto thru routing mode.
     /**
      * This duplicates information in ControlBlock.  It exists so that
      * we can check if we need a thru channel using just this class.
      */
-    bool m_selected;
+    bool m_selected{false};
     /**
      * This is usually the same as Instrument's fixedness, but can
      * disagree briefly when fixedness changes.  Meaningless if no channel.
      */
-    bool m_useFixedChannel;
+    bool m_useFixedChannel{true};
 
 private:
     void allocateThruChannel(Studio &studio);
 };
 
-// should be high enough for the moment
-#define CONTROLBLOCK_MAX_NB_TRACKS 1024
-
 /// Control data passed from GUI thread to sequencer thread.
 /**
- * This class contains data that is being passed from GUI threads to
- * sequencer threads.  It used to be mapped into a shared memory
- * backed file, which had to be of fixed size and layout (with no
- * internal pointers).  The design reflects that history to an extent,
- * though nowadays it is a simple singleton class with no such
- * constraint.
- *
+ * This class contains data that is being passed from the GUI thread
+ * (SequenceManager) to the sequencer thread (RosegardenSequencer).
  * SequenceManager monitors the Composition and updates the data here.
  * RosegardenSequencer and the mappers (e.g. InternalSegmentMapper) use
  * the data found here.
- *
- * ??? It seems strange that this class/object is used for communication
- *     between threads, yet it is lock free.  I suspect this is OK since
- *     we never move more than a word at a time.  The only issue might
- *     be inconsistency across fields.  And in that case, there is little
- *     that can really go wrong.
  *
  * @see SequencerDataBlock
  */
@@ -159,8 +147,6 @@ public:
 
     void setDocument(RosegardenDocument *doc);
 
-    //unsigned int getMaxTrackId() const { return m_maxTrackId; }
-
     /// Update m_trackInfo for the track.
     void updateTrackData(Track *);
 
@@ -168,33 +154,15 @@ public:
     // unused InstrumentId getInstrumentForTrack(TrackId trackId) const;
     bool isInstrumentUnused(InstrumentId instrumentId) const;
 
-    void setTrackArmed(TrackId trackId, bool armed);
-    //bool isTrackArmed(TrackId trackId) const;
-
-    void setTrackMuted(TrackId trackId, bool muted);
     bool isTrackMuted(TrackId trackId) const;
     bool isInstrumentMuted(InstrumentId instrumentId) const;
 
-    void setTrackArchived(TrackId trackId, bool archived);
     bool isTrackArchived(TrackId trackId) const;
 
-    void setSolo(TrackId trackId, bool solo);
     bool isSolo(TrackId trackId) const;
     bool isAnyTrackInSolo() const;
 
-    void setTrackDeleted(TrackId trackId, bool deleted);
-    //bool isTrackDeleted(TrackId trackId) const;
-
-    /// Recording filters: Device
-    void setTrackDeviceFilter(TrackId trackId, DeviceId);
-    //DeviceId getTrackDeviceFilter(TrackId trackId) const;
-
-    /// Recording filters: Channel
-    void setTrackChannelFilter(TrackId trackId, char channel);
-    //char getTrackChannelFilter(TrackId trackId) const;
-
-    /// Recording filters: Thru Routing
-    void setTrackThruRouting(TrackId trackId, Track::ThruRouting thruRouting);
+    void trackDeleted(TrackId trackId);
 
     void setInstrumentForMetronome(InstrumentId instId)
         { m_metronomeInfo.m_instrumentId = instId; }
@@ -205,7 +173,7 @@ public:
     bool isMetronomeMuted() const     { return m_metronomeInfo.m_muted; }
 
     void setSelectedTrack(TrackId track);
-    TrackId getSelectedTrack() const     { return m_selectedTrack; }
+    //TrackId getSelectedTrack() const     { return m_selectedTrack; }
 
     void setThruFilter(MidiFilter filter) { m_thruFilter = filter; }
     MidiFilter getThruFilter() const { return m_thruFilter; }
@@ -223,24 +191,28 @@ public:
 
 private:
     // Singleton.  Use getInstance().
-    ControlBlock();
+    ControlBlock()  { }
 
-    void clearTracks();
+    // Factored out implementations for reuse.
+    void updateTrackDataImpl(Track *t);
+    void setInstrumentForTrackImpl(TrackId trackId, InstrumentId);
+    void setSelectedTrackImpl(TrackId track);
 
-    RosegardenDocument *m_doc;
+    RosegardenDocument *m_doc{nullptr};
 
-    unsigned int m_maxTrackId;
+    MidiFilter m_thruFilter{0};
+    MidiFilter m_recordFilter{0};
 
-    bool m_isSelectedChannelReady;
-    MidiFilter m_thruFilter;
-    MidiFilter m_recordFilter;
-
-    TrackId m_selectedTrack;
+    /// Used only for deselection of the previously selected track.
+    TrackId m_selectedTrack{0};
 
     TrackInfo m_metronomeInfo;
 
-    TrackInfo m_trackInfo[CONTROLBLOCK_MAX_NB_TRACKS];
+    std::map<TrackId, TrackInfo> m_trackInfo;
+
+    mutable QMutex m_mutex;
 };
+
 
 }
 

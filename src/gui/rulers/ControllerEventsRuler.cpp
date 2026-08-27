@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControllerEventsRuler]"
 #define RG_NO_DEBUG_PRINT
 
 #include "ControllerEventsRuler.h"
@@ -287,8 +286,8 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     //  come out the right size
     ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
-        for (ControlItemMap::iterator it = m_controlItemMap.begin();
-             it != m_controlItemMap.end();
+        for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+             it != m_controlItems.end();
              ++it) {
             it->second->reconfigure();
         }
@@ -306,18 +305,18 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
     painter.setBrush(brush);
     painter.setPen(pen);
 
-    ControlItemMap::iterator mapIt;
+    ControlItemMultiMap::iterator mapIt;
     float lastX, lastY;
     lastX = m_rulerScale->getXForTime(m_segment->getStartTime()) * getXScale();
 
-    if (m_nextItemLeft != m_controlItemMap.end()) {
+    if (m_nextItemLeft != m_controlItems.end()) {
         lastY = m_nextItemLeft->second->y();
     } else {
         lastY = valueToY(m_controller->getDefault());
     }
 
     mapIt = m_firstVisibleItem;
-    while (mapIt != m_controlItemMap.end()) {
+    while (mapIt != m_controlItems.end()) {
         QSharedPointer<ControlItem> item = mapIt->second;
 
         painter.drawLine(mapXToWidget(lastX),mapYToWidget(lastY),
@@ -327,7 +326,7 @@ void ControllerEventsRuler::paintEvent(QPaintEvent *event)
         lastX = item->xStart();
         lastY = item->y();
         if (mapIt == m_lastVisibleItem) {
-            mapIt = m_controlItemMap.end();
+            mapIt = m_controlItems.end();
         } else {
             ++mapIt;
         }
@@ -435,7 +434,7 @@ QSharedPointer<ControlItem>
 ControllerEventsRuler::addControlItem2(float x, float y)
 {
     // Adds a ControlItem in the absence of an event (used by ControlPainter)
-    clearSelectedItems();
+    clearSelection();
 
     QSharedPointer<EventControlItem> item(new EventControlItem(
             this,  // controlRuler
@@ -455,7 +454,7 @@ ControllerEventsRuler::addControlLine(
         double x2, double y2,
         bool eraseExistingControllers)
 {
-    clearSelectedItems();
+    clearSelection();
 
     if (!m_controller) {
         RG_WARNING << "addControlLine(): No controller number set.  Line drawing aborted.";
@@ -713,7 +712,7 @@ void ControllerEventsRuler::eraseControllerEvent()
                                           getEventSelection()->getEndTime());
     CommandHistory::getInstance()->addCommand(command);
     m_selectedItems.clear();
-    updateSelection();
+    updateEventSelection();
 }
 
 Event* ControllerEventsRuler::getNewEvent(timeT time, long value) const

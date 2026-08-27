@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[PluginControl]"
 #define RG_NO_DEBUG_PRINT
 
 #include "PluginControl.h"

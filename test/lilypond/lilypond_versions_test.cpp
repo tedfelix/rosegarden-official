@@ -140,6 +140,7 @@ void TestLilypondVersion::testExamples_data()
         QTest::newRow("lilypond-up-down") << "examples" << lv;
         QTest::newRow("lilypond-staff-groupings") << "examples" << lv;
         QTest::newRow("lilypond-tied-grace-notes") << "examples" << lv;
+        QTest::newRow("lilypond-tied-grace-notes-2") << "examples" << lv;
         QTest::newRow("logical-segments-4") << "examples" << lv;
         QTest::newRow("mandolin-sonatina") << "examples" << lv;
         QTest::newRow("marks-test") << "examples" << lv;

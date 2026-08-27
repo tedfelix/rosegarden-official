@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[AudioConfigurationPage]"
 #define RG_NO_DEBUG_PRINT
 
 #include "AudioConfigurationPage.h"

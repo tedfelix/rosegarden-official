@@ -16,7 +16,6 @@
 */
 
 #define RG_NO_DEBUG_PRINT
-#define RG_MODULE_STRING "[SelectAddEvenNotesCommand]"
 
 #include "SelectAddEvenNotesCommand.h"
 

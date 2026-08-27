@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlPainter]"
 #define RG_NO_DEBUG_PRINT
 
 #include "ControlPainter.h"
@@ -71,7 +70,7 @@ ControlPainter::handleLeftButtonPress(const ControlMouseEvent *e)
     }
     if (e->itemList.size()) {
         ControlItemVector::const_iterator it = e->itemList.begin();
-        ruler1->clearSelectedItems();
+        ruler1->clearSelection();
         ruler1->addToSelection(*it);
         ruler1->eraseControllerEvent();
 
@@ -159,10 +158,9 @@ ControlPainter::handleMouseMove(const ControlMouseEvent *e)
         }
     }
 
-    // not sure what any of this is about; had to match the return type used
-    // elsewhere, and have made no investigation into what any of it means
+    // ControlPainter does not need autoscroll.
     return NO_FOLLOW;
 }
 
-QString ControlPainter::ToolName() { return "painter"; }
+
 }

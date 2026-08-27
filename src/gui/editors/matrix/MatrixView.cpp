@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[MatrixView]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "MatrixView.h"
@@ -238,7 +237,6 @@ MatrixView::MatrixView(const std::vector<Segment *>& segments,
         findAction("highlight_black_notes")->setChecked(true);
         break;
     }
-    settings.endGroup();
 
     bool constrain = Preferences::getMatrixConstrainNotes();
     findAction("constrained_move")->setChecked(constrain);

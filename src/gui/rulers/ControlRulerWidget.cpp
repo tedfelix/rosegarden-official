@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlRulerWidget]"
 #define RG_NO_DEBUG_PRINT
 
 #include "ControlRulerWidget.h"
@@ -622,11 +621,11 @@ ControlRulerWidget::slotHoveredOverNoteChanged(int /* evPitch */, bool /* haveEv
 }
 
 void
-ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT endTime)
+ControlRulerWidget::slotUpdateRulers(timeT startTime, timeT /*endTime*/)
 {
     // For each ruler, ask for an update.
     for (ControlRuler *ruler : m_controlRulerList) {
-        ruler->notationLayoutUpdated(startTime, endTime);
+        ruler->notationLayoutUpdated(startTime);
     }
 }
 
@@ -654,7 +653,7 @@ ControlRulerWidget::slotSetTool(const QString &toolName)
 }
 
 void
-ControlRulerWidget::slotChildRulerSelectionChanged(EventSelection *)
+ControlRulerWidget::slotChildRulerSelectionChanged()
 {
     emit childRulerSelectionChanged();
 }
@@ -688,7 +687,7 @@ void ControlRulerWidget::setSnapFromEditor(timeT snapSetting)
         PropertyControlRuler *pcr =
             dynamic_cast <PropertyControlRuler *>(ruler);
         bool forceFromEditor = false;
-        // propery control ruler always takes the editor setting
+        // property control ruler always takes the editor setting
         if (pcr) forceFromEditor = true;
         ruler->setSnapFromEditor(snapSetting, forceFromEditor);
     }

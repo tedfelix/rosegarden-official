@@ -357,6 +357,8 @@ private slots:
     /// Handles clicks from m_clickedSigMapper.
     void slotTrackSelected(int trackId);
 
+    void slotDocumentAboutToChange();
+
 private:
     // Hide copy ctor and op=
     TrackButtons(const TrackButtons &);

@@ -16,7 +16,6 @@
 */
 
 #define RG_NO_DEBUG_PRINT 1
-#define RG_MODULE_STRING "[AddLayerCommand]"
 
 #include "AddLayerCommand.h"
 

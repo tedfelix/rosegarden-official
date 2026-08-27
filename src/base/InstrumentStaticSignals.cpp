@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[InstrumentStaticSignals]"
 
 #include "InstrumentStaticSignals.h"
 #include "Instrument.h"

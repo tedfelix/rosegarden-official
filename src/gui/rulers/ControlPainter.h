@@ -47,7 +47,7 @@ public:
      */
 //    virtual void handleEventRemoved(Event *event);
 
-    static QString ToolName();
+    static QString ToolName()  { return "painter"; }
 
 signals:
 //    void hoveredOverNoteChanged(int evPitch, bool haveEvent, timeT evTime);

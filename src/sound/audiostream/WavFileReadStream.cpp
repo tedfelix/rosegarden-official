@@ -14,7 +14,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[WavFileReadStream]"
 #define RG_NO_DEBUG_PRINT
 
 #ifdef HAVE_LIBSNDFILE

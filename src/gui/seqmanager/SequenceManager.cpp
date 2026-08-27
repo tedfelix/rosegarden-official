@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[SequenceManager]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "SequenceManager.h"
@@ -1677,7 +1676,7 @@ void SequenceManager::tracksDeleted(const Composition *, std::vector<TrackId> &t
 
     for (unsigned i = 0; i < trackIds.size(); ++i) {
         RG_DEBUG << "  ID: " << trackIds[i];
-        ControlBlock::getInstance()->setTrackDeleted(trackIds[i], true);
+        ControlBlock::getInstance()->trackDeleted(trackIds[i]);
     }
 }
 

@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlSelector]"
 #define RG_NO_DEBUG_PRINT
 
 #include "ControlSelector.h"
@@ -69,13 +68,13 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
         pRectF->setBottomRight(QPointF(e->x, e->y));
 
         // Find items within the range of the new rectangle
-        ControlItemMap::iterator iterMin = m_ruler->findControlItem(
+        ControlItemMultiMap::iterator iterMin = m_ruler->findControlItem(
                 std::min(pRectF->left(), pRectF->right()));
-        const ControlItemMap::iterator iterMax = m_ruler->findControlItem(
+        const ControlItemMultiMap::iterator iterMax = m_ruler->findControlItem(
                 std::max(pRectF->left(), pRectF->right()));
 
         // For each item...
-        for (ControlItemMap::iterator it = iterMin; it != iterMax; ++it) {
+        for (ControlItemMultiMap::iterator it = iterMin; it != iterMax; ++it) {
             // If this item is within the rubber-band rectangle....
             if (pRectF->contains(it->second->boundingRect().center())  &&
                 it->second->active()) {
@@ -86,7 +85,9 @@ ControlSelector::handleMouseMove(const ControlMouseEvent *e)
 
     }
 
-    return ControlMover::handleMouseMove(e);
+    ControlMover::handleMouseMove(e);
+
+    return FOLLOW_HORIZONTAL;
 }
 
 void

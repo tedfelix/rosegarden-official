@@ -46,7 +46,14 @@ public:
     virtual BaseTool* getTool(QString toolName);
 
 signals:
-    void showContextHelp(const QString &);
+
+    /// Display context help in the status bar.
+    /**
+     * MatrixWidget, CompositionView, and ControlRuler connect for this and
+     * after a winding path of signals and slots, end up displaying the string
+     * on their parent status bars.
+     */
+    void showContextHelp(const QString &text);
 
 protected:
     virtual BaseTool* createTool(QString toolName) = 0;

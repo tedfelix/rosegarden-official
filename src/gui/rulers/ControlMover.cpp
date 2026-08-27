@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlMover]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "ControlMover.h"
@@ -69,7 +68,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
             // If the user is not holding down Shift for "Add to selection",
             // clear the current selection.
             if (!(e->modifiers & Qt::ShiftModifier))
-                m_ruler->clearSelectedItems();
+                m_ruler->clearSelection();
             return;
         }
 
@@ -81,7 +80,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
             // If the user is not holding down Shift for "Add to selection",
             // clear the current selection.
             if (!(e->modifiers & Qt::ShiftModifier))
-                m_ruler->clearSelectedItems();
+                m_ruler->clearSelection();
 
             m_ruler->addToSelection(controlItem);
         }
@@ -101,7 +100,7 @@ ControlMover::handleLeftButtonPress(const ControlMouseEvent *e)
         // If the user is not holding down Shift for "Add to selection",
         // clear the current selection.
         if (!(e->modifiers & Qt::ShiftModifier))
-            m_ruler->clearSelectedItems();
+            m_ruler->clearSelection();
     }
 
     // Track the mouse click point.

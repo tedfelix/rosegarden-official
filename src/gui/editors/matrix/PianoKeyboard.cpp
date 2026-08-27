@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[PianoKeyboard]"
 
 #include "PianoKeyboard.h"
 #include "misc/Debug.h"

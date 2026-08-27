@@ -79,6 +79,8 @@ public slots:
      */
     void devicesChanged();
 
+    void slotDocumentAboutToChange();
+
 signals:
     /// Connected to TrackButtons::slotTPBInstrumentSelected().
     /**

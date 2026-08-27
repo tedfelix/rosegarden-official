@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[CheckButton]"
 
 #include "CheckButton.h"
 #include "gui/general/IconLoader.h"

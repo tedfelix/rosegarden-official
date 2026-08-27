@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[NotationView]"
 #define RG_NO_DEBUG_PRINT
 
 #include "NotationView.h"
@@ -4000,6 +3999,9 @@ NotationView::slotRegenerateScene()
     NOTATION_DEBUG << "NotationView::slotRegenerateScene: "
                    << m_notationWidget->getScene()->getSegmentsDeleted()->size()
                    << " segments deleted";
+
+    // first remove headers to clean up observers
+    m_notationWidget->removeHeaders();
 
     // The scene is going to be deleted then restored.  To continue
     // processing at best is useless and at the worst may cause a

@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[RosegardenMainWindow]"
 #define RG_NO_DEBUG_PRINT
 
 #include "RosegardenMainWindow.h"
@@ -1000,6 +999,7 @@ RosegardenMainWindow::setupActions()
 void
 RosegardenMainWindow::setupRecentFilesMenu()
 {
+    RG_DEBUG << "setupRecentFilesMenu";
     QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
     if (!fileOpenRecentMenu) {
         RG_WARNING << "setupRecentFilesMenu(): WARNING: No recent files menu!";
@@ -1033,6 +1033,12 @@ RosegardenMainWindow::setupRecentFilesMenu()
             action->setShortcuts(m_mostRecentShortcuts);
         }
     }
+
+    fileOpenRecentMenu->addSeparator();
+    QAction *clearAction = new QAction(tr("Clear recent files menu"), this);
+    connect(clearAction, &QAction::triggered,
+            this, &RosegardenMainWindow::slotClearRecentFiles);
+    fileOpenRecentMenu->addAction(clearAction);
 }
 
 void
@@ -1577,11 +1583,11 @@ RosegardenMainWindow::createDocument(
 
     switch (importType) {
     case ImportMIDI:
-        doc = createDocumentFromMIDIFile(filePath, permanent);
+        doc = createDocumentFromMIDIFile(filePath, permanent, clearHistory);
         break;
 
     case ImportRG21:
-        doc = createDocumentFromRG21File(filePath);
+        doc = createDocumentFromRG21File(filePath, clearHistory);
         break;
 
     //case ImportHydrogen:
@@ -1589,7 +1595,7 @@ RosegardenMainWindow::createDocument(
     //    break;
 
     case ImportMusicXML:
-        doc = createDocumentFromMusicXMLFile(filePath, permanent);
+        doc = createDocumentFromMusicXMLFile(filePath, permanent, clearHistory);
         break;
 
     case ImportRG4:
@@ -4268,13 +4274,14 @@ RosegardenMainWindow::fixTextEncodings(Composition *c)
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromMIDIFile(
         const QString &filePath,
-        bool permanent)
+        bool permanent,
+        bool clearHistory)
 {
     //if (!merge && !saveIfModified()) return;
 
     // Create new document (autoload is inherent)
     //
-    RosegardenDocument *newDoc = newDocument(permanent);
+    RosegardenDocument *newDoc = newDocument(permanent, "", clearHistory);
 
     MidiFile midiFile;
 
@@ -4467,7 +4474,8 @@ RosegardenMainWindow::slotMergeRG21()
 }
 
 RosegardenDocument *
-RosegardenMainWindow::createDocumentFromRG21File(QString file)
+RosegardenMainWindow::createDocumentFromRG21File(QString file,
+                                                 bool clearHistory)
 {
     StartupLogo::hideIfStillThere();
 
@@ -4491,8 +4499,10 @@ RosegardenMainWindow::createDocumentFromRG21File(QString file)
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = newDocument(
-            true);  // permanent
+    RosegardenDocument *newDoc =
+        newDocument(true,  // permanent
+                    "",
+                    clearHistory);
 
     RG21Loader rg21Loader(&newDoc->getStudio());
 
@@ -4657,7 +4667,8 @@ RosegardenMainWindow::slotMergeMusicXML()
 
 RosegardenDocument *
 RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
-                                                     const bool permanent)
+                                                     const bool permanent,
+                                                     bool clearHistory)
 {
     StartupLogo::hideIfStillThere();
 
@@ -4681,7 +4692,7 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
 
     // Inherent autoload
     //
-    RosegardenDocument *newDoc = newDocument(permanent);
+    RosegardenDocument *newDoc = newDocument(permanent, "", clearHistory);
 
     MusicXMLLoader musicxmlLoader;
 
@@ -4709,6 +4720,7 @@ RosegardenMainWindow::createDocumentFromMusicXMLFile(const QString& file,
 void
 RosegardenMainWindow::mergeFile(const QStringList &filePathList, ImportType type)
 {
+    RG_DEBUG << "mergeFile" << filePathList;
     if (!RosegardenDocument::currentDocument)
         return;
 
@@ -4719,6 +4731,7 @@ RosegardenMainWindow::mergeFile(const QStringList &filePathList, ImportType type
                 false,  // permanent
                 false,  // revert
                 false);  // clearHistory
+        RG_DEBUG << "mergeFile created doc" << srcDoc;
         if (!srcDoc)
             return;
 
@@ -4738,6 +4751,7 @@ RosegardenMainWindow::mergeFile(const QStringList &filePathList, ImportType type
                         dialog.getMergeTimesAndTempos());
             }
 
+            RG_DEBUG << "mergeFile delete doc" << srcDoc;
             delete srcDoc;
         } else {
             // more than 1 file, so multiple merge
@@ -6130,6 +6144,11 @@ RosegardenMainWindow::slotToggleMute()
     // Notify observers
     comp.notifyTrackChanged(track);
     RosegardenDocument::currentDocument->slotDocumentModified();
+}
+
+void RosegardenMainWindow::slotClearRecentFiles()
+{
+    m_recentFiles.clear();
 }
 
 void
@@ -8756,7 +8775,8 @@ RosegardenMainWindow::uiUpdateKludge()
 }
 
 RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent,
-                                                      const QString& path)
+                                                      const QString& path,
+                                                      bool clearHistory)
 {
     // if the path is set this will load a file so autolaod should be skipped
     bool skipAutoLoad = false;
@@ -8765,7 +8785,7 @@ RosegardenDocument *RosegardenMainWindow::newDocument(bool permanent,
             this,  // parent
             m_pluginManager,  // audioPluginManager
             skipAutoLoad,  // skipAutoload
-            true,  // clearCommandHistory
+            clearHistory,  // clearCommandHistory
             m_useSequencer && permanent,  // enableSound
             path); // file to load
 }

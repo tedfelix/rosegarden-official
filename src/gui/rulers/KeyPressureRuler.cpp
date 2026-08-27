@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[KeyPressureRuler]"
 #define RG_NO_DEBUG_PRINT
 
 #include "KeyPressureRuler.h"
@@ -80,8 +79,8 @@ void KeyPressureRuler::setElementSelection
     }
 
     // set element active flag
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         ControlItem* item = it->second.data();
         EventControlItem *ecItem = dynamic_cast<EventControlItem*>(item);
@@ -102,7 +101,7 @@ void KeyPressureRuler::setElementSelection
     }
 
     // and clear any selection
-    if (m_selectedItems.size() > 0) clearSelectedItems();
+    if (m_selectedItems.size() > 0) clearSelection();
     update();
 }
 
@@ -122,8 +121,8 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
     //  come out the right size
     ///@TODO Only reconfigure all items if zoom has changed
     if (m_lastDrawnRect != m_pannedRect) {
-        for (ControlItemMap::iterator it = m_controlItemMap.begin();
-             it != m_controlItemMap.end();
+        for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+             it != m_controlItems.end();
              ++it) {
             it->second->reconfigure();
         }
@@ -144,8 +143,8 @@ void KeyPressureRuler::paintEvent(QPaintEvent *event)
     // only connect active items
     float lastX, lastY;
     bool first = true;
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         if (!it->second->active()) continue;
         QSharedPointer<ControlItem> item = it->second;
@@ -175,8 +174,8 @@ KeyPressureRuler::setSegment(Segment *segment)
 {
     ControllerEventsRuler::setSegment(segment); // create all items
     // and deactivate them
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         it->second->setActive(false);
     }

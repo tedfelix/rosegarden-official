@@ -82,17 +82,14 @@ public:
     void setSelectionRect(QRectF *rect)  { m_selectionRect = rect; }
     QRectF *getSelectionRectangle()  { return m_selectionRect; }
 
-    virtual void setSegment(Segment *);
-    virtual void setViewSegment(ViewSegment *);
+    virtual void setSegment(Segment *segment);
+    /// Also performs a setSegment().
+    virtual void setViewSegment(ViewSegment *viewSegment);
 
-    /// Copy screen to document.  Uses a command for undo.
-    /**
-     * ??? rename: updateDocument()?
-     */
+    /// Copy control events from the UI to the document.
     void updateSegment();
 
-    // ??? endTime is unused.  Remove it.
-    void notationLayoutUpdated(timeT startTime, timeT endTime);
+    void notationLayoutUpdated(timeT startTime);
 
     void setXOffset(int offset)  { m_xOffset = offset; }
 
@@ -109,28 +106,24 @@ public:
 
     void addToSelection(QSharedPointer<ControlItem>);
     void removeFromSelection(QSharedPointer<ControlItem>);
-    /// Deselect all selected items.
-    /**
-     * ??? rename: removeAllFromSelection()
-     */
-    void clearSelectedItems();
+    void clearSelection();
     EventSelection *getEventSelection()  { return m_eventSelection; }
 
 
-    ControlItemMap::iterator findControlItem(float x);
+    ControlItemMultiMap::iterator findControlItem(double x);
     void moveItem(ControlItem *item);
 
     SnapGrid *getSnapGrid() const  { return m_snapGrid; }
     void setSnapFromEditor(timeT snapSetting, bool forceFromEditor);
 
-    void setPannedRect(QRectF);
+    void setPannedRect(const QRectF &pannedRect);
 
 signals:
 
     /**
      * Eventually ends up calling MatrixView::slotUpdateMenuStates().
      */
-    void rulerSelectionChanged(EventSelection *);
+    void rulerSelectionChanged();
     /// Special case for velocity ruler.
     /**
      * See the emitter, ControlRuler::updateSelection(), for details.
@@ -160,26 +153,22 @@ protected:
     void mousePressEvent(QMouseEvent *) override;
     void mouseReleaseEvent(QMouseEvent *) override;
     void mouseMoveEvent(QMouseEvent *) override;
-    // ??? Do we need this?  It's empty.  Does it break the context menu if
-    //     we remove it?
     void contextMenuEvent(QContextMenuEvent *) override;
     void wheelEvent(QWheelEvent *) override;
     void resizeEvent(QResizeEvent *) override;
 
     void addControlItem(QSharedPointer<ControlItem>);
+    void removeControlItem(const ControlItemMultiMap::iterator &);
     void eraseControlItem(const Event *);
-    void eraseControlItem(const ControlItemMap::iterator &);
 
-    int mapXToWidget(float x);
-    int mapYToWidget(float y);
-    QRect mapRectToWidget(QRectF *rect);
-    QPolygon mapItemToWidget(QSharedPointer<ControlItem> controlItem);
+    int mapXToWidget(float x) const;
+    int mapYToWidget(float y) const;
+    QRect mapRectToWidget(const QRectF *rect) const;
+    QPolygon mapItemToWidget(
+            QSharedPointer<const ControlItem> controlItem) const;
 
     /// Copies from m_selectedItems to m_eventSelection.
-    /**
-     * ??? rename: UpdateEventSelection()
-     */
-    void updateSelection();
+    void updateEventSelection();
 
     /// Derivers override to create a right-click context menu for display.
     virtual void createRulerMenu()  { }
@@ -189,17 +178,18 @@ protected:
     ViewSegment *m_viewSegment{nullptr};
     Segment *m_segment{nullptr};
 
-    ControlItemMap m_controlItemMap;
+    ControlItemMultiMap m_controlItems;
 
     // Iterators to the first visible and the last visible item
     // NB these iterators are only really useful for zero duration items as the
     //   interval is determined by start position and will omit items that start
     //   to the left of the screen but end on screen. For this reason, the
     //   m_visibleItems list includes all items that are actually visible.
-    ControlItemMap::iterator m_firstVisibleItem;
-    ControlItemMap::iterator m_lastVisibleItem;
-    ControlItemMap::iterator m_nextItemLeft;
+    ControlItemMultiMap::iterator m_firstVisibleItem;
+    ControlItemMultiMap::iterator m_lastVisibleItem;
+    ControlItemMultiMap::iterator m_nextItemLeft;
 
+    /// Selected ControlItems on the UI.
     ControlItemList m_selectedItems;
     ControlItemList m_visibleItems;
 
@@ -222,16 +212,30 @@ private:
 
     int m_xOffset{0};
 
-    ControlItemMap::iterator findControlItem(const ControlItem *);
-    ControlItemMap::iterator findControlItem(const Event *);
-    void addCheckVisibleLimits(ControlItemMap::iterator);
-    void removeControlItem(const ControlItemMap::iterator &);
-    void removeCheckVisibleLimits(const ControlItemMap::iterator &);
-    int visiblePosition(QSharedPointer<ControlItem>);
+    ControlItemMultiMap::iterator findControlItem(const ControlItem *);
+    ControlItemMultiMap::iterator findControlItem(const Event *);
 
-    QPointF mapWidgetToItem(QPoint *point);
+    /**
+     * Update m_visibleItems, m_firstVisibleItem, m_lastVisibleItem, and
+     * m_nextItemLeft based on the item that was just added.
+     *
+     * See removeCheckVisibleLimits().
+     */
+    void addCheckVisibleLimits(ControlItemMultiMap::iterator);
 
-    ControlMouseEvent createControlMouseEvent(QMouseEvent *e);
+    /**
+     * Update m_visibleItems, m_firstVisibleItem, m_lastVisibleItem, and
+     * m_nextItemLeft based on an item that is about to be removed.
+     *
+     * See addCheckVisibleLimits().
+     */
+    void removeCheckVisibleLimits(const ControlItemMultiMap::iterator &);
+
+    int visiblePosition(QSharedPointer<ControlItem> item);
+
+    QPointF mapWidgetToItem(const QPoint *point) const;
+
+    ControlMouseEvent createControlMouseEvent(const QMouseEvent *e) const;
 
     SnapGrid *m_snapGrid;
     QString m_snapName;
@@ -240,6 +244,11 @@ private:
 
     QPointer<AutoScroller> m_autoScroller;
 
+    /// Selected Events in the Segment.
+    /**
+     * This should match m_selectedItems.  See updateEventSelection().
+     * updateSegment() appears to be the main user of this.
+     */
     EventSelection *m_eventSelection{nullptr};
 
 };

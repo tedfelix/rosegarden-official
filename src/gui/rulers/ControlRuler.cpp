@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ControlRuler]"
 #define RG_NO_DEBUG_PRINT
 
 #include "ControlRuler.h"
@@ -46,10 +45,12 @@
 #include <QPolygonF>
 #include <QSettings>
 
-//#include <algorithm>
+#include <algorithm>  // std::min(), std::max(), std::find()
 #include <memory>
+#include <utility>  // std::pair
 
 #include <float.h>  // FLT_MAX
+#include <math.h>  // lround()
 
 
 namespace Rosegarden
@@ -60,19 +61,21 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
                            QWidget *parent) :
     QWidget(parent),
     m_rulerScale(rulerScale),
-    m_controlItemMap(),
-    m_firstVisibleItem(m_controlItemMap.end()),
-    m_lastVisibleItem(m_controlItemMap.end()),
-    m_nextItemLeft(m_controlItemMap.end()),
+    m_firstVisibleItem(m_controlItems.end()),
+    m_lastVisibleItem(m_controlItems.end()),
+    m_nextItemLeft(m_controlItems.end()),
     m_snapTimeFromEditor(SnapGrid::NoSnap)
 {
     setFixedHeight(sizeHint().height());
     setMouseTracking(true);
 
     m_toolBox = new ControlToolBox(this);
+    // Re-broadcast context help from the tools.  ControlRulerWidget connects
+    // for this.
     connect(m_toolBox, &BaseToolBox::showContextHelp,
             this, &ControlRuler::showContextHelp);
 
+    // Context menu actions.
     createAction("snap_none", &ControlRuler::slotSnap);
     createAction("snap_editor", &ControlRuler::slotSnap);
     createAction("snap_unit", &ControlRuler::slotSnap);
@@ -90,18 +93,22 @@ ControlRuler::ControlRuler(RulerScale *rulerScale,
     createAction("snap_beat", &ControlRuler::slotSnap);
     createAction("snap_bar", &ControlRuler::slotSnap);
 
+    // Snap
     m_snapGrid = new SnapGrid(m_rulerScale);
+
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
     QString snapString =
         settings.value("Snap Grid Size", "snap_editor").toString();
-    settings.endGroup();
+
     setSnapTimeFromActionName(snapString);
 }
 
 ControlRuler::~ControlRuler()
 {
     delete m_snapGrid;
+    m_snapGrid = nullptr;
+
     delete m_eventSelection;
     m_eventSelection = nullptr;
 }
@@ -110,8 +117,10 @@ void ControlRuler::setSegment(Segment *segment)
 {
     m_segment = segment;
 
-    if (m_eventSelection) delete m_eventSelection;
+    if (m_eventSelection)
+        delete m_eventSelection;
 
+    // Create a new EventSelection connected to the Segment.
     m_eventSelection = new EventSelection(*segment);
 }
 
@@ -122,150 +131,137 @@ void ControlRuler::setViewSegment(ViewSegment *viewSegment)
     setSegment(&m_viewSegment->getSegment());
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(float x)
+ControlItemMultiMap::iterator ControlRuler::findControlItem(const double x)
 {
-    ControlItemMap::iterator it;
-    it = m_controlItemMap.upper_bound(x);
-    return it;
+    return m_controlItems.upper_bound(x);
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(const Event *event)
+ControlItemMultiMap::iterator ControlRuler::findControlItem(const Event *event)
 {
-    // double xstart = getRulerScale()->getXForTime(event->getAbsoluteTime());
+#if 0
+    ControlItemMultiMap::iterator iter;
 
-    ControlItemMap::iterator it;
-    std::pair <ControlItemMap::iterator,ControlItemMap::iterator> ret;
-
-    for (it = m_controlItemMap.begin(); it != m_controlItemMap.end(); ++it) {
-        if (it->second->getEvent() == event) break;
+    // For each controlItem, find the provided Event.
+    for (iter = m_controlItems.begin();
+         iter != m_controlItems.end();
+         ++iter) {
+        if (iter->second->getEvent() == event)
+            break;
     }
 
-    ///@TODO equal_range (above) is not behaving as expected - sort it out
-//    if (it != m_controlItemMap.end() && it->second->getEvent() != event) {
-//        it = m_controlItemMap.end();
-//    }
-
-    return it;
+    return iter;
+#else
+    // Find the ControlItem for the given event.
+    // Not a fan of STL algorithms, just trying this one out.
+    return std::find_if(m_controlItems.begin(),
+                        m_controlItems.end(),
+                        [event](const ControlItemMultiMap::value_type &x)
+                            { return (x.second->getEvent() == event); });
+#endif
 }
 
-ControlItemMap::iterator ControlRuler::findControlItem(const ControlItem* item)
+ControlItemMultiMap::iterator ControlRuler::findControlItem(const ControlItem *item)
 {
-    double xstart = item->xKey();
+    const double xStart = item->xKey();
 
-    std::pair<ControlItemMap::iterator, ControlItemMap::iterator>
-        range = m_controlItemMap.equal_range(xstart);
+    const std::pair<ControlItemMultiMap::iterator,
+                    ControlItemMultiMap::iterator> range =
+                            m_controlItems.equal_range(xStart);
+    // Not found?  Bail.
+    //if (range.first == m_controlItems.end())
+    //    return range.first;
 
     // now find in this range
-    if (range.first != m_controlItemMap.end()) {
-        for(ControlItemMap::iterator it = range.first;
-            it != range.second;
-            ++it) {
-            if (it->second == item) {
-                RG_DEBUG << "findControlItem equal_range1 found item";
-                return it;
-            }
-        }
+    for (ControlItemMultiMap::iterator it = range.first;
+         it != range.second;
+         ++it) {
+        if (it->second == item)
+            return it;
     }
 
-    return m_controlItemMap.end();
+    return m_controlItems.end();
 }
 
 void ControlRuler::addControlItem(QSharedPointer<ControlItem> item)
 {
-    // Add a ControlItem to the ruler
-
-    //RG_DEBUG << "addControlItem(): ControlItem added: " << hex << (long)item;
-
     // ControlItem may not have an assigned event but must have x position
     item->setXKey(item->xStart());
-    ControlItemMap::iterator it =
-            m_controlItemMap.insert(
-                    ControlItemMap::value_type(item->xStart(), item));
+
+    // Insert it.
+    ControlItemMultiMap::iterator it = m_controlItems.insert(
+            ControlItemMultiMap::value_type(item->xStart(), item));
 
     addCheckVisibleLimits(it);
 
     if (it->second->isSelected())
         m_selectedItems.push_back(it->second);
-
 }
 
-void ControlRuler::addCheckVisibleLimits(ControlItemMap::iterator it)
+void ControlRuler::addCheckVisibleLimits(ControlItemMultiMap::iterator it)
 {
-    // Referenced item is has just been added to m_controlItemMap
+    // Referenced item has just been added to m_controlItems.
     // If it is visible, add it to the list and correct first/last
     // visible item iterators
-    QSharedPointer<ControlItem> item = it->second;
+    const QSharedPointer<ControlItem> item = it->second;
 
     // If this new item is visible
-    if (visiblePosition(item)==0) {
+    if (visiblePosition(item) == 0) {
         // put it in the visible list
         m_visibleItems.push_back(item);
-        // If there is no first visible item or this one is further left
-        if (m_firstVisibleItem == m_controlItemMap.end() ||
-                item->xStart() < m_firstVisibleItem->second->xStart()) {
+
+        // Update m_firstVisibleItem.
+
+        // If there is no first visible item or this one is farthest left
+        if (m_firstVisibleItem == m_controlItems.end()  ||
+            item->xStart() < m_firstVisibleItem->second->xStart()) {
             // make it the first visible item
             m_firstVisibleItem = it;
         }
 
-        // If there is no last visible item or this is further right
-        if (m_lastVisibleItem == m_controlItemMap.end() ||
-                item->xStart() >= m_lastVisibleItem->second->xStart()) {
+        // Update m_lastVisibleItem.
+
+        // If there is no last visible item or this is farthest right
+        if (m_lastVisibleItem == m_controlItems.end()  ||
+            item->xStart() >= m_lastVisibleItem->second->xStart()) {
             // make it the last visible item
             m_lastVisibleItem = it;
         }
     }
 
+    // Update m_nextItemLeft.
+
     // If the new item is invisible to the left
     if (visiblePosition(item) == -1) {
-        if (m_nextItemLeft == m_controlItemMap.end() ||
-                item->xStart() > m_nextItemLeft->second->xStart()) {
+        // If there is no "next item left" or this one is after the
+        // "next item left"...
+        if (m_nextItemLeft == m_controlItems.end()  ||
+            item->xStart() > m_nextItemLeft->second->xStart()) {
             // make it the next item to the left
             m_nextItemLeft = it;
         }
     }
 }
 
-#if 0
-void ControlRuler::removeControlItem(ControlItem* item)
+void ControlRuler::removeControlItem(const ControlItemMultiMap::iterator &it)
 {
-    // Remove control item by item pointer
-    // No search by Value provided for std::multimap so find items with the requested item's
-    //  xstart position and sweep these for the correct entry
-    ControlItemMap::iterator it = findControlItem(item);
+    if (it->second->isSelected())
+        m_selectedItems.remove(it->second);
 
-    if (it != m_controlItemMap.end()) removeControlItem(it);
-}
-
-void ControlRuler::removeControlItem(const Event *event)
-{
-    // Remove the ControlItem matching the received event if one exists
-    ControlItemMap::iterator it = findControlItem(event);
-
-    if (it != m_controlItemMap.end()) {
-        RG_DEBUG << "removeControlItem(): at x = " << it->first;
-        removeControlItem(it);
-    }
-}
-#endif
-
-void ControlRuler::removeControlItem(const ControlItemMap::iterator &it)
-{
-    //RG_DEBUG << "removeControlItem(): iterator->item: " << hex << (long) it->second;
-    //RG_DEBUG << "  m_selectedItems.front(): " << hex << (long) m_selectedItems.front();
-
-    if (it->second->isSelected()) m_selectedItems.remove(it->second);
     removeCheckVisibleLimits(it);
-    m_controlItemMap.erase(it);
+
+    m_controlItems.erase(it);
 }
 
-void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
+void ControlRuler::removeCheckVisibleLimits(const ControlItemMultiMap::iterator &it)
 {
-    // Referenced item is being removed from m_controlItemMap
+    // Referenced item is being removed from m_controlItems
     // If it was visible, remove it from the list and correct first/last
     // visible item iterators
     // Note, we can't check if it _was_ visible. It may have just become invisible
     // Try to remove from list and check iterators.
     m_visibleItems.remove(it->second);
+
+    // Update m_firstVisibleItem.
 
     // If necessary, correct the first and lastVisibleItem iterators
     // If this was the first visible item
@@ -274,84 +270,79 @@ void ControlRuler::removeCheckVisibleLimits(const ControlItemMap::iterator &it)
         ++m_firstVisibleItem;
         // If the next item to the right is invisible, there are no visible items
         // Note we have to check .end() before we dereference ->second
-        if (m_firstVisibleItem != m_controlItemMap.end() &&
+        if (m_firstVisibleItem != m_controlItems.end() &&
                 visiblePosition(m_firstVisibleItem->second)!=0)
-            m_firstVisibleItem = m_controlItemMap.end();
+            m_firstVisibleItem = m_controlItems.end();
     }
+
+    // Update m_lastVisibleItem.
 
     // If this was the last visible item
     if (it == m_lastVisibleItem) {
         // and not the first in the list
-        if (it != m_controlItemMap.begin()) {
+        if (it != m_controlItems.begin()) {
             // check the next item to the left
             --m_lastVisibleItem;
             // If this is invisible, there are no visible items
-            if (visiblePosition(m_lastVisibleItem->second)!=0) m_lastVisibleItem = m_controlItemMap.end();
+            if (visiblePosition(m_lastVisibleItem->second)!=0) m_lastVisibleItem = m_controlItems.end();
         }
         // if it's first in the list then there are no visible items
-        else m_lastVisibleItem = m_controlItemMap.end();
+        else m_lastVisibleItem = m_controlItems.end();
     }
+
+    // Update m_nextItemLeft.
 
     // If this was the first invisible item left (could be part of a selection moved off screen)
     if (it == m_nextItemLeft) {
         // and not the first in the list
-        if (it != m_controlItemMap.begin()) {
+        if (it != m_controlItems.begin()) {
             // use the next to the left (we know it is invisible)
             --m_nextItemLeft;
         }
         // if it's first in the list then there are no invisible items to the left
-        else m_nextItemLeft = m_controlItemMap.end();
+        else m_nextItemLeft = m_controlItems.end();
     }
 }
 
 void ControlRuler::eraseControlItem(const Event *event)
 {
-    ControlItemMap::iterator it = findControlItem(event);
-    if (it != m_controlItemMap.end()) eraseControlItem(it);
-}
-
-void ControlRuler::eraseControlItem(const ControlItemMap::iterator &it)
-{
-    removeControlItem(it);
+    ControlItemMultiMap::iterator it = findControlItem(event);
+    if (it != m_controlItems.end())
+        removeControlItem(it);
 }
 
 void ControlRuler::moveItem(ControlItem *item)
 {
-    // ??? This is pretty ugly.  A naked pointer being used to find
-    //     a shared pointer.  It's as if the three callers of this
-    //     function also need to pass in the shared pointer.  That
-    //     would look a bit funny:
-    //
-    //         item->reconfigure(item);
-
-    // Move the item within m_controlItemMap
-    // Need to check changes in visibility
-    // DO NOT change isSelected or m_selectedItems as this is used to loop this
-    ControlItemMap::iterator it = findControlItem(item);
+    ControlItemMultiMap::iterator it = findControlItem(item);
     // Not found?  Bail.
-    if (it == m_controlItemMap.end())
+    if (it == m_controlItems.end())
         return;
 
     // Copy the shared pointer so that the item isn't deleted.
     QSharedPointer<ControlItem> item2 = it->second;
 
+    // Remove the original.
     removeCheckVisibleLimits(it);
-    m_controlItemMap.erase(it);
+    m_controlItems.erase(it);
+
+    // Add the new.
     item2->setXKey(item2->xStart());
-    it = m_controlItemMap.insert(
-            ControlItemMap::value_type(item2->xStart(), item2));
+    it = m_controlItems.insert(
+            ControlItemMultiMap::value_type(item2->xStart(), item2));
     addCheckVisibleLimits(it);
 }
 
 int ControlRuler::visiblePosition(QSharedPointer<ControlItem> item)
 {
-    // Check visibility of an item
-    // Returns: -1 - item is off screen left
-    //           0 - item is visible
-    //          +1 - item is off screen right
-    if (item->xEnd() < m_pannedRect.left()) return -1;
-    if (item->xStart() > m_pannedRect.right()) return 1;
+    // Off screen left?
+    if (item->xEnd() < m_pannedRect.left())
+        return -1;
 
+    // Off screen right?
+    if (item->xStart() > m_pannedRect.right())
+        return 1;
+
+    // On screen.
     return 0;
 }
 
@@ -376,20 +367,23 @@ void ControlRuler::updateSegment()
     //
     // Either run through the ruler's EventSelection, updating from each item
     //  or, if there isn't one, go through m_selectedItems
-    timeT start,end;
 
     QString commandLabel = "Adjust control/property";
 
     std::unique_ptr<MacroCommand> macro(new MacroCommand(commandLabel));
 
     // Find the extent of the selected items
-    float xmin=FLT_MAX,xmax=-1.0;
+    double xmin = FLT_MAX;
+    double xmax = -1.0;
 
-    // EventSelection::addEvent adds timeT(1) to its extentt for zero duration events so need to mimic this here
+    // EventSelection::addEvent() adds timeT(1) to its extent for zero duration
+    // events so need to mimic this here.
+
     timeT durationAdd = 0;
 
     for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
-        if ((*it)->xStart() < xmin) xmin = (*it)->xStart();
+        if ((*it)->xStart() < xmin)
+            xmin = (*it)->xStart();
         if ((*it)->xEnd() > xmax) {
             xmax = (*it)->xEnd();
             if ((*it)->xEnd() == (*it)->xStart())
@@ -399,12 +393,12 @@ void ControlRuler::updateSegment()
         }
     }
 
-    start = getRulerScale()->getTimeForX(xmin);
-    end = getRulerScale()->getTimeForX(xmax)+durationAdd;
+    timeT start = getRulerScale()->getTimeForX(xmin);
+    timeT end = getRulerScale()->getTimeForX(xmax) + durationAdd;
 
     RG_DEBUG << "updateSegment(): added events" << m_eventSelection->size();
 
-    if (m_eventSelection->size() == 0) {
+    if (m_eventSelection->empty()) {
         // We do not have a valid set of selected events to update
         if (m_selectedItems.empty())
             return;
@@ -415,13 +409,14 @@ void ControlRuler::updateSegment()
 
     } else {
         // Check for movement in time here and delete events if necessary
-        if (start != m_eventSelection->getStartTime() || end != m_eventSelection->getEndTime()) {
+        if (start != m_eventSelection->getStartTime()  ||
+            end != m_eventSelection->getEndTime()) {
             commandLabel = "Move control";
             macro->setName(commandLabel);
 
             // Get the limits of the change for undo
-            start = std::min(start,m_eventSelection->getStartTime());
-            end = std::max(end,m_eventSelection->getEndTime());
+            start = std::min(start, m_eventSelection->getStartTime());
+            end = std::max(end, m_eventSelection->getEndTime());
 
         }
     }
@@ -437,12 +432,13 @@ void ControlRuler::updateSegment()
             RG_DEBUG << "updateSegment(): check for event at" << xItem;
 
             // For each control item starting at xItem...
-            for (ControlItemMap::const_iterator otherItemIter =
-                     m_controlItemMap.lower_bound(xItem);
-                 otherItemIter != m_controlItemMap.end();
+            for (ControlItemMultiMap::const_iterator otherItemIter =
+                     m_controlItems.lower_bound(xItem);
+                 otherItemIter != m_controlItems.end();
                  ++otherItemIter) {
-                // ignore inactive items
-                if (! otherItemIter->second->active()) continue;
+                // Item not active?  Try the next.
+                if (!otherItemIter->second->active())
+                    continue;
                 // If this is the same as the item we are checking,
                 // try the next.
                 if (cItem == otherItemIter->second) {
@@ -485,40 +481,50 @@ void ControlRuler::updateSegment()
 
     CommandHistory::getInstance()->addCommand(macro.release());
 
-    updateSelection();
+    updateEventSelection();
 }
 
-void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
+void ControlRuler::notationLayoutUpdated(timeT startTime)
 {
-    // notationLayoutUpdated should be called after notation has adjusted the layout
-    // Clearly, for property control rulers, notes may have been moved so their position needs updating
-    // The rulers may also have changed so ControllerEventRulers also need updating
-    // Property control items may now need to be repositioned within the ControlItemMap
-    // as new items are all created with a zero x-position, and have now been put in place.
-    // For this reason, we need to collect items into a separate list otherwise we get the
-    // dreaded 'modifying a list within a loop of the list' problem which can take quite a long
-    // time to fix!
+    // notationLayoutUpdated() should be called after Notation has adjusted the
+    // layout.  Clearly, for property control rulers, notes may have been moved
+    // so their position needs updating.  The rulers may also have changed so
+    // ControllerEventRulers also need updating.  Property control items may
+    // now need to be repositioned within the ControlItemMap as new items are
+    // all created with a zero x-position, and have now been put in place.
+    // For this reason, we need to collect items into a separate list
+    // (itemsToUpdate) otherwise we get the dreaded 'modifying a list within a
+    // loop of the list' problem which can take quite a long time to fix!
+
     ControlItemVector itemsToUpdate;
-    ControlItemMap::iterator it = m_controlItemMap.begin();
-    while (it != m_controlItemMap.end() && it->first == 0) {
+
+    ControlItemMultiMap::iterator it = m_controlItems.begin();
+
+    // Add all new items (items at x position 0) to itemsToUpdate.
+    while (it != m_controlItems.end()  &&  it->first == 0) {
         itemsToUpdate.push_back(it->second);
         ++it;
     }
 
-    while (it != m_controlItemMap.end() && it->first < getRulerScale()->getXForTime(startTime)) ++it;
+    // Skip items up to the first whose x is at or after startTime.
+    while (it != m_controlItems.end()  &&
+           it->first < getRulerScale()->getXForTime(startTime)) {
+        ++it;
+    }
 
-    // Would like to only update in the defined region but, unfortunately, everything after this time
-    // may well have moved as well so we have to do everything after startTime
-    while (it != m_controlItemMap.end()) {
+    // Would like to only update in the defined region but, unfortunately,
+    // everything after this time may well have moved as well so we have to do
+    // everything after startTime.
+
+    // Copy all items up to the end to itemsToUpdate.
+    while (it != m_controlItems.end()) {
         itemsToUpdate.push_back(it->second);
         ++it;
     }
 
-    for (ControlItemVector::iterator vit = itemsToUpdate.begin();
-         vit != itemsToUpdate.end();
-         ++vit) {
-        (*vit)->update();
-        //RG_DEBUG << "notationLayoutUpdated(): Updated item: " << hex << (long)(*vit);
+    // For each item to update, call the item's update().
+    for (QSharedPointer<ControlItem> controlItem : itemsToUpdate) {
+        controlItem->update();
     }
 
     update();
@@ -526,165 +532,176 @@ void ControlRuler::notationLayoutUpdated(timeT startTime, timeT /*endTime*/)
 
 void ControlRuler::paintEvent(QPaintEvent * /*event*/)
 {
-    //RG_DEBUG << "paintEvent(): width()=" << width() << " height()=" << height();
+    // We just draw the background here.
+    // Derivers call this then draw the items.
 
     QPainter painter(this);
 
     QPen pen;
-    QBrush brush;
-
     pen.setStyle(Qt::NoPen);
     painter.setPen(pen);
 
+    QBrush brush;
     brush.setStyle(Qt::SolidPattern);
     brush.setColor(Qt::white);
     painter.setBrush(brush);
 
+    // Fill with white.
     painter.drawRect(0,0,width(),height());
 
-    double xstartUnscaled =
+    const double xStartUnscaled =
         m_rulerScale->getXForTime(m_segment->getStartTime());
-    double xendUnscaled =
+    const double xStart = mapXToWidget(xStartUnscaled * m_xScale);
+
+    const double xEndUnscaled =
         m_rulerScale->getXForTime(m_segment->getEndTime());
+    const double xEnd = mapXToWidget(xEndUnscaled * m_xScale);
 
-    double xstart = mapXToWidget(xstartUnscaled * m_xScale);
-    double xend = mapXToWidget(xendUnscaled * m_xScale);
-
-    //RG_DEBUG << "paintEvent(): xstart=" << xstart;
-
+    // Top/Middle/Bottom horizontal lines.
     painter.setPen(QColor(127, 127, 127));
-    painter.drawLine(xstart, mapYToWidget(0.0f), xend, mapYToWidget(0.0f));
-    painter.drawLine(xstart, mapYToWidget(0.5f), xend, mapYToWidget(0.5f));
-    painter.drawLine(xstart, mapYToWidget(1.0f), xend, mapYToWidget(1.0f));
+    painter.drawLine(xStart, mapYToWidget(0.0f), xEnd, mapYToWidget(0.0f));
+    painter.drawLine(xStart, mapYToWidget(0.5f), xEnd, mapYToWidget(0.5f));
+    painter.drawLine(xStart, mapYToWidget(1.0f), xEnd, mapYToWidget(1.0f));
 
+    // Quarter horizontal lines.
     painter.setPen(QColor(192, 192, 192));
-    painter.drawLine(xstart, mapYToWidget(0.25f), xend, mapYToWidget(0.25f));
-    painter.drawLine(xstart, mapYToWidget(0.75f), xend, mapYToWidget(0.75f));
+    painter.drawLine(xStart, mapYToWidget(0.25f), xEnd, mapYToWidget(0.25f));
+    painter.drawLine(xStart, mapYToWidget(0.75f), xEnd, mapYToWidget(0.75f));
 
     // vertical lines from snap grid
+
     timeT snaps = m_snapGrid->getSnapSetting();
     if (snaps != SnapGrid::NoSnap) {
         Composition *comp = m_rulerScale->getComposition();
-        double y0 = mapYToWidget(0.0f);
-        double y1 = mapYToWidget(1.0f);
 
-        timeT startt = m_segment->getStartTime();
-        timeT endt = m_segment->getEndMarkerTime();
-        int firstbar = comp->getBarNumber(startt);
-        int lastbar = comp->getBarNumber(endt);
+        const double yTop = mapYToWidget(0.0f);
+        const double yBottom = mapYToWidget(1.0f);
+        const double xLeft = geometry().left();
+        const double xRight = geometry().right();
 
-        for (int bar = firstbar; bar <= lastbar; ++bar) {
+        const int firstBar = comp->getBarNumber(m_segment->getStartTime());
+        const int lastBar = comp->getBarNumber(m_segment->getEndMarkerTime());
+
+        // For each bar in the Segment...
+        for (int bar = firstBar; bar <= lastBar; ++bar) {
             std::pair<timeT, timeT> range = comp->getBarRange(bar);
+            const double x0 = m_rulerScale->getXForTime(range.first);
+            const double x1 = m_rulerScale->getXForTime(range.second);
+
+            // Bar is to the left of the viewport?  Try the next.
+            if (mapXToWidget(x1 * m_xScale) < xLeft) continue;
+            // Bar is to the right of the viewport?  We are done.
+            if (mapXToWidget(x0 * m_xScale) > xRight) break;
 
             bool newTimeSig = false;
             TimeSignature timeSig =
                 comp->getTimeSignatureInBar(bar, newTimeSig);
 
-            double x0 = m_rulerScale->getXForTime(range.first);
-            double x1 = m_rulerScale->getXForTime(range.second);
-            double width = x1 - x0;
-
-            double gridLines = double(timeSig.getBarDuration()) /
+            const double gridLines = double(timeSig.getBarDuration()) /
                 double(m_snapGrid->getSnapTimeForX(x0));
 
-            double dx = width / gridLines;
+            const double barWidth = x1 - x0;
+            const double dx = barWidth / gridLines;
             double x = x0;
 
-            for (int index = 0; index < gridLines; ++index) {
+            // For each grid line within the bar...
+            for (int index = 0; index < gridLines; ++index, x += dx) {
 
-                if (x < xstartUnscaled) {
-                    x += dx;
+                if (x < xStartUnscaled)
                     continue;
-                }
-
                 // Exit if we have passed the end of last segment end time.
-                if (x > xendUnscaled) {
+                if (x > xEndUnscaled)
                     break;
-                }
 
+                // If it's the bar line...
                 if (index == 0) {
-                    // index 0 is the bar line
+                    // Make it dark.
                     painter.setPen(QColor(127, 127, 127));
-                } else {
+                } else {  // Not the bar line, not so dark.
                     painter.setPen(QColor(192, 192, 192));
                 }
                 int xmap = mapXToWidget(x * m_xScale);
-                painter.drawLine(xmap, y0, xmap, y1);
-                x += dx;
+                painter.drawLine(xmap, yTop, xmap, yBottom);
+
             }
         }
     }
 }
 
-int ControlRuler::mapXToWidget(float x)
+int ControlRuler::mapXToWidget(float x) const
 {
-    return (0.5+(m_xOffset+x-m_pannedRect.left()) / m_xScale);
+    return lround((m_xOffset + x - m_pannedRect.left()) / m_xScale);
 }
 
-int ControlRuler::mapYToWidget(float y)
+int ControlRuler::mapYToWidget(float y) const
 {
-    return (0.5+(-y+1.0f) / m_yScale);
+    return lround((-y + 1.0) / m_yScale);
 }
 
-QRect ControlRuler::mapRectToWidget(QRectF *rect)
+QRect ControlRuler::mapRectToWidget(const QRectF *rect) const
 {
-    QRect newrect;
+    QRect widgetRect;
+    widgetRect.setLeft(mapXToWidget(rect->left()));
+    widgetRect.setTop(mapYToWidget(rect->top()));
+    widgetRect.setRight(mapXToWidget(rect->right()));
+    widgetRect.setBottom(mapYToWidget(rect->bottom()));
 
-    newrect.setTopLeft(QPoint(mapXToWidget(rect->left()),mapYToWidget(rect->top())));
-    newrect.setBottomRight(QPoint(mapXToWidget(rect->right()),mapYToWidget(rect->bottom())));
-
-    return newrect;
+    return widgetRect;
 }
 
-QPolygon ControlRuler::mapItemToWidget(QSharedPointer<ControlItem> controlItem)
+QPolygon ControlRuler::mapItemToWidget(
+        QSharedPointer<const ControlItem> controlItem) const
 {
-
     QPolygon newpoly;
-    QPoint newpoint;
+
     // For each point in the ControlItem (it's a QPolygonF)...
-    for (QPolygonF::iterator it = controlItem->begin(); it != controlItem->end(); ++it) {
-        newpoint.setX(mapXToWidget((*it).x()));
-        newpoint.setY(mapYToWidget((*it).y()));
-        newpoly.push_back(newpoint);
+    for (const QPointF &point : *controlItem) {
+        newpoly.push_back(QPoint{mapXToWidget(point.x()),
+                                 mapYToWidget(point.y())});
     }
 
     return newpoly;
 }
 
-QPointF ControlRuler::mapWidgetToItem(QPoint *point)
+QPointF ControlRuler::mapWidgetToItem(const QPoint *point) const
 {
-
     QPointF newpoint;
-    newpoint.setX(m_xScale*(point->x()) + m_pannedRect.left() - m_xOffset);
-    newpoint.setY(-m_yScale*(point->y()) + 1.0f);
+    newpoint.setX(m_xScale * point->x() + m_pannedRect.left() - m_xOffset);
+    newpoint.setY(-m_yScale * point->y() + 1.0);
+
     return newpoint;
 }
 
-void ControlRuler::setPannedRect(QRectF pr)
+void ControlRuler::setPannedRect(const QRectF &pannedRect)
 {
-    if (pr.isNull())
+    if (pannedRect.isNull())
         RG_WARNING << "slotSetPannedRect(): WARNING: Rect is null.";
 
-    m_pannedRect = pr;
-    m_xScale = (double) m_pannedRect.width() / (double) width();
-    m_yScale = 1.0f / (double) height();
-    RG_DEBUG << "slotSetPannedRect" << pr << width() << m_xScale;
+    m_pannedRect = pannedRect;
+
+    m_xScale = (double)m_pannedRect.width() / (double)width();
+    m_yScale = 1.0f / (double)height();
 
     // Create the visible items list
-    ///TODO Improve efficiency using xstart and xstop ordered lists of control items
+
     m_visibleItems.clear();
     bool anyVisibleYet = false;
 
-    m_nextItemLeft = m_controlItemMap.end();
-    m_firstVisibleItem = m_controlItemMap.end();
-    m_lastVisibleItem = m_controlItemMap.end();
+    m_nextItemLeft = m_controlItems.end();
+    m_firstVisibleItem = m_controlItems.end();
+    m_lastVisibleItem = m_controlItems.end();
 
-    ControlItemMap::iterator it;
-    for (it = m_controlItemMap.begin();it != m_controlItemMap.end(); ++it) {
-        int visPos = visiblePosition(it->second);
+    // For each ControlItem...
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
+         ++it) {
+        const int visPos = visiblePosition(it->second);
 
-        if (visPos == -1) m_nextItemLeft = it;
+        // To the left?  Remember as "next item left".
+        if (visPos == -1)
+            m_nextItemLeft = it;
 
+        // Within?  Add to visible items.
         if (visPos == 0) {
             if (!anyVisibleYet) {
                 m_firstVisibleItem = it;
@@ -695,10 +712,10 @@ void ControlRuler::setPannedRect(QRectF pr)
             m_lastVisibleItem = it;
         }
 
-        if (visPos == 1) break;
+        // To the right?  We're done.
+        if (visPos == 1)
+            break;
     }
-
-    //RG_DEBUG << "slotSetPannedRect() - visible items: " << m_visibleItems.size();
 }
 
 void ControlRuler::resizeEvent(QResizeEvent *)
@@ -709,43 +726,53 @@ void ControlRuler::resizeEvent(QResizeEvent *)
     setPannedRect(m_pannedRect);
 }
 
-ControlMouseEvent ControlRuler::createControlMouseEvent(QMouseEvent* e)
+ControlMouseEvent ControlRuler::createControlMouseEvent(
+        const QMouseEvent *e) const
 {
     ControlMouseEvent controlMouseEvent;
+
+    // Copy mouse position.
     QPoint widgetMousePos = e->pos();
     QPointF mousePos = mapWidgetToItem(&widgetMousePos);
     controlMouseEvent.x = mousePos.x();
     controlMouseEvent.y = mousePos.y();
 
-    int mtime = m_rulerScale->getTimeForX(controlMouseEvent.x / m_xScale);
+    // Compute snapped coords, left and right.
 
-    int leftTime = m_snapGrid->snapTime(mtime, SnapGrid::SnapLeft);
+    const int mouseTime = m_rulerScale->getTimeForX(
+            controlMouseEvent.x / m_xScale);
+
+    const int leftTime = m_snapGrid->snapTime(mouseTime, SnapGrid::SnapLeft);
     controlMouseEvent.snappedXLeft =
         m_rulerScale->getXForTime(leftTime) * m_xScale;
-    int rightTime = m_snapGrid->snapTime(mtime, SnapGrid::SnapRight);
+
+    const int rightTime = m_snapGrid->snapTime(mouseTime, SnapGrid::SnapRight);
     controlMouseEvent.snappedXRight =
         m_rulerScale->getXForTime(rightTime) * m_xScale;
 
     //RG_DEBUG << "createControlMouseEvent(): snap" <<
-    //    controlMouseEvent.x << mtime <<
+    //    controlMouseEvent.x << mouseTime <<
     //    controlMouseEvent.snappedXLeft << leftTime <<
     //    controlMouseEvent.snappedXRight << rightTime <<
     //    m_xScale;
 
-    for (ControlItemList::iterator it = m_visibleItems.begin();
-            it != m_visibleItems.end(); ++it) {
-        if ((*it)->containsPoint(mousePos,Qt::OddEvenFill)) {
+    // Fill the itemList with each ControlItem under the mouse pointer.
+
+    for (ControlItemList::const_iterator it = m_visibleItems.begin();
+         it != m_visibleItems.end();
+         ++it) {
+        if ((*it)->containsPoint(mousePos, Qt::OddEvenFill))
             controlMouseEvent.itemList.push_back(*it);
-        }
     }
 
+    // Copy buttons and modifiers.
     controlMouseEvent.buttons = e->buttons();
     controlMouseEvent.modifiers = e->modifiers();
 
     return controlMouseEvent;
 }
 
-void ControlRuler::mousePressEvent(QMouseEvent* e)
+void ControlRuler::mousePressEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
         return;
@@ -763,11 +790,12 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         if (!m_rulerMenu)
             createRulerMenu();
         if (m_rulerMenu) {
-            QAction* setAction = findAction(m_snapName);
-            RG_DEBUG << "set checked" << m_snapName;
+            QAction *setAction = findAction(m_snapName);
             setAction->setChecked(true);
+
             // Let derivers update the menu as needed.
             updateRulerMenu();
+
             m_rulerMenu->exec(QCursor::pos());
         }
     }
@@ -776,11 +804,12 @@ void ControlRuler::mousePressEvent(QMouseEvent* e)
         m_autoScroller->start();
 }
 
-void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
+void ControlRuler::mouseReleaseEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
         return;
 
+    // Delegate left and middle button release to tool.
     if (e->button() == Qt::LeftButton  ||  e->button() == Qt::MiddleButton) {
         ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
         m_currentTool->handleMouseRelease(&controlMouseEvent);
@@ -790,14 +819,17 @@ void ControlRuler::mouseReleaseEvent(QMouseEvent* e)
         m_autoScroller->stop();
 }
 
-void ControlRuler::mouseMoveEvent(QMouseEvent* e)
+void ControlRuler::mouseMoveEvent(QMouseEvent *e)
 {
     if (!m_currentTool)
         return;
 
     ControlMouseEvent controlMouseEvent = createControlMouseEvent(e);
-    // ??? Isn't this always FOLLOW_HORIZONTAL?  I don't think we can
-    //     scroll anything vertically within the control rulers.
+
+    // Some tools (e.g. ControlPainter) return NO_FOLLOW to prevent following
+    // while adding new points.
+    // Others, (e.g. ControlSelector) return FOLLOW_HORIZONTAL to allow
+    // auto scrolling while selecting.
     FollowMode mode = m_currentTool->handleMouseMove(&controlMouseEvent);
 
     if (m_autoScroller)
@@ -810,90 +842,93 @@ ControlRuler::wheelEvent(QWheelEvent * /*e*/)
     // not sure what to do yet
     // ??? It would be really nice if this would gently move the selected
     //     items up/down by one.  This would provide precision adjustment.
-
 }
 
 void ControlRuler::slotSnap()
 {
-    QObject* obj = sender();
-    QString oname = obj->objectName();
-    RG_DEBUG << "slotSnap" << oname;
-    setSnapTimeFromActionName(oname);
+    setSnapTimeFromActionName(sender()->objectName());
+
     repaint();
 }
 
-void ControlRuler::setSnapTimeFromActionName(const QString& actionName)
+void ControlRuler::setSnapTimeFromActionName(const QString &actionName)
 {
     QString snapName = actionName;
-    int stime = SnapGrid::NoSnap;
+
+    // Convert action name to duration.
+    int snapTime = SnapGrid::NoSnap;
     timeT crotchetDuration = Note(Note::Crotchet).getDuration();
     if (actionName == "snap_none") {
-        stime = SnapGrid::NoSnap;
+        snapTime = SnapGrid::NoSnap;
     } else if (actionName == "snap_editor") {
-        stime = m_snapTimeFromEditor;
+        snapTime = m_snapTimeFromEditor;
     } else if (actionName == "snap_unit") {
-        stime = SnapGrid::SnapToUnit;
+        snapTime = SnapGrid::SnapToUnit;
     } else if (actionName == "snap_64") {
-        stime = crotchetDuration / 16;
+        snapTime = crotchetDuration / 16;
     } else if (actionName == "snap_48") {
-        stime = crotchetDuration / 12;
+        snapTime = crotchetDuration / 12;
     } else if (actionName == "snap_32") {
-        stime = crotchetDuration / 8;
+        snapTime = crotchetDuration / 8;
     } else if (actionName == "snap_24") {
-        stime = crotchetDuration / 6;
+        snapTime = crotchetDuration / 6;
     } else if (actionName == "snap_16") {
-        stime = crotchetDuration / 4;
+        snapTime = crotchetDuration / 4;
     } else if (actionName == "snap_12") {
-        stime = crotchetDuration / 3;
+        snapTime = crotchetDuration / 3;
     } else if (actionName == "snap_8") {
-        stime = crotchetDuration / 2;
+        snapTime = crotchetDuration / 2;
     } else if (actionName == "snap_dotted_8") {
-        stime = (crotchetDuration * 3) / 4;
+        snapTime = (crotchetDuration * 3) / 4;
     } else if (actionName == "snap_4") {
-        stime = crotchetDuration;
+        snapTime = crotchetDuration;
     } else if (actionName == "snap_dotted_4") {
-        stime = (crotchetDuration * 3) / 2;
+        snapTime = (crotchetDuration * 3) / 2;
     } else if (actionName == "snap_2") {
-        stime = crotchetDuration * 2;
+        snapTime = crotchetDuration * 2;
     } else if (actionName == "snap_beat") {
-        stime = SnapGrid::SnapToBeat;
+        snapTime = SnapGrid::SnapToBeat;
     } else if (actionName == "snap_bar") {
-        stime = SnapGrid::SnapToBar;
+        snapTime = SnapGrid::SnapToBar;
     } else {
         // unknown action name - use snap_none
         snapName = "snap_none";
     }
-    RG_DEBUG << "setSnapTimeFromActionName" << snapName << stime;
-    m_snapGrid->setSnapTime(stime);
+
+    m_snapGrid->setSnapTime(snapTime);
     m_snapName = snapName;
+
     QSettings settings;
     settings.beginGroup(ControlRulerConfigGroup);
     settings.setValue("Snap Grid Size", snapName);
-    settings.endGroup();
 }
 
 void ControlRuler::contextMenuEvent(QContextMenuEvent *)
 {
+    // DO NOT REMOVE.
+    // This is required for the context menu to launch.
+    // ??? Why?
 }
 
 void
-ControlRuler::clearSelectedItems()
+ControlRuler::clearSelection()
 {
-    for (ControlItemList::iterator it = m_selectedItems.begin(); it != m_selectedItems.end(); ++it) {
+    for (ControlItemList::iterator it = m_selectedItems.begin();
+         it != m_selectedItems.end();
+         ++it) {
         (*it)->setSelected(false);
     }
     m_selectedItems.clear();
 
-    if (m_eventSelection) delete m_eventSelection;
-
+    delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 }
 
-void ControlRuler::updateSelection()
+void ControlRuler::updateEventSelection()
 {
-    if (m_eventSelection) delete m_eventSelection;
+    delete m_eventSelection;
     m_eventSelection = new EventSelection(*m_segment);
 
     for (ControlItemList::iterator it = m_selectedItems.begin();
@@ -902,7 +937,7 @@ void ControlRuler::updateSelection()
         m_eventSelection->addEvent((*it)->getEvent());
     }
 
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 
     // Special signal for the velocity ruler to make sure the user can
     // go from bar to bar and adjust velocities when nothing is selected
@@ -919,36 +954,33 @@ void ControlRuler::updateSelection()
 
 void ControlRuler::addToSelection(QSharedPointer<ControlItem> item)
 {
-    ControlItemList::iterator found =
-        std::find (m_selectedItems.begin(),
-                   m_selectedItems.end(), item);
+    // If we already have this one, bail.
+    if (std::find(m_selectedItems.begin(), m_selectedItems.end(), item) !=
+            m_selectedItems.end())
+        return;
 
-    // If we already have this item, do nothing.
-    if (found != m_selectedItems.end()) { return; }
     m_selectedItems.push_back(item);
     item->setSelected(true);
-    m_eventSelection->addEvent(item->getEvent());
-    emit rulerSelectionChanged(m_eventSelection);
 
-    RG_DEBUG << "addToSelection() done";
+    m_eventSelection->addEvent(item->getEvent());
+    emit rulerSelectionChanged();
 }
 
 void ControlRuler::removeFromSelection(QSharedPointer<ControlItem> item)
 {
     m_selectedItems.remove(item);
     item->setSelected(false);
+
     m_eventSelection->removeEvent(item->getEvent());
-    emit rulerSelectionChanged(m_eventSelection);
+    emit rulerSelectionChanged();
 }
 
 void ControlRuler::clear()
 {
-    RG_DEBUG << "clear() - m_controlItemMap.size(): " << m_controlItemMap.size();
-
-    m_controlItemMap.clear();
-    m_firstVisibleItem = m_controlItemMap.end();
-    m_lastVisibleItem = m_controlItemMap.end();
-    m_nextItemLeft = m_controlItemMap.end();
+    m_controlItems.clear();
+    m_firstVisibleItem = m_controlItems.end();
+    m_lastVisibleItem = m_controlItems.end();
+    m_nextItemLeft = m_controlItems.end();
 
     m_visibleItems.clear();
     m_selectedItems.clear();
@@ -961,24 +993,20 @@ float ControlRuler::valueToY(long val)
 
 long ControlRuler::yToValue(float y)
 {
-    // NOTE: while debugging #1451 I had debug output here and it confirmed that
-    // this is returning very reasonable numbers, which get mangled elsewhere
-
     return (long)(y * (m_maxItemValue - m_minItemValue)) + m_minItemValue;
 }
 
 void ControlRuler::setSnapFromEditor(timeT snapSetting, bool forceFromEditor)
 {
-    RG_DEBUG << "setSnapFromEditor" << m_snapName << snapSetting <<
-        forceFromEditor;
     m_snapTimeFromEditor = snapSetting;
-    if (forceFromEditor) {
+    if (forceFromEditor)
         m_snapName = "snap_editor";
-    }
+
     if (m_snapName == "snap_editor") {
         m_snapGrid->setSnapTime(snapSetting);
         repaint();
     }
 }
+
 
 }

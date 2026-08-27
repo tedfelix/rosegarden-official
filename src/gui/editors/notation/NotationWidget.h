@@ -165,6 +165,8 @@ public:
      */
     void setScroll(bool scroll) { m_noScroll = !scroll; }
 
+    void removeHeaders();
+
 signals:
     void sceneNeedsRebuilding();
     void toolChanged(QString);

@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[JackDriver]"
 #define RG_NO_DEBUG_PRINT
 
 #include "JackDriver.h"

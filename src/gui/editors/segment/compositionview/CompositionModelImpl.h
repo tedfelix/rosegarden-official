@@ -360,6 +360,8 @@ private slots:
     /// Handler for m_updateTimer.
     void slotUpdateTimer();
 
+    void slotDocumentAboutToChange();
+
 private:
     // --- Misc -------------------------------------------
 

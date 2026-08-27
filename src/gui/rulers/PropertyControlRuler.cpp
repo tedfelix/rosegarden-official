@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[PropertyControlRuler]"
 #define RG_NO_DEBUG_PRINT
 
 #include <QMouseEvent>
@@ -217,12 +216,12 @@ void PropertyControlRuler::updateSelection(
 
     // Set each item as not selected, clear m_selectedItems and create a new
     // m_eventSelection member.
-    clearSelectedItems();
+    clearSelection();
 
     // For each item in the new selection
     for (const ViewElement *element : elementList) {
         // For each item on the ruler
-        for (ControlItemMap::value_type &rControlItemPair : m_controlItemMap) {
+        for (ControlItemMultiMap::value_type &rControlItemPair : m_controlItems) {
             // Downcast so we can call getElement().
             QSharedPointer<PropertyControlItem> item =
                     qSharedPointerDynamicCast<PropertyControlItem>(
@@ -308,8 +307,8 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 
     RG_DEBUG << "elementRemoved()";
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         QSharedPointer<PropertyControlItem> item =
                 qSharedPointerDynamicCast<PropertyControlItem>(it->second);
@@ -319,7 +318,7 @@ void PropertyControlRuler::elementRemoved(const ViewSegment *, ViewElement *el)
 //                m_controlItemList.erase(it);
 //                m_selectedItems.remove(item);
 //                delete item;
-                eraseControlItem(it);
+                removeControlItem(it);
                 RG_DEBUG << "elementRemoved(): Control item erased";
                 break;
             }
@@ -410,8 +409,8 @@ void PropertyControlRuler::contextMenuEvent(QContextMenuEvent* e)
     // check if we actually have some control items
     bool haveItems = false;
 
-    for (ControlItemMap::iterator it = m_controlItemMap.begin();
-         it != m_controlItemMap.end();
+    for (ControlItemMultiMap::iterator it = m_controlItems.begin();
+         it != m_controlItems.end();
          ++it) {
         if (it->second) {
             haveItems = true;

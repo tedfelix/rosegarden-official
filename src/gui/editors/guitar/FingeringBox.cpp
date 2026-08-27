@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[FingeringBox]"
 #define RG_NO_DEBUG_PRINT
 
 #include "FingeringBox.h"

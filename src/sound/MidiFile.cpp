@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[MidiFile]"
 #define RG_NO_DEBUG_PRINT
 
 #include "MidiFile.h"
