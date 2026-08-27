@@ -50,6 +50,9 @@ public:
 
     void clear();
 
+signals:
+    void recentFilesChanged(int numFiles);
+
 private:
     std::list<QString> m_names;
 

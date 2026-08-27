@@ -968,9 +968,13 @@ RosegardenMainWindow::setupActions()
 
     // Hook up for aboutToShow() so we can set up the menu when it is
     // needed.
-    const QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
-    connect(fileOpenRecentMenu, &QMenu::aboutToShow,
+    m_fileOpenRecentMenu = findMenu("file_open_recent");
+    const std::list<QString> recentFiles = m_recentFiles.get();
+    m_fileOpenRecentMenu->setEnabled(recentFiles.size() > 0);
+    connect(m_fileOpenRecentMenu, &QMenu::aboutToShow,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
+    connect(&m_recentFiles, &RecentFiles::recentFilesChanged,
+            this, &RosegardenMainWindow::slotRecentFilesChanged);
 
     const QMenu *setTrackInstrumentMenu =
             findChild<QMenu *>("set_track_instrument");
@@ -6147,6 +6151,11 @@ RosegardenMainWindow::slotToggleMute()
 void RosegardenMainWindow::slotClearRecentFiles()
 {
     m_recentFiles.clear();
+}
+
+void RosegardenMainWindow::slotRecentFilesChanged(int numFiles)
+{
+    m_fileOpenRecentMenu->setEnabled(numFiles > 0);
 }
 
 void
