@@ -301,7 +301,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     // Use new JACK transport
-    layout->addWidget(new QLabel(tr("Use new JACK transport"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("New JACK Transport Logic"), frame), row, 0);
 
     m_useNewJackTransport = new QCheckBox(frame);
     m_useNewJackTransport->setChecked(Preferences::getUseNewJackTransport());
