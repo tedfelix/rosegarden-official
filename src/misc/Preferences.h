@@ -150,13 +150,11 @@ namespace Preferences
     void setShowGtk2Warning(bool value);
     bool getShowGtk2Warning();
 
-    enum JackTransportMethod {
-        None,
-        Old,
-        New
-    };
-    void setUseJackTransport(JackTransportMethod value);
-    JackTransportMethod getUseJackTransport();
+    void setUseJackTransport(bool value);
+    bool getUseJackTransport();
+
+    void setUseNewJackTransport(bool value);
+    bool getUseNewJackTransport();
 
     // This will setup all the cached variables so the get... calls
     // can be made from realtime threads

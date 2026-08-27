@@ -273,7 +273,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     // Use JACK transport
-    layout->addWidget(new QLabel(tr("JACK transport Method"), frame), row, 0);
+    layout->addWidget(new QLabel(tr("Use JACK transport"), frame), row, 0);
 
     // ??? Just a checkbox for now.  Originally, three settings were
     //     proposed for this:
@@ -284,16 +284,34 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     // now a checkbox none/old/new
 
-    m_jackTransportMethod = new QComboBox(frame);
-    m_jackTransportMethod->addItem(tr("Do not Use"));
-    m_jackTransportMethod->addItem(tr("Old method"));
-    m_jackTransportMethod->addItem(tr("New method"));
-    m_jackTransportMethod->setCurrentIndex
-            (Preferences::getUseJackTransport());
-    connect(m_jackTransportMethod, static_cast<void(QComboBox::*)(int)>(
-                &QComboBox::activated),
+    m_useJackTransport = new QCheckBox(frame);
+    m_useJackTransport->setChecked(Preferences::getUseJackTransport());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useJackTransport, &QCheckBox::checkStateChanged,
+#else
+    connect(m_useJackTransport, &QCheckBox::stateChanged,
+#endif
             this, &GeneralConfigurationPage::slotModified);
-    layout->addWidget(m_jackTransportMethod, row, 1, 1, 2);
+    layout->addWidget(m_useJackTransport, row, 1, 1, 2);
+
+    ++row;
+
+    settings.endGroup();
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    // Use new JACK transport
+    layout->addWidget(new QLabel(tr("Use new JACK transport"), frame), row, 0);
+
+    m_useNewJackTransport = new QCheckBox(frame);
+    m_useNewJackTransport->setChecked(Preferences::getUseNewJackTransport());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useNewJackTransport, &QCheckBox::checkStateChanged,
+#else
+    connect(m_useNewJackTransport, &QCheckBox::stateChanged,
+#endif
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_useNewJackTransport, row, 1, 1, 2);
 
     ++row;
 
@@ -754,24 +772,19 @@ void GeneralConfigurationPage::apply()
     settings.endGroup();
 
 #ifdef HAVE_LIBJACK
-    settings.beginGroup(SequencerOptionsConfigGroup);
 
-    int jackTransport = m_jackTransportMethod->currentIndex();
-    Preferences::JackTransportMethod jackTransportMethod =
-        static_cast<Preferences::JackTransportMethod>(jackTransport);
-
-    Preferences::setUseJackTransport(jackTransportMethod);
+    Preferences::setUseJackTransport(m_useJackTransport->isChecked());
+    Preferences::setUseNewJackTransport(m_useNewJackTransport->isChecked());
 
     // This can be removed if preferences are used in the sound drivers
     // note: Preferences can be used in the audio thread
-    if (jackTransportMethod == Preferences::New) jackTransport = 0;
+    int jackTransport = (Preferences::getUseJackTransport() &&
+                         ! Preferences::getUseNewJackTransport());
     MappedEvent mEjackValue;
     mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
     mEjackValue.setType(MappedEvent::SystemJackTransport);
     mEjackValue.setData1(MidiByte(jackTransport));
     StudioControl::sendMappedEvent(mEjackValue);
-
-    settings.endGroup();
 
     Preferences::setJACKStopAtAutoStop(m_jackStopAtAutoStop->isChecked());
 

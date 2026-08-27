@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[TransportControl]"
 #define RG_NO_DEBUG_PRINT
 
 #include "TransportControl.h"
@@ -101,7 +100,8 @@ void TransportControl::tick()
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     //RG_DEBUG << "tick" << seq.getStatus();
 #ifdef HAVE_LIBJACK
-    if (Preferences::getUseJackTransport() == Preferences::New) {
+    if (Preferences::getUseJackTransport() &&
+        Preferences::getUseNewJackTransport()) {
         // logic with jack transport
         switch (seq.getStatus()) {
         case STARTING_TO_PLAY:
@@ -204,7 +204,8 @@ void TransportControl::tick()
 
     bool withJackTransport = false;
 #ifdef HAVE_LIBJACK
-    withJackTransport = Preferences::getUseJackTransport() == Preferences::New;
+    withJackTransport = (Preferences::getUseJackTransport() &&
+                         Preferences::getUseNewJackTransport());
 #endif
     if (! withJackTransport) {
         // logic without jack transport
@@ -292,7 +293,8 @@ int TransportControl::play(RealTime startPos)
 {
 #ifdef HAVE_LIBJACK
     int result = true;
-    if (Preferences::getUseJackTransport() == Preferences::New) {
+    if (Preferences::getUseJackTransport() &&
+        Preferences::getUseNewJackTransport()) {
         unsigned int sampleRate =
             RosegardenSequencer::getInstance()->getSampleRate();
         if (startPos < RealTime::zero()) {
@@ -324,7 +326,8 @@ int TransportControl::play(RealTime startPos)
 void TransportControl::stop(bool autoStop)
 {
 #ifdef HAVE_LIBJACK
-    if (Preferences::getUseJackTransport() == Preferences::New) {
+    if (Preferences::getUseJackTransport() &&
+        Preferences::getUseNewJackTransport()) {
         if (m_countIn) {
             // we are still in the count in and jack is not rolling
             RosegardenSequencer::getInstance()->stop(autoStop);
@@ -353,7 +356,8 @@ void TransportControl::jumpTo(RealTime time, bool reset)
 {
     RG_DEBUG << "jumpTo" << time << reset;
 #ifdef HAVE_LIBJACK
-    if (Preferences::getUseJackTransport() == Preferences::New) {
+    if (Preferences::getUseJackTransport() &&
+        Preferences::getUseNewJackTransport()) {
         m_resetPlaybackOnJump = reset;
         // if we are in record count in the time may be 0. We cannot
         // use -ve time in jack so we have to set zero here but still
@@ -396,7 +400,11 @@ int TransportControl::record(const RealTime &time, long recordMode)
 int TransportControl::syncCallback(jack_transport_state_t state,
                                    const jack_position_t *pos) const
 {
-    if (Preferences::getUseJackTransport() != Preferences::New) return 1;
+    RG_DEBUG << "syncCallback" <<
+        Preferences::getUseJackTransport() <<
+        Preferences::getUseNewJackTransport();
+    if (! Preferences::getUseJackTransport() ||
+        ! Preferences::getUseNewJackTransport()) return 1;
 
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     TransportStatus seqStatus = seq.getStatus();
@@ -425,7 +433,10 @@ int TransportControl::syncCallback(jack_transport_state_t state,
 int TransportControl::processCallback(jack_nframes_t)
 {
     //RG_DEBUG << "processCallback";
-    if (Preferences::getUseJackTransport() != Preferences::New) return 0;
+
+    if (! Preferences::getUseJackTransport() ||
+        ! Preferences::getUseNewJackTransport()) return 0;
+
     jack_position_t pos ;
     jack_transport_state_t state = jack_transport_query(m_client, &pos);
 

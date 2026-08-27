@@ -1324,7 +1324,8 @@ RosegardenSequencer::updateClocks()
     if (isLooping()  &&  newPosition >= m_loopEnd) {
 
         // if we are using TransportControl just jumpTo the loop start
-        if (Preferences::getUseJackTransport() == Preferences::New) {
+        if (Preferences::getUseJackTransport() &&
+            Preferences::getUseNewJackTransport()) {
             TransportControl::getInstance()->jumpTo(m_loopStart);
             return;
         }

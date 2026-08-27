@@ -423,36 +423,30 @@ int Preferences::getFilePrinter()
     return filePrinter.get();
 }
 
-//static PreferenceBool useJackTransport(
-//      SequencerOptionsConfigGroup, "jacktransport", false);
+static PreferenceBool useJackTransport
+(SequencerOptionsConfigGroup, "jacktransport", false);
 
-static PreferenceInt jackTransportMethod(
-        SequencerOptionsConfigGroup, "jacktransportMethod", 0);
-
-void Preferences::setUseJackTransport(JackTransportMethod value)
+void Preferences::setUseJackTransport(bool value)
 {
-    jackTransportMethod.set(value);
+    useJackTransport.set(value);
 }
 
-Preferences::JackTransportMethod Preferences::getUseJackTransport()
+bool Preferences::getUseJackTransport()
 {
-    static bool first = true;
-    if (first) {
-        first = false;
-        // first call - we can access settings
-        QSettings settings;
-        settings.beginGroup(SequencerOptionsConfigGroup);
-        if (! settings.contains("jacktransportMethod")) {
-            // This item does not exist - use the old prefernce value
-            bool oldJackTransport =
-                settings.value("jacktransport", false).toBool();
-            if (oldJackTransport) {
-                setUseJackTransport(Old);
-            }
-        }
-        settings.endGroup();
-    }
-    return static_cast<JackTransportMethod>(jackTransportMethod.get());
+    return useJackTransport.get();
+}
+
+static PreferenceBool useNewJackTransport
+(SequencerOptionsConfigGroup, "newjacktransport", true);
+
+void Preferences::setUseNewJackTransport(bool value)
+{
+    useNewJackTransport.set(value);
+}
+
+bool Preferences::getUseNewJackTransport()
+{
+    return useNewJackTransport.get();
 }
 
 void Preferences::initializeCache()
@@ -486,6 +480,7 @@ void Preferences::initializeCache()
     getMatrixConstrainNotes();
     getShowGtk2Warning();
     getUseJackTransport();
+    getUseNewJackTransport();
 
 }
 

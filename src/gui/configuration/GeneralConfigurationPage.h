@@ -105,7 +105,8 @@ private:
     QCheckBox *m_useTrackName;
     QCheckBox *m_enableEditingDuringPlayback;
     QCheckBox *m_cleanRecentFilesList;
-    QComboBox *m_jackTransportMethod;
+    QCheckBox *m_useJackTransport;
+    QCheckBox *m_useNewJackTransport;
     QCheckBox *m_jackStopAtAutoStop;
     QCheckBox *m_stopPlaybackAtEnd;
     QCheckBox *m_jumpToLoop;

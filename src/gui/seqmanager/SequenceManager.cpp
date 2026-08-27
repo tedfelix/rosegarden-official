@@ -1769,13 +1769,13 @@ SequenceManager::sendPreferences()
 
 
     // Send JACK transport
-
-    Preferences::JackTransportMethod method =
-        Preferences::getUseJackTransport();
-
     // For no jack transport or new method - disable old method
     MidiByte jackValue{0};
-    if (method == Preferences::Old) jackValue = 1;
+    if (Preferences::getUseJackTransport() &&
+        ! Preferences::getUseNewJackTransport()) {
+        // old jack transport
+        jackValue = 1;
+    }
 
     MappedEvent mEjackValue;
     mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? needed?
