@@ -15,6 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
+//#define RG_NO_DEBUG_PRINT 1
 
 #include "RescaleCommand.h"
 
@@ -22,6 +23,8 @@
 #include "base/Segment.h"
 #include "base/Selection.h"
 #include "document/BasicCommand.h"
+#include "misc/Debug.h"
+
 #include <QString>
 #include <iostream>
 
@@ -55,11 +58,16 @@ RescaleCommand::getAffectedEndTime(EventSelection &selection,
 
     // dupe of rescale(), but we can't use that here as the m_
     // variables may not have been set
-    double d = preScaleEnd;
+    timeT selectStart = selection.getStartTime();
+    timeT selectEnd = selection.getEndTime();
+    double d = selectEnd - selectStart;
     d *= newDuration;
     d /= selection.getTotalDuration();
     d += 0.5;
-    timeT postScaleEnd = (timeT)d;
+    timeT postScaleDuration = (timeT)d;
+    timeT postScaleEnd = selectStart + postScaleDuration;
+
+    RG_DEBUG << "getAffectedEndTime" << preScaleEnd << postScaleEnd;
 
     return std::max(preScaleEnd, postScaleEnd);
 }
@@ -121,6 +129,8 @@ RescaleCommand::modifySegment()
         m_selection->addEvent(*i);  // add to selection
     }
 
+    RG_DEBUG << "modifySegment" << m_closeGap << diff << startTime <<
+        segment.getEndMarkerTime();
     if (m_closeGap && diff > 0) {
         segment.setEndMarkerTime(startTime +
                                  rescale(segment.getEndMarkerTime() - startTime));
