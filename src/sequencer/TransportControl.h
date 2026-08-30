@@ -39,6 +39,7 @@ public:
     void stop(bool autoStop);
     void jumpTo(RealTime time, bool reset = true);
     int record(const RealTime &time, long recordMode);
+    bool jackAvailable() const;
 
 #ifdef HAVE_LIBJACK
     int processCallback(jack_nframes_t nframes);
@@ -57,6 +58,7 @@ private:
     bool m_waitingForStartJack;
     bool m_countIn;
     bool m_resetPlaybackOnJump;
+    bool m_jackAvailable;
 #endif
 };
 
