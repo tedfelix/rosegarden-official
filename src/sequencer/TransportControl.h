@@ -59,6 +59,7 @@ private:
     bool m_countIn;
     bool m_resetPlaybackOnJump;
     bool m_jackAvailable;
+    bool m_jackDecoupled;
 #endif
 };
 

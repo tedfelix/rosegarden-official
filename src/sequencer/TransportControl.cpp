@@ -20,8 +20,6 @@
 #include "TransportControl.h"
 #include "RosegardenSequencer.h"
 
-#include "base/Composition.h"
-#include "document/RosegardenDocument.h"
 #include "misc/Debug.h"
 #include "misc/Preferences.h"
 #include "sound/SequencerDataBlock.h"
@@ -70,7 +68,8 @@ TransportControl* TransportControl::getInstance()
         m_waitingForStartJack(false),
         m_countIn(false),
         m_resetPlaybackOnJump(true),
-        m_jackAvailable(false)
+        m_jackAvailable(false),
+        m_jackDecoupled(false)
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -103,6 +102,7 @@ TransportControl::~TransportControl()
 
 void TransportControl::tick()
 {
+    // called from sequencer thread
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     //RG_DEBUG << "tick" << seq.getStatus();
 #ifdef HAVE_LIBJACK
@@ -299,6 +299,7 @@ void TransportControl::tick()
 
 int TransportControl::play(RealTime startPos)
 {
+    // called from gui thread
 #ifdef HAVE_LIBJACK
     int result = true;
     if (Preferences::getUseJackTransport() &&
@@ -334,7 +335,11 @@ int TransportControl::play(RealTime startPos)
 
 void TransportControl::stop(bool autoStop)
 {
+    // called from gui thread
 #ifdef HAVE_LIBJACK
+    RG_DEBUG << "stop" << autoStop;
+    if ( autoStop) m_jackDecoupled = false;
+
     if (Preferences::getUseJackTransport() &&
         Preferences::getUseNewJackTransport() &&
         m_jackAvailable) {
@@ -346,10 +351,15 @@ void TransportControl::stop(bool autoStop)
             bool jackStopAtAutoStop = Preferences::getJACKStopAtAutoStop();
             RG_DEBUG << "stop jackTransport" << autoStop << jackStopAtAutoStop;
             if (jackStopAtAutoStop || ! autoStop) {
+                RG_DEBUG << "stop - stop jack transport";
                 jack_transport_stop(m_client);
             } else {
                 // let jack continue running but still tell the
-                // sequnecer to stop
+                // sequnecer to stop. After this Rosegarden and jack
+                // are decoupled until either Rosegarden is stopped
+                // (withot autoStop) or jack transport is stopped
+                RG_DEBUG << "stop - stop but leave jack running";
+                m_jackDecoupled = true;
                 RosegardenSequencer::getInstance()->stop(autoStop);
             }
         }
@@ -364,11 +374,13 @@ void TransportControl::stop(bool autoStop)
 
 void TransportControl::jumpTo(RealTime time, bool reset)
 {
+    // called from gui and sequencer threads
     RG_DEBUG << "jumpTo" << time << reset;
 #ifdef HAVE_LIBJACK
     if (Preferences::getUseJackTransport() &&
         Preferences::getUseNewJackTransport() &&
-        m_jackAvailable) {
+        m_jackAvailable &&
+        ! m_jackDecoupled) {
         m_resetPlaybackOnJump = reset;
         // if we are in record count in the time may be 0. We cannot
         // use -ve time in jack so we have to set zero here but still
@@ -396,6 +408,7 @@ void TransportControl::jumpTo(RealTime time, bool reset)
 
 int TransportControl::record(const RealTime &time, long recordMode)
 {
+    // called from gui thread
     RG_DEBUG << "record" << time << recordMode;
     bool playRequested = false;
     int ret = RosegardenSequencer::getInstance()->record
@@ -409,6 +422,7 @@ int TransportControl::record(const RealTime &time, long recordMode)
 
 bool TransportControl::jackAvailable() const
 {
+    // called from sequencer thread
 #ifdef HAVE_LIBJACK
     return m_jackAvailable;
 #else
@@ -420,6 +434,7 @@ bool TransportControl::jackAvailable() const
 int TransportControl::syncCallback(jack_transport_state_t state,
                                    const jack_position_t *pos) const
 {
+    // called from jack thread
     RG_DEBUG << "syncCallback" <<
         Preferences::getUseJackTransport() <<
         Preferences::getUseNewJackTransport();
@@ -453,6 +468,7 @@ int TransportControl::syncCallback(jack_transport_state_t state,
 #ifdef HAVE_LIBJACK
 int TransportControl::processCallback(jack_nframes_t)
 {
+    // called from jack thread
     //RG_DEBUG << "processCallback";
 
     if (! Preferences::getUseJackTransport() ||
@@ -468,16 +484,6 @@ int TransportControl::processCallback(jack_nframes_t)
     unsigned int frame = pos.frame;
     unsigned int sampleRate = seq.getSampleRate();
     RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
-    RosegardenDocument* doc = RosegardenDocument::currentDocument;
-    if (! doc) return 0;
-    const Composition& comp = doc->getComposition();
-    timeT endTime = comp.getEndMarker();
-    // If "stop at end of last Segment" is enabled, use the latest
-    // Segment end time.
-    if (Preferences::getStopAtSegmentEnd())
-        endTime = comp.getDuration(true);
-    RealTime compEndTime =
-        comp.getElapsedRealTime(endTime);
 
     if (m_waitingForStartJack && state == JackTransportRolling) {
         // now we are ready to play or record and everyone else too
@@ -506,12 +512,15 @@ int TransportControl::processCallback(jack_nframes_t)
         if (state == JackTransportStarting) sstr = "starting";
         RG_DEBUG << "jack state change" << sstr;
         if (state == JackTransportStarting) {
-            // no start if we are after composition end
-            if (seqStatus == STOPPED && jackTime < compEndTime) {
+            // start even if we are after composition end so jack
+            // starts rolling. If we are beyond end Rosegarden will
+            // stop again immediately
+            if (seqStatus == STOPPED) {
                 seq.play(jackTime);
             }
         }
         if (state == JackTransportStopped) {
+            m_jackDecoupled = false;
             seq.stop(false);
         }
 
