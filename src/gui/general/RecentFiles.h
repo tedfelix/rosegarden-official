@@ -45,13 +45,12 @@ public:
     /// Remove any files that don't actually exist on the filesystem.
     void removeNonExistent();
 
+    bool isEmpty() const  { return m_names.empty(); }
+
     /// Get the list of recent file names.
     const std::list<QString> &get() const  { return m_names; }
 
     void clear();
-
-signals:
-    void recentFilesChanged(int numFiles);
 
 private:
     std::list<QString> m_names;

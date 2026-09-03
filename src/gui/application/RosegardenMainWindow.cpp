@@ -967,15 +967,15 @@ RosegardenMainWindow::setupActions()
 
     createAndSetupTransport();
 
+    const QMenu *fileMenu = findMenu("file");
+    connect(fileMenu, &QMenu::aboutToShow,
+            this, &RosegardenMainWindow::slotFileMenuAboutToShow);
+
     // Hook up for aboutToShow() so we can set up the menu when it is
     // needed.
     m_fileOpenRecentMenu = findMenu("file_open_recent");
-    const std::list<QString> recentFiles = m_recentFiles.get();
-    m_fileOpenRecentMenu->setEnabled(recentFiles.size() > 0);
     connect(m_fileOpenRecentMenu, &QMenu::aboutToShow,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
-    connect(&m_recentFiles, &RecentFiles::recentFilesChanged,
-            this, &RosegardenMainWindow::slotRecentFilesChanged);
 
     const QMenu *setTrackInstrumentMenu =
             findChild<QMenu *>("set_track_instrument");
@@ -6153,11 +6153,10 @@ RosegardenMainWindow::slotToggleMute()
 void RosegardenMainWindow::slotClearRecentFiles()
 {
     m_recentFiles.clear();
-}
 
-void RosegardenMainWindow::slotRecentFilesChanged(int numFiles)
-{
-    m_fileOpenRecentMenu->setEnabled(numFiles > 0);
+    // Clear out the menu as well so that Ctrl+R will now do nothing.
+    // Otherwise Ctrl+R will load the first entry prior to clearing.
+    setupRecentFilesMenu();
 }
 
 void
@@ -8967,6 +8966,13 @@ RosegardenMainWindow::slotMetronomeActivated(bool active)
     QAction *action = findAction("toggle_metronome");
     if (action)
         action->setChecked(active);
+}
+
+void
+RosegardenMainWindow::slotFileMenuAboutToShow()
+{
+    if (m_fileOpenRecentMenu)
+        m_fileOpenRecentMenu->setEnabled(!m_recentFiles.isEmpty());
 }
 
 

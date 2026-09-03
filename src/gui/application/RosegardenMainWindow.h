@@ -1423,7 +1423,6 @@ public slots:
     void slotToggleMute();
 
     void slotClearRecentFiles();
-    void slotRecentFilesChanged(int numFiles);
 
 private:
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
@@ -1583,9 +1582,11 @@ private:
 
     void doStop(bool autoStop);
 
-    QMenu* m_fileOpenRecentMenu;
+    QMenu *m_fileOpenRecentMenu{nullptr};
 
 private slots:
+
+    void slotFileMenuAboutToShow();
 
     /// ??? Rename: slotSetupRecentFilesMenu().
     void setupRecentFilesMenu();
