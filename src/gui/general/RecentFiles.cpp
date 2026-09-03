@@ -101,6 +101,7 @@ RecentFiles::add(QString name)
     }
 
     write();
+    emit recentFilesChanged(m_names.size());
 }
 
 void
@@ -117,6 +118,7 @@ RecentFiles::removeNonExistent()
         if (!QFileInfo(*j).exists())
             m_names.erase(j);
     }
+    emit recentFilesChanged(m_names.size());
 
     // ??? Should we call write() now?  Otherwise we are out of sync.
     //     If we don't write it out, then the user can switch back
@@ -149,6 +151,7 @@ void RecentFiles::clear()
         }
     }
     settings.endGroup();
+    emit recentFilesChanged(m_names.size());
 
 }
 
