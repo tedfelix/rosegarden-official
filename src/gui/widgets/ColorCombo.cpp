@@ -38,7 +38,6 @@ ColorCombo::ColorCombo(QWidget *parent) :
 {
     setEditable(false);
     setMaxVisibleItems(20);
-    view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 void

@@ -131,7 +131,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_bankComboBox->setToolTip(tr("<qt>Set the MIDI bank from which to select programs</qt>"));
     m_bankComboBox->setMaxVisibleItems(maxVisibleItems);
     m_bankComboBox->setMinimumContentsLength(minimumContentsLength);
-    m_bankComboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(m_bankComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectBank);
@@ -154,7 +153,6 @@ MIDIInstrumentParameterPanel::MIDIInstrumentParameterPanel(QWidget *parent) :
     m_programComboBox->setToolTip(tr("<qt>Set the MIDI program or &quot;patch&quot;</p></qt>"));
     m_programComboBox->setMaxVisibleItems(maxVisibleItems);
     m_programComboBox->setMinimumContentsLength(minimumContentsLength);
-    m_programComboBox->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     connect(m_programComboBox,
                 static_cast<void(QComboBox::*)(int)>(&QComboBox::activated),
             this, &MIDIInstrumentParameterPanel::slotSelectProgram);
