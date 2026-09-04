@@ -33,7 +33,8 @@ namespace Rosegarden
 CompositionPosition::CompositionPosition():
     m_position(0),
     m_positionAsElapsedTime(RealTime::zero()),
-    m_documentPosition(0)
+    m_documentPosition(0),
+    m_blockUpdateCycles(0)
 {
     RG_DEBUG << "ctor";
     m_updateTimer = new QTimer(this);
@@ -103,6 +104,12 @@ void CompositionPosition::slotUpdate()
 {
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
+
+    if (m_blockUpdateCycles > 0) {
+        RG_DEBUG << "slotUpdate avoid jump back to old position";
+        m_blockUpdateCycles--;
+        return;
+    }
 
     const Composition& comp = doc->getComposition();
     RealTime position =

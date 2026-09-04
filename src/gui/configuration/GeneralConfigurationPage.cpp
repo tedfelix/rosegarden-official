@@ -281,9 +281,11 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     //       - Sync
     //       - Sync, and offer timebase master
     //     Not sure whether those are still relevant.  Capturing here in case.
+
+    // now a checkbox none/old/new
+
     m_useJackTransport = new QCheckBox(frame);
-    m_useJackTransport->setChecked(
-            settings.value("jacktransport", false).toBool());
+    m_useJackTransport->setChecked(Preferences::getUseJackTransport());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
     connect(m_useJackTransport, &QCheckBox::checkStateChanged,
 #else
@@ -291,6 +293,25 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 #endif
             this, &GeneralConfigurationPage::slotModified);
     layout->addWidget(m_useJackTransport, row, 1, 1, 2);
+
+    ++row;
+
+    settings.endGroup();
+
+    settings.beginGroup(SequencerOptionsConfigGroup);
+
+    // Use new JACK transport
+    layout->addWidget(new QLabel(tr("New JACK Transport Logic"), frame), row, 0);
+
+    m_useNewJackTransport = new QCheckBox(frame);
+    m_useNewJackTransport->setChecked(Preferences::getUseNewJackTransport());
+#if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
+    connect(m_useNewJackTransport, &QCheckBox::checkStateChanged,
+#else
+    connect(m_useNewJackTransport, &QCheckBox::stateChanged,
+#endif
+            this, &GeneralConfigurationPage::slotModified);
+    layout->addWidget(m_useNewJackTransport, row, 1, 1, 2);
 
     ++row;
 
@@ -751,22 +772,19 @@ void GeneralConfigurationPage::apply()
     settings.endGroup();
 
 #ifdef HAVE_LIBJACK
-    settings.beginGroup(SequencerOptionsConfigGroup);
 
-    bool jackTransport = m_useJackTransport->isChecked();
+    Preferences::setUseJackTransport(m_useJackTransport->isChecked());
+    Preferences::setUseNewJackTransport(m_useNewJackTransport->isChecked());
 
-    // 0 -> nothing, 1 -> sync, 2 -> master
-    int jackValue = jackTransport ? 1 : 0;
-
-    settings.setValue("jacktransport", jackTransport);
-
+    // This can be removed if preferences are used in the sound drivers
+    // note: Preferences can be used in the audio thread
+    int jackTransport = (Preferences::getUseJackTransport() &&
+                         ! Preferences::getUseNewJackTransport());
     MappedEvent mEjackValue;
     mEjackValue.setInstrumentId(MidiInstrumentBase);  // ??? Needed?
     mEjackValue.setType(MappedEvent::SystemJackTransport);
-    mEjackValue.setData1(MidiByte(jackValue));
+    mEjackValue.setData1(MidiByte(jackTransport));
     StudioControl::sendMappedEvent(mEjackValue);
-
-    settings.endGroup();
 
     Preferences::setJACKStopAtAutoStop(m_jackStopAtAutoStop->isChecked());
 

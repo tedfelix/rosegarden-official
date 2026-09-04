@@ -767,6 +767,7 @@ set(rg_CPPS
   commands/studio/ModifyDeviceMappingCommand.cpp
   sequencer/SequencerThread.cpp
   sequencer/RosegardenSequencer.cpp
+  sequencer/TransportControl.cpp
 )
 
 if (JACK_FOUND)

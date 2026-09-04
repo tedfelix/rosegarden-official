@@ -1582,7 +1582,11 @@ private:
 
     void doStop(bool autoStop);
 
+    QMenu *m_fileOpenRecentMenu{nullptr};
+
 private slots:
+
+    void slotFileMenuAboutToShow();
 
     /// ??? Rename: slotSetupRecentFilesMenu().
     void setupRecentFilesMenu();
