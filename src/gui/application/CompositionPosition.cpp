@@ -74,6 +74,9 @@ void CompositionPosition::setPosition(timeT time, bool reset)
     RG_DEBUG << "setPosition" << m_position << "->" << time << reset;
     RosegardenDocument* doc = RosegardenDocument::currentDocument;
     if (! doc) return;
+    // After a set we block updates for a few cycles to give time for
+    // the sequencer to accept the new value.
+    m_blockUpdateCycles = 4;
 
     // even if the time has not changed pass it on otherwise it may
     // mess up the trensport request system
@@ -114,10 +117,14 @@ void CompositionPosition::slotUpdate()
     const Composition& comp = doc->getComposition();
     RealTime position =
         SequencerDataBlock::getInstance()->getPositionPointer();
-    if (position != m_positionAsElapsedTime) {
+    // a new position rounding error can cause an exact position at a
+    // bar line to be adjusted to just before the bar line. To avoid
+    // this we ignore very small deltas
+    double delta = abs(position.toSeconds() -
+                       m_positionAsElapsedTime.toSeconds());
+    if (delta > 1.0e-4) {
         RG_DEBUG << "slotUpdate new position" << m_positionAsElapsedTime <<
-            "->" << position;
-        // a new position
+            "->" << position << (position - m_positionAsElapsedTime) * 1000.0;
         m_positionAsElapsedTime = position;
         m_position = comp.getElapsedTimeForRealTime(position);
         RG_DEBUG << "slotUpdate new position position" << m_position;
