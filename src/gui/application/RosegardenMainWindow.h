@@ -1422,6 +1422,8 @@ public slots:
     /// Toggles mute state of the currently selected track.
     void slotToggleMute();
 
+    void slotClearRecentFiles();
+
 private:
     /** Use QTemporaryFile to obtain a tmp filename that is guaranteed to be
      * unique
@@ -1580,7 +1582,11 @@ private:
 
     void doStop(bool autoStop);
 
+    QMenu *m_fileOpenRecentMenu{nullptr};
+
 private slots:
+
+    void slotFileMenuAboutToShow();
 
     /// ??? Rename: slotSetupRecentFilesMenu().
     void setupRecentFilesMenu();

@@ -322,6 +322,8 @@ public:
     {
 #ifdef HAVE_LIBJACK
         if (m_jackDriver) m_jackDriver->getPluginPlayableAudio(playable);
+#else
+        (void)playable; // avoid warning
 #endif
     }
 

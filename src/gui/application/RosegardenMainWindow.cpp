@@ -318,6 +318,7 @@ RosegardenMainWindow::RosegardenMainWindow(
     RG_WARNING << "UI Thread gettid(): " << gettid();
 #endif
 
+    Preferences::initializeCache();
     initStaticObjects();
 
     // the AudioPluginGUIManager must be created after initStaticObjects
@@ -966,10 +967,14 @@ RosegardenMainWindow::setupActions()
 
     createAndSetupTransport();
 
+    const QMenu *fileMenu = findMenu("file");
+    connect(fileMenu, &QMenu::aboutToShow,
+            this, &RosegardenMainWindow::slotFileMenuAboutToShow);
+
     // Hook up for aboutToShow() so we can set up the menu when it is
     // needed.
-    const QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
-    connect(fileOpenRecentMenu, &QMenu::aboutToShow,
+    m_fileOpenRecentMenu = findMenu("file_open_recent");
+    connect(m_fileOpenRecentMenu, &QMenu::aboutToShow,
             this, &RosegardenMainWindow::setupRecentFilesMenu);
 
     const QMenu *setTrackInstrumentMenu =
@@ -998,6 +1003,7 @@ RosegardenMainWindow::setupActions()
 void
 RosegardenMainWindow::setupRecentFilesMenu()
 {
+    RG_DEBUG << "setupRecentFilesMenu";
     QMenu *fileOpenRecentMenu = findMenu("file_open_recent");
     if (!fileOpenRecentMenu) {
         RG_WARNING << "setupRecentFilesMenu(): WARNING: No recent files menu!";
@@ -1031,6 +1037,12 @@ RosegardenMainWindow::setupRecentFilesMenu()
             action->setShortcuts(m_mostRecentShortcuts);
         }
     }
+
+    fileOpenRecentMenu->addSeparator();
+    QAction *clearAction = new QAction(tr("Clear recent files menu"), this);
+    connect(clearAction, &QAction::triggered,
+            this, &RosegardenMainWindow::slotClearRecentFiles);
+    fileOpenRecentMenu->addAction(clearAction);
 }
 
 void
@@ -5950,6 +5962,7 @@ RosegardenMainWindow::slotStop()
 void
 RosegardenMainWindow::doStop(bool autoStop)
 {
+    RG_DEBUG << "doStop" << autoStop;
     if (m_seqManager &&
         m_seqManager->getCountdownDialog()) {
         disconnect(m_seqManager->getCountdownDialog(), &CountdownDialog::stopped,
@@ -6135,6 +6148,15 @@ RosegardenMainWindow::slotToggleMute()
     // Notify observers
     comp.notifyTrackChanged(track);
     RosegardenDocument::currentDocument->slotDocumentModified();
+}
+
+void RosegardenMainWindow::slotClearRecentFiles()
+{
+    m_recentFiles.clear();
+
+    // Clear out the menu as well so that Ctrl+R will now do nothing.
+    // Otherwise Ctrl+R will load the first entry prior to clearing.
+    setupRecentFilesMenu();
 }
 
 void
@@ -8944,6 +8966,13 @@ RosegardenMainWindow::slotMetronomeActivated(bool active)
     QAction *action = findAction("toggle_metronome");
     if (action)
         action->setChecked(active);
+}
+
+void
+RosegardenMainWindow::slotFileMenuAboutToShow()
+{
+    if (m_fileOpenRecentMenu)
+        m_fileOpenRecentMenu->setEnabled(!m_recentFiles.isEmpty());
 }
 
 

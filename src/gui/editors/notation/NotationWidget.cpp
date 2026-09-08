@@ -895,6 +895,7 @@ void NotationWidget::removeHeaders()
 {
     m_headersGroup->setParent(nullptr);
     delete m_headersGroup;
+    m_headersGroup = nullptr;
 }
 
 void

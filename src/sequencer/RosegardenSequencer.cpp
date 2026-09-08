@@ -20,6 +20,7 @@
 #include "RosegardenSequencer.h"
 
 #include "misc/Debug.h"
+#include "misc/Preferences.h"
 #include "misc/Strings.h"
 #include "sound/ControlBlock.h"
 #include "sound/SoundDriver.h"
@@ -33,6 +34,7 @@
 #include "base/Instrument.h"
 #include "base/InstrumentStaticSignals.h"
 #include "gui/studio/StudioControl.h"
+#include "sequencer/TransportControl.h"
 
 #include "gui/application/RosegardenMainWindow.h"
 
@@ -129,7 +131,7 @@ RosegardenSequencer::getInstance()
 {
     // Guaranteed in C++11 to be lazy initialized and thread-safe.
     // See ISO/IEC 14882:2011 6.7(4).
-    RG_DEBUG << "create instance";
+    //RG_DEBUG << "create instance";
     static RosegardenSequencer instance;
 
     // ??? To avoid the static destruction order fiasco, we might want to
@@ -227,8 +229,9 @@ RosegardenSequencer::play(const RealTime &time)
 }
 
 bool
-RosegardenSequencer::record(const RealTime &time,
-                            long recordMode)
+RosegardenSequencer::record(const RealTime &,
+                            long recordMode,
+                            bool& playRequested)
 {
     LOCKED;
 
@@ -341,7 +344,8 @@ RosegardenSequencer::record(const RealTime &time,
         //
         m_driver->initialisePlayback(m_songPosition);
 
-        return play(time);
+        playRequested = true;
+        return 0;
     }
 }
 
@@ -365,10 +369,11 @@ RosegardenSequencer::stop(bool autoStop)
     // the Sequencer doesn't need to know these once
     // we've stopped.
     //
-    //m_songPosition.sec = 0;
-    //m_songPosition.nsec = 0;
     m_lastFetchSongPosition.sec = 0;
     m_lastFetchSongPosition.nsec = 0;
+    // the song position should always be correct
+    //m_songPosition.sec = 0;
+    //m_songPosition.nsec = 0;
 
 //    cleanupMmapData();
 
@@ -463,7 +468,7 @@ RosegardenSequencer::setLoop(
 
     if (jumpToLoop) {
         if (!inLoop)
-            jumpTo(loopStart);
+            TransportControl::getInstance()->jumpTo(loopStart);
         // Guaranteed to be the case now.
         m_withinLoop = true;
     } else {
@@ -1318,6 +1323,14 @@ RosegardenSequencer::updateClocks()
     // If we've reached the end of the loop, go back to the beginning.
     if (isLooping()  &&  newPosition >= m_loopEnd) {
 
+        // if we are using TransportControl just jumpTo the loop start
+        if (Preferences::getUseJackTransport() &&
+            Preferences::getUseNewJackTransport() &&
+            TransportControl::getInstance()->jackAvailable()) {
+            TransportControl::getInstance()->jumpTo(m_loopStart);
+            return;
+        }
+
         RealTime oldPosition = m_songPosition;
 
         // Remove the loop width from the song position and send
@@ -1533,6 +1546,13 @@ RosegardenSequencer::installExporter(WAVExporter* wavExporter)
 {
     m_driver->installExporter(wavExporter);
 }
+
+RealTime
+RosegardenSequencer::getSongPosition()
+{
+    return m_songPosition;
+}
+
 
 void
 RosegardenSequencer::checkForNewClients()

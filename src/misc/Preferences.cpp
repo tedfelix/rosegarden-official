@@ -87,6 +87,31 @@ bool Preferences::getSendControlChangesWhenLooping()
     return sendControlChangesWhenLooping.get();
 }
 
+static PreferenceBool allowresetallcontrollers(                                         SequencerOptionsConfigGroup, "allowresetallcontroller", true);
+
+void Preferences::setAllowresetallcontrollers(bool value)
+{
+    allowresetallcontrollers.set(value);
+}
+
+bool Preferences::getAllowresetallcontrollers()
+{
+    return allowresetallcontrollers.get();
+}
+
+static PreferenceBool forceChannelSetups(
+        SequencerOptionsConfigGroup, "forceChannelSetups", false);
+
+void Preferences::setForceChannelSetups(bool value)
+{
+    forceChannelSetups.set(value);
+}
+
+bool Preferences::getForceChannelSetups()
+{
+    return forceChannelSetups.get();
+}
+
 static PreferenceBool useNativeFileDialogs(
         "FileDialog", "useNativeFileDialogs", true);
 
@@ -398,5 +423,65 @@ int Preferences::getFilePrinter()
     return filePrinter.get();
 }
 
+static PreferenceBool useJackTransport
+(SequencerOptionsConfigGroup, "jacktransport", false);
+
+void Preferences::setUseJackTransport(bool value)
+{
+    useJackTransport.set(value);
+}
+
+bool Preferences::getUseJackTransport()
+{
+    return useJackTransport.get();
+}
+
+static PreferenceBool useNewJackTransport
+(SequencerOptionsConfigGroup, "newjacktransport", true);
+
+void Preferences::setUseNewJackTransport(bool value)
+{
+    useNewJackTransport.set(value);
+}
+
+bool Preferences::getUseNewJackTransport()
+{
+    return useNewJackTransport.get();
+}
+
+void Preferences::initializeCache()
+{
+    getMIDIPitchOctave();
+    getSendProgramChangesWhenLooping();
+    getSendControlChangesWhenLooping();
+    getAllowresetallcontrollers();
+    getForceChannelSetups();
+    getUseNativeFileDialogs();
+    getStopAtSegmentEnd();
+    getJumpToLoop();
+    getAdvancedLooping();
+    getJACKStopAtAutoStop();
+    getAudioFileLocationDlgDontShow();
+    getDefaultAudioLocation();
+    getCustomAudioLocation();
+    getJACKLoadCheck();
+    getShowNoteNames();
+    getPDFViewer();
+    getFilePrinter();
+    getBug1623();
+    getMusewhirl();
+    getHRTimer();
+    getLV2();
+    getDynamicDrag();
+    getLv2Environment();
+    getAutoChannels();
+    getIncludeAlsaPortNumbersWhenMatching();
+    getSMFExportPPQN();
+    getMatrixConstrainNotes();
+    getShowGtk2Warning();
+    getUseJackTransport();
+    getUseNewJackTransport();
+
+}
 
 }

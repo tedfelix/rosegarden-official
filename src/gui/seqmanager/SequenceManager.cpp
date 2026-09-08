@@ -47,6 +47,7 @@
 #include "gui/studio/StudioControl.h"
 #include "gui/widgets/WarningWidget.h"
 #include "sequencer/RosegardenSequencer.h"
+#include "sequencer/TransportControl.h"
 #include "MarkerMapper.h"
 #include "MetronomeMapper.h"
 #include "TempoSegmentMapper.h"
@@ -70,6 +71,7 @@
 #include <QElapsedTimer>
 
 #include <utility>  // For std::pair.
+#include <unistd.h>
 
 namespace Rosegarden
 {
@@ -173,6 +175,7 @@ SequenceManager::setDocument(RosegardenDocument *doc)
 void
 SequenceManager::play()
 {
+    RG_DEBUG << "play";
     if (!m_doc)
         return;
 
@@ -216,7 +219,7 @@ SequenceManager::play()
     if (comp.getLoopMode() == Composition::LoopOn)
         startPos = comp.getElapsedRealTime(comp.getLoopStart());
 
-    int result = RosegardenSequencer::getInstance()->play(startPos);
+    int result = TransportControl::getInstance()->play(startPos);
 
     // Failed?  Bail.
     if (!result) {
@@ -272,7 +275,15 @@ SequenceManager::stop(bool autoStop)
     // response - then we can fiddle about with the audio file
     // without worrying about the sequencer causing problems
     // with access to the same audio files.
-    RosegardenSequencer::getInstance()->stop(autoStop);
+    TransportControl::getInstance()->stop(autoStop);
+
+    // if we are using jack transport the stop will come
+    // asynchronously so wait for it here
+    while (RosegardenSequencer::getInstance()->getStatus() != STOPPED) {
+        RG_DEBUG << "stop waiting for stop" <<
+            RosegardenSequencer::getInstance()->getStatus();
+        usleep(10000);
+    }
 
     // restore
     QApplication::restoreOverrideCursor();
@@ -369,7 +380,7 @@ SequenceManager::fastforward()
 void
 SequenceManager::jumpTo(const RealTime &time, bool reset)
 {
-    RosegardenSequencer::getInstance()->jumpTo(time, reset);
+    TransportControl::getInstance()->jumpTo(time, reset);
 }
 
 void
@@ -609,7 +620,7 @@ punchin:
         const RealTime startPos =
             CompositionPosition::getInstance()->getElapsedTime();
 
-        int result = RosegardenSequencer::getInstance()->record(
+        int result = TransportControl::getInstance()->record(
                 startPos,
                 STARTING_TO_RECORD);  // recordMode
 
@@ -1121,16 +1132,10 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
     if (!warnUser)
         return;
 
-#ifdef HAVE_LIBJACK
     // Audio and MIDI ok?  Bail.
     if ((m_soundDriverStatus & AUDIO_OK)  &&
         (m_soundDriverStatus & MIDI_OK))
         return;
-#else
-    // MIDI ok?  Bail.
-    if (m_soundDriverStatus & MIDI_OK)
-        return;
-#endif
 
     // Either MIDI or Audio are not ok...
 
@@ -1150,28 +1155,20 @@ SequenceManager::checkSoundDriverStatus(bool warnUser)
         return;
     }
 
-#ifdef HAVE_LIBJACK
     // If audio driver is not ok...
     if (!(m_soundDriverStatus & AUDIO_OK)) {
-        // This is to avoid us ever showing the same dialog more than
-        // once during a single run of the program -- it's quite
-        // separate from the suppression function
-        // ??? But this routine is only ever called once.  From
-        //     RMW's ctor.  There is no need for this.  Plus the warning dialogs
-        //     are now hidden in the warning button in the WarningWidget in
-        //     the status bar.
-        static bool showJackWarning = true;
-
-        if (showJackWarning) {
-            emit sendWarning(
+#ifdef HAVE_LIBJACK
+        emit sendWarning(
                     WarningWidget::Audio,
                     tr("<h3>Audio sequencing and synth plugins unavailable!</h3>"),
                     tr("<p>Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.</p><p>If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.</p><p> Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.</p>"));
-
-            showJackWarning = false;
-        }
-    }
+#else
+        emit sendWarning(
+                    WarningWidget::Audio,
+                    tr("<h3>Audio sequencing and synth plugins unavailable!</h3>"),
+                    tr("<p>Rosegarden has been compiled without jack support.</p>"));
 #endif
+    }
 }
 
 void
@@ -1679,7 +1676,7 @@ void SequenceManager::tracksDeleted(const Composition *, std::vector<TrackId> &t
 
     for (unsigned i = 0; i < trackIds.size(); ++i) {
         RG_DEBUG << "  ID: " << trackIds[i];
-        ControlBlock::getInstance()->setTrackDeleted(trackIds[i], true);
+        ControlBlock::getInstance()->trackDeleted(trackIds[i]);
     }
 }
 
@@ -1772,18 +1769,12 @@ SequenceManager::sendPreferences()
 
 
     // Send JACK transport
-
-    const bool jackTransport = qStrToBool(settings.value("jacktransport", "false"));
-    const bool jackSource = qStrToBool(settings.value("jackmaster", "false"));
-
+    // For no jack transport or new method - disable old method
     MidiByte jackValue{0};
-    if (jackTransport && jackSource)
-        jackValue = 2;  // On and source.
-    else {
-        if (jackTransport)
-            jackValue = 1;  // On and follow.
-        else
-            jackValue = 0;  // Off.
+    if (Preferences::getUseJackTransport() &&
+        ! Preferences::getUseNewJackTransport()) {
+        // old jack transport
+        jackValue = 1;
     }
 
     MappedEvent mEjackValue;
