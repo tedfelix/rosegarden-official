@@ -40,6 +40,7 @@ namespace
 }
 #endif
 
+
 namespace Rosegarden
 {
 
@@ -53,17 +54,7 @@ TransportControl* TransportControl::getInstance()
     return &instance;
 }
 
-    TransportControl::TransportControl()
-#ifdef HAVE_LIBJACK
-        :
-        m_state(JackTransportStopped),
-        m_allowedDelta(RealTime::fromMilliseconds(0.1)),
-        m_waitingForStartJack(false),
-        m_countIn(false),
-        m_resetPlaybackOnJump(true),
-        m_jackAvailable(false),
-        m_jackDecoupled(false)
-#endif
+TransportControl::TransportControl()
 {
 #ifdef HAVE_LIBJACK
     RG_DEBUG << "ctor";
@@ -146,11 +137,10 @@ void TransportControl::tick()
                 // starts rolling. If we are beyond end Rosegarden will
                 // stop again immediately
                 if (seqStatus == STOPPED) {
-                    unsigned int frame = pos.frame;
                     // LOCKED
-                    unsigned int sampleRate = seq.getSampleRate();
-                    RealTime jackTime =
-                        RealTime::frame2RealTime(frame, sampleRate);
+                    const unsigned int sampleRate = seq.getSampleRate();
+                    const RealTime jackTime =
+                            RealTime::frame2RealTime(pos.frame, sampleRate);
                     // LOCKED
                     seq.play(jackTime);
                 }
