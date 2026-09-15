@@ -22,6 +22,7 @@
 #include "MappedStudio.h"
 #include "AudioPlayQueue.h"
 #include "PlayableAudioFile.h"
+#include "sound/AudioInstrumentMixer.h"
 
 #include <unistd.h>  // for usleep()
 #include <sys/time.h>
@@ -59,6 +60,7 @@ SoundDriver::~SoundDriver()
 void
 SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
 {
+    RG_DEBUG << "initialiseAudioQueue" << audioEvents.size();
     AudioPlayQueue *newQueue = new AudioPlayQueue();
 
     for (std::vector<MappedEvent>::const_iterator i = audioEvents.begin();
@@ -85,10 +87,10 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
             int channels = fader->getPropertyList(
                                         MappedAudioFader::Channels)[0].toInt();
 
-            //#define DEBUG_PLAYING_AUDIO
+            #define DEBUG_PLAYING_AUDIO
 #ifdef DEBUG_PLAYING_AUDIO
 
-            RG_DEBUG << "Creating playable audio file: id " << audioFile->getId() << ", event time " << i->getEventTime() << ", time now " << getSequencerTime() << ", start marker " << i->getAudioStartMarker() << ", duration " << i->getDuration() << ", instrument " << i->getInstrument() << " channels " << channels;
+            RG_DEBUG << "Creating playable audio file: id " << audioFile->getId() << ", event time " << i->getEventTime() << ", time now " << getSequencerTime() << ", start marker " << i->getAudioStartMarker() << ", duration " << i->getDuration() << ", instrument " << i->getInstrumentId() << " channels " << channels;
 #endif
 
             RealTime bufferLength = getAudioReadBufferLength();
@@ -154,6 +156,13 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
     RG_DEBUG << "SoundDriver::initialiseAudioQueue -- new queue has "
     << newQueue->size() << " files";
 
+    // The audio mixer may have to reload buffers - this is necessary,
+    // for example, if a track is unmuted during play. Note we do this
+    // even if the audio queue is empty as we may have plugins which
+    // need resetting.
+    AudioInstrumentMixer *aim = AudioInstrumentMixer::getInstance();
+    aim->emptyBuffers(getSequencerTime());
+
     if (newQueue->empty()) {
         if (m_audioQueue->empty()) {
             delete newQueue;
@@ -165,6 +174,7 @@ SoundDriver::initialiseAudioQueue(const std::vector<MappedEvent> &audioEvents)
     m_audioQueue = newQueue;
     if (oldQueue)
         m_audioQueueScavenger.claim(oldQueue);
+
 }
 
 const AudioPlayQueue *

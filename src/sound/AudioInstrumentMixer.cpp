@@ -780,6 +780,7 @@ AudioInstrumentMixer::generateBuffers()
 void
 AudioInstrumentMixer::fillBuffers(const RealTime &currentTime)
 {
+    RG_DEBUG << "fillBuffers" << currentTime;
     // Not RT safe
 
     emptyBuffers(currentTime);
@@ -815,6 +816,7 @@ AudioInstrumentMixer::allocateBuffers()
 void
 AudioInstrumentMixer::emptyBuffers(RealTime currentTime)
 {
+    RG_DEBUG << "emptyBuffers" << currentTime;
     // Not RT safe
 
     getLock();
@@ -1050,6 +1052,7 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
     BufferRec &rec = m_bufferMap[id];
     ProcessBufferType &pBuf = m_processBuffers[id];
     RealTime bufferTime = rec.filledTo;
+    RG_DEBUG << "processBlock(" << id << "): buffer time is" << bufferTime;
 
 #ifdef DEBUG_MIXER
     //    if (m_driver->isPlaying()) {
@@ -1210,9 +1213,12 @@ AudioInstrumentMixer::processBlock(InstrumentId id,
             int offset = 0;
             int blockSize = (int)m_blockSize;
 
+            RG_DEBUG << "processBlock time" << file->getStartTime() <<
+                bufferTime;
             if (file->getStartTime() > bufferTime) {
                 offset = (int)RealTime::realTime2Frame
                          (file->getStartTime() - bufferTime, m_sampleRate);
+                RG_DEBUG << "processBlock offset" << offset;
                 if (offset < blockSize)
                     blockSize -= offset;
                 else
