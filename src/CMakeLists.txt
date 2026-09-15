@@ -9,7 +9,6 @@ configure_file(rosegarden-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegarden
 
 # Export macros
 configure_file(rosegardenprivate_export.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegardenprivate_export.h)
-add_definitions(-DROSEGARDENPRIVATE_LIB_MAKEDLL)
 
 # Define the include paths (-I...)
 include_directories(
@@ -879,6 +878,8 @@ install(TARGETS rosegardenGtk2
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 endif()
+
+target_compile_definitions(rosegardenprivate PRIVATE ROSEGARDENPRIVATE_LIB_MAKEDLL)
 
 # If we've got cmake 3.16.0 or greater, use precompiled headers.
 # Cuts build time almost in half.
