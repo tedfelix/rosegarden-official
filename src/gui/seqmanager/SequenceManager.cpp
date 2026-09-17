@@ -553,8 +553,14 @@ punchin:
                 m_realRecordStart = comp.getElapsedRealTime(
                         comp.getBarRange(startBar).first);
                 startBar -= settings.value("countinbars", 0).toUInt();
-                CompositionPosition::getInstance()->slotSet(
-                        comp.getBarRange(startBar).first);
+                timeT jumpTime = comp.getBarRange(startBar).first;
+                CompositionPosition::getInstance()->slotSet(jumpTime);
+                // We must wait here until the jump has been processed
+                while(true) {
+                    if (CompositionPosition::getInstance()->
+                        timeStabilized()) break;
+                    usleep(1000);
+                }
             }
         }
 

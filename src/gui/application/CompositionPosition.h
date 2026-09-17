@@ -46,6 +46,10 @@ public:
     // the notation editor) we do not want to reset the playback.
     void setPosition(timeT time, bool reset = true);
 
+    // after a setPosition call timeStabilized will return true after
+    // the position has been processed by the sequencer.
+    bool timeStabilized() const;
+
 public slots:
     void slotSet(timeT time);
     void slotSetDocumentTime();
