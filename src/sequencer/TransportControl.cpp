@@ -481,10 +481,6 @@ int TransportControl::processCallback(jack_nframes_t)
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     TransportStatus seqStatus = seq.getStatus();
 
-    unsigned int frame = pos.frame;
-    unsigned int sampleRate = seq.getSampleRate();
-    RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
-
     if (m_waitingForStartJack && state == JackTransportRolling) {
         // now we are ready to play or record and everyone else too
         if (seqStatus == STARTING_TO_PLAY) {
@@ -506,16 +502,23 @@ int TransportControl::processCallback(jack_nframes_t)
     }
 
     if (state != m_state) {
+#ifndef NDEBUG
         QString sstr("unknown");
         if (state == JackTransportStopped) sstr = "stopped";
         if (state == JackTransportRolling) sstr = "rolling";
         if (state == JackTransportStarting) sstr = "starting";
         RG_DEBUG << "jack state change" << sstr;
+#endif
         if (state == JackTransportStarting) {
             // start even if we are after composition end so jack
             // starts rolling. If we are beyond end Rosegarden will
             // stop again immediately
             if (seqStatus == STOPPED) {
+                unsigned int frame = pos.frame;
+                // LOCKED
+                unsigned int sampleRate = seq.getSampleRate();
+                RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
+                // LOCKED
                 seq.play(jackTime);
             }
         }
