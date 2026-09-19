@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[SegmentPerformanceHelper]"
 #define RG_NO_DEBUG_PRINT
 
 #include "SegmentPerformanceHelper.h"

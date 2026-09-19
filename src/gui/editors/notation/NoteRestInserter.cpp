@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[NoteRestInserter]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "NoteRestInserter.h"
@@ -170,7 +169,17 @@ NoteRestInserter::NoteRestInserter(NotationWidget* widget) :
     //        this, &NoteRestInserter::slotSetAccidental);
 
     // Push down the default RadioAction on Accidentals.
-    invokeInParentView("no_accidental");
+    // A direct call does not work in the constructor as the widget hierarchy
+    // is not yet available
+    // This call has side effects - it sets the insertion tool.
+
+    // The call appears not to be necessary. The default for the
+    // widget is set in notation.rc and m_accidental is initialized in
+    // the header file
+
+    //QTimer::singleShot(0, this, [this]() {
+    //    invokeInParentView("no_accidental");
+    //});
 
     // Setup wheelIndex accordingly to m_noteType and m_noteDots
     synchronizeWheel();
@@ -187,7 +196,17 @@ NoteRestInserter::NoteRestInserter(const QString &rcFileName,
     //        this, &NoteRestInserter::slotSetAccidental);
 
     // Push down the default RadioAction on Accidentals.
-    invokeInParentView("no_accidental");
+    // A direct call does not work in the constructor as the widget hierarchy
+    // is not yet available
+    // This call has side effects - it sets the insertion tool.
+
+    // The call appears not to be necessary. The default for the
+    // widget is set in notation.rc and m_accidental is initialized in
+    // the header file
+
+    //QTimer::singleShot(0, this, [this]() {
+    //    invokeInParentView("no_accidental");
+    //});
 
     //!!! grace & triplet mode should be stored by this tool, not by widget!
 

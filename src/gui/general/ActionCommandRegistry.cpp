@@ -15,7 +15,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[ActionCommandRegistry]"
 
 #include "ActionCommandRegistry.h"
 #include "ActionFileClient.h"

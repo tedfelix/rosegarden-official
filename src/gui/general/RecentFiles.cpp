@@ -14,7 +14,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[RecentFiles]"
 
 #include "RecentFiles.h"
 
@@ -134,6 +133,22 @@ RecentFiles::removeNonExistent()
     //
     //     Let's avoid calling write() for now in the interests of
     //     simplicity and speed.
+
+}
+
+void RecentFiles::clear()
+{
+    // clear recent files
+    m_names.clear();
+    QSettings settings;
+    settings.beginGroup(RecentFilesConfigGroup);
+    QStringList keys = settings.allKeys();
+    for (const QString &key : keys) {
+        if (key.startsWith("recent-")) {
+            settings.remove(key);
+        }
+    }
+    settings.endGroup();
 
 }
 

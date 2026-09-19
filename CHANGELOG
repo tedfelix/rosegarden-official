@@ -1,3 +1,36 @@
+====== ROSEGARDEN 26.12 RELEASED ======
+
+The Rosegarden team is proud to announce the release of version 26.06
+of Rosegarden, a MIDI sequencer that features a rich understanding of
+music notation along with basic support for digital audio.
+
+  http://www.rosegardenmusic.com/
+
+Included in this release...
+
+===== Bug Fixes =====
+
+  * lilypond: Fix grace note beaming.  github PR #51.
+    [9e7a6d885b] [8d85fab2a3]  [ca4e740438]
+  * notation: Fix grace note durations.  Bug #1779.  [135593d00e]
+  * sequencer: Fix tied note beyond segment end with repeats.
+    Bug #1780.  [abca0d2605]
+  * composition: Fix observer warnings.  Bug #1783.  [4ad74a293f]
+  * ControlBlock: Fix no sound after MusicXML merge.  Bug #1785.
+    [8d01d04364]  [e338ad4e4d]  [d87fc08615]
+  * merge: Allow for undo after file merge.  Bug #1784.
+    [eb0acfe442]
+
+  Stopped at [a28011024e].
+
+===== New Features =====
+
+  * control-rulers: Enable auto-scroll for rubber band selection.
+    [de3664bd09]
+  * debug: Better debug logging with file and line number.
+    Feature Request #545.  [5f8d9694e4]  [f3b708aead]
+
+
 ====== ROSEGARDEN 26.06 RELEASED ======
 
 The Rosegarden team is proud to announce the release of version 26.06
@@ -191,6 +224,7 @@ Included in this release...
   * MIDI Mixer Window review and simplification.  [887e2e1d71 etc...]
   * Rotary widget (knob) review and simplification.
     [eee2941115 etc...]
+
 
 ====== ROSEGARDEN 25.06 RELEASED ======
 

@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[main]"
 
 #include "misc/ConfigGroups.h"
 #include "misc/Strings.h"
@@ -388,6 +387,21 @@ int main(int argc, char *argv[])
     QString organizationName("rosegardenmusic");
     QString organizationDomain("rosegardenmusic.com");
     QString applicationName("Rosegarden");
+
+    // setup environment for logging with file name
+    QByteArray pattern = qgetenv("QT_MESSAGE_PATTERN");
+    if (pattern.isEmpty()) {
+        pattern = "(%{file}:%{line}) %{message}";
+        qputenv("QT_MESSAGE_PATTERN", pattern);
+    } else {
+        // check if file is already used
+        QByteArray substring = "%{file}";
+        if (! pattern.contains(substring)) {
+            // then add it
+            pattern = "(%{file}:%{line}) " + pattern;
+            qputenv("QT_MESSAGE_PATTERN", pattern);
+        }
+    }
 
     {
         // on wayland and gnome there are some requirements for

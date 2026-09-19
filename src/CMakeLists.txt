@@ -9,7 +9,6 @@ configure_file(rosegarden-version.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegarden
 
 # Export macros
 configure_file(rosegardenprivate_export.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/rosegardenprivate_export.h)
-add_definitions(-DROSEGARDENPRIVATE_LIB_MAKEDLL)
 
 # Define the include paths (-I...)
 include_directories(
@@ -767,6 +766,7 @@ set(rg_CPPS
   commands/studio/ModifyDeviceMappingCommand.cpp
   sequencer/SequencerThread.cpp
   sequencer/RosegardenSequencer.cpp
+  sequencer/TransportControl.cpp
 )
 
 if (JACK_FOUND)
@@ -879,6 +879,8 @@ install(TARGETS rosegardenGtk2
 )
 endif()
 
+target_compile_definitions(rosegardenprivate PRIVATE ROSEGARDENPRIVATE_LIB_MAKEDLL)
+
 # If we've got cmake 3.16.0 or greater, use precompiled headers.
 # Cuts build time almost in half.
 if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0" AND NOT DISABLE_PCH)
@@ -910,16 +912,6 @@ if(NOT ${CMAKE_VERSION} VERSION_LESS "3.16.0" AND NOT DISABLE_PCH)
       #<string>
 
       # Top 5 rg headers
-      #
-      # Can't bring any of these in or we'll get RG_MODULE_STRING redefinition
-      # warnings.  This is due to the fact that a default RG_MODULE_STRING is
-      # defined in misc/Debug.h and that ends up being #included before
-      # RG_MODULE_STRING is defined in each file.  We could remove the default
-      # from Debug.h which would force all #includers to define
-      # RG_MODULE_STRING.  That idea has some merit.
-      #
-      # Just bring in the system headers they pull in then.  That
-      # should be similar.
       #
       # Adding any of these just slows the build down, so no point.  Let's
       # just stick to the top 10 system headers above.

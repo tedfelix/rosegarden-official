@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[MatrixTool]"
+#define RG_NO_DEBUG_PRINT
 
 #include "MatrixTool.h"
 #include "misc/Debug.h"

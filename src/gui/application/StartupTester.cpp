@@ -16,7 +16,6 @@
 */
 
 
-#define RG_MODULE_STRING "[StartupTester]"
 
 #include "StartupTester.h"
 

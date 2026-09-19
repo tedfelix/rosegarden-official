@@ -15,7 +15,6 @@
     COPYING included with this distribution for more m_information.
 */
 
-#define RG_MODULE_STRING "[LilyPondProcessor]"
 #define RG_NO_DEBUG_PRINT
 
 #include "LilyPondProcessor.h"

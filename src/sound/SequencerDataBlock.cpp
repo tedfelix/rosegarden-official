@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[SequencerDataBlock]"
 
 #include "SequencerDataBlock.h"
 #include "MappedEventList.h"

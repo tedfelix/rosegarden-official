@@ -38,21 +38,16 @@ public:
     RGNoDebug &operator<<(QTextStreamFunction)  { return *this; }
 };
 
-#if !defined RG_MODULE_STRING
-    #define RG_MODULE_STRING "[generic] "
-#endif
-
 #if !defined NDEBUG
 
     // Use RG_INFO for startup/shutdown progress messages that will be helpful
     // when debugging issues with users.  These will always be written to
     // the debug output even with RG_NO_DEBUG_PRINT defined.  Keep them
     // to a minimum.
-    #define RG_INFO QDebug(QtDebugMsg) << RG_MODULE_STRING
-
+    #define RG_INFO QMessageLogger(__FILE_NAME__, __LINE__, Q_FUNC_INFO).debug()
 #else
 
-    #define RG_INFO Rosegarden::RGNoDebug() << RG_MODULE_STRING
+    #define RG_INFO Rosegarden::RGNoDebug()
 
 #endif
 
@@ -60,13 +55,11 @@ public:
 
     // Use RG_DEBUG for general debugging.  Define RG_NO_DEBUG_PRINT at the
     // top of a .cpp to turn off all RG_DEBUG output.
-    #define RG_DEBUG QDebug(QtDebugMsg) << RG_MODULE_STRING
+    #define RG_DEBUG QMessageLogger(__FILE_NAME__, __LINE__, Q_FUNC_INFO).debug()
 
-    // !!! The following are deprecated since RG_MODULE_STRING provides more
-    //     information.  Define RG_MODULE_STRING and use RG_DEBUG instead.
-    #define NOTATION_DEBUG  QDebug(QtDebugMsg) << "[notation] "
-    #define MATRIX_DEBUG    QDebug(QtDebugMsg) << "[matrix] "
-    #define SEQUENCER_DEBUG QDebug(QtDebugMsg) << "[sequencer] "
+    #define NOTATION_DEBUG  RG_DEBUG
+    #define MATRIX_DEBUG    RG_DEBUG
+    #define SEQUENCER_DEBUG RG_DEBUG
 
 #else
 
@@ -85,7 +78,7 @@ public:
 // For a normal run, there should be no RG_WARNING output.
 // This works in both debug and release builds.  Formerly, std::cerr was
 // used for this.
-#define RG_WARNING QDebug(QtDebugMsg) << RG_MODULE_STRING
+#define RG_WARNING QMessageLogger(__FILE_NAME__, __LINE__, Q_FUNC_INFO).warning()
 
 // Handy logging switcher.  Repurpose when needed in the future.
 //extern bool bug1560Logging();

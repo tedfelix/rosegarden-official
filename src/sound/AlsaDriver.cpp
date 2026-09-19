@@ -17,7 +17,6 @@
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 #endif
 
-#define RG_MODULE_STRING "[AlsaDriver]"
 #define RG_NO_DEBUG_PRINT
 
 #include "misc/Debug.h"
@@ -1610,6 +1609,8 @@ AlsaDriver::checkTimerSync(size_t frames)
 
         m_firstTimerCheck = true;
     }
+#else
+    (void)frames;
 #endif
 }
 
@@ -2116,7 +2117,11 @@ AlsaDriver::initialisePlayback(const RealTime &position)
 }
 
 void
+#ifdef HAVE_LIBJACK
 AlsaDriver::stopPlayback(bool autoStop)
+#else
+AlsaDriver::stopPlayback(bool)
+#endif
 {
 #ifdef DEBUG_ALSA
     RG_DEBUG << "stopPlayback() begin...";
@@ -4368,6 +4373,10 @@ AlsaDriver::processSoftSynthEventOut(InstrumentId id,
             m_jackDriver->setHaveAsyncAudioEvent();
         }
     }
+#else
+    (void)id;
+    (void)event;
+    (void)now;
 #endif
 }
 
@@ -4556,8 +4565,10 @@ AlsaDriver::processEventsOut(const MappedEventList &rgEventList,
         }
     }
 
+#ifdef HAVE_LIBJACK
     AudioFile *audioFile = nullptr;
     bool haveNewAudio = false;
+#endif
 
     // For each incoming event, insert audio events if we find them
     for (const MappedEvent *mappedEvent : rgEventList) {
@@ -5625,6 +5636,8 @@ AlsaDriver::installExporter(WAVExporter* wavExporter)
     if (m_jackDriver) {
         m_jackDriver->installExporter(wavExporter);
     }
+#else
+    (void)wavExporter;
 #endif
 }
 

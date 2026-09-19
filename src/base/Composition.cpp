@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[Composition]"
 #define RG_NO_DEBUG_PRINT
 
 #include "Composition.h"
@@ -1783,6 +1782,11 @@ static void dumpTracks(Composition::TrackMap& tracks)
 
 Track* Composition::getTrackById(TrackId track) const
 {
+    // This routine can get called from RoseXmlHandler - before the
+    // tracks are created. This appears to be harmless but no warning
+    // given in this case
+    if (m_tracks.size() == 0) return nullptr;
+
     TrackMap::const_iterator i = m_tracks.find(track);
 
     if (i != m_tracks.end())

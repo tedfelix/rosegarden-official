@@ -173,6 +173,7 @@ void TestLilypondExport::testExamples_data()
     QTest::newRow("lilypond-up-down") << "examples" << QString();
     QTest::newRow("lilypond-staff-groupings") << "examples" << QString();
     QTest::newRow("lilypond-tied-grace-notes") << "examples" << QString();
+    QTest::newRow("lilypond-tied-grace-notes-2") << "examples" << QString();
     QTest::newRow("logical-segments-4") << "examples" << QString();
     QTest::newRow("mandolin-sonatina") << "examples" << QString();
     QTest::newRow("marks-test") << "examples" << QString();

@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[TrackButtons]"
+#define RG_NO_DEBUG_PRINT
 
 #include "TrackButtons.h"
 
@@ -37,6 +37,7 @@
 #include "commands/segment/RenameTrackCommand.h"
 #include "document/RosegardenDocument.h"
 #include "document/CommandHistory.h"
+#include "gui/application/RosegardenMainWindow.h"
 #include "gui/general/GUIPalette.h"
 #include "gui/general/IconLoader.h"
 #include "gui/seqmanager/SequenceManager.h"
@@ -183,6 +184,10 @@ TrackButtons::TrackButtons(int trackCellHeight,
             this, &TrackButtons::slotTrackSelected);
 #endif
 
+    connect(RosegardenMainWindow::self(),
+            &RosegardenMainWindow::documentAboutToChange,
+            this, &TrackButtons::slotDocumentAboutToChange);
+
     // We have to force the height for the moment
     //
     setMinimumHeight(overallHeight);
@@ -193,10 +198,6 @@ TrackButtons::TrackButtons(int trackCellHeight,
 
 TrackButtons::~TrackButtons()
 {
-    // CRASH!  Probably RosegardenDocument::currentDocument is gone...
-    // Probably don't need to disconnect as we only go away when the
-    // doc and composition do.  shared_ptr would help here.
-    //RosegardenDocument::currentDocument->getComposition().removeObserver(this);
 }
 
 void
@@ -474,7 +475,7 @@ TrackButtons::removeButtons(int position)
     //RG_DEBUG << "removeButtons() - deleting track button at position:" << position;
 
     if (position < 0  ||  position >= m_tracks) {
-        RG_DEBUG << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
+        RG_WARNING << "%%%%%%%%% BIG PROBLEM : TrackButtons::removeButtons() was passed a non-existing index\n";
         return;
     }
 
@@ -549,16 +550,16 @@ TrackButtons::slotUpdateTracks()
                     m_trackHBoxes.push_back(trackHBox);
                 }
             } else
-                RG_DEBUG << "TrackButtons::slotUpdateTracks - can't find TrackId for position " << i;
+                RG_WARNING << "TrackButtons::slotUpdateTracks - can't find TrackId for position " << i;
         }
     }
 
     m_tracks = newNbTracks;
 
     if (m_tracks != (int)m_trackHBoxes.size())
-        RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackHBoxes.size() != m_tracks";
+        RG_WARNING << "WARNING  TrackButtons::slotUpdateTracks(): m_trackHBoxes.size() != m_tracks";
     if (m_tracks != (int)m_trackLabels.size())
-        RG_DEBUG << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
+        RG_WARNING << "WARNING  TrackButtons::slotUpdateTracks(): m_trackLabels.size() != m_tracks";
 
     // For each track
     for (int i = 0; i < m_tracks; ++i) {
@@ -1338,7 +1339,7 @@ TrackButtons::getRecordLedColour(Instrument *ins)
 
     case Instrument::InvalidInstrument:
     default:
-        RG_DEBUG << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!";
+        RG_WARNING << "TrackButtons::slotUpdateTracks() - invalid instrument type, this is probably a BUG!";
         return Qt::green;
 
     }
@@ -1435,5 +1436,9 @@ TrackButtons::slotDocumentModified(bool)
     slotUpdateTracks();
 }
 
+void TrackButtons::slotDocumentAboutToChange()
+{
+    RosegardenDocument::currentDocument->getComposition().removeObserver(this);
+}
 
 }

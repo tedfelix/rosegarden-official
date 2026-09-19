@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[LV2PluginFactory]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "LV2PluginFactory.h"

@@ -13,7 +13,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[MidiDevice]"
 
 #include "MidiDevice.h"
 #include "sound/Midi.h"  // For MIDI_CONTROLLER_VOLUME, etc...

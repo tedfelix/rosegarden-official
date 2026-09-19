@@ -12,7 +12,6 @@
     COPYING included with this distribution for more information.
 */
 
-#define RG_MODULE_STRING "[AudioPluginInstance]"
 #define RG_NO_DEBUG_PRINT 1
 
 #include "base/AudioPluginInstance.h"

@@ -59,7 +59,11 @@ namespace Preferences
     void setSendControlChangesWhenLooping(bool value);
     bool getSendControlChangesWhenLooping();
 
-    // ??? Move ChannelManager.cpp:allowReset() and forceChannelSetups() here.
+    void setAllowresetallcontrollers(bool value);
+    bool getAllowresetallcontrollers();
+
+    void setForceChannelSetups(bool value);
+    bool getForceChannelSetups();
 
     void setUseNativeFileDialogs(bool value);
     bool getUseNativeFileDialogs();
@@ -145,6 +149,16 @@ namespace Preferences
 
     void setShowGtk2Warning(bool value);
     bool getShowGtk2Warning();
+
+    void setUseJackTransport(bool value);
+    bool getUseJackTransport();
+
+    void setUseNewJackTransport(bool value);
+    bool getUseNewJackTransport();
+
+    // This will setup all the cached variables so the get... calls
+    // can be made from realtime threads
+    void initializeCache();
 }
 
 
