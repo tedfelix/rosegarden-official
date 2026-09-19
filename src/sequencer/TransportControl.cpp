@@ -28,13 +28,6 @@
 namespace
 {
 
-    int processCallbackC(jack_nframes_t nframes, void *arg)
-    {
-        Rosegarden::TransportControl* tc =
-            static_cast<Rosegarden::TransportControl*>(arg);
-        return tc->processCallback(nframes);
-    }
-
     int syncCallbackC(jack_transport_state_t state,
                       jack_position_t *pos,
                       void *arg)
@@ -85,7 +78,6 @@ TransportControl* TransportControl::getInstance()
         return;
     }
     m_jackAvailable = true;
-    jack_set_process_callback(m_client, processCallbackC, this);
     jack_set_sync_callback(m_client, syncCallbackC, this);
     jack_set_sync_timeout(m_client, 2000000);
     jack_activate(m_client);
@@ -106,6 +98,66 @@ void TransportControl::tick()
     RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
     //RG_DEBUG << "tick" << seq.getStatus();
 #ifdef HAVE_LIBJACK
+    if (Preferences::getUseJackTransport() &&
+        Preferences::getUseNewJackTransport() &&
+        m_jackAvailable) {
+
+        jack_position_t pos ;
+        jack_transport_state_t state = jack_transport_query(m_client, &pos);
+
+        TransportStatus seqStatus = seq.getStatus();
+
+        if (m_waitingForStartJack && state == JackTransportRolling) {
+            // now we are ready to play or record and everyone else too
+            if (seqStatus == STARTING_TO_PLAY) {
+                if (!seq.startPlaying()) {
+                    // send result failed and stop Sequencer
+                    seq.setStatus(STOPPING);
+                } else {
+                    seq.setStatus(PLAYING);
+                }
+            }
+            if (seqStatus == STARTING_TO_RECORD) {
+                if (!seq.startPlaying()) {
+                    seq.setStatus(STOPPING);
+                } else {
+                    seq.setStatus(RECORDING);
+                }
+            }
+            m_waitingForStartJack = false;
+        }
+
+        if (state != m_state) {
+#ifndef NDEBUG
+            QString sstr("unknown");
+            if (state == JackTransportStopped) sstr = "stopped";
+            if (state == JackTransportRolling) sstr = "rolling";
+            if (state == JackTransportStarting) sstr = "starting";
+            RG_DEBUG << "jack state change" << sstr;
+#endif
+            if (state == JackTransportStarting) {
+                // start even if we are after composition end so jack
+                // starts rolling. If we are beyond end Rosegarden will
+                // stop again immediately
+                if (seqStatus == STOPPED) {
+                    unsigned int frame = pos.frame;
+                    // LOCKED
+                    unsigned int sampleRate = seq.getSampleRate();
+                    RealTime jackTime =
+                        RealTime::frame2RealTime(frame, sampleRate);
+                    // LOCKED
+                    seq.play(jackTime);
+                }
+            }
+            if (state == JackTransportStopped) {
+                m_jackDecoupled = false;
+                seq.stop(false);
+            }
+
+            m_state = state;
+        }
+    }
+
     if (Preferences::getUseJackTransport() &&
         Preferences::getUseNewJackTransport() &&
         m_jackAvailable) {
@@ -461,75 +513,6 @@ int TransportControl::syncCallback(jack_transport_state_t state,
     }
 
     return 1;
-}
-
-#endif
-
-#ifdef HAVE_LIBJACK
-int TransportControl::processCallback(jack_nframes_t)
-{
-    // called from jack thread
-    //RG_DEBUG << "processCallback";
-
-    if (! Preferences::getUseJackTransport() ||
-        ! Preferences::getUseNewJackTransport() ||
-        ! m_jackAvailable) return 0;
-
-    jack_position_t pos ;
-    jack_transport_state_t state = jack_transport_query(m_client, &pos);
-
-    RosegardenSequencer& seq = *RosegardenSequencer::getInstance();
-    TransportStatus seqStatus = seq.getStatus();
-
-    if (m_waitingForStartJack && state == JackTransportRolling) {
-        // now we are ready to play or record and everyone else too
-        if (seqStatus == STARTING_TO_PLAY) {
-            if (!seq.startPlaying()) {
-                // send result failed and stop Sequencer
-                seq.setStatus(STOPPING);
-            } else {
-                seq.setStatus(PLAYING);
-            }
-        }
-        if (seqStatus == STARTING_TO_RECORD) {
-            if (!seq.startPlaying()) {
-                seq.setStatus(STOPPING);
-            } else {
-                seq.setStatus(RECORDING);
-            }
-        }
-        m_waitingForStartJack = false;
-    }
-
-    if (state != m_state) {
-#ifndef NDEBUG
-        QString sstr("unknown");
-        if (state == JackTransportStopped) sstr = "stopped";
-        if (state == JackTransportRolling) sstr = "rolling";
-        if (state == JackTransportStarting) sstr = "starting";
-        RG_DEBUG << "jack state change" << sstr;
-#endif
-        if (state == JackTransportStarting) {
-            // start even if we are after composition end so jack
-            // starts rolling. If we are beyond end Rosegarden will
-            // stop again immediately
-            if (seqStatus == STOPPED) {
-                unsigned int frame = pos.frame;
-                // LOCKED
-                unsigned int sampleRate = seq.getSampleRate();
-                RealTime jackTime = RealTime::frame2RealTime(frame, sampleRate);
-                // LOCKED
-                seq.play(jackTime);
-            }
-        }
-        if (state == JackTransportStopped) {
-            m_jackDecoupled = false;
-            seq.stop(false);
-        }
-
-        m_state = state;
-    }
-    return 0;
 }
 #endif
 
