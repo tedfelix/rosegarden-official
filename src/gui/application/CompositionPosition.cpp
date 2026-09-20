@@ -90,6 +90,22 @@ void CompositionPosition::setPosition(timeT time, bool reset)
     emit changed(m_position);
 }
 
+    bool CompositionPosition::timeStabilized() const
+{
+    RosegardenDocument* doc = RosegardenDocument::currentDocument;
+    if (! doc) return true;
+    const Composition& comp = doc->getComposition();
+    timeT pos = m_position;
+    // for -ve time the correct sequencer time is 0
+    if (pos < 0) pos = 0;
+    RealTime posTime = comp.getElapsedRealTime(pos);
+    RealTime rtPosition =
+        SequencerDataBlock::getInstance()->getPositionPointer();
+    double delta = abs(rtPosition.toSeconds() -
+                       posTime.toSeconds());
+    return (delta < 1.0e-4);
+}
+
 void CompositionPosition::slotSet(timeT time)
 {
     setPosition(time);

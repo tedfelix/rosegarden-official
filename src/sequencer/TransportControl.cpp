@@ -476,7 +476,9 @@ bool TransportControl::jackAvailable() const
 {
     // called from sequencer thread
 #ifdef HAVE_LIBJACK
-    return m_jackAvailable;
+    return (Preferences::getUseJackTransport() &&
+            Preferences::getUseNewJackTransport() &&
+            m_jackAvailable);
 #else
     return false;
 #endif
