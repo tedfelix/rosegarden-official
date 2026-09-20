@@ -42,7 +42,6 @@ public:
     bool jackAvailable() const;
 
 #ifdef HAVE_LIBJACK
-    int processCallback(jack_nframes_t nframes);
     int syncCallback(jack_transport_state_t state,
                      const jack_position_t *pos) const;
 #endif
