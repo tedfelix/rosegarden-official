@@ -135,7 +135,13 @@ void TransportControl::tick()
             if (state == JackTransportStarting) sstr = "starting";
             RG_DEBUG << "jack state change" << sstr;
 #endif
-            if (state == JackTransportStarting) {
+            // This is called from the sequencer thread. The jack
+            // thread may move straight on to the rollong state before
+            // we get here. So we must check for a direct jump from
+            // stopped to rolling.
+            if (state == JackTransportStarting ||
+                (m_state == JackTransportStopped &&
+                 state == JackTransportRolling)) {
                 // start even if we are after composition end so jack
                 // starts rolling. If we are beyond end Rosegarden will
                 // stop again immediately
