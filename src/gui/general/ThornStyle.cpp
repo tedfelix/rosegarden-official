@@ -209,6 +209,7 @@ void AppEventFilter::polishWidget(QWidget *widget)
         }
     } else if (QComboBox *cb = qobject_cast<QComboBox *>(widget)) {
         cb->setAttribute(Qt::WA_Hover);
+        cb->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     } else if (QAbstractSpinBox *sb = qobject_cast<QAbstractSpinBox *>(widget)) {
         sb->setAttribute(Qt::WA_Hover);
     }
