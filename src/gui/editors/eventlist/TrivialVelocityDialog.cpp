@@ -38,6 +38,7 @@ TrivialVelocityDialog::TrivialVelocityDialog(
     QHBoxLayout *hboxLayout = new QHBoxLayout;
     m_metagrid->addWidget(hbox, 0, 0);
 
+    // cppcheck-suppress constVariablePointer
     QLabel *child_3 = new QLabel(label, hbox );
     hboxLayout->addWidget(child_3);
     m_spin = new QSpinBox( hbox );

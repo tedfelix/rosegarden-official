@@ -80,7 +80,7 @@ MatrixMover::handleLeftButtonPress(const MatrixMouseEvent *e)
 
     m_mousePressPos = e->viewpos;
 
-    Segment *segment = m_scene->getCurrentSegment();
+    const Segment *segment = m_scene->getCurrentSegment();
     if (!segment) return;
 
     // Check the scene's current segment (apparently not necessarily the same
@@ -478,14 +478,9 @@ void MatrixMover::ready()
     }
 }
 
-void MatrixMover::stow()
-{
-    // Nothing of this vestigial code remains in modern Qt Rosegarden.
-}
-
 void MatrixMover::setBasicContextHelp(bool ctrlPressed)
 {
-    EventSelection *selection = m_scene->getSelection();
+    const EventSelection *selection = m_scene->getSelection();
     if (!selection || selection->size() < 2) {
         if (!ctrlPressed) {
             setContextHelp(tr("Click and drag to move a note; hold Ctrl as well to copy it"));

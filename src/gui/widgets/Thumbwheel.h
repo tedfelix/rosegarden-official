@@ -32,8 +32,8 @@ class Thumbwheel : public QWidget
 
 public:
 
-    Thumbwheel(Qt::Orientation orientation,
-               QWidget *parent = nullptr);
+    explicit Thumbwheel(Qt::Orientation orientation,
+                        QWidget *parent = nullptr);
 
     // Appearance routines.
     void setBright(bool bright)  { m_bright = bright; }

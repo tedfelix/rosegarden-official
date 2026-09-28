@@ -50,7 +50,7 @@ public:
     static const unsigned int DEFAULT_NB_STRINGS = 6;
 
     explicit Fingering(unsigned int nbStrings = DEFAULT_NB_STRINGS);
-    explicit Fingering(QString);
+    explicit Fingering(const QString&);
 
     enum { MUTED = -1, OPEN = 0 };
 

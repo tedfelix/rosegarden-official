@@ -305,7 +305,7 @@ MatrixWidget::MatrixWidget(bool drumMode) :
     connect(m_controlsWidget, &ControlRulerWidget::showContextHelp,
             this, &MatrixWidget::showContextHelp);
 
-    MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName()));
+    const MatrixMover *matrixMoverTool = dynamic_cast <MatrixMover *> (m_toolBox->getTool(MatrixMover::ToolName()));
     if (matrixMoverTool) {
         connect(matrixMoverTool, &MatrixMover::hoveredOverNoteChanged,
                 m_controlsWidget, &ControlRulerWidget::slotHoveredOverNoteChanged);
@@ -370,8 +370,8 @@ MatrixWidget::setSegments(RosegardenDocument *document,
     m_onlyKeyMapping = true;
     std::vector<Segment *>::iterator si;
     for (si=segments.begin(); si!=segments.end(); ++si) {
-        Track *track = comp.getTrackById((*si)->getTrack());
-        Instrument *instr = document->getStudio().getInstrumentById(track->getInstrument());
+        const Track *track = comp.getTrackById((*si)->getTrack());
+        const Instrument *instr = document->getStudio().getInstrumentById(track->getInstrument());
         if (instr) {
             if (!instr->getKeyMapping()) {
                 m_onlyKeyMapping = false;
@@ -528,9 +528,9 @@ MatrixWidget::generatePitchRuler()
     m_localMapping.reset();
     bool isPercussion = false;
 
-    Composition &comp = m_document->getComposition();
+    const Composition &comp = m_document->getComposition();
     const MidiKeyMapping *mapping = nullptr;
-    Track *track = comp.getTrackById(m_scene->getCurrentSegment()->getTrack());
+    const Track *track = comp.getTrackById(m_scene->getCurrentSegment()->getTrack());
     m_instrument = m_document->getStudio().
                             getInstrumentById(track->getInstrument());
     if (m_instrument) {
@@ -795,12 +795,12 @@ MatrixWidget::nextSegment()
 Device *
 MatrixWidget::getCurrentDevice()
 {
-    Segment *segment = getCurrentSegment();
+    const Segment *segment = getCurrentSegment();
     if (!segment)
         return nullptr;
 
-    Studio &studio = m_document->getStudio();
-    Instrument *instrument =
+    const Studio &studio = m_document->getStudio();
+    const Instrument *instrument =
         studio.getInstrumentById
         (segment->getComposition()->getTrackById(segment->getTrack())->
          getInstrument());
@@ -887,7 +887,7 @@ MatrixWidget::setCanvasCursor(QCursor cursor)
 }
 
 void
-MatrixWidget::setTool(QString name)
+MatrixWidget::setTool(const QString& name)
 {
     MatrixTool *tool = dynamic_cast<MatrixTool *>(m_toolBox->getTool(name));
     if (!tool)
@@ -918,7 +918,8 @@ MatrixWidget::setSelectAndEditTool()
 {
     setTool(MatrixSelector::ToolName());
 
-    MatrixSelector *selector = dynamic_cast<MatrixSelector *>(m_currentTool);
+    const MatrixSelector *selector =
+        dynamic_cast<MatrixSelector *>(m_currentTool);
     if (selector) {
         //RG_DEBUG << "setSelectAndEditTool(): selector successfully set";
 
@@ -1381,11 +1382,11 @@ void MatrixWidget::slotKeyPressed(unsigned int y, bool repeating)
     if (!repeating)
         m_firstNote = evPitch;
 
-    Composition &comp = m_document->getComposition();
-    Studio &studio = m_document->getStudio();
+    const Composition &comp = m_document->getComposition();
+    const Studio &studio = m_document->getStudio();
 
     MatrixViewSegment *current = m_scene->getCurrentViewSegment();
-    Track *track = comp.getTrackById(current->getSegment().getTrack());
+    const Track *track = comp.getTrackById(current->getSegment().getTrack());
     if (!track)
         return;
 
@@ -1456,10 +1457,10 @@ void MatrixWidget::slotKeySelected(unsigned int y, bool repeating)
     setSelection(eventSelection, false);
 
     // now play the note as well
-    Composition &comp = m_document->getComposition();
-    Studio &studio = m_document->getStudio();
+    const Composition &comp = m_document->getComposition();
+    const Studio &studio = m_document->getStudio();
 
-    Track *track = comp.getTrackById(current->getSegment().getTrack());
+    const Track *track = comp.getTrackById(current->getSegment().getTrack());
     if (!track)
         return;
 
@@ -1486,11 +1487,11 @@ void MatrixWidget::slotKeyReleased(unsigned int y, bool repeating)
 
     // send note off (note on at zero velocity)
 
-    Composition &comp = m_document->getComposition();
-    Studio &studio = m_document->getStudio();
+    const Composition &comp = m_document->getComposition();
+    const Studio &studio = m_document->getStudio();
 
     MatrixViewSegment *current = m_scene->getCurrentViewSegment();
-    Track *track = comp.getTrackById(current->getSegment().getTrack());
+    const Track *track = comp.getTrackById(current->getSegment().getTrack());
     if (!track)
         return;
 

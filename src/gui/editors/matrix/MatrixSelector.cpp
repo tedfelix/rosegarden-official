@@ -287,7 +287,7 @@ MatrixSelector::handleMouseTripleClick(const MatrixMouseEvent *e)
     if (!m_justSelectedBar) return;
     m_justSelectedBar = false;
 
-    MatrixViewSegment *vs = e->viewSegment;
+    const MatrixViewSegment *vs = e->viewSegment;
     if (!vs) return;
 
     if (m_clickedElement) {
@@ -576,7 +576,7 @@ MatrixSelector::getSelection(EventSelection *&selection,
 void
 MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
 {
-    MatrixElement *element = e->element;
+    const MatrixElement *element = e->element;
 
     if (!element) {
 
@@ -594,7 +594,7 @@ MatrixSelector::setContextHelpFor(const MatrixMouseEvent *e, bool ctrlPressed)
         // max size of 10
         if ((x + width) - resizeStart > 10) resizeStart = x + width - 10;
 
-        EventSelection *s = m_scene->getSelection();
+        const EventSelection *s = m_scene->getSelection();
 
         if (e->sceneX > resizeStart) {
             if (s && s->size() > 1) {

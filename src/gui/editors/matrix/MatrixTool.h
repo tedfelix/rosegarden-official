@@ -78,7 +78,9 @@ protected slots:
     void slotDrawSelected();
 
 protected:
-    MatrixTool(QString rcFileName, QString menuName, MatrixWidget *);
+    MatrixTool(const QString& rcFileName,
+               const QString& menuName,
+               MatrixWidget *);
 
     const SnapGrid *getSnapGrid() const;
 

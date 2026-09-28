@@ -297,8 +297,6 @@ void MatrixPainter::handleMouseRelease(const MatrixMouseEvent *e)
         }
     } else {
 
-        SegmentMatrixHelper helper(m_currentViewSegment->getSegment());
-
         MatrixInsertionCommand* command =
             new MatrixInsertionCommand(m_currentViewSegment->getSegment(),
                                        time,

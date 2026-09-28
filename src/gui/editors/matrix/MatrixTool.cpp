@@ -32,8 +32,9 @@
 namespace Rosegarden
 {
 
-MatrixTool::MatrixTool(QString rcFileName, QString menuName,
-                           MatrixWidget *widget) :
+MatrixTool::MatrixTool(const QString& rcFileName,
+                       const QString& menuName,
+                       MatrixWidget *widget) :
     BaseTool(menuName, widget),
     m_widget(widget),
     m_scene(nullptr),

@@ -28,13 +28,13 @@ namespace Rosegarden
 
 namespace Guitar
 {
-    
+
 Fingering::Fingering(unsigned int nbStrings) :
     m_strings(nbStrings, MUTED)
 {
 }
 
-Fingering::Fingering(QString s)
+Fingering::Fingering(const QString& s)
 {
     QString errString;
     Fingering t = parseFingering(s, errString);
@@ -51,10 +51,10 @@ Fingering::getStartFret() const
         if (*i > max)
             max = *i;
     }
-    
+
     if (max < 4)
         min = 1;
-    
+
     return min == 999 ? 1 : min;
 }
 
@@ -62,7 +62,7 @@ bool
 Fingering::hasBarre() const
 {
     int lastStringStatus = m_strings[getNbStrings() - 1];
-    
+
     return ((m_strings[0] > OPEN && m_strings[0] == lastStringStatus) ||
             (m_strings[1] > OPEN && m_strings[1] == lastStringStatus) ||
             (m_strings[2] > OPEN && m_strings[2] == lastStringStatus));
@@ -78,7 +78,7 @@ Fingering::getBarre() const
     int lastStringStatus = m_strings[getNbStrings() - 1];
 
     Barre res;
-    
+
     res.fret = lastStringStatus;
 
     // For each string from first (0) to third (2).
@@ -105,8 +105,8 @@ Fingering::getBarre() const
     }
 
     res.end = 5;
-    
-    return res;        
+
+    return res;
 }
 
 Fingering
@@ -120,19 +120,19 @@ Fingering::parseFingering(const QString& ch, QString& errorString)
 
     unsigned int idx = 0;
     Fingering fingering;
-    
+
     for(QStringList::iterator i = tokens.begin(); i != tokens.end() && idx < fingering.getNbStrings(); ++i, ++idx) {
         QString t = *i;
         bool b = false;
         unsigned int fn = t.toUInt(&b);
         if (b) {
-//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = " << fn;  
+//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = " << fn;
             fingering[idx] = fn;
         } else if (t.toLower() == "x") {
-//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = MUTED\n";  
+//            NOTATION_DEBUG << "Fingering::parseFingering : '" << t << "' = MUTED\n";
             fingering[idx] = MUTED;
         } else {
-            errorString = tr("couldn't parse fingering '%1' in '%2'").arg(t).arg(ch);            
+            errorString = tr("couldn't parse fingering '%1' in '%2'").arg(t).arg(ch);
         }
     }
 
@@ -143,7 +143,7 @@ Fingering::parseFingering(const QString& ch, QString& errorString)
 std::string Fingering::toString() const
 {
     std::stringstream s;
-    
+
     for(std::vector<int>::const_iterator i = m_strings.begin(); i != m_strings.end(); ++i) {
         if (*i >= 0)
             s << *i << ' ';
@@ -162,7 +162,7 @@ bool operator<(const Fingering& a, const Fingering& b)
         }
     }
     return false;
-}    
+}
 
 }
 

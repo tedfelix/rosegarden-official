@@ -39,7 +39,7 @@ class PianoKeyboard : public PitchRuler
 {
     Q_OBJECT
 public:
-    PianoKeyboard(QWidget *parent, int keys = 88);
+    explicit PianoKeyboard(QWidget *parent, int keys = 88);
 
     QSize sizeHint() const override;
     QSize minimumSizeHint() const override;

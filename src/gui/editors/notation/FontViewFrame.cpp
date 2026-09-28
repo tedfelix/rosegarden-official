@@ -56,7 +56,7 @@ FontViewFrame::~FontViewFrame()
 }
 
 void
-FontViewFrame::setFont(QString font)
+FontViewFrame::setFont(const QString& font)
 {
     m_fontName = font;
     loadFont();
