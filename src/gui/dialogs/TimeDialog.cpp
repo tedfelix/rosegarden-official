@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2026 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -119,6 +119,20 @@ TimeDialog::slotIsValid(bool valid)
 {
     QPushButton *okButton = m_buttonBox->button(QDialogButtonBox::Ok);
     okButton->setEnabled(valid);
+}
+
+void TimeDialog::showEvent(QShowEvent *)
+{
+    // Set focus to the OK button.
+    // Added to fix bug #1749.  Some environments prevent the Enter key from
+    // pressing the OK button when a SpinBox has focus.  This makes sure the OK
+    // button has the focus instead of the first field in TimeWidget2.  That
+    // should guarantee pressing Enter will always dismiss this dialog after
+    // it is launched.
+
+    QPushButton *okButton =
+        m_buttonBox->button(QDialogButtonBox::Ok);
+    okButton->setFocus();
 }
 
 
