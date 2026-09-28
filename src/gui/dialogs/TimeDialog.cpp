@@ -123,6 +123,13 @@ TimeDialog::slotIsValid(bool valid)
 
 void TimeDialog::showEvent(QShowEvent *)
 {
+    // Set focus to the OK button.
+    // Added to fix bug #1749.  Some environments prevent the Enter key from
+    // pressing the OK button when a SpinBox has focus.  This makes sure the OK
+    // button has the focus instead of the first field in TimeWidget2.  That
+    // should guarantee pressing Enter will always dismiss this dialog after
+    // it is launched.
+
     QPushButton *okButton =
         m_buttonBox->button(QDialogButtonBox::Ok);
     okButton->setFocus();
