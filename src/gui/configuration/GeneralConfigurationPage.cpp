@@ -301,10 +301,14 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
     settings.beginGroup(SequencerOptionsConfigGroup);
 
     // Use new JACK transport
-    layout->addWidget(new QLabel(tr("New JACK Transport Logic"), frame), row, 0);
+    m_useNewJackTransportLabel =
+            new QLabel(tr("New JACK Transport Logic"), frame);
+    m_useNewJackTransportLabel->setEnabled(Preferences::getUseJackTransport());
+    layout->addWidget(m_useNewJackTransportLabel, row, 0);
 
     m_useNewJackTransport = new QCheckBox(frame);
     m_useNewJackTransport->setChecked(Preferences::getUseNewJackTransport());
+    m_useNewJackTransport->setEnabled(Preferences::getUseJackTransport());
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 7, 0))
     connect(m_useNewJackTransport, &QCheckBox::checkStateChanged,
 #else
@@ -860,6 +864,16 @@ void GeneralConfigurationPage::apply()
                 tr("You must restart Rosegarden or open a file for the track label width change to take effect."));
     }
 
+}
+
+void
+GeneralConfigurationPage::slotModified()
+{
+    // "Use New JACK Transport" only makes sense when JACK transport is enabled.
+    m_useNewJackTransport->setEnabled(m_useJackTransport->isChecked());
+    m_useNewJackTransportLabel->setEnabled(m_useJackTransport->isChecked());
+
+    TabbedConfigurationPage::slotModified();
 }
 
 

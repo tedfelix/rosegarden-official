@@ -20,6 +20,7 @@
 
 #include "TabbedConfigurationPage.h"
 
+#include <QLabel>
 #include <QString>
 
 class QCheckBox;
@@ -92,6 +93,10 @@ public:
 signals:
     void updateAutoSaveInterval(unsigned int);
 
+protected slots:
+
+    void slotModified() override;
+
 private slots:
     void slotShowStatus();
 
@@ -106,6 +111,7 @@ private:
     QCheckBox *m_enableEditingDuringPlayback;
     QCheckBox *m_cleanRecentFilesList;
     QCheckBox *m_useJackTransport;
+    QLabel *m_useNewJackTransportLabel;
     QCheckBox *m_useNewJackTransport;
     QCheckBox *m_jackStopAtAutoStop;
     QCheckBox *m_stopPlaybackAtEnd;
