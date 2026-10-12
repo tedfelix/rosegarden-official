@@ -62,7 +62,8 @@ TransportControl* TransportControl::getInstance()
         m_countIn(false),
         m_resetPlaybackOnJump(true),
         m_jackAvailable(false),
-        m_jackDecoupled(false)
+        m_jackDecoupled(false),
+        m_sequencerJumpRequested(false)
 #endif
 {
 #ifdef HAVE_LIBJACK
@@ -101,6 +102,11 @@ void TransportControl::tick()
     if (Preferences::getUseJackTransport() &&
         Preferences::getUseNewJackTransport() &&
         m_jackAvailable) {
+
+        if (m_sequencerJumpRequested) {
+            seq.jumpTo(m_sequencerJumpTime, m_resetPlaybackOnJump);
+            m_sequencerJumpRequested = false;
+        }
 
         jack_position_t pos ;
         jack_transport_state_t state = jack_transport_query(m_client, &pos);
@@ -492,7 +498,7 @@ bool TransportControl::jackAvailable() const
 
 #ifdef HAVE_LIBJACK
 int TransportControl::syncCallback(jack_transport_state_t state,
-                                   const jack_position_t *pos) const
+                                   const jack_position_t *pos)
 {
     // called from jack thread
     RG_DEBUG << "syncCallback" <<
@@ -517,7 +523,8 @@ int TransportControl::syncCallback(jack_transport_state_t state,
         seqStatus != RECORDING) { // no jump while recording
         RG_DEBUG << "syncCallback jump requested" << songPosition <<
             "->" << jackTime;
-        seq.jumpTo(jackTime, m_resetPlaybackOnJump);
+        m_sequencerJumpTime = jackTime;
+        m_sequencerJumpRequested = true;
     }
 
     return 1;

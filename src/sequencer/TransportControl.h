@@ -43,7 +43,7 @@ public:
 
 #ifdef HAVE_LIBJACK
     int syncCallback(jack_transport_state_t state,
-                     const jack_position_t *pos) const;
+                     const jack_position_t *pos);
 #endif
 
 private:
@@ -59,6 +59,8 @@ private:
     bool m_resetPlaybackOnJump;
     bool m_jackAvailable;
     bool m_jackDecoupled;
+    RealTime m_sequencerJumpTime;
+    bool m_sequencerJumpRequested;
 #endif
 };
 
