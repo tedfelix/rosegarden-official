@@ -4,10 +4,10 @@
     Rosegarden
     A MIDI and audio sequencer and musical notation editor.
     Copyright 2000-2026 the Rosegarden development team.
- 
+
     Other copyrights also apply to some parts of this work.  Please
     see the AUTHORS file and individual file headers for details.
- 
+
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
     published by the Free Software Foundation; either version 2 of the
@@ -103,6 +103,11 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
         //RG_DEBUG << "mousePressEvent() - got item";
         setChangingSegment(item);
 
+        // always switch the selection to the resizing element
+        m_canvas->getModel()->clearSelected();
+        m_canvas->getModel()->setSelected(item->getSegment());
+        m_canvas->getModel()->selectionHasChanged();
+
         // Are we resizing from start or end?
         if (item->rect().x() + item->rect().width() / 2 > pos.x()) {
             m_resizeStart = true;
@@ -110,7 +115,7 @@ void SegmentResizer::mousePressEvent(QMouseEvent *e)
             m_resizeStart = false;
         }
 
-        m_canvas->getModel()->startChange(item, 
+        m_canvas->getModel()->startChange(item,
             m_resizeStart ? CompositionModelImpl::ChangeResizeFromStart :
                             CompositionModelImpl::ChangeResizeFromEnd);
 
@@ -199,7 +204,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
         // We only want to snap the end that we were actually resizing.
 
         timeT oldStartTime, oldEndTime;
-        
+
         oldStartTime = segment->getStartTime();
         oldEndTime = segment->getEndMarkerTime(false);
 
@@ -215,7 +220,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
 
         // If something has changed
         if (newStartTime != oldStartTime  ||  newEndTime != oldEndTime) {
-                
+
             if (newStartTime > newEndTime) std::swap(newStartTime, newEndTime);
 
             if (rescale) {
@@ -229,7 +234,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                     resizeAudioSegment(segment, ratio, newStartTime, newEndTime);
 
                 } else {
-                    
+
                     SegmentRescaleCommand *command =
                         new SegmentRescaleCommand(segment,
                                                   newEndTime - newStartTime,
@@ -246,17 +251,17 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
                                 new AudioSegmentResizeFromStartCommand(
                                         segment, newStartTime));
                     } else {
-                        SegmentLinkToCopyCommand* unlinkCmd = 
+                        SegmentLinkToCopyCommand* unlinkCmd =
                                          new SegmentLinkToCopyCommand(segment);
-                        SegmentResizeFromStartCommand* resizeCmd = 
+                        SegmentResizeFromStartCommand* resizeCmd =
                         new SegmentResizeFromStartCommand(segment, newStartTime);
-                        
+
                         MacroCommand* command = new MacroCommand(
                             SegmentResizeFromStartCommand::getGlobalName());
-                       
+
                         command->addCommand(unlinkCmd);
                         command->addCommand(resizeCmd);
-                        
+
                         CommandHistory::getInstance()->addCommand(command);
                     }
 
@@ -284,7 +289,7 @@ void SegmentResizer::mouseReleaseEvent(QMouseEvent *e)
     m_canvas->getModel()->endChange();
 //     m_canvas->updateContents();
     m_canvas->update();
-    
+
     //setChangeMade(false);
     setChangingSegment(ChangingSegmentPtr());
 
@@ -352,7 +357,7 @@ int SegmentResizer::mouseMoveEvent(QMouseEvent *e)
         timeT newStartTime = time;
 
         if (duration < snapSize) {
-        
+
             // Make sure the segment can never be smaller than the snap size.
             newStartTime = itemEndTime - snapSize;
 
@@ -435,8 +440,8 @@ void SegmentResizer::setContextHelp2(Qt::KeyboardModifiers modifiers)
         setContextHelp(tr("Click and drag to resize a segment; hold Ctrl as well to rescale its contents"));
     } else {
         setContextHelp(tr("Click and drag to rescale segment"));
-    }        
-}    
+    }
+}
 
 
 }
