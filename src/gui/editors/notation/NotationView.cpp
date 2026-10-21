@@ -4846,8 +4846,9 @@ NotationView::slotTutorial()
 void
 NotationView::slotBugGuidelines()
 {
-    QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
-     QDesktopServices::openUrl(QUrl(glURL));
+    QString glURL =
+        tr("https://www.rosegardenmusic.com/tutorials/bug-guidelines.html");
+    QDesktopServices::openUrl(QUrl(glURL));
 }
 
 void
