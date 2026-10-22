@@ -21,7 +21,9 @@
 #include <jack/jack.h>
 #endif
 
+
 namespace Rosegarden {
+
 
 class TransportControl
 {
@@ -30,8 +32,6 @@ public:
     // Singleton
     static TransportControl *getInstance();
     ~TransportControl();
-    TransportControl(const TransportControl&) = delete;
-    TransportControl& operator=(const TransportControl&) = delete;
 
     void tick();
 
@@ -47,22 +47,30 @@ public:
 #endif
 
 private:
+
+    // Singleton.  Use getInstance().
     TransportControl();
+
+    TransportControl(const TransportControl&) = delete;
+    TransportControl& operator=(const TransportControl&) = delete;
 
 #ifdef HAVE_LIBJACK
     // TransportControl has its own jack client.
-    jack_client_t* m_client;
-    jack_transport_state_t m_state;
-    RealTime m_allowedDelta;
-    bool m_waitingForStartJack;
-    bool m_countIn;
-    bool m_resetPlaybackOnJump;
-    bool m_jackAvailable;
-    bool m_jackDecoupled;
+    jack_client_t *m_client;
+
+    jack_transport_state_t m_state{JackTransportStopped};
+    RealTime m_allowedDelta{RealTime::fromMilliseconds(0.1)};
+    bool m_waitingForStartJack{false};
+    bool m_countIn{false};
+    bool m_resetPlaybackOnJump{true};
+    bool m_jackAvailable{false};
+    bool m_jackDecoupled{false};
     RealTime m_sequencerJumpTime;
-    bool m_sequencerJumpRequested;
+    bool m_sequencerJumpRequested{false};
 #endif
+
 };
+
 
 }
 
