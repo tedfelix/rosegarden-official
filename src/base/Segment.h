@@ -207,6 +207,7 @@ public:
     //
     void setLabel(const std::string &label);
     std::string getLabel() const { return m_label; }
+    QString getDisplayLabel() const;
 
     // Colour information
     void setColourIndex(const unsigned int input);

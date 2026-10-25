@@ -285,7 +285,7 @@ EditViewBase::getTitle(const QString &editorName)
 
         const int trackPosition = track->getPosition();
 
-        QString segLabel = strtoqstr(m_segments[0]->getLabel());
+        QString segLabel = m_segments[0]->getDisplayLabel();
         if (!segLabel.isEmpty())
             segLabel = tr("Segment \"%1\" ").arg(segLabel);
 

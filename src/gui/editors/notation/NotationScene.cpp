@@ -640,7 +640,9 @@ NotationScene::getNextStaffHorizontally(int direction, bool cycle) const
 
     QMultiMap<timeT, NotationStaff *> timeMap;
     for (size_t i = 0; i < m_staffs.size(); ++i) {
-        if (m_staffs[i]->getSegment().getTrack() == trackId) {
+        // ignore tmp segments
+        bool tmp = m_staffs[i]->getSegment().isTmp();
+        if (m_staffs[i]->getSegment().getTrack() == trackId && ! tmp) {
             timeMap.insert(m_staffs[i]->getSegment().getClippedStartTime(), m_staffs[i]);
         }
     }
