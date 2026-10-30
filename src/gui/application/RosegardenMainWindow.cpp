@@ -7945,7 +7945,8 @@ RosegardenMainWindow::slotTutorial()
 void
 RosegardenMainWindow::slotBugGuidelines()
 {
-    QString glURL = tr("http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html");
+    QString glURL =
+        tr("https://www.rosegardenmusic.com/tutorials/bug-guidelines.html");
     QDesktopServices::openUrl(QUrl(glURL));
 }
 
