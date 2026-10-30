@@ -1774,7 +1774,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     m_HsegmentChanger->setToolTip(tr("<qt>Rotate wheel to change the active segment</qt>"));
     m_VsegmentChanger->setToolTip(tr("<qt>Rotate wheel to change the active segment</qt>"));
     m_changerWidget->setToolTip(tr("<qt>Segment: \"%1\"<br>Track: %2 \"%3\"</qt>")
-                                .arg(QString::fromStdString(m_scene->getCurrentSegment()->getLabel()))
+                                .arg(m_scene->getCurrentSegment()->getDisplayLabel())
                                 .arg(trackPosition)
                                 .arg(trackLabel));
 
@@ -1782,7 +1782,7 @@ NotationWidget::slotUpdateSegmentChangerBackground()
     const QString segmentText = tr("Track %1 (%2) | %3").
         arg(track->getPosition() + 1).
         arg(trackLabel).
-        arg(QString::fromStdString(segment->getLabel()));
+        arg(segment->getDisplayLabel());
 
     m_segmentLabel->setText(segmentText);
 

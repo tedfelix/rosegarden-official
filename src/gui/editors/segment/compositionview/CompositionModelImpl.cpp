@@ -49,7 +49,6 @@
 #include <QColor>
 #include <QPoint>
 #include <QRect>
-#include <QRegularExpression>
 #include <QSize>
 #include <QString>
 #include <QTimer>
@@ -337,23 +336,7 @@ void CompositionModelImpl::getSegmentRect(
     getSegmentQRect(segment, segmentRect.rect);
     RG_DEBUG << "getSegmentRect" << segmentRect.rect;
 
-    QString label = strtoqstr(segment.getLabel());
-    if (segment.isTrulyLinked()) {
-        // Add the linker Id to a linked segment label
-        unsigned linkId = segment.getLinker()->getSegmentLinkerId();
-        label += QString(" L{%1}").arg(linkId);
-    }
-    if (segment.getExcludeFromPrinting()) {
-        // Add a marker for this
-        label += QString("   (xp)");
-    }
-    if (segment.isAudio()) {
-        // Remove anything in parens and the filename suffix.
-        static QRegularExpression re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
-        static QRegularExpression re2("\\.[^.]+$"); // filename suffix
-        label.replace(re1, "").replace(re2, "");
-    }
-    segmentRect.label = label;
+    segmentRect.label = segment.getDisplayLabel();
 
     if (segment.isRepeating()) {
         computeRepeatMarks(segment, segmentRect);

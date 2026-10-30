@@ -1320,7 +1320,7 @@ MatrixWidget::updateSegmentChangerBackground()
     const QString segmentText = tr("Track %1 (%2) | %3").
             arg(track->getPosition() + 1).
             arg(trackLabel).
-            arg(QString::fromStdString(segment->getLabel()));
+            arg(segment->getDisplayLabel());
 
     m_segmentLabel->setText(segmentText);
 

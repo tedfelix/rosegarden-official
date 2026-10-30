@@ -27,6 +27,7 @@
 #include "misc/Debug.h"
 
 #include <QtGlobal>
+#include <QRegularExpression>
 
 #include <iostream>
 #include <algorithm>
@@ -1375,6 +1376,27 @@ Segment::setLabel(const std::string &label)
     m_label = label;
     if (m_composition) m_composition->updateRefreshStatuses();
     notifyAppearanceChange();
+}
+
+QString Segment::getDisplayLabel() const
+{
+    QString label = strtoqstr(getLabel());
+    if (isTrulyLinked()) {
+        // Add the linker Id to a linked segment label
+        unsigned linkId = getLinker()->getSegmentLinkerId();
+        label += QString(" L{%1}").arg(linkId);
+    }
+    if (getExcludeFromPrinting()) {
+        // Add a marker for this
+        label += QString("   (xp)");
+    }
+    if (isAudio()) {
+        // Remove anything in parens and the filename suffix.
+        static QRegularExpression re1("( *\\([^)]*\\))*$"); // (inserted) (copied) (etc)
+        static QRegularExpression re2("\\.[^.]+$"); // filename suffix
+        label.replace(re1, "").replace(re2, "");
+    }
+    return label;
 }
 
 bool
