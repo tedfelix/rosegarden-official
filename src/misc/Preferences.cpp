@@ -436,8 +436,12 @@ bool Preferences::getUseJackTransport()
     return useJackTransport.get();
 }
 
-static PreferenceBool useNewJackTransport
-(SequencerOptionsConfigGroup, "newjacktransport", true);
+// Added "newjacktransport-opt-in" for 26.12 release.  Feel free to go back to
+// "newjacktransport" which is "opt-out" when we need testers to use the latest.
+// Eventually the goal is to switch to the new logic and remove this.
+static PreferenceBool useNewJackTransport(
+        //SequencerOptionsConfigGroup, "newjacktransport", true);
+        SequencerOptionsConfigGroup, "newjacktransport-opt-in", false);
 
 void Preferences::setUseNewJackTransport(bool value)
 {

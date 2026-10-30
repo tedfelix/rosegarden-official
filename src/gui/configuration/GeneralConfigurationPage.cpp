@@ -302,7 +302,7 @@ GeneralConfigurationPage::GeneralConfigurationPage(QWidget *parent) :
 
     // Use new JACK transport
     m_useNewJackTransportLabel =
-            new QLabel(tr("New JACK Transport Logic"), frame);
+            new QLabel(tr("New JACK Transport Logic (experimental)"), frame);
     m_useNewJackTransportLabel->setEnabled(Preferences::getUseJackTransport());
     layout->addWidget(m_useNewJackTransportLabel, row, 0);
 
