@@ -20,8 +20,28 @@ Included in this release...
     [8d01d04364]  [e338ad4e4d]  [d87fc08615]
   * merge: Allow for undo after file merge.  Bug #1784.
     [eb0acfe442]
+  * LoopRuler: Avoid null loop.  Bug #1788.  [2b87cd8e89]  [0b6ddc1c08]
+  * Notation: Fix notation always opening with draw tool selected.
+    Bug #1790.  [5ca89911cc]
+  * Audio: Fix audio delay when unmuting tracks during play.
+    Bug #1792.  [baea841aa0]  [ab032b1b49]
+  * Rescale: Fix issues with growing and shrinking notes.
+    Bug #1793.  [27747a2a68]  [00605c857d]
+  * Notation: Fix crash when undoing a raising/lowering of notes.
+    Bug #1794.  [a52124e519]
+  * TimeDialog: Ensure focus is on the OK button.  Bug #1749.
+    [73564597b0]
+  * cmake: Use target_compile_definitions().  Bug #1746.  [938738abf4]
+  * MainWindow: Set selection When resizing a segment.  Bug #1799.
+    [afa2818d3d]
+  * help: Fix bug guidelines links in help menus.  Bug #1801.
+    [2168201c19]
+  * notation: Fix hang when navigating between staves.  Feature Request
+    #544.  [e51ddf7935]
+  * notation: Make segment label text consistent across all editors.
+    Feature Request #544.  [e51ddf7935]
 
-  Stopped at [a28011024e].
+  Stopped at [6ef84491bd].
 
 ===== New Features =====
 
@@ -29,6 +49,8 @@ Included in this release...
     [de3664bd09]
   * debug: Better debug logging with file and line number.
     Feature Request #545.  [5f8d9694e4]  [f3b708aead]
+  * MRU: Added a clear option to recent files menu.  Bug #1791.
+    [aabfa2fd66]  [40ef883b76]
 
 
 ====== ROSEGARDEN 26.06 RELEASED ======
