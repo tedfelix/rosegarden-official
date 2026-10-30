@@ -48,8 +48,7 @@ protected:
     void modifySegment() override;
 
 private:
-    timeT rescale(timeT) const;
-    static timeT getAffectedEndTime(EventSelection &selection,
+    static timeT getAffectedEndTime(const EventSelection &selection,
                                     timeT newDuration,
                                     bool closeGap);
 

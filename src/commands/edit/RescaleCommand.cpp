@@ -15,7 +15,7 @@
     COPYING included with this distribution for more information.
 */
 
-//#define RG_NO_DEBUG_PRINT 1
+#define RG_NO_DEBUG_PRINT
 
 #include "RescaleCommand.h"
 
@@ -28,8 +28,28 @@
 #include <QString>
 #include <iostream>
 
+
 namespace Rosegarden
 {
+
+
+namespace {
+
+// Rescale t given oldDuration and newDuration.
+timeT a_rescale(const timeT oldDuration,
+                const timeT newDuration,
+                const timeT t)
+{
+    // avoid overflows by using doubles
+    double d = t;
+    d *= newDuration;
+    d /= oldDuration;
+    d += 0.5;  // ??? Use lround().
+    return d;
+}
+
+}
+
 
 RescaleCommand::RescaleCommand(EventSelection &selection,
                                timeT newDuration,
@@ -48,39 +68,24 @@ RescaleCommand::RescaleCommand(EventSelection &selection,
 }
 
 timeT
-RescaleCommand::getAffectedEndTime(EventSelection &selection,
-                                   timeT newDuration,
-                                   bool closeGap)
+RescaleCommand::getAffectedEndTime(const EventSelection &selection,
+                                   const timeT newDuration,
+                                   const bool closeGap)
 {
     timeT preScaleEnd = selection.getEndTime();
     if (closeGap)
         preScaleEnd = selection.getSegment().getEndMarkerTime();
 
-    // dupe of rescale(), but we can't use that here as the m_
-    // variables may not have been set
-    timeT selectStart = selection.getStartTime();
-    timeT selectEnd = selection.getEndTime();
-    double d = selectEnd - selectStart;
-    d *= newDuration;
-    d /= selection.getTotalDuration();
-    d += 0.5;
-    timeT postScaleDuration = (timeT)d;
-    timeT postScaleEnd = selectStart + postScaleDuration;
+    const timeT selectStart = selection.getStartTime();
+    const timeT selectEnd = selection.getEndTime();
+    const timeT postScaleDuration = a_rescale(
+            selection.getTotalDuration(), newDuration, selectEnd - selectStart);
+
+    const timeT postScaleEnd = selectStart + postScaleDuration;
 
     RG_DEBUG << "getAffectedEndTime" << preScaleEnd << postScaleEnd;
 
     return std::max(preScaleEnd, postScaleEnd);
-}
-
-timeT
-RescaleCommand::rescale(timeT t) const
-{
-    // avoid overflows by using doubles
-    double d = t;
-    d *= m_newDuration;
-    d /= m_oldDuration;
-    d += 0.5;
-    return (timeT)d;
 }
 
 void
@@ -104,8 +109,8 @@ RescaleCommand::modifySegment()
 
         timeT t = (*i)->getAbsoluteTime() - startTime;
         timeT d = (*i)->getDuration();
-        t = rescale(t);
-        d = rescale(d);
+        t = a_rescale(m_oldDuration, m_newDuration, t);
+        d = a_rescale(m_oldDuration, m_newDuration, d);
 
         toInsert.push_back(new Event(**i, startTime + t, d));
     }
