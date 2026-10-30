@@ -129,6 +129,24 @@ RescaleCommand::modifySegment()
         m_selection->addEvent(*i);  // add to selection
     }
 
+#if 0
+    // Bug #1793
+    //
+    // Removing this but leaving it in for future reference.  It sure would
+    // be nice to normalize rests, tie notes at barlines, and auto-beam after
+    // this, but I think we need to leave all that up to the user for now.
+    //
+    // This was removed for Bug #1793 where we noticed that using Adjust >
+    // Rescale > Stretch or Squash with "Adjust times of following events..."
+    // checked, the size of the Segment was modified (here) and could not be
+    // undone.  This is because this modifies the size of the Segment prior to
+    // BasicCommand seeing it and being able to work its magic.  Changing the
+    // begin or end time of a Segment in modifySegment() is prohibited.
+    //
+    // We could add a "clean up notation" feature to BasicCommand that derivers
+    // could request by setting a bool.  Then BasicCommand would perform a
+    // normalize/tie/auto-beam/... at the right moment.
+
     RG_DEBUG << "modifySegment" << m_closeGap << diff << startTime <<
         segment.getEndMarkerTime();
     if (m_closeGap && diff > 0) {
@@ -137,6 +155,7 @@ RescaleCommand::modifySegment()
     }
 
     segment.normalizeRests(getStartTime(), getEndTime());
+#endif
 }
 
 }
