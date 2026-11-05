@@ -6007,12 +6007,12 @@
     <message>
         <location line="+4"/>
         <source>Set to &amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>Ustaw na domyślne</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Paste &amp;At...</source>
-        <translation type="unfinished"></translation>
+        <translation>Wklej w...</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -6040,13 +6040,13 @@
         <location line="-249"/>
         <location line="+408"/>
         <source>&amp;Half</source>
-        <translation type="unfinished"></translation>
+        <translation>Połowa</translation>
     </message>
     <message>
         <location line="-407"/>
         <location line="+408"/>
         <source>&amp;Double</source>
-        <translation type="unfinished"></translation>
+        <translation>Dwukrotnie</translation>
     </message>
     <message>
         <location line="-304"/>
@@ -10832,12 +10832,12 @@ Kontynuować?</translation>
     <message>
         <location line="-199"/>
         <source>JACK Audio subsystem not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Podsystem JACK Audio jest niedostępny.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Plugin editor not available.</source>
-        <translation type="unfinished"></translation>
+        <translation>Edytor wtyczek jest niedostępny.</translation>
     </message>
     <message>
         <location line="+357"/>
@@ -11439,27 +11439,27 @@ Kontynuować?</translation>
     <message>
         <location line="-1815"/>
         <source>Bank Select Type</source>
-        <translation type="unfinished"></translation>
+        <translation>Typ wyboru banku</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Normal&lt;/b&gt; sends bank select MSB/LSB and program change.&lt;/p&gt;&lt;p&gt;&lt;b&gt;PC100+&lt;/b&gt; uses program changes 100-127 as bank selects.  Yamaha TG77 and others.&lt;/p&gt;&lt;p&gt;&lt;b&gt;CC31&lt;/b&gt; uses control change 31 value 127 and a program change as a bank select.  Oberheim Matrix-1000.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;b&gt;Normalny&lt;/b&gt; wysyła wybór banku MSB/LSB i zmianę programu.&lt;/p&gt;&lt;p&gt;&lt;b&gt;PC100+&lt;/b&gt; używa zmian programów 100-127 jako wyborów banków. Yamaha TG77 i inne.&lt;/p&gt;&lt;p&gt;&lt;b&gt;CC31&lt;/b&gt; używa zmiany kontroli 31 o wartości 127 i zmianę programu jako wybór banku. Oberheim Matrix-1000.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Normal</source>
-        <translation type="unfinished">Normalny</translation>
+        <translation>Normalny</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>PC100+</source>
-        <translation type="unfinished"></translation>
+        <translation>PC100+</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>CC31</source>
-        <translation type="unfinished"></translation>
+        <translation>CC31</translation>
     </message>
     <message>
         <location line="+513"/>
@@ -11514,7 +11514,7 @@ Kontynuować?</translation>
     <message>
         <location line="+16"/>
         <source>bank select type changed</source>
-        <translation type="unfinished"></translation>
+        <translation>zmieniono typ wyboru banku</translation>
     </message>
     <message>
         <location line="+111"/>
@@ -15294,7 +15294,8 @@ zamiast tego?</translation>
         <location line="+1155"/>
         <source>Bar %1 contains an event too short to represent in standard notation.
 This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.</source>
-        <translation type="unfinished"></translation>
+        <translation>Takt %1 zawiera zdarzenie zbyt krótkie, aby można je było przedstawić w standardowej notacji.
+Prawdopodobnie jest to spowodowane uszkodzonym zdarzeniem w pliku. Spodziewaj się błędów sprawdzania taktów w LilyPond.</translation>
     </message>
     <message>
         <location line="+751"/>
@@ -22948,7 +22949,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+15"/>
         <source>Could not save SysEx file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można zapisać pliku SysEx.</translation>
     </message>
 </context>
 <context>
