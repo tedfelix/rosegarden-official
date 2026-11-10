@@ -2177,7 +2177,7 @@
 <context>
     <name>ControlRulerEventEraseCommand</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+33"/>
+        <location filename="../../src/gui/rulers/ControlRulerEventEraseCommand.cpp" line="+32"/>
         <source>Erase Controller Event(s)</source>
         <translation>컨트롤러 이벤트 지우기</translation>
     </message>
@@ -2186,162 +2186,197 @@
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+354"/>
         <source>Manage MIDI Devices</source>
         <translation>MIDI 장치 관리</translation>
     </message>
     <message>
         <location line="+26"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
         <translation>MIDI 플레이백</translation>
     </message>
     <message>
         <location line="+36"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Sends its data through</source>
         <translation>데이터 전송 방법</translation>
     </message>
     <message>
         <location line="-5"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Rosegarden 플레이백 장치</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+5"/>
         <source>Default playback device</source>
         <translation>기본 플레이백 장치</translation>
     </message>
     <message>
         <location line="-23"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;여기에서 새 플레이백 장치를 만드십시오. 장치 이름을 두 번 클릭하여 변경합니다. 여기에서 장치를 선택하고 오른쪽에 있는 포트를 클릭하여 MIDI 출력 포트에 연결하십시오.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+67"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;뱅크 정의를 사용하면 이 장치에 연결된 장비(하드웨어 또는 소프트웨어 신스)에서 사용할 수 있는 프로그램이나 패치에 대해 Rosegarden에 알릴 수 있습니다.&lt;/p&gt;&lt;p&gt;Rosegarden은 정의되지 않은 모든 뱅크 및 프로그램 번호를 숨기므로 전송하려는 모든 프로그램 또는 뱅크 변경에 대해 정의된 것이 있어야 합니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>뱅크...</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;이 장치와 연결된 컨트롤러를 수정합니다.&lt;/p&gt;&lt;p&gt;컨트롤 눈금자 또는 &lt;b&gt;악기 매개변수&lt;/b&gt; 상자와 같이 Rosegarden의 모든 위치에서 사용하려면 여기에서 컨트롤러를 정의해야 합니다. &lt;b&gt;악기 매개변수&lt;/b&gt; 상자에 표시되는 컨트롤러를 변경하고 레이아웃을 재정렬할 수 있습니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
         <translation>컨트롤러...</translation>
     </message>
     <message>
         <location line="+43"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;새 플레이백 장치 만들기&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+209"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
+        <location line="+28"/>
         <source>New</source>
         <translation>새로 만들기</translation>
     </message>
     <message>
         <location line="-187"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;선택한 플레이백 장치를 삭제합니다. 이 장치를 사용하는 모든 트랙은 재할당해야 하며 해당 트랙의 프로그램 또는 뱅크 변경 사항은 영구적으로 손실됩니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
     <message>
         <location line="+19"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
         <translation>MIDI 출력</translation>
     </message>
     <message>
         <location line="+28"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
         <translation>사용 가능한 출력</translation>
     </message>
     <message>
         <location line="+5"/>
         <location line="+282"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+5"/>
+        <location line="+41"/>
         <source>No port</source>
         <translation>포트 없음</translation>
     </message>
     <message>
         <location line="-272"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-39"/>
         <source>Internal Synth</source>
         <translation>내부 신스</translation>
     </message>
     <message>
         <location line="-19"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;사용 가능한 MIDI 출력 (하드웨어 또는 소프트웨어)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+59"/>
         <location line="+278"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+3"/>
+        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;새 장비를 연결했거나 새 소프트 신스를 시작한 후, 클릭하여 포트 목록을 새로고침하십시오&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-275"/>
         <location line="+278"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-37"/>
+        <location line="+39"/>
         <source>Refresh</source>
         <translation>새로 고침</translation>
     </message>
     <message>
         <location line="-241"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
         <translation>MIDI 레코딩</translation>
     </message>
     <message>
         <location line="+39"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;새 레코딩 장치 만들기&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;선택한 레코딩 장치 삭제&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>삭제</translation>
     </message>
     <message>
         <location line="+61"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
         <translation>데이터 수신 위치</translation>
     </message>
     <message>
         <location line="-5"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Rosegarden 레코딩 장치</translation>
     </message>
     <message>
         <location line="+10"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
         <translation>기본 녹음 장치</translation>
     </message>
     <message>
         <location line="+26"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
         <translation>MIDI 입력</translation>
     </message>
     <message>
         <location line="+28"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
         <translation>사용 가능한 입력</translation>
     </message>
     <message>
         <location line="-4"/>
+        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;사용 가능한 MIDI 입력(하드웨어 또는 소프트웨어에서)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -4882,25 +4917,25 @@
         <translation>오픈 트라이앵글</translation>
     </message>
     <message>
-        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+309"/>
+        <location filename="../../src/gui/dialogs/ManageMetronomeDialog.cpp" line="+308"/>
         <source>Synth plugin </source>
         <translation>신스 플러그인 </translation>
     </message>
     <message>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+745"/>
+        <location filename="../../src/base/Studio.cpp" line="+72"/>
         <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1085"/>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+746"/>
-        <location filename="../../src/base/Studio.cpp" line="+73"/>
         <source>Synth plugin</source>
         <translation>신스 플러그인</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
+        <location line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
         <translation>오디오</translation>
     </message>
     <message>
-        <location filename="../../src/base/MidiDevice.cpp" line="+1090"/>
+        <location filename="../../src/base/MidiDevice.cpp" line="+1089"/>
         <source>&lt;new bank&gt;</source>
         <translation>&lt;새 뱅크&gt;</translation>
     </message>
@@ -4997,7 +5032,7 @@
 <context>
     <name>MusicXmlExporter</name>
     <message>
-        <location filename="../../src/document/io/MusicXmlExporter.cpp" line="+323"/>
+        <location filename="../../src/document/io/MusicXmlExporter.cpp" line="+322"/>
         <source>Writing score part...</source>
         <translation>악보 파트 쓰는 중...</translation>
     </message>
@@ -5011,7 +5046,7 @@
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="+47"/>
+        <location filename="../../src/gui/editors/notation/NoteFontMap.cpp" line="+46"/>
         <source>unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
@@ -8829,7 +8864,7 @@
         <translation>빠른 마커로 이동(&amp;J)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+63"/>
+        <location filename="../../src/gui/editors/notation/NoteFont.cpp" line="+62"/>
         <source>No sizes listed for font &quot;%1&quot;</source>
         <translation>&quot;%1&quot; 글꼴의 크기가 나열되지 않았습니다</translation>
     </message>
@@ -8851,7 +8886,7 @@
         <translation>Db</translation>
     </message>
     <message>
-        <location filename="../../src/base/Pitch.cpp" line="+48"/>
+        <location filename="../../src/base/Pitch.cpp" line="+47"/>
         <location filename="../InstrumentStrings.cpp" line="+2"/>
         <source>Eb</source>
         <comment>note name</comment>
@@ -8920,31 +8955,31 @@
         <translation>generalmap</translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+753"/>
+        <location filename="../../src/gui/editors/parameters/MIDIInstrumentParameterPanel.cpp" line="+750"/>
         <location line="+133"/>
         <source>%1. %2</source>
         <translation>%1. %2</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+478"/>
+        <location filename="../../src/gui/studio/DeviceManagerDialog.cpp" line="+477"/>
         <source>%1</source>
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+87"/>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+85"/>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+98"/>
-        <location filename="../../src/sound/WAVExporter.cpp" line="+51"/>
+        <location filename="../../src/sound/WAVExporter.cpp" line="+50"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+84"/>
+        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+86"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+1"/>
         <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
         <translation>Rosegarden gtk2 라이브러리(librosegardenGtk2.so)를 찾을 수 없습니다. 라이브러리가 표준 경로에 있거나 LD_LIBRARY_PATH 환경 변수로 찾을 수 있는지 확인하십시오.</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/main.cpp" line="+430"/>
+        <location filename="../../src/gui/application/main.cpp" line="+444"/>
         <source>Warning: LV2 GTK2 plugins are active. You may have to install the qt gtk2 platform style plugin</source>
         <translation>경고: LV2 GTK2 플러그인이 활성화되어 있습니다. qt gtk2 플랫폼 스타일 플러그인을 설치해야 할 수 있습니다</translation>
     </message>
@@ -9039,7 +9074,7 @@
         <translation>B</translation>
     </message>
     <message>
-        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+407"/>
+        <location filename="../../src/gui/seqmanager/SequenceManager.cpp" line="+417"/>
         <source>Audio subsystem is not available - can&apos;t record audio</source>
         <translation>오디오 하위시스템을 사용할 수 없습니다 - 오디오를 녹음할 수 없습니다</translation>
     </message>
@@ -9049,12 +9084,12 @@
         <translation>&lt;qt&gt;&lt;p&gt;레코딩을 위해 준비된 트랙이 없습니다.&lt;/p&gt;&lt;p&gt;레코딩 LED &lt;img src=&quot;:pixmaps/tooltip/record-leds.png&quot;&gt; 중 하나 이상을 준비하고 다시 시도하십시오&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+146"/>
+        <location line="+155"/>
         <source>&lt;qt&gt;&lt;p&gt;Couldn&apos;t start recording audio.&lt;/p&gt;&lt;p&gt;Make sure the composition has been saved and check the audio file path in &lt;b&gt;Composition -&gt; Edit Document Properties... -&gt; Audio&lt;/b&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;오디오 레코딩을 시작할 수 없습니다.&lt;/p&gt;&lt;p&gt;작곡이 저장되었는지 확인하고 &lt;b&gt;작곡 -&gt; 문서 속성 편집... -&gt; 오디오&lt;/b&gt;에서 오디오 파일 경로를 확인하십시오.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location filename="../../src/gui/application/TranzportClient.cpp" line="+59"/>
+        <location filename="../../src/gui/application/TranzportClient.cpp" line="+58"/>
         <source>Failed to open tranzport device /dev/tranzport0</source>
         <translation>tranzport 장치 /dev/tranzport0을 열지 못했습니다</translation>
     </message>
@@ -9099,7 +9134,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+282"/>
+        <location filename="../../src/gui/editors/matrix/MatrixElement.cpp" line="+283"/>
         <source>This event is tied to another event.</source>
         <translation>이 이벤트는 다른 이벤트와 붙임줄로 묶여 있습니다.</translation>
     </message>
@@ -9153,7 +9188,7 @@
         <translation>사용 가능한 사운드 드라이버 없음: 애플리케이션이 사운드 지원 없이 컴파일되었습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+53"/>
+        <location filename="../../src/base/figuration/SegmentFigData.cpp" line="+52"/>
         <source>Replace segment contents</source>
         <translation>세그먼트 내용 바꾸기</translation>
     </message>
@@ -9263,14 +9298,14 @@
         <translation>교대 - 교대 이벤트에서 최댓값 및 최솟값으로 %1 지정</translation>
     </message>
     <message>
+        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>첫 번째 값</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>두 번째 값</translation>
     </message>
@@ -9300,7 +9335,7 @@
         <translation>울림 - 둘 다 0으로 줄어가면서 최댓값에서 최솟값으로 %1 지정</translation>
     </message>
     <message>
-        <location filename="../../src/gui/general/ActionData.cpp" line="+394"/>
+        <location filename="../../src/gui/general/ActionData.cpp" line="+393"/>
         <source>Audio manager</source>
         <translation>오디오 관리자</translation>
     </message>
@@ -9480,7 +9515,7 @@
         <translation>단축키 4</translation>
     </message>
     <message>
-        <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+216"/>
+        <location filename="../../src/gui/widgets/QuantizeParameters.cpp" line="+215"/>
         <source>Arbitrary grid unit</source>
         <translation>임의지정 그리드 단위</translation>
     </message>
@@ -9490,13 +9525,13 @@
         <translation>파일 &apos;%1&apos;을(를) 열 수 없습니다</translation>
     </message>
     <message>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
         <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+1"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
         <translation>연결된 Korg nanoKONTROL2가 Rosegarden에 최적으로 구성되어 있지 않습니다. 재구성하면 nanoKONTROL2 편집기에서 설정한 사용자 지정 설정이 손실됩니다. 재구성하시겠습니까?</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+74"/>
+        <location filename="../../src/gui/studio/MidiProgramsEditor.cpp" line="+73"/>
         <source>Bank and Program details</source>
         <translation>뱅크 및 프로그램 세부정보</translation>
     </message>
@@ -9527,7 +9562,7 @@
 <context>
     <name>Rosegarden::ActionCommandArgumentQuerier</name>
     <message>
-        <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="+71"/>
+        <location filename="../../src/gui/general/ActionCommandRegistry.cpp" line="+70"/>
         <source>Rosegarden - Query</source>
         <translation>Rosegarden - 쿼리</translation>
     </message>
@@ -9655,7 +9690,7 @@
 <context>
     <name>Rosegarden::AddLayerCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="+38"/>
+        <location filename="../../src/commands/segment/AddLayerCommand.cpp" line="+37"/>
         <source>Add Layer</source>
         <translation>레이어 추가</translation>
     </message>
@@ -9831,7 +9866,7 @@
 <context>
     <name>Rosegarden::AddTracksCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AddTracksCommand.cpp" line="+36"/>
+        <location filename="../../src/commands/segment/AddTracksCommand.cpp" line="+35"/>
         <location line="+11"/>
         <location line="+11"/>
         <source>Add Tracks...</source>
@@ -9841,7 +9876,7 @@
 <context>
     <name>Rosegarden::AddTracksDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="+56"/>
+        <location filename="../../src/gui/dialogs/AddTracksDialog.cpp" line="+55"/>
         <source>Add Tracks</source>
         <translation>트랙 추가</translation>
     </message>
@@ -9907,7 +9942,7 @@
         <translation>오디오 설정</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+90"/>
+        <location filename="../../src/gui/configuration/AudioConfigurationPage.cpp" line="+89"/>
         <source>Audio preview scale</source>
         <translation>오디오 미리듣기 스케일</translation>
     </message>
@@ -10050,7 +10085,7 @@
 <context>
     <name>Rosegarden::AudioFaderBox</name>
     <message>
-        <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="+78"/>
+        <location filename="../../src/gui/widgets/AudioFaderBox.cpp" line="+77"/>
         <source>&lt;no plugin&gt;</source>
         <translation>&lt;플러그인 없음&gt;</translation>
     </message>
@@ -10118,7 +10153,7 @@
 <context>
     <name>Rosegarden::AudioFileLocationDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+44"/>
+        <location filename="../../src/gui/dialogs/AudioFileLocationDialog.cpp" line="+43"/>
         <source>Audio File Location</source>
         <translation>오디오 파일 위치</translation>
     </message>
@@ -10168,7 +10203,7 @@
 <context>
     <name>Rosegarden::AudioFileManager</name>
     <message>
-        <location filename="../../src/sound/AudioFileManager.cpp" line="+638"/>
+        <location filename="../../src/sound/AudioFileManager.cpp" line="+637"/>
         <source>Cannot download file %1</source>
         <translation>%1 파일을 다운로드할 수 없습니다</translation>
     </message>
@@ -10246,7 +10281,7 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::AudioFileTimeStretcher</name>
     <message>
-        <location filename="../../src/sound/AudioFileTimeStretcher.cpp" line="+79"/>
+        <location filename="../../src/sound/AudioFileTimeStretcher.cpp" line="+78"/>
         <source>Rescaling audio file...</source>
         <translation>오디오 파일 재조정 중...</translation>
     </message>
@@ -10254,7 +10289,7 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::AudioInstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+88"/>
+        <location filename="../../src/gui/editors/parameters/AudioInstrumentParameterPanel.cpp" line="+87"/>
         <source>Click to rename this instrument.</source>
         <translation>이 악기의 이름을 바꾸려면 클릭하십시오.</translation>
     </message>
@@ -10284,7 +10319,7 @@ Error was : %2</source>
 <context>
     <name>Rosegarden::AudioManagerDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+111"/>
+        <location filename="../../src/gui/dialogs/AudioManagerDialog.cpp" line="+110"/>
         <source>Audio File Manager</source>
         <translation>오디오 파일 관리자</translation>
     </message>
@@ -10501,7 +10536,7 @@ Please select the ones you wish to delete permanently from the hard disk.
 <context>
     <name>Rosegarden::AudioMixerWindow2</name>
     <message>
-        <location filename="../../src/gui/studio/AudioMixerWindow2.cpp" line="+58"/>
+        <location filename="../../src/gui/studio/AudioMixerWindow2.cpp" line="+57"/>
         <source>Audio Mixer</source>
         <translation>오디오 믹서</translation>
     </message>
@@ -10573,7 +10608,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginConnectionDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+43"/>
+        <location filename="../../src/gui/dialogs/AudioPluginConnectionDialog.cpp" line="+42"/>
         <source>Audio Plugin Connections</source>
         <translation>오디오 플러그인 연결</translation>
     </message>
@@ -10621,7 +10656,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+93"/>
+        <location filename="../../src/gui/dialogs/AudioPluginDialog.cpp" line="+92"/>
         <source>Audio Plugin</source>
         <translation>오디오 플러그인</translation>
     </message>
@@ -10847,7 +10882,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginLV2GUI</name>
     <message>
-        <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="+84"/>
+        <location filename="../../src/gui/studio/AudioPluginLV2GUI.cpp" line="+83"/>
         <source>Sub %1</source>
         <translation>서브 %1</translation>
     </message>
@@ -10855,7 +10890,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginOSCGUIManager</name>
     <message>
-        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+413"/>
+        <location filename="../../src/gui/studio/AudioPluginOSCGUIManager.cpp" line="+412"/>
         <source>Rosegarden Plugin</source>
         <translation>Rosegarden 플러그인</translation>
     </message>
@@ -10878,7 +10913,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginParameterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+57"/>
+        <location filename="../../src/gui/dialogs/AudioPluginParameterDialog.cpp" line="+56"/>
         <source>Plugin Parameters</source>
         <translation>플러그인 매개변수</translation>
     </message>
@@ -10942,7 +10977,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioPluginPresetDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioPluginPresetDialog.cpp" line="+49"/>
+        <location filename="../../src/gui/dialogs/AudioPluginPresetDialog.cpp" line="+48"/>
         <location line="+3"/>
         <source>Plugin Presets</source>
         <translation>플러그인 프리셋</translation>
@@ -11007,7 +11042,7 @@ Are you sure?</source>
         <translation>오디오 설정</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+64"/>
+        <location filename="../../src/gui/configuration/AudioPropertiesPage.cpp" line="+63"/>
         <source>Audio file location:</source>
         <translation>오디오 파일 위치:</translation>
     </message>
@@ -11086,7 +11121,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioRouteMenu</name>
     <message>
-        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+265"/>
+        <location filename="../../src/gui/widgets/AudioRouteMenu.cpp" line="+264"/>
         <source>none</source>
         <translation>없음</translation>
     </message>
@@ -11146,7 +11181,7 @@ Are you sure?</source>
         <translation>무음 시 분리(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="+140"/>
+        <location filename="../../src/commands/segment/AudioSegmentAutoSplitCommand.cpp" line="+139"/>
         <source>(part %1)</source>
         <translation>(부분 %1)</translation>
     </message>
@@ -11162,7 +11197,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioSegmentInsertCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="+45"/>
+        <location filename="../../src/commands/segment/AudioSegmentInsertCommand.cpp" line="+44"/>
         <source>Create Segment</source>
         <translation>세그먼트 만들기</translation>
     </message>
@@ -11185,7 +11220,7 @@ Are you sure?</source>
         <translation>늘이기 또는 줄이기(&amp;Q)...</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentRescaleCommand.cpp" line="+137"/>
+        <location filename="../../src/commands/segment/AudioSegmentRescaleCommand.cpp" line="+136"/>
         <source>(rescaled)</source>
         <translation>(재조정됨)</translation>
     </message>
@@ -11201,7 +11236,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioSegmentSplitCommand</name>
     <message>
-        <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="+36"/>
+        <location filename="../../src/commands/segment/AudioSegmentSplitCommand.cpp" line="+35"/>
         <source>Split Audio Segment</source>
         <translation>오디오 세그먼트 분리</translation>
     </message>
@@ -11214,7 +11249,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioSplitDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="+71"/>
+        <location filename="../../src/gui/dialogs/AudioSplitDialog.cpp" line="+70"/>
         <source>Autosplit Audio Segment</source>
         <translation>오디오 세그먼트 자동 분리</translation>
     </message>
@@ -11247,7 +11282,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::AudioStrip</name>
     <message>
-        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+152"/>
+        <location filename="../../src/gui/studio/AudioStrip.cpp" line="+151"/>
         <source>Record input source</source>
         <translation>녹음 입력 소스</translation>
     </message>
@@ -11325,7 +11360,7 @@ Are you sure?</source>
 <context>
     <name>Rosegarden::BankEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+83"/>
+        <location filename="../../src/gui/studio/BankEditorDialog.cpp" line="+82"/>
         <source>Manage MIDI Banks and Programs</source>
         <translation>MIDI 뱅크 및 프로그램 관리</translation>
     </message>
@@ -11676,7 +11711,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ChannelPressureWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/ChannelPressureWidget.cpp" line="+65"/>
+        <location filename="../../src/gui/editors/event/ChannelPressureWidget.cpp" line="+64"/>
         <source>Channel Pressure Properties</source>
         <translation>채널 프레셔 속성</translation>
     </message>
@@ -11797,7 +11832,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ChordNameRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+61"/>
+        <location filename="../../src/gui/rulers/ChordNameRuler.cpp" line="+60"/>
         <source>&lt;qt&gt;&lt;p&gt;Chord name ruler.  This ruler analyzes your harmonies and attempts to guess what chords your composition contains.  These chords cannot be printed or manipulated, and this is only a reference for your information.&lt;/p&gt;&lt;p&gt;Turn it on and off with the &lt;b&gt;View -&gt; Rulers&lt;/b&gt; menu.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;코드 이름 눈금자. 이 눈금자는 화성을 분석하고 작곡에 포함된 코드을 추측합니다. 이 코드은 인쇄하거나 조작할 수 없으며 참고용일 뿐입니다.&lt;/p&gt;&lt;p&gt;&lt;b&gt;보기 -&gt; 눈금자&lt;/b&gt; 메뉴에서 켜고 끌 수 있습니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -11957,7 +11992,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ColorCombo</name>
     <message>
-        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+86"/>
+        <location filename="../../src/gui/widgets/ColorCombo.cpp" line="+84"/>
         <source>Default</source>
         <translation>기본값</translation>
     </message>
@@ -11980,7 +12015,7 @@ Destination device already has a bank for
         <translation>색상 설정</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="+67"/>
+        <location filename="../../src/gui/configuration/ColourConfigurationPage.cpp" line="+66"/>
         <source>Add New Color</source>
         <translation>새 색상 추가</translation>
     </message>
@@ -12041,7 +12076,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CommandHistory</name>
     <message>
-        <location filename="../../src/document/CommandHistory.cpp" line="+49"/>
+        <location filename="../../src/document/CommandHistory.cpp" line="+48"/>
         <location line="+5"/>
         <source>&amp;Undo</source>
         <translation>실행 취소(&amp;U)</translation>
@@ -12088,7 +12123,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CommentsConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="+78"/>
+        <location filename="../../src/gui/configuration/CommentsConfigurationPage.cpp" line="+77"/>
         <source>&lt;qt&gt;Notes inserted here will be stored in the .rg file along with the composition&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;여기에 삽입된 메모는 작곡과 함께 .rg 파일에 저장됩니다&lt;/qt&gt;</translation>
     </message>
@@ -12253,7 +12288,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CompositionView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+314"/>
+        <location filename="../../src/gui/editors/segment/compositionview/CompositionView.cpp" line="+313"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -12269,7 +12304,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlChangeCommand</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="+30"/>
+        <location filename="../../src/gui/rulers/ControlChangeCommand.cpp" line="+29"/>
         <source>Control Change</source>
         <translation>컨트롤 체인지</translation>
     </message>
@@ -12277,7 +12312,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlEditorDialog</name>
     <message>
-        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+82"/>
+        <location filename="../../src/gui/studio/ControlEditorDialog.cpp" line="+81"/>
         <source>&lt;no device&gt;</source>
         <translation>&lt;장치 없음&gt;</translation>
     </message>
@@ -12391,7 +12426,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlEraser</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlEraser.cpp" line="+79"/>
+        <location filename="../../src/gui/rulers/ControlEraser.cpp" line="+78"/>
         <source>Click on a value to delete it</source>
         <translation>값을 클릭하면 삭제됩니다</translation>
     </message>
@@ -12399,7 +12434,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlMover</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlMover.cpp" line="+131"/>
+        <location filename="../../src/gui/rulers/ControlMover.cpp" line="+130"/>
         <source>Click and drag a value. Shift suppresses grid snap. Ctrl constrains to horizontal or vertical</source>
         <translation>값을 클릭하여 드래그하십시오. Shift는 그리드 스냅을 해제합니다. Ctrl은 수평 또는 수직으로 제한합니다</translation>
     </message>
@@ -12407,7 +12442,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlPainter</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlPainter.cpp" line="+138"/>
+        <location filename="../../src/gui/rulers/ControlPainter.cpp" line="+137"/>
         <source>Click to set a value. Right click for grid options</source>
         <translation>값을 지정하려면 클릭하십시오. 그리드 옵션은 오른쪽 클릭</translation>
     </message>
@@ -12415,7 +12450,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlParameterEditDialog</name>
     <message>
-        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="+77"/>
+        <location filename="../../src/gui/studio/ControlParameterEditDialog.cpp" line="+76"/>
         <source>Name:</source>
         <translation>이름:</translation>
     </message>
@@ -12486,7 +12521,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControlRulerWidget</name>
     <message>
-        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+526"/>
+        <location filename="../../src/gui/rulers/ControlRulerWidget.cpp" line="+525"/>
         <source>Velocity</source>
         <translation>음세기</translation>
     </message>
@@ -12502,7 +12537,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControllerEventsRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+351"/>
+        <location filename="../../src/gui/rulers/ControllerEventsRuler.cpp" line="+350"/>
         <source>Unsupported Event Type</source>
         <translation>지원되지 않는 이벤트 유형</translation>
     </message>
@@ -12530,7 +12565,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::ControllerWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/ControllerWidget.cpp" line="+67"/>
+        <location filename="../../src/gui/editors/event/ControllerWidget.cpp" line="+66"/>
         <source>Controller Properties</source>
         <translation>컨트롤러 속성</translation>
     </message>
@@ -12553,7 +12588,7 @@ Destination device already has a bank for
         <translation>복사(&amp;C)</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/CopyCommand.cpp" line="+44"/>
+        <location filename="../../src/commands/edit/CopyCommand.cpp" line="+43"/>
         <location line="+29"/>
         <source>(excerpt)</source>
         <translation>(발췌)</translation>
@@ -12572,7 +12607,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CopySegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/CopySegmentCommand.cpp" line="+95"/>
+        <location filename="../../src/commands/segment/CopySegmentCommand.cpp" line="+94"/>
         <source>(linked)</source>
         <translation>(연결됨)</translation>
     </message>
@@ -12590,7 +12625,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CountdownDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="+48"/>
+        <location filename="../../src/gui/dialogs/CountdownDialog.cpp" line="+47"/>
         <source>Recording...</source>
         <translation>레코딩...</translation>
     </message>
@@ -12631,7 +12666,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::CreateTempoMapFromSegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="+33"/>
+        <location filename="../../src/commands/segment/CreateTempoMapFromSegmentCommand.cpp" line="+32"/>
         <source>Set Tempos from Beat Segment</source>
         <translation>비트 세그먼트에서 템포 지정</translation>
     </message>
@@ -12746,7 +12781,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::DiatonicPitchChooser</name>
     <message>
-        <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="+65"/>
+        <location filename="../../src/gui/widgets/DiatonicPitchChooser.cpp" line="+64"/>
         <source>C</source>
         <comment>note name</comment>
         <translation>C</translation>
@@ -12866,7 +12901,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::DocumentConfigureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="+40"/>
+        <location filename="../../src/gui/dialogs/DocumentConfigureDialog.cpp" line="+39"/>
         <source>Document Properties</source>
         <translation>문서 속성</translation>
     </message>
@@ -12885,7 +12920,7 @@ Destination device already has a bank for
         <translation>%1분 %2.%3%4초 (%5단위, %6마디)</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="+96"/>
+        <location filename="../../src/gui/configuration/DocumentMetaConfigurationPage.cpp" line="+95"/>
         <source>Headers</source>
         <translation>헤더</translation>
     </message>
@@ -13028,7 +13063,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EditEvent</name>
     <message>
-        <location filename="../../src/gui/editors/event/EditEvent.cpp" line="+62"/>
+        <location filename="../../src/gui/editors/event/EditEvent.cpp" line="+61"/>
         <source>Edit Event</source>
         <translation>이벤트 편집</translation>
     </message>
@@ -13121,7 +13156,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EditTempoController</name>
     <message>
-        <location filename="../../src/gui/general/EditTempoController.cpp" line="+90"/>
+        <location filename="../../src/gui/general/EditTempoController.cpp" line="+89"/>
         <source>Move Tempo Change</source>
         <translation>템포 변경 이동</translation>
     </message>
@@ -13144,7 +13179,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EditViewBase</name>
     <message>
-        <location filename="../../src/gui/general/EditViewBase.cpp" line="+215"/>
+        <location filename="../../src/gui/general/EditViewBase.cpp" line="+214"/>
         <source>Segment Start Time</source>
         <translation>세그먼트 시작 시간</translation>
     </message>
@@ -13192,7 +13227,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EraseCommand</name>
     <message>
-        <location filename="../../src/commands/edit/EraseCommand.cpp" line="+37"/>
+        <location filename="../../src/commands/edit/EraseCommand.cpp" line="+36"/>
         <source>&amp;Erase</source>
         <translation>지우기(&amp;E)</translation>
     </message>
@@ -13224,7 +13259,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EventFilterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="+79"/>
+        <location filename="../../src/gui/dialogs/EventFilterDialog.cpp" line="+78"/>
         <source>Event Filter</source>
         <translation>이벤트 필터</translation>
     </message>
@@ -13356,7 +13391,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EventListEditor</name>
     <message>
-        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+197"/>
+        <location filename="../../src/gui/editors/eventlist/EventListEditor.cpp" line="+196"/>
         <source>Event filters</source>
         <translation>이벤트 필터</translation>
     </message>
@@ -13544,7 +13579,7 @@ Destination device already has a bank for
         <translation>(그룹 %1)  </translation>
     </message>
     <message>
-        <location line="+211"/>
+        <location line="+215"/>
         <source>Segment label</source>
         <translation>세그먼트 레이블</translation>
     </message>
@@ -13604,7 +13639,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EventParameterDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+111"/>
+        <location filename="../../src/gui/dialogs/EventParameterDialog.cpp" line="+110"/>
         <source>Set the %1 property of the event selection:</source>
         <translation>이벤트 선택 항목의 %1 속성 지정:</translation>
     </message>
@@ -13640,7 +13675,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::EventTypeDialog</name>
     <message>
-        <location filename="../../src/gui/editors/event/EventTypeDialog.cpp" line="+54"/>
+        <location filename="../../src/gui/editors/event/EventTypeDialog.cpp" line="+53"/>
         <source>Select Event type to insert.</source>
         <translation>삽입할 이벤트 유형을 선택하십시오.</translation>
     </message>
@@ -13688,7 +13723,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::FileLocateDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="+47"/>
+        <location filename="../../src/gui/dialogs/FileLocateDialog.cpp" line="+46"/>
         <source>Locate audio file</source>
         <translation>오디오 파일 찾기</translation>
     </message>
@@ -13721,7 +13756,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::FileMergeDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="+46"/>
+        <location filename="../../src/gui/dialogs/FileMergeDialog.cpp" line="+45"/>
         <source>Merge File</source>
         <translation>파일 합치기</translation>
     </message>
@@ -13759,7 +13794,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::FileSource</name>
     <message>
-        <location filename="../../src/gui/general/FileSource.cpp" line="+109"/>
+        <location filename="../../src/gui/general/FileSource.cpp" line="+108"/>
         <location line="+80"/>
         <location line="+31"/>
         <source>Unsupported scheme in URL</source>
@@ -13821,7 +13856,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::GeneralConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+88"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.h" line="+89"/>
         <source>General</source>
         <translation>일반</translation>
     </message>
@@ -13831,7 +13866,7 @@ Destination device already has a bank for
         <translation>일반 구성</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+99"/>
+        <location filename="../../src/gui/configuration/GeneralConfigurationPage.cpp" line="+98"/>
         <source>Double-click opens segment in</source>
         <translation>두 번 클릭으로 세그먼트 열기</translation>
     </message>
@@ -13946,7 +13981,12 @@ Destination device already has a bank for
         <translation>JACK 트랜스포트 사용</translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+29"/>
+        <source>New JACK Transport Logic (experimental)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+20"/>
         <source>JACK stop at auto stop</source>
         <translation>자동 정지 시 JACK 정지</translation>
     </message>
@@ -14056,7 +14096,7 @@ Destination device already has a bank for
         <translation>네이티브 파일 대화상자 사용</translation>
     </message>
     <message>
-        <location line="-576"/>
+        <location line="-601"/>
         <source>Okular (KDE)</source>
         <translation>Okular (KDE)</translation>
     </message>
@@ -14066,7 +14106,7 @@ Destination device already has a bank for
         <translation>HPLIP (HP 프린터)</translation>
     </message>
     <message>
-        <location line="+770"/>
+        <location line="+792"/>
         <source>You must restart Rosegarden or open a file for the track size change to take effect.</source>
         <translation>트랙 크기 변경 사항을 적용하려면 Rosegarden을 다시 시작하거나 파일을 열어야 합니다.</translation>
     </message>
@@ -14076,12 +14116,12 @@ Destination device already has a bank for
         <translation>트랙 레이블 너비 변경 사항을 적용하려면 Rosegarden을 다시 시작하거나 파일을 열어야 합니다.</translation>
     </message>
     <message>
-        <location line="-753"/>
+        <location line="-775"/>
         <source>Behavior</source>
         <translation>동작</translation>
     </message>
     <message>
-        <location line="+250"/>
+        <location line="+275"/>
         <source>Jump to loop</source>
         <translation>루프로 이동</translation>
     </message>
@@ -14112,7 +14152,7 @@ Destination device already has a bank for
         <translation>크게</translation>
     </message>
     <message>
-        <location line="-532"/>
+        <location line="-557"/>
         <source>MuPDF</source>
         <translation>MuPDF</translation>
     </message>
@@ -14127,12 +14167,12 @@ Destination device already has a bank for
         <translation>xdg-open (추천)</translation>
     </message>
     <message>
-        <location line="+779"/>
+        <location line="+801"/>
         <source>You must restart Rosegarden for the presentation change to take effect.</source>
         <translation>표시 변경 사항을 적용하려면 Rosegarden을 다시 시작해야 합니다.</translation>
     </message>
     <message>
-        <location line="-323"/>
+        <location line="-320"/>
         <source>Note name style</source>
         <translation>음표 이름 스타일</translation>
     </message>
@@ -14207,7 +14247,7 @@ Destination device already has a bank for
         <translation>PDF 뷰어</translation>
     </message>
     <message>
-        <location line="-613"/>
+        <location line="-638"/>
         <source>Evince (GNOME)</source>
         <translation>Evince (GNOME)</translation>
     </message>
@@ -14217,7 +14257,7 @@ Destination device already has a bank for
         <translation>Adobe Acrobat Reader (비자유)</translation>
     </message>
     <message>
-        <location line="+613"/>
+        <location line="+638"/>
         <source>Used to preview generated LilyPond output</source>
         <translation>생성된 LilyPond 출력 미리듣기에 사용</translation>
     </message>
@@ -14227,7 +14267,7 @@ Destination device already has a bank for
         <translation>명령줄 파일 인쇄 유틸리티</translation>
     </message>
     <message>
-        <location line="-617"/>
+        <location line="-642"/>
         <source>Gtk-LP (GNOME)</source>
         <translation>Gtk-LP (GNOME)</translation>
     </message>
@@ -14242,7 +14282,7 @@ Destination device already has a bank for
         <translation>lp (GUI 없음)</translation>
     </message>
     <message>
-        <location line="+617"/>
+        <location line="+642"/>
         <source>Used to print generated LilyPond output without previewing it</source>
         <translation>미리듣기 없이 생성된 LilyPond 출력을 인쇄하는 데 사용</translation>
     </message>
@@ -14252,7 +14292,7 @@ Destination device already has a bank for
         <translation>외부 애플리케이션</translation>
     </message>
     <message>
-        <location line="+181"/>
+        <location line="+178"/>
         <source>Changes to the textured background in the main window will not take effect until you restart Rosegarden.</source>
         <translation>기본 창의 텍스처 배경 변경 사항은 Rosegarden을 다시 시작해야 적용됩니다.</translation>
     </message>
@@ -14325,7 +14365,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::GuitarChordSelectorDialog</name>
     <message>
-        <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="+53"/>
+        <location filename="../../src/gui/editors/guitar/GuitarChordSelectorDialog.cpp" line="+52"/>
         <source>Guitar Chord Selector</source>
         <translation>기타 코드 선택기</translation>
     </message>
@@ -14394,7 +14434,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::HeadersConfigurationPage</name>
     <message>
-        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="+67"/>
+        <location filename="../../src/gui/configuration/HeadersConfigurationPage.cpp" line="+66"/>
         <source>Printable headers</source>
         <translation>인쇄 가능한 헤더</translation>
     </message>
@@ -14507,7 +14547,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::HydrogenXMLHandler</name>
     <message>
-        <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+289"/>
+        <location filename="../../src/document/io/HydrogenXMLHandler.cpp" line="+288"/>
         <source> imported from Hydrogen </source>
         <translation> Hydrogen에서 가져옴 </translation>
     </message>
@@ -14515,7 +14555,7 @@ Destination device already has a bank for
 <context>
     <name>Rosegarden::IdentifyTextCodecDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="+73"/>
+        <location filename="../../src/gui/dialogs/IdentifyTextCodecDialog.cpp" line="+72"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -14793,7 +14833,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InstrumentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="+40"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterBox.cpp" line="+39"/>
         <source>Instrument Parameters</source>
         <translation>악기 매개변수</translation>
     </message>
@@ -14801,7 +14841,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::InstrumentParameterPanel</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+63"/>
+        <location filename="../../src/gui/editors/parameters/InstrumentParameterPanel.cpp" line="+62"/>
         <source>none</source>
         <translation>없음</translation>
     </message>
@@ -15082,7 +15122,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::KeyPressureWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/KeyPressureWidget.cpp" line="+70"/>
+        <location filename="../../src/gui/editors/event/KeyPressureWidget.cpp" line="+69"/>
         <source>Key Pressure Properties</source>
         <translation>키 프레셔 속성</translation>
     </message>
@@ -15110,7 +15150,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::KeySignatureDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="+74"/>
+        <location filename="../../src/gui/dialogs/KeySignatureDialog.cpp" line="+73"/>
         <source>Key Change</source>
         <translation>조 변경</translation>
     </message>
@@ -15240,7 +15280,7 @@ Example text from file:</source>
 <context>
     <name>Rosegarden::LilyPondExporter</name>
     <message>
-        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+844"/>
+        <location filename="../../src/document/io/LilyPondExporter.cpp" line="+843"/>
         <source>LilyPond does not allow spaces or backslashes in filenames.
 
 Would you like to use
@@ -15282,14 +15322,14 @@ Would you like to use
         <translation>선택한 세그먼트를 내보내지 못했습니다. 선택된 세그먼트가 없습니다.</translation>
     </message>
     <message>
-        <location line="+1155"/>
+        <location line="+1154"/>
         <source>Bar %1 contains an event too short to represent in standard notation.
 This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.</source>
         <translation>막대 %1에는 표준 표기법으로 표현하기에는 너무 짧은 이벤트가 포함되어 있습니다.
 이는 파일의 이벤트가 손상되었기 때문일 가능성이 높습니다. LilyPond에서 막대 검사 오류가 발생할 수 있습니다.</translation>
     </message>
     <message>
-        <location line="+751"/>
+        <location line="+761"/>
         <source>warning: overlong bar truncated here</source>
         <translation>경고: 너무 긴 마디가 여기서 잘림</translation>
     </message>
@@ -15302,7 +15342,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::LilyPondOptionsDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="+68"/>
+        <location filename="../../src/gui/dialogs/LilyPondOptionsDialog.cpp" line="+67"/>
         <source>LilyPond Export/Preview</source>
         <translation>LilyPond 내보내기/미리듣기</translation>
     </message>
@@ -15651,7 +15691,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::LilyPondProcessor</name>
     <message>
-        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="+64"/>
+        <location filename="../../src/gui/general/LilyPondProcessor.cpp" line="+63"/>
         <source>Preview</source>
         <translation>미리듣기</translation>
     </message>
@@ -15769,7 +15809,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::LoopRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+74"/>
+        <location filename="../../src/gui/rulers/LoopRuler.cpp" line="+73"/>
         <source>&lt;qt&gt;&lt;p&gt;Click and drag to move the playback pointer.&lt;/p&gt;&lt;p&gt;Right-click and drag to set a range for looping or editing.&lt;/p&gt;&lt;p&gt;Right-click to switch between loop range and loop all.&lt;/p&gt;&lt;p&gt;Ctrl-click and drag to move the playback pointer with snap to beat.&lt;/p&gt;&lt;p&gt;Double-click to start playback.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;클릭하고 드래그하여 재생 포인터를 이동합니다.&lt;/p&gt;&lt;p&gt;우클릭하고 드래그하여 반복 또는 편집 범위를 지정합니다.&lt;/p&gt;&lt;p&gt;우클릭하여 반복 범위와 전체 반복을 전환합니다.&lt;/p&gt;&lt;p&gt;Ctrl+클릭하고 드래그하여 비트에 맞춰 재생 포인터를 이동합니다.&lt;/p&gt;&lt;p&gt;더블클릭하여 재생을 시작합니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -15779,7 +15819,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
         <translation>&lt;qt&gt;&lt;p&gt;클릭하고 드래그하여 재생 포인터를 이동합니다.&lt;/p&gt;&lt;p&gt;우클릭하고 드래그하여 반복 또는 편집 범위를 지정합니다.&lt;/p&gt;&lt;p&gt;우클릭하여 범위를 전환합니다.&lt;/p&gt;&lt;p&gt;Ctrl+클릭하고 드래그하여 비트에 맞춰 재생 포인터를 이동합니다.&lt;/p&gt;&lt;p&gt;더블클릭하여 재생을 시작합니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+398"/>
+        <location line="+414"/>
         <source>Hold Ctrl to snap to unit.</source>
         <translation>Ctrl을 누르면 단위에 맞춥니다.</translation>
     </message>
@@ -15787,7 +15827,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::LyricEditDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="+64"/>
+        <location filename="../../src/gui/dialogs/LyricEditDialog.cpp" line="+63"/>
         <source>Edit Lyrics</source>
         <translation>가사 편집</translation>
     </message>
@@ -15860,7 +15900,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
         <translation>MIDI 설정</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+72"/>
+        <location filename="../../src/gui/configuration/MIDIConfigurationPage.cpp" line="+71"/>
         <source>Base octave number for MIDI pitch display</source>
         <translation>MIDI 음높이 표시를 위한 기준 옥타브 번호</translation>
     </message>
@@ -16086,42 +16126,42 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
         <translation>&lt;qt&gt;스튜디오에서 사용 가능한 경우 위 프로그램의 변형을 지정합니다&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-46"/>
+        <location line="-44"/>
         <source>&lt;qt&gt;Set the MIDI bank from which to select programs&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;프로그램을 선택할 MIDI 뱅크를 지정합니다&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+22"/>
         <source>&lt;qt&gt;Set the MIDI program or &amp;quot;patch&amp;quot;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;MIDI 프로그램 또는 &amp;quot;패치&amp;quot;를 지정합니다&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-49"/>
+        <location line="-48"/>
         <source>&lt;qt&gt;&lt;p&gt;Check this to tell Rosegarden that this is a percussion instrument.  This allows you access to any percussion key maps and drum kits you may have configured in the studio&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;이것이 퍼커션 악기임을 Rosegarden에 알리려면 이것을 선택하십시오. 이를 통해 스튜디오에서 구성했을 수 있는 모든 퍼커션 키 맵 및 드럼 키트에 액세스할 수 있습니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+80"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;i&gt;Auto&lt;/i&gt;, allocate channel automatically; &lt;i&gt;Fixed&lt;/i&gt;, fix channel to instrument number&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;&lt;i&gt;자동&lt;/i&gt;, 채널을 자동으로 할당합니다. &lt;i&gt;고정&lt;/i&gt;, 채널을 악기 번호로 고정합니다&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="-76"/>
+        <location line="-74"/>
         <source>Bank</source>
         <translation>뱅크</translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+51"/>
         <source>Variation</source>
         <translation>변형</translation>
     </message>
     <message>
-        <location line="-23"/>
+        <location line="-22"/>
         <source>Program</source>
         <translation>프로그램</translation>
     </message>
     <message>
-        <location line="-42"/>
+        <location line="-41"/>
         <source>Percussion</source>
         <translation>퍼커션</translation>
     </message>
@@ -16131,12 +16171,12 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
         <translation>&lt;qt&gt;뱅크 선택 보내기&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+30"/>
+        <location line="+29"/>
         <source>&lt;qt&gt;Send program change&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;프로그램 변경 보내기&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+22"/>
         <source>&lt;qt&gt;Send bank select for variation&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;변형을 위한 뱅크 선택 보내기&lt;/qt&gt;</translation>
     </message>
@@ -16400,7 +16440,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::MarkerEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+74"/>
+        <location filename="../../src/gui/editors/segment/MarkerEditor.cpp" line="+73"/>
         <source>Manage Markers</source>
         <translation>마커 관리</translation>
     </message>
@@ -16499,7 +16539,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::MarkerModifyDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="+66"/>
+        <location filename="../../src/gui/dialogs/MarkerModifyDialog.cpp" line="+65"/>
         <source>Edit Marker</source>
         <translation>마커 편집</translation>
     </message>
@@ -16527,7 +16567,7 @@ This is probably due to a corrupt event in the file. Expect barcheck errors in L
 <context>
     <name>Rosegarden::MarkerRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+80"/>
+        <location filename="../../src/gui/rulers/MarkerRuler.cpp" line="+79"/>
         <source>Click on a marker to move the playback pointer.
 Click and drag a marker to move it.
 Shift-click to set a range between markers.
@@ -16634,7 +16674,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixMover</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+225"/>
+        <location filename="../../src/gui/editors/matrix/MatrixMover.cpp" line="+224"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Shift를 누르면 비트 그리드에 맞추지 않습니다</translation>
     </message>
@@ -16659,7 +16699,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
         <translation>이벤트 이동</translation>
     </message>
     <message>
-        <location line="+118"/>
+        <location line="+113"/>
         <source>Click and drag to move a note; hold Ctrl as well to copy it</source>
         <translation>음표를 이동하려면 클릭하고 드래그; 복사하려면 Ctrl도 함께 누르십시오</translation>
     </message>
@@ -16682,12 +16722,12 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixPainter</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+215"/>
+        <location filename="../../src/gui/editors/matrix/MatrixPainter.cpp" line="+214"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Shift를 누르면 비트 그리드에 맞추지 않습니다</translation>
     </message>
     <message>
-        <location line="+129"/>
+        <location line="+127"/>
         <source>Click and drag to draw a note; Shift to avoid snapping to grid</source>
         <translation>음표를 그리려면 클릭하고 드래그; 그리드에 맞추지 않으려면 Shift</translation>
     </message>
@@ -16700,7 +16740,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixPercussionInsertionCommand</name>
     <message>
-        <location filename="../../src/commands/matrix/MatrixPercussionInsertionCommand.cpp" line="+40"/>
+        <location filename="../../src/commands/matrix/MatrixPercussionInsertionCommand.cpp" line="+39"/>
         <source>Insert Percussion Note</source>
         <translation>퍼커션 음표 삽입</translation>
     </message>
@@ -16708,7 +16748,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixResizer</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+123"/>
+        <location filename="../../src/gui/editors/matrix/MatrixResizer.cpp" line="+122"/>
         <source>Hold Shift to avoid snapping to beat grid</source>
         <translation>Shift를 누르면 비트 그리드에 맞추지 않습니다</translation>
     </message>
@@ -16736,7 +16776,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixSelector</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+424"/>
+        <location filename="../../src/gui/editors/matrix/MatrixSelector.cpp" line="+423"/>
         <location line="+161"/>
         <source>Click and drag to select; middle-click and drag to draw new note</source>
         <translation>선택하려면 클릭하고 드래그; 새 음표를 그리려면 가운데 버튼을 클릭하고 드래그</translation>
@@ -16783,7 +16823,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixVelocity</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="+229"/>
+        <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="+228"/>
         <source>Velocity change: %1   Velocity: %2</source>
         <translation>음세기 변화: %1   음세기: %2</translation>
     </message>
@@ -16793,17 +16833,15 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
         <translation>음세기 변화: %1   음세기: %2 ~ %3</translation>
     </message>
     <message>
-        <location line="+27"/>
         <source>Change Velocity</source>
-        <translation>음세기 변경</translation>
+        <translation type="vanished">음세기 변경</translation>
     </message>
     <message>
-        <location line="+3"/>
         <source>Change Velocities</source>
-        <translation>음세기 변경</translation>
+        <translation type="vanished">음세기 변경</translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+66"/>
         <source>Click and drag to scale velocity of selected notes</source>
         <translation>선택한 음표의 음세기를 조정하려면 클릭하고 드래그</translation>
     </message>
@@ -16816,7 +16854,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixView</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+664"/>
+        <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="+662"/>
         <source> Grid: </source>
         <translation> 그리드: </translation>
     </message>
@@ -16881,9 +16919,13 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
         <translation>http://www.rosegardenmusic.com/tutorials/ko/chapter-0.html</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
+        <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -16908,7 +16950,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
         <translation>추정된 조표 표시됨</translation>
     </message>
     <message>
-        <location line="-926"/>
+        <location line="-927"/>
         <source>Estimated time signature shown</source>
         <translation>추정된 박자표 표시됨</translation>
     </message>
@@ -16951,7 +16993,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MatrixWidget</name>
     <message>
-        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+199"/>
+        <location filename="../../src/gui/editors/matrix/MatrixWidget.cpp" line="+198"/>
         <source>Zoom</source>
         <translation>확대/축소</translation>
     </message>
@@ -16971,7 +17013,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
         <translation>확대/축소 재설정</translation>
     </message>
     <message>
-        <location line="+789"/>
+        <location line="+790"/>
         <source>%1 Controller %2 %3</source>
         <translation>%1 컨트롤러 %2 %3</translation>
     </message>
@@ -16986,7 +17028,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
         <translation>트랙 %1 (%2) | %3</translation>
     </message>
     <message>
-        <location line="-1156"/>
+        <location line="-1157"/>
         <source>&lt;qt&gt;Rotate wheel to change the active segment&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;휠을 돌려 활성 세그먼트를 변경합니다&lt;/qt&gt;</translation>
     </message>
@@ -16994,7 +17036,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MergeFileCommand</name>
     <message>
-        <location filename="../../src/commands/segment/MergeFileCommand.cpp" line="+44"/>
+        <location filename="../../src/commands/segment/MergeFileCommand.cpp" line="+43"/>
         <source>Merge File</source>
         <translation>파일 합치기</translation>
     </message>
@@ -17033,7 +17075,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MidiFile</name>
     <message>
-        <location filename="../../src/sound/MidiFile.cpp" line="+81"/>
+        <location filename="../../src/sound/MidiFile.cpp" line="+80"/>
         <source>Wrong length for long data in MIDI stream</source>
         <translation>MIDI 스트림의 long 데이터 길이가 잘못되었습니다</translation>
     </message>
@@ -17088,7 +17130,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MidiFilterDialog</name>
     <message>
-        <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="+50"/>
+        <location filename="../../src/gui/seqmanager/MidiFilterDialog.cpp" line="+49"/>
         <source>Modify MIDI Filters</source>
         <translation>MIDI 필터 수정</translation>
     </message>
@@ -17153,7 +17195,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MidiKeyMappingEditor</name>
     <message>
-        <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+55"/>
+        <location filename="../../src/gui/studio/MidiKeyMappingEditor.cpp" line="+54"/>
         <location line="+22"/>
         <source>Key Mapping details</source>
         <translation>키 매핑 세부정보</translation>
@@ -17167,7 +17209,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MidiMixerWindow</name>
     <message>
-        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+64"/>
+        <location filename="../../src/gui/studio/MidiMixerWindow.cpp" line="+63"/>
         <source>MIDI Mixer</source>
         <translation>MIDI 믹서</translation>
     </message>
@@ -17295,7 +17337,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::MoveCommand</name>
     <message>
-        <location filename="../../src/commands/edit/MoveCommand.cpp" line="+54"/>
+        <location filename="../../src/commands/edit/MoveCommand.cpp" line="+53"/>
         <source>&amp;Move Events</source>
         <translation>이벤트 이동(&amp;M)</translation>
     </message>
@@ -17462,7 +17504,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::NRPNWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/NRPNWidget.cpp" line="+65"/>
+        <location filename="../../src/gui/editors/event/NRPNWidget.cpp" line="+64"/>
         <source>NRPN Properties</source>
         <translation>NRPN 속성</translation>
     </message>
@@ -17480,7 +17522,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::NameSetEditor</name>
     <message>
-        <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+72"/>
+        <location filename="../../src/gui/studio/NameSetEditor.cpp" line="+71"/>
         <source>Provided by</source>
         <translation>제공자</translation>
     </message>
@@ -17812,7 +17854,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::NotationStaff</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+455"/>
+        <location filename="../../src/gui/editors/notation/NotationStaff.cpp" line="+454"/>
         <source> %1</source>
         <translation> %1</translation>
     </message>
@@ -18038,7 +18080,7 @@ Shift 키를 누른 상태에서 클릭하면 마커 사이의 범위를 지정�
 <context>
     <name>Rosegarden::NotationVLayout</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="+509"/>
+        <location filename="../../src/gui/editors/notation/NotationVLayout.cpp" line="+508"/>
         <source>Spanned note at %1 has no HEIGHT_ON_STAFF property!
 This is a bug (the program would previously have crashed by now)</source>
         <translation>%1의 스팬 음표에 HEIGHT_ON_STAFF 속성이 없습니다!
@@ -18048,7 +18090,7 @@ This is a bug (the program would previously have crashed by now)</source>
 <context>
     <name>Rosegarden::NotationView</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1193"/>
+        <location filename="../../src/gui/editors/notation/NotationView.cpp" line="+1192"/>
         <source>Note &amp;Font</source>
         <translation>음표 글꼴(&amp;F)</translation>
     </message>
@@ -18097,7 +18139,7 @@ This is a bug (the program would previously have crashed by now)</source>
         </translation>
     </message>
     <message>
-        <location line="+2731"/>
+        <location line="+2734"/>
         <source>Notation</source>
         <translation>기보</translation>
     </message>
@@ -18112,7 +18154,7 @@ This is a bug (the program would previously have crashed by now)</source>
         <translation>꾸밈음</translation>
     </message>
     <message>
-        <location line="-2359"/>
+        <location line="-2362"/>
         <source>Unknown spacing action %1</source>
         <translation>알 수 없는 간격 작업 %1</translation>
     </message>
@@ -18158,12 +18200,12 @@ This is a bug (the program would previously have crashed by now)</source>
         <location line="+877"/>
         <location line="+81"/>
         <location line="+751"/>
-        <location line="+1096"/>
+        <location line="+1100"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-3168"/>
+        <location line="-3172"/>
         <source>Printing with LilyPond...</source>
         <translation>LilyPond로 인쇄하는 중...</translation>
     </message>
@@ -18297,7 +18339,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>추정된 박자표 표시됨</translation>
     </message>
     <message>
-        <location line="+298"/>
+        <location line="+301"/>
         <source>Tuplet</source>
         <translation>잇단음표</translation>
     </message>
@@ -18334,9 +18376,13 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>http://www.rosegardenmusic.com/tutorials/ko/chapter-0.html</translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
+        <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+108"/>
@@ -18408,7 +18454,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotationWidget</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+239"/>
+        <location filename="../../src/gui/editors/notation/NotationWidget.cpp" line="+238"/>
         <source>Zoom</source>
         <translation>확대/축소</translation>
     </message>
@@ -18462,7 +18508,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NoteFontFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="+109"/>
+        <location filename="../../src/gui/editors/notation/NoteFontFactory.cpp" line="+108"/>
         <location line="+74"/>
         <location line="+28"/>
         <source>Rosegarden</source>
@@ -18510,7 +18556,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NoteInsertionCommand</name>
     <message>
-        <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="+53"/>
+        <location filename="../../src/commands/notation/NoteInsertionCommand.cpp" line="+52"/>
         <source>Insert Note</source>
         <translation>음표 삽입</translation>
     </message>
@@ -18518,7 +18564,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NotePixmapFactory</name>
     <message>
-        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+197"/>
+        <location filename="../../src/gui/editors/notation/NotePixmapFactory.cpp" line="+196"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -18554,7 +18600,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::NoteWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/NoteWidget.cpp" line="+76"/>
+        <location filename="../../src/gui/editors/event/NoteWidget.cpp" line="+75"/>
         <source>Note Properties</source>
         <translation>음표 속성</translation>
     </message>
@@ -18564,7 +18610,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>음길이:</translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+21"/>
         <location line="+24"/>
         <location line="+53"/>
         <location line="+20"/>
@@ -18628,7 +18674,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::OutOfProcessorPower</name>
     <message>
-        <location filename="../../src/gui/dialogs/OutOfProcessorPower.cpp" line="+38"/>
+        <location filename="../../src/gui/dialogs/OutOfProcessorPower.cpp" line="+37"/>
         <source>Out Of Processor Power</source>
         <translation>프로세서 성능 부족</translation>
     </message>
@@ -18659,7 +18705,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>붙여넣기(&amp;P)</translation>
     </message>
     <message>
-        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+120"/>
+        <location filename="../../src/commands/edit/PasteEventsCommand.cpp" line="+119"/>
         <source>Paste into an existing gap [&quot;restricted&quot;]</source>
         <translation>기존 간격에 붙여넣기 [&quot;제한적&quot;]</translation>
     </message>
@@ -18731,7 +18777,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PasteToTriggerSegmentCommand</name>
     <message>
-        <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="+51"/>
+        <location filename="../../src/commands/segment/PasteToTriggerSegmentCommand.cpp" line="+50"/>
         <source>Paste as New Triggered Segment</source>
         <translation>새 트리거 세그먼트로 붙여넣기</translation>
     </message>
@@ -18739,7 +18785,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PercussionPitchRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+59"/>
+        <location filename="../../src/gui/rulers/PercussionPitchRuler.cpp" line="+58"/>
         <source>  A#2   Acoustic Bass Drum  </source>
         <extracomment>Note to the translators: Don&apos;t translate literally. This string is never displayed but defines the largest width of the text (pitch and instrument name) in the percussion ruler.</extracomment>
         <translation>  A#2   어쿠스틱 베이스 드럼  </translation>
@@ -18754,7 +18800,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchBendSequenceDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+96"/>
+        <location filename="../../src/gui/dialogs/PitchBendSequenceDialog.cpp" line="+95"/>
         <location line="+761"/>
         <source>%1 Sequence</source>
         <translation>%1 시퀀스</translation>
@@ -19019,7 +19065,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchBendWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/PitchBendWidget.cpp" line="+64"/>
+        <location filename="../../src/gui/editors/event/PitchBendWidget.cpp" line="+63"/>
         <source>Pitch Bend Properties</source>
         <translation>피치 밴드 속성</translation>
     </message>
@@ -19037,7 +19083,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchChooser</name>
     <message>
-        <location filename="../../src/gui/widgets/PitchChooser.cpp" line="+58"/>
+        <location filename="../../src/gui/widgets/PitchChooser.cpp" line="+57"/>
         <source>Pitch:</source>
         <translation>음높이:</translation>
     </message>
@@ -19101,7 +19147,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
         <translation>음높이 트래커</translation>
     </message>
     <message>
-        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+71"/>
+        <location filename="../../src/gui/configuration/PitchTrackerConfigurationPage.cpp" line="+70"/>
         <source>Tuning</source>
         <translation>튜닝</translation>
     </message>
@@ -19174,7 +19220,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PitchTrackerView</name>
     <message>
-        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+148"/>
+        <location filename="../../src/gui/editors/pitchtracker/PitchTrackerView.cpp" line="+147"/>
         <source>Cannot connect to jack! Ensure jack server is running and no other tracker clients are open.</source>
         <translation>JACK에 연결할 수 없습니다! JACK 서버가 실행 중이고 열려 있는 다른 트래커 클라이언트가 없는지 확인합니다.</translation>
     </message>
@@ -19200,7 +19246,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PlayList</name>
     <message>
-        <location filename="../../src/gui/editors/segment/PlayList.cpp" line="+75"/>
+        <location filename="../../src/gui/editors/segment/PlayList.cpp" line="+74"/>
         <source>Add...</source>
         <translation>추가...</translation>
     </message>
@@ -19258,7 +19304,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PlayListView</name>
     <message>
-        <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="+43"/>
+        <location filename="../../src/gui/editors/segment/PlayListView.cpp" line="+42"/>
         <source>Title</source>
         <translation>제목</translation>
     </message>
@@ -19271,7 +19317,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PresetGroup</name>
     <message>
-        <location filename="../../src/gui/general/PresetGroup.cpp" line="+45"/>
+        <location filename="../../src/gui/general/PresetGroup.cpp" line="+44"/>
         <source>unknown error</source>
         <translation>알 수 없는 오류</translation>
     </message>
@@ -19284,7 +19330,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PresetHandlerDialog</name>
     <message>
-        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+57"/>
+        <location filename="../../src/gui/general/PresetHandlerDialog.cpp" line="+56"/>
         <source>Convert notation for...</source>
         <translation>다음에 대한 기보 변환...</translation>
     </message>
@@ -19367,7 +19413,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProgramChangeWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/ProgramChangeWidget.cpp" line="+55"/>
+        <location filename="../../src/gui/editors/event/ProgramChangeWidget.cpp" line="+54"/>
         <source>Program Properties</source>
         <translation>프로그램 속성</translation>
     </message>
@@ -19380,7 +19426,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::ProjectPackager</name>
     <message>
-        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+81"/>
+        <location filename="../../src/gui/general/ProjectPackager.cpp" line="+80"/>
         <source>Unpack</source>
         <translation>암축 해제</translation>
     </message>
@@ -19570,7 +19616,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::PropertyAdjuster</name>
     <message>
-        <location filename="../../src/gui/rulers/PropertyAdjuster.cpp" line="+107"/>
+        <location filename="../../src/gui/rulers/PropertyAdjuster.cpp" line="+106"/>
         <source>Velocity: %1</source>
         <translation>음세기: %1</translation>
     </message>
@@ -19761,7 +19807,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RIFFAudioFile</name>
     <message>
-        <location filename="../../src/sound/RIFFAudioFile.cpp" line="+63"/>
+        <location filename="../../src/sound/RIFFAudioFile.cpp" line="+62"/>
         <source>Rosegarden currently only supports 16 or 32-bit PCM or IEEE floating-point RIFF files for writing</source>
         <translation>Rosegarden은 현재 쓰기용으로 16비트 또는 32비트 PCM 또는 IEEE 부동 소수점 RIFF 파일만 지원합니다</translation>
     </message>
@@ -19804,7 +19850,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RPNWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/RPNWidget.cpp" line="+65"/>
+        <location filename="../../src/gui/editors/event/RPNWidget.cpp" line="+64"/>
         <source>RPN Properties</source>
         <translation>RPN 속성</translation>
     </message>
@@ -19822,7 +19868,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RawNoteRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+466"/>
+        <location filename="../../src/gui/rulers/RawNoteRuler.cpp" line="+465"/>
         <source>Track #%1, Segment &quot;%2&quot; (runtime id %3)</source>
         <translation>트랙 #%1, 세그먼트 &quot;%2&quot; (런타임 ID %3)</translation>
     </message>
@@ -19967,7 +20013,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RescaleDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="+50"/>
+        <location filename="../../src/gui/dialogs/RescaleDialog.cpp" line="+49"/>
         <source>Stretch or Squash</source>
         <translation>늘리기 또는 줄이기</translation>
     </message>
@@ -20056,7 +20102,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RestWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/RestWidget.cpp" line="+58"/>
+        <location filename="../../src/gui/editors/event/RestWidget.cpp" line="+57"/>
         <source>Rest Properties</source>
         <translation>쉼표 속성</translation>
     </message>
@@ -20119,7 +20165,7 @@ Please ensure the device is configured correctly in the Manage MIDI Devices dial
 <context>
     <name>Rosegarden::RoseXmlHandler</name>
     <message>
-        <location filename="../../src/document/RoseXmlHandler.cpp" line="+300"/>
+        <location filename="../../src/document/RoseXmlHandler.cpp" line="+299"/>
         <source>Reading file...</source>
         <translation>파일 읽는 중...</translation>
     </message>
@@ -20162,8 +20208,8 @@ There may be some incompatibilities with the file format.</source>
 <context>
     <name>Rosegarden::RosegardenDocument</name>
     <message>
-        <location filename="../../src/document/RosegardenDocument.cpp" line="+498"/>
-        <location line="+63"/>
+        <location filename="../../src/document/RosegardenDocument.cpp" line="+499"/>
+        <location line="+66"/>
         <location line="+12"/>
         <location line="+66"/>
         <location line="+34"/>
@@ -20175,14 +20221,14 @@ There may be some incompatibilities with the file format.</source>
         <location line="+11"/>
         <location line="+23"/>
         <location line="+13"/>
-        <location line="+998"/>
+        <location line="+999"/>
         <location line="+16"/>
         <location line="+223"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
     <message numerus="yes">
-        <location line="-2593"/>
+        <location line="-2597"/>
         <source>Delete the %n audio file(s) recorded during the unsaved session?</source>
         <translation>
             <numerusform>저장되지 않은 세션에서 녹음된 %n개 오디오 파일을 삭제하시겠습니까?</numerusform>
@@ -20223,7 +20269,7 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>제목 없음</translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+44"/>
         <source>Can&apos;t open file &apos;%1&apos;</source>
         <translation>&apos;%1&apos; 파일을 열 수 없습니다</translation>
     </message>
@@ -20307,7 +20353,7 @@ We recommend you re-save this file from this version of Rosegarden to ensure tha
 이 버전의 Rosegarden에서 이 파일을 다시 저장하여 차후 버전에서 계속 다시 불러올 수 있도록 하는 것이 좋습니다.</translation>
     </message>
     <message>
-        <location line="+1176"/>
+        <location line="+1177"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
@@ -20361,18 +20407,18 @@ Rosegarden의 다른 사용자나 인스턴스가 이미 이 파일을
         <translation>녹음된 MIDI 삽입</translation>
     </message>
     <message>
-        <location line="-1912"/>
-        <location line="+2233"/>
+        <location line="-1913"/>
+        <location line="+2234"/>
         <source>Cancel</source>
         <translation>취소</translation>
     </message>
     <message>
-        <location line="-2168"/>
+        <location line="-2169"/>
         <source>Error when parsing file &apos;%1&apos;:&lt;br /&gt;&quot;%2&quot;</source>
         <translation>파일 &apos;%1&apos; 파싱 중 오류:&lt;br /&gt;&quot;%2&quot;</translation>
     </message>
     <message>
-        <location line="+1938"/>
+        <location line="+1939"/>
         <location line="+80"/>
         <source>(recorded)</source>
         <translation>(녹음됨)</translation>
@@ -20381,7 +20427,7 @@ Rosegarden의 다른 사용자나 인스턴스가 이미 이 파일을
 <context>
     <name>Rosegarden::RosegardenMainViewWidget</name>
     <message>
-        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+231"/>
+        <location filename="../../src/gui/application/RosegardenMainViewWidget.cpp" line="+230"/>
         <source>Selection must contain only audio or non-audio segments</source>
         <translation>선택 항목에는 오디오 또는 비오디오 세그먼트만 포함되어야 합니다</translation>
     </message>
@@ -20487,7 +20533,7 @@ See Edit -&gt; Preferences -&gt; Audio.</source>
         <translation>시작 중...</translation>
     </message>
     <message>
-        <location line="+531"/>
+        <location line="+542"/>
         <source>  Zoom:  </source>
         <translation>  확대/축소:  </translation>
     </message>
@@ -20514,13 +20560,13 @@ Do you want to open it instead ?</source>
 대신 열어 보시겠습니까?</translation>
     </message>
     <message>
-        <location line="+4895"/>
+        <location line="+4913"/>
         <location line="+19"/>
         <source>Untitled</source>
         <translation>제목 없음</translation>
     </message>
     <message>
-        <location line="-4365"/>
+        <location line="-4383"/>
         <location line="+138"/>
         <source>Could not save document at %1
 Error was : %2</source>
@@ -20530,12 +20576,12 @@ Error was : %2</source>
     <message>
         <location line="-135"/>
         <location line="+138"/>
-        <location line="+6367"/>
+        <location line="+6386"/>
         <source>Could not save document at %1</source>
         <translation>%1에 문서를 저장할 수 없습니다</translation>
     </message>
     <message>
-        <location line="-6823"/>
+        <location line="-6842"/>
         <source>Creating new document...</source>
         <translation>새 문서 작성 중...</translation>
     </message>
@@ -20554,12 +20600,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="-101"/>
-        <location line="+6058"/>
+        <location line="+6077"/>
         <source>All supported files</source>
         <translation>지원되는 모든 파일</translation>
     </message>
     <message>
-        <location line="-6057"/>
+        <location line="-6076"/>
         <location line="+74"/>
         <location line="+175"/>
         <source>Rosegarden files</source>
@@ -20579,24 +20625,24 @@ Error was : %2</source>
         <location line="+1814"/>
         <location line="+39"/>
         <location line="+23"/>
-        <location line="+257"/>
+        <location line="+258"/>
         <location line="+23"/>
-        <location line="+74"/>
+        <location line="+77"/>
         <location line="+20"/>
         <location line="+74"/>
         <location line="+22"/>
-        <location line="+571"/>
+        <location line="+575"/>
         <location line="+40"/>
         <location line="+53"/>
         <location line="+59"/>
         <location line="+55"/>
         <location line="+126"/>
-        <location line="+2554"/>
+        <location line="+2565"/>
         <source>All files</source>
         <translation>모든 파일</translation>
     </message>
     <message>
-        <location line="-6060"/>
+        <location line="-6079"/>
         <source>Open File</source>
         <translation>파일 열기</translation>
     </message>
@@ -20698,12 +20744,12 @@ Error was : %2</source>
     </message>
     <message>
         <location line="+57"/>
-        <location line="+2889"/>
+        <location line="+2897"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
     <message>
-        <location line="-2817"/>
+        <location line="-2825"/>
         <source>Jog Selection</source>
         <translation>선택항목 조그</translation>
     </message>
@@ -20734,14 +20780,19 @@ No segment will be split.</source>
         <translation>세그먼트 시작 시간 지정</translation>
     </message>
     <message>
-        <location line="-3017"/>
+        <location line="-3028"/>
         <source>An auto-save file for an unsaved document has been found.
 Do you want to open it?</source>
         <translation>저장되지 않은 문서의 자동 저장 파일이 발견되었습니다.
 열어 보시겠습니까?</translation>
     </message>
     <message>
-        <location line="+1178"/>
+        <location line="+661"/>
+        <source>Clear recent files menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+528"/>
         <source>File &quot;%1&quot; is a Rosegarden Device, and must be imported using the MIDI device manager.</source>
         <translation>&quot;%1&quot; 파일은 Rosegarden 장치이므로 MIDI 장치 관리자를 사용하여 가져와야 합니다.</translation>
     </message>
@@ -20762,17 +20813,17 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+156"/>
-        <location line="+2525"/>
+        <location line="+2529"/>
         <source>Select File(s)</source>
         <translation>파일 선택</translation>
     </message>
     <message>
-        <location line="-1817"/>
-        <location line="+1459"/>
-        <location line="+190"/>
-        <location line="+94"/>
+        <location line="-1821"/>
+        <location line="+1460"/>
+        <location line="+191"/>
         <location line="+96"/>
-        <location line="+609"/>
+        <location line="+97"/>
+        <location line="+612"/>
         <location line="+57"/>
         <location line="+54"/>
         <location line="+125"/>
@@ -20781,7 +20832,7 @@ Do you want to open it?</source>
         <translation>취소</translation>
     </message>
     <message numerus="yes">
-        <location line="-2431"/>
+        <location line="-2439"/>
         <location line="+55"/>
         <source>Split %n Segment(s) by Drum</source>
         <translation>
@@ -20888,22 +20939,22 @@ Do you want to open it?</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+1103"/>
+        <location line="+1111"/>
         <source>Rosegarden Project files</source>
         <translation>Rosegarden 프로젝트 파일</translation>
     </message>
     <message>
-        <location line="-1042"/>
+        <location line="-1050"/>
         <source>Select MIDI File(s)</source>
         <translation>MIDI 파일 선택</translation>
     </message>
     <message>
-        <location line="+280"/>
+        <location line="+281"/>
         <source>Select X11 Rosegarden File(s)</source>
         <translation>X11 Rosegarden 파일 선택</translation>
     </message>
     <message>
-        <location line="+75"/>
+        <location line="+78"/>
         <location line="+20"/>
         <source>Open Hydrogen File</source>
         <translation>Hydrogen 파일 열기</translation>
@@ -20924,7 +20975,7 @@ Do you want to open it?</source>
         <translation>MusicXML 파일 열기</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+44"/>
         <source>Importing MusicXML file...</source>
         <translation>MusicXML 파일 가져오는 중...</translation>
     </message>
@@ -20936,7 +20987,7 @@ Do you want to open it?</source>
 </translation>
     </message>
     <message>
-        <location line="+885"/>
+        <location line="+888"/>
         <source>Unable to export WAV without JACK running.</source>
         <translation>JACK이 실행 중이 아니면 WAV를 내보낼 수 없습니다.</translation>
     </message>
@@ -20957,7 +21008,7 @@ Only audio and synth plugin tracks will be exported</source>
 오디오 및 신스 플러그인 트랙만 내보내집니다</translation>
     </message>
     <message>
-        <location line="+959"/>
+        <location line="+969"/>
         <source>&lt;qt&gt;&lt;p&gt;You must choose a filename for this composition before recording audio.&lt;/p&gt;&lt;p&gt;Audio files will be saved to &lt;b&gt;%1&lt;/b&gt; as &lt;b&gt;rg-[&lt;i&gt;filename&lt;/i&gt;]-[&lt;i&gt;instrument&lt;/i&gt;]-&lt;i&gt;date&lt;/i&gt;_&lt;i&gt;time&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;.  You may wish to rename audio instruments before recording as well.  For more information, please see the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;오디오를 레코딩하기 전에 이 작곡의 파일 이름을 선택해야 합니다.&lt;/p&gt;&lt;p&gt;오디오 파일은 &lt;b&gt;rg-[&lt;i&gt;파일이름&lt;/i&gt;]-[&lt;i&gt;악기&lt;/i&gt;]-&lt;i&gt;날짜&lt;/i&gt;_&lt;i&gt;시간&lt;/i&gt;-&lt;i&gt;n&lt;/i&gt;.wav&lt;/b&gt;로 &lt;b&gt;%1&lt;/b&gt;에 저장됩니다. 레코딩하기 전에 오디오 악기의 이름을 바꿀 수도 있습니다. 자세한 내용은 &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/doc:audio-filenames-en&quot;&gt;Rosegarden Wiki&lt;/a&gt;를 참조하십시오.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -20982,7 +21033,12 @@ Only audio and synth plugin tracks will be exported</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
     </message>
     <message>
-        <location line="+651"/>
+        <location line="+8"/>
+        <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+644"/>
         <source>Interpret segments</source>
         <translation>세그먼트 해석</translation>
     </message>
@@ -21034,8 +21090,8 @@ Only audio and synth plugin tracks will be exported</source>
 (%2)</translation>
     </message>
     <message>
-        <location line="-8323"/>
-        <location line="+1134"/>
+        <location line="-8353"/>
+        <location line="+1145"/>
         <location line="+8"/>
         <location line="+10"/>
         <location line="+26"/>
@@ -21057,15 +21113,15 @@ Only audio and synth plugin tracks will be exported</source>
         <location line="+77"/>
         <location line="+38"/>
         <location line="+806"/>
-        <location line="+199"/>
+        <location line="+200"/>
         <location line="+19"/>
-        <location line="+171"/>
-        <location line="+20"/>
+        <location line="+172"/>
+        <location line="+22"/>
         <location line="+74"/>
         <location line="+19"/>
-        <location line="+77"/>
+        <location line="+78"/>
         <location line="+19"/>
-        <location line="+509"/>
+        <location line="+512"/>
         <location line="+4"/>
         <location line="+34"/>
         <location line="+43"/>
@@ -21088,12 +21144,12 @@ Only audio and synth plugin tracks will be exported</source>
         <location line="+13"/>
         <location line="+79"/>
         <location line="+2"/>
-        <location line="+41"/>
-        <location line="+588"/>
+        <location line="+42"/>
+        <location line="+597"/>
         <location line="+101"/>
         <location line="+117"/>
         <location line="+13"/>
-        <location line="+1155"/>
+        <location line="+1156"/>
         <location line="+111"/>
         <location line="+18"/>
         <location line="+3"/>
@@ -21104,7 +21160,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location line="-1855"/>
+        <location line="-1856"/>
         <source>Relabel Segment</source>
         <translation>세그먼트 레이블 다시 지정</translation>
     </message>
@@ -21114,7 +21170,7 @@ Only audio and synth plugin tracks will be exported</source>
         <translation>새 세그먼트 레이블</translation>
     </message>
     <message>
-        <location line="+1514"/>
+        <location line="+1515"/>
         <source>&lt;h3&gt;Newer version available&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;최신 버전 사용 가능&lt;/h3&gt;</translation>
     </message>
@@ -21124,12 +21180,12 @@ Only audio and synth plugin tracks will be exported</source>
         <translation>&lt;p&gt;%1 버전을 사용하고 있습니다. 이제 %2 버전을 사용할 수 있습니다.&lt;/p&gt;&lt;p&gt;자세한 내용은 &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/getting/&quot;&gt;Rosegarden 웹사이트&lt;/a&gt;를 참조하십시오.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-4215"/>
+        <location line="-4234"/>
         <source>Open MIDI File</source>
         <translation>MIDI 파일 열기</translation>
     </message>
     <message>
-        <location line="+134"/>
+        <location line="+135"/>
         <source>Importing MIDI file...</source>
         <translation>MIDI 파일 가져오는 중...</translation>
     </message>
@@ -21155,17 +21211,17 @@ Only audio and synth plugin tracks will be exported</source>
         <translation>X11 Rosegarden 파일</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+21"/>
         <source>Importing X11 Rosegarden file...</source>
         <translation>X11 Rosegarden 파일 가져오는 중...</translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+27"/>
         <source>Can&apos;t load X11 Rosegarden file.  It appears to be corrupted.</source>
         <translation>X11 Rosegarden 파일을 불러올 수 없습니다. 손상된 것 같습니다.</translation>
     </message>
     <message>
-        <location line="+984"/>
+        <location line="+988"/>
         <source>&lt;qt&gt;&lt;p&gt;Failed to open a temporary file for LilyPond export.&lt;/p&gt;&lt;p&gt;This probably means you have run out of disk space on &lt;pre&gt;%1&lt;/pre&gt;&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;LilyPond 내보내기를 위한 임시 파일을 열지 못했습니다.&lt;/p&gt;&lt;p&gt;&lt;pre&gt;%1&lt;/pre&gt;의 디스크 공간이 부족하다는 의미일 수 있습니다.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -21177,12 +21233,12 @@ Please exit and restart Rosegarden to restore sound capability.</source>
 사운드 기능을 복원하려면 Rosegarden을 종료하고 다시 시작하십시오.</translation>
     </message>
     <message>
-        <location line="-4844"/>
+        <location line="-4863"/>
         <source>Starting sequencer...</source>
         <translation>시퀀서 시작 중...</translation>
     </message>
     <message>
-        <location line="+1937"/>
+        <location line="+1948"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
         <translation>%1 파일을 새 파일 이름으로 저장하는 중...</translation>
@@ -21208,7 +21264,7 @@ Please exit and restart Rosegarden to restore sound capability.</source>
         <translation>아나크루시스 만들기</translation>
     </message>
     <message>
-        <location line="+1894"/>
+        <location line="+1902"/>
         <source>The Rosegarden sequencer could not be started, so sound and recording will be unavailable for this session.
 For assistance with correct audio and MIDI configuration, go to http://rosegardenmusic.com.</source>
         <translation>Rosegarden 시퀀서를 시작할 수 없으므로 이 세션에서 사운드 및 레코딩을 사용할 수 없습니다.
@@ -21312,9 +21368,9 @@ For assistance with correct audio and MIDI configuration, go to http://rosegarde
         <translation>MusicXML 파일 내보내는 중...</translation>
     </message>
     <message>
-        <location line="-923"/>
+        <location line="-927"/>
         <location line="+22"/>
-        <location line="+904"/>
+        <location line="+908"/>
         <source>XML files</source>
         <translation>XML 파일</translation>
     </message>
@@ -21342,7 +21398,7 @@ Would you like to set it now?</source>
 지금 지정하시겠습니까?</translation>
     </message>
     <message>
-        <location line="+494"/>
+        <location line="+504"/>
         <source>Move playback pointer to time</source>
         <translation>재생 포인터를 시간으로 이동</translation>
     </message>
@@ -21367,12 +21423,11 @@ Would you like to set it now?</source>
         <translation>재생 목록</translation>
     </message>
     <message>
-        <location line="+51"/>
         <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
+        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+176"/>
         <source>Are you sure you want to save this as your default studio?</source>
         <translation>이것을 기본 스튜디오로 저장하시겠습니까?</translation>
     </message>
@@ -21409,7 +21464,7 @@ Error was : %2</source>
         <translation>스튜디오 가져오기</translation>
     </message>
     <message>
-        <location line="-5255"/>
+        <location line="-5274"/>
         <source>The audio file path does not exist or is not writable.
 You must set the audio file path to a valid directory in Document Properties before %1.
 Would you like to set it now?</source>
@@ -21421,7 +21476,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::Rotary</name>
     <message>
-        <location filename="../../src/gui/widgets/Rotary.cpp" line="+617"/>
+        <location filename="../../src/gui/widgets/Rotary.cpp" line="+616"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -21444,7 +21499,7 @@ Would you like to set it now?</source>
         <translation>무음에서 분할(&amp;S)</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/SegmentAutoSplitCommand.cpp" line="+146"/>
+        <location filename="../../src/commands/segment/SegmentAutoSplitCommand.cpp" line="+145"/>
         <source>(part %1)</source>
         <translation>(파트 %1)</translation>
     </message>
@@ -21512,7 +21567,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentEraseCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentEraseCommand.cpp" line="+36"/>
+        <location filename="../../src/commands/segment/SegmentEraseCommand.cpp" line="+35"/>
         <location line="+12"/>
         <source>Erase Segment</source>
         <translation>세그먼트 지우기</translation>
@@ -21521,7 +21576,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentEraser</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="+52"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentEraser.cpp" line="+51"/>
         <source>Click on a segment to delete it</source>
         <translation>삭제할 세그먼트를 클릭하십시오</translation>
     </message>
@@ -21529,7 +21584,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentExcludeFromPrintingCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentExcludeFromPrintingCommand.cpp" line="+30"/>
+        <location filename="../../src/commands/segment/SegmentExcludeFromPrintingCommand.cpp" line="+29"/>
         <source>Change Exclude From Printing</source>
         <translation>인쇄 제외 변경</translation>
     </message>
@@ -21553,7 +21608,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentInsertCommand</name>
     <message>
-        <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="+41"/>
+        <location filename="../../src/commands/segment/SegmentInsertCommand.cpp" line="+40"/>
         <location line="+13"/>
         <source>Create Segment</source>
         <translation>세그먼트 만들기</translation>
@@ -21607,7 +21662,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentMover</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+84"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentMover.cpp" line="+83"/>
         <source>Move</source>
         <translation>이동</translation>
     </message>
@@ -21635,7 +21690,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentParameterBox</name>
     <message>
-        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+87"/>
+        <location filename="../../src/gui/editors/parameters/SegmentParameterBox.cpp" line="+86"/>
         <source>Segment Parameters</source>
         <translation>세그먼트 매개변수</translation>
     </message>
@@ -21853,7 +21908,7 @@ before new transposition can be applied.</source>
 <context>
     <name>Rosegarden::SegmentResizer</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+133"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentResizer.cpp" line="+137"/>
         <source>Warning</source>
         <translation>경고</translation>
     </message>
@@ -21915,7 +21970,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentSelector</name>
     <message numerus="yes">
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+321"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSelector.cpp" line="+320"/>
         <source>Move %n Segment(s)</source>
         <translation>
             <numerusform>%n개 세그먼트 이동</numerusform>
@@ -22076,7 +22131,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SegmentSplitter</name>
     <message>
-        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+67"/>
+        <location filename="../../src/gui/editors/segment/compositionview/SegmentSplitter.cpp" line="+66"/>
         <source>Click on a segment to split it in two; hold Shift to avoid snapping to beat grid</source>
         <translation>세그먼트를 두 개로 분리하려면 세그먼트 클릭; 비트 그리드로 스냅되지 않으려면 Shift 키 누름</translation>
     </message>
@@ -22116,7 +22171,7 @@ Would you like to set it now?</source>
         <translation>음정을 지정하고 조옮김하기(&amp;I)...</translation>
     </message>
     <message>
-        <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="+37"/>
+        <location filename="../../src/commands/segment/SegmentTransposeCommand.cpp" line="+36"/>
         <location line="+11"/>
         <source>Change segment transposition</source>
         <translation>세그먼트 조옮김 변경</translation>
@@ -22133,7 +22188,7 @@ Would you like to set it now?</source>
 <context>
     <name>Rosegarden::SelectBankDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/SelectBankDialog.cpp" line="+47"/>
+        <location filename="../../src/gui/dialogs/SelectBankDialog.cpp" line="+46"/>
         <source>Select Bank</source>
         <translation>뱅크 선택</translation>
     </message>
@@ -22287,7 +22342,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;p&gt;Rosegarden에서 MIDI 퍼포먼스를 위한 고해상도 타이밍 소스를 찾을 수 없습니다.&lt;/p&gt;&lt;p&gt;사용 중인 Linux 배포판에서 멀티MIDI어 최적화 커널을 제공하는지 확인하십시오. 자세한 내용은 &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/wiki/low-latency_kernels&quot;&gt;Rosegarden 웹사이트&lt;/a&gt;를 참고하십시오.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+156"/>
+        <location line="+150"/>
         <source>&lt;h3&gt;Sequencer engine unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;시퀀서 엔진을 사용할 수 없습니다!&lt;/h3&gt;</translation>
     </message>
@@ -22307,17 +22362,23 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;p&gt;MIDI 하위 시스템을 초기화하지 못했습니다.&lt;/p&gt;&lt;p&gt;시퀀서 없이 계속할 수 있지만 Rosegarden을 닫고 &quot;modprobe snd-seq-midi&quot;를 루트로 실행한 다음 Rosegarden을 다시 시작하는 것이 좋습니다. 설계상 시퀀서 없이 실행하려면 &quot;rosegarden --nosound&quot;를 사용하여 앞으로 이 오류가 표시되지 않도록 하십시오.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+9"/>
+        <location line="+5"/>
         <source>&lt;h3&gt;Audio sequencing and synth plugins unavailable!&lt;/h3&gt;</source>
         <translation>&lt;h3&gt;오디오 시퀀싱 및 신스 플러그인을 사용할 수 없습니다!&lt;/h3&gt;</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="-4"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Rosegarden은 JACK 오디오 서버에 연결할 수 없습니다. 이것은 아마도 구성, 시스템 설치 또는 둘 다 문제로 인해 Rosegarden이 오디오 서버를 시작할 수 없다는 것을 의미합니다.&lt;/p&gt;&lt;p&gt;오디오 파일을 연주 또는 녹음하거나 플러그인을 사용하려면, JACK 시작을 허용하는 구성에 도달할 때까지 Rosegarden을 종료하고 JACK 제어 유틸리티(qjackctl)를 사용하여 다른 설정을 시도하는 것이 좋습니다. 또한 실시간 커널을 설치하고 시스템 보안 구성을 편집하는 등의 작업이 필요할 수 있습니다. 불행하게도, 이것은 매우 복잡한 주제입니다.&lt;/p&gt;&lt;p&gt; 작동하는 JACK 구성을 설정하면 Rosegarden은 향후 자동으로 오디오 서버를 시작할 수 있습니다.&lt;/p&gt;</translation>
     </message>
     <message>
-        <location line="-266"/>
+        <location line="+5"/>
+        <source>&lt;p&gt;Rosegarden has been compiled without jack support.&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-255"/>
         <source>The audio mixing subsystem is failing to keep up.</source>
         <translation>오디오 믹싱 하위 시스템이 따라가지 못하고 있습니다.</translation>
     </message>
@@ -22391,7 +22452,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::ShortcutDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ShortcutDialog.cpp" line="+54"/>
+        <location filename="../../src/gui/dialogs/ShortcutDialog.cpp" line="+53"/>
         <source>Keyboard Shortcuts</source>
         <translation>키보드 단축키</translation>
     </message>
@@ -22490,7 +22551,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::ShortcutWarnDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ShortcutWarnDialog.cpp" line="+38"/>
+        <location filename="../../src/gui/dialogs/ShortcutWarnDialog.cpp" line="+37"/>
         <source>Shortcut Conflicts</source>
         <translation>단축키 충돌</translation>
     </message>
@@ -22508,7 +22569,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::ShowSequencerStatusDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="+46"/>
+        <location filename="../../src/gui/dialogs/ShowSequencerStatusDialog.cpp" line="+45"/>
         <source>Sequencer status</source>
         <translation>시퀀서 상태</translation>
     </message>
@@ -22629,7 +22690,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::StaffHeader</name>
     <message>
-        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+149"/>
+        <location filename="../../src/gui/editors/notation/StaffHeader.cpp" line="+148"/>
         <source>Track %1 : &quot;%2&quot;</source>
         <translation>트랙 %1 : &quot;%2&quot;</translation>
     </message>
@@ -22674,7 +22735,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
         <translation>&lt;qt&gt;&lt;p&gt;기보가 일관되지 않습니다&lt;/p&gt;&lt;p&gt;자세한 정보를 보려면 클릭하십시오&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
-        <location line="+162"/>
+        <location line="+164"/>
         <location line="+50"/>
         <source>...</source>
         <translation>...</translation>
@@ -22836,7 +22897,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SynthPluginManagerDialog</name>
     <message>
-        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="+71"/>
+        <location filename="../../src/gui/studio/SynthPluginManagerDialog.cpp" line="+70"/>
         <source>Manage Synth Plugins</source>
         <translation>신스 플러그인 관리</translation>
     </message>
@@ -22864,7 +22925,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::SysExWidget</name>
     <message>
-        <location filename="../../src/gui/editors/event/SysExWidget.cpp" line="+64"/>
+        <location filename="../../src/gui/editors/event/SysExWidget.cpp" line="+63"/>
         <source>SysEx Properties</source>
         <translation>SysEx 속성</translation>
     </message>
@@ -22927,7 +22988,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoAndTimeSignatureEditor</name>
     <message>
-        <location filename="../../src/gui/editors/tempo/TempoAndTimeSignatureEditor.cpp" line="+104"/>
+        <location filename="../../src/gui/editors/tempo/TempoAndTimeSignatureEditor.cpp" line="+103"/>
         <source>Filter</source>
         <translation>필터</translation>
     </message>
@@ -23020,7 +23081,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+57"/>
+        <location filename="../../src/gui/dialogs/TempoDialog.cpp" line="+56"/>
         <source>Insert Tempo Change</source>
         <translation>템포 변경 삽입</translation>
     </message>
@@ -23138,7 +23199,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TempoRuler</name>
     <message>
-        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+444"/>
+        <location filename="../../src/gui/rulers/TempoRuler.cpp" line="+443"/>
         <source>%1.%2%3 (%4.%5%6 bpm)</source>
         <translation>%1.%2%3 (%4.%5%6 bpm)</translation>
     </message>
@@ -23164,7 +23225,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TextEventDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="+66"/>
+        <location filename="../../src/gui/dialogs/TextEventDialog.cpp" line="+65"/>
         <source>Text</source>
         <translation>텍스트</translation>
     </message>
@@ -23545,7 +23606,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::Thumbwheel</name>
     <message>
-        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+129"/>
+        <location filename="../../src/gui/widgets/Thumbwheel.cpp" line="+128"/>
         <source>Enter new value</source>
         <translation>새 값 입력</translation>
     </message>
@@ -23649,7 +23710,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TimeWidget2</name>
     <message>
-        <location filename="../../src/gui/widgets/TimeWidget2.cpp" line="+50"/>
+        <location filename="../../src/gui/widgets/TimeWidget2.cpp" line="+49"/>
         <source>Out Of Range</source>
         <translation>범위 초과</translation>
     </message>
@@ -23745,7 +23806,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackButtons</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+360"/>
+        <location filename="../../src/gui/editors/segment/TrackButtons.cpp" line="+361"/>
         <source>&lt;no instrument&gt;</source>
         <translation>&lt;악기 없음&gt;</translation>
     </message>
@@ -23778,7 +23839,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TrackEditor</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+355"/>
+        <location filename="../../src/gui/editors/segment/TrackEditor.cpp" line="+354"/>
         <source>Delete Tracks</source>
         <translation>트랙 삭제</translation>
     </message>
@@ -24262,12 +24323,12 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TransportDialog</name>
     <message>
-        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+120"/>
+        <location filename="../../src/gui/dialogs/TransportDialog.cpp" line="+119"/>
         <source>Rosegarden Transport</source>
         <translation>Rosegarden 트랜스포트</translation>
     </message>
     <message>
-        <location line="+775"/>
+        <location line="+772"/>
         <location line="+96"/>
         <source>PITCH WHEEL</source>
         <translation>음높이 휠</translation>
@@ -24394,7 +24455,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::TriggerSegmentManager</name>
     <message>
-        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+71"/>
+        <location filename="../../src/gui/editors/segment/TriggerSegmentManager.cpp" line="+70"/>
         <source>Manage Triggered Segments</source>
         <translation>트리거된 세그먼트 관리</translation>
     </message>
@@ -24784,7 +24845,7 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
 <context>
     <name>Rosegarden::WarningWidget</name>
     <message>
-        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+68"/>
+        <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+67"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;퍼포먼스 문제가 감지되었습니다!&lt;/p&gt;&lt;p&gt;세부정보를 표시하려면 클릭하세요.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -24813,197 +24874,237 @@ Quitting other running applications may improve Rosegarden&apos;s performance.</
     <name>RosegardenTransport</name>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+26"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1041"/>
         <source>Rosegarden Transport</source>
         <translation>Rosegarden 트랜스포트</translation>
     </message>
     <message>
         <location line="+31"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
         <translation>추가 컨트롤 숨김</translation>
     </message>
     <message>
         <location line="+36"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
         <translation>패닉 버튼</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation>음표가 붙어 있는 경우 모든 MIDI 장치 재설정</translation>
     </message>
     <message>
         <location line="+35"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
         <translation>메트로놈</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>함께 연주할 수 있는 메트로놈 클릭을 제공</translation>
     </message>
     <message>
         <location line="+465"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Rosegarden 안팎의 MIDI 활동 표시</translation>
     </message>
     <message>
         <location line="+463"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
         <translation>입력</translation>
     </message>
     <message>
         <location line="+464"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
         <translation>출력</translation>
     </message>
     <message>
         <location line="+465"/>
         <location line="+465"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
+        <location line="+1"/>
         <source>NO EVENTS</source>
         <translation>이벤트 없음</translation>
     </message>
     <message>
         <location line="+23"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
         <translation>녹음</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation>MIDI 또는 오디오 녹음</translation>
     </message>
     <message>
         <location line="+41"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
         <translation>루프</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>루프 마커 켜기 및 끄기 (지정된 경우)</translation>
     </message>
     <message>
         <location line="+41"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
         <translation>솔로</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation>현재 선택한 트랙을 제외한 모든 트랙 음소거</translation>
     </message>
     <message>
         <location line="+23"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
         <translation>여기서 루프 또는 범위 시작</translation>
     </message>
     <message>
         <location line="+20"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
         <translation>여기서 루프 또는 범위 끝</translation>
     </message>
     <message>
         <location line="+1031"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
         <translation>SIG</translation>
     </message>
     <message>
         <location line="+464"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
         <translation>DIV</translation>
     </message>
     <message>
         <location line="+465"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
         <location line="+467"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
         <translation>템포</translation>
     </message>
     <message>
         <location line="+474"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
         <translation>END</translation>
     </message>
     <message>
         <location line="+467"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
         <translation>세로줄</translation>
     </message>
     <message>
         <location line="+151"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>실시간, 음악 시간 및 프레임 수 간 전환</translation>
     </message>
     <message>
         <location line="+33"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
         <translation>추가 컨트롤 표시</translation>
     </message>
     <message>
         <location line="+36"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
         <translation>되감기</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>현재 포인터 위치를 한 세로줄 뒤로 이동합니다.</translation>
     </message>
     <message>
         <location line="+29"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
         <translation>처음으로 되감기</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>포인터 위치를 작곡의 시작 부분으로 이동합니다. (포인터가 현재 시작 전에 있으면 앞으로 진행된다는 것을 의미할 수 있습니다.)</translation>
     </message>
     <message>
         <location line="+26"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
         <translation>연주하기/일시정지</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>현재 포인터 위치에서 연주하거나 이미 진행 중인 경우 플레이백을 일시정지합니다.</translation>
     </message>
     <message>
         <location line="+38"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
         <translation>중지</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation>플레이백 또는 레코딩을 중지합니다.</translation>
     </message>
     <message>
         <location line="+32"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
         <translation>빨리감기</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>현재 포인터 위치를 한 세로줄 앞으로 이동합니다.</translation>
     </message>
     <message>
         <location line="+29"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
         <translation>끝까지 빨리감기</translation>
     </message>
     <message>
         <location line="+3"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>포인터 위치를 작곡의 끝으로 이동합니다.  (포인터가 이미 끝을 넘어서면 뒤로 이동하는 것을 의미할 수 있습니다.)</translation>
     </message>
     <message>
         <location line="+27"/>
+        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
         <translation>끝나는 시간 표시</translation>
     </message>

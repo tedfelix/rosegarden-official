@@ -1,0 +1,14 @@
+Language		Translation file
+1. Spanish (Spain)	es.ts
+2. Spanish (Argentina)	es_AR.ts
+3. Simplified Chinese	zh_CN.ts
+4. Russian		ru.ts
+5. Catalan		ca.ts
+6. Czech		cs.ts
+7. Finnish		fi.ts
+8. Italian		it.ts
+9. Brazilian Portuguese	pt_BR.ts
+
+German translator has the notes from ChatGPT, and will decide what to do with them.
+
+ChatGPT was not comfortable doing the other languages without a human in the loop, but this is a good chunk of updates.
