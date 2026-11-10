@@ -2189,197 +2189,162 @@
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="18"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="354"/>
         <source>Manage MIDI Devices</source>
         <translation>Správa zařízení MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="44"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="355"/>
         <source>MIDI Playback</source>
         <translation>Přehrávání MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="80"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="357"/>
         <source>Sends its data through</source>
         <translation>Posílá svá data skrz</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="75"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="358"/>
         <source>Rosegarden playback device</source>
         <translation>Zařízení pro přehrávání v Rosegardenu</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="62"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="367"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vytvořit nové zařízení pro přehrávání zde. Dvakrát klepněte na název zařízení pro jeho změnu. Vyberte zařízení a spojte je s výstupní přípojkou MIDI poklepáním na přípojku napravo.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="287"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="394"/>
         <source>Internal Synth</source>
         <translation>Vnitřní syntetizátor</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="85"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="363"/>
         <source>Default playback device</source>
         <translation>Výchozí zařízení pro přehrávání</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="129"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="370"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vymezením banky lze Rosegardenu říct o programech a záplatách dostupných k použití ve vybavení (technické nebo programové syntetizátory) připojenému k tomuto zařízení.&lt;/p&gt;&lt;p&gt;Protože Rosegarden skrývá všechny banky a programy, které nejsou určeny, musí být něco určeno pro každý program nebo každou banku, kterou si přejete přenášet.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="132"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="372"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Banky...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="151"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="374"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Upravte ovladače spojené s tímto zařízením.&lt;/p&gt;&lt;p&gt;Zde musíte určit ovladače, abyste je mohl použít kdekoli v Rosegardenu, jako například na ovládacích pravítkách nebo v políčku &lt;b&gt;Parametry nástrojů&lt;/b&gt; Které ovladače jsou zobrazovány, můžete změnit v políčku&lt;b&gt;Parametry nástrojů&lt;/b&gt;, a přeuspořádat jejich rozvržení&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="154"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="376"/>
         <source>Controllers...</source>
         <translation>Ovládací prvky...</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="197"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="378"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vytvořit nové zařízení pro přehrávání&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="200"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="409"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="380"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="408"/>
         <source>New</source>
         <translation>Nový</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="222"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="382"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Smazat vybrané zařízení pro přehrávání.  Všechny stopy, které toto zařízení používají, budou muset být znovu přiřazeny. Mimoto jsou všechny změny programů a bank u těchto stop trvale ztraceny.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="225"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="384"/>
         <source>Delete</source>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="244"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="385"/>
         <source>MIDI outputs</source>
         <translation>Výstupy MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="272"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="387"/>
         <source>Available outputs</source>
         <translation>Dostupné výstupy</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="277"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="559"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="392"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="433"/>
         <source>No port</source>
         <translation>Žádná přípojka</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="268"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="398"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Dostupné výstupy MIDI (technické nebo programové)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="550"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="437"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Dostupné vstupy MIDI (od technických po programové)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="327"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="605"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="401"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="440"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Poklepejte pro obnovení seznamu přípojek po připojení nového kusu vybavení nabo po spuštění nového softwarového syntetizátoru.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="330"/>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="608"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="403"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="442"/>
         <source>Refresh</source>
         <translation>Obnovit</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="367"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="404"/>
         <source>MIDI Recording</source>
         <translation>Nahrávání MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="406"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="406"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Vytvořit nové nahrávací zařízení&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="431"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="410"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Smazat vybrané nahrávací zařízení&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="434"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="412"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translation>Smazat</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="495"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="414"/>
         <source>Receives its data from</source>
         <translation>Přijímá svá data z</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="490"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="415"/>
         <source>Rosegarden recording device</source>
         <translation>Zařízení pro nahrávání v Rosegardenu</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="500"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="420"/>
         <source>Default record device</source>
         <translation>Výchozí zařízení pro nahrávání</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="526"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="426"/>
         <source>MIDI inputs</source>
         <translation>Vstupy MIDI</translation>
     </message>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="554"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="428"/>
         <source>Available inputs</source>
         <translation>Dostupné vstupy</translation>
     </message>
@@ -4925,9 +4890,9 @@
         <translation>Přídavný modul syntetizátoru</translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1085"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="745"/>
         <location filename="../../src/base/Studio.cpp" line="72"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="1085"/>
         <source>Synth plugin</source>
         <translation>Syntetizátorový přídavný modul</translation>
     </message>
@@ -8971,10 +8936,10 @@
         <translation>%1</translation>
     </message>
     <message>
-        <location filename="../../src/sound/WAVExporter.cpp" line="50"/>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="97"/>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="84"/>
         <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="86"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="84"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="97"/>
+        <location filename="../../src/sound/WAVExporter.cpp" line="50"/>
         <source>Rosegarden</source>
         <translation>Rosegarden</translation>
     </message>
@@ -9299,14 +9264,14 @@
         <translation>Střídavé - nastavit %1 střídavě na největší a nejmenší při střídání událostí</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="40"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="38"/>
+        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="40"/>
         <source>First Value</source>
         <translation>První hodnota</translation>
     </message>
     <message>
-        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="42"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="40"/>
+        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="42"/>
         <source>Second Value</source>
         <translation>Druhá hodnota</translation>
     </message>
@@ -9526,8 +9491,8 @@
         <translation>Nelze otevřít soubor &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="98"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="85"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="98"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
         <translation>Připojený Korg nanoKONTROL2 není pro Rosegarden optimálně nastaven. Změnou konfigurace ztratíte všechna vlastní nastavení provedená editorem nanoKONTROL2. Změnit konfiguraci?</translation>
     </message>
@@ -16844,14 +16809,6 @@ Pravým tlačítkem otevřete místní nabídku.</translation>
         <translation>Změna dynamiky úhozu: %1   Dynamika úhozu: %2 až %3</translation>
     </message>
     <message>
-        <source>Change Velocity</source>
-        <translation type="vanished">Změnit sílu tónu</translation>
-    </message>
-    <message>
-        <source>Change Velocities</source>
-        <translation type="vanished">Změnit síly tónů</translation>
-    </message>
-    <message>
         <location filename="../../src/gui/editors/matrix/MatrixVelocity.cpp" line="297"/>
         <source>Click and drag to scale velocity of selected notes</source>
         <translation>Klepnutím a tažením přizpůsobíte sílu tónu vybraných not</translation>
@@ -16938,10 +16895,6 @@ Pravým tlačítkem otevřete místní nabídku.</translation>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1789"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
         <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/matrix/MatrixView.cpp" line="1802"/>
@@ -18420,10 +18373,6 @@ Ujistěte se, že je zařízení správně nastaveno v dialogu Správa zařízen
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4842"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/editors/notation/NotationView.cpp" line="4959"/>
@@ -21402,10 +21351,6 @@ Chcete cestu nastavit nyní?</translation>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="7897"/>
         <source>Play List</source>
         <translation>Seznam přehrávání</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location filename="../../src/gui/application/RosegardenMainWindow.cpp" line="8073"/>
@@ -24912,237 +24857,197 @@ Ukončení ostatních běžících programů by mohlo zlepšit výkon programu R
     <name>RosegardenTransport</name>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="26"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1041"/>
         <source>Rosegarden Transport</source>
         <translation>Obsluha programu Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="57"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1043"/>
         <source>Hide additional controls</source>
         <translation>Skrýt dodatečné ovládací prvky</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="93"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1047"/>
         <source>Panic Button</source>
         <translation>Tlačítko nouzového zastavení v případě zaseknutí nástroje</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="96"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1050"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation>Nastaví znovu všechna zařízení MIDI, pokud došlo k zaseknutí not</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="131"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1054"/>
         <source>Metronome</source>
         <translation>Metronom</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="134"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1057"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>Poskytuje tikot metronomu pro hraní s metronomem</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="599"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1061"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Ukazuje vstupní a výstupní činnosti MIDI pro program Rosegarden</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1062"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1063"/>
         <source>IN</source>
         <translation>VSTUP</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1526"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1064"/>
         <source>OUT</source>
         <translation>VÝSTUP</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="1991"/>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2456"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1065"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1066"/>
         <source>NO EVENTS</source>
         <translation>BEZ UDÁLOSTÍ</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2479"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1068"/>
         <source>Record</source>
         <translation>Nahrát</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2482"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1071"/>
         <source>Record either MIDI or audio</source>
         <translation>Záznam buď MIDI nebo zvuku</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2523"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1075"/>
         <source>Loop</source>
         <translation>Opakování</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2526"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1078"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>Zapínání a vypínání značek pro opakování (jsou-li nastaveny)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2567"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1082"/>
         <source>Solo</source>
         <translation>Sólo</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2570"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1085"/>
         <source>Mutes all but the currently selected track</source>
         <translation>Ztlumení všech stop kromě v současnosti vybrané</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2593"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1089"/>
         <source>Start loop or range here</source>
         <translation>Zde začít s opakováním nebo rozsahem</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="2613"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1093"/>
         <source>End loop or range here</source>
         <translation>Zde ukončit opakování nebo rozsah</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="3644"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1096"/>
         <source>SIG</source>
         <translation>SIG</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="4108"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1097"/>
         <source>DIV</source>
         <translation>DIV</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="4573"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1098"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5040"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1099"/>
         <source>TEMPO</source>
         <translation>TEMPO</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5514"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1100"/>
         <source>END</source>
         <translation>KONEC</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="5981"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1101"/>
         <source>BAR</source>
         <translation>TAKT</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6132"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1103"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>Přepínání mezi skutečným časem, hudebním časem a odpočtem snímků</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6165"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1107"/>
         <source>Show additional controls</source>
         <translation>Ukázat dodatečné ovládací prvky</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6201"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1111"/>
         <source>Rewind</source>
         <translation>Ukazatel přehrávání o takt zpět</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6204"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1114"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>Posune současnou polohu ukazatele o jednu taktovou čáru zpět.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6233"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1118"/>
         <source>Rewind to beginning</source>
         <translation>Ukazatel přehrávání na začátek</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6236"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1121"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>Posune polohu ukazatele na začátek skladby. (To může znamenat i posun směrem vpřed, pokud se ukazatel nachází před začátkem skladby.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6262"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1125"/>
         <source>Play/Pause</source>
         <translation>Přehrát/Pozastavit</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6265"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1128"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>Přehrává od současné polohy ukazatele nebo pozastaví přehrávání, pokud již probíhá.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6303"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1132"/>
         <source>Stop</source>
         <translation>Zastavit</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6306"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1135"/>
         <source>Stops playback or recording.</source>
         <translation>Zastaví přehrávání nebo záznam.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6338"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1139"/>
         <source>Fast forward</source>
         <translation>Ukazatel přehrávání o takt dopředu</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6341"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1142"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>Posune současnou polohu ukazatele o jednu taktovou čáru dopředu.</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6370"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1146"/>
         <source>Fast forward to end</source>
         <translation>Ukazatel přehrávání na konec</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6373"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1149"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>Posune polohu ukazatele na konec skladby. (To může znamenat i posun směrem vzad, pokud se ukazatel nachází za koncem skladby.)</translation>
     </message>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="6400"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="1153"/>
         <source>Display time to end</source>
         <translation>Zobrazit čas zbývající do konce</translation>
     </message>

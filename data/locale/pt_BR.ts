@@ -2189,49 +2189,41 @@
     <name>DeviceManagerDialogUi</name>
     <message>
         <location filename="../../src/gui/studio/DeviceManagerDialogUi.ui" line="+18"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+354"/>
         <source>Manage MIDI Devices</source>
         <translation>Gerenciador de dispositivo MIDI</translation>
     </message>
     <message>
         <location line="+26"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI Playback</source>
         <translation>Reprodutor MIDI</translation>
     </message>
     <message>
         <location line="+36"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Sends its data through</source>
         <translation>Enviar dados através</translation>
     </message>
     <message>
         <location line="-5"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden playback device</source>
         <translation>Dispositivo de reprodução Rosegarden</translation>
     </message>
     <message>
         <location line="+10"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+5"/>
         <source>Default playback device</source>
         <translation>Dispositivo de reprodução padrão</translation>
     </message>
     <message>
         <location line="-23"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Create new playback devices here. Double-click the device name to change it. Select a device here and connect it to a MIDI output port by clicking on a port to the right.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Crie novos dispositivos de reprodução aqui. Clique duas vezes no nome do dispositivo para alterá-lo. Selecione um dispositivo e conecte-o a uma porta de saída MIDI clicando na porta à direita.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+67"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+3"/>
         <source>&lt;qt&gt;&lt;p&gt;Bank definitions allow you to tell Rosegarden about the programs or patches available for use on the equipment (hardware or software synth) connected to this device.&lt;/p&gt;&lt;p&gt;You must have something defined for any program or bank changes you wish to transmit, as Rosegarden hides all bank and program numbers that are undefined.&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Definições do Banco permitem que você diga ao Rosegarden sobre os programas ou correções disponíveis para uso do equipamento (hardware ou software synth) conectado a este dispositivo.&lt;/p&gt;&lt;p&gt;É necessário ter algo definido para qualquer programa ou banco de alterações que deseja transmitir, como Rosegarden oculta todos os valores do banco e do programa que estão indefinidos.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Banks...</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translatorcomment>Criar, carregar ou exportar Bancos (ou correções) definições com nome do programa para o dispositivo selecionado.</translatorcomment>
@@ -2239,111 +2231,90 @@
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Edit the controllers associated with this device.&lt;/p&gt;&lt;p&gt;You must define controllers here in order to use them anywhere in Rosegarden, such as on control rulers or in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box,  You can change which controllers are displayed in the &lt;b&gt;Instrument Parameters&lt;/b&gt; box, and rearrange their layout&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Editar os controles associados a este dispositivo.&lt;/p&gt;&lt;p&gt;Você deverá definir os controles aqui para usá-los em qualquer parte do programa Rosegarden, como no controle de réguas ou na caixa&lt;b&gt;Parâmetros de Instrumentos&lt;/b&gt;. Você pode alterar quais controles são exibidos na caixa &lt;b&gt;Parâmetros de Instrumentos&lt;/b&gt;, e rearranjar seu layout&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Controllers...</source>
         <translation>Controles...</translation>
     </message>
     <message>
         <location line="+43"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new playback device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Criar um novo dispositivo de reprodução&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
         <location line="+209"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
-        <location line="+28"/>
         <source>New</source>
         <translation>Novo</translation>
     </message>
     <message>
         <location line="-187"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-26"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected playback device.  Any tracks using this device will need to be reassigned, and any program or bank changes on those tracks will be lost permanently&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Excluir o dispositivo de reprodução selecionado. Qualquer faixa com este dispositivo terá de ser transferido, e qualquer outro programa ou modificações no banco dessas faixas estarão perdidos permanentemente&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <translation>Excluir</translation>
     </message>
     <message>
         <location line="+19"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>MIDI outputs</source>
         <translation>MIDI saídas</translation>
     </message>
     <message>
         <location line="+28"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Available outputs</source>
         <translation>Saídas disponíveis</translation>
     </message>
     <message>
         <location line="+5"/>
         <location line="+282"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+5"/>
-        <location line="+41"/>
         <source>No port</source>
         <translation>Não há porta</translation>
     </message>
     <message>
         <location line="-272"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-39"/>
         <source>Internal Synth</source>
         <translation>Synth Interno</translation>
     </message>
     <message>
         <location line="-19"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI outputs (hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Saídas MIDI disponíveis (hardware ou software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+59"/>
         <location line="+278"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+3"/>
-        <location line="+39"/>
         <source>&lt;qt&gt;&lt;p&gt;Click to refresh the port list after connecting a new piece of equipment or starting a new soft synth&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Clique para atualizar a lista de portas após conectar uma nova peça de equipamento ou iniciar um novo soft synth&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="-275"/>
         <location line="+278"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-37"/>
-        <location line="+39"/>
         <source>Refresh</source>
         <translation>Atualizar</translation>
     </message>
     <message>
         <location line="-241"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="-38"/>
         <source>MIDI Recording</source>
         <translation>Gravação MIDI</translation>
     </message>
     <message>
         <location line="+39"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Create a new recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Criar um novo dispositivo de gravação&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+4"/>
         <source>&lt;qt&gt;&lt;p&gt;Delete the selected recording device&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Excluir o dispositivo de gravação selecionado&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Delete</source>
         <comment>Create, load or export bank (or patch) definitions with program names for the selected device.</comment>
         <translatorcomment>Cria, carrega ou exporta um Banco (ou correção) definições com nome de programas para o dispositivo selecionado.</translatorcomment>
@@ -2351,37 +2322,31 @@
     </message>
     <message>
         <location line="+61"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Receives its data from</source>
         <translation>Receber os dados de</translation>
     </message>
     <message>
         <location line="-5"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+1"/>
         <source>Rosegarden recording device</source>
         <translation>Dispositivo de gravação Rosegarden</translation>
     </message>
     <message>
         <location line="+10"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+5"/>
         <source>Default record device</source>
         <translation>Dispositivo de gravação padrão</translation>
     </message>
     <message>
         <location line="+26"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+6"/>
         <source>MIDI inputs</source>
         <translation>MIDI entradas</translation>
     </message>
     <message>
         <location line="+28"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+2"/>
         <source>Available inputs</source>
         <translation>Entradas disponíveis</translation>
     </message>
     <message>
         <location line="-4"/>
-        <location filename="../../src/ui_DeviceManagerDialogUi.h" line="+9"/>
         <source>&lt;qt&gt;&lt;p&gt;Available MIDI inputs (from hardware or software)&lt;/p&gt;&lt;/qt&gt;</source>
         <translation>&lt;qt&gt;&lt;p&gt;Entradas MIDI disponíveis (hardware ou software)&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
@@ -4927,15 +4892,15 @@
         <translation>Plugin de sintetizador </translation>
     </message>
     <message>
+        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1085"/>
         <location filename="../../src/sound/AlsaDriver.cpp" line="+745"/>
         <location filename="../../src/base/Studio.cpp" line="+72"/>
-        <location filename="../../src/gui/editors/parameters/TrackParameterBox.cpp" line="+1085"/>
         <source>Synth plugin</source>
         <translatorcomment>Plugin de sintetizador</translatorcomment>
         <translation>Plugin synth</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location filename="../../src/sound/AlsaDriver.cpp" line="+38"/>
         <location filename="../../src/base/Studio.cpp" line="-4"/>
         <source>Audio</source>
         <translation>Áudio</translation>
@@ -5137,16 +5102,16 @@
         <translation>Espectro de Produto Harmônico</translation>
     </message>
     <message>
-        <location filename="../../src/sound/WAVExporter.cpp" line="+50"/>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
-        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+84"/>
         <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+86"/>
+        <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+84"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+97"/>
+        <location filename="../../src/sound/WAVExporter.cpp" line="+50"/>
         <source>Rosegarden</source>
         <translatorcomment>(significa Jardim de Rosas)</translatorcomment>
         <translation>Rosegarden</translation>
     </message>
     <message>
-        <location filename="../../src/gui/studio/LV2Gtk2.cpp" line="+1"/>
+        <location line="+1"/>
         <source>The rosegarden gtk2 library (librosegardenGtk2.so) has not been found. Ensure that the library is in a standard location or is findable with the LD_LIBRARY_PATH environment variable.</source>
         <translation>A biblioteca GTK2 do Rosegarden (librosegardenGtk2.so) não foi encontrada. Verifique se a biblioteca está em um local padrão ou se pode ser localizada pela variável de ambiente LD_LIBRARY_PATH.</translation>
     </message>
@@ -9324,14 +9289,14 @@
         <translation>Alternando - definido %1 para máximo e mínimo em eventos alternados</translation>
     </message>
     <message>
-        <location line="+11"/>
         <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+38"/>
+        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+11"/>
         <source>First Value</source>
         <translation>Primeiro Valor</translation>
     </message>
     <message>
         <location line="+2"/>
-        <location filename="../../src/base/parameterpattern/RingingParameterPattern.cpp" line="+2"/>
+        <location filename="../../src/base/parameterpattern/AlternatingParameterPattern.cpp" line="+2"/>
         <source>Second Value</source>
         <translation>Segundo Valor</translation>
     </message>
@@ -9551,8 +9516,8 @@
         <translation>Não foi possível abrir arquivo &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+1"/>
         <location filename="../../src/sound/KorgNanoKontrol2.cpp" line="+1"/>
+        <location filename="../../src/sound/AkaiMPKmini4.cpp" line="+1"/>
         <source>The connected Korg nanoKONTROL2 is not configured optimally for Rosegarden.  Reconfiguring it will lose any custom settings you&apos;ve made with the nanoKONTROL2 editor.  Reconfigure?</source>
         <translation>O Korg nanoKONTROL2 conectado não está configurado de maneira ideal para o Rosegarden. A reconfiguração apagará todas as configurações personalizadas feitas no editor do nanoKONTROL2. Deseja reconfigurá-lo?</translation>
     </message>
@@ -16864,14 +16829,6 @@ Clique com o botão direito para abrir o menu de contexto.</translation>
         <translation>Mudança de velocidade: %1   Velocidade: %2 para %3</translation>
     </message>
     <message>
-        <source>Change Velocity</source>
-        <translation type="vanished">Mudança de velocidade</translation>
-    </message>
-    <message>
-        <source>Change Velocities</source>
-        <translation type="vanished">Mudanças de velocidades</translation>
-    </message>
-    <message>
         <location line="+66"/>
         <source>Click and drag to scale velocity of selected notes</source>
         <translation>Clique e arraste a escala de velocidade das notas selecionadas</translation>
@@ -16993,10 +16950,6 @@ Clique com o botão direito para abrir o menu de contexto.</translation>
         <location line="+8"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
         <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -18412,10 +18365,6 @@ Assegure que o dispositivo está configurado corretamente na caixa de diálogo G
         <location line="+7"/>
         <source>http://www.rosegardenmusic.com/tutorials/en/chapter-0.html</source>
         <translation>http://www.rosegardenmusic.com/tutorials/pt/capítulo-0.html</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+116"/>
@@ -21435,10 +21384,6 @@ Gostaria de configurá-lo agora?</translation>
         <location line="+7"/>
         <source>http://rosegardenmusic.com/tutorials/</source>
         <translation>http://rosegardenmusic.com/tutorials/</translation>
-    </message>
-    <message>
-        <source>http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</source>
-        <translation type="vanished">http://rosegarden.sourceforge.net/tutorial/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+132"/>
@@ -24926,237 +24871,197 @@ Sair de outros aplicativos em execução pode melhorar o desempenho do Rosegarde
     <name>RosegardenTransport</name>
     <message>
         <location filename="../../src/gui/dialogs/RosegardenTransportUi.ui" line="+26"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1041"/>
         <source>Rosegarden Transport</source>
         <translation>Transporte Rosegarden</translation>
     </message>
     <message>
         <location line="+31"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>Hide additional controls</source>
         <translation>Ocultar controles adicionais</translation>
     </message>
     <message>
         <location line="+36"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Panic Button</source>
         <translation>Botão Pânico (!)</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Resets all MIDI devices if you&apos;ve got stuck notes</source>
         <translation>Redefine todos os dispositivos MIDI, se você tem notas presas</translation>
     </message>
     <message>
         <location line="+35"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Metronome</source>
         <translation>Metrônomo</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Provides a metronome click for you to play along with</source>
         <translation>Fornece um clique do metrônomo para que você possa tocar junto</translation>
     </message>
     <message>
         <location line="+465"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Shows MIDI activity in and out of Rosegarden</source>
         <translation>Apresenta atividade MIDI dentro e fora do Rosegarden</translation>
     </message>
     <message>
         <location line="+463"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>IN</source>
         <translation>IN</translation>
     </message>
     <message>
         <location line="+464"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>OUT</source>
         <translation>OUT</translation>
     </message>
     <message>
         <location line="+465"/>
         <location line="+465"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
-        <location line="+1"/>
         <source>NO EVENTS</source>
         <translation>SEM EVENTOS</translation>
     </message>
     <message>
         <location line="+23"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>Record</source>
         <translation>Gravar</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Record either MIDI or audio</source>
         <translation>Gravar ambos MIDI ou Áudio</translation>
     </message>
     <message>
         <location line="+41"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Loop</source>
         <translation>Laço</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Turn on and off the loop markers (if set)</source>
         <translation>Liga ou desliga os marcadores de Laço (se definido)</translation>
     </message>
     <message>
         <location line="+41"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Solo</source>
         <translation>Solo</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Mutes all but the currently selected track</source>
         <translation>Silencia todos menos a faixa atualmente selecionada</translation>
     </message>
     <message>
         <location line="+23"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Start loop or range here</source>
         <translation>Iniciar laço ou intervalo aqui</translation>
     </message>
     <message>
         <location line="+20"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>End loop or range here</source>
         <translation>Fim da repetição ou intervalo aqui</translation>
     </message>
     <message>
         <location line="+1031"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>SIG</source>
         <translation>FÓRM.</translation>
     </message>
     <message>
         <location line="+464"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>DIV</source>
         <translation>DIV</translation>
     </message>
     <message>
         <location line="+465"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>/16</source>
         <translation>/16</translation>
     </message>
     <message>
         <location line="+467"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>TEMPO</source>
         <translation>ANDAMENTO</translation>
     </message>
     <message>
         <location line="+474"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>END</source>
         <translation>FIM</translation>
     </message>
     <message>
         <location line="+467"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+1"/>
         <source>BAR</source>
         <translation>BARRA</translation>
     </message>
     <message>
         <location line="+151"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+2"/>
         <source>Switch between real time, musical time, and frame count</source>
         <translation>Alternar entre o tempo real, o tempo musical, e contagem de quadros</translation>
     </message>
     <message>
         <location line="+33"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Show additional controls</source>
         <translation>Exibir controles adicionais</translation>
     </message>
     <message>
         <location line="+36"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Rewind</source>
         <translation>Retroceder</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position back one bar.</source>
         <translation>Desloca a posição atual do ponteiro de volta um compasso.</translation>
     </message>
     <message>
         <location line="+29"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Rewind to beginning</source>
         <translation>Retroceder ao Início</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the start of the composition. (This may mean going forwards if the pointer is currently before the start.)</source>
         <translation>Desloca a posição do ponteiro para o início da composição. (Isto pode significar ir para a frente se o ponteiro está atualmente no começo.)</translation>
     </message>
     <message>
         <location line="+26"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Play/Pause</source>
         <translation>Tocar/Pausar</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Plays from the current pointer position, or pauses playback if already in progress.</source>
         <translation>Reproduz a partir da posição atual do ponteiro, ou pausa a reprodução caso já está em andamento.</translation>
     </message>
     <message>
         <location line="+38"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Stop</source>
         <translation>Parar</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Stops playback or recording.</source>
         <translation>Interrompe a reprodução ou gravação.</translation>
     </message>
     <message>
         <location line="+32"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward</source>
         <translation>Avançar rápido</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the current pointer position forwards one bar.</source>
         <translation>Move a posição atual do ponteiro para a frente um compasso.</translation>
     </message>
     <message>
         <location line="+29"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Fast forward to end</source>
         <translation>Avançar rápido até o fim</translation>
     </message>
     <message>
         <location line="+3"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+3"/>
         <source>Moves the pointer position to the end of the composition.  (This may mean going backwards if the pointer is already beyond the end.)</source>
         <translation>Desloca a posição do ponteiro até o final da composição. (Isto pode significar ir para trás se o ponteiro já está além do fim.)</translation>
     </message>
     <message>
         <location line="+27"/>
-        <location filename="../../src/ui_RosegardenTransportUi.h" line="+4"/>
         <source>Display time to end</source>
         <translation>Exibir tempo para terminar</translation>
     </message>
