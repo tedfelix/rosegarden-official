@@ -10018,7 +10018,7 @@
     <message>
         <location line="+11"/>
         <source>Start JACK automatically</source>
-        <translation>Uruchom JACK automatycznie</translation>
+        <translation>Uruchom JACK-a automatycznie</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -13944,22 +13944,22 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location line="+26"/>
         <source>Use JACK transport</source>
-        <translation>Użyj JACK transport</translation>
+        <translation>Użyj transportu JACK-a</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>New JACK Transport Logic (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nowa logika transportu JACK-a (eksperymentalna)</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>JACK stop at auto stop</source>
-        <translation>Zatrzymanie JACK przy automatycznym zatrzymaniu</translation>
+        <translation>Zatrzymanie JACK-a przy automatycznym zatrzymaniu</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Odznaczenie tej opcji spowoduje, że transport JACK będzie mógł przewinąć się poza koniec utworu Rosegarden. Spowoduje to, że transport JACK będzie niezsynchronizowany z transportem Rosegarden i może spowodować nieoczekiwane uruchomienie i zatrzymanie transportu.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Odznaczenie tej opcji spowoduje, że transport JACK-a będzie mógł przewinąć się poza koniec utworu Rosegarden. Spowoduje to, że transport JACK-a będzie niezsynchronizowany z transportem Rosegarden i może spowodować nieoczekiwane uruchomienie i zatrzymanie transportu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -15300,7 +15300,7 @@ zamiast tego?</translation>
         <source>Bar %1 contains an event too short to represent in standard notation.
 This is probably due to a corrupt event in the file. Expect barcheck errors in LilyPond.</source>
         <translation>Takt %1 zawiera zdarzenie zbyt krótkie, aby można je było przedstawić w standardowej notacji.
-Prawdopodobnie jest to spowodowane uszkodzonym zdarzeniem w pliku. Spodziewaj się błędów sprawdzania taktów w LilyPond.</translation>
+Prawdopodobnie jest to spowodowane uszkodzonym zdarzeniem w pliku. Spodziewaj się błędów podczas sprawdzania taktów w LilyPond.</translation>
     </message>
     <message>
         <location line="+761"/>
@@ -16887,7 +16887,7 @@ Kliknij prawym przyciskiem myszki dla menu kontekstowego.</translation>
     <message>
         <location line="+8"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -18344,7 +18344,7 @@ Upewnij się, że urządzenie jest prawidłowo skonfigurowane w oknie Zarządzan
     <message>
         <location line="+8"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+108"/>
@@ -20754,7 +20754,7 @@ Chcesz go otworzyć?</translation>
     <message>
         <location line="+661"/>
         <source>Clear recent files menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Wyczyść menu ostatnich plików</translation>
     </message>
     <message>
         <location line="+528"/>
@@ -21021,7 +21021,7 @@ Zostaną wyeksportowane tylko ścieżki dźwiękowe i wtyczki syntezatora</trans
     <message>
         <location line="+8"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+644"/>
@@ -22343,12 +22343,12 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="-4"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden nie może połączyć się z serwerem JACK Audio. Prawdopodobnie oznacza to, że Rosegarden nie był w stanie uruchomić serwera dźwięku z powodu problemu z konfiguracją, instalacją Twojego systemu, lub wystąpiły obie wspomniane opcje.&lt;/p&gt;&lt;p&gt;Jeśli chcesz odtworzyć lub nagrać pliki dźwiękowe lub korzystać z wtyczek, sugerujemy wyjść z Rosegarden i użyć narzędzia JACK Control (qjackctl), aby wypróbować różne ustawienia, aż dotrzesz do konfiguracji, która pozwala na uruchomienie JACK. Możesz również zainstalować jądro czasu rzeczywistego, edytować konfigurację zabezpieczeń systemu itd. Niestety, jest to bardzo złożony temat.&lt;/p&gt;&lt;p&gt;Po ustaleniu konfiguracji pracy JACK, Rosegarden będzie w stanie automatycznie uruchomić serwer dźwięku w przyszłości.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden nie może połączyć się z serwerem JACK Audio. Prawdopodobnie oznacza to, że Rosegarden nie był w stanie uruchomić serwera dźwięku z powodu problemu z konfiguracją, instalacją Twojego systemu, lub wystąpiły obie wspomniane opcje.&lt;/p&gt;&lt;p&gt;Jeśli chcesz odtworzyć lub nagrać pliki dźwiękowe lub korzystać z wtyczek, sugerujemy wyjść z Rosegarden i użyć narzędzia JACK Control (qjackctl), aby wypróbować różne ustawienia, aż dotrzesz do konfiguracji, która pozwala na uruchomienie JACK-a. Możesz również zainstalować jądro czasu rzeczywistego, edytować konfigurację zabezpieczeń systemu itd. Niestety, jest to bardzo złożony temat.&lt;/p&gt;&lt;p&gt;Po ustaleniu konfiguracji pracy JACK-a, Rosegarden będzie w stanie automatycznie uruchomić serwer dźwięku w przyszłości.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;p&gt;Rosegarden has been compiled without jack support.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden został skompilowany bez obsługi JACK-a.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="-255"/>
