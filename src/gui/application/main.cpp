@@ -554,11 +554,11 @@ int main(int argc, char *argv[])
     QTranslator qtTranslator;
 #if (QT_VERSION >= QT_VERSION_CHECK(6, 0, 0))
     bool qtTranslationsLoaded =
-      qtTranslator.load("qt_" + QLocale::system().name(),
+      qtTranslator.load(QLocale::system(), "qtbase", "_",
             QLibraryInfo::path(QLibraryInfo::TranslationsPath));
 #else
     bool qtTranslationsLoaded =
-      qtTranslator.load("qt_" + QLocale::system().name(),
+      qtTranslator.load(QLocale::system(), "qtbase", "_",
             QLibraryInfo::location(QLibraryInfo::TranslationsPath));
 #endif
     if (qtTranslationsLoaded) {
