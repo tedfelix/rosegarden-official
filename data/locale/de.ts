@@ -55,12 +55,12 @@
     <message>
         <location line="+1"/>
         <source>MediumSlateBlue</source>
-        <translation>Mittleres Schiefergrau</translation>
+        <translation>Mittleres Schieferblau</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>LightSlateBlue</source>
-        <translation>Schiefer</translation>
+        <translation>Helles Schieferblau</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -2776,7 +2776,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+1"/>
         <source>Heckelphone</source>
-        <translation>Heckelphone</translation>
+        <translation>Heckelphon</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -3369,7 +3369,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+1"/>
         <source>Tubaphone</source>
-        <translation>Tubaphone</translation>
+        <translation>Tubaphon</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4927,7 +4927,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location filename="../AutoloadStrings.cpp" line="+449"/>
         <source>Copyright (c) xxxx Copyright Holder</source>
-        <translation>Copyright (c) xxxx Die Inhaber des Copyright</translation>
+        <translation>Copyright (c) xxxx Urheberrechtsinhaber</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5220,7 +5220,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
         <location line="+599"/>
         <location line="+190"/>
         <source>&amp;Save</source>
-        <translation>&amp;Sichern</translation>
+        <translation>&amp;Speichern</translation>
     </message>
     <message>
         <location line="-1114"/>
@@ -8125,7 +8125,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+3"/>
         <source>Save as &amp;Template...</source>
-        <translation>Als Vorla&amp;ge sichern...</translation>
+        <translation>Als Vorla&amp;ge speichern...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8316,7 +8316,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+1"/>
         <source>&amp;Save Current Document as Default Studio</source>
-        <translation>Aktuelles Dokument als &amp;Standardstudio sichern</translation>
+        <translation>Aktuelles Dokument als &amp;Standardstudio speichern</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -8732,7 +8732,7 @@ müssen Sie hier definiert werden. Hier kann ausgewählt werden, welche Kontroll
     <message>
         <location line="+8"/>
         <source>Save &amp;as...</source>
-        <translation>Sichern &amp;als...</translation>
+        <translation>Speichern &amp;als...</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -9924,7 +9924,7 @@ Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&
     <message>
         <location line="+10"/>
         <source>Record audio files as</source>
-        <translation>Audio-Aufnahmen sichern als</translation>
+        <translation>Audio-Aufnahmen speichern als</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -9939,7 +9939,7 @@ Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&
     <message>
         <location line="+12"/>
         <source>Show Audio File Location dialog when saving</source>
-        <translation>Beim Sichern Ort der Audio-Datei anzeigen</translation>
+        <translation>Beim Speichern Ort der Audio-Datei anzeigen</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -10204,13 +10204,13 @@ Freiwilliger aus aller Welt. Für eine Liste der Beitragenden besuche&lt;br&gt;&
         <location line="+48"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation>Kann Dokument nicht unter %1 sichern
+        <translation>Kann Dokument nicht unter %1 speichern
 Fehler war: %2</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Could not save document at %1</source>
-        <translation>Kann Dokument nicht unter %1 sichern</translation>
+        <translation>Kann Dokument nicht unter %1 speichern</translation>
     </message>
     <message>
         <location line="+206"/>
@@ -10332,7 +10332,7 @@ von der des JACK-Audio-Servers unterscheidet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosega
     <message>
         <location line="+356"/>
         <source>Save File As</source>
-        <translation>Datei sichern als</translation>
+        <translation>Datei speichern als</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -10342,7 +10342,7 @@ von der des JACK-Audio-Servers unterscheidet.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosega
     <message>
         <location line="+18"/>
         <source>Save Files To</source>
-        <translation>Dateien sichern nach</translation>
+        <translation>Dateien speichern nach</translation>
     </message>
     <message>
         <location line="+23"/>
@@ -10973,7 +10973,7 @@ Bist du sicher?</translation>
     <message>
         <location line="+5"/>
         <source>Save</source>
-        <translation>Sichern</translation>
+        <translation>Speichern</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -10994,7 +10994,7 @@ Bist du sicher?</translation>
     <message>
         <location line="+11"/>
         <source>Save preset</source>
-        <translation>Voreinstellung sichern</translation>
+        <translation>Voreinstellung speichern</translation>
     </message>
 </context>
 <context>
@@ -11043,7 +11043,7 @@ Bist du sicher?</translation>
         <location line="+4"/>
         <location line="+22"/>
         <source>Save document first.</source>
-        <translation>Zuerst Dokument sichern.</translation>
+        <translation>Zuerst Dokument speichern.</translation>
     </message>
     <message>
         <location line="-15"/>
@@ -11078,7 +11078,7 @@ Bist du sicher?</translation>
     <message>
         <location line="+1"/>
         <source>Document&apos;s audio files will now be moved to the new location.&lt;br /&gt;Please note that this will force a save of the file.</source>
-        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten Sie, dass dies ein Sichern der Datei erzwingt.</translation>
+        <translation>Die Audio-Dateien des Dokumentes werden nicht zum neuen Ort verschoben.&lt;br /&gt;Bitte beachten Sie, dass dies ein Speichern der Datei erzwingt.</translation>
     </message>
     <message>
         <location line="-134"/>
@@ -13885,7 +13885,7 @@ Komposition werden in der rg-Datei gesichert&lt;/qt&gt;</translation>
     <message>
         <location line="+9"/>
         <source>Auto-save interval</source>
-        <translation>Intervall für automatisches Sichern</translation>
+        <translation>Intervall für automatisches Speichern</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -13930,7 +13930,7 @@ Komposition werden in der rg-Datei gesichert&lt;/qt&gt;</translation>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;WARNING: Editing during playback can lead to instability, crashes, and data loss.  Save frequently.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;WARNUNG: Bearbeiten während Wiedergabe kann zu Instabilität, Abstürzen, und Datenverlust führen.  Regelmäßig sichern.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;WARNUNG: Bearbeiten während Wiedergabe kann zu Instabilität, Abstürzen, und Datenverlust führen.  Regelmäßig speichern.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -20228,9 +20228,9 @@ Please select any you wish to delete permanently from the hard disk.
         <translation>Die folgenden Audio-Dateien wurden zwar während 
 dieser Sitzung
 aufgenommen, sind aber nicht mehr im Audio-Dateimanager geladen
-und werden daher vom zu sichernden Dokument nicht mehr verwendet.
+und werden daher vom zu speichernden Dokument nicht mehr verwendet.
 
-Sie können entscheiden diese Dateien zu löschen, um Plattenplatz 
+Sie können entscheiden diese Dateien zu löschen, um Speicherplatz 
 zu sparen.
 
 Bitte diejenigen auswählen, die Sie permanent von der Festplatte entfernen möchten.
@@ -20272,8 +20272,8 @@ Bitte diejenigen auswählen, die Sie permanent von der Festplatte entfernen möc
     <message>
         <location line="+548"/>
         <source>&apos;%1&apos; is read-only.  Please save to a different file.</source>
-        <translation>&apos;%1&apos; ist schreibgesichert.  Bitte in einer 
-anderen Datei sichern.</translation>
+        <translation>&apos;%1&apos; ist schreibgeschützt.  Bitte in einer 
+anderen Datei speichern.</translation>
     </message>
     <message>
         <location line="+15"/>
@@ -20302,7 +20302,7 @@ Support for these elements may disappear in future versions of Rosegarden.
 We recommend you re-save this file from this version of Rosegarden to ensure that it can still be re-loaded in future versions.</source>
         <translation>Diese Datei enthält mindestens einen veralteten Elementtyp.
 In Zukunft wird dieser Elementtyp vielleicht nicht mehr unterstützt.
-Empfehlung: sichern Sie diese Datei aus dieser Version von Rosegarden heraus um sicherzustellen, daß sie auch in Zukunft gelesen werden kann.</translation>
+Empfehlung: speichern Sie diese Datei aus dieser Version von Rosegarden heraus um sicherzustellen, dass sie auch in Zukunft gelesen werden kann.</translation>
     </message>
     <message>
         <location line="+1177"/>
@@ -20316,7 +20316,7 @@ Please set the audio file path to a valid directory in Document Properties befor
 Would you like to set it now?</source>
         <translation>Der angegebene Audio-Dateipfad existiert entweder nicht oder ist nicht schreibbar.
 Bitte setzen Sie den Audio-Dateipfad auf ein gültiges Verzeichnis in 
-dem
+den
 Dokumenteigenschaften bevor Sie Audio aufnehmen.
 Möchten Sie den Pfad jetzt setzen?</translation>
     </message>
@@ -20386,13 +20386,13 @@ die Datei bearbeitet, können Sie Ignorieren drücken um diese zu öffnen.
     <message>
         <location line="+34"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber Rosegarden läuft aktuell ohne Audiounterstützung, weil der &apos;JACK-Audio-Server&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK-Audio-Server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut sichern, gehen alle Audio- und Plugin-Daten verloren !.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber Rosegarden läuft aktuell ohne Audiounterstützung, weil der &apos;JACK-Audio-Server&apos; bei Programstart nicht verfügbar war.&lt;/p&gt;&lt;p&gt;Bitte beenden Sie Rosegarden, starten Sie den &apos;JACK-Audio-Server&apos; und starten Sie Rosegarden danach neu, um die ganze Komposition zu laden.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition jetzt erneut speichern, gehen alle Audio- und Plugin-Daten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but you are running a version of Rosegarden that was compiled without audio support.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition from this version of Rosegarden, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
         <translation>&lt;h3&gt;Audio und Plugins sind nicht verfügbar.&lt;/h3&gt;&lt;p&gt;Diese Komposition verwendet Audio-Dateien oder Plugins, aber diese laufende Version von Rosegarden wurde ohne Unterstützung für Audio kompiliert.&lt;/p&gt;&lt;p&gt;&lt;b&gt;&lt;b&gt;WARNUNG:&lt;/b&gt;Wenn Sie diese Komposition mit dieser Version von Rosegarden 
-erneut sichern, dann gehen alle Audio- und Plugin-Daten verloren !.&lt;/p&gt;</translation>
+erneut speichern, dann gehen alle Audio- und Plugin-Daten verloren !.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+49"/>
@@ -20565,7 +20565,7 @@ Wollen Sie diese stattdessen öffnen?</translation>
         <location line="+138"/>
         <source>Could not save document at %1
 Error was : %2</source>
-        <translation>Kann Dokument nicht unter %1 sichern
+        <translation>Kann Dokument nicht unter %1 speichern
 Fehler war: %2</translation>
     </message>
     <message>
@@ -20573,7 +20573,7 @@ Fehler war: %2</translation>
         <location line="+138"/>
         <location line="+6386"/>
         <source>Could not save document at %1</source>
-        <translation>Kann Dokument nicht unter %1 sichern</translation>
+        <translation>Kann Dokument nicht unter %1 speichern</translation>
     </message>
     <message>
         <location line="-6842"/>
@@ -20654,7 +20654,7 @@ Fehler war: %2</translation>
     <message>
         <location line="+168"/>
         <source>Saving file...</source>
-        <translation>Datei sichern...</translation>
+        <translation>Datei speichern...</translation>
     </message>
     <message>
         <location line="+108"/>
@@ -20665,7 +20665,7 @@ Fehler war: %2</translation>
         <location line="+18"/>
         <source>Saving file%1with a new filename...</source>
         <comment>&apos;file%1with&apos; is correct. %1 will either become &apos; &apos; or &apos; as a template &apos; at runtime</comment>
-        <translation>Datei%1 unter einem neuen Dateinamen sichern...</translation>
+        <translation>Datei%1 unter einem neuen Dateinamen speichern...</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -20675,12 +20675,12 @@ Fehler war: %2</translation>
     <message>
         <location line="+2"/>
         <source>Save as template...</source>
-        <translation>Als Vorlage sichern...</translation>
+        <translation>Als Vorlage speichern...</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Save as...</source>
-        <translation>Sichern als...</translation>
+        <translation>Speichern als...</translation>
     </message>
     <message>
         <location line="+80"/>
@@ -21187,7 +21187,7 @@ Für Hilfestellung bei der Audio- und MIDI-Konfiguration gehe nach http://rosega
     <message>
         <location line="-316"/>
         <source>Saving Rosegarden file to package failed: %1</source>
-        <translation>Sichern der Rosegarden-Datei beim Komprimieren fehlgeschlagen: %1</translation>
+        <translation>Speichern der Rosegarden-Datei beim Komprimieren fehlgeschlagen: %1</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -21397,24 +21397,24 @@ Möchten Sie den Pfad jetzt setzen?</translation>
     <message>
         <location line="+176"/>
         <source>Are you sure you want to save this as your default studio?</source>
-        <translation>Sind Sie sicher, dass Sie dies als Ihr Standardstudio sichern wollen?</translation>
+        <translation>Sind Sie sicher, dass Sie dies als Ihr Standardstudio speichern wollen?</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Saving current document as default studio...</source>
-        <translation>Aktuelles Dokument als Standardstudio sichern...</translation>
+        <translation>Aktuelles Dokument als Standardstudio speichern...</translation>
     </message>
     <message>
         <location line="+12"/>
         <source>Could not auto-save document at %1
 Error was : %2</source>
-        <translation>Kann das Dokument nicht automatisch unter %1 sichern
+        <translation>Kann das Dokument nicht automatisch unter %1 speichern
 Fehler: %2</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Could not auto-save document at %1</source>
-        <translation>Kann das Dokument nicht automatisch unter %1 sichern</translation>
+        <translation>Kann das Dokument nicht automatisch unter %1 speichern</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -21459,13 +21459,13 @@ Fehler: %2</translation>
     <message>
         <location line="+1"/>
         <source>&lt;qt&gt;&lt;p&gt;The current file has been modified.&lt;/p&gt;&lt;p&gt;Do you want to save it?&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie sichern?&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Die aktuelle Datei wurde verändert.&lt;/p&gt;&lt;p&gt;Möchten Sie speichern?&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+36"/>
         <source>Could not save document at %1
 (%2)</source>
-        <translation>Kann Dokument nicht unter %1 sichern
+        <translation>Kann Dokument nicht unter %1 speichern
 (%2)</translation>
     </message>
 </context>
@@ -24811,7 +24811,7 @@ Ton zu hören ist, klicke &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices
     <message>
         <location line="+1"/>
         <source>Stretch or squash segment to note duration</source>
-        <translation>Segment gemäß Notendauer strecken oder stauchen</translation>
+        <translation>Segment auf Notendauer dehnen oder stauchen</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -24824,7 +24824,7 @@ Ton zu hören ist, klicke &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices
     <message>
         <location filename="../../src/gui/widgets/WarningDialog.cpp" line="+48"/>
         <source>Performance Problems Detected</source>
-        <translation>Probleme mit der Computerleistung entdeckt</translation>
+        <translation>Probleme mit der Computerleistung erkannt</translation>
     </message>
     <message>
         <location line="+27"/>
@@ -24857,7 +24857,7 @@ Ton zu hören ist, klicke &lt;img src=&quot;:pixmaps/toolbar/manage-midi-devices
     <message>
         <location filename="../../src/gui/widgets/WarningWidget.cpp" line="+67"/>
         <source>&lt;qt&gt;&lt;p&gt;Performance problems detected!&lt;/p&gt;&lt;p&gt;Click to display details&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Probleme mit der Computerleistung!&lt;/p&gt;&lt;p&gt;Für weitere Details bitte anklicken &lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Probleme mit der Computerleistung erkannt!&lt;/p&gt;&lt;p&gt;Für weitere Details bitte anklicken &lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+11"/>
