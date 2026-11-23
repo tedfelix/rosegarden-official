@@ -8964,7 +8964,7 @@
     <message>
         <location line="+1"/>
         <source>&lt;h2&gt;Welcome to Rosegarden!&lt;/h2&gt;&lt;p&gt;Welcome to the Rosegarden audio and MIDI sequencer and musical notation editor.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;If you have not already done so, you may wish to install some DSSI synth plugins, or a separate synth program such as QSynth.  Rosegarden does not synthesize sounds from MIDI on its own, so without these you will hear nothing.&lt;/li&gt;&lt;li&gt;Rosegarden uses the JACK audio server for recording and playback of audio, and for playback from DSSI synth plugins.  These features will only be available if the JACK server is running.&lt;/li&gt;&lt;li&gt;Rosegarden has comprehensive documentation: see the &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;Rosegarden website&lt;/a&gt; for the &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;manual&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;tutorials&lt;/a&gt;, and other information!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden was brought to you by a team of volunteers across the world.  To learn more, go to the &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;Rosegarden website&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation>&lt;h2&gt;Witaj w Rosegarden!&lt;/h2&gt;&lt;p&gt;Rosegarden jest sekwencerem dźwięku i MIDI oraz edytorem nutowym.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Jeśli jeszcze tego nie zrobiłeś/aś, zapewne zechcesz zainstalować niektóre wtyczki syntezatora DSSI lub osobny program, taki jak QSynth. Rosegarden nie syntezuje samodzielnie dźwięków z MIDI, więc bez nich nic nie będzie słychać.&lt;/li&gt;&lt;li&gt;Rosegarden używa serwera JACK Audio do nagrywania i odtwarzania dźwięku oraz do odtwarzania z wtyczek syntezatora DSSI. Funkcje te będą dostępne tylko wtedy, gdy serwer JACK jest uruchomiony.&lt;/li&gt;&lt;li&gt;Rosegarden posiada również obszerną dokumentację. Zobacz &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;, gdzie znajdziesz &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;podręcznik&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;samouczki&lt;/a&gt; i inne przydatne informacje!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby dowiedzieć się więcej, odwiedź &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
+        <translation>&lt;h2&gt;Witaj w Rosegarden!&lt;/h2&gt;&lt;p&gt;Rosegarden jest sekwencerem dźwięku i MIDI oraz edytorem nutowym.&lt;/p&gt;&lt;ul&gt;&lt;li&gt;Jeśli jeszcze tego nie zrobiłeś/aś, zapewne zechcesz zainstalować niektóre wtyczki syntezatora DSSI lub osobny program, taki jak QSynth. Rosegarden nie syntezuje samodzielnie dźwięków z MIDI, więc bez nich nic nie będzie słychać.&lt;/li&gt;&lt;li&gt;Rosegarden używa serwera JACK audio do nagrywania i odtwarzania dźwięku oraz do odtwarzania z wtyczek syntezatora DSSI. Funkcje te będą dostępne tylko wtedy, gdy serwer JACK jest uruchomiony.&lt;/li&gt;&lt;li&gt;Rosegarden posiada również obszerną dokumentację. Zobacz &lt;a style=&quot;color:gold&quot; href=&quot;http://rosegardenmusic.com&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;, gdzie znajdziesz &lt;a style=&quot;color:gold&quot; href=&quot;%1&quot;&gt;podręcznik&lt;/a&gt;, &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/tutorials/&quot;&gt;samouczki&lt;/a&gt; i inne przydatne informacje!&lt;/li&gt;&lt;/ul&gt;&lt;p&gt;Rosegarden został stworzony dla Ciebie przez zespół wolontariuszy z całego świata. Aby dowiedzieć się więcej, odwiedź &lt;a style=&quot;color:gold&quot; href=&quot;http://www.rosegardenmusic.com/&quot;&gt;stronę internetową Rosegarden&lt;/a&gt;.&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../../src/base/Pitch.cpp" line="-5"/>
@@ -10290,7 +10290,7 @@ Błąd: %2</translation>
     <message>
         <location line="+26"/>
         <source>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Audio files marked with an asterisk (*) are encoded at a sample rate different from that of the JACK audio server.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden will play them at the correct speed, but they will sound terrible.  Please consider resampling these files externally, or adjusting the sample rate of the JACK server.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Pliki dźwiękowe oznaczone gwiazdką (*) są kodowane przy innej częstotliwości próbkowania niż ta z serwera JACK Audio.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden będzie odtwarzać je z prawidłową prędkością, ale będą one brzmieć okropnie. Rozważ zmianę próbkowania tego pliku na zewnątrz lub wyregulowanie częstotliwości próbkowania serwera JACK.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;&lt;img src=&quot;:pixmaps/tooltip/warning.png&quot;&gt;&lt;/img&gt; &lt;b&gt;Pliki dźwiękowe oznaczone gwiazdką (*) są kodowane przy innej częstotliwości próbkowania niż ta z serwera JACK audio.&lt;/b&gt;&lt;/p&gt;&lt;p&gt;Rosegarden będzie odtwarzać je z prawidłową prędkością, ale będą one brzmieć okropnie. Rozważ zmianę próbkowania tego pliku na zewnątrz lub wyregulowanie częstotliwości próbkowania serwera JACK.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -10832,7 +10832,7 @@ Kontynuować?</translation>
     <message>
         <location line="-199"/>
         <source>JACK Audio subsystem not available.</source>
-        <translation>Podsystem JACK Audio jest niedostępny.</translation>
+        <translation>Podsystem JACK audio jest niedostępny.</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -13944,12 +13944,12 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location line="+26"/>
         <source>Use JACK transport</source>
-        <translation>Użyj transportu JACK-a</translation>
+        <translation>Użyj JACK transport</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>New JACK Transport Logic (experimental)</source>
-        <translation>Nowa logika transportu JACK-a (eksperymentalna)</translation>
+        <translation>Nowa logika JACK transport (eksperymentalna)</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -13959,7 +13959,7 @@ Urządzenie docelowe ma już bank dla
     <message>
         <location line="+2"/>
         <source>&lt;qt&gt;&lt;p&gt;Unchecking this will allow the JACK transport to roll past the end of the Rosegarden composition.  This will lead to the JACK transport being out of sync with Rosegarden&apos;s transport and could cause unexpected starting and stopping of the transport.&lt;/p&gt;&lt;/qt&gt;</source>
-        <translation>&lt;qt&gt;&lt;p&gt;Odznaczenie tej opcji spowoduje, że transport JACK-a będzie mógł przewinąć się poza koniec utworu Rosegarden. Spowoduje to, że transport JACK-a będzie niezsynchronizowany z transportem Rosegarden i może spowodować nieoczekiwane uruchomienie i zatrzymanie transportu.&lt;/p&gt;&lt;/qt&gt;</translation>
+        <translation>&lt;qt&gt;&lt;p&gt;Odznaczenie tej opcji spowoduje, że JACK transport będzie mógł przewinąć się poza koniec utworu Rosegarden. Spowoduje to, że JACK transport będzie niezsynchronizowany z transportem Rosegarden i może spowodować nieoczekiwane uruchomienie i zatrzymanie transportu.&lt;/p&gt;&lt;/qt&gt;</translation>
     </message>
     <message>
         <location line="+22"/>
@@ -20348,7 +20348,7 @@ możesz nacisnąć Ignoruj, aby otworzyć plik.
     <message>
         <location line="+34"/>
         <source>&lt;h3&gt;Audio and plugins not available&lt;/h3&gt;&lt;p&gt;This composition uses audio files or plugins, but Rosegarden is currently running without audio because the JACK audio server was not available on startup.&lt;/p&gt;&lt;p&gt;Please exit Rosegarden, start the JACK audio server and re-start Rosegarden if you wish to load this complete composition.&lt;/p&gt;&lt;p&gt;&lt;b&gt;WARNING:&lt;/b&gt; If you re-save this composition, all audio and plugin data and settings in it will be lost.&lt;/p&gt;</source>
-        <translation>&lt;h3&gt;Dźwięk i wtyczki niedostępne&lt;/h3&gt;&lt;p&gt;Ten utwór używa plików dźwiękowych lub wtyczek, ale Rosegarden jest obecnie uruchomiony bez dźwięku, ponieważ serwer JACK Audio nie był dostępny przy starcie.&lt;/p&gt;&lt;p&gt;Wyjdź z Rosegarden, uruchom serwer JACK Audio i zrestartuj Rosegarden, jeśli chcesz załadować utwór w całości.&lt;/p&gt;&lt;p&gt;&lt;b&gt;OSTRZEŻENIE:&lt;/b&gt; Jeśli ponownie zapiszesz ten utwór, wszystkie dane dźwiękowe, dane wtyczek i ustawienia zostaną utracone.&lt;/p&gt;</translation>
+        <translation>&lt;h3&gt;Dźwięk i wtyczki niedostępne&lt;/h3&gt;&lt;p&gt;Ten utwór używa plików dźwiękowych lub wtyczek, ale Rosegarden jest obecnie uruchomiony bez dźwięku, ponieważ serwer JACK audio nie był dostępny przy starcie.&lt;/p&gt;&lt;p&gt;Wyjdź z Rosegarden, uruchom serwer JACK audio i zrestartuj Rosegarden, jeśli chcesz załadować utwór w całości.&lt;/p&gt;&lt;p&gt;&lt;b&gt;OSTRZEŻENIE:&lt;/b&gt; Jeśli ponownie zapiszesz ten utwór, wszystkie dane dźwiękowe, dane wtyczek i ustawienia zostaną utracone.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -20439,7 +20439,7 @@ Zobacz Edycja -&gt; Ustawienia -&gt; Dźwięk.</translation>
     <message>
         <location line="+725"/>
         <source>Cannot add dropped file.  JACK audio server is not available.</source>
-        <translation>Nie można dodać upuszczonego pliku. Serwer JACK Audio jest niedostępny.</translation>
+        <translation>Nie można dodać upuszczonego pliku. Serwer JACK audio jest niedostępny.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -22270,7 +22270,7 @@ Chcesz ją teraz ustawić?</translation>
         <source>The JACK Audio subsystem has failed or it has stopped Rosegarden from processing audio.
 Please restart Rosegarden to continue working with audio.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
-        <translation>Podsystem JACK Audio zawiódł lub stanął i wstrzymał Rosegarden w przetwarzaniu dźwięku.
+        <translation>Podsystem JACK audio zawiódł lub stanął i wstrzymał Rosegarden w przetwarzaniu dźwięku.
 Zrestartuj Rosegarden, aby kontynuować pracę z dźwiękiem.
 Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</translation>
     </message>
@@ -22280,7 +22280,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
         <source>The JACK Audio subsystem has stopped Rosegarden from processing audio, probably because of a processing overload.
 An attempt to restart the audio service has been made, but some problems may remain.
 Quitting other running applications may improve Rosegarden&apos;s performance.</source>
-        <translation>Podsystem JACK Audio zawiódł lub stanął i wstrzymał Rosegarden w przetwarzaniu dźwięku, prawdopodobnie z powodu przeładowania procesora.
+        <translation>Podsystem JACK audio zawiódł lub stanął i wstrzymał Rosegarden w przetwarzaniu dźwięku, prawdopodobnie z powodu przeładowania procesora.
 Uruchomiono ponownie usługi dźwiękowe, ale problemy mogły pozostać.
 Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</translation>
     </message>
@@ -22292,7 +22292,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="+26"/>
         <source>JACK Audio subsystem is losing sample frames.</source>
-        <translation>Podsystem JACK Audio traci ramki próbek.</translation>
+        <translation>Podsystem JACK audio traci ramki próbek.</translation>
     </message>
     <message>
         <location line="+18"/>
@@ -22343,7 +22343,7 @@ Zamknięcie innych programów może spowodować wzrost wydajności Rosegarden.</
     <message>
         <location line="-4"/>
         <source>&lt;p&gt;Rosegarden could not connect to the JACK audio server.  This probably means that Rosegarden was unable to start the audio server due to a problem with your configuration, your system installation, or both.&lt;/p&gt;&lt;p&gt;If you want to be able to play or record audio files or use plugins, we suggest that you exit Rosegarden and use the JACK Control utility (qjackctl) to try different settings until you arrive at a configuration that permits JACK to start.  You may also need to install a realtime kernel, edit your system security configuration, and so on.  Unfortunately, this is an extremely complex subject.&lt;/p&gt;&lt;p&gt; Once you establish a working JACK configuration, Rosegarden will be able to start the audio server automatically in the future.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Rosegarden nie może połączyć się z serwerem JACK Audio. Prawdopodobnie oznacza to, że Rosegarden nie był w stanie uruchomić serwera dźwięku z powodu problemu z konfiguracją, instalacją Twojego systemu, lub wystąpiły obie wspomniane opcje.&lt;/p&gt;&lt;p&gt;Jeśli chcesz odtworzyć lub nagrać pliki dźwiękowe lub korzystać z wtyczek, sugerujemy wyjść z Rosegarden i użyć narzędzia JACK Control (qjackctl), aby wypróbować różne ustawienia, aż dotrzesz do konfiguracji, która pozwala na uruchomienie JACK-a. Możesz również zainstalować jądro czasu rzeczywistego, edytować konfigurację zabezpieczeń systemu itd. Niestety, jest to bardzo złożony temat.&lt;/p&gt;&lt;p&gt;Po ustaleniu konfiguracji pracy JACK-a, Rosegarden będzie w stanie automatycznie uruchomić serwer dźwięku w przyszłości.&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Rosegarden nie może połączyć się z serwerem JACK audio. Prawdopodobnie oznacza to, że Rosegarden nie był w stanie uruchomić serwera dźwięku z powodu problemu z konfiguracją, instalacją Twojego systemu, lub wystąpiły obie wspomniane opcje.&lt;/p&gt;&lt;p&gt;Jeśli chcesz odtworzyć lub nagrać pliki dźwiękowe lub korzystać z wtyczek, sugerujemy wyjść z Rosegarden i użyć narzędzia JACK Control (qjackctl), aby wypróbować różne ustawienia, aż dotrzesz do konfiguracji, która pozwala na uruchomienie JACK-a. Możesz również zainstalować jądro czasu rzeczywistego, edytować konfigurację zabezpieczeń systemu itd. Niestety, jest to bardzo złożony temat.&lt;/p&gt;&lt;p&gt;Po ustaleniu konfiguracji pracy JACK-a, Rosegarden będzie w stanie automatycznie uruchomić serwer dźwięku w przyszłości.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="+5"/>
