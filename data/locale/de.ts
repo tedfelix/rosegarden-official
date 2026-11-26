@@ -13950,7 +13950,7 @@ Komposition werden in der rg-Datei gesichert&lt;/qt&gt;</translation>
     <message>
         <location line="+29"/>
         <source>New JACK Transport Logic (experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>Neue JACK-Transport Logik (experimentell)</translation>
     </message>
     <message>
         <location line="+20"/>
@@ -16902,7 +16902,7 @@ zu ändern</translation>
     <message>
         <location line="+8"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+13"/>
@@ -18241,7 +18241,7 @@ Dies ist ein Fehler (das Programm ist vermutlich inzwischen abgestürzt)</transl
     <message>
         <location line="+2616"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+247"/>
@@ -21059,7 +21059,7 @@ Möchten Sie diese öffnen?</translation>
     <message>
         <location line="+689"/>
         <source>Clear recent files menu</source>
-        <translation type="unfinished"></translation>
+        <translation>Menü zuletzt verwendeter Dateien leeren</translation>
     </message>
     <message>
         <location line="+528"/>
@@ -21300,7 +21300,7 @@ Nur Audio- und Synth-Plugin-Spuren werden exportiert</translation>
     <message>
         <location line="+1069"/>
         <source>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</source>
-        <translation type="unfinished"></translation>
+        <translation>https://www.rosegardenmusic.com/tutorials/bug-guidelines.html</translation>
     </message>
     <message>
         <location line="+644"/>
@@ -22374,7 +22374,7 @@ des Systems zu reparieren und Rosegarden neu zu starten.&lt;/p&gt;</translation>
     <message>
         <location line="+1"/>
         <source>&lt;p&gt;Rosegarden has been compiled without jack support.&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p&gt;Rosegarden wurde ohne JACK-Unterstützung kompiliert.&lt;/p&gt;</translation>
     </message>
     <message>
         <location line="-255"/>
@@ -22946,7 +22946,7 @@ des Systems zu reparieren und Rosegarden neu zu starten.&lt;/p&gt;</translation>
     <message>
         <location line="+7"/>
         <source>Save data</source>
-        <translation>Daten sichern</translation>
+        <translation>Daten speichern</translation>
     </message>
     <message>
         <location line="+25"/>
@@ -22981,7 +22981,7 @@ des Systems zu reparieren und Rosegarden neu zu starten.&lt;/p&gt;</translation>
     <message>
         <location line="+21"/>
         <source>Save System Exclusive data to...</source>
-        <translation>Systemexklusive Daten sichern nach...</translation>
+        <translation>Systemexklusive Daten speichern nach...</translation>
     </message>
     <message>
         <location line="+15"/>
